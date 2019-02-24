@@ -111,7 +111,7 @@ void MHyProBox::test(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
  * @brief Method for the construction of an empty box of required dimension.
  **/
 void MHyProBox::empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - empty: Expecting one output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - empty: One or more arguments are missing!");
@@ -132,7 +132,7 @@ void MHyProBox::empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
  * @brief Returns the intervals from which the box is constructed
  **/
 void MHyProBox::intervals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - intervals: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - intervals: One or more input arguments are missing."); 
@@ -179,7 +179,7 @@ void MHyProBox::insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
  * @brief Getter for the limiting points.
  **/
 void MHyProBox::limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - limits: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - limits: One argument is missing!");
@@ -219,7 +219,7 @@ void MHyProBox::constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
  * @brief Getter for an interval representation of one specific dimension.
  **/
 void MHyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - interval: Expecting an output!");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - interval: One or more arguments are missing!");
@@ -237,7 +237,7 @@ void MHyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  * @brief Getter for an interval representation of one specific dimension.
  **/
 void MHyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - at: Expecting an output!");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - at: One or more arguments are missing!");
@@ -256,7 +256,7 @@ void MHyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief Determines if the current box is symmetric.
  **/
 void MHyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - isSymmetric: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - isSymmetric: One argument missing!");
@@ -273,7 +273,7 @@ void MHyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
  * @brief Getter for the maximal point.
  **/
 void MHyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - max: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - max: One argument missing!");
@@ -291,7 +291,7 @@ void MHyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief Getter for the minimal point.
  **/
 void MHyProBox::min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - min: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - min: One argument missing!");
@@ -310,7 +310,7 @@ void MHyProBox::min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief Evaluation function (convex linear optimization).
  **/
 void MHyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - evaluate: Expecting an output!");
     if(nrhs < 5)
         mexErrMsgTxt("MHyProBox - evaluate: One or more arguments are missing!");
@@ -345,7 +345,7 @@ void MHyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  * @brief Multi-evaluation function (convex linear optimization).
  **/
 void MHyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - multiEvaluate: Expecting an output!");
     if(nrhs < 5)
         mexErrMsgTxt("MHyProBox - multiEvaluate: One or more arguments are missing!");
@@ -409,7 +409,7 @@ void MHyProBox::outstream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
  * @brief Storage size determination.
  **/
 void MHyProBox::box_size(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - size: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - size: One or more arguments are missing!");
@@ -445,7 +445,7 @@ void MHyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray
  * @brief Performs a Minkowski decomposition of two boxes.
  **/
 void MHyProBox::minkowskiDecomposition(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - minkowskiDecomposition: Expecting one output value!");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - minkowskiDecomposition: One or more arguments are missing!");
@@ -631,10 +631,6 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
         return;
     }
 
-    /**************************************************************************
-     * General interface
-    **************************************************************************/
-    
     if(!strcmp("dimension", cmd)){
         dimension(nlhs, plhs, nrhs, prhs);
         return;

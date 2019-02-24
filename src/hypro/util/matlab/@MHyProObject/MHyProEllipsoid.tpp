@@ -111,12 +111,12 @@ void MHyProEllipsoid::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray
      * Constructors
      **************************************************************************/
 
-    if (!strcmp("ellipsoid", cmd) && nrhs == 4){  
+    if (!strcmp("new_rad", cmd) && nrhs == 4){  
         ellipsoid_rad(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("ellipsoid_mat", cmd) && nrhs == 3){  
+    if (!strcmp("new_mat", cmd) && nrhs == 3){  
         new_matrix(nlhs, plhs, nrhs, prhs);
         return;
     }

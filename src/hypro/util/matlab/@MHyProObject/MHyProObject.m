@@ -1,4 +1,6 @@
 classdef MHyProObject < handle
+    
+    %% This is an old version do not use it!
     properties (SetAccess = public, GetAccess = public)
         Type
         Handle
@@ -69,7 +71,7 @@ classdef MHyProObject < handle
         end
                 
         function out = empty(obj,dim)
-            if isreal(dim)
+            if dim - floor(dim) == 0
                 ptr = MHyPro(obj.Type, 'empty', obj.Handle, dim);
                 out = MHyProObject(obj.Type, ptr);
             else

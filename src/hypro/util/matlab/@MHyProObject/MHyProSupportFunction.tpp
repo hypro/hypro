@@ -1,5 +1,15 @@
 #include "MHyProSupportFunction.h"
 
+/**
+ * @brief
+ **/
+void MHyProSupportFunction::new_empty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProSupportFunction - new_empty: One output is expected.");
+
+    plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>());
+}
+
 // /**
 //  * @brief
 //  **/
@@ -189,9 +199,9 @@ void MHyProSupportFunction::scale(int nlhs, mxArray* plhs[], int nrhs, const mxA
  * @brief
  **/
 void MHyProSupportFunction::swap(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nrhs < 5)
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProSupportFunction - swap: One or more arguments are missing!");
-    if(nrhs > 5)
+    if(nrhs > 4)
         mexWarnMsgTxt("MHyProSupportFunction - swap: At least one argument were ignored.");
     
     hypro::SupportFunction<double>* origin = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
@@ -306,8 +316,18 @@ void MHyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const m
      * Constructors
      **************************************************************************/
 
+    if(!strcmp("new_empty", cmd)){
+        new_empty(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
     if (!strcmp("new_matrix", cmd)){  
         new_matrix(nlhs, plhs, nrhs ,prhs);
+        return;
+    }
+
+    if(!strcmp("new_intervals", cmd)){
+        new_intervals(nlhs, plhs, nrhs, prhs);
         return;
     }
 
