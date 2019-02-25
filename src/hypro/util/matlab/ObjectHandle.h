@@ -177,7 +177,8 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
-            out[i*dimy+j] = matrix(j,i);
+            //mexPrintf("i: %d j: %d value: %f\n", i,j, matrix.coeff(i,j));
+            out[i*dimy+j] = matrix.coeff(j,i);
         }
     }
 }
@@ -191,6 +192,7 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
 void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimy; i++){
+        // mexPrintf("i: %d value: %f\n", i, vec.coeff(i));
         out[i] = vec(i);
     }
 }
@@ -204,9 +206,10 @@ void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m
  **/
 void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
-    hypro::vector_t<double> vec_one =  p.rawCoordinates();
-    for(int i = 0; i < vec_one.size(); i++){
-        out[i*dimy + index] = vec_one[i];
+    for(int i = 0; i < dimx; i++){
+        // mexPrintf("Set: %f at: %d\n", p[i], i*dimy+index);
+        //out[i*dimy + index] = p[i];
+        out[dimx*index + i] = p[i];
     }
 }
 

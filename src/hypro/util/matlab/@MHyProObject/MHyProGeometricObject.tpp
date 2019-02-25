@@ -1,7 +1,7 @@
 #include "MHyProGeometricObject.h"
 
 /**
- * @brief
+ * @brief Constructs a HyPro geometric object using a matrix
  **/
 template<typename T>
 void MHyProGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -24,7 +24,7 @@ void MHyProGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, c
 }
 
 /**
- * @brief
+ * @brief Constructs a HyPro geometric object using a vector
  **/
 template<typename T>
 void MHyProGeometricObject<T>::new_vector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -48,7 +48,7 @@ void MHyProGeometricObject<T>::new_vector(int nlhs, mxArray* plhs[], int nrhs, c
 }
 
 /**
- * @brief
+ * @brief Copy constructor
  **/
 template<typename T>
 void MHyProGeometricObject<T>::copyObj(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -64,7 +64,7 @@ void MHyProGeometricObject<T>::copyObj(int nlhs, mxArray* plhs[], int nrhs, cons
 }
 
 /**
- * @brief
+ * @brief Constructs a HyPro geometric object using a matrix and a vector
  **/
 template<typename T>
 void MHyProGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -91,7 +91,7 @@ void MHyProGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, 
 
 
 /**
- * @brief
+ * @brief Destructor
  **/
 template<class T>
 void MHyProGeometricObject<T>::deleteObject(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -108,17 +108,24 @@ void MHyProGeometricObject<T>::deleteObject(int nlhs, mxArray* plhs[], int nrhs,
  **/
 template<class T>
 void MHyProGeometricObject<T>::matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nrhs < 3)
-        mexErrMsgTxt("MHyProGeometricObject - matrix: One or more arguments are missing!");
     if(nlhs != 1)
         mexErrMsgTxt("MHyProGeometricObject - matrix: One output expected!");
-    if(nrhs > 1)
+    if(nrhs < 3)
+        mexErrMsgTxt("MHyProGeometricObject - matrix: One or more arguments are missing!");
+    if(nrhs > 3)
         mexWarnMsgTxt("MHyProGeometricObject - matrix: One or more input arguments were ignored.");
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
     hypro::matrix_t<double> mat = temp->matrix();
     plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
     ObjectHandle::convert2Matlab(mat, plhs[0], mat.cols(), mat.rows());
+    /* TEST */
+    // hypro::matrix_t<double> m(3,2);
+    // m << 1,2,3,4,5,6;
+    // mexPrintf("Matrix:\nrows: %d cols: %d\n", m.rows(), m.cols());
+    // plhs[0] = mxCreateDoubleMatrix(m.rows(), m.cols(), mxREAL);
+    // ObjectHandle::convert2Matlab(m, plhs[0], m.cols(), m.rows());
+    
 }
 
 /**
@@ -145,17 +152,18 @@ void MHyProGeometricObject<T>::scale(int nlhs, mxArray *plhs[], int nrhs, const 
  **/
 template<class T>
 void MHyProGeometricObject<T>::vector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nrhs < 3)
-        mexErrMsgTxt("MHyProGeometricObject - vector: One or more arguments are missing!");
     if(nlhs != 1)
         mexErrMsgTxt("MHyProGeometricObject - vector: One output expected!");
-    if(nrhs > 1)
+    if(nrhs < 3)
+        mexErrMsgTxt("MHyProGeometricObject - vector: One or more arguments are missing!");
+    if(nrhs > 3)
         mexWarnMsgTxt("MHyProGeometricObject - vector: One or more input arguments were ignored.");
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
     hypro::vector_t<double> vec = temp->vector();
-    plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
-    ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.rows());
+    // mexPrintf("Vector:\nrows: %d\n",vec.size());
+    plhs[0] = mxCreateDoubleMatrix(vec.size(), 1, mxREAL);
+    ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.size());
 }
 
 /**

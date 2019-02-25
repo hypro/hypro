@@ -113,16 +113,16 @@ void MHyProBox::test(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 void MHyProBox::empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - empty: Expecting one output!");
-    if(nrhs < 3)
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - empty: One or more arguments are missing!");
-    if(nrhs > 3)
+    if(nrhs > 4)
         mexWarnMsgTxt("MHyProBox - new_interval: One or more input arguments were ignored."); 
 
     const mwSize *dims;
     int dimy, dimx;
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    size_t in = (size_t) mxGetScalar(prhs[3]);
+    std::size_t in = (std::size_t) mxGetScalar(prhs[3]);
     hypro::Box<double> temp = box->Empty(in);
     hypro::Box<double>* b = new hypro::Box<double>(temp);
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
@@ -188,9 +188,19 @@ void MHyProBox::limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
  
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::pair<hypro::Point<double>, hypro::Point<double>> p = box->limits();
-    
-    plhs[0] = mxCreateDoubleMatrix(2, 2, mxREAL);
-    pair2Matlab(p, plhs[0], 1, 2);
+    // mexPrintf("limits dimension: %d\n", p.first.dimension());
+    int dim = p.first.dimension();
+    plhs[0] = mxCreateDoubleMatrix(dim, 2, mxREAL);
+    pair2Matlab(p, plhs[0], dim, 2);
+    //TESET
+    // mexPrintf("First:\n");
+    // for(int i = 0; i < dim; i++){
+    //     mexPrintf("%f\n",p.first[i]);
+    // }
+    // mexPrintf("Second:\n");
+    // for(int i = 0; i < dim; i++){
+    //     mexPrintf("%f\n",p.second[i]);
+    // }
 }
 
 /**
@@ -507,7 +517,7 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
         return;
     }
 
-    if(!strcmp("new_matrix",cmd)){
+    if(!strcmp("new_mat_vec",cmd)){
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }

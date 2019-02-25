@@ -28,6 +28,8 @@ classdef MHyProBox < MHyProGeometricObjectInterface
                     obj.Handle = MHyPro('Box', 'new_interval', varargin{2});
                 elseif strcmp(varargin{1}, 'intervals') && areIntervals(varargin{2})
                     obj.Handle = MHyPro('Box', 'new_intervals', varargin{2});
+                elseif ismatrix(varargin{1}) && isvector(varargin{2}) && (size(varargin{1}, 2)== size(varargin{2},1))
+                    obj.Handle = MHyPro('Box', 'new_mat_vec', varargin{1}, varargin{2});
                 else
                     error('MHyProBox - Constructor: Wrong arguments.');
                 end

@@ -1,85 +1,65 @@
 function res = testMHyProBox
+% This script contains tests for all functions for HyPro Boxes.
 
-%**************************************************************************
-% Tests for HyPro Boxes
-%**************************************************************************
-inter = [1 2; 3 4; 5 6; 7 8; 9 10];
+disp('Run Tests for MHyProBoxes');
+inter = [1 2; 3 4; 5 6];
 points = [0 0; 2 2];
 insert_inter = [12 41];
-mat = [1 0 0; 0 1 0; 0 0 1];
+mat = [1 2 3; 4 5 6; 7 8 9];
 vec = [1; 2; 3];
-single_inter = [2 4];
 
-%****************************Constructors**********************************
 
-disp('Construct empty box');
-box_0 = MHyProBox();
-intervals_box_0 = box_0.intervals();
-disp('Box 0 intervals:');
-disp(intervals_box_0);
+% Construct an empty box
+empty_box = MHyProBox();
+isEmpty = empty_box.isempty();
+assert(isEmpty == 1);
 
-disp('Construct box from list of intervals');
-box_1 = MHyProBox('intervals',inter);
-intervals_box_1 = box_1.intervals();
-disp('Box 1 intervals:');
-disp(intervals_box_1);
-% 
-% disp('Construct box from a pair of points');
-% box_2 = MHyProObject('Box','new_points',points);
-% box_2_inter = box_2.intervals();
-% disp('Box 2 intervals:');
-% disp(box_2_inter);
-% 
-% disp('Copy a box');
-% box_3 = MHyProObject('Box','new_intervals',inter);
-% box_4 = MHyProObject('Box', 'copy', box_3);
-% box_4_inter = box_4.intervals();
-% disp('Box 4 intervals:');
-% disp(box_4_inter);
-% 
-% disp('Construct box from matrix and vector');
-% box_5 = MHyProObject('Box','new_matrix',mat,vec);
-% box_5_inter = box_5.intervals();
-% disp('Box 5 intervals:');
-% disp(box_5_inter);
-% 
-% disp('Construct box from single interval');
-% box_6 = MHyProObject('Box','new_interval',single_inter);
-% box_6_inter = box_6.intervals();
-% disp('Box 6 interval:');
-% disp(box_6_inter);
-% 
-% %**************************Getters&Setters*********************************
-% 
-% disp('Insert');
-% box_7 = MHyProObject('Box', 'new_intervals',inter);
-% old_intervals = box_7.intervals();
-% disp('Old intervals:');
-% disp(old_intervals);
-% box_7.insert(insert_inter);
-% new_intervals = box_7.intervals();
-% disp('New intervals:');
-% disp(new_intervals);
-% 
-% disp('Empty');
-% box_8 = MHyProObject('Box','new_intervals',inter);
-% old_intervals = box_8.intervals();
-% disp('Old intervals:');
-% disp(old_intervals);
-% box_8_1 = box_8.empty(2);
-% new_intervals = box_8_1.intervals();
-% disp('New intervals:');
-% disp(new_intervals);
-% 
-% disp('Limits');
-% box_9 = MHyProObject('Box','new_intervals',inter);
-% limits = box_9.limits();
-% disp('Limits of box 9:');
-% disp(limits);
-% 
-% disp('Constraints');
-% %box_10
-% 
+%Construct a box from a list of intervals
+intervals_box = MHyProBox('intervals',inter);
+intervals = intervals_box.intervals();
+assert(isequal(inter,intervals));
+ 
+% Construct box from a pair of points
+points_box = MHyProBox('points',points);
+intervals = points_box.intervals();
+assert(isequal(intervals, points));
+
+% Copy a box
+copied_box = MHyProBox(points_box);
+intervals = copied_box.intervals();
+assert(isequal(intervals, points));
+
+% Construct box from matrix and vector
+mat_vec_box = MHyProBox([1 0; 0 1],[0;0]);
+matrix = mat_vec_box.matrix();
+vector = mat_vec_box.vector();
+% assert(matrix, mat);
+% assert(vector, vec);
+% TODO: Shouldn't the assertions be correct?
+
+% Construct box from single interval
+interval_box = MHyProBox('interval',[2 4]);
+intervals = interval_box.intervals();
+assert(isequal(intervals, [2 4]));
+
+% Insert an interval to a box
+
+intervals_box.insert([11 12]);
+intervals = intervals_box.intervals();
+assert(isequal([1 2; 3 4; 5 6; 11 12], intervals));
+
+% Construct an empty box of required dimension
+new_box = intervals_box.empty(5);
+intervals = new_box.matrix();
+%assert(?);
+
+% Get limits of intervals_box
+limits = intervals_box.limits();
+assert(isequal([1 2; 3 4; 5 6; 11 12], limits));
+
+% Get constraints defining a box
+
+
 % disp('Interval');
 % box_11 = MHyProObject('Box','new_intervals',inter);
 % inter_11 = box_11.interval(2);
