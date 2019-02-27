@@ -209,7 +209,6 @@ boxes = {box2, box3};
 % assert(isequal(inter, [0 7; -1 10]));
 
 % Scale a box
-disp('* (Scale)');
 box2 = box1 * 3;
 inter = box2.intervals();
 assert(isequal(inter, [3 15; 3 21]));
