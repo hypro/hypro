@@ -8,8 +8,8 @@
 #include "../@MHyProGeometricObjectInterface/MHyProGeometricObject.h"
 #include "mex.h"
 #include "matrix.h"
-#include "../ClassHandle.h"
-#include "../ObjectHandle.h"
+#include "../Handles/ClassHandle.h"
+#include "../Handles/ObjectHandle.h"
 
 
 class MHyProConstraintSet: public MHyProGeometricObject<hypro::ConstraintSet<double>>{

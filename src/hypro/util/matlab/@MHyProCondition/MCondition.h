@@ -9,8 +9,8 @@
 // #include <string>
 #include "mex.h"
 #include "matrix.h"
-#include "../ClassHandle.h"
-#include "../ObjectHandle.h"
+#include "../Handles/ClassHandle.h"
+#include "../Handles/ObjectHandle.h"
 // #include "decomposition/Decomposition.h"
 // #include "../../representations/ConstraintSet/ConstraintSet.h"
 // #include "../../representations/types.h"

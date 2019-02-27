@@ -5,8 +5,8 @@
 #include <string>
 #include "mex.h"
 #include "matrix.h"
-#include "../ClassHandle.h"
-#include "../ObjectHandle.h"
+#include "../Handles/ClassHandle.h"
+#include "../Handles/ObjectHandle.h"
 
 
 class MHyProBox: public MHyProGeometricObject<hypro::Box<double>>{

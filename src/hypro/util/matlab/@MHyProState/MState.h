@@ -3,8 +3,8 @@
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
-#include "../ClassHandle.h"
-#include "../ObjectHandle.h"
+#include "../Handles/ClassHandle.h"
+#include "../Handles/ObjectHandle.h"
 //#include "../../datastructures/HybridAutomaton/Condition.h"
 //#include "../../datastructures/HybridAutomaton/Visitors.h"
 #include "../../../datastructures/HybridAutomaton/State.h"

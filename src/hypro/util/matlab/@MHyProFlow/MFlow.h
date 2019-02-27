@@ -3,8 +3,8 @@
 #include "../../../types.h"
 #include "mex.h"
 #include "matrix.h"
-#include "../ClassHandle.h"
-#include "../ObjectHandle.h"
+#include "../Handles/ClassHandle.h"
+#include "../Handles/ObjectHandle.h"
 
 template<class T> class MFlow{
     public:
