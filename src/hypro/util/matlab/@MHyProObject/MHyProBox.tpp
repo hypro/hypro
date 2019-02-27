@@ -222,7 +222,7 @@ void MHyProBox::constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
 
     plhs[0] = mxCreateDoubleMatrix(dimy,dimx, mxREAL);
     plhs[1] = mxCreateDoubleMatrix(dimy,1,mxREAL);
-    vector2Matlab(hSpaces, plhs[0], plhs[1]);
+    vector2Matlab<hypro::Halfspace<double>>(hSpaces, plhs[0], plhs[1]);
 }
 
 /**
@@ -236,7 +236,8 @@ void MHyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
     if(nrhs > 4)
         mexWarnMsgTxt("MHyProBox - interval: One or more input arguments were ignored."); 
 
-    size_t dim = (size_t) mxGetScalar(prhs[3]);
+    // Decrease the dimension by 1 because in Matlab everything starts at 1
+    size_t dim = (size_t) mxGetScalar(prhs[3]) - 1;
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const carl::Interval<double> inter = box->interval(dim);
     plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
@@ -254,7 +255,7 @@ void MHyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nrhs > 4)
         mexWarnMsgTxt("MHyProBox - at: One or more input arguments were ignored.");  
 
-    size_t dim = (size_t) mxGetScalar(prhs[3]);
+    size_t dim = (size_t) mxGetScalar(prhs[3]) - 1;
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const carl::Interval<double> inter = box->at(dim);
 
@@ -292,9 +293,9 @@ void MHyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::Point<double> m = box->max();
-    int dim = m.rawCoordinates().size();
-    plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
-    ObjectHandle::convert2Matlab(m, plhs[0], 1, dim);
+    int dim = m.dimension();
+    plhs[0] = mxCreateDoubleMatrix(dim, 1, mxREAL);
+    ObjectHandle::convert2Matlab(m, plhs[0], dim, 1);
 }
 
 /**
@@ -310,83 +311,83 @@ void MHyProBox::min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::Point<double> m = box->min();
-    int dim = m.rawCoordinates().size();
-    plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
-    ObjectHandle::convert2Matlab(m, plhs[0], 1, dim);
+    int dim = m.dimension();
+    plhs[0] = mxCreateDoubleMatrix(dim, 1, mxREAL);
+    ObjectHandle::convert2Matlab(m, plhs[0], dim, 1);
 }
 
 
-/**
- * @brief Evaluation function (convex linear optimization).
- **/
-void MHyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MHyProBox - evaluate: Expecting an output!");
-    if(nrhs < 5)
-        mexErrMsgTxt("MHyProBox - evaluate: One or more arguments are missing!");
-    if(nrhs > 5)
-         mexWarnMsgTxt("MHyProBox - evaluate: One or more input arguments were ignored."); 
+// /**
+//  * @brief Evaluation function (convex linear optimization).
+//  **/
+// void MHyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("MHyProBox - evaluate: Expecting an output!");
+//     if(nrhs < 5)
+//         mexErrMsgTxt("MHyProBox - evaluate: One or more arguments are missing!");
+//     if(nrhs > 5)
+//          mexWarnMsgTxt("MHyProBox - evaluate: One or more input arguments were ignored."); 
 
-    const mwSize *dims_vec;
-    int vec_len;
-    bool ans;
+//     const mwSize *dims_vec;
+//     int vec_len;
+//     bool ans;
 
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+//     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
 
-    const double dir = (double) mxGetScalar(prhs[4]);
-    dims_vec = mxGetDimensions(prhs[3]);
-    vec_len = (int) dims_vec[0];
+//     const double dir = (double) mxGetScalar(prhs[4]);
+//     dims_vec = mxGetDimensions(prhs[3]);
+//     vec_len = (int) dims_vec[0];
 
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
+//     hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
 
-    if(dir == 0){
-        ans = false;
-    }else if (dir == 1){
-        ans = true;
-    }else{
-        mexErrMsgTxt("MHyProBox - evaluate: The direction must be either 0 or 1!");
-    }
+//     if(dir == 0){
+//         ans = false;
+//     }else if (dir == 1){
+//         ans = true;
+//     }else{
+//         mexErrMsgTxt("MHyProBox - evaluate: The direction must be either 0 or 1!");
+//     }
     
-    hypro::EvaluationResult<double> eval = box->evaluate(vec, ans);
-    plhs[0] = convertPtr2Mat<hypro::EvaluationResult<double>>(&eval);
-}
+//     hypro::EvaluationResult<double> eval = box->evaluate(vec, ans);
+//     plhs[0] = convertPtr2Mat<hypro::EvaluationResult<double>>(&eval);
+// }
 
-/**
- * @brief Multi-evaluation function (convex linear optimization).
- **/
-void MHyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MHyProBox - multiEvaluate: Expecting an output!");
-    if(nrhs < 5)
-        mexErrMsgTxt("MHyProBox - multiEvaluate: One or more arguments are missing!");
-    if(nrhs > 5)
-        mexWarnMsgTxt("MHyProBox - multiEvaluate: One or more input arguments were ignored."); 
+// *
+//  * @brief Multi-evaluation function (convex linear optimization).
+//  *
+// void MHyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("MHyProBox - multiEvaluate: Expecting an output!");
+//     if(nrhs < 5)
+//         mexErrMsgTxt("MHyProBox - multiEvaluate: One or more arguments are missing!");
+//     if(nrhs > 5)
+//         mexWarnMsgTxt("MHyProBox - multiEvaluate: One or more input arguments were ignored."); 
  
-    const mwSize *dims;
-    int dimx, dimy;
-    bool ans;
+//     const mwSize *dims;
+//     int dimx, dimy;
+//     bool ans;
 
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    const double dir = (double) mxGetScalar(prhs[4]);
+//     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+//     const double dir = (double) mxGetScalar(prhs[4]);
 
-    dims = mxGetDimensions(prhs[3]);
-    dimy = (int) dims[0];
-    dimx = (int) dims[1];
+//     dims = mxGetDimensions(prhs[3]);
+//     dimy = (int) dims[0];
+//     dimx = (int) dims[1];
 
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
+//     hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
 
-    if(dir == 0){
-        ans = false;
-    }else if (dir == 1){
-        ans = true;
-    }else{
-        mexErrMsgTxt("MHyProBox - evaluate: The direction must be either 0 or 1!");
-    }
+//     if(dir == 0){
+//         ans = false;
+//     }else if (dir == 1){
+//         ans = true;
+//     }else{
+//         mexErrMsgTxt("MHyProBox - evaluate: The direction must be either 0 or 1!");
+//     }
     
-    //Does this make sense?
-    // std::vector<hypro::EvaluationResult<double>> eval = box->multiEvaluate(mat,ans);
-    // plhs[0] = convertPtr2Mat<std::vector<hypro::EvaluationResult<double>>>(&eval);
-}
+//     //Does this make sense?
+//     // std::vector<hypro::EvaluationResult<double>> eval = box->multiEvaluate(mat,ans);
+//     // plhs[0] = convertPtr2Mat<std::vector<hypro::EvaluationResult<double>>>(&eval);
+// }
 
 /**
  * @brief Outstream operator.
@@ -442,13 +443,16 @@ void MHyProBox::type(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
  * @brief Makes a symmetric box from the current box.
  **/
 void MHyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProBox - makeSymmetric: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - makeSymmetric: One or more arguments are missing!");
     if(nrhs > 3)
         mexWarnMsgTxt("MHyProBox - makeSymmetric: One or more input arguments were ignored."); 
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    box->makeSymmetric();
+    hypro::Box<double> symmBox = box->makeSymmetric();
+    plhs[0] = plhs[0] = convertPtr2Mat<hypro::Box<double>>(new hypro::Box<double>(symmBox));
 }
 
 /**
@@ -611,15 +615,15 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
         return;
     }
 
-    if(!strcmp("evaluate", cmd)){
-        evaluate(nlhs, plhs, nrhs, prhs);
-        return;
-    }
+    // if(!strcmp("evaluate", cmd)){
+    //     evaluate(nlhs, plhs, nrhs, prhs);
+    //     return;
+    // }
 
-    if(!strcmp("multiEvaluate", cmd)){
-        multiEvaluate(nlhs, plhs, nrhs, prhs);
-        return;
-    }
+    // if(!strcmp("multiEvaluate", cmd)){
+    //     multiEvaluate(nlhs, plhs, nrhs, prhs);
+    //     return;
+    // }
 
     if(!strcmp("==", cmd)){
         equal(nlhs, plhs, nrhs, prhs);
@@ -717,7 +721,7 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
     }
 
     if(!strcmp("intersectHalfspaces", cmd)){
-        reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
+        intersectHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -737,7 +741,8 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
     }
 
     if(!strcmp("unite_objects", cmd)){
-        unite_vec(nlhs, plhs, nrhs, prhs);
+        mexErrMsgTxt("MMHyProBox - unite_objects is broken!");
+        // unite_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 

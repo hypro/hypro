@@ -490,7 +490,8 @@ void MHyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const m
     }
 
     if(!strcmp("unite_objects", cmd)){
-        unite_vec(nlhs, plhs, nrhs, prhs);
+        mexErrMsgTxt("MHyProSupportFunction - unite_objects is broken.");
+        // unite_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 

@@ -207,8 +207,6 @@ void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m
 void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimx; i++){
-        // mexPrintf("Set: %f at: %d\n", p[i], i*dimy+index);
-        //out[i*dimy + index] = p[i];
         out[dimx*index + i] = p[i];
     }
 }

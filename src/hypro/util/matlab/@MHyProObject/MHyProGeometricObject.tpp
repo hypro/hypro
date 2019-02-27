@@ -197,10 +197,17 @@ void MHyProGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, con
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = temp->vertices();
-    int dimy = vertices.size();
-    int dimx = vertices[0].dimension();
-    plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
-    vector2Matlab<hypro::Point<double>>(vertices, plhs[0]);
+    int dimx = vertices.size();
+    int dimy = vertices[0].dimension();
+    plhs[0] = mxCreateDoubleMatrix(dimx, dimy, mxREAL);
+    double* out = mxGetPr(plhs[0]);
+    for(int j = 0; j < dimx; j++){
+        hypro::Point<double> p = vertices[j];
+        for(int i = 0; i < dimy; i++){
+            out[i*dimx + j] = p[i];
+        }
+    }
+   
 }
 
 /**
@@ -418,16 +425,14 @@ void MHyProGeometricObject<T>::project(int nlhs, mxArray* plhs[], int nrhs, cons
     double *in_dimensions;
     int dimy;
 
-    T* box = convertMat2Ptr<T>(prhs[2]);
+    T* obj = convertMat2Ptr<T>(prhs[2]);
     m_in_dimensions = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
 
-    // in_dimensions = mxGetPr(m_in_dimensions);
-
     std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro(m_in_dimensions,dimy);
 
-    T temp = box->project(hy_dimensions);
+    T temp = obj->project(hy_dimensions);
     T* b = new T(temp);
     plhs[0] = convertPtr2Mat<T>(b);
 }
@@ -646,7 +651,7 @@ void MHyProGeometricObject<T>::unite_single(int nlhs, mxArray* plhs[], int nrhs,
     if(nrhs > 4)
         mexWarnMsgTxt("MHyProGeometricObject - unite_single: One or more input arguments were ignored.");
     
-    T* obj = convertMat2Ptr<T>(prhs[3]);
+    T* obj = convertMat2Ptr<T>(prhs[2]);
     T* obj_rhs = convertMat2Ptr<T>(prhs[3]);
 
     T temp = obj->unite(*obj_rhs);
@@ -659,28 +664,22 @@ void MHyProGeometricObject<T>::unite_single(int nlhs, mxArray* plhs[], int nrhs,
  **/
 template<class T>
 void MHyProGeometricObject<T>::unite_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    // if(nlhs != 1)
-    //     mexErrMsgTxt("MHyProGeometricObject - unite_vec: Expecting one output value!");
-    // if(nrhs < 4)
-    //     mexErrMsgTxt("MHyProGeometricObject - unite_vec: One or more arguments are missing!");
-    
-    // const mwSize *dims;
-    // int dimy;
-    // std::vector<T> hy_objs;
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProGeometricObject - unite_vec: Expecting one output value!");
+    if(nrhs < 4)
+        mexErrMsgTxt("MHyProGeometricObject - unite_vec: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MHyProGeometricObject - unite_vec: One or more input arguments were ignored.");
 
-    // T* obj = convertMat2Ptr<T>(prhs[2]);
-    // in_objs = mxGetPr(m_in_objs);
-    // dims = mxGetDimensions(prhs[3]);
-    // dimy = dims[0];
+    T* obj = convertMat2Ptr<T>(plhs[2]);
+    const mwSize* dims;
+    dims = mxGetDimensions(prhs[3]);
+    const int dimx = dims[1];
+    const std::vector<T> objects = objArray2Hypro<T>(prhs[3],dimx);
 
-    // for(int i = 3; i < nrhs; i++){
-    //     T* b = convertMat2Ptr<T>(prhs[i]);
-    //     hy_objs.emplace_back(*b);
-    // }
-
-    // T united = obj->unite(hy_objs); HERE IS SOMETHING WRONG
-    // T* b = new T(united);
-    // plhs[0] = convertPtr2Mat<T>(b);
+    T united = T::unite(objects);
+    T* b = new T(united);
+    plhs[0] = convertPtr2Mat<T>(b);
 }
 
 /**

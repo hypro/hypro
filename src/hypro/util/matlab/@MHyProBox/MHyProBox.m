@@ -71,9 +71,19 @@ classdef MHyProBox < MHyProGeometricObjectInterface
         end
         
         function out = project(obj, dim)
-            if isreal(dim)
-                ptr = MHyPro('Box', 'project', obj.Handle, dim);
-                out = MHyProBox( ptr);
+            max = obj.dimension();
+            if isvector(dim) && size(dim, 1) <= max 
+                new_dim = zeros(max,1);
+                for i = 1:size(dim,1)
+                    if dim(i) <= max
+                        % Has to be reduced to match C++
+                        new_dim(i) = dim(i) - 1;
+                    else
+                        error('MHyProBox - project: Dimension exceeds the dimension of object.');
+                    end
+                end
+                ptr = MHyPro('Box', 'project', obj.Handle, new_dim);
+                out = MHyProBox(ptr);
             else
                 error('MHyProBox - project: Wrong type of input argument.');
             end
@@ -106,15 +116,24 @@ classdef MHyProBox < MHyProGeometricObjectInterface
             end
         end
         
-        function out = intersectHalfspace(obj, mat, vec)
+        function out = intersectHalfspaces(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro('Box', 'intersectHalfspace', obj.Handle, mat, vec);
+                ptr = MHyPro('Box', 'intersectHalfspaces', obj.Handle, mat, vec);
+                out = MHyProBox(ptr);
+            else
+                error('MHyProBox - intersectHalfspaces: Wrong type of input argument.');
+            end
+        end
+        
+        function out = intersectHalfspace(obj, nor, off)
+            if isvector(nor) && isreal(off)
+                ptr = MHyPro('Box', 'intersectHalfspace', obj.Handle, nor, off);
                 out = MHyProBox(ptr);
             else
                 error('MHyProBox - intersectHalfspace: Wrong type of input argument.');
             end
         end
-        
+
         function out = contains(obj, arg)
             if isreal(arg)
                 out = MHyPro('Box', 'contains_point', obj.Handle, arg);
@@ -129,12 +148,23 @@ classdef MHyProBox < MHyProGeometricObjectInterface
             if isa(rhs, 'MHyProBox')
                 ptr = MHyPro('Box', 'unite', obj.Handle, rhs.Handle);
                 out = MHyProBox(ptr);
+%             elseif iscell(rhs)
+%                 objects = uint64.empty(length(rhs),0);
+%                 for i = 1:length(rhs)
+%                     objects{i} = rhs{i}.Handle;
+%                 end
+%                 ptr = MHyPro('Box', 'unite_objects', obj.Handle, objects{:});
             elseif iscell(rhs)
-                objects = uint64.empty(length(rhs),0);
+%                 objects = uint64.empty(length(rhs),0);
+                objects = cell(1,2);
                 for i = 1:length(rhs)
-                    objects{i} = rhs{i}.Handle;
+                    if isa(rhs{i}, 'MHyProBox')
+                        objects{i} = rhs{i}.Handle;
+                    else
+                        error('MHyProBox - unite: Wrong type of input argument.');
+                    end
                 end
-                ptr = MHyPro('Box', 'unite_objects', obj.Handle, objects{:});
+                ptr = MHyPro('Box', 'unite_objects', obj.Handle, objects);
                 out = MHyProBox(ptr);
             else
                 error('MHyProBox - unite: Wrong type of input argument.');
@@ -203,7 +233,7 @@ classdef MHyProBox < MHyProGeometricObjectInterface
         end
         
         function out = interval(obj, dim)
-            if isreal(dim)
+            if dim - floor(dim) == 0 && dim >= 1
                 out = MHyPro('Box', 'interval', obj.Handle, dim);
             else
                 error('MHyProBox - interval: Wrong type of argument.');
@@ -211,7 +241,7 @@ classdef MHyProBox < MHyProGeometricObjectInterface
         end
         
         function out = at(obj, dim)
-            if isreal(dim)
+            if dim - floor(dim) == 0
                 out = MHyPro('Box', 'at', obj.Handle, dim);
             else
                 error('MHyProBox - at: Wrong type of argument.');
@@ -255,12 +285,13 @@ classdef MHyProBox < MHyProGeometricObjectInterface
             end
         end
         
-        function makeSymmetric(obj)
-            MHyPro('Box', 'makeSymmetric', obj.Handle);
+        function out = makeSymmetric(obj)
+            ptr = MHyPro('Box', 'makeSymmetric', obj.Handle);
+            out = MHyProBox(ptr);
         end
         
         function out = minkowskiDecomposition(obj, rhs)
-            if ia(rhs, 'MHyProBox')
+            if isa(rhs, 'MHyProBox')
                 ptr = MHyPro(obj.Type, 'minkowskiDecomposition', obj.Handle, rhs.Handle);
                 out = MHyProBox(ptr);
             else

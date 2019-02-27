@@ -48,7 +48,7 @@ classdef MHyProGeometricObjectInterface < handle
         end
         
         function out = eq(obj, rhs)
-            if isa(rhs, obj.Type)
+            if strcmp(rhs.Type, obj.Type)
                 out = MHyPro(obj.Type, '==', obj.Handle, rhs.Handle);
             else
                 error('MHyProGeometricObjectInterface - equal: Not allowed for this type of HyProObject or wrong type of argument.');
@@ -56,7 +56,7 @@ classdef MHyProGeometricObjectInterface < handle
         end
         
         function out = ne(obj, rhs)
-            if ~strcmp(obj.Type, 'SupportFunction') && isa(rhs, obj.Type)
+            if ~strcmp(obj.Type, 'SupportFunction') && strcmp(rhs.Type, obj.Type)
                 out = MHyPro(obj.Type, '!=', obj.Handle, rhs.Handle);
             else
                 error('MHyProGeometricObjectInterface - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
