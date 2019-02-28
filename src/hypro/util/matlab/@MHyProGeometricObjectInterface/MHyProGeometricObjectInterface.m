@@ -6,15 +6,12 @@ classdef MHyProGeometricObjectInterface < handle
     end
     
     methods (Abstract)
-        empty(obj, dim)
         satisfiesHalfspace(obj, normal, offset)
         satisfiesHalfspaces(obj, mat, vec)
         project(obj, dim)
         linearTransformation(obj, mat)
         affineTransformation(obj, mat, vec)
         plot(obj, dims)
-        intersect(obj, rhs)
-    
     end
     
      methods (Access = private)
@@ -79,8 +76,8 @@ classdef MHyProGeometricObjectInterface < handle
             out = MHyPro(obj.Type, 'isEmpty', obj.Handle);
         end
         
-        function out = removeRedundancy(obj)
-            out = MHyPro(obj.Type, 'removeRedundancy', obj.Handle);
+        function removeRedundancy(obj)
+            MHyPro(obj.Type, 'removeRedundancy', obj.Handle);
         end
         
         function out = type(obj)

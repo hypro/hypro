@@ -433,10 +433,13 @@ void MHyProBox::box_size(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 }
 
 /**
- * @brief Returns type of representation.
+ * @brief
  **/
-void MHyProBox::type(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexPrintf("Box");
+void MHyProBox::type(int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProBox - type: Expecting one output value!");
+    std::string ans = "MHyProBox";
+    plhs[0] = mxCreateString(ans.c_str());
 }
 
 /**
@@ -486,275 +489,211 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
     char cmd[64];
     if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
         mexErrMsgTxt("MHyProBox - First input should be a command string less than 64 characters long.");
-    
-    /***************************************************************************
-     * Constructors
-     **************************************************************************/
 
     if (!strcmp("new_empty", cmd) && nrhs == 2){  
         emptyBox(nlhs, plhs, nrhs, prhs);
         return;
-    }
-    
-    // Check if there is a second input, which should be the class instance handle
-    if (nrhs < 2){
-        mexErrMsgTxt("Second input should be a Box instance handle.");
-    }
-    
+    } 
     if(!strcmp("copy", cmd)){
         copyObj(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("new_interval", cmd)){
         boxFromSingleInterval(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("new_intervals", cmd)){
         boxFromIntervals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("new_points",cmd)){
         boxFromPoints(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("new_mat_vec",cmd)){
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete", cmd)) {
         deleteObject(nlhs, plhs, nrhs, prhs);
         return;
     }
-    
-    /***************************************************************************
-     * Getters & setters
-     **************************************************************************/ 
-
     if(!strcmp("Test", cmd)){
         test(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("empty", cmd)){
         empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intervals", cmd)){
         intervals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("insert", cmd)){
         insert(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("limits", cmd)){
         limits(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("matrix", cmd)){
         matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("vector", cmd)){
         vector(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("constraints", cmd)){
         constraints(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("interval", cmd)){
         interval(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("at", cmd)){
         at(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("isEmpty", cmd)){
         is_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("isSymmetric", cmd)){
         is_symmetric(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("max", cmd)){
         max(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("min", cmd)){
         min(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("supremum", cmd)){
         supremum(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("vertices", cmd)){
         vertices(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     // if(!strcmp("evaluate", cmd)){
     //     evaluate(nlhs, plhs, nrhs, prhs);
     //     return;
     // }
-
     // if(!strcmp("multiEvaluate", cmd)){
     //     multiEvaluate(nlhs, plhs, nrhs, prhs);
     //     return;
     // }
-
     if(!strcmp("==", cmd)){
         equal(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("!=", cmd)){
         unequal(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("*", cmd)){
         scale(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("<<", cmd)){
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("dimension", cmd)){
         dimension(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("removeRedundancy", cmd)){
         removeRedundancy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("size", cmd)){
         box_size(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("type", cmd)){
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("reduceNumberRepresentation", cmd)){
         reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("makeSymmetric", cmd)){
         makeSymmetric(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("satisfiesHalfspace", cmd)){
         satisfiesHalfspace(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("satisfiesHalfspaces", cmd)){
         satisfiesHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("project", cmd)){
         project(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("linearTransformation", cmd)){
         linearTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("affineTransformation", cmd)){
         affineTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("minkowskiSum", cmd)){
         minkowskiSum(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("minkowskiDecomposition", cmd)){
         minkowskiDecomposition(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersect", cmd)){
         intersect(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersectHalfspace", cmd)){
         intersectHalfspace(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersectHalfspaces", cmd)){
         intersectHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_point", cmd)){
         contains_point(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_set", cmd)){
         contains_object(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("unite", cmd)){
         unite_single(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("unite_objects", cmd)){
         mexErrMsgTxt("MMHyProBox - unite_objects is broken!");
         // unite_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("reduceRepresentation", cmd)){
         reduceRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("clear", cmd)){
         clear(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     mexErrMsgTxt("MMHyProBox - Command not recognized.");
 }

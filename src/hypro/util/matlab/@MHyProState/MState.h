@@ -5,8 +5,6 @@
 #include "matrix.h"
 #include "../Handles/ClassHandle.h"
 #include "../Handles/ObjectHandle.h"
-//#include "../../datastructures/HybridAutomaton/Condition.h"
-//#include "../../datastructures/HybridAutomaton/Visitors.h"
 #include "../../../datastructures/HybridAutomaton/State.h"
 #include "../../../representations/types.h"
 #include "../../../representations/GeometricObject.h"

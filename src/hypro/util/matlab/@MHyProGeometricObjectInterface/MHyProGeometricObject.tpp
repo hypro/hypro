@@ -293,8 +293,6 @@ void MHyProGeometricObject<T>::dimension(int nlhs, mxArray* plhs[], int nrhs, co
  **/
 template<class T>
 void MHyProGeometricObject<T>::removeRedundancy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MHyProGeometricObject - removeRedundancy: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProGeometricObject - removeRedundancy: One or more arguments are missing!");
     if(nrhs > 3)

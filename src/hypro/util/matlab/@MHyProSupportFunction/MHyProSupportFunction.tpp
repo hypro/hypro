@@ -10,28 +10,31 @@ void MHyProSupportFunction::new_empty(int nlhs, mxArray* plhs[], int nrhs, const
     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>());
 }
 
-// /**
-//  * @brief
-//  **/
-// void MHyProSupportFunction::new_points(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-//     if(nlhs != 1)
-//         mexErrMsgTxt("MHyProSupportFunction - new_points: One output is expected.");
-//     if(nrhs < 3)
-//         mexErrMsgTxt("MHyProSupportFunction - new_points: At least one argument is missing.");
+/**
+ * @brief
+ **/
+void MHyProSupportFunction::new_points(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProSupportFunction - new_points: One output is expected.");
+    if(nrhs < 3)
+        mexErrMsgTxt("MHyProSupportFunction - new_points: At least one argument is missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - new_points: One or more input arguments were ignored."); 
+
     
-//     mxArray *m_in_points;
-//     double *in_points;
-//     const mwSize *dims;
-//     int dimy;
+    mxArray *m_in_points;
+    double *in_points;
+    const mwSize *dims;
+    int dimy, dimx;
 
-//     dims = mxGetDimensions(prhs[2]);
-//     dimy = (const int) dims[0];
-//     m_in_points = mxDuplicateArray(prhs[2]);
-//     in_points = mxGetPr(m_in_points);
+    dims = mxGetDimensions(prhs[2]);
+    dimy = (const int) dims[0];
+    dimx = (const int) dims[1];
+    m_in_points = mxDuplicateArray(prhs[2]);
 
-//     const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro(in_points, dimy);
-//     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
-// }
+    const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro(m_in_points, dimx, dimy);
+    // plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
+}
 
 /**
  * @brief
@@ -115,7 +118,7 @@ void MHyProSupportFunction::depth(int nlhs, mxArray* plhs[], int nrhs, const mxA
  * @brief
  **/
 void MHyProSupportFunction::operationCount(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProSupportFunction - operationCount: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - operationCount: One or more arguments are missing!");
@@ -131,14 +134,17 @@ void MHyProSupportFunction::operationCount(int nlhs, mxArray* plhs[], int nrhs, 
  * @brief
  **/
 void MHyProSupportFunction::type(int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[]){
-    mexPrintf("MHyProSupportFunction");
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProSupportFunction - type: Expecting one output value!");
+    std::string ans = "MHyProSupportFunction";
+    plhs[0] = mxCreateString(ans.c_str());
 }
 
 /**
  * @brief
  **/
 void MHyProSupportFunction::contains_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProSupportFunction - contains_vector: Expecting one output value!");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProSupportFunction - contains_vector: One or more arguments are missing!");
@@ -245,7 +251,7 @@ void MHyProSupportFunction::multiplicationsPerEvaluation(int nlhs, mxArray* plhs
  * @brief
  **/
 void MHyProSupportFunction::collectProjections(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1)
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProSupportFunction - collectProjections: Expecting one output value!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - collectProjections: One or more arguments are missing!");
@@ -287,8 +293,6 @@ void MHyProSupportFunction::evaluateTemplate(int nlhs, mxArray* plhs[], int nrhs
  * @brief
  **/
 void MHyProSupportFunction::reduceNumberRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("MHyProSupportFunction - reduceNumberRepresentation: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - reduceNumberRepresentation: One or more arguments are missing!");
     if(nrhs > 3)
@@ -320,235 +324,183 @@ void MHyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const m
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_matrix", cmd)){  
         new_matrix(nlhs, plhs, nrhs ,prhs);
         return;
     }
-
     if(!strcmp("new_intervals", cmd)){
         new_intervals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("new_halfspaces", cmd)){
         new_halfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-    
-    // if (!strcmp("new_points", cmd)){
-    //     new_points(nlhs, plhs, nrhs, prhs);
-    //     return;
-    // }
-    
+    if (!strcmp("new_points", cmd)){
+        mexErrMsgTxt("MHyProSupportFunction - new_points is broken!");
+        new_points(nlhs, plhs, nrhs, prhs);
+        return;
+    }
     if(!strcmp("copy", cmd)){
         copyObj(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete", cmd)) {
         deleteObject(nlhs, plhs, nrhs, prhs);
         return;
     }
-    
-    /***************************************************************************
-     * Getters & setters
-     **************************************************************************/ 
-
     if(!strcmp("matrix", cmd)){
         matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("vector", cmd)){
         vector(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("isEmpty", cmd)){
         is_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("vertices", cmd)){
         vertices(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("supremum", cmd)){
         supremum(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("==", cmd)){
         equal(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("<<", cmd)){
         ostream(nlhs, plhs, nrhs, prhs);
         return;
     }
-
-    /**************************************************************************
-     * General interface
-    **************************************************************************/
-    
     if(!strcmp("dimension", cmd)){
         dimension(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("removeRedundancy", cmd)){
         removeRedundancy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("size", cmd)){
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("type", cmd)){
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("reduceNumberRepresentation", cmd)){
         reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("satisfiesHalfspace", cmd)){
         satisfiesHalfspace(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("satisfiesHalfspaces", cmd)){
         satisfiesHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("project", cmd)){
         project(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("linearTransformation", cmd)){
         linearTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("affineTransformation", cmd)){
         affineTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("minkowskiSum", cmd)){
         minkowskiSum(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersect", cmd)){
         intersect(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersectHalfspace", cmd)){
         intersectHalfspace(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersectHalfspaces", cmd)){
-        reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
+        intersectHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_point", cmd)){
         contains_point(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_set", cmd)){
         contains_object(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_vec", cmd)){
         contains_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("unite", cmd)){
         unite_single(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("unite_objects", cmd)){
         mexErrMsgTxt("MHyProSupportFunction - unite_objects is broken.");
         // unite_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("reduceRepresentation", cmd)){
         reduceRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("cleanUp", cmd)){
         cleanUp(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("depth", cmd)){
         depth(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("operationCount", cmd)){
         operationCount(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_dir", cmd)){
         contains_dir(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("*", cmd)){
         scale(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("swap", cmd)){
         swap(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("forceLinTransReduction", cmd)){
         forceLinTransReduction(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("multiplicationsPerEvaluation", cmd)){
         multiplicationsPerEvaluation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("collectProjections", cmd)){
         collectProjections(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("evaluateTemplate", cmd)){
         evaluateTemplate(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     mexErrMsgTxt("MHyProSupportFunction - Command not recognized.");
 }

@@ -17,7 +17,7 @@ class MHyProSupportFunction: public MHyProGeometricObject<hypro::SupportFunction
         static void process(int, mxArray**, int, const mxArray**);
     private:
         static void new_empty(int, mxArray**, int, const mxArray**);
-        // static void new_points(int, mxArray**, int, const mxArray**);
+        static void new_points(int, mxArray**, int, const mxArray**);
         static void new_intervals(int, mxArray**, int, const mxArray**);
         static void new_halfspaces(int, mxArray**, int, const mxArray**);
         static void type(int, mxArray**, int, const mxArray**);

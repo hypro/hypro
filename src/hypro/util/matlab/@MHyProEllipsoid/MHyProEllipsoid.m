@@ -14,12 +14,16 @@ classdef MHyProEllipsoid < MHyProGeometricObjectInterface
                 elseif isa(varargin{1}, 'MHyProEllipsoid')
                     % Call copy constructor
                     obj.Handle = MHyPro('Ellipsoid', 'copy', varargin{1}.Handle);
-                elseif isreal(varargin{1})
-                    % Construct using radius
-                    obj.Handle = MHyPro('Ellipsoid', 'new_rad', varargin{1});
                 elseif ismatrix(varargin{1})
                     % Construct using matrix
                     obj.Handle = MHyPro('Ellipsoid', 'new_mat', varargin{1});
+                else
+                    error('MHyProEllipsoid - Constructor: Wrong type of argument.');
+                end
+            elseif nargin == 2
+                if isreal(varargin{1}) && varargin{2} - floor(varargin{2}) == 0
+                    % Construct using radius
+                    obj.Handle = MHyPro('Ellipsoid', 'new_rad', varargin{1}, varargin{2});
                 else
                     error('MHyProEllipsoid - Constructor: Wrong type of argument.');
                 end
@@ -27,16 +31,7 @@ classdef MHyProEllipsoid < MHyProGeometricObjectInterface
                 error('MHyProEllipsoid - Constructor: Wrong arguments.');
             end
         end
-                        
-        function out = empty(obj,dim)
-            if dim - floor(dim) == 0
-                ptr = MHyPro('Ellipsoid', 'empty', obj.Handle, dim);
-                out = MHyProEllipsoid(ptr);
-            else
-                error('MHyProEllipsoid - empty: Wrong type of input argument.');
-            end
-        end
-       
+                               
         function [containment, out] = satisfiesHalfspace(obj, normal, offset)
             if isvector(normal) && isreal(offset)
                 [containment, ptr] = MHyPro('Ellipsoid', 'satisfiesHalfspace', obj.Handle, normal, offset);
@@ -101,7 +96,6 @@ classdef MHyProEllipsoid < MHyProGeometricObjectInterface
            else
                 error('MHyProEllipsoid - approxEllipsoidMatrix: Wrong type of argument.');
            end
-       end
-
+        end
     end
 end

@@ -17,10 +17,10 @@ class MHyProEllipsoid: public MHyProGeometricObject<hypro::Ellipsoid<double>>{
     private:
         static void ellipsoid_rad(int, mxArray**, int, const mxArray**);
         static void ellipsoid_mat(int, mxArray**, int, const mxArray**);
-        static void evaluate(int, mxArray**, int, const mxArray**);
+        // static void evaluate(int, mxArray**, int, const mxArray**);
         static void approxEllipsoidTMatrix(int, mxArray**, int, const mxArray**);
         static void ostream(int, mxArray**, int, const mxArray**);
-        
+        static void type(int, mxArray**, int, const mxArray**);
 };
 
 #include "MHyProEllipsoid.tpp"

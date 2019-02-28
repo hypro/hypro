@@ -1,6 +1,5 @@
 #include "@MHyProBox/MHyProBox.h"
 #include "@MHyProConstraintSet/MHyProConstraintSet.h"
-#include "@MHyProTaylorModel/MHyProTaylorModel.h"
 #include "@MHyProEllipsoid/MHyProEllipsoid.h"
 #include "@MHyProSupportFunction/MHyProSupportFunction.h"
 #include "@MHyProHAutomaton/MHybridAutomaton.h"
@@ -30,8 +29,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         MHyProConstraintSet::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "SupportFunction")){
         MHyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "TaylorModel")){
-        // MHyProTaylorModel::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "HybridAutomaton")){
         MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Condition")){
