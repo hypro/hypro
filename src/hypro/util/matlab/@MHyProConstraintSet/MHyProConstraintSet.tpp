@@ -1,15 +1,28 @@
 #include "MHyProConstraintSet.h"
 
 /**
+ * @brief Creates an empty constraint set
+ **/
+void MHyProConstraintSet::new_empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProConstraintSet - new_empty: One output expected.");
+    if(nrhs > 2)
+        mexWarnMsgTxt("MHyProConstraintSet - new_empty: One or more input arguments were ignored.");
+
+    plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>(new hypro::ConstraintSet<double>);
+}
+
+/**
  * @brief
  **/
 void MHyProConstraintSet::isAxisAligned(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProConstraintSet - isAxisAligned: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProConstraintSet - isAxisAligned: One argument missing!");
-    }
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProConstraintSet - isAxisAligned: One or more input arguments were ignored.");
+
     hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>(prhs[2]);
     const bool empty = temp->isAxisAligned();
     plhs[0] = mxCreateLogicalScalar(empty);
@@ -21,6 +34,9 @@ void MHyProConstraintSet::isAxisAligned(int nlhs, mxArray* plhs[], int nrhs, con
 void MHyProConstraintSet::addConstraint(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 5)
         mexErrMsgTxt("MHyProConstraintSet - addConstraint: One or more arguments are missing!");
+    if(nrhs > 5)
+        mexWarnMsgTxt("MHyProConstraintSet - addConstraint: One or more input arguments were ignored.");
+
 
     const mwSize *dims;
     int dimx, dimy;
@@ -38,8 +54,11 @@ void MHyProConstraintSet::addConstraint(int nlhs, mxArray* plhs[], int nrhs, con
 /**
  * @brief
  **/
-void MHyProConstraintSet::type(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    mexPrintf("ConstraintSet");
+void MHyProConstraintSet::type(int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProConstraintSet - type: Expecting one output value!");
+    std::string ans = "MHyProConstraintSet";
+    plhs[0] = mxCreateString(ans.c_str());
 }
 
 /**
@@ -47,10 +66,13 @@ void MHyProConstraintSet::type(int nlhs, mxArray* plhs[], int nrhs, const mxArra
  **/
 void MHyProConstraintSet::reduceNumberRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("HyProGeometricObject - reduceNumberRepresentation: Expecting an output!");
+        mexErrMsgTxt("HyProConstraintSet - reduceNumberRepresentation: Expecting an output!");
     if(nrhs < 4)
-        mexErrMsgTxt("HyProGeometricObject - reduceNumberRepresentation: One or more arguments are missing!");
-    
+        mexErrMsgTxt("HyProConstraintSet - reduceNumberRepresentation: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MHyProConstraintSet - reduceNumberRepresentation: One or more input arguments were ignored.");
+
+
     hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>(prhs[2]);
     const unsigned u = (const unsigned) mxGetScalar(prhs[3]);
     hypro::ConstraintSet<double> obj = temp->reduceNumberRepresentation(u);
@@ -94,183 +116,138 @@ void MHyProConstraintSet::process(int nlhs, mxArray *plhs[], int nrhs, const mxA
     char cmd[64];
     if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
         mexErrMsgTxt("MHyProConstraintSet - First input should be a command string less than 64 characters long.");
-    
-    /***************************************************************************
-     * Constructors
-     **************************************************************************/
 
+    if(!strcmp("new_empty", cmd)){
+        new_empty(nlhs, plhs, nrhs, prhs);
+        return;
+    }
     if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-    
-    // Check if there is a second input, which should be the class instance handle
-    if (nrhs < 2){
-        mexErrMsgTxt("Second input should be a Box instance handle.");
-    }
-    
     if(!strcmp("copy", cmd)){
         copyObj(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete", cmd)) {
         deleteObject(nlhs, plhs, nrhs, prhs);
         return;
     }
-    
-    /***************************************************************************
-     * Getters & setters
-     **************************************************************************/ 
-
     if(!strcmp("matrix", cmd)){
         matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("vector", cmd)){
         vector(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("isAxisAligned", cmd)){
         isAxisAligned(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("addConstraint", cmd)){
         addConstraint(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("isEmpty", cmd)){
         is_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("vertices", cmd)){
         vertices(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("==", cmd)){
         equal(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("!=", cmd)){
         unequal(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("<<", cmd)){
         ostream(nlhs, plhs, nrhs, prhs);
         return;
     }
-
-    /**************************************************************************
-     * General interface
-    **************************************************************************/
-    
     if(!strcmp("dimension", cmd)){
         dimension(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("removeRedundancy", cmd)){
         removeRedundancy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("size", cmd)){
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("type", cmd)){
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("reduceNumberRepresentation", cmd)){
         reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("satisfiesHalfspace", cmd)){
         satisfiesHalfspace(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("satisfiesHalfspaces", cmd)){
         satisfiesHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("project", cmd)){
         project(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("linearTransformation", cmd)){
         linearTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("affineTransformation", cmd)){
         affineTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("minkowskiSum", cmd)){
         minkowskiSum(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersect", cmd)){
         intersect(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersectHalfspace", cmd)){
         intersectHalfspace(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("intersectHalfspaces", cmd)){
         intersectHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_point", cmd)){
         contains_point(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("contains_set", cmd)){
         contains_object(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("unite", cmd)){
         unite_single(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("unite_objects", cmd)){
         unite_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("reduceRepresentation", cmd)){
         reduceRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if(!strcmp("clear", cmd)){
         clear(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     mexErrMsgTxt("MHyProConstraintSet - Command not recognized.");
 }

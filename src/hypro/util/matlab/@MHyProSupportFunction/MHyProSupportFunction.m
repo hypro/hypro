@@ -133,7 +133,7 @@ classdef MHyProSupportFunction < MHyProGeometricObjectInterface
             if isvector(pnt)
                 out = MHyPro('SupportFunction', 'contains_point', obj.Handle, pnt);
             else
-                error('MHyProSupportFunction - contains: Wrong type of input argument.');
+                error('MHyProSupportFunction - containsPoint: Wrong type of input argument.');
             end
         end
         

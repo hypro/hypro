@@ -16,6 +16,7 @@ class MHyProConstraintSet: public MHyProGeometricObject<hypro::ConstraintSet<dou
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
+        static void new_empty(int, mxArray**, int, const mxArray**);
         static void isAxisAligned(int, mxArray**, int, const mxArray**);
         static void addConstraint(int, mxArray**, int, const mxArray**);
         static void type(int, mxArray**, int, const mxArray**);
