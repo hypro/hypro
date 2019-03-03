@@ -121,13 +121,15 @@ classdef MHyProConstraintSet < MHyProGeometricObjectInterface
             if isa(rhs, 'MHyProConstraintSet')
                 ptr = MHyPro('ConstraintSet', 'unite', obj.Handle, rhs.Handle);
                 out = MHyProConstraintSet(ptr);
-            elseif iscell(rhs)
+            elseif iscelloftype(rhs, "MHyProConstraintSet")
                 objects = uint64.empty(length(rhs),0);
                 for i = 1:length(rhs)
                     objects{i} = rhs{i}.Handle;
                 end
-                ptr = MHyPro('ConstraintSet', 'unite_objects', obj.Handle, objects);
-                out = MHyProConstraintSet(ptr);
+                object
+                out = 1;
+%                 ptr = MHyPro('ConstraintSet', 'unite_objects', obj.Handle, objects);
+%                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - unite: Wrong type of input argument.');
             end

@@ -16,28 +16,28 @@ classdef MHyProLocation < handle
         
         %Constructor
          function obj = MHyProLocation(varargin)
-            if nargin == 1
+            if nargin == 0
                 % Call the constructor for empty flow
                 obj.Handle = MHyPro('Location', 'new_empty');
-            elseif nargin == 2
-                if isa(varargin{2}, 'uint64')
+            elseif nargin == 1
+                if isa(varargin{1}, 'uint64')
                     % Call the copy constructor
-                    obj.Handle = MHyPro('Location', 'copy', varargin{2});
-                elseif ismatrix(varargin{2})
+                    obj.Handle = MHyPro('Location', 'copy', varargin{1});
+                elseif ismatrix(varargin{1})
                     % Call the matrix constructor
-                    obj.Handle = MHyPro('Location', 'new_mat', varargin{2});
+                    obj.Handle = MHyPro('Location', 'new_mat', varargin{1});
                 else
                     error('MHyProLocation - Constructor: Wrong type of at least one argument.');
                 end
             elseif nargin == 3
-                if ismatrix(varargin{2}) && isvector(varargin{3})
+                if ismatrix(varargin{1}) && isvector(varargin{2}) && isa(varargin{3}, 'MHyProCondition')
                     % Call the matrix-vector constructor for affine flow
-                    obj.Handle = MHyPro('Location', 'new_mat_vec' ,varargin{2}, varargin{3});
+                    obj.Handle = MHyPro('Location', 'new_mat_vec_inv' ,varargin{1}, varargin{2});
                 else
-                    error('MHyProLocation - Constructor: Wrong type of at leat one argument.');
+                    error('MHyProLocation - Constructor: Wrong type of at least one argument.');
                 end
             else
-                error('MHyProLocation - Constructor: Wrong type of at leat one argument.');
+                error('MHyProLocation - Constructor: Wrong type of at least one argument.');
             end
          end
         

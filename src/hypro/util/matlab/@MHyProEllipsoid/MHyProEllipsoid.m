@@ -21,7 +21,7 @@ classdef MHyProEllipsoid < MHyProGeometricObjectInterface
                     error('MHyProEllipsoid - Constructor: Wrong type of argument.');
                 end
             elseif nargin == 2
-                if isreal(varargin{1}) && varargin{2} - floor(varargin{2}) == 0
+                if isreal(varargin{1}) && mod(varargin{2}, 1) == 0
                     % Construct using radius
                     obj.Handle = MHyPro('Ellipsoid', 'new_rad', varargin{1}, varargin{2});
                 else

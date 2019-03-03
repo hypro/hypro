@@ -1,13 +1,5 @@
 #pragma once
 
-// #include "Condition.h"
-// #include "flow/operations.h"
-// #include "flow/typetraits.h"
-// #include "flow/visitors.h"
-// #include "../../types.h"
-// #include <boost/variant.hpp>
-// #include <iostream>
-// #include <string>
 #include "mex.h"
 #include "matrix.h"
 #include "../Handles/ClassHandle.h"
@@ -19,7 +11,7 @@ class MLocation{
     private:
         static void new_empty(int, mxArray**, int, const mxArray**);
         static void new_matrix(int, mxArray**, int, const mxArray**);
-        static void new_mat_vec(int, mxArray**, int, const mxArray**);
+        static void new_mat_vec_inv(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
         static void delete_loc(int, mxArray**, int, const mxArray**);
         static void getNumberFlow(int, mxArray**, int, const mxArray**);
@@ -41,7 +33,7 @@ class MLocation{
         static void addTransition(int, mxArray**, int , const mxArray**);
         static void setExtInput(int, mxArray**, int , const mxArray**);
         static void isComposedOf(int, mxArray**, int , const mxArray**);
-        static void getDotRepresentation(int, mxArray**, int , const mxArray**);
+        // static void getDotRepresentation(int, mxArray**, int , const mxArray**);
         static void decompose(int, mxArray**, int , const mxArray**);
         static void less(int, mxArray**, int , const mxArray**);
         static void equals(int, mxArray**, int , const mxArray**);

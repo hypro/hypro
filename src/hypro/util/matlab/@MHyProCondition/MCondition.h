@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../datastructures/HybridAutomaton/Condition.h"
+// #include "../../../datastructures/HybridAutomaton/Condition.h"
 // #include "flow/operations.h"
 // #include "flow/typetraits.h"
 // #include "flow/visitors.h"
@@ -34,12 +34,11 @@ class MCondition{
         static void setVector(int, mxArray**, int, const mxArray**);
         static void constraints(int, mxArray**, int, const mxArray**);
         static void hash(int, mxArray**, int, const mxArray**);
-        static void getDotRepresentation(int, mxArray**, int, const mxArray**);
+        // static void getDotRepresentation(int, mxArray**, int, const mxArray**);
         static void decompose(int, mxArray**, int, const mxArray**);
         static void equals(int, mxArray**, int, const mxArray**);
         static void unequals(int, mxArray**, int, const mxArray**);
         static void outstream(int, mxArray**, int, const mxArray**);
         static void combine(int, mxArray**, int, const mxArray**);
 };
-
 #include "MCondition.tpp"

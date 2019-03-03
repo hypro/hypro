@@ -246,28 +246,28 @@ void MCondition::hash(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
     plhs[0] = mxCreateDoubleScalar(s);
 }
 
-/**
- * @brief
- **/
-void MCondition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MCondition - getDotRepresentation: Expecting an output!");
-    if(nrhs < 4)
-        mexErrMsgTxt("MCondition - getDotRepresentation: One or more input arguments are missing!");
-    if(nrhs > 4)
-        mexWarnMsgTxt("MCondition - getDotRepresentation: One or more input arguments were ignored!");
+// /**
+//  * @brief
+//  **/
+// void MCondition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("MCondition - getDotRepresentation: Expecting an output!");
+//     if(nrhs < 4)
+//         mexErrMsgTxt("MCondition - getDotRepresentation: One or more input arguments are missing!");
+//     if(nrhs > 4)
+//         mexWarnMsgTxt("MCondition - getDotRepresentation: One or more input arguments were ignored!");
 
-    const mwSize* dims;
-    int len;
-    dims = mxGetDimensions(prhs[3]);
-    len = dims[0];
+//     const mwSize* dims;
+//     int len;
+//     dims = mxGetDimensions(prhs[3]);
+//     len = dims[0];
 
-    hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-    std::vector<std::string> strs = ObjectHandle::mStringVector2Hypro(prhs[3], len);
+//     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
+//     std::vector<std::string> strs = ObjectHandle::mStringVector2Hypro(prhs[3], len);
 
-    std::string ans = cond->getDotRepresentation(strs);
-    plhs[0] = mxCreateString(ans.c_str());
-}
+//     std::string ans = cond->getDotRepresentation(strs);
+//     plhs[0] = mxCreateString(ans.c_str());
+// }
 
 /**
  * @brief
@@ -359,107 +359,85 @@ void MCondition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_constr_set", cmd)){  
-        copy(nlhs, plhs, nrhs, prhs);
+        new_constr_set(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete_condition", cmd)){  
         delete_condition(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("size", cmd)){  
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isempty", cmd)){  
         isempty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getMatrix", cmd)){  
         getMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getVector", cmd)){  
         getVector(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isAxisAligned", cmd)){  
         isAxisAligned(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isAxisAligned_at", cmd)){  
         isAxisAligned_at(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setMatrix", cmd)){  
         setMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setVector", cmd)){  
         setVector(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("constraints", cmd)){  
         constraints(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("hash", cmd)){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
-
-    if (!strcmp("getDotRepresentation", cmd)){  
-        getDotRepresentation(nlhs, plhs, nrhs, prhs);
-        return;
-    }
-
+    // if (!strcmp("getDotRepresentation", cmd)){  
+    //     getDotRepresentation(nlhs, plhs, nrhs, prhs);
+    //     return;
+    // }
     if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("equals", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("unequals", cmd)){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("combine", cmd)){  
         combine(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     mexErrMsgTxt("MCondition - Command not recognized.");
-
 }

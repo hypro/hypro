@@ -44,7 +44,7 @@ classdef MHyProBox < MHyProGeometricObjectInterface
         
                 
         function out = empty(obj,dim)
-            if dim - floor(dim) == 0
+            if mod(dim, 1) == 0
                 ptr = MHyPro('Box', 'empty', obj.Handle, dim);
                 out = MHyProBox(ptr);
             else
@@ -233,7 +233,7 @@ classdef MHyProBox < MHyProGeometricObjectInterface
         end
         
         function out = interval(obj, dim)
-            if dim - floor(dim) == 0 && dim >= 1
+            if mod(dim, 1) == 0 && dim >= 1
                 out = MHyPro('Box', 'interval', obj.Handle, dim);
             else
                 error('MHyProBox - interval: Wrong type of argument.');
@@ -241,7 +241,7 @@ classdef MHyProBox < MHyProGeometricObjectInterface
         end
         
         function out = at(obj, dim)
-            if dim - floor(dim) == 0
+            if mod(dim, 1) == 0
                 out = MHyPro('Box', 'at', obj.Handle, dim);
             else
                 error('MHyProBox - at: Wrong type of argument.');

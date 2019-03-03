@@ -1,12 +1,5 @@
 #pragma once
 
-/*#include "../../../datastructures/HybridAutomaton/Location.h"
-#include "../../../datastructures/HybridAutomaton/Transition.h"
-#include "../../../datastructures/HybridAutomaton/Condition.h"
-#include "../../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
-#include "../../../types.h"
-#include "../../../util/adaptions_eigen/adaptions_eigen.h"
-#include <map>*/
 #include "mex.h"
 #include "matrix.h"
 #include "../Handles/ClassHandle.h"

@@ -8,7 +8,6 @@ void MLabel::new_name(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 
     char name[64];
     mxGetString(prhs[2], name, sizeof(name));
-
     hypro::Label* temp = new hypro::Label(name);
     plhs[0] = convertPtr2Mat<hypro::Label>(temp);
 }

@@ -101,64 +101,56 @@ void MAffineFlow::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete", cmd)){  
         delete_flow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("type", cmd)){  
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("hasTranslation", cmd)){  
         hasTranslation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setTranslation", cmd)){  
         setTranslation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getTranslation", cmd)){  
         getTranslation(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isTimed", cmd)){  
         isTimed(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isDiscrete", cmd)){  
         isDiscrete(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("==", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("!=", cmd)){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if(!strcmp("dimension", cmd)){
+        dimension(nlhs, plhs, nrhs, prhs);
         return;
     }
 

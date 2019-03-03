@@ -134,79 +134,68 @@ void MLinearFlow::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_mat", cmd)){  
         new_mat(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete", cmd)){  
         delete_flow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("size", cmd)){  
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("type", cmd)){  
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("hasNoFlow", cmd)){  
         hasNoFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getFlowMatrix", cmd)){  
         getFlowMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setFlowMatrix", cmd)){  
         setFlowMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("addRow", cmd)){  
         addRow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isIdentity", cmd)){  
         isIdentity(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isTimed", cmd)){  
         isTimed(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isDiscrete", cmd)){  
         isDiscrete(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("==", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("!=", cmd)){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if(!strcmp("dimension", cmd)){
+        dimension(nlhs, plhs, nrhs, prhs);
         return;
     }
 

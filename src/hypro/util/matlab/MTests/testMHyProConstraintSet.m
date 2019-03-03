@@ -114,24 +114,13 @@ assert(contains == 1);
 uni = set2.unite(set1);
 % assert ---> ?
 
-
 % Unite multiple constraint sets
 set1 = MHyProConstraintSet(eye(2), [1; 5]);
 set2 = MHyProConstraintSet(eye(3), [2; 7;-1]);
 set3 = MHyProConstraintSet(eye(1), [2]);
 sets = {set2, set3};
-united = set1.unite(sets);
+% united = set1.unite(sets);
 % assert ---> ?
-% 
-% % Scale a box
-% box2 = box1 * 3;
-% inter = box2.intervals();
-% assert(isequal(inter, [3 15; 3 21]));
-% 
-% % Reduce number of representation
-% box1 = MHyProBox('intervals', [1 5; 1 7; 1 2; 2 3]);
-% box2 = box1.reduceNumberRepresentation();
-% inter = box2.intervals();
-% assert(isequal(inter, [1 5; 1 7; 1 2; 2 3]));
+
 
 res = 1;

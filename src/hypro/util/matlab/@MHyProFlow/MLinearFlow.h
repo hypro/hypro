@@ -8,7 +8,7 @@
 #include "MFlow.h"
 
 class MLinearFlow: public MFlow<hypro::linearFlow<double>>{
- public:
+    public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
         static void new_mat(int, mxArray**, int, const mxArray**);

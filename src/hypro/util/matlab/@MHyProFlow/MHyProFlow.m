@@ -25,12 +25,18 @@ classdef MHyProFlow < handle
             end 
 
             if nargin == 1
-                % Call the constructor for empty flow
-                obj.Handle = MHyPro(varargin{1}, 'new_empty');
+                if ischar(varargin{1})
+                    % Call the constructor for empty flow
+                    obj.Handle = MHyPro(varargin{1}, 'new_empty');
+                else
+                    error('MHyProFlow - Constructor: Wrong type of at least one argument.');
+                end
             elseif nargin == 2
                 if isa(varargin{2}, 'uint64')
                     % Call the copy constructor
-                    obj.Handle = MHyPro(varargin{1}, 'copy', varargin{2});
+                    obj.Handle = varargin{2};
+                elseif isa(varargin{2}, 'MHyProFlow')
+                    obj.Handle = MHyPro(varargin{2}.Type, 'copy', varargin{2}.Handle);    
                 elseif strcmp(varargin{1}, 'linearFlow') && ismatrix(varargin{2})
                     % Call the matrix constructor for linear flow
                     obj.Handle = MHyPro('linearFlow', 'new_mat', varargin{2});
@@ -38,11 +44,11 @@ classdef MHyProFlow < handle
                     error('MHyProFlow - Constructor: Wrong type of at least one argument.');
                 end
             elseif nargin == 3
-                if strcmp(varargin{1}, 'affineFlow') && ismatrix(varargin{2}) && isvector(varargin{3})
+                if strcmp(varargin{1}, 'affineFlow') && ismatrix(varargin{2}) && isvector(varargin{3}) && size(varargin{2},2) == size(varargin{3},1)
                     % Call the matrix-vector constructor for affine flow
                     obj.Handle = MHyPro('affineFlow', 'new_mat_vec' ,varargin{2}, varargin{3});
                 else
-                    error('MHyproFlow - Constructor: Wrong type of at leat one argument.');
+                    error('MHyproFlow - Constructor: Wrong type of at least one argument.');
                 end
             else
                 error('MHyproFlow - Constructor: Wrong type of at leat one argument.');
@@ -105,9 +111,9 @@ classdef MHyProFlow < handle
             end
         end
         
-        function out = setFlowMatrix(obj)
+        function setFlowMatrix(obj, mat)
             if strcmp(obj.Type, 'linearFlow')
-                out = MHyPro('linearFlow', 'setFlowMatrix', obj.Handle);
+                MHyPro('linearFlow', 'setFlowMatrix', obj.Handle, mat);
             else
                 error('MHyProFlow - setFlowMatrix: Wrong type of input argument.');
             end
@@ -152,6 +158,10 @@ classdef MHyProFlow < handle
             else
                 error('MHyProFlow - getTranslation: Wrong type of input argument(s).');
             end
+        end
+        
+        function out = dimension(obj)
+            out = MHyPro(obj.Type, 'dimension', obj.Handle);
         end
         
     end

@@ -138,7 +138,7 @@ void MFlow<T>::equals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
     T* flow_2 = convertMat2Ptr<T>(prhs[3]);
     mxLogical ans = false;
     if(*flow_1 == *flow_2)
-    ans = true;
+        ans = true;
     
     plhs[0] = mxCreateLogicalScalar(ans);
 }
@@ -159,7 +159,7 @@ void MFlow<T>::unequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
     T* flow_2 = convertMat2Ptr<T>(prhs[3]);
     mxLogical ans = false;
     if(*flow_1 != *flow_2)
-    ans = true;
+        ans = true;
     
     plhs[0] = mxCreateLogicalScalar(ans);
 }

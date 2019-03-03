@@ -1,6 +1,5 @@
 #include "MLocation.h"
 
-
 /**
  * @brief
  **/
@@ -39,8 +38,27 @@ void MLocation::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 /**
  * @brief
  **/
-void MLocation::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO
+void MLocation::new_mat_vec_inv(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    // if(nlhs != 1)
+    //     mexErrMsgTxt("MHyProLocation - new_mat_vec: Expecting an output!");
+    // if(nrhs < 5)
+    //     mexErrMsgTxt("MHyProLocation - new_mat_vec: One or more arguments are missing!");
+    // if(nrhs > 5)
+    //     mexWarnMsgTxt("MHyProLocation - new_mat_vec: One or more input arguments were ignored.");
+
+    // const mwSize *mat_dims, *vec_dims;
+    // int mat_dimx, mat_dimy, vec_dimy;
+
+    // mat_dims = mxGetDimensions(prhs[2]);
+    // mat_dimy = (int) mat_dims[0];
+    // mat_dimx = (int) mat_dims[1];
+    // vec_dims = mxGetDimensions(prhs[3]);
+    // vec_dimy = (int) vec_dims[0];
+
+    // hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
+    // hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
+    // hypro::Condition<double>* inv = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
+    // plhs[0] =  convertPtr2Mat<hypro::Location<double>>(new hypro::Location<double>(matrix, vector, *inv));
 }
 
 /**
@@ -499,146 +517,117 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("new_mat", cmd)){  
         new_matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-
-    if (!strcmp("new_mat_vec", cmd)){  
-        new_mat_vec(nlhs, plhs, nrhs, prhs);
+    if (!strcmp("new_mat_vec_inv", cmd)){  
+        new_mat_vec_inv(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("delete", cmd)){  
         delete_loc(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getNumberFlow", cmd)){  
         getNumberFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getLinearFlow", cmd)){  
         getLinearFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getLinearFlows", cmd)){  
         getLinearFlows(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getInvariant", cmd)){  
         getInvariant(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getTransitions", cmd)){  
         getTransitions(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getExternalInput", cmd)){  
         getExternalInput(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("hasExternalInput", cmd)){  
         hasExternalInput(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("hash", cmd)){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("getName", cmd)){  
         getName(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("dimension_at", cmd)){  
         dimension_at(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setName", cmd)){  
         setName(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setLinearFlow", cmd)){  
         setLinearFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setLinearFlows", cmd)){
         setLinearFlow_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setInvariant", cmd)){  
         setInvariant(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setTransition", cmd)){  
         setTransition(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("addTransition", cmd)){  
         addTransition(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("setExtInput", cmd)){  
         setExtInput(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("isComposedOf", cmd)){  
         isComposedOf(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     // if (!strcmp("getDotRepresentation", cmd)){  
     //     getDotRepresentation(nlhs, plhs, nrhs, prhs);
     //     return;
     // }
-
     if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("less", cmd)){  
         less(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("equals", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("unequals", cmd)){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
-
     mexErrMsgTxt("MLocation - Command not recognized.");   
 }
