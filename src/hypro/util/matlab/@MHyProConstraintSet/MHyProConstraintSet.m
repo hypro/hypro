@@ -50,7 +50,7 @@ classdef MHyProConstraintSet < MHyProGeometricObjectInterface
         function out = project(obj, dim)
             if isreal(dim)
                 ptr = MHyPro('ConstraintSet', 'project', obj.Handle, dim);
-                out = MHyProConstraintSet( ptr);
+                out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - project: Wrong type of input argument.');
             end

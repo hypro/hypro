@@ -40,7 +40,16 @@ void MCondition::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
  * @brief
  **/
 void MCondition::new_constr_set(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO:
+    if(nlhs != 1)
+        mexErrMsgTxt("MCondition - new_constr_set: Expecting an output!");
+    if(nrhs < 3)
+        mexErrMsgTxt("MCondition - new_constr_set: One or more input arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MCondition - new_constr_set: One or more input arguments were ignored!");
+
+    const hypro::ConstraintSetT<double>* set = convertMat2Ptr<hypro::ConstraintSetT<double>>(prhs[2]);
+    // hypro::Condition<double>* cond = new hypro::Condition<double>(*set);
+    // plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond); ---> ?
 }
 
 /**
@@ -371,7 +380,7 @@ void MCondition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete_condition", cmd)){  
+    if (!strcmp("delete", cmd)){  
         delete_condition(nlhs, plhs, nrhs, prhs);
         return;
     }

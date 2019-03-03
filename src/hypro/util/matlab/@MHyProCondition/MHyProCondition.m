@@ -16,7 +16,9 @@ classdef MHyProCondition < handle
         
         % Constructor
         function obj = MHyProCondition(varargin)
-            if nargin == 1
+            if nargin == 0
+                obj.Handle = MHyPro('Condition', 'new_empty');
+            elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
                     obj.Handle = varargin{2};
                 elseif isa(varargin{1}, 'MHyProCondition')
@@ -51,16 +53,16 @@ classdef MHyProCondition < handle
         end
         
         function out = getVector(obj)
-            out = MHyPro('Condtion', 'getVector', obj.Handle);
+            out = MHyPro('Condition', 'getVector', obj.Handle);
         end
         
         function out = isAxisAligned(obj)
-            out = MHyPro('Condtion', 'isAxisAligned', obj.Handle);
+            out = MHyPro('Condition', 'isAxisAligned', obj.Handle);
         end
         
         function out = isAxisAligned_at(obj, dim)
             if mod(dim, 1) == 0
-                out = MHyPro('Condition', 'isAxisAligned_at', obj.Handle, dim);
+                out = MHyPro('Condition', 'isAxisAligned_at', obj.Handle, dim - 1);
             else
                 error('MHyProCondition - isAxisAligned_at: Wrong type of at least one argument.');
             end
@@ -74,16 +76,21 @@ classdef MHyProCondition < handle
             end
         end
         
-        function setVector(obj, vec)
-            if isvector(vec)
-                MHyPro('Condition', 'setVector', obj.Handle, vec);
+        function setVector(obj, vec, pos)
+            if isvector(vec) && mod(pos,1) == 0
+                MHyPro('Condition', 'setVector', obj.Handle, vec, pos);
             else
                 error('MHyProCondition - setVector: Wrong type of at least one argument.');
             end
         end
         
         function out = constraints(obj)
-            out = MHyPro('Condition', 'constraints', obj.Handle);
+            ptrscell = MHyPro('Condition', 'constraints', obj.Handle);
+            out = cell(1, size(ptrscell,2));
+            for i = 1:size(ptrscell,2)
+                ptr = ptrscell{i};
+                out{i} = MHyProConstraintSet(ptr);
+            end
         end
         
         function out = hash(obj)
