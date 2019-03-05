@@ -11,7 +11,7 @@ class MLocation{
     private:
         static void new_empty(int, mxArray**, int, const mxArray**);
         static void new_matrix(int, mxArray**, int, const mxArray**);
-        static void new_mat_vec_inv(int, mxArray**, int, const mxArray**);
+        static void new_mat_tran_inv(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
         static void delete_loc(int, mxArray**, int, const mxArray**);
         static void getNumberFlow(int, mxArray**, int, const mxArray**);

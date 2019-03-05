@@ -38,27 +38,37 @@ void MLocation::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 /**
  * @brief
  **/
-void MLocation::new_mat_vec_inv(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    // if(nlhs != 1)
-    //     mexErrMsgTxt("MHyProLocation - new_mat_vec: Expecting an output!");
-    // if(nrhs < 5)
-    //     mexErrMsgTxt("MHyProLocation - new_mat_vec: One or more arguments are missing!");
-    // if(nrhs > 5)
-    //     mexWarnMsgTxt("MHyProLocation - new_mat_vec: One or more input arguments were ignored.");
+void MLocation::new_mat_tran_inv(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProLocation - new_mat_tran_inv: Expecting an output!");
+    if(nrhs < 5)
+        mexErrMsgTxt("MHyProLocation - new_mat_tran_inv: One or more arguments are missing!");
+    if(nrhs > 5)
+        mexWarnMsgTxt("MHyProLocation - new_mat_tran_inv: One or more input arguments were ignored.");
 
-    // const mwSize *mat_dims, *vec_dims;
-    // int mat_dimx, mat_dimy, vec_dimy;
+    const mwSize *mat_dims, *vec_dims;
+    int mat_dimx, mat_dimy, vec_dimy;
 
-    // mat_dims = mxGetDimensions(prhs[2]);
-    // mat_dimy = (int) mat_dims[0];
-    // mat_dimx = (int) mat_dims[1];
-    // vec_dims = mxGetDimensions(prhs[3]);
-    // vec_dimy = (int) vec_dims[0];
+    mat_dims = mxGetDimensions(prhs[2]);
+    mat_dimy = (int) mat_dims[0];
+    mat_dimx = (int) mat_dims[1];
+    vec_dims = mxGetDimensions(prhs[3]);
+    vec_dimy = (int) vec_dims[0];
 
-    // hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
-    // hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
-    // hypro::Condition<double>* inv = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
-    // plhs[0] =  convertPtr2Mat<hypro::Location<double>>(new hypro::Location<double>(matrix, vector, *inv));
+    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
+    const std::vector<hypro::Transition<double>> temp = objArray2Hypro<hypro::Transition<double>>(prhs[3], vec_dimy);
+    hypro::Condition<double>* inv = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
+
+    std::vector<std::unique_ptr<hypro::Transition<double>>> transitions;
+
+    for(const auto &elem : temp){
+        hypro::Transition<double>* t = new hypro::Transition<double>(elem);
+        std::unique_ptr<hypro::Transition<double>> tran = std::make_unique<hypro::Transition<double>>(*t);
+        transitions.emplace_back(std::move(tran));
+    }
+    hypro::Location<double>* loc = new hypro::Location<double>(matrix, std::move(transitions), *inv);
+    
+    plhs[0] =  convertPtr2Mat<hypro::Location<double>>(loc);
 }
 
 /**
@@ -521,8 +531,8 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         new_matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_mat_vec_inv", cmd)){  
-        new_mat_vec_inv(nlhs, plhs, nrhs, prhs);
+    if (!strcmp("new_mat_tran_inv", cmd)){  
+        new_mat_tran_inv(nlhs, plhs, nrhs, prhs);
         return;
     }
     if (!strcmp("copy", cmd)){  

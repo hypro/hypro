@@ -10,47 +10,38 @@ classdef MHyProTransition < handle
         function delete(obj)
             MHyPro('Transition', 'delete', obj.Handle);
         end
-        
-        %Auxiliary functions
-        function out = iscelloftype(cell, type)
-            for i=(1:length(cell))
-                elem = cell(i);
-                if strcmp(elem.Type, type) == 0
-                    out = 0;
-                end
-            end
-            out = 1;
-        end
     end
     
     methods (Access = public)
         
         %Constructor
-         function obj = MHyProLocation(varargin)
+         function obj = MHyProTransition(varargin)
 
-            if nargin == 1
+            if nargin == 0
                 % Call the constructor for empty flow
                 obj.Handle = MHyPro('Transition', 'new_empty');
-            elseif nargin == 2
-                if isa(varargin{2}, 'uint64')
+            elseif nargin == 1
+                if isa(varargin{1}, 'uint64')
                     % Call the copy constructor
-                    obj.Handle = MHyPro('Transition', 'copy', varargin{2});
+                    obj.Handle = varargin{1};
+                elseif isa(varargin{1}, 'MHyProTransition')
+                    obj.Handle = MHyPro('Transition', 'copy', varargin{1}.Handle);
                 else
                     error('MHyProTransition - Constructor: Wrong type of at least one argument.');
                 end
-            elseif nargin == 3
-                if isa(varargin{2}, "MHyProLocation") && isa(varargin{3}, "MHyProLocation")
+            elseif nargin == 2
+                if isa(varargin{1}, "MHyProLocation") && isa(varargin{2}, "MHyProLocation")
                     % Call the source-target constructor
-                    obj.Handle = MHyPro('Transition', 'new_source_target' ,varargin{2}, varargin{3});
+                    obj.Handle = MHyPro('Transition', 'new_source_target' ,varargin{1}, varargin{2});
                 else
                     error('MHyproTransition - Constructor: Wrong type of at leat one argument.');
                 end
-            elseif nargin == 5
-                if isa(varargin{2}, "MHyProLocation") && isa(varargin{3}, "MHyProLocation") && ...
-                        isa(varargin{4}, "MHyProCondition") && isa(varargin{5}, "MHyProReset")
+            elseif nargin == 4
+                if isa(varargin{1}, "MHyProLocation") && isa(varargin{2}, "MHyProLocation") && ...
+                        isa(varargin{3}, "MHyProCondition") && isa(varargin{4}, "MHyProReset")
                     % Call the constructor for full transition
-                    obj.Handle = MHyPro('Transition', 'new_full', varargin{2}, varargin{3},...
-                        varargin{4}, varargin{5});
+                    obj.Handle = MHyPro('Transition', 'new_full', varargin{1}, varargin{2},...
+                        varargin{3}, varargin{4});
                 else
                     error('MHyproTransition - Constructor: Wrong type of at leat one argument.');
                 end

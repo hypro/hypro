@@ -21,8 +21,9 @@ classdef MHyProLocation < handle
                 obj.Handle = MHyPro('Location', 'new_empty');
             elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
-                    % Call the copy constructor
-                    obj.Handle = MHyPro('Location', 'copy', varargin{1});
+                    obj.Handle = varargin{1};
+                elseif isa(varargin{1}, 'MHyProLocation')
+                    obj.Handle = MHyPro('Location', 'copy', varargin{1}.Handle);
                 elseif ismatrix(varargin{1})
                     % Call the matrix constructor
                     obj.Handle = MHyPro('Location', 'new_mat', varargin{1});
@@ -30,9 +31,17 @@ classdef MHyProLocation < handle
                     error('MHyProLocation - Constructor: Wrong type of at least one argument.');
                 end
             elseif nargin == 3
-                if ismatrix(varargin{1}) && isvector(varargin{2}) && isa(varargin{3}, 'MHyProCondition')
+                if ismatrix(varargin{1}) && iscell(varargin{2}) && isa(varargin{3}, 'MHyProCondition')
+                    objects = cell(1, size(varargin{2}, 2));
+                    for i = 1:length(varargin{2})
+                        if isa(varargin{2}{i}, 'MHyProTransition')
+                            objects{i} = varargin{2}{i}.Handle;
+                        else
+                            error('MHyProBox - unite: Wrong type of input argument.');
+                        end
+                    end
                     % Call the matrix-vector constructor for affine flow
-                    obj.Handle = MHyPro('Location', 'new_mat_vec_inv' ,varargin{1}, varargin{2});
+                    obj.Handle = MHyPro('Location', 'new_mat_tran_inv' ,varargin{1}, objects, varargin{3}.Handle);
                 else
                     error('MHyProLocation - Constructor: Wrong type of at least one argument.');
                 end

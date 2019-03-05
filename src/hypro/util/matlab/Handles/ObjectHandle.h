@@ -127,10 +127,7 @@ void objArray2Matlab(const std::vector<T>& vec, mxArray* m_array, const int len)
     double* array = mxGetPr(m_array);
     for(int i = 0; i < len; i++){
         auto item = vec[i];
-        // array[i] = convertPtr2Mat<T>(&item);
-        
         mxSetCell(m_array, i, convertPtr2Mat<T>(new T(item)));
-        mexPrintf("Convert");
     }
 }
 

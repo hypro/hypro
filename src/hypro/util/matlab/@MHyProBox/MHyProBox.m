@@ -148,15 +148,8 @@ classdef MHyProBox < MHyProGeometricObjectInterface
             if isa(rhs, 'MHyProBox')
                 ptr = MHyPro('Box', 'unite', obj.Handle, rhs.Handle);
                 out = MHyProBox(ptr);
-%             elseif iscell(rhs)
-%                 objects = uint64.empty(length(rhs),0);
-%                 for i = 1:length(rhs)
-%                     objects{i} = rhs{i}.Handle;
-%                 end
-%                 ptr = MHyPro('Box', 'unite_objects', obj.Handle, objects{:});
             elseif iscell(rhs)
-%                 objects = uint64.empty(length(rhs),0);
-                objects = cell(1,2);
+                objects = cell(1, size(rhs, 2));
                 for i = 1:length(rhs)
                     if isa(rhs{i}, 'MHyProBox')
                         objects{i} = rhs{i}.Handle;

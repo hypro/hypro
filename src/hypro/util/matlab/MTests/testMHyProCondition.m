@@ -32,6 +32,12 @@ cond1.setVector([1; 2; 3], 0);
 vec = cond1.getVector();
 assert(isequal(vec, [1;2;3]));
 
-constr = cond1.constraints()
+constr = cond3.constraints();
+
+hash = cond3.hash();
+
+
+
+
 
 res = 1;
