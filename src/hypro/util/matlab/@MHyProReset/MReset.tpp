@@ -29,27 +29,28 @@ void MReset::copy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 /**
  * @brief
  **/
-void MReset::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MReset - new_mat_vec: Expecting an output.");
-    if(nrhs < 4)
-        mexErrMsgTxt("MReset - new_mat_vec: One or more arguments are missing.");
-    if(nrhs > 4)
-        mexWarnMsgTxt("MReset - new_mat_vec: One or more arguments were ignored.");
+// void MReset::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("MReset - new_mat_vec: Expecting an output.");
+//     if(nrhs < 4)
+//         mexErrMsgTxt("MReset - new_mat_vec: One or more arguments are missing.");
+//     if(nrhs > 4)
+//         mexWarnMsgTxt("MReset - new_mat_vec: One or more arguments were ignored.");
 
-    const mwSize *mat_dims, *vec_dims;
-    int mat_dimx, mat_dimy, len;
+//     const mwSize *mat_dims, *vec_dims;
+//     int mat_dimx, mat_dimy, len;
 
-    mat_dims = mxGetDimensions(prhs[2]);
-    vec_dims = mxGetDimensions(prhs[3]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
-    len = (int) vec_dims[0];
+//     mat_dims = mxGetDimensions(prhs[2]);
+//     vec_dims = mxGetDimensions(prhs[3]);
+//     mat_dimy = (int) mat_dims[0];
+//     mat_dimx = (int) mat_dims[1];
+//     len = (int) vec_dims[0];
 
-    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], len);
-    plhs[0] = convertPtr2Mat<hypro::Reset<double>>(new hypro::Reset<double>(matrix, vector));
-}
+//     const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
+//     const hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], len);
+//     hypro::Reset<double>* reset = new hypro::Reset<double>(matrix, vector);
+//     plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
+// }
 
 /**
  * @brief
@@ -71,7 +72,7 @@ void MReset::new_intervals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     dimx = (int) dims[1];    
     std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro(prhs[2], dimx, dimy);
     hypro::Reset<double>* reset = new hypro::Reset<double>(intervals);
-    plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
+    // plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
 }
 
 /**
@@ -176,13 +177,13 @@ void MReset::getIntervals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 /**
 * @brief
 **/
-void MReset::getAffineReset(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+void MReset::getAffineReset_at(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
-        mexErrMsgTxt("MReset - getAffineReset: One output expected!");
+        mexErrMsgTxt("MReset - getAffineReset_at: One output expected!");
     if(nrhs < 4)
-        mexErrMsgTxt("MReset - getAffineReset: One or more arguments are missing!");
+        mexErrMsgTxt("MReset - getAffineReset_at: One or more arguments are missing!");
     if(nrhs > 4)
-        mexErrMsgTxt("MReset - getAffineReset: One or more arguments were ignored!");
+        mexErrMsgTxt("MReset - getAffineReset_at: One or more arguments were ignored!");
 
     hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>(prhs[2]);
     std::size_t pos = mxGetScalar(prhs[3]);
@@ -219,13 +220,13 @@ void MReset::getAffineResets(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 /**
 * @brief
 **/
-void MReset::getIntervalReset(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+void MReset::getIntervalReset_at(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
-        mexErrMsgTxt("MReset - getIntervalReset: One output expected!");
+        mexErrMsgTxt("MReset - getIntervalReset_at: One output expected!");
     if(nrhs < 4)
-        mexErrMsgTxt("MReset - getIntervalReset: One or more arguments are missing!");
+        mexErrMsgTxt("MReset - getIntervalReset_at: One or more arguments are missing!");
     if(nrhs > 4)
-        mexErrMsgTxt("MReset - getIntervalReset: One or more arguments were ignored!");
+        mexErrMsgTxt("MReset - getIntervalReset_at: One or more arguments were ignored!");
 
     hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>(prhs[2]);
     std::size_t pos = mxGetScalar(prhs[3]);
@@ -322,7 +323,7 @@ void MReset::setIntervals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
     dimy = (int) dims[0];
     dimx = (int) dims[1];    
 
-    hypro::Reset<double>* res = convertmat2Ptr<hypro::Reset<double>>(prhs[2]);
+    hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>(prhs[2]);
     std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro(prhs[3], dimx, dimy);
     std::size_t at = mxGetScalar(prhs[4]);
     res->setIntervals(intervals, at);
@@ -371,28 +372,28 @@ void MReset::decompose(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
  * @brief
  **/
 void MReset::combine(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MReset - combine: Expecting an output!");
-    if(nrhs < 7)
-        mexErrMsgTxt("MReset - combine: One or more input arguments are missing!");
-    if(nrhs > 7)
-        mexWarnMsgTxt("MReset - combine: One or more input arguments were ignored!");
+    // if(nlhs != 1)
+    //     mexErrMsgTxt("MReset - combine: Expecting an output!");
+    // if(nrhs < 7)
+    //     mexErrMsgTxt("MReset - combine: One or more input arguments are missing!");
+    // if(nrhs > 7)
+    //     mexWarnMsgTxt("MReset - combine: One or more input arguments were ignored!");
     
-    const mwSize *dims_var, *dims_lhs, *dims_rhs;
-    int len_var, len_lhs, len_rhs;
+    // const mwSize *dims_var, *dims_lhs, *dims_rhs;
+    // int len_var, len_lhs, len_rhs;
 
-    dims_var = mxGetDimensions(prhs[4]);
-    dims_lhs = mxGetDimensions(prhs[5]);
-    dims_lhs = mxGetDimensions(prhs[6])
-    len_var = dims_var[0];
-    len_lhs = dims_lhs[0];
-    len_rhs = dims_rhs[0];
+    // dims_var = mxGetDimensions(prhs[4]);
+    // dims_lhs = mxGetDimensions(prhs[5]);
+    // dims_lhs = mxGetDimensions(prhs[6])
+    // len_var = dims_var[0];
+    // len_lhs = dims_lhs[0];
+    // len_rhs = dims_rhs[0];
     
-    hypro::Reset<double>* lhs = convertMat2Ptr<hypro::Reset<double>>(prhs[2]);
-    hypro::Reset<double>* rhs = convertMat2Ptr<hypro::Reset<double>>(prhs[3]);
-    std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro(prhs[4], len_var);
-    std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro(prhs[5], len_lhs);
-    std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro(prhs[6], len_rhs);
+    // hypro::Reset<double>* lhs = convertMat2Ptr<hypro::Reset<double>>(prhs[2]);
+    // hypro::Reset<double>* rhs = convertMat2Ptr<hypro::Reset<double>>(prhs[3]);
+    // std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro(prhs[4], len_var);
+    // std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro(prhs[5], len_lhs);
+    // std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro(prhs[6], len_rhs);
 
     //TODO:
     // hypro::Reset<double>* res = lhs->combine(lhs, rhs, haVar, lhsVar, rhsVar);
@@ -408,87 +409,87 @@ void MReset::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
         mexErrMsgTxt("MReset - First input should be a command string less than 64 characters long.");
 
 
-    if (!strcmp("new_empty", cmd) && nrhs == 2){  
+    if (!strcmp("new_empty", cmd)){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("copy", cmd) && nrhs == 2){  
+    if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_mat_vec", cmd) && nrhs == 2){  
-        new_mat_vec(nlhs, plhs, nrhs, prhs);
-        return;
-    }
-    if (!strcmp("new_intervals", cmd) && nrhs == 2){  
+    // if (!strcmp("new_mat_vec", cmd)){  
+    //     new_mat_vec(nlhs, plhs, nrhs, prhs);
+    //     return;
+    // }
+    if (!strcmp("new_intervals", cmd)){  
         new_intervals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd) && nrhs == 2){  
+    if (!strcmp("delete", cmd)){  
         delete_reset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("empty", cmd) && nrhs == 2){  
+    if (!strcmp("empty", cmd)){  
         empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("size", cmd) && nrhs == 2){  
+    if (!strcmp("size", cmd)){  
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getVector", cmd) && nrhs == 2){  
+    if (!strcmp("getVector", cmd)){  
         getVector(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getMatrix", cmd) && nrhs == 2){  
+    if (!strcmp("getMatrix", cmd)){  
         getMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getIntervals", cmd) && nrhs == 2){  
+    if (!strcmp("getIntervals", cmd)){  
         getIntervals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getAffineReset_at", cmd) && nrhs == 2){  
+    if (!strcmp("getAffineReset_at", cmd)){  
         getAffineReset_at(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getAffineResets", cmd) && nrhs == 2){  
+    if (!strcmp("getAffineResets", cmd)){  
         getAffineResets(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getIntervalReset_at", cmd) && nrhs == 2){  
+    if (!strcmp("getIntervalReset_at", cmd)){  
         getIntervalReset_at(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getInvervalResets", cmd) && nrhs == 2){  
-        getInvervalResets(nlhs, plhs, nrhs, prhs);
+    if (!strcmp("getIntervalResets", cmd)){  
+        getIntervalResets(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setVector", cmd) && nrhs == 2){  
+    if (!strcmp("setVector", cmd)){  
         setVector(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setMatrix", cmd) && nrhs == 2){  
+    if (!strcmp("setMatrix", cmd)){  
         setMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setIntervals", cmd) && nrhs == 2){  
+    if (!strcmp("setIntervals", cmd)){  
         setIntervals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isIdentity", cmd) && nrhs == 2){  
+    if (!strcmp("isIdentity", cmd)){  
         isIdentity(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hash", cmd) && nrhs == 2){  
+    if (!strcmp("hash", cmd)){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("decompose", cmd) && nrhs == 2){  
+    if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("combine", cmd) && nrhs == 2){  
+    if (!strcmp("combine", cmd)){  
         combine(nlhs, plhs, nrhs, prhs);
         return;
     }

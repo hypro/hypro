@@ -8,7 +8,7 @@ classdef MHyProReset < handle
         
         % Destructor
         function delete(obj)
-            MHyPro('Location', 'delete', obj.Handle);
+            MHyPro('Reset', 'delete', obj.Handle);
         end
  
     end
@@ -22,9 +22,9 @@ classdef MHyProReset < handle
                 obj.Handle = MHyPro('Reset', 'new_empty');
             elseif nargin == 1
                 if isa(varargin{1},'uint64')
-                    obj.Handle = MHyPro('Reset', 'copy', varargin{2});
+                    obj.Handle = varargin{1};
                 elseif isa(varargin{1}, 'MHyProReset')
-                    obj.Handle = MHyPro('Reset', 'copy', varargin{2}.Handle);
+                    obj.Handle = MHyPro('Reset', 'copy', varargin{1}.Handle);
                 elseif ismatrix(varargin{1})
                     % Construct from intervals
                     obj.Handle = MHyPro('Reset', 'new_intervals');

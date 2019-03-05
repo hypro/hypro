@@ -176,9 +176,18 @@ void MLocation::getTransitions(int nlhs, mxArray* plhs[], int nrhs , const mxArr
          mexErrMsgTxt("MLocation - getTransitions: One or more arguments were ignored.");
 
     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
-    std::vector<hypro::Transition<double>*> transitions = loc->getTransitions();
-    //TODO
-    // plhs[0] = objArray2Matlab(transitions, plhs[0], len);
+    std::vector<hypro::Transition<double>*> temp = loc->getTransitions();
+    std::vector<hypro::Transition<double>> transitions;
+
+    for(const auto &elem : temp){
+        transitions.emplace_back(*elem);
+    }
+
+    mxArray* m_array_out;
+    int len = transitions.size();
+    const mwSize dims[2] = {1,(mwSize) len};
+    plhs[0]  = mxCreateCellArray(2,dims);
+    objArray2Matlab(transitions, plhs[0], len);
 }
 
 /**

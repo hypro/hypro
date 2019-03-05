@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../datastructures/HybridAutomaton/Reset.h"
+// #include "../../../datastructures/HybridAutomaton/Reset.h"
 #include "../../../types.h"
 #include <map>
 #include "mex.h"
@@ -36,4 +36,4 @@ class MReset{
         static void combine(int, mxArray**, int, const mxArray**);
 };
 
-#include "MReset.h"
+#include "MReset.tpp"

@@ -55,15 +55,22 @@ classdef MHyProLocation < handle
         end
         
         function out = getLinearFlow(obj)
-            out = MHyPro('Location', 'getLinearFlow', obj.Handle);
+            ptr = MHyPro('Location', 'getLinearFlow', obj.Handle);
+            out = MHyProFlow('linearFlow', ptr);
         end
         
         function out = getInvariant(obj)
-            out = MHyPro('Location', 'getInvariant', obj.Handle);
+            ptr = MHyPro('Location', 'getInvariant', obj.Handle);
+            out = MHyProCondition(ptr);
         end
         
         function out = getTransitions(obj)
-            out = MHyPro('Location', 'getTransitions', obj.Handle);
+            ptrscell = MHyPro('Location', 'getTransitions', obj.Handle);
+            out = cell(1, size(ptrscell,2));
+            for i = 1:size(ptrscell,2)
+                ptr = ptrscell{i};
+                out{i} = MHyProTransition(ptr);
+            end
         end
         
         function out = getExternalInput(obj)

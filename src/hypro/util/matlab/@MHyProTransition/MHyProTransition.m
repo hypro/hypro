@@ -32,7 +32,7 @@ classdef MHyProTransition < handle
             elseif nargin == 2
                 if isa(varargin{1}, "MHyProLocation") && isa(varargin{2}, "MHyProLocation")
                     % Call the source-target constructor
-                    obj.Handle = MHyPro('Transition', 'new_source_target' ,varargin{1}, varargin{2});
+                    obj.Handle = MHyPro('Transition', 'new_source_target' ,varargin{1}.Handle, varargin{2}.Handle);
                 else
                     error('MHyproTransition - Constructor: Wrong type of at leat one argument.');
                 end
@@ -40,8 +40,8 @@ classdef MHyProTransition < handle
                 if isa(varargin{1}, "MHyProLocation") && isa(varargin{2}, "MHyProLocation") && ...
                         isa(varargin{3}, "MHyProCondition") && isa(varargin{4}, "MHyProReset")
                     % Call the constructor for full transition
-                    obj.Handle = MHyPro('Transition', 'new_full', varargin{1}, varargin{2},...
-                        varargin{3}, varargin{4});
+                    obj.Handle = MHyPro('Transition', 'new_full', varargin{1}.Handle, varargin{2}.Handle,...
+                        varargin{3}.Handle, varargin{4}.Handle);
                 else
                     error('MHyproTransition - Constructor: Wrong type of at leat one argument.');
                 end

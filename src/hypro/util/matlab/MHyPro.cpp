@@ -43,6 +43,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         MLinearFlow::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "affineFlow")){
         MAffineFlow::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "Reset")){
+        MReset::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "State")){
     //     MState::process(nlhs, plhs, nrhs, prhs);
     }else{

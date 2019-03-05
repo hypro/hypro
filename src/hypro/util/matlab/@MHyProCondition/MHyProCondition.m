@@ -20,7 +20,7 @@ classdef MHyProCondition < handle
                 obj.Handle = MHyPro('Condition', 'new_empty');
             elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
-                    obj.Handle = varargin{2};
+                    obj.Handle = varargin{1};
                 elseif isa(varargin{1}, 'MHyProCondition')
                     obj.Handle = MHyPro('Condition', 'copy', varargin{1}.Handle);
                 elseif isa(varargin{1}, 'MHyProConstraintSet')
