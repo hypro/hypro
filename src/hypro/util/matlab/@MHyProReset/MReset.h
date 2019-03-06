@@ -1,6 +1,5 @@
 #pragma once
 
-// #include "../../../datastructures/HybridAutomaton/Reset.h"
 #include "../../../types.h"
 #include <map>
 #include "mex.h"

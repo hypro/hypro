@@ -41,7 +41,7 @@ classdef MHyProReset < handle
             end
         end
         
-        function out = empty(obj)
+        function out = isempty(obj)
             out = MHyPro('Reset', 'empty', obj.Handle);
         end
         
@@ -49,53 +49,79 @@ classdef MHyProReset < handle
             out = MHyPro('Reset', 'size', obj.Handle);
         end
         
-        function out = getVector(obj)
-            out = MHyPro('Reset', 'getVector', obj.Handle);
+        function out = getVector(obj, at)
+            if mod(at, 1) == 0 && at <= obj.size() && at -1 >= 0
+                out = MHyPro('Reset', 'getVector', obj.Handle, at - 1);
+            else
+                error('MHyProReset - getVector: Wrong type of at least one argument.');
+            end
         end
         
-        function out = getMatrix(obj)
-            out = MHyPro('Reset', 'getMatrix', obj.Handle);
+        function out = getMatrix(obj, at)
+            if mod(at, 1) == 0 && at <= obj.size() && at -1 >= 0
+                out = MHyPro('Reset', 'getMatrix', obj.Handle, at - 1);
+            else
+                error('MHyProReset - getIntervals: Wrong type of at least one argument.');
+            end
         end
         
-        function out = getIntervals(obj)
-            out = MHyPro('Reset', 'getIntervals', obj.Handle);
+        function out = getIntervals(obj, at)
+            if mod(at, 1) == 0 && at <= obj.size() && at - 1 >= 0
+                out = MHyPro('Reset', 'getIntervals', obj.Handle, at - 1);
+            else
+                error('MHyProReset - getIntervals: Wrong type of at least one argument.');
+            end
         end
         
-        function out = getAffineReset(obj)
-            out = MHyPro('Reset', 'getAffineReset', obj.Handle);
+        function out = getAffineReset(obj, at)
+            if mod(at, 1) == 0 && at <= obj.size() && at - 1 >= 0
+                ptr = MHyPro('Reset', 'getAffineReset_at', obj.Handle, at - 1);
+                out = MHyProConstraintSet(ptr);
+            else
+                error('MHyProReset - getAffineReset: Wrong type of at least one argument.');
+            end
         end
-        
+                
         function out = getAffineResetes(obj)
-            out = MHyPro('Reset', 'getAffineResets', obj.Handle);
+            ptrscell = MHyPro('Reset', 'getAffineResets', obj.Handle);
+            out = cell(1, size(ptrscell, 2));
+            for i = 1:size(ptrscell,2)
+                ptr = ptrscell{i};
+                out{i} = MHyProConstraintSet(ptr);
+            end
         end
         
-        function out = getIntervalReset(obj)
-            out = MHyPro('Reset', 'getIntervalReset', obj.Handle);
+        function out = getIntervalReset(obj, at)
+            if mod(at, 1) == 0 && at <= obj.size() && at - 1 >= 0
+                out = MHyPro('Reset', 'getIntervalReset_at', obj.Handle, at - 1);
+            else
+                error('MHyProReset - getIntervalReset: Wrong type of at least one argument.');
+            end
         end
         
         function out = getIntervalResets(obj)
             out = MHyPro('Reset', 'getIntervalResets', obj.Handle);
         end
         
-        function out = setVector(obj, vec)
-            if isvector(vec)
-                out = MHyPro('Reset', 'setVector', obj.Handle, vec);
+        function setVector(obj, vec, at)
+            if isvector(vec) && mod(at,1) == 0 &&  at - 1 >= 0
+                MHyPro('Reset', 'setVector', obj.Handle, vec, at - 1);
             else
                 error("MHyProReset - setVector: Wrong type of at leat one argument.");
             end
         end
         
-        function out = setMatrix(obj, mat)
-            if ismatrix(mat)
-                out = MHyPro('Reset', 'setMatrix', obj.Handle, mat);
+        function setMatrix(obj, mat, at)
+            if ismatrix(mat) && mod(at,1) == 0 && at - 1 >= 0
+                MHyPro('Reset', 'setMatrix', obj.Handle, mat, at - 1);
             else
                 error("MHyProReset - setMatrix: Wrong type of at leat one argument.");
             end
         end
         
-        function out = setIntervals(obj, ints)
-            if areIntervals(ints)
-                out = MHyPro('Reset', 'setIntervals', obj.Handle, ints);
+        function setIntervals(obj, ints, at)
+            if areIntervals(ints) && mod(at,1) == 0 && at - 1 >= 0
+                MHyPro('Reset', 'setIntervals', obj.Handle, ints, at - 1);
             else
                 error("MHyProReset - areIntervals: Wrong type of at leat one argument.");
             end

@@ -8,6 +8,7 @@
 #include "@MHyProFlow/MAffineFlow.h"
 #include "@MHyProLabel/MLabel.h"
 #include "@MHyProLocation/MLocation.h"
+// #include "@MHyProResetType/MAffineTransformation.h"
 // #include "@MHyProState/MState.h"
 #include "@MHyProTransition/MTransition.h"
 #include "@MHyProReset/MReset.h"
@@ -45,6 +46,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         MAffineFlow::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Reset")){
         MReset::process(nlhs, plhs, nrhs, prhs);
+    // }else if(!strcmp(type, "affineTransformation")){
+    //     MAffineTransformation::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "State")){
     //     MState::process(nlhs, plhs, nrhs, prhs);
     }else{
