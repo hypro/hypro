@@ -353,8 +353,8 @@ void MTransition::setLabels(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
     const mwSize *dims;
     int num;
     dims = mxGetDimensions(prhs[3]);
-    num = dims[0];
-    std::vector<hypro::Label> labs = objArray2Hypro<hypro::Label>(prhs[2], num);
+    num = dims[1];
+    std::vector<hypro::Label> labs = objArray2Hypro<hypro::Label>(prhs[3], num);
     tran->setLabels(labs);
 }
 
@@ -434,8 +434,8 @@ void MTransition::equals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     if(nrhs > 4)
         mexWarnMsgTxt("MTransition - equals: One or more arguments were ignored.");
 
-    hypro::Transition<double>* tran1 = convertMat2Ptr<hypro::Transition<double>>(plhs[2]);
-    hypro::Transition<double>* tran2 = convertMat2Ptr<hypro::Transition<double>>(plhs[3]);
+    hypro::Transition<double>* tran1 = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    hypro::Transition<double>* tran2 = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
 
     if(tran1 == tran2)
         plhs[0] = mxCreateLogicalScalar(true);
@@ -454,8 +454,8 @@ void MTransition::nequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
     if(nrhs > 4)
         mexWarnMsgTxt("MTransition - nequals: One or more arguments were ignored.");
 
-    hypro::Transition<double>* tran1 = convertMat2Ptr<hypro::Transition<double>>(plhs[2]);
-    hypro::Transition<double>* tran2 = convertMat2Ptr<hypro::Transition<double>>(plhs[3]);
+    hypro::Transition<double>* tran1 = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    hypro::Transition<double>* tran2 = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
 
     if(tran1 != tran2)
         plhs[0] = mxCreateLogicalScalar(true);

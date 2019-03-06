@@ -22,6 +22,8 @@ classdef MHyProLabel < handle
                     obj.Handle = MHyPro('Label','new_name', varargin{1});
                 elseif isa(varargin{1}, 'MHyProLabel')
                     obj.Handle = MHyPro('Label', 'copy', varargin{1}.Handle);
+                elseif isa(varargin{1}, 'uint64')
+                    obj.Handle = varargin{1};
                 else
                     error('MHyProLabel - Constructor: Wrong type of at least one argument.');
                 end           

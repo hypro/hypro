@@ -51,24 +51,32 @@ classdef MHyProTransition < handle
          end
         
         function out = getTarget(obj)
-            out = MHyPro('Transition', 'getTarget', obj.Handle);
+            ptr = MHyPro('Transition', 'getTarget', obj.Handle);
+            out = MHyProLocation(ptr);
         end
         
         function out = getSource(obj)
-            out = MHyPro('Transition', 'getSource', obj.Handle);
+            ptr = MHyPro('Transition', 'getSource', obj.Handle);
+            out = MHyProLocation(ptr);
         end
         
         function out = getGuard(obj)
-            out = MHyPro('Transition', 'getGuard', obj.Handle);
+            ptr = MHyPro('Transition', 'getGuard', obj.Handle);
+            out = MHyProCondition(ptr);
         end
         
         function out = getReset(obj)
-            out = MHyPro('Transition', 'getReset', obj.Handle);
+            ptr = MHyPro('Transition', 'getReset', obj.Handle);
+            out = MHyProReset(ptr);
         end
         
         function out = getAggregation(obj)
             %TODO
             out = MHyPro('Transition', 'getAggregation', obj.Handle);
+        end
+        
+        function out = getTriggerTime(obj)
+            out = MHyPro('Transition', 'getTriggerTime', obj.Handle);
         end
         
         function out = isUrgent(obj)
@@ -84,7 +92,12 @@ classdef MHyProTransition < handle
         end
         
         function out = getLabels(obj)
-            out = MHyPro('Transition', 'getLabels', obj.Handle);
+            ptrscell = MHyPro('Transition', 'getLabels', obj.Handle);
+            out = cell(1, size(ptrscell, 2));
+            for i = 1:size(ptrscell,2)
+                ptr = ptrscell{i};
+                out{i} = MHyProLabel(ptr);
+            end
         end
         
         function out = hash(obj)
@@ -93,7 +106,7 @@ classdef MHyProTransition < handle
         
         function setSource(obj, loc)
             if isa(loc, 'MHyProLocation') 
-                MHyPro('Transition', 'setSource', obj.Handle, loc);
+                MHyPro('Transition', 'setSource', obj.Handle, loc.Handle);
             else
                 error("MHyProTransition - setSource: Wrong type of at leat one argument.");
             end
@@ -101,15 +114,15 @@ classdef MHyProTransition < handle
         
         function setTarget(obj, loc)
             if isa(loc, 'MHyProLocation') 
-                MHyPro('Transition', 'setTarget', obj.Handle, loc);
+                MHyPro('Transition', 'setTarget', obj.Handle, loc.Handle);
             else
                 error("MHyProTransition - setTarget: Wrong type of at leat one argument.");
             end
         end
         
-        function setGuard(obj, loc)
-            if isa(loc, 'MHyProCondition') 
-                MHyPro('Transition', 'setGuard', obj.Handle, loc);
+        function setGuard(obj, cond)
+            if isa(cond, 'MHyProCondition') 
+                MHyPro('Transition', 'setGuard', obj.Handle, cond.Handle);
             else
                 error("MHyProTransition - setGuard: Wrong type of at leat one argument.");
             end
@@ -117,7 +130,7 @@ classdef MHyProTransition < handle
         
         function setReset(obj, res)
             if isa(res, 'MHyProReset') 
-                MHyPro('Transition', 'setReset', obj.Handle, res);
+                MHyPro('Transition', 'setReset', obj.Handle, res.Handle);
             else
                 error("MHyProTransition - setReset: Wrong type of at leat one argument.");
             end
@@ -141,7 +154,7 @@ classdef MHyProTransition < handle
         end
         
         function setTriggerTime(obj, time)
-            if isdouble(time) 
+            if isreal(time) 
                 MHyPro('Transition', 'setTriggerTime', obj.Handle, time);
             else
                 error("MHyProTransition - setTriggerTime: Wrong type of at leat one argument.");
@@ -149,16 +162,20 @@ classdef MHyProTransition < handle
         end
         
         function setLabels(obj, labs)
-            if iscelloftype(labs, 'MHyProLabels') 
-                MHyPro('Transition', 'setSource', obj.Handle, loc);
-            else
-                error("MHyProTransition - setLabels: Wrong type of at leat one argument.");
+            objects = cell(1, length(labs));
+            for i = 1:length(labs)
+                if isa(labs{i}, 'MHyProLabel')
+                    objects{i} = labs{i}.Handle;
+                else
+                    error('MHyProTransition - setLabels: Wrong type of input argument.');
+                end
             end
+            MHyPro('Transition', 'setLabels', obj.Handle, objects);
         end
         
         function addLabel(obj, lab)
             if isa(lab, 'MHyProLabel') 
-                MHyPro('Transition', 'addLabel', obj.Handle, lab);
+                MHyPro('Transition', 'addLabel', obj.Handle, lab.Handle);
             else
                 error("MHyProTransition - addLabel: Wrong type of at leat one argument.");
             end
@@ -185,17 +202,17 @@ classdef MHyProTransition < handle
             %TODO
         end
         
-        function eq(obj, rhs)
+        function out = eq(obj, rhs)
             if isa(rhs, 'MHyProTransition') 
-                MHyPro('Transition', 'equals', obj.Handle, rhs.Handle);
+                out = MHyPro('Transition', 'equals', obj.Handle, rhs.Handle);
             else
                 error("MHyProTransition - equals: Wrong type of at leat one argument.");
             end
         end
         
-        function ne(obj, rhs)
+        function out = ne(obj, rhs)
             if isa(rhs, 'MHyProTransition') 
-                MHyPro('Transition', 'unequals', obj.Handle, rhs.Handle);
+                out = MHyPro('Transition', 'nequals', obj.Handle, rhs.Handle);
             else
                 error("MHyProTransition - equals: Wrong type of at leat one argument.");
             end
