@@ -74,7 +74,11 @@ classdef MHyProLocation < handle
         end
         
         function out = getExternalInput(obj)
-            out = MHyPro('Location', 'getExternalInput', obj.Handle);
+            if obj.hasExternalInput()
+                out = MHyPro('Location', 'getExternalInput', obj.Handle);
+            else
+                error('MHyProLocation - getExternalInput: Object has no external input.');
+            end
         end
         
         function out = hasExternalInput(obj)
@@ -93,12 +97,16 @@ classdef MHyProLocation < handle
             out = MHyPro('Location', 'dimension', obj.Handle);
         end
         
-        function out = dimension_at(obj)
-            out = MHyPro('Location', 'dimension_at', obj.Handle);
+        function out = dimension_at(obj, pos)
+            if mod(pos,1) == 0
+                out = MHyPro('Location', 'dimension_at', obj.Handle, pos);
+            else
+                error("MHyProLocation - dimension_at: Wrong type of at leat one argument. Note: strings in MATLAB have to be written in "".");
+            end
         end
         
         function setName(obj, name)
-            if isStringScalar(name)
+            if ischar(name)
                 MHyPro('Location', 'setName', obj.Handle, name);
             else
                 error("MHyProLocation - setName: Wrong type of at leat one argument. Note: strings in MATLAB have to be written in "".");
@@ -106,8 +114,8 @@ classdef MHyProLocation < handle
         end
         
         function setLinearFlow(obj, linFlow, pos)
-            if isa(linFlow, "MHyProFlow") && strcmp(linFlow.Type, "linearFlow") && isdouble(pos)
-                MHyPro('Location', 'setLinearFlow', obj.Handle, linFlow, pos);
+            if isa(linFlow, "MHyProFlow") && strcmp(linFlow.Type, "linearFlow") && mod(pos,1) == 0
+                MHyPro('Location', 'setLinearFlow', obj.Handle, linFlow.Handle, pos - 1);
             else
                 error("MHyProLocation - setLinearFlow: Wrong type of at leat one argument.");
             end
@@ -130,7 +138,7 @@ classdef MHyProLocation < handle
         end
         
         function setExtInput(obj, ints)
-            if iscell(ints) && size(ints, 1) == 2 
+            if areIntervals(ints)
                 MHyPro('Location', 'setExtInput', obj.Handle, ints);
             else
                 error("MHyProLocation - setExtInput: Wrong type of at leat one argument.");

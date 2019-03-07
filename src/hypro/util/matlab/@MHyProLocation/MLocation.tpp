@@ -53,7 +53,7 @@ void MLocation::new_mat_tran_inv(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     mat_dimy = (int) mat_dims[0];
     mat_dimx = (int) mat_dims[1];
     vec_dims = mxGetDimensions(prhs[3]);
-    vec_dimy = (int) vec_dims[0];
+    vec_dimy = (int) vec_dims[1];
 
     hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
     const std::vector<hypro::Transition<double>> temp = objArray2Hypro<hypro::Transition<double>>(prhs[3], vec_dimy);
@@ -184,7 +184,7 @@ void MLocation::getTransitions(int nlhs, mxArray* plhs[], int nrhs , const mxArr
     }
 
     mxArray* m_array_out;
-    int len = transitions.size();
+    int len = temp.size();
     const mwSize dims[2] = {1,(mwSize) len};
     plhs[0]  = mxCreateCellArray(2,dims);
     objArray2Matlab(transitions, plhs[0], len);
@@ -203,7 +203,7 @@ void MLocation::getExternalInput(int nlhs, mxArray* plhs[], int nrhs , const mxA
 
     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
     std::vector<carl::Interval<double>> input = loc->getExternalInput();
-    plhs[0] = mxCreateDoubleMatrix(1, input.size(), mxREAL);
+    plhs[0] = mxCreateDoubleMatrix(input.size(), 2, mxREAL);
     vector2Matlab<carl::Interval<double>>(input, plhs[0]);
 }
 
@@ -397,6 +397,8 @@ void MLocation::setExtInput(int nlhs, mxArray* plhs[], int nrhs , const mxArray*
     dimx = dims[1];
     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
     std::vector<carl::Interval<double>> ints = ObjectHandle::mIntervals2Hypro(prhs[3], dimx, dimy);
+
+    loc->setExtInput(ints);
 }
 
 /**
@@ -409,18 +411,20 @@ void MLocation::isComposedOf(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
         mexErrMsgTxt("MLocation - isComposedOf: One or more arguments are missing!");
     if(nrhs > 6)
         mexWarnMsgTxt("MLocation - isComposedOf: One or more arguments were ignored.");
+
+    const mwSize *rhsvar_dim, *thisvar_dim;
+    rhsvar_dim = mxGetDimensions(prhs[4]);
+    thisvar_dim = mxGetDimensions(prhs[5]);
+    int rhsvar_len = rhsvar_dim[1];
+    int thisvar_len = thisvar_dim[1];
     
-    hypro::Location<double>* obj = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
-    //const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
     hypro::Location<double>* rhs = convertMat2Ptr<hypro::Location<double>>(prhs[3]);
-    const mxArray *m_in_rhsVars, *m_in_thisVars;
-    double *in_rhsVars, *in_thisVars;
-    const mwSize *dims_rhsVars, *dims_thisVars;
-    int len_rhsVars, len_thisVars;
+    std::vector<std::string> rhsVars = ObjectHandle::mStringVector2Hypro(prhs[4], rhsvar_len);
+    std::vector<std::string> thisVars = ObjectHandle::mStringVector2Hypro(prhs[5], thisvar_len);
 
-    in_rhsVars = mxGetPr(prhs[4]);
-    //TODO
-
+    // bool ans = loc->isComposedOf(*rhs, rhsVars, thisVars);
+    // plhs[0] = mxCreateLogicalScalar(ans); ---> ?
 }
 
 /**
