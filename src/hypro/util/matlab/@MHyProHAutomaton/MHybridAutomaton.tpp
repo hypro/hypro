@@ -14,29 +14,29 @@
     /**
      * @brief
      **/    
-    // void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //     if(nlhs != 1)
-    //         mexErrMsgTxt("MHybridAutomaton - new_sets: One output expected.");
-    //     if(nrhs < 4)
-    //         mexErrMsgTxt("MHybridAutomaton - new_sets: One or more arguments are missing.");
+    void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+        if(nlhs != 1)
+            mexErrMsgTxt("MHybridAutomaton - new_loc_init: One output expected.");
+        if(nrhs < 4)
+            mexErrMsgTxt("MHybridAutomaton - new_loc_init: One or more arguments are missing.");
         
-    //     const mwSize *loc_dims;
-    //     int loc_num;
-    //     loc_dims = mxGetDimensions(prhs[2]);
-    //     loc_num = loc_dims[0];
-    //     const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
-    //     const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+        const mwSize *loc_dims;
+        int loc_num;
+        loc_dims = mxGetDimensions(prhs[2]);
+        loc_num = loc_dims[1];
+        const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
+        const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+        
+        std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
+        for(const auto &elem : locs){
+            hypro::Location<double>* l = new hypro::Location<double>(elem);
+            std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
+            ptr_locs.emplace_back(std::move(loc));
+        }
 
-    //     std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
-
-    //     for(const auto &elem : locs){
-    //         std::unique_ptr<hypro::Location<double>> loc(new hypro::Location<double>(elem));
-    //         ptr_locs.emplace_back(std::move(loc));
-    //     }
-
-    //     hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
-    //     plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
-    // }
+        // hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
+        // plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+    }
 
     /**
      * @brief
@@ -294,14 +294,14 @@
         dimy = dims[0];
         hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
         std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[3], dimy);
-        std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
-
+        
+        std::vector<std::unique_ptr<hypro::Location<double>>> locs_ptr;
         for(const auto &elem : locs){
-            std::unique_ptr<hypro::Location<double>> loc(new hypro::Location<double>(elem));
-            ptr_locs.emplace_back(std::move(loc));
+            hypro::Location<double>* l = new hypro::Location<double>(elem);
+            std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
+            locs_ptr.emplace_back(std::move(loc));
         }
-
-        // autom->setLocations(ptr_locs); ??? TODO
+        autom->setLocations(std::move(locs_ptr));
     }
 
     // /**
@@ -397,19 +397,19 @@
     //}
 
     /**
-     * @brief THIS IS CORRECT BUT CANNOT BE USED NOW
+     * @brief
      **/    
-    // void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //     if(nrhs < 4)
-    //         mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
-    //     if(nrhs > 4)
-    //         mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
+    void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+        if(nrhs < 4)
+            mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
+        if(nrhs > 4)
+            mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
 
-    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-    //     hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
-    //     std::unique_ptr<hypro::Transition<double>> tran(new hypro::Transition<double>(*temp));
-    //     autom->addTransition(std::move(tran));
-    // }
+        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+        hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
+        std::unique_ptr<hypro::Transition<double>> tran = std::make_unique<hypro::Transition<double>>(*temp);
+        // autom->addTransition(std::move(tran));
+    }
 
        /**
         * @brief
@@ -634,192 +634,154 @@
         if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
             mexErrMsgTxt("MHybridAutomaton - First input should be a command string less than 64 characters long.");
 
-
         if (!strcmp("new_empty", cmd)){  
             new_empty(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("copy", cmd)){  
             copy(nlhs, plhs, nrhs, prhs);
             return;
         }
-
-        // if (!strcmp("new_loc", cmd)){  
-        //     new_loc_init(nlhs, plhs, nrhs, prhs);
-        //     return;
-        // }
-
+        if (!strcmp("new_loc_init", cmd)){  
+            new_loc_init(nlhs, plhs, nrhs, prhs);
+            return;
+        }
         if (!strcmp("delete", cmd)){  
             delete_autom(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getLocations", cmd)){  
             getLocations(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getLocation_by_hash", cmd)){  
             getLocation_by_hash(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getLocation_by_name", cmd)){  
             getLocation_by_name(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getTransitions", cmd)){  
             getTransitions(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getInitialStates", cmd)){  
             getInitialStates(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getLocalBadStates", cmd)){  
             getLocalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getGlobalBadStates", cmd)){  
             getGlobalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("dimension", cmd)){  
             dimension(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getVariables", cmd)){  
             getVariables(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("getLabels", cmd)){  
             getLabels(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("setLocations", cmd)){  
             setLocations(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         // if (!strcmp("setTransitions", cmd)){  
         //     setTransitions(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
-
         if (!strcmp("setInitialStates", cmd)){  
             setInitialStates(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("setLocalBadStates", cmd)){  
             setLocalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("setGlobalBadStates", cmd)){  
             setGlobalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("setVariables", cmd)){  
             setVariables(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("addLocation", cmd)){  
             addLocation(nlhs, plhs, nrhs, prhs);
             return;
         }
-
-        // if (!strcmp("addTransition", cmd)){  
-        //     addTransition(nlhs, plhs, nrhs, prhs);
-        //     return;
-        // }
-
+        if (!strcmp("addTransition", cmd)){  
+            addTransition(nlhs, plhs, nrhs, prhs);
+            return;
+        }
         if (!strcmp("addInitialState", cmd)){  
             addInitialState(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("addLocalBadState", cmd)){  
             addLocalBadState(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("addGlobalBadState", cmd)){  
             addGlobalBadState(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         // if (!strcmp("removeTransition", cmd)){  
         //     removeTransition(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
-
         if (!strcmp("decompose", cmd)){  
             decompose(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("reduce", cmd)){  
             reduce(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         // if (!strcmp("isComposedOf", cmd)){  
         //     isComposedOf(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
-
         // if (!strcmp("getDotRepresentation", cmd)){  
         //     getDotRepresentation(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
-
         if (!strcmp("getStatistics", cmd)){  
             getStatistics(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("equals", cmd)){  
             equals(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("unequals", cmd)){  
             unequals(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         // if (!strcmp("or_operator", cmd)){  
         //     or_operator(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
-
         if (!strcmp("plus", cmd)){  
             plus(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("outstream", cmd)){  
             outstream(nlhs, plhs, nrhs, prhs);
             return;
         }
-
         if (!strcmp("checkConsistency", cmd)){  
             checkConsistency(nlhs, plhs, nrhs, prhs);
             return;
         }
-    
 
     mexErrMsgTxt("MHybridAutomaton - Command not recognized.");
 }

@@ -11,7 +11,7 @@ class MHybridAutomaton{
     private:
         static void new_empty(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
-        // static void new_loc_init(int, mxArray**, int, const mxArray**);
+        static void new_loc_init(int, mxArray**, int, const mxArray**);
         static void delete_autom(int, mxArray**, int, const mxArray**);
         static void getLocations(int, mxArray**, int, const mxArray**);
         static void getLocation_by_hash(int, mxArray**, int, const mxArray**);
@@ -29,7 +29,7 @@ class MHybridAutomaton{
         static void setGlobalBadStates(int, mxArray**, int, const mxArray**);
         static void setVariables(int, mxArray**, int, const mxArray**);
         static void addLocation(int, mxArray**, int, const mxArray**);
-        // static void addTransition(int, mxArray**, int, const mxArray**);
+        static void addTransition(int, mxArray**, int, const mxArray**);
         static void addInitialState(int, mxArray**, int, const mxArray**);
         static void addLocalBadState(int, mxArray**, int, const mxArray**);
         static void addGlobalBadState(int, mxArray**, int, const mxArray**);

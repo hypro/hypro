@@ -74,6 +74,4 @@ assert(nequal == 1);
 
 
 
-
-
 res = 1;

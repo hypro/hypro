@@ -60,7 +60,6 @@ void MLocation::new_mat_tran_inv(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     hypro::Condition<double>* inv = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
 
     std::vector<std::unique_ptr<hypro::Transition<double>>> transitions;
-
     for(const auto &elem : temp){
         hypro::Transition<double>* t = new hypro::Transition<double>(elem);
         std::unique_ptr<hypro::Transition<double>> tran = std::make_unique<hypro::Transition<double>>(*t);
