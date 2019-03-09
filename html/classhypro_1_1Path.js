@@ -3,7 +3,6 @@ var classhypro_1_1Path =
     [ "TIterator", "classhypro_1_1Path.html#a10fd505bf8db529c874cf6d00ffca3f4", null ],
     [ "TIterator_const", "classhypro_1_1Path.html#a01a0b17f0fe75c38dcec584196535c27", null ],
     [ "Path", "classhypro_1_1Path.html#a8472e229d647ab14908ff3b099ca319c", null ],
-    [ "Path", "classhypro_1_1Path.html#aa07b2de9fab37fc451ef3b921f07e30f", null ],
     [ "~Path", "classhypro_1_1Path.html#aa8c5d3cf388c86f59e2c2652e12d3019", null ],
     [ "add", "classhypro_1_1Path.html#a638bfb0372adc5336181c386dd4d2a7c", null ],
     [ "addTimeStep", "classhypro_1_1Path.html#a01ee87d5ef9cb76c5a807aa0cecdddec", null ],

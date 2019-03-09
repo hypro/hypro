@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['tbacktrackinginfo',['TBacktrackingInfo',['../structhypro_1_1TBacktrackingInfo.html#ae994ba52d1c081bd9d30a1e4ac76221f',1,'hypro::TBacktrackingInfo']]],
   ['tocobase',['toCobase',['../classhypro_1_1Dictionary.html#aadcf6cd0a47ee7c3770f2b99df1aa2a5',1,'hypro::Dictionary']]],
   ['todual',['toDual',['../classhypro_1_1ConvexHull.html#ad7cf4ffa337f35a465d84940f8b2f917',1,'hypro::ConvexHull']]],
   ['togeneralcoordinates',['toGeneralCoordinates',['../classhypro_1_1VertexEnumeration.html#a64c95b3ddb91524beede68a6b42e1d8d',1,'hypro::VertexEnumeration']]],

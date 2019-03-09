@@ -18,7 +18,7 @@ var searchData=
   ['adressablescontext',['AdressablesContext',['../classHybridSystemParser_1_1AdressablesContext.html',1,'HybridSystemParser']]],
   ['affineflow',['affineFlow',['../classhypro_1_1affineFlow.html',1,'hypro']]],
   ['affinetransformation',['AffineTransformation',['../structhypro_1_1AffineTransformation.html',1,'hypro']]],
-  ['affinetransformation_3c_20n_20_3e',['AffineTransformation&lt; N &gt;',['../structhypro_1_1AffineTransformation.html',1,'hypro']]],
+  ['affinetransformation_3c_20typename_20state_3a_3anumbertype_20_3e',['AffineTransformation&lt; typename State::NumberType &gt;',['../structhypro_1_1AffineTransformation.html',1,'hypro']]],
   ['aggregationcontext',['AggregationContext',['../classHybridAutomatonParser_1_1AggregationContext.html',1,'HybridAutomatonParser']]],
   ['algvarsdefscontext',['AlgVarsDefsContext',['../classHybridSystemParser_1_1AlgVarsDefsContext.html',1,'HybridSystemParser']]],
   ['allocationcontext',['AllocationContext',['../classHybridAutomatonParser_1_1AllocationContext.html',1,'HybridAutomatonParser']]],

@@ -1,7 +1,7 @@
 var structhypro_1_1ReachabilitySettings =
 [
     [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html#af91b99cf64b956259347ba1595d0ad4d", null ],
-    [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html#a7e9ccb2197c17cf65dc0a5877d2235bf", null ],
+    [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html#a36fbed54bd6e1fd4a9cc73b50b5f43c5", null ],
     [ "operator=", "structhypro_1_1ReachabilitySettings.html#a5820205b3c95b72db229e5f580c32b83", null ],
     [ "operator<<", "structhypro_1_1ReachabilitySettings.html#ae93b9fbf4be9c3f1ec20ff1647283dcb", null ],
     [ "operator==", "structhypro_1_1ReachabilitySettings.html#af27b3c78a5d04e3e98845619e059b2ff", null ],
@@ -12,8 +12,5 @@ var structhypro_1_1ReachabilitySettings =
     [ "pplDenomimator", "structhypro_1_1ReachabilitySettings.html#aa17f76655c115df2a6ce1107f6c03341", null ],
     [ "timeBound", "structhypro_1_1ReachabilitySettings.html#a44a833ef02d4ada2a384afe29cbdeeba", null ],
     [ "timeStep", "structhypro_1_1ReachabilitySettings.html#a52e2aa09e72bba3c3c4385c18f7248aa", null ],
-    [ "uniformBloating", "structhypro_1_1ReachabilitySettings.html#a75dab1f6c8dcf210c5e8319ece734829", null ],
-    [ "useBadStateTimingInformation", "structhypro_1_1ReachabilitySettings.html#a9cecce701bd68f407fea7129035c37f4", null ],
-    [ "useGuardTimingInformation", "structhypro_1_1ReachabilitySettings.html#a6fec83f69b27ea8473a100b497482a92", null ],
-    [ "useInvariantTimingInformation", "structhypro_1_1ReachabilitySettings.html#aa879f947713bf99a791174af672ba59d", null ]
+    [ "uniformBloating", "structhypro_1_1ReachabilitySettings.html#a75dab1f6c8dcf210c5e8319ece734829", null ]
 ];

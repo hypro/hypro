@@ -1,11 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"annotated.html":[6,0],
-"carlPolytopeSettings_8h_source.html":[7,0,1,0,3,8,0,1],
-"carlPolytope_8h_source.html":[7,0,1,0,3,8,0,0],
-"carlTypes_8h_source.html":[7,0,1,0,5],
-"citelist.html":[3],
-"classCIFLocationBaseVisitor.html":[6,0,5],
 "classCIFLocationBaseVisitor.html#a01bf92e7687b570ac7217541bc2eb752":[6,0,5,43],
 "classCIFLocationBaseVisitor.html#a0301ad50d17a85ab33d95f2fff7c6d7f":[6,0,5,34],
 "classCIFLocationBaseVisitor.html#a04d5fce0920e40c811d133b273363865":[6,0,5,47],
@@ -249,5 +243,11 @@ var NAVTREEINDEX1 =
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5f6cb3663e5648f57c8d86d505290954":[6,0,7,125],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa616861498ed6f0f1c86809afd14c1ed7":[6,0,7,164],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa62ca11509f7fa989874ea462f04b49f0":[6,0,7,179],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6524be38895a1c93c45046d22b5c26eb":[6,0,7,185]
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6524be38895a1c93c45046d22b5c26eb":[6,0,7,185],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6590c8ae65a7fbbbc1a0486d45f87d43":[6,0,7,157],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa66c74497b6ff43c7aa798e0af0e6e665":[6,0,7,128],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6c874d1a8f05bd23baad675e7e93d9d0":[6,0,7,134],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa7537025fe4b18c5ba1b8a937278aee6d":[6,0,7,109],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa7a448426b5000c87edb7a755fce904fd":[6,0,7,171],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa7bc890b672e2dc2d9f8cae27c6164c37":[6,0,7,102]
 };
