@@ -103,27 +103,45 @@ classdef MHyProReset < handle
             out = MHyPro('Reset', 'getIntervalResets', obj.Handle);
         end
         
-        function setVector(obj, vec, at)
-            if isvector(vec) && mod(at,1) == 0 &&  at - 1 >= 0
-                MHyPro('Reset', 'setVector', obj.Handle, vec, at - 1);
+        function setVector(varargin)
+            if isa(varargin{1}, 'MHyProReset')
+                if nargin == 2 && isvector(varargin{2})
+                    MHyPro('Reset', 'setVector', varargin{1}.Handle, varargin{2}, 0);
+                elseif nargin == 3 && isvector(varargin{2}) && mod(varargin{3},1) == 0
+                    MHyPro('Reset', 'setVector', varargin{1}.Handle, varargin{2}, varargin{3} - 1);
+                else
+                    error('MHyProReset - setVector: Wrong type of at least one argument.');
+                end
             else
-                error("MHyProReset - setVector: Wrong type of at leat one argument.");
+                error('MHyProReset - setVector: The first argument must be a MHyProReset.');
             end
         end
-        
-        function setMatrix(obj, mat, at)
-            if ismatrix(mat) && mod(at,1) == 0 && at - 1 >= 0
-                MHyPro('Reset', 'setMatrix', obj.Handle, mat, at - 1);
+
+         function setMatrix(varargin)
+            if isa(varargin{1}, 'MHyProReset')
+                if nargin == 2 && ismatrix(varargin{2})
+                    MHyPro('Reset', 'setMatrix', varargin{1}.Handle, varargin{2}, 0);
+                elseif nargin == 3 && ismatrix(varargin{2}) && mod(varargin{3},1) == 0
+                    MHyPro('Reset', 'setMatrix', varargin{1}.Handle, varargin{2}, varargin{3} - 1);
+                else
+                    error('MHyProReset - setMatrix: Wrong type of at least one argument.');
+                end
             else
-                error("MHyProReset - setMatrix: Wrong type of at leat one argument.");
+                error('MHyProReset - setMatrix: The first argument must be a MHyProReset.');
             end
         end
-        
-        function setIntervals(obj, ints, at)
-            if areIntervals(ints) && mod(at,1) == 0 && at - 1 >= 0
-                MHyPro('Reset', 'setIntervals', obj.Handle, ints, at - 1);
+
+        function setIntervals(varargin)
+            if isa(varargin{1}, 'MHyProReset')
+                if nargin == 2 && areIntervals(varargin{2})
+                    MHyPro('Reset', 'setIntervals', varargin{1}.Handle, varargin{2}, 0);
+                elseif nargin == 3 && areIntervals(varargin{2}) && mod(varargin{3},1) == 0
+                    MHyPro('Reset', 'setIntervals', varargin{1}.Handle, varargin{2}, varargin{3} - 1);
+                else
+                    error('MHyProReset - setIntervals: Wrong type of at least one argument.');
+                end
             else
-                error("MHyProReset - areIntervals: Wrong type of at leat one argument.");
+                error('MHyProReset - setIntervals: The first argument must be a MHyProReset.');
             end
         end
         

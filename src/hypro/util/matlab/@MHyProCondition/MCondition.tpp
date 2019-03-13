@@ -214,7 +214,7 @@ void MCondition::setVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
     hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], len);
-    std::size_t s = mxGetScalar(prhs[4]);
+    std::size_t s = (std::size_t) mxGetScalar(prhs[4]);
     cond->setVector(vec, s);
 }
 

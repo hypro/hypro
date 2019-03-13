@@ -76,27 +76,19 @@ classdef MHyProCondition < handle
             end
         end
         
-        function setVector(obj, vec, pos)
-            if isvector(vec) && mod(pos,1) == 0
-                MHyPro('Condition', 'setVector', obj.Handle, vec, pos);
+        function setVector(varargin)
+            if isa(varargin{1}, 'MHyProCondition')
+                if nargin == 2 && isvector(varargin{2})
+                    MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, 0);
+                elseif nargin == 3 && isvector(varargin{2}) && mod(varargin{3},1) == 0
+                    MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, varargin{3});
+                else
+                    error('MHyProCondition - setVector: Wrong type of at least one argument.');
+                end
             else
-                error('MHyProCondition - setVector: Wrong type of at least one argument.');
+                error('MHyProCondition - setVector: The first argument must be a MHyProCondition.');
             end
         end
-        
-%         function setVector(varargin)
-%             if isa(varargin{1}, 'MHyProCondition')
-%                 if nargin == 2 && isvector(varargin{2})
-%                     MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, 0);
-%                 elseif nargin == 3 && isvector(varargin{2}) && mod(varargin{3},1) == 0
-%                     MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, varargin{3});
-%                 else
-%                     error('MHyProCondition - setVector: Wrong type of at least one argument.');
-%                 end
-%             else
-%                 error('MHyProCondition - setVector: The first argument must be a MHyProCondition.');
-%             end
-%         end
         
         function out = constraints(obj)
             ptrscell = MHyPro('Condition', 'constraints', obj.Handle);

@@ -10,14 +10,14 @@ size = reset_empty.size();
 assert(size == 0);
 
 reset = MHyProReset();
-reset.setVector([1; 2; 2], 1);
+reset.setVector([1; 2; 2]);
 empty = reset.isempty();
 assert(empty == 0);
 
 vec = reset.getVector(1);
 assert(isequal(vec, [1;2;2]));
 
-reset.setMatrix([1 2 0; 2 3 3; 1 0 0], 1);
+reset.setMatrix([1 2 0; 2 3 3; 1 0 0]);
 mat = reset.getMatrix(1);
 assert(isequal(mat, [1 2 0; 2 3 3; 1 0 0]));
 

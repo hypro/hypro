@@ -28,7 +28,7 @@ cond1.setMatrix(eye(3));
 mat = cond1.getMatrix();
 assert(isequal(mat, eye(3)));
 
-cond1.setVector([1; 2; 3], 0);
+cond1.setVector([1; 2; 3], 1);
 vec = cond1.getVector();
 assert(isequal(vec, [1;2;3]));
 
