@@ -14,29 +14,29 @@
     /**
      * @brief
      **/    
-    void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nlhs != 1)
-            mexErrMsgTxt("MHybridAutomaton - new_loc_init: One output expected.");
-        if(nrhs < 4)
-            mexErrMsgTxt("MHybridAutomaton - new_loc_init: One or more arguments are missing.");
+    // void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nlhs != 1)
+    //         mexErrMsgTxt("MHybridAutomaton - new_loc_init: One output expected.");
+    //     if(nrhs < 4)
+    //         mexErrMsgTxt("MHybridAutomaton - new_loc_init: One or more arguments are missing.");
         
-        const mwSize *loc_dims;
-        int loc_num;
-        loc_dims = mxGetDimensions(prhs[2]);
-        loc_num = loc_dims[1];
-        const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
-        const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+    //     const mwSize *loc_dims;
+    //     int loc_num;
+    //     loc_dims = mxGetDimensions(prhs[2]);
+    //     loc_num = loc_dims[1];
+    //     const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
+    //     const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
         
-        std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
-        for(const auto &elem : locs){
-            hypro::Location<double>* l = new hypro::Location<double>(elem);
-            std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
-            ptr_locs.emplace_back(std::move(loc));
-        }
+    //     std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
+    //     for(const auto &elem : locs){
+    //         hypro::Location<double>* l = new hypro::Location<double>(elem);
+    //         std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
+    //         ptr_locs.emplace_back(std::move(loc));
+    //     }
 
-        // hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
-        // plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
-    }
+    //     // hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
+    //     // plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+    // }
 
     /**
      * @brief
@@ -399,17 +399,17 @@
     /**
      * @brief
      **/    
-    void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nrhs < 4)
-            mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
-        if(nrhs > 4)
-            mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
+    // void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nrhs < 4)
+    //         mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
+    //     if(nrhs > 4)
+    //         mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
 
-        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-        hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
-        std::unique_ptr<hypro::Transition<double>> tran = std::make_unique<hypro::Transition<double>>(*temp);
-        // autom->addTransition(std::move(tran));
-    }
+    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    //     hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
+    //     std::unique_ptr<hypro::Transition<double>> tran = std::make_unique<hypro::Transition<double>>(*temp);
+    //     // autom->addTransition(std::move(tran));
+    // }
 
        /**
         * @brief
@@ -642,10 +642,10 @@
             copy(nlhs, plhs, nrhs, prhs);
             return;
         }
-        if (!strcmp("new_loc_init", cmd)){  
-            new_loc_init(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("new_loc_init", cmd)){  
+        //     new_loc_init(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
         if (!strcmp("delete", cmd)){  
             delete_autom(nlhs, plhs, nrhs, prhs);
             return;
@@ -718,10 +718,10 @@
             addLocation(nlhs, plhs, nrhs, prhs);
             return;
         }
-        if (!strcmp("addTransition", cmd)){  
-            addTransition(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("addTransition", cmd)){  
+        //     addTransition(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
         if (!strcmp("addInitialState", cmd)){  
             addInitialState(nlhs, plhs, nrhs, prhs);
             return;

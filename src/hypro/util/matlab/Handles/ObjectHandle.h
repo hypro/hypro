@@ -176,7 +176,7 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
             //mexPrintf("i: %d j: %d value: %f\n", i,j, matrix.coeff(i,j));
-            out[i*dimy+j] = matrix.coeff(j,i);
+            out[i*dimy+j] = matrix.coeff(i,j);
         }
     }
 }
@@ -380,7 +380,8 @@ hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, con
     hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
-            (*hypro_matrix)(j,i) = matrix[i*dimy+j];
+            //mexPrintf("(%d, %d) = %d\n", j, i, i*dimy+j);
+            (*hypro_matrix)(i,j) = matrix[i*dimy+j];
         }
     }
     return *hypro_matrix;

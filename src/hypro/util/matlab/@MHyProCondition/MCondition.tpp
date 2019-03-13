@@ -26,8 +26,8 @@ void MCondition::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     int mat_dimx, mat_dimy, vec_len;
     mat_dims = mxGetDimensions(prhs[2]);
     vec_dims = mxGetDimensions(prhs[3]);
-    mat_dimy = mat_dims[0];
-    mat_dimx = mat_dims[1];
+    mat_dimx = mat_dims[0];
+    mat_dimy = mat_dims[1];
     vec_len = vec_dims[0];
 
     hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);

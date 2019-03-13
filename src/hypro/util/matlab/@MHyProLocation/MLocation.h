@@ -26,6 +26,7 @@ class MLocation{
         static void dimension(int, mxArray**, int , const mxArray**);
         static void dimension_at(int, mxArray**, int , const mxArray**);
         static void setName(int, mxArray**, int , const mxArray**);
+        static void setFlow(int, mxArray**, int, const mxArray**);
         static void setLinearFlow(int, mxArray**, int , const mxArray**);
         static void setLinearFlow_vec(int, mxArray**, int, const mxArray**);
         static void setInvariant(int, mxArray**, int , const mxArray**);

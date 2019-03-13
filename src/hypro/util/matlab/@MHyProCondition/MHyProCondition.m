@@ -29,7 +29,7 @@ classdef MHyProCondition < handle
                     error('MHyProCondition - Constructor: Wrong type of at least one argument.');
                 end
             elseif nargin == 2
-                if ismatrix(varargin{1}) && isvector(varargin{2}) && size(varargin{1},2) == size(varargin{2},1)
+                if ismatrix(varargin{1}) && isvector(varargin{2}) && size(varargin{1},1) == size(varargin{2},1)
                     obj.Handle = MHyPro('Condition', 'new_mat_vec' ,varargin{1}, varargin{2});
                 else
                     error('MHyProCondition - Constructor: Wrong type of at least one argument.');
@@ -83,6 +83,20 @@ classdef MHyProCondition < handle
                 error('MHyProCondition - setVector: Wrong type of at least one argument.');
             end
         end
+        
+%         function setVector(varargin)
+%             if isa(varargin{1}, 'MHyProCondition')
+%                 if nargin == 2 && isvector(varargin{2})
+%                     MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, 0);
+%                 elseif nargin == 3 && isvector(varargin{2}) && mod(varargin{3},1) == 0
+%                     MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, varargin{3});
+%                 else
+%                     error('MHyProCondition - setVector: Wrong type of at least one argument.');
+%                 end
+%             else
+%                 error('MHyProCondition - setVector: The first argument must be a MHyProCondition.');
+%             end
+%         end
         
         function out = constraints(obj)
             ptrscell = MHyPro('Condition', 'constraints', obj.Handle);

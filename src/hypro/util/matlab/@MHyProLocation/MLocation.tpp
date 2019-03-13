@@ -304,11 +304,35 @@ void MLocation::setName(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prh
 /**
  * @brief
  **/
+void MLocation::setFlow(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nrhs < 4)
+         mexErrMsgTxt("MLocation - setFlow: One or more arguments are missing.");
+    if(nrhs > 4)
+         mexErrMsgTxt("MLocation - setFlow: One or more arguments were ignored.");
+
+    double* in_matrix;
+    const mwSize* dims;
+    int dimx, dimy;
+
+    dims = mxGetDimensions(prhs[3]);
+    dimy = dims[0];
+    dimx = dims[1];
+
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
+    
+    loc->setFlow(mat);
+}
+
+
+/**
+ * @brief
+ **/
 void MLocation::setLinearFlow(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
     if(nrhs < 5)
-         mexErrMsgTxt("MLocation - setFlow: One or more arguments are missing.");
+         mexErrMsgTxt("MLocation - setLinearFlow: One or more arguments are missing.");
     if(nrhs > 5)
-         mexErrMsgTxt("MLocation - setFlow: One or more arguments were ignored.");
+         mexErrMsgTxt("MLocation - setLinearFlow: One or more arguments were ignored.");
     
     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
     const hypro::linearFlow<double>* flow = convertMat2Ptr<hypro::linearFlow<double>>(prhs[3]);
@@ -597,6 +621,10 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
     }
     if (!strcmp("setName", cmd)){  
         setName(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if (!strcmp("setFlow", cmd)){  
+        setFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
     if (!strcmp("setLinearFlow", cmd)){  

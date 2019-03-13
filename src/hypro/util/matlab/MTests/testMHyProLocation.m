@@ -22,7 +22,6 @@ tran1_3.addLabel(lab2);
 tran1_4.addLabel(lab3);
 tran2_4.addLabel(lab4);
 
-
 transitions = {tran1_2, tran1_3, tran1_4};
 cond = MHyProCondition([1 2; 3 4], [1; 2]);
 loc3 = MHyProLocation([1 2; 3 4], transitions, cond);

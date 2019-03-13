@@ -306,7 +306,20 @@ void MTransition::setReset(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 * @brief
 **/
 void MTransition::setAggregation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO
+    if(nrhs < 4)
+        mexErrMsgTxt("MTransition - setAggregation: One or more input arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MTransition - setAggregation: One or more input arguments were ignored!");
+
+    hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    const int agg = (int) mxGetScalar(prhs[3]);
+    if(agg == 0){
+        tran->setAggregation(hypro::Aggregation::none);
+    }else if(agg == 1){
+        tran->setAggregation(hypro::Aggregation::boxAgg);
+    }else{
+        tran->setAggregation(hypro::Aggregation::parallelotopeAgg);
+    }
 }
 
 /**

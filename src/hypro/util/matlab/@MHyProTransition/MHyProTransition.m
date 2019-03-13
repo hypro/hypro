@@ -137,12 +137,15 @@ classdef MHyProTransition < handle
         end
         
         function setAggregation(obj, agg)
-            %TODO
-%             if iscelloftype(loc, 'MHyProLocation') 
-%                 MHyPro('Transition', 'setSource', obj.Handle, loc);
-%             else
-%                 error("MHyProTransition - setSource: Wrong type of at leat one argument.");
-%             end
+           if agg == '0'
+                MHyPro('Transition', 'setAggregation', obj.Handle, 0);
+           elseif isequal(agg,'boxAgg')
+                MHyPro('Transition', 'setAggregation', obj.Handle, 1);
+           elseif isequal(agg,'parallelotopeAgg')
+                MHyPro('Transition', 'setAggregation', obj.Hanlde, 2);
+           else
+                error("MHyProTransition - setAggregation: Wrong type of at leat one argument.");
+           end
         end
         
         function setUrgent(obj, urg)

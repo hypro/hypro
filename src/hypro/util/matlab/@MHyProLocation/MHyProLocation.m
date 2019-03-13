@@ -113,6 +113,14 @@ classdef MHyProLocation < handle
             end
         end
         
+        function setFlow(obj, mat)
+            if ismatrix(mat)
+                MHyPro('Location', 'setFlow', obj.Handle, mat);
+            else
+                error("MHyProLocation - setFlow: Wrong type of at leat one argument.");
+            end
+        end
+        
         function setLinearFlow(obj, linFlow, pos)
             if isa(linFlow, "MHyProFlow") && strcmp(linFlow.Type, "linearFlow") && mod(pos,1) == 0
                 MHyPro('Location', 'setLinearFlow', obj.Handle, linFlow.Handle, pos - 1);
@@ -131,7 +139,7 @@ classdef MHyProLocation < handle
            
         function setInvariant(obj, cond)
             if isa(cond, 'MHyProCondition') 
-                MHyPro('Location', 'setInvariant', obj.Handle, cond);
+                MHyPro('Location', 'setInvariant', obj.Handle, cond.Handle);
             else
                 error("MHyProLocation - setInvariant: Wrong type of at leat one argument.");
             end
