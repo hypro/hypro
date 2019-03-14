@@ -18,6 +18,7 @@
 #include "../../../datastructures/HybridAutomaton/Transition.h"
 #include "../../../datastructures/HybridAutomaton/Condition.h"
 #include "../../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
+#include "../../../datastructures/reachability/Settings.h"
 
 
 class ObjectHandle{
@@ -66,9 +67,11 @@ class ObjectHandle{
         static std::vector<hypro::Point<double>> mPointsVector2Hypro(const mxArray*, const int, const int);
         static std::vector<hypro::Halfspace<double>> mHalfspaces2Hypro(mxArray*, mxArray*, const int, const int, const int);
         static std::vector<carl::Term<double>> mMultivariatePoly2Hypro(const mxArray*);
-        static std::vector<std::vector<size_t>> mVectorOfVectors2Hypro(const mxArray*, const int, const int);
+        static std::vector<std::vector<std::size_t>> mVectorOfVectors2Hypro(const mxArray*, const int, const int);
         static std::vector<std::string> mStringVector2Hypro(const mxArray*, const int);
         static std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray*);
+
+        static hypro::ReachabilitySettings mReachSetting2Hypro(const mxArray*);
 };
 
 /**
@@ -519,16 +522,18 @@ hypro::representation_name ObjectHandle::mRepresentationName2Hypro(char* name){
  * and conditions to Hypro.
  **/
 
-std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray* structArray, const int len){
-    double* structArrayPtr = mxGetPr(structArray);
-    std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
+// std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray* structArray, const int len){
+//     double* structArrayPtr = mxGetPr(structArray);
+//     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
+//     mexPrintf("Hallo");
+//     for(int i = 0; i < len; i++){
+//         hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray,0,i));
+//         mexPrintf("Got location");
+//         hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray,1,i));
+//         mexPrintf("Got cond");
+//     }
 
-    for(int i = 0; i < len; i++){
-        hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray,0,i));
-        hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray,0,i));
-    }
-
-}
+// }
 
 /**
  * @brief Converts a Matlab matrix and vector into a vector of halfspaces.
@@ -587,18 +592,44 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro(const mxArray* string
 /**
 * @brief
 **/
-std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
-    double* structPtr = mxGetPr(structArray);
-    const mwSize* dims = mxGetDimensions(structArray);
-    int dimy = dims[0];
-    int dimx = dims[1];
+// std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
+//     double* structPtr = mxGetPr(structArray);
+//     const mwSize* dims = mxGetDimensions(structArray);
+//     int dimy = dims[0];
+//     int dimx = dims[1];
 
-    std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
+//     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
 
-    for(int i = 0; i < dimy; i++){
-        hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
-        hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
-        mapping[loc] = *cond;
-    } 
+//     for(int i = 0; i < dimy; i++){
+//         hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
+//         hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
+//         mapping[loc] = *cond;
+//     } 
 
+// }
+
+/**
+ * @brief
+ **/
+hypro::ReachabilitySettings ObjectHandle::mReachSetting2Hypro(const mxArray* settings){
+    double timeBound = (double) mxGetScalar(mxGetCell(settings,0));
+    int jumpDepth = (int) mxGetScalar(mxGetCell(settings,1));
+    double timeStep = (double) mxGetScalar(mxGetCell(settings,2));
+    char file[64];
+    mxGetString(mxGetCell(settings,3), file, sizeof(file));
+    std::string fileName = std::string(file);
+    unsigned long pplDenominator = (unsigned long) mxGetScalar(mxGetCell(settings,4));
+    const mwSize* dims;
+    int dimx, dimy;
+    dims = mxGetDimensions(mxGetCell(settings,5));
+    dimx = dims[0];
+    dimy = dims[1];
+    std::vector<std::vector<std::size_t>> plotDimensions = mVectorOfVectors2Hypro(mxGetCell(settings,5), dimx, dimy);
+    int temp = (int) mxGetScalar(mxGetCell(settings,6));
+    bool uniformBolating = false;
+    if (temp == 1)
+        uniformBolating = true;
+
+    int clustering = (int) mxGetScalar(mxGetCell(settings,7));; // -1 = off, 0 = all, i = maximal number of segments to unify
+    
 }

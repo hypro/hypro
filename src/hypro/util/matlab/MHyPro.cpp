@@ -1,17 +1,18 @@
-#include "@MHyProBox/MHyProBox.h"
-#include "@MHyProConstraintSet/MHyProConstraintSet.h"
-#include "@MHyProEllipsoid/MHyProEllipsoid.h"
-#include "@MHyProSupportFunction/MHyProSupportFunction.h"
-#include "@MHyProHAutomaton/MHybridAutomaton.h"
-#include "@MHyProCondition/MCondition.h"
-#include "@MHyProFlow/MLinearFlow.h"
-#include "@MHyProFlow/MAffineFlow.h"
-#include "@MHyProLabel/MLabel.h"
-#include "@MHyProLocation/MLocation.h"
-// #include "@MHyProResetType/MAffineTransformation.h"
-// #include "@MHyProState/MState.h"
-#include "@MHyProTransition/MTransition.h"
-#include "@MHyProReset/MReset.h"
+#include "representations/@MHyProBox/MBox.h"
+#include "representations/@MHyProConstraintSet/MConstraintSet.h"
+#include "representations/@MHyProEllipsoid/MEllipsoid.h"
+#include "representations/@MHyProSupportFunction/MSupportFunction.h"
+#include "reachability/@MHyProHAutomaton/MHybridAutomaton.h"
+#include "reachability/@MHyProCondition/MCondition.h"
+#include "reachability/@MHyProFlow/MLinearFlow.h"
+#include "reachability/@MHyProFlow/MAffineFlow.h"
+#include "reachability/@MHyProLabel/MLabel.h"
+#include "reachability/@MHyProLocation/MLocation.h"
+// #include "reachability/@MHyProResetType/MAffineTransformation.h"
+// #include "reachability/@MHyProState/MState.h"
+#include "reachability/@MHyProTransition/MTransition.h"
+#include "reachability/@MHyProReset/MReset.h"
+#include "reachability/@MHyProReachability/MReach.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -23,13 +24,13 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     mxGetString(prhs[0], type, sizeof(type));
 
     if(!strcmp(type, "Box")){
-        MHyProBox::process(nlhs, plhs, nrhs, prhs);
+        MBox::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Ellipsoid")){
-        MHyProEllipsoid::process(nlhs, plhs, nrhs, prhs);
+        MEllipsoid::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "ConstraintSet")){
-        MHyProConstraintSet::process(nlhs, plhs, nrhs, prhs);
+        MConstraintSet::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "SupportFunction")){
-        MHyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
+        MSupportFunction::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "HybridAutomaton")){
         MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Condition")){
