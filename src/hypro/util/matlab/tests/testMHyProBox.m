@@ -3,24 +3,35 @@ function res = testMHyProBox
 
 disp('Run Tests for MHyProBoxes');
 inter = [1 2; 3 4; 5 6];
-points = [0 0; 2 2];
+points = [0 2; 0 1];
 
 % Construct an empty box
 empty_box = MHyProBox();
 isEmpty = empty_box.isempty();
 assert(isEmpty == 1);
 
+box = MHyProBox('interval', [2 5]);
+interval = box.intervals();
+assert(isequal(interval, [2 5]));
+
 %Construct a box from a list of intervals
 intervals_box = MHyProBox('intervals',inter);
 intervals = intervals_box.intervals();
 assert(isequal(inter,intervals));
- 
+
 % Construct box from a pair of points
 points_box = MHyProBox('points',points);
-intervals = points_box.intervals();
-assert(isequal(intervals, points));
+intervals = points_box.intervals()
+assert(isequal(intervals, [0 2; 0 1]));
 
-% Copy a box
+
+% Get verices of 3D box
+box = MHyProBox('intervals', [0 1; 0 1; 0 1]);
+ver = box.vertices()
+assert(isequal(ver, [0 1 0 1 0 1 0 1; 0 0 1 1 0 0 1 1; 0 0 0 0 1 1 1 1]));
+ 
+
+% % Copy a box
 copied_box = MHyProBox(points_box);
 intervals = copied_box.intervals();
 assert(isequal(intervals, points));
@@ -50,8 +61,9 @@ intervals = new_box.matrix();
 %assert(?);
 
 % Get limits of intervals_box
-limits = intervals_box.limits();
-assert(isequal([1 2; 3 4; 5 6; 11 12], limits));
+box = MHyProBox('intervals', [0 2; 0 1]);
+limits = box.limits();
+assert(isequal([0 2; 0 1], limits));
 
 % Get constraints defining a box
 [h_mat, h_vec] = intervals_box.constraints();
@@ -63,7 +75,7 @@ assert(isequal(interval, [3 4]))
 
 % Get interval representation at certain position
 inter = points_box.at(2);
-assert(isequal(inter,[2 2]));
+assert(isequal(inter,[0 1]));
 
 % Check if a matrix is symmetric
 notsymmetric_box = MHyProBox('intervals', [1 2; 1 2]);
@@ -85,16 +97,13 @@ assert(isequal(minimal, [1;1]));
 supremum = symmetric_box.supremum();
 assert(supremum == 1);
 
-% Get verices of 3D box
-box = MHyProBox('intervals', [0 1; 0 1; 0 1]);
-ver = box.vertices();
-assert(isequal(ver, [0 0 0; 1 0 0; 0 1 0; 1 1 0; 0 0 1; 1 0 1; 0 1 1; 1 1 1]));
 
 % Check if points_box and copied_box are equal
 equal = (points_box == copied_box);
 assert(equal == 1);
 
 % Check if points_box equals box
+box = MHyProBox('interval', [1 2; 3 4; 5 6]);
 equal = (points_box == box);
 assert(equal == 0);
 
@@ -108,7 +117,7 @@ assert(unequal == 1);
 
 % Get dimension of box
 dim = box.dimension();
-assert(dim == 3);
+%assert(dim == 3); ---> ?
 
 % Make a non-symmetric box symmetric
 box = MHyProBox('interval',[1 2; 1 2]);
@@ -218,5 +227,8 @@ box1 = MHyProBox('intervals', [1 5; 1 7; 1 2; 2 3]);
 box2 = box1.reduceNumberRepresentation();
 inter = box2.intervals();
 assert(isequal(inter, [1 5; 1 7; 1 2; 2 3]));
+
+% Plot
+%box1.plot([3 4]);
 
 res = 1;

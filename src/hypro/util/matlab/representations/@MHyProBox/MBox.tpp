@@ -26,8 +26,9 @@ void MBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     const mwSize *dims;
     int dimx, dimy;
     dims = mxGetDimensions(prhs[2]);
-    dimy = (int) dims[0];
-    dimx = (int) dims[1];
+    dimy = (int) dims[1];
+    dimx = (int) dims[0];
+    mexPrintf("box new_interval - dimx: %d, dimy: %d\n", dimx, dimy);
     carl::Interval<double> inter = ObjectHandle::mInterval2Hypro(prhs[2]);
     hypro::Box<double>* box = new hypro::Box<double>(inter);
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(box);
@@ -72,16 +73,15 @@ void MBox::boxFromPoints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 
     dims = mxGetDimensions(prhs[2]);
     numdims = mxGetNumberOfDimensions(prhs[2]);
-    dimy = (int) dims[0];
-    dimx = (int) dims[1];
-    if(numdims > 2 || dimy != 2 || dimx != 2){
-        mexErrMsgTxt("MBox - new_points: You have to input a 2x2-matrix containing the min. and max. point!");
-    }
+    dimy = (int) dims[1];
+    dimx = (int) dims[0];
+
+    if (dimy != 2)
+        mexErrMsgTxt("MBox - new_points: Put two points.");
 
     std::pair<hypro::Point<double>, hypro::Point<double>> pair = ObjectHandle::mPointPair2Hypro(prhs[2]);
     hypro::Box<double>* box = new hypro::Box<double>(pair);
     plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
-    return;
 }
 
 /**
@@ -142,9 +142,10 @@ void MBox::intervals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::vector<carl::Interval<double>> intervals = box->intervals();
 
-    const int dimy = intervals.size();
-    const int dimx = 2;
-    plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
+    const int dimx = intervals.size();
+    const int dimy = 2;
+    mexPrintf("box intervals - dimx: %d, dimy: %d\n", dimx, dimy);
+    plhs[0] = mxCreateDoubleMatrix(dimx, dimy, mxREAL);
     vector2Matlab(intervals, plhs[0]);
 }
 
@@ -188,19 +189,9 @@ void MBox::limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::pair<hypro::Point<double>, hypro::Point<double>> p = box->limits();
-    // mexPrintf("limits dimension: %d\n", p.first.dimension());
     int dim = p.first.dimension();
     plhs[0] = mxCreateDoubleMatrix(dim, 2, mxREAL);
     pair2Matlab(p, plhs[0], dim, 2);
-    //TESET
-    // mexPrintf("First:\n");
-    // for(int i = 0; i < dim; i++){
-    //     mexPrintf("%f\n",p.first[i]);
-    // }
-    // mexPrintf("Second:\n");
-    // for(int i = 0; i < dim; i++){
-    //     mexPrintf("%f\n",p.second[i]);
-    // }
 }
 
 /**
@@ -241,7 +232,7 @@ void MBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const carl::Interval<double> inter = box->interval(dim);
     plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
-    ObjectHandle::convert2Matlab(inter, plhs[0], 2, 1);
+    ObjectHandle::convert2Matlab(inter, plhs[0], 1, 2);
 }
 
 /**
@@ -260,7 +251,7 @@ void MBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     const carl::Interval<double> inter = box->at(dim);
 
     plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
-    ObjectHandle::convert2Matlab(inter, plhs[0], 2, 1);
+    ObjectHandle::convert2Matlab(inter, plhs[0], 1, 2);
 }
 
 /**

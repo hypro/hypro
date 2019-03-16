@@ -134,10 +134,6 @@ classdef MHyProConstraintSet < MHyProGeometricObject
                 error('MHyProConstraintSet - unite: Wrong type of input argument.');
             end
         end
- 
-        function plot(obj, dims)
-            error('MHyProConstraintSet - plot: NOT IMPLEMENTED')
-        end
 
         function reduceNumberRepresentation(obj)
             MHyPro('ConstraintSet', 'reduceNumberRepresentation', obj.Handle);
@@ -223,7 +219,30 @@ classdef MHyProConstraintSet < MHyProGeometricObject
             else
                 error('MHyProConstraintSet - addConstraint: Wrong type of argument.');
             end
-       end 
+       end
+       
+       function plot(obj, dims)
+            isempty = MHyPro(obj.Type, 'isEmpty', obj.Handle);
+            if isempty
+                warning('MHyProConstraintSet - plot: It is not possible to plot an empty object.');
+            else
+                vertices = MHyPro('ConstraintSet', 'vertices', obj.Handle)
+                
+
+                % Sort the vertices clockwise
+%                 ver_x = vertices(:,1).';
+%                 ver_y = vertices(:,2).';
+%                 cx = mean(ver_x);
+%                 cy = mean(ver_y);
+%                 a = atan2(ver_y - cy, ver_x - cx);
+%                 [~, order] = sort(a);
+%                 ver_x = ver_x(order);
+%                 ver_y = ver_y(order);
+% 
+%                 pgon = polyshape(ver_x, ver_y);
+%                 plot(pgon);                
+            end
+        end
 
     end
 end

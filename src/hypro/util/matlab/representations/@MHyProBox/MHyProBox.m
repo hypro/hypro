@@ -168,7 +168,6 @@ classdef MHyProBox < MHyProGeometricObject
             if isempty
                 warning('MHyProBox - plot: It is not possible to plot an empty object.');
             else
-                %ver = MHyPro('Box', 'vertices', obj.Handle);
                 intervals = MHyPro('Box', 'intervals', obj.Handle);
                 inter_1 = intervals(dims(1),:);
                 inter_2 = intervals(dims(2),:);
@@ -184,7 +183,7 @@ classdef MHyProBox < MHyProGeometricObject
                     counter = counter + dimx;
                 end
 
-                % Sort the vertices clocwise
+                % Sort the vertices clockwise
                 ver_x = ver(:,1).';
                 ver_y = ver(:,2).';
                 cx = mean(ver_x);

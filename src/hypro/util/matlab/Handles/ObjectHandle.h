@@ -49,6 +49,7 @@ class ObjectHandle{
         static void convert2Matlab(const hypro::representation_name&, std::string&);
         static void convert2Matlab(const std::vector<std::string>&, mxArray* , const mwSize*);
         static void convert2Matlab(const std::map<const hypro::Location<double>*, hypro::Condition<double>>&, mxArray*, const std::size_t);
+        static void convert2Matlab(const std::vector<hypro::Point<double>>&, mxArray*);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
         static hypro::representation_name mRepresentationName2Hypro(char*);
@@ -82,10 +83,11 @@ class ObjectHandle{
 template<typename T>
 void vector2Matlab(const std::vector<T>& vec, mxArray* m_out){
     const mwSize* dims = mxGetDimensions(m_out);
-    const int dimy = (int) dims[0];
-    const int dimx = (int) dims[1];
+    const int dimy = (int) dims[1];
+    const int dimx = (int) dims[0];
+    mexPrintf("ObjectHandle - dimx: %d, dimy: %d\n", dimx, dimy);
     double* out = mxGetPr(m_out);
-    for(int i = 0; i < dimy; i++){
+    for(int i = 0; i < dimx; i++){
         ObjectHandle::convert2Matlab(vec[i], m_out, dimx, dimy, i);
     }
 }
@@ -93,14 +95,15 @@ void vector2Matlab(const std::vector<T>& vec, mxArray* m_out){
 template<typename T>
 void vector2Matlab(const std::vector<T>& vec, mxArray* m_out_1, mxArray* m_out_2){
     const mwSize* dims = mxGetDimensions(m_out_1);
-    const int dimy = (int) dims[0];
-    const int dimx = (int) dims[1];
+    const int dimy = (int) dims[1];
+    const int dimx = (int) dims[0];
     double* out_1 = mxGetPr(m_out_1);
     double* out_2 = mxGetPr(m_out_2);
     for(int i = 0; i < dimy; i++){
         ObjectHandle::convert2Matlab(vec[i], m_out_1, m_out_2, dimx, dimy, i);
     }
 }
+
 
 /**
  * @brief Converts a std pair into Matlab vecotr
@@ -134,6 +137,19 @@ void objArray2Matlab(const std::vector<T>& vec, mxArray* m_array, const int len)
     }
 }
 
+void ObjectHandle::convert2Matlab(const std::vector<hypro::Point<double>>& points, mxArray* m_out){
+    const mwSize* dims = mxGetDimensions(m_out);
+    const int cols = (int) dims[1];
+    const int rows = (int) dims[0];
+    double* out = mxGetPr(m_out);
+    
+    for(int j = 0; j < cols; j++){
+        hypro::Point<double> p = points[j];
+        for(int i = 0; i < rows; i++){
+            out[i + rows * j] = p[i];
+      }
+    }
+}
 
 /**
 * @brief This function converts a location-condition map into an MATLAB array strucure.
@@ -165,7 +181,7 @@ void ObjectHandle::convert2Matlab(const std::map<const hypro::Location<double>*,
 void ObjectHandle::convert2Matlab(const carl::Interval<double>& inter, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
     out[index] = inter.lower();
-    out[index + dimy] = inter.upper();
+    out[index + dimx] = inter.upper();
 }
 
 /**
@@ -193,7 +209,6 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
 void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimy; i++){
-        // mexPrintf("i: %d value: %f\n", i, vec.coeff(i));
         out[i] = vec(i);
     }
 }
@@ -208,7 +223,7 @@ void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m
 void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimx; i++){
-        out[dimx*index + i] = p[i];
+        out[index * dimx +  i] = p[i];
     }
 }
 

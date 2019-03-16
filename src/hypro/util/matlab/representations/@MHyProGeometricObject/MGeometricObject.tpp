@@ -197,17 +197,10 @@ void MGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, const mx
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = temp->vertices();
-    int dimx = vertices.size();
-    int dimy = vertices[0].dimension();
-    plhs[0] = mxCreateDoubleMatrix(dimx, dimy, mxREAL);
-    double* out = mxGetPr(plhs[0]);
-    for(int j = 0; j < dimx; j++){
-        hypro::Point<double> p = vertices[j];
-        for(int i = 0; i < dimy; i++){
-            out[i*dimx + j] = p[i];
-        }
-    }
-   
+    int dimy = vertices.size();
+    int dimx = vertices[0].dimension();
+    plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
+	ObjectHandle::convert2Matlab( vertices, plhs[0] );
 }
 
 /**

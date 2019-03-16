@@ -122,5 +122,6 @@ sets = {set2, set3};
 % united = set1.unite(sets);
 % assert ---> ?
 
+%set1.plot([1 2]);
 
 res = 1;
