@@ -16,8 +16,8 @@ void MGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const 
     int mat_dimx, mat_dimy;
 
     mat_dims = mxGetDimensions(prhs[2]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
+    mat_dimy = (int) mat_dims[1];
+    mat_dimx = (int) mat_dims[0];
 
     hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
     plhs[0] = convertPtr2Mat<T>(new T(matrix));
@@ -37,11 +37,11 @@ void MGeometricObject<T>::new_vector(int nlhs, mxArray* plhs[], int nrhs, const 
 
     double *in_vector;
     const mwSize *vec_dims;
-    int mat_dimx, mat_dimy, vec_dimy;
+    int mat_dimx, mat_dimy, len;
     vec_dims = mxGetDimensions(prhs[3]);
-    vec_dimy = (int) vec_dims[0];
+    len = (int) vec_dims[0];
 
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
+    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], len);
 
     T* temp = new T(vector);
     plhs[0] = convertPtr2Mat<T>(temp);
@@ -76,16 +76,15 @@ void MGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const
         mexWarnMsgTxt("MGeometricObject - new_mat_vec: One or more input arguments were ignored.");
 
     const mwSize *mat_dims, *vec_dims;
-    int mat_dimx, mat_dimy, vec_dimy;
+    int mat_dimx, mat_dimy, len;
 
     mat_dims = mxGetDimensions(prhs[2]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
+    mat_dimy = (int) mat_dims[1];
+    mat_dimx = (int) mat_dims[0];
     vec_dims = mxGetDimensions(prhs[3]);
-    vec_dimy = (int) vec_dims[0];
-
+    len = (int) vec_dims[0];
     hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
+    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], len);
     plhs[0] =  convertPtr2Mat<T>(new T(matrix, vector));
 }
 
@@ -117,15 +116,17 @@ void MGeometricObject<T>::matrix(int nlhs, mxArray* plhs[], int nrhs, const mxAr
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
     hypro::matrix_t<double> mat = temp->matrix();
-    plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
-    ObjectHandle::convert2Matlab(mat, plhs[0], mat.cols(), mat.rows());
-    /* TEST */
-    // hypro::matrix_t<double> m(3,2);
-    // m << 1,2,3,4,5,6;
-    // mexPrintf("Matrix:\nrows: %d cols: %d\n", m.rows(), m.cols());
-    // plhs[0] = mxCreateDoubleMatrix(m.rows(), m.cols(), mxREAL);
-    // ObjectHandle::convert2Matlab(m, plhs[0], m.cols(), m.rows());
+    int rows = mat.rows();
+    int cols = mat.cols();
     
+    plhs[0] = mxCreateDoubleMatrix(rows, cols, mxREAL);
+    ObjectHandle::convert2Matlab(mat, plhs[0], rows, cols);
+//     /* TEST */
+//     hypro::matrix_t<double> m(3,2);
+//     m << 1,2,3,4,5,6;
+//     mexPrintf("Matrix:\nrows: %d cols: %d\n", m.rows(), m.cols());
+//     plhs[0] = mxCreateDoubleMatrix(m.rows(), m.cols(), mxREAL);
+//     ObjectHandle::convert2Matlab(m, plhs[0], m.rows(), m.cols());
 }
 
 /**

@@ -1,7 +1,6 @@
 function res = testMHyProBox
 % This script contains tests for all functions for HyPro Boxes.
 
-disp('Run Tests for MHyProBoxes');
 inter = [1 2; 3 4; 5 6];
 points = [0 2; 0 1];
 
@@ -21,13 +20,13 @@ assert(isequal(inter,intervals));
 
 % Construct box from a pair of points
 points_box = MHyProBox('points',points);
-intervals = points_box.intervals()
+intervals = points_box.intervals();
 assert(isequal(intervals, [0 2; 0 1]));
 
 
 % Get verices of 3D box
 box = MHyProBox('intervals', [0 1; 0 1; 0 1]);
-ver = box.vertices()
+ver = box.vertices();
 assert(isequal(ver, [0 1 0 1 0 1 0 1; 0 0 1 1 0 0 1 1; 0 0 0 0 1 1 1 1]));
  
 
@@ -40,9 +39,8 @@ assert(isequal(intervals, points));
 mat_vec_box = MHyProBox([1 0; 0 1],[0;0]);
 matrix = mat_vec_box.matrix();
 vector = mat_vec_box.vector();
-% assert(matrix, mat);
-% assert(vector, vec);
-% TODO: Shouldn't the assertions be correct?
+% assert(isequal(matrix, [1 0; 0 1]));
+% assert(isequal(vector, [0;0]));
 
 % Construct box from single interval
 interval_box = MHyProBox('interval',[2 4]);
@@ -71,7 +69,7 @@ assert(isequal([0 2; 0 1], limits));
 
 % Get an interval at certain position
 interval = intervals_box.interval(2);
-assert(isequal(interval, [3 4]))
+assert(isequal(interval, [3 4]));
 
 % Get interval representation at certain position
 inter = points_box.at(2);
@@ -229,6 +227,6 @@ inter = box2.intervals();
 assert(isequal(inter, [1 5; 1 7; 1 2; 2 3]));
 
 % Plot
-%box1.plot([3 4]);
+% box1.plot([3 4]);
 
 res = 1;

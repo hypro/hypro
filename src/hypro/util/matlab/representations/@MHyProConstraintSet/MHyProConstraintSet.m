@@ -226,7 +226,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
             if isempty
                 warning('MHyProConstraintSet - plot: It is not possible to plot an empty object.');
             else
-                vertices = MHyPro('ConstraintSet', 'vertices', obj.Handle)
+                vertices = MHyPro('ConstraintSet', 'vertices', obj.Handle);
                 
 
                 % Sort the vertices clockwise

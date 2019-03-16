@@ -85,7 +85,7 @@ void vector2Matlab(const std::vector<T>& vec, mxArray* m_out){
     const mwSize* dims = mxGetDimensions(m_out);
     const int dimy = (int) dims[1];
     const int dimx = (int) dims[0];
-    mexPrintf("ObjectHandle - dimx: %d, dimy: %d\n", dimx, dimy);
+    // mexPrintf("ObjectHandle - dimx: %d, dimy: %d\n", dimx, dimy);
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimx; i++){
         ObjectHandle::convert2Matlab(vec[i], m_out, dimx, dimy, i);
@@ -194,7 +194,6 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
-            //mexPrintf("i: %d j: %d value: %f\n", i,j, matrix.coeff(i,j));
             out[i*dimy+j] = matrix.coeff(i,j);
         }
     }
@@ -395,10 +394,11 @@ std::vector<carl::Interval<double>> ObjectHandle::mPoints2Hypro(const mxArray* m
  **/
 hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
     double* matrix = mxGetPr(m_matrix);
+    // mexPrintf("GO: rows: %d, cols: %d\n", dimx, dimy);
     hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
-            //mexPrintf("(%d, %d) = %d\n", j, i, i*dimy+j);
+            // mexPrintf("(%d, %d) = %d\n", j, i, i*dimy+j);
             (*hypro_matrix)(i,j) = matrix[i*dimy+j];
         }
     }

@@ -81,7 +81,7 @@ classdef MHyProCondition < handle
                 if nargin == 2 && isvector(varargin{2})
                     MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, 0);
                 elseif nargin == 3 && isvector(varargin{2}) && mod(varargin{3},1) == 0
-                    MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, varargin{3});
+                    MHyPro('Condition', 'setVector', varargin{1}.Handle, varargin{2}, varargin{3} - 1);
                 else
                     error('MHyProCondition - setVector: Wrong type of at least one argument.');
                 end

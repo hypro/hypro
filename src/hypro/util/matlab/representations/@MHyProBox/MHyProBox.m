@@ -36,12 +36,7 @@ classdef MHyProBox < MHyProGeometricObject
                 error('MHyProBox - Constructor: wrong arguments.');
             end
         end
-        
-        function out = test(obj)
-            %Test function
-        end
-        
-                
+                        
         function out = empty(obj,dim)
             if mod(dim, 1) == 0
                 ptr = MHyPro('Box', 'empty', obj.Handle, dim);

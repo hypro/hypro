@@ -28,7 +28,6 @@ void MBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     dims = mxGetDimensions(prhs[2]);
     dimy = (int) dims[1];
     dimx = (int) dims[0];
-    mexPrintf("box new_interval - dimx: %d, dimy: %d\n", dimx, dimy);
     carl::Interval<double> inter = ObjectHandle::mInterval2Hypro(prhs[2]);
     hypro::Box<double>* box = new hypro::Box<double>(inter);
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(box);
@@ -144,7 +143,7 @@ void MBox::intervals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     const int dimx = intervals.size();
     const int dimy = 2;
-    mexPrintf("box intervals - dimx: %d, dimy: %d\n", dimx, dimy);
+    // mexPrintf("box intervals - dimx: %d, dimy: %d\n", dimx, dimy);
     plhs[0] = mxCreateDoubleMatrix(dimx, dimy, mxREAL);
     vector2Matlab(intervals, plhs[0]);
 }

@@ -41,7 +41,7 @@ mat = affEli.matrix();
 
 % Add two ellipsoids
 sum = rad_eli + mat_eli;
-mat = sum.matrix()
+mat = sum.matrix();
 % assert(); ---> ?
 
 % Approximate ellipsoid matrix
