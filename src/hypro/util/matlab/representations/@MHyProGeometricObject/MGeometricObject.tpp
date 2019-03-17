@@ -118,7 +118,7 @@ void MGeometricObject<T>::matrix(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     hypro::matrix_t<double> mat = temp->matrix();
     int rows = mat.rows();
     int cols = mat.cols();
-    
+
     plhs[0] = mxCreateDoubleMatrix(rows, cols, mxREAL);
     ObjectHandle::convert2Matlab(mat, plhs[0], rows, cols);
 //     /* TEST */
@@ -189,19 +189,25 @@ void MGeometricObject<T>::is_empty(int nlhs, mxArray* plhs[], int nrhs, const mx
  **/
 template<class T>
 void MGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MGeometricObject - vertices: Expecting an output!");
+    // if(nlhs != 1)
+    //     mexErrMsgTxt("MGeometricObject - vertices: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MGeometricObject - vertices: One argument is missing!");
     if(nrhs > 3)
         mexWarnMsgTxt("MGeometricObject - vertices: One or more input arguments were ignored.");
-
+    
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = temp->vertices();
     int dimy = vertices.size();
-    int dimx = vertices[0].dimension();
-    plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
-	ObjectHandle::convert2Matlab( vertices, plhs[0] );
+    if (dimy != 0){
+        int dimx = vertices[0].dimension();
+        plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
+        ObjectHandle::convert2Matlab( vertices, plhs[0] );
+    }else{
+        mexWarnMsgTxt("MGeometricObject - vertices: The object has no vertices.");
+        plhs[0] = mxCreateDoubleMatrix(1, 1, mxREAL );
+    }
+        
 }
 
 /**

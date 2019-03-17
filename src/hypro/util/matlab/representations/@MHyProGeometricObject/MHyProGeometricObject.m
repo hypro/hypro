@@ -29,7 +29,11 @@ classdef MHyProGeometricObject < handle
         end
         
         function out = vertices(obj)
-           out = MHyPro(obj.Type, 'vertices', obj.Handle);
+            if obj.isempty() == 0
+                out = MHyPro(obj.Type, 'vertices', obj.Handle);
+            else
+                out = [];
+            end          
         end
         
         function reduceRepresentation(obj)

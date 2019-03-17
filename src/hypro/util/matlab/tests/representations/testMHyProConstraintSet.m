@@ -106,7 +106,7 @@ intersected = set1.intersectHalfspaces(mat,vec);
 contains = set1.containsPoint([2;2;1]);
 assert(contains == 1);
 
-vertices = set1.vertices();
+vertices = set1.vertices()
 
 % Check if contains another constraint set
 contains = set1.contains(set2);
