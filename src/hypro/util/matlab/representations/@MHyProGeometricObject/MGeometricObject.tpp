@@ -199,10 +199,13 @@ void MGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, const mx
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = temp->vertices();
     int dimy = vertices.size();
+    mexPrintf("Vertices\n");
     if (dimy != 0){
         int dimx = vertices[0].dimension();
+        mexPrintf("dimx: %d dimy: %d\n", dimx, dimy);
         plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
         ObjectHandle::convert2Matlab( vertices, plhs[0] );
+        mexPrintf("Created in GO\n");
     }else{
         mexWarnMsgTxt("MGeometricObject - vertices: The object has no vertices.");
         plhs[0] = mxCreateDoubleMatrix(1, 1, mxREAL );
@@ -421,14 +424,14 @@ void MGeometricObject<T>::project(int nlhs, mxArray* plhs[], int nrhs, const mxA
     mxArray *m_in_dimensions;
     const mwSize *dims;
     double *in_dimensions;
-    int dimy;
+    int len;
 
     T* obj = convertMat2Ptr<T>(prhs[2]);
     m_in_dimensions = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
-    dimy = (int) dims[0];
+    len = (int) dims[1];
 
-    std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro(m_in_dimensions,dimy);
+    std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro(m_in_dimensions,len);
 
     T temp = obj->project(hy_dimensions);
     T* b = new T(temp);

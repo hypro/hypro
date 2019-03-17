@@ -8,10 +8,10 @@ catch
 end
 
 try
-   set = MHyProConstraintSet(eye(3), [1;2;3]);
-   set.plot([1 2]);
+   fct = MHyProSupportFunction('intervals', [1 2; 3 4; 5 6]);
+   fct.plot([2 3]);
 catch
-   disp('Not possible to plot MConstraintSet');
+   disp('Not possible to plot MSupportFunction');
 end
 
 

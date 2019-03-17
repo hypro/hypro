@@ -67,16 +67,7 @@ classdef MHyProBox < MHyProGeometricObject
         function out = project(obj, dim)
             max = obj.dimension();
             if isvector(dim) && size(dim, 1) <= max 
-                new_dim = zeros(max,1);
-                for i = 1:size(dim,1)
-                    if dim(i) <= max
-                        % Has to be reduced to match C++
-                        new_dim(i) = dim(i) - 1;
-                    else
-                        error('MHyProBox - project: Dimension exceeds the dimension of object.');
-                    end
-                end
-                ptr = MHyPro('Box', 'project', obj.Handle, new_dim);
+                ptr = MHyPro('Box', 'project', obj.Handle, dim);
                 out = MHyProBox(ptr);
             else
                 error('MHyProBox - project: Wrong type of input argument.');
@@ -158,40 +149,40 @@ classdef MHyProBox < MHyProGeometricObject
             end
         end
  
-        function plot(obj, dims)
-            isempty = MHyPro(obj.Type, 'isEmpty', obj.Handle);
-            if isempty
-                warning('MHyProBox - plot: It is not possible to plot an empty object.');
-            else
-                intervals = MHyPro('Box', 'intervals', obj.Handle);
-                inter_1 = intervals(dims(1),:);
-                inter_2 = intervals(dims(2),:);
-                [~, dimx] = size(inter_1);
-                ver = zeros(dimx*2, 2);
-                counter = 0;
-
-                for i = 1:(dimx)
-                    for j = 1:(dimx)
-                        ver(j+counter,1) = inter_1(i);
-                        ver(j+counter,2) = inter_2(j);
-                    end
-                    counter = counter + dimx;
-                end
-
-                % Sort the vertices clockwise
-                ver_x = ver(:,1).';
-                ver_y = ver(:,2).';
-                cx = mean(ver_x);
-                cy = mean(ver_y);
-                a = atan2(ver_y - cy, ver_x - cx);
-                [~, order] = sort(a);
-                ver_x = ver_x(order);
-                ver_y = ver_y(order);
-
-                pgon = polyshape(ver_x, ver_y);
-                plot(pgon);                
-            end
-        end
+%         function plot(obj, dims)
+%             isempty = MHyPro(obj.Type, 'isEmpty', obj.Handle);
+%             if isempty
+%                 warning('MHyProBox - plot: It is not possible to plot an empty object.');
+%             else
+%                 intervals = MHyPro('Box', 'intervals', obj.Handle);
+%                 inter_1 = intervals(dims(1),:);
+%                 inter_2 = intervals(dims(2),:);
+%                 [~, dimx] = size(inter_1);
+%                 ver = zeros(dimx*2, 2);
+%                 counter = 0;
+% 
+%                 for i = 1:(dimx)
+%                     for j = 1:(dimx)
+%                         ver(j+counter,1) = inter_1(i);
+%                         ver(j+counter,2) = inter_2(j);
+%                     end
+%                     counter = counter + dimx;
+%                 end
+% 
+%                 % Sort the vertices clockwise
+%                 ver_x = ver(:,1).';
+%                 ver_y = ver(:,2).';
+%                 cx = mean(ver_x);
+%                 cy = mean(ver_y);
+%                 a = atan2(ver_y - cy, ver_x - cx);
+%                 [~, order] = sort(a);
+%                 ver_x = ver_x(order);
+%                 ver_y = ver_y(order);
+% 
+%                 pgon = polyshape(ver_x, ver_y);
+%                 plot(pgon);                
+%             end
+%         end
 
         function out = reduceNumberRepresentation(obj)
             ptr = MHyPro('Box', 'reduceNumberRepresentation', obj.Handle);

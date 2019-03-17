@@ -6,13 +6,15 @@ mat_fct = MHyProSupportFunction([1 0 0; 0 1 0; 0 0 1]);
 int_fct = MHyProSupportFunction('intervals', [1 2; 3 4]);
 mat_vec_fct = MHyProSupportFunction([1 0; 0 1], [1; 2]);
 halfs_fct = MHyProSupportFunction([-1 0; 1 0], [-2; 2]);
-% points_fct = MHyProSupportFunction('points', [1 2 1; 2 3 2]); ---> Here
+% points_fct = MHyProSupportFunction('points', [1 2; 2 3; 1 2]); ---> Here
 % is something broken!
 copied_fct = MHyProSupportFunction(mat_fct);
 
 % Get matrix
 mat = halfs_fct.matrix();
 %assert ---> ?
+
+
 
 % Get vector
 vec = int_fct.vector();
@@ -25,7 +27,7 @@ vec = int_fct.vector();
 % assert(empty == 0);
 
 % Get vertices
-vertices = mat_vec_fct.vertices();
+vertices = int_fct.vertices();
 % assert ---> ?
 
 % Get supremum
@@ -70,7 +72,7 @@ vec = [3; 5];
 
 % Project a support function on a certain dimension
 fct = MHyProSupportFunction('intervals', [3 5; 2 4; 1 2]);
-projfct = fct.project([1;2]);
+projfct = fct.project([1 2]);
 mat = projfct.matrix();
 % assert ---> ?
 

@@ -11,8 +11,6 @@ classdef MHyProSupportFunction < MHyProGeometricObject
                 obj.Handle = MHyPro('SupportFunction', 'new_empty');
             elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
-                    % This constructor is needed in case HyPro returns
-                    % a new box
                     obj.Handle = varargin{1};
                 elseif ismatrix(varargin{1})
                     % Construct using matrix
@@ -68,7 +66,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         function out = project(obj, dim)
             if isreal(dim)
                 ptr = MHyPro('SupportFunction', 'project', obj.Handle, dim);
-                out = MHyProSupportFunction( ptr);
+                out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - project: Wrong type of input argument.');
             end
@@ -152,10 +150,6 @@ classdef MHyProSupportFunction < MHyProGeometricObject
                 error('MHyProSupportFunction - unite: Wrong type of input argument.');
             end
         end
- 
-        function plot(obj, dims)
-            error('MHyProSupportFunction - plot: NOT IMPLEMENTED')
-        end
 
         function reduceNumberRepresentation(obj)
             MHyPro('SupportFunction', 'reduceNumberRepresentation', obj.Handle);
@@ -229,7 +223,6 @@ classdef MHyProSupportFunction < MHyProGeometricObject
             else
                 error('MHyProSupportFunction - scale: Wrong type of argument.');
             end
-        end
-
+       end        
     end
 end
