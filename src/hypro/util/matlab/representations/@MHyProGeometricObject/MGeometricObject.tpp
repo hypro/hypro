@@ -199,13 +199,10 @@ void MGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, const mx
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = temp->vertices();
     int dimy = vertices.size();
-    mexPrintf("Vertices\n");
     if (dimy != 0){
         int dimx = vertices[0].dimension();
-        mexPrintf("dimx: %d dimy: %d\n", dimx, dimy);
         plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
         ObjectHandle::convert2Matlab( vertices, plhs[0] );
-        mexPrintf("Created in GO\n");
     }else{
         mexWarnMsgTxt("MGeometricObject - vertices: The object has no vertices.");
         plhs[0] = mxCreateDoubleMatrix(1, 1, mxREAL );
