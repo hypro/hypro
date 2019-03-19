@@ -27,6 +27,7 @@ var classhypro_1_1SettingsProvider =
     [ "setUseDecider", "classhypro_1_1SettingsProvider.html#aa8e375a122815e4689d9dd787c4d886f", null ],
     [ "setWorkerThreadCount", "classhypro_1_1SettingsProvider.html#a4420bc55d5e63969f24ca4252121238f", null ],
     [ "skipPlot", "classhypro_1_1SettingsProvider.html#abc747cb14cac6b33e4786b349f559cb9", null ],
+    [ "useAnyTimingInformation", "classhypro_1_1SettingsProvider.html#ac85200f1463a75abfbc592c71f46fb63", null ],
     [ "useContextSwitch", "classhypro_1_1SettingsProvider.html#a7eda795c71ae0e6801646fef2be07236", null ],
     [ "useDecider", "classhypro_1_1SettingsProvider.html#a6060c80b21c3099376c37ecc39ce5260", null ],
     [ "useFixedPointTest", "classhypro_1_1SettingsProvider.html#a21654646cba7f8e977ebafc25c519514", null ],

@@ -25,5 +25,6 @@ var searchData=
   ['convexhullvertices',['convexHullVertices',['../classhypro_1_1ConvexHull.html#a5a1ef906a71ffcb97131ec56dda09dde',1,'hypro::ConvexHull']]],
   ['coordinate',['coordinate',['../classhypro_1_1Point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53',1,'hypro::Point::coordinate(const carl::Variable &amp;_var) const '],['../classhypro_1_1Point.html#af3a4db44815daa25768b01afaf88e68a',1,'hypro::Point::coordinate(std::size_t _dimension) const '],['../classhypro_1_1Vertex.html#a52db98764c18889c9d28414df7ef7b68',1,'hypro::Vertex::coordinate()']]],
   ['coordinates',['coordinates',['../classhypro_1_1Point.html#ab90b8ddb5ba4fcb0cab0554b36359ac3',1,'hypro::Point']]],
-  ['copy',['copy',['../classhypro_1_1DifferenceBoundsT.html#a8f9b8d741c790e73cd5227fdbd37d0fb',1,'hypro::DifferenceBoundsT']]]
+  ['copy',['copy',['../classhypro_1_1DifferenceBoundsT.html#a8f9b8d741c790e73cd5227fdbd37d0fb',1,'hypro::DifferenceBoundsT']]],
+  ['coversentry',['coversEntry',['../classhypro_1_1HierarchicalIntervalVector.html#a9258adb71802345bd1820d69f5b775d4',1,'hypro::HierarchicalIntervalVector']]]
 ];

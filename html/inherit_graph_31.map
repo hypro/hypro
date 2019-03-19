@@ -1,30 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$structhypro_1_1detail_1_1getParametersVisitor.html" title="hypro::detail::getParameters\lVisitor" alt="" coords="185,5,389,47"/>
-<area shape="rect" id="node3" href="$structhypro_1_1detail_1_1ResetVisitor.html" title="hypro::detail::ResetVisitor\l\&lt; ReturnType, Function \&gt;" alt="" coords="195,71,379,112"/>
-<area shape="rect" id="node4" href="$structhypro_1_1detail_1_1strategyConversionVisitor.html" title="hypro::detail::strategyConversion\lVisitor\&lt; State \&gt;" alt="" coords="171,136,404,177"/>
-<area shape="rect" id="node5" href="$structhypro_1_1flowDimensionVisitor.html" title="hypro::flowDimensionVisitor" alt="" coords="188,202,387,229"/>
-<area shape="rect" id="node6" href="$structhypro_1_1flowHashVisitor.html" title="hypro::flowHashVisitor" alt="" coords="206,253,369,279"/>
-<area shape="rect" id="node7" href="$structhypro_1_1flowIsDiscreteVisitor.html" title="hypro::flowIsDiscreteVisitor" alt="" coords="191,303,384,330"/>
-<area shape="rect" id="node8" href="$structhypro_1_1flowIsTimedVisitor.html" title="hypro::flowIsTimedVisitor" alt="" coords="198,354,377,381"/>
-<area shape="rect" id="node9" href="$structhypro_1_1flowTypeVisitor.html" title="hypro::flowTypeVisitor" alt="" coords="208,405,367,431"/>
-<area shape="rect" id="node10" href="$classhypro_1_1genericAffineTransformationVisitor.html" title="hypro::genericAffineTransformation\lVisitor\&lt; T, Number \&gt;" alt="" coords="165,456,409,497"/>
-<area shape="rect" id="node11" href="$classhypro_1_1genericCompareVisitor.html" title="hypro::genericCompareVisitor" alt="" coords="181,522,393,549"/>
-<area shape="rect" id="node12" href="$classhypro_1_1genericConversionVisitor.html" title="hypro::genericConversion\lVisitor\&lt; T, To \&gt;" alt="" coords="195,573,379,615"/>
-<area shape="rect" id="node13" href="$classhypro_1_1genericConvertAndGetVisitor.html" title="hypro::genericConvertAnd\lGetVisitor\&lt; OutType \&gt;" alt="" coords="193,639,381,680"/>
-<area shape="rect" id="node14" href="$classhypro_1_1genericDimensionVisitor.html" title="hypro::genericDimensionVisitor" alt="" coords="177,705,398,731"/>
-<area shape="rect" id="node15" href="$classhypro_1_1genericInternalConversionVisitor.html" title="hypro::genericInternalConversion\lVisitor\&lt; T, Ext \&gt;" alt="" coords="171,756,403,797"/>
-<area shape="rect" id="node16" href="$classhypro_1_1genericIntersectVisitor.html" title="hypro::genericIntersectVisitor\&lt; T \&gt;" alt="" coords="164,822,411,849"/>
-<area shape="rect" id="node17" href="$classhypro_1_1genericIntervalAssignmentVisitor.html" title="hypro::genericIntervalAssignment\lVisitor\&lt; T, Number \&gt;" alt="" coords="169,873,405,915"/>
-<area shape="rect" id="node18" href="$classhypro_1_1genericMinkowskiSumVisitor.html" title="hypro::genericMinkowskiSum\lVisitor\&lt; T \&gt;" alt="" coords="184,939,391,980"/>
-<area shape="rect" id="node19" href="$classhypro_1_1genericOutstreamVisitor.html" title="hypro::genericOutstreamVisitor" alt="" coords="176,1005,399,1031"/>
-<area shape="rect" id="node20" href="$classhypro_1_1genericProjectionVisitor.html" title="hypro::genericProjection\lVisitor\&lt; T \&gt;" alt="" coords="199,1056,375,1097"/>
-<area shape="rect" id="node21" href="$classhypro_1_1genericReductionVisitor.html" title="hypro::genericReductionVisitor\l\&lt; T, Number \&gt;" alt="" coords="180,1121,395,1163"/>
-<area shape="rect" id="node22" href="$classhypro_1_1genericRedundancyVisitor.html" title="hypro::genericRedundancy\lVisitor\&lt; T, Number \&gt;" alt="" coords="192,1187,383,1228"/>
-<area shape="rect" id="node23" href="$classhypro_1_1genericSatisfiesHalfspacesVisitor.html" title="hypro::genericSatisfiesHalfspaces\lVisitor\&lt; T, Number \&gt;" alt="" coords="169,1252,406,1293"/>
-<area shape="rect" id="node24" href="$classhypro_1_1genericSetContainsVisitor.html" title="hypro::genericSetContains\lVisitor" alt="" coords="192,1317,383,1359"/>
-<area shape="rect" id="node25" href="$classhypro_1_1genericSupremumVisitor.html" title="hypro::genericSupremumVisitor\&lt; T \&gt;" alt="" coords="156,1383,419,1410"/>
-<area shape="rect" id="node26" href="$classhypro_1_1genericTypeVisitor.html" title="hypro::genericTypeVisitor" alt="" coords="197,1434,378,1461"/>
-<area shape="rect" id="node27" href="$classhypro_1_1genericUniteVisitor.html" title="hypro::genericUniteVisitor\&lt; T \&gt;" alt="" coords="175,1485,399,1511"/>
-<area shape="rect" id="node28" href="$classhypro_1_1genericVerticesVisitor.html" title="hypro::genericVerticesVisitor\l\&lt; Number \&gt;" alt="" coords="185,1536,389,1577"/>
-<area shape="rect" id="node29" href="$structhypro_1_1setCreationVisitor.html" title="hypro::setCreationVisitor\l\&lt; State \&gt;" alt="" coords="197,1601,377,1643"/>
+<area shape="rect" id="node1" href="$classhypro_1_1DAGNode.html" title="hypro::DAGNode\&lt; Data \&gt;" alt="" coords="5,5,196,32"/>
+<area shape="rect" id="node2" href="$classhypro_1_1EventTimingNode.html" title="hypro::EventTimingNode\&lt; N \&gt;" alt="" coords="244,5,463,32"/>
 </map>
