@@ -53,6 +53,7 @@ struct trafoContent {
 		auto trafoInDepth = _origin->hasTrafo(parameters, A, b, 0); // returns a pair of bool and depth in which the node was found -> this saves some comparisons later, as we know if the second value is 1, we can reduce.
 		assert(trafoInDepth.second != 1 || ((origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && trafoInDepth.first ) );
 		if(Setting::USE_LIN_TRANS_REDUCTION){
+			DEBUG("hypro.representations.supportFunction","Reduction of sf with depth: " << origin->depth() + 1);
 			// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 			bool reduced;
 			do {
@@ -80,6 +81,7 @@ struct trafoContent {
 					TRACE("hypro.representations.supportFunction","Next node type: " << origin->type());
 				}
 			} while (reduced == true);
+			DEBUG("hypro.representations.supportFunction","Reduced sf to depth: " << origin->depth() + 1);
 			assert(origin->checkTreeValidity());
 		}
 	}
