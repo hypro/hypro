@@ -18,7 +18,7 @@
 #include "../../../datastructures/HybridAutomaton/Transition.h"
 #include "../../../datastructures/HybridAutomaton/Condition.h"
 #include "../../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
-#include "../../../datastructures/reachability/Settings.h"
+// #include "../../../datastructures/reachability/Settings.h"
 
 
 class ObjectHandle{
@@ -72,7 +72,7 @@ class ObjectHandle{
         static std::vector<std::string> mStringVector2Hypro(const mxArray*, const int);
         static std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray*);
 
-        static hypro::ReachabilitySettings mReachSetting2Hypro(const mxArray*);
+        // static hypro::ReachabilitySettings mReachSetting2Hypro(const mxArray*);
 };
 
 /**
@@ -626,25 +626,25 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro(const mxArray* string
 /**
  * @brief
  **/
-hypro::ReachabilitySettings ObjectHandle::mReachSetting2Hypro(const mxArray* settings){
-    double timeBound = (double) mxGetScalar(mxGetCell(settings,0));
-    int jumpDepth = (int) mxGetScalar(mxGetCell(settings,1));
-    double timeStep = (double) mxGetScalar(mxGetCell(settings,2));
-    char file[64];
-    mxGetString(mxGetCell(settings,3), file, sizeof(file));
-    std::string fileName = std::string(file);
-    unsigned long pplDenominator = (unsigned long) mxGetScalar(mxGetCell(settings,4));
-    const mwSize* dims;
-    int dimx, dimy;
-    dims = mxGetDimensions(mxGetCell(settings,5));
-    dimx = dims[0];
-    dimy = dims[1];
-    std::vector<std::vector<std::size_t>> plotDimensions = mVectorOfVectors2Hypro(mxGetCell(settings,5), dimx, dimy);
-    int temp = (int) mxGetScalar(mxGetCell(settings,6));
-    bool uniformBolating = false;
-    if (temp == 1)
-        uniformBolating = true;
+// hypro::ReachabilitySettings ObjectHandle::mReachSetting2Hypro(const mxArray* settings){
+//     double timeBound = (double) mxGetScalar(mxGetCell(settings,0));
+//     int jumpDepth = (int) mxGetScalar(mxGetCell(settings,1));
+//     double timeStep = (double) mxGetScalar(mxGetCell(settings,2));
+//     char file[64];
+//     mxGetString(mxGetCell(settings,3), file, sizeof(file));
+//     std::string fileName = std::string(file);
+//     unsigned long pplDenominator = (unsigned long) mxGetScalar(mxGetCell(settings,4));
+//     const mwSize* dims;
+//     int dimx, dimy;
+//     dims = mxGetDimensions(mxGetCell(settings,5));
+//     dimx = dims[0];
+//     dimy = dims[1];
+//     std::vector<std::vector<std::size_t>> plotDimensions = mVectorOfVectors2Hypro(mxGetCell(settings,5), dimx, dimy);
+//     int temp = (int) mxGetScalar(mxGetCell(settings,6));
+//     bool uniformBolating = false;
+//     if (temp == 1)
+//         uniformBolating = true;
 
-    int clustering = (int) mxGetScalar(mxGetCell(settings,7));; // -1 = off, 0 = all, i = maximal number of segments to unify
+//     int clustering = (int) mxGetScalar(mxGetCell(settings,7));; // -1 = off, 0 = all, i = maximal number of segments to unify
     
-}
+// }

@@ -1,20 +1,22 @@
 #pragma once
 
-#include <iostream>
+// #include <iostream>
 #include "mex.h"
 #include "matrix.h"
 #include "../../handles/ClassHandle.h"
 #include "../../handles/ObjectHandle.h"
 #include "../../../../datastructures/HybridAutomaton/State.h"
-#include "../../../../representations/types.h"
-#include "../../../../representations/GeometricObject.h"
-#include <carl/util/tuple_util.h>
-#include <carl/interval/Interval.h>
+// #include "../../../../representations/types.h"
+// #include "../../../../representations/GeometricObject.h"
+// #include <carl/util/tuple_util.h>
+// #include <carl/interval/Interval.h>
 
-class MState{
+
+template<class T> class MState{
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
+        static void del_state(int, mxArray**, int, const mxArray**);
         static void new_empty(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
         static void new_loc(int, mxArray**, int, const mxArray**);
@@ -29,7 +31,7 @@ class MState{
         static void isEmpty(int, mxArray**, int, const mxArray**);
         static void setLocation(int, mxArray**, int, const mxArray**);
         static void setSet_untyped(int, mxArray**, int, const mxArray**);
-        static void setSet(int, mxArray**, int, const mxArray**);
+        // static void setSet(int, mxArray**, int, const mxArray**);
         static void setSetType(int, mxArray**, int, const mxArray**);
         static void setTimestamp(int, mxArray**, int, const mxArray**);
         static void setSets(int, mxArray**, int, const mxArray**);

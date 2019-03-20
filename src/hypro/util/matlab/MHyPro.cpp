@@ -9,7 +9,7 @@
 #include "reachability/@MHyProLabel/MLabel.h"
 #include "reachability/@MHyProLocation/MLocation.h"
 // #include "reachability/@MHyProResetType/MAffineTransformation.h"
-// #include "reachability/@MHyProState/MState.h"
+#include "reachability/@MHyProState/MState.h"
 #include "reachability/@MHyProTransition/MTransition.h"
 #include "reachability/@MHyProReset/MReset.h"
 #include "reachability/@MHyProReachability/MReach.h"

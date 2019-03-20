@@ -207,7 +207,6 @@ void MGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, const mx
         mexWarnMsgTxt("MGeometricObject - vertices: The object has no vertices.");
         plhs[0] = mxCreateDoubleMatrix(1, 1, mxREAL );
     }
-        
 }
 
 /**
