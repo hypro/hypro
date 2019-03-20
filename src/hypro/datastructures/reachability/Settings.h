@@ -19,6 +19,9 @@ struct ReachabilitySettings {
     std::vector<std::vector<std::size_t>>   plotDimensions; /// A set of dimension pairs to plot.
     bool                                    uniformBloating = false; /// Bloating settings.
     int                                     clustering = -1; /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
+    bool                                    useInvariantTimingInformation = true;
+    bool                                    useGuardTimingInformation = true;
+    bool                                    useBadStateTimingInformation = true;
 
     /**
      * @brief      Default constructor.
@@ -29,16 +32,7 @@ struct ReachabilitySettings {
     	plotDimensions[0].push_back(1);
     }
 
-    ReachabilitySettings(const ReachabilitySettings& orig)
-    	: timeBound(orig.timeBound)
-    	, jumpDepth(orig.jumpDepth)
-    	, timeStep(orig.timeStep)
-    	, fileName(orig.fileName)
-    	, pplDenomimator(orig.pplDenomimator)
-    	, plotDimensions(orig.plotDimensions)
-    	, uniformBloating(orig.uniformBloating)
-    	, clustering(orig.clustering)
-    {}
+    ReachabilitySettings(const ReachabilitySettings& orig) = default;
 
     /**
      * @brief      Assignment operator.
@@ -62,7 +56,10 @@ struct ReachabilitySettings {
     		lhs.pplDenomimator == rhs.pplDenomimator &&
     		lhs.plotDimensions == rhs.plotDimensions &&
     		lhs.uniformBloating == rhs.uniformBloating &&
-    		lhs.clustering == rhs.clustering
+    		lhs.clustering == rhs.clustering &&
+            lhs.useBadStateTimingInformation == rhs.useBadStateTimingInformation &&
+            lhs.useGuardTimingInformation == rhs.useGuardTimingInformation &&
+            lhs.useInvariantTimingInformation == rhs.useInvariantTimingInformation
     		);
     }
 

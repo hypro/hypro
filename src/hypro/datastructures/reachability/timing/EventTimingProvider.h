@@ -10,6 +10,7 @@
 #include "../Settings.h"
 #include <carl/util/Singleton.h>
 #include <string>
+#include <optional>
 
 namespace hypro
 {
@@ -28,30 +29,47 @@ private:
 public:
 
 	void initialize(const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon);
+	void initialize(const Location<Number>* loc, tNumber globalTimeHorizon);
 
 	void setName(const std::string& name) { mName = name; }
 	const std::string& getName() const { return mName; }
 
-	/**
-	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
-	 */
-	const EventTimingNode<Number>* getTimingNode(const Path<Number,tNumber>& path) const;
+	EventTimingNode<Number>* getRoot() { return mRoot; }
+
+	void clear() { delete mRoot; mRoot = new EventTimingNode<Number>(); }
 
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
 	 */
-	EventTimingNode<Number>* rGetNode(const Path<Number,tNumber>& path) const;
+	const EventTimingNode<Number>* getTimingNode(const Path<Number,tNumber>& path, std::size_t level = 0) const;
+
+	/**
+	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
+	 */
+	EventTimingNode<Number>* rGetNode(const Path<Number,tNumber>& path, std::size_t level = 0) const;
+
+	std::optional<EventTimingContainer<Number>> getTimings(const Path<Number,tNumber>& path) const;
 
 	void updateTimings(const Path<Number,tNumber>& path, const EventTimingContainer<Number>& update);
 
-	typename EventTimingNode<Number>::Node_t addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon);
+	typename EventTimingNode<Number>::Node_t addChildToNode(typename EventTimingNode<Number>::Node_t parent, tNumber timeHorizon);
 
 	std::string getDotRepresentation() const;
 
 private:
-	EventTimingNode<Number>* findNode(const Path<Number,tNumber>& path) const;
+	EventTimingNode<Number>* findNode(const Path<Number,tNumber>& path, std::size_t level) const;
 	void writeTree() const;
 
+	// for dbg
+	void printSet(const std::vector<std::set<EventTimingNode<Number>*>>& sets) const {
+		TRACE("hypro.datastructures.timing","Have " << sets.size() << " sets.");
+		for(const auto& set : sets) {
+			TRACE("hypro.datastructures.timing","Have " << set.size() << " containers.");
+			for(const auto sPtr : set) {
+				TRACE("hypro.datastructures.timing","Container " << *sPtr);
+			}
+		}
+	}
 };
 
 } // hypro

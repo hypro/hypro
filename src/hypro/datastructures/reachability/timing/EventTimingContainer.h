@@ -8,12 +8,7 @@ namespace hypro {
 template<typename Number>
 class EventTimingContainer {
 private:
-	// Members required for identification with a path
-	const Location<Number>* mLocation = nullptr;
-	const Transition<Number>* mEntryTransition = nullptr;
-	carl::Interval<tNumber> mEntryTimestamp;
-
-	// Actual timing storage
+	// Timing storage
 	HierarchicalIntervalVector<CONTAINMENT,tNumber> mInvariantEvents;
 	std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>> mTransitionEvents;
 	HierarchicalIntervalVector<CONTAINMENT,tNumber> mBadStateEvents;
@@ -52,35 +47,33 @@ public:
 	bool isInitialized() const;
 	void initialize(tNumber timeHorizon);
 
-	const Location<Number>* getLocation() const { return mLocation; }
-	const carl::Interval<tNumber>& getEntryTimestamp() const { return mEntryTimestamp; }
-	const Transition<Number>* getEntryTransition() const { return mEntryTransition; }
-
-	void setLocation(const Location<Number>* lc) { mLocation = lc; }
-	void setEntryTimestamp(const carl::Interval<tNumber>& ts) { mEntryTimestamp = ts; }
-	void setEntryTransition(const Transition<Number>* tr) { mEntryTransition = tr; }
-
 	void merge(const EventTimingContainer& snapshot);
 
 	void setTransitionTimings(const std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& timings) { mTransitionEvents = timings; }
+	void setTransitionTimings(Transition<Number>* t, const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mTransitionEvents.insert_or_assign(t,timings); }
 	void setInvariantTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mInvariantEvents = timings; }
 	void setBadStateTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mBadStateEvents = timings; }
 
 	const std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& getTransitionTimings() const;
+	std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& rGetTransitionTimings();
 	const HierarchicalIntervalVector<CONTAINMENT,tNumber>& getTransitionTimings(Transition<Number>* transition) const;
 	const HierarchicalIntervalVector<CONTAINMENT,tNumber>& getInvariantTimings() const;
+	HierarchicalIntervalVector<CONTAINMENT,tNumber>& rGetInvariantTimings() { return mInvariantEvents; }
 	//const std::vector<carl::Interval<Number>>& getInvariantTimings(CONTAINMENT type) const;
 	const HierarchicalIntervalVector<CONTAINMENT,tNumber>& getBadStateTimings() const;
 
 	bool hasTransitionEvent(Transition<Number>* transition) const;
 	bool hasTransitionEvent(const carl::Interval<tNumber>& timeInterval, Transition<Number>* transition) const;
 	bool hasTransitionInformation(const carl::Interval<mpq_class>& timeInterval, Transition<Number>* transition) const;
+	bool hasTransition(Transition<Number>* t) const {return mTransitionEvents.find(t) != mTransitionEvents.end();}
 
 	bool hasInvariantEvent(CONTAINMENT type) const;
+	bool satisfiedInvariant(const carl::Interval<tNumber>& timeInterval) const;
 	bool hasInvariantEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
 
 	bool hasBadStateEvent() const;
 	bool hasBadStateEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
+	bool hasPositiveBadStateEvent(const carl::Interval<mpq_class>& timeInterval) const;
 
 	void insertTransition(Transition<Number>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type);
 	void insertInvariant(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type);
@@ -110,3 +103,4 @@ public:
 } // hypro
 
 #include "EventTimingContainer.tpp"
+#include "ETC_util.h"

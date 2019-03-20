@@ -59,15 +59,13 @@ struct RefinementSetting {
 		, isEmpty(false)
 	{}
 
-	RefinementSetting(const State& set, const Location<Number>* loc)
+	RefinementSetting(const State& set, const Location<Number>*)
 		: initialSet(set)
 		, mTimings()
 		, fullyComputed()
 		, isDummy(false)
 		, isEmpty(false)
-	{
-		mTimings.setLocation(loc);
-	}
+	{}
 
 	RefinementSetting& operator=(const RefinementSetting& orig) {
 		initialSet = orig.initialSet;
@@ -139,12 +137,6 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>>
     //ReachTreeNode& operator=(ReachTreeNode&& orig) = delete;
 
     ~ReachTreeNode() {}
-
-    /**
-     * @brief      Copy constructor.
-     * @param[in]  _in   The original node.
-     */
-
 
     ReachTreeNode()
         : TreeNode<ReachTreeNode<State>>()

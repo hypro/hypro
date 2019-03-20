@@ -29,7 +29,7 @@ namespace hypro
 										StrategyParameters sPars,
 										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-										EventTimingNode<typename State::NumberType>* timingNode);
+										const EventTimingContainer<typename State::NumberType>& timings);
 	};
 } // hypro
 

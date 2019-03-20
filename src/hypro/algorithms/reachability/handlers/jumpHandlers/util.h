@@ -1,8 +1,6 @@
 #pragma once
 
 #include "../../../../datastructures/reachability/ReachTreeNode.h"
-//#include "../../../../../../include/lib/utils/DecisionEntity.h"
-//#include <hypro/datastructures/HybridAutomaton/Transition.h>
 
 namespace hypro {
 
@@ -120,7 +118,8 @@ struct nodeUpdater{
 
 		#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 		if(mTargetLevel > 0 && !node->getRefinements().at(0).fullyComputed) {
-			node->convertRefinement(mTargetLevel, 0, SettingsProvider<State>::getInstance().getStrategy().at(0));
+			//node->convertRefinement(mTargetLevel, 0, SettingsProvider<State>::getInstance().getStrategy().at(0));
+			SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(node->rGetRefinements()[mTargetLevel].initialSet, 0);
 			if(SettingsProvider<State>::getInstance().useLocalTiming()) {
 				node->rGetRefinements().at(0).entryTimestamp = carl::Interval<tNumber>(0);
 			}
@@ -217,6 +216,7 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
 			assert(!currentTask->btInfo.btPath.at(currentTask->btInfo.currentBTPosition).isDiscreteStep());
 			std::shared_ptr<Task<State>> newTask(new Task<State>(*nodeIt, currentTask->btInfo));
 			newTask->btInfo.currentBTPosition += 2;
+			newTask->btInfo.timingLevel = currentTask->btInfo.timingLevel;
 			TRACE("hydra.worker.refinement","Created task from fresh child node. Bt-Level: " << newTask->btInfo.btLevel << ", bt-path: " << newTask->btInfo.btPath);
 			assert(newTask->treeNode->getRefinements().at(newTask->btInfo.btLevel).fullyComputed == false);
 			assert(newTask->treeNode->getRefinements().at(newTask->btInfo.btLevel).isDummy == false);
@@ -256,6 +256,7 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
         	//#endif
 
 			std::shared_ptr<Task<State>> newTask(new Task<State>(*nodeIt));
+			newTask->btInfo.timingLevel = currentTask->btInfo.timingLevel;
 			TRACE("hydra.worker.refinement","Created task from fresh child node. Bt-Level: " << newTask->btInfo.btLevel << ", bt-path: " << newTask->btInfo.btPath);
 			assert(newTask->btInfo.btPath.size() == 0);
 			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Refinement finished, create new Task<State> (local) with tree node " << newTask->treeNode);

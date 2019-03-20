@@ -452,6 +452,9 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	// std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
 	BoxT<Number,Converter,Setting> res(std::make_pair(min, max));
 	res.reduceNumberRepresentation();
+	//std::cout << "Res: " << res << std::endl;
+	//std::cout << "min transformed: " << Point<Number>(A*this->min().rawCoordinates()) << std::endl;
+	//std::cout << "max transformed: " << Point<Number>(A*this->max().rawCoordinates()) << std::endl;
 	assert(res.contains(Point<Number>(A*this->min().rawCoordinates())));
 	assert(res.contains(Point<Number>(A*this->max().rawCoordinates())));
 	#ifndef NDEBUG

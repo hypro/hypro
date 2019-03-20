@@ -35,7 +35,23 @@ namespace hypro {
 			TRACE("hydra.worker.discrete","Transition covers time " << coveredTimeInterval);
 			TRACE("hydra.worker.discrete","Created " << children.size() << " new nodes which have to be added to the tree.");
 
-			// Update tree
+			// Update timing tree - add node for each child
+			auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+			EventTimingNode<typename State::NumberType>* timingNode = nullptr;
+			if( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
+				timingNode = tProvider.rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel);
+			}
+			for(const auto& child : children) {
+				if( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
+					auto newNode = tProvider.addChildToNode(timingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+					newNode->setEntryTransition(transitionStatePair.first);
+					newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
+					newNode->setLocation(transitionStatePair.first->getTarget());
+					newNode->setLevel(currentTargetLevel);
+				}
+			}
+
+			// Update reach tree
 			// Note: At this point we have a fresh node with only the refinement set for the dedicated level. In case of a backtrack
 			// run, we need to match the node to existing children. In case of a fresh run (no childen), I think we can simply create
 			// a new task (depending on the settings, i.e. reset to level 0, we have to modify the node).
@@ -54,7 +70,8 @@ namespace hypro {
 						for(auto i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
-								child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
+								//child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
+								SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(child->rGetRefinements()[i].initialSet, i);
 							}
 						}
 					}
@@ -65,22 +82,6 @@ namespace hypro {
 					TRACE("hydra.worker.discrete", "Add node " << child << " as child to node " << mTask->treeNode << " which has " << mTask->treeNode->getRefinements().size() << " refinements." );
 					TRACE("hydra.worker.discrete", "Child entry timestamp: " << child->getTimestamp(currentTargetLevel) );
 					assert(child->getParent() == mTask->treeNode);
-					assert(child->getTimestamp(currentTargetLevel) == coveredTimeInterval);
-
-					// timing-tree extension
-					auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
-					// make sure the node does not exist yet
-					TRACE("hypro.datastructures.timing","Regular tree extension, find child.");
-					auto potentialNewNode = tProvider.rGetNode(child->getPath());
-					if(potentialNewNode == nullptr) {
-						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
-						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
-						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
-						newNode->setLocation(transitionStatePair.first->getTarget());
-					} else {
-						// timing node already exists, just update entry timestamp
-						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
-					}
 
 					// create tasks
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
@@ -89,6 +90,7 @@ namespace hypro {
 					#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 					newTask->btInfo.btLevel = currentTargetLevel;
 					#endif
+					newTask->btInfo.timingLevel = mTask->btInfo.timingLevel;
 
 					// the first property has to be true already while the second never can be satisfied (wasREfinementTask demands NO bt-path)
 					if(!wasRefinementTask || mTask->btInfo.currentBTPosition == mTask->btInfo.btPath.size()){
@@ -118,26 +120,6 @@ namespace hypro {
 				// This goes towards chattering behavior.
 
 				TRACE("hydra.worker.discrete","Current->treeNode is: " << mTask->treeNode);
-
-				// potential timing-tree extension, do this for every child
-				TRACE("hypro.datastructures.timing","Refinement tree extension, find children.");
-				auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
-				for(const auto& child : children) {
-					TRACE("hypro.datastructures.timing","Find timing node for child " << child << " for path " << child->getPath());
-					// make sure the node does not exist yet
-					auto potentialNewNode = tProvider.rGetNode(child->getPath());
-					if(potentialNewNode == nullptr) {
-						TRACE("hypro.datastructures.timing","Did not find child in timing tree, create new one.");
-						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
-						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
-						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
-						newNode->setLocation(transitionStatePair.first->getTarget());
-					} else {
-						// timing node already exists, just update entry timestamp
-						TRACE("hypro.datastructures.timing","Found child in timing tree: " << potentialNewNode << ". Update entry timestamp to " << coveredTimeInterval);
-						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
-					}
-				}
 
 				typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
 
@@ -455,8 +437,17 @@ namespace hypro {
 			// collect covered time interval
 			coveredTimeInterval = coveredTimeInterval.convexHull(state.getTimestamp());
 
+			// invariant timings
+			auto invariantTimings = getEnabledTimings(mObtainedTimings.getInvariantTimings());
+			if(invariantTimings.size() == 1) {
+				newNode->addTimeStepToPath(invariantTimings[0]);
+			} else {
+				// Attention, this is a dummy setting.
+				newNode->addTimeStepToPath(coveredTimeInterval);
+			}
+
 			// set up node properties
-			newNode->addTimeStepToPath(state.getTimestamp());
+
 			newNode->addTransitionToPath(transition, state.getTimestamp());
 			newNode->setDepth(parent->getDepth() + 1);
 			newNode->setTimestamp(currentTargetLevel, state.getTimestamp());

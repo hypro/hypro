@@ -89,6 +89,13 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	bool EventTimingContainer<Number>::satisfiedInvariant(const carl::Interval<tNumber>& timeInterval) const {
+		return (mInvariantEvents.hasEntry(timeInterval,CONTAINMENT::PARTIAL) ||
+				mInvariantEvents.hasEntry(timeInterval,CONTAINMENT::FULL) ||
+				mInvariantEvents.hasEntry(timeInterval,CONTAINMENT::YES));
+	}
+
+	template<typename Number>
 	bool EventTimingContainer<Number>::hasInvariantEvent(const carl::Interval<mpq_class>& timeInterval, CONTAINMENT type) const {
 		return mInvariantEvents.hasEntry(timeInterval,type);
 	}
@@ -104,8 +111,23 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	bool EventTimingContainer<Number>::hasPositiveBadStateEvent(const carl::Interval<mpq_class>& timeInterval) const {
+		for(auto type : mBadStateEvents.getTypeOrder()) {
+			if( static_cast<int>(type) >= 0) {
+				if (mBadStateEvents.hasEntry(timeInterval,type)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	template<typename Number>
 	void EventTimingContainer<Number>::insertTransition(Transition<Number>* transition, const carl::Interval<mpq_class>& timeInterval, CONTAINMENT type) {
-		TRACE("hydra.datastructures.etc","In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() << " in time " << timeInterval);
+		#ifdef HYPRO_LOGGING
+		auto tmp = carl::convert<mpq_class,double>(timeInterval);
+		TRACE("hypro.datastructures.etc","In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() << " in time " << tmp );
+		#endif
 		if(mTransitionEvents.find(transition) == mTransitionEvents.end()) {
 			assert(!mInvariantEvents.empty());
 			// initialize with same time horizon as invariants and bad states.
@@ -122,6 +144,11 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& EventTimingContainer<Number>::rGetTransitionTimings() {
+		return mTransitionEvents;
+	}
+
+	template<typename Number>
 	const HierarchicalIntervalVector<CONTAINMENT,mpq_class>& EventTimingContainer<Number>::getTransitionTimings(Transition<Number>* transition) const {
 		return mTransitionEvents.at(transition);
 	}
@@ -134,14 +161,20 @@ namespace hypro {
 	template<typename Number>
 	void EventTimingContainer<Number>::insertInvariant(const carl::Interval<mpq_class>& timeInterval, CONTAINMENT type) {
 		assert(!mInvariantEvents.empty());
-		TRACE("hydra.datastructures.etc","Invariant type " << type << " in time " << timeInterval);
+		#ifdef HYPRO_LOGGING
+		auto tmp = carl::convert<mpq_class,double>(timeInterval);
+		TRACE("hypro.datastructures.etc","Invariant type " << type << " in time " << tmp);
+		#endif
 		return mInvariantEvents.insertInterval(type, timeInterval);
 	}
 
 	template<typename Number>
 	void EventTimingContainer<Number>::insertBadState(const carl::Interval<mpq_class>& timeInterval, CONTAINMENT type) {
 		assert(!mBadStateEvents.empty());
-		TRACE("hydra.datastructures.etc","BadState type " << type << " in time " << timeInterval);
+		#ifdef HYPRO_LOGGING
+		auto tmp = carl::convert<mpq_class,double>(timeInterval);
+		TRACE("hypro.datastructures.etc","BadState type " << type << " in time " << tmp);
+		#endif
 		mBadStateEvents.insertInterval(type, timeInterval);
 	}
 

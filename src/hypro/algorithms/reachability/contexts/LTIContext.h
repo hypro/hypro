@@ -72,6 +72,8 @@ namespace hypro
 
 	    virtual void firstSegment() override ;
 
+		virtual void execAfterFirstSegment() override;
+
 	    virtual void checkInvariant() override ;
 
 	    virtual void intersectBadStates() override ;
@@ -98,6 +100,8 @@ namespace hypro
 	    void applyBacktracking();
 
 	    bool omitTransition(Transition<Number>* transition);
+		bool omitInvariant();
+		bool omitBadStateCheck();
 	};
 } // hypro
 

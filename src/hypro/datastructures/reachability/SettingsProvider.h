@@ -37,6 +37,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     bool useFixedPointTest() const { return mUseFixedPointTest; }
     double getQueueBalancingRatio() const;
     bool useLocalTiming() const { return mUseLocalTiming; }
+    bool useAnyTimingInformation() const { return mReachabilitySettings.useBadStateTimingInformation || mReachabilitySettings.useGuardTimingInformation || mReachabilitySettings.useInvariantTimingInformation; }
     bool useDecider();
     void setUseDecider(bool useDecider) { mUseDecider = useDecider;}
     bool decomposeAutomaton();
@@ -61,6 +62,9 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
         rsConverted.plotDimensions = rs.plotDimensions;
         rsConverted.uniformBloating = rs.uniformBloating;
         rsConverted.clustering = rs.clustering;
+        rsConverted.useBadStateTimingInformation = rs.useBadStateTimingInformation;
+        rsConverted.useInvariantTimingInformation = rs.useInvariantTimingInformation;
+        rsConverted.useGuardTimingInformation = rs.useGuardTimingInformation;
         mReachabilitySettings = rsConverted;
     }
 

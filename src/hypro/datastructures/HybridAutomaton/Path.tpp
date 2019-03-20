@@ -9,6 +9,15 @@
 namespace hypro {
 
 	template<typename Number, typename tNumber>
+	Path<Number,tNumber>::Path(std::initializer_list<TPathElement<Number,tNumber>> pathElems)
+		:mPath()
+	{
+		std::for_each(pathElems.begin(), pathElems.end(), [&](const auto& e)
+			{mPath.push_back(e);}
+			);
+	}
+
+	template<typename Number, typename tNumber>
 	void Path<Number,tNumber>::add(const TPathElement<Number,tNumber>& elem) {
 		mPath.push_back(elem);
 	}
@@ -327,5 +336,3 @@ namespace hypro {
 	}
 
 } // namespace hypro
-
-

@@ -3,6 +3,7 @@
 #include "../../../types.h"
 #include "../../../util/convenienceOperators.h"
 #include <carl/interval/Interval.h>
+#include <carl/interval/set_theory.h>
 #include <utility>
 #include <vector>
 
@@ -24,6 +25,10 @@ struct endPoint {
 	}
 
 	friend bool operator!=(const endPoint<T,Number>& lhs, const endPoint<T,Number>& rhs) { return !(lhs == rhs); }
+
+	friend std::ostream& operator<<(std::ostream& out, const endPoint<T,Number>& in) {
+		return out << "(" << carl::convert<Number,double>(in.timePoint) << "," << in.type << ")" ;
+	}
 };
 
 template<typename T, typename Number>
@@ -33,13 +38,30 @@ private:
 	std::vector<T> mOrder;
 	std::vector<endPoint<T,Number>> mIntervals;
 
+	using Ivec = std::vector<endPoint<T,Number>>;
+
 public:
 	HierarchicalIntervalVector() = delete;
 	HierarchicalIntervalVector(const std::vector<T>& order) : mOrder(order) {}
+	HierarchicalIntervalVector(const HierarchicalIntervalVector<T,Number>& in)
+		: mOrder(in.getTypeOrder())
+		, mIntervals(in.getIntervals())
+	{}
 
 	void initialize(const T& baseElement, Number endTime);
 
 	void insertInterval(const T& type, const carl::Interval<Number>& timespan);
+
+	void fill(const T& type, Number startingPoint);
+	void clear() { mIntervals.clear(); }
+
+	typename Ivec::iterator begin() { return mIntervals.begin(); }
+	typename Ivec::const_iterator begin() const { return mIntervals.begin(); }
+	typename Ivec::iterator end() { return mIntervals.end(); }
+	typename Ivec::const_iterator end() const { return mIntervals.end(); }
+
+	const std::vector<T>& getTypeOrder() const { return mOrder; }
+	void setTypeOrder(const std::vector<T>& in) { mOrder = in; }
 
 	/**
 	 * @brief      Determines if it has an entry of the passed type.
@@ -71,6 +93,20 @@ public:
 	 */
 	bool intersectsEntry(const carl::Interval<Number>& timeInterval, const T& type) const;
 
+	/**
+	 * @brief Determines, if the passed entry is fully contained in the HIV.
+	 *
+	 * @param timeInterval
+	 * @param type
+	 * @return true
+	 * @return false
+	 */
+	bool coversEntry(const carl::Interval<Number>& timeInterval, const T& type) const;
+
+	std::vector<carl::Interval<Number>> getIntersectionIntervals(const carl::Interval<Number>& timeInterval, const T& type) const;
+
+	std::vector<carl::Interval<Number>> getIntersectingIntervals(const carl::Interval<Number>& timeInterval, const T& type) const;
+
 	void merge(const HierarchicalIntervalVector<T,Number>& rhs);
 
 	const endPoint<T,Number>& back() const;
@@ -81,7 +117,7 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& out, const HierarchicalIntervalVector<T,Number>& in) {
 		for(const auto& valuePair : in.mIntervals) {
-			out << "(" << carl::convert<Number,double>(valuePair.timePoint) << ", " << valuePair.type << "), ";
+			out << valuePair << ", ";
 		}
 		return out;
 	}
@@ -93,8 +129,8 @@ public:
 
 	friend bool operator!=(const HierarchicalIntervalVector<T,Number>& lhs, const HierarchicalIntervalVector<T,Number>& rhs) { return !(lhs == rhs); }
 
-private:
 	const std::vector<endPoint<T,Number>>& getIntervals() const { return mIntervals; }
+private:
 	bool isLess(const T& lhs, const T& rhs) const;
 	std::size_t getOrderIndex(const T& type) const;
 	bool isSane() const;
@@ -103,3 +139,4 @@ private:
 } // hypro
 
 #include "HierarchicalIntervalVector.tpp"
+#include "HIV_util.h"
