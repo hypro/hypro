@@ -12,14 +12,14 @@
 
 #pragma once
 #include "FirstSegment.h"
-#include "datastructures/reachability/Settings.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/State.h"
-#include "datastructures/reachability/workQueue/WorkQueue.h"
-#include "config.h"
-#include "util/plotting/Plotter.h"
-#include "representations/Ellipsoids/Ellipsoid.h"
-#include "representations/GeometricObject.h"
+#include "../../datastructures/reachability/Settings.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../datastructures/HybridAutomaton/State.h"
+#include "../../datastructures/reachability/workQueue/WorkQueue.h"
+#include "../../config.h"
+#include "../../util/plotting/Plotter.h"
+#include "../../representations/Ellipsoids/Ellipsoid.h"
+#include "../../representations/GeometricObject.h"
 #include "boost/tuple/tuple.hpp"
 
 CLANG_WARNING_DISABLE("-Wdeprecated-register")

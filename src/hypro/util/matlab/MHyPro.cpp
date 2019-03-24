@@ -12,7 +12,10 @@
 #include "reachability/@MHyProState/MState.h"
 #include "reachability/@MHyProTransition/MTransition.h"
 #include "reachability/@MHyProReset/MReset.h"
-#include "reachability/@MHyProReachability/MReach.h"
+#include "reachability/@MHyProReach/MBoxReach.h"
+#include "reachability/@MHyProReach/MConstraintSetReach.h"
+#include "reachability/@MHyProReach/MEllipsoidReach.h"
+#include "reachability/@MHyProReach/MSupportFunctionReach.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -47,6 +50,14 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         MAffineFlow::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Reset")){
         MReset::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "BoxReacher")){
+        MBoxReach::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "EllipsoidReacher")){
+        MEllipsoidReach::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "ConstraintSetReacher")){
+        MConstraintSetReach::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "SupportFunctionReacher")){
+        MSupportFunctionReach::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "affineTransformation")){
     //     MAffineTransformation::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "State")){
