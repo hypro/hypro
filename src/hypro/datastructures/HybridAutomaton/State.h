@@ -341,6 +341,8 @@ class State
 
     State<Number,Representation,Rargs...> intersectHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I = 0) const;
 
+    State<Number,Representation,Rargs...> intersect(const State<Number,Representation,Rargs...>& rhs) const;    
+
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.

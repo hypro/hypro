@@ -2,15 +2,16 @@
 
 namespace hypro
 {
+
     template<typename State>
     void ltiFirstSegmentHandler<State>::handle() {
-		assert(!mState->getTimestamp().isEmpty());
-	    // check if initial Valuation fulfills Invariant
-	    assert(mState->getLocation() != nullptr);
+        assert(!mState->getTimestamp().isEmpty());
+        // check if initial Valuation fulfills Invariant
+        assert(mState->getLocation() != nullptr);
 
         std::size_t dim = mState->getLocation()->getLinearFlow(mIndex).dimension();
 
-    	// if the location has no flow, stop computation and exit.
+        // if the location has no flow, stop computation and exit.
         if (mState->getLocation()->getLinearFlow(mIndex).isDiscrete()) {
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
             mTrafo = matrix_t<Number>::Identity(dim-1,dim-1);
@@ -56,28 +57,51 @@ namespace hypro
         std::vector<Box<Number>> errorBoxVector =
               errorBoxes(carl::convert<tNumber,Number>(mTimeStep), mState->getLocation()->getLinearFlow(mIndex), *mState, trafoMatrix, externalInput);
 
-        firstSegment = deltaValuation.unite(*(mState));
+        #ifdef HYDRA_USE_LOGGING
+        TRACE("hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension);
+        TRACE("hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << dimension);
+        #endif
+
+        firstSegment = bloatBox(deltaValuation, Number(Number(1) / Number(4)) * errorBoxVector[2], mIndex);
+
+        TRACE("hypro.worker","Epsilon errorbox: " << errorBoxVector[2]);
+
+        firstSegment = firstSegment.unite(*(mState));
 
         #ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "Union of initial set and set after first step: " << firstSegment);
         #endif
 
-    	#ifdef HYDRA_USE_LOGGING
-        TRACE("hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension);
-        TRACE("hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << dimension);
-        #endif
-
-		firstSegment = bloatBox(firstSegment, Number(Number(1) / Number(4)) * errorBoxVector[2], mIndex);
-
-        TRACE("hypro.worker","Epsilon errorbox: " << errorBoxVector[2]);
-
         #ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "first Flowpipe Segment (after minkowski Sum): " << firstSegment);
         #endif
 
+        //This would usually be the first segment. However we need the backprojection from deltaValuation to the initial set to make the first segment smaller.
         firstSegment.partiallyRemoveRedundancy(mIndex);
+
+        //Bloat initialState
+        matrix_t<Number> trafoMatrixInverse = trafoMatrix.inverse();
+        assert(trafoMatrix*trafoMatrixInverse == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()));
+        std::vector<Box<Number>> errorBoxVectorBackwards = errorBoxes(carl::convert<tNumber,Number>(-mTimeStep), mState->getLocation()->getLinearFlow(mIndex), *mState, trafoMatrixInverse, externalInput);
+        State inverseFirstSegment = bloatBox(*mState, Number(Number(1) / Number(4)) * errorBoxVectorBackwards[2], mIndex);
+        assert(inverseFirstSegment.contains(*mState));
+        
+        //Unite bloated initial and deltaValuation
+        inverseFirstSegment = inverseFirstSegment.unite(deltaValuation);
+        assert(inverseFirstSegment.contains(*mState));
+        assert(inverseFirstSegment.contains(deltaValuation));
+        
+        //Intersect inverseFirstSegment and firstSegment
+        firstSegment = firstSegment.intersect(inverseFirstSegment);
+        assert(firstSegment.contains(*mState));
+        assert(firstSegment.contains(deltaValuation));
+
+        firstSegment.partiallyRemoveRedundancy(mIndex);
+        assert(firstSegment.contains(*mState));
+        assert(firstSegment.contains(deltaValuation));
+        
         mState->setSet(firstSegment.getSet(mIndex),mIndex);
-	}
+    }
 
     template <typename State>
 	matrix_t<typename State::NumberType> ltiFirstSegmentHandler<State>::computeTrafoMatrix(const Location<Number>* _loc) const

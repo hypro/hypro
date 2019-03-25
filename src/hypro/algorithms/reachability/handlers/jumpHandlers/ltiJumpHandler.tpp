@@ -65,13 +65,13 @@ namespace hypro {
 				TRACE("hydra.worker.discrete","Regular tree extension.");
 				for(const auto& child : children) {
 					// if the following is set, copy the refinement to any other refinement level.
-					#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+					#ifdef RESET_REFINEMENT
 					if(currentTargetLevel > 0) { // I think this branch can never be reached, as wasRefinementTask prevents this.
 						for(auto i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
 								//child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
-								SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(child->rGetRefinements()[i].initialSet, i);
+								SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(child->rGetRefinements()[currentTargetLevel].initialSet, i);
 							}
 						}
 					}
@@ -87,7 +87,7 @@ namespace hypro {
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
 					std::shared_ptr<Task<State>> newTask = std::make_shared<Task<State>>(child);
 					// if we do not reset to level 0, set refinementLevel of task
-					#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+					#ifndef RESET_REFINEMENT
 					newTask->btInfo.btLevel = currentTargetLevel;
 					#endif
 					newTask->btInfo.timingLevel = mTask->btInfo.timingLevel;

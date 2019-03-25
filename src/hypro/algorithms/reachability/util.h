@@ -103,7 +103,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number
     // assert(tmpMatrix.row(dim-1).nonZeros() == 0);
     State transformedInitialSet =
           initialSet.affineTransformation(matrix_t<Number>(tmpMatrix.block(0, 0, dim - 1, dim - 1)),
-                                                                               vector_t<Number>(tmpMatrix.block(0, dim - 1, dim - 1, 1)));
+                                          vector_t<Number>(tmpMatrix.block(0, dim - 1, dim - 1, 1)));
     auto b1 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Box<Number>>(), transformedInitialSet.getSet(0)));
     if(b1.empty()) {
     	return std::vector<Box<Number>>{};

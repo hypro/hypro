@@ -106,17 +106,16 @@ struct nodeUpdater{
 		DEBUG("hydra.worker.refinement","Create and raise normal task.");
 		// set refinements in any case - even though it might not be used for further refinement.
 		node->setNewRefinement(mTargetLevel,update->getRefinements().at(mTargetLevel));
-
 		// also set intermediate refinements
 		for(std::size_t i = 0; i < node->getRefinements().size(); ++i) {
 			// convert, in case this is necessary
-			if(node->getRefinements()[i].isDummy) {
+			if(node->getRefinements()[i].isDummy) {		
 				SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(node->rGetRefinements()[i].initialSet, i);
 				node->rGetRefinements()[i].isDummy = false;
 			}
 		}
 
-		#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+		#ifdef RESET_REFINEMENT
 		if(mTargetLevel > 0 && !node->getRefinements().at(0).fullyComputed) {
 			//node->convertRefinement(mTargetLevel, 0, SettingsProvider<State>::getInstance().getStrategy().at(0));
 			SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(node->rGetRefinements()[mTargetLevel].initialSet, 0);
@@ -169,7 +168,6 @@ struct nodeUpdater{
 					if(mTask->btInfo.currentBTPosition < mTask->btInfo.btPath.size() &&
 						mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition+1).transition == transition &&
 						set_have_intersection(mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition+1).timeInterval, (*referenceIt)->getTimestamp((*referenceIt)->getLatestBTLevel())) ){
-
 						createAndRaiseRefinementTask(*referenceIt, *nodeIt);
 
 					} else {
@@ -233,7 +231,7 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
 			assert((*nodeIt)->rGetRefinements()[targetLevel].initialSet.getLocation() != nullptr);
 			// Current setting: We override all dummy settings to make sure everything is set properly
 			// Todo: We could think of a less-agressive way in which only the required levels are set.
-			//#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+			//#ifdef RESET_REFINEMENT
         	if(targetLevel > 0) {
 				TRACE("hydra.worker.refinement","Create intermediate refinements.");
 	        	// also set intermediate refinements which are not already set.

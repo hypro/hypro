@@ -176,6 +176,18 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::int
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::intersect(const State<Number,Representation,Rargs...>& rhs) const {
+	State<Number,Representation,Rargs...> res(*this);
+	assert(rhs.getNumberSets() == mSets.size());
+	assert(checkConsistency());
+	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		assert(mTypes.at(i) == rhs.getSetType(i));
+		res.setSetDirect(boost::apply_visitor(genericIntersectVisitor<repVariant>(), mSets.at(i), rhs.getSet(i)), i);
+	}
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {
 	State<Number,Representation,Rargs...> res(*this);
 	TRACE("hypro.datastructures","Apply timestep of size " << timeStepSize);

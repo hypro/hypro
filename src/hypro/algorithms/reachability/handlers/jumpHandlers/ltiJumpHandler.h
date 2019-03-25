@@ -8,6 +8,7 @@
 #include "../../../../datastructures/reachability/NodeManager.h"
 #include "../../../../datastructures/reachability/ReachTreeNode.h"
 #include "../../../../datastructures/reachability/Task.h"
+#include "../../../../flags.h"
 
 namespace hypro {
 
