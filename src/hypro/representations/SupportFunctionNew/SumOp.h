@@ -77,11 +77,11 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Given two or more result vecs, sum them coefficientwise
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const {
+	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& /*currentParam*/) const {
 		
 		assert(resultStackBack.size() >= 2);
 		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
-		assert(resultStackBack.at(0).size() == std::size_t(currentParam.rows()));
+		//assert(resultStackBack.at(0).size() == std::size_t(currentParam.rows()));
 
 		std::vector<EvaluationResult<Number>> accumulatedResult;
 

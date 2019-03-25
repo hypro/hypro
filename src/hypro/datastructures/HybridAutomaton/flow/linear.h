@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../types.h"
+#include <iostream>
 
 namespace hypro {
 
@@ -95,7 +96,7 @@ public:
         return !(lhs == rhs);
     }
 
-    friend ostream& operator<<(ostream& out, const linearFlow<Number>& in) {
+    friend std::ostream& operator<<(std::ostream& out, const linearFlow<Number>& in) {
         return out << in.mFlowMatrix;
     }
 };

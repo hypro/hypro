@@ -600,7 +600,7 @@ HybridAutomaton<Number> operator||(const HybridAutomaton<Number>& lhs, const Hyb
 	//std::cout << "set initial states" << std::endl;
 	for(const auto& initialStateLhs: lhs.getInitialStates()) {
 		for(const auto& initialStateRhs: rhs.getInitialStates()) {
-			cout << "WARNING: parallel composition of initial states not implemented yet." << std::endl;
+			std::cout << "WARNING: parallel composition of initial states not implemented yet." << std::endl;
 			assert(false);
 			//State state = parallelCompose(initialStateLhs.second,  initialStateRhs.second, lhsVar, rhsVar, haVar, ha);
 			//ha.addInitialState(state);

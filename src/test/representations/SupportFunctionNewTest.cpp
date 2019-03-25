@@ -1150,9 +1150,10 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	EXPECT_EQ(sf2.dimension(), sf.dimension());
 	
 	//TrafoOp
-	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
-	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(3,3);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(3);
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf.affineTransformation(mat,vec);	
+
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> trafo2(trafo);
 	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>* trafo2Node = dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(trafo2.getRoot().get());
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo.getRoot().get())->getParameters()->power), unsigned(2));

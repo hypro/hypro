@@ -590,22 +590,10 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-		INFO("hypro.representations", "SFN::affineTransformation, matrix: \n" << A << " vector: \n" << b << " vertices before: [");
-		for(auto x : this->vertices()){
-			INFO("hypro.representations", x << ",");
-		}
-		INFO("hypro.representations", "]" << std::endl);
 		std::shared_ptr<TrafoOp<Number,Converter,Setting>> trafo = std::make_shared<TrafoOp<Number,Converter,Setting>>(*this, A, b);
-		assert(trafo);
 		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> trafoPtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(trafo);
-		assert(trafoPtr);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(trafoPtr);
-		assert(sf.getRoot());
-		INFO("hypro.representations", "SFN::affineTransformation, vertices after: [");
-		for(auto x : sf.vertices()){
-			INFO("hypro.representations", x << ",");
-		}
-		INFO("hypro.representations", "]" << std::endl);
+		assert(trafo && trafoPtr && sf.getRoot());
 		return sf;
 	}
 
