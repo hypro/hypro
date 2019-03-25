@@ -856,7 +856,7 @@ namespace hypro
 		#ifdef HYPRO_LOGGING
 		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
 		#endif
-		if( !mLocalTimings.hasPositiveBadStateEvent(mComputationState.getTimestamp()) ) {
+		if( fullCover(mLocalTimings.getBadStateTimings(), mComputationState.getTimestamp(),CONTAINMENT::NO) ) {
 			DEBUG("hypro.worker.discrete","Omit bad state check for time interval " << tmp << ".");
 			COUNT("OmitBadStateCheck");
 			return true;

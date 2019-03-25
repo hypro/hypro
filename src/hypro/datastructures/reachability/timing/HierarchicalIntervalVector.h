@@ -93,6 +93,16 @@ public:
 	 */
 	bool intersectsEntry(const carl::Interval<Number>& timeInterval, const T& type) const;
 
+	/**
+	 * @brief Determines, if the passed entry is fully contained in the HIV.
+	 *
+	 * @param timeInterval
+	 * @param type
+	 * @return true
+	 * @return false
+	 */
+	bool coversEntry(const carl::Interval<Number>& timeInterval, const T& type) const;
+
 	std::vector<carl::Interval<Number>> getIntersectionIntervals(const carl::Interval<Number>& timeInterval, const T& type) const;
 
 	std::vector<carl::Interval<Number>> getIntersectingIntervals(const carl::Interval<Number>& timeInterval, const T& type) const;

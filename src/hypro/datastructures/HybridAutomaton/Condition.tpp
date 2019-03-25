@@ -145,11 +145,13 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 	std::vector<ConstraintSetT<Number>> newCset;
 	// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
 	for(auto set : decomposition){
+		#ifdef HYPRO_LOGGING
 		DEBUG("hypro.datastructures", "decompose constraint for set: {");
 		for(auto entry : set){
 			DEBUG("hypro.datastructures", ""<<  entry << ", ");
 		}
 		DEBUG("hypro.datastructures","}");
+		#endif
 
 		// for each row of the constraints check if it contains an entry for one of the variables of the set
 		// and add the corresponding rows to a list of indices that are later added to a matrix
