@@ -81,3 +81,8 @@ SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSu
 	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,ZonotopeT<Number,Converter<Number>,inSetting>>&>(tmp));
 }
 
+template<typename Number>
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
+}

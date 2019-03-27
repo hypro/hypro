@@ -282,8 +282,7 @@ namespace hypro {
 					}
 				}
 
-
-				DEBUG("hydra.worker.discrete","State after reduction: " << newState);
+				DEBUG("hydra.worker.discrete","State after reduction: " << newState.vertices());
 
 				// Note: Here we misuse the state's timestamp to carry the transition timing to the next stage -> just don't reset
 				// the timestamp in case no aggregation happens.

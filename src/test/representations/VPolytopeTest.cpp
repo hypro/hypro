@@ -403,7 +403,7 @@ TYPED_TEST(VPolytopeTest, Evaluation)
 	EXPECT_EQ(res4.at(2).optimumValue, this->points1.at(0).rawCoordinates());
 	EXPECT_EQ(res4.at(2).supportValue, TypeParam(-0.75));
 	EXPECT_EQ(res4.at(2).errorCode, hypro::SOLUTION::FEAS);
-
+}
 
 TYPED_TEST(VPolytopeTest, SatisfiesHalfspaces)
 {
