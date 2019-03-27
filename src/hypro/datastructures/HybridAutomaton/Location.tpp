@@ -3,46 +3,6 @@
 namespace hypro
 {
 
-////// Deprecated Versions //////
-
-template<typename Number>
-Location<Number>::Location(unsigned _id) : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id), mHash(0)
-{}
-
-template<typename Number>
-Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
-	: mLinearFlows(_loc.getLinearFlows()), mRectangularFlows(_loc.getRectangularFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
-{
-	for(auto& t : _loc.rGetTransitions()) {
-		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
-		mTransitions.back()->setSource(this);
-	}
-}
-
-template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mLinearFlows(), mRectangularFlows(), mId(_id), mExternalInput(), mTransitions()
-{
-	mLinearFlows.emplace_back(linearFlow<Number>(_mat));
-	mRectangularFlows.emplace_back(rectangularFlow<Number>());
-	mHasExternalInput = false;
-	mHash = 0;
-}
-
-template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
-    : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId(_id)
-{
-	for(auto& t : mTransitions) {
-		t->setSource(this);
-	}
-	mLinearFlows.emplace_back(linearFlow<Number>(_mat));
-	mRectangularFlows.emplace_back(rectangularFlow<Number>());
-	mHasExternalInput = false;
-	mHash = 0;
-}
-
-/////// New Versions ///////
-
 template<typename Number>
 Location<Number>::Location() : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(), mHash(0)
 {}

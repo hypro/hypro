@@ -34,10 +34,10 @@ namespace hypro {
 		for(i=0; i<n0; ++i){
 			Ab(i, i+1) = -1;
 		}
-		Ab(n0,0)=-1; 
+		Ab(n0,0)=-1;
 		// Ab (is square) contains all -1's one right to the diagonal and lower left ist also -1.
 
-		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1); // An has dimensions as the final dictionary. 
+		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1); // An has dimensions as the final dictionary.
 
 		// make first row (f in the paper) all ones except g-col, which is the last col.
 		for(i=0; i<d; ++i){
@@ -212,7 +212,7 @@ namespace hypro {
 			std::cout << "All variables are in their bounds." << std::endl;
 			#endif
 			return false;
-		} 
+		}
 		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw std::string("\n WARNING: empty set. \n");}//is there a suitable pivot
 		#ifdef DICT_DBG
 		std::cout << "Variable " << indexRef << " is out of bounds by " << diff << std::endl;

@@ -18,7 +18,7 @@ public:
     virtual ~linearFlow() {}
 
     static DynamicType type() { return DynamicType::linear; }
-    std::size_t dimension() const { return mFlowMatrix.cols(); }
+    std::size_t dimension() const { return mFlowMatrix.cols()-1; }
     std::size_t size() const { return mFlowMatrix.rows(); }
 
     void setFlowMatrix(const matrix_t<Number>& newA) {

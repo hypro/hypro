@@ -4,7 +4,9 @@ namespace hypro {
 
 	template<typename T, typename Number>
 	void HierarchicalIntervalVector<T, Number>::initialize(const T& baseElement, Number endTime) {
-		assert(mIntervals.empty());
+		if(!mIntervals.empty()) {
+			this->clear();
+		}
 		mIntervals.emplace_back(endPoint<T,Number>(baseElement,endTime));
 		assert(this->isSane());
 	}
@@ -14,40 +16,40 @@ namespace hypro {
 		assert(this->isSane());
 		carl::Interval<Number> copy = timespan;
 		carl::Interval<double> tmp = carl::Interval<double>(carl::convert<Number,double>(copy.lower()),carl::convert<Number,double>(copy.upper()));
-		DEBUG("hydra.datastructures.hiv","Insert interval " << tmp << " of type " << type << " into: " << *this);
+		DEBUG("hypro.datastructures.hiv","Insert interval " << tmp << " of type " << type << " into: " << *this);
 
 		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
 #ifdef HYPRO_USE_LOGGING
 			double tmptp = carl::convert<Number,double>(it->timePoint);
-			TRACE("hydra.datastructures.hiv","Consider " << tmptp << ", " << it->type);
+			TRACE("hypro.datastructures.hiv","Consider " << tmptp << ", " << it->type);
 #endif
 			if(it->timePoint <= copy.lower()) {
-				TRACE("hydra.datastructures.hiv","Area not reached, skip.");
+				TRACE("hypro.datastructures.hiv","Area not reached, skip.");
 				continue;
 			}
 			if((it != mIntervals.begin() && std::prev(it)->timePoint >= copy.upper())){
-				TRACE("hydra.datastructures.hiv","Done.");
+				TRACE("hypro.datastructures.hiv","Done.");
 				break;
 			}
 
 			if(copy.upper() >= it->timePoint && ((it == mIntervals.begin() && copy.lower() == Number(0)) || (it != mIntervals.begin() && std::prev(it)->timePoint >= copy.lower())) && isLess(it->type, type)) {
-				TRACE("hydra.datastructures.hiv","Simple override.");
+				TRACE("hypro.datastructures.hiv","Simple override.");
 				it->type = type;
 			}
 			if(copy.lower() <= it->timePoint && (it == mIntervals.begin() || std::prev(it)->timePoint < copy.lower() ) && isLess(it->type, type)) {
 				if(copy.lower() > Number(0)) {
 					it = mIntervals.insert(it, endPoint<T,Number>(it->type,copy.lower()));
-					TRACE("hydra.datastructures.hiv","Left split, it now considers: " << it->timePoint << ", type " << it->type);
+					TRACE("hypro.datastructures.hiv","Left split, it now considers: " << it->timePoint << ", type " << it->type);
 				}
 			}
 			if(copy.upper() < it->timePoint && (it == mIntervals.begin() || std::prev(it)->timePoint < copy.upper() ) && isLess(it->type, type)) {
 				it = mIntervals.insert(it, endPoint<T,Number>(type,copy.upper()));
-				TRACE("hydra.datastructures.hiv","Right split.");
+				TRACE("hypro.datastructures.hiv","Right split.");
 				++it;
 			}
 		}
 
-		TRACE("hydra.datastructures.hiv","After plain insertion: " << *this);
+		TRACE("hypro.datastructures.hiv","After plain insertion: " << *this);
 
 		// sanitize
 		for(auto it = mIntervals.begin(); it != mIntervals.end(); ) {
@@ -58,8 +60,45 @@ namespace hypro {
 			}
 		}
 
-		DEBUG("hydra.datastructures.hiv","After insertion: " << *this);
+		DEBUG("hypro.datastructures.hiv","After insertion: " << *this);
 		assert(this->isSane());
+	}
+
+	template<typename T, typename Number>
+	void HierarchicalIntervalVector<T, Number>::fill(const T& type, Number startingPoint) {
+		// only do something, if the startingPoint lies in the covered interval.
+		if(startingPoint <= mIntervals.back().timePoint) {
+			// store old endpoint, it will be deleted for once.
+			auto oldEndpoint = mIntervals.back();
+			// iterate until starting point insertion point.
+			for(auto it = mIntervals.begin(); it != mIntervals.end(); ) {
+				// proceed.
+				if(it->timePoint < startingPoint) {
+					TRACE("hypro.datastructures.hiv","Area not reached, skip.");
+					++it;
+					continue;
+				}
+
+				// at this point we found the correct entry point.
+				assert(it->timePoint  >= startingPoint);
+				assert(it != mIntervals.end());
+				// set new boundary, if not already set
+				if(it->type != type) {
+					it->timePoint = startingPoint;
+					++it;
+				}
+
+				// override all following ones -> delete.
+				while(it != mIntervals.end()) {
+					it = mIntervals.erase(it);
+				}
+			}
+			// insert new endpoint
+			oldEndpoint.type = type;
+			mIntervals.emplace_back(oldEndpoint);
+			// verify result
+			assert(this->hasEntry(carl::Interval<Number>(startingPoint, oldEndpoint.timePoint), type));
+		}
 	}
 
 	template<typename T, typename Number>
@@ -86,83 +125,164 @@ namespace hypro {
 	template<typename T, typename Number>
 	bool HierarchicalIntervalVector<T, Number>::hasEntry(const carl::Interval<Number>& timeInterval, const T& type) const {
 		assert(this->isSane());
-		DEBUG("hydra.datastructures.hiv", "hasEntry: " << timeInterval << ", type " << type );
-		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
-			TRACE("hydra.datastructures.hiv", "Consider interval" << it->timePoint << ", " << it->type );
-			if(it->timePoint < timeInterval.lower()) {
-				TRACE("hydra.datastructures.hiv", "continue" );
-				continue;
-			}
-
-			// special case for first interval since there is no predecessor.
-			if(it == mIntervals.begin()) {
-				TRACE("hydra.datastructures.hiv", "First interval" );
-				if(it->timePoint >= timeInterval.upper()) {
-					TRACE("hydra.datastructures.hiv", "Bounds match" );
-					if(it->type == type) {
-						DEBUG("hydra.datastructures.hiv", "Types match (first interval) - return true." );
-						return true;
-					}
-					return false;
-				}
-			}
-
-			// the queried interval spans two stored intervals which by construction are of different types.
-			if(it != mIntervals.begin() && it->timePoint >= timeInterval.upper() && (it-1)->timePoint > timeInterval.lower() ) {
-				DEBUG("hydra.datastructures.hiv", "Is not first and bounds do not match - return false." );
-				return false;
-			}
-			// too far.
-			if(it != mIntervals.begin() && (it-1)->timePoint > timeInterval.upper()){
-				DEBUG("hydra.datastructures.hiv", "No matching time interval found - return false." );
-				return false;
-			}
-
-			// at this point the bounds match, now check type.
-			if(it->type == type) {
-				DEBUG("hydra.datastructures.hiv", "Types match - return true." );
-				return true;
-			}
-		}
-		return false;
+		DEBUG("hypro.datastructures.hiv", "hasEntry: " << timeInterval << ", type " << type );
+		return getIntersectionIntervals(timeInterval, type).size() > 0;
 	}
 
 	template<typename T, typename Number>
 	bool HierarchicalIntervalVector<T, Number>::intersectsEntry(const carl::Interval<Number>& timeInterval, const T& type) const {
 		assert(this->isSane());
-		DEBUG("hydra.datastructures.hiv", "This: " << *this << " intersects: " << timeInterval << ", type " << type );
-		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
-			TRACE("hydra.datastructures.hiv", "Consider interval" << it->timePoint << ", " << it->type );
-			if(it->timePoint < timeInterval.lower()) {
-				TRACE("hydra.datastructures.hiv", "continue" );
+		DEBUG("hypro.datastructures.hiv", "This: " << *this << " intersects: " << timeInterval << ", type " << type );
+
+		auto it = mIntervals.begin();
+		while(it != mIntervals.end()) {
+			TRACE("hypro.datastructures.hiv", "Current it points to " << *it );
+			// handle first interval differently
+			if( it == mIntervals.begin() && it->timePoint >= timeInterval.upper() && it->type == type ) {
+				TRACE("hypro.datastructures.hiv", "Begin and match." );
+				assert(getIntersectionIntervals(timeInterval, type).size() > 0);
+				return true;
+			} else if( it == mIntervals.begin() ) {
+				++it;
 				continue;
 			}
 
-			// special case for first interval since there is no predecessor.
+			if(it->timePoint >= timeInterval.lower() && std::prev(it)->timePoint <= timeInterval.upper() && it->type == type) {
+				assert(getIntersectionIntervals(timeInterval, type).size() > 0);
+				return true;
+			}
+
+			if(it->timePoint > timeInterval.upper()) {
+				assert(getIntersectionIntervals(timeInterval, type).size() == 0);
+				return false;
+			}
+
+			++it;
+		}
+		TRACE("hypro.datastructures.hiv", "Not found." );
+		assert(getIntersectionIntervals(timeInterval, type).size() == 0);
+		return false;
+	}
+
+	template<typename T, typename Number>
+	bool HierarchicalIntervalVector<T, Number>::coversEntry(const carl::Interval<Number>& timeInterval, const T& type) const {
+		DEBUG("hypro.datastructures.hiv", "This: " << *this << " covers entry: " << timeInterval << ", type " << type );
+		assert(this->isSane());
+		auto it = mIntervals.begin();
+		while(it != mIntervals.end()) {
+			TRACE("hypro.datastructures.hiv", "Current it points to " << *it );
+			// handle first interval differently
+			if( it == mIntervals.begin() && it->timePoint >= timeInterval.upper() && it->type == type ) {
+				TRACE("hypro.datastructures.hiv", "Begin and match." );
+				return true;
+			} else if( it == mIntervals.begin() ) {
+				++it;
+				continue;
+			}
+
+			// check for containment and matching type - only case in which we return true.
+			if( (it->timePoint >= timeInterval.upper() && std::prev(it)->timePoint <= timeInterval.lower() ) && it->type == type) {
+				TRACE("hypro.datastructures.hiv", "Intermediate and match." );
+				return true;
+			}
+
+			if( std::prev(it)->timePoint > timeInterval.upper() ) {
+				TRACE("hypro.datastructures.hiv", "Too large." );
+				return false;
+			}
+
+			++it;
+		}
+		TRACE("hypro.datastructures.hiv", "Not found." );
+		return false;
+	}
+
+	template<typename T, typename Number>
+	std::vector<carl::Interval<Number>> HierarchicalIntervalVector<T, Number>::getIntersectionIntervals(const carl::Interval<Number>& timeInterval, const T& type) const {
+		std::vector<carl::Interval<Number>> res;
+		DEBUG("hypro.datastructures.hiv", "In: " << timeInterval << ", type " << type << ", this: " << *this );
+		// synthesize intervals which intersect the passed interval
+		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
+			TRACE("hypro.datastructures.hiv", "Current interval: " << *it );
+			if(it->timePoint < timeInterval.lower()) {
+				continue;
+			}
+
+			// first time point requires special care.
 			if(it == mIntervals.begin()) {
-				TRACE("hydra.datastructures.hiv", "First interval" );
+				TRACE("hypro.datastructures.hiv", "First interval" );
 				if(timeInterval.lower() <= it->timePoint) {
-					TRACE("hydra.datastructures.hiv", "Bounds match" );
+					TRACE("hypro.datastructures.hiv", "Bounds match" );
 					if(it->type == type) {
-						DEBUG("hydra.datastructures.hiv", "Types match (first interval) - return true." );
-						return true;
+						DEBUG("hypro.datastructures.hiv", "Types match (first interval) - return true." );
+						res.emplace_back(carl::Interval<Number>(timeInterval.lower(), std::min(it->timePoint, timeInterval.upper())));
 					}
 				}
 			}
 
-			if(it != mIntervals.begin() && set_have_intersection(timeInterval,carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint)) && it->type == type) {
-				DEBUG("hydra.datastructures.hiv", "Bound and type match - return true." );
-				return true;
+			if(it != mIntervals.begin() && carl::set_have_intersection(timeInterval,carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint)) && it->type == type) {
+				DEBUG("hypro.datastructures.hiv", "Bound and type match - return true." );
+				res.emplace_back(carl::set_intersection(carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint),timeInterval) );
 			}
 
 			// too far.
 			if(it != mIntervals.begin() && std::prev(it,1)->timePoint > timeInterval.upper()){
-				DEBUG("hydra.datastructures.hiv", "No matching time interval found - return false." );
-				return false;
+				DEBUG("hypro.datastructures.hiv", "No matching time interval found - return false." );
+				break;
 			}
 		}
-		// should only happen when mIntervals is empty (?).
-		return false;
+		// assert that all intervals are pairwise disjunct -- similar to sanity check.
+		#ifndef NDEBUG
+		for(auto it = res.begin(); it != res.end(); ++it) {
+			assert(it == res.begin() || !carl::set_have_intersection(*it, *std::prev(it)));
+		}
+		#endif
+		DEBUG("hypro.datastructures.hiv", "Found " << res.size() << " intersecting intervals.");
+		return res;
+	}
+
+	template<typename T, typename Number>
+	std::vector<carl::Interval<Number>> HierarchicalIntervalVector<T, Number>::getIntersectingIntervals(const carl::Interval<Number>& timeInterval, const T& type) const {
+		std::vector<carl::Interval<Number>> res;
+		DEBUG("hypro.datastructures.hiv", "In: " << timeInterval << ", type " << type << ", this: " << *this );
+		// synthesize intervals which intersect the passed interval
+		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
+			TRACE("hypro.datastructures.hiv", "Current interval: " << *it );
+			if(it->timePoint < timeInterval.lower()) {
+				continue;
+			}
+
+			// first time point requires special care.
+			if(it == mIntervals.begin()) {
+				TRACE("hypro.datastructures.hiv", "First interval" );
+				if(timeInterval.lower() <= it->timePoint) {
+					TRACE("hypro.datastructures.hiv", "Bounds match" );
+					if(it->type == type) {
+						DEBUG("hypro.datastructures.hiv", "Types match (first interval) - return true." );
+						res.emplace_back(carl::Interval<Number>(timeInterval.lower(), it->timePoint));
+					}
+				}
+			}
+
+			if(it != mIntervals.begin() && carl::set_have_intersection(timeInterval,carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint)) && it->type == type) {
+				DEBUG("hypro.datastructures.hiv", "Bound and type match - return true." );
+				res.emplace_back(carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint) );
+			}
+
+			// too far.
+			if(it != mIntervals.begin() && std::prev(it,1)->timePoint > timeInterval.upper()){
+				DEBUG("hypro.datastructures.hiv", "No matching time interval found - return false." );
+				break;
+			}
+		}
+		// assert that all intervals are pairwise disjunct -- similar to sanity check.
+		#ifndef NDEBUG
+		for(auto it = res.begin(); it != res.end(); ++it) {
+			assert(it == res.begin() || !carl::set_have_intersection(*it, *std::prev(it)));
+		}
+		#endif
+		DEBUG("hypro.datastructures.hiv", "Found " << res.size() << " intersecting intervals.");
+		return res;
 	}
 
 	template<typename T, typename Number>
@@ -202,9 +322,9 @@ namespace hypro {
 
 	template<typename T, typename Number>
 	bool HierarchicalIntervalVector<T, Number>::isLess(const T& lhs, const T& rhs) const{
-		//TRACE("hydra.datastructures.hiv","Compare " << lhs << " and " << rhs << ", for this: " << *this << " with order ");
+		//TRACE("hypro.datastructures.hiv","Compare " << lhs << " and " << rhs << ", for this: " << *this << " with order ");
 		//for(auto i : mOrder){
-		//	TRACE("hydra.datastructures.hiv",i);
+		//	TRACE("hypro.datastructures.hiv",i);
 		//}
 		assert(std::find(mOrder.begin(),mOrder.end(), lhs) != mOrder.end());
 		assert(std::find(mOrder.begin(),mOrder.end(), rhs) != mOrder.end());
@@ -218,7 +338,7 @@ namespace hypro {
 		}
 		// none of the items is in the order.
 		assert(false);
-		FATAL("hydra.datastructures.hiv","This should not be reachable! Error: the queried items are not in the passed order vector.");
+		FATAL("hypro.datastructures.hiv","This should not be reachable! Error: the queried items are not in the passed order vector.");
 		std::cout << "HierarchicalIntervalVector." << __func__  << ": THIS SHOULD NOT BE REACHABLE!" << std::endl;
 		return false;
 	}
@@ -235,9 +355,12 @@ namespace hypro {
 
 	template<typename T, typename Number>
 	bool HierarchicalIntervalVector<T, Number>::isSane() const {
+		if(mIntervals.size() <= 1) return true;
+
 		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
 			if(it != mIntervals.begin()) {
 				if(it->type == std::prev(it,1)->type) {
+					DEBUG("hypro.datastructures.timing", "Is not sane: " << *this );
 					return false;
 				}
 			}

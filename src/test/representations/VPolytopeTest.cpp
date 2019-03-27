@@ -403,4 +403,18 @@ TYPED_TEST(VPolytopeTest, Evaluation)
 	EXPECT_EQ(res4.at(2).optimumValue, this->points1.at(0).rawCoordinates());
 	EXPECT_EQ(res4.at(2).supportValue, TypeParam(-0.75));
 	EXPECT_EQ(res4.at(2).errorCode, hypro::SOLUTION::FEAS);
+
+
+TYPED_TEST(VPolytopeTest, SatisfiesHalfspaces)
+{
+	// box (1,2) - (3,4)
+	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
+
+	EXPECT_EQ(hypro::CONTAINMENT::FULL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},4)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::FULL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},3)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::PARTIAL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},2)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::PARTIAL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},1)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::NO, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},0)).first);
+
+	PRINT_STATS();
 }

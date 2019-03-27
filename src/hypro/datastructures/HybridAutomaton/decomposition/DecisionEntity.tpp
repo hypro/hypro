@@ -269,8 +269,8 @@ namespace hypro
 		// we do not consider the constant part of the trafo
     	tmp.conservativeResize(tmp.rows()-1, tmp.cols()-1);
 
-    	for(size_t i = 0; i < tmp.rows(); i++){
-			for(size_t j = 0; j < tmp.cols(); j++){
+    	for(Eigen::Index i = 0; i < tmp.rows(); i++){
+			for(Eigen::Index j = 0; j < tmp.cols(); j++){
 				if(tmp(i,j) != 0){
 					boost::add_edge(i,j,graph);
 				}
@@ -280,8 +280,8 @@ namespace hypro
 
     template<typename Number>
 	void DecisionEntity<Number>::addEdgesForLinTrafo(matrix_t<Number> linTrafo,boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph){
-    	for(size_t i = 0; i < linTrafo.rows(); i++){
-			for(size_t j = 0; j < linTrafo.cols(); j++){
+    	for(Eigen::Index i = 0; i < linTrafo.rows(); i++){
+			for(Eigen::Index j = 0; j < linTrafo.cols(); j++){
 				if(linTrafo(i,j) != 0){
 					boost::add_edge(i,j,graph);
 				}
@@ -322,10 +322,10 @@ namespace hypro
     	}
     	matrix_t<Number> tmp(condition.getMatrix());
 
-    	for(size_t i = 0; i < tmp.rows(); i++){
+    	for(Eigen::Index i = 0; i < tmp.rows(); i++){
 			//pairwise comparison of the row entries
-			for(size_t j = 0; j < tmp.cols();j++){
-				for(size_t k = 0; k < tmp.cols(); k++){
+			for(Eigen::Index j = 0; j < tmp.cols();j++){
+				for(Eigen::Index k = 0; k < tmp.cols(); k++){
 
 					//Example:
 					// row i: 0,0,2,0,0,-4

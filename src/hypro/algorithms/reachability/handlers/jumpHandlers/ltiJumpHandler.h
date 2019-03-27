@@ -21,6 +21,7 @@ namespace hypro {
 		StrategyParameters mStrategy;
 		WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
 		WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
+		EventTimingContainer<Number> mObtainedTimings;
 
 	public:
 		ltiJumpHandler() = delete;
@@ -29,13 +30,15 @@ namespace hypro {
 										Transition<Number>* transition,
 										StrategyParameters strategy,
 										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue)
+										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+										const EventTimingContainer<typename State::NumberType>& timings)
 			: mSuccessorBuffer(successorBuffer)
 			, mTask(task)
 			, mTransition(transition)
 			, mStrategy(strategy)
 			, mLocalQueue(localQueue)
 			, mLocalCEXQueue(localCEXQueue)
+			, mObtainedTimings(timings)
 		{}
 
 		void handle();

@@ -3,6 +3,7 @@
 #include <carl/core/Variable.h>
 #include <iostream>
 #include <map>
+#include <iostream>
 
 namespace hypro {
 

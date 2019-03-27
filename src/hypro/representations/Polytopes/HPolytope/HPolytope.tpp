@@ -99,16 +99,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		int effectiveDim = effectiveDimension(coordinates);
 		assert(effectiveDim >= 0);
 
-		// For debugging
-		//std::cout << "effectiveDimension: " << effectiveDim << std::endl;
-		//if(effectiveDim < mDimension){
-		//	std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
-		//	HPolytopeT<Number,Converter,Setting> tmp(boxConstraints);
-		//	std::cout << "Theoretical oriented Box: " << tmp << std::endl;
-		//}
-
-		// End for debugging
-
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {

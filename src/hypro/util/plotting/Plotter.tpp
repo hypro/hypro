@@ -9,6 +9,7 @@ template <typename Number>
 void Plotter<Number>::setFilename( const std::string &_filename ) {
 	mFilename = _filename;
 	mSettings.name = _filename;
+	std::replace( mSettings.name.begin(), mSettings.name.end(), '_', '-');
 }
 
 template <typename Number>
@@ -294,6 +295,7 @@ void Plotter<Number>::writeGnuplot() const {
 
 		mOutfile << "set xtics autofreq\n";
 		mOutfile << "set ytics autofreq\n";
+		mOutfile << "set bmargin 2\n";
 
 		if(!mSettings.plain) {
 			if(mSettings.grid) {

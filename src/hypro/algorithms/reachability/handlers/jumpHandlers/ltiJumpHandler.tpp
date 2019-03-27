@@ -23,26 +23,35 @@ namespace hypro {
 		TRACE("hydra.worker.discrete","Process " << processedStates.size() << " aggregated transitions.");
 		for(const auto& transitionStatePair : processedStates) {
 
+			// we need to determine the time interval during which the transition was enabled.
+			// The covered time interval is required for the timing updates and spans the time interval the transition was enabled
+			// irregardless of aggregation settings (that is, why this is not computed during state stage)
 			carl::Interval<tNumber> coveredTimeInterval = transitionStatePair.second.begin()->getTimestamp();
 
-			// the collected time interval is required for the timing updates and spans the time interval the transition was enabled
-			// irregardless of aggregation settings.
-			/*
-			carl::Interval<tNumber> collectedTimeInterval = transitionStatePair.second.begin()->getTimestamp();
-			for(const auto& s : transitionStatePair.second) {
-				collectedTimeInterval = collectedTimeInterval.convexHull(s.getTimestamp());
-			}
-
-			TRACE("hydra.worker.discrete","Transition covers time " << collectedTimeInterval);
-			*/
-
-
-			// children holds the nodes which need to be added
+			// children holds the nodes which need to be added,
+			// also writes to the coveredTimeInterval to obtain the time the transition was enabled.
 			typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, currentTargetLevel, coveredTimeInterval, mTask->treeNode);
 
+			TRACE("hydra.worker.discrete","Transition covers time " << coveredTimeInterval);
 			TRACE("hydra.worker.discrete","Created " << children.size() << " new nodes which have to be added to the tree.");
 
-			// Update tree
+			// Update timing tree - add node for each child
+			auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+			EventTimingNode<typename State::NumberType>* timingNode = nullptr;
+			if( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
+				timingNode = tProvider.rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel);
+			}
+			for(const auto& child : children) {
+				if( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
+					auto newNode = tProvider.addChildToNode(timingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+					newNode->setEntryTransition(transitionStatePair.first);
+					newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
+					newNode->setLocation(transitionStatePair.first->getTarget());
+					newNode->setLevel(currentTargetLevel);
+				}
+			}
+
+			// Update reach tree
 			// Note: At this point we have a fresh node with only the refinement set for the dedicated level. In case of a backtrack
 			// run, we need to match the node to existing children. In case of a fresh run (no childen), I think we can simply create
 			// a new task (depending on the settings, i.e. reset to level 0, we have to modify the node).
@@ -50,33 +59,38 @@ namespace hypro {
 			// regular, tree-extending (depth) case, i.e. no backtracking
 			// Note: There might be children, but for a different transition, so catch this by the second condition.
 			// Note: There can also be children for this transition, but with a whole different timestamp (wavy trajectories).
-
-			// Note: This branch is only taken, if the bt-path is empty and there do not exist child-nodes for this transition -> a bit too restrictive?
+			// Note: This branch is only taken, if the bt-path is empty and there do not exist child-nodes for this transition.
+			// TODO: Pass the time interval to isTreeExtension and check for the time intervals the transition was enabled.
 			if ( !wasRefinementTask && isTreeExtension<State>(mTask->treeNode, transitionStatePair.first) ){
 				TRACE("hydra.worker.discrete","Regular tree extension.");
 				for(const auto& child : children) {
-					// if the following is set, copy the refinement to level 0
+					// if the following is set, copy the refinement to any other refinement level.
 					#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
-					if(currentTargetLevel > 0) { // I think this branch can never be reached.
+					if(currentTargetLevel > 0) { // I think this branch can never be reached, as wasRefinementTask prevents this.
 						for(auto i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
-								child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
+								//child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
+								SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(child->rGetRefinements()[i].initialSet, i);
 							}
 						}
 					}
 					#endif
+
+					// add child to current reach tree.
 					mTask->treeNode->addChild(child);
 					TRACE("hydra.worker.discrete", "Add node " << child << " as child to node " << mTask->treeNode << " which has " << mTask->treeNode->getRefinements().size() << " refinements." );
+					TRACE("hydra.worker.discrete", "Child entry timestamp: " << child->getTimestamp(currentTargetLevel) );
 					assert(child->getParent() == mTask->treeNode);
 
-					// timing-tree updates
+					// create tasks
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
 					std::shared_ptr<Task<State>> newTask = std::make_shared<Task<State>>(child);
 					// if we do not reset to level 0, set refinementLevel of task
 					#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 					newTask->btInfo.btLevel = currentTargetLevel;
 					#endif
+					newTask->btInfo.timingLevel = mTask->btInfo.timingLevel;
 
 					// the first property has to be true already while the second never can be satisfied (wasREfinementTask demands NO bt-path)
 					if(!wasRefinementTask || mTask->btInfo.currentBTPosition == mTask->btInfo.btPath.size()){
@@ -105,7 +119,6 @@ namespace hypro {
 				// be due to some "wavy" trajectory, i.e. the transition can be enabled multiple times with breaks in between.
 				// This goes towards chattering behavior.
 
-
 				TRACE("hydra.worker.discrete","Current->treeNode is: " << mTask->treeNode);
 
 				typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
@@ -115,7 +128,6 @@ namespace hypro {
 				collectTimespansForRefinementLevel<State>(oldTimespans, oldChildren, currentTargetLevel);
 
 				DEBUG("hydra.worker.refinement","For transition " << *transitionStatePair.first << " there are " << oldChildren.size() << " existing relevant children and we attempt to add " << children.size() << " new ones.");
-				//DEBUG("hydra.worker.refinement","The pre-defined timespans are " << oldTimespans);
 
 				// now we need to map the children via their timestamp.
 				// Note: All this relies on the child-nodes to be sorted ascending in their transition timestamps.
@@ -134,9 +146,9 @@ namespace hypro {
 				// in case there are old children left to map (i.e. we had too many old children and already mapped all new ones)
 				// set the remaining old children for the target level to dummy.
 				if(!oldChildren.empty()){
+					RefinementSetting<State> dummyRefinement;
+					dummyRefinement.isDummy = true;
 					for(auto oldChildIt = oldChildren.begin(); oldChildIt != oldChildren.end(); ++oldChildIt) {
-						RefinementSetting<State> dummyRefinement;
-						dummyRefinement.isDummy = true;
 						TRACE("hydra.worker.refinement","Old child " << *oldChildIt << " not required. Set level " << mTask->btInfo.btLevel << " to dummy.");
 						(*oldChildIt)->setNewRefinement(mTask->btInfo.btLevel,dummyRefinement);
 					}
@@ -309,9 +321,10 @@ namespace hypro {
 			std::vector<SUBSPACETYPE> types = *(subspaceTypesIt->second);
 			// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 			std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
+			// contains the aggregated timestamp, initialized with the first timestamp
+			carl::Interval<tNumber> aggregatedTimestamp = (*transitionStatePair.second.begin()).getTimestamp();
 			//START_BENCHMARK_OPERATION(AGGREGATE);
 			for (auto stateIt = ++transitionStatePair.second.begin(); stateIt != transitionStatePair.second.end(); ++stateIt) {
-				assert(!(*stateIt).getTimestamp().isEmpty());
 				TRACE("hydra.worker.discrete","Agg. aggState and set " << setCnt);
 				// actual aggregation.
 				for(std::size_t i = 0; i < aggregatedState.getNumberSets(); i++){
@@ -328,6 +341,10 @@ namespace hypro {
 					}
 				}
 
+				// timestamp handling
+				assert(!(*stateIt).getTimestamp().isEmpty());
+				aggregatedTimestamp = aggregatedTimestamp.convexHull((*stateIt).getTimestamp());
+
 				leftovers = true;
 				++setCnt;
 				++clusterCnt;
@@ -338,6 +355,7 @@ namespace hypro {
 					leftovers = false;
 					if(stateIt+1 != transitionStatePair.second.end()) {
 						aggregatedState = *(++stateIt);
+						aggregatedTimestamp = aggregatedState.getTimestamp();
 						clusterCnt = 1;
 					} else {
 						break;
@@ -350,6 +368,7 @@ namespace hypro {
 					leftovers = false;
 					if(stateIt+1 != transitionStatePair.second.end()) {
 						aggregatedState = *(++stateIt);
+						aggregatedTimestamp = aggregatedState.getTimestamp();
 						clusterCnt = 1;
 					} else {
 						break;
@@ -359,6 +378,9 @@ namespace hypro {
 			}
 			aggregatedState.setSets(currentSets);
 			//EVALUATE_BENCHMARK_RESULT(AGGREGATE);
+
+			// set timestamps accordingly
+			aggregatedState.setTimestamp(aggregatedTimestamp);
 
 			if(strategy.clustering < 1 || leftovers) {
 				TRACE("hydra.worker.discrete","No clustering.");
@@ -415,8 +437,17 @@ namespace hypro {
 			// collect covered time interval
 			coveredTimeInterval = coveredTimeInterval.convexHull(state.getTimestamp());
 
+			// invariant timings
+			auto invariantTimings = getEnabledTimings(mObtainedTimings.getInvariantTimings());
+			if(invariantTimings.size() == 1) {
+				newNode->addTimeStepToPath(invariantTimings[0]);
+			} else {
+				// Attention, this is a dummy setting.
+				newNode->addTimeStepToPath(coveredTimeInterval);
+			}
+
 			// set up node properties
-			newNode->addTimeStepToPath(state.getTimestamp());
+
 			newNode->addTransitionToPath(transition, state.getTimestamp());
 			newNode->setDepth(parent->getDepth() + 1);
 			newNode->setTimestamp(currentTargetLevel, state.getTimestamp());

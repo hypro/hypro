@@ -67,26 +67,26 @@ public:
 	std::size_t b = std::size_t(0);
 	std::size_t& i = a;
 	std::size_t& j = b;
-	cout<<"\n test \n";
+std::cout<<"\n test \n";
 	d.pivot(i,j);
 	d.printDictionary();
-	cout<<"\n test \n";
+std::cout<<"\n test \n";
 	d.selectCrissCrossPivot(i,j);
-	cout << "\n";
-	cout << i;
-	cout << "\n";
-	cout << j;
-	cout << "\n";
-	cout.flush();
+std::cout << "\n";
+std::cout << i;
+std::cout << "\n";
+std::cout << j;
+std::cout << "\n";
+std::cout.flush();
 	d.pivot(i,j);
 	d.printDictionary();
 	d.selectCrissCrossPivot(i,j);
-	cout << "\n";
-	cout << i;
-	cout << "\n";
-	cout << j;
-	cout << "\n";
-	cout.flush();
+std::cout << "\n";
+std::cout << i;
+std::cout << "\n";
+std::cout << j;
+std::cout << "\n";
+std::cout.flush();
 	d.pivot(i,j);
 	d.printDictionary();
 
@@ -99,7 +99,7 @@ public:
 
 
 	hypro::Dictionary<mpq_class> d = hypro::Dictionary<mpq_class>(v);
-	cout<<"\n test1 \n";
+std::cout<<"\n test1 \n";
 	d.printDictionary();
 	hypro::VertexEnumeration<mpq_class> ev = hypro::VertexEnumeration<mpq_class>(v);
 
@@ -107,36 +107,36 @@ public:
 	//d.setOnes(basisAux);
 	//d.pivot(i,j);
 	d.printDictionary();
-	cout<<"\n test2 \n";	ev.hypro::VertexEnumeration<mpq_class>::findFirstVertex(v);
-	cout<<d.selectDualBlandPivot(i,j,basisAux);
-	cout<<"\ni="<<i<<";j="<<j<<";";d.pivot(i,j);d.printDictionary();
+std::cout<<"\n test2 \n";	ev.hypro::VertexEnumeration<mpq_class>::findFirstVertex(v);
+std::cout<<d.selectDualBlandPivot(i,j,basisAux);
+std::cout<<"\ni="<<i<<";j="<<j<<";";d.pivot(i,j);d.printDictionary();
 
 	//cout<<"\n test3 \n";
 	//cout<<"\n"<< d.reverseDual(i,j,basisAux) <<"\n";
 
-	i=0;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	i=0;j=0; std::cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
 	d.pivot(i,j);
 	d.printDictionary();
-	i=1;j=0; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	i=1;j=0; std::cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
 	d.pivot(i,j);
 	d.printDictionary();
-	cout<<"\n--------------\n";
-	cout << d.selectBlandPivot(i,j);
-	cout<<"\nselection  i="<<i<<";j="<<j<<"\n";
+std::cout<<"\n--------------\n";
+std::cout << d.selectBlandPivot(i,j);
+std::cout<<"\nselection  i="<<i<<";j="<<j<<"\n";
 	d.pivot(i,j);
 	d.printDictionary();
-	cout<<"\n--------------\n";
+std::cout<<"\n--------------\n";
 	d.pivot(i,j);
-	i=0;j=1; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	i=0;j=1; std::cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
 	d.pivot(i,j);
 	d.printDictionary();
 	d.pivot(i,j);
-	i=1;j=1; cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
+	i=1;j=1; std::cout<<"\ni="<<i<<";j="<<j<<"; rev="<<d.reverse(i,j);
 	d.pivot(i,j);
 	d.printDictionary();
 	d.pivot(i,j);
 	//ev.enumerateDictionaries();
-	cout<<"\n test4 \n";
+std::cout<<"\n test4 \n";
 
 
 	//ev.enumerateVertices();

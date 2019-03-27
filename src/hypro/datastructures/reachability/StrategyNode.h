@@ -24,9 +24,10 @@ namespace detail{
 
 		template<typename Node>
 		void operator()(Node& ) const {
+			TRACE("hypro.utility","Expect conversion of state set at pos " << mSubsetIndex << " to type " << typeid(typename Node::representationType).name() << " and is actually " << mState.getSetType(mSubsetIndex));
 			mState.setSet(boost::apply_visitor(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet(mSubsetIndex)), mSubsetIndex);
 			//mState.setSetType(Node::representationType::type(),mSubsetIndex);
-			TRACE("hypro.utility","Expect conversion of state set at pos " << mSubsetIndex << " to type " << typeid(typename Node::representationType).name() << " and is actually " << mState.getSetType(mSubsetIndex));
+
 			TRACE("hypro.utility","Should be of type " << Node::representationType::type());
 			assert(mState.getSetType(mSubsetIndex) == Node::representationType::type());
 		}

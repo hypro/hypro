@@ -247,13 +247,20 @@ template<typename Number>
 void HybridAutomaton<Number>::addTransition(const Transition<Number>& transition) {
 	this->addTransition(std::move(std::make_unique<Transition<Number>>(transition)));
 }
+*/
 
 template<typename Number>
 void HybridAutomaton<Number>::addTransition(std::unique_ptr<Transition<Number>>&& transition) {
 	assert(transition != nullptr);
-	mTransitions.emplace_back(std::move(transition));
+	for(auto& l : mLocations) {
+		if(l.get() == transition->getSource()) {
+			l.addTransition(std::move(transition));
+			break;
+		}
+	}
 }
 
+/*
 template<typename Number>
 void HybridAutomaton<Number>::removeTransition(Transition<Number>* toRemove) {
 	for(auto tIt = mTransitions.begin(); tIt != mTransitions.end(); ) {

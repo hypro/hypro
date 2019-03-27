@@ -9,10 +9,10 @@ namespace box
         Results<std::size_t> ress;
         std::vector<std::future<Results<std::size_t>>> workingTasks;
 
-        workingTasks.emplace_back(std::async(std::launch::async,intersectHalfspace,settings));
-        workingTasks.emplace_back(std::async(std::launch::async,affineTransformation,settings));
-        workingTasks.emplace_back(std::async(std::launch::async,unite,settings));
-        workingTasks.emplace_back(std::async(std::launch::async,intersect,settings));
+        workingTasks.emplace_back(std::async(std::launch::deferred,intersectHalfspace,settings));
+        workingTasks.emplace_back(std::async(std::launch::deferred,affineTransformation,settings));
+        workingTasks.emplace_back(std::async(std::launch::deferred,unite,settings));
+        workingTasks.emplace_back(std::async(std::launch::deferred,intersect,settings));
 
         // half-space intersection
         auto tmp = workingTasks[0].get();
@@ -38,5 +38,5 @@ namespace box
 
         return ress;
     }
-} // box    
+} // box
 } // benchmark

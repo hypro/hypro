@@ -2,6 +2,7 @@
 
 #include "Dictionary.h"
 #include "../../util/Permutator.h"
+#include <string>
 
 namespace hypro {
 

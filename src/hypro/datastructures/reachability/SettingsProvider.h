@@ -7,7 +7,7 @@
 #include "../HybridAutomaton/HybridAutomaton.h"
 #include "../HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../HybridAutomaton/decomposition/Decomposition.h"
-#include "../../util/multithreading/Filewriter.h"
+#include "../../util/logging/Filewriter.h"
 #include "../../util/logging/Logger.h"
 #include <carl/util/Singleton.h>
 //#include <hypro/representations/GeometricObject.h>
@@ -29,18 +29,21 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
 
     ReachabilitySettings &getReachabilitySettings();
 
-    unsigned getWorkerThreadCount();
+    unsigned getWorkerThreadCount() const;
+    void setWorkerThreadCount(std::size_t c);
     void setSkipPlot(bool skip) { mSkipPlot = skip; }
     bool skipPlot() const;
     bool useGlobalQueuesOnly() const;
     bool useFixedPointTest() const { return mUseFixedPointTest; }
     double getQueueBalancingRatio() const;
     bool useLocalTiming() const { return mUseLocalTiming; }
+    bool useAnyTimingInformation() const { return mReachabilitySettings.useBadStateTimingInformation || mReachabilitySettings.useGuardTimingInformation || mReachabilitySettings.useInvariantTimingInformation; }
     bool useDecider();
     void setUseDecider(bool useDecider) { mUseDecider = useDecider;}
     bool decomposeAutomaton();
     void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
     std::size_t getNumberVariables() const { return mHybridAutomaton.getVariables().size(); }
+    tNumber getGlobalTimeHorizon() const { return mReachabilitySettings.timeBound*mReachabilitySettings.jumpDepth; }
 
 
     void setHybridAutomaton(HybridAutomaton<Number>&& ha);
@@ -59,6 +62,9 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
         rsConverted.plotDimensions = rs.plotDimensions;
         rsConverted.uniformBloating = rs.uniformBloating;
         rsConverted.clustering = rs.clustering;
+        rsConverted.useBadStateTimingInformation = rs.useBadStateTimingInformation;
+        rsConverted.useInvariantTimingInformation = rs.useInvariantTimingInformation;
+        rsConverted.useGuardTimingInformation = rs.useGuardTimingInformation;
         mReachabilitySettings = rsConverted;
     }
 
