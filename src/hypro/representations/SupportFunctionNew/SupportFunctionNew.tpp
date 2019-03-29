@@ -91,13 +91,25 @@ namespace hypro {
 	//When Result type and Param type = void
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::traverse( 	
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const 
+		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
+		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const 
 	{
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { transform(n); return Parameters<Dummy>(Dummy()); };
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { compute(n); return Parameters<Dummy>(Dummy()); };
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Dummy>)> aNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Dummy> p) -> Parameters<Dummy> { aggregate(n); return Parameters<Dummy>(Dummy()); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { 
+				transform(n); 
+				return Parameters<Dummy>(Dummy()); 
+			};
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { 
+				compute(n); 
+				return Parameters<Dummy>(Dummy()); 
+			};
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Dummy>)> aNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Dummy> p) -> Parameters<Dummy> { 
+				aggregate(n); 
+				return Parameters<Dummy>(Dummy()); 
+			};
 		traverse(tNotVoid, cNotVoid, aNotVoid, Parameters<Dummy>(Dummy()));
 	}
 
@@ -105,13 +117,23 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename Result>
 	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(	
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const 
+		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+		const std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
+		const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const 
 	{	
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Parameters<Dummy> { transform(n); return Parameters<Dummy>(Dummy()); };
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Result { return compute(n); };
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Dummy>)> aWithParams = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Result> v, Parameters<Dummy> ) -> Result { return aggregate(n,v); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Parameters<Dummy> { 
+				transform(n); 
+				return Parameters<Dummy>(Dummy()); 
+			};
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Result { 
+				return compute(n); 
+			};
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Dummy>)> aWithParams = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Result> v, Parameters<Dummy> ) -> Result { 
+				return aggregate(n,v); 
+			};
 		Parameters<Dummy> noInitParams = Parameters<Dummy>(Dummy());
 		return traverse(tNotVoid, cNotVoid, aWithParams, noInitParams);
 	}
@@ -120,13 +142,21 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename ...Rargs>
 	void SupportFunctionNewT<Number,Converter,Setting>::traverse(	
-		std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
-		Parameters<Rargs...>& initParams) const 
+		const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+		const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+		const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
+		const Parameters<Rargs...>& initParams) const 
 	{
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...> p) -> Parameters<Dummy>{ compute(n,p); return Parameters<Dummy>(Dummy()); };
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Rargs...>)> aNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Rargs...> p) -> Parameters<Dummy> { aggregate(n,p); return Parameters<Dummy>(Dummy()); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)> cNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...> p) -> Parameters<Dummy>{ 
+				compute(n,p); 
+				return Parameters<Dummy>(Dummy()); 
+			};
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Rargs...>)> aNotVoid = 
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Rargs...> p) -> Parameters<Dummy> { 
+				aggregate(n,p); 
+				return Parameters<Dummy>(Dummy()); 
+			};
 		traverse(transform, cNotVoid, aNotVoid, initParams);
 	}
 
@@ -134,10 +164,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename Result, typename ...Rargs>
 	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(
-		std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
-		Parameters<Rargs...>& initParams) const
+		const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+		const std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+		const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+		const Parameters<Rargs...>& initParams) const
 	{ 
 		//Usings
 		using Node = RootGrowNode<Number,Converter,Setting>*;

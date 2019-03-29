@@ -248,33 +248,33 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//When Result type and Param type = void
 	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
-	void traverse(	std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-					std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
-					std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const;
+	void traverse(	const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+					const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
+					const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const;
 
 	//When Param type = void, but Result type not
 	//Wrap transform and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename Result>
-	Result traverse(std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const;
+	Result traverse(const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+					const std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
+					const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const;
 
 	//When Result type = void, but Param type not
 	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename ...Rargs>
-	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
-					Parameters<Rargs...>& initParams) const;
+	void traverse(	const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+					const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+					const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
+					const Parameters<Rargs...>& initParams) const;
 
 	//Actual traverse function
 	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
 	//we can assume that we do not get functions returning void / that have no parameters
 	template<typename Result, typename ...Rargs>
-	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
-					Parameters<Rargs...>& initParams) const;
+	Result traverse(const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+					const std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+					const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+					const Parameters<Rargs...>& initParams) const;
 
 	/***************************************************************************
 	 * Evaluation

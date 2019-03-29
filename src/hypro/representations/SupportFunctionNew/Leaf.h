@@ -59,7 +59,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	Leaf(const LeafData& d){
 		assert(Representation::type() == d.typeOfRep);
-		rep = std::make_shared<Representation>(*(reinterpret_cast<Representation*>(d.addressToRep)));
+		rep = std::move(std::make_shared<Representation>(*(reinterpret_cast<Representation*>(d.addressToRep))));
 		assert(rep != nullptr);
 		mDimension = rep->dimension();
 		isNotRedundant = d.isNotRedundant;
