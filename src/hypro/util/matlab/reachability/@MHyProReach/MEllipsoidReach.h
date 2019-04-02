@@ -7,7 +7,7 @@
 #include "../../handles/ObjectHandle.h"
 
 
-class MEllipsoidReach: public MReach<hypro::Box<double>>{
+class MEllipsoidReach: public MReach<hypro::Ellipsoid<double>>{
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:

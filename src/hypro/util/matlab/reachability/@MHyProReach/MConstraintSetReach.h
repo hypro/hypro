@@ -7,7 +7,7 @@
 #include "../../handles/ObjectHandle.h"
 
 
-class MConstraintSetReach: public MReach<hypro::Box<double>>{
+class MConstraintSetReach: public MReach<hypro::ConstraintSet<double>>{
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
