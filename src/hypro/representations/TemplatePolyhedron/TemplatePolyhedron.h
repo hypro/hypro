@@ -36,19 +36,24 @@ template <typename Number, typename Converter, class Setting>
 class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<Number,Converter,Setting>> {
   private:
   public:
+
+  	//Needed for Converter
+  	typedef Setting Settings;
+
   protected:
 
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 
-  	//The constraint matrix which is the same for every polyhedron until explicitly changed
-  	static matrix_t<Number> mMatrix = matrix_t<Number>::Zero(1,1);
+  	//The constraint matrix which is the same for every polyhedron. Can only be changed once to a meaningful value.
+  	inline static matrix_t<Number> mMatrix = matrix_t<Number>::Zero(0,0);
 
   	//The offset vector, different for each instance of this class
   	vector_t<Number> mVector;
 
   public:
+
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
@@ -64,7 +69,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param[in]  noOfSides  amount of constraints the polyhedron should consist of. 
 	 * 			   Must be at least dimension+1 .
 	 */
-	TemplatePolyhedronT( std::size_t dimension, const Number& noOfSides );
+	TemplatePolyhedronT( const std::size_t dimension, const std::size_t noOfSides, const vector_t<Number>& vec);
 
 	/**
 	 * @brief      Matrix Vector constructor.
@@ -72,6 +77,13 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param[in]  vec  The vector
 	 */
 	TemplatePolyhedronT( const matrix_t<Number>& mat, const vector_t<Number>& vec );
+
+	/**
+	 * @brief      Vector constructor. When you do not want to change the matrix.
+	 * @param[in]  mat 	The matrix
+	 * @param[in]  vec  The vector
+	 */
+	TemplatePolyhedronT( const vector_t<Number>& vec );
 
 	/**
 	 * @brief      Copy constructor.
@@ -105,25 +117,33 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @brief Getter for constraint matrix
 	 * @return The constraint matrix
 	 */
-	static matrix_t<Number> matrix() { return mMatrix; }
+	inline static matrix_t<Number> matrix() { return TemplatePolyhedronT::mMatrix; }
 
 	/**
 	 * @brief Getter for offset vecor
 	 * @return The offset vector
 	 */
-	vector_t<Number> vector() const { return mVector; }
+	inline vector_t<Number> vector() const { return mVector; }
 
 	/**
 	 * @brief Getter for the settings
 	 * @return The settings
 	 */
-	Setting getSettings() const { return Setting{}; }
+	inline Setting getSettings() const { return Setting{}; }
+
+  private:
 
 	/**
-	 * @brief Setter for the static matrix
+	 * @brief Setter for the static matrix. Sets the matrix only once in case it has not been set yet.
 	 * @param[in]  mat  the matrix to be set
 	 */
-	void setMatrix(const matrix_t<Number>& mat){ mMatrix = mat; }
+	void setMatrix(const matrix_t<Number>& mat){ 
+		if(TemplatePolyhedronT::mMatrix.rows() == 0){
+			TemplatePolyhedronT::mMatrix = mat; 	
+		}
+	}
+
+  public:
 
 	/***************************************************************************
 	 * Geometric Object Interface

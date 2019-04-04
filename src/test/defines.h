@@ -37,7 +37,7 @@ typedef ::testing::Types<
 	mpq_class
 > rationalTypes;
 // List tests which should be typed
-
+/*
 // Algorithm
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
@@ -74,6 +74,8 @@ TYPED_TEST_CASE(VPolytopeTest, allTypes);
 TYPED_TEST_CASE(ZonotopeTest, allTypes); // problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 TYPED_TEST_CASE(DifferenceBoundsTest, allTypes);
 TYPED_TEST_CASE(SupportFunctionNewTest, allTypes);
+*/
+TYPED_TEST_CASE(TemplatePolyhedronTest, allTypes);
 // Practical term
 //TYPED_TEST_CASE(PTermBoxTest, allTypes);
 //TYPED_TEST_CASE(PTermPolytopeTest, allTypes);
