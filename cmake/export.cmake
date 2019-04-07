@@ -37,7 +37,7 @@ else()
 	    export_target(DEPENDENT_TARGETS lib_smtrat)
 	endif()
 	if(HYPRO_MATLAB_BINDINGS)
-		export_target(DEPENDENT_TARGETS Matlab_SHARED)
+#export_target(DEPENDENT_TARGETS Matlab_SHARED)
 	endif()
 endif()
 

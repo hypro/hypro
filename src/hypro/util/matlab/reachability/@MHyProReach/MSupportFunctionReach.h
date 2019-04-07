@@ -7,7 +7,7 @@
 #include "../../handles/ObjectHandle.h"
 
 
-class MSupportFunctionReach: public MReach<hypro::SupportFunction<double>>{
+class MSupportFunctionReach: public MReach<hypro::State<double, hypro::SupportFunction<double>>>{
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:

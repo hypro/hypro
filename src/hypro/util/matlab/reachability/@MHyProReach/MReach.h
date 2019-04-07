@@ -7,14 +7,13 @@
 #include "../../../../algorithms/reachability/Reach.h"
 
 
-
-template<class T>class MReach{
+class MReach{
     public:
-        using Reacher = hypro::reachability::Reach<double, hypro::reachability::ReachSettings, T>;
-        using flowpipe = std::vector<hypro::State<double, T>>;
+        using Reacher = hypro::reachability::Reach<double, hypro::reachability::ReachSettings, hypro::State_t<double>>;
+        using flowpipe = std::vector<hypro::State_t<double>>;
         
         static void del_reach(int lhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void new_reach(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
+        static void process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
 };
-#include "MReach.tpp"
