@@ -7,7 +7,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 # filter out matlab-bindings
 message(STATUS "sources before filtering: ${sources}")
-list(FILTER sources EXCLUDE REGEX .*matlab.*)
+list(FILTER sources EXCLUDE REGEX MHyPro.cpp)
 message(STATUS "sources after filtering: ${sources}")
 
 ########################################################################################

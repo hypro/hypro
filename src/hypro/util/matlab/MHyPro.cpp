@@ -12,7 +12,6 @@
 #include "reachability/@MHyProState/MState.h"
 #include "reachability/@MHyProTransition/MTransition.h"
 #include "reachability/@MHyProReset/MReset.h"
-#include "HyProType.h"
 #include "reachability/@MHyProReach/MReach.h"
 // #include "reachability/@MHyProReach/MConstraintSetReach.h"
 // #include "reachability/@MHyProReach/MEllipsoidReach.h"

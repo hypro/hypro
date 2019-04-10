@@ -96,7 +96,7 @@ else
         
         %Save the found paths
             mex -setup c++;
-            mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
+            mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','GCC=/usr/local/bin/gcc','CXX=/usr/local/opt/llvm/bin/clang++','CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
 
 
         
@@ -180,7 +180,8 @@ else
         '-I/home/marta/hypro/build/resources/antlr_build/include/antlr4-runtime/support',...
         '-I/home/marta/hypro/src','-I/usr/bin/c++','-I/home/marta/carl/src',...
         '-I/usr/local/include','-I/home/marta/carl/resources/include',...
-        '-L/home/marta/hypro/build','-lhypro','CXXFLAGS=\$CXXFLAGS -std=c++17';};
+        '-L/home/marta/hypro/build','-lhypro','CXXFLAGS=\$CXXFLAGS -std=c++17',...
+        '-IC:/Users/marta/carl/build/resources/include';};
     
         mex -setup c++; 
         mex('-v',ipaths{:},srcFile);    
