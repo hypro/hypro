@@ -21,6 +21,7 @@
 #include "../../util/logging/Logger.h"
 #include "../../util/templateDirections.h"
 #include <iostream>
+#include <memory>
 
 namespace hypro {
 
@@ -46,8 +47,8 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * Members
 	 **************************************************************************/
 
-  	//The constraint matrix which is the same for every polyhedron. Can only be changed once to a meaningful value.
-  	inline static matrix_t<Number> mMatrix = matrix_t<Number>::Zero(0,0);
+  	//The constraint matrix which is the same for every polyhedron until explicitly changed.
+  	std::shared_ptr<matrix_t<Number>> mMatrixPtr = nullptr;
 
   	//The offset vector, different for each instance of this class
   	vector_t<Number> mVector;
@@ -72,18 +73,12 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	TemplatePolyhedronT( const std::size_t dimension, const std::size_t noOfSides, const vector_t<Number>& vec);
 
 	/**
-	 * @brief      Matrix Vector constructor.
+	 * @brief      Matrix Vector constructor. 
 	 * @param[in]  mat 	The matrix
 	 * @param[in]  vec  The vector
+	 * @details    Constructs a shared_ptr to a copy of the matrix allocated on the heap
 	 */
 	TemplatePolyhedronT( const matrix_t<Number>& mat, const vector_t<Number>& vec );
-
-	/**
-	 * @brief      Vector constructor. When you do not want to change the matrix.
-	 * @param[in]  mat 	The matrix
-	 * @param[in]  vec  The vector
-	 */
-	TemplatePolyhedronT( const vector_t<Number>& vec );
 
 	/**
 	 * @brief      Copy constructor.
@@ -117,7 +112,13 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @brief Getter for constraint matrix
 	 * @return The constraint matrix
 	 */
-	inline static matrix_t<Number> matrix() { return TemplatePolyhedronT::mMatrix; }
+	inline matrix_t<Number> matrix() const { return *mMatrixPtr; }
+	std::shared_ptr<matrix_t<Number>> rGetMatrixPtr() const { return mMatrixPtr; }
+	void setMatrixToNull() { mMatrixPtr = nullptr; }
+
+	//void setMatrix(matrix_t<Number>&& mat) const { 
+	//	mMatrixPtr = std::make_shared<matrix_t<Number>>(mat);
+	//}
 
 	/**
 	 * @brief Getter for offset vecor
@@ -125,23 +126,16 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	inline vector_t<Number> vector() const { return mVector; }
 
+	void setVector(const vector_t<Number>& vec) const { 
+		assert(((vec.rows() == mMatrixPtr->rows()) && mMatrixPtr != nullptr) || mMatrixPtr == nullptr);
+		mVector = vec; 
+	}
+
 	/**
 	 * @brief Getter for the settings
 	 * @return The settings
 	 */
-	inline Setting getSettings() const { return Setting{}; }
-
-  private:
-
-	/**
-	 * @brief Setter for the static matrix. Sets the matrix only once in case it has not been set yet.
-	 * @param[in]  mat  the matrix to be set
-	 */
-	void setMatrix(const matrix_t<Number>& mat){ 
-		if(TemplatePolyhedronT::mMatrix.rows() == 0){
-			TemplatePolyhedronT::mMatrix = mat; 	
-		}
-	}
+	inline Setting getSettings() const { return Setting{}; }	
 
   public:
 
@@ -302,7 +296,8 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param[in]  TemplatePolyhedrones  The TemplatePolyhedrones.
 	 * @return     The resulting TemplatePolyhedron.
 	 */
-	static TemplatePolyhedronT<Number,Converter,Setting> unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& TemplatePolyhedrones );
+	//static TemplatePolyhedronT<Number,Converter,Setting> unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& TemplatePolyhedrones );
+	TemplatePolyhedronT<Number,Converter,Setting> unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& TemplatePolyhedrones );
 
 	/**
 	 * @brief      Reduces the representation of the current TemplatePolyhedron.

@@ -26,58 +26,50 @@ namespace hypro {
 			throw std::invalid_argument("Template polyhedron is unbound. Please check the amount of constraints used for building this template polyhedron.");
 		}
 		
-		//compute template matrix and set it as new mMatrix
+		//compute template matrix and set it as new mMatrixPtr
 		auto templateDirs = computeTemplate<Number>(dimension, noOfSides);
 		matrix_t<Number> templateMatrix = matrix_t<Number>::Zero(templateDirs.size(), templateDirs.front().rows());
 		for(unsigned i = 0; i < templateDirs.size(); ++i){
 			templateMatrix.row(i) = templateDirs.at(i);
 		}
-		setMatrix(templateMatrix);
+		mMatrixPtr = std::make_shared<matrix_t<Number>>(templateMatrix);
 	}
 
 	//Matrix-Vector-constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const matrix_t<Number>& mat, const vector_t<Number>& vec ) 
+		: mMatrixPtr(std::make_shared<matrix_t<Number>>(mat)), mVector(vec)
 	{
-		setMatrix(mat); 
-		if(vec.rows() == mMatrix.rows()){
-			mVector = vec;
-		}
+		assert(vec.rows() == mMatrixPtr->rows());
 	}
-
-	//Vector constructor
-	template<typename Number, typename Converter, typename Setting>
-	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const vector_t<Number>& vec ) : mVector(vec) {}	
 
 	//Copy constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const TemplatePolyhedronT<Number,Converter,Setting>& orig ) 
+		: mMatrixPtr(orig.rGetMatrixPtr()), mVector(orig.vector())
 	{
-		setMatrix(orig.matrix());
-		if(vec.rows() == mMatrix.rows()){
-			mVector = orig.vector();
-		}
+		assert(mVector.rows() == mMatrixPtr->rows());	
+		assert(mMatrixPtr == orig.rGetMatrixPtr());
 	}
 
 	//Move constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( TemplatePolyhedronT<Number,Converter,Setting>&& orig ) 
+		: mMatrixPtr(std::move(orig.rGetMatrixPtr())), mVector(std::move(orig.vector()))	
 	{
-		setMatrix(std::move(orig.matrix()));
-		if(vec.rows() == mMatrix.rows()){
-			mVector = std::move(orig.vector());
-		}
+		orig.setMatrixToNull();
+		assert(mVector.rows() == mMatrixPtr->rows());		
+		assert(orig.rGetMatrixPtr() == nullptr);
 	}
 
 	//Settings constructor
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > >
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT(const TemplatePolyhedronT<Number,Converter,SettingRhs>& orig)
+		: mMatrixPtr(orig.rGetMatrixPtr()), mVector(orig.vector())
 	{
-		setMatrix(orig.matrix());
-		if(vec.rows() == mMatrix.rows()){
-			mVector = orig.vector();
-		}
+		assert(mVector.rows() == mMatrixPtr->rows());
+		assert(mMatrixPtr == orig.rGetMatrixPtr());
 	}
 
 	//////// GeometricObject Interface ////////
@@ -109,7 +101,7 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t TemplatePolyhedronT<Number,Converter,Setting>::dimension() const {
-		return mMatrix.cols();
+		return mMatrixPtr->cols();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -160,12 +152,12 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersect( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
 		vector_t<Number> res = mVector;
-		for(int i = 0; i < mMatrix.rows(); ++i){
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
 			if(rhs.vector()(i) < res(i)){
 				res(i) = rhs.vector()(i);
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrix, res);
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -180,10 +172,10 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	bool TemplatePolyhedronT<Number,Converter,Setting>::contains( const Point<Number>& point ) const {
-		if(point.dimension() != mMatrix.cols()){
+		if(point.dimension() != mMatrixPtr->cols()){
 			throw std::invalid_argument("Template polyhedron cannot contain point of different dimension.");
 		}
-		if(mMatrix*point.rawCoordinates() <= mVector) return true;
+		if(vector_t<Number>((*mMatrixPtr)*(point.rawCoordinates())) <= mVector) return true;
 		return false;
 	}
 
@@ -198,25 +190,25 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::unite( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
 		vector_t<Number> res = mVector;
-		for(int i = 0; i < mMatrix.rows(); ++i){
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
 			if(rhs.vector()(i) > res(i)){
 				res(i) = rhs.vector()(i);
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrix, res);
+		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& templatePolyhedrones ) {
 		vector_t<Number> res = mVector;
-		for(int i = 0; i < mMatrix.rows(); ++i){
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
 			for(const auto& tpoly : templatePolyhedrones){
 				if(tpoly(i) > res(i)){
 					res(i) = tpoly(i);
 				}
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrix, res);
+		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
 	}
 
 	template<typename Number, typename Converter, typename Setting>

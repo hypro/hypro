@@ -17,50 +17,56 @@ template<typename Number>
 class TemplatePolyhedronTest : public ::testing::Test
 {
 protected:
+
     virtual void SetUp(){
 
-    	mat = matrix_t<TypeParam>::Zero(constraintSize,dim);
-		mat(0,0) = TypeParam(1);
-		mat(1,0) = TypeParam(-1);
-		mat(2,1) = TypeParam(1);
-		mat(3,1) = TypeParam(-1);
+    	mat = matrix_t<Number>::Zero(4,2);
+		mat(0,0) = Number(1);
+		mat(1,0) = Number(-1);
+		mat(2,1) = Number(1);
+		mat(3,1) = Number(-1);
 
-		middle = vector_t<TypeParam>::Ones(constraintSize);
-		//the other vecs upleft
-		//the other vecs upright
-		//the other vecs downleft
-		//the other vecs downright
+		middleVec = 2*vector_t<Number>::Ones(4);
+		upleftVec = vector_t<Number>::Zero(4);
+		upleftVec << 3, -1, 3, -1;
+		uprightVec = vector_t<Number>::Zero(4);
+		uprightVec << -1, 3, -1, 3;
+		downleftVec = vector_t<Number>::Zero(4);
+		downleftVec << 3, -1, -1, 3;
+		downrightVec = vector_t<Number>::Zero(4);
+		downrightVec << -1, 3, 3, -1;
 
-		tpoly1 = TemplatePolyhedron<TypeParam>(mat,vec1);
+		middle = TemplatePolyhedron<Number>(mat,middleVec);
+		upleft = TemplatePolyhedron<Number>(mat,upleftVec);
+		upright = TemplatePolyhedron<Number>(mat,uprightVec);
+		downleft = TemplatePolyhedron<Number>(mat,downleftVec);
+		downright = TemplatePolyhedron<Number>(mat,downrightVec);
     }
     virtual void TearDown(){}
 
-    std::size_t dim = 2;
-	std::size_t constraintSize = 4;
+    matrix_t<Number> mat;			//A square with unit directions in 2d
+    vector_t<Number> middleVec;		//for middle
+    vector_t<Number> upleftVec;		//for upleft
+    vector_t<Number> uprightVec;	//for upright
+    vector_t<Number> downleftVec; 	//for downleft
+    vector_t<Number> downrightVec;	//for downright
 
-    matrix_t<TypeParam> mat;	//A square with unit directions in 2d
-    vector_t<TypeParam> vec1;	//for middle
-    vector_t<TypeParam> vec2;	//for upleft
-    vector_t<TypeParam> vec3;	//for upright
-    vector_t<TypeParam> vec4;	//for downleft
-    vector_t<TypeParam> vec5;	//for downright
-
-    TemplatePolyhedron<TypeParam> middle;	  	//Middle of square in origin
-    TemplatePolyhedron<TypeParam> upleft;	  	//Middle of square in (-1,1)
-    TemplatePolyhedron<TypeParam> upright;		//Middle of square in (1,1)	
-    TemplatePolyhedron<TypeParam> downleft; 	//Middle of square in (-1,-1)
-    TemplatePolyhedron<TypeParam> downright;	//Middle of square in (1,-1)
+    TemplatePolyhedron<Number> middle;	  	//Middle of square in origin
+    TemplatePolyhedron<Number> upleft;	  	//Middle of square in (-1,1)
+    TemplatePolyhedron<Number> upright;		//Middle of square in (1,1)	
+    TemplatePolyhedron<Number> downleft; 	//Middle of square in (-1,-1)
+    TemplatePolyhedron<Number> downright;	//Middle of square in (1,-1)
 };
 
 TYPED_TEST(TemplatePolyhedronTest, Constructor){
 
 	//Empty constructor
 	TemplatePolyhedron<TypeParam> empty;
-	EXPECT_EQ(empty.matrix(), matrix_t<TypeParam>::Zero(0,0));
+	EXPECT_EQ(empty.rGetMatrixPtr(), nullptr);
 	EXPECT_EQ(empty.vector(), vector_t<TypeParam>::Zero(0));
 
 	//Define control matrix
-	matrix_t<TypeParam> controlMatrix = matrix_t<TypeParam>::Zero(constraintSize,dim);
+	matrix_t<TypeParam> controlMatrix = matrix_t<TypeParam>::Zero(4,2);
 	controlMatrix(0,0) = TypeParam(1);
 	controlMatrix(1,0) = TypeParam(-1);
 	controlMatrix(2,1) = TypeParam(1);
@@ -70,62 +76,58 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	std::size_t noOfSides = 2;
 	vector_t<TypeParam> offset = vector_t<TypeParam>::Ones(noOfSides);
 	try {
-		TemplatePolyhedron<TypeParam> regular(dim, noOfSides, offset);
+		TemplatePolyhedron<TypeParam> regular(2, noOfSides, offset);
 		FAIL();
 	} catch(std::invalid_argument& e){
 		//If we get here thats right. Just continue then.
 	}
 
 	//Regular directions constructor - Bounded template polyhedra: Should work
-	noOfSides = constraintSize;
+	noOfSides = 4;
 	offset = vector_t<TypeParam>::Ones(noOfSides);
-	TemplatePolyhedron<TypeParam> regular(dim, noOfSides, offset);
+	TemplatePolyhedron<TypeParam> regular(2, noOfSides, offset);
 	EXPECT_EQ(regular.matrix(), controlMatrix);
-	EXPECT_EQ(empty.matrix(), controlMatrix);
 	EXPECT_EQ(regular.vector(), offset);
 
-	//Matrix Vector constructor - with a different matrix and vector: matrix should still be controlMatrix
-	//vector is not changed, since its size does not comply with the #rows of controlMatrix
-	matrix_t<TypeParam> differentMatrix = matrix_t<TypeParam>::Zero(constraintSize-1,dim);
+	//Matrix Vector constructor - with a different matrix and vector
+	matrix_t<TypeParam> differentMatrix = matrix_t<TypeParam>::Zero(3,2);
 	differentMatrix(0,0) = TypeParam(1);
 	differentMatrix(0,1) = TypeParam(1);
 	differentMatrix(1,0) = TypeParam(-1);
 	differentMatrix(2,1) = TypeParam(-1);
-	vector_t<TypeParam> differentOffset = 2*vector_t<TypeParam>::Ones(constraintSize-1);
+	vector_t<TypeParam> differentOffset = 2*vector_t<TypeParam>::Ones(3);
 	TemplatePolyhedron<TypeParam> matVecTPoly(differentMatrix, differentOffset);
-	EXPECT_EQ(matVecTPoly.matrix(), controlMatrix);
-	EXPECT_EQ(regular.matrix(), controlMatrix);
-	EXPECT_EQ(empty.matrix(), controlMatrix);	
-	EXPECT_EQ(matVecTPoly.vector(), offset);
-
-	//Vector constructor: Should work
-	vector_t<TypeParam> functioningOffset = 3*vector_t<TypeParam>::Ones(constraintSize);
-	TemplatePolyhedron<TypeParam> vecTPoly(functioningOffset);
-	EXPECT_EQ(vecTPoly.matrix(), matVecTPoly.matrix());
-	EXPECT_EQ(vecTPoly.vector(), functioningOffset);
+	EXPECT_EQ(matVecTPoly.matrix(), differentMatrix);
+	EXPECT_EQ(matVecTPoly.vector(), differentOffset);
+	EXPECT_EQ(regular.matrix(), controlMatrix);	
 
 	//Copy constructor
-	TemplatePolyhedron<TypeParam> copy(vecTPoly);
-	EXPECT_EQ(copy.matrix(), vecTPoly.matrix());
-	EXPECT_EQ(copy.vector(), vecTPoly.vector());
-
-	//Move constructor
-	TemplatePolyhedron<TypeParam> move(std::move(vecTPoly));
-	EXPECT_EQ(move.matrix(), vecTPoly.matrix());
-	EXPECT_EQ(move.vector(), vecTPoly.vector());
+	TemplatePolyhedron<TypeParam> copy(matVecTPoly);
+	EXPECT_EQ(copy.matrix(), matVecTPoly.matrix());
+	EXPECT_EQ(copy.vector(), matVecTPoly.vector());
+	EXPECT_EQ(copy.rGetMatrixPtr(), matVecTPoly.rGetMatrixPtr());
 
 	//Settings constructor
-	TemplatePolyhedronT<TypeParam,Converter<TypeParam>,TemplatePolyhedronDifferent> setting(vecTPoly);
-	EXPECT_EQ(setting.matrix(), vecTPoly.matrix());
-	EXPECT_EQ(setting.vector(), vecTPoly.vector());	
+	TemplatePolyhedronT<TypeParam,Converter<TypeParam>,TemplatePolyhedronDifferent> setting(matVecTPoly);
+	EXPECT_EQ(setting.matrix(), matVecTPoly.matrix());
+	EXPECT_EQ(setting.vector(), matVecTPoly.vector());
+	EXPECT_EQ(setting.rGetMatrixPtr(), matVecTPoly.rGetMatrixPtr());
 
-}
-
-TYPED_TEST(TemplatePolyhedronTest, Intersect){
+	//Move constructor
+	TemplatePolyhedron<TypeParam> move(std::move(matVecTPoly));
+	EXPECT_EQ(move.matrix(), differentMatrix);
+	EXPECT_EQ(move.vector(), differentOffset);
+	EXPECT_EQ(matVecTPoly.rGetMatrixPtr(), nullptr);
+	EXPECT_EQ(move.rGetMatrixPtr(), copy.rGetMatrixPtr());
+	EXPECT_EQ(move.rGetMatrixPtr(), setting.rGetMatrixPtr());
 
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Containment){
+
+}
+
+TYPED_TEST(TemplatePolyhedronTest, Intersect){
 
 }
 
