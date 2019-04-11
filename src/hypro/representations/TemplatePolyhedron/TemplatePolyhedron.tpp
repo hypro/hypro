@@ -151,13 +151,14 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersect( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
+		//TODO: Somehow check whether both polyhedra even intersect or not beforehand or after
 		vector_t<Number> res = mVector;
 		for(int i = 0; i < mMatrixPtr->rows(); ++i){
 			if(rhs.vector()(i) < res(i)){
 				res(i) = rhs.vector()(i);
-			}
+			} 
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
+		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -175,12 +176,19 @@ namespace hypro {
 		if(point.dimension() != mMatrixPtr->cols()){
 			throw std::invalid_argument("Template polyhedron cannot contain point of different dimension.");
 		}
-		if(vector_t<Number>((*mMatrixPtr)*(point.rawCoordinates())) <= mVector) return true;
+		std::cout << "matrix: \n" << *mMatrixPtr << "point: \n" << point << std::endl;
+		std::cout << "product: \n" << Point<Number>((*mMatrixPtr)*(point.rawCoordinates())) << "is smaller than mVector? \n" << mVector << std::endl;
+		if(Point<Number>((*mMatrixPtr)*(point.rawCoordinates())) <= Point<Number>(mVector)){
+			return true;
+		}
 		return false;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	bool TemplatePolyhedronT<Number,Converter,Setting>::contains( const TemplatePolyhedronT<Number,Converter,Setting>& templatePolyhedron ) const {
+		if(templatePolyhedron.dimension() != mMatrixPtr->cols()){
+			throw std::invalid_argument("Template polyhedron cannot contain another template polyhedron of different dimension.");
+		}
 		for(int i = 0; mVector.rows(); ++i){
 			if(mVector(i) < templatePolyhedron.vector()(i)) return false;
 		}

@@ -28,13 +28,13 @@ protected:
 
 		middleVec = 2*vector_t<Number>::Ones(4);
 		upleftVec = vector_t<Number>::Zero(4);
-		upleftVec << 3, -1, 3, -1;
+		upleftVec << -1, 3, -1, 3;
 		uprightVec = vector_t<Number>::Zero(4);
-		uprightVec << -1, 3, -1, 3;
+		uprightVec << 3, -1, 3, -1;
 		downleftVec = vector_t<Number>::Zero(4);
-		downleftVec << 3, -1, -1, 3;
+		downleftVec << -1, 3, 3, -1;
 		downrightVec = vector_t<Number>::Zero(4);
-		downrightVec << -1, 3, 3, -1;
+		downrightVec << 3, -1, -1, 3;
 
 		middle = TemplatePolyhedron<Number>(mat,middleVec);
 		upleft = TemplatePolyhedron<Number>(mat,upleftVec);
@@ -120,14 +120,69 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	EXPECT_EQ(matVecTPoly.rGetMatrixPtr(), nullptr);
 	EXPECT_EQ(move.rGetMatrixPtr(), copy.rGetMatrixPtr());
 	EXPECT_EQ(move.rGetMatrixPtr(), setting.rGetMatrixPtr());
-
 }
+
 
 TYPED_TEST(TemplatePolyhedronTest, Containment){
 
+	//Point of a different dimension - should fail
+	try {
+		Point<TypeParam> p0 = Point<TypeParam>::Zero(3);
+		this->middle.contains(p0);
+		FAIL();
+	}catch(std::invalid_argument& e){
+		//Is right if it fails, in that case continue
+	}
+	
+	//Point that lies within middle template poly
+	Point<TypeParam> p1 = Point<TypeParam>::Zero(2);
+	EXPECT_TRUE(this->middle.contains(p1));
+
+	//Point on the edge
+	Point<TypeParam> p2({TypeParam(0), TypeParam(2)});
+	EXPECT_TRUE(this->middle.contains(p2));	
+
+	//Point outside
+	Point<TypeParam> p3({TypeParam(1.7234), TypeParam(2.1)});
+	EXPECT_TRUE(!(this->middle.contains(p3)));	
+
+	//Template Poly in a different dimension - should fail
+	matrix_t<TypeParam> diffDimMat = matrix_t<TypeParam>::Identity(3,3);
+	vector_t<TypeParam> diffDimVec = vector_t<TypeParam>::Ones(3);
+	try {
+		TemplatePolyhedron<TypeParam> t1(diffDimMat, diffDimVec);
+		this->middle.contains(t1);
+		FAIL();
+	} catch(std::invalid_argument& e){
+		//Is right if it fails, in that case continue	
+	}
+
+	//Template poly that lies fully within middle 
+	vector_t<TypeParam> withinVec = vector_t<TypeParam>::Zero(2);
+	TemplatePolyhedron<TypeParam> t2(this->mat, withinVec);
+	EXPECT_TRUE(this->middle.contains(t2)); 
+
+	//Template poly that lies partially within middle
+	EXPECT_TRUE(this->middle.contains(this->upright)); //???
+
+	//Template poly that lies fully outside middle
+ 	vector_t<TypeParam> outsideVec = 100*vector_t<TypeParam>::Ones(2);
+ 	TemplatePolyhedron<TypeParam> t3(this->mat, outsideVec);
+ 	EXPECT_TRUE(!(this->middle.contains(t3)));
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Intersect){
+
+	//Wish result poly after intersection between middle and upright
+	vector_t<TypeParam> resVec = vector_t<TypeParam>::Zero(4);
+	resVec << 2,-1,2,-1;
+	TemplatePolyhedron<TypeParam> resMiddleUpright(this->mat, resVec);
+
+	//Intersect middle and upleft - Should result in resMiddleUpright
+	EXPECT_EQ(this->middle.intersect(this->upright), resMiddleUpright);
+
+	//Intersect upleft and upright - Should be empty
+	//EXPECT_EQ(this->upright.intersect(this->upleft), TemplatePolyhedron<TypeParam>());
 
 }
 

@@ -192,7 +192,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	template<class SettingRhs>
 	friend bool operator==( const TemplatePolyhedronT<Number,Converter,Setting>& b1, const TemplatePolyhedronT<Number,Converter,SettingRhs>& b2 ) {
-		return false;
+		return b1.matrix() == b2.matrix() && b1.vector() == b2.vector();
 	}
 
 	/**
