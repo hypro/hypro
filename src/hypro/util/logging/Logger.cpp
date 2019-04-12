@@ -9,6 +9,7 @@ namespace hypro {
 	    ("hypro", carl::logging::LogLevel::LVL_INFO)
 		("hypro.representations", carl::logging::LogLevel::LVL_INFO)
 		("hypro.representations.supportFunction", carl::logging::LogLevel::LVL_INFO)
+		("hypro.representations.HPolytope", carl::logging::LogLevel::LVL_TRACE)
 		("hypro.datastructures", carl::logging::LogLevel::LVL_DEBUG)
 		("hypro.reacher", carl::logging::LogLevel::LVL_TRACE)
 		("hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_TRACE)
