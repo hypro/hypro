@@ -19,38 +19,63 @@ void MReach::del_reach(int lhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 void MReach::new_reach(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MReach - new_reach: Expecting an output.");
-    if(nrhs < 5)
+    if(nrhs < 4)
         mexErrMsgTxt("MReach - new_reach: At least one input argument is missing.");
-    if(nrhs > 5)
+    if(nrhs > 4)
         mexWarnMsgTxt("MReach- new_reach: One or more arguments were ignored.");
 
     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-    double timeBound = (double) mxGetScalar(mxGetCell(prhs[3],0));
-    int jumpDepth = (int) mxGetScalar(mxGetCell(prhs[3],1));
-    double timeStep = (double) mxGetScalar(mxGetCell(prhs[3],2));
-    char file[64];
-    mxGetString(mxGetCell(prhs[3],3), file, sizeof(file));
-    std::string fileName = std::string(file);
-    unsigned long pplDenominator = (unsigned long) mxGetScalar(mxGetCell(prhs[3],4));
-    const mwSize* dims;
-    int dimx, dimy;
-    dims = mxGetDimensions(mxGetCell(prhs[3],5));
-    dimx = dims[0];
-    dimy = dims[1];
-    std::vector<std::vector<std::size_t>> plotDimensions = ObjectHandle::mVectorOfVectors2Hypro(mxGetCell(prhs[3],5), dimx, dimy);
-    int temp = (int) mxGetScalar(mxGetCell(prhs[3],6));
-    bool uniformBolating = false;
-    if (temp == 1)
-        uniformBolating = true;
 
+    
+    mwIndex idx = 1;
+    int ifield, nfields;
+    nfields = mxGetNumberOfFields(prhs[3]);
     hypro::ReachabilitySettings settings;
-    settings.timeBound = timeBound;
-    settings.jumpDepth = jumpDepth;
-    settings.timeStep = timeStep;
-    settings.fileName = fileName;
-    settings.pplDenomimator = pplDenominator;
-    settings.plotDimensions = plotDimensions;
-    settings.uniformBloating = uniformBolating;
+    for (ifield=0; ifield< nfields; ifield++){
+        mxArray* tmp = mxGetFieldByNumber(prhs[3], 0, ifield);
+        const char* fname = mxGetFieldNameByNumber(prhs[3], ifield);
+
+        if(!strcmp(fname, "timeBound")){
+            double timeBound = mxGetScalar(tmp);
+            settings.timeBound = timeBound;
+            mexPrintf("%s: %f\n", fname, timeBound);
+        }else if(!strcmp(fname, "jumpDepth")){
+            double jumpDepth = mxGetScalar(tmp);
+            settings.jumpDepth = jumpDepth;
+            mexPrintf("%s: %f\n", fname, jumpDepth);
+        }else if(!strcmp(fname, "timeStep")){
+            double timeStep = mxGetScalar(tmp);
+            settings.timeStep = timeStep;
+            mexPrintf("%s: %f\n", fname, timeStep);
+        }else if(!strcmp(fname, "fileName")){
+            char file[64];
+            mxGetString(tmp, file, sizeof(file));
+            std::string fileName = std::string(file);
+            settings.fileName = fileName;
+            mexPrintf("%s: %s\n", fname, fileName.c_str());
+        }else if(!strcmp(fname, "pplDenomimator")){
+            double pplDenomimator = mxGetScalar(tmp);
+            settings.pplDenomimator = pplDenomimator;
+            mexPrintf("%s: %f\n", fname, pplDenomimator);
+        }else if(!strcmp(fname, "plotDimensions")){
+            const mwSize* dims;
+            int dimx, dimy;
+            dims = mxGetDimensions(tmp);
+            dimx = dims[0];
+            dimy = dims[1];
+            std::vector<std::vector<std::size_t>> plotDimensions = ObjectHandle::mVectorOfVectors2Hypro(tmp, dimx, dimy);
+            settings.plotDimensions = plotDimensions;
+        }else if(!strcmp(fname, "uniformBloating")){
+            double uniformBloating = mxGetScalar(tmp);
+            bool uB = false;
+            if(uniformBloating == 1)
+                uB = true;
+            settings.uniformBloating = uB;
+            mexPrintf("%s: %f\n", fname, uniformBloating);
+        }else{
+            mexErrMsgTxt("MHyProReach - new_reach: Unknown setting field.");
+        }     
+    }
 
     Reacher* reacher = new Reacher(*autom, settings);
     plhs[0] = convertPtr2Mat<Reacher>(reacher);
@@ -73,4 +98,21 @@ void MReach::computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, con
 }
 
 void MReach::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    char cmd[64];
+    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
+        mexErrMsgTxt("MReach - First input should be a command string less than 64 characters long.");
+    
+    if (!strcmp("new_reach", cmd)){  
+        new_reach(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if (!strcmp("delete", cmd)){  
+        del_reach(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if (!strcmp("computeForwardReachability", cmd)){  
+        computeForwardReachability(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    mexErrMsgTxt("MReach - Command not recognized.");
 }

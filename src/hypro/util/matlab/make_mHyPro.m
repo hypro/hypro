@@ -49,7 +49,7 @@ else
 %         cxx_flag = 'CXXFLAGS=\$CXXFLAGS -std=c++17';
 %         
 %         %Save the found paths
-%         save 'matlabInput' mat_str;
+%         save 'matlcd nput' mat_str;
 %         save 'matlabInput' antl_str;
 %         save 'matlabInput' misc_str;
 %         save 'matlabInput' atn_str;
@@ -97,7 +97,7 @@ else
         %Save the found paths
             mex -setup c++;
             mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','GCC=/usr/local/bin/gcc','CXX=/usr/local/opt/llvm/bin/clang++','CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
-
+%             mex /reachability/@MHyProReach/MReach.cpp
 
         
         elseif isunix
@@ -167,9 +167,9 @@ else
 %         'CXXFLAGS=\$CXXFLAGS -std=c++17';};
 
     setenv LD_RUN_PATH /home/marta/hypro/build;
-%     setenv LD_LIBRARY_PATH /usr/lib/gcc/x86_64-linux-gnu/8/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH;
-%     setenv LD_LIBRARY_PATH /usr/local/MATLAB/R2018b/bin/glnxa64:/usr/local/MATLAB/R2018b/sys/os/glnxa64;
-%     setenv LD_PRELOAD /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+    setenv LD_LIBRARY_PATH /usr/lib/gcc/x86_64-linux-gnu/8/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH;
+    setenv LD_LIBRARY_PATH /usr/local/MATLAB/R2018b/bin/glnxa64:/usr/local/MATLAB/R2018b/sys/os/glnxa64;
+    setenv LD_PRELOAD /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
         
     ipaths = {'-I/Applications/MATLAB_R2018b.app/extern/include',...
         '-I/home/marta/hypro/build/resources/antlr_build/include/antlr4-runtime',...

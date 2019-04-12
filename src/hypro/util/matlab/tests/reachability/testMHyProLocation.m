@@ -74,12 +74,6 @@ assert(linFlow == flow);
 
 dim = loc3.dimension_at(1); % ---> ?
 
-less = (loc1 < loc2);
-assert(less == 1);
-
-less = (loc3 < loc4);
-% assert(less == 0); ---> ?
-
 equal = (loc1 == loc3);
 assert(equal == 0);
 loc5 = MHyProLocation(loc3);
