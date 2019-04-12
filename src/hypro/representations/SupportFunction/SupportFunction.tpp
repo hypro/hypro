@@ -435,6 +435,11 @@ namespace hypro{
     std::pair<CONTAINMENT, SupportFunctionT<Number,Converter,Setting>> SupportFunctionT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
 
+		// catch zero-constraints separately
+		if(rhs.normal() == vector_t<Number>::Zero(rhs.normal().rows())) {
+			return rhs.offset() <= 0 ? std::make_pair(CONTAINMENT::FULL, *this) : std::make_pair(CONTAINMENT::NO, *this);
+		}
+
 		bool limiting = false;
     	EvaluationResult<Number> planeEvalRes = content->evaluate(rhs.normal(), false);
     	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
