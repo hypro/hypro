@@ -29,6 +29,7 @@ classdef MHyProReach < handle
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
                     states = flowpipes(i).flowpipe;
+                    flowpipes(i).num
                     fPipe = cell(1,length(states));
                     for j = 1:length(states)
                         if isa(states{i}, 'uint64')
