@@ -35,15 +35,19 @@ classdef MHyProReach < handle
         end
         
         function out = computeForwardReachability(obj)
-            states = MHyPro('Reacher', 'computeForwardReachability', obj.Handle);
-            out = cell(1, length(states));
-                for i = 1:length(states)
-                    states(i).flowpipe
-%                     if isa(states{i}, 'uint64')
-% %                         out{i} = MHyProState(states(i));
-%                     else
-%                         error('MHyProReach - computeForwardReach: Wrong type of input argument.');
-%                     end
+            flowpipes = MHyPro('Reacher', 'computeForwardReachability', obj.Handle);
+            out = cell(1, length(flowpipes));
+                for i = 1:length(flowpipes)
+                    states = flowpipes(i).flowpipe;
+                    fPipe = cell(1,length(states));
+                    for j = 1:length(states)
+                        if isa(states{i}, 'uint64')
+                            fPipe{i} = MHyProState(states(i))
+                        else
+                            error('MHyProReach - computeForwardReach: Wrong type of input argument.');
+                        end
+                    end
+                    out{i} = fPipe;
                 end 
         end
         
