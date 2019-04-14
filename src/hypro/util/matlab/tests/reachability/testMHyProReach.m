@@ -49,9 +49,10 @@ automaton.addLocation(loc);
 
 % Reachability
 
-settings = struct('timeStep', 0.001, 'timeBound', 20, 'uniformBloating', 0);
+settings = struct('timeStep', 0.001, 'timeBound', 20);
 
 reach = MHyProReach(automaton, settings);
+flowpipes = reach.computeForwardReachability();
 
 
 

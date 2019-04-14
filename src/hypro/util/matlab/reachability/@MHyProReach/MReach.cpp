@@ -95,6 +95,14 @@ void MReach::computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, con
     Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
     std::vector<std::pair<unsigned, flowpipe>> flowpipes = reacher->computeForwardReachability();
 
+    int num_flowpipes = flowpipes.size();
+    mexPrintf("Number of flowpipes: %d\n", num_flowpipes);
+    mwSize dims[2] = {1, num_flowpipes};
+    const char *field_names[] = {"num", "flowpipe"};
+    plhs[0] = mxCreateStructArray(2, dims, 2, field_names);
+    ObjectHandle::flowpipes2Matlab(flowpipes, plhs[0], num_flowpipes);
+    
+
 }
 
 void MReach::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
