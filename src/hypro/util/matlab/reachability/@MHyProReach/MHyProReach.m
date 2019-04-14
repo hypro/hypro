@@ -17,18 +17,8 @@ classdef MHyProReach < handle
         
         % Constructor
         function obj = MHyProReach(varargin)
-            if nargin == 2 && isa(varargin{1}, 'MHyProHAutomaton') && isstruct(varargin{2})
-                fields = fieldnames(varargin{2});         
-                for i = 1:length(fields)
-                    currentField = fields{i};
-                    if ~strcmp(currentField, 'timeBound') && ~strcmp(currentField, 'jumpDepth')...
-                            && ~strcmp(currentField, 'timeStep') && ~strcmp(currentField, 'plotDimensions')...
-                            && ~strcmp(currentField, 'pplDenomimator') && ~strcmp(currentField, 'uniformBloating')...
-                            && ~strcmp(currentField, 'fileName')
-                        error(['MHyProReach - Constructor: Unknown field name ', currentField]);
-                    end
-                end
-                obj.Handle = MHyPro('Reacher', 'new_reach', varargin{1}.Handle, varargin{2});
+            if nargin == 1 && isa(varargin{1}, 'MHyProHAutomaton')
+                obj.Handle = MHyPro('Reacher', 'new_reach', varargin{1}.Handle);
             else
                 error('MHyProReach - Constructor: Wrong type of at least one argument.');
             end
@@ -49,6 +39,33 @@ classdef MHyProReach < handle
                     end
                     out{i} = fPipe;
                 end 
+        end
+        
+        function setSettings(obj, settings)
+            if isstruct(settings)
+                fields = fieldnames(settings);         
+                for i = 1:length(fields)
+                    currentField = fields{i};
+                    if ~strcmp(currentField, 'timeBound') && ~strcmp(currentField, 'jumpDepth')...
+                            && ~strcmp(currentField, 'timeStep') && ~strcmp(currentField, 'plotDimensions')...
+                            && ~strcmp(currentField, 'pplDenomimator') && ~strcmp(currentField, 'uniformBloating')...
+                            && ~strcmp(currentField, 'fileName')
+                        error(['MHyProReach - setSettings: Unknown field name ', currentField]);
+                    end
+                end
+                MHyPro('Reacher', 'setSettings', obj.Handle, settings);
+            else
+                error('MHyProReach - setSettings: Wrong type of at least one argument.');
+            end       
+        end
+        
+        function setRepresentationType(obj, type)
+            % MHyProBox=0, MHyProConstraintSet = 1, MHyProSupportFunction = 2
+            if type == 0 || type == 1 || type == 2
+                MHyPro('Reacher', 'setRepresentationType', obj.Handle, type);
+            else
+                error('MHyProReach - setRepresentationType: Wrong type of at least one argument.');
+            end
         end
         
     end

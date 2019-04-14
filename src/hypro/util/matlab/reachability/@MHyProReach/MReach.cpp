@@ -19,21 +19,72 @@ void MReach::del_reach(int lhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 void MReach::new_reach(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MReach - new_reach: Expecting an output.");
-    if(nrhs < 4)
+    if(nrhs < 3)
         mexErrMsgTxt("MReach - new_reach: At least one input argument is missing.");
-    if(nrhs > 4)
+    if(nrhs > 3)
         mexWarnMsgTxt("MReach- new_reach: One or more arguments were ignored.");
 
     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    Reacher* reacher = new Reacher(*autom);
+    plhs[0] = convertPtr2Mat<Reacher>(reacher);
+}
 
+/*
+* @brief
+*/
+void MReach::computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MReach - computeForwardReachability: Expecting an output.");
+    if(nrhs < 3)
+        mexErrMsgTxt("MReach - computeForwardReachability: At least one input argument is missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MReach- computeForwardReachability: One or more arguments were ignored.");
+
+    Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
+    std::vector<std::pair<unsigned, flowpipe>> flowpipes = reacher->computeForwardReachability();
+
+    int num_flowpipes = flowpipes.size();
+    mexPrintf("Number of flowpipes: %d\n", num_flowpipes);
+    mwSize dims[2] = {1, num_flowpipes};
+    const char *field_names[] = {"num", "flowpipe"};
+    plhs[0] = mxCreateStructArray(2, dims, 2, field_names);
+    ObjectHandle::flowpipes2Matlab(flowpipes, plhs[0], num_flowpipes);
     
+}
+
+void MReach::setRepresentationType(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nrhs < 4)
+        mexErrMsgTxt("MReach - setRepresentationType: At least one input argument is missing.");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MReach- setRepresentationType: One or more arguments were ignored.");
+
+    Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
+    int type = mxGetScalar(prhs[3]);
+    //box=0, constraint_set = 1, support_function = 2
+    if(type == 0)
+        reacher->setRepresentationType(hypro::representation_name::box);
+    else if(type == 1)
+        reacher->setRepresentationType(hypro::representation_name::constraint_set);
+    else if (type == 2)
+        reacher->setRepresentationType(hypro::representation_name::support_function);
+    else
+        mexErrMsgTxt("MReach - setRepresentationType: unknown type.");
+}
+
+void MReach::setSettings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nrhs < 4)
+        mexErrMsgTxt("MReach - setSettings: At least one input argument is missing.");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MReach- setSettings: One or more arguments were ignored.");
+
+    Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
     mwIndex idx = 1;
     int ifield, nfields;
-    nfields = mxGetNumberOfFields(prhs[3]);
+    nfields = mxGetNumberOfFields(prhs[2]);
     hypro::ReachabilitySettings settings;
     for (ifield=0; ifield< nfields; ifield++){
-        mxArray* tmp = mxGetFieldByNumber(prhs[3], 0, ifield);
-        const char* fname = mxGetFieldNameByNumber(prhs[3], ifield);
+        mxArray* tmp = mxGetFieldByNumber(prhs[2], 0, ifield);
+        const char* fname = mxGetFieldNameByNumber(prhs[2], ifield);
 
         if(!strcmp(fname, "timeBound")){
             double timeBound = mxGetScalar(tmp);
@@ -73,37 +124,12 @@ void MReach::new_reach(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
             settings.uniformBloating = uB;
             mexPrintf("%s: %f\n", fname, uniformBloating);
         }else{
-            mexErrMsgTxt("MHyProReach - new_reach: Unknown setting field.");
+            mexErrMsgTxt("MHyProReach - setSettings: Unknown setting field.");
         }     
     }
-
-    Reacher* reacher = new Reacher(*autom, settings);
-    plhs[0] = convertPtr2Mat<Reacher>(reacher);
+    reacher->setSettings(settings);
 }
 
-/*
-* @brief
-*/
-void MReach::computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MReach - computeForwardReachability: Expecting an output.");
-    if(nrhs < 3)
-        mexErrMsgTxt("MReach - computeForwardReachability: At least one input argument is missing.");
-    if(nrhs > 3)
-        mexWarnMsgTxt("MReach- computeForwardReachability: One or more arguments were ignored.");
-
-    Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
-    std::vector<std::pair<unsigned, flowpipe>> flowpipes = reacher->computeForwardReachability();
-
-    int num_flowpipes = flowpipes.size();
-    mexPrintf("Number of flowpipes: %d\n", num_flowpipes);
-    mwSize dims[2] = {1, num_flowpipes};
-    const char *field_names[] = {"num", "flowpipe"};
-    plhs[0] = mxCreateStructArray(2, dims, 2, field_names);
-    ObjectHandle::flowpipes2Matlab(flowpipes, plhs[0], num_flowpipes);
-    
-
-}
 
 void MReach::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     char cmd[64];
@@ -116,6 +142,14 @@ void MReach::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
     }
     if (!strcmp("delete", cmd)){  
         del_reach(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if (!strcmp("setSettings", cmd)){  
+        setSettings(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if (!strcmp("setRepresentationType", cmd)){  
+        setRepresentationType(nlhs, plhs, nrhs, prhs);
         return;
     }
     if (!strcmp("computeForwardReachability", cmd)){  

@@ -15,5 +15,7 @@ class MReach{
         static void del_reach(int lhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void new_reach(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
+        static void setSettings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
+        static void setRepresentationType(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
 };
