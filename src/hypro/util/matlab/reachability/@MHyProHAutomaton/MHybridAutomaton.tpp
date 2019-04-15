@@ -118,11 +118,18 @@
             mexWarnMsgTxt("MHybridAutomaton - getLocations: One or more arguments were ignored.");
 
         hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-        std::vector<hypro::Location<double>*> locs = autom->getLocations();
-        int len = locs.size();
-        const mwSize dims[2] = {1, (mwSize) len};
+        std::vector<hypro::Location<double>*> temp = autom->getLocations();
+        std::vector<hypro::Location<double>> locations;
+
+        for(const auto &elem : temp){
+            locations.emplace_back(*elem);
+        }
+
+        mxArray* m_array_out;
+        int len = temp.size();
+        const mwSize dims[2] = {1,(mwSize) len};
         plhs[0]  = mxCreateCellArray(2,dims);
-        objArray2Matlab(locs, plhs[0], len);
+        objArray2Matlab(locations, plhs[0], len);
     }
 
     /**

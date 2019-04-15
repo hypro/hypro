@@ -54,6 +54,9 @@ reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
 
+loc = automaton.getLocations()
+loc{1}.getTransitions()
+
 flowpipes = reach.computeForwardReachability();
 
 

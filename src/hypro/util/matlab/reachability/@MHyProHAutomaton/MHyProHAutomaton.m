@@ -42,15 +42,22 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = getLocations(obj)
-            loc_handle = MHyPro('HybridAutomaton', 'getLocations', obj.Handle);
-            out = 0;
-            %TODO
+            locations = MHyPro('HybridAutomaton', 'getLocations', obj.Handle);
+            len = length(locations);
+            out = cell(1,len);
+            for i = 1:length(len)
+                out{i} = MHyProLocation(locations{i});
+            end
         end
         
         function out = getLocations_by_hash(obj, hash)
             if isreal(hash)
-                loc_handle = MHyPro('HybridAutomaton', 'getLocation_by_hash', obj.Handle, hash);
-                %TODO
+                locations = MHyPro('HybridAutomaton', 'getLocation_by_hash', obj.Handle, hash);
+                len = length(locations);
+                out = cell(1,len);
+                for i = 1:length(len)
+                    out{i} = MHyProLocation(locations{i});
+                end
             else
                 error('MHyProHAutomaton - getLocations_by_hash: Wrong type of argument.');
         
@@ -59,31 +66,54 @@ classdef MHyProHAutomaton < handle
         
         function out = getLocations_by_name(obj, name)
             if isstring(name)
-                loc_handle = MHyPro('HybridAutomaton', 'getLocations_by_name', obj.Handle, name);
-                %TODO
+                locations = MHyPro('HybridAutomaton', 'getLocations_by_name', obj.Handle, name);
+                len = length(locations);
+                out = cell(1,len);
+                for i = 1:length(len)
+                    out{i} = MHyProLocation(locations{i});
+                end
             else
                 error('MHyProHAutomaton - getLocations_by_name: Wrong type of argument.');
             end
         end
         
         function out = getTransitions(obj)
-            tran_handle = MHyPro('HybridAutomaton', 'getTransitions', obj.Handle);
-            %TODO
+            transitions = MHyPro('HybridAutomaton', 'getTransitions', obj.Handle);
+            len = length(transitions);
+            out = cell(1,len);
+            for i = 1:length(len)
+                out{i} = MHyProTransition(transitions{i});
+            end
         end
         
         function out = getInitialStates(obj)
-            handle = MHyPro('HybridAutomaton', 'getInitialStates', obj.Handle);
-            %TODO
+            mapping = MHyPro('HybridAutomaton', 'getInitialStates', obj.Handle);
+            len = length(mapping);
+            out = cell(1,len);
+            for i = 1:length(len)
+                out{i}.location = MHyProLocation(mapping{i}.location);
+                out{i}.condition = MHyProCondition(mapping{i}.condition);
+            end
         end
         
         function out = getLocalBadStates(obj)
-            handle = MHyPro('HybridAutomaton', 'getLocalBadStates', obj.Handle);
-            %TODO
+            mapping = MHyPro('HybridAutomaton', 'getLocalBadStates', obj.Handle);
+            len = length(mapping);
+            out = cell(1,len);
+            for i = 1:length(len)
+                out{i}.location = MHyProLocation(mapping{i}.location);
+                out{i}.condition = MHyProCondition(mapping{i}.condition);
+            end
         end
         
         function out = getGlobalBadStates(obj)
-            handle = MHyPro('HybridAutomaton', 'getGlobalBadStates', obj.Handle);
-            %TODO
+            mapping = MHyPro('HybridAutomaton', 'getGlobalBadStates', obj.Handle);
+            len = length(mapping);
+            out = cell(1,len);
+            for i = 1:length(len)
+                out{i}.location = MHyProLocation(mapping{i}.location);
+                out{i}.condition = MHyProCondition(mapping{i}.condition);
+            end
         end
         
         function out = getVariables(obj)
@@ -91,19 +121,33 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = getLables(obj)
-            handle = MHyPro('HybridAutomaton', 'getLabels', obj.Handle);
-            %TODO
+            labels = MHyPro('HybridAutomaton', 'getLabels', obj.Handle);
+            len = length(labels);
+            out = cell(1,len);
+            for i = 1:length(len)
+                out{i} = MHyProLocation(labels{i});
+            end
         end
         
         function setLocations(obj, locs)
             if iscell(locs) && isa(locs{0}, 'MHyProLocation')
-                MHyPro('HybridAutomaton', 'setLocations', obj.Handle, locs);
-                %TODO
+                len = lengt(locs);
+                loc_handles = cell(1,len);
+                for i = 1:len
+                    loc_handles{i} = locs{i}.Handle;
+                end
+                MHyPro('HybridAutomaton', 'setLocations', obj.Handle, loc_handles);
             end
         end
         
         function setInitialStates(obj, mapping)
-            MHyPro('HybridAutomaton', 'setInitialStates', obj.Handle, mapping);
+            len = length(mapping);
+            mapping_handles = cell(1,len);
+            for i = 1:len
+                mapping_handles{i}.location = mapping{i}.location.Handle;
+                mapping_handles{i}.condition = mapping{i}.condition.Handle;
+            end
+            MHyPro('HybridAutomaton', 'setInitialStates', obj.Handle, mapping_handles);
         end
         
         function setLocalBadStates(obj, mapping)
