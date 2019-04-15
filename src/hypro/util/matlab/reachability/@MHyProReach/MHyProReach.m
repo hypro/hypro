@@ -33,7 +33,7 @@ classdef MHyProReach < handle
                     fPipe = cell(1,length(states));
                     for j = 1:length(states)
                         if isa(states{i}, 'uint64')
-                            fPipe{i} = MHyProState(states(i))
+                            fPipe{i} = MHyProState(states(i));
                         else
                             error('MHyProReach - computeForwardReach: Wrong type of input argument.');
                         end

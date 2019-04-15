@@ -37,6 +37,7 @@ tran.setGuard(guard);
 tran.setSource(loc);
 tran.setTarget(loc);
 tran.setReset(reset);
+tran.setLabels({MHyProLabel('t1')});
 loc.addTransition(tran);
 
 % Create initial set
@@ -54,10 +55,21 @@ reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
 
-loc = automaton.getLocations()
-loc{1}.getTransitions()
+loc = automaton.getLocations();
+tran = loc{1}.getTransitions();
+for i = 1:length(tran)
+    labs = tran{i}.getLabels();
+    name = labs{1}.getName();
+    assert(isequal(name, 't1'));
+end
 
 flowpipes = reach.computeForwardReachability();
+
+num_flowpipes = length(flowpipes);
+for pipe = 1:num_flowpipes
+    currentStates =  flowpipes{pipe}
+    num_states = length(currentStates);
+end
 
 
 
