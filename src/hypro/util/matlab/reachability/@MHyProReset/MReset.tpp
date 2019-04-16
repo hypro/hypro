@@ -115,7 +115,7 @@ void MReset::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
     std::size_t pos = mxGetScalar( prhs[3] );
 	hypro::vector_t<double> vec = res->getVector(pos);
 	plhs[0] = mxCreateDoubleMatrix( vec.rows(), 1, mxREAL );
-	ObjectHandle::convert2Matlab( vec, plhs[0], 1, vec.rows() );
+	ObjectHandle::convert2Matlab( vec, plhs[0], vec.rows(), 1 );
 }
 
 /**
@@ -130,7 +130,7 @@ void MReset::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
     std::size_t pos = mxGetScalar( prhs[3] );
 	hypro::matrix_t<double> mat = cond->getMatrix(pos);
 	plhs[0] = mxCreateDoubleMatrix( mat.rows(), mat.cols(), mxREAL );
-	ObjectHandle::convert2Matlab( mat, plhs[0], mat.cols(), mat.rows() );
+	ObjectHandle::convert2Matlab( mat, plhs[0], mat.rows(), mat.cols() );
 }
 
 /**

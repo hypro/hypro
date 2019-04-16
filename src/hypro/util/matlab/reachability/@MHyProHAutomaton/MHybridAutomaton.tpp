@@ -199,8 +199,11 @@
 
         hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
         const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = autom->getInitialStates();
-
-        ObjectHandle::convert2Matlab(mapping, plhs[0], mapping.size());
+        int len = mapping.size();
+        mwSize dims[2] = {1, (mwSize) len};
+        const char *fieldnames[] = {"location", "condition"};
+        plhs[0] = mxCreateStructArray(2, dims, 2, fieldnames);        
+        ObjectHandle::convert2Matlab(mapping, plhs[0]);
     }
 
     /**
@@ -217,7 +220,7 @@
         hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
         const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = autom->getLocalBadStates();
 
-        ObjectHandle::convert2Matlab(mapping, plhs[0], mapping.size());
+        ObjectHandle::convert2Matlab(mapping, plhs[0]);
     }
 
     /**
@@ -321,42 +324,42 @@
     /**
      * @brief
      **/    
-    // void MHybridAutomaton::setInitialStates(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //     if(nrhs < 5)
-    //         mexErrMsgTxt("MHybridAutomaton - setInitialStates: One or more arguments are missing.");
-    //     if(nrhs > 5)
-    //         mexWarnMsgTxt("MHybridAutomaton - setInitialStates: One or more arguments were ignored.");
+    void MHybridAutomaton::setInitialStates(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+        if(nrhs < 5)
+            mexErrMsgTxt("MHybridAutomaton - setInitialStates: One or more arguments are missing.");
+        if(nrhs > 5)
+            mexWarnMsgTxt("MHybridAutomaton - setInitialStates: One or more arguments were ignored.");
 
-    //     const mwSize *dims;
-    //     int len;
-    //     dims = mxGetDimensions(prhs[3]);
-    //     len = (int) dims[0];
+        const mwSize *dims;
+        int len;
+        dims = mxGetDimensions(prhs[3]);
+        len = (int) dims[0];
+
+        // std::map<const Location<Number>*, Condition<Number>>;
+        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+        std::vector<hypro::Location<double>> locations = objArray2Hypro<hypro::Location<double>>(prhs[3], len);
+        std::vector<hypro::Condition<double>> conditions = objArray2Hypro<hypro::Condition<double>>(prhs[4], len);
+        std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
 
 
-    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-    //     std::vector<hypro::Location<double>> locations = ObjectHandle::objArray2Hypro<hypro::Location<double>>(prhs[3], len);
-    //     std::vector<hypro::Condition<double>> conditions = ObjectHandle::objArray2Hypro<hypro::Condition<double>>(prhs[4], len);
-    //     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
-
-
-    //     // TODO
+        // TODO
         
-    //     // autom->setInitialStates(mapping);
-    // }
+        // autom->setInitialStates(mapping);
+    }
 
     /**
      * @brief
      **/    
-    // void MHybridAutomaton::setLocalBadStates(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //     if(nrhs < 4)
-    //         mexErrMsgTxt("MHybridAutomaton - setLocalBadStates: One or more arguments are missing.");
-    //     if(nrhs > 4)
-    //         mexWarnMsgTxt("MHybridAutomaton - setLocalBadStates: One or more arguments were ignored.");
+    void MHybridAutomaton::setLocalBadStates(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+        if(nrhs < 4)
+            mexErrMsgTxt("MHybridAutomaton - setLocalBadStates: One or more arguments are missing.");
+        if(nrhs > 4)
+            mexWarnMsgTxt("MHybridAutomaton - setLocalBadStates: One or more arguments were ignored.");
 
-    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-    //     const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
-    //     autom->setLocalBadStates(mapping);
-    // }
+        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+        const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+        autom->setLocalBadStates(mapping);
+    }
 
     /**
      * @brief
@@ -717,14 +720,14 @@
         //     setTransitions(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
-        // if (!strcmp("setInitialStates", cmd)){  
-        //     setInitialStates(nlhs, plhs, nrhs, prhs);
-        //     return;
-        // }
-        // if (!strcmp("setLocalBadStates", cmd)){  
-        //     setLocalBadStates(nlhs, plhs, nrhs, prhs);
-        //     return;
-        // }
+        if (!strcmp("setInitialStates", cmd)){  
+            setInitialStates(nlhs, plhs, nrhs, prhs);
+            return;
+        }
+        if (!strcmp("setLocalBadStates", cmd)){  
+            setLocalBadStates(nlhs, plhs, nrhs, prhs);
+            return;
+        }
         if (!strcmp("setGlobalBadStates", cmd)){  
             setGlobalBadStates(nlhs, plhs, nrhs, prhs);
             return;

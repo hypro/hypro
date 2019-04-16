@@ -29,7 +29,6 @@ classdef MHyProReach < handle
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
                     states = flowpipes(i).flowpipe;
-                    flowpipes(i).num
                     fPipe = cell(1,length(states));
                     for j = 1:length(states)
                         if isa(states{i}, 'uint64')
@@ -67,6 +66,10 @@ classdef MHyProReach < handle
             else
                 error('MHyProReach - setRepresentationType: Wrong type of at least one argument.');
             end
+        end
+        
+        function settings(obj)
+            MHyPro('Reacher', 'settings', obj.Handle);
         end
         
     end

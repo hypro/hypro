@@ -54,7 +54,7 @@ class ObjectHandle{
         static void convert2Matlab(const hypro::SOLUTION&, std::string&);
         static void convert2Matlab(const hypro::representation_name&, std::string&);
         static void convert2Matlab(const std::vector<std::string>&, mxArray* , const mwSize*);
-        static void convert2Matlab(const std::map<const hypro::Location<double>*, hypro::Condition<double>>&, mxArray*, const std::size_t);
+        static void convert2Matlab(const std::map<const hypro::Location<double>*, hypro::Condition<double>>&, mxArray*);
         static void convert2Matlab(const std::vector<hypro::Point<double>>&, mxArray*);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
@@ -168,9 +168,9 @@ void ObjectHandle::flowpipes2Matlab(const std::vector<std::pair<unsigned, Object
         const mwSize dims[2] = {1, (mwSize) len};
         mxArray* states = mxCreateCellArray(2,dims);
         //  ObjectHandle::objArray2Matlab(f, states, len);?
-        for(int i = 0; i < len; i++){
-            auto item = f[i];
-            mxSetCell(states, i, convertPtr2Mat<hypro::State_t<double>>(new hypro::State_t<double>(item)));
+        for(int j = 0; j < len; j++){
+            auto item = f[j];
+            mxSetCell(states, j, convertPtr2Mat<hypro::State_t<double>>(new hypro::State_t<double>(item)));
         }
         mxSetFieldByNumber(m_out, i, 0, num);
         mxSetFieldByNumber(m_out, i, 1, states);
@@ -181,15 +181,9 @@ void ObjectHandle::flowpipes2Matlab(const std::vector<std::pair<unsigned, Object
 /**
 * @brief This function converts a location-condition map into an MATLAB array strucure.
 **/
-void ObjectHandle::convert2Matlab(const std::map<const hypro::Location<double>*, hypro::Condition<double>>& locConmap, mxArray* m_array, const std::size_t len){
-    const char *fieldnames[] = {"location", "condition"};
-    mwSize dims[2] = {1, len};
+void ObjectHandle::convert2Matlab(const std::map<const hypro::Location<double>*, hypro::Condition<double>>& locConmap, mxArray* m_array){
 
-    double *ptr;
     int i = 0;
-
-    m_array = mxCreateStructArray(2, dims, len, fieldnames);
-     
     for(auto& entry: locConmap){
         mxArray* loc = convertPtr2Mat<hypro::Location<double>>(new hypro::Location<double>(*(entry.first)));
         mxArray* cond = convertPtr2Mat<hypro::Condition<double>>(new hypro::Condition<double>(entry.second));
@@ -440,7 +434,7 @@ hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, con
 hypro::vector_t<double> ObjectHandle::mVector2Hypro(const mxArray* m_vector, const int v_len){
     double* vector = mxGetPr(m_vector);
     hypro::vector_t<double> *hypro_vector = new hypro::vector_t<double>(v_len);
-    for(int i = 0; i < v_len; i++){
+    for(int i = 0; i < v_len; i++){  
         (*hypro_vector)(i) = vector[i];
     }
     return *hypro_vector;
@@ -563,7 +557,6 @@ hypro::representation_name ObjectHandle::mRepresentationName2Hypro(char* name){
  * @brief Converts a Matlab struct conating mapping between locations
  * and conditions to Hypro.
  **/
-
 // std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray* structArray, const int len){
 //     double* structArrayPtr = mxGetPr(structArray);
 //     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
@@ -634,21 +627,21 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro(const mxArray* string
 /**
 * @brief
 **/
-// std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
-//     double* structPtr = mxGetPr(structArray);
-//     const mwSize* dims = mxGetDimensions(structArray);
-//     int dimy = dims[0];
-//     int dimx = dims[1];
+std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
+    double* structPtr = mxGetPr(structArray);
+    const mwSize* dims = mxGetDimensions(structArray);
+    int dimy = dims[0];
+    int dimx = dims[1];
 
-//     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
+    std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
 
-//     for(int i = 0; i < dimy; i++){
-//         hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
-//         hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
-//         mapping[loc] = *cond;
-//     } 
+    for(int i = 0; i < dimy; i++){
+        hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
+        hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
+        mapping[loc] = *cond;
+    } 
 
-// }
+}
 
 /**
  * @brief

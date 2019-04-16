@@ -87,12 +87,12 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = getInitialStates(obj)
-            mapping = MHyPro('HybridAutomaton', 'getInitialStates', obj.Handle);
+           mapping = MHyPro('HybridAutomaton', 'getInitialStates', obj.Handle);
             len = length(mapping);
             out = cell(1,len);
             for i = 1:length(len)
-                out{i}.location = MHyProLocation(mapping{i}.location);
-                out{i}.condition = MHyProCondition(mapping{i}.condition);
+                out{i}.location = MHyProLocation(mapping(i).location);
+                out{i}.condition = MHyProCondition(mapping(i).condition);
             end
         end
         

@@ -70,9 +70,8 @@ classdef MHyProTransition < handle
             out = MHyProReset(ptr);
         end
         
-        function out = getAggregation(obj)
-            %TODO
-            out = MHyPro('Transition', 'getAggregation', obj.Handle);
+        function getAggregation(obj)
+            MHyPro('Transition', 'getAggregation', obj.Handle);
         end
         
         function out = getTriggerTime(obj)
@@ -137,11 +136,11 @@ classdef MHyProTransition < handle
         end
         
         function setAggregation(obj, agg)
-           if agg == '0'
+           if agg == 0
                 MHyPro('Transition', 'setAggregation', obj.Handle, 0);
-           elseif isequal(agg,'boxAgg')
+           elseif agg == 1
                 MHyPro('Transition', 'setAggregation', obj.Handle, 1);
-           elseif isequal(agg,'parallelotopeAgg')
+           elseif agg == 2
                 MHyPro('Transition', 'setAggregation', obj.Handle, 2);
            else
                 error("MHyProTransition - setAggregation: Wrong type of at leat one argument.");

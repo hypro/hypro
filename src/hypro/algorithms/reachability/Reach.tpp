@@ -134,6 +134,7 @@ namespace reachability {
 			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
 				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
 				noFlow = true;
+				std::cout << "NO FLOW" << std::endl;
 				// Collect potential new initial states from discrete behaviour.
 				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
 					INFO("hypro.reacher", "-- Checking Transitions from initial!");
@@ -149,7 +150,7 @@ namespace reachability {
 				currentSegment = boost::get<1>(initialSetup);
 			}
 			flowpipe.push_back( currentSegment );
-
+			std::cout << "PUSHED" << std::endl;
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(currentSegment)){
 				// clear queue to stop whole algorithm

@@ -44,7 +44,10 @@ void MReach::computeForwardReachability(int nlhs, mxArray* plhs[], int nrhs, con
     std::vector<std::pair<unsigned, flowpipe>> flowpipes = reacher->computeForwardReachability();
 
     int num_flowpipes = flowpipes.size();
+    mexPrintf("\n");
     mexPrintf("Number of flowpipes: %d\n", num_flowpipes);
+    std::vector<hypro::State_t<double>> f = flowpipes[0].second;
+    mexPrintf("Number of states in f1: %d\n", f.size());
     mwSize dims[2] = {1, num_flowpipes};
     const char *field_names[] = {"num", "flowpipe"};
     plhs[0] = mxCreateStructArray(2, dims, 2, field_names);
@@ -80,15 +83,14 @@ void MReach::setSettings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
     mwIndex idx = 1;
     int ifield, nfields;
-    nfields = mxGetNumberOfFields(prhs[2]);
+    nfields = mxGetNumberOfFields(prhs[3]);
     hypro::ReachabilitySettings settings;
     for (ifield=0; ifield< nfields; ifield++){
-        mxArray* tmp = mxGetFieldByNumber(prhs[2], 0, ifield);
-        const char* fname = mxGetFieldNameByNumber(prhs[2], ifield);
-
+        mxArray* tmp = mxGetFieldByNumber(prhs[3], 0, ifield);
+        const char* fname = mxGetFieldNameByNumber(prhs[3], ifield);
         if(!strcmp(fname, "timeBound")){
             double timeBound = mxGetScalar(tmp);
-            settings.timeBound = timeBound;
+            settings.timeBound = hypro::tNumber(timeBound);
             mexPrintf("%s: %f\n", fname, timeBound);
         }else if(!strcmp(fname, "jumpDepth")){
             double jumpDepth = mxGetScalar(tmp);
@@ -96,7 +98,7 @@ void MReach::setSettings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
             mexPrintf("%s: %f\n", fname, jumpDepth);
         }else if(!strcmp(fname, "timeStep")){
             double timeStep = mxGetScalar(tmp);
-            settings.timeStep = timeStep;
+            settings.timeStep = carl::convert<double, hypro::tNumber>(timeStep);
             mexPrintf("%s: %f\n", fname, timeStep);
         }else if(!strcmp(fname, "fileName")){
             char file[64];
@@ -130,6 +132,66 @@ void MReach::setSettings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     reacher->setSettings(settings);
 }
 
+void MReach::settings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nrhs < 3)
+        mexErrMsgTxt("MReach - setSettings: At least one input argument is missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MReach- setSettings: One or more arguments were ignored.");
+
+    Reacher* reacher = convertMat2Ptr<Reacher>(prhs[2]);
+    const hypro::ReachabilitySettings currSettings = reacher->settings();
+
+    double tB = carl::convert<hypro::tNumber, double>(currSettings.timeBound);
+    int jD = currSettings.jumpDepth;
+    double tS = carl::convert<hypro::tNumber, double>(currSettings.timeStep);
+    std::string fN = currSettings.fileName;
+    unsigned long pplD = currSettings.pplDenomimator;
+    std::vector<std::vector<std::size_t>> dim = currSettings.plotDimensions;
+    bool uB = currSettings.uniformBloating;
+    int cl = currSettings.clustering;
+    bool uITI = currSettings.useInvariantTimingInformation;
+    bool uGTI = currSettings.useGuardTimingInformation;
+    bool uBSTI = currSettings.useBadStateTimingInformation;
+
+    mexPrintf("Settings:\n");
+    mexPrintf("timeBound: %f\n", tB);
+    mexPrintf("jumpDepth: %d\n", jD);
+    mexPrintf("timeStep: %f\n", tS);
+    mexPrintf("fileName: %s\n", fN.c_str());
+    mexPrintf("pplDenomimator: %d\n", pplD);
+    mexPrintf("dims:\n");
+    for(int i = 0; i < dim.size(); i++){
+        std::vector<std::size_t> current = dim[i];
+        mexPrintf("[");
+        for(int j = 0; j < dim[0].size(); j++){
+            mexPrintf("%d ", current[j]);
+        }
+        mexPrintf("]\n");
+    }
+    if(uB){
+        mexPrintf("uniformBloating: true\n");
+    }else{
+        mexPrintf("uniformBloating: false\n");
+    }
+    mexPrintf("clustering: %d\n", cl);
+    if(uITI){
+        mexPrintf("useInvariantTimingInformation: true\n");
+    }else{
+        mexPrintf("useInvariantTimingInformation: false\n");
+    }
+    if(uGTI){
+        mexPrintf("useGuardTimingInformation: true\n");
+    }else{
+        mexPrintf("useGuardTimingInformation: false\n");
+    }
+    if(uBSTI){
+        mexPrintf("useBadStateTimingInformation: true\n");
+    }else{
+        mexPrintf("useBadStateTimingInformation: false\n");
+    }
+
+}
+
 
 void MReach::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     char cmd[64];
@@ -150,6 +212,10 @@ void MReach::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])
     }
     if (!strcmp("setRepresentationType", cmd)){  
         setRepresentationType(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    if (!strcmp("settings", cmd)){  
+        settings(nlhs, plhs, nrhs, prhs);
         return;
     }
     if (!strcmp("computeForwardReachability", cmd)){  

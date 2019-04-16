@@ -144,7 +144,21 @@ void MTransition::getReset(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 * @brief
 **/
 void MTransition::getAggregation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO
+    if(nrhs < 3)
+        mexErrMsgTxt("MTransition - getAggregation: One or more arguments are missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MTransition - getAggregation: One or more arguments were ignored.");
+
+    hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    hypro::Aggregation agg =  tran->getAggregation();
+
+    if(agg == hypro::Aggregation::none){
+        mexPrintf("none\n");
+    }else if(agg == hypro::Aggregation::boxAgg){
+        mexPrintf("boxAgg\n");
+    }else{
+        mexPrintf("parallelotopeAgg\n");
+    }
 }
 
 /**
@@ -313,6 +327,7 @@ void MTransition::setAggregation(int nlhs, mxArray* plhs[], int nrhs, const mxAr
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
     const int agg = (int) mxGetScalar(prhs[3]);
+
     if(agg == 0){
         tran->setAggregation(hypro::Aggregation::none);
     }else if(agg == 1){
