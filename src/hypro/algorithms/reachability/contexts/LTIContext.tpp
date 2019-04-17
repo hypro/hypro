@@ -235,9 +235,11 @@ namespace hypro
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.getParameters(mTask->btInfo.btLevel).timeStep) );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters(mTask->btInfo.btLevel).representation_type );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
+	    #if HYPRO_LOGGING
 	    for(auto& ref : mTask->treeNode->rGetRefinements()){
 	    	INFO("hypro.worker",  std::this_thread::get_id() << ": " << ref);
 	    }
+	    #endif
 
 		if(mSettings.useInvariantTimingInformation ||
 		   mSettings.useGuardTimingInformation ||

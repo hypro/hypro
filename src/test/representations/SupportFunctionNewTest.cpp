@@ -23,32 +23,25 @@ protected:
 TYPED_TEST(SupportFunctionNewTest, LeafTest){
 
 	Box<TypeParam> box;
-	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);
+	SupportFunctionNew<TypeParam> sf(box);
 	EXPECT_TRUE(sf.getRoot()->getType() == SFNEW_TYPE::LEAF);
 	EXPECT_EQ(sf.getRoot()->getOriginCount(), unsigned(0));
 	EXPECT_EQ(sf.getRoot()->getChildren().size(), std::size_t(0));
 	EXPECT_EQ(sf.getRoot().use_count(), long(1));
 	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), box);
 
-	//Test with HPoly
-	HPolytope<TypeParam> hpoly;
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfHpoly(hpoly);
+	//Test with HPoly that is a box
+	HPolytope<TypeParam> hpoly(matrix_t<TypeParam>::Identity(2,2));
+	SupportFunctionNew<TypeParam> sfHpoly(hpoly);
 	EXPECT_TRUE(sfHpoly.getRoot()->getType() == SFNEW_TYPE::LEAF);
 	EXPECT_EQ(sfHpoly.getRoot()->getOriginCount(), unsigned(0));
 	EXPECT_EQ(sfHpoly.getRoot()->getChildren().size(), std::size_t(0));
 	EXPECT_EQ(sfHpoly.getRoot().use_count(), long(1));
-	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation()), hpoly);
+	EXPECT_TRUE(boost::get<0>(isBox(hpoly.matrix(), hpoly.vector())));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
 
-/*	WAIT UNTIL VPOLY::MULTIEVALUATE IMPLEMENTED
-	VPolytope<TypeParam> vpoly;
-	Leaf<TypeParam, VPolytope<TypeParam>> child(&vpoly);
-	r.addToChildren(&child);
-	EXPECT_TRUE(r.getChildren().size() == 1);
-	EXPECT_TRUE(child.getChildren().size() == 0);
-*/
 }
-
 
 //Have a box as a leaf. Put a chain of trafoOps above the leaf. 
 //Check currentExponent, successiveTransformations and parameter values
@@ -60,7 +53,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	Box<TypeParam> box(std::make_pair(p,q));
 	
 	//The tree with only one leaf containing the box
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);
+	SupportFunctionNew<TypeParam> sf(box);
 	EXPECT_TRUE(sf.getRoot()->getType() == SFNEW_TYPE::LEAF);
 	EXPECT_TRUE(sf.getRoot()->getOriginCount() == unsigned(0));
 	EXPECT_TRUE(sf.getRoot()->getChildren().size() == std::size_t(0));
@@ -71,6 +64,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(dim);
 	tVec(0) = 1;
 
+
 	//Directions to evaluate, is the identity matrix
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);
 
@@ -78,7 +72,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	std::shared_ptr<const LinTrafoParameters<TypeParam,SupportFunctionNewDefault>> trafo0Params = nullptr;
 
 	//sf1
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1 = sf.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf1 = sf.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf1.getRoot() != nullptr);
 	EXPECT_TRUE(sf1.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getCurrentExponent(), unsigned(1));
@@ -88,7 +82,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	trafo0Params = (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getParameters();
 
 	//sf2
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2 = sf1.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf2 = sf1.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf2.getRoot() != nullptr);
 	EXPECT_TRUE(sf2.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get()))->getCurrentExponent(), unsigned(1));
@@ -106,21 +100,21 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	//sf3
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf3 = sf2.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf3 = sf2.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf3.getRoot() != nullptr);
 	EXPECT_TRUE(sf3.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getCurrentExponent(), unsigned(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getSuccessiveTransformations(), std::size_t(2));
 
 	//sf4
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf4 = sf3.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf4 = sf3.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf4.getRoot() != nullptr);
 	EXPECT_TRUE(sf4.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getCurrentExponent(), unsigned(4));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
-
 	//Check whether parameter object remained the same (whether both point to the same address)
 	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get())->getParameters()));
+
 
 	//Evaluate
 	res = sf4.multiEvaluate(directions,true);
@@ -131,28 +125,28 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	//sf5
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf5 = sf4.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf5 = sf4.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf5.getRoot() != nullptr);
 	EXPECT_TRUE(sf5.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getCurrentExponent(), unsigned(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
 
 	//sf6
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf6 = sf5.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf6 = sf5.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf6.getRoot() != nullptr);
 	EXPECT_TRUE(sf6.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getCurrentExponent(), unsigned(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
 
 	//sf7
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf7 = sf6.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf7 = sf6.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf7.getRoot() != nullptr);
 	EXPECT_TRUE(sf7.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getCurrentExponent(), unsigned(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getSuccessiveTransformations(), std::size_t(2));
 
 	//sf8
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf8 = sf7.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf8 = sf7.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf8.getRoot() != nullptr);
 	EXPECT_TRUE(sf8.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getCurrentExponent(), unsigned(4));
@@ -170,7 +164,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	//sf9
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf9 = sf8.affineTransformation(tMat, tVec); 
+	SupportFunctionNew<TypeParam> sf9 = sf8.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf9.getRoot() != nullptr);
 	EXPECT_TRUE(sf9.getRoot()->getChildren().size() == std::size_t(1));
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getCurrentExponent(), unsigned(1));
@@ -229,8 +223,8 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 TYPED_TEST(SupportFunctionNewTest, ScaleOp){
 
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1), TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfScale = sf.scale(TypeParam(10));
+	SupportFunctionNew<TypeParam> sf(box);
+	SupportFunctionNew<TypeParam> sfScale = sf.scale(TypeParam(10));
 	EXPECT_TRUE(sfScale.getRoot()->getType() == SFNEW_TYPE::SCALEOP);
 	EXPECT_EQ(sfScale.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfScale.getRoot()->getChildren().size(), std::size_t(1));
@@ -249,11 +243,11 @@ TYPED_TEST(SupportFunctionNewTest, ProjectOp){
 
 	//3d box
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(1),TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);
+	SupportFunctionNew<TypeParam> sf(box);
 
 	//We want to throw out first and third dimension, keep second dimension
 	std::vector<std::size_t> dims({1});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfProject = sf.project(dims);
+	SupportFunctionNew<TypeParam> sfProject = sf.project(dims);
 	EXPECT_TRUE(sfProject.getRoot()->getType() == SFNEW_TYPE::PROJECTOP);
 	EXPECT_EQ(sfProject.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfProject.getRoot()->getChildren().size(), std::size_t(1));
@@ -273,10 +267,10 @@ TYPED_TEST(SupportFunctionNewTest, SumOp){
 
 	//2d box
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);	
+	SupportFunctionNew<TypeParam> sf(box);	
 	
 	//Sum has only 2 children
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfSum = sf.minkowskiSum(sf);
+	SupportFunctionNew<TypeParam> sfSum = sf.minkowskiSum(sf);
 	EXPECT_TRUE(sfSum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_EQ(sfSum.getRoot()->getOriginCount(), unsigned(2));
 	EXPECT_EQ(sfSum.getRoot()->getChildren().size(), std::size_t(2));
@@ -290,8 +284,8 @@ TYPED_TEST(SupportFunctionNewTest, SumOp){
 	EXPECT_EQ(res.at(1).supportValue, TypeParam(2));
 
 	//Sum2 will have 5 children, which are all sf
-	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec(4,sf);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfSum2 = sf.minkowskiSum(sfVec);
+	std::vector<SupportFunctionNew<TypeParam>> sfVec(4,sf);
+	SupportFunctionNew<TypeParam> sfSum2 = sf.minkowskiSum(sfVec);
 	EXPECT_TRUE(sfSum2.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_EQ(sfSum2.getRoot()->getOriginCount(), unsigned(2));
 	EXPECT_EQ(sfSum2.getRoot()->getChildren().size(), std::size_t(5));
@@ -308,12 +302,12 @@ TYPED_TEST(SupportFunctionNewTest, IntersectOp){
 
 	//Two overlapping boxes, the overlapping box is (0,0) to (1,1)
 	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(upRight);	
+	SupportFunctionNew<TypeParam> uR(upRight);	
 	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(-1)}), Point<TypeParam>({TypeParam(1),TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(downLeft);
+	SupportFunctionNew<TypeParam> dL(downLeft);
 
 	//Intersect with only two boxes 
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfIntersect = uR.intersect(dL);
+	SupportFunctionNew<TypeParam> sfIntersect = uR.intersect(dL);
 	EXPECT_TRUE(sfIntersect.getRoot()->getType() == SFNEW_TYPE::INTERSECTOP);
 	EXPECT_EQ(sfIntersect.getRoot()->getOriginCount(), unsigned(2));
 	EXPECT_EQ(sfIntersect.getRoot()->getChildren().size(), std::size_t(2));
@@ -338,13 +332,13 @@ TYPED_TEST(SupportFunctionNewTest, IntersectOp){
 
 	//Intersect first two with two other boxes, overlapping region should still be the box (0,0) to (1,1)
 	Box<TypeParam> upLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uL(upLeft);	
+	SupportFunctionNew<TypeParam> uL(upLeft);	
 	Box<TypeParam> downRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(2),TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dR(downRight);
+	SupportFunctionNew<TypeParam> dR(downRight);
 
 	//Evaluate with the four boxes with directions (0,1) and (1,0)
-	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec{dL, uL, dR};
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfIntersect2 = uR.intersect(sfVec);
+	std::vector<SupportFunctionNew<TypeParam>> sfVec{dL, uL, dR};
+	SupportFunctionNew<TypeParam> sfIntersect2 = uR.intersect(sfVec);
 	EXPECT_EQ(sfIntersect2.getRoot()->getChildren().size(), std::size_t(4));
 	res = sfIntersect2.multiEvaluate(directions,true);
 	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
@@ -358,12 +352,12 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 
 	//Two overlapping boxes, the overlapping box is (0,0) to (1,1)
 	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(upRight);	
+	SupportFunctionNew<TypeParam> uR(upRight);	
 	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(-1)}), Point<TypeParam>({TypeParam(1),TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(downLeft);
+	SupportFunctionNew<TypeParam> dL(downLeft);
 
 	//Intersect with only two boxes 
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfUnion = uR.unite(dL);
+	SupportFunctionNew<TypeParam> sfUnion = uR.unite(dL);
 	EXPECT_TRUE(sfUnion.getRoot()->getType() == SFNEW_TYPE::UNIONOP);
 	EXPECT_EQ(sfUnion.getRoot()->getOriginCount(), unsigned(2));
 	EXPECT_EQ(sfUnion.getRoot()->getChildren().size(), std::size_t(2));
@@ -388,13 +382,13 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 
 	//Intersect first two with two other boxes, overlapping region should still be the box (0,0) to (1,1)
 	Box<TypeParam> upLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uL(upLeft);	
+	SupportFunctionNew<TypeParam> uL(upLeft);	
 	Box<TypeParam> downRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(2),TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dR(downRight);
+	SupportFunctionNew<TypeParam> dR(downRight);
 
 	//Evaluate with the four boxes with directions (0,1) and (1,0)
-	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec{dL, uL, dR};
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfUnion2 = uR.unite(sfVec);
+	std::vector<SupportFunctionNew<TypeParam>> sfVec{dL, uL, dR};
+	SupportFunctionNew<TypeParam> sfUnion2 = uR.unite(sfVec);
 	EXPECT_EQ(sfUnion2.getRoot()->getChildren().size(), std::size_t(4));
 	res = sfUnion2.multiEvaluate(directions,true);
 	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
@@ -406,26 +400,26 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 TYPED_TEST(SupportFunctionNewTest, Constructors){
 
 	//Empty constructor
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
+	SupportFunctionNew<TypeParam> sfEmpty;
 	EXPECT_TRUE(sfEmpty.empty());
 	EXPECT_TRUE(sfEmpty.getRoot() == nullptr);
 
 	//First make a small sf
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box1);
+	SupportFunctionNew<TypeParam> sf(box1);
 	EXPECT_EQ(sf.getRoot().use_count(), long(1));
 	
 	//Then build a TrafoOp on top
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfTrafo = sf.affineTransformation(trafoMat, trafoVec);
+	SupportFunctionNew<TypeParam> sfTrafo = sf.affineTransformation(trafoMat, trafoVec);
 	EXPECT_EQ(sfTrafo.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_TRUE(&(*(sfTrafo.getRoot()->getChildren().at(0))) == &(*(sf.getRoot())));
 	EXPECT_EQ(sfTrafo.getRoot().use_count(), long(1));
 	EXPECT_EQ(sf.getRoot().use_count(), long(2));
 
 	//Copy constructor - copy sfTrafo. the copy should point to the same object sfTrafo points to
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfCopy(sfTrafo);
+	SupportFunctionNew<TypeParam> sfCopy(sfTrafo);
 	EXPECT_TRUE(&(*(sfCopy.getRoot())) == &(*(sfTrafo.getRoot())));	
 	EXPECT_EQ(sfCopy.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_EQ(sfTrafo.getRoot()->getChildren().size(), std::size_t(1));
@@ -441,7 +435,7 @@ TYPED_TEST(SupportFunctionNewTest, Constructors){
 	EXPECT_EQ(sf.getRoot().use_count(), long(3)); 
 
 	//Move constructor - 
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfMove(std::move(sfCopy));
+	SupportFunctionNew<TypeParam> sfMove(std::move(sfCopy));
 	EXPECT_TRUE(sfCopy.getRoot() == nullptr); 
 	EXPECT_TRUE(&(*(sfMove.getRoot())) == &(*(sf.getRoot())));	
 	EXPECT_TRUE(sfMove.getRoot()->getChildren().size() == std::size_t(0));
@@ -464,7 +458,7 @@ TYPED_TEST(SupportFunctionNewTest, Constructors){
 	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Zero(4,2);
 	mat << 1,0,-2,0,0,1,0,-2;
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Ones(4);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfMatVec(mat,vec);
+	SupportFunctionNew<TypeParam> sfMatVec(mat,vec);
 	EXPECT_TRUE(sfMatVec.getRoot() != nullptr);
 	EXPECT_EQ(sfMatVec.getRoot()->getType(), SFNEW_TYPE::LEAF);
 	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfMatVec.getRoot().get())->getRepresentation()->type()), representation_name::box);
@@ -474,7 +468,7 @@ TYPED_TEST(SupportFunctionNewTest, Constructors){
 	matrix_t<TypeParam> mat2 = matrix_t<TypeParam>::Zero(3,2);
 	mat2 << 2,-1,1,0,-2,3;
 	vector_t<TypeParam> vec2 = vector_t<TypeParam>::Ones(3);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfMatVec2(mat2,vec2);
+	SupportFunctionNew<TypeParam> sfMatVec2(mat2,vec2);
 	EXPECT_TRUE(sfMatVec2.getRoot() != nullptr);
 	EXPECT_EQ(sfMatVec2.getRoot()->getType(), SFNEW_TYPE::LEAF);
 	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
@@ -485,17 +479,17 @@ TYPED_TEST(SupportFunctionNewTest, Constructors){
 TYPED_TEST(SupportFunctionNewTest, Deletion){
 
 	//Non-owning pointers needed to check whether the sf's they are pointing to are actually deleted or not
-	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf1Copy;
-	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf2Copy;
-	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfTrafoCopy;
-	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfSumCopy;
+	std::weak_ptr<SupportFunctionNew<TypeParam>> sf1Copy;
+	std::weak_ptr<SupportFunctionNew<TypeParam>> sf2Copy;
+	std::weak_ptr<SupportFunctionNew<TypeParam>> sfTrafoCopy;
+	std::weak_ptr<SupportFunctionNew<TypeParam>> sfSumCopy;
 
 	{
 		//Construct leaf nodes
 		Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
 		Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-		std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf1 = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(box1);
-		std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf2 = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(box2);
+		std::shared_ptr<SupportFunctionNew<TypeParam>> sf1 = std::make_shared<SupportFunctionNew<TypeParam>>(box1);
+		std::shared_ptr<SupportFunctionNew<TypeParam>> sf2 = std::make_shared<SupportFunctionNew<TypeParam>>(box2);
 		sf1Copy = sf1;
 		sf2Copy = sf2;
 		{
@@ -505,8 +499,8 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
 			trafoMat(1,1) = TypeParam(2);
 			vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
 
-			SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfTrafo = sf1->affineTransformation(trafoMat, trafoVec);
-			std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfTrafoPtr = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(sfTrafo);
+			SupportFunctionNew<TypeParam> sfTrafo = sf1->affineTransformation(trafoMat, trafoVec);
+			std::shared_ptr<SupportFunctionNew<TypeParam>> sfTrafoPtr = std::make_shared<SupportFunctionNew<TypeParam>>(sfTrafo);
 			sfTrafoCopy = sfTrafoPtr;
 
 			EXPECT_TRUE(sfTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
@@ -514,8 +508,8 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
 
 			{
 				//Build SumOp
-				SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfTrafo.minkowskiSum(*sf2);
-				std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sumPtr = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(sum);
+				SupportFunctionNew<TypeParam> sum = sfTrafo.minkowskiSum(*sf2);
+				std::shared_ptr<SupportFunctionNew<TypeParam>> sumPtr = std::make_shared<SupportFunctionNew<TypeParam>>(sum);
 				sfSumCopy = sumPtr;
 				EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 				EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());
@@ -548,24 +542,24 @@ TYPED_TEST(SupportFunctionNewTest, IntermediateDeletion){
 	//Construct leaf nodes
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(box1);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(box2);
+	SupportFunctionNew<TypeParam> sf1(box1);
+	SupportFunctionNew<TypeParam> sf2(box2);
 	
 	//Build trafop
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = sf1.affineTransformation(trafoMat, trafoVec);
+	SupportFunctionNew<TypeParam> sfWithTrafo = sf1.affineTransformation(trafoMat, trafoVec);
 
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getChildren().size() == 1);
 	
 	//Build SumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfWithTrafo.minkowskiSum(sf2);
+	SupportFunctionNew<TypeParam> sum = sfWithTrafo.minkowskiSum(sf2);
 	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());	
 	
 	//Vector where all supportFunctions are saved - sf's are saved in deletion order, last one deleted first
-	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec;
+	std::vector<SupportFunctionNew<TypeParam>> sfVec;
 	sfVec.emplace_back(std::move(sf1));
 	sfVec.emplace_back(std::move(sum));
 	sfVec.emplace_back(std::move(sfWithTrafo));
@@ -619,22 +613,22 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
 
 	//Assemble them to a tree 
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box1);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(box2);
+	SupportFunctionNew<TypeParam> sf(box1);
+	SupportFunctionNew<TypeParam> sf2(box2);
 	
 	//Build trafop
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = sf.affineTransformation(trafoMat, trafoVec);
+	SupportFunctionNew<TypeParam> sfWithTrafo = sf.affineTransformation(trafoMat, trafoVec);
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getChildren().size() == std::size_t(1));
 	
 	//Build a sumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfWithTrafo.minkowskiSum(sf2);
+	SupportFunctionNew<TypeParam> sum = sfWithTrafo.minkowskiSum(sf2);
 	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());
 
-	//Evaluate
+	//Evaluate sumOp
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
 	std::vector<EvaluationResult<TypeParam>> res = sum.multiEvaluate(directions,true);
 
@@ -645,7 +639,7 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	EXPECT_TRUE(resOnlyOneDir.supportValue == res.at(0).supportValue);
 
 	//Test Evaluation of empty sf
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
+	SupportFunctionNew<TypeParam> sfEmpty;
 	res = sfEmpty.multiEvaluate(directions,true);
 	EXPECT_TRUE(res == std::vector<EvaluationResult<TypeParam>>());
 	resOnlyOneDir = sfEmpty.evaluate(dir,true);
@@ -661,9 +655,9 @@ TYPED_TEST(SupportFunctionNewTest, EvaluateMixedLeaves){
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Ones(3);
 	HPolytope<TypeParam> hpoly(mat,vec);
 
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfBox(box);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfHPoly(hpoly);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> inter = sfBox.intersect(sfHPoly);
+	SupportFunctionNew<TypeParam> sfBox(box);
+	SupportFunctionNew<TypeParam> sfHPoly(hpoly);
+	SupportFunctionNew<TypeParam> inter = sfBox.intersect(sfHPoly);
 
 	std::vector<EvaluationResult<TypeParam>> res = inter.multiEvaluate(mat, true);
 	EXPECT_EQ(res.at(0).supportValue, 0);
@@ -675,18 +669,18 @@ TYPED_TEST(SupportFunctionNewTest, Emptyness){
 
 	//Empty sf
 	Box<TypeParam> box1 = Box<TypeParam>::Empty(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(box1);
+	SupportFunctionNew<TypeParam> sf1(box1);
 	EXPECT_TRUE(sf1.empty());
 	
 	//Leaf
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(box2);
+	SupportFunctionNew<TypeParam> sf2(box2);
 	EXPECT_TRUE(!sf2.empty());
 
 	//Trafo
 	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf1.affineTransformation(mat, vec);	
+	SupportFunctionNew<TypeParam> trafo = sf1.affineTransformation(mat, vec);	
 	EXPECT_TRUE(trafo.empty());	
 	trafo = sf2.affineTransformation(mat, vec);
 	EXPECT_TRUE(!trafo.empty());	
@@ -697,7 +691,7 @@ TYPED_TEST(SupportFunctionNewTest, Emptyness){
 
 	//ProjectOp
 	std::vector<std::size_t> dims({0});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = sf1.project(dims);
+	SupportFunctionNew<TypeParam> proj = sf1.project(dims);
 	EXPECT_TRUE(proj.empty());
 	proj = sf2.project(dims);
 	EXPECT_TRUE(!proj.empty());
@@ -706,7 +700,7 @@ TYPED_TEST(SupportFunctionNewTest, Emptyness){
 	EXPECT_TRUE(proj.empty());
 
 	//ScaleOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = sf1.scale(TypeParam(5));
+	SupportFunctionNew<TypeParam> scale = sf1.scale(TypeParam(5));
 	EXPECT_TRUE(scale.empty());
 	scale = sf2.scale(TypeParam(5));
 	EXPECT_TRUE(!scale.empty());
@@ -714,39 +708,39 @@ TYPED_TEST(SupportFunctionNewTest, Emptyness){
 	EXPECT_TRUE(!scale.empty());
 
 	//Sum
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = trafo.minkowskiSum(sf2);
+	SupportFunctionNew<TypeParam> sum = trafo.minkowskiSum(sf2);
 	EXPECT_TRUE(!sum.empty());
 	sum = sf1.minkowskiSum(sf2);
 	EXPECT_TRUE(!sum.empty());
 	sum = proj.minkowskiSum(sf1); 	//Test with 2 empty sfs
 	EXPECT_TRUE(sum.empty());
-	sum = sf2.minkowskiSum(std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>{trafo,scale}); //Test with no empty set
+	sum = sf2.minkowskiSum(std::vector<SupportFunctionNew<TypeParam>>{trafo,scale}); //Test with no empty set
 	EXPECT_TRUE(!sum.empty());
-	sum = sf2.minkowskiSum(std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>{trafo,scale,proj,sf1}); //Test with empty set
+	sum = sf2.minkowskiSum(std::vector<SupportFunctionNew<TypeParam>>{trafo,scale,proj,sf1}); //Test with empty set
 	EXPECT_TRUE(!sum.empty());
 
 	//UnionOp	
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = sf2.unite(scale);
+	SupportFunctionNew<TypeParam> uniteOp = sf2.unite(scale);
 	EXPECT_TRUE(!uniteOp.empty());
 	uniteOp = sf2.unite(sf1);
 	EXPECT_TRUE(!uniteOp.empty());
 	uniteOp = proj.unite(sf1); 	//Test with 2 empty sfs
 	EXPECT_TRUE(uniteOp.empty());	
-	uniteOp = sf2.unite(std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>{trafo,scale}); //Test with no empty set
+	uniteOp = sf2.unite(std::vector<SupportFunctionNew<TypeParam>>{trafo,scale}); //Test with no empty set
 	EXPECT_TRUE(!uniteOp.empty());
-	uniteOp = sf2.unite(std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>{trafo,scale,proj,sf1}); //Test with empty set
+	uniteOp = sf2.unite(std::vector<SupportFunctionNew<TypeParam>>{trafo,scale,proj,sf1}); //Test with empty set
 	EXPECT_TRUE(!uniteOp.empty());
 
 	//IntersectOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = sf2.intersect(scale);
+	SupportFunctionNew<TypeParam> intersectOp = sf2.intersect(scale);
 	EXPECT_TRUE(!intersectOp.empty());
 	intersectOp = sf2.intersect(sf1);
 	EXPECT_TRUE(intersectOp.empty());
 	intersectOp = proj.intersect(sf1);
 	EXPECT_TRUE(intersectOp.empty());
-	intersectOp = sf2.intersect(std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>({trafo,scale})); //Test with no empty set
+	intersectOp = sf2.intersect(std::vector<SupportFunctionNew<TypeParam>>({trafo,scale})); //Test with no empty set
 	EXPECT_TRUE(!intersectOp.empty());
-	intersectOp = sf2.intersect(std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>({trafo,scale,proj,sf1})); //Test with empty set
+	intersectOp = sf2.intersect(std::vector<SupportFunctionNew<TypeParam>>({trafo,scale,proj,sf1})); //Test with empty set
 	EXPECT_TRUE(intersectOp.empty());
 }
 
@@ -754,12 +748,12 @@ TYPED_TEST(SupportFunctionNewTest, Dimension){
 
 	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
 	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(2),TypeParam(3)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(upRight);	
+	SupportFunctionNew<TypeParam> uR(upRight);	
 	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(downLeft);
+	SupportFunctionNew<TypeParam> dL(downLeft);
 
 	//Dimension of empty SF
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
+	SupportFunctionNew<TypeParam> sf;
 	TypeParam dim = sf.dimension();
 	EXPECT_EQ(dim, std::size_t(0));
 
@@ -770,33 +764,33 @@ TYPED_TEST(SupportFunctionNewTest, Dimension){
 	//Dimension for TrafoOp
 	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = uR.affineTransformation(mat, vec);
+	SupportFunctionNew<TypeParam> trafo = uR.affineTransformation(mat, vec);
 	dim = trafo.dimension();
 	EXPECT_EQ(dim, std::size_t(2));
 
 	//Dimension for ProjectOp
 	std::vector<std::size_t> dims({0});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = uR.project(dims);
+	SupportFunctionNew<TypeParam> proj = uR.project(dims);
 	dim = proj.dimension();
 	EXPECT_EQ(dim, std::size_t(2));
 
 	//Dimension for ScaleOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
+	SupportFunctionNew<TypeParam> scale = uR.scale(TypeParam(5));
 	dim = scale.dimension();
 	EXPECT_EQ(dim, std::size_t(2));	
 
 	//Dimension for SumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
+	SupportFunctionNew<TypeParam> sumOp = uR.minkowskiSum(dL);
 	dim = sumOp.dimension();
 	EXPECT_EQ(dim, std::size_t(2));	
 
 	//Dimension for IntersectOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
+	SupportFunctionNew<TypeParam> intersectOp = uR.intersect(dL);
 	dim = intersectOp.dimension();
 	EXPECT_EQ(dim, std::size_t(2));
 
 	//Dimension for UnionOp	
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
+	SupportFunctionNew<TypeParam> uniteOp = uR.unite(dL);
 	dim = uniteOp.dimension();
 	EXPECT_EQ(dim, std::size_t(2));
 }
@@ -805,12 +799,12 @@ TYPED_TEST(SupportFunctionNewTest, Supremum){
 
 	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
 	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(2),TypeParam(3)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(upRight);	
+	SupportFunctionNew<TypeParam> uR(upRight);	
 	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(downLeft);
+	SupportFunctionNew<TypeParam> dL(downLeft);
 
 	//Supremum of empty SF
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
+	SupportFunctionNew<TypeParam> sf;
 	TypeParam sup = sf.supremum();
 	EXPECT_EQ(sup, std::size_t(0));
 
@@ -821,33 +815,33 @@ TYPED_TEST(SupportFunctionNewTest, Supremum){
 	//Supremum for TrafoOp
 	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = uR.affineTransformation(mat, vec);
+	SupportFunctionNew<TypeParam> trafo = uR.affineTransformation(mat, vec);
 	sup = trafo.supremum();
 	EXPECT_EQ(sup, TypeParam(6));
 
 	//Supremum for ProjectOp
 	std::vector<std::size_t> dims({0});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = uR.project(dims);
+	SupportFunctionNew<TypeParam> proj = uR.project(dims);
 	sup = proj.supremum();
 	EXPECT_EQ(sup, TypeParam(2));
 
 	//Supremum for ScaleOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
+	SupportFunctionNew<TypeParam> scale = uR.scale(TypeParam(5));
 	sup = scale.supremum();
 	EXPECT_EQ(sup, TypeParam(15));	
 
 	//Supremum for SumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
+	SupportFunctionNew<TypeParam> sumOp = uR.minkowskiSum(dL);
 	sup = sumOp.supremum();
 	EXPECT_EQ(sup, TypeParam(5));	
 
 	//Supremum for IntersectOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
+	SupportFunctionNew<TypeParam> intersectOp = uR.intersect(dL);
 	sup = intersectOp.supremum();
 	EXPECT_EQ(sup, TypeParam(2));
 
 	//Supremum for UnionOp	
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
+	SupportFunctionNew<TypeParam> uniteOp = uR.unite(dL);
 	sup = uniteOp.supremum();
 	EXPECT_EQ(sup, TypeParam(3));
 
@@ -857,7 +851,7 @@ TYPED_TEST(SupportFunctionNewTest, StorageSize){
 
 	//Empty SF
 	try {
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;	
+		SupportFunctionNew<TypeParam> sf;	
 	} catch(const std::runtime_error& e) {
 		FAIL();
 	}
@@ -866,16 +860,16 @@ TYPED_TEST(SupportFunctionNewTest, StorageSize){
 	//Construct leaf nodes
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(box1);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(box2);
+	SupportFunctionNew<TypeParam> sf1(box1);
+	SupportFunctionNew<TypeParam> sf2(box2);
 	
 	//Build trafop
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = sf1.affineTransformation(trafoMat, trafoVec);
+	SupportFunctionNew<TypeParam> sfWithTrafo = sf1.affineTransformation(trafoMat, trafoVec);
 	
 	//Build SumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfWithTrafo.minkowskiSum(sf2);
+	SupportFunctionNew<TypeParam> sum = sfWithTrafo.minkowskiSum(sf2);
 	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());
 
@@ -895,9 +889,9 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 
 	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
 	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(2),TypeParam(3)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(upRight);	
+	SupportFunctionNew<TypeParam> uR(upRight);	
 	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(downLeft);
+	SupportFunctionNew<TypeParam> dL(downLeft);
 	
 	//Points to test for containment
 	Point<TypeParam> inUR{TypeParam(2),TypeParam(2)};
@@ -905,7 +899,7 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	Point<TypeParam> inBoth{TypeParam(0),TypeParam(1)};
 
 	//Contains of empty SF
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
+	SupportFunctionNew<TypeParam> sf;
 	bool resUR = sf.contains(inUR);
 	bool resDL = sf.contains(inDL);
 	bool resBoth = sf.contains(inBoth);
@@ -925,7 +919,7 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
 	//trafo scales the boxes by 2, so uR = box made of [(0.2),(2,4)]
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = uR.affineTransformation(mat, vec);
+	SupportFunctionNew<TypeParam> trafo = uR.affineTransformation(mat, vec);
 	//To not get confused with the spaces, we double the points to test also, and let them get halved within the contains function
 	inUR *= 2;
 	inDL *= 2;
@@ -942,11 +936,11 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	
 	//Contains for ProjectOp
 	//std::vector<std::size_t> dims({0});
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = uR.project(dims);
+	//SupportFunctionNew<TypeParam> proj = uR.project(dims);
 	//No testing since not correct	
 
 	//Contains for ScaleOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
+	SupportFunctionNew<TypeParam> scale = uR.scale(TypeParam(5));
 	//To not get confused with the spaces, we multiply the points to test also by 5, and let them get resized within the contains function
 	inUR *= 5;
 	inDL *= 5;
@@ -962,7 +956,7 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	inBoth /= 5;
 	
 	//Contains for SumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
+	SupportFunctionNew<TypeParam> sumOp = uR.minkowskiSum(dL);
 	resUR = sumOp.contains(inUR);
 	resDL = sumOp.contains(inDL);
 	resBoth = sumOp.contains(inBoth);
@@ -971,7 +965,7 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_TRUE(resBoth);
 
 	//Contains for IntersectOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
+	SupportFunctionNew<TypeParam> intersectOp = uR.intersect(dL);
 	resUR = intersectOp.contains(inUR);
 	resDL = intersectOp.contains(inDL);
 	resBoth = intersectOp.contains(inBoth);
@@ -980,7 +974,7 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_TRUE(resBoth);
 
 	//Contains for UnionOp	
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
+	SupportFunctionNew<TypeParam> uniteOp = uR.unite(dL);
 	resUR = uniteOp.contains(inUR);
 	resDL = uniteOp.contains(inDL);
 	resBoth = uniteOp.contains(inBoth);
@@ -991,14 +985,14 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	//Contains for SupportFunctions
 	EXPECT_FALSE(uR.contains(dL));
 	Box<TypeParam> overlapBox (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> overlapSF(overlapBox);
+	SupportFunctionNew<TypeParam> overlapSF(overlapBox);
 	EXPECT_TRUE(uR.contains(overlapSF));
 }
 
 TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0.1),TypeParam(0.1)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(box);
+	SupportFunctionNew<TypeParam> sf1(box);
 
 	//Halfspaces to test - belowBox does not contain the box, within box partially, aboveBox fully
 	Halfspace<TypeParam> belowBox ({TypeParam(0),TypeParam(1)}, TypeParam(0));
@@ -1006,27 +1000,27 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	Halfspace<TypeParam> aboveBox ({TypeParam(0),TypeParam(1)}, TypeParam(2));
 
 	//Test with empty sf
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> emptySatisfy = sfEmpty.satisfiesHalfspace(belowBox);		
+	SupportFunctionNew<TypeParam> sfEmpty;
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> emptySatisfy = sfEmpty.satisfiesHalfspace(belowBox);		
 	EXPECT_TRUE(emptySatisfy.first == hypro::CONTAINMENT::BOT);
 	EXPECT_TRUE(emptySatisfy.second.empty());
 	EXPECT_TRUE(emptySatisfy.second == sfEmpty);
 
 	//Test with belowBox
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> belowSatisfy = sf1.satisfiesHalfspace(belowBox);
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> belowSatisfy = sf1.satisfiesHalfspace(belowBox);
 	EXPECT_TRUE(belowSatisfy.first == hypro::CONTAINMENT::NO);
 	EXPECT_TRUE(belowSatisfy.second.empty());
 
 	//Test with withinBox
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
 	EXPECT_TRUE(withinSatisfy.first == hypro::CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(!withinSatisfy.second.empty());
 	Box<TypeParam> boxWithin (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1), TypeParam(1)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithin(boxWithin);
+	SupportFunctionNew<TypeParam> sfWithin(boxWithin);
 	EXPECT_TRUE(withinSatisfy.second.intersect(sfWithin).contains(withinSatisfy.second));
 
 	//Test with aboveBox
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> aboveSatisfy = sf1.satisfiesHalfspace(aboveBox);
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> aboveSatisfy = sf1.satisfiesHalfspace(aboveBox);
 	EXPECT_TRUE(aboveSatisfy.first == hypro::CONTAINMENT::FULL);
 	EXPECT_TRUE(!aboveSatisfy.second.empty());
 	EXPECT_TRUE(aboveSatisfy.second == sf1);
@@ -1047,17 +1041,17 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	triangleVec3 << TypeParam(2), TypeParam(4), TypeParam(0);
 
 	//Box and triangle do not overlap
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> noOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec1);
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> noOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec1);
 	EXPECT_TRUE(noOverlap.first == hypro::CONTAINMENT::NO);
 	EXPECT_TRUE(noOverlap.second.empty());
 
 	//Box and triangle overlap partially
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> partialOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec2);
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> partialOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec2);
 	EXPECT_EQ(partialOverlap.first, hypro::CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(!partialOverlap.second.empty());
 
-	//Triangle contains box
-	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> fullOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec3);
+	//Triangle contains box fully
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> fullOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec3);
 	EXPECT_EQ(fullOverlap.first, hypro::CONTAINMENT::FULL);
 	EXPECT_TRUE(!fullOverlap.second.empty());
 	EXPECT_TRUE(fullOverlap.second == sf1);
@@ -1083,41 +1077,42 @@ TYPED_TEST(SupportFunctionNewTest, CollectProjections){
 	Point<TypeParam> p1 {TypeParam(0), TypeParam(1), TypeParam(2), TypeParam(3), TypeParam(4)};
 	Point<TypeParam> p2 {TypeParam(-2), TypeParam(-1), TypeParam(0), TypeParam(1), TypeParam(2)};
 	Box<TypeParam> box(std::make_pair(p1,p2));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);
+	SupportFunctionNew<TypeParam> sf(box);
 
 	//Proj1 - projects away dimension 5
 	std::vector<std::size_t> proj1Dims ({0,1,2,3});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj1 = sf.project(proj1Dims);
-	EXPECT_EQ(proj1.dimension(), std::size_t(5)); //the 5th dimension is only projected away in other functions like collectProjections
+	SupportFunctionNew<TypeParam> proj1 = sf.project(proj1Dims);
+	//the 5th dimension is only projected away in other functions like collectProjections; the original dimension is still callable via dimension()
+	EXPECT_EQ(proj1.dimension(), std::size_t(5)); 
 	EXPECT_EQ(proj1.collectProjections(), proj1Dims);
 
 	//Union - should leave out dimension 5 as it is not in both proj1 and sf
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> unio = proj1.unite(sf);
+	SupportFunctionNew<TypeParam> unio = proj1.unite(sf);
 	EXPECT_EQ(unio.collectProjections(), proj1Dims);
 
 	//Proj2 - projects away dimension 2 and 3
 	std::vector<std::size_t> proj2Dims ({0,3,4});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj2 = sf.project(proj2Dims);
+	SupportFunctionNew<TypeParam> proj2 = sf.project(proj2Dims);
 	EXPECT_EQ(proj2.dimension(), std::size_t(5)); //the 5th dimension is only projected away in other functions like collectProjections
 	EXPECT_EQ(proj2.collectProjections(), proj2Dims);	
 
 	//Sum - Should return intersection of proj1Dims and proj2Dims
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = proj2.minkowskiSum(unio);
+	SupportFunctionNew<TypeParam> sum = proj2.minkowskiSum(unio);
 	EXPECT_EQ(sum.collectProjections(), std::vector<std::size_t>({0,3}));
 
 	//Proj3 - projects away dimension 1
 	std::vector<std::size_t> proj3Dims ({1,2,3,4});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj3 = sf.project(proj3Dims);
+	SupportFunctionNew<TypeParam> proj3 = sf.project(proj3Dims);
 	EXPECT_EQ(proj3.collectProjections(), proj3Dims);
 
 	//Proj4 - projects away dimension 4
 	std::vector<std::size_t> proj4Dims ({0,1,2,4});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj4 = sf.project(proj4Dims);
+	SupportFunctionNew<TypeParam> proj4 = sf.project(proj4Dims);
 	EXPECT_EQ(proj4.collectProjections(), proj4Dims);	
 
 	//Intersect - no dimension should be left
-	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> children({proj3,sum});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> inter = proj4.intersect(children);
+	std::vector<SupportFunctionNew<TypeParam>> children({proj3,sum});
+	SupportFunctionNew<TypeParam> inter = proj4.intersect(children);
 	EXPECT_EQ(inter.collectProjections(), std::vector<std::size_t>());
 }
 
@@ -1127,7 +1122,7 @@ TYPED_TEST(SupportFunctionNewTest, Vertices){
 	Point<TypeParam> p1 = Point<TypeParam>({TypeParam(0),TypeParam(-4),TypeParam(-22)});
 	Point<TypeParam> p2 = Point<TypeParam>({TypeParam(3),TypeParam(6.789),TypeParam(-3.1415)});
 	Box<TypeParam> box (std::make_pair(p1,p2));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);	
+	SupportFunctionNew<TypeParam> sf(box);	
 	std::vector<Point<TypeParam>> points = sf.vertices();
 	//Results commented out because the values are actually right, but suffer from numerical instabilities
 	//auto it = points.begin();
@@ -1141,7 +1136,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	Point<TypeParam> p1 = Point<TypeParam>({TypeParam(0),TypeParam(-4),TypeParam(-22)});
 	Point<TypeParam> p2 = Point<TypeParam>({TypeParam(3),TypeParam(6.789),TypeParam(-3.1415)});
 	Box<TypeParam> box (std::make_pair(p1,p2));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);	
+	SupportFunctionNew<TypeParam> sf(box);	
 
 	//Leaf
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sf2(sf);		
@@ -1152,7 +1147,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	//TrafoOp
 	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(3,3);
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(3);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf.affineTransformation(mat,vec);	
+	SupportFunctionNew<TypeParam> trafo = sf.affineTransformation(mat,vec);	
 
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> trafo2(trafo);
 	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>* trafo2Node = dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(trafo2.getRoot().get());
@@ -1166,30 +1161,30 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 
 		//ProjectOp
 		std::vector<std::size_t> dims({0});
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = sf.project(dims);
+		SupportFunctionNew<TypeParam> proj = sf.project(dims);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> proj2(proj);
 		EXPECT_EQ((dynamic_cast<ProjectOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(proj2.getRoot().get())->getDimensions().size()), std::size_t(1));
 		
 		//ScaleOp
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = sf.scale(TypeParam(5));
+		SupportFunctionNew<TypeParam> scale = sf.scale(TypeParam(5));
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> scale2(scale);
 		EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(scale2.getRoot().get())->getFactor()), TypeParam(5));
 
 		//SumOp
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = sf.minkowskiSum(scale);
+		SupportFunctionNew<TypeParam> sumOp = sf.minkowskiSum(scale);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sum2(sumOp);
 		EXPECT_EQ(sum2.getRoot()->getChildren().size(), std::size_t(2));
 		EXPECT_EQ(sum2.dimension(), sf.dimension());
 
 		//IntersectOp
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = sf.intersect(scale);
+		SupportFunctionNew<TypeParam> intersectOp = sf.intersect(scale);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> inter2(intersectOp);
 		EXPECT_EQ(inter2.getRoot()->getChildren().size(), std::size_t(2));
 		EXPECT_EQ(inter2.dimension(), sf.dimension());
 		
 		//UnionOp	
-		std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> vec = {proj, scale, sumOp};
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = sf.unite(vec);
+		std::vector<SupportFunctionNew<TypeParam>> vec = {proj, scale, sumOp};
+		SupportFunctionNew<TypeParam> uniteOp = sf.unite(vec);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> unite2(uniteOp);
 		EXPECT_EQ(unite2.getRoot()->getChildren().size(), std::size_t(4));
 		EXPECT_EQ(unite2.dimension(), sf.dimension());
@@ -1202,7 +1197,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 TYPED_TEST(SupportFunctionNewTest, MatrixVector){
 
 	//Empty SF
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
+	SupportFunctionNew<TypeParam> sfEmpty;
 	EXPECT_EQ(sfEmpty.matrix(), matrix_t<TypeParam>::Zero(1,1));
 	EXPECT_EQ(sfEmpty.vector(), vector_t<TypeParam>::Zero(1));
 
@@ -1210,7 +1205,7 @@ TYPED_TEST(SupportFunctionNewTest, MatrixVector){
 	Point<TypeParam> p1 {TypeParam(-1), TypeParam(-1)};
 	Point<TypeParam> p2 {TypeParam(1), TypeParam(1)};
 	Box<TypeParam> box(std::make_pair(p1,p2));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(box);
+	SupportFunctionNew<TypeParam> sf(box);
 	matrix_t<TypeParam> expectedResMat = matrix_t<TypeParam>::Zero(8,2);
 	vector_t<TypeParam> expectedResVec = vector_t<TypeParam>::Zero(8);
 	expectedResMat << 1, 0, -1, 0, 0, 1, 0, -1, 1, 1, -1, -1, 1, -1, -1, 1;
@@ -1219,3 +1214,47 @@ TYPED_TEST(SupportFunctionNewTest, MatrixVector){
 	EXPECT_EQ(sf.vector(), expectedResVec);
 
 }
+/*
+TYPED_TEST(SupportFunctionNewTest, ForceLinTransReduction){
+
+	//Make the box 
+	Point<TypeParam> p({TypeParam(0),TypeParam(0)});
+	Point<TypeParam> q({TypeParam(1),TypeParam(1)});
+	Box<TypeParam> box(std::make_pair(p,q));
+	
+	//The tree with only one leaf containing the box
+	SupportFunctionNew<TypeParam> sf(box);
+	
+	//tMat = 2 * Identity_Matrix , tVec = (1 0 0)
+	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Identity(2, 2);
+	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(2);
+	tVec(0) = 1;
+
+	//Nothing should change if lin trans reduction forced on leaf
+	try {
+		sf.forceLinTransReduction();	
+	} catch(...) {
+		FAIL();
+	}
+	
+	//Add a TrafoOp - Nothing should change if lin trans reduction forced on lone trafo object
+	SupportFunctionNew<TypeParam> trafo1 = sf.affineTransformation(tMat,tVec);
+	trafo1.forceLinTransReduction();
+	EXPECT_EQ(trafo1.getRoot()->getChildren().front(), sf.getRoot());
+
+	//Add another TrafoOp - LinTransParameters changed, and trafo1 is not the child of trafo2 anymore
+	std::cout << "1" << std::endl;
+	SupportFunctionNew<TypeParam> trafo2 = trafo1.affineTransformation(tMat,tVec);
+	EXPECT_EQ(trafo2.getRoot()->getChildren().front(), trafo1.getRoot());
+	std::cout << "2" << std::endl;
+	trafo2.forceLinTransReduction();
+	EXPECT_EQ(trafo2.getRoot()->getChildren().size(), std::size_t(1));
+	EXPECT_EQ(trafo2.getRoot()->getChildren().front(), sf.getRoot());
+	EXPECT_NE(trafo2.getRoot()->getChildren().front(), trafo1.getRoot());
+	vector_t<TypeParam> result = 2*tVec;
+	std::cout << "3" << std::endl;
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo2.getRoot().get())->getParameters()->matrix()), tMat);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo2.getRoot().get())->getParameters()->vector()), result);
+
+}
+*/

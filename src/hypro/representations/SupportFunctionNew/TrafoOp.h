@@ -101,12 +101,17 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 				if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
+					std::shared_ptr<RootGrowNode<Number,Converter,Setting>> grandChild = this->getChildren().at(0);
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						std::shared_ptr<RootGrowNode<Number,Converter,Setting>> grandChild = this->getChildren().at(0)->getChildren().at(0);
-						this->clearChildren();
-						this->addToChildren(grandChild);
-						assert(this->getChildren().size() == 1);
+						//std::shared_ptr<RootGrowNode<Number,Converter,Setting>> grandChild = this->getChildren().at(0)->getChildren().at(0);
+						//this->clearChildren();
+						//this->addToChildren(grandChild);
+						//assert(this->getChildren().size() == 1);
+						grandChild = grandChild->getChildren().at(0);
 					}
+					this->clearChildren();
+					this->addToChildren(grandChild);
+					assert(this->getChildren().size() == 1);
 				} 
 			} while (reduced == true);
 		}
@@ -119,7 +124,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		//, mDimension(d.origin->getDimension())
 		, currentExponent(d.currentExponent)
 		, successiveTransformations(d.successiveTransformations)
-		, parameters(std::move(d.parameters))
+		, parameters(d.parameters)
 	{}
 
 	~TrafoOp(){ }

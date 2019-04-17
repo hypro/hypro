@@ -276,10 +276,21 @@ namespace hypro {
 						SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 						// convert to actual support function inside the state, which might have different settings == different type.
 						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunction<Number>>(newSet), newState.getSet(i)),i);
-					}
-					if(newState.getSetType(i) == representation_name::support_function) {
 						newState.partiallyReduceRepresentation(i);
 					}
+					if(newState.getSetType(i) == representation_name::SFN){
+						//Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope
+						//and set it as the leaf of a new tree
+						newState.partiallyReduceRepresentation(i);
+						//auto tmpHPoly = HPolytope<typename State::NumberType>(newState.getSet(i).matrix(), newState.getSet(i).vector());
+						auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), newState.getSet(i));
+						SupportFunctionNew<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
+						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(newSet), newState.getSet(i)),i);
+						newState.partiallyReduceRepresentation(i);
+					}
+					//if(newState.getSetType(i) == representation_name::support_function) {
+					//	newState.partiallyReduceRepresentation(i);
+					//}
 				}
 
 				DEBUG("hydra.worker.discrete","State after reduction: " << newState.vertices());

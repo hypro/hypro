@@ -44,9 +44,11 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
+		#ifndef NDEBUG
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
+		#endif
 		lhs.addOperation(this, rhs); 
 	}
 

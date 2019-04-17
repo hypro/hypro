@@ -79,6 +79,20 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 		return LeafData(reinterpret_cast<uintptr_t>(rep.get()), rep->type(), isNotRedundant);
 	}
 	void setDimension(const std::size_t d) { mDimension = d; }
+
+	////// Displaying
+
+	void print(std::ostream& ostr) const {
+		ostr << "RootGrowNode address: " << this << " own type: " << this->getType() << " children types(address): [";
+		for(auto c : this->getChildren()){
+			ostr << c->getType() << "(" << &(*c) << ")" << ",";
+		}
+		ostr << "]" << std::endl;
+		ostr << "Leaf representation: " << *rep << std::endl;
+		for(auto c : this->getChildren()){
+			ostr << *c;
+		}
+	}
 	
 	////// RootGrowNode Interface
 
@@ -90,12 +104,46 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	//Evaluate leaf via multiEvaluate function of the representation
 	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const { 
+
 		assert(rep != nullptr);
+		
 		//Optimization: Remove redundancy only when rep is being evaluated the first time
 		if(!isNotRedundant){
 			rep->removeRedundancy();
 			isNotRedundant = true;
 		}
+		
+		//Optimization: If rep is only a halfspace, save yourself an expensive evaluation: Used in guard / invariant satisfaction
+		auto repMatrix = rep->matrix();
+		if(repMatrix.rows() == 1){
+			COUNT("Single constraint evaluate.");
+			auto repVector = rep->vector();
+			std::vector<EvaluationResult<Number>> res;
+			for(int i = 0; i < param.rows(); i++){
+				// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
+				if(param.row(i) == repMatrix.row(0)){ 
+					// The vectors are EXACTLY the same -> to find point on plane and to avoid squareroot computations, return vector
+					// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored distance.
+					vector_t<Number> pointOnPlane = vector_t<Number>::Zero(param.cols());
+					unsigned j = 0;
+					while(j < param.cols() && param(i,j) == 0){
+						++j;
+					}
+					// TODO: Check if this is correct -> we evaluated something weird with a weird direction (both zero vertors).
+					if(param(i,j) == 0){
+						res.emplace_back(EvaluationResult<Number>());
+					}
+					pointOnPlane(i) = repVector(0);
+					res.emplace_back(EvaluationResult<Number>(repVector(0), pointOnPlane, SOLUTION::FEAS));
+				} else {
+					res.emplace_back(EvaluationResult<Number>(1,SOLUTION::INFTY));
+				}
+			}
+			return res;
+		}
+
+		//If no optimizations could be used
+		COUNT("Multi constraint evaluate.");
 		return rep->multiEvaluate(param, useExact);
 	}
 
@@ -106,7 +154,9 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Leaves call empty function of the representation
-	bool empty() const { return rep->empty(); }
+	bool empty() const { 
+		return rep->empty(); 
+	}
 
 	//Compute the point that is the supremum of the representation
 	Point<Number> supremumPoint() const { 
@@ -118,7 +168,9 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Calls contains function of given representation
-	bool contains(const vector_t<Number>& point) const { return rep->contains(Point<Number>(point)); }
+	bool contains(const vector_t<Number>& point) const { 
+		return rep->contains(Point<Number>(point)); 
+	}
 
 	//matrix_t<Number> getMatrix() const { return rep->matrix(); }
 

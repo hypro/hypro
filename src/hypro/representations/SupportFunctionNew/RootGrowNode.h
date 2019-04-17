@@ -100,15 +100,19 @@ class RootGrowNode {
 
 	////// Displaying
 
-	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
-		ostr << "RootGrowNode address: " << &r << " own type: " << r.getType() << " children types(address): [";
-		for(auto c : r.getChildren()){
+	virtual void print(std::ostream& ostr) const {
+		ostr << "RootGrowNode address: " << this << " own type: " << this->getType() << " children types(address): [";
+		for(auto c : this->getChildren()){
 			ostr << c->getType() << "(" << &(*c) << ")" << ",";
 		}
 		ostr << "]" << std::endl;
-		for(auto c : r.getChildren()){
+		for(auto c : this->getChildren()){
 			ostr << *c;
 		}
+	}
+
+	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
+		r.print(ostr);
 		return ostr;
 	}
 

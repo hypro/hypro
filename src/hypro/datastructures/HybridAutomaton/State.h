@@ -303,7 +303,7 @@ class State
 		mSets[I] = in;
 	}
 
-  template<typename To>
+    template<typename To>
 	void setAndConvertType( std::size_t I = 0 );
 
 	/**

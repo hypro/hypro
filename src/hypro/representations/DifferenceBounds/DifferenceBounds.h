@@ -133,6 +133,11 @@ public:
     DifferenceBoundsT (const DifferenceBoundsT& orig) = default;
     DifferenceBoundsT (matrix_t<Number> matrix, vector_t<Number> vector);
 
+    /* TODO: not implemented */ 
+    matrix_t<Number> matrix() const { assert("Not implemented." && false); return matrix_t<Number>::Zero(0,0); }
+    /* TODO: not implemented */ 
+    vector_t<Number> vector() const { assert("Not implemented." && false); return vector_t<Number>::Zero(0); }
+
     matrix_t<DBMEntry> getDBM() const;
     void setDBM(matrix_t<DBMEntry> dbm);
 

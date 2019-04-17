@@ -290,22 +290,28 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 template<typename Number, typename Converter, class Setting>
 EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
 	DEBUG("hypro.representations.box","In evaluate. direction: " << std::endl << _direction);
-	//std::cout << "In Box::evaluate. direction rows: " << _direction.rows() << " and direction itself: " << _direction << std::endl;
-	//std::cout << "In Box::evaluate. Box itself is: " << *this << std::endl;
 	assert(_direction.rows() == Eigen::Index(this->dimension()));
-	//std::cout << "In evaluate. assert okay" << std::endl;
 	if(this->empty()){
-		//std::cout << "In evaluate. box was empty" << std::endl;
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
 	}
-	//std::cout << "In evaluate. box not empty" << std::endl;
 	// find the point, which represents the maximum towards the direction - compare signs.
-	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
+	vector_t<Number> furthestPoint = vector_t<Number>::Zero(this->dimension());
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
-	//for(Eigen::Index i = 0; i < this->dimension(); ++i) {
-		furthestPoint(i) = _direction(i) >= 0 ? mLimits[i].upper() : mLimits[i].lower();
+		if(_direction(i) >= 0){
+			//Unboundedness check
+			if (mLimits[i].upperBoundType() == carl::BoundType::INFTY) {
+				return EvaluationResult<Number>(0,furthestPoint,SOLUTION::INFTY);
+			}
+			furthestPoint(i) = mLimits[i].upper();
+		} else {
+			//Unboundedness check
+			if (mLimits[i].lowerBoundType() == carl::BoundType::INFTY) {
+				return EvaluationResult<Number>(0,furthestPoint,SOLUTION::INFTY);
+			}
+			furthestPoint(i) = mLimits[i].lower();
+		}
+		
 	}
-	//std::cout << "In evaluate. passed loop" << std::endl;
 	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
 }
 

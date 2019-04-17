@@ -122,6 +122,12 @@ TYPED_TEST(BoxTest, Constructor)
 	EXPECT_EQ(TypeParam(1), dBox.max().at(0));
 	EXPECT_EQ(TypeParam(4), dBox.max().at(1));
 	EXPECT_EQ(true, dBox.contains(hypro::Point<TypeParam>({0,3})));
+
+	hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty();
+	EXPECT_TRUE(b.empty());
+	hypro::Box<TypeParam> b2 = hypro::Box<TypeParam>::Empty(2);
+	EXPECT_TRUE(b.empty());
+
     SUCCEED();
 }
 

@@ -2,7 +2,7 @@
  * SupportFunctionNew.h
  *
  * Class representing a SupportFunction.
- * Here, a SupportFunction is a tree where a new node is set above the new root, thus growing at the root.
+ * Here, a SupportFunction is a tree where a new node is set as the parent of the current root, thus growing at the root.
  * The SupportFunction itself knows and owns the root node, which in turn knows its children and so on.
  * Note that the pointer to the root node will not be shifted when a new node is added. 
  * Through this, it is possible to query an evaluation of the operations from each node in the tree.
@@ -49,6 +49,7 @@ struct Parameters {
 
 	std::tuple<Rargs...> args;
 
+	Parameters(){}
 	Parameters(Rargs... r) : args(std::make_tuple(r...)) {}
 	Parameters(std::tuple<Rargs...>& r) : args(r) {}
 	~Parameters(){}
@@ -118,7 +119,13 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	//constructor for adding a new node
-  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root ) : mRoot(root) { }
+  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root ) : mRoot(root) {}
+
+
+  	template<typename Representation>
+	SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool ) 
+		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r)))
+	{}
 
   public:
 	/**
@@ -151,8 +158,20 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	template<typename Representation>
 	SupportFunctionNewT( GeometricObject<Number,Representation>& r) 
-		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r))) 
-	{}
+	{
+		Representation tmp = dynamic_cast<Representation&>(r);
+		if(tmp.empty()){
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
+		} else {
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(tmp.matrix(),tmp.vector());
+			if(boost::get<0>(areArgsBox)){
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
+			} else {
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
+			}	
+		}
+		assert(mRoot != nullptr);
+	}
 
 	/**
 	 * @brief      Matrix vector constructor
@@ -167,6 +186,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 		} else {
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
 		}
+		assert(mRoot != nullptr);
 	}
 
 	/**
@@ -175,7 +195,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
 		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
-	{ /*TODO: Optimize hspace constructor with isBox() */ }
+	{ /*TODO: Optimize hspace constructor with isBox() */ 
+		//std::cout << "hspace constructor!" << std::endl;
+	}
 
 	/**
 	 * @brief Destructor.
@@ -195,6 +217,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
   	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot) const;
   	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
+
+  	/**
+  	 * @brief     Overapproximates the root node via template evaluation and saves the result in mMatrix and mVector
+  	 */
+  	void polyhedralApproximation();
 
   public:
 
@@ -224,9 +251,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 **************************************************************************/
 	/*
 	 * Three functions are needed: transform, compute and aggregate.
-	 * - transform will be called by every node
-	 * - compute will only be called once by leaf nodes
-	 * - aggregate will only be called once by all non leaf nodes
+	 * - transform: will be called by every node and mainly transforms additional parameters
+	 * - compute: will only be called once by leaf nodes and computes a result for unmodified representations such as box, V-polytope, etc.
+	 * - aggregate: will only be called once by all non leaf nodes and accumulates the results of its children
 	 * 
 	 * Order of calling:
 	 * 1) From top to bottom, all nodes call transform
@@ -248,33 +275,33 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//When Result type and Param type = void
 	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
-	void traverse(	const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-					const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
-					const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const;
+	void traverse(	std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+					std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
+					std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const;
 
 	//When Param type = void, but Result type not
 	//Wrap transform and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename Result>
-	Result traverse(const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-					const std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
-					const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const;
+	Result traverse(std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const;
 
 	//When Result type = void, but Param type not
 	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename ...Rargs>
-	void traverse(	const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-					const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-					const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
-					const Parameters<Rargs...>& initParams) const;
+	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
+					Parameters<Rargs...>& initParams) const;
 
 	//Actual traverse function
 	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
 	//we can assume that we do not get functions returning void / that have no parameters
 	template<typename Result, typename ...Rargs>
-	Result traverse(const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-					const std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-					const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
-					const Parameters<Rargs...>& initParams) const;
+	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+					Parameters<Rargs...>& initParams) const;
 
 	/***************************************************************************
 	 * Evaluation
@@ -306,7 +333,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true) const;
 
 	/**
-	 * @brief      Multi-evaluation function (convex linear optimization).
+	 * @brief      Multi-evaluation function (convex linear optimization). 
 	 * @param[in]  _directions  The directions/cost functions.
 	 * @return     A set of maxima towards the respective directions.
 	 */
@@ -500,7 +527,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Reduces the representation of the current SupportFunctionNew.
 	 */
-	inline void reduceRepresentation(){ }
+	void reduceRepresentation();
 
 	/**
 	 * @brief      Makes this SupportFunctionNew equal to the empty SupportFunctionNew.
@@ -514,9 +541,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	std::vector<std::size_t> collectProjections() const;
 
 	/**
-	 * @brief	   
+	 * @brief	   Get the matrix vector representation of the current SupportFunctionNew
 	 * @param[in]  directionCount  Number of directions to be evaluated
-	 * @param[in]  force  		   
+	 * @param[in]  force  		   Whether this should be done although a matrix vector representation is already cached
 	 */
 	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
 

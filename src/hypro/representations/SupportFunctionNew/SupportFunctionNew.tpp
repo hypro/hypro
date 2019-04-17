@@ -9,15 +9,11 @@ namespace hypro {
 	 **************************************************************************/
 
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT() {
-		//do nothing
-	}
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT() {}
 
 	//copy constructor
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) : mRoot(orig.getRoot()) {
-		//handled by initializer list
-	}
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) : mRoot(orig.getRoot()) {}
 
 	//move constructor
 	template<typename Number, typename Converter, typename Setting>
@@ -29,7 +25,7 @@ namespace hypro {
 	//settings constructor
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig){
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
 		if(orig.getRoot() == nullptr){ 
 			mRoot == nullptr; 
 		} else {
@@ -91,35 +87,36 @@ namespace hypro {
 	//When Result type and Param type = void
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::traverse( 	
-		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
-		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const 
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const 
 	{
 		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { 
-				transform(n); 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Parameters<Dummy> { 
+				transform(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
 				return Parameters<Dummy>(Dummy()); 
 			};
 		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { 
-				compute(n); 
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Parameters<Dummy> { 
+				compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
 				return Parameters<Dummy>(Dummy()); 
 			};
 		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Dummy>)> aNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Dummy> p) -> Parameters<Dummy> { 
-				aggregate(n); 
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> , Parameters<Dummy> ) -> Parameters<Dummy> { 
+				aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
 				return Parameters<Dummy>(Dummy()); 
 			};
-		traverse(tNotVoid, cNotVoid, aNotVoid, Parameters<Dummy>(Dummy()));
+		Parameters<Dummy> noInitParams = Parameters<Dummy>(Dummy());
+		traverse(tNotVoid, cNotVoid, aNotVoid, noInitParams);
 	}
 
 	//When Param type = void, but Result type not
 	template<typename Number, typename Converter, typename Setting>
 	template<typename Result>
 	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(	
-		const std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
-		const std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
-		const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const 
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const 
 	{	
 		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = 
 			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Parameters<Dummy> { 
@@ -142,10 +139,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename ...Rargs>
 	void SupportFunctionNewT<Number,Converter,Setting>::traverse(	
-		const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-		const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-		const std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
-		const Parameters<Rargs...>& initParams) const 
+		std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
+		Parameters<Rargs...>& initParams) const 
 	{
 		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)> cNotVoid = 
 			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...> p) -> Parameters<Dummy>{ 
@@ -164,10 +161,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename Result, typename ...Rargs>
 	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(
-		const std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
-		const std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
-		const std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
-		const Parameters<Rargs...>& initParams) const
+		std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+		Parameters<Rargs...>& initParams) const
 	{ 
 		//Usings
 		using Node = RootGrowNode<Number,Converter,Setting>*;
@@ -493,7 +490,7 @@ namespace hypro {
             }
     	}
     	if(limiting){
-        	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
+    		return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
     	} else {
     		return std::make_pair(CONTAINMENT::FULL, *this);
     	}
@@ -676,13 +673,13 @@ namespace hypro {
     	vector_t<Number> vec = vector_t<Number>(1);
     	vec(0) = hspace.offset();
     	typename Converter::HPolytope hpoly(mat,vec);
-    	return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));
+    	return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly,true));
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		typename Converter::HPolytope hpoly(_mat,_vec);
-		return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));	
+		return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly,true));	
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -748,15 +745,20 @@ namespace hypro {
 		return sf;
 	}
 
-	//template<typename Number, typename Converter, typename Setting>
-	//void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
-	//	//Do nothing
-	//}
+	template<typename Number, typename Converter, typename Setting>
+	void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
+		polyhedralApproximation();	
+	}
 
-	//template<typename Number, typename Converter, typename Setting>
-	//void SupportFunctionNewT<Number,Converter,Setting>::clear() {
-	//	mRoot = nullptr;
-	//}
+	template<typename Number, typename Converter, typename Setting>
+	void SupportFunctionNewT<Number,Converter,Setting>::polyhedralApproximation() {
+		//Amount of directions for evaluation depends on Settings
+		if(Setting::REDUCE_TO_BOX){
+			evaluateTemplate(4,true);
+		} else {
+			evaluateTemplate(8,false);
+		}
+	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<std::size_t> SupportFunctionNewT<Number,Converter,Setting>::collectProjections() const {

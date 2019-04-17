@@ -172,7 +172,9 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	  * @return Empty box.
 	  */
 	static BoxT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
-		return BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+		auto tmp = BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+		assert(tmp.empty());
+		return tmp;
 	}
 
 	/**

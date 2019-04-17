@@ -277,7 +277,6 @@ public:
     }
 };
 
-
 class genericSetContainsVisitor
     : public boost::static_visitor<bool>
 {

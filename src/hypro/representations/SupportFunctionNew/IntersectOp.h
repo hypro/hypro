@@ -46,9 +46,11 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
 	//Multiple siblings constructor
 	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
+		#ifndef NDEBUG
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
+		#endif
 		lhs.addOperation(this, rhs); 
 	}
 
@@ -78,7 +80,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	//Given two result vecs, sum them coefficientwise
+	//Given evaluation result vecs, take the smallest supportValues coefficientwise
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const {
 		
 		TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
@@ -95,14 +97,13 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
 		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {		
 			EvaluationResult<Number> r = resultStackBack.front().at(i);
-
-			//actual aggregation loop
 			for(const auto& res : resultStackBack){
 				assert(res[i].errorCode != SOLUTION::INFEAS);
-				if(res[i].errorCode == SOLUTION::FEAS){
-					r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
-					r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 		
-				}
+				//if(res[i].errorCode == SOLUTION::FEAS){
+				//r.errorCode = res[i].errorCode < r.errorCode ? res[i].errorCode : r.errorCode;
+				r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
+				r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 		
+				//} 
 			}
 			accumulatedResult.emplace_back(r);
 		}
@@ -130,22 +131,29 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	bool empty(const std::vector<bool>& childrenEmpty) const {
 
 		//Current implementation uses Solution 1: template evaluation.
+		//std::cout << "IntersectOp::empty" << std::endl;
 
 		//Quick check
 		for(auto child : childrenEmpty){
 			if(child) return true;
 		}
 
-		//First: select the most negative object
+		//First: select the most negative object - objects can be unbounded (like halfspaces)
 		vector_t<Number> allNegativeDir = -1*vector_t<Number>::Ones(mDimension);
 		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
 		std::size_t indexOfMostNegativeChild = 0;
 		Number mostNegativeEvalValue = Number(100000000);
+		//std::cout << "IntersectOp::empty initialized" << std::endl;		
 		for(std::size_t i = 0; i < this->getChildren().size(); ++i){
 			sfChildren.emplace_back(SupportFunctionNewT<Number,Converter,Setting>(this->getChildren().at(i)));
-			Number childEvalRes = sfChildren.back().evaluate(allNegativeDir,false).supportValue;
+			EvaluationResult<Number> evalRes = sfChildren.back().evaluate(allNegativeDir,false);
+			//std::cout << "eval res for allNegativeDir is: " << evalRes << std::endl;;
+			Number childEvalRes = evalRes.supportValue;
+			//Number childEvalRes = evalRes.errorCode == SOLUTION::INFTY ? -Number(100000000) : evalRes.supportValue;
+			//Number childEvalRes = sfChildren.back().evaluate(allNegativeDir,false).supportValue;
 			indexOfMostNegativeChild = childEvalRes < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
 			mostNegativeEvalValue = childEvalRes < mostNegativeEvalValue ? childEvalRes : mostNegativeEvalValue;
+			//std::cout << "Child " << i << " childEvalRes " << childEvalRes << " indexOfMostNegativeChild " << indexOfMostNegativeChild << " mostNegativeEvalValue " << mostNegativeEvalValue << std::endl;
 		}
 		assert(indexOfMostNegativeChild < sfChildren.size());
 
@@ -159,10 +167,17 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 			
 			//Determine reverse direction for mostNegative
 			Number mostNegEvalRes = mostNegative.evaluate(-direction, false).supportValue;
+			//EvaluationResult<Number> evalRes = mostNegative.evaluate(-direction, false);
+			//Number mostNegEvalRes = evalRes.supportValue;
+			//std::cout << "Direction: \n" << direction;
+			//std::cout << "most negative eval res: " << evalRes << std::endl;
 
 			//Fill evalResults
 			for(const auto& child : sfChildren){
 				Number childEvalRes = child.evaluate(direction, false).supportValue;
+				//EvaluationResult<Number> cEvalRes = child.evaluate(direction, false);
+				//Number childEvalRes = cEvalRes.supportValue;
+				//std::cout << "child eval res: " << cEvalRes << " < " << -mostNegEvalRes << " ? " << (childEvalRes < -mostNegEvalRes) << " if yes then empty." << std::endl;
 				if(childEvalRes < -mostNegEvalRes) return true;
 			}
 		}
