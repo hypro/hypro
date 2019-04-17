@@ -51,7 +51,7 @@ classdef MHyProState < handle
         end
         
         function out = vertices(obj, offset)
-            out = MHyPro('State', 'vertices', obj.Handle, offset);
+            out = MHyPro('State', 'vertices', obj.Handle, offset-1);
         end
         
         function out = project(obj, dims, offset)

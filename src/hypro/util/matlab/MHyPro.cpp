@@ -52,6 +52,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         MReset::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Reacher")){
         MReach::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "State")){
+        MState::process(nlhs, plhs, nrhs, prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");
     }

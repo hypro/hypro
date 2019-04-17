@@ -164,10 +164,8 @@ void ObjectHandle::flowpipes2Matlab(const std::vector<std::pair<unsigned, Object
         mxArray* num = mxCreateDoubleScalar((double) currentPair.first);
         std::vector<hypro::State_t<double>> f = currentPair.second;
         int len = f.size();
-        mexPrintf("size: %d", len);
         const mwSize dims[2] = {1, (mwSize) len};
         mxArray* states = mxCreateCellArray(2,dims);
-        //  ObjectHandle::objArray2Matlab(f, states, len);?
         for(int j = 0; j < len; j++){
             auto item = f[j];
             mxSetCell(states, j, convertPtr2Mat<hypro::State_t<double>>(new hypro::State_t<double>(item)));
