@@ -143,8 +143,9 @@ TYPED_TEST(TemplatePolyhedronTest, Containment){
 	EXPECT_TRUE(this->middle.contains(p2));	
 
 	//Point outside
-	Point<TypeParam> p3({TypeParam(1.7234), TypeParam(2.1)});
-	EXPECT_TRUE(!(this->middle.contains(p3)));	
+	//Point<TypeParam> p3({TypeParam(1.7234), TypeParam(2.1)});
+	Point<TypeParam> p3({TypeParam(1.1234), TypeParam(4.1)});
+	EXPECT_FALSE(this->middle.contains(p3));	
 
 	//Template Poly in a different dimension - should fail
 	matrix_t<TypeParam> diffDimMat = matrix_t<TypeParam>::Identity(3,3);
@@ -158,15 +159,15 @@ TYPED_TEST(TemplatePolyhedronTest, Containment){
 	}
 
 	//Template poly that lies fully within middle 
-	vector_t<TypeParam> withinVec = vector_t<TypeParam>::Zero(2);
+	vector_t<TypeParam> withinVec = 0.5*vector_t<TypeParam>::Ones(4);
 	TemplatePolyhedron<TypeParam> t2(this->mat, withinVec);
 	EXPECT_TRUE(this->middle.contains(t2)); 
 
 	//Template poly that lies partially within middle
-	EXPECT_TRUE(this->middle.contains(this->upright)); //???
+	EXPECT_FALSE(this->middle.contains(this->upright)); //???
 
 	//Template poly that lies fully outside middle
- 	vector_t<TypeParam> outsideVec = 100*vector_t<TypeParam>::Ones(2);
+ 	vector_t<TypeParam> outsideVec = 100*vector_t<TypeParam>::Ones(4);
  	TemplatePolyhedron<TypeParam> t3(this->mat, outsideVec);
  	EXPECT_TRUE(!(this->middle.contains(t3)));
 }

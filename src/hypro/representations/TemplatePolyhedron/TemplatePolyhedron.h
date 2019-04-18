@@ -222,7 +222,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number,Converter,Setting>& b ) {
-		// Put outstream operations here.
+		std::cout << "Matrix address: " << b.rGetMatrixPtr() << std::endl << b.matrix() << "Vector: " << std::endl << b.vector() << std::endl;
 #else
 	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number,Converter,Setting>& ) {
 #endif

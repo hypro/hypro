@@ -176,20 +176,22 @@ namespace hypro {
 		if(point.dimension() != mMatrixPtr->cols()){
 			throw std::invalid_argument("Template polyhedron cannot contain point of different dimension.");
 		}
-		std::cout << "matrix: \n" << *mMatrixPtr << "point: \n" << point << std::endl;
-		std::cout << "product: \n" << Point<Number>((*mMatrixPtr)*(point.rawCoordinates())) << "is smaller than mVector? \n" << mVector << std::endl;
-		if(Point<Number>((*mMatrixPtr)*(point.rawCoordinates())) <= Point<Number>(mVector)){
-			return true;
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			if(!carl::AlmostEqual2sComplement(mMatrixPtr->row(i).dot(point.rawCoordinates()), mVector(i), 128) && mMatrixPtr->row(i).dot(point.rawCoordinates()) > mVector(i)){
+				return false;
+			}
 		}
-		return false;
+		return true;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	bool TemplatePolyhedronT<Number,Converter,Setting>::contains( const TemplatePolyhedronT<Number,Converter,Setting>& templatePolyhedron ) const {
+		//if(this->empty()) return false; 
+		//if(templatePolyhedron.empy()) return true;
 		if(templatePolyhedron.dimension() != mMatrixPtr->cols()){
 			throw std::invalid_argument("Template polyhedron cannot contain another template polyhedron of different dimension.");
 		}
-		for(int i = 0; mVector.rows(); ++i){
+		for(int i = 0; i < mVector.rows(); i++){
 			if(mVector(i) < templatePolyhedron.vector()(i)) return false;
 		}
 		return true;
