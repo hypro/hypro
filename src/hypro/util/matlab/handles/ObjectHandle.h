@@ -19,7 +19,6 @@
 #include "../../../datastructures/HybridAutomaton/Condition.h"
 #include "../../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
 #include "../../../datastructures/HybridAutomaton/State.h"
-// #include "../../../datastructures/reachability/Settings.h"
 
 
 class ObjectHandle{
@@ -592,13 +591,17 @@ std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(mxArray* m
  **/
 std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
     double* matrix = mxGetPr(m_matrix);
-    std::vector<std::vector<size_t>> vector(dimy);
+    std::vector<std::vector<size_t>> vector(dimx);
+    // mexPrintf("rows: %d, cols: %d\n", dimx, dimy);
     for(int i = 0; i < dimx; i++){
-        std::vector<size_t> temp(dimx);
+        std::vector<size_t> temp(dimy);
+        // mexPrintf("Vector no.: %d\n", i);
         for(int j = 0; j < dimy; j++){
-            temp.emplace_back((size_t)matrix[i*dimy+j]);
+            temp[j] = (size_t)matrix[i*dimy+j];
+            // mexPrintf("matrix[%d] = %d ",i*dimy+j, matrix[i*dimy+j]);
         }
-        vector.emplace_back(temp);
+        // mexPrintf("\n");
+        vector[i] = temp;
     }
     return vector;
 }
@@ -640,29 +643,3 @@ std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle:
     } 
 
 }
-
-/**
- * @brief
- **/
-// hypro::ReachabilitySettings ObjectHandle::mReachSetting2Hypro(const mxArray* settings){
-//     double timeBound = (double) mxGetScalar(mxGetCell(settings,0));
-//     int jumpDepth = (int) mxGetScalar(mxGetCell(settings,1));
-//     double timeStep = (double) mxGetScalar(mxGetCell(settings,2));
-//     char file[64];
-//     mxGetString(mxGetCell(settings,3), file, sizeof(file));
-//     std::string fileName = std::string(file);
-//     unsigned long pplDenominator = (unsigned long) mxGetScalar(mxGetCell(settings,4));
-//     const mwSize* dims;
-//     int dimx, dimy;
-//     dims = mxGetDimensions(mxGetCell(settings,5));
-//     dimx = dims[0];
-//     dimy = dims[1];
-//     std::vector<std::vector<std::size_t>> plotDimensions = mVectorOfVectors2Hypro(mxGetCell(settings,5), dimx, dimy);
-//     int temp = (int) mxGetScalar(mxGetCell(settings,6));
-//     bool uniformBolating = false;
-//     if (temp == 1)
-//         uniformBolating = true;
-
-//     int clustering = (int) mxGetScalar(mxGetCell(settings,7));; // -1 = off, 0 = all, i = maximal number of segments to unify
-    
-// }

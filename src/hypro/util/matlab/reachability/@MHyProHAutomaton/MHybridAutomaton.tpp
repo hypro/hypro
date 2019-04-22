@@ -100,7 +100,7 @@
         // dims = mxGetDimensions(prhs[3]);
         // dimy = dims[0];
         // dimx = dims[1];
-        // std::vector<std::vector<size_t>> decomposition = ObjectHandle::mVectorOfVectors2Hypro(in_vec,dimx, dimy);
+        // std::vector<std::vector<size_t>> decomposition = ObjectHandle::mVectorOfVectors2Hypro(m_in_vec,dimx, dimy);
         // hypro::HybridAutomaton<double>* obj = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
         //obj->decompose();
         // obj->decompose(decomposition);

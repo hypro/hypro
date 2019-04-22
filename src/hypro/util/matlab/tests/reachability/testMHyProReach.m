@@ -7,11 +7,11 @@ tran = MHyProTransition();
 reset = MHyProReset();
 guard = MHyProCondition();
 
-inv_mat = [-1];
+inv_mat = [-1 0 0];
 inv_vec = 0;
 inv = MHyProCondition(inv_mat, inv_vec);
 loc.setInvariant(inv);
-flowMatrix = [1 0; 0 1];
+flowMatrix = [1 0 0; 0 1 0; 0 1 1];
 loc.setFlow(flowMatrix);
 
 guardVector = [0];
@@ -25,7 +25,7 @@ linReset = [1];
 reset.setMatrix(linReset);
 reset.setVector(constReset);
 
-tran.setAggregation(2);
+tran.setAggregation(1);
 tran.setGuard(guard);
 tran.setSource(loc);
 tran.setTarget(loc);
@@ -141,12 +141,17 @@ automaton.addLocation(loc);
 
 % Reachability
 
-settings = struct('timeStep', 0.001, 'timeBound', 20, 'jumpDepth', 3);
+settings = struct('timeStep', 0.01, 'timeBound', 2, 'jumpDepth', 3, 'plotDimensions', [1 3; 2 4]);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
+reach.settings();
 
+tic;
 flowpipes = reach.computeForwardReachability();
+time = toc;
+
+disp("Time needed: ", num2str(time));
 num_flowpipes = length(flowpipes);
 
 for pipe = 1:num_flowpipes
@@ -157,7 +162,7 @@ for pipe = 1:num_flowpipes
     for state = 1:num_states
         currentState = currentFlowpipe{state};
         vertices = currentState.vertices(1);
-        plot(vertices(1), vertices(2), 'o');
+        plot(vertices(1), vertices(2), 'bo');
         hold on
     end  
 end
