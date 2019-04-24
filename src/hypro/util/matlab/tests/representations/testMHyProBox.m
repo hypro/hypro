@@ -227,6 +227,6 @@ inter = box2.intervals();
 assert(isequal(inter, [1 5; 1 7; 1 2; 2 3]));
 
 % Plot
-% box1.plot([3 4]);
+box1.plotObj([3 4]);
 
 res = 1;

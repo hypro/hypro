@@ -72,6 +72,43 @@ classdef MHyProReach < handle
             MHyPro('Reacher', 'settings', obj.Handle);
         end
         
+         function plotVertices(obj, vertices, dims)
+            %Compute projection
+            temp = vertices(dims(1):dims(2),:);
+            ver = unique(temp.','rows').';
+            ver_x = ver(1,:);
+            ver_y = ver(2,:);
+            cx = mean(ver_x);
+            cy = mean(ver_y);
+            a = atan2(ver_y - cy, ver_x - cx);
+            [~, order] = sort(a);
+            ver_x = ver_x(order);
+            ver_y = ver_y(order);
+
+            pgon = polyshape(ver_x, ver_y);
+            plot(pgon);           
+        end
+        
+        function plot(obj, flowpipes, type, dims)
+            num_flowpipes = length(flowpipes);
+            for pipe = 1:num_flowpipes
+                currentFlowpipe =  flowpipes{pipe};
+                num_states = length(currentFlowpipe);
+                disp(['Number of states: ', num2str(num_states)]);
+                figure()
+                for state = 1:num_states
+                    currentState = currentFlowpipe{state};
+                    vertices = currentState.vertices(1);
+                    obj.plotVertices(vertices, dims);
+%                     num_vertices= length(vertices);
+%                     for point = 1:num_vertices
+%                         plot(vertices(1), vertices(2), 'bo');
+%                     end
+                    hold on
+                end  
+            end
+        end
+        
     end
     
 end

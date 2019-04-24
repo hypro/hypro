@@ -121,7 +121,7 @@ assert(isequal(flm, alocfm));
 
 % Reachability
 
-settings = struct('timeStep', 0.01, 'timeBound', 20, 'jumpDepth', 3);
+settings = struct('timeStep', 0.1, 'timeBound', 20, 'jumpDepth', 3);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -130,22 +130,11 @@ reach.settings();
 tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
-
 disp("Time needed: ", num2str(time));
-num_flowpipes = length(flowpipes);
+dim = [1 2];
+reach.plot(flowpipes, 0, dim);
 
-for pipe = 1:num_flowpipes
-    currentFlowpipe =  flowpipes{pipe};
-    num_states = length(currentFlowpipe);
-    disp(['Number of states: ', num2str(num_states)]);
-    figure()
-    for state = 1:num_states
-        currentState = currentFlowpipe{state};
-        vertices = currentState.vertices(1);
-        plot(vertices(1), vertices(2), 'bo');
-        hold on
-    end  
-end
+
 
 
 

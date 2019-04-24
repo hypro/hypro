@@ -91,7 +91,7 @@ classdef MHyProGeometricObject < handle
             out = MHyPro(obj.Type, 'clear', obj.Handle, rhs.Handle);
         end
      
-        function plot(obj, dims)
+        function plotObj(obj, dims)
             isempty = MHyPro(obj.Type, 'isEmpty', obj.Handle);
             if isempty
                 warning('MHyProGeometricObject - plot: It is not possible to plot an empty object.');
@@ -100,6 +100,29 @@ classdef MHyProGeometricObject < handle
                 %Compute projection
                 v = obj.vertices();
                 temp = v(dims(1):dims(2),:);
+                ver = unique(temp.','rows').';
+                ver_x = ver(1,:);
+                ver_y = ver(2,:);
+                cx = mean(ver_x);
+                cy = mean(ver_y);
+                a = atan2(ver_y - cy, ver_x - cx);
+                [~, order] = sort(a);
+                ver_x = ver_x(order);
+                ver_y = ver_y(order);
+
+                pgon = polyshape(ver_x, ver_y);
+                plot(pgon);           
+            end
+        end
+        
+        function plotVertices(obj, vertices, dims)
+            isempty = MHyPro(obj.Type, 'isEmpty', obj.Handle);
+            if isempty
+                warning('MHyProGeometricObject - plot: It is not possible to plot an empty object.');
+            else
+           
+                %Compute projection
+                temp = vertices(dims(1):dims(2),:);
                 ver = unique(temp.','rows').';
                 ver_x = ver(1,:);
                 ver_y = ver(2,:);
