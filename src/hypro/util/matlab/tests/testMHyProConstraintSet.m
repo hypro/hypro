@@ -10,7 +10,7 @@ mat = mat_vec_set.matrix();
 assert(isequal(mat, eye(3)));
 
 % Get vector
-vec = mat_vec_set.vector();
+vec = mat_vec_set.vector()
 assert(isequal(vec, [1;2;3]));
 
 % Check if is axis aligned

@@ -83,6 +83,7 @@ void MGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const
     mat_dimx = (int) mat_dims[0];
     vec_dims = mxGetDimensions(prhs[3]);
     len = (int) vec_dims[0];
+    mexPrintf("Rows: %d\n", len);
     hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
     hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], len);
     plhs[0] =  convertPtr2Mat<T>(new T(matrix, vector));
@@ -164,7 +165,8 @@ void MGeometricObject<T>::vector(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     hypro::vector_t<double> vec = temp->vector();
     // mexPrintf("Vector:\nrows: %d\n",vec.size());
     plhs[0] = mxCreateDoubleMatrix(vec.size(), 1, mxREAL);
-    ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.size());
+    ObjectHandle::convert2Matlab(vec, plhs[0], vec.size(), 1);
+    // ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.size());
 }
 
 /**

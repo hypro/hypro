@@ -60,8 +60,8 @@ void MAffineFlow::getTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     hypro::affineFlow<double>* flow = convertMat2Ptr<hypro::affineFlow<double>>(prhs[2]);
     hypro::vector_t<double> vector = flow->getTranslation();
 
-    plhs[0] = mxCreateDoubleMatrix(1, vector.size(), mxREAL);
-    ObjectHandle::convert2Matlab(vector, plhs[0], 1, vector.size());
+    plhs[0] = mxCreateDoubleMatrix(vector.size(), 1, mxREAL);
+    ObjectHandle::convert2Matlab(vector, plhs[0], vector.size(), 1);
 }
 
 

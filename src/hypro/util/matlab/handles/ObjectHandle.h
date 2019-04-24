@@ -212,10 +212,29 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
     double* out = mxGetPr(m_out);
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
-            out[i*dimy+j] = matrix.coeff(i,j);
+            out[i+j*dimx] = matrix.coeff(i,j);
         }
     }
 }
+
+/**
+ * @brief Converts a Matlab matrix into HyPro matrix_t<double>
+ * @param m_matrix Pointer to the Matlab matrix
+ * @param dimx, dimy The dimensions of the matrix
+ **/
+hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
+    double* matrix = mxGetPr(m_matrix);
+    // mexPrintf("GO: rows: %d, cols: %d\n", dimx, dimy);
+    hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
+    for(int i = 0; i < dimx; i++){
+        for(int j = 0; j < dimy; j++){
+            //mexPrintf("(%d, %d) = matrix[%d] = %f\n", i, j, i+j*dimx ,matrix[i+j*dimx]);
+            (*hypro_matrix)(i,j) = matrix[i+j*dimx];
+        }
+    }
+    return *hypro_matrix;
+}
+
 
 /**
  * @brief Converts a HyPro vector into Matlab vector
@@ -225,7 +244,7 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
  **/
 void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m_out, const int dimx, const int dimy, const int index){
     double* out = mxGetPr(m_out);
-    for(int i = 0; i < dimy; i++){
+    for(int i = 0; i < dimx; i++){
         out[i] = vec(i);
     }
 }
@@ -405,23 +424,6 @@ std::vector<carl::Interval<double>> ObjectHandle::mPoints2Hypro(const mxArray* m
     return *hyPro_intervals;
 }
 
-/**
- * @brief Converts a Matlab matrix into HyPro matrix_t<double>
- * @param m_matrix Pointer to the Matlab matrix
- * @param dimx, dimy The dimensions of the matrix
- **/
-hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
-    double* matrix = mxGetPr(m_matrix);
-    // mexPrintf("GO: rows: %d, cols: %d\n", dimx, dimy);
-    hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
-    for(int i = 0; i < dimx; i++){
-        for(int j = 0; j < dimy; j++){
-            // mexPrintf("(%d, %d) = %d\n", j, i, i*dimy+j);
-            (*hypro_matrix)(i,j) = matrix[i*dimy+j];
-        }
-    }
-    return *hypro_matrix;
-}
 
 /**
  * @brief Converts a Matlab vector into HyPro vector
@@ -432,6 +434,7 @@ hypro::vector_t<double> ObjectHandle::mVector2Hypro(const mxArray* m_vector, con
     double* vector = mxGetPr(m_vector);
     hypro::vector_t<double> *hypro_vector = new hypro::vector_t<double>(v_len);
     for(int i = 0; i < v_len; i++){  
+        //mexPrintf("Vector(%d) = %f", i, vector[i]);
         (*hypro_vector)(i) = vector[i];
     }
     return *hypro_vector;

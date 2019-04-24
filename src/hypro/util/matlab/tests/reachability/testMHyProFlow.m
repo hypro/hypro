@@ -56,9 +56,9 @@ assert(tran == 0);
 tran = affineFlow.hasTranslation();
 assert(tran == 1);
 
-affineFlowEmpt.setTranslation([1; 2]);
-tran = affineFlowEmpt.getTranslation();
-assert(isequal(tran,[1 2]));
+affineFlowEmpt.setTranslation([1; 2])
+tran = affineFlowEmpt.getTranslation()
+assert(isequal(tran,[1; 2]));
 
 
 

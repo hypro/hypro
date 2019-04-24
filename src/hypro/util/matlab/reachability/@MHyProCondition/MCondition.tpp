@@ -142,7 +142,7 @@ void MCondition::getVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
     hypro::vector_t<double> vec = cond->getVector();
     plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
-    ObjectHandle::convert2Matlab(vec, plhs[0], 1,vec.rows());
+    ObjectHandle::convert2Matlab(vec, plhs[0],vec.rows(), 1);
 }
 
 /**

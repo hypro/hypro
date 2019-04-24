@@ -32,7 +32,7 @@ reset.setVector(constReset);
 
 
 % Setup transition
-tran.setAggregation('parallelotopeAgg');
+tran.setAggregation(2);
 tran.setGuard(guard);
 tran.setSource(loc);
 tran.setTarget(loc);

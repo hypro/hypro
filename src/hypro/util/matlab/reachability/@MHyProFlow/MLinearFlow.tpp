@@ -79,7 +79,7 @@ void MLinearFlow::getFlowMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArr
     int rows = matrix.rows();
     int cols = matrix.cols();
     plhs[0] = mxCreateDoubleMatrix(rows, cols, mxREAL);
-    ObjectHandle::convert2Matlab(matrix, plhs[0], cols, rows);
+    ObjectHandle::convert2Matlab(matrix, plhs[0], rows, cols);
 }
 
 /**
