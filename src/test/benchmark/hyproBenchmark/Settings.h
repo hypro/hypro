@@ -1,6 +1,6 @@
 /**
  * @brief General benchmark settings.
- * 
+ *
  * @file Settings.h
  * @author Stefan Schupp
  * @date 2018-09-28

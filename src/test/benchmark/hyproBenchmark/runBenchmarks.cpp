@@ -22,11 +22,11 @@ int main(int argc, char const *argv[])
     benchmark::Timer general;
     benchmark::Settings s;
 
-    //std::cout << "Benchmark boxes." << std::endl;
-    //benchmark::box::run(s);
+    std::cout << "Benchmark boxes." << std::endl;
+    benchmark::box::run(s);
 
-    std::cout << "Benchmark polytopes." << std::endl;
-    benchmark::polytope::run(s);
+    //std::cout << "Benchmark polytopes." << std::endl;
+    //benchmark::polytope::run(s);
 
     //std::cout << "Benchmark support functions." << std::endl;
     //std::async(std::launch::async,benchmark::sf::run,s);
