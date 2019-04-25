@@ -46,7 +46,7 @@ namespace box {
             }
             auto runningTime = runTimerHyPro.elapsed();
             ress.emplace_back({"affineTransformation",runningTime/settings.iterations,static_cast<int>(d)});
-            //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+            std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             Timer runTimerHyProNaive;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
@@ -69,6 +69,7 @@ namespace box {
             }
             auto runningTimeNaive = runTimerHyProNaive.elapsed();
             ress.emplace_back({"affineTransformationNaive",runningTimeNaive/settings.iterations,static_cast<int>(d)});
+            std::cout << "Dimension " << d << ":  Running took " << runningTimeNaive.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;
 

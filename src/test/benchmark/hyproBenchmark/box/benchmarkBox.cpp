@@ -9,8 +9,8 @@ namespace box
         Results<std::size_t> ress;
         std::vector<std::future<Results<std::size_t>>> workingTasks;
 
-        workingTasks.emplace_back(std::async(std::launch::deferred,intersectHalfspace,settings));
-        //workingTasks.emplace_back(std::async(std::launch::deferred,affineTransformation,settings));
+        //workingTasks.emplace_back(std::async(std::launch::deferred,intersectHalfspace,settings));
+        workingTasks.emplace_back(std::async(std::launch::deferred,affineTransformation,settings));
         //workingTasks.emplace_back(std::async(std::launch::deferred,unite,settings));
         //workingTasks.emplace_back(std::async(std::launch::deferred,intersect,settings));
         //workingTasks.emplace_back(std::async(std::launch::deferred,computeSupport,settings));
