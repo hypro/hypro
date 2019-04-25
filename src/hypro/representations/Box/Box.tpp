@@ -289,7 +289,7 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 
 template<typename Number, typename Converter, class Setting>
 EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
-	assert(_direction.rows() == this->dimension());
+	assert(_direction.rows() == Eigen::Index(this->dimension()));
 	if(this->empty()){
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
 	}

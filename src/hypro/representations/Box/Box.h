@@ -325,7 +325,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool = true) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization).
