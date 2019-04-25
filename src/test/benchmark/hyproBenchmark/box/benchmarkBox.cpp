@@ -10,37 +10,39 @@ namespace box
         std::vector<std::future<Results<std::size_t>>> workingTasks;
 
         workingTasks.emplace_back(std::async(std::launch::deferred,intersectHalfspace,settings));
-        workingTasks.emplace_back(std::async(std::launch::deferred,affineTransformation,settings));
-        workingTasks.emplace_back(std::async(std::launch::deferred,unite,settings));
-        workingTasks.emplace_back(std::async(std::launch::deferred,intersect,settings));
-        workingTasks.emplace_back(std::async(std::launch::deferred,computeSupport,settings));
+        //workingTasks.emplace_back(std::async(std::launch::deferred,affineTransformation,settings));
+        //workingTasks.emplace_back(std::async(std::launch::deferred,unite,settings));
+        //workingTasks.emplace_back(std::async(std::launch::deferred,intersect,settings));
+        //workingTasks.emplace_back(std::async(std::launch::deferred,computeSupport,settings));
 
         // half-space intersection
         auto tmp = workingTasks[0].get();
         tmp.createCSV("boxIntersectHalfspace", "\t", "intersectHalfspace");
+        tmp.createCSV("boxIntersectHalfspaceNaive", "\t", "intersectHalfspaceNaive");
         tmp.createCSV("boxIntersectHalfspacePPL", "\t", "intersectHalfspacePPL");
         std::cout << "Benchmarked hsp intersection." << std::endl;
 
         // affine transformation
-        tmp = workingTasks[1].get();
-        tmp.createCSV("boxAffineTransformation", "\t");
-        std::cout << "Benchmarked affine transformation." << std::endl;
+        //tmp = workingTasks[1].get();
+        //tmp.createCSV("boxAffineTransformation", "\t");
+        //std::cout << "Benchmarked affine transformation." << std::endl;
 
         // union
-        tmp = workingTasks[2].get();
-        tmp.createCSV("boxUnion", "\t");
-        std::cout << "Benchmarked union." << std::endl;
+        //tmp = workingTasks[2].get();
+        //tmp.createCSV("boxUnion", "\t");
+        //std::cout << "Benchmarked union." << std::endl;
 
         // intersection
-        tmp = workingTasks[3].get();
-        tmp.createCSV("boxIntersection", "\t","intersect");
-        tmp.createCSV("boxIntersectionPPL", "\t", "intersectPPL");
-        std::cout << "Benchmarked intersection." << std::endl;
+        //tmp = workingTasks[3].get();
+        //tmp.createCSV("boxIntersection", "\t","intersect");
+        //tmp.createCSV("boxIntersectionPPL", "\t", "intersectPPL");
+        //std::cout << "Benchmarked intersection." << std::endl;
 
         // support
-        tmp = workingTasks[4].get();
-        tmp.createCSV("boxComputeSupport", "\t");
-        std::cout << "Benchmarked compute support." << std::endl;
+        //auto tmp = workingTasks[0].get();
+        //tmp.createCSV("boxComputeSupport", "\t", "computeSupport");
+        //tmp.createCSV("boxComputeSupportNaive", "\t", "computeSupportNaive");
+        //std::cout << "Benchmarked compute support." << std::endl;
 
         return ress;
     }

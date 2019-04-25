@@ -37,6 +37,14 @@ namespace box {
             ress.emplace_back({"computeSupport",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
+            // run instances
+            Timer runTimerHyProConversion;
+            for(std::size_t i = 0; i < settings.iterations; ++i) {
+                hypro::Converter<::benchmark::Number>::toHPolytope(box).evaluate(normals[i]);
+            }
+            auto runningTimeNaive = runTimerHyProConversion.elapsed();
+            ress.emplace_back({"computeSupportNaive",runningTimeNaive/settings.iterations,static_cast<int>(d)});
+
             ress.mRunningTime += runningTime;
 
             // prepare next run

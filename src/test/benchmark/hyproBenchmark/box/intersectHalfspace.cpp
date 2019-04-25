@@ -43,7 +43,7 @@ namespace box {
                 #endif
             }
             auto creationTime = creationTimer.elapsed();
-            //std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+            std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
             ress.mCreationTime += creationTime;
 
             // run instances
@@ -53,7 +53,15 @@ namespace box {
             }
             auto runningTime = runTimerHyPro.elapsed();
             ress.emplace_back({"intersectHalfspace",runningTime/settings.iterations,static_cast<int>(d)});
-            //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+            std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+
+            Timer runTimerHyProNaive;
+            for(std::size_t i = 0; i < settings.iterations; ++i) {
+                hypro::Converter<::benchmark::Number>::toBox(hypro::Converter<::benchmark::Number>::toHPolytope(box).intersectHalfspace(hsps[i]));
+            }
+            auto runningTimeNaive = runTimerHyProNaive.elapsed();
+            ress.emplace_back({"intersectHalfspaceNaive",runningTimeNaive/settings.iterations,static_cast<int>(d)});
+            std::cout << "Dimension " << d << ":  Running took " << runningTimeNaive.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL
             std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();

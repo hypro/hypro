@@ -59,7 +59,7 @@ class Converter {
 		template<typename BoxSetting = typename Box::Settings>
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename BoxSetting = typename Box::Settings, typename inSetting>
-		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
+		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::ALTERNATIVE);
 		template<typename BoxSetting = typename Box::Settings, typename inSetting>
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 		#ifdef HYPRO_USE_PPL
