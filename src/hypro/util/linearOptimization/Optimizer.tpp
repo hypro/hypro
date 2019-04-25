@@ -392,10 +392,10 @@ namespace hypro {
 		glpk_context& glpCtx = mGlpkContext[std::this_thread::get_id()];
 
 		if(!glpCtx.mConstraintsSet){
-			//std::cout << "!mConstraintsSet" << std::endl;
+			std::cout << "!mConstraintsSet" << std::endl;
 
 			if(alreadyInitialized) { // clean up old setup.
-				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
+				std::cout << "alreadyInitialized - Cleanup" << std::endl;
 				glpCtx.deleteArrays();
 
 				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " refreshes its glp instance. (@" << &mGlpkContext[std::this_thread::get_id()] << ")");
@@ -431,6 +431,11 @@ namespace hypro {
 				glp_add_rows( glpCtx.lp, numberOfConstraints );
 				for ( int i = 0; i < numberOfConstraints; i++ ) {
 					// Set relation symbols correctly
+					//if(mRelationSymbols.empty()){
+					//	std::cout << "no relation symbols" << std::endl;
+					//} else {
+					//	std::cout << "relation symbols size: " << mRelationSymbols.size() << std::endl;
+					//}
 					switch(mRelationSymbols[i]) {
 						case carl::Relation::LEQ: {
 							// set upper bounds, lb-values (here 0.0) are ignored.
@@ -467,9 +472,9 @@ namespace hypro {
 				assert(mConstraintMatrix.size() == numberOfConstraints * cols);
 				for ( int i = 0; i < numberOfConstraints * cols; ++i ) {
 					glpCtx.ia[i + 1] = ( int( i / cols ) ) + 1;
-					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+					std::cout << __func__ << " set ia[" << i+1 << "]= " << glpCtx.ia[i+1];
 					glpCtx.ja[i + 1] = ( int( i % cols ) ) + 1;
-					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+					std::cout << ", ja[" << i+1 << "]= " << glpCtx.ja[i+1];
 					glpCtx.ar[i + 1] = carl::toDouble( mConstraintMatrix.row(glpCtx.ia[i + 1] - 1)( glpCtx.ja[i + 1] - 1 ) );
 					// TODO:: Assuming ColMajor storage alignment.
 					//assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
@@ -487,14 +492,14 @@ namespace hypro {
 				#ifndef RECREATE_SOLVER
 				mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 
-				//std::cout << "Set new constraints." << std::endl;
+				std::cout << "Set new constraints." << std::endl;
 
 				for(const auto& constraintPair : mFormulaMapping) {
 					mSmtratSolver.inform(constraintPair.first);
 					mSmtratSolver.add(constraintPair.first, false);
 				}
 
-				//std::cout << "Set new constraints - done." << std::endl;
+				std::cout << "Set new constraints - done." << std::endl;
 
 				mCurrentFormula = smtrat::FormulaT(mSmtratSolver.formula());
 				#endif

@@ -2,7 +2,7 @@
  * TemplatePolyhedron.h
  *
  * Class representing a bounded template polyhedron. 
- * Each polyhedron made from this class will have the same constraints, until it is explicitly changed.
+ * Each polyhedron made from this class will have the same constraint matrix, until it is explicitly changed.
  * However, the offsets can be shifted around freely.
  * In this general version, each constraint can be a linear constraint.
  * 
@@ -48,10 +48,13 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 **************************************************************************/
 
   	//The constraint matrix which is the same for every polyhedron until explicitly changed.
-  	std::shared_ptr<matrix_t<Number>> mMatrixPtr = nullptr;
+  	std::shared_ptr<const matrix_t<Number>> mMatrixPtr = nullptr;
 
   	//The offset vector, different for each instance of this class
   	vector_t<Number> mVector;
+
+  	//Optimizer as member since needed in different functions
+  	Optimizer<Number> mOptimizer;
 
   public:
 
@@ -113,12 +116,15 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @return The constraint matrix
 	 */
 	inline matrix_t<Number> matrix() const { return *mMatrixPtr; }
-	std::shared_ptr<matrix_t<Number>> rGetMatrixPtr() const { return mMatrixPtr; }
-	void setMatrixToNull() { mMatrixPtr = nullptr; }
-
-	//void setMatrix(matrix_t<Number>&& mat) const { 
-	//	mMatrixPtr = std::make_shared<matrix_t<Number>>(mat);
-	//}
+	
+	std::shared_ptr<const matrix_t<Number>> rGetMatrixPtr() const { return mMatrixPtr; }
+	
+	void setMatrixToNull() { 
+		mOptimizer.setMatrix(matrix_t<Number>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols()));
+		mMatrixPtr = nullptr; 
+	}
+	
+	Optimizer<Number>& getOptimizer() { return mOptimizer; }
 
 	/**
 	 * @brief Getter for offset vecor

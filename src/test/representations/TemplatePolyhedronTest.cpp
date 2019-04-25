@@ -51,19 +51,21 @@ protected:
     vector_t<Number> downleftVec; 	//for downleft
     vector_t<Number> downrightVec;	//for downright
 
-    TemplatePolyhedron<Number> middle;	  	//Middle of square in origin
-    TemplatePolyhedron<Number> upleft;	  	//Middle of square in (-1,1)
-    TemplatePolyhedron<Number> upright;		//Middle of square in (1,1)	
-    TemplatePolyhedron<Number> downleft; 	//Middle of square in (-1,-1)
-    TemplatePolyhedron<Number> downright;	//Middle of square in (1,-1)
+    TemplatePolyhedron<Number> empty;		//An empty tpoly
+    TemplatePolyhedron<Number> middle;	  	//Middle of square in origin with side length 2
+    TemplatePolyhedron<Number> upleft;	  	//Middle of square in (-1,1) with side length 2
+    TemplatePolyhedron<Number> upright;		//Middle of square in (1,1)	with side length 2
+    TemplatePolyhedron<Number> downleft; 	//Middle of square in (-1,-1) with side length 2
+    TemplatePolyhedron<Number> downright;	//Middle of square in (1,-1) with side length 2
 };
 
 TYPED_TEST(TemplatePolyhedronTest, Constructor){
 
 	//Empty constructor
-	TemplatePolyhedron<TypeParam> empty;
-	EXPECT_EQ(empty.rGetMatrixPtr(), nullptr);
-	EXPECT_EQ(empty.vector(), vector_t<TypeParam>::Zero(0));
+	EXPECT_EQ(this->empty.rGetMatrixPtr(), nullptr);
+	EXPECT_EQ(this->empty.vector(), vector_t<TypeParam>::Zero(0));
+	EXPECT_EQ(this->empty.getOptimizer().matrix(), matrix_t<TypeParam>());
+	EXPECT_EQ(this->empty.getOptimizer().vector(), vector_t<TypeParam>());
 
 	//Define control matrix
 	matrix_t<TypeParam> controlMatrix = matrix_t<TypeParam>::Zero(4,2);
@@ -88,6 +90,8 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	TemplatePolyhedron<TypeParam> regular(2, noOfSides, offset);
 	EXPECT_EQ(regular.matrix(), controlMatrix);
 	EXPECT_EQ(regular.vector(), offset);
+	EXPECT_EQ(regular.getOptimizer().matrix(), controlMatrix);
+	EXPECT_EQ(regular.getOptimizer().vector(), offset);
 
 	//Matrix Vector constructor - with a different matrix and vector
 	matrix_t<TypeParam> differentMatrix = matrix_t<TypeParam>::Zero(3,2);
@@ -100,18 +104,24 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	EXPECT_EQ(matVecTPoly.matrix(), differentMatrix);
 	EXPECT_EQ(matVecTPoly.vector(), differentOffset);
 	EXPECT_EQ(regular.matrix(), controlMatrix);	
+	EXPECT_EQ(matVecTPoly.getOptimizer().matrix(), differentMatrix);
+	EXPECT_EQ(matVecTPoly.getOptimizer().vector(), differentOffset);
 
 	//Copy constructor
 	TemplatePolyhedron<TypeParam> copy(matVecTPoly);
 	EXPECT_EQ(copy.matrix(), matVecTPoly.matrix());
 	EXPECT_EQ(copy.vector(), matVecTPoly.vector());
 	EXPECT_EQ(copy.rGetMatrixPtr(), matVecTPoly.rGetMatrixPtr());
+	EXPECT_EQ(copy.getOptimizer().matrix(), matVecTPoly.matrix());
+	EXPECT_EQ(copy.getOptimizer().vector(), matVecTPoly.vector());
 
 	//Settings constructor
 	TemplatePolyhedronT<TypeParam,Converter<TypeParam>,TemplatePolyhedronDifferent> setting(matVecTPoly);
 	EXPECT_EQ(setting.matrix(), matVecTPoly.matrix());
 	EXPECT_EQ(setting.vector(), matVecTPoly.vector());
 	EXPECT_EQ(setting.rGetMatrixPtr(), matVecTPoly.rGetMatrixPtr());
+	EXPECT_EQ(setting.getOptimizer().matrix(), matVecTPoly.matrix());
+	EXPECT_EQ(setting.getOptimizer().vector(), matVecTPoly.vector());
 
 	//Move constructor
 	TemplatePolyhedron<TypeParam> move(std::move(matVecTPoly));
@@ -120,6 +130,9 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	EXPECT_EQ(matVecTPoly.rGetMatrixPtr(), nullptr);
 	EXPECT_EQ(move.rGetMatrixPtr(), copy.rGetMatrixPtr());
 	EXPECT_EQ(move.rGetMatrixPtr(), setting.rGetMatrixPtr());
+	EXPECT_EQ(move.getOptimizer().matrix(), differentMatrix);
+	EXPECT_EQ(move.getOptimizer().vector(), differentOffset);
+	//Somehow test whether GLP instance of matVecTPoly has been cleaned
 }
 
 
@@ -143,9 +156,13 @@ TYPED_TEST(TemplatePolyhedronTest, Containment){
 	EXPECT_TRUE(this->middle.contains(p2));	
 
 	//Point outside
-	//Point<TypeParam> p3({TypeParam(1.7234), TypeParam(2.1)});
 	Point<TypeParam> p3({TypeParam(1.1234), TypeParam(4.1)});
 	EXPECT_FALSE(this->middle.contains(p3));	
+
+	//Empty poly does not contain any points, not even the empty point
+	EXPECT_FALSE(this->empty.contains(p1));
+	EXPECT_FALSE(this->empty.contains(p2));
+	EXPECT_FALSE(this->empty.contains(Point<TypeParam>()));
 
 	//Template Poly in a different dimension - should fail
 	matrix_t<TypeParam> diffDimMat = matrix_t<TypeParam>::Identity(3,3);
@@ -163,15 +180,77 @@ TYPED_TEST(TemplatePolyhedronTest, Containment){
 	TemplatePolyhedron<TypeParam> t2(this->mat, withinVec);
 	EXPECT_TRUE(this->middle.contains(t2)); 
 
-	//Template poly that lies partially within middle
-	EXPECT_FALSE(this->middle.contains(this->upright)); //???
+	//Template poly that lies partially within middle - False since contains() is only true for full containment
+	EXPECT_FALSE(this->middle.contains(this->upright)); 
 
 	//Template poly that lies fully outside middle
- 	vector_t<TypeParam> outsideVec = 100*vector_t<TypeParam>::Ones(4);
+	vector_t<TypeParam> outsideVec = 100*vector_t<TypeParam>::Ones(4);
  	TemplatePolyhedron<TypeParam> t3(this->mat, outsideVec);
- 	EXPECT_TRUE(!(this->middle.contains(t3)));
+ 	EXPECT_FALSE(this->middle.contains(t3));
+
+ 	//Template poly that is like t2 (fully within middle), but its directions are inversed - Unbounded poly test, check later
+ 	//vector_t<TypeParam> inverseWithinVec = -1*withinVec;
+	//TemplatePolyhedron<TypeParam> t4(this->mat, inverseWithinVec);
+	//EXPECT_FALSE(t4.contains(p1));
+	//EXPECT_TRUE(t4.contains(p3));
+	//EXPECT_FALSE(this->middle.contains(t4)); 	
 }
 
+TYPED_TEST(TemplatePolyhedronTest, Emptiness){
+	
+	//Empty TPoly
+	EXPECT_TRUE(this->empty.empty());
+
+	//Normal TPoly
+	EXPECT_FALSE(this->middle.empty());
+
+	//Point TPoly
+	TemplatePolyhedron<TypeParam> pointTPoly(this->mat, vector_t<TypeParam>::Zero(4));
+	EXPECT_FALSE(pointTPoly.empty());
+
+	//Unbounded TPoly
+	//TemplatePolyhedron<TypeParam> unbound(this->mat, -0.5*vector_t<TypeParam>::Ones(4));
+	//EXPECT_FALSE(unbound.empty());
+}
+
+TYPED_TEST(TemplatePolyhedronTest, Vertices){
+
+	//Empty TPoly
+	EXPECT_EQ(this->empty.vertices(), std::vector<Point<TypeParam>>());
+
+	//Normal TPoly
+	auto vert = this->middle.vertices();
+	EXPECT_EQ(vert.size(), std::size_t(4));
+	EXPECT_TRUE(std::find(vert.begin(), vert.end(), Point<TypeParam>({TypeParam(2), TypeParam(2)})) != vert.end());
+	EXPECT_TRUE(std::find(vert.begin(), vert.end(), Point<TypeParam>({TypeParam(2), TypeParam(-2)})) != vert.end());
+	EXPECT_TRUE(std::find(vert.begin(), vert.end(), Point<TypeParam>({TypeParam(-2), TypeParam(2)})) != vert.end());
+	EXPECT_TRUE(std::find(vert.begin(), vert.end(), Point<TypeParam>({TypeParam(-2), TypeParam(-2)})) != vert.end());
+
+	//Point TPoly
+	TemplatePolyhedron<TypeParam> pointTPoly(this->mat, vector_t<TypeParam>::Zero(4));
+	EXPECT_EQ(pointTPoly.vertices().size(), std::size_t(1));
+	EXPECT_EQ(pointTPoly.vertices().front(), Point<TypeParam>::Zero(2));
+
+	//Unbound Poly - TODO
+}
+
+TYPED_TEST(TemplatePolyhedronTest, Supremum){
+
+	//Empty TPoly
+	std::cout << "1" << std::endl;
+	EXPECT_EQ(this->empty.supremum(), TypeParam(0));
+	
+	//Normal TPoly
+	std::cout << "2" << std::endl;
+	EXPECT_EQ(this->middle.supremum(), TypeParam(2));
+	std::cout << "3" << std::endl;
+	EXPECT_EQ(this->upright.supremum(), TypeParam(3));
+	std::cout << "4" << std::endl;
+
+	//Unbound TPoly - TODO 
+}
+
+/*
 TYPED_TEST(TemplatePolyhedronTest, Intersect){
 
 	//Wish result poly after intersection between middle and upright
@@ -191,3 +270,4 @@ TYPED_TEST(TemplatePolyhedronTest, Union){
 
 }
 
+*/
