@@ -48,6 +48,28 @@ namespace box {
             ress.emplace_back({"affineTransformation",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
+            Timer runTimerHyProNaive;
+            for(std::size_t i = 0; i < settings.iterations; ++i) {
+              std::vector<hypro::Point<::benchmark::Number>> vertices = box.vertices();
+            	hypro::Point<::benchmark::Number> manualMin = hypro::Point<::benchmark::Number>(matrices[i]*(vertices.begin()->rawCoordinates()));
+            	hypro::Point<::benchmark::Number> manualMax = hypro::Point<::benchmark::Number>(matrices[i]*(vertices.begin()->rawCoordinates()));
+            	for(const auto& v : vertices) {
+            		hypro::Point<::benchmark::Number> t = hypro::Point<::benchmark::Number>(matrices[i]*v.rawCoordinates());
+            		for(std::size_t d = 0; d < box.dimension(); ++d) {
+            			if(manualMin.at(d) > t.at(d)) {
+            				manualMin[d] = t[d];
+            			}
+            			if(manualMax.at(d) < t.at(d)) {
+            				manualMax[d] = t[d];
+            			}
+            		}
+            	}
+              manualMin += vectors[i];
+              manualMax += vectors[i];
+            }
+            auto runningTimeNaive = runTimerHyProNaive.elapsed();
+            ress.emplace_back({"affineTransformationNaive",runningTimeNaive/settings.iterations,static_cast<int>(d)});
+
             ress.mRunningTime += runningTime;
 
             // prepare next run

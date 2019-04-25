@@ -16,16 +16,17 @@ namespace box
         //workingTasks.emplace_back(std::async(std::launch::deferred,computeSupport,settings));
 
         // half-space intersection
-        auto tmp = workingTasks[0].get();
-        tmp.createCSV("boxIntersectHalfspace", "\t", "intersectHalfspace");
-        tmp.createCSV("boxIntersectHalfspaceNaive", "\t", "intersectHalfspaceNaive");
-        tmp.createCSV("boxIntersectHalfspacePPL", "\t", "intersectHalfspacePPL");
-        std::cout << "Benchmarked hsp intersection." << std::endl;
+        //auto tmp = workingTasks[0].get();
+        //tmp.createCSV("boxIntersectHalfspace", "\t", "intersectHalfspace");
+        //tmp.createCSV("boxIntersectHalfspaceNaive", "\t", "intersectHalfspaceNaive");
+        //tmp.createCSV("boxIntersectHalfspacePPL", "\t", "intersectHalfspacePPL");
+        //std::cout << "Benchmarked hsp intersection." << std::endl;
 
         // affine transformation
-        //tmp = workingTasks[1].get();
-        //tmp.createCSV("boxAffineTransformation", "\t");
-        //std::cout << "Benchmarked affine transformation." << std::endl;
+        auto tmp = workingTasks[0].get();
+        tmp.createCSV("boxAffineTransformation", "\t", "affineTransformation");
+        tmp.createCSV("boxAffineTransformationNaive", "\t", "affineTransformationNaive");
+        std::cout << "Benchmarked affine transformation." << std::endl;
 
         // union
         //tmp = workingTasks[2].get();
