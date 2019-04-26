@@ -1,5 +1,5 @@
 /**
- * Tests for new SupportFunction architecture
+ * Tests for new SupportFunctions
  *
  * @author Phillip Tse
  */ 
@@ -63,7 +63,6 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Identity(dim, dim);
 	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(dim);
 	tVec(0) = 1;
-
 
 	//Directions to evaluate, is the identity matrix
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);

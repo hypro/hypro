@@ -56,6 +56,57 @@ namespace hypro {
 		}
 	}
 
+	//constructor for adding a new node
+	template<typename Number, typename Converter, typename Setting>
+  	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root ) 
+  		: mRoot(root) 
+  	{}
+
+	//No optimization constructor
+  	template<typename Number, typename Converter, typename Setting>
+  	template<typename Representation>
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool ) 
+		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r)))
+	{}
+
+	//Generic Leaf constructor
+	template<typename Number, typename Converter, typename Setting>
+	template<typename Representation>
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r) 
+	{
+		Representation tmp = dynamic_cast<Representation&>(r);
+		if(tmp.empty()){
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
+		} else {
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(tmp.matrix(),tmp.vector());
+			if(boost::get<0>(areArgsBox)){
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
+			} else {
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
+			}	
+		}
+		assert(mRoot != nullptr);
+	}
+
+	//Matrix vector constructor
+	template<typename Number, typename Converter, typename Setting>
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec)
+	{
+		boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(mat,vec);
+		if(boost::get<0>(areArgsBox)){
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
+		} else {
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
+		}
+		assert(mRoot != nullptr);
+	}
+
+	//Halfspace vector constructor
+	template<typename Number, typename Converter, typename Setting>
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
+		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
+	{ /*TODO: Optimize hspace constructor with isBox() */ }
+
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
@@ -232,7 +283,7 @@ namespace hypro {
 
 					// here we create the new stack levels.
 					std::size_t callingFrame = callStack.size() - 1;
-					for(auto c : cur->getChildren()){
+					for(auto& c : cur->getChildren()){
 						callStack.push_back(c.get());
 						paramStack.push_back(std::apply(transform, std::make_pair(cur, std::forward<Parameters<Rargs...>>(currentParam))));
 						resultStack.push_back(std::make_pair(callingFrame, std::vector<Res>()));
@@ -327,9 +378,9 @@ namespace hypro {
 		using EvalVec = std::vector<EvaluationResult<Number>>;
 
 		//Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
-		std::function<Matrix(RGNPtr, Matrix&)> trans = 
-			[&](RGNPtr n, Matrix& param) -> Matrix { 
-				return Matrix(n->transform(std::get<0>(param.args))); 
+		std::function<Matrix(RGNPtr, Matrix)> trans = 
+			[&](RGNPtr n, Matrix param) -> Matrix { 
+				return n->transform(std::get<0>(param.args)); 
 			};
 
 		std::function<EvalVec(RGNPtr, Matrix)> comp = 

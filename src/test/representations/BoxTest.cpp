@@ -126,9 +126,7 @@ TYPED_TEST(BoxTest, Constructor)
 	hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty();
 	EXPECT_TRUE(b.empty());
 	hypro::Box<TypeParam> b2 = hypro::Box<TypeParam>::Empty(2);
-	EXPECT_TRUE(b.empty());
-
-    SUCCEED();
+	EXPECT_TRUE(b2.empty());
 }
 
 TYPED_TEST(BoxTest, Access)

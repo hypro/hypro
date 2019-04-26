@@ -107,7 +107,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
-		mEmpty = false;
+		mEmpty = limits.first.dimension() > 0 ? false : true;
 		for(std::size_t i = 0; i < limits.first.dimension(); ++i) {
 			mLimits.emplace_back(carl::Interval<Number>(limits.first[i], limits.second[i]));
 			mEmpty = mEmpty || mLimits.back().isEmpty();

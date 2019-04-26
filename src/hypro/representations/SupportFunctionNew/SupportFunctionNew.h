@@ -119,13 +119,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	//constructor for adding a new node
-  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root ) : mRoot(root) {}
+  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root );
 
-
+  	//No optimization constructor
   	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool ) 
-		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r)))
-	{}
+	SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool );
 
   public:
 	/**
@@ -157,47 +155,20 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>& r) 
-	{
-		Representation tmp = dynamic_cast<Representation&>(r);
-		if(tmp.empty()){
-			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
-		} else {
-			boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(tmp.matrix(),tmp.vector());
-			if(boost::get<0>(areArgsBox)){
-				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
-			} else {
-				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
-			}	
-		}
-		assert(mRoot != nullptr);
-	}
+	SupportFunctionNewT( GeometricObject<Number,Representation>& r);
 
 	/**
 	 * @brief      Matrix vector constructor
 	 * @param[in]  mat 	The given matrix
 	 * @param[in]  vec  The given vector
 	 */
-	SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec)
-	{
-		boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(mat,vec);
-		if(boost::get<0>(areArgsBox)){
-			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
-		} else {
-			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
-		}
-		assert(mRoot != nullptr);
-	}
+	SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec);
 
 	/**
 	 * @brief      Vector of halfspaces constructor
 	 * @param[in]  hspaces  The vector of halfspaces
 	 */
-	SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
-		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
-	{ /*TODO: Optimize hspace constructor with isBox() */ 
-		//std::cout << "hspace constructor!" << std::endl;
-	}
+	SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces);
 
 	/**
 	 * @brief Destructor.
@@ -304,7 +275,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 					Parameters<Rargs...>&& initParams) const;
 
 	/***************************************************************************
-	 * Evaluation
+	 * General Interface
 	 **************************************************************************/
 
 	/**
