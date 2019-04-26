@@ -118,6 +118,10 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+		std::size_t templateDirectionCnt = numberOfDirections;
+		if(inSetting::REDUCE_TO_BOX) {
+			templateDirectionCnt = 4;
+		}
     //gets dimension of source object
     std::size_t dim = _source.dimension();
 
@@ -125,9 +129,9 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
 	if( projections.size() == dim ){
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
-	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, templateDirectionCnt);
 	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-	    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+	    assert (templateDirections.size() <= std::pow(templateDirections, dim));
 	    //creates a matrix with one row for each direction and one column for each dimension
 	    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
 
@@ -178,7 +182,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 			}
 		}
 		//std::cout << __func__ << ": compute template ... ";
-		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, numberOfDirections, dim); // TODO: ATTENTION, 8 is hardcoded here.
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, templateDirectionCnt, dim); // TODO: ATTENTION, 8 is hardcoded here.
 		//std::cout << "done." << std::endl;
 		for(auto direction : additionalDirections) {
 			// project direction

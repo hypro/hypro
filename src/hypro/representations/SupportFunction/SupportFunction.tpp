@@ -553,7 +553,16 @@ namespace hypro{
 
     template<typename Number, typename Converter, typename Setting>
     void SupportFunctionT<Number,Converter,Setting>::reduceRepresentation() {
-    	content->reduceRepresentation();
+
+      // create polyhedral approximation using a template
+      if(Setting::REDUCE_TO_BOX) {
+        // force sampling - not necessary if stored template was using 4 directions.
+        this->evaluateTemplate(4,true);
+        content = std::move(SupportFunctionContent<Number,Setting>::create(SF_TYPE::BOX, mMatrix, mVector));
+      } else {
+        this->evaluateTemplate();
+        content = std::move(SupportFunctionContent<Number,Setting>::create(SF_TYPE::POLY, mMatrix, mVector));
+      }
     }
 
     template<typename Number, typename Converter, typename Setting>
