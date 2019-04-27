@@ -131,7 +131,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, templateDirectionCnt);
 	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-	    assert (templateDirections.size() <= std::pow(templateDirections, dim));
+	    assert (templateDirections.size() <= std::pow(templateDirectionCnt, dim));
 	    //creates a matrix with one row for each direction and one column for each dimension
 	    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
 
