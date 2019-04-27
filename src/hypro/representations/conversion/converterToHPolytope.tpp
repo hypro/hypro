@@ -131,7 +131,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, templateDirectionCnt);
 	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-	    assert (templateDirections.size() <= std::pow(templateDirections, dim));
+	    assert (templateDirections.size() <= std::pow(templateDirectionCnt, dim));
 	    //creates a matrix with one row for each direction and one column for each dimension
 	    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
 
@@ -141,6 +141,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	    }
 	    std::size_t pos = 0;
 	    for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+					assert(additionalDirections.at(pos).rows() == templateDirectionMatrix.cols());
 	        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 	        ++pos;
 	    }
@@ -170,10 +171,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     	return HPolytope(constraints, constants);
 
 	} else {
-		//std::cout << "Projection" << std::endl;
-		//for(auto dim : projections) {
-		//	std::cout << "projection dimension " << dim << std::endl;
-		//}
 		std::list<unsigned> zeroDimensions;
 		for(unsigned i = 0; i < dim; ++i) {
 			if(std::find(projections.begin(), projections.end(), i) == projections.end()){
@@ -182,12 +179,17 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 			}
 		}
 		//std::cout << __func__ << ": compute template ... ";
-		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, templateDirectionCnt, dim); // TODO: ATTENTION, 8 is hardcoded here.
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, templateDirectionCnt, dim);
 		//std::cout << "done." << std::endl;
 		for(auto direction : additionalDirections) {
-			// project direction
-			for(const auto& dir : zeroDimensions) {
-				direction(dir) = Number(0);
+			// we assume that the additional direction, if it has the right number of rows, is already projected.
+			if(direction.rows() == dim) {
+				// project direction
+				//std::cout << "project " << direction << std::endl;
+				for(const auto& dir : zeroDimensions) {
+					//std::cout << "set " << dir << " to zero" << std::endl;
+					direction(dir) = Number(0);
+				}
 			}
 			// add projected direction
 			if(direction.nonZeros() > 0 && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
@@ -200,12 +202,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//fills the matrix with the template directions
 		for (unsigned i=0; i<templateDirections.size();++i){
 			templateDirectionMatrix.row(i) = templateDirections[i];
-		}
-		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
-		std::size_t pos = 0;
-		for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
-			templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
-			++pos;
 		}
 		//std::cout << __func__ << ": TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
 
@@ -228,7 +224,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//std::cout << "Construct polytope from constraints " << constraints << " and constants " << constants << std::endl;
 
 		//constructs a H-Polytope out of the computed halfspaces
-    	return HPolytope(constraints, constants);
+    return HPolytope(constraints, constants);
 	}
 
 }

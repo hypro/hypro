@@ -136,7 +136,7 @@ public:
 
 	std::vector<std::size_t> collectProjections() const;
 
-	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
+	const SupportFunctionT<Number,Converter,Setting>& evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
 
 private:
 

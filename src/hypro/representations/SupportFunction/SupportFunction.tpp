@@ -592,7 +592,7 @@ namespace hypro{
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
+	const SupportFunctionT<Number,Converter,Setting>& SupportFunctionT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
 		if(!mTemplateSet || force) {
 			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directionCount);
 
@@ -622,6 +622,7 @@ namespace hypro{
 		    mVector = constants;
 		    mTemplateSet = true;
 		}
+    return *this;
 	}
 
 
