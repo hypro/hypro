@@ -286,7 +286,7 @@ namespace hypro {
 						auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), newState.getSet(i));
 						SupportFunctionNew<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(newSet), newState.getSet(i)),i);
-						newState.partiallyReduceRepresentation(i);
+						//newState.partiallyReduceRepresentation(i);
 					}
 					//if(newState.getSetType(i) == representation_name::support_function) {
 					//	newState.partiallyReduceRepresentation(i);

@@ -54,11 +54,11 @@ public:
 
     CarlPolytopeT<Number,Converter,Setting> linearTransformation( const matrix_t<Number> &A ) const;
 
-    CarlPolytopeT<Number,Converter,Setting> minkowskiSum(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    CarlPolytopeT<Number,Converter,Setting> minkowskiSum(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return CarlPolytopeT<Number,Converter,Setting>(); }
 
-    CarlPolytopeT<Number,Converter,Setting> unite(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    CarlPolytopeT<Number,Converter,Setting> unite(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return CarlPolytopeT<Number,Converter,Setting>(); }
 
-    CarlPolytopeT<Number,Converter,Setting> affineTransformation(const matrix_t<Number>& , const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    CarlPolytopeT<Number,Converter,Setting> affineTransformation(const matrix_t<Number>& , const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); return CarlPolytopeT<Number,Converter,Setting>(); }
 
     std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
@@ -66,9 +66,9 @@ public:
 
     bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return false; }
 
-    EvaluationResult<Number> evaluate(const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    EvaluationResult<Number> evaluate(const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); return EvaluationResult<Number>(); }
 
-    std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& , bool ) const { assert(false && "NOT IMPLEMENTED"); }
+    std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& , bool ) const { assert(false && "NOT IMPLEMENTED"); return std::vector<EvaluationResult<Number>>(); }
 
     std::size_t dimension() const { TRACE("hypro.representations.carlPolytope","Dimension " << mDimension << ". forced: " << mSpaceDimensionSet); return mDimension; }
     const FormulaT<tNumber>& getFormula() const { return mFormula; }

@@ -179,21 +179,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Getters & setters
 	 **************************************************************************/
 
-  private:
-
-  	/**
-	 * @brief      Connects a given node with the current root. mRoot stays the same.
-	 * @param[in]  newRoot  The node to connect the current root with.
-	 * @param[in]  rhs 		Possible siblings of the current root that should also be connected to newRoot
-	 */
-  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot) const;
-  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
-
-  	/**
-  	 * @brief     Overapproximates the root node via template evaluation and saves the result in mMatrix and mVector
-  	 */
-  	void polyhedralApproximation();
-
   public:
 
   	/**
@@ -208,6 +193,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	  */
 	inline std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& getRoot() const { return mRoot; }
 
+	inline bool isTemplateSet() const { return mTemplateSet; }
+
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
 	  * @param dimension Required dimension.
@@ -217,9 +204,24 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 		return SupportFunctionNewT<Number,Converter,Setting>();
 	}
 
+	//friend void swap(SupportFunctionNewT<Number,Converter,Setting>& first, SupportFunctionNewT<Number,Converter,Setting>& second);
+
 	/***************************************************************************
 	 * Tree Traversal
 	 **************************************************************************/
+
+  private:
+
+  	/**
+	 * @brief      Connects a given node with the current root. mRoot stays the same.
+	 * @param[in]  newRoot  The node to connect the current root with.
+	 * @param[in]  rhs 		Possible siblings of the current root that should also be connected to newRoot
+	 */
+  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot) const;
+  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
+  
+  public:
+
 	/*
 	 * Three functions are needed: transform, compute and aggregate.
 	 * - transform: will be called by every node and mainly transforms additional parameters
@@ -348,12 +350,25 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param rhs A SupportFunctionNew.
 	 */
 	SupportFunctionNewT<Number,Converter,Setting>& operator=( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) = default;
+	//{
+	//	if(this != &rhs){
+	//		SupportFunctionNewT<Number,Converter,Setting> tmp(rhs);
+	//		swap(*this, tmp);
+	//	}
+	//	return *this;
+	//}
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A SupportFunctionNew.
 	 */
 	SupportFunctionNewT<Number,Converter,Setting>& operator=(SupportFunctionNewT<Number,Converter,Setting>&& rhs) = default;
+	//{
+	//	if(this != &rhs){
+	//		swap(*this, rhs);
+	//	}
+	//	return *this;
+	//}
 
 	/**
 	 * @brief Outstream operator.
@@ -503,7 +518,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Makes this SupportFunctionNew equal to the empty SupportFunctionNew.
 	 */
-	inline void clear(){ mRoot = nullptr; }
+	inline void clear();
 
 	/**
 	 * @brief	   Traverses the tree and computes dimensions remaining after all projection operations considered.
@@ -517,6 +532,13 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  force  		   Whether this should be done although a matrix vector representation is already cached
 	 */
 	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
+
+  private:
+
+	/**
+  	 * @brief     Overapproximates the root node via template evaluation and saves the result in mMatrix and mVector
+  	 */
+  	void polyhedralApproximation();
 
 };
 /** @} */

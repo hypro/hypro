@@ -115,30 +115,29 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 		
 		//Optimization: If rep is only a halfspace, save yourself an expensive evaluation: Used in guard / invariant satisfaction
 		auto repMatrix = rep->matrix();
-		if(repMatrix.rows() == 1){
-			COUNT("Single constraint evaluate.");
-			auto repVector = rep->vector();
+		if(repMatrix.rows() == 1) {
 			std::vector<EvaluationResult<Number>> res;
-			for(int i = 0; i < param.rows(); i++){
-				// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
-				if(param.row(i) == repMatrix.row(0)){ 
-					// The vectors are EXACTLY the same -> to find point on plane and to avoid squareroot computations, return vector
-					// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored distance.
-					vector_t<Number> pointOnPlane = vector_t<Number>::Zero(param.cols());
-					unsigned j = 0;
-					while(j < param.cols() && param(i,j) == 0){
-						++j;
+			auto repVector = rep->vector();
+			vector_t<Number> pointOnPlane = vector_t<Number>::Zero(mDimension);
+			assert(repMatrix.row(0).nonZeros() != 0 );
+			unsigned nonZeroPos = 0;
+			while(repMatrix(0,nonZeroPos) == 0) { ++nonZeroPos; }
+			pointOnPlane(nonZeroPos) = repVector(0);
+			for ( unsigned index = 0; index < param.rows(); ++index ) {
+				std::pair<bool,Number> dependent = linearDependent(vector_t<Number>(repMatrix.row(0)), vector_t<Number>(param.row(index)));
+				if( dependent.first ) {
+					if( dependent.second > 0 ) {
+						//std::cout << "Vectors " << convert<Number,double>(vector_t<Number>(repMatrix.row(0))).transpose() << " and " << convert<Number,double>(vector_t<Number>(param.row(index))).transpose() << " are dependent!" << std::endl;
+						//std::cout << "Factor: " << dependent.second << std::endl;
+						res.emplace_back(repVector(0)*dependent.second, pointOnPlane, SOLUTION::FEAS);
+					} else {
+						res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
 					}
-					// TODO: Check if this is correct -> we evaluated something weird with a weird direction (both zero vertors).
-					if(param(i,j) == 0){
-						res.emplace_back(EvaluationResult<Number>());
-					}
-					pointOnPlane(i) = repVector(0);
-					res.emplace_back(EvaluationResult<Number>(repVector(0), pointOnPlane, SOLUTION::FEAS));
 				} else {
-					res.emplace_back(EvaluationResult<Number>(1,SOLUTION::INFTY));
+					res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
 				}
 			}
+			assert(res.size() == std::size_t(param.rows()));
 			return res;
 		}
 

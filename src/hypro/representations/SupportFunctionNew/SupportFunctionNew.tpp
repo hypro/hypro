@@ -13,12 +13,20 @@ namespace hypro {
 
 	//copy constructor
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) : mRoot(orig.getRoot()) {}
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) : mRoot(orig.getRoot()) {
+		if(orig.isTemplateSet()){
+			mMatrix = orig.matrix();
+			mVector = orig.vector();
+		}
+	}
 
 	//move constructor
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( SupportFunctionNewT<Number,Converter,Setting>&& orig ) {
-		mRoot = std::move(orig.getRoot());
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( SupportFunctionNewT<Number,Converter,Setting>&& orig ) : mRoot(std::move(orig.getRoot())) {
+		if(orig.isTemplateSet()){
+			mMatrix = std::move(orig.matrix());
+			mVector = std::move(orig.vector());
+		}	
 		orig.clear();
 	}
 
@@ -130,6 +138,17 @@ namespace hypro {
 		}
 		assert(newRoot->getChildren().size() >= newRoot->getOriginCount());
 	}
+
+	//template<typename Number, typename Converter, typename Setting>
+	//void swap(SupportFunctionNewT<Number,Converter,Setting>& first, SupportFunctionNewT<Number,Converter,Setting>& second){
+	//	using std::swap;
+	//	first.mRoot.swap(second.mRoot);
+	//	if(second.isTemplateSet()){
+	//		first.mMatrix.swap(second.mMatrix);
+	//		first.mVector.swap(second.mVector);
+	//		first.mTemplateSet = true;
+	//	}
+	//}
 
 	/***************************************************************************
 	 * Tree Traversal
@@ -361,10 +380,8 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
 		if(mRoot == nullptr) return EvaluationResult<Number>();
-		TRACE("hypro.representations.supportFunctionNew","direction: \n" << _direction);
 		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(1,_direction.rows());
 		dirAsMatrix.row(0) = _direction;
-		TRACE("hypro.representations.supportFunctionNew","dirAsMatrix: \n" << dirAsMatrix);
 		return multiEvaluate(dirAsMatrix, useExact).front();
 	}
 
@@ -809,6 +826,14 @@ namespace hypro {
 		} else {
 			evaluateTemplate(8,false);
 		}
+	}
+
+	template<typename Number, typename Converter, typename Setting>
+	void SupportFunctionNewT<Number,Converter,Setting>::clear() {
+		mRoot = nullptr;
+		mMatrix = matrix_t<Number>::Zero(0,0);
+		mVector = vector_t<Number>::Zero(0);
+		mTemplateSet = false;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
