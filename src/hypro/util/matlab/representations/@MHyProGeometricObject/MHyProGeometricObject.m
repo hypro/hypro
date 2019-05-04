@@ -134,8 +134,9 @@ classdef MHyProGeometricObject < handle
                 ver_y = ver_y(order);
 
                 pgon = polyshape(ver_x, ver_y);
-                plot(pgon);           
-            end
+                plot(pgon, 'green');
+            end  
         end
+        
     end
 end

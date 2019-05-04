@@ -121,7 +121,7 @@ assert(isequal(flm, alocfm));
 
 % Reachability
 
-settings = struct('timeStep', 0.1, 'timeBound', 20, 'jumpDepth', 3);
+settings = struct('timeStep', 0.1, 'timeBound', 50, 'jumpDepth', 3);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);

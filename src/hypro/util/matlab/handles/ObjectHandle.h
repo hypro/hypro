@@ -57,7 +57,7 @@ class ObjectHandle{
         static void convert2Matlab(const std::vector<hypro::Point<double>>&, mxArray*);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
-        static hypro::representation_name mRepresentationName2Hypro(char*);
+        static hypro::representation_name mRepresentationName2Hypro(int type);
         static carl::Interval<double> mInterval2Hypro(const mxArray*);
         static carl::Interval<hypro::tNumber> mMPQInterval2Hypro(const mxArray*);
         static hypro::matrix_t<double> mMatrix2Hypro(const mxArray*, const int, const int);
@@ -527,26 +527,26 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro(char* mSol){
  * @brief Converts a Matlab string containing a representation name
  * into Hypro enum
  **/
-hypro::representation_name ObjectHandle::mRepresentationName2Hypro(char* name){
-    if(!strcmp(name, "box")){
+hypro::representation_name ObjectHandle::mRepresentationName2Hypro(int type){
+    if(type == 0){
         return hypro::representation_name::box;
-    }else if(!strcmp(name, "carl_polytope")){
+    }else if(type == 1){
         return hypro::representation_name::carl_polytope;
-    }else if(!strcmp(name,"constraint_set")){
+    }else if(type == 2){
         return hypro::representation_name::constraint_set;
-    }else if(!strcmp(name,"difference_bounds")){
+    }else if(type == 3){
         return hypro::representation_name::difference_bounds;
-    }else if(!strcmp(name,"polytope_h")){
+    }else if(type == 4){
         return hypro::representation_name::polytope_h;
-    }else if(!strcmp(name,"polytope_v")){
+    }else if(type == 5){
         return hypro::representation_name::polytope_v;
-    }else if(!strcmp(name, "ppl_polytope")){
+    }else if(type == 6){
         return hypro::representation_name::ppl_polytope;
-    }else if(!strcmp(name, "support_function")){
+    }else if(type == 7){
         return hypro::representation_name::support_function;
-    }else if(!strcmp(name, "taylor_model")){
+    }else if(type == 8){
         return hypro::representation_name::taylor_model;
-    }else if(!strcmp(name, "zonotope")){
+    }else if(type == 9){
         return hypro::representation_name::zonotope;
     }else{
         return hypro::representation_name::UNDEF;

@@ -71,3 +71,9 @@ else
     disp("HAutomaton:.............................FAILED");
 end
 
+if testMHyProReach()
+    disp("Reach:.............................SUCCEED");
+else
+    disp("Reach:.............................FAILED");
+end
+

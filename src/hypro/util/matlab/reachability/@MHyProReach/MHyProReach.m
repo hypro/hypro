@@ -109,6 +109,22 @@ classdef MHyProReach < handle
             end
         end
         
+        function plot3D(obj, flowpipes, type, dims)
+            num_flowpipes = length(flowpipes);
+            for pipe = 1:num_flowpipes
+                currentFlowpipe =  flowpipes{pipe};
+                num_states = length(currentFlowpipe);
+                disp(['Number of states: ', num2str(num_states)]);
+                figure()
+                for state = 1:num_states
+                    currentState = currentFlowpipe{state};
+                    vertices = currentState.vertices(1);
+                    obj.plotVertices(vertices, dims);
+                    hold on
+                end  
+            end
+        end
+        
     end
     
 end
