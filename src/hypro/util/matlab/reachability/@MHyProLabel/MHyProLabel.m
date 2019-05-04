@@ -8,7 +8,7 @@ classdef MHyProLabel < handle
         
         % Destructor
         function delete(obj)
-            MHyPro('Label', 'delete', obj.Handle);
+            MHyPro(8, 'delete', obj.Handle);
         end
     end
     
@@ -19,9 +19,9 @@ classdef MHyProLabel < handle
             if nargin == 1
                 if ischar(varargin{1})
                     % Construct new label
-                    obj.Handle = MHyPro('Label','new_name', varargin{1});
+                    obj.Handle = MHyPro(8,'new_name', varargin{1});
                 elseif isa(varargin{1}, 'MHyProLabel')
-                    obj.Handle = MHyPro('Label', 'copy', varargin{1}.Handle);
+                    obj.Handle = MHyPro(8, 'copy', varargin{1}.Handle);
                 elseif isa(varargin{1}, 'uint64')
                     obj.Handle = varargin{1};
                 else
@@ -33,30 +33,30 @@ classdef MHyProLabel < handle
         end
         
         function out = getName(obj)
-            out = MHyPro('Label', 'getName', obj.Handle);
+            out = MHyPro(8, 'getName', obj.Handle);
         end
         
         function setName(obj, name)
             if ischar(name)
-                MHyPro('Label', 'setName', obj.Handle, name);
+                MHyPro(8, 'setName', obj.Handle, name);
             end
         end
         
         function out = eq(obj, rhs)
             if isa(rhs, 'MHyProLabel')
-                out = MHyPro('Label', 'equals', obj.Handle, rhs.Handle);
+                out = MHyPro(8, 'equals', obj.Handle, rhs.Handle);
             end
         end
         
         function out = ne(obj, rhs)
             if isa(rhs, 'MHyProLabel')
-                out = MHyPro('Label', 'unequals', obj.Handle, rhs.Handle);
+                out = MHyPro(8, 'unequals', obj.Handle, rhs.Handle);
             end
         end
         
         function out = lt(obj, rhs)
             if isa(rhs, 'MHyProLabel')
-                out = MHyPro('Label', 'less', obj.Handle, rhs.Handle);
+                out = MHyPro(8, 'less', obj.Handle, rhs.Handle);
             end
         end
         

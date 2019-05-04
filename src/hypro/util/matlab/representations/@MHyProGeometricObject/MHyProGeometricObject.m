@@ -48,7 +48,7 @@ classdef MHyProGeometricObject < handle
         end
         
         function out = eq(obj, rhs)
-            if strcmp(rhs.Type, obj.Type)
+            if rhs.Type == obj.Type
                 out = MHyPro(obj.Type, '==', obj.Handle, rhs.Handle);
             else
                 error('MHyProGeometricObject - equal: Not allowed for this type of HyProObject or wrong type of argument.');
@@ -56,7 +56,7 @@ classdef MHyProGeometricObject < handle
         end
         
         function out = ne(obj, rhs)
-            if ~strcmp(obj.Type, 'SupportFunction') && strcmp(rhs.Type, obj.Type)
+            if obj.Type ~= 3 && rhs.Type == obj.Type
                 out = MHyPro(obj.Type, '!=', obj.Handle, rhs.Handle);
             else
                 error('MHyProGeometricObject - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
@@ -68,7 +68,7 @@ classdef MHyProGeometricObject < handle
         end
         
         function out = vector(obj)
-            if ~strcmp(obj.Type, 'Ellipse')
+            if obj.Type ~= 1
                 out = MHyPro(obj.Type, 'vector', obj.Handle);
             else
                 error('HyProGeometricObjectInterface - vector: Not allowed for this type of HyProObject');

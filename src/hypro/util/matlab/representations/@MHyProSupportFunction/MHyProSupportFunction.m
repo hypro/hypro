@@ -4,39 +4,39 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         % Create a HyPro support function
         function obj = MHyProSupportFunction(varargin) 
-            obj.Type = 'SupportFunction';
+            obj.Type = 3;
             
             if nargin == 0
                 % Call default constructor
-                obj.Handle = MHyPro('SupportFunction', 'new_empty');
+                obj.Handle = MHyPro(3, 'new_empty');
             elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
                     obj.Handle = varargin{1};
                 elseif ismatrix(varargin{1})
                     % Construct using matrix
-                    obj.Handle = MHyPro('SupportFunction', 'new_matrix', varargin{1});
+                    obj.Handle = MHyPro(3, 'new_matrix', varargin{1});
                 elseif isa(varargin{1}, 'MHyProSupportFunction')
                     % Call copy constructor
-                    obj.Handle = MHyPro('SupportFunction', 'copy', varargin{1}.Handle);
+                    obj.Handle = MHyPro(3, 'copy', varargin{1}.Handle);
                 elseif ismatrix(varargin{1})
-                    obj.Handle = MHyPro('SupportFunction', 'new_matrix', varargin{1});
+                    obj.Handle = MHyPro(3, 'new_matrix', varargin{1});
                 else
                     error('MHyProSupportFunction - Constructor: Wrong type of argument.');
                 end
             elseif nargin == 2
                 if strcmp(varargin{1}, 'points') && ismatrix(varargin{2})
-                    obj.Handle = MHyPro('SupportFunction', 'new_points', varargin{2});
+                    obj.Handle = MHyPro(3, 'new_points', varargin{2});
                 elseif strcmp(varargin{1}, 'intervals') && areIntervals(varargin{2})
-                    obj.Handle = MHyPro('SupportFunction', 'new_intervals', varargin{2}); 
+                    obj.Handle = MHyPro(3, 'new_intervals', varargin{2}); 
                 elseif ismatrix(varargin{1}) && isvector(varargin{2})
-                    obj.Handle = MHyPro('SupportFunction', 'new_mat_vec', varargin{1}, varargin{2});
+                    obj.Handle = MHyPro(3, 'new_mat_vec', varargin{1}, varargin{2});
                 else
                     error('MHyProSupportFunction - Constructor: Wrong arguments.');
                 end
             elseif narargin == 3
                 if strcmp(varargin{1}, 'halfspaces') && ismatrix(varargin{2}) && isvector(varargin{3})
                     % Construct form halfspaces
-                    obj.Handle = MHyPro('SupportFunction', 'new_halfspaces', varargin{2}, varargin{3});
+                    obj.Handle = MHyPro(3, 'new_halfspaces', varargin{2}, varargin{3});
                 else
                     error('MHyProSupportFunction - Constructor: Wrong arguments.');
                 end
@@ -47,7 +47,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
 
         function [containment, out] = satisfiesHalfspace(obj, normal, offset)
             if isvector(normal) && isreal(offset)
-                [containment, ptr] = MHyPro('SupportFunction', 'satisfiesHalfspace', obj.Handle, normal, offset);
+                [containment, ptr] = MHyPro(3, 'satisfiesHalfspace', obj.Handle, normal, offset);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - satisfiesHalfspace: Wrong type of input argument.');
@@ -56,7 +56,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function [containment, out] = satisfiesHalfspaces(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                [containment, ptr] = MHyPro('SupportFunction', 'satisfiesHalfspace', obj.Handle, mat, vec);
+                [containment, ptr] = MHyPro(3, 'satisfiesHalfspace', obj.Handle, mat, vec);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - satisfiesHalfspaces: Wrong type of input argument.');
@@ -65,7 +65,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = project(obj, dim)
             if isreal(dim)
-                ptr = MHyPro('SupportFunction', 'project', obj.Handle, dim);
+                ptr = MHyPro(3, 'project', obj.Handle, dim);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - project: Wrong type of input argument.');
@@ -74,7 +74,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = linearTransformation(obj, mat)
             if ismatrix(mat)
-                ptr = MHyPro('SupportFunction', 'linearTransformation', obj.Handle, mat);
+                ptr = MHyPro(3, 'linearTransformation', obj.Handle, mat);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - linearTransformation: Wrong type of input argument.');
@@ -83,7 +83,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = affineTransformation(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro('SupportFunction', 'affineTransformation', obj.Handle, mat, vec);
+                ptr = MHyPro(3, 'affineTransformation', obj.Handle, mat, vec);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - affineTransformation: Wrong type of input argument.');
@@ -92,7 +92,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = plus(obj, rhs)
             if isa(rhs, 'MHyProSupportFunction')
-                ptr = MHyPro('SupportFunction', 'minkowskiSum', obj.Handle, rhs.Handle);
+                ptr = MHyPro(3, 'minkowskiSum', obj.Handle, rhs.Handle);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - minkowskiSum: Wrong type of input argument.');
@@ -101,7 +101,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = intersectHalfspace(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro('SupportFunction', 'intersectHalfspace', obj.Handle, mat, vec);
+                ptr = MHyPro(3, 'intersectHalfspace', obj.Handle, mat, vec);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - intersectHalfspace: Wrong type of input argument.');
@@ -110,7 +110,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = intersectHalfspaces(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro('SupportFunction', 'intersectHalfspaces', obj.Handle, mat, vec);
+                ptr = MHyPro(3, 'intersectHalfspaces', obj.Handle, mat, vec);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - intersectHalfspaces: Wrong type of input argument.');
@@ -119,9 +119,9 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = contains(obj, arg)
             if isvector(arg)
-                out = MHyPro('SupportFunction', 'contains_vec', obj.Handle, arg);
+                out = MHyPro(3, 'contains_vec', obj.Handle, arg);
             elseif isa(arg, 'MHyProSupportFunction')
-                out = MHyPro('SupportFunction', 'contains_set', obj.Handle, arg.Handle);
+                out = MHyPro(3, 'contains_set', obj.Handle, arg.Handle);
             else
                 error('MHyProSupportFunction - contains: Wrong type of input argument.');
             end
@@ -129,7 +129,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = containsPoint(obj, pnt)
             if isvector(pnt)
-                out = MHyPro('SupportFunction', 'contains_point', obj.Handle, pnt);
+                out = MHyPro(3, 'contains_point', obj.Handle, pnt);
             else
                 error('MHyProSupportFunction - containsPoint: Wrong type of input argument.');
             end
@@ -137,14 +137,14 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         
         function out = unite(obj, rhs)
             if isa(rhs, 'MHyProSupportFunction')
-                ptr = MHyPro('SupportFunction', 'unite', obj.Handle, rhs.Handle);
+                ptr = MHyPro(3, 'unite', obj.Handle, rhs.Handle);
                 out = MHyProSupportFunction(ptr);
             elseif iscell(rhs)
                 objects = uint64.empty(length(rhs),0);
                 for i = 1:length(rhs)
                     objects{i} = rhs{i}.Handle;
                 end
-                ptr = MHyPro('SupportFunction', 'unite_objects', obj.Handle, objects{:});
+                ptr = MHyPro(3, 'unite_objects', obj.Handle, objects{:});
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - unite: Wrong type of input argument.');
@@ -152,11 +152,11 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         end
 
         function reduceNumberRepresentation(obj)
-            MHyPro('SupportFunction', 'reduceNumberRepresentation', obj.Handle);
+            MHyPro(3, 'reduceNumberRepresentation', obj.Handle);
         end
 
         function out = supremum(obj)
-            if strcmp(obj.Type, 'SupportFunction') || strcmp(obj.Type, 'SupportFunction')
+            if obj.Type == 3
                 out = MHyPro(obj.Type, 'supremum', obj.Handle);
             else
                 error('MHyProObject - supremum: Not allowed for this type of HyProObject.');
@@ -165,7 +165,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
 
         function out = intersect(obj, rhs)
             if isa(rhs, 'MHyProSupportFunction') 
-                ptr = MHyPro('SupportFunction', 'intersect', obj.Handle, rhs.Handle);
+                ptr = MHyPro(3, 'intersect', obj.Handle, rhs.Handle);
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - intersect: Wrong type of argument.');
@@ -173,20 +173,20 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         end
         
         function cleanUp(obj)
-            MHyPro('SupportFunction', 'cleanUp', obj.Handle);
+            MHyPro(3, 'cleanUp', obj.Handle);
         end
        
         function out = depth(obj)
-            out = MHyPro('SupportFunction', 'depth', obj.Handle);
+            out = MHyPro(3, 'depth', obj.Handle);
         end
        
         function out = operationCount(obj)
-        	 out = MHyPro('SupportFunction', 'operationCount', obj.Handle);
+        	 out = MHyPro(3, 'operationCount', obj.Handle);
         end
 
         function out = contains_vec(obj, vec)
             if isvector(vec)
-                 out = MHyPro('SupportFunction', 'contains_vec', obj.Handle, vec);
+                 out = MHyPro(3, 'contains_vec', obj.Handle, vec);
             else
                  error('MHyProObject - contains_vec: Wrong argument.');
             end
@@ -194,7 +194,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
 
        function out = contains_dir(obj,rhs, dir)
            if isa(rhs, 'MHyProSupportFunction') && isreal(dir)
-                out = MHyPro('SupportFunction', 'contains_dir', obj.Handle, rhs.Handle, dir);
+                out = MHyPro(3, 'contains_dir', obj.Handle, rhs.Handle, dir);
            else
                 error('MHyProSupportFunction - contains_dir: Wrong argument.');
            end
@@ -202,23 +202,23 @@ classdef MHyProSupportFunction < MHyProGeometricObject
 
        function swap(obj, rhs1, rhs2)
            if isa(rhs1, 'MHyProSupportFunction') && isa(rhs2, 'MHyProSupportFunction')
-                MHyPro('SupportFunction', 'swap', obj.Handle, rhs1.Handle, rhs2.Handle);
+                MHyPro(3, 'swap', obj.Handle, rhs1.Handle, rhs2.Handle);
            else
                 error('MHyProObject - swap: Wrong argument.');
            end
        end
 
        function forceLinTransReduction(obj)
-         	MHyPro('SupportFunction', 'forceLinTransReduction', obj.Handle);
+         	MHyPro(3, 'forceLinTransReduction', obj.Handle);
        end
 
        function out = collectProjections(obj)
-         	out = MHyPro('SupportFunction', 'collectProjections', obj.Handle);
+         	out = MHyPro(3, 'collectProjections', obj.Handle);
        end
        
        function out = mtimes(obj, scalar)
             if isreal(scalar)
-                ptr = MHyPro('SupportFunction', '*', obj.Handle, scalar);
+                ptr = MHyPro(3, '*', obj.Handle, scalar);
                 out = MHyProBox(ptr);
             else
                 error('MHyProSupportFunction - scale: Wrong type of argument.');

@@ -8,14 +8,10 @@
 #include "reachability/@MHyProFlow/MAffineFlow.h"
 #include "reachability/@MHyProLabel/MLabel.h"
 #include "reachability/@MHyProLocation/MLocation.h"
-// #include "reachability/@MHyProResetType/MAffineTransformation.h"
 #include "reachability/@MHyProState/MState.h"
 #include "reachability/@MHyProTransition/MTransition.h"
 #include "reachability/@MHyProReset/MReset.h"
 #include "reachability/@MHyProReach/MReach.h"
-// #include "reachability/@MHyProReach/MConstraintSetReach.h"
-// #include "reachability/@MHyProReach/MEllipsoidReach.h"
-// #include "reachability/@MHyProReach/MSupportFunctionReach.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -23,36 +19,40 @@
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     // Get type of the Matlab object
-    char type[64];
-    mxGetString(prhs[0], type, sizeof(type));
+    // 0 = Box, 1 = Ellipsoid, 2 = ConstraintSet,
+    // 3 = SupportFunction, 4 = HybridAutomaton, 5 = Condition,
+    // 6 = Location, 7 = Transition, 8 = Label,
+    // 9 = linearFlow, 10 = affineFlow, 11 = Reset,
+    // 12 = Reacher, 13 = State
+    int type = mxGetScalar(prhs[0]);
 
-    if(!strcmp(type, "Box")){
+    if(type == 0){
         MBox::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Ellipsoid")){
+    }else if(type == 1){
         MEllipsoid::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "ConstraintSet")){
+    }else if(type == 2){
         MConstraintSet::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "SupportFunction")){
+    }else if(type == 3){
         MSupportFunction::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "HybridAutomaton")){
+    }else if(type == 4){
         MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Condition")){
+    }else if(type == 5){
         MCondition::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Location")){
+    }else if(type == 6){
         MLocation::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Transition")){
+    }else if(type == 7){
         MTransition::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Label")){
+    }else if(type == 8){
         MLabel::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "linearFlow")){
+    }else if(type == 9){
         MLinearFlow::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "affineFlow")){
+    }else if(type == 10){
         MAffineFlow::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Reset")){
+    }else if(type == 11){
         MReset::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "Reacher")){
+    }else if(type == 12){
         MReach::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "State")){
+    }else if(type == 13){
         MState::process(nlhs, plhs, nrhs, prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");

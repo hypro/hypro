@@ -67,7 +67,7 @@ name = loc3.getName();
 assert(isequal(name, 'loc3'));
 
 
-linFlow = MHyProFlow('linearFlow', [1 0 0; 0 1 0; 0 0 1]);
+linFlow = MHyProFlow(9, [1 0 0; 0 1 0; 0 0 1]);
 loc1.setLinearFlow(linFlow, 1);
 flow = loc1.getLinearFlow();
 assert(linFlow == flow);

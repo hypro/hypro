@@ -18,14 +18,14 @@ classdef MHyProFlow < handle
     methods (Access = public)
         
         function obj = MHyProFlow(varargin)
-            if strcmp(varargin{1},'linearFlow') || strcmp(varargin{1},'affineFlow')
+            if (varargin{1} == 9) || (varargin{1} == 10)
                 obj.Type = varargin{1};
             else
                 error('MHyProFlow - Constructor: Unknown type.');
             end 
 
             if nargin == 1
-                if ischar(varargin{1})
+                if varargin{1} == 9 || varargin{1} == 10
                     % Call the constructor for empty flow
                     obj.Handle = MHyPro(varargin{1}, 'new_empty');
                 else
@@ -37,16 +37,16 @@ classdef MHyProFlow < handle
                     obj.Handle = varargin{2};
                 elseif isa(varargin{2}, 'MHyProFlow')
                     obj.Handle = MHyPro(varargin{2}.Type, 'copy', varargin{2}.Handle);    
-                elseif strcmp(varargin{1}, 'linearFlow') && ismatrix(varargin{2})
+                elseif varargin{1} == 9 && ismatrix(varargin{2})
                     % Call the matrix constructor for linear flow
-                    obj.Handle = MHyPro('linearFlow', 'new_mat', varargin{2});
+                    obj.Handle = MHyPro(9, 'new_mat', varargin{2});
                 else
                     error('MHyProFlow - Constructor: Wrong type of at least one argument.');
                 end
             elseif nargin == 3
-                if strcmp(varargin{1}, 'affineFlow') && ismatrix(varargin{2}) && isvector(varargin{3}) && size(varargin{2},2) == size(varargin{3},1)
+                if varargin{1} == 10 && ismatrix(varargin{2}) && isvector(varargin{3}) && size(varargin{2},2) == size(varargin{3},1)
                     % Call the matrix-vector constructor for affine flow
-                    obj.Handle = MHyPro('affineFlow', 'new_mat_vec' ,varargin{2}, varargin{3});
+                    obj.Handle = MHyPro(10, 'new_mat_vec' ,varargin{2}, varargin{3});
                 else
                     error('MHyproFlow - Constructor: Wrong type of at least one argument.');
                 end
@@ -68,7 +68,7 @@ classdef MHyProFlow < handle
         end
         
         function out = eq(lhs, rhs)
-            if strcmp(lhs.Type, rhs.Type)
+            if lhs.Type == rhs.Type
                 out = MHyPro(lhs.Type, '==', lhs.Handle, rhs.Handle);
             else
                 out = false;
@@ -77,7 +77,7 @@ classdef MHyProFlow < handle
         end
         
         function out = neq(lhs, rhs)
-            if strcmp(lhs.Type, rhs.Type) == 0
+            if lhs.Type ~= rhs.Type
                 out = true;
                 warning('MHyProFlow - neq: Different types of flows!');
             else
@@ -90,54 +90,54 @@ classdef MHyProFlow < handle
         end
         
         function out = size(obj)
-            if strcmp(obj.Type,'linearFlow')
-                out = MHyPro('linearFlow', 'size', obj.Handle);
+            if obj.Type == 9
+                out = MHyPro(9, 'size', obj.Handle);
             else
                 error('MHyProFlow - size: Wrong type of input argument.');
             end
         end
         
         function out = hasNoFlow(obj)
-            if strcmp(obj.Type, 'linearFlow')
-                out = MHyPro('linearFlow', 'hasNoFlow', obj.Handle);
+            if obj.Type == 9
+                out = MHyPro(9, 'hasNoFlow', obj.Handle);
             end
         end
         
         function out = getFlowMatrix(obj)
-            if strcmp(obj.Type, 'linearFlow')
-                out = MHyPro('linearFlow', 'getFlowMatrix', obj.Handle);
+            if obj.Type == 9
+                out = MHyPro(9, 'getFlowMatrix', obj.Handle);
             else
                 error('MHyProFlow - getFlowMatrix: Wrong type of input argument.');
             end
         end
         
         function setFlowMatrix(obj, mat)
-            if strcmp(obj.Type, 'linearFlow')
-                MHyPro('linearFlow', 'setFlowMatrix', obj.Handle, mat);
+            if obj.Type == 9
+                MHyPro(9, 'setFlowMatrix', obj.Handle, mat);
             else
                 error('MHyProFlow - setFlowMatrix: Wrong type of input argument.');
             end
         end
         
         function addRow(obj, row)
-            if strcmp(obj.Type, 'linearFlow') && isvector(row)
-                MHyPro('linearFlow', 'addRow', obj.Handle, row);
+            if obj.Type == 9 && isvector(row)
+                MHyPro(9, 'addRow', obj.Handle, row);
             else
                 error('MHyProFlow - addRow: Wrong type of input argument(s).');
             end
         end
         
         function out = isIdentity(obj)
-            if strcmp(obj.Type, 'linearFlow')
-                out = MHyPro('linearFlow', 'isIdentity', obj.Handle);
+            if obj.Type == 9
+                out = MHyPro(9, 'isIdentity', obj.Handle);
             else
                 error('MHyProFlow - isIdentity: Wrong type of input argument.');
             end
         end
         
         function out = hasTranslation(obj)
-            if strcmp(obj.Type, 'affineFlow')
-                out = MHyPro('affineFlow', 'hasTranslation', obj.Handle);
+            if obj.Type == 10
+                out = MHyPro(10, 'hasTranslation', obj.Handle);
             else
                 error('MHyProFlow - hasTranslation: Wrong type of input argument.');
             end
@@ -145,16 +145,16 @@ classdef MHyProFlow < handle
         
         
         function setTranslation(obj, tran)
-            if strcmp(obj.Type, 'affineFlow') && isvector(tran)
-                MHyPro('affineFlow', 'setTranslation', obj.Handle, tran);
+            if obj.Type == 10 && isvector(tran)
+                MHyPro(10, 'setTranslation', obj.Handle, tran);
             else
                 error('MHyProFlow - setTranslation: Wrong type of input argument(s).');
             end
         end
         
         function out = getTranslation(obj)
-            if strcmp(obj.Type, 'affineFlow')
-                out = MHyPro('affineFlow', 'getTranslation', obj.Handle);
+            if obj.Type == 10
+                out = MHyPro(10, 'getTranslation', obj.Handle);
             else
                 error('MHyProFlow - getTranslation: Wrong type of input argument(s).');
             end
