@@ -56,6 +56,9 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
   	//Optimizer as member since needed in different functions
   	Optimizer<Number> mOptimizer;
 
+  	//Flag whether current TPoly has no unnecessary constraints - saves computation time
+  	bool mNonRedundant = false;
+
   public:
 
 	/***************************************************************************

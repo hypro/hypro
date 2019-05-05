@@ -41,6 +41,7 @@ protected:
 		upright = TemplatePolyhedron<Number>(mat,uprightVec);
 		downleft = TemplatePolyhedron<Number>(mat,downleftVec);
 		downright = TemplatePolyhedron<Number>(mat,downrightVec);
+		infeas = TemplatePolyhedron<Number>(mat,-0.5*middleVec);
     }
     virtual void TearDown(){}
 
@@ -52,11 +53,12 @@ protected:
     vector_t<Number> downrightVec;	//for downright
 
     TemplatePolyhedron<Number> empty;		//An empty tpoly
-    TemplatePolyhedron<Number> middle;	  	//Middle of square in origin with side length 2
-    TemplatePolyhedron<Number> upleft;	  	//Middle of square in (-1,1) with side length 2
-    TemplatePolyhedron<Number> upright;		//Middle of square in (1,1)	with side length 2
-    TemplatePolyhedron<Number> downleft; 	//Middle of square in (-1,-1) with side length 2
-    TemplatePolyhedron<Number> downright;	//Middle of square in (1,-1) with side length 2
+    TemplatePolyhedron<Number> middle;	  	//Middle of square in origin with side length 4
+    TemplatePolyhedron<Number> upleft;	  	//Middle of square in (-2,2) with side length 2
+    TemplatePolyhedron<Number> upright;		//Middle of square in (2,2)	with side length 2
+    TemplatePolyhedron<Number> downleft; 	//Middle of square in (-2,-2) with side length 2
+    TemplatePolyhedron<Number> downright;	//Middle of square in (2,-2) with side length 2
+    TemplatePolyhedron<Number> infeas;		//Middle of square in origin with side length 1 but with inverted directions
 };
 
 TYPED_TEST(TemplatePolyhedronTest, Constructor){
@@ -208,9 +210,8 @@ TYPED_TEST(TemplatePolyhedronTest, Emptiness){
 	TemplatePolyhedron<TypeParam> pointTPoly(this->mat, vector_t<TypeParam>::Zero(4));
 	EXPECT_FALSE(pointTPoly.empty());
 
-	//Unbounded TPoly
-	//TemplatePolyhedron<TypeParam> unbound(this->mat, -0.5*vector_t<TypeParam>::Ones(4));
-	//EXPECT_FALSE(unbound.empty());
+	//Infeasible TPoly
+	EXPECT_TRUE(this->infeas.empty());
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Vertices){
@@ -231,26 +232,138 @@ TYPED_TEST(TemplatePolyhedronTest, Vertices){
 	EXPECT_EQ(pointTPoly.vertices().size(), std::size_t(1));
 	EXPECT_EQ(pointTPoly.vertices().front(), Point<TypeParam>::Zero(2));
 
-	//Unbound Poly - TODO
+	//Infeas Poly - TODO
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Supremum){
 
 	//Empty TPoly
-	std::cout << "1" << std::endl;
 	EXPECT_EQ(this->empty.supremum(), TypeParam(0));
 	
 	//Normal TPoly
-	std::cout << "2" << std::endl;
 	EXPECT_EQ(this->middle.supremum(), TypeParam(2));
-	std::cout << "3" << std::endl;
 	EXPECT_EQ(this->upright.supremum(), TypeParam(3));
-	std::cout << "4" << std::endl;
 
-	//Unbound TPoly - TODO 
+	//Infeas TPoly - TODO
+	EXPECT_EQ(this->infeas.supremum(), TypeParam(0));
 }
 
+TYPED_TEST(TemplatePolyhedronTest, Evaluation){
+
+	vector_t<TypeParam> up = vector_t<TypeParam>::Zero(2);
+	up(1) = TypeParam(1);
+
+	//One direction evaluation - Empty TPoly
+	EvaluationResult<TypeParam> res1 = this->empty.evaluate(up, true);
+	EXPECT_EQ(res1.errorCode, SOLUTION::INFTY);
+	EXPECT_EQ(res1.supportValue, 0);
+	EXPECT_EQ(res1.optimumValue, vector_t<TypeParam>::Zero(0));
+
+	//One direction evaluation - Normal TPoly
+	EvaluationResult<TypeParam> res2 = this->middle.evaluate(up, true);
+	EXPECT_EQ(res2.errorCode, SOLUTION::FEAS);
+	EXPECT_EQ(res2.supportValue, 2);
+	EXPECT_EQ(res2.optimumValue, 2*up);	
+
+	//One direction evaluation - Infeasible TPoly
+	//TemplatePolyhedron<TypeParam> infeas(this->mat, -0.5*vector_t<TypeParam>::Ones(4));
+	//EvaluationResult<TypeParam> res3 = infeas.evaluate(up, true);
+	//EXPECT_EQ(res3.errorCode, SOLUTION::INFEAS);	//Test says INFTY?
+	//EXPECT_EQ(res3.supportValue, 0);
+	//EXPECT_EQ(res3.optimumValue, vector_t<TypeParam>::Zero(0));	
+
+	matrix_t<TypeParam> allcorners = matrix_t<TypeParam>::Zero(4,2);
+	allcorners <<	1, 1,
+					1, -1,
+					-1, 1,
+					-1, -1;
+
+	//Multiple direction evaluation - Empty TPoly
+	std::vector<EvaluationResult<TypeParam>> res4 = this->empty.multiEvaluate(allcorners, true);
+	EXPECT_EQ(res4.size(), std::size_t(0));
+
+	//Multiple direction evaluation - Normal TPoly
+	res4 = this->middle.multiEvaluate(allcorners, true);
+	EXPECT_EQ(res4.size(), std::size_t(4));	
+	for(const auto& elem : res4){
+		EXPECT_EQ(elem.errorCode, SOLUTION::FEAS);
+		EXPECT_EQ(elem.supportValue, TypeParam(4));
+	}
+
+	//Multiple direction evaluation - Infeasible TPoly
+	std::vector<EvaluationResult<TypeParam>> res5 = this->infeas.multiEvaluate(allcorners, true);
+	EXPECT_EQ(res5.size(), std::size_t(0));
+}
+
+TYPED_TEST(TemplatePolyhedronTest, RemoveRedundancy){
+
+	//Empty TPoly
+	this->empty.removeRedundancy();
+
+	//TPoly with no redundancy
+	auto matRows = this->middle.matrix().rows();
+	auto matCols = this->middle.matrix().cols();
+	auto vecRows = this->middle.vector().rows();
+	this->middle.removeRedundancy();
+	EXPECT_EQ(matRows, this->middle.matrix().rows());
+	EXPECT_EQ(matCols, this->middle.matrix().cols());
+	EXPECT_EQ(vecRows, this->middle.vector().rows());
+
+	//TPoly with 1 redundant constraint
+	matrix_t<TypeParam> withOneRedundantMat = matrix_t<TypeParam>::Zero(5,2);
+	vector_t<TypeParam> withOneRedundantVec = vector_t<TypeParam>::Zero(5);
+	for(int i=0; i < this->mat.rows(); i++){
+		for(int j = 0; j < this->mat.cols(); j++){
+			withOneRedundantMat(i,j) = this->mat(i,j);
+		}
+		withOneRedundantVec(i) = this->middleVec(i);
+	}
+	withOneRedundantMat(4,0) = TypeParam(4);
+	withOneRedundantVec(4) = TypeParam(4);
+	TemplatePolyhedron<TypeParam> withOneRedundant(withOneRedundantMat, withOneRedundantVec);
+	withOneRedundant.removeRedundancy();
+	EXPECT_EQ(withOneRedundant.matrix().rows(), 4);
+	EXPECT_EQ(withOneRedundant.vector().rows(), 4);
+
+	//Multiple redundant constraints
+}
 /*
+TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
+
+	//Define matrix and vector for linear and affine transformation
+	matrix_t<TypeParam> transMat = 3*matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> transVec = 2*vector_t<TypeParam>::Ones(2);
+
+	//Empty TPoly
+	EXPECT_EQ(this->empty, this->empty.linearTransformation(transMat));
+	EXPECT_EQ(this->empty, this->empty.affineTransformation(transMat, transVec));
+	
+	//Normal TPoly 
+	auto res1 = this->middle.linearTransformation(transMat);
+	EXPECT_EQ(res1.matrix(), this->mat);
+	EXPECT_EQ(res1.vector(), 3*this->middleVec);
+	auto res2 = this->middle.affineTransformation(transMat,transVec);
+	vector_t<TypeParam> controlVec;
+	controlVec << 7, 5, 7, 5;
+	EXPECT_EQ(res2.matrix(), this->mat);
+	EXPECT_EQ(res2.vector(), controlVec);
+}
+*/
+
+TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
+
+	auto res1 = this->middle.minkowskiSum(this->upright);
+	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
+	controlVec << 5,1,5,1;
+	auto res1Vertices = res1.vertices();
+	EXPECT_EQ(res1.vector(), controlVec);
+	EXPECT_EQ(res1Vertices.size(), 4);
+	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(5),TypeParam(5)})) != res1Vertices.end());
+	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(5),TypeParam(-1)})) != res1Vertices.end());
+	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(-1),TypeParam(5)})) != res1Vertices.end());
+	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(-1),TypeParam(-1)})) != res1Vertices.end());
+}
+
 TYPED_TEST(TemplatePolyhedronTest, Intersect){
 
 	//Wish result poly after intersection between middle and upright
@@ -258,16 +371,56 @@ TYPED_TEST(TemplatePolyhedronTest, Intersect){
 	resVec << 2,-1,2,-1;
 	TemplatePolyhedron<TypeParam> resMiddleUpright(this->mat, resVec);
 
-	//Intersect middle and upleft - Should result in resMiddleUpright
+	//Intersect middle and upright - Should result in resMiddleUpright
 	EXPECT_EQ(this->middle.intersect(this->upright), resMiddleUpright);
 
 	//Intersect upleft and upright - Should be empty
-	//EXPECT_EQ(this->upright.intersect(this->upleft), TemplatePolyhedron<TypeParam>());
+	EXPECT_TRUE(this->upright.intersect(this->upleft).empty());
 
+	//Intersect middle and empty - Should result in middle
+	EXPECT_EQ(this->middle.intersect(this->empty), this->middle);
+
+	//Intersect upleft and infeas - should result in upleft
+	EXPECT_EQ(this->upleft.intersect(this->infeas), this->upleft);
+
+	//Intersect infeas and empty - should result in empty
+	EXPECT_EQ(this->infeas.intersect(this->empty), this->empty);
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Union){
 
-}
+	//Wish result poly after unification between middle and upright
+	vector_t<TypeParam> resVec = vector_t<TypeParam>::Zero(4);
+	resVec << 3,2,3,2;
+	TemplatePolyhedron<TypeParam> resMiddleUpright(this->mat, resVec);	
 
-*/
+	//Unite middle and upright - Should result in resMiddleUpright
+	EXPECT_EQ(this->middle.unite(this->upright), resMiddleUpright);
+
+	//Unite upleft and upright - Should be empty
+	EXPECT_TRUE(this->upright.unite(this->upleft).empty());
+
+	//Unite middle and empty - Should be middle
+	EXPECT_EQ(this->middle.unite(this->empty), this->middle);
+
+	//Unite upleft and infeas - should be upleft
+	EXPECT_EQ(this->upleft.unite(this->infeas), this->upleft);
+
+	//Unite infeas and empty - should be empty
+	EXPECT_TRUE(this->infeas.unite(this->empty).empty());
+
+	//Unite upright, middle and downleft - should work
+	vector_t<TypeParam> resVec2 = vector_t<TypeParam>::Zero(4);
+	resVec2 << 3,3,3,3;
+	TemplatePolyhedron<TypeParam> multiUnite(this->mat, resVec2);
+	std::vector<TemplatePolyhedron<TypeParam>> uniteWith;
+	uniteWith.push_back(this->middle);
+	uniteWith.push_back(this->downleft);
+	EXPECT_EQ(this->upright.unite(uniteWith), multiUnite);
+
+	//Unite upright, middle and infeas - should result in resMiddleUpright
+	uniteWith.pop_back();
+	uniteWith.push_back(this->infeas);
+	EXPECT_EQ(this->upright.unite(uniteWith), resMiddleUpright);
+
+}

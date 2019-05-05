@@ -105,6 +105,9 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	* General interface
 	**************************************************************************/
 
+	EvaluationResult<Number> evaluate( const vector_t<Number>& direction) const;
+	//std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& directions) const;
+
 	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;

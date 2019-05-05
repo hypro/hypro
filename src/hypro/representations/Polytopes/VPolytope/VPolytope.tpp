@@ -118,6 +118,38 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 }
 
 template<typename Number, typename Converter, typename S>
+EvaluationResult<Number> VPolytopeT<Number,Converter,S>::evaluate( const vector_t<Number>& direction) const {
+
+/*
+	//Compute angle between direction and a unit vector 
+	Number dirLength = 0;
+	for(int i = 0; i < direction.rows(); i++){
+		dirLength += i*i;
+	}
+	dirLength = std::sqrt(dirLength);
+	Number angle = std::acos(direction(i) / dirLength);
+
+	//Compute rotation matrix that turns direction into the unit vector
+	matrix_t<Number> rotation = matrix_t<Number>::Identity(this->dimension(), this->dimension());
+	//Insert cos and sin into the rotation plane
+
+	//Apply rotation matrix to each vertex, get the supremum and save the max supremum
+
+	//
+
+	//EÖFINÖEILFNK:SENK
+*/
+	typename Converter::HPolytope tmp(mVertices);
+	return tmp.evaluate(direction);
+}
+
+//template<typename Number, typename Converter, typename S>
+//std::vector<EvaluationResult<Number>> VPolytopeT<Number,Converter,S>::multiEvaluate( const matrix_t<Number>& directions) const {
+//
+//}
+//
+
+template<typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();

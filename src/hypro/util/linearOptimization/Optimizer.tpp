@@ -384,6 +384,7 @@ namespace hypro {
 		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
 		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
+			//std::cout << "mOptimizer has not been initialized, initialize now" << std::endl;
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();
 		}
@@ -392,10 +393,10 @@ namespace hypro {
 		glpk_context& glpCtx = mGlpkContext[std::this_thread::get_id()];
 
 		if(!glpCtx.mConstraintsSet){
-			std::cout << "!mConstraintsSet" << std::endl;
+			//std::cout << "!mConstraintsSet" << std::endl;
 
 			if(alreadyInitialized) { // clean up old setup.
-				std::cout << "alreadyInitialized - Cleanup" << std::endl;
+				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
 				glpCtx.deleteArrays();
 
 				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " refreshes its glp instance. (@" << &mGlpkContext[std::this_thread::get_id()] << ")");
@@ -429,14 +430,17 @@ namespace hypro {
 			if(numberOfConstraints > 0) {
 				// convert constraint constants
 				glp_add_rows( glpCtx.lp, numberOfConstraints );
+				// Set relation symbols correctly - mRelationSymbols are suddenly empty in the Supremum test for TemplatePolyhedron. This is a small hack.
+				std::vector<carl::Relation> mRelationSymbolsReplacement;
+				if(mRelationSymbols.empty() && mConstraintMatrix.rows() >= 1){
+					mRelationSymbolsReplacement = std::vector<carl::Relation>(mConstraintMatrix.rows(), carl::Relation::LEQ);
+				} else {
+					mRelationSymbolsReplacement = mRelationSymbols;
+				}
 				for ( int i = 0; i < numberOfConstraints; i++ ) {
-					// Set relation symbols correctly
-					//if(mRelationSymbols.empty()){
-					//	std::cout << "no relation symbols" << std::endl;
-					//} else {
-					//	std::cout << "relation symbols size: " << mRelationSymbols.size() << std::endl;
-					//}
-					switch(mRelationSymbols[i]) {
+
+					//switch(mRelationSymbols[i]) {
+					switch(mRelationSymbolsReplacement[i]){
 						case carl::Relation::LEQ: {
 							// set upper bounds, lb-values (here 0.0) are ignored.
 							glp_set_row_bnds( glpCtx.lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
@@ -472,9 +476,9 @@ namespace hypro {
 				assert(mConstraintMatrix.size() == numberOfConstraints * cols);
 				for ( int i = 0; i < numberOfConstraints * cols; ++i ) {
 					glpCtx.ia[i + 1] = ( int( i / cols ) ) + 1;
-					std::cout << __func__ << " set ia[" << i+1 << "]= " << glpCtx.ia[i+1];
+					//std::cout << __func__ << " set ia[" << i+1 << "]= " << glpCtx.ia[i+1];
 					glpCtx.ja[i + 1] = ( int( i % cols ) ) + 1;
-					std::cout << ", ja[" << i+1 << "]= " << glpCtx.ja[i+1];
+					//std::cout << ", ja[" << i+1 << "]= " << glpCtx.ja[i+1];
 					glpCtx.ar[i + 1] = carl::toDouble( mConstraintMatrix.row(glpCtx.ia[i + 1] - 1)( glpCtx.ja[i + 1] - 1 ) );
 					// TODO:: Assuming ColMajor storage alignment.
 					//assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
