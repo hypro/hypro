@@ -496,132 +496,125 @@ void MTransition::nequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
  **/
 void MTransition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     // Get the command string
-    char cmd[64];
-    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("MTransition - First input should be a command string less than 64 characters long.");
+    int cmd = mxGetScalar(prhs[1]);
 
-
-    if (!strcmp("new_empty", cmd)){  
+    if (cmd == 2){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("copy", cmd)){  
+    if (cmd == 3){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd)){  
+    if (cmd == 1){  
         delete_tran(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_source_target", cmd)){  
+    if (cmd == 4){  
         new_source_target(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_full", cmd)){  
+    if (cmd == 5){  
         new_full(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getTarget", cmd)){  
+    if (cmd == 6){  
         getTarget(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getSource", cmd)){  
+    if (cmd == 7){  
         getSource(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getGuard", cmd)){  
+    if (cmd == 8){  
         getGuard(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getReset", cmd)){  
+    if (cmd == 9){  
         getReset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getAggregation", cmd)){  
+    if (cmd == 10){  
         getAggregation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getTriggerTime", cmd)){  
+    if (cmd == 11){  
         getTriggerTime(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isUrgent", cmd)){  
+    if (cmd == 12){  
         isUrgent(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isTimeTriggered", cmd)){  
+    if (cmd == 13){  
         isTimeTriggered(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hasIdentityReset", cmd)){  
+    if (cmd == 14){  
         hasIdentityReset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getLabels", cmd)){  
+    if (cmd == 15){  
         getLabels(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hash", cmd)){  
+    if (cmd == 16){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setSource", cmd)){  
+    if (cmd == 17){  
         setSource(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setTarget", cmd)){  
+    if (cmd == 18){  
         setTarget(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setGuard", cmd)){  
+    if (cmd == 19){  
         setGuard(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setReset", cmd)){  
+    if (cmd == 20){  
         setReset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setAggregation", cmd)){  
+    if (cmd == 21){  
         setAggregation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setUrgent", cmd)){  
+    if (cmd == 22){  
         setUrgent(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setTriggerTime", cmd)){  
+    if (cmd == 23){  
         setTriggerTime(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setLabels", cmd)){  
+    if (cmd == 24){  
         setLabels(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("addLabel", cmd)){  
+    if (cmd == 25){  
         addLabel(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getDotRepresentation", cmd)){  
+    if (cmd == 26){  
         getDotRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isComposedOf", cmd)){  
+    if (cmd == 27){  
         isComposedOf(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("decompose", cmd)){  
+    if (cmd == 28){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("outstream", cmd)){  
-        outstream(nlhs, plhs, nrhs, prhs);
-        return;
-    }
-    if (!strcmp("equals", cmd)){  
+    if (cmd == 29){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("nequals", cmd)){  
+    if (cmd == 30){  
         nequals(nlhs, plhs, nrhs, prhs);
         return;
     }

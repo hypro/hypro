@@ -355,91 +355,89 @@ void MReset::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
  * @brief
  **/
 void MReset::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	char cmd[64];
-	if ( nrhs < 1 || mxGetString( prhs[1], cmd, sizeof( cmd ) ) )
-		mexErrMsgTxt( "MReset - First input should be a command string less than 64 characters long." );
+	int cmd = mxGetScalar(prhs[1]);
 
-	if ( !strcmp( "new_empty", cmd ) ) {
+	if ( cmd == 2 ) {
 		new_empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "copy", cmd ) ) {
+	if ( cmd == 3 ) {
 		copy( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	// if (!strcmp("new_mat_vec", cmd)){
+	// if (cmd == 5){
 	//     new_mat_vec(nlhs, plhs, nrhs, prhs);
 	//     return;
 	// }
-	if ( !strcmp( "new_intervals", cmd ) ) {
+	if ( cmd == 4 ) {
 		new_intervals( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "delete", cmd ) ) {
+	if ( cmd == 1 ) {
 		delete_reset( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "empty", cmd ) ) {
+	if ( cmd == 6 ) {
 		empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "size", cmd ) ) {
+	if ( cmd == 7 ) {
 		size( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getVector", cmd ) ) {
+	if ( cmd == 8 ) {
 		getVector( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getMatrix", cmd ) ) {
+	if ( cmd == 9 ) {
 		getMatrix( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getIntervals", cmd ) ) {
+	if ( cmd == 10 ) {
 		getIntervals( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getAffineReset_at", cmd ) ) {
+	if ( cmd == 11 ) {
 		getAffineReset_at( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getAffineResets", cmd ) ) {
+	if ( cmd == 12 ) {
 		getAffineResets( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getIntervalReset_at", cmd ) ) {
+	if ( cmd == 13 ) {
 		getIntervalReset_at( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "getIntervalResets", cmd ) ) {
+	if ( cmd == 14 ) {
 		getIntervalResets( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "setVector", cmd ) ) {
+	if ( cmd == 15 ) {
 		setVector( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "setMatrix", cmd ) ) {
+	if ( cmd == 16 ) {
 		setMatrix( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "setIntervals", cmd ) ) {
+	if ( cmd == 17 ) {
 		setIntervals( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "isIdentity", cmd ) ) {
+	if ( cmd == 18 ) {
 		isIdentity( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "hash", cmd ) ) {
+	if ( cmd == 19 ) {
 		hash( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "decompose", cmd ) ) {
+	if ( cmd == 20 ) {
 		decompose( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "combine", cmd ) ) {
+	if ( cmd == 21) {
 		combine( nlhs, plhs, nrhs, prhs );
 		return;
 	}

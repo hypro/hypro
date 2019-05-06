@@ -609,18 +609,75 @@ void MState::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] 
 void MState::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
 void MState::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	char cmd[64];
-	if ( nrhs < 1 || mxGetString( prhs[1], cmd, sizeof( cmd ) ) )
-		mexErrMsgTxt( "MState - First input should be a command string less than 64 characters long." );
+	int cmd = mxGetScalar(prhs[1]);
 
-	if ( !strcmp( "delete", cmd ) ) {
+	if ( cmd == 1 ) {
 		del_state( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( !strcmp( "vertices", cmd ) ) {
+	if ( cmd == 2 ) {
+		new_empty( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 3 ) {
+		copy( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 4 ) {
+		new_loc( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 5 ) {
+		getSetType( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 6 ) {
+		getSets( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 7 ) {
+		getTimestamp( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 8 ) {
+		isEmpty( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 9 ) {
 		vertices( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-
+	if ( cmd == 10 ) {
+		project( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 11 ) {
+		getDimension( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 12 ) {
+		getDimensionOffset( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 13 ) {
+		getLocation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 14 ) {
+		getNumberSets( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 15 ) {
+		//getSet( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 16 ) {
+		getTypes( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 17 ) {
+		setLocation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
 	mexErrMsgTxt( "MState - Command not recognized." );
 }

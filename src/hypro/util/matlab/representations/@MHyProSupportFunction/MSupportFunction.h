@@ -28,10 +28,8 @@ class MSupportFunction: public MGeometricObject<hypro::SupportFunction<double>>{
         static void swap(int, mxArray**, int, const mxArray**);
         static void scale(int, mxArray**, int, const mxArray**);
         static void forceLinTransReduction(int, mxArray**, int, const mxArray**);
-        static void multiplicationsPerEvaluation(int, mxArray**, int, const mxArray**);
         static void cleanUp(int, mxArray**, int, const mxArray**);
         static void collectProjections(int, mxArray**, int, const mxArray**);
-        static void evaluateTemplate(int, mxArray**, int, const mxArray**);
         static void reduceNumberRepresentation(int, mxArray**, int, const mxArray**);
 
 };

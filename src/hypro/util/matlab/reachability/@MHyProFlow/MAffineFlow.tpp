@@ -93,63 +93,61 @@ void MAffineFlow::outstream(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 **/
 void MAffineFlow::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 // Get the command string
-    char cmd[64];
-    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("MLinearFlow - First input should be a command string less than 64 characters long.");
+    int cmd = mxGetScalar(prhs[1]);
 
-    if (!strcmp("new_empty", cmd)){  
+    if (cmd == 2){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_mat_vec", cmd)){  
+    if (cmd == 5){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("copy", cmd)){  
+    if (cmd == 3){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd)){  
+    if (cmd == 1){  
         delete_flow(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("type", cmd)){  
+    if (cmd == 6){  
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hasTranslation", cmd)){  
+    if (cmd == 18){  
         hasTranslation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setTranslation", cmd)){  
+    if (cmd == 19){  
         setTranslation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getTranslation", cmd)){  
+    if (cmd == 20){  
         getTranslation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isTimed", cmd)){  
+    if (cmd == 7){  
         isTimed(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isDiscrete", cmd)){  
+    if (cmd == 8){  
         isDiscrete(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("==", cmd)){  
+    if (cmd == 9){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("!=", cmd)){  
+    if (cmd == 10){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("outstream", cmd)){  
+    if (cmd == 11){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("dimension", cmd)){
+    if(cmd == 21){
         dimension(nlhs, plhs, nrhs, prhs);
         return;
     }

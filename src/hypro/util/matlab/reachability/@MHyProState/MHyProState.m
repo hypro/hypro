@@ -8,7 +8,7 @@ classdef MHyProState < handle
         
         % Destructor
         function delete(obj)
-            MHyPro(13, 'delete', obj.Handle);
+            MHyPro(13, 1, obj.Handle);
         end
     end
     
@@ -17,13 +17,13 @@ classdef MHyProState < handle
         % Constructor
         function obj = MHyProState(varargin)
             if nargin == 0
-                obj.Handle = MHyPro(13, 'new_empty');
+                obj.Handle = MHyPro(13, 2); %new_empty
             elseif nargin == 1 && isa(varargin{1}, 'uint64')
                 obj.Handle = varargin{1};
             elseif nargin == 1 && isa(varargin{1}, 'MHyProState')
-                obj.Handle = MHyPro(13, 'copy', varargin{1}.Handle);
+                obj.Handle = MHyPro(13, 3, varargin{1}.Handle); % copy
             elseif nargin == 1 && isa(varargin{1}, 'MHyProLocation')
-                obj.Handle = MHyPro(13, 'new_loc', varargin{1}.Handle);
+                obj.Handle = MHyPro(13, 4, varargin{1}.Handle); % new_loc
             else
                 error('MState - Constructor: Wrong type of at least one argument.');
             end
@@ -31,11 +31,11 @@ classdef MHyProState < handle
         
         
         function out = getSetType(obj)
-            out = MHyPro(13, 'getSetType', obj.Handle);
+            out = MHyPro(13, 5, obj.Handle);
         end
         
         function out = getSets(obj)
-            stateCell = MHyPro(13, 'getSets', obj.Handle);
+            stateCell = MHyPro(13, 6, obj.Handle);
             out = cell(1, length(stateCell));
             for i = 1:length(stateCell)
                 if isa(stateCell{i}, 'uint64')
@@ -47,49 +47,49 @@ classdef MHyProState < handle
         end
         
         function out = getTimestamp(obj)
-            out = MHyPro(13, 'getTimestamp', obj.Handle);
+            out = MHyPro(13, 7, obj.Handle);
         end
         
         function out = isempty(obj)
-            out = MHyPro(13, 'isEmpty', obj.Handle);
+            out = MHyPro(13, 8, obj.Handle);
         end
         
         function out = vertices(obj, offset)
-            out = MHyPro(13, 'vertices', obj.Handle, offset-1);
+            out = MHyPro(13, 9, obj.Handle, offset-1);
         end
         
         function out = project(obj, dims, offset)
             if iscell(dims)
-                out = MHyPro(13, 'project', obj.Handle, dims, offset);
+                out = MHyPro(13, 10, obj.Handle, dims, offset);
             else
                 error('MHyProState - wrong input argument.');
             end
         end
         
         function out = getDimension(obj, offset)
-            out = MHyPro(13, 'getDimension', obj.Handle, offset);
+            out = MHyPro(13, 11, obj.Handle, offset);
         end
         
         function out = getDimensionOffset(obj, offset)
-            out = MHyPro(13, 'getDimensionOffset', obj.Handle, offset);
+            out = MHyPro(13, 12, obj.Handle, offset);
         end   
         
         function out = getLocation(obj)
-            temp = MHyPro(13, 'getLocation', obj.Handle);
+            temp = MHyPro(13, 13, obj.Handle);
             out = MHyProLocation(temp);
         end
         
         function out = getNumberSets(obj)
-            out = MHyPro(13, 'getNumberSets', obj.Handle);
+            out = MHyPro(13, 14, obj.Handle);
         end
         
         function out = getSet(obj, pos)
-            temp = MHyPro(13, 'getSet', obj.Handle, pos - 1);
+            temp = MHyPro(13, 15, obj.Handle, pos - 1);
             out = MHyProState(temp);
         end
         
         function out = getTypes(obj)
-            temp = MHyPro(13, 'getSet', obj.Handle);
+            temp = MHyPro(13, 16, obj.Handle);
             out = cell(1, length(temp));
             for i = 1:length(temp)
                 if isa(temp{i}, 'uint64')
@@ -102,7 +102,7 @@ classdef MHyProState < handle
         
         function setLocation(obj, loc)
             if isa(loc, 'MHyProLocation')
-                MHyPro(13, 'setLocation', obj.Handle, loc.Handle);
+                MHyPro(13, 17, obj.Handle, loc.Handle);
             else
                 error('MHyProState - setLocation: Wrong type of input argument.');
             end
@@ -115,7 +115,7 @@ classdef MHyProState < handle
         % 9 = zonotope
         function setSetType(obj, type, pos)
             if type >= 0 && type <= 9 && mod(pos, 1) == 0
-                MHyPro(13, 'setSetType', type, pos - 1);
+                MHyPro(13, 18, type, pos - 1);
             else
                 error('MHyProState - setSetType: Wrong type of input argument.');
             end      

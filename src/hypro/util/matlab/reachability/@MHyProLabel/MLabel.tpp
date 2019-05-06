@@ -111,39 +111,37 @@ void MLabel::less(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 
 void MLabel::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     // Get the command string
-    char cmd[64];
-    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("MLabel - First input should be a command string less than 64 characters long.");
+    int cmd = mxGetScalar(prhs[1]);
 
-    if(!strcmp("new_name", cmd)){
+    if(cmd == 2){
         new_name(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("copy", cmd)){  
+    if (cmd == 3){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd)){  
+    if (cmd == 1){  
         del_label(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getName", cmd)){  
+    if (cmd == 4){  
         getName(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setName", cmd)){  
+    if (cmd ==  5){  
         setName(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("equals", cmd)){  
+    if (cmd == 6){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("unequals", cmd)){  
+    if (cmd == 7){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("less", cmd)){  
+    if (cmd == 8){  
         less(nlhs, plhs, nrhs, prhs);
         return;
     }

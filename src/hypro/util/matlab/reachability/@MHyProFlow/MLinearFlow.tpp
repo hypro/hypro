@@ -126,75 +126,73 @@ void MLinearFlow::outstream(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 **/
 void MLinearFlow::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 // Get the command string
-    char cmd[64];
-    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("MLinearFlow - First input should be a command string less than 64 characters long.");
+    int cmd = mxGetScalar(prhs[1]);
 
-    if (!strcmp("new_empty", cmd)){  
+    if (cmd == 2){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_mat", cmd)){  
+    if (cmd == 4){  
         new_mat(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("copy", cmd)){  
+    if (cmd == 3){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd)){  
+    if (cmd == 1){  
         delete_flow(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("size", cmd)){  
+    if (cmd == 12){  
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("type", cmd)){  
+    if (cmd == 6){  
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hasNoFlow", cmd)){  
+    if (cmd == 13){  
         hasNoFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getFlowMatrix", cmd)){  
+    if (cmd == 14){  
         getFlowMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setFlowMatrix", cmd)){  
+    if (cmd == 15){  
         setFlowMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("addRow", cmd)){  
+    if (cmd == 16){  
         addRow(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isIdentity", cmd)){  
+    if (cmd == 17){  
         isIdentity(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isTimed", cmd)){  
+    if (cmd == 7){  
         isTimed(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isDiscrete", cmd)){  
+    if (cmd == 8){  
         isDiscrete(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("==", cmd)){  
+    if (cmd == 9){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("!=", cmd)){  
+    if (cmd == 10){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("outstream", cmd)){  
+    if (cmd == 11){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("dimension", cmd)){
+    if(cmd == 21){
         dimension(nlhs, plhs, nrhs, prhs);
         return;
     }

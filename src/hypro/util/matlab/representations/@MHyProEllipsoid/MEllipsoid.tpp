@@ -20,40 +20,6 @@
  /**
   * @brief
   **/
-//  void MEllipsoid::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-//      if(nlhs < 1)
-//         mexErrMsgTxt("MEllipsoid - evaluate: Expecting an output!");
-//     if(nrhs < 5)
-//         mexErrMsgTxt("MEllipsoid - evaluate: One or more arguments are missing!");
-//     if(nrhs > 5)
-//         mexWarnMsgTxt("MEllipsoid - evaluate: One or more input arguments were ignored."); 
-//     const mwSize *dims_vec;
-//     int vec_len;
-//     bool ans;
-
-//     hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
-//     const double dir = (double) mxGetScalar(prhs[4]);
-//     dims_vec = mxGetDimensions(prhs[3]);
-//     vec_len = (int) dims_vec[0];
-
-//     hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
-
-//     if(dir == 0){
-//         ans = false;
-//     }else if (dir == 1){
-//         ans = true;
-//     }else{
-//         mexErrMsgTxt("MEllipsoid - evaluate: The direction must be either 0 or 1!");
-//     }
-    
-//     hypro::vector_t<double> vect = ellipse->evaluate(vec);
-//     plhs[0] = mxCreateDoubleMatrix(vect.rows(), 1, mxREAL);
-//     ObjectHandle::convert2Matlab(vect, plhs[0], 1, vect.rows());
-//  }
-
- /**
-  * @brief
-  **/
  void MEllipsoid::approxEllipsoidTMatrix(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MEllipsoid - approxEllipsoidTMatrix: Expecting one output value!");
@@ -121,75 +87,69 @@ void MEllipsoid::type(int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[])
 **/
 void MEllipsoid::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     // Get the command string
-    char cmd[64];
-    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("MEllipsoid - First input should be a command string less than 64 characters long.");
+    int cmd = mxGetScalar(prhs[1]);
 
-    if (!strcmp("new_rad", cmd)){  
+    if (cmd == 17){  
         ellipsoid_rad(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_mat", cmd)){  
+    if (cmd == 16){  
         new_matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("copy", cmd)){
+    if(cmd == 15){
         copyObj(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd)) {
+    if (cmd == 1) {
         deleteObject(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("isEmpty", cmd)){
+    if(cmd == 11){
         is_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("type", cmd)){
+    if(cmd == 13){
         type(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("matrix", cmd)){
+    if(cmd == 9){
         matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("==", cmd)){
+    if(cmd == 7){
         equal(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("dimension", cmd)){
+    if(cmd == 2){
         dimension(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("matrix", cmd)){
+    if(cmd == 9){
         matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("!=", cmd)){
+    if(cmd == 8){
         unequal(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("<<", cmd)){
+    if(cmd == 5){
         ostream(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("linearTransformation", cmd)){
+    if(cmd == 18){
         linearTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("affineTransformation", cmd)){
+    if(cmd == 19){
         affineTransformation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if(!strcmp("minkowskiSum", cmd)){
+    if(cmd == 20){
         minkowskiSum(nlhs, plhs, nrhs, prhs);
         return;
     }
-    // if(!strcmp("evaluate", cmd)){
-    //     evaluate(nlhs, plhs, nrhs, prhs);
-    //     return;
-    // }
-    if(!strcmp("approxEllipsoidTMatrix", cmd)){
+    if(cmd == 21){
         approxEllipsoidTMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
