@@ -114,6 +114,20 @@ TYPED_TEST(SupportFunctionTest, constructor) {
 	r << TypeParam(3),TypeParam(3);
 	EXPECT_EQ(box.evaluate(this->vec1).optimumValue,r);
 
+	matrix_t<TypeParam> constraints = matrix_t<TypeParam>(3,2);
+	constraints << 1,0,0,1,0,-1;
+	vector_t<TypeParam> constants = vector_t<TypeParam>(3);
+	constants << 1,1,1;
+
+	vector_t<TypeParam> evalVec = vector_t<TypeParam>(2);
+	evalVec << 1,0;
+
+	SupportFunction<TypeParam> box2 = SupportFunction<TypeParam>(constraints, constants);
+	EXPECT_EQ(box2.sfType(),SF_TYPE::BOX);
+	EXPECT_EQ(box2.evaluate(evalVec).supportValue,TypeParam(1));
+	evalVec << -1,0;
+	EXPECT_EQ(box2.evaluate(evalVec).errorCode,SOLUTION::INFTY);
+
 	SUCCEED();
 }
 
