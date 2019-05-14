@@ -366,8 +366,10 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	std::pair<CONTAINMENT,SupportFunction<TypeParam>> cutHalf2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 0));
 	EXPECT_TRUE(cutHalf.first != CONTAINMENT::NO);
 	EXPECT_TRUE(cutHalf2.first != CONTAINMENT::NO);
+	EXPECT_TRUE(cutHalf2.first == CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(cutHalf.second.evaluate(evalDir).supportValue == 0);
 	EXPECT_TRUE(cutHalf2.second.evaluate(evalDir).supportValue == 0);
+	EXPECT_TRUE(!cutHalf2.second.empty());
 
 	offset << -1;
 	std::pair<CONTAINMENT,SupportFunction<TypeParam>> barelyContained = psf1.satisfiesHalfspaces(normal, offset);
@@ -384,6 +386,16 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	EXPECT_FALSE(notContained2.first != CONTAINMENT::NO);
 	EXPECT_TRUE(notContained.second.empty());
 	EXPECT_TRUE(notContained2.second.empty());
+
+	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Zero(4,2);
+	mat << 1,0,-1,0,0,1,0,-1;
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(4);
+	vec << 2,-0.1,2,-0.1;
+	SupportFunction<TypeParam> sf1(mat,vec);
+	Halfspace<TypeParam> withinBox ({TypeParam(0),TypeParam(1)}, TypeParam(1));
+	std::pair<CONTAINMENT, SupportFunction<TypeParam>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
+	EXPECT_TRUE(withinSatisfy.first == hypro::CONTAINMENT::PARTIAL);
+	EXPECT_TRUE(!withinSatisfy.second.empty());
 }
 
 TYPED_TEST(SupportFunctionTest, intersectHalfspaces) {

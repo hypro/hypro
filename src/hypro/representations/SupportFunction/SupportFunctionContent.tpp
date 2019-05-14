@@ -100,8 +100,7 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( Number _radius, 
 }
 
 template<typename Number, typename Setting>
-SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number> &_directions, const vector_t<Number> &_distances,
-										  SF_TYPE _type ) {
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number> &_directions, const vector_t<Number> &_distances, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals;
@@ -1539,7 +1538,7 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 				return scaleParameters()->origin->empty();  // Todo: What if factor is negative?
 		}
 		case SF_TYPE::SUM: {
-			return ( summands()->lhs->empty() && summands()->rhs->empty() );
+			return ( summands()->lhs->empty() || summands()->rhs->empty() );
 		}
 		case SF_TYPE::UNITE: {
 			for(const auto& item : unionParameters()->items) {
@@ -1556,12 +1555,14 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 			// TODO: Current implementation uses template evaluation.
 			std::vector<vector_t<Number>> directions = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 			for(const auto& direction : directions){
-				Number rhsPos = intersectionParameters()->rhs->evaluate(direction, false).supportValue;
-				Number lhsNeg = intersectionParameters()->lhs->evaluate(-direction, false).supportValue;
-				if(rhsPos < -lhsNeg) return true;
-				Number rhsNeg = intersectionParameters()->rhs->evaluate(-direction, false).supportValue;
-				Number lhsPos = intersectionParameters()->lhs->evaluate(direction, false).supportValue;
-				if(-rhsNeg > lhsPos) return true;
+				auto rhsPosEval = intersectionParameters()->rhs->evaluate(direction, false);
+				auto lhsNegEval = intersectionParameters()->lhs->evaluate(-direction, false);
+				//if(rhsPosEval.errorCode == SOLUTION::INFTY || lhsNegEval.errorCode == SOLUTION::INFTY) return false;
+				if(rhsPosEval.supportValue < -lhsNegEval.supportValue) return true;
+				auto rhsNegEval = intersectionParameters()->rhs->evaluate(-direction, false);
+				auto lhsPosEval = intersectionParameters()->lhs->evaluate(direction, false);
+				//if(rhsNegEval.errorCode == SOLUTION::INFTY || lhsPosEval.errorCode == SOLUTION::INFTY) return false;
+				if(-rhsNegEval.supportValue > lhsPosEval.supportValue) return true;
 			}
 			return false;
 		}

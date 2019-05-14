@@ -14,7 +14,7 @@ template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	BoxT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,BoxT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 template<typename Number>
@@ -27,14 +27,14 @@ template<typename Number>
 template<typename SFNSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const Ellipsoid& _source, const CONV_MODE  ) {
 	Ellipsoid tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,Ellipsoid>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	HPolytopeT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,HPolytopeT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 //template<typename Number>
@@ -48,14 +48,14 @@ template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	VPolytopeT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,VPolytopeT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 template<typename Number>	
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	DifferenceBoundsT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,DifferenceBoundsT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 #ifdef HYPRO_USE_PPL
@@ -63,7 +63,7 @@ template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const PolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	PolytopeT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,PolytopeT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 #endif
 
@@ -71,14 +71,14 @@ template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	SupportFunctionT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,SupportFunctionT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	ZonotopeT<Number,Converter<Number>,inSetting> tmp(_source);
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(static_cast<GeometricObject<Number,ZonotopeT<Number,Converter<Number>,inSetting>>&>(tmp));
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(tmp);
 }
 
 template<typename Number>

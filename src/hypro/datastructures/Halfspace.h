@@ -295,7 +295,7 @@ class Halfspace {
 	static Number computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane);
 
 	/**
-	 * For SupportFunctionNew
+	 * For SupportFunctionNew where it is seen as a representation
 	 */
 	matrix_t<Number> matrix() const { 
 		matrix_t<Number> mat = matrix_t<Number>::Zero(1,mNormal.rows());

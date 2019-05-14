@@ -300,6 +300,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     //std::cout << __func__ << "Dimension of source: " << dim << std::endl;
     std::vector<std::size_t> projections = _source.collectProjections();
     //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
+    //std::cout << __func__ << "numberOfDirections: " << numberOfDirections << std::endl;
 	if( projections.size() == dim ){
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);

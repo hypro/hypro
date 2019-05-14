@@ -309,11 +309,11 @@ TYPED_TEST(ConverterTest, toPolytope){
 
 TYPED_TEST(ConverterTest, toSupportFunctionNew)
 {
-    auto result = Converter<TypeParam>::toSupportFunctionNew(this->zonotope);
+    //auto result = Converter<TypeParam>::toSupportFunctionNew(this->zonotope); //COMMENTED OUT SINCE ZONOTOPE HAVE NO MATRIX AND VECTOR FUNCTION 
     auto result2 = Converter<TypeParam>::toSupportFunctionNew(this->box);
-    auto result3 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope);
-    auto result4 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope2);
-    auto result5 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope3);
+    //auto result3 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope); //COMMENTED OUT SINCE VPOLYS HAVE NO MATRIX AND VECTOR FUNCTION
+    //auto result4 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope2); //COMMENTED OUT SINCE VPOLYS HAVE NO MATRIX AND VECTOR FUNCTION
+    //auto result5 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope3); //COMMENTED OUT SINCE VPOLYS HAVE NO MATRIX AND VECTOR FUNCTION
     auto result6 = Converter<TypeParam>::toSupportFunctionNew(this->hpolytope);
     auto result7 = Converter<TypeParam>::toSupportFunctionNew(this->hpolytope2);
     auto result8 = Converter<TypeParam>::toSupportFunctionNew(this->support, ALTERNATIVE);

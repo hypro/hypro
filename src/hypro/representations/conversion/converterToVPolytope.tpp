@@ -531,9 +531,9 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
         target = VPolytopeT<Number,Converter,VPolySetting>(constraints, constants);
     }
     if (mode == UNDER){
-            //gets dimension of source object
+        //gets dimension of source object
         std::size_t dim = _source.dimension();
-
+        
         //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
         std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
         //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
