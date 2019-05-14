@@ -24,7 +24,7 @@ var classhypro_1_1SupportFunctionT =
     [ "ellipsoid", "classhypro_1_1SupportFunctionT.html#aa5f7aa64590ecb34fb9cbc5ca9e068bc", null ],
     [ "empty", "classhypro_1_1SupportFunctionT.html#a688b09f824ce0494c61f65640b95fa76", null ],
     [ "evaluate", "classhypro_1_1SupportFunctionT.html#a5ecf7b23a99bee42718795d1628b1058", null ],
-    [ "evaluateTemplate", "classhypro_1_1SupportFunctionT.html#ac10d359da2c45ef2a7723a6a7bcb20c3", null ],
+    [ "evaluateTemplate", "classhypro_1_1SupportFunctionT.html#aebac22446eee2feaa9e35fc646fc44c0", null ],
     [ "forceLinTransReduction", "classhypro_1_1SupportFunctionT.html#a7e3a0de2365a70b918d37a1434154ad5", null ],
     [ "getDotRepresentation", "classhypro_1_1SupportFunctionT.html#a1cfba90089b5287ff6acd8247043269a", null ],
     [ "intersect", "classhypro_1_1SupportFunctionT.html#aebea730c2cb795c666f34940a8bbe60d", null ],
