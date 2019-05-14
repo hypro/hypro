@@ -127,7 +127,7 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 		}		
 	}
 
-	//divide by factor
+	//Parameters are backtransformed into the domain space of the given operation- divide by factor
 	vector_t<Number> reverseOp(const vector_t<Number>& point) const { 
 		if(factor == 0) return vector_t<Number>::Zero(point.rows());
 		return point / factor;

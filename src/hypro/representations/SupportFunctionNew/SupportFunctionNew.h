@@ -51,7 +51,7 @@ struct Parameters {
 
 	Parameters(){}
 	Parameters(Rargs... r) : args(std::make_tuple(r...)) {}
-	Parameters(std::tuple<Rargs...>& r) : args(r) {}
+	Parameters(const std::tuple<Rargs...>& r) : args(r) { std::cout << "Param copy!" << std::endl; }
 	~Parameters(){}
 
 	std::size_t size() const { 
@@ -124,6 +124,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	//No optimization constructor
   	template<typename Representation>
 	SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool );
+
+	//Halfspace constructor
+	SupportFunctionNewT( const Halfspace<Number>& hspace );
 
   public:
 	/**
@@ -257,23 +260,23 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	template<typename Result>
 	Result traverse(std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& transform,
 					std::function<Result(RootGrowNode<Number,Converter,Setting>*)>&& compute, 
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>&& aggregate) const;
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&)>&& aggregate) const;
 
 	//When Result type = void, but Param type not
 	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename ...Rargs>
-	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>&& transform,
-					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>&& compute, 
-					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>&& aggregate,
+	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& transform,
+					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute, 
+					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& aggregate,
 					Parameters<Rargs...>&& initParams) const;
 
 	//Actual traverse function
 	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
 	//we can assume that we do not get functions returning void / that have no parameters
 	template<typename Result, typename ...Rargs>
-	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>&& transform,
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>&& compute, 
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>&& aggregate, 
+	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& transform,
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute, 
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&, Parameters<Rargs...>&)>&& aggregate, 
 					Parameters<Rargs...>&& initParams) const;
 
 	/***************************************************************************
@@ -417,6 +420,10 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	std::size_t size() const;
 
+	/**
+	 * @brief      Getter for the class name
+	 * @return     The value "SFN" of the representation_name enum
+	 */
 	static representation_name type() { return representation_name::SFN; }
 
 	/**

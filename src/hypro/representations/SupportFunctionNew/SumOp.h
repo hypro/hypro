@@ -114,7 +114,7 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	//Minkowski Sum empty when all operands (children) are empty
 	//Minkowski Sum of an nonempty object with an empty object equals the nonempty object
 	bool empty(const std::vector<bool>& childrenEmpty) const {
-		for(auto childEmpty : childrenEmpty){
+		for(const auto& childEmpty : childrenEmpty){
 			if(!childEmpty) return false;
 		}
 		return true;

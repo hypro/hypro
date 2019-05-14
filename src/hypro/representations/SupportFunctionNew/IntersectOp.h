@@ -10,6 +10,7 @@
 #pragma once
 
 #include "RootGrowNode.h"
+#include "../../datastructures/Halfspace.h"
 
 namespace hypro {
 
@@ -88,17 +89,18 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		std::vector<EvaluationResult<Number>> accumulatedResult;
 
 		// in case one of the results is infeasible (the set is empty), return this result.
-		for(const auto& res : resultStackBack){
-			if(res.begin()->errorCode == SOLUTION::INFEAS){
-				return res;
-			}
-		}
+		//for(const auto& res : resultStackBack){
+		//	if(res.begin()->errorCode == SOLUTION::INFEAS){
+		//		return res;
+		//	}
+		//}
 
 		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
 		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {		
 			EvaluationResult<Number> r = resultStackBack.front().at(i);
 			for(const auto& res : resultStackBack){
-				assert(res[i].errorCode != SOLUTION::INFEAS);
+				if(res[i].errorCode == SOLUTION::INFEAS) return res;
+				//assert(res[i].errorCode != SOLUTION::INFEAS);
 				//if(res[i].errorCode == SOLUTION::FEAS){
 				//r.errorCode = res[i].errorCode < r.errorCode ? res[i].errorCode : r.errorCode;
 				r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
@@ -109,6 +111,8 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		}
 		return accumulatedResult;
 	}
+
+  public:
 
 	/* Problem: Check emptiness of intersection of n convex objects
 	 * Solution 1: Template Evaluation
@@ -127,32 +131,101 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	 *	- Compute the COG of all points and determine the direction as the vector from the COG to the points
 	 *	- Evaluate all directions -> but how to determine emptiness from that?
 	 *	- Needs n*LP to generate points and n*LPs for evaluation
+	 *
+     * All these solutions were not ideal for dealing with halfspaces. Algorithm now (for only 2 objects):
+	 * - If both are not halfspaces: Use template evaluation: 2*#dir*LP
+	 * - If one is a halfspace and the other not: Use satisfiesHalfspace: 2*LP
+	 * - If none are halfspaces: Check linear dependency of halfspace normals: linear
 	 */
 	bool empty(const std::vector<bool>& childrenEmpty) const {
 
 		//Current implementation uses Solution 1: template evaluation.
-		//std::cout << "IntersectOp::empty" << std::endl;
+		//std::cout << "IntersectOp::empty. Has children: " << this->getChildren().size() << std::endl;
 
 		//Quick check
-		for(auto child : childrenEmpty){
-			if(child) return true;
+		for(const auto& child : childrenEmpty){
+			if(child){
+				//std::cout << "One child was empty" << std::endl;
+				return true;
+			} 
 		}
+/*
+		assert(this->getChildren().size() == 2);
+		SupportFunctionNewT<Number,Converter,Setting> rhs(this->getChildren().at(0));
+		SupportFunctionNewT<Number,Converter,Setting> lhs(this->getChildren().at(1));
+		std::cout << "rhs matrix: \n" << rhs.matrix() << std::endl << "lhs matrix: \n" << lhs.matrix() << std::endl;
+		if(rhs.matrix().rows() > 1 && lhs.matrix().rows() > 1){
+			//Both should be closed convex objects - use templateEvaluation
+			std::vector<vector_t<Number>> directions = computeTemplate<Number>(this->getDimension(), defaultTemplateDirectionCount);
+			for(const auto& direction : directions){
+				Number rhsPos = rhs.evaluate(direction, false).supportValue;
+				Number lhsNeg = lhs.evaluate(-direction, false).supportValue;
+				if(rhsPos < -lhsNeg) return true;
+				Number rhsNeg = rhs.evaluate(-direction, false).supportValue;
+				Number lhsPos = lhs.evaluate(direction, false).supportValue;
+				if(-rhsNeg > lhsPos) return true;
+			}
+		} else if(rhs.matrix().rows() <= 1 && lhs.matrix().rows() > 1){
+			//rhs is a halfspace - empty if lhs does not lie within rhs
+			Halfspace<Number> hspace(vector_t<Number>(rhs.matrix().row(0).transpose()), rhs.vector()(0));
+			auto lhsInHalfspace = lhs.satisfiesHalfspace(hspace);
+			if(lhsInHalfspace.first == CONTAINMENT::NO){
+				return true;
+			} 
+		} else if(rhs.matrix().rows() > 1 && lhs.matrix().rows() <= 1){
+			//lhs is a halfspace - empty if rhs does not within lhs
+			Halfspace<Number> hspace(vector_t<Number>(lhs.matrix().row(0).transpose()), lhs.vector()(0));
+			auto rhsInHalfspace = rhs.satisfiesHalfspace(hspace);
+			if(rhsInHalfspace.first == CONTAINMENT::NO){
+				return true;
+			}
+		} else if(rhs.matrix().rows() <= 1 && lhs.matrix().rows() <= 1){
+			//Both children are halfspaces - empty if one halfspace points to the exact inverse direction of the other
+			std::cout << "We are here" << std::endl;
+			vector_t<Number> rhsDir = vector_t<Number>(rhs.matrix().row(0).transpose());
+			vector_t<Number> lhsDir = vector_t<Number>(lhs.matrix().row(0).transpose());
+			auto bothHalfspacesLinDependent = linearDependent(rhsDir, lhsDir);
+			if(bothHalfspacesLinDependent.first && bothHalfspacesLinDependent.second < 0){
+				return true;
+			}
+		} else {
+			std::cout << "This was not intended" << std::endl;
+		}
+		return false;
+
+		//Check which children are halfspaces 
+
+		//Add all their halfspaces to one matrix
+
+		//Compute intersection 
+*/
+		//std::vector<vector_t<Number>> directions = computeTemplate<Number>(mDimension, defaultTemplateDirectionCount);
+		//for(const auto& direction : directions){
+		//	for(const auto& child : this->getChildren()){
+		//		SupportFunctionNewT<Number,Converter,Setting> sfChild(child);
+		//		
+		//	}
+		//}
 
 		//First: select the most negative object - objects can be unbounded (like halfspaces)
 		vector_t<Number> allNegativeDir = -1*vector_t<Number>::Ones(mDimension);
-		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
 		std::size_t indexOfMostNegativeChild = 0;
 		Number mostNegativeEvalValue = Number(100000000);
-		//std::cout << "IntersectOp::empty initialized" << std::endl;		
+		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
+		//std::cout << "Finding most negative!" << std::endl;
 		for(std::size_t i = 0; i < this->getChildren().size(); ++i){
 			sfChildren.emplace_back(SupportFunctionNewT<Number,Converter,Setting>(this->getChildren().at(i)));
 			EvaluationResult<Number> evalRes = sfChildren.back().evaluate(allNegativeDir,false);
+			if(evalRes.errorCode != SOLUTION::INFTY){
+				indexOfMostNegativeChild = evalRes.supportValue < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
+				mostNegativeEvalValue = evalRes.supportValue < mostNegativeEvalValue ? evalRes.supportValue : mostNegativeEvalValue;	
+			}
 			//std::cout << "eval res for allNegativeDir is: " << evalRes << std::endl;;
-			Number childEvalRes = evalRes.supportValue;
-			//Number childEvalRes = evalRes.errorCode == SOLUTION::INFTY ? -Number(100000000) : evalRes.supportValue;
+			//Number childEvalRes = evalRes.supportValue;
+			//Number childEvalRes = evalRes.errorCode == SOLUTION::INFTY ? Number(100000000) : evalRes.supportValue;
 			//Number childEvalRes = sfChildren.back().evaluate(allNegativeDir,false).supportValue;
-			indexOfMostNegativeChild = childEvalRes < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
-			mostNegativeEvalValue = childEvalRes < mostNegativeEvalValue ? childEvalRes : mostNegativeEvalValue;
+			//indexOfMostNegativeChild = childEvalRes < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
+			//mostNegativeEvalValue = childEvalRes < mostNegativeEvalValue ? childEvalRes : mostNegativeEvalValue;	
 			//std::cout << "Child " << i << " childEvalRes " << childEvalRes << " indexOfMostNegativeChild " << indexOfMostNegativeChild << " mostNegativeEvalValue " << mostNegativeEvalValue << std::endl;
 		}
 		assert(indexOfMostNegativeChild < sfChildren.size());
@@ -166,22 +239,31 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		for(const auto& direction : directions){
 			
 			//Determine reverse direction for mostNegative
-			Number mostNegEvalRes = mostNegative.evaluate(-direction, false).supportValue;
-			//EvaluationResult<Number> evalRes = mostNegative.evaluate(-direction, false);
+			EvaluationResult<Number> mostNegEvalRes = mostNegative.evaluate(-direction, false);
+			//if(mostNegEvalRes.errorCode == SOLUTION::INFTY) return false;
+			//Number mostNegEvalRes = mostNegative.evaluate(-direction, false).supportValue;
 			//Number mostNegEvalRes = evalRes.supportValue;
-			//std::cout << "Direction: \n" << direction;
-			//std::cout << "most negative eval res: " << evalRes << std::endl;
+			//std::cout << "Current direction: \n" << direction;
+			//std::cout << "most negative eval res: " << mostNegEvalRes << std::endl;
 
 			//Fill evalResults
 			for(const auto& child : sfChildren){
-				Number childEvalRes = child.evaluate(direction, false).supportValue;
-				//EvaluationResult<Number> cEvalRes = child.evaluate(direction, false);
+				EvaluationResult<Number> childEvalRes = child.evaluate(direction, false);
+				//if(childEvalRes.errorCode == SOLUTION::INFTY) return false;
+				//Number childEvalRes = child.evaluate(direction, false).supportValue;
+				//std::cout << "child evaluated to: \n" << cEvalRes << std::endl;
+				//cEvalRes.supportValue = cEvalRes.errorCode == SOLUTION::INFTY ? Number(100000000) : cEvalRes.supportValue;
+				//Number childEvalRes = cEvalRes.errorCode == SOLUTION::INFTY ? Number(100000000) : cEvalRes.supportValue;
 				//Number childEvalRes = cEvalRes.supportValue;
-				//std::cout << "child eval res: " << cEvalRes << " < " << -mostNegEvalRes << " ? " << (childEvalRes < -mostNegEvalRes) << " if yes then empty." << std::endl;
-				if(childEvalRes < -mostNegEvalRes) return true;
+				//std::cout << "child eval suppport value: " << childEvalRes << " < " << -mostNegEvalRes << " ? " << (childEvalRes < -mostNegEvalRes) << " if yes then empty." << std::endl;
+				//if(childEvalRes < -mostNegEvalRes) return true;
+				if(childEvalRes.supportValue < -mostNegEvalRes.supportValue) return true;
 			}
 		}
 		return false;
+
+		//Brauchen wir die erste hälfte überhaupt?? Muss der negativste ausgesucht werden? 
+		//
 	}
 
 	//Select smallest supremum of given suprema

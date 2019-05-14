@@ -43,9 +43,12 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	////// Members for this class
 
-	std::shared_ptr<Representation> rep;
+	//A pointer to the representation it holds. Is shared since after a settings conversion, 
+	//both the converted and the original version point to the same representations 
+	std::shared_ptr<Representation> rep;	
 
-	mutable bool isNotRedundant = false; 	//A flag that tells us if removeRedundancy() has been used on the representation
+	//A flag that tells us if removeRedundancy() has been used on the representation
+	mutable bool isNotRedundant = false; 	
 	
   public:
 
@@ -83,14 +86,12 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	////// Displaying
 
 	void print(std::ostream& ostr) const {
-		ostr << "RootGrowNode address: " << this << " own type: " << this->getType() << " children types(address): [";
-		for(auto c : this->getChildren()){
-			ostr << c->getType() << "(" << &(*c) << ")" << ",";
-		}
-		ostr << "]" << std::endl;
-		ostr << "Leaf representation: " << *rep << std::endl;
-		for(auto c : this->getChildren()){
-			ostr << *c;
+		ostr << "RootGrowNode address: " << this << " own type: " << this->getType();
+		if(rep != nullptr){
+			ostr << " Leaf type: " << rep->type() << std::endl;
+			//ostr << " Leaf representation: \n" << *rep << std::endl;	
+		} else {
+			ostr << " Leaf has no representation." << std::endl;
 		}
 	}
 	
@@ -116,8 +117,8 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 		//Optimization: If rep is only a halfspace, save yourself an expensive evaluation: Used in guard / invariant satisfaction
 		auto repMatrix = rep->matrix();
 		if(repMatrix.rows() == 1) {
-			std::vector<EvaluationResult<Number>> res;
 			auto repVector = rep->vector();
+			std::vector<EvaluationResult<Number>> res;
 			vector_t<Number> pointOnPlane = vector_t<Number>::Zero(mDimension);
 			assert(repMatrix.row(0).nonZeros() != 0 );
 			unsigned nonZeroPos = 0;
@@ -127,8 +128,6 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 				std::pair<bool,Number> dependent = linearDependent(vector_t<Number>(repMatrix.row(0)), vector_t<Number>(param.row(index)));
 				if( dependent.first ) {
 					if( dependent.second > 0 ) {
-						//std::cout << "Vectors " << convert<Number,double>(vector_t<Number>(repMatrix.row(0))).transpose() << " and " << convert<Number,double>(vector_t<Number>(param.row(index))).transpose() << " are dependent!" << std::endl;
-						//std::cout << "Factor: " << dependent.second << std::endl;
 						res.emplace_back(repVector(0)*dependent.second, pointOnPlane, SOLUTION::FEAS);
 					} else {
 						res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
