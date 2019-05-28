@@ -25,7 +25,7 @@ classdef MHyProBox < MHyProGeometricObject
                     obj.Handle = MHyPro(0, 18, varargin{2});
                 elseif strcmp(varargin{1}, 'intervals') && areIntervals(varargin{2})
                     obj.Handle = MHyPro(0, 19, varargin{2});
-                elseif ismatrix(varargin{1}) && isvector(varargin{2}) && (size(varargin{1}, 2)== size(varargin{2},1))
+                elseif ismatrix(varargin{1}) && isvector(varargin{2})
                     obj.Handle = MHyPro(0, 20, varargin{1}, varargin{2});
                 else
                     error('MHyProBox - Constructor: Wrong arguments.');
@@ -64,7 +64,10 @@ classdef MHyProBox < MHyProGeometricObject
         
         function out = project(obj, dim)
             max = obj.dimension();
-            if isvector(dim) && size(dim, 1) <= max 
+            if isvector(dim) && size(dim, 1) <= max
+                for i = 1:length(dim)
+                    dim(i) = dim(i)-1;
+                end
                 ptr = MHyPro(0, 24, obj.Handle, dim);
                 out = MHyProBox(ptr);
             else

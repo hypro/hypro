@@ -117,17 +117,12 @@ void MGeometricObject<T>::matrix(int nlhs, mxArray* plhs[], int nrhs, const mxAr
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
     hypro::matrix_t<double> mat = temp->matrix();
+
     int rows = mat.rows();
     int cols = mat.cols();
 
     plhs[0] = mxCreateDoubleMatrix(rows, cols, mxREAL);
     ObjectHandle::convert2Matlab(mat, plhs[0], rows, cols);
-//     /* TEST */
-//     hypro::matrix_t<double> m(3,2);
-//     m << 1,2,3,4,5,6;
-//     mexPrintf("Matrix:\nrows: %d cols: %d\n", m.rows(), m.cols());
-//     plhs[0] = mxCreateDoubleMatrix(m.rows(), m.cols(), mxREAL);
-//     ObjectHandle::convert2Matlab(m, plhs[0], m.rows(), m.cols());
 }
 
 /**
@@ -427,11 +422,12 @@ void MGeometricObject<T>::project(int nlhs, mxArray* plhs[], int nrhs, const mxA
     T* obj = convertMat2Ptr<T>(prhs[2]);
     m_in_dimensions = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
-    len = (int) dims[1];
+    len = (int) dims[0];
 
     std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro(m_in_dimensions,len);
 
     T temp = obj->project(hy_dimensions);
+
     T* b = new T(temp);
     plhs[0] = convertPtr2Mat<T>(b);
 }
@@ -673,7 +669,7 @@ void MGeometricObject<T>::unite_vec(int nlhs, mxArray* plhs[], int nrhs, const m
     T* obj = convertMat2Ptr<T>(plhs[2]);
     const mwSize* dims;
     dims = mxGetDimensions(prhs[3]);
-    const int dimx = dims[1];
+    const int dimx = dims[0];
     const std::vector<T> objects = objArray2Hypro<T>(prhs[3],dimx);
 
     T united = T::unite(objects);

@@ -821,8 +821,8 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::unite( const std:
 
 	std::pair<Point<Number>, Point<Number>> newLimits = boxes.begin()->limits();
 	for(const auto& box : boxes) {
-		newLimits.first = coeffWiseMin(newLimits.first, box.limits().first);
-		newLimits.second = coeffWiseMax(newLimits.first, box.limits().second);
+		newLimits.first = Point<Number>::coeffWiseMin(newLimits.first, box.limits().first);
+		newLimits.second = Point<Number>::coeffWiseMax(newLimits.first, box.limits().second);
 	}
 	return BoxT<Number,Converter,Setting>(newLimits);
 }

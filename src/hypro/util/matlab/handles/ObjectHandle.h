@@ -88,24 +88,24 @@ class ObjectHandle{
 template<typename T>
 void vector2Matlab(const std::vector<T>& vec, mxArray* m_out){
     const mwSize* dims = mxGetDimensions(m_out);
-    const int dimy = (int) dims[1];
-    const int dimx = (int) dims[0];
-    // mexPrintf("ObjectHandle - dimx: %d, dimy: %d\n", dimx, dimy);
+    const int cols = (int) dims[1];
+    const int rows = (int) dims[0];
+    // mexPrintf("ObjectHandle - rows: %d, cols: %d\n", rows, cols);
     double* out = mxGetPr(m_out);
-    for(int i = 0; i < dimx; i++){
-        ObjectHandle::convert2Matlab(vec[i], m_out, dimx, dimy, i);
+    for(int i = 0; i < rows; i++){
+        ObjectHandle::convert2Matlab(vec[i], m_out, rows, cols, i);
     }
 }
 
 template<typename T>
 void vector2Matlab(const std::vector<T>& vec, mxArray* m_out_1, mxArray* m_out_2){
     const mwSize* dims = mxGetDimensions(m_out_1);
-    const int dimy = (int) dims[1];
-    const int dimx = (int) dims[0];
+    const int cols = (int) dims[1];
+    const int rows = (int) dims[0];
     double* out_1 = mxGetPr(m_out_1);
     double* out_2 = mxGetPr(m_out_2);
-    for(int i = 0; i < dimy; i++){
-        ObjectHandle::convert2Matlab(vec[i], m_out_1, m_out_2, dimx, dimy, i);
+    for(int i = 0; i < rows; i++){
+        ObjectHandle::convert2Matlab(vec[i], m_out_1, m_out_2, rows, cols, i);
     }
 }
 
@@ -116,9 +116,9 @@ void vector2Matlab(const std::vector<T>& vec, mxArray* m_out_1, mxArray* m_out_2
  * @param out Pointer to the Matlab vector
  **/
 template<typename T>
-void pair2Matlab(const std::pair<T,T> p, mxArray* m_out, const int dimx, const int dimy){
-    ObjectHandle::convert2Matlab(p.first, m_out, dimx, dimy);
-    ObjectHandle::convert2Matlab(p.second, m_out, dimx, dimy, 1);
+void pair2Matlab(const std::pair<T,T> p, mxArray* m_out, const int rows, const int cols){
+    ObjectHandle::convert2Matlab(p.first, m_out, rows, cols);
+    ObjectHandle::convert2Matlab(p.second, m_out, rows, cols, 1);
 }
 
 template<typename T>
@@ -156,9 +156,9 @@ void ObjectHandle::convert2Matlab(const std::vector<hypro::Point<double>>& point
 }
 
 
-void ObjectHandle::flowpipes2Matlab(const std::vector<std::pair<unsigned, ObjectHandle::flowpipe>>& flowpipes, mxArray* m_out, const int dimx){
+void ObjectHandle::flowpipes2Matlab(const std::vector<std::pair<unsigned, ObjectHandle::flowpipe>>& flowpipes, mxArray* m_out, const int rows){
 
-    for(int i = 0; i < dimx; i++){
+    for(int i = 0; i < rows; i++){
         std::pair<unsigned, ObjectHandle::flowpipe> currentPair = flowpipes[i];
         mxArray* num = mxCreateDoubleScalar((double) currentPair.first);
         std::vector<hypro::State_t<double>> f = currentPair.second;
@@ -194,25 +194,25 @@ void ObjectHandle::convert2Matlab(const std::map<const hypro::Location<double>*,
  * @brief Converts a single HyPro interval into Matlab interval (matrix)
  * @param inter The hypro interval
  * @param out Pointer to the Matlab output matrix
- * @parma dimx, dimy Dimensions
+ * @parma rows, cols Dimensions
  **/
-void ObjectHandle::convert2Matlab(const carl::Interval<double>& inter, mxArray* m_out, const int dimx, const int dimy, const int index){
+void ObjectHandle::convert2Matlab(const carl::Interval<double>& inter, mxArray* m_out, const int rows, const int cols, const int index){
     double* out = mxGetPr(m_out);
     out[index] = inter.lower();
-    out[index + dimx] = inter.upper();
+    out[index + rows] = inter.upper();
 }
 
 /**
  * @brief Converts a HyPro matrix into Matalb  matrix
  * @param matrix HyPro matrix
  * @param out Pointer to the output matlab matrix
- * @param dimx, dimy The dimensions of the matrix
+ * @param rows, cols The dimensions of the matrix
  **/
-void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray* m_out, const int dimx, const int dimy, const int index){
+void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray* m_out, const int rows, const int cols, const int index){
     double* out = mxGetPr(m_out);
-    for(int i = 0; i < dimx; i++){
-        for(int j = 0; j < dimy; j++){
-            out[i+j*dimx] = matrix.coeff(i,j);
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            out[i+j*rows] = matrix.coeff(i,j);
         }
     }
 }
@@ -220,16 +220,16 @@ void ObjectHandle::convert2Matlab(const hypro::matrix_t<double>& matrix, mxArray
 /**
  * @brief Converts a Matlab matrix into HyPro matrix_t<double>
  * @param m_matrix Pointer to the Matlab matrix
- * @param dimx, dimy The dimensions of the matrix
+ * @param rows, cols The dimensions of the matrix
  **/
-hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
+hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, const int rows, const int cols){
     double* matrix = mxGetPr(m_matrix);
-    // mexPrintf("GO: rows: %d, cols: %d\n", dimx, dimy);
-    hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
-    for(int i = 0; i < dimx; i++){
-        for(int j = 0; j < dimy; j++){
-            //mexPrintf("(%d, %d) = matrix[%d] = %f\n", i, j, i+j*dimx ,matrix[i+j*dimx]);
-            (*hypro_matrix)(i,j) = matrix[i+j*dimx];
+    // mexPrintf("GO: rows: %d, cols: %d\n", rows, cols);
+    hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(rows,cols);
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            //mexPrintf("(%d, %d) = matrix[%d] = %f\n", i, j, i+j*rows ,matrix[i+j*rows]);
+            (*hypro_matrix)(i,j) = matrix[i+j*rows];
         }
     }
     return *hypro_matrix;
@@ -240,11 +240,11 @@ hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, con
  * @brief Converts a HyPro vector into Matlab vector
  * @param vect The HyPro vector
  * @param out Pointer to the output Matlab vector
- * @param dimx,dimy The dimensions
+ * @param rows,cols The dimensions
  **/
-void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m_out, const int dimx, const int dimy, const int index){
+void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m_out, const int rows, const int cols, const int index){
     double* out = mxGetPr(m_out);
-    for(int i = 0; i < dimx; i++){
+    for(int i = 0; i < rows; i++){
         out[i] = vec(i);
     }
 }
@@ -253,13 +253,13 @@ void ObjectHandle::convert2Matlab(const hypro::vector_t<double>& vec, mxArray* m
  * @brief Converts a HyPro Point into Matlab vector
  * @param p HyPro point
  * @param out Pointer to the output matlab vector
- * @param dimx,dimy The dimensions
+ * @param rows,cols The dimensions
  * @index index Points to the first element of the matlab vector
  **/
-void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out, const int dimx, const int dimy, const int index){
+void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out, const int rows, const int cols, const int index){
     double* out = mxGetPr(m_out);
-    for(int i = 0; i < dimx; i++){
-        out[index * dimx +  i] = p[i];
+    for(int i = 0; i < rows; i++){
+        out[index * rows +  i] = p[i];
     }
 }
 
@@ -267,20 +267,23 @@ void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out,
  * @brief Converts a HyPro halfspace into Matlab representation
  * @param h The HyPro halfspace
  * @param out Pointer to Matlab struct representing the halfspace
- * @param dimx,dimy
+ * @param rows,cols
  * @param index
  **/
-void ObjectHandle::convert2Matlab(const hypro::Halfspace<double>& h, mxArray* m_normal_out, mxArray* m_offset_out, const int dimx, const int dimy, const int index){
+void ObjectHandle::convert2Matlab(const hypro::Halfspace<double>& h, mxArray* m_normal_out, mxArray* m_offset_out, const int rows, const int cols, const int index){
     double* normal_out = mxGetPr(m_normal_out);
     double* offset_out = mxGetPr(m_offset_out);
     
     hypro::vector_t<double> nVector = h.normal();
     double offset = h.offset();
 
-    for(int i = 0; i < nVector.size(); i++){
-        normal_out[i] = nVector[i];
+    for(int i = 0; i < cols; i++){
+        int at = i * rows + index;
+        normal_out[at] = nVector[i];
+        mexPrintf(" normal[%d] = %f", at, nVector[i]);
     }
-    offset_out = &offset;
+    mexPrintf(" <= %f\n", offset_out[index]);
+    offset_out[index] = offset;
 }
 
 /**
@@ -378,13 +381,13 @@ std::vector<std::size_t> ObjectHandle::mSizeVector2Hypro(const mxArray* m_sizes,
  * @brief Converts Matlab intervals (in form of a matrix) into a vector of HyPro intervals
  * @param m_interval_list A list of Matlab intervals (represented as arrays)
  **/
-std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro(const mxArray* m_intervals, int dimx, int dimy){
+std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro(const mxArray* m_intervals, int rows, int cols){
     double* intervals = mxGetPr(m_intervals);
     std::vector<carl::Interval<double>> hyPro_intervals;
     int counter = 0;
-    for(int i = 0; i < dimx; i++){
-        for(int j = 0; j < dimy; j++){
-            hyPro_intervals.emplace_back(carl::Interval<double>(intervals[i*dimy+j], intervals[(i + 1)*dimy+j]));
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            hyPro_intervals.emplace_back(carl::Interval<double>(intervals[i*cols+j], intervals[(i + 1)*cols+j]));
         }
         i++;
     }
@@ -397,20 +400,10 @@ std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro(const mxArray
  **/
 carl::Interval<double> ObjectHandle::mInterval2Hypro(const mxArray* m_interval){
     double* interval = mxGetPr(m_interval);
+    mexPrintf("interval: [%f %f]", interval[0], interval[1]);
     carl::Interval<double> *hyPro_interval = new carl::Interval<double>(interval[0], interval[1]);
     return *hyPro_interval;
 }
-
-/**
- * @brief Converts a Matlab interval of 
- **/
-// carl::Interval<hypro::tNumber> ObjectHandle::mMPQInterval2Hypro(const mxArray* m_interval){
-//     double* interval = mxGetPr(m_interval);
-//     hypro::tNumber lower(interval[0]);
-//     hypro::tNumber upper(interval[1]);
-//     carl::Interval<hypro::tNumber>* h_interval = new carl::Interval<hypro::tNumber>(lower, upper);
-//     return *h_interval;
-// }
 
 /**
  *  @brief Converts a pair of points defined in matlab into hyPro intervals
@@ -443,12 +436,12 @@ hypro::vector_t<double> ObjectHandle::mVector2Hypro(const mxArray* m_vector, con
 /**
  * @brief Converts a Matlab vector into HyPro Point
  * @param vec Pointer to the vector of coordinates
- * @param dimy Lenght of the vector
+ * @param cols Lenght of the vector
  **/
-hypro::Point<double> ObjectHandle::mPoint2Hypro(const mxArray* m_vec, int dimy){
+hypro::Point<double> ObjectHandle::mPoint2Hypro(const mxArray* m_vec, int cols){
     double* vec = mxGetPr(m_vec);
     std::vector<double> temp;
-    for(int i = 0; i < dimy; i++){
+    for(int i = 0; i < cols; i++){
         temp.emplace_back(vec[i]);
     }
     hypro::Point<double> *point = new hypro::Point<double>(temp);
@@ -476,14 +469,14 @@ std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2H
 * @param vec Pointer to the Matlab matrix
 * @parma dim Length of the vector
 **/
-std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2Hypro(const mxArray* m_vec, const int dimx, const int dimy){
+std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2Hypro(const mxArray* m_vec, const int rows, const int cols){
     double* points = mxGetPr(m_vec);
-    std::vector<hypro::Point<double>> hypro_vec(dimx);
+    std::vector<hypro::Point<double>> hypro_vec(rows);
 
-    for(int i = 0; i < dimx; i++){
-        std::vector<double> pnt(dimy);
-        for(int j = 0; j < dimy; j++){
-            pnt[j] = points[i*dimy + j];
+    for(int i = 0; i < rows; i++){
+        std::vector<double> pnt(cols);
+        for(int j = 0; j < cols; j++){
+            pnt[j] = points[i*cols + j];
         }
         hypro_vec[i] = hypro::Point<double>(pnt);
     }
@@ -576,11 +569,11 @@ hypro::representation_name ObjectHandle::mRepresentationName2Hypro(int type){
  * is saved in the vector
  * 
  **/
-std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(mxArray* m_matrix, mxArray* m_offsets, const int dimx, const int dimy, const int len){
+std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(mxArray* m_matrix, mxArray* m_offsets, const int rows, const int cols, const int len){
     std::vector<hypro::Halfspace<double>> hypro_vec(len);
-    hypro::matrix_t<double> mat = mMatrix2Hypro(m_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = mMatrix2Hypro(m_matrix, rows, cols);
     hypro::vector_t<double> vec = mVector2Hypro(m_offsets, len);
-    for(int i = 0; i < dimx; i++){
+    for(int i = 0; i < rows; i++){
         const hypro::vector_t<double> normal = mat.col(i);    
         const double offset = vec(i,0);  
         hypro::Halfspace<double>* h = new hypro::Halfspace<double>(normal, offset);  
@@ -592,16 +585,16 @@ std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(mxArray* m
 /**
  * @brief
  **/
-std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
+std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro(const mxArray* m_matrix, const int rows, const int cols){
     double* matrix = mxGetPr(m_matrix);
-    std::vector<std::vector<size_t>> vector(dimx);
-    // mexPrintf("rows: %d, cols: %d\n", dimx, dimy);
-    for(int i = 0; i < dimx; i++){
-        std::vector<size_t> temp(dimy);
+    std::vector<std::vector<size_t>> vector(rows);
+    // mexPrintf("rows: %d, cols: %d\n", rows, cols);
+    for(int i = 0; i < rows; i++){
+        std::vector<size_t> temp(cols);
         // mexPrintf("Vector no.: %d\n", i);
-        for(int j = 0; j < dimy; j++){
-            temp[j] = (size_t)matrix[i*dimy+j];
-            // mexPrintf("matrix[%d] = %d ",i*dimy+j, matrix[i*dimy+j]);
+        for(int j = 0; j < cols; j++){
+            temp[j] = (size_t)matrix[i*cols+j];
+            // mexPrintf("matrix[%d] = %d ",i*cols+j, matrix[i*cols+j]);
         }
         // mexPrintf("\n");
         vector[i] = temp;
@@ -634,12 +627,12 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro(const mxArray* string
 std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
     double* structPtr = mxGetPr(structArray);
     const mwSize* dims = mxGetDimensions(structArray);
-    int dimy = dims[0];
-    int dimx = dims[1];
+    int cols = dims[0];
+    int rows = dims[1];
 
     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
 
-    for(int i = 0; i < dimy; i++){
+    for(int i = 0; i < cols; i++){
         hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
         hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
         mapping[loc] = *cond;

@@ -60,8 +60,12 @@ classdef MHyProLocation < handle
         end
         
         function out = getLinearFlows(obj)
-            ptr = MHyPro(6, 8, obj.Handle);
-            out = MHyProFlow(9, ptr);
+            ptrscell = MHyPro(6, 8, obj.Handle);
+            out = cell(1, size(ptrscell, 2));
+            for i = 1:size(ptrscell,2)
+                ptr = ptrscell{i};
+                out{i} = MHyProFlow(9, ptr);
+            end
         end
         
         function out = getInvariant(obj)

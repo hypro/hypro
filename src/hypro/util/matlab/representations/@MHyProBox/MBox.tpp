@@ -18,11 +18,6 @@ void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxA
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_interval: One or more input arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MBox - new_interval: One or more input arguments were ignored." );
 
-	const mwSize *dims;
-	int dimx, dimy;
-	dims = mxGetDimensions( prhs[2] );
-	dimy = (int)dims[1];
-	dimx = (int)dims[0];
 	carl::Interval<double> inter = ObjectHandle::mInterval2Hypro( prhs[2] );
 	hypro::Box<double> *box = new hypro::Box<double>( inter );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
@@ -38,12 +33,12 @@ void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 
 	const mwSize *dims;
 	double *in;
-	int dimx, dimy;
+	int rows, cols;
 
 	dims = mxGetDimensions( prhs[2] );
-	dimy = (int)dims[0];
-	dimx = (int)dims[1];
-	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], dimx, dimy );
+	cols = (int)dims[0];
+	rows = (int)dims[1];
+	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], rows, cols );
 	hypro::Box<double> *box = new hypro::Box<double>( intervals );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 }
@@ -56,40 +51,9 @@ void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_points: One or more input arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MBox - new_points: One or more input arguments were ignored." );
 
-	const mwSize *dims;
-	int dimy, dimx, numdims;
-
-	dims = mxGetDimensions( prhs[2] );
-	numdims = mxGetNumberOfDimensions( prhs[2] );
-	dimy = (int)dims[1];
-	dimx = (int)dims[0];
-
-	if ( dimy != 2 ) mexErrMsgTxt( "MBox - new_points: Put two points." );
-
 	std::pair<hypro::Point<double>, hypro::Point<double>> pair = ObjectHandle::mPointPair2Hypro( prhs[2] );
 	hypro::Box<double> *box = new hypro::Box<double>( pair );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
-}
-
-/**
- * @brief Returns setting of a box
- **/
-void MBox::test( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-	const mwSize *dims;
-	dims = mxGetDimensions( prhs[3] );
-	const int dimx = dims[1];
-
-	// uint64_t addr = (uint64_t) mxGetScalar(prhs[2]);
-	// mexPrintf("Matlab address: %zu -> ",addr);
-	// hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-
-	const std::vector<hypro::Box<double>> vec = objArray2Hypro<hypro::Box<double>>( prhs[3], dimx );
-
-	mxArray *m_array_out;
-	int len = vec.size();
-	const mwSize new_dims[2] = {1, (mwSize)len};
-	plhs[0] = mxCreateCellArray( 2, new_dims );
-	objArray2Matlab( vec, plhs[0], len );
 }
 
 /**
@@ -99,9 +63,6 @@ void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - empty: Expecting one output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MBox - empty: One or more arguments are missing!" );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MBox - new_interval: One or more input arguments were ignored." );
-
-	const mwSize *dims;
-	int dimy, dimx;
 
 	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
 	std::size_t in = (std::size_t)mxGetScalar( prhs[3] );
@@ -121,10 +82,10 @@ void MBox::intervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
 	std::vector<carl::Interval<double>> intervals = box->intervals();
 
-	const int dimx = intervals.size();
-	const int dimy = 2;
-	// mexPrintf("box intervals - dimx: %d, dimy: %d\n", dimx, dimy);
-	plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
+	const int rows = intervals.size();
+	const int cols = 2;
+	// mexPrintf("box intervals - rows: %d, cols: %d\n", rows, cols);
+	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	vector2Matlab( intervals, plhs[0] );
 }
 
@@ -137,15 +98,15 @@ void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 
 	const mwSize *dims;
 	double *in_box, *in_interval, *out;
-	int dimy, dimx, numdims;
+	int cols, rows, numdims;
 
 	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
 
 	dims = mxGetDimensions( prhs[3] );
 	numdims = mxGetNumberOfDimensions( prhs[3] );
-	dimy = (int)dims[0];
-	dimx = (int)dims[1];
-	if ( numdims > 2 || dimy != 1 || dimx != 2 ) {
+	cols = (int)dims[0];
+	rows = (int)dims[1];
+	if ( numdims > 2 || cols != 1 || rows != 2 ) {
 		mexErrMsgTxt( "MBox - insert: You have to input a 1x2-matrix!" );
 	}
 
@@ -179,11 +140,22 @@ void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
 	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
 	const std::vector<hypro::Halfspace<double>> hSpaces = box->constraints();
 
-	const int dimx = hSpaces[0].dimension();
-	const int dimy = hSpaces.size();
+	const int cols = hSpaces[0].dimension();
+	const int rows = hSpaces.size();
 
-	plhs[0] = mxCreateDoubleMatrix( dimy, dimx, mxREAL );
-	plhs[1] = mxCreateDoubleMatrix( dimy, 1, mxREAL );
+	for(int i = 0; i < rows; i++){
+		hypro::vector_t<double> nVector = hSpaces[i].normal();
+    	double offset = hSpaces[i].offset();
+		for(int j = 0; j < cols; j++){
+			mexPrintf("%f, ", nVector[j]);
+		}
+		mexPrintf(" <= %f\n",offset );
+	}
+	
+
+
+	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
+	plhs[1] = mxCreateDoubleMatrix( rows, 1, mxREAL );
 	vector2Matlab<hypro::Halfspace<double>>( hSpaces, plhs[0], plhs[1] );
 }
 
@@ -379,10 +351,6 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 		deleteObject( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 1000 ) {
-		test( nlhs, plhs, nrhs, prhs );
-		return;
-	}
 	if ( cmd == 21 ) {
 		empty( nlhs, plhs, nrhs, prhs );
 		return;
@@ -537,7 +505,7 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 	}
 	if ( cmd == 33 ) {
 		mexErrMsgTxt( "MBox - unite_objects is broken!" );
-		// unite_vec(nlhs, plhs, nrhs, prhs);
+		unite_vec(nlhs, plhs, nrhs, prhs);
 		return;
 	}
 	if ( cmd == 4 ) {
