@@ -1,4 +1,26 @@
 classdef MHyProSupportFunction < MHyProGeometricObject
+    
+    
+    methods (Static)
+
+        function out = uniteMultiple(objects)
+            if iscell(objects)
+                objectPtrs = cell(1, length(objects));
+                for i = 1:length(objects)
+                    if isa(objects{i}, 'MHyProSupportFunction')
+                        objectPtrs{i} = objects{i}.Handle;
+                    else
+                        error('MHyProSupportFunction - uniteMultiple: Wrong type of input argument.');
+                    end
+                end
+                ptr = MHyPro(3, 34, objectPtrs);
+                out = MHyProSupportFunction(ptr);
+            else
+                error('MHyProSupportFunction - uniteMultiple: Wrong type of input argument.');
+            end
+        end
+        
+    end
 
     methods (Access = public)
         
@@ -136,13 +158,6 @@ classdef MHyProSupportFunction < MHyProGeometricObject
         function out = unite(obj, rhs)
             if isa(rhs, 'MHyProSupportFunction')
                 ptr = MHyPro(3, 33, obj.Handle, rhs.Handle);
-                out = MHyProSupportFunction(ptr);
-            elseif iscell(rhs)
-                objects = uint64.empty(length(rhs),0);
-                for i = 1:length(rhs)
-                    objects{i} = rhs{i}.Handle;
-                end
-                ptr = MHyPro(3, 34, obj.Handle, objects{:});
                 out = MHyProSupportFunction(ptr);
             else
                 error('MHyProSupportFunction - unite: Wrong type of input argument.');

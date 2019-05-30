@@ -18,9 +18,8 @@ classdef MHyProGeometricObject < handle
         function delete(obj)
             MHyPro(obj.Type, 1, obj.Handle);
         end
-    end
-    
-    
+     end
+
     methods (Access = public)
         
         function out = dimension(obj)

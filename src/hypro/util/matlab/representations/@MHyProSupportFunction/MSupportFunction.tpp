@@ -23,8 +23,8 @@ void MSupportFunction::new_points( int nlhs, mxArray* plhs[], int nrhs, const mx
 	int dimy, dimx;
 
 	dims = mxGetDimensions( prhs[2] );
-	dimy = (const int)dims[0];
-	dimx = (const int)dims[1];
+	dimy = (const int)dims[1];
+	dimx = (const int)dims[0];
 	m_in_points = mxDuplicateArray( prhs[2] );
 
 	const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro( m_in_points, dimx, dimy );
@@ -307,7 +307,6 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		return;
 	}
 	if ( cmd == 18 ) {
-		mexErrMsgTxt( "MSupportFunction - new_points is broken!" );
 		new_points( nlhs, plhs, nrhs, prhs );
 		return;
 	}
@@ -372,7 +371,6 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		return;
 	}
 	if ( cmd == 34 ) {
-		mexErrMsgTxt( "MSupportFunction - unite_objects is broken." );
 		// unite_vec(nlhs, plhs, nrhs, prhs);
 		return;
 	}

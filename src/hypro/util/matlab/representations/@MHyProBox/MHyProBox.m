@@ -1,4 +1,29 @@
 classdef MHyProBox < MHyProGeometricObject
+    
+    
+    methods (Static)
+
+        function out = uniteMultiple(objects)
+            if iscell(objects)
+                objectPtrs = cell(1, length(objects));
+                for i = 1:length(objects)
+                    if isa(objects{i}, 'MHyProBox')
+                        objectPtrs{i} = objects{i}.Handle;
+                    else
+                        error('MHyProBox - uniteMultiple: Wrong type of input argument.');
+                    end
+                end
+                ptr = MHyPro(0, 33, objectPtrs);
+                out = MHyProBox(ptr);
+            else
+                error('MHyProBox - uniteMultiple: Wrong type of input argument.');
+            end
+        end
+        
+    end
+    
+    
+    
     methods (Access = public)
         
         % Create a HyPro box
@@ -129,27 +154,7 @@ classdef MHyProBox < MHyProGeometricObject
                 error('MHyProBox - contains: Wrong type of input argument.');
             end
         end
-        
-        function out = unite(obj, rhs)
-            if isa(rhs, 'MHyProBox')
-                ptr = MHyPro(0, 32, obj.Handle, rhs.Handle);
-                out = MHyProBox(ptr);
-            elseif iscell(rhs)
-                objects = cell(1, size(rhs, 2));
-                for i = 1:length(rhs)
-                    if isa(rhs{i}, 'MHyProBox')
-                        objects{i} = rhs{i}.Handle;
-                    else
-                        error('MHyProBox - unite: Wrong type of input argument.');
-                    end
-                end
-                ptr = MHyPro(0, 33, obj.Handle, objects);
-                out = MHyProBox(ptr);
-            else
-                error('MHyProBox - unite: Wrong type of input argument.');
-            end
-        end
-
+ 
         function out = reduceNumberRepresentation(obj)
             ptr = MHyPro(0, 34, obj.Handle);
             out = MHyProBox(ptr);
@@ -240,6 +245,15 @@ classdef MHyProBox < MHyProGeometricObject
                 out = MHyProBox(ptr);
             else
                 error('MHyProBox - intersect: Wrong type of argument.');
+            end
+        end
+        
+        function out = unite(obj, rhs)
+            if isa(rhs, 'MHyProBox')
+                ptr = MHyPro(0, 32, obj.Handle, rhs.Handle);
+                out = MHyProBox(ptr);
+            else
+                error('MHyProBox - unite: Wrong type of input argument.');
             end
         end
 

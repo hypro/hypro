@@ -123,6 +123,7 @@ void pair2Matlab(const std::pair<T,T> p, mxArray* m_out, const int rows, const i
 
 template<typename T>
 std::vector<T> objArray2Hypro(const mxArray* array_ptr, const int len){
+    mexPrintf("Called objArray2Hypro\n");
     std::vector<T> vec;
     mxArray* cellElement;
     for(int i = 0; i < len; i++){
@@ -280,9 +281,9 @@ void ObjectHandle::convert2Matlab(const hypro::Halfspace<double>& h, mxArray* m_
     for(int i = 0; i < cols; i++){
         int at = i * rows + index;
         normal_out[at] = nVector[i];
-        mexPrintf(" normal[%d] = %f", at, nVector[i]);
+        //mexPrintf(" normal[%d] = %f", at, nVector[i]);
     }
-    mexPrintf(" <= %f\n", offset_out[index]);
+    // mexPrintf(" <= %f\n", offset_out[index]);
     offset_out[index] = offset;
 }
 
@@ -400,7 +401,7 @@ std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro(const mxArray
  **/
 carl::Interval<double> ObjectHandle::mInterval2Hypro(const mxArray* m_interval){
     double* interval = mxGetPr(m_interval);
-    mexPrintf("interval: [%f %f]", interval[0], interval[1]);
+    // mexPrintf("interval: [%f %f]", interval[0], interval[1]);
     carl::Interval<double> *hyPro_interval = new carl::Interval<double>(interval[0], interval[1]);
     return *hyPro_interval;
 }

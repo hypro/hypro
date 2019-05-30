@@ -143,16 +143,14 @@ void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
 	const int cols = hSpaces[0].dimension();
 	const int rows = hSpaces.size();
 
-	for(int i = 0; i < rows; i++){
-		hypro::vector_t<double> nVector = hSpaces[i].normal();
-    	double offset = hSpaces[i].offset();
-		for(int j = 0; j < cols; j++){
-			mexPrintf("%f, ", nVector[j]);
-		}
-		mexPrintf(" <= %f\n",offset );
-	}
-	
-
+	// for(int i = 0; i < rows; i++){
+	// 	hypro::vector_t<double> nVector = hSpaces[i].normal();
+    // 	double offset = hSpaces[i].offset();
+	// 	for(int j = 0; j < cols; j++){
+	// 		mexPrintf("%f, ", nVector[j]);
+	// 	}
+	// 	mexPrintf(" <= %f\n",offset );
+	// }
 
 	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	plhs[1] = mxCreateDoubleMatrix( rows, 1, mxREAL );
@@ -504,7 +502,6 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 		return;
 	}
 	if ( cmd == 33 ) {
-		mexErrMsgTxt( "MBox - unite_objects is broken!" );
 		unite_vec(nlhs, plhs, nrhs, prhs);
 		return;
 	}

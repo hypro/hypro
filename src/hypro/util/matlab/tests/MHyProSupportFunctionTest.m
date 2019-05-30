@@ -1,6 +1,9 @@
-% test MHyProSupportFunction
+function tests = MHyProEllipsoidTest
+    tests = functiontests(localfunctions);
+end
 
-%% Test Basic Functionality
+function testSupportFunctions(testCase)
+
 % This script contains tests for all functions for HyPro support functions.
 
 fct = MHyProSupportFunction();
@@ -12,19 +15,10 @@ halfs_fct = MHyProSupportFunction([-1 0; 1 0], [-2; 2]);
 % is something broken!
 copied_fct = MHyProSupportFunction(mat_fct);
 
-% Get matrix
-mat = halfs_fct.matrix();
-%assert ---> ?
-
-
-
-% Get vector
-vec = int_fct.vector();
-%assert ---> ?
 
 % Check for emptyness
-% empty = fct.isempty(); ---> Why does this cause crashes???
-% assert(empty == 1);
+empty = fct.isempty();
+assert(empty == 1);
 % empty = mat_vec_fct.isEmpty();
 % assert(empty == 0);
 
@@ -130,30 +124,14 @@ assert(contains == 0);
 contains = fct1.contains([1; 2; 3]);
 assert(contains == 1);
 
-% Unite two boxes
-fct1 = MHyProSupportFunction('intervals', [1 3; 1 3]);
-fct2 = MHyProSupportFunction('intervals', [2 4; 2 4]);
+% Unite two support functions
+fct1 = MHyProSupportFunction('intervals', [1 3; 2 3]);
+fct2 = MHyProSupportFunction('intervals', [2 4; 1 4]);
 uni = fct2.unite(fct1);
 
+% Unite multiple support functions
+fct3 = MHyProSupportFunction('intervals', [3 4; 1 3]);
+functions = {fct1,fct2, fct3};
+ufct = MHyProSupportFunction.uniteMultiple(functions);
 
-
-% 
-% % Unite multiple boxes
-% box1 = MHyProBox('intervals', [1 5; 1 7]);
-% box2 = MHyProBox('intervals', [2 7; -1 9]);
-% box3 = MHyProBox('intervals', [0 1; 9 10]);
-% boxes = {box2, box3};
-% % united = box1.unite(boxes);
-% % inter = united.intervals();
-% % assert(isequal(inter, [0 7; -1 10]));
-% 
-% % Scale a box
-% box2 = box1 * 3;
-% inter = box2.intervals();
-% assert(isequal(inter, [3 15; 3 21]));
-% 
-% % Reduce number of representation
-% box1 = MHyProBox('intervals', [1 5; 1 7; 1 2; 2 3]);
-% box2 = box1.reduceNumberRepresentation();
-% inter = box2.intervals();
-% assert(isequal(inter, [1 5; 1 7; 1 2; 2 3]));
+end
