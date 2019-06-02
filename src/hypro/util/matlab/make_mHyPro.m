@@ -169,8 +169,9 @@ else
     setenv LD_RUN_PATH /home/marta/hypro/build;
     setenv LD_LIBRARY_PATH /usr/lib/gcc/x86_64-linux-gnu/8/lib:/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH;
     setenv LD_LIBRARY_PATH /usr/local/MATLAB/R2018b/bin/glnxa64:/usr/local/MATLAB/R2018b/sys/os/glnxa64;
-    setenv LD_PRELOAD /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.26
-        
+    setenv LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/libstdc++.so.6:$LD_LIBRARY_PATH
+    %setenv LD_PRELOAD /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+    
     ipaths = {'-I/Applications/MATLAB_R2018b.app/extern/include',...
         '-I/home/marta/hypro/build/resources/antlr_build/include/antlr4-runtime',...
         '-I/home/marta/hypro/build/resources/antlr_build/include/antlr4-runtime/misc',...

@@ -31,15 +31,16 @@ void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const m
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MConstraintSet - addConstraint: One or more input arguments were ignored." );
 
 	const mwSize* dims;
-	int dimx, dimy;
+	int  cols;
 
 	hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
 	const double offset = (const double)mxGetScalar( prhs[4] );
-	dims = mxGetDimensions( prhs[3] );
-	dimy = (int)dims[0];
-	dimx = (int)dims[1];
 
-	const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro( prhs[3], dimy );
+	dims = mxGetDimensions( prhs[3] );
+	cols = (int)dims[1];
+
+	const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro( prhs[3], cols );
+
 	temp->addConstraint( hy_vec, offset );
 }
 
@@ -68,6 +69,57 @@ void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int 
 	hypro::ConstraintSet<double>* b = new hypro::ConstraintSet<double>( obj );
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
 }
+
+void MConstraintSet::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: Expecting one output value!" );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: One or more arguments are missing!" );
+	if ( nrhs > 4 )
+		mexWarnMsgTxt( "MGeometricObject - lineaTransformation: One or more input arguments were ignored." );
+
+	const mwSize* dims;
+	double* in_matrix;
+	int rows, cols;
+
+	hypro::ConstraintSet<double>* obj = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
+	dims = mxGetDimensions( prhs[3] );
+	cols = (int)dims[1];
+	rows = (int)dims[0];
+
+	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
+
+	std::vector<hypro::Point<double>> vertices = obj->vertices();
+
+	mexPrintf("before:\n");
+	for(int i = 0; i < vertices.size(); i++){
+		for(int j = 0; j < vertices[0].dimension(); j++){
+			std::size_t pos = j;
+			mexPrintf("%f ", vertices[i].coordinate(j));
+		}
+		mexPrintf("\n");
+	}
+
+	hypro::ConstraintSet<double> temp = obj->linearTransformation( mat );
+
+	hypro::matrix_t<double> matt = temp.matrix();
+
+	std::vector<hypro::Point<double>> vertices1 = temp.vertices();
+
+	mexPrintf("after:\n");
+	for(int i = 0; i < vertices1.size(); i++){
+		for(int j = 0; j < vertices1[0].dimension(); j++){
+			std::size_t pos = j;
+			mexPrintf("%f ", vertices1[i].coordinate(j));
+		}
+		mexPrintf("\n");
+	}
+
+	hypro::ConstraintSet<double>* b = new hypro::ConstraintSet<double>( temp );
+	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
+}
+
+
+
+
 
 // /**
 //  * @brief

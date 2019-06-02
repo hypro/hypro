@@ -122,8 +122,7 @@ class ConstraintSetT {
 		} else {
 			assert(mConstraints.cols() == normal.rows());
 			mConstraints.conservativeResize(mConstraints.rows()+1, mConstraints.cols());
-			mConstants.conservativeResize(mConstraints.rows()+1);
-
+			mConstants.conservativeResize(mConstraints.rows());
 			mConstraints.row(mConstraints.rows()-1) = normal;
 			mConstants(mConstants.rows()-1) = offset;
 		}

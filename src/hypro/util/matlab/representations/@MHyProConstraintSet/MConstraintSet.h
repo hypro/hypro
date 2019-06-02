@@ -16,6 +16,7 @@ class MConstraintSet: public MGeometricObject<hypro::ConstraintSet<double>>{
         static void addConstraint(int, mxArray**, int, const mxArray**);
         static void type(int, mxArray**, int, const mxArray**);
         static void reduceNumberRepresentation(int, mxArray**, int, const mxArray**);
+        static void linearTransformation(int, mxArray**, int, const mxArray**);
 };
 
 #include "MConstraintSet.tpp"

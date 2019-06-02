@@ -87,6 +87,7 @@ class ObjectHandle{
  **/ 
 template<typename T>
 void vector2Matlab(const std::vector<T>& vec, mxArray* m_out){
+    mexPrintf("HALLO");
     const mwSize* dims = mxGetDimensions(m_out);
     const int cols = (int) dims[1];
     const int rows = (int) dims[0];
@@ -261,7 +262,9 @@ void ObjectHandle::convert2Matlab(const hypro::Point<double>& p, mxArray* m_out,
     double* out = mxGetPr(m_out);
     for(int i = 0; i < rows; i++){
         out[index * rows +  i] = p[i];
+        mexPrintf("%f ", p[i]);
     }
+    mexPrintf("\n");
 }
 
 /**

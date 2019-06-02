@@ -4,9 +4,10 @@
  * @brief
  **/
 void MSupportFunction::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - new_empty: One output is expected." );
+	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - new_empty: One output expected." );
+	if ( nrhs > 2 ) mexWarnMsgTxt( "MSupportFunction - new_empty: One or more input arguments were ignored." );
 
-	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>() );
+	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double> );
 }
 
 /**
@@ -20,14 +21,14 @@ void MSupportFunction::new_points( int nlhs, mxArray* plhs[], int nrhs, const mx
 	mxArray* m_in_points;
 	double* in_points;
 	const mwSize* dims;
-	int dimy, dimx;
+	int cols, rows;
 
 	dims = mxGetDimensions( prhs[2] );
-	dimy = (const int)dims[1];
-	dimx = (const int)dims[0];
+	cols = (const int)dims[1];
+	rows = (const int)dims[0];
 	m_in_points = mxDuplicateArray( prhs[2] );
 
-	const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro( m_in_points, dimx, dimy );
+	const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro( m_in_points, rows, cols );
 	// plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
 }
 
@@ -40,11 +41,11 @@ void MSupportFunction::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MSupportFunction - new_intervals: At least one argument were ignored." );
 
 	const mwSize* dims;
-	int dimy;
+	int cols;
 	dims = mxGetDimensions( prhs[2] );
-	dimy = (const int)dims[0];
+	cols = (const int)dims[0];
 
-	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], 2, dimy );
+	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], 2, cols );
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( intervals ) );
 }
 
@@ -59,18 +60,18 @@ void MSupportFunction::new_halfspaces( int nlhs, mxArray* plhs[], int nrhs, cons
 	mxArray *m_in_matrix, *m_in_vector;
 	double *in_matrix, *in_vector;
 	const mwSize *mat_dims, *vec_dims;
-	int mat_dimy, mat_dimx, vec_len;
+	int mat_cols, mat_rows, vec_len;
 
 	mat_dims = mxGetDimensions( prhs[2] );
 	vec_dims = mxGetDimensions( prhs[3] );
-	mat_dimy = (int)mat_dims[0];
-	mat_dimx = (int)mat_dims[1];
+	mat_cols = (int)mat_dims[0];
+	mat_rows = (int)mat_dims[1];
 	vec_len = (int)vec_dims[0];
 	m_in_matrix = mxDuplicateArray( prhs[2] );
 	m_in_vector = mxDuplicateArray( prhs[3] );
 
 	std::vector<hypro::Halfspace<double>> halfspaces =
-		  ObjectHandle::mHalfspaces2Hypro( m_in_matrix, m_in_vector, mat_dimx, mat_dimy, vec_len );
+		  ObjectHandle::mHalfspaces2Hypro( m_in_matrix, m_in_vector, mat_rows, mat_cols, vec_len );
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( halfspaces ) );
 }
 /**
@@ -145,8 +146,8 @@ void MSupportFunction::contains_vec( int nlhs, mxArray* plhs[], int nrhs, const 
  **/
 void MSupportFunction::contains_dir( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MSupportFunction - contains_dir: Expecting one output value!" );
-	if ( nrhs < 4 ) mexErrMsgTxt( "MSupportFunction - contains_dir: One or more arguments are missing!" );
-	if ( nrhs > 4 ) mexWarnMsgTxt( "MSupportFunction - contains_dir: At least one argument were ignored." );
+	if ( nrhs < 5 ) mexErrMsgTxt( "MSupportFunction - contains_dir: One or more arguments are missing!" );
+	if ( nrhs > 5 ) mexWarnMsgTxt( "MSupportFunction - contains_dir: At least one argument were ignored." );
 
 	hypro::SupportFunction<double>* sfct_1 = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[2] );
 	hypro::SupportFunction<double>* sfct_2 = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[3] );
@@ -161,8 +162,8 @@ void MSupportFunction::contains_dir( int nlhs, mxArray* plhs[], int nrhs, const 
  **/
 void MSupportFunction::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MSupportFunction - scale: Expecting one output value!" );
-	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - scale: One or more arguments are missing!" );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MSupportFunction - scale: At least one argument were ignored." );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MSupportFunction - scale: One or more arguments are missing!" );
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MSupportFunction - scale: At least one argument were ignored." );
 
 	hypro::SupportFunction<double>* obj = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[2] );
 	const double factor = (double)mxGetScalar( prhs[3] );
@@ -176,8 +177,8 @@ void MSupportFunction::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray
  * @brief
  **/
 void MSupportFunction::swap( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nrhs < 4 ) mexErrMsgTxt( "MSupportFunction - swap: One or more arguments are missing!" );
-	if ( nrhs > 4 ) mexWarnMsgTxt( "MSupportFunction - swap: At least one argument were ignored." );
+	if ( nrhs < 5 ) mexErrMsgTxt( "MSupportFunction - swap: One or more arguments are missing!" );
+	if ( nrhs > 5 ) mexWarnMsgTxt( "MSupportFunction - swap: At least one argument were ignored." );
 
 	hypro::SupportFunction<double>* origin = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[2] );
 	hypro::SupportFunction<double>* sfct_1 = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[3] );

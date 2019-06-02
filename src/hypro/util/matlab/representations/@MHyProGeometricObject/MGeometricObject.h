@@ -10,6 +10,7 @@
 
 template<class T> class MGeometricObject{
     public:
+        static void new_empty(int, mxArray**, int, const mxArray**);
         static void new_matrix(int, mxArray**, int, const mxArray**);
         static void new_vector(int, mxArray**, int, const mxArray**);
         static void copyObj(int, mxArray**, int, const mxArray**);

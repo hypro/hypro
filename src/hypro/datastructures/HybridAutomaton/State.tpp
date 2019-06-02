@@ -59,7 +59,7 @@ void State<Number,Representation,Rargs...>::setSet(const State<Number,Representa
 
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::addTimeToClocks(tNumber t) {
-	TRACE("hypro.datastructures","Add timestep of size " << t << " to clocks.");
+	//TRACE("hypro.datastructures","Add timestep of size " << t << " to clocks.");
 	//if(mHasClocks) {
 	//	matrix_t<Number> identity = matrix_t<Number>::Identity(mClockAssignment.dimension(), mClockAssignment.dimension());
 	//	vector_t<Number> clockShift = vector_t<Number>::Ones(mClockAssignment.dimension());

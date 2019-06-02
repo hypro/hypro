@@ -19,7 +19,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
                     error('MHyProConstraintSet - Constructor: Wrong type of argument.');
                 end
             elseif nargin == 2
-                if ismatrix(varargin{1}) && isvector(varargin{2}) && size(varargin{1},2) == size(varargin{2},1)
+                if ismatrix(varargin{1}) && isvector(varargin{2}) && size(varargin{1},1) == size(varargin{2},1)
                     obj.Handle = MHyPro(2, 17, varargin{1}, varargin{2});
                 else
                     error('MHyProConstraintSet - Constructor: Wrong arguments.');
@@ -47,9 +47,9 @@ classdef MHyProConstraintSet < MHyProGeometricObject
             end
         end
         
-        function out = project(obj, dim)
-            if isreal(dim)
-                ptr = MHyPro(2, 20, obj.Handle, dim);
+        function out = project(obj, dims)
+            if isvector(dims)
+                ptr = MHyPro(2, 20, obj.Handle, dims);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - project: Wrong type of input argument.');
@@ -161,12 +161,12 @@ classdef MHyProConstraintSet < MHyProGeometricObject
        end
        
        function plot(obj, dims)
-            isempty = MHyPro(obj.Type, 'isEmpty', obj.Handle);
+            isempty = MHyPro(obj.Type, 11, obj.Handle);
             if isempty
                 warning('MHyProConstraintSet - plot: It is not possible to plot an empty object.');
             else
-                vertices = MHyPro(2, 'vertices', obj.Handle);
-                
+                vertices = MHyPro(2, 3, obj.Handle);
+                plotVertices(obj, vertices, dims);
 
                 % Sort the vertices clockwise
 %                 ver_x = vertices(:,1).';
