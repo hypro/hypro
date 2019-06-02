@@ -100,10 +100,6 @@ classdef MHyProReach < handle
                     currentState = currentFlowpipe{state};
                     vertices = currentState.vertices(1);
                     obj.plotVertices(vertices, dims);
-%                     num_vertices= length(vertices);
-%                     for point = 1:num_vertices
-%                         plot(vertices(1), vertices(2), 'bo');
-%                     end
                     hold on
                 end  
             end
