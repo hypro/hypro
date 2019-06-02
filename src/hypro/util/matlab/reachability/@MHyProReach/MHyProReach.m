@@ -84,8 +84,8 @@ classdef MHyProReach < handle
             [~, order] = sort(a);
             ver_x = ver_x(order);
             ver_y = ver_y(order);
-
-            pgon = polyshape(ver_x, ver_y);
+            P = [ver_x;ver_y]';
+            pgon = polyshape(P, 'Simplify', false);
             plot(pgon);           
         end
         
