@@ -1,4 +1,4 @@
-% Bouncing ball benchmark
+function BouncingBallTest
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -124,7 +124,7 @@ assert(isequal(flm, alocfm));
 settings = struct('timeStep', 0.001, 'timeBound', 2, 'jumpDepth', 3);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(2);
+reach.setRepresentationType(0);
 reach.settings();
 
 tic;
@@ -133,3 +133,4 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 2];
 reach.plot(flowpipes, 0, dim);
+end

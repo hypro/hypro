@@ -1,4 +1,4 @@
-% Two tanks benchmark
+function TwoTanksTest
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -182,19 +182,20 @@ tran7.setLabels({MHyProLabel('tran7')});
 
 loc_on_on.addTransition(tran7);
 
+
 %-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
 
-% x1 = [1.5 2.5] x2 = [1 1]
-boxVector = [2.5; -1.5; 1; -1];
-boxMatrix = [1 0; -1 0; 0 1; 0 -1];
+% x1 = [1.5, 2.5] x2 = [1, 1]
+boxVector = [2.5; -1.5; 1; -1;];
+boxMatrix = [1 0 0; -1 0 0; 0 1 0; 0 -1 0];
 initialCond = MHyProCondition(boxMatrix, boxVector);
-automaton.addInitialState(loc_off_off, initialCond);
+automaton.addInitialState(loc_off_on, initialCond);
 
 automaton.addLocation(loc_off_off);
-automaton.addLocation(loc_on_off);
 automaton.addLocation(loc_off_on);
+automaton.addLocation(loc_on_off);
 automaton.addLocation(loc_on_on);
 
 
@@ -202,7 +203,7 @@ automaton.addLocation(loc_on_on);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 2, 'jumpDepth', 2);
+settings = struct('timeStep', 0.001, 'timeBound', 2, 'jumpDepth', 2);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -214,6 +215,8 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 2];
 reach.plot(flowpipes, 0, dim);
+
+end
 
 
 

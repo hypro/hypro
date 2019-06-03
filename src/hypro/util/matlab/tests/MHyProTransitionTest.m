@@ -1,6 +1,8 @@
-% test MHyProTransition
+function tests = MHyProTransitionTest
+    tests = functiontests(localfunctions);
+end
 
-%% Test Basic Functionality
+function testTransition(testCase)
 tran = MHyProTransition();
 copied_tran = MHyProTransition(tran);
 
@@ -72,3 +74,4 @@ assert(equal == 0);
 
 nequal = (copied_tran ~= MHyProTransition());
 assert(nequal == 1);
+end

@@ -315,7 +315,9 @@ void MHybridAutomaton::setLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, c
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
 		  ObjectHandle::mLocCondMap2Hypro( prhs[3] );
-	autom->setLocalBadStates( mapping );
+		  mexPrintf("Set bad states\n");
+	//autom->setLocalBadStates( mapping );
+	mexPrintf("get out\n");
 }
 
 /**

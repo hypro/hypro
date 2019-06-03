@@ -1,6 +1,8 @@
-% Test HyProCondition
+function tests = MHyProConditionTest
+    tests = functiontests(localfunctions);
+end
 
-%% Test Basic Functionality
+function testCondition(testCase)
 
 cond1 = MHyProCondition();
 cond2 = MHyProCondition([1 2; 3 4], [1; 2]);
@@ -37,3 +39,4 @@ vec = cond1.getVector();
 constr = cond3.constraints();
 
 hash = cond3.hash();
+end

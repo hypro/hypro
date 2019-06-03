@@ -628,17 +628,19 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro(const mxArray* string
 * @brief
 **/
 std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
-    double* structPtr = mxGetPr(structArray);
     const mwSize* dims = mxGetDimensions(structArray);
-    int cols = dims[0];
-    int rows = dims[1];
+    int cols = dims[1]; // This is correct!
 
     std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
-
+    mexPrintf("Number of bad states: %d\n", cols);
     for(int i = 0; i < cols; i++){
-        hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
-        hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
+        hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetField(structArray, i, "loc"));
+        std::string name = loc->getName();
+        mexPrintf("Name of location %d: %s\n", i, name.c_str());
+        hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetField(structArray, i , "cond"));
+        mexPrintf("Got condition\n");
         mapping[loc] = *cond;
+        mexPrintf("Added to map\n");
     } 
-
+    return mapping;
 }

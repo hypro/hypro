@@ -1,6 +1,8 @@
-% test MHyProReset
+function tests = MHyProResetTest
+    tests = functiontests(localfunctions);
+end
 
-%% Test Basic Functionality
+function testReset(testCase)
 
 reset_empty = MHyProReset();
 
@@ -45,3 +47,4 @@ assert(isequal(intervals{1}, [1 2; 3 4; 5 6]));
 assert(isequal(intervals{2}, [1 3; 3 7; 10 110]));
 
 hash = reset1.hash();
+end

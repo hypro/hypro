@@ -1,4 +1,8 @@
-% test MHyProHAutomaton
+function tests = MHyProHAutomatonTest
+    tests = functiontests(localfunctions);
+end
+
+function testHAutomaton(testCase)
 
 %% Test Basic Functionality
 % Automaton for bouncing ball
@@ -51,3 +55,4 @@ automaton.addLocation(loc);
 
 
 % automaton_locs_init
+end

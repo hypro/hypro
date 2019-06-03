@@ -99,20 +99,20 @@ classdef MHyProHAutomaton < handle
         function out = getLocalBadStates(obj)
             mapping = MHyPro(4, 12, obj.Handle);
             len = length(mapping);
-            out = cell(1,len);
+            out = cell(len);
             for i = 1:length(len)
-                out{i}.location = MHyProLocation(mapping{i}.location);
-                out{i}.condition = MHyProCondition(mapping{i}.condition);
+                out(i).loc = MHyProLocation(mapping(i).loc);
+                out(i).cond = MHyProCondition(mapping(i).cond);
             end
         end
         
         function out = getGlobalBadStates(obj)
             mapping = MHyPro(4, 13, obj.Handle);
             len = length(mapping);
-            out = cell(1,len);
+            out = cell(len);
             for i = 1:length(len)
-                out{i}.location = MHyProLocation(mapping{i}.location);
-                out{i}.condition = MHyProCondition(mapping{i}.condition);
+                out(i).loc = MHyProLocation(mapping(i).loc);
+                out(i).cond = MHyProCondition(mapping(i).cond);
             end
         end
         
@@ -151,13 +151,38 @@ classdef MHyProHAutomaton < handle
         end
         
         function setLocalBadStates(obj, mapping)
-            MHyPro(4, 18, obj.Handle);
-            %TODO
+            len = length(mapping);
+            disp(['Set local: ', num2str(len)]);
+            if isstruct(mapping) && len > 0
+                mappingHandles = struct(); 
+                for i = 1:length(mapping)
+                    if isa(mapping(i).loc,'MHyProLocation') && isa(mapping(i).cond,'MHyProCondition')
+                        mappingHandles(i).loc = mapping(i).loc.Handle;
+                        mappingHandles(i).cond = mapping(i).cond.Handle;
+                    else
+                        error('MHyProHAutomaton - setLocalBadStates: Wrong type of an argument.');
+                    end
+                end
+                MHyPro(4, 18, obj.Handle, mappingHandles);
+            else
+                error('MHyProHAutomaton - setLocalBadStates: Wrong type of an argument.');
+            end
         end
         
         function setGlobalBadStates(obj, mapping)
-            MHyPro(4, 19, obj.Handle);
-            %TODO
+            len = length(mapping);
+            if isstruct(mapping) && len > 0
+                mappingHandles = struct();
+                for i = 1:length(mapping)
+                    if isa(mapping(i).loc,'MHyProLocation') && isa(mapping(i).cond, 'MHyProCondition')
+                        mappingHandles(i).loc = mapping(i).loc.Handle;
+                        mappingHandles(i).cond = mapping(i).cond.Handle;
+                    else
+                        error('MHyProHAutomaton - setLocalBadStates: Wrong type of an argument.');
+                    end
+                end
+                MHyPro(4, 19, obj.Handle, mappingHandles);
+            end
         end
         
         function setVariables(obj, vars)

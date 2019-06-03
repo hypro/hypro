@@ -1,4 +1,8 @@
-% test MHyProFlow
+function tests = MHyProFlowTest
+    tests = functiontests(localfunctions);
+end
+
+function testFlow(testCase)
 
 %% Test Basic Functionality
 
@@ -58,3 +62,5 @@ assert(tran == 1);
 affineFlowEmpt.setTranslation([1; 2])
 tran = affineFlowEmpt.getTranslation();
 assert(isequal(tran,[1; 2]));
+
+end

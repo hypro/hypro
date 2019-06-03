@@ -1,6 +1,8 @@
-% test MHyProLocation
+function tests = MHyProLocationTest
+    tests = functiontests(localfunctions);
+end
 
-%% Test Basic Functionality
+function testLocation(testCase)
 loc1 = MHyProLocation();
 loc2 = MHyProLocation([1 0 1; 2 1 3; 1 1 1]);
 loc3 = MHyProLocation([1 0; 2 1]);
@@ -85,3 +87,4 @@ nequal = (loc1 ~= loc3);
 assert(nequal == 1);
 nequal = (loc3 ~= loc5);
 assert(nequal == 0);
+end

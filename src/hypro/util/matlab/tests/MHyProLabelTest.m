@@ -1,6 +1,9 @@
-% test MHyProLabel
+function tests = MHyProLabelTest
+    tests = functiontests(localfunctions);
+end
 
-%% Test Basic Functionality
+function testLabel(testCase)
+% Test Basic Functionality
 lab1 = MHyProLabel('lab1');
 lab2 = MHyProLabel(lab1);
 
@@ -33,3 +36,4 @@ less = (lab1 < lab2);
 assert(less == 1);
 less = (lab2 < lab1);
 assert(less == 0);
+end
