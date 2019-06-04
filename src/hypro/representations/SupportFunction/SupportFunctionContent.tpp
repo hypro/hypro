@@ -1557,12 +1557,10 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 			for(const auto& direction : directions){
 				auto rhsPosEval = intersectionParameters()->rhs->evaluate(direction, false);
 				auto lhsNegEval = intersectionParameters()->lhs->evaluate(-direction, false);
-				//if(rhsPosEval.errorCode == SOLUTION::INFTY || lhsNegEval.errorCode == SOLUTION::INFTY) return false;
-				if(rhsPosEval.supportValue < -lhsNegEval.supportValue) return true;
+				if(rhsPosEval.supportValue < -lhsNegEval.supportValue && rhsPosEval.errorCode != SOLUTION::INFTY && lhsNegEval.errorCode != SOLUTION::INFTY) return true;
 				auto rhsNegEval = intersectionParameters()->rhs->evaluate(-direction, false);
 				auto lhsPosEval = intersectionParameters()->lhs->evaluate(direction, false);
-				//if(rhsNegEval.errorCode == SOLUTION::INFTY || lhsPosEval.errorCode == SOLUTION::INFTY) return false;
-				if(-rhsNegEval.supportValue > lhsPosEval.supportValue) return true;
+				if(-rhsNegEval.supportValue > lhsPosEval.supportValue && rhsNegEval.errorCode != SOLUTION::INFTY && lhsPosEval.errorCode != SOLUTION::INFTY) return true;
 			}
 			return false;
 		}

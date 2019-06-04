@@ -296,12 +296,14 @@ template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
 	
 	//gets dimension of source object
+	//assert(!_source.empty());
     std::size_t dim = _source.dimension();
-    //std::cout << __func__ << "Dimension of source: " << dim << std::endl;
+    //std::cout << __func__ << ": Dimension of source: " << dim << std::endl;
     std::vector<std::size_t> projections = _source.collectProjections();
     //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
-    //std::cout << __func__ << "numberOfDirections: " << numberOfDirections << std::endl;
-	if( projections.size() == dim ){
+    //std::cout << __func__ << ": numberOfDirections: " << numberOfDirections << std::endl;
+    //std::cout << __func__ << ": additionalDirections: \n";
+    if( projections.size() == dim ){
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
 	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
@@ -318,11 +320,12 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 	        ++pos;
 	    }
+	    //std::cout << "templateDirectionMatrix: \n" << templateDirectionMatrix << std::endl;
 
 	    //lets the support function evaluate the offset of the halfspaces for each direction
 	    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix, false);
 	    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
-
+	    
 	    std::vector<std::size_t> boundedConstraints;
 	    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
 			//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
@@ -339,6 +342,8 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	        boundedConstraints.pop_back();
 	        --pos;
 	    }
+	    //std::cout << "constraints: \n" << constraints << std::endl;
+	    //std::cout << "constants: \n" << constants << std::endl;
 
 	    //constructs a H-Polytope out of the computed halfspaces
     	return HPolytope(constraints, constants);

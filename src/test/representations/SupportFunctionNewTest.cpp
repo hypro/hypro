@@ -41,6 +41,19 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::box);
 	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
 
+	//Test with Halfspace
+	Halfspace<TypeParam> hspace({TypeParam(0),TypeParam(1)}, TypeParam(1));
+	SupportFunctionNew<TypeParam> sfHSpace(hspace);
+	EXPECT_TRUE(sfHpoly.getRoot()->getType() == SFNEW_TYPE::LEAF);
+	EXPECT_EQ(sfHpoly.getRoot()->getOriginCount(), unsigned(0));
+	EXPECT_EQ(sfHpoly.getRoot()->getChildren().size(), std::size_t(0));
+	EXPECT_EQ(sfHpoly.getRoot().use_count(), long(1));
+	EXPECT_TRUE(boost::get<0>(isBox(hspace.matrix(), hspace.vector())));
+	EXPECT_TRUE(boost::get<0>(isBox(sfHSpace.matrix(), sfHSpace.vector())));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Halfspace<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
+
 }
 
 //Have a box as a leaf. Put a chain of trafoOps above the leaf. 
@@ -235,7 +248,14 @@ TYPED_TEST(SupportFunctionNewTest, ScaleOp){
 	std::vector<EvaluationResult<TypeParam>> res = sfScale.multiEvaluate(directions,true);
 	EXPECT_TRUE(res.at(0).supportValue == TypeParam(10));
 	EXPECT_TRUE(res.at(1).supportValue == TypeParam(10));
-	
+
+	//Evaluate with Halfspace SF
+	Halfspace<TypeParam> hspace({TypeParam(0),TypeParam(1)}, TypeParam(0.5));
+	SupportFunctionNew<TypeParam> sf2(hspace);
+	SupportFunctionNew<TypeParam> sfScale2 = sf2.scale(TypeParam(100));
+	std::vector<EvaluationResult<TypeParam>> res2 = sfScale2.multiEvaluate(directions,true);
+	EXPECT_EQ(res2.at(0).errorCode, SOLUTION::INFTY);
+	EXPECT_EQ(res2.at(1).errorCode, SOLUTION::FEAS);
 }
 
 TYPED_TEST(SupportFunctionNewTest, ProjectOp){
@@ -1001,6 +1021,7 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	//Test with empty sf
 	SupportFunctionNew<TypeParam> sfEmpty;
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> emptySatisfy = sfEmpty.satisfiesHalfspace(belowBox);		
+
 	EXPECT_TRUE(emptySatisfy.first == hypro::CONTAINMENT::BOT);
 	EXPECT_TRUE(emptySatisfy.second.empty());
 	EXPECT_TRUE(emptySatisfy.second == sfEmpty);
@@ -1014,10 +1035,11 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
 	EXPECT_TRUE(withinSatisfy.first == hypro::CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(!withinSatisfy.second.empty());
-	Box<TypeParam> boxWithin (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1), TypeParam(1)})));
-	SupportFunctionNew<TypeParam> sfWithin(boxWithin);
-	EXPECT_TRUE(withinSatisfy.second.intersect(sfWithin).contains(withinSatisfy.second));
-
+	Box<TypeParam> boxWithin (std::make_pair(Point<TypeParam>({TypeParam(0.1),TypeParam(0.1)}), Point<TypeParam>({TypeParam(2), TypeParam(1)})));
+	SupportFunctionNew<TypeParam> sfWithin(boxWithin);	
+	EXPECT_TRUE(withinSatisfy.second.contains(sfWithin));
+	//EXPECT_TRUE(sfWithin.contains(withinSatisfy.second)); //DOES NOT WORK, SINCE WE OVERAPPROXIMATE
+	
 	//Test with aboveBox
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> aboveSatisfy = sf1.satisfiesHalfspace(aboveBox);
 	EXPECT_TRUE(aboveSatisfy.first == hypro::CONTAINMENT::FULL);
@@ -1212,48 +1234,29 @@ TYPED_TEST(SupportFunctionNewTest, MatrixVector){
 	EXPECT_EQ(sf.matrix(), expectedResMat);
 	EXPECT_EQ(sf.vector(), expectedResVec);
 
-}
-/*
-TYPED_TEST(SupportFunctionNewTest, ForceLinTransReduction){
-
-	//Make the box 
-	Point<TypeParam> p({TypeParam(0),TypeParam(0)});
-	Point<TypeParam> q({TypeParam(1),TypeParam(1)});
-	Box<TypeParam> box(std::make_pair(p,q));
-	
-	//The tree with only one leaf containing the box
-	SupportFunctionNew<TypeParam> sf(box);
-	
-	//tMat = 2 * Identity_Matrix , tVec = (1 0 0)
-	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Identity(2, 2);
-	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(2);
-	tVec(0) = 1;
-
-	//Nothing should change if lin trans reduction forced on leaf
-	try {
-		sf.forceLinTransReduction();	
-	} catch(...) {
-		FAIL();
-	}
-	
-	//Add a TrafoOp - Nothing should change if lin trans reduction forced on lone trafo object
-	SupportFunctionNew<TypeParam> trafo1 = sf.affineTransformation(tMat,tVec);
-	trafo1.forceLinTransReduction();
-	EXPECT_EQ(trafo1.getRoot()->getChildren().front(), sf.getRoot());
-
-	//Add another TrafoOp - LinTransParameters changed, and trafo1 is not the child of trafo2 anymore
-	std::cout << "1" << std::endl;
-	SupportFunctionNew<TypeParam> trafo2 = trafo1.affineTransformation(tMat,tVec);
-	EXPECT_EQ(trafo2.getRoot()->getChildren().front(), trafo1.getRoot());
-	std::cout << "2" << std::endl;
-	trafo2.forceLinTransReduction();
-	EXPECT_EQ(trafo2.getRoot()->getChildren().size(), std::size_t(1));
-	EXPECT_EQ(trafo2.getRoot()->getChildren().front(), sf.getRoot());
-	EXPECT_NE(trafo2.getRoot()->getChildren().front(), trafo1.getRoot());
-	vector_t<TypeParam> result = 2*tVec;
-	std::cout << "3" << std::endl;
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo2.getRoot().get())->getParameters()->matrix()), tMat);
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo2.getRoot().get())->getParameters()->vector()), result);
+	//Halfspace
+	//Halfspace<TypeParam> hspace ({TypeParam(0),TypeParam(1)}, TypeParam(0));
+	//SupportFunctionNew<TypeParam> sfHspace(hspace);
 
 }
-*/
+
+TYPED_TEST(SupportFunctionNewTest, Reduction){
+
+	//Empty SF
+	SupportFunctionNew<TypeParam> sfEmpty;
+	sfEmpty.reduceRepresentation();
+	EXPECT_TRUE(sfEmpty.getRoot() == nullptr);
+	EXPECT_FALSE(sfEmpty.isTemplateSet());
+
+	//Halfspace
+	
+
+
+	//Reducible SF
+	//Point<TypeParam> p1 {TypeParam(-1), TypeParam(-1)};
+	//Point<TypeParam> p2 {TypeParam(1), TypeParam(1)};
+	//Box<TypeParam> box(std::make_pair(p1,p2));
+	//SupportFunctionNew<TypeParam> sf(box);
+
+
+}

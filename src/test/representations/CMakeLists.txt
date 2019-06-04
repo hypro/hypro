@@ -18,7 +18,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#PolytopeTest.cpp
 			#PolytopeUtilTest.cpp
 			#PolytopeSupportFunctionTest.cpp
-			#SupportFunctionTest.cpp
+			SupportFunctionTest.cpp
 			##TaylorModelTest.cpp
 			#VPolytopeTest.cpp
 			#ZonotopeTest.cpp
@@ -35,7 +35,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#NeighborhoodContainerTest.cpp
 			#OrthogonalPolyhedronTest.cpp
 			#PolytopeSupportFunctionTest.cpp
-			#SupportFunctionTest.cpp
+			SupportFunctionTest.cpp
 			##TaylorModelTest.cpp
 			#VPolytopeTest.cpp
 			#ZonotopeTest.cpp

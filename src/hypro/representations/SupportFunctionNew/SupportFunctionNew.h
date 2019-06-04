@@ -121,14 +121,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	//constructor for adding a new node
   	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root );
 
-  	//No optimization constructor
-  	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool );
+  public:
 
 	//Halfspace constructor
 	SupportFunctionNewT( const Halfspace<Number>& hspace );
 
-  public:
 	/**
 	 * @brief      Creates an empty SupportFunctionNew.
 	 */
@@ -206,8 +203,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	static SupportFunctionNewT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
 		return SupportFunctionNewT<Number,Converter,Setting>();
 	}
-
-	//friend void swap(SupportFunctionNewT<Number,Converter,Setting>& first, SupportFunctionNewT<Number,Converter,Setting>& second);
 
 	/***************************************************************************
 	 * Tree Traversal
@@ -353,25 +348,12 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param rhs A SupportFunctionNew.
 	 */
 	SupportFunctionNewT<Number,Converter,Setting>& operator=( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) = default;
-	//{
-	//	if(this != &rhs){
-	//		SupportFunctionNewT<Number,Converter,Setting> tmp(rhs);
-	//		swap(*this, tmp);
-	//	}
-	//	return *this;
-	//}
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A SupportFunctionNew.
 	 */
 	SupportFunctionNewT<Number,Converter,Setting>& operator=(SupportFunctionNewT<Number,Converter,Setting>&& rhs) = default;
-	//{
-	//	if(this != &rhs){
-	//		swap(*this, rhs);
-	//	}
-	//	return *this;
-	//}
 
 	/**
 	 * @brief Outstream operator.

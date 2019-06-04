@@ -100,7 +100,7 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
+	//Given the results, return vector of evaluation results (here only first place needed, since unary op)
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>&) const {
 		assert(resultStackBack.size() == 1);
 		return resultStackBack.front();

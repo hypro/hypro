@@ -83,31 +83,31 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
 	//Given evaluation result vecs, take the smallest supportValues coefficientwise
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const {
-		
+
 		TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 		assert(resultStackBack.size() >= 2);
 		std::vector<EvaluationResult<Number>> accumulatedResult;
-
-		// in case one of the results is infeasible (the set is empty), return this result.
-		//for(const auto& res : resultStackBack){
-		//	if(res.begin()->errorCode == SOLUTION::INFEAS){
-		//		return res;
-		//	}
-		//}
 
 		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
 		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {		
 			EvaluationResult<Number> r = resultStackBack.front().at(i);
 			for(const auto& res : resultStackBack){
 				if(res[i].errorCode == SOLUTION::INFEAS) return res;
-				//assert(res[i].errorCode != SOLUTION::INFEAS);
-				//if(res[i].errorCode == SOLUTION::FEAS){
-				//r.errorCode = res[i].errorCode < r.errorCode ? res[i].errorCode : r.errorCode;
-				r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
-				r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 		
-				//} 
+				if(res[i].errorCode == SOLUTION::FEAS){
+					//Since the first result we compare with can still be infty
+					if(r.errorCode == SOLUTION::INFTY){
+						r.errorCode = SOLUTION::FEAS;
+						r.supportValue = res[i].supportValue;
+						r.optimumValue = res[i].optimumValue;
+					} else {
+						r.errorCode = SOLUTION::FEAS;
+						r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
+						r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 
+					}
+				}
 			}
 			accumulatedResult.emplace_back(r);
+			
 		}
 		return accumulatedResult;
 	}
@@ -140,130 +140,40 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	bool empty(const std::vector<bool>& childrenEmpty) const {
 
 		//Current implementation uses Solution 1: template evaluation.
-		//std::cout << "IntersectOp::empty. Has children: " << this->getChildren().size() << std::endl;
 
 		//Quick check
 		for(const auto& child : childrenEmpty){
-			if(child){
-				//std::cout << "One child was empty" << std::endl;
-				return true;
-			} 
+			if(child) return true;
 		}
-/*
-		assert(this->getChildren().size() == 2);
-		SupportFunctionNewT<Number,Converter,Setting> rhs(this->getChildren().at(0));
-		SupportFunctionNewT<Number,Converter,Setting> lhs(this->getChildren().at(1));
-		std::cout << "rhs matrix: \n" << rhs.matrix() << std::endl << "lhs matrix: \n" << lhs.matrix() << std::endl;
-		if(rhs.matrix().rows() > 1 && lhs.matrix().rows() > 1){
-			//Both should be closed convex objects - use templateEvaluation
-			std::vector<vector_t<Number>> directions = computeTemplate<Number>(this->getDimension(), defaultTemplateDirectionCount);
-			for(const auto& direction : directions){
-				Number rhsPos = rhs.evaluate(direction, false).supportValue;
-				Number lhsNeg = lhs.evaluate(-direction, false).supportValue;
-				if(rhsPos < -lhsNeg) return true;
-				Number rhsNeg = rhs.evaluate(-direction, false).supportValue;
-				Number lhsPos = lhs.evaluate(direction, false).supportValue;
-				if(-rhsNeg > lhsPos) return true;
-			}
-		} else if(rhs.matrix().rows() <= 1 && lhs.matrix().rows() > 1){
-			//rhs is a halfspace - empty if lhs does not lie within rhs
-			Halfspace<Number> hspace(vector_t<Number>(rhs.matrix().row(0).transpose()), rhs.vector()(0));
-			auto lhsInHalfspace = lhs.satisfiesHalfspace(hspace);
-			if(lhsInHalfspace.first == CONTAINMENT::NO){
-				return true;
-			} 
-		} else if(rhs.matrix().rows() > 1 && lhs.matrix().rows() <= 1){
-			//lhs is a halfspace - empty if rhs does not within lhs
-			Halfspace<Number> hspace(vector_t<Number>(lhs.matrix().row(0).transpose()), lhs.vector()(0));
-			auto rhsInHalfspace = rhs.satisfiesHalfspace(hspace);
-			if(rhsInHalfspace.first == CONTAINMENT::NO){
-				return true;
-			}
-		} else if(rhs.matrix().rows() <= 1 && lhs.matrix().rows() <= 1){
-			//Both children are halfspaces - empty if one halfspace points to the exact inverse direction of the other
-			std::cout << "We are here" << std::endl;
-			vector_t<Number> rhsDir = vector_t<Number>(rhs.matrix().row(0).transpose());
-			vector_t<Number> lhsDir = vector_t<Number>(lhs.matrix().row(0).transpose());
-			auto bothHalfspacesLinDependent = linearDependent(rhsDir, lhsDir);
-			if(bothHalfspacesLinDependent.first && bothHalfspacesLinDependent.second < 0){
-				return true;
-			}
-		} else {
-			std::cout << "This was not intended" << std::endl;
-		}
-		return false;
 
-		//Check which children are halfspaces 
-
-		//Add all their halfspaces to one matrix
-
-		//Compute intersection 
-*/
-		//std::vector<vector_t<Number>> directions = computeTemplate<Number>(mDimension, defaultTemplateDirectionCount);
-		//for(const auto& direction : directions){
-		//	for(const auto& child : this->getChildren()){
-		//		SupportFunctionNewT<Number,Converter,Setting> sfChild(child);
-		//		
-		//	}
-		//}
-
-		//First: select the most negative object - objects can be unbounded (like halfspaces)
-		vector_t<Number> allNegativeDir = -1*vector_t<Number>::Ones(mDimension);
-		std::size_t indexOfMostNegativeChild = 0;
-		Number mostNegativeEvalValue = Number(100000000);
+		//Turn children into SFs
 		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
-		//std::cout << "Finding most negative!" << std::endl;
 		for(std::size_t i = 0; i < this->getChildren().size(); ++i){
 			sfChildren.emplace_back(SupportFunctionNewT<Number,Converter,Setting>(this->getChildren().at(i)));
-			EvaluationResult<Number> evalRes = sfChildren.back().evaluate(allNegativeDir,false);
-			if(evalRes.errorCode != SOLUTION::INFTY){
-				indexOfMostNegativeChild = evalRes.supportValue < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
-				mostNegativeEvalValue = evalRes.supportValue < mostNegativeEvalValue ? evalRes.supportValue : mostNegativeEvalValue;	
-			}
-			//std::cout << "eval res for allNegativeDir is: " << evalRes << std::endl;;
-			//Number childEvalRes = evalRes.supportValue;
-			//Number childEvalRes = evalRes.errorCode == SOLUTION::INFTY ? Number(100000000) : evalRes.supportValue;
-			//Number childEvalRes = sfChildren.back().evaluate(allNegativeDir,false).supportValue;
-			//indexOfMostNegativeChild = childEvalRes < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
-			//mostNegativeEvalValue = childEvalRes < mostNegativeEvalValue ? childEvalRes : mostNegativeEvalValue;	
-			//std::cout << "Child " << i << " childEvalRes " << childEvalRes << " indexOfMostNegativeChild " << indexOfMostNegativeChild << " mostNegativeEvalValue " << mostNegativeEvalValue << std::endl;
 		}
-		assert(indexOfMostNegativeChild < sfChildren.size());
 
-		//Erase most negative child from sfChildren
-		SupportFunctionNewT<Number,Converter,Setting> mostNegative = sfChildren.at(indexOfMostNegativeChild);
-		sfChildren.erase(sfChildren.begin() + indexOfMostNegativeChild);
-
+		SupportFunctionNewT<Number,Converter,Setting> chosenOne = sfChildren.back();
+		sfChildren.pop_back();
 		std::vector<vector_t<Number>> directions = computeTemplate<Number>(mDimension, defaultTemplateDirectionCount);
 
 		for(const auto& direction : directions){
 			
-			//Determine reverse direction for mostNegative
-			EvaluationResult<Number> mostNegEvalRes = mostNegative.evaluate(-direction, false);
-			//if(mostNegEvalRes.errorCode == SOLUTION::INFTY) return false;
-			//Number mostNegEvalRes = mostNegative.evaluate(-direction, false).supportValue;
-			//Number mostNegEvalRes = evalRes.supportValue;
-			//std::cout << "Current direction: \n" << direction;
-			//std::cout << "most negative eval res: " << mostNegEvalRes << std::endl;
+			//Determine supportValue of direction and reverse direction for chosenOne
+			EvaluationResult<Number> chosenNegEval = chosenOne.evaluate(-direction, false);
+			EvaluationResult<Number> chosenPosEval = chosenOne.evaluate(direction, false);
 
-			//Fill evalResults
+			//Check if the supportValues don't overlap -> there is no intersection between at least two -> empty -> return true
+			//Check in both directions since directions and children do not have to be symmetrical
 			for(const auto& child : sfChildren){
-				EvaluationResult<Number> childEvalRes = child.evaluate(direction, false);
-				//if(childEvalRes.errorCode == SOLUTION::INFTY) return false;
-				//Number childEvalRes = child.evaluate(direction, false).supportValue;
-				//std::cout << "child evaluated to: \n" << cEvalRes << std::endl;
-				//cEvalRes.supportValue = cEvalRes.errorCode == SOLUTION::INFTY ? Number(100000000) : cEvalRes.supportValue;
-				//Number childEvalRes = cEvalRes.errorCode == SOLUTION::INFTY ? Number(100000000) : cEvalRes.supportValue;
-				//Number childEvalRes = cEvalRes.supportValue;
-				//std::cout << "child eval suppport value: " << childEvalRes << " < " << -mostNegEvalRes << " ? " << (childEvalRes < -mostNegEvalRes) << " if yes then empty." << std::endl;
-				//if(childEvalRes < -mostNegEvalRes) return true;
-				if(childEvalRes.supportValue < -mostNegEvalRes.supportValue) return true;
+				EvaluationResult<Number> childPosEval = child.evaluate(direction, false);
+				if(childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY) 
+					return true;
+				EvaluationResult<Number> childNegEval = child.evaluate(direction, false);
+				if(-childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY)
+					return true;
 			}
 		}
 		return false;
-
-		//Brauchen wir die erste hälfte überhaupt?? Muss der negativste ausgesucht werden? 
-		//
 	}
 
 	//Select smallest supremum of given suprema
@@ -278,9 +188,14 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
 	//Only return true if all children contained the point before	
 	bool contains(const std::vector<bool>& v) const {
-		for(auto containedInChild : v){
-			if(!containedInChild) return false;
+		std::cout << "IntersectOp::contains" << std::endl;
+		for(const auto& containedInChild : v){
+			if(!containedInChild){
+				std::cout << "point was not contained in child!" << std::endl;
+				return false;	
+			} 
 		}
+		std::cout << "point was contained in child!" << std::endl;
 		return true;
 	}
 

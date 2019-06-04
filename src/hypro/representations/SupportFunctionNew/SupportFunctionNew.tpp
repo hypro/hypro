@@ -36,6 +36,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
+		//std::cout << "SFN::Settingsconversion" << std::endl;
 		if(orig.getRoot() == nullptr){ 
 			mRoot == nullptr; 
 		} else {
@@ -72,17 +73,16 @@ namespace hypro {
   		: mRoot(root) 
   	{}
 
-	//No optimization constructor
-  	template<typename Number, typename Converter, typename Setting>
-  	template<typename Representation>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool ) 
-		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r)))
-	{}
+	//No optimization constructor //OBSOLETE
+  	//template<typename Number, typename Converter, typename Setting>
+  	//template<typename Representation>
+	//SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool ) 
+	//	: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r)))
+	//{}
 
 	//Halfspace constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const Halfspace<Number>& hspace )
-		//: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Halfspace<Number>>>(Halfspace<Number>(hspace)))
 		: mMatrix(hspace.matrix())
 		, mVector(hspace.vector())
 		, mTemplateSet(true)
@@ -99,19 +99,12 @@ namespace hypro {
 		Representation tmp = dynamic_cast<Representation&>(r);
 		if(tmp.empty()){
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
-			//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_unique<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
 		} else {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(tmp.matrix(),tmp.vector());
-			//assert(boost::get<1>(areArgsBox).size() > 0);
 			if(boost::get<0>(areArgsBox)){
-				//auto box = typename Converter::Box(boost::get<1>(areArgsBox));
-				//auto sptr = std::make_shared<typename Converter::Box>(box);
-				//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(sptr);
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(std::move(boost::get<1>(areArgsBox))));
-				//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_unique<typename Converter::Box>(std::move(boost::get<1>(areArgsBox))));
 			} else {
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
-				//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_unique<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
 			}	
 		}
 		assert(mRoot != nullptr);
@@ -122,19 +115,10 @@ namespace hypro {
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec)
 	{
 		boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(mat,vec);
-		//std::cout << "Is mat: \n" << mat << "vec: \n " << vec << "a box? areArgsBox intervals:" << std::endl;
-		//for(const auto& elem : boost::get<1>(areArgsBox)){
-		//	std::cout << elem << std::endl;
-		//}
 		if(boost::get<0>(areArgsBox)){
-			//auto tmp = typename Converter::Box(boost::get<1>(areArgsBox));
-			//std::cout << "Is a box: " << tmp << std::endl;
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
-			//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_unique<typename Converter::Box>(std::move(boost::get<1>(areArgsBox))));
 		} else {
-			//std::cout << "Is a hpoly!" << std::endl;
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
-			//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_unique<typename Converter::HPolytope>(mat,vec));
 		}
 		assert(mRoot != nullptr);
 		mMatrix = mat;
@@ -171,17 +155,6 @@ namespace hypro {
 		}
 		assert(newRoot->getChildren().size() >= newRoot->getOriginCount());
 	}
-
-	//template<typename Number, typename Converter, typename Setting>
-	//void swap(SupportFunctionNewT<Number,Converter,Setting>& first, SupportFunctionNewT<Number,Converter,Setting>& second){
-	//	using std::swap;
-	//	first.mRoot.swap(second.mRoot);
-	//	if(second.isTemplateSet()){
-	//		first.mMatrix.swap(second.mMatrix);
-	//		first.mVector.swap(second.mVector);
-	//		first.mTemplateSet = true;
-	//	}
-	//}
 
 	/***************************************************************************
 	 * Tree Traversal
@@ -295,13 +268,11 @@ namespace hypro {
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
 
-					//return std::apply(compute, std::make_pair(cur, std::forward<Parameters<Rargs...>>(currentParam)));
 					return std::apply(compute, std::forward_as_tuple(cur, currentParam));
 					
 				//If leaf and not end of stack is reached	
 				} else {
 
-					//resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::make_pair(cur, std::forward<Parameters<Rargs...>>(currentParam))));
 					resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::forward_as_tuple(cur, currentParam)));
 
 				}
@@ -316,7 +287,6 @@ namespace hypro {
 				//If enough arguments for operation of node and #arguments != 0
 				if(resultStack.back().second.size() >= cur->getOriginCount()) {
 
-					//Res accumulatedResult = std::apply(aggregate, std::make_tuple(cur, resultStack.back().second, std::forward<Parameters<Rargs...>>(currentParam)));
 					Res accumulatedResult = std::apply(aggregate, std::forward_as_tuple(cur, resultStack.back().second, currentParam));
 
 					// we reached the top, exit
@@ -339,7 +309,6 @@ namespace hypro {
 					std::size_t callingFrame = callStack.size() - 1;
 					for(auto& c : cur->getChildren()){
 						callStack.push_back(c.get());
-						//paramStack.push_back(std::apply(transform, std::make_pair(cur, std::forward<Parameters<Rargs...>>(currentParam))));
 						paramStack.push_back(std::apply(transform, std::forward_as_tuple(cur, currentParam)));
 						resultStack.push_back(std::make_pair(callingFrame, std::vector<Res>()));
 					}
@@ -410,22 +379,30 @@ namespace hypro {
 			additionalDirectionVector.push_back(vector_t<Number>(additionalDirections.row(rowIndex)));
 		}
 		auto tmp = Converter::toHPolytope(*this, additionalDirectionVector);
-		//auto tmp = Converter::toVPolytope(*this);
 		return tmp.vertices();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
-		if(mRoot == nullptr) return EvaluationResult<Number>();
+		if(mRoot == nullptr){
+			return EvaluationResult<Number>();	
+		} 
+		if(_direction == vector_t<Number>::Zero(_direction.rows())){
+			return EvaluationResult<Number>(SOLUTION::INFTY);		
+		}
 		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(1,_direction.rows());
-		dirAsMatrix.row(0) = _direction;
+		dirAsMatrix << _direction.transpose();
 		return multiEvaluate(dirAsMatrix, useExact).front();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<EvaluationResult<Number>> SupportFunctionNewT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
-
-		if(mRoot == nullptr) return std::vector<EvaluationResult<Number>>();
+		if(mRoot == nullptr){
+			return std::vector<EvaluationResult<Number>>();
+		}
+		if(_directions == matrix_t<Number>::Zero(_directions.rows(), _directions.cols())){
+			return std::vector<EvaluationResult<Number>>();
+		}
 
 		using Matrix = Parameters<matrix_t<Number>>;
 		using RGNPtr = RootGrowNode<Number,Converter,Setting>*;
@@ -611,6 +588,9 @@ namespace hypro {
 		if(_mat.rows() == 0) {
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
+		//if(_mat.rows() == 1 && _vec.rows() == 1){
+		//	return satisfiesHalfspace(Halfspace<Number>(_mat.row(0),_vec(0)));
+		//}
 		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
@@ -768,28 +748,15 @@ namespace hypro {
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
 		Halfspace<Number> copy(hspace);
 		return intersect(SupportFunctionNewT<Number,Converter,Setting>(copy));
-		//matrix_t<Number> mat = matrix_t<Number>(1,hspace.normal().rows());
-    	//for(unsigned i = 0; i < hspace.normal().rows(); ++i){
-    	//	mat(0,i) = hspace.normal()(i);
-    	//}
-    	//vector_t<Number> vec = vector_t<Number>(1);
-    	//vec(0) = hspace.offset();
-    	//auto tmp = SupportFunctionNewT<Number,Converter,Setting>(mat, vec);
-    	//std::cout << "intersectHalfspace: tmp is: " << tmp << std::endl;
-    	//return intersect(tmp);
-    	//typename Converter::HPolytope hpoly(mat,vec);
-    	//return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly,true));
-    	//typename Converter::Box box(mat,vec);
-		//return intersect(SupportFunctionNewT<Number,Converter,Setting>(box,true));
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat, _vec));
-		//typename Converter::HPolytope hpoly(_mat,_vec);
-		//return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly,true));	
-		//typename Converter::Box box(_mat,_vec);
-		//return intersect(SupportFunctionNewT<Number,Converter,Setting>(box,true));
+		if(_mat.rows() == 1 && _vec.rows() == 1){
+			Halfspace<Number> hspace(_mat.row(0), _vec(0));
+			return intersect(SupportFunctionNewT<Number,Converter,Setting>(hspace));
+		}
+		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -825,11 +792,25 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
     bool SupportFunctionNewT<Number,Converter,Setting>::contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions) const {
+    	//std::cout << "SFN::contains" << std::endl;
     	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directions);
     	for(const auto& direction : templateDirections) {
-    		if(this->evaluate(direction,true).supportValue < rhs.evaluate(direction,true).supportValue){
-				return false;
-			}
+    		EvaluationResult<Number> thisRes = this->evaluate(direction,true);
+    		EvaluationResult<Number> rhsRes = rhs.evaluate(direction,true);
+    		assert(thisRes.errorCode != SOLUTION::INFTY && rhsRes.errorCode != SOLUTION::INFTY);
+    		if(thisRes.errorCode == SOLUTION::FEAS){
+    			if(rhsRes.errorCode == SOLUTION::FEAS){
+    				if(thisRes < rhsRes){
+    					return false;
+					}
+    			} else {
+    				//If this is bound and rhs is unbound, then this does not contain rhs on this side and therefore overall
+    				return false;
+    			}
+    		}
+    		//If this is unbound and rhs bound, then rhs is still contained on this side
+    		//If both are unbound, then both SFs are halfspaces and are only contained in each other, if the normals point to the same direction
+    		//while the offset of rhs is smaller than of this. 
     	}
     	return true;
     }
@@ -857,7 +838,9 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
-		polyhedralApproximation();	
+		if(!empty()){
+			polyhedralApproximation();	
+		}
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -909,8 +892,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
 		if(!mTemplateSet || force) {
-			//std::cout << "evaluateTemplate!" << std::endl;
-
+			
 			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directionCount);
 
 		    matrix_t<Number> templateDirectionMatrix = combineRows(templateDirections);

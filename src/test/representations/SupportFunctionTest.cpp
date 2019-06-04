@@ -396,6 +396,15 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	std::pair<CONTAINMENT, SupportFunction<TypeParam>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
 	EXPECT_TRUE(withinSatisfy.first == hypro::CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(!withinSatisfy.second.empty());
+	vec(2) = 1;
+	SupportFunction<TypeParam> sfWithin(mat,vec);
+	EXPECT_TRUE(withinSatisfy.second.contains(sfWithin));
+	//EXPECT_TRUE(sfWithin.contains(withinSatisfy.second)); //DOES NOT WORK SINCE WE OVERAPPROXIMATE
+
+	Halfspace<TypeParam> belowBox ({TypeParam(0),TypeParam(1)}, TypeParam(0));
+	std::pair<CONTAINMENT, SupportFunction<TypeParam>> belowSatisfy = sf1.satisfiesHalfspace(belowBox);
+	EXPECT_TRUE(belowSatisfy.first == hypro::CONTAINMENT::NO);
+	EXPECT_TRUE(belowSatisfy.second.empty());
 }
 
 TYPED_TEST(SupportFunctionTest, intersectHalfspaces) {

@@ -30,7 +30,7 @@
 namespace hypro {
 
 	//Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
-	enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, INTERSECTHSPACEOP, SUMOP, INTERSECTOP, UNIONOP};
+	enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, SUMOP, INTERSECTOP, UNIONOP};
 	
 	//Abstract class encapsulating all needed data to build a RootGrowNode. Only needed for Settings conversion
 	struct RGNData {

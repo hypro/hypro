@@ -83,10 +83,8 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 		
 		assert(resultStackBack.size() >= 2);
 		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
-		//assert(resultStackBack.at(0).size() == std::size_t(currentParam.rows()));
 
 		std::vector<EvaluationResult<Number>> accumulatedResult;
-
 		for(const auto& res : resultStackBack){
 			if(res.begin()->errorCode == SOLUTION::INFEAS) return accumulatedResult;
 		}
@@ -108,6 +106,7 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 			}
 			accumulatedResult.emplace_back(r);
 		}
+
 		return accumulatedResult;
 	}
 

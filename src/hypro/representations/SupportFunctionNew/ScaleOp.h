@@ -96,6 +96,7 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>&) const {
 		TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
 		assert(resultStackBack.size() == 1);
+		
 		// if one result is infeasible, the others will be too -> do not process.
 		if(resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS){
 			for(auto& singleRes : resultStackBack.front()){

@@ -88,8 +88,8 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	void print(std::ostream& ostr) const {
 		ostr << "RootGrowNode address: " << this << " own type: " << this->getType();
 		if(rep != nullptr){
-			ostr << " Leaf type: " << rep->type() << std::endl;
-			//ostr << " Leaf representation: \n" << *rep << std::endl;	
+			//ostr << " Leaf type: " << rep->type() << std::endl;
+			ostr << " Leaf representation: \n" << *rep << std::endl;	
 		} else {
 			ostr << " Leaf has no representation." << std::endl;
 		}
@@ -115,30 +115,30 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 		}
 		
 		//Optimization: If rep is only a halfspace, save yourself an expensive evaluation: Used in guard / invariant satisfaction
-		auto repMatrix = rep->matrix();
-		if(repMatrix.rows() == 1) {
-			auto repVector = rep->vector();
-			std::vector<EvaluationResult<Number>> res;
-			vector_t<Number> pointOnPlane = vector_t<Number>::Zero(mDimension);
-			assert(repMatrix.row(0).nonZeros() != 0 );
-			unsigned nonZeroPos = 0;
-			while(repMatrix(0,nonZeroPos) == 0) { ++nonZeroPos; }
-			pointOnPlane(nonZeroPos) = repVector(0);
-			for ( unsigned index = 0; index < param.rows(); ++index ) {
-				std::pair<bool,Number> dependent = linearDependent(vector_t<Number>(repMatrix.row(0)), vector_t<Number>(param.row(index)));
-				if( dependent.first ) {
-					if( dependent.second > 0 ) {
-						res.emplace_back(repVector(0)*dependent.second, pointOnPlane, SOLUTION::FEAS);
-					} else {
-						res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
-					}
-				} else {
-					res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
-				}
-			}
-			assert(res.size() == std::size_t(param.rows()));
-			return res;
-		}
+		//auto repMatrix = rep->matrix();
+		//if(repMatrix.rows() == 1) {
+		//	auto repVector = rep->vector();
+		//	std::vector<EvaluationResult<Number>> res;
+		//	vector_t<Number> pointOnPlane = vector_t<Number>::Zero(mDimension);
+		//	assert(repMatrix.row(0).nonZeros() != 0 );
+		//	unsigned nonZeroPos = 0;
+		//	while(repMatrix(0,nonZeroPos) == 0) { ++nonZeroPos; }
+		//	pointOnPlane(nonZeroPos) = repVector(0);
+		//	for ( unsigned index = 0; index < param.rows(); ++index ) {
+		//		std::pair<bool,Number> dependent = linearDependent(vector_t<Number>(repMatrix.row(0)), vector_t<Number>(param.row(index)));
+		//		if( dependent.first ) {
+		//			if( dependent.second > 0 ) {
+		//				res.emplace_back(repVector(0)*dependent.second, pointOnPlane, SOLUTION::FEAS);
+		//			} else {
+		//				res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
+		//			}
+		//		} else {
+		//			res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
+		//		}
+		//	}
+		//	assert(res.size() == std::size_t(param.rows()));
+		//	return res;
+		//}
 
 		//If no optimizations could be used
 		COUNT("Multi constraint evaluate.");

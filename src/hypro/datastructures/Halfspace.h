@@ -295,55 +295,54 @@ class Halfspace {
 	static Number computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane);
 
 	/**
-	 * For SupportFunctionNew where it is seen as a representation
+	 * Functions for SupportFunctionNew where it is seen as a representation
 	 */
-	matrix_t<Number> matrix() const { 
-		matrix_t<Number> mat = matrix_t<Number>::Zero(1,mNormal.rows());
-		mat.row(0) = mNormal.transpose();
-		return mat;
-	}
 
-	vector_t<Number> vector() const {
-		vector_t<Number> vec = vector_t<Number>::Zero(1);
-		vec(0) = mScalar;
-		return vec;
-	}
+	/**
+	 * @brief Return mNormal as a matrix
+	 */
+	matrix_t<Number> matrix() const;
 
-	bool empty() const { return false; }
+	/**
+	 * @brief Return mScalar as a vector
+	 */
+	vector_t<Number> vector() const;
 
+	/**
+	 * @brief Return whether the halfspace is empty.
+	 * @detail A halfspace itself cannot be empty, except its normal is the zero vector and the scalar is smaller than 0
+	 */
+	bool empty() const;
+
+	/**
+	 * @brief Does nothing since a halfpsace cannot have redundancy
+	 */
 	void removeRedundancy() {}
 
-	EvaluationResult<Number> evaluate(const vector_t<Number>& direction, bool /*useExact*/) const {
-		std::pair<bool,Number> dependent = linearDependent(mNormal, direction);
-		if(dependent.first){
-			if(dependent.second > 0){
-				// The vectors are EXACTLY the same -> to find point on plane and to avoid squareroot computations, return vector
-				// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored distance.
-				vector_t<Number> pointOnPlane = vector_t<Number>::Zero(direction.rows());
-				unsigned i = 0;
-				while(i<direction.rows() && direction(i) == 0) {
-					++i;
-				}
-				pointOnPlane(i) = mScalar;
-				return EvaluationResult<Number>(mScalar,pointOnPlane,SOLUTION::FEAS);
-			} else {
-				return EvaluationResult<Number>(0,SOLUTION::INFTY);
-			}
-		} 
-		return EvaluationResult<Number>(0,SOLUTION::INFTY);
-	}
+	/**
+	 * @brief Return the steps needed in the given direction to reach the optimal point.
+	 * @param[in] direction The direction to evaluate
+	 * @return Whether it is feasible, and if it is, how much steps are needed.
+	 */
+	EvaluationResult<Number> evaluate(const vector_t<Number>& direction, bool /*useExact*/) const;
  
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool /*useExact*/ ) const {
-		assert(_directions.cols() == this->dimension());
-		std::vector<EvaluationResult<Number>> res;
-		for(int i = 0; i < _directions.rows(); ++i){
-			res.push_back(evaluate(_directions.row(i), true));
-		}
-		return res;
-	}
+ 	/**
+	 * @brief Return the evaluation result for multiple directions
+	 * @param[in] _directions The directions to evaluate
+	 * @return For each direction, whether the evaluation is feasible, and if it is, how many steps are needed
+	 */
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool /*useExact*/ ) const;
 
+	/**
+	 * @brief Returns a point representation of the halfspace. which does not exist.
+	 * @detail Although this function is nonsensical, it is needed in order to use the Halfspace class as a leaf in the SupportFunctionNew.
+	 */
 	std::vector<Point<Number>> vertices() const { return std::vector<Point<Number>>(); }
 
+	/**
+	 * @brief Returns the representation type of the halfspace.
+	 * @detail Since adding an own representation name for halfspaces would greatly affect the code, it just returns box as the representation name.
+	 */
 	static representation_name type() { return representation_name::box; }
 };
 

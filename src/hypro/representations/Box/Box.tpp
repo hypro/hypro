@@ -318,13 +318,10 @@ EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_
 template<typename Number, typename Converter, class Setting>
 std::vector<EvaluationResult<Number>> BoxT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
 	DEBUG("hypro.representations.box","In Box::multiEvaluate. directions: " << std::endl << _directions);
-	////std::cout << "In Box::multiEvaluate. directions: " << _directions << std::endl;
 	std::vector<EvaluationResult<Number>> res;
 	for(Eigen::Index i = 0; i < _directions.rows(); ++i) {
-		//res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i)), useExact));
 		res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i).transpose()), useExact));
 	}
-	//std::cout << "In Box::multiEvaluate. passed loop" << std::endl;
 	return res;
 }
 
