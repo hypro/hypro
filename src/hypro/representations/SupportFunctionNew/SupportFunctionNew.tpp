@@ -73,13 +73,6 @@ namespace hypro {
   		: mRoot(root) 
   	{}
 
-	//No optimization constructor //OBSOLETE
-  	//template<typename Number, typename Converter, typename Setting>
-  	//template<typename Representation>
-	//SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r, bool ) 
-	//	: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r)))
-	//{}
-
 	//Halfspace constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const Halfspace<Number>& hspace )
@@ -102,7 +95,7 @@ namespace hypro {
 		} else {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(tmp.matrix(),tmp.vector());
 			if(boost::get<0>(areArgsBox)){
-				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(std::move(boost::get<1>(areArgsBox))));
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 			} else {
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
 			}	
