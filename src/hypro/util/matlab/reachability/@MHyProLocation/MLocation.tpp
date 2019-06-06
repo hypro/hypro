@@ -7,6 +7,7 @@ void MLocation::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - new_empty: Expecting an output." );
 
 	hypro::Location<double>* loc = new hypro::Location<double>();
+	mexPrintf("New location Addresss %p\n", loc);
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 }
 
@@ -49,7 +50,7 @@ void MLocation::new_mat_tran_inv( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	vec_dimy = (int)vec_dims[1];
 
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_dimx, mat_dimy );
-	const std::vector<hypro::Transition<double>> temp = objArray2Hypro<hypro::Transition<double>>( prhs[3], vec_dimy );
+	const std::vector<hypro::Transition<double>> temp = ObjectHandle::objArray2Hypro<hypro::Transition<double>>( prhs[3], vec_dimy );
 	hypro::Condition<double>* inv = convertMat2Ptr<hypro::Condition<double>>( prhs[4] );
 
 	std::vector<std::unique_ptr<hypro::Transition<double>>> transitions;
@@ -133,10 +134,16 @@ void MLocation::getInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getInvariant: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getInvariant: One or more arguments are missing." );
 	if ( nrhs > 3 ) mexErrMsgTxt( "MLocation - getInvariant: One or more arguments were ignored." );
-
+	
+	mexPrintf("GETINVARIANT\n");
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	hypro::Condition<double> cond = loc->getInvariant();
-	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( new hypro::Condition<double>( cond ) );
+	mexPrintf("get invariant location Addresss %p\n", cond);
+	hypro::Condition<double>* address = &cond;
+	mexPrintf("get invariant condition Addresss %p\n", address);
+	//plhs[0] = convertPtr2Mat<hypro::Condition<double>>( new hypro::Condition<double>( cond ) );
+	plhs[0] = convertPtr2Mat<hypro::Condition<double>>(address);
+	mexPrintf("plhs[0]: %f\n", plhs[0]);
 }
 
 /**
@@ -250,6 +257,7 @@ void MLocation::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - setName: One or more arguments were ignored." );
 
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
+	mexPrintf("setName loc Addresss %p\n", loc);
 	char* name = mxArrayToString( prhs[3] );
 	loc->setName( std::string( name ) );
 }
@@ -301,7 +309,7 @@ void MLocation::setLinearFlow_vec( int nlhs, mxArray* plhs[], int nrhs, const mx
 	len = dims[0];
 
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
-	const std::vector<hypro::linearFlow<double>> flows = objArray2Hypro<hypro::linearFlow<double>>( prhs[3], len );
+	const std::vector<hypro::linearFlow<double>> flows = ObjectHandle::objArray2Hypro<hypro::linearFlow<double>>( prhs[3], len );
 	loc->setLinearFlow( flows );
 }
 
@@ -314,6 +322,7 @@ void MLocation::setInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[3] );
+	mexPrintf("Set invariant Condition Addresss %p\n", cond);
 	loc->setInvariant( *cond );
 }
 

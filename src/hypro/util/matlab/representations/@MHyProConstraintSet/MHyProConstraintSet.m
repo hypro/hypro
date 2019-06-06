@@ -8,19 +8,19 @@ classdef MHyProConstraintSet < MHyProGeometricObject
             
             if nargin == 0
                 % Call default constructor
-                obj.Handle = MHyPro(2, 15);
+                obj.ObjectHandle = MHyPro(2, 15);
             elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
-                    obj.Handle = varargin{1};
+                    obj.ObjectHandle = varargin{1};
                 elseif isa(varargin{1}, 'MHyProConstraintSet')
                     % Call copy constructor
-                    obj.Handle = MHyPro(2, 16, varargin{1}.Handle);
+                    obj.ObjectHandle = MHyPro(2, 16, varargin{1}.ObjectHandle);
                 else
                     error('MHyProConstraintSet - Constructor: Wrong type of argument.');
                 end
             elseif nargin == 2
                 if ismatrix(varargin{1}) && isvector(varargin{2}) && size(varargin{1},1) == size(varargin{2},1)
-                    obj.Handle = MHyPro(2, 17, varargin{1}, varargin{2});
+                    obj.ObjectHandle = MHyPro(2, 17, varargin{1}, varargin{2});
                 else
                     error('MHyProConstraintSet - Constructor: Wrong arguments.');
                 end
@@ -31,7 +31,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
 
         function [containment, out] = satisfiesHalfspace(obj, normal, offset)
             if isvector(normal) && isreal(offset)
-                [containment, ptr] = MHyPro(2, 18, obj.Handle, normal, offset);
+                [containment, ptr] = MHyPro(2, 18, obj.ObjectHandle, normal, offset);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - satisfiesHalfspace: Wrong type of input argument.');
@@ -40,7 +40,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function [containment, out] = satisfiesHalfspaces(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                [containment, ptr] = MHyPro(2, 19, obj.Handle, mat, vec);
+                [containment, ptr] = MHyPro(2, 19, obj.ObjectHandle, mat, vec);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - satisfiesHalfspaces: Wrong type of input argument.');
@@ -49,7 +49,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = project(obj, dims)
             if isvector(dims)
-                ptr = MHyPro(2, 20, obj.Handle, dims);
+                ptr = MHyPro(2, 20, obj.ObjectHandle, dims);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - project: Wrong type of input argument.');
@@ -58,7 +58,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = linearTransformation(obj, mat)
             if ismatrix(mat)
-                ptr = MHyPro(2, 21, obj.Handle, mat);
+                ptr = MHyPro(2, 21, obj.ObjectHandle, mat);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - linearTransformation: Wrong type of input argument.');
@@ -67,7 +67,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = affineTransformation(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro(2, 22, obj.Handle, mat, vec);
+                ptr = MHyPro(2, 22, obj.ObjectHandle, mat, vec);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - affineTransformation: Wrong type of input argument.');
@@ -76,7 +76,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = plus(obj, rhs)
             if isa(rhs, 'MHyProConstraintSet')
-                ptr = MHyPro(2, 23, obj.Handle, rhs.Handle);
+                ptr = MHyPro(2, 23, obj.ObjectHandle, rhs.ObjectHandle);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - minkowskiSum: Wrong type of input argument.');
@@ -85,7 +85,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = intersectHalfspace(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro(2, 24, obj.Handle, mat, vec);
+                ptr = MHyPro(2, 24, obj.ObjectHandle, mat, vec);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - intersectHalfspace: Wrong type of input argument.');
@@ -94,7 +94,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = intersectHalfspaces(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-                ptr = MHyPro(2, 25, obj.Handle, mat, vec);
+                ptr = MHyPro(2, 25, obj.ObjectHandle, mat, vec);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - intersectHalfspaces: Wrong type of input argument.');
@@ -103,7 +103,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = contains(obj, arg)
             if isa(arg, 'MHyProConstraintSet')
-                out = MHyPro(2, 26, obj.Handle, arg.Handle);
+                out = MHyPro(2, 26, obj.ObjectHandle, arg.ObjectHandle);
             else
                 error('MHyProConstraintSet - contains: Wrong type of input argument.');
             end
@@ -111,7 +111,7 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = containsPoint(obj, pnt)
             if isvector(pnt)
-                out = MHyPro(2, 27, obj.Handle, pnt);
+                out = MHyPro(2, 27, obj.ObjectHandle, pnt);
             else
                 error('MHyProConstraintSet - contains: Wrong type of input argument.');
             end
@@ -119,16 +119,16 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         
         function out = unite(obj, rhs)
             if isa(rhs, 'MHyProConstraintSet')
-                ptr = MHyPro(2, 28, obj.Handle, rhs.Handle);
+                ptr = MHyPro(2, 28, obj.ObjectHandle, rhs.ObjectHandle);
                 out = MHyProConstraintSet(ptr);
             elseif iscelloftype(rhs, "MHyProConstraintSet")
                 objects = uint64.empty(length(rhs),0);
                 for i = 1:length(rhs)
-                    objects{i} = rhs{i}.Handle;
+                    objects{i} = rhs{i}.ObjectHandle;
                 end
                 object
                 out = 1;
-%                 ptr = MHyPro(2, 29, obj.Handle, objects);
+%                 ptr = MHyPro(2, 29, obj.ObjectHandle, objects);
 %                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - unite: Wrong type of input argument.');
@@ -136,12 +136,12 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         end
 
         function reduceNumberRepresentation(obj)
-            MHyPro(2, 30, obj.Handle);
+            MHyPro(2, 30, obj.ObjectHandle);
         end
         
         function out = intersect(obj, rhs)
             if isa(rhs, 'MHyProConstraintSet') 
-                ptr = MHyPro(2, 31, obj.Handle, rhs.Handle);
+                ptr = MHyPro(2, 31, obj.ObjectHandle, rhs.ObjectHandle);
                 out = MHyProConstraintSet(ptr);
             else
                 error('MHyProConstraintSet - intersect: Wrong type of argument.');
@@ -149,23 +149,23 @@ classdef MHyProConstraintSet < MHyProGeometricObject
         end
 
        function out = isAxisAligned(obj)
-           out = MHyPro(2, 32, obj.Handle);
+           out = MHyPro(2, 32, obj.ObjectHandle);
        end
        
        function addConstraint(obj, vec, offset)
             if isvector(vec) && isreal(offset)
-                MHyPro(2, 33, obj.Handle, vec, offset);
+                MHyPro(2, 33, obj.ObjectHandle, vec, offset);
             else
                 error('MHyProConstraintSet - addConstraint: Wrong type of argument.');
             end
        end
        
        function plot(obj, dims)
-            isempty = MHyPro(obj.Type, 11, obj.Handle);
+            isempty = MHyPro(obj.Type, 11, obj.ObjectHandle);
             if isempty
                 warning('MHyProConstraintSet - plot: It is not possible to plot an empty object.');
             else
-                vertices = MHyPro(2, 3, obj.Handle);
+                vertices = MHyPro(2, 3, obj.ObjectHandle);
                 plotVertices(obj, vertices, dims);
 
                 % Sort the vertices clockwise

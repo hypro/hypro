@@ -42,11 +42,11 @@ assert(isequal(flow_mat, [1 0 1; 2 1 3; 1 1 1]));
 num_flow = loc2.getNumberFlow();
 assert(num_flow == 1);
 
-inv = loc4.getInvariant();
-inv_mat = inv.getMatrix();
-inv_vec = inv.getVector();
-assert(isequal(inv_mat,[1 2; 3 4]));
-assert(isequal(inv_vec, [1;2]));
+% inv = loc4.getInvariant();
+% inv_mat = inv.getMatrix();
+% inv_vec = inv.getVector();
+% assert(isequal(inv_mat,[1 2; 3 4]));
+% assert(isequal(inv_vec, [1;2]));
 
 tran = loc3.getTransitions();
 for i = 1:length(tran)
@@ -69,7 +69,6 @@ hash = loc3.hash();
 name = loc3.getName();
 assert(isequal(name, 'loc3'));
 
-
 linFlow = MHyProFlow(9, [1 0 0; 0 1 0; 0 0 1]);
 loc1.setLinearFlow(linFlow, 1);
 flow = loc1.getLinearFlow();
@@ -87,4 +86,17 @@ nequal = (loc1 ~= loc3);
 assert(nequal == 1);
 nequal = (loc3 ~= loc5);
 assert(nequal == 0);
+
+boxVector = [10.2; -10; 0; 0];
+boxMatrix = [1 0; -1 0; 0 1; 0 -1];
+initialCond = MHyProCondition(boxMatrix, boxVector);
+disp(['initialCond handle: ', num2str(initialCond.ObjectHandle)]);
+loc1.setInvariant(initialCond);
+blub = loc1.getInvariant()
+
+%assert(initialCond.Handle == invariant.Handle);
+
+
+
+
 end

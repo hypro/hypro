@@ -382,7 +382,7 @@ void MTransition::setLabels(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
     int num;
     dims = mxGetDimensions(prhs[3]);
     num = dims[1];
-    std::vector<hypro::Label> labs = objArray2Hypro<hypro::Label>(prhs[3], num);
+    std::vector<hypro::Label> labs = ObjectHandle::objArray2Hypro<hypro::Label>(prhs[3], num);
     tran->setLabels(labs);
 }
 

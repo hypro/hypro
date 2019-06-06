@@ -311,7 +311,7 @@ void MState::setSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	len = dims[0];
 
 	if ( !strcmp( "Box", type ) ) {
-		const std::vector<hypro::Box<double>> boxes = objArray2Hypro<hypro::Box<double>>( prhs[3], len );
+		const std::vector<hypro::Box<double>> boxes = ObjectHandle::objArray2Hypro<hypro::Box<double>>( prhs[3], len );
 		// st->setSets(boxes);?
 
 	} else if ( !strcmp( "ConstraintSet", type ) ) {

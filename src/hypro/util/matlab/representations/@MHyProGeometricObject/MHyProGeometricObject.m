@@ -1,7 +1,7 @@
 classdef MHyProGeometricObject < handle
     
     properties (SetAccess = public, GetAccess = public)
-        Handle
+        ObjectHandle
         Type
     end
     
@@ -16,39 +16,39 @@ classdef MHyProGeometricObject < handle
      methods (Access = private)
         % Delete a MHyPro object - Destructor
         function delete(obj)
-            MHyPro(obj.Type, 1, obj.Handle);
+            MHyPro(obj.Type, 1, obj.ObjectHandle);
         end
      end
 
     methods (Access = public)
         
         function out = dimension(obj)
-            out = MHyPro(obj.Type, 2, obj.Handle);
+            out = MHyPro(obj.Type, 2, obj.ObjectHandle);
         end
         
         function out = vertices(obj)
             if obj.isempty() == 0
-                out = MHyPro(obj.Type, 3, obj.Handle);
+                out = MHyPro(obj.Type, 3, obj.ObjectHandle);
             else
                 out = [];
             end          
         end
         
         function reduceRepresentation(obj)
-            MHyPro(obj.Type, 4, obj.Handle);
+            MHyPro(obj.Type, 4, obj.ObjectHandle);
         end
         
         function ostream(obj)
-            MHyPro(obj.Type, 5, obj.Handle);
+            MHyPro(obj.Type, 5, obj.ObjectHandle);
         end
         
         function out = size(obj)
-            out = MHyPro(obj.Type, 6, obj.Handle);
+            out = MHyPro(obj.Type, 6, obj.ObjectHandle);
         end
         
         function out = eq(obj, rhs)
             if rhs.Type == obj.Type
-                out = MHyPro(obj.Type, 7, obj.Handle, rhs.Handle);
+                out = MHyPro(obj.Type, 7, obj.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProGeometricObject - equal: Not allowed for this type of HyProObject or wrong type of argument.');
             end
@@ -56,42 +56,42 @@ classdef MHyProGeometricObject < handle
         
         function out = ne(obj, rhs)
             if obj.Type ~= 3 && rhs.Type == obj.Type
-                out = MHyPro(obj.Type, 8, obj.Handle, rhs.Handle);
+                out = MHyPro(obj.Type, 8, obj.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProGeometricObject - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
             end
         end
         
         function out = matrix(obj)
-            out = MHyPro(obj.Type, 9, obj.Handle);
+            out = MHyPro(obj.Type, 9, obj.ObjectHandle);
         end
         
         function out = vector(obj)
             if obj.Type ~= 1
-                out = MHyPro(obj.Type, 10, obj.Handle);
+                out = MHyPro(obj.Type, 10, obj.ObjectHandle);
             else
                 error('HyProGeometricObjectInterface - vector: Not allowed for this type of HyProObject');
             end
         end
         
         function out = isempty(obj)
-            out = MHyPro(obj.Type, 11, obj.Handle);
+            out = MHyPro(obj.Type, 11, obj.ObjectHandle);
         end
         
         function removeRedundancy(obj)
-            MHyPro(obj.Type, 12, obj.Handle);
+            MHyPro(obj.Type, 12, obj.ObjectHandle);
         end
         
         function out = type(obj)
-            out = MHyPro(obj.Type, 13, obj.Handle);
+            out = MHyPro(obj.Type, 13, obj.ObjectHandle);
         end
 
         function out = clear(obj)
-            out = MHyPro(obj.Type, 14, obj.Handle, rhs.Handle);
+            out = MHyPro(obj.Type, 14, obj.ObjectHandle, rhs.ObjectHandle);
         end
      
         function plotObj(obj, dims)
-            isempty = MHyPro(obj.Type, 11, obj.Handle);
+            isempty = MHyPro(obj.Type, 11, obj.ObjectHandle);
             if isempty
                 warning('MHyProGeometricObject - plot: It is not possible to plot an empty object.');
             else
@@ -115,7 +115,7 @@ classdef MHyProGeometricObject < handle
         end
         
         function plotVertices(obj, vertices, dims)
-            isempty = MHyPro(obj.Type, 11, obj.Handle);
+            isempty = MHyPro(obj.Type, 11, obj.ObjectHandle);
             if isempty
                 warning('MHyProGeometricObject - plot: It is not possible to plot an empty object.');
             else

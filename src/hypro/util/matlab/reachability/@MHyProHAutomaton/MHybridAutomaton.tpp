@@ -1,46 +1,52 @@
+/**
+ * This is the wrapper class for HyPro HybridAutomaton.
+ **/
+
+
+
 #include "MHybridAutomaton.h"
 
-/**
- * @brief
- **/
 void MHybridAutomaton::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - new_empty: Expecting an output." );
 
 	hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>();
+	mexPrintf("Automaton Addresss %p\n", temp);
 	plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>( temp );
 }
 
-/**
- * @brief
- **/
-// void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-//     if(nlhs != 1)
-//         mexErrMsgTxt("MHybridAutomaton - new_loc_init: One output expected.");
-//     if(nrhs < 4)
-//         mexErrMsgTxt("MHybridAutomaton - new_loc_init: One or more arguments are missing.");
 
-//     const mwSize *loc_dims;
-//     int loc_num;
-//     loc_dims = mxGetDimensions(prhs[2]);
-//     loc_num = loc_dims[1];
-//     const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
-//     const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
-//     ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MHybridAutomaton - new_loc_init: One output expected.");
+    if(nrhs < 4)
+        mexErrMsgTxt("MHybridAutomaton - new_loc_init: One or more arguments are missing.");
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - new_loc_init: One or more arguments were ignored." );
 
-//     std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
-//     for(const auto &elem : locs){
-//         hypro::Location<double>* l = new hypro::Location<double>(elem);
-//         std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
-//         ptr_locs.emplace_back(std::move(loc));
-//     }
+	std::vector<std::unique_ptr<hypro::Location<double>>> locs = ObjectHandle::mLocsVector2Hypro(prhs[2]);
+	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro( prhs[3] );
+	hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>();
+	plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
 
-//     // hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
-//     // plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
-// }
 
-/**
- * @brief
- **/
+    // const mwSize *loc_dims;
+    // int loc_num;
+    // loc_dims = mxGetDimensions(prhs[2]);
+    // loc_num = loc_dims[1];
+    // const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
+    // const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
+    // ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+
+    // std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
+    // for(const auto &elem : locs){
+    //     hypro::Location<double>* l = new hypro::Location<double>(elem);
+    //     std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
+    //     ptr_locs.emplace_back(std::move(loc));
+    // }
+
+    // hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
+    // plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+}
+
 void MHybridAutomaton::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - copy: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - copy: One or more arguments are missing." );
@@ -50,18 +56,14 @@ void MHybridAutomaton::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>( new hypro::HybridAutomaton<double>( *origin ) );
 }
 
-/**
- * @brief
- **/
+
 void MHybridAutomaton::delete_autom( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - delete_autom: Expecting an output." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MHybridAutomaton - delete_autom: One or more arguments were ignored." );
 	destroyObject<hypro::HybridAutomaton<double>>( prhs[2] );
 }
 
-/**
- * @brief
- **/
+
 void MHybridAutomaton::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - dimension: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - dimension: One or more arguments are missing." );
@@ -72,9 +74,6 @@ void MHybridAutomaton::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// if(nrhs < 4)
 	//     mexErrMsgTxt("MHybridAutomaton - decompose: One or more arguments are missing.");
@@ -97,9 +96,6 @@ void MHybridAutomaton::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	// obj->decompose(decomposition);
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getLocations( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocations: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getLocations: One or more arguments are missing." );
@@ -120,9 +116,6 @@ void MHybridAutomaton::getLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 	objArray2Matlab( locations, plhs[0], len );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getLocation_by_hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_hash: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_hash: One or more arguments are missing." );
@@ -134,24 +127,26 @@ void MHybridAutomaton::getLocation_by_hash( int nlhs, mxArray* plhs[], int nrhs,
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *loc ) );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getLocation_by_name( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - getLocation_by_name: One or more arguments were ignored." );
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	char name[64];
-	mxGetString( prhs[3], name, sizeof( name ) );
-	hypro::Location<double>* loc = autom->getLocation( name );
-	plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *loc ) );
+	// char name[64];
+	// mxGetString( prhs[3], name, sizeof( name ) );
+	// hypro::Location<double>* loc = autom->getLocation( name );
+	// mexPrintf("getLocation loc Addresss %p\n", loc);
+	// plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *loc ) );
+
+	hypro::Location<double>* loc = new hypro::Location<double>();
+	loc->setName("loc1");
+	mexPrintf("Address of new location: %p\n", loc);
+	autom->addLocation(*loc);
+	hypro::Location<double>* loc2 = autom->getLocation("loc1");
+	mexPrintf("Address of the location: %p\n", loc2);
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getTransitions: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getTransitions: One or more arguments are missing." );
@@ -165,9 +160,6 @@ void MHybridAutomaton::getTransitions( int nlhs, mxArray* plhs[], int nrhs, cons
 	objArray2Matlab( trans, plhs[0], len );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getInitialStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getInitialStates: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getInitialStates: One or more arguments are missing." );
@@ -177,14 +169,11 @@ void MHybridAutomaton::getInitialStates( int nlhs, mxArray* plhs[], int nrhs, co
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = autom->getInitialStates();
 	int len = mapping.size();
 	mwSize dims[2] = {1, (mwSize)len};
-	const char* fieldnames[] = {"location", "condition"};
+	const char* fieldnames[] = {"loc", "cond"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, fieldnames );
 	ObjectHandle::convert2Matlab( mapping, plhs[0] );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocalBadStates: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getLocalBadStates: One or more arguments are missing." );
@@ -192,13 +181,14 @@ void MHybridAutomaton::getLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, c
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = autom->getLocalBadStates();
-
+	int len = mapping.size();
+	mwSize dims[2] = {1, (mwSize)len};
+	const char* fieldnames[] = {"loc", "cond"};
+	plhs[0] = mxCreateStructArray( 2, dims, 2, fieldnames );
 	ObjectHandle::convert2Matlab( mapping, plhs[0] );
+	mexPrintf("converted");
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getGlobalBadStates: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getGlobalBadStates: One or more arguments are missing." );
@@ -212,9 +202,6 @@ void MHybridAutomaton::getGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, 
 	objArray2Matlab( conds, plhs[0], len );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getVariables( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getVariables: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getVariables: One or more arguments are missing." );
@@ -228,9 +215,6 @@ void MHybridAutomaton::getVariables( int nlhs, mxArray* plhs[], int nrhs, const 
 	ObjectHandle::convert2Matlab( vars, plhs[0], dims );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getLabels( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLabels: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getLabels: One or more arguments are missing." );
@@ -251,10 +235,6 @@ void MHybridAutomaton::getLabels( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	objArray2Matlab( labels_vec, plhs[0], len );
 }
 
-/**
- * @brief
- * @param A hybrid automaton and a vector of locations.
- **/
 void MHybridAutomaton::setLocations( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - setLocations: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - setLocations: One or more arguments were ignored." );
@@ -264,7 +244,7 @@ void MHybridAutomaton::setLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 	dims = mxGetDimensions( plhs[3] );
 	dimy = dims[0];
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>( prhs[3], dimy );
+	std::vector<hypro::Location<double>> locs = ObjectHandle::objArray2Hypro<hypro::Location<double>>( prhs[3], dimy );
 
 	std::vector<std::unique_ptr<hypro::Location<double>>> locs_ptr;
 	for ( const auto& elem : locs ) {
@@ -282,32 +262,15 @@ void MHybridAutomaton::setLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 
 // }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::setInitialStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nrhs < 5 ) mexErrMsgTxt( "MHybridAutomaton - setInitialStates: One or more arguments are missing." );
-	if ( nrhs > 5 ) mexWarnMsgTxt( "MHybridAutomaton - setInitialStates: One or more arguments were ignored." );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - setInitialStates: One or more arguments are missing." );
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - setInitialStates: One or more arguments were ignored." );
 
-	const mwSize* dims;
-	int len;
-	dims = mxGetDimensions( prhs[3] );
-	len = (int)dims[0];
-
-	// std::map<const Location<Number>*, Condition<Number>>;
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	std::vector<hypro::Location<double>> locations = objArray2Hypro<hypro::Location<double>>( prhs[3], len );
-	std::vector<hypro::Condition<double>> conditions = objArray2Hypro<hypro::Condition<double>>( prhs[4], len );
-	std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
-
-	// TODO
-
-	// autom->setInitialStates(mapping);
+	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro( prhs[3] );
+	autom->setInitialStates(mapping);
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::setLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - setLocalBadStates: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - setLocalBadStates: One or more arguments were ignored." );
@@ -315,14 +278,9 @@ void MHybridAutomaton::setLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, c
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
 		  ObjectHandle::mLocCondMap2Hypro( prhs[3] );
-		  mexPrintf("Set bad states\n");
-	//autom->setLocalBadStates( mapping );
-	mexPrintf("get out\n");
+	autom->setLocalBadStates( mapping );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::setGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - setGlobalBadStates: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - setGlobalBadStates: One or more arguments were ignored." );
@@ -332,13 +290,10 @@ void MHybridAutomaton::setGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, 
 	dims = mxGetDimensions( plhs[3] );
 	dimy = dims[0];
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	std::vector<hypro::Condition<double>> conds = objArray2Hypro<hypro::Condition<double>>( prhs[3], dimy );
+	std::vector<hypro::Condition<double>> conds = ObjectHandle::objArray2Hypro<hypro::Condition<double>>( prhs[3], dimy );
 	autom->setGlobalBadStates( conds );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::setVariables( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - setVariables: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - setVariables: One or more arguments were ignored." );
@@ -352,9 +307,6 @@ void MHybridAutomaton::setVariables( int nlhs, mxArray* plhs[], int nrhs, const 
 	autom->setVariables( vars );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::addLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - addLocation: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - addLocation: One or more arguments were ignored." );
@@ -393,9 +345,6 @@ void MHybridAutomaton::addLocation( int nlhs, mxArray* plhs[], int nrhs, const m
 // TODO?
 //}
 
-/**
- * @brief
- **/
 void MHybridAutomaton::addInitialState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MHybridAutomaton - addInitialState: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MHybridAutomaton - addInitialState: One or more arguments were ignored." );
@@ -406,9 +355,6 @@ void MHybridAutomaton::addInitialState( int nlhs, mxArray* plhs[], int nrhs, con
 	autom->addInitialState( loc, *cond );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::addLocalBadState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MHybridAutomaton - addLocalBadState: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MHybridAutomaton - addLocalBadState: One or more arguments were ignored." );
@@ -419,9 +365,6 @@ void MHybridAutomaton::addLocalBadState( int nlhs, mxArray* plhs[], int nrhs, co
 	autom->addLocalBadState( &( *loc ), *cond );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::addGlobalBadState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - addGlobalBadState: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - addGlobalBadState: One or more arguments were ignored." );
@@ -431,9 +374,6 @@ void MHybridAutomaton::addGlobalBadState( int nlhs, mxArray* plhs[], int nrhs, c
 	autom->addGlobalBadState( *cond );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::reduce( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - addGlobalBadState: One or more arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MHybridAutomaton - addGlobalBadState: One or more arguments were ignored." );
@@ -474,9 +414,6 @@ void MHybridAutomaton::reduce( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 //     plhs[0] = mxCreateString(rep.c_str());
 // }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::getStatistics( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getStatistics: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - getStatistics: One or more arguments are missing." );
@@ -487,9 +424,6 @@ void MHybridAutomaton::getStatistics( int nlhs, mxArray* plhs[], int nrhs, const
 	plhs[0] = mxCreateString( rep.c_str() );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - equals: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - equals: One or more arguments are missing." );
@@ -502,9 +436,6 @@ void MHybridAutomaton::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - unequals: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - unequals: One or more arguments are missing." );
@@ -517,9 +448,6 @@ void MHybridAutomaton::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief TODO
- **/
 // void MHybridAutomaton::or_operator(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 //     if(nlhs != 1)
 //          mexErrMsgTxt("MHybridAutomaton - or_operator: One output expected.");
@@ -535,31 +463,22 @@ void MHybridAutomaton::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 //     plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(new hypro::HybridAutomaton<double>(temp));
 // }
 
-/**
- * @brief
- **/
-void MHybridAutomaton::plus( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - plus: One output expected." );
-	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - plus: One or more arguments are missing." );
-	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - plus: One or more arguments were ignored." );
+// void MHybridAutomaton::plus( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+	// if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - plus: One output expected." );
+	// if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - plus: One or more arguments are missing." );
+	// if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - plus: One or more arguments were ignored." );
 
-	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[3] );
+	// hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
+	// hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[3] );
 
-	hypro::HybridAutomatonComp<double> temp = *autom + *rhs;
-	plhs[0] = convertPtr2Mat<hypro::HybridAutomatonComp<double>>( new hypro::HybridAutomatonComp<double>( temp ) );
-}
+	// hypro::HybridAutomatonComp<double> temp = *autom + *rhs;
+	// plhs[0] = convertPtr2Mat<hypro::HybridAutomatonComp<double>>( new hypro::HybridAutomatonComp<double>( temp ) );
+// }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO?
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::checkConsistency( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - unequals: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - unequals: One or more arguments are missing." );
@@ -572,9 +491,6 @@ void MHybridAutomaton::checkConsistency( int nlhs, mxArray* plhs[], int nrhs, co
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Get the command string
 	int cmd = mxGetScalar( prhs[1] );
@@ -587,10 +503,10 @@ void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		copy( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	// if (cmd == 4){
-	//     new_loc_init(nlhs, plhs, nrhs, prhs);
-	//     return;
-	// }
+	if (cmd == 4){
+	    new_loc_init(nlhs, plhs, nrhs, prhs);
+	    return;
+	}
 	if ( cmd == 1 ) {
 		delete_autom( nlhs, plhs, nrhs, prhs );
 		return;
@@ -711,9 +627,9 @@ void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	//     or_operator(nlhs, plhs, nrhs, prhs);
 	//     return;
 	// }
-	if ( cmd == 31 ) {
-		plus( nlhs, plhs, nrhs, prhs );
-		return;
-	}
+	// if ( cmd == 31 ) {
+	// 	plus( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
 	mexErrMsgTxt( "MHybridAutomaton - Command not recognized." );
 }

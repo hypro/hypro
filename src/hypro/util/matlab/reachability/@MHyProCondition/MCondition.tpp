@@ -7,6 +7,7 @@ void MCondition::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - new_empty: Expecting an output!" );
 
 	hypro::Condition<double>* cond = new hypro::Condition<double>();
+	mexPrintf("New Condition Addresss %p\n", cond);
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 
@@ -29,6 +30,7 @@ void MCondition::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_dimx, mat_dimy );
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], vec_len );
 	hypro::Condition<double>* cond = new hypro::Condition<double>( matrix, vector );
+	// mexPrintf("Condition Addresss %p\n", cond);
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 

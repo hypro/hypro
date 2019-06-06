@@ -281,12 +281,12 @@ class HybridAutomaton
      * @param[in]  rhs   The right hand side.
      * @return     Return compositional Automata of two Automata.
      */
-    friend HybridAutomatonComp<Number> operator+(const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs) {
-		// HybridAutomatonComp<Number> hac;
-		// hac.addAutomata(lhs);
-		// hac.addAutomata(rhs);
-		// return hac;
-    }
+    // friend HybridAutomatonComp<Number> operator+(const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs) {
+	// 	// HybridAutomatonComp<Number> hac;
+	// 	// hac.addAutomata(lhs);
+	// 	// hac.addAutomata(rhs);
+	// 	// return hac;
+    // }
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>& a)

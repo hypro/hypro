@@ -4,10 +4,8 @@ end
 
 function testHAutomaton(testCase)
 
-%% Test Basic Functionality
-% Automaton for bouncing ball
-
 automaton = MHyProHAutomaton();
+
 loc = MHyProLocation();
 tran = MHyProTransition();
 reset = MHyProReset();
@@ -51,8 +49,49 @@ boxMatrix = [1 0; -1 0; 0 1; 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(loc, initialCond);
 
-automaton.addLocation(loc);
+% Creat new automaton from locations and initial set mapping
 
+loc1 = MHyProLocation();
+loc2 = MHyProLocation();
+locs = {loc1, loc2};
+
+initialState = MHyProCondition();
+initialState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
+initialState.setVector(-1.7);
+initialStates(1).loc = loc1;
+initialStates(1).cond = initialState;
+initialStates(2).loc = loc2;
+initialStates(2).cond = initialState;
+
+automaton = MHyProHAutomaton(locs, initialStates);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tests for getters
+
+% automaton = MHyProHAutomaton();
+% automaton.getLocation_by_name('loc1');
+% disp('Create Location 1');
+% loc1 = MHyProLocation();
+% disp('Create Location 2');
+% loc2 = MHyProLocation();
+% disp('Set name');
+% loc1.setName('loc1');
+% disp('Add location');
+% automaton.addLocation(loc1);
+% disp(['Loc1 object handle: ', num2str(loc1.ObjectHandle)]);
+% disp('Get Location by name');
+% locs = automaton.getLocation_by_name('loc1');
+% disp(['Get handle of the getted location: ', num2str(locs.ObjectHandle)]);
+
+% disp('New invariant:');
+% cond = MHyProCondition();
+% disp('New location');
+% loc1 = MHyProLocation();
+% disp('set invariant');
+% loc1.setInvariant(cond);
+% disp('get invariant');
+% loc1.getInvariant();
 
 % automaton_locs_init
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end

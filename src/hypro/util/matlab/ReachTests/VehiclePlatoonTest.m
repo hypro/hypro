@@ -138,11 +138,26 @@ badStates(1).loc = loc_qc;
 badStates(1).cond = badState;
 badStates(2).loc = loc_qn;
 badStates(2).cond = badState;
+
+badState.setMatrix([1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
+badState.setVector(-1.7);
+
+badStates(3).loc = loc_qc;
+badStates(3).cond = badState;
 automaton.setLocalBadStates(badStates);
 
 % CHECK
 
-% mapping = automaton.getLocalBadStates()
+qcHandle = loc_qc.Handle
+qnHandle = loc_qn.Handle
+condHandle = badState.Handle
+
+mapping = automaton.getLocalBadStates()
+mapping(1).loc.Handle
+assert(qcHandle == mapping(1).loc.Handle);
+assert(condHandle == mapping(1).cond.Handle);
+assert(qnHandle == mapping(2).loc.Handle);
+assert(condHandle == mapping(2).cond.Handle);
 
 
 %-----------------------------------------------%

@@ -1,14 +1,14 @@
 classdef MHyProReach < handle
     
     properties (SetAccess = public, GetAccess = public)
-        Handle
+        ObjectHandle
     end
     
     methods (Access = private)
         
         % Destructor
         function delete(obj)
-            MHyPro(12, 1, obj.Handle);
+            MHyPro(12, 1, obj.ObjectHandle);
         end
         
     end
@@ -18,14 +18,14 @@ classdef MHyProReach < handle
         % Constructor
         function obj = MHyProReach(varargin)
             if nargin == 1 && isa(varargin{1}, 'MHyProHAutomaton')
-                obj.Handle = MHyPro(12, 2, varargin{1}.Handle);
+                obj.ObjectHandle = MHyPro(12, 2, varargin{1}.ObjectHandle);
             else
                 error('MHyProReach - Constructor: Wrong type of at least one argument.');
             end
         end
         
         function out = computeForwardReachability(obj)
-            flowpipes = MHyPro(12, 3, obj.Handle);
+            flowpipes = MHyPro(12, 3, obj.ObjectHandle);
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
                     states = flowpipes(i).flowpipe;
@@ -53,7 +53,7 @@ classdef MHyProReach < handle
                         error(['MHyProReach - setSettings: Unknown field name ', currentField]);
                     end
                 end
-                MHyPro(12, 4, obj.Handle, settings);
+                MHyPro(12, 4, obj.ObjectHandle, settings);
             else
                 error('MHyProReach - setSettings: Wrong type of at least one argument.');
             end       
@@ -62,14 +62,14 @@ classdef MHyProReach < handle
         function setRepresentationType(obj, type)
             % MHyProBox=0, MHyProConstraintSet = 1, MHyProSupportFunction = 2
             if type == 0 || type == 1 || type == 2
-                MHyPro(12, 5, obj.Handle, type);
+                MHyPro(12, 5, obj.ObjectHandle, type);
             else
                 error('MHyProReach - setRepresentationType: Wrong type of at least one argument.');
             end
         end
         
         function settings(obj)
-            MHyPro(12, 6, obj.Handle);
+            MHyPro(12, 6, obj.ObjectHandle);
         end
         
          function plotVertices(obj, vertices, dims)

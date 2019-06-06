@@ -591,7 +591,7 @@ void MGeometricObject<T>::unite_vec( int nlhs, mxArray* plhs[], int nrhs, const 
 	const mwSize* dims;
 	dims = mxGetDimensions( prhs[2] );
 	const int len = dims[1];
-	const std::vector<T> objects = objArray2Hypro<T>( prhs[2], len );
+	const std::vector<T> objects = ObjectHandle::objArray2Hypro<T>( prhs[2], len );
 	T united = T::unite(objects);
 	T* b = new T( united );
 	plhs[0] = convertPtr2Mat<T>( b );

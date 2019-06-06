@@ -1,14 +1,14 @@
 classdef MHyProHAutomaton < handle
     
     properties (SetAccess = public, GetAccess = public)
-        Handle
+        ObjectHandle
     end
     
     methods (Access = private)
         
         % Destructor
         function delete(obj)
-            MHyPro(4, 1, obj.Handle);
+            MHyPro(4, 1, obj.ObjectHandle);
         end
     end
     
@@ -17,32 +17,45 @@ classdef MHyProHAutomaton < handle
         % Constructor
         function obj = MHyProHAutomaton(varargin)
             if nargin == 0
-                obj.Handle = MHyPro(4, 2);
+                obj.ObjectHandle = MHyPro(4, 2);
             elseif nargin == 1
                 if isa(varargin{1}, 'uint64')
-                    obj.Handle = varargin{1};
+                    obj.ObjectHandle = varargin{1};
                 elseif isa(varargin{1}, 'MHyProHAutomaton')
-                    obj.Handle = MHyPro(4, 3, varargin{1}.Handle);
+                    obj.ObjectHandle = MHyPro(4, 3, varargin{1}.ObjectHandle);
                 else
-                    obj.Handle = MHyPro(4, varargin{1});
+                    obj.ObjectHandle = MHyPro(4, varargin{1});
                 end
             elseif nargin == 2
-                % 4
+                %if iscelloftype(varargin{1}, 'MHyProLocation') && isstruct(varargin{2})
+                    numberLocations = length(varargin{1});
+                    locPointers = cell(1, numberLocations);
+                    mappingLen = length(varargin{2});
+                    mapping_ObjectHandles = struct();
+                    for i = 1:numberLocations
+                        locPointers{i} = varargin{1}{i}.ObjectHandle;
+                    end
+                    for i = 1:mappingLen
+                        mapping_ObjectHandles(i).loc = varargin{2}(i).loc.ObjectHandle;
+                        mapping_ObjectHandles(i).cond = varargin{2}(i).cond.ObjectHandle;
+                    end
+                    obj.ObjectHandle = MHyPro(4, 4, locPointers, mapping_ObjectHandles);
+               % end
             elseif nargin == 3
-                obj.Handle = MHyPro(4, varargin{1}, varargin{2}, varargin{3});
+                obj.ObjectHandle = MHyPro(4, varargin{1}, varargin{2}, varargin{3});
             end
         end
                 
         function out = dimension(obj)
-            out = MHyPro(4, 5, obj.Handle);
+            out = MHyPro(4, 5, obj.ObjectHandle);
         end
         
         function out = decompose(obj, vec)
-            out = MHyPro(4, 6, obj.Handle, vec);
+            out = MHyPro(4, 6, obj.ObjectHandle, vec);
         end
         
         function out = getLocations(obj)
-            locations = MHyPro(4, 7, obj.Handle);
+            locations = MHyPro(4, 7, obj.ObjectHandle);
             len = length(locations);
             out = cell(1,len);
             for i = 1:length(len)
@@ -50,35 +63,27 @@ classdef MHyProHAutomaton < handle
             end
         end
         
-        function out = getLocations_by_hash(obj, hash)
+        function out = getLocation_by_hash(obj, hash)
             if isreal(hash)
-                locations = MHyPro(4, 8, obj.Handle, hash);
-                len = length(locations);
-                out = cell(1,len);
-                for i = 1:length(len)
-                    out{i} = MHyProLocation(locations{i});
-                end
+                location = MHyPro(4, 8, obj.ObjectHandle, hash);
+                
             else
                 error('MHyProHAutomaton - getLocations_by_hash: Wrong type of argument.');
         
             end
         end
         
-        function out = getLocations_by_name(obj, name)
-            if isstring(name)
-                locations = MHyPro(4, 9, obj.Handle, name);
-                len = length(locations);
-                out = cell(1,len);
-                for i = 1:length(len)
-                    out{i} = MHyProLocation(locations{i});
-                end
+        function out = getLocation_by_name(obj, name)
+            if ischar(name)
+                location = MHyPro(4, 9, obj.ObjectHandle, name);
+                out = MHyProLocation(location);
             else
                 error('MHyProHAutomaton - getLocations_by_name: Wrong type of argument.');
             end
         end
         
         function out = getTransitions(obj)
-            transitions = MHyPro(4, 10, obj.Handle);
+            transitions = MHyPro(4, 10, obj.ObjectHandle);
             len = length(transitions);
             out = cell(1,len);
             for i = 1:length(len)
@@ -87,41 +92,43 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = getInitialStates(obj)
-           mapping = MHyPro(4, 11, obj.Handle);
+           mapping = MHyPro(4, 11, obj.ObjectHandle);
             len = length(mapping);
-            out = cell(1,len);
-            for i = 1:length(len)
-                out{i}.location = MHyProLocation(mapping(i).location);
-                out{i}.condition = MHyProCondition(mapping(i).condition);
-            end
-        end
-        
-        function out = getLocalBadStates(obj)
-            mapping = MHyPro(4, 12, obj.Handle);
-            len = length(mapping);
-            out = cell(len);
+            out = struct();
             for i = 1:length(len)
                 out(i).loc = MHyProLocation(mapping(i).loc);
                 out(i).cond = MHyProCondition(mapping(i).cond);
             end
         end
         
-        function out = getGlobalBadStates(obj)
-            mapping = MHyPro(4, 13, obj.Handle);
+        function out = getLocalBadStates(obj)
+            mapping = MHyPro(4, 12, obj.ObjectHandle);
             len = length(mapping);
-            out = cell(len);
-            for i = 1:length(len)
+            out = struct();
+            for i = 1:len
+                out(i).loc = MHyProLocation(mapping(i).loc);
+                disp(['loc:', num2str(out(i).loc.ObjectHandle)]);
+                out(i).cond = MHyProCondition(mapping(i).cond);
+                disp(['cond:', num2str(out(i).cond.ObjectHandle)]);
+            end
+        end
+        
+        function out = getGlobalBadStates(obj)
+            mapping = MHyPro(4, 13, obj.ObjectHandle);
+            len = length(mapping);
+            out = struct();
+            for i = 1:len
                 out(i).loc = MHyProLocation(mapping(i).loc);
                 out(i).cond = MHyProCondition(mapping(i).cond);
             end
         end
         
         function out = getVariables(obj)
-            out = MHyPro(4, 14, obj.Handle);
+            out = MHyPro(4, 14, obj.ObjectHandle);
         end
         
         function out = getLables(obj)
-            labels = MHyPro(4, 15, obj.Handle);
+            labels = MHyPro(4, 15, obj.ObjectHandle);
             len = length(labels);
             out = cell(1,len);
             for i = 1:length(len)
@@ -132,38 +139,38 @@ classdef MHyProHAutomaton < handle
         function setLocations(obj, locs)
             if iscell(locs) && isa(locs{0}, 'MHyProLocation')
                 len = lengt(locs);
-                loc_handles = cell(1,len);
+                loc_ObjectHandles = cell(1,len);
                 for i = 1:len
-                    loc_handles{i} = locs{i}.Handle;
+                    loc_ObjectHandles{i} = locs{i}.ObjectHandle;
                 end
-                MHyPro(4, 16, obj.Handle, loc_handles);
+                MHyPro(4, 16, obj.ObjectHandle, loc_ObjectHandles);
             end
         end
         
         function setInitialStates(obj, mapping)
             len = length(mapping);
-            mapping_handles = cell(1,len);
+            mapping_ObjectHandles = struct();
             for i = 1:len
-                mapping_handles{i}.location = mapping{i}.location.Handle;
-                mapping_handles{i}.condition = mapping{i}.condition.Handle;
+                mapping_ObjectHandles(i).loc = mapping(i).loc.ObjectHandle;
+                mapping_ObjectHandles(i).cond = mapping(i).cond.ObjectHandle;
             end
-            MHyPro(4, 17, obj.Handle, mapping_handles);
+            MHyPro(4, 17, obj.ObjectHandle, mapping_ObjectHandles);
         end
         
         function setLocalBadStates(obj, mapping)
             len = length(mapping);
             disp(['Set local: ', num2str(len)]);
             if isstruct(mapping) && len > 0
-                mappingHandles = struct(); 
+                mappingObjectHandles = struct(); 
                 for i = 1:length(mapping)
                     if isa(mapping(i).loc,'MHyProLocation') && isa(mapping(i).cond,'MHyProCondition')
-                        mappingHandles(i).loc = mapping(i).loc.Handle;
-                        mappingHandles(i).cond = mapping(i).cond.Handle;
+                        mappingObjectHandles(i).loc = mapping(i).loc.ObjectHandle;
+                        mappingObjectHandles(i).cond = mapping(i).cond.ObjectHandle;
                     else
                         error('MHyProHAutomaton - setLocalBadStates: Wrong type of an argument.');
                     end
                 end
-                MHyPro(4, 18, obj.Handle, mappingHandles);
+                MHyPro(4, 18, obj.ObjectHandle, mappingObjectHandles);
             else
                 error('MHyProHAutomaton - setLocalBadStates: Wrong type of an argument.');
             end
@@ -172,32 +179,32 @@ classdef MHyProHAutomaton < handle
         function setGlobalBadStates(obj, mapping)
             len = length(mapping);
             if isstruct(mapping) && len > 0
-                mappingHandles = struct();
+                mappingObjectHandles = struct();
                 for i = 1:length(mapping)
                     if isa(mapping(i).loc,'MHyProLocation') && isa(mapping(i).cond, 'MHyProCondition')
-                        mappingHandles(i).loc = mapping(i).loc.Handle;
-                        mappingHandles(i).cond = mapping(i).cond.Handle;
+                        mappingObjectHandles(i).loc = mapping(i).loc.ObjectHandle;
+                        mappingObjectHandles(i).cond = mapping(i).cond.ObjectHandle;
                     else
                         error('MHyProHAutomaton - setLocalBadStates: Wrong type of an argument.');
                     end
                 end
-                MHyPro(4, 19, obj.Handle, mappingHandles);
+                MHyPro(4, 19, obj.ObjectHandle, mappingObjectHandles);
             end
         end
         
         function setVariables(obj, vars)
-            MHyPro(4, 20, obj.Handle);
+            MHyPro(4, 20, obj.ObjectHandle);
         end
         
         function addLocation(obj, loc)
             if isa(loc, 'MHyProLocation')
-                MHyPro(4, 21, obj.Handle, loc.Handle);
+                MHyPro(4, 21, obj.ObjectHandle, loc.ObjectHandle);
             end
         end
         
         function addInitialState(obj, loc, cond)
             if isa(loc, 'MHyProLocation') && isa(cond, 'MHyProCondition')
-                MHyPro(4, 22, obj.Handle, loc.Handle, cond.Handle);
+                MHyPro(4, 22, obj.ObjectHandle, loc.ObjectHandle, cond.ObjectHandle);
             else
                 error('MHyProHAutomaton - addInitialState: Wrong type of an argument.');
             end
@@ -205,7 +212,7 @@ classdef MHyProHAutomaton < handle
         
         function addLocalBadState(obj, loc, cond)
             if isa(loc, 'MHyProLocation') && isa(cond, 'Condition')
-                MHyPro(4, 23, obj.Handle, loc.Handle, cond.Handle);
+                MHyPro(4, 23, obj.ObjectHandle, loc.ObjectHandle, cond.ObjectHandle);
             else
                 error('MHyProHAutomaton - addLocalBadState: Wrong type of an argument.');
             end
@@ -213,35 +220,35 @@ classdef MHyProHAutomaton < handle
         
         function addGlobalBadState(obj, cond)
             if isa(cond, 'Condition')
-                MHyPro(4, 24, obj.Handle, cond.Handle);
+                MHyPro(4, 24, obj.ObjectHandle, cond.ObjectHandle);
             else
                 error('MHyProHAutomaton - addGlobalBadState: Wrong type of an argument.');
             end
         end
         
         function reduce(obj)
-            MHyPro(4, 25, obj.Handle);
+            MHyPro(4, 25, obj.ObjectHandle);
         end
         
         function out = isComposedOf(obj, rhs)
             if isa(rhs, 'MHyProAutomaton')
-                 out = MHyPro(4, 26, obj.Handle, rhs.Handle);
+                 out = MHyPro(4, 26, obj.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - isComposedOf: Wrong type of an argument.');
             end
         end
         
         function out = getDotRepresentation(obj)
-            out = MHyPro(4, 27, obj.Handle);
+            out = MHyPro(4, 27, obj.ObjectHandle);
         end
         
         function out = getStatistics(obj)
-            out = MHyPro(4, 28, obj.Handle);
+            out = MHyPro(4, 28, obj.ObjectHandle);
         end
         
         function out = eq(lhs, rhs)
             if isa(lhs, 4) && isa(rhs, 4)
-                out = MHyPro(4, 29, lhs.Handle, rhs.Handle);
+                out = MHyPro(4, 29, lhs.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - ==: Wrong type of an argument.');
             end
@@ -249,7 +256,7 @@ classdef MHyProHAutomaton < handle
         
         function out = nq(lhs, rhs)
            if isa(lhs, 4) && isa(rhs, 4)
-                out = MHyPro(4, 30, lhs.Handle, rhs.Handle);
+                out = MHyPro(4, 30, lhs.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - !=: Wrong type of an argument.');
             end
@@ -257,7 +264,7 @@ classdef MHyProHAutomaton < handle
         
         function out = plus(lhs, rhs)
             if isa(lhs, 4) && isa(rhs, 4)
-                out = MHyPro(4, 31, lhs.Handle, rhs.Handle);
+                out = MHyPro(4, 31, lhs.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - +: Wrong type of an argument.');
             end

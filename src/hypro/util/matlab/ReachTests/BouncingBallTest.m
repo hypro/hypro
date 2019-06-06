@@ -104,8 +104,8 @@ automaton.addLocation(loc);
 
 % CHECK
 initState = automaton.getInitialStates();
-il = initState{1}.location;
-ic = initState{1}.condition;
+il = initState(1).loc;
+ic = initState(1).cond;
 assert(isequal(il.getName(), loc.getName()));
 assert(isequal(ic.getMatrix(), boxMatrix));
 assert(isequal(ic.getVector(), boxVector));
@@ -121,16 +121,16 @@ assert(isequal(flm, alocfm));
 
 % Reachability
 
-settings = struct('timeStep', 0.001, 'timeBound', 2, 'jumpDepth', 3);
-reach = MHyProReach(automaton);
-reach.setSettings(settings);
-reach.setRepresentationType(0);
-reach.settings();
-
-tic;
-flowpipes = reach.computeForwardReachability();
-time = toc;
-disp(['Time needed: ', num2str(time)]);
-dim = [1 2];
-reach.plot(flowpipes, 0, dim);
+% settings = struct('timeStep', 0.001, 'timeBound', 2, 'jumpDepth', 3);
+% reach = MHyProReach(automaton);
+% reach.setSettings(settings);
+% reach.setRepresentationType(0);
+% reach.settings();
+% 
+% tic;
+% flowpipes = reach.computeForwardReachability();
+% time = toc;
+% disp(['Time needed: ', num2str(time)]);
+% dim = [1 2];
+% reach.plot(flowpipes, 0, dim);
 end
