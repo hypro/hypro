@@ -69,10 +69,9 @@ classdef MHyProLocation < handle
             end
         end
         
-        function blub = getInvariant(obj)
-            out = 1;
-            blub = MHyPro(6, 9, obj.ObjectHandle);
-            %out = MHyProCondition(ptr);
+        function out = getInvariant(obj)
+            ptr = MHyPro(6, 9, obj.ObjectHandle);
+            out = MHyProCondition(ptr);
         end
         
         function out = getTransitions(obj)

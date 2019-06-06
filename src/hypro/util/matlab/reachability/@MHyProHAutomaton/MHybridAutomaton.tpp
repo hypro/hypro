@@ -128,23 +128,31 @@ void MHybridAutomaton::getLocation_by_hash( int nlhs, mxArray* plhs[], int nrhs,
 }
 
 void MHybridAutomaton::getLocation_by_name( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One output expected." );
+	// if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - getLocation_by_name: One or more arguments were ignored." );
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	// char name[64];
-	// mxGetString( prhs[3], name, sizeof( name ) );
-	// hypro::Location<double>* loc = autom->getLocation( name );
-	// mexPrintf("getLocation loc Addresss %p\n", loc);
-	// plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *loc ) );
-
-	hypro::Location<double>* loc = new hypro::Location<double>();
-	loc->setName("loc1");
-	mexPrintf("Address of new location: %p\n", loc);
-	autom->addLocation(*loc);
+	//char name[64];
+	//mxGetString( prhs[3], name, sizeof( name ) );
+	//hypro::Location<double>* loc = autom->getLocation( name );
+	//mexPrintf("getLocation loc Addresss %p\n", loc);
+	//plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
+	hypro::Location<double>* loc1 = new hypro::Location<double>();
+	mexPrintf("getLocation loc1 Addresss %p\n", loc1);
+	loc1->setName("loc1");
+	
+	std::vector<std::unique_ptr<hypro::Location<double>>> locs_ptr;
+	std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>( *loc1 );
+	locs_ptr.emplace_back( std::move( loc ) );
+	autom->setLocations( std::move( locs_ptr ) );
 	hypro::Location<double>* loc2 = autom->getLocation("loc1");
-	mexPrintf("Address of the location: %p\n", loc2);
+	mexPrintf("getLocation loc2 Addresss %p\n", loc2);
+	loc2->setName("newName");
+	std::string name = loc1->getName();
+	mexPrintf("loc1 name after loc2 changed its: %s\n", name.c_str());
+	// plhs[0] = convertPtr2Mat<hypro::Location<double>>(loc1);
+	// plhs[1] = convertPtr2Mat<hypro::Location<double>>(loc2);
 }
 
 void MHybridAutomaton::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

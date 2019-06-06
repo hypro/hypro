@@ -66,6 +66,7 @@ classdef MHyProHAutomaton < handle
         function out = getLocation_by_hash(obj, hash)
             if isreal(hash)
                 location = MHyPro(4, 8, obj.ObjectHandle, hash);
+                out = MHyProLocation(location);
                 
             else
                 error('MHyProHAutomaton - getLocations_by_hash: Wrong type of argument.');
@@ -75,8 +76,8 @@ classdef MHyProHAutomaton < handle
         
         function out = getLocation_by_name(obj, name)
             if ischar(name)
-                location = MHyPro(4, 9, obj.ObjectHandle, name);
-                out = MHyProLocation(location);
+                [location1, location2] = MHyPro(4, 9, obj.ObjectHandle, name);
+                out = [MHyProLocation(location1), MHyProLocation(location2)];
             else
                 error('MHyProHAutomaton - getLocations_by_name: Wrong type of argument.');
             end

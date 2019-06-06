@@ -141,9 +141,8 @@ void MLocation::getInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	mexPrintf("get invariant location Addresss %p\n", cond);
 	hypro::Condition<double>* address = &cond;
 	mexPrintf("get invariant condition Addresss %p\n", address);
-	//plhs[0] = convertPtr2Mat<hypro::Condition<double>>( new hypro::Condition<double>( cond ) );
-	plhs[0] = convertPtr2Mat<hypro::Condition<double>>(address);
-	mexPrintf("plhs[0]: %f\n", plhs[0]);
+	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( new hypro::Condition<double>( cond ) );
+	//plhs[0] = convertPtr2Mat<hypro::Condition<double>>(address);
 }
 
 /**
