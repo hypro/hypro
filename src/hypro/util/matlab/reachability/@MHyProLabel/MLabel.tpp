@@ -110,7 +110,6 @@ void MLabel::less(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 }
 
 void MLabel::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    // Get the command string
     int cmd = mxGetScalar(prhs[1]);
 
     if(cmd == 2){

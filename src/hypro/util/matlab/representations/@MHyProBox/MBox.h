@@ -1,3 +1,7 @@
+/*
+ * Wrapper class for boxes.
+ */
+
 #pragma once
 
 #include "../../handles/ClassHandle.h"

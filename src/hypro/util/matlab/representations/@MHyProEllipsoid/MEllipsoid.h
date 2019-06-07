@@ -1,3 +1,7 @@
+/*
+ * Wrapper class for ellipsoids.
+ */
+
 #pragma once
 
 #include "../@MHyProGeometricObject/MGeometricObject.h"

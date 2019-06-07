@@ -1,3 +1,6 @@
+/*
+*   Wrapper class for transition.
+*/
 #pragma once
 
 #include "mex.h"

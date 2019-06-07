@@ -1,15 +1,15 @@
+/*
+*   Wrapper class for state.
+*/
+
+
 #pragma once
 
-// #include <iostream>
 #include "mex.h"
 #include "matrix.h"
 #include "../../handles/ClassHandle.h"
 #include "../../handles/ObjectHandle.h"
 #include "../../../../datastructures/HybridAutomaton/State.h"
-// #include "../../../../representations/types.h"
-// #include "../../../../representations/GeometricObject.h"
-// #include <carl/util/tuple_util.h>
-// #include <carl/interval/Interval.h>
 
 class MState{
     public:

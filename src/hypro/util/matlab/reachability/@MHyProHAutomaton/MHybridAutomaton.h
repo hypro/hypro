@@ -1,3 +1,7 @@
+/*
+*   Wrapper class for hybrid automata.
+*/
+
 #pragma once
 
 #include "mex.h"

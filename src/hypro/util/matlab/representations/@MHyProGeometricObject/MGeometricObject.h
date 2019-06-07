@@ -1,3 +1,8 @@
+/*
+ * Super class for all wrapped representations implementing
+ * common functions.
+ */
+
 #pragma once
 
 #include <iostream>

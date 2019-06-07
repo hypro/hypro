@@ -1,8 +1,5 @@
 #include "MConstraintSet.h"
 
-/**
- * @brief Creates an empty constraint set
- **/
 void MConstraintSet::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MConstraintSet - new_empty: One output expected." );
 	if ( nrhs > 2 ) mexWarnMsgTxt( "MConstraintSet - new_empty: One or more input arguments were ignored." );
@@ -10,9 +7,6 @@ void MConstraintSet::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( new hypro::ConstraintSet<double> );
 }
 
-/**
- * @brief
- **/
 void MConstraintSet::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MConstraintSet - isAxisAligned: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MConstraintSet - isAxisAligned: One argument missing!" );
@@ -23,9 +17,6 @@ void MConstraintSet::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const m
 	plhs[0] = mxCreateLogicalScalar( empty );
 }
 
-/**
- * @brief
- **/
 void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MConstraintSet - addConstraint: One or more arguments are missing!" );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MConstraintSet - addConstraint: One or more input arguments were ignored." );
@@ -44,18 +35,12 @@ void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const m
 	temp->addConstraint( hy_vec, offset );
 }
 
-/**
- * @brief
- **/
 void MConstraintSet::type( int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MConstraintSet - type: Expecting one output value!" );
 	std::string ans = "MHyProConstraintSet";
 	plhs[0] = mxCreateString( ans.c_str() );
 }
 
-/**
- * @brief
- **/
 void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "HyProConstraintSet - reduceNumberRepresentation: Expecting an output!" );
 	if ( nrhs < 4 )
@@ -117,13 +102,6 @@ void MConstraintSet::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, 
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
 }
 
-
-
-
-
-// /**
-//  * @brief
-//  **/
 // template<typename From, typename To, typename S>
 // void MConstraintSet::convert(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 //     if(nlhs != 1)
@@ -152,7 +130,6 @@ void MConstraintSet::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, 
  * @param prhs Array of mxArray pointers to the input variables
  **/
 void MConstraintSet::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// Get the command string
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 15 ) {

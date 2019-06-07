@@ -1,3 +1,11 @@
+
+/* 
+*   This file implements the gateway function 'mexFunction' which
+*   allow the communication between Matlab and HyPro. This file
+*   has to be compiled by Matlab.
+*/
+
+
 #include "representations/@MHyProBox/MBox.h"
 #include "representations/@MHyProConstraintSet/MConstraintSet.h"
 #include "representations/@MHyProEllipsoid/MEllipsoid.h"
@@ -16,6 +24,15 @@
 #include "mex.h"
 #include "matrix.h"
 
+/*
+@brief This function is the gateway function to Matlab.
+@param nlhs Number of output arguments
+@param plhs Pointer to mex array that will contain various
+            output arguments that will be passed to Matlab
+@param nrhs Number of input arguments passed by Matlab
+@param prhs Pointer to mex array containing different
+            input arguments from wrapped functions in Matlab
+*/
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     // Get type of the Matlab object

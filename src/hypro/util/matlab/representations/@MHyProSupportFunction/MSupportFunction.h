@@ -1,3 +1,7 @@
+/*
+ * Wrapper class for support functions.
+ */
+
 #pragma once
 
 #include "../@MHyProGeometricObject/MGeometricObject.h"

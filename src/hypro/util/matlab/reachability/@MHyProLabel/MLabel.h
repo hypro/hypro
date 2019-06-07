@@ -1,3 +1,7 @@
+/*
+*   Wrapper class for label.
+*/
+
 #pragma once
 
 #include "../../../../datastructures/HybridAutomaton/Label.h"

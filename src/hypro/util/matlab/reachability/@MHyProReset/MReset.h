@@ -1,3 +1,7 @@
+/*
+*   Wrapper class for reset.
+*/
+
 #pragma once
 
 #include "../../../../types.h"

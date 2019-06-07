@@ -1,8 +1,5 @@
 #include "MAffineFlow.h"
 
-/**
-* @brief
-**/
 void MAffineFlow::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MAffineFlow - new_mat_vec: Expecting an output.");
@@ -25,9 +22,6 @@ void MAffineFlow::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray
     plhs[0] = convertPtr2Mat<hypro::affineFlow<double>>(new hypro::affineFlow<double>(matrix, vector));
 }
 
-/**
-* @brief
-**/
 void MAffineFlow::setTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 4)
         mexErrMsgTxt("MAffineFlow - setTranslation: One or more arguments are missing.");
@@ -45,10 +39,6 @@ void MAffineFlow::setTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     flow->setTranslation(vector);
 }
 
-
-/**
-* @brief
-**/
 void MAffineFlow::getTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MAffineFlow - getTranslation: Expecting an output.");
@@ -64,10 +54,6 @@ void MAffineFlow::getTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     ObjectHandle::convert2Matlab(vector, plhs[0], vector.size(), 1);
 }
 
-
-/**
-* @brief
-**/
 void MAffineFlow::hasTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MAffineFlow - hasTranslation: Expecting an output.");
@@ -81,18 +67,11 @@ void MAffineFlow::hasTranslation(int nlhs, mxArray* plhs[], int nrhs, const mxAr
     plhs[0] = mxCreateLogicalScalar(ans);
 }
 
-/**
-* @brief
-**/
 void MAffineFlow::outstream(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     //TODO
 }
 
-/**
-* @brief
-**/
 void MAffineFlow::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-// Get the command string
     int cmd = mxGetScalar(prhs[1]);
 
     if (cmd == 2){  

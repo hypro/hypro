@@ -1,3 +1,7 @@
+/*
+*   Wrapper class for location.
+*/
+
 #pragma once
 
 #include "mex.h"

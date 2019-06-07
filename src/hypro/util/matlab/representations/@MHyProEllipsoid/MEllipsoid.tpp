@@ -1,8 +1,5 @@
 #include "MEllipsoid.h"
 
-/**
- * @brief
- **/
 void MEllipsoid::ellipsoid_rad( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MEllipsoid - ellipsoid_rad: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MEllipsoid - ellipsoid_rad: One or more arguments are missing!" );
@@ -14,9 +11,6 @@ void MEllipsoid::ellipsoid_rad( int nlhs, mxArray *plhs[], int nrhs, const mxArr
 	plhs[0] = convertPtr2Mat<hypro::Ellipsoid<double>>( new hypro::Ellipsoid<double>( radius, dim ) );
 }
 
-/**
- * @brief
- **/
 void MEllipsoid::approxEllipsoidTMatrix( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MEllipsoid - approxEllipsoidTMatrix: Expecting one output value!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MEllipsoid - approxEllipsoidTMatrix: One or more arguments are missing!" );
@@ -36,9 +30,6 @@ void MEllipsoid::approxEllipsoidTMatrix( int nlhs, mxArray *plhs[], int nrhs, co
 	ObjectHandle::convert2Matlab( out_mat, plhs[0], out_mat.cols(), out_mat.rows() );
 }
 
-/**
- * @brief
- **/
 void MEllipsoid::ostream( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MEllipsoid - ostream: One or more input arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MEllipsoid - ostream: One or more input arguments were ignored." );
@@ -59,9 +50,6 @@ void MEllipsoid::ostream( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	mexPrintf( "]\n" );
 }
 
-/**
- * @brief
- **/
 void MEllipsoid::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MEllipsoid - type: Expecting one output value!" );
 	std::string ans = "MHyProEllipsoid";
@@ -76,7 +64,7 @@ void MEllipsoid::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[]
  * @param prhs Array of mxArray pointers to the input variables
  **/
 void MEllipsoid::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-	// Get the command string
+	
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 17 ) {

@@ -1,8 +1,5 @@
 #include "MLocation.h"
 
-/**
- * @brief
- **/
 void MLocation::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - new_empty: Expecting an output." );
 
@@ -11,9 +8,6 @@ void MLocation::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 }
 
-/**
- * @brief
- **/
 void MLocation::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - new_matrix: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - new_matrix: One or more arguments are missing." );
@@ -32,9 +26,6 @@ void MLocation::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 }
 
-/**
- * @brief
- **/
 void MLocation::new_mat_tran_inv( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHyProLocation - new_mat_tran_inv: Expecting an output!" );
 	if ( nrhs < 5 ) mexErrMsgTxt( "MHyProLocation - new_mat_tran_inv: One or more arguments are missing!" );
@@ -64,9 +55,6 @@ void MLocation::new_mat_tran_inv( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 }
 
-/**
- * @brief
- **/
 void MLocation::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - copy: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - copy: One or more arguments are missing." );
@@ -76,18 +64,12 @@ void MLocation::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *origin ) );
 }
 
-/**
- * @brief
- **/
 void MLocation::delete_loc( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - delete_loc: Expecting an output." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MLocation - delete_loc: One or more arguments were ignored." );
 	destroyObject<hypro::Location<double>>( prhs[2] );
 }
 
-/**
- * @brief
- **/
 void MLocation::getNumberFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getNumberFlow: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getNumberFlow: One or more arguments are missing." );
@@ -98,9 +80,6 @@ void MLocation::getNumberFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	plhs[0] = mxCreateDoubleScalar( num );
 }
 
-/**
- * @brief
- **/
 void MLocation::getLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getLinearFlow: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getLinearFlow: One or more arguments are missing." );
@@ -111,9 +90,6 @@ void MLocation::getLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	plhs[0] = convertPtr2Mat<hypro::linearFlow<double>>( new hypro::linearFlow<double>( flow ) );
 }
 
-/**
- * @brief
- **/
 void MLocation::getLinearFlows( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getLinearFlows: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getLinearFlows: One or more arguments are missing." );
@@ -127,9 +103,6 @@ void MLocation::getLinearFlows( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	objArray2Matlab( flows, plhs[0], len );
 }
 
-/**
- * @brief
- **/
 void MLocation::getInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getInvariant: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getInvariant: One or more arguments are missing." );
@@ -145,9 +118,6 @@ void MLocation::getInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	//plhs[0] = convertPtr2Mat<hypro::Condition<double>>(address);
 }
 
-/**
- * @brief
- **/
 void MLocation::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getTransitions: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getTransitions: One or more arguments are missing." );
@@ -168,9 +138,6 @@ void MLocation::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	objArray2Matlab( transitions, plhs[0], len );
 }
 
-/**
- * @brief
- **/
 void MLocation::getExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getExternalInput: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getExternalInput: One or more arguments are missing." );
@@ -182,9 +149,6 @@ void MLocation::getExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	vector2Matlab<carl::Interval<double>>( input, plhs[0] );
 }
 
-/**
- * @brief
- **/
 void MLocation::hasExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - hasExternalInput: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - hasExternalInput: One or more arguments are missing." );
@@ -195,9 +159,6 @@ void MLocation::hasExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MLocation::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - hash: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - hash: One or more arguments are missing." );
@@ -208,9 +169,6 @@ void MLocation::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	plhs[0] = mxCreateDoubleScalar( h );
 }
 
-/**
- * @brief
- **/
 void MLocation::getName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - getName: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - getName: One or more arguments are missing." );
@@ -221,9 +179,6 @@ void MLocation::getName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	plhs[0] = mxCreateString( name.c_str() );
 }
 
-/**
- * @brief
- **/
 void MLocation::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - dimension: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - dimension: One or more arguments are missing." );
@@ -234,9 +189,6 @@ void MLocation::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	plhs[0] = mxCreateDoubleScalar( h );
 }
 
-/**
- * @brief
- **/
 void MLocation::dimension_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - dimension_at: Expecting an output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - dimension_at: One or more arguments are missing." );
@@ -248,9 +200,6 @@ void MLocation::dimension_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	plhs[0] = mxCreateDoubleScalar( h );
 }
 
-/**
- * @brief
- **/
 void MLocation::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - setName: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - setName: One or more arguments were ignored." );
@@ -261,9 +210,6 @@ void MLocation::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	loc->setName( std::string( name ) );
 }
 
-/**
- * @brief
- **/
 void MLocation::setFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - setFlow: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - setFlow: One or more arguments were ignored." );
@@ -282,9 +228,6 @@ void MLocation::setFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	loc->setFlow( mat );
 }
 
-/**
- * @brief
- **/
 void MLocation::setLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MLocation - setLinearFlow: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexErrMsgTxt( "MLocation - setLinearFlow: One or more arguments were ignored." );
@@ -295,9 +238,6 @@ void MLocation::setLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	loc->setLinearFlow( *flow, i );
 }
 
-/**
- * @brief
- **/
 void MLocation::setLinearFlow_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - setFlow_vec: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - setFlow_vec: One or more arguments were ignored." );
@@ -312,9 +252,6 @@ void MLocation::setLinearFlow_vec( int nlhs, mxArray* plhs[], int nrhs, const mx
 	loc->setLinearFlow( flows );
 }
 
-/**
- * @brief
- **/
 void MLocation::setInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - setInvariant: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - setInvariant: One or more arguments were ignored." );
@@ -325,9 +262,6 @@ void MLocation::setInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	loc->setInvariant( *cond );
 }
 
-/**
- * @brief
- **/
 // void MLocation::setTransition(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
 //     if(nrhs < 4)
 //          mexErrMsgTxt("MLocation - setTransition: One or more arguments are missing.");
@@ -339,9 +273,6 @@ void MLocation::setInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 //     loc->setTransition(*tran);
 // }
 
-/**
- * @brief
- **/
 void MLocation::addTransition( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - addTransition: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - addTransition: One or more arguments were ignored." );
@@ -352,9 +283,6 @@ void MLocation::addTransition( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	loc->addTransition( std::move( tran ) );
 }
 
-/**
- * @brief
- **/
 void MLocation::setExtInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - setExtInput: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MLocation - setExtInput: One or more arguments were ignored." );
@@ -371,9 +299,6 @@ void MLocation::setExtInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	loc->setExtInput( ints );
 }
 
-/**
- * @brief
- **/
 void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - isComposedOf: Expecting an output!" );
 	if ( nrhs < 6 ) mexErrMsgTxt( "MLocation - isComposedOf: One or more arguments are missing!" );
@@ -394,9 +319,6 @@ void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	// plhs[0] = mxCreateLogicalScalar(ans); ---> ?
 }
 
-/**
- * @brief THIS IS CORRECT BUT CANNOT BE USED NOW
- **/
 // void MLocation::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
 //     if(nlhs != 1)
 //         mexErrMsgTxt("MLocation - getDotRepresentation: Expecting an output!");
@@ -416,16 +338,10 @@ void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 //     plhs[0] = mxCreateString(rep.c_str());
 // }
 
-/**
- * @brief
- **/
 void MLocation::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO
 }
 
-/**
- * @brief
- **/
 void MLocation::less( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - less: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - less: One or more arguments are missing!" );
@@ -439,9 +355,6 @@ void MLocation::less( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MLocation::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - equals: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - equals: One or more arguments are missing!" );
@@ -455,9 +368,6 @@ void MLocation::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MLocation::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MLocation - unequals: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MLocation - unequals: One or more arguments are missing!" );
@@ -471,18 +381,11 @@ void MLocation::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MLocation::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO
 }
 
-/**
- * @brief
- **/
 void MLocation::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// Get the command string
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 2 ) {

@@ -1,3 +1,8 @@
+/*
+*   Wrapper class for linear flow.
+*/
+
+
 #pragma once
 
 #include "../../../../types.h"

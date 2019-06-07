@@ -8,10 +8,6 @@ void MGeometricObject<T>::new_empty( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = convertPtr2Mat<T>( new T() );
 }
 
-
-/**
- * @brief Constructs a HyPro geometric object using a matrix
- **/
 template <typename T>
 void MGeometricObject<T>::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - new_matrix: Expecting an output!" );
@@ -29,9 +25,6 @@ void MGeometricObject<T>::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const
 	plhs[0] = convertPtr2Mat<T>( new T( matrix ) );
 }
 
-/**
- * @brief Constructs a HyPro geometric object using a vector
- **/
 template <typename T>
 void MGeometricObject<T>::new_vector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - new_vector: Expecting an output!" );
@@ -41,11 +34,6 @@ void MGeometricObject<T>::new_vector( int nlhs, mxArray* plhs[], int nrhs, const
 	double* in_vector;
 	const mwSize* vec_dims;
 	int len;
-	// vec_dims = mxGetDimensions( prhs[3] );
-	// len = (int)vec_dims[0];
-
-	// hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
-
 	vec_dims = mxGetDimensions(prhs[2]);
 	len = (int)vec_dims[0];
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[2], len );
@@ -55,9 +43,6 @@ void MGeometricObject<T>::new_vector( int nlhs, mxArray* plhs[], int nrhs, const
 	plhs[0] = convertPtr2Mat<T>( temp );
 }
 
-/**
- * @brief Copy constructor
- **/
 template <typename T>
 void MGeometricObject<T>::copyObj( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - copyObj: One output expected." );
@@ -68,9 +53,6 @@ void MGeometricObject<T>::copyObj( int nlhs, mxArray* plhs[], int nrhs, const mx
 	plhs[0] = convertPtr2Mat<T>( new T( *origin ) );
 }
 
-/**
- * @brief Constructs a HyPro geometric object using a matrix and a vector
- **/
 template <typename T>
 void MGeometricObject<T>::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - new_mat_vec: Expecting an output!" );
@@ -90,9 +72,6 @@ void MGeometricObject<T>::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, cons
 	plhs[0] = convertPtr2Mat<T>( new T( matrix, vector ) );
 }
 
-/**
- * @brief Destructor
- **/
 template <class T>
 void MGeometricObject<T>::deleteObject( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MGeometricObject - deleteObject: One or more arguments are missing." );
@@ -101,9 +80,6 @@ void MGeometricObject<T>::deleteObject( int nlhs, mxArray* plhs[], int nrhs, con
 	destroyObject<T>( prhs[2] );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::matrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - matrix: One output expected!" );
@@ -120,9 +96,6 @@ void MGeometricObject<T>::matrix( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	ObjectHandle::convert2Matlab( mat, plhs[0], rows, cols );
 }
 
-/**
- * @brief Scaling operator.
- **/
 template <class T>
 void MGeometricObject<T>::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - scale: Expecting an output!" );
@@ -136,9 +109,6 @@ void MGeometricObject<T>::scale( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::vector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - vector: One output expected!" );
@@ -151,9 +121,6 @@ void MGeometricObject<T>::vector( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	ObjectHandle::convert2Matlab( vec, plhs[0], vec.size(), 1 );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::is_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - isEmpty: Expecting an output!" );
@@ -166,9 +133,6 @@ void MGeometricObject<T>::is_empty( int nlhs, mxArray* plhs[], int nrhs, const m
 	plhs[0] = mxCreateLogicalScalar( empty );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if(nlhs != 1)
@@ -189,9 +153,6 @@ void MGeometricObject<T>::vertices( int nlhs, mxArray* plhs[], int nrhs, const m
 	}
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::equal( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - ==: Expecting an output!" );
@@ -207,9 +168,6 @@ void MGeometricObject<T>::equal( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::unequal( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - !=: Expecting an output!" );
@@ -225,9 +183,6 @@ void MGeometricObject<T>::unequal( int nlhs, mxArray* plhs[], int nrhs, const mx
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief Method returning the supremum point of the box, i.e. the maximal point.
- **/
 template <class T>
 void MGeometricObject<T>::supremum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - supremum: Expecting an output!" );
@@ -239,9 +194,6 @@ void MGeometricObject<T>::supremum( int nlhs, mxArray* plhs[], int nrhs, const m
 	plhs[0] = mxCreateDoubleScalar( supremum );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - dimension: Expecting an output!" );
@@ -253,9 +205,6 @@ void MGeometricObject<T>::dimension( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::removeRedundancy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MGeometricObject - removeRedundancy: One or more arguments are missing!" );
@@ -265,9 +214,6 @@ void MGeometricObject<T>::removeRedundancy( int nlhs, mxArray* plhs[], int nrhs,
 	temp->removeRedundancy();
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - size: Expecting an output!" );
@@ -280,9 +226,6 @@ void MGeometricObject<T>::size( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - reduceNumberRepresentation: Expecting an output!" );
@@ -296,9 +239,6 @@ void MGeometricObject<T>::reduceNumberRepresentation( int nlhs, mxArray* plhs[],
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::satisfiesHalfspace( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 2 ) mexErrMsgTxt( "MGeometricObject - satisfiesHalfspace: Expecting two output values!" );
@@ -326,9 +266,6 @@ void MGeometricObject<T>::satisfiesHalfspace( int nlhs, mxArray* plhs[], int nrh
 	plhs[1] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::satisfiesHalfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 2 ) mexErrMsgTxt( "MGeometricObject - satisfiesHalfspaces: Expecting two output values!" );
@@ -358,9 +295,6 @@ void MGeometricObject<T>::satisfiesHalfspaces( int nlhs, mxArray* plhs[], int nr
 	plhs[1] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - project: Expecting one output value!" );
@@ -384,9 +318,6 @@ void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mx
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: Expecting one output value!" );
@@ -409,9 +340,6 @@ void MGeometricObject<T>::linearTransformation( int nlhs, mxArray* plhs[], int n
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::affineTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - affineTransformation: Expecting one output value!" );
@@ -438,9 +366,6 @@ void MGeometricObject<T>::affineTransformation( int nlhs, mxArray* plhs[], int n
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - minkowskiSum: Expecting one output value!" );
@@ -455,9 +380,6 @@ void MGeometricObject<T>::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, con
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::intersect( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - intersect: Expecting one output value!" );
@@ -471,9 +393,6 @@ void MGeometricObject<T>::intersect( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::intersectHalfspace( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - intersectHalfspace: Expecting two output values!" );
@@ -498,9 +417,6 @@ void MGeometricObject<T>::intersectHalfspace( int nlhs, mxArray* plhs[], int nrh
 	plhs[0] = convertPtr2Mat<T>( inter );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::intersectHalfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - intersectHalfspaces: Expecting one output value!" );
@@ -527,9 +443,6 @@ void MGeometricObject<T>::intersectHalfspaces( int nlhs, mxArray* plhs[], int nr
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::contains_point( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - contains_point: Expecting one output value!" );
@@ -546,9 +459,6 @@ void MGeometricObject<T>::contains_point( int nlhs, mxArray* plhs[], int nrhs, c
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::contains_object( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - contains_box: Expecting one output value!" );
@@ -562,9 +472,6 @@ void MGeometricObject<T>::contains_object( int nlhs, mxArray* plhs[], int nrhs, 
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::unite_single( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - unite_single: Expecting one output value!" );
@@ -579,9 +486,6 @@ void MGeometricObject<T>::unite_single( int nlhs, mxArray* plhs[], int nrhs, con
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::unite_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - unite_vec: Expecting one output value!" );
@@ -597,9 +501,6 @@ void MGeometricObject<T>::unite_vec( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = convertPtr2Mat<T>( b );
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::reduceRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MGeometricObject - reduceRepresentation: One or more arguments are missing!" );
@@ -610,9 +511,6 @@ void MGeometricObject<T>::reduceRepresentation( int nlhs, mxArray* plhs[], int n
 	obj->reduceRepresentation();
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::clear( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MGeometricObject - clear: One or more arguments are missing!" );
@@ -622,13 +520,10 @@ void MGeometricObject<T>::clear( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	obj->clear();
 }
 
-/**
- * @brief
- **/
 template <class T>
 void MGeometricObject<T>::ostream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nrhs < 3 ) mexErrMsgTxt( "HyProEllipsoid - ostream: One or more input arguments are missing." );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MGeometricObject - ostream: One or more input arguments were ignored." );
+	if ( nrhs < 3 ) mexErrMsgTxt( "HyProGeometricObject - ostream: One or more input arguments are missing." );
+	if ( nrhs > 3 ) mexWarnMsgTxt( "HyProGeometricObject - ostream: One or more input arguments were ignored." );
 
 	T* obj = convertMat2Ptr<T>( prhs[2] );
 	hypro::matrix_t<double> mat = obj->matrix();

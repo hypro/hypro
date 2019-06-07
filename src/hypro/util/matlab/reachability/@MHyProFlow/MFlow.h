@@ -1,3 +1,7 @@
+/*
+*   Super class for flows.
+*/
+
 #pragma once
 
 #include "../../../../types.h"

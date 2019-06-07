@@ -1,3 +1,7 @@
+/*
+*   Wrapper class for reach.
+*/
+
 #pragma once
 
 #include "mex.h"

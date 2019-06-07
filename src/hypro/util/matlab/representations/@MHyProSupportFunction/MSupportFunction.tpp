@@ -1,8 +1,5 @@
 #include "MSupportFunction.h"
 
-/**
- * @brief
- **/
 void MSupportFunction::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - new_empty: One output expected." );
 	if ( nrhs > 2 ) mexWarnMsgTxt( "MSupportFunction - new_empty: One or more input arguments were ignored." );
@@ -10,9 +7,6 @@ void MSupportFunction::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double> );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::new_points( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - new_points: One output is expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - new_points: At least one argument is missing." );
@@ -32,9 +26,6 @@ void MSupportFunction::new_points( int nlhs, mxArray* plhs[], int nrhs, const mx
 	// plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - new_intervals: One output is expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - new_intervals: At least one argument is missing." );
@@ -49,9 +40,6 @@ void MSupportFunction::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( intervals ) );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::new_halfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - new_halfspaces: One output is expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MSupportFunction - new_halfspaces: At least one argument is missing." );
@@ -74,9 +62,7 @@ void MSupportFunction::new_halfspaces( int nlhs, mxArray* plhs[], int nrhs, cons
 		  ObjectHandle::mHalfspaces2Hypro( m_in_matrix, m_in_vector, mat_rows, mat_cols, vec_len );
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( halfspaces ) );
 }
-/**
- * @brief
- **/
+
 void MSupportFunction::cleanUp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MSupportFunction - cleanUp: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - cleanUp: One or more arguments are missing!" );
@@ -86,9 +72,6 @@ void MSupportFunction::cleanUp( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	temp->cleanUp();
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::depth( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MSupportFunction - depth: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - depth: One or more arguments are missing!" );
@@ -99,9 +82,6 @@ void MSupportFunction::depth( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	plhs[0] = mxCreateDoubleScalar( depth );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::operationCount( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - operationCount: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - operationCount: One or more arguments are missing!" );
@@ -112,18 +92,12 @@ void MSupportFunction::operationCount( int nlhs, mxArray* plhs[], int nrhs, cons
 	plhs[0] = mxCreateDoubleScalar( count );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::type( int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - type: Expecting one output value!" );
 	std::string ans = "MHyProSupportFunction";
 	plhs[0] = mxCreateString( ans.c_str() );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::contains_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - contains_vector: Expecting one output value!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MSupportFunction - contains_vector: One or more arguments are missing!" );
@@ -141,9 +115,6 @@ void MSupportFunction::contains_vec( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::contains_dir( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MSupportFunction - contains_dir: Expecting one output value!" );
 	if ( nrhs < 5 ) mexErrMsgTxt( "MSupportFunction - contains_dir: One or more arguments are missing!" );
@@ -157,9 +128,6 @@ void MSupportFunction::contains_dir( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MSupportFunction - scale: Expecting one output value!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MSupportFunction - scale: One or more arguments are missing!" );
@@ -173,9 +141,6 @@ void MSupportFunction::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( b );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::swap( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MSupportFunction - swap: One or more arguments are missing!" );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MSupportFunction - swap: At least one argument were ignored." );
@@ -187,9 +152,6 @@ void MSupportFunction::swap( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	origin->swap( *sfct_1, *sfct_2 );
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::forceLinTransReduction( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - forcedLinTransReduction: One or more arguments are missing!" );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MSupportFunction - forcedLinTransReduction: At least one argument were ignored." );
@@ -198,9 +160,6 @@ void MSupportFunction::forceLinTransReduction( int nlhs, mxArray* plhs[], int nr
 	sfct->forceLinTransReduction();
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::collectProjections( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - collectProjections: Expecting one output value!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - collectProjections: One or more arguments are missing!" );
@@ -219,9 +178,6 @@ void MSupportFunction::collectProjections( int nlhs, mxArray* plhs[], int nrhs, 
 	}
 }
 
-/**
- * @brief
- **/
 void MSupportFunction::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MSupportFunction - reduceNumberRepresentation: One or more arguments are missing!" );
 	if ( nrhs > 3 )
@@ -231,19 +187,14 @@ void MSupportFunction::reduceNumberRepresentation( int nlhs, mxArray* plhs[], in
 	temp->reduceNumberRepresentation();
 }
 
-/**
+/*
  * @brief The entry point to the HyPro Support Function class for Matalb.
  * @param nlhs Number of items in plhs
  * @param plhs Array of mxArray pointers to the output variables
  * @param nrhs Number of items in prhs
  * @param prhs Array of mxArray pointers to the input variables
- **/
+ */
 void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// Get the command number
-
-	/***************************************************************************
-	 * Constructors
-	 **************************************************************************/
 
 	int cmd = mxGetScalar( prhs[1] );
 

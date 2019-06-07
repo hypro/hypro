@@ -1,3 +1,7 @@
+/*
+ * Wrapper class for constraint set.
+ */
+
 #pragma once
 
 #include "../@MHyProGeometricObject/MGeometricObject.h"

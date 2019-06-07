@@ -1,8 +1,5 @@
 #include "MBox.h"
 
-/**
- * @brief Creates an empty box
- **/
 void MBox::emptyBox( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_empty: One output expected." );
 	if ( nrhs > 2 ) mexWarnMsgTxt( "MBox - new_empty: One or more input arguments were ignored." );
@@ -10,9 +7,6 @@ void MBox::emptyBox( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double> );
 }
 
-/**
- * @brief Creates a box from a single interval
- **/
 void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_interval: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_interval: One or more input arguments are missing." );
@@ -23,9 +17,6 @@ void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxA
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 }
 
-/**
- * @brief Creates a box from a list of intervals
- **/
 void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_intervals: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_intervals: One or more input arguments are missing." );
@@ -43,9 +34,6 @@ void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 }
 
-/**
- * @brief Creates a box from a minimal and maximal point limiting the box
- **/
 void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_points: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_points: One or more input arguments are missing." );
@@ -56,9 +44,6 @@ void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 }
 
-/**
- * @brief Method for the construction of an empty box of required dimension.
- **/
 void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - empty: Expecting one output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MBox - empty: One or more arguments are missing!" );
@@ -71,9 +56,6 @@ void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( b );
 }
 
-/**
- * @brief Returns the intervals from which the box is constructed
- **/
 void MBox::intervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - intervals: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - intervals: One or more input arguments are missing." );
@@ -83,15 +65,10 @@ void MBox::intervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 	std::vector<carl::Interval<double>> intervals = box->intervals();
 
 	const int rows = intervals.size();
-	const int cols = 2;
-	// mexPrintf("box intervals - rows: %d, cols: %d\n", rows, cols);
-	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
+	plhs[0] = mxCreateDoubleMatrix( rows, 2, mxREAL );
 	vector2Matlab( intervals, plhs[0] );
 }
 
-/**
- * @brief Extends a box by a further interval
- **/
 void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MBox - insert: One argument is missing!" );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MBox - insert: One or more input arguments were ignored." );
@@ -114,9 +91,6 @@ void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	box->insert( interval );
 }
 
-/**
- * @brief Getter for the limiting points.
- **/
 void MBox::limits( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - limits: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - limits: One argument is missing!" );
@@ -129,9 +103,6 @@ void MBox::limits( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	pair2Matlab( p, plhs[0], dim, 2 );
 }
 
-/**
- * @brief Getter for the hyperplanar representation of the current box.
- **/
 void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 2 ) mexErrMsgTxt( "MBox - constraints: Expecting two output values!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - constraints: One argument is missing!" );
@@ -143,23 +114,11 @@ void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
 	const int cols = hSpaces[0].dimension();
 	const int rows = hSpaces.size();
 
-	// for(int i = 0; i < rows; i++){
-	// 	hypro::vector_t<double> nVector = hSpaces[i].normal();
-    // 	double offset = hSpaces[i].offset();
-	// 	for(int j = 0; j < cols; j++){
-	// 		mexPrintf("%f, ", nVector[j]);
-	// 	}
-	// 	mexPrintf(" <= %f\n",offset );
-	// }
-
 	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	plhs[1] = mxCreateDoubleMatrix( rows, 1, mxREAL );
 	vector2Matlab<hypro::Halfspace<double>>( hSpaces, plhs[0], plhs[1] );
 }
 
-/**
- * @brief Getter for an interval representation of one specific dimension.
- **/
 void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - interval: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MBox - interval: One or more arguments are missing!" );
@@ -173,9 +132,6 @@ void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 	ObjectHandle::convert2Matlab( inter, plhs[0], 1, 2 );
 }
 
-/**
- * @brief Getter for an interval representation of one specific dimension.
- **/
 void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - at: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MBox - at: One or more arguments are missing!" );
@@ -189,9 +145,6 @@ void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	ObjectHandle::convert2Matlab( inter, plhs[0], 1, 2 );
 }
 
-/**
- * @brief Determines if the current box is symmetric.
- **/
 void MBox::is_symmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - isSymmetric: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - isSymmetric: One argument missing!" );
@@ -203,9 +156,6 @@ void MBox::is_symmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 	plhs[0] = mxCreateLogicalScalar( empty );
 }
 
-/**
- * @brief Getter for the maximal point.
- **/
 void MBox::max( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - max: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - max: One argument missing!" );
@@ -218,9 +168,6 @@ void MBox::max( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 }
 
-/**
- * @brief Getter for the minimal point.
- **/
 void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - min: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - min: One argument missing!" );
@@ -233,9 +180,6 @@ void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 }
 
-/**
- * @brief Outstream operator.
- **/
 void MBox::outstream( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - <<: One or more arguments are missing!" );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MBox - <<: One or more input arguments were ignored." );
@@ -258,9 +202,6 @@ void MBox::outstream( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 	}
 }
 
-/**
- * @brief Storage size determination.
- **/
 void MBox::box_size( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - size: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - size: One or more arguments are missing!" );
@@ -271,18 +212,12 @@ void MBox::box_size( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @brief
- **/
 void MBox::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - type: Expecting one output value!" );
 	std::string ans = "MHyProBox";
 	plhs[0] = mxCreateString( ans.c_str() );
 }
 
-/**
- * @brief Makes a symmetric box from the current box.
- **/
 void MBox::makeSymmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - makeSymmetric: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - makeSymmetric: One or more arguments are missing!" );
@@ -293,9 +228,6 @@ void MBox::makeSymmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	plhs[0] = plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( symmBox ) );
 }
 
-/**
- * @brief Performs a Minkowski decomposition of two boxes.
- **/
 void MBox::minkowskiDecomposition( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - minkowskiDecomposition: Expecting one output value!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MBox - minkowskiDecomposition: One or more arguments are missing!" );
@@ -318,7 +250,6 @@ void MBox::minkowskiDecomposition( int nlhs, mxArray *plhs[], int nrhs, const mx
  * @param prhs Array of mxArray pointers to the input variables
  **/
 void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-	// Get the command string
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 15 ) {

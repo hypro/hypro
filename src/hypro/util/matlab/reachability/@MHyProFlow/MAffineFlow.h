@@ -1,3 +1,7 @@
+/*
+*   Wrapper class for affine flow.
+*/
+
 #pragma once
 
 #include "../../../../types.h"

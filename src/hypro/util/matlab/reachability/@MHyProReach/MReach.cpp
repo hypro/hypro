@@ -1,18 +1,10 @@
 #include "MReach.h"
 
-/*
- * @brief
- */
-
 void MReach::del_reach( int lhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReach- del_reach: Expecting an output." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MReach- del_reach: One or more arguments were ignored." );
 	destroyObject<Reacher>( prhs[2] );
 }
-
-/*
- * @brief
- */
 
 void MReach::new_reach( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReach - new_reach: Expecting an output." );
@@ -24,9 +16,6 @@ void MReach::new_reach( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	plhs[0] = convertPtr2Mat<Reacher>( reacher );
 }
 
-/*
- * @brief
- */
 void MReach::computeForwardReachability( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReach - computeForwardReachability: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReach - computeForwardReachability: At least one input argument is missing." );

@@ -1,3 +1,9 @@
+/*
+ *  Class that converts various HyPro datastructures from HyPro
+ *  to Matlab and vice versa.
+ */
+
+
 #pragma once
 
 #include "../../../datastructures/Halfspace.h"
@@ -80,11 +86,11 @@ class ObjectHandle {
 	static std::vector<std::unique_ptr<hypro::Location<double>>> mLocsVector2Hypro( const mxArray* );
 };
 
-/**
- * @brief Converts a std vector into a Matlab vector
+/*
+ * @brief Converts a std vector into a Matlab vector.
  * @param vec The vector
  * @parma out Pointer to the matlab vector
- **/
+ */
 template <typename T>
 void vector2Matlab( const std::vector<T>& vec, mxArray* m_out ) {
 	const mwSize* dims = mxGetDimensions( m_out );
@@ -96,6 +102,13 @@ void vector2Matlab( const std::vector<T>& vec, mxArray* m_out ) {
 	}
 }
 
+/*
+ * @brief Converts a std vector into a Matlab vector.
+ * @param vec The vector
+ * @param m_out_1 Pointer to output matlab vector
+ * @param m_out_2 Pointer to output matlab vector
+ * 
+ */
 template <typename T>
 void vector2Matlab( const std::vector<T>& vec, mxArray* m_out_1, mxArray* m_out_2 ) {
 	const mwSize* dims = mxGetDimensions( m_out_1 );
@@ -108,20 +121,22 @@ void vector2Matlab( const std::vector<T>& vec, mxArray* m_out_1, mxArray* m_out_
 	}
 }
 
-/**
- * @brief Converts a std pair into Matlab vecotr
+/*
+ * @brief Converts an std pair into Matlab vector.
  * @param p The pair
  * @param out Pointer to the Matlab vector
- **/
+ */
 template <typename T>
 void pair2Matlab( const std::pair<T, T> p, mxArray* m_out, const int rows, const int cols ) {
 	ObjectHandle::convert2Matlab( p.first, m_out, rows, cols );
 	ObjectHandle::convert2Matlab( p.second, m_out, rows, cols, 1 );
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a cell of MHyPro objects into a vector of HyPro objects.
+ * @param array_ptr Pointer to the cell array of MHyPro objects
+ * @param len Number of the objects in the cell array
+ */
 template <typename T>
 std::vector<T> ObjectHandle::objArray2Hypro( const mxArray* array_ptr, const int len ) {
 	std::vector<T> vec;
@@ -134,9 +149,12 @@ std::vector<T> ObjectHandle::objArray2Hypro( const mxArray* array_ptr, const int
 	return vec;
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a vector of HyPro objects into a cell array of MHyPro       * objects.
+ * @param vec Vector of HyPro objects
+ * @param m_array Pointer to output cell
+ * @param len Length of the vector
+ */
 template <typename T>
 void objArray2Matlab( const std::vector<T>& vec, mxArray* m_array, const int len ) {
 	for ( int i = 0; i < len; i++ ) {
@@ -145,9 +163,11 @@ void objArray2Matlab( const std::vector<T>& vec, mxArray* m_array, const int len
 	}
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a vector of HyPro points into a n x 2 Matlab matrix.
+ * @param points Vector of HyPro points
+ * @param m_out Pointer to the output Matlab matrix
+ */
 void ObjectHandle::convert2Matlab( const std::vector<hypro::Point<double>>& points, mxArray* m_out ) {
 	const mwSize* dims = mxGetDimensions( m_out );
 	const int cols = (int)dims[1];
@@ -162,9 +182,12 @@ void ObjectHandle::convert2Matlab( const std::vector<hypro::Point<double>>& poin
 	}
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a vector of flowpipes into a cell array of MStates.
+ * @param flowpipes Vector of HyPro flowpipes
+ * @param m_out Pointer to the output cell array
+ * @param rows Length of the flowpipes vector
+ */
 void ObjectHandle::flowpipes2Matlab( const std::vector<std::pair<unsigned, ObjectHandle::flowpipe>>& flowpipes,
 									 mxArray* m_out, const int rows ) {
 	for ( int i = 0; i < rows; i++ ) {
@@ -183,9 +206,11 @@ void ObjectHandle::flowpipes2Matlab( const std::vector<std::pair<unsigned, Objec
 	}
 }
 
-/**
- * @brief This function converts a location-condition map into an MATLAB array strucure.
- **/
+/*
+ * @brief Converts a location-condition map into an Matlab struct array.
+ * @param locConmap Map of locations and conditions
+ * @param m_array Pointer to the output struct array
+ */
 void ObjectHandle::convert2Matlab( const std::map<const hypro::Location<double>*, hypro::Condition<double>>& locConmap,
 								   mxArray* m_array ) {
 	int i = 0;
@@ -198,12 +223,12 @@ void ObjectHandle::convert2Matlab( const std::map<const hypro::Location<double>*
 	}
 }
 
-/**
- * @brief Converts a single HyPro interval into Matlab interval (matrix)
+/*
+ * @brief Converts a single HyPro interval into Matlab matrix.
  * @param inter The hypro interval
  * @param out Pointer to the Matlab output matrix
  * @parma rows, cols Dimensions
- **/
+ */
 void ObjectHandle::convert2Matlab( const carl::Interval<double>& inter, mxArray* m_out, const int rows, const int cols,
 								   const int index ) {
 	double* out = mxGetPr( m_out );
@@ -211,12 +236,12 @@ void ObjectHandle::convert2Matlab( const carl::Interval<double>& inter, mxArray*
 	out[index + rows] = inter.upper();
 }
 
-/**
- * @brief Converts a HyPro matrix into Matalb  matrix
+/*
+ * @brief Converts a HyPro matrix into Matalb matrix.
  * @param matrix HyPro matrix
  * @param out Pointer to the output matlab matrix
  * @param rows, cols The dimensions of the matrix
- **/
+ */
 void ObjectHandle::convert2Matlab( const hypro::matrix_t<double>& matrix, mxArray* m_out, const int rows,
 								   const int cols, const int index ) {
 	double* out = mxGetPr( m_out );
@@ -227,11 +252,11 @@ void ObjectHandle::convert2Matlab( const hypro::matrix_t<double>& matrix, mxArra
 	}
 }
 
-/**
- * @brief Converts a Matlab matrix into HyPro matrix_t<double>
+/*
+ * @brief Converts a Matlab matrix into HyPro matrix.
  * @param m_matrix Pointer to the Matlab matrix
- * @param rows, cols The dimensions of the matrix
- **/
+ * @param rows, cols Dimensions of the matrix
+ */
 hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro( const mxArray* m_matrix, const int rows, const int cols ) {
 	double* matrix = mxGetPr( m_matrix );
 	hypro::matrix_t<double>* hypro_matrix = new hypro::matrix_t<double>( rows, cols );
@@ -243,12 +268,12 @@ hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro( const mxArray* m_matrix, co
 	return *hypro_matrix;
 }
 
-/**
- * @brief Converts a HyPro vector into Matlab vector
+/*
+ * @brief Converts a HyPro vector into Matlab vector.
  * @param vect The HyPro vector
  * @param out Pointer to the output Matlab vector
  * @param rows,cols The dimensions
- **/
+ */
 void ObjectHandle::convert2Matlab( const hypro::vector_t<double>& vec, mxArray* m_out, const int rows, const int cols,
 								   const int index ) {
 	double* out = mxGetPr( m_out );
@@ -257,13 +282,13 @@ void ObjectHandle::convert2Matlab( const hypro::vector_t<double>& vec, mxArray* 
 	}
 }
 
-/**
- * @brief Converts a HyPro Point into Matlab vector
+/*
+ * @brief Converts a HyPro Point into Matlab vector.
  * @param p HyPro point
  * @param out Pointer to the output matlab vector
  * @param rows,cols The dimensions
  * @index index Points to the first element of the matlab vector
- **/
+ */
 void ObjectHandle::convert2Matlab( const hypro::Point<double>& p, mxArray* m_out, const int rows, const int cols,
 								   const int index ) {
 	double* out = mxGetPr( m_out );
@@ -272,13 +297,13 @@ void ObjectHandle::convert2Matlab( const hypro::Point<double>& p, mxArray* m_out
 	}
 }
 
-/**
- * @brief Converts a HyPro halfspace into Matlab representation
+/*
+ * @brief Converts a HyPro halfspace into Matlab representation.
  * @param h The HyPro halfspace
  * @param out Pointer to Matlab struct representing the halfspace
- * @param rows,cols
- * @param index
- **/
+ * @param rows,cols Dimensions
+ * @param index Offset
+ */
 void ObjectHandle::convert2Matlab( const hypro::Halfspace<double>& h, mxArray* m_normal_out, mxArray* m_offset_out,
 								   const int rows, const int cols, const int index ) {
 	double* normal_out = mxGetPr( m_normal_out );
@@ -293,11 +318,11 @@ void ObjectHandle::convert2Matlab( const hypro::Halfspace<double>& h, mxArray* m
 	offset_out[index] = offset;
 }
 
-/**
- * @brief Converts the HyPro containment enum into matlab
+/*
+ * @brief Converts the HyPro containment enum into Matlab.
  * @param cont Containment value
  * @param out Pointer to the Matlab output
- **/
+ */
 void ObjectHandle::convert2Matlab( const hypro::CONTAINMENT& cont, std::string& out ) {
 	if ( cont == hypro::CONTAINMENT::NO ) {
 		out = "NO";
@@ -312,11 +337,11 @@ void ObjectHandle::convert2Matlab( const hypro::CONTAINMENT& cont, std::string& 
 	}
 }
 
-/**
- * @brief Converts the HyPro solution enum into matlab
+/*
+ * @brief Converts the HyPro solution enum into Matlab
  * @param cont Solution value
  * @param out Pointer to the Matlab output
- **/
+ */
 void ObjectHandle::convert2Matlab( const hypro::SOLUTION& sol, std::string& out ) {
 	if ( sol == hypro::SOLUTION::FEAS ) {
 		out = "FEAS";
@@ -329,9 +354,11 @@ void ObjectHandle::convert2Matlab( const hypro::SOLUTION& sol, std::string& out 
 	}
 }
 
-/**
- * @brief Converts representation_name into matlab string
- **/
+/*
+ * @brief Converts representation_name into Matlab string.
+ * @param name Name of the representation
+ * @param out Pointer to the output Matlab string
+ */
 void ObjectHandle::convert2Matlab( const hypro::representation_name& name, std::string& out ) {
 	if ( name == hypro::representation_name::box ) {
 		out = "box";
@@ -368,9 +395,12 @@ void ObjectHandle::convert2Matlab( const hypro::representation_name& name, std::
 	}
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a vector of strings into a Matlab cell array of strings.
+ * @param strings Vector of strings
+ * @param str_array Pointer to the output cell array
+ * @param dim Dimensions
+ */
 void ObjectHandle::convert2Matlab( const std::vector<std::string>& strings, mxArray* str_arr, const mwSize* dims ) {
 	mxArray* element;
 	for ( int i = 0; i < 3; i++ ) {
@@ -379,11 +409,11 @@ void ObjectHandle::convert2Matlab( const std::vector<std::string>& strings, mxAr
 	}
 }
 
-/**
- * @brief Converts a Matlab vector of ints into standard vector
+/*
+ * @brief Converts a Matlab vector of ints into standard vector.
  * @param sizes Pointer to the Matlab vector
  * @param v_len Length of the vector
- **/
+ */
 std::vector<std::size_t> ObjectHandle::mSizeVector2Hypro( const mxArray* m_sizes, const int v_len ) {
 	double* sizes = mxGetPr( m_sizes );
 	std::vector<std::size_t> vec;
@@ -393,10 +423,11 @@ std::vector<std::size_t> ObjectHandle::mSizeVector2Hypro( const mxArray* m_sizes
 	return vec;
 }
 
-/**
- * @brief Converts Matlab intervals (in form of a matrix) into a vector of HyPro intervals
- * @param m_interval_list A list of Matlab intervals (represented as arrays)
- **/
+/*
+ * @brief Converts Matlab array of matrices into a vector of HyPro intervals.
+ * @param m_interval_list A list of Matlab matrices
+ * @param rows, cols Dimensions
+ */
 std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro( const mxArray* m_intervals, int rows, int cols ) {
 	double* intervals = mxGetPr( m_intervals );
 	std::vector<carl::Interval<double>> hyPro_intervals;
@@ -411,10 +442,10 @@ std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro( const mxArra
 	return hyPro_intervals;
 }
 
-/**
- *  @brief Converts a single Matlab interval into a HyPro interval
- *  @param Pointer to the matlab input interval
- **/
+/*
+ *  @brief Converts a single Matlab matrix into a HyPro interval.
+ *  @param Pointer to the Matlab input matrix
+ */
 carl::Interval<double> ObjectHandle::mInterval2Hypro( const mxArray* m_interval ) {
 	double* interval = mxGetPr( m_interval );
 	// mexPrintf("interval: [%f %f]", interval[0], interval[1]);
@@ -422,10 +453,10 @@ carl::Interval<double> ObjectHandle::mInterval2Hypro( const mxArray* m_interval 
 	return *hyPro_interval;
 }
 
-/**
- *  @brief Converts a pair of points defined in matlab into hyPro intervals
+/*
+ *  @brief Converts a pair of points defined in Matlab into HyPro intervals.
  *  @param points A pointer to the input Matlab matrix
- **/
+ */
 std::vector<carl::Interval<double>> ObjectHandle::mPoints2Hypro( const mxArray* m_points ) {
 	double* points = mxGetPr( m_points );
 	std::vector<carl::Interval<double>>* hyPro_intervals = new std::vector<carl::Interval<double>>;
@@ -434,26 +465,25 @@ std::vector<carl::Interval<double>> ObjectHandle::mPoints2Hypro( const mxArray* 
 	return *hyPro_intervals;
 }
 
-/**
- * @brief Converts a Matlab vector into HyPro vector
+/*
+ * @brief Converts a Matlab vector into HyPro vector.
  * @param m_vector Pointer to the Matlab vector
  * @parma v_len Length of the vector
- **/
+ */
 hypro::vector_t<double> ObjectHandle::mVector2Hypro( const mxArray* m_vector, const int v_len ) {
 	double* vector = mxGetPr( m_vector );
 	hypro::vector_t<double>* hypro_vector = new hypro::vector_t<double>( v_len );
 	for ( int i = 0; i < v_len; i++ ) {
-		// mexPrintf("Vector(%d) = %f", i, vector[i]);
 		( *hypro_vector )( i ) = vector[i];
 	}
 	return *hypro_vector;
 }
 
-/**
- * @brief Converts a Matlab vector into HyPro Point
+/*
+ * @brief Converts a Matlab vector into HyPro point
  * @param vec Pointer to the vector of coordinates
  * @param cols Lenght of the vector
- **/
+ */
 hypro::Point<double> ObjectHandle::mPoint2Hypro( const mxArray* m_vec, int cols ) {
 	double* vec = mxGetPr( m_vec );
 	std::vector<double> temp;
@@ -464,10 +494,10 @@ hypro::Point<double> ObjectHandle::mPoint2Hypro( const mxArray* m_vec, int cols 
 	return *point;
 }
 
-/**
- * @brief Converts a 2x2 Matlab matrix into pair of HyPro points
+/*
+ * @brief Converts a 2 x 2 Matlab matrix into pair of HyPro points.
  * @param mat Pointer to the matrix
- **/
+ */
 std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2Hypro( const mxArray* m_mat ) {
 	double* mat = mxGetPr( m_mat );
 	std::vector<double> temp_one{mat[0], mat[1]};
@@ -480,11 +510,11 @@ std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2H
 	return pair;
 }
 
-/**
- * @brief Converts a Matlab matrix into vector of HyPro Points
+/*
+ * @brief Converts a Matlab matrix into vector of HyPro points.
  * @param vec Pointer to the Matlab matrix
  * @parma dim Length of the vector
- **/
+ */
 std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2Hypro( const mxArray* m_vec, const int rows,
 																	 const int cols ) {
 	double* points = mxGetPr( m_vec );
@@ -500,21 +530,21 @@ std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2Hypro( const mxArr
 	return hypro_vec;
 }
 
-/**
- * @brief Converts a Maltab normal vector and offset into HyPro halfspace
+/*
+ * @brief Converts a Maltab normal vector and offset into HyPro halfspace.
  * @param mNormal The normal vector
  * @param offset The offset
- **/
+ */
 hypro::Halfspace<double> ObjectHandle::mHalfspace2Hypro( mxArray* m_normal, const int len, double& offset ) {
 	hypro::vector_t<double> normalVec = ObjectHandle::mVector2Hypro( m_normal, len );
 	hypro::Halfspace<double> hSpace = hypro::Halfspace<double>( normalVec, offset );
 	return hSpace;
 }
 
-/**
- * @brief Converts a Maltab solution into HyPro SOLUTION enum value
+/*
+ * @brief Converts a Maltab solution into HyPro SOLUTION enum value.
  * @param mSol The solution
- **/
+ */
 hypro::SOLUTION ObjectHandle::mSolution2Hypro( char* mSol ) {
 	if ( !strcmp( mSol, "FEAS" ) || !strcmp( mSol, "feas" ) ) {
 		return hypro::SOLUTION::FEAS;
@@ -527,10 +557,10 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro( char* mSol ) {
 	}
 }
 
-/**
- * @brief Converts a Matlab string containing a representation name
+/*
+ * @brief Converts a Matlab string containing a representation name.
  * into Hypro enum
- **/
+ */
 hypro::representation_name ObjectHandle::mRepresentationName2Hypro( int type ) {
 	if ( type == 0 ) {
 		return hypro::representation_name::box;
@@ -557,12 +587,14 @@ hypro::representation_name ObjectHandle::mRepresentationName2Hypro( int type ) {
 	}
 }
 
-/**
+/*
  * @brief Converts a Matlab matrix and vector into a vector of halfspaces.
  * Each column of the matrix is a normal vector. The corresponding offset
- * is saved in the vector
- *
- **/
+ * is saved in the vector.
+ * @param m_matrix Pointer to the input matrix
+ * @param m_offsets Pointer to the input vector
+ * @param rows, cols, len Dimensions
+ */
 std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro( mxArray* m_matrix, mxArray* m_offsets,
 																	   const int rows, const int cols, const int len ) {
 	std::vector<hypro::Halfspace<double>> hypro_vec( len );
@@ -577,11 +609,12 @@ std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro( mxArray* 
 	return hypro_vec;
 }
 
-/**
- * @brief
- **/
-std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxArray* m_matrix, const int rows,
-																	   const int cols ) {
+/*
+ * @brief Converts a Matlab matrix into a vector of vectors.
+ * @param m_matrix Pointer to the input Matlab matrix
+ * @parma rows, cols Dimensions
+ */
+std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxArray* m_matrix, const int rows, const int cols ) {
 	double* matrix = mxGetPr( m_matrix );
 	std::vector<std::vector<size_t>> vector( rows );
 	for ( int i = 0; i < rows; i++ ) {
@@ -594,9 +627,11 @@ std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxA
 	return vector;
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a cell array of strings in Matlab into a vector of strings * in HyPro.
+ * @param strings Pointer to the cell array
+ * @param len Length of the cell array
+ */
 std::vector<std::string> ObjectHandle::mStringVector2Hypro( const mxArray* strings, const int len ) {
 	std::vector<std::string> vec;
 	mxArray* cellElement;
@@ -612,9 +647,10 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro( const mxArray* strin
 	return vec;
 }
 
-/**
- * @brief
- **/
+/*
+ * @brief Converts a struct array containg locations conditions mapping into     HyPro map of locations-conditions.
+ * @param structArray Pointer to the Matlab struct array
+ */
 std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(
 	  const mxArray* structArray ) {
 	const mwSize* dims = mxGetDimensions( structArray );
@@ -631,9 +667,10 @@ std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle:
 	return mapping;
 }
 
-/**
- * @brief Converts a Matlab vector of locations into vector of unique pointers to the locations.
- **/
+/*
+ * @brief Converts a Matlab vector of locations into vector of unique pointers   to the locations.
+ * @param locsVector Pointer to the vector of MLocation objects
+ */
 std::vector<std::unique_ptr<hypro::Location<double>>> ObjectHandle::mLocsVector2Hypro( const mxArray* locsVector ) {
 	const mwSize* loc_dims;
 	int loc_num;

@@ -1,8 +1,5 @@
 #include "MFlow.h"
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::new_empty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -12,9 +9,6 @@ void MFlow<T>::new_empty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     plhs[0] = convertPtr2Mat<T>(temp);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::copy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -28,9 +22,6 @@ void MFlow<T>::copy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     plhs[0] = convertPtr2Mat<T>(new T(*origin));
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::delete_flow(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 3)
@@ -41,9 +32,6 @@ void MFlow<T>::delete_flow(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     destroyObject<T>(prhs[2]);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::type(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -71,9 +59,6 @@ void MFlow<T>::type(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     plhs[0] = mxCreateString(ans.c_str());
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::dimension(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -88,9 +73,6 @@ void MFlow<T>::dimension(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     plhs[0] = mxCreateDoubleScalar(dim);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::isTimed(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -105,9 +87,6 @@ void MFlow<T>::isTimed(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
     plhs[0] = mxCreateLogicalScalar(ans);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::isDiscrete(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -122,9 +101,6 @@ void MFlow<T>::isDiscrete(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
     plhs[0] = mxCreateLogicalScalar(ans);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::equals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -143,9 +119,6 @@ void MFlow<T>::equals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
     plhs[0] = mxCreateLogicalScalar(ans);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::unequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
@@ -164,9 +137,6 @@ void MFlow<T>::unequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
     plhs[0] = mxCreateLogicalScalar(ans);
 }
 
-/**
- * @brief
-**/
 template<typename T>
 void MFlow<T>::size(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)

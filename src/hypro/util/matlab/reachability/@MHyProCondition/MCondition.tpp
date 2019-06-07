@@ -1,8 +1,5 @@
 #include "MCondition.h"
 
-/**
- * @brief
- **/
 void MCondition::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - new_empty: Expecting an output!" );
 
@@ -11,9 +8,6 @@ void MCondition::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 
-/**
- * @brief
- **/
 void MCondition::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - new_mat_vec: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - new_mat_vec: One or more input arguments are missing!" );
@@ -34,9 +28,6 @@ void MCondition::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 
-/**
- * @brief
- **/
 void MCondition::new_constr_set( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - new_constr_set: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - new_constr_set: One or more input arguments are missing!" );
@@ -47,9 +38,6 @@ void MCondition::new_constr_set( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	// plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond); ---> ?
 }
 
-/**
- * @brief
- **/
 void MCondition::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - copy: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - copy: One or more input arguments are missing!" );
@@ -60,18 +48,12 @@ void MCondition::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 
-/**
- * @brief
- **/
 void MCondition::delete_condition( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - delete_condition: Expecting an output." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MCondition - delete_condition: One or more arguments were ignored." );
 	destroyObject<hypro::Condition<double>>( prhs[2] );
 }
 
-/**
- * @brief
- **/
 void MCondition::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - size: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - size: One or more input arguments are missing!" );
@@ -82,9 +64,6 @@ void MCondition::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	plhs[0] = mxCreateDoubleScalar( s );
 }
 
-/**
- * @brief
- **/
 void MCondition::isempty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - isempty: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - isempty: One or more arguments are missing." );
@@ -95,9 +74,6 @@ void MCondition::isempty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MCondition::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - getMatrix: One output expected!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - getMatrix: One or more arguments are missing!" );
@@ -109,9 +85,6 @@ void MCondition::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	ObjectHandle::convert2Matlab( mat, plhs[0], mat.rows(), mat.cols() );
 }
 
-/**
- * @brief
- **/
 void MCondition::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - getVector: One output expected!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - getVector: One or more arguments are missing!" );
@@ -123,9 +96,6 @@ void MCondition::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	ObjectHandle::convert2Matlab( vec, plhs[0], vec.rows(), 1 );
 }
 
-/**
- * @brief
- **/
 void MCondition::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - isAxisAligned: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - isAxisAligned: One or more arguments are missing." );
@@ -136,9 +106,6 @@ void MCondition::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MCondition::isAxisAligned_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - isAxisAligned_at: Expecting an output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - isAxisAligned_at: One or more arguments are missing." );
@@ -150,9 +117,6 @@ void MCondition::isAxisAligned_at( int nlhs, mxArray* plhs[], int nrhs, const mx
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MCondition::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - setMatrix: One or more arguments are missing!" );
 	if ( nrhs > 4 ) mexErrMsgTxt( "MCondition - setMatrix: One or more arguments were ignored!" );
@@ -168,9 +132,6 @@ void MCondition::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	cond->setMatrix( mat );
 }
 
-/**
- * @brief
- **/
 void MCondition::setVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MCondition - setVector: One or more arguments are missing!" );
 	if ( nrhs > 5 ) mexErrMsgTxt( "MCondition - setVector: One or more arguments were ignored!" );
@@ -186,9 +147,6 @@ void MCondition::setVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	cond->setVector( vec, s );
 }
 
-/**
- * @brief
- **/
 void MCondition::constraints( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - constraints: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - constraints: One or more arguments are missing!" );
@@ -204,9 +162,6 @@ void MCondition::constraints( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	objArray2Matlab( constrs, m_out_constrs, len );
 }
 
-/**
- * @brief
- **/
 void MCondition::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - hash: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - hash: One or more input arguments are missing!" );
@@ -217,9 +172,6 @@ void MCondition::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	plhs[0] = mxCreateDoubleScalar( s );
 }
 
-// /**
-//  * @brief
-//  **/
 // void MCondition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 //     if(nlhs != 1)
 //         mexErrMsgTxt("MCondition - getDotRepresentation: Expecting an output!");
@@ -240,16 +192,10 @@ void MCondition::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 //     plhs[0] = mxCreateString(ans.c_str());
 // }
 
-/**
- * @brief
- **/
 void MCondition::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO:
 }
 
-/**
- * @brief
- **/
 void MCondition::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MCondition - ==: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - ==: One or more arguments are missing!" );
@@ -263,9 +209,6 @@ void MCondition::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MCondition::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MCondition - !=: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - !=: One or more arguments are missing!" );
@@ -279,16 +222,10 @@ void MCondition::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MCondition::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO:
 }
 
-/**
- * @brief
- **/
 void MCondition::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - getDotRepresentation: Expecting an output!" );
 	if ( nrhs < 7 ) mexErrMsgTxt( "MCondition - getDotRepresentation: One or more input arguments are missing!" );
@@ -310,11 +247,7 @@ void MCondition::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro( prhs[6], len_rhsVar );
 }
 
-/**
- * @brief
- **/
 void MCondition::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// Get the command string
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 2 ) {

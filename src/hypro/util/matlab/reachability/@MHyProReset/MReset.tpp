@@ -1,8 +1,5 @@
 #include "MReset.h"
 
-/**
- * @brief
- **/
 void MReset::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_empty: Expecting an output." );
 
@@ -10,9 +7,6 @@ void MReset::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	plhs[0] = convertPtr2Mat<hypro::Reset<double>>( temp );
 }
 
-/**
- * @brief
- **/
 void MReset::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - copy: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - copy: One or more arguments are missing." );
@@ -22,9 +16,6 @@ void MReset::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	plhs[0] = convertPtr2Mat<hypro::Reset<double>>( new hypro::Reset<double>( *origin ) );
 }
 
-/**
- * @brief
- **/
 void MReset::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	mexErrMsgTxt("Weird things happen here...");
     // if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_mat_vec: Expecting an output." );
@@ -46,9 +37,6 @@ void MReset::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
 }
 
-/**
- * @brief
- **/
 void MReset::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	mexErrMsgTxt("Weird things happen here...");
     // if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_intervals: One output expected." );
@@ -67,9 +55,6 @@ void MReset::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
 }
 
-/**
- * @brief
- **/
 void MReset::delete_reset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - delete_reset: One or more arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MReset - delete_reset: One or more arguments were ignored." );
@@ -77,9 +62,6 @@ void MReset::delete_reset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	destroyObject<hypro::Reset<double>>( prhs[2] );
 }
 
-/**
- * @brief
- **/
 void MReset::empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - empty: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - empty: One argument missing!" );
@@ -90,9 +72,6 @@ void MReset::empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] )
 	plhs[0] = mxCreateLogicalScalar( empty );
 }
 
-/**
- * @brief
- **/
 void MReset::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - size: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - size: One or more arguments are missing!" );
@@ -103,9 +82,6 @@ void MReset::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @brief
- **/
 void MReset::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getVector: One output expected!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MReset - getVector: One or more arguments are missing!" );
@@ -118,9 +94,6 @@ void MReset::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	ObjectHandle::convert2Matlab( vec, plhs[0], vec.rows(), 1 );
 }
 
-/**
- * @brief
- **/
 void MReset::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getMatrix: One output expected!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MReset - getMatrix: One or more arguments are missing!" );
@@ -133,9 +106,6 @@ void MReset::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	ObjectHandle::convert2Matlab( mat, plhs[0], mat.rows(), mat.cols() );
 }
 
-/**
- * @brief
- **/
 void MReset::getIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getIntervals: Expecting an output!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MReset - getIntervals: One or more input arguments are missing." );
@@ -150,9 +120,6 @@ void MReset::getIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	vector2Matlab( intervals, plhs[0] );
 }
 
-/**
- * @brief
- **/
 void MReset::getAffineReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getAffineReset_at: One output expected!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MReset - getAffineReset_at: One or more arguments are missing!" );
@@ -165,9 +132,6 @@ void MReset::getAffineReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( new hypro::ConstraintSet<double>( cond ) );
 }
 
-/**
- * @brief
- **/
 void MReset::getAffineResets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getAffineResets: One output expected!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - getAffineResets: One or more arguments are missing!" );
@@ -186,9 +150,6 @@ void MReset::getAffineResets( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	objArray2Matlab<hypro::ConstraintSet<double>>( conds, plhs[0], conds.size() );
 }
 
-/**
- * @brief
- **/
 void MReset::getIntervalReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getIntervalReset_at: One output expected!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MReset - getIntervalReset_at: One or more arguments are missing!" );
@@ -202,9 +163,6 @@ void MReset::getIntervalReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	vector2Matlab<carl::Interval<double>>( ints, plhs[0] );
 }
 
-/**
- * @brief
- **/
 void MReset::getIntervalResets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - getIntervalResets: One output expected!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - getIntervalResets: One or more arguments are missing!" );
@@ -229,9 +187,6 @@ void MReset::getIntervalResets( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	}
 }
 
-/**
- * @brief
- **/
 void MReset::setVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MReset - setVector: One or more arguments are missing!" );
 	if ( nrhs > 5 ) mexErrMsgTxt( "MReset - setVector: One or more arguments were ignored!" );
@@ -246,9 +201,6 @@ void MReset::setVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	res->setVector( vec, at );
 }
 
-/**
- * @brief
- **/
 void MReset::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MReset - setMatrix: One or more arguments are missing!" );
 	if ( nrhs > 5 ) mexErrMsgTxt( "MReset - setMatrix: One or more arguments were ignored!" );
@@ -265,9 +217,6 @@ void MReset::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	res->setMatrix( mat, at );
 }
 
-/**
- * @brief
- **/
 void MReset::setIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MReset- setIntervals: One or more input arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MReset- setIntervals: One or more input arguments were ignored." );
@@ -286,9 +235,6 @@ void MReset::setIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	res->setIntervals( intervals, at );
 }
 
-/**
- * @brief
- **/
 void MReset::isIdentity( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - isIdentity: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - isIdentity: One argument missing!" );
@@ -299,9 +245,6 @@ void MReset::isIdentity( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @brief
- **/
 void MReset::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - hash: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - hash: One or more input arguments are missing!" );
@@ -312,16 +255,10 @@ void MReset::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	plhs[0] = mxCreateDoubleScalar( val );
 }
 
-/**
- * @brief
- **/
 void MReset::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO:
 }
 
-/**
- * @brief
- **/
 void MReset::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// if(nlhs != 1)
 	//     mexErrMsgTxt("MReset - combine: Expecting an output!");
@@ -351,9 +288,6 @@ void MReset::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(new hypro::Reset<double>(*res));
 }
 
-/**
- * @brief
- **/
 void MReset::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	int cmd = mxGetScalar(prhs[1]);
 

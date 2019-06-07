@@ -1,3 +1,8 @@
+/*
+*   Wrapper class for conditions.
+*/
+
+
 #pragma once
 
 #include "mex.h"

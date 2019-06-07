@@ -1,17 +1,11 @@
 #include "MState.h"
 
-/**
- * @breif
- **/
 void MState::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - new_empty: Expecting an output." );
 	hypro::State_t<double>* st = new hypro::State_t<double>();
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( st );
 }
 
-/**
- * @breif
- **/
 void MState::new_loc( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - new_loc: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - new_loc: One or more input arguments are missing." );
@@ -22,9 +16,6 @@ void MState::new_loc( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( st );
 }
 
-/**
- * @breif
- **/
 void MState::del_state( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - del_state: One or more arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MState - del_state: One or more arguments were ignored." );
@@ -32,9 +23,6 @@ void MState::del_state( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	destroyObject<hypro::State_t<double>>( prhs[2] );
 }
 
-/**
- * @breif
- **/
 void MState::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MState - vertices: Expecting an output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - vertices: One or more arguments are missing." );
@@ -54,9 +42,6 @@ void MState::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	}
 }
 
-/**
- * @breif
- **/
 void MState::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - copy: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - copy: One or more input arguments are missing." );
@@ -66,9 +51,6 @@ void MState::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( st );
 }
 
-/**
- * @breif
- **/
 void MState::getSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - getSetType: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getSetType: One or more input arguments are missing." );
@@ -81,9 +63,6 @@ void MState::getSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	plhs[0] = mxCreateString( ans.c_str() );
 }
 
-/**
- * @breif
- **/
 void MState::getSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - getSets: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getSets: One or more input arguments are missing." );
@@ -99,9 +78,6 @@ void MState::getSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	objArray2Matlab( states, plhs[0], len );
 }
 
-/**
- * @breif
- **/
 void MState::getTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - getTimestamp: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getTimestamp: One or more input arguments are missing." );
@@ -116,9 +92,6 @@ void MState::getTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	ObjectHandle::convert2Matlab( inter, plhs[0], 1, 2 );
 }
 
-/**
- * @breif
- **/
 void MState::isEmpty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MState - isEmpty: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - isEmpty: One or more arguments are missing." );
@@ -130,9 +103,6 @@ void MState::isEmpty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	plhs[0] = mxCreateLogicalScalar( ans );
 }
 
-/**
- * @breif
- **/
 void MState::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MState - vertices: Expecting an output." );
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - vertices: One or more arguments are missing." );
@@ -154,9 +124,6 @@ void MState::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( new_st ) );
 }
 
-/**
- * @breif
- **/
 void MState::getDimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MState - getDimension: Expecting an output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - getDimension: One or more arguments are missing." );
@@ -169,9 +136,6 @@ void MState::getDimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @breif
- **/
 void MState::getDimensionOffset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MState - getDimensionOffset: Expecting an output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - getDimensionOffset: One or more arguments are missing." );
@@ -184,9 +148,6 @@ void MState::getDimensionOffset( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	plhs[0] = mxCreateDoubleScalar( dim );
 }
 
-/**
- * @breif
- **/
 void MState::getLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - getLocation: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getLocation: One or more input arguments are missing." );
@@ -198,9 +159,6 @@ void MState::getLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 }
 
-/**
- * @breif
- **/
 void MState::getNumberSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - getNumberSets: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getNumberSets: One or more input arguments are missing." );
@@ -211,9 +169,6 @@ void MState::getNumberSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	plhs[0] = mxCreateDoubleScalar( tmp );
 }
 
-/**
- * @breif
- **/
 void MState::getTypes( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - getTypes: Expecting an output." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getTypes: One or more input arguments are missing." );
@@ -228,9 +183,6 @@ void MState::getTypes( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 
 }
 
-/**
- * @breif
- **/
 void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - setLocation: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MState - setLocation: One or more arguments were ignored." );
@@ -240,9 +192,6 @@ void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	st->setLocation( loc );
 }
 
-/**
- * @breif
- **/
 // void MState::setSet( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 // 	if ( nrhs < 6 ) mexErrMsgTxt( "MState - setSet: One or more arguments are missing." );
 // 	if ( nrhs > 6 ) mexWarnMsgTxt( "MState - setSet: One or more arguments were ignored." );
@@ -268,9 +217,6 @@ void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 // 	}
 // }
 
-/**
- * @breif
- **/
 void MState::setSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - setSetType: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MState - setSetType: One or more arguments were ignored." );
@@ -282,9 +228,6 @@ void MState::setSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	st->setSetType( name, pos );
 }
 
-/**
- * @breif
- **/
 void MState::setTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - setTimestamp: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MState - setTimestamp: One or more arguments were ignored." );
@@ -295,9 +238,6 @@ void MState::setTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	// st->setTimestamp(inter);
 }
 
-/**
- * @breif
- **/
 void MState::setSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - setSets: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MState - setSets: One or more arguments were ignored." );
@@ -323,16 +263,10 @@ void MState::setSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	}
 }
 
-// /**
-//  * @breif
-//  **/
 // void MState::setSetSave(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 //     //Not in reach
 // }
 
-/**
- * @breif
- **/
 void MState::setSetDirect( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - setSetDirect: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MState - setSetDirect: One or more arguments were ignored." );
@@ -361,30 +295,18 @@ void MState::setSetDirect( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	}
 }
 
-/**
- * @breif
- **/
 void MState::setAndConvertType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::addTimeToClocks( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::unite( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::satisfies( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 2 ) mexErrMsgTxt( "MState - satisfies: Expecting two output values." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - satisfies: One or more arguments are missing." );
@@ -401,37 +323,22 @@ void MState::satisfies( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	plhs[1] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( p.second ) );
 }
 
-/**
- * @breif
- **/
 void MState::satisfiesHalfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::intersectHalfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::partiallySatisfies( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::applyTimeStep( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::partiallyApplyTimeStep( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - satisfies: Expecting one output." );
 	if ( nrhs < 6 ) mexErrMsgTxt( "MState - satisfies: One or more arguments are missing." );
@@ -446,30 +353,18 @@ void MState::partiallyApplyTimeStep( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
 }
 
-/**
- * @breif
- **/
 void MState::applyTransformation_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::applyTransformation_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::applyTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - linearTransformation: Expecting one output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - linearTransformation: One or more arguments are missing." );
@@ -487,9 +382,6 @@ void MState::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mx
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
 }
 
-/**
- * @breif
- **/
 void MState::affineTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - affineTransformation: Expecting one output." );
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - affineTransformation: One or more arguments are missing." );
@@ -511,30 +403,18 @@ void MState::affineTransformation( int nlhs, mxArray* plhs[], int nrhs, const mx
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
 }
 
-/**
- * @breif
- **/
 void MState::partialIntervalAssignment( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::partiallyApplyTransformation_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::partiallyApplyTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// Not in reach
 }
 
-/**
- * @breif
- **/
 void MState::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - minkowskiSum: Expecting one output." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - minkowskiSum: One or more arguments are missing." );
@@ -546,9 +426,6 @@ void MState::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	hypro::State_t<double> temp = st->minkowskiSum( *rhs );
 }
 
-/**
- * @breif
- **/
 // void MState::partiallyMinkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 // 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - partiallyMinkowskiSum: Expecting one output." );
 // 	if ( nrhs < 4 ) mexErrMsgTxt( "MState - partiallyMinkowskiSum: One or more arguments are missing." );
@@ -558,54 +435,24 @@ void MState::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 // 	hypro::State_t<double>* rhs = convertMat2HandlePtr<hypro::State_t<double>>( prhs[3] );
 // }
 
-/**
- * @breif
- **/
 void MState::contains( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::getSupremum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::removeRedundancy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::partiallyRemoveRedundancy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::reduceRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::partiallyReduceRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
-/**
- * @breif
- **/
 void MState::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
 void MState::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

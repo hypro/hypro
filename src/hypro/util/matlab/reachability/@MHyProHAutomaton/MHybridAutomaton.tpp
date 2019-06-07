@@ -1,10 +1,4 @@
-/**
- * This is the wrapper class for HyPro HybridAutomaton.
- **/
-
-
-
-#include "MHybridAutomaton.h"
+/#include "MHybridAutomaton.h"
 
 void MHybridAutomaton::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - new_empty: Expecting an output." );
@@ -500,7 +494,6 @@ void MHybridAutomaton::checkConsistency( int nlhs, mxArray* plhs[], int nrhs, co
 }
 
 void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// Get the command string
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 2 ) {
