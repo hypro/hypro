@@ -99,9 +99,6 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, PolytopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::PolytopeT< Number, Converter, Setting >", "classhypro_1_1PolytopeT.html", null ]
-    ] ],
     [ "hypro::GeometricObject< Number, SupportFunctionT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::SupportFunctionT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionT.html", null ]
     ] ],

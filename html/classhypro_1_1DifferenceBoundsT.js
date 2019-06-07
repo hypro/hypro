@@ -22,6 +22,7 @@ var classhypro_1_1DifferenceBoundsT =
     [ "extraM", "classhypro_1_1DifferenceBoundsT.html#aa14832773084fa111eb919280fee9d73", null ],
     [ "extraMPlus", "classhypro_1_1DifferenceBoundsT.html#a431313da756ecef0746dfbff3c59e1fa", null ],
     [ "free", "classhypro_1_1DifferenceBoundsT.html#a72c94c20831b84d978834c9345e0dcdf", null ],
+    [ "getCoveredTimeInterval", "classhypro_1_1DifferenceBoundsT.html#a080c8c587fdc19875a14d70b0bea40d1", null ],
     [ "getDBM", "classhypro_1_1DifferenceBoundsT.html#a7d687668d7a20cc6d3117a98818bd594", null ],
     [ "getTimeHorizon", "classhypro_1_1DifferenceBoundsT.html#a50f881dd68093e4d6dd848988deb4792", null ],
     [ "intersect", "classhypro_1_1DifferenceBoundsT.html#a30fc56605b08aff2efae9c04a3d8a272", null ],

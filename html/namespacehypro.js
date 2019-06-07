@@ -167,7 +167,6 @@ var namespacehypro =
     [ "PolytopeSetting", "structhypro_1_1PolytopeSetting.html", null ],
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html", "classhypro_1_1PolytopeSupportFunction" ],
     [ "PolytopeSupportFunctionSetting", "structhypro_1_1PolytopeSupportFunctionSetting.html", null ],
-    [ "PolytopeT", "classhypro_1_1PolytopeT.html", "classhypro_1_1PolytopeT" ],
     [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ],
     [ "projectionContent", "structhypro_1_1projectionContent.html", "structhypro_1_1projectionContent" ],
     [ "Range", "classhypro_1_1Range.html", "classhypro_1_1Range" ],

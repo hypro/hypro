@@ -24,7 +24,6 @@ var searchData=
   ['genericverticesvisitor',['genericVerticesVisitor',['../classhypro_1_1genericVerticesVisitor.html',1,'hypro']]],
   ['geometricobject',['GeometricObject',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20differenceboundst_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
-  ['geometricobject_3c_20number_2c_20polytopet_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, PolytopeT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20supportfunctiont_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20vpolytopet_3c_20number_2c_20converter_2c_20s_20_3e_20_3e',['GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter, S &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20zonotopet_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],

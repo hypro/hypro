@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"classhypro_1_1LockedFileWriter.html#a175b431197259eaed826bdd5763d393d":[6,0,1,118,1],
 "classhypro_1_1LockedFileWriter.html#a18110699500645fadb01a569500cb345":[6,0,1,118,2],
 "classhypro_1_1LockedFileWriter.html#a7925797af53d06862e317e49a6c07256":[6,0,1,118,0],
 "classhypro_1_1NeighborhoodContainer.html":[6,0,1,129],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "classhypro_1_1Point.html#ada9598e71254ea47896ec2ceabfac3ea":[6,0,1,145,0],
 "classhypro_1_1Point.html#adbd99d1c7ff9e355dec68d1b04447ab3":[6,0,1,145,16],
 "classhypro_1_1Point.html#aded350852679d2335df411129f2c8369":[6,0,1,145,61],
-"classhypro_1_1Point.html#ae0d225cbe34a3a74cd7002f30a21388e":[6,0,1,145,47],
-"classhypro_1_1Point.html#ae19c1e0062f7d973008ae995316e6ea2":[6,0,1,145,6]
+"classhypro_1_1Point.html#ae0d225cbe34a3a74cd7002f30a21388e":[6,0,1,145,47]
 };

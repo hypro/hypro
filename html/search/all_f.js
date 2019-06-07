@@ -2,7 +2,6 @@ var searchData=
 [
   ['range',['Range',['../classhypro_1_1Range.html',1,'hypro']]],
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df',1,'hypro::Point']]],
-  ['rawpolyhedron',['rawPolyhedron',['../classhypro_1_1PolytopeT.html#a1d8c026b9efe29e4481c63ab2205640d',1,'hypro::PolytopeT']]],
   ['reach_2eh',['Reach.h',['../Reach_8h.html',1,'']]],
   ['reachability',['reachability',['../namespacereachability.html',1,'']]],
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html',1,'hypro']]],
@@ -20,7 +19,7 @@ var searchData=
   ['reduce',['reduce',['../classhypro_1_1HybridAutomaton.html#a18ace72be9084ee3df5c54aead596737',1,'hypro::HybridAutomaton']]],
   ['reduced',['reduced',['../classhypro_1_1VPolytopeT.html#a7f1d3b3c38761d773df2acc4e5961ffc',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],
-  ['reducerepresentation',['reduceRepresentation',['../classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa',1,'hypro::DifferenceBoundsT::reduceRepresentation()'],['../classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a',1,'hypro::GeometricObject::reduceRepresentation()'],['../classhypro_1_1PolytopeT.html#a3fb914a20e32e6695a738063ec687810',1,'hypro::PolytopeT::reduceRepresentation()'],['../classhypro_1_1VPolytopeT.html#a584ddb1d0d1446e534a45a19b3542865',1,'hypro::VPolytopeT::reduceRepresentation()'],['../classhypro_1_1SupportFunctionT.html#a1beee2b99f7a5f440edc300bfec26e02',1,'hypro::SupportFunctionT::reduceRepresentation()'],['../classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d',1,'hypro::ZonotopeT::reduceRepresentation()']]],
+  ['reducerepresentation',['reduceRepresentation',['../classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa',1,'hypro::DifferenceBoundsT::reduceRepresentation()'],['../classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a',1,'hypro::GeometricObject::reduceRepresentation()'],['../classhypro_1_1VPolytopeT.html#a584ddb1d0d1446e534a45a19b3542865',1,'hypro::VPolytopeT::reduceRepresentation()'],['../classhypro_1_1SupportFunctionT.html#a1beee2b99f7a5f440edc300bfec26e02',1,'hypro::SupportFunctionT::reduceRepresentation()'],['../classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d',1,'hypro::ZonotopeT::reduceRepresentation()']]],
   ['reducetodimensions',['reduceToDimensions',['../classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac',1,'hypro::Point']]],
   ['redundantconstraints',['redundantConstraints',['../classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084',1,'hypro::Optimizer']]],
   ['refinementsetting',['RefinementSetting',['../structhypro_1_1RefinementSetting.html#aef4ab59d09d621981204dd0c3533cc38',1,'hypro::RefinementSetting']]],
@@ -38,8 +37,8 @@ var searchData=
   ['reverse',['reverse',['../classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7',1,'hypro::Dictionary']]],
   ['rewind',['rewind',['../classhypro_1_1DifferenceBoundsT.html#a909a0530fdf24274da0939d3dd01c28c',1,'hypro::DifferenceBoundsT']]],
   ['rgetnode',['rGetNode',['../classhypro_1_1EventTimingProvider.html#a26ffa86e373f27dae9e8646ec5cd0b0a',1,'hypro::EventTimingProvider']]],
-  ['ridge',['Ridge',['../classhypro_1_1Ridge.html',1,'hypro']]],
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
+  ['ridge',['Ridge',['../classhypro_1_1Ridge.html',1,'hypro']]],
   ['rpoint',['rPoint',['../classhypro_1_1Vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
   ['rsettings',['rSettings',['../classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d',1,'hypro::Plotter']]],
   ['rvertices',['rVertices',['../classhypro_1_1Ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge']]]
