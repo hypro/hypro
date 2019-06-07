@@ -204,7 +204,7 @@ namespace hypro {
 	void ConvexHull<Number>::polyhedriclHull() {
 		try{
 			if(mPoints.size()==0) {
-				throw string("\n WARNING: empty set. \n");
+				throw std::string("\n WARNING: empty set. \n");
 			}
 			std::vector<vector_t<Number>> newCone;
 			for(const auto& p:mPoints) {
@@ -249,7 +249,7 @@ namespace hypro {
 				hs.setNormal(aux);
 				if(aux!=zero) {mHsv.push_back(hs);}
 			}
-		} catch(string const& message) {
+		} catch(std::string const& message) {
 		std::cout << message;
 		}
 	}

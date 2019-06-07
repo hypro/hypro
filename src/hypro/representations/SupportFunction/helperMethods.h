@@ -170,20 +170,13 @@ matrix_t<Number> directionList2Matrix( std::vector<matrix_t<Number>>* list ) {
 */
 template<typename Number>
 matrix_t<Number>* list2Array( std::vector<matrix_t<Number>>* list ) {
-	// get list size
-	unsigned int counter = 0;
-	for ( auto iterator = ( *list ).begin(); iterator != ( *list ).end(); ++iterator ) {
-		counter++;
-	}
+	matrix_t<Number>* result[list->size()];
 
-	matrix_t<Number>* result[counter];
-
-	counter = 0;
+	std::size_t counter = 0;
 	for ( auto iterator = ( *list ).begin(); iterator != ( *list ).end(); ++iterator ) {
 		result[counter] = &( *iterator );
 		counter++;
 	}
-
 	return *result;
 }
 
