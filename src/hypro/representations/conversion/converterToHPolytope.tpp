@@ -9,10 +9,11 @@
  */
 
 #include "Converter.h"
-#include "../../util/templateDirections.h"
 #ifndef INCL_FROM_CONVERTERHEADER
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
+
+namespace hypro {
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -21,11 +22,13 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     return _source;
 }
 
+
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE ){
     return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(_source.matrix(), _source.vector());
 }
+
 
 template<typename Number>
 template<typename HPolySetting>
@@ -70,6 +73,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(constraintMatrix, b);
 }
 
+
 //conversion from V-Polytope to H-Polytope (EXACT or OVER)
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
@@ -100,6 +104,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
      return HPolytope(_source.matrix(), _source.vector());
 }
 
+
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
@@ -113,6 +118,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 
     return toHPolytope(vpoly, mode);
 }
+
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
@@ -183,7 +189,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//std::cout << "done." << std::endl;
 		for(auto direction : additionalDirections) {
 			// we assume that the additional direction, if it has the right number of rows, is already projected.
-			if(direction.rows() == dim) {
+			if(direction.rows() == Eigen::Index(dim)) {
 				// project direction
 				//std::cout << "project " << direction << std::endl;
 				for(const auto& dir : zeroDimensions) {
@@ -228,7 +234,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	}
 
 }
-
 
 // conversion from difference bounds to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -280,14 +285,33 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 //Convert a ppl polytope into a HPolytope. Luckily, ppl polytopes have halfspaces internally.
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
-	Converter<Number>::VPolytope v(source.vertices());
-	return toHPolytope(v, CONV_MODE::EXACT);
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE mode){
+	if(source.empty()) {
+		return HPolytope::Empty();
+	}
+
+	HPolytope target;
+    if (mode == EXACT){
+		target = HPolytope(source.vertices());
+    } else if (mode == OVER) {
+	    //gets vertices from source object
+	    auto vertices = source.vertices();
+
+	    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
+	    PrincipalComponentAnalysis<Number> pca(vertices);
+	    std::vector<Halfspace<Number>> planes = pca.box();
+	    target = HPolytope(planes);
+    }
+    return target;
 }
 #endif
+
 
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.getHalfspaces());
 }
+
+
+} // namespace hypro

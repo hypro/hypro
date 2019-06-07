@@ -18,6 +18,7 @@
 #include "../Zonotope/Zonotope.h"
 #include "../DifferenceBounds/DifferenceBounds.h"
 #include "../../util/pca.h"
+#include "../../util/templateDirections.h"
 
 namespace hypro {
 
@@ -75,6 +76,7 @@ class Converter {
 		template<typename BoxSetting = typename Box::Settings, typename inSetting>
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 
+
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
 		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
@@ -98,6 +100,7 @@ class Converter {
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
 		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 
+
 		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
 		static ConstraintSetT<Number,CSSetting> toConstraintSet(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
@@ -119,7 +122,8 @@ class Converter {
 	    template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
 		static ConstraintSetT<Number,CSSetting> toConstraintSet(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
-		static ConstraintSetT<Number,CSSetting> toConstraintSet(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
+		static ConstraintSetT<Number,CSSetting> toConstraintSet(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = 	CONV_MODE::OVER);
+
 
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -144,6 +148,7 @@ class Converter {
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 
+
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
@@ -155,7 +160,7 @@ class Converter {
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#ifdef HYPRO_USE_PPL
-		template<typename VPolySetting = typename VPolytope::Settings>
+		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#endif
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
@@ -166,6 +171,7 @@ class Converter {
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+
 
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -179,7 +185,7 @@ class Converter {
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#ifdef HYPRO_USE_PPL
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
-		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#endif
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const SupportFunctionT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -189,6 +195,7 @@ class Converter {
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+
 
 		template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
 		static ZonotopeT<Number,Converter<Number>,ZonotopeSetting> toZonotope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -234,6 +241,7 @@ class Converter {
 		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
 		#endif
 
+
 		template<typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
 		static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
@@ -256,11 +264,16 @@ class Converter {
 		static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
 		static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-
 		/* END Conversion (do not remove this comment!) */
 };
 
+
+
+
+} // namespace hypro
+
 #include "typedefs.h"
+
 #include "converterToBox.tpp"
 #include "converterToCarlPolytope.tpp"
 #include "converterToConstraintSet.tpp"
@@ -271,10 +284,7 @@ class Converter {
 #ifdef HYPRO_USE_PPL
 #include "converterToPolytope.tpp"
 #endif
-//#include "settingsConversion.tpp"
 #include "converterToDifferenceBounds.tpp"
 
-} // namespace hypro
-
-#include "convenienceOperators.h"
+//#include "convenienceOperators.h"
 #include "conversionHelper.h"

@@ -33,8 +33,6 @@ CLANG_WARNING_DISABLE("-Wunused-local-typedef")
 CLANG_WARNING_RESET
 #include <carl/core/Variable.h>
 
-using namespace Parma_Polyhedra_Library::IO_Operators;
-
 namespace hypro
 {
 
@@ -47,6 +45,8 @@ namespace hypro
 	template<typename Number, typename Converter, class Setting>
 	class PolytopeT : public GeometricObject<Number, PolytopeT<Number,Converter,Setting>>
 	{
+	public:
+		typedef Setting Settings;
 	private:
 		Parma_Polyhedra_Library::C_Polyhedron mPolyhedron;
 		mutable std::vector<Point<Number>> mPoints;
@@ -131,7 +131,7 @@ namespace hypro
 		/**
 		 * PPL related functions
 		 */
-		const C_Polyhedron& rawPolyhedron() const;
+		const Parma_Polyhedra_Library::C_Polyhedron& rawPolyhedron() const;
 
 		/**
 		 * Geometric Object interface

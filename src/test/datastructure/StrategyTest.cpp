@@ -4,12 +4,14 @@
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
 #include "../../hypro/datastructures/reachability/Strategy.h"
 
+namespace {
 
 using namespace hypro;
 
 
 TEST(StrategyTest, Constructor)
 {
+	using namespace hypro;
     Strategy<State_t<double>> strat;
 
 	strat.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
@@ -25,6 +27,8 @@ TEST(StrategyTest, Constructor)
 
 TEST(StrategyTest, Conversion)
 {
+	using namespace hypro;
+
     Strategy<State_t<double>> strat;
 
 	strat.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
@@ -60,4 +64,5 @@ TEST(StrategyTest, Conversion)
 	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
 	EXPECT_EQ(s.getSetType(), representation_name::support_function);
 
+}
 }
