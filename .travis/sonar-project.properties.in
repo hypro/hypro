@@ -11,6 +11,7 @@ sonar.language=cpp
 sonar.sources=src
 sonar.exclusions=src/resources/**/*, src/hypro/parser, src/test
 sonar.cpp.file.suffixes=.h,.tpp,.cpp
+sonar.c.file.suffixes=.c
 
 # Encoding of the source code. Default is default system encoding
 #sonar.sourceEncoding=UTF-8"
