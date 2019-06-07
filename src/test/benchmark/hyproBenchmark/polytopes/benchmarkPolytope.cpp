@@ -28,11 +28,11 @@ namespace polytope
         //ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         // intersection
-        //std::cout << "Benchmarking intersection." << std::endl;
-        //tmp = intersect(settings);
-        //tmp.createCSV("polytopeIntersection", "\t","intersect");
-        //tmp.createCSV("polytopeIntersectionPPL", "\t", "intersectPPL");
-        //ress.insert(ress.end(), tmp.begin(), tmp.end());
+        std::cout << "Benchmarking intersection." << std::endl;
+        tmp = intersect(settings);
+        tmp.createCSV("polytopeIntersection", "\t","intersect");
+        tmp.createCSV("polytopeIntersectionPPL", "\t", "intersectPPL");
+        ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         std::cout << "Polytope benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
 

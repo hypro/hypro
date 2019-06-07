@@ -28,7 +28,8 @@ int main(int argc, char const *argv[])
     //std::cout << "Benchmark polytopes." << std::endl;
     //benchmark::polytope::run(s);
 
-    //std::cout << "Benchmark support functions." << std::endl;
+    std::cout << "Benchmark support functions." << std::endl;
+    benchmark::sf::run(s);
     //std::async(std::launch::async,benchmark::sf::run,s);
 
     std::cout << "Benchmarking took " << general.elapsedMs() << " sec." << std::endl;

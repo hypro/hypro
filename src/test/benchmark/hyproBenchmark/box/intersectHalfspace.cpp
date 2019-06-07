@@ -14,7 +14,7 @@ namespace box {
         box.insert(carl::Interval<::benchmark::Number>(-1,1));
 
         // initialize random number generator
-        mt19937 generator;
+        std::mt19937 generator;
         std::uniform_int_distribution<int> dist = std::uniform_int_distribution<int>(0,10);
 
         // iterate over dimensions
@@ -35,8 +35,8 @@ namespace box {
                 #ifdef HYPRO_USE_PPL
                 Parma_Polyhedra_Library::Constraint c;
                 Parma_Polyhedra_Library::Linear_Expression e;
-                for (dimension_type i = 0; i < d; ++i )
-                    e += hsps.back().normal()(i) * Variable(i);
+                for (Parma_Polyhedra_Library::dimension_type i = 0; i < d; ++i )
+                    e += hsps.back().normal()(i) * Parma_Polyhedra_Library::Variable(i);
                 e += -hsps.back().offset();
                 c = e <= 0;
                 pplHsps.emplace_back(c);
@@ -78,7 +78,7 @@ namespace box {
                 b.refine_with_constraint(pplHsps[i]);
                 pplRT += runTimerPPL.elapsed();
             }
-            ress.emplace_back({"intersectHalfspacePPL",pplRT/settings.iterations,d});
+            ress.emplace_back({"intersectHalfspacePPL",pplRT/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
             #endif
 
