@@ -17,40 +17,40 @@ void MReset::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 }
 
 void MReset::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	mexErrMsgTxt("Weird things happen here...");
-    // if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_mat_vec: Expecting an output." );
+	mexErrMsgTxt( "Weird things happen here..." );
+	// if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_mat_vec: Expecting an output." );
 	// if ( nrhs < 4 ) mexErrMsgTxt( "MReset - new_mat_vec: One or more arguments are missing." );
 	// if ( nrhs > 4 ) mexWarnMsgTxt( "MReset - new_mat_vec: One or more arguments were ignored." );
 
 	// const mwSize *mat_dims, *vec_dims;
-	// int mat_dimx, mat_dimy, len;
+	// int mat_rows, mat_cols, len;
 
 	// mat_dims = mxGetDimensions( prhs[2] );
 	// vec_dims = mxGetDimensions( prhs[3] );
-	// mat_dimy = (int)mat_dims[0];
-	// mat_dimx = (int)mat_dims[1];
+	// mat_cols = (int)mat_dims[1];
+	// mat_rows = (int)mat_dims[0];
 	// len = (int)vec_dims[0];
 
-	// const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_dimx, mat_dimy );
+	// const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
 	// const hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	// hypro::Reset<double>* reset = new hypro::Reset<double>( matrix, vector );
 	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
 }
 
 void MReset::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	mexErrMsgTxt("Weird things happen here...");
-    // if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_intervals: One output expected." );
+	mexErrMsgTxt( "Weird things happen here..." );
+	// if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_intervals: One output expected." );
 	// if ( nrhs < 3 ) mexErrMsgTxt( "MReset - new_intervals: One or more input arguments are missing." );
 	// if ( nrhs > 3 ) mexWarnMsgTxt( "MReset - new_intervals: One or more input arguments were ignored." );
 
 	// const mwSize* dims;
 	// double* in;
-	// int dimx, dimy;
+	// int rows, cols;
 
 	// dims = mxGetDimensions( prhs[2] );
-	// dimy = (int)dims[0];
-	// dimx = (int)dims[1];
-	// const std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], dimx, dimy );
+	// cols = (int)dims[1];
+	// rows = (int)dims[0];
+	// const std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], rows, cols );
 	// hypro::Reset<double>* temp = new hypro::Reset<double>(intervals);
 	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
 }
@@ -88,8 +88,8 @@ void MReset::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( nrhs > 4 ) mexErrMsgTxt( "MReset - getVector: One or more arguments were ignored!" );
 
 	hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
-    std::size_t pos = mxGetScalar( prhs[3] );
-	hypro::vector_t<double> vec = res->getVector(pos);
+	std::size_t pos = mxGetScalar( prhs[3] );
+	hypro::vector_t<double> vec = res->getVector( pos );
 	plhs[0] = mxCreateDoubleMatrix( vec.rows(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( vec, plhs[0], vec.rows(), 1 );
 }
@@ -100,8 +100,8 @@ void MReset::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( nrhs > 4 ) mexErrMsgTxt( "MReset - getMatrix: One or more arguments were ignored!" );
 
 	hypro::Reset<double>* cond = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
-    std::size_t pos = mxGetScalar( prhs[3] );
-	hypro::matrix_t<double> mat = cond->getMatrix(pos);
+	std::size_t pos = mxGetScalar( prhs[3] );
+	hypro::matrix_t<double> mat = cond->getMatrix( pos );
 	plhs[0] = mxCreateDoubleMatrix( mat.rows(), mat.cols(), mxREAL );
 	ObjectHandle::convert2Matlab( mat, plhs[0], mat.rows(), mat.cols() );
 }
@@ -112,11 +112,11 @@ void MReset::getIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MReset - getIntervals: One or more input arguments were ignored." );
 
 	hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
-    std::size_t pos = mxGetScalar( prhs[3] );
-	std::vector<carl::Interval<double>> intervals = res->getIntervals(pos);
-	const int dimy = intervals.size();
-	const int dimx = 2;
-	plhs[0] = mxCreateDoubleMatrix( dimy, dimx, mxREAL );
+	std::size_t pos = mxGetScalar( prhs[3] );
+	std::vector<carl::Interval<double>> intervals = res->getIntervals( pos );
+	const int rows = intervals.size();
+	const int cols = 2;
+	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	vector2Matlab( intervals, plhs[0] );
 }
 
@@ -176,12 +176,12 @@ void MReset::getIntervalResets( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		ints[i] = intAss[i].mIntervals;
 	}
 
-    int len = ints.size();
-    const mwSize dims[2] = {1, (mwSize) len};
-	plhs[0] = mxCreateCellArray( 2, dims);
+	int len = ints.size();
+	const mwSize dims[2] = {1, (mwSize)len};
+	plhs[0] = mxCreateCellArray( 2, dims );
 
 	for ( int i = 0; i < ints.size(); i++ ) {
-		mxArray* elem = mxCreateDoubleMatrix( ints[i].size(),2, mxREAL );
+		mxArray* elem = mxCreateDoubleMatrix( ints[i].size(), 2, mxREAL );
 		vector2Matlab<carl::Interval<double>>( ints[i], elem );
 		mxSetCell( plhs[0], i, elem );
 	}
@@ -206,13 +206,13 @@ void MReset::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( nrhs > 5 ) mexErrMsgTxt( "MReset - setMatrix: One or more arguments were ignored!" );
 
 	const mwSize* dims;
-	int dimx, dimy;
+	int rows, cols;
 	dims = mxGetDimensions( prhs[3] );
-	dimx = dims[0];
-	dimy = dims[1];
+	rows = dims[0];
+	cols = dims[1];
 
 	hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
-	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], dimx, dimy );
+	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
 	std::size_t at = mxGetScalar( prhs[4] );
 	res->setMatrix( mat, at );
 }
@@ -223,14 +223,14 @@ void MReset::setIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
 	const mwSize* dims;
 	double* in;
-	int dimx, dimy;
+	int rows, cols;
 
 	dims = mxGetDimensions( prhs[3] );
-	dimy = (int)dims[0];
-	dimx = (int)dims[1];
+	cols = (int)dims[1];
+	rows = (int)dims[0];
 
 	hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
-	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[3], dimx, dimy );
+	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[3], rows, cols );
 	std::size_t at = mxGetScalar( prhs[4] );
 	res->setIntervals( intervals, at );
 }
@@ -289,7 +289,7 @@ void MReset::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 }
 
 void MReset::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	int cmd = mxGetScalar(prhs[1]);
+	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 2 ) {
 		new_empty( nlhs, plhs, nrhs, prhs );
@@ -371,7 +371,7 @@ void MReset::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 		decompose( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 21) {
+	if ( cmd == 21 ) {
 		combine( nlhs, plhs, nrhs, prhs );
 		return;
 	}

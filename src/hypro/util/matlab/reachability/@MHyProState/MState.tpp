@@ -31,10 +31,10 @@ void MState::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
 	std::size_t offset = (std::size_t)mxGetScalar( prhs[3] );
 	std::vector<hypro::Point<double>> vertices = st->vertices( offset );
-	int dimy = vertices.size();
-	if ( dimy != 0 ) {
-		int dimx = vertices[0].dimension();
-		plhs[0] = mxCreateDoubleMatrix( dimx, dimy, mxREAL );
+	int cols = vertices.size();
+	if ( cols != 0 ) {
+		int rows = vertices[0].dimension();
+		plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 		ObjectHandle::convert2Matlab( vertices, plhs[0] );
 	} else {
 		mexWarnMsgTxt( "MState - vertices: The object has no vertices." );
@@ -174,13 +174,12 @@ void MState::getTypes( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	if ( nrhs < 3 ) mexErrMsgTxt( "MState - getTypes: One or more input arguments are missing." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MState - getTypes: One or more input arguments were ignored." );
 
-    hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>(prhs[2]);
-    std::vector<hypro::representation_name> types = st->getTypes();
-    const int dimx = types.size();
-    const int dimy = 1;
-    plhs[0] = mxCreateDoubleMatrix(dimx, dimy, mxREAL);
-    vector2Matlab(types, plhs[0]); 
-
+	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
+	std::vector<hypro::representation_name> types = st->getTypes();
+	const int rows = types.size();
+	const int cols = 1;
+	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
+	vector2Matlab( types, plhs[0] );
 }
 
 void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -222,7 +221,7 @@ void MState::setSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MState - setSetType: One or more arguments were ignored." );
 
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
-	int type = mxGetScalar(prhs[3]);
+	int type = mxGetScalar( prhs[3] );
 	hypro::representation_name name = ObjectHandle::mRepresentationName2Hypro( type );
 	std::size_t pos = mxGetScalar( prhs[4] );
 	st->setSetType( name, pos );
@@ -371,12 +370,12 @@ void MState::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mx
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MState - linearTransformation: One or more arguments were ignored." );
 
 	const mwSize* dims;
-	int dimx, dimy;
+	int rows, cols;
 	dims = mxGetDimensions( prhs[3] );
-	dimy = dims[0];
-	dimx = dims[1];
+	cols = dims[1];
+	rows = dims[0];
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
-	const hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], dimx, dimy );
+	const hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
 
 	hypro::State_t<double> temp = st->linearTransformation( mat );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
@@ -388,15 +387,15 @@ void MState::affineTransformation( int nlhs, mxArray* plhs[], int nrhs, const mx
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MState - affineTransformation: One or more arguments were ignored." );
 
 	const mwSize *mat_dims, *vec_dims;
-	int mat_dimx, mat_dimy, vec_len;
+	int mat_rows, mat_cols, vec_len;
 	mat_dims = mxGetDimensions( prhs[3] );
 	vec_dims = mxGetDimensions( prhs[4] );
-	mat_dimy = mat_dims[0];
-	mat_dimx = mat_dims[1];
+	mat_cols = mat_dims[1];
+	mat_rows = mat_dims[0];
 	vec_len = vec_dims[0];
 
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
-	const hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], mat_dimx, mat_dimy );
+	const hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], mat_rows, mat_cols );
 	const hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro( prhs[4], vec_len );
 
 	hypro::State_t<double> temp = st->affineTransformation( mat, vec );
@@ -456,7 +455,7 @@ void MState::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] 
 void MState::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {}
 
 void MState::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	int cmd = mxGetScalar(prhs[1]);
+	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 1 ) {
 		del_state( nlhs, plhs, nrhs, prhs );
@@ -515,7 +514,7 @@ void MState::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 		return;
 	}
 	if ( cmd == 15 ) {
-		//getSet( nlhs, plhs, nrhs, prhs );
+		// getSet( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 16 ) {

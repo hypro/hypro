@@ -1,4 +1,4 @@
-/#include "MHybridAutomaton.h"
+#include "MHybridAutomaton.h"
 
 void MHybridAutomaton::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - new_empty: Expecting an output." );
@@ -77,14 +77,14 @@ void MHybridAutomaton::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	// mxArray* m_in_vec;
 	// double* in_vec;
 	// const mwSize* dims;
-	// int dimx, dimy;
+	// int rows, cols;
 
 	// m_in_vec = mxDuplicateArray(prhs[3]);
 	// in_vec = mxGetPr(m_in_vec);
 	// dims = mxGetDimensions(prhs[3]);
-	// dimy = dims[0];
-	// dimx = dims[1];
-	// std::vector<std::vector<size_t>> decomposition = ObjectHandle::mVectorOfVectors2Hypro(m_in_vec,dimx, dimy);
+	// cols = dims[1];
+	// rows = dims[0];
+	// std::vector<std::vector<size_t>> decomposition = ObjectHandle::mVectorOfVectors2Hypro(m_in_vec,rows, cols);
 	// hypro::HybridAutomaton<double>* obj = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
 	// obj->decompose();
 	// obj->decompose(decomposition);

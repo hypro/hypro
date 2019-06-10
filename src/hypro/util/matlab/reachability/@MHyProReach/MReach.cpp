@@ -88,12 +88,12 @@ void MReach::setSettings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 			mexPrintf( "%s: %f\n", fname, pplDenomimator );
 		} else if ( !strcmp( fname, "plotDimensions" ) ) {
 			const mwSize* dims;
-			int dimx, dimy;
+			int rows, cols;
 			dims = mxGetDimensions( tmp );
-			dimx = dims[0];
-			dimy = dims[1];
+			rows = dims[0];
+			cols = dims[1];
 			std::vector<std::vector<std::size_t>> plotDimensions =
-				  ObjectHandle::mVectorOfVectors2Hypro( tmp, dimx, dimy );
+				  ObjectHandle::mVectorOfVectors2Hypro( tmp, rows, cols );
 			settings.plotDimensions = plotDimensions;
 		} else if ( !strcmp( fname, "uniformBloating" ) ) {
 			double uniformBloating = mxGetScalar( tmp );

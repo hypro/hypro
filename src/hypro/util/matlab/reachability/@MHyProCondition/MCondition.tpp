@@ -2,9 +2,7 @@
 
 void MCondition::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - new_empty: Expecting an output!" );
-
 	hypro::Condition<double>* cond = new hypro::Condition<double>();
-	mexPrintf("New Condition Addresss %p\n", cond);
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 
@@ -14,17 +12,16 @@ void MCondition::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MCondition - new_mat_vec: One or more input arguments were ignored!" );
 
 	const mwSize *mat_dims, *vec_dims;
-	int mat_dimx, mat_dimy, vec_len;
+	int mat_rows, mat_cols, vec_len;
 	mat_dims = mxGetDimensions( prhs[2] );
 	vec_dims = mxGetDimensions( prhs[3] );
-	mat_dimx = mat_dims[0];
-	mat_dimy = mat_dims[1];
+	mat_rows = mat_dims[0];
+	mat_cols = mat_dims[1];
 	vec_len = vec_dims[0];
 
-	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_dimx, mat_dimy );
+	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], vec_len );
 	hypro::Condition<double>* cond = new hypro::Condition<double>( matrix, vector );
-	// mexPrintf("Condition Addresss %p\n", cond);
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( cond );
 }
 
@@ -33,9 +30,10 @@ void MCondition::new_constr_set( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	if ( nrhs < 3 ) mexErrMsgTxt( "MCondition - new_constr_set: One or more input arguments are missing!" );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MCondition - new_constr_set: One or more input arguments were ignored!" );
 
-	const hypro::ConstraintSetT<double>* set = convertMat2Ptr<hypro::ConstraintSetT<double>>( prhs[2] );
-	// hypro::Condition<double>* cond = new hypro::Condition<double>(*set);
-	// plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond); ---> ?
+	const hypro::ConstraintSet<double>* constraint = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
+	hypro::Condition<double>* cond = new hypro::Condition<double>(*constraint);
+	mexErrMsgTxt("Not implemented!");
+	//plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
 }
 
 void MCondition::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -122,13 +120,13 @@ void MCondition::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	if ( nrhs > 4 ) mexErrMsgTxt( "MCondition - setMatrix: One or more arguments were ignored!" );
 
 	const mwSize* dims;
-	int dimx, dimy;
+	int rows, cols;
 	dims = mxGetDimensions( prhs[3] );
-	dimx = dims[0];
-	dimy = dims[1];
+	rows = dims[0];
+	cols = dims[1];
 
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[2] );
-	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], dimx, dimy );
+	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
 	cond->setMatrix( mat );
 }
 
