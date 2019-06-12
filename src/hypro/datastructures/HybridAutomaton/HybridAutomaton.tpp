@@ -242,7 +242,7 @@ void HybridAutomaton<Number>::addLocation(std::unique_ptr<Location<Number>>&& lo
     mLocations.emplace_back(std::move(location));
 }
 
-/*
+/* 
 template<typename Number>
 void HybridAutomaton<Number>::addTransition(const Transition<Number>& transition) {
 	this->addTransition(std::move(std::make_unique<Transition<Number>>(transition)));

@@ -31,9 +31,9 @@ void MCondition::new_constr_set( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MCondition - new_constr_set: One or more input arguments were ignored!" );
 
 	const hypro::ConstraintSet<double>* constraint = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
-	hypro::Condition<double>* cond = new hypro::Condition<double>(*constraint);
-	mexErrMsgTxt("Not implemented!");
-	//plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
+	// hypro::Condition<double>* cond = new hypro::Condition<double>(*constraint);
+	mexErrMsgTxt( "Not implemented!" );
+	// plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
 }
 
 void MCondition::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -170,25 +170,22 @@ void MCondition::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	plhs[0] = mxCreateDoubleScalar( s );
 }
 
-// void MCondition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-//     if(nlhs != 1)
-//         mexErrMsgTxt("MCondition - getDotRepresentation: Expecting an output!");
-//     if(nrhs < 4)
-//         mexErrMsgTxt("MCondition - getDotRepresentation: One or more input arguments are missing!");
-//     if(nrhs > 4)
-//         mexWarnMsgTxt("MCondition - getDotRepresentation: One or more input arguments were ignored!");
+void MCondition::getDotRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+	if ( nlhs != 1 ) mexErrMsgTxt( "MCondition - getDotRepresentation: Expecting an output!" );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - getDotRepresentation: One or more input arguments are missing!" );
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MCondition - getDotRepresentation: One or more input arguments were ignored!" );
 
-//     const mwSize* dims;
-//     int len;
-//     dims = mxGetDimensions(prhs[3]);
-//     len = dims[0];
+	const mwSize* dims;
+	int len;
+	dims = mxGetDimensions( prhs[3] );
+	len = dims[0];
 
-//     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-//     std::vector<std::string> strs = ObjectHandle::mStringVector2Hypro(prhs[3], len);
+	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[2] );
+	std::vector<std::string> strs = ObjectHandle::mStringVector2Hypro( prhs[3], len );
 
-//     std::string ans = cond->getDotRepresentation(strs);
-//     plhs[0] = mxCreateString(ans.c_str());
-// }
+	std::string ans = cond->getDotRepresentation( strs );
+	plhs[0] = mxCreateString( ans.c_str() );
+}
 
 void MCondition::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	// TODO:
@@ -308,10 +305,10 @@ void MCondition::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 		hash( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	// if (cmd == 16){
-	//     getDotRepresentation(nlhs, plhs, nrhs, prhs);
-	//     return;
-	// }
+	if ( cmd == 16 ) {
+		getDotRepresentation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
 	if ( cmd == 17 ) {
 		decompose( nlhs, plhs, nrhs, prhs );
 		return;

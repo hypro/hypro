@@ -15,30 +15,11 @@ void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const m
     if(nrhs < 4)
         mexErrMsgTxt("MHybridAutomaton - new_loc_init: One or more arguments are missing.");
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - new_loc_init: One or more arguments were ignored." );
-
+	
 	std::vector<std::unique_ptr<hypro::Location<double>>> locs = ObjectHandle::mLocsVector2Hypro(prhs[2]);
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro( prhs[3] );
-	hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>();
-	plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
-
-
-    // const mwSize *loc_dims;
-    // int loc_num;
-    // loc_dims = mxGetDimensions(prhs[2]);
-    // loc_num = loc_dims[1];
-    // const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
-    // const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
-    // ObjectHandle::mLocCondMap2Hypro(prhs[3]);
-
-    // std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
-    // for(const auto &elem : locs){
-    //     hypro::Location<double>* l = new hypro::Location<double>(elem);
-    //     std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>(*l);
-    //     ptr_locs.emplace_back(std::move(loc));
-    // }
-
-    // hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
-    // plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+	// hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(locs, mapping);
+	// plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
 }
 
 void MHybridAutomaton::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -122,31 +103,15 @@ void MHybridAutomaton::getLocation_by_hash( int nlhs, mxArray* plhs[], int nrhs,
 }
 
 void MHybridAutomaton::getLocation_by_name( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One output expected." );
+	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One output expected." );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - getLocation_by_name: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - getLocation_by_name: One or more arguments were ignored." );
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
-	//char name[64];
-	//mxGetString( prhs[3], name, sizeof( name ) );
-	//hypro::Location<double>* loc = autom->getLocation( name );
-	//mexPrintf("getLocation loc Addresss %p\n", loc);
-	//plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
-	hypro::Location<double>* loc1 = new hypro::Location<double>();
-	mexPrintf("getLocation loc1 Addresss %p\n", loc1);
-	loc1->setName("loc1");
-	
-	std::vector<std::unique_ptr<hypro::Location<double>>> locs_ptr;
-	std::unique_ptr<hypro::Location<double>> loc = std::make_unique<hypro::Location<double>>( *loc1 );
-	locs_ptr.emplace_back( std::move( loc ) );
-	autom->setLocations( std::move( locs_ptr ) );
-	hypro::Location<double>* loc2 = autom->getLocation("loc1");
-	mexPrintf("getLocation loc2 Addresss %p\n", loc2);
-	loc2->setName("newName");
-	std::string name = loc1->getName();
-	mexPrintf("loc1 name after loc2 changed its: %s\n", name.c_str());
-	// plhs[0] = convertPtr2Mat<hypro::Location<double>>(loc1);
-	// plhs[1] = convertPtr2Mat<hypro::Location<double>>(loc2);
+	char name[64];
+	mxGetString( prhs[3], name, sizeof( name ) );
+	hypro::Location<double>* loc = autom->getLocation( name );
+	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 }
 
 void MHybridAutomaton::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -170,6 +135,7 @@ void MHybridAutomaton::getInitialStates( int nlhs, mxArray* plhs[], int nrhs, co
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = autom->getInitialStates();
 	int len = mapping.size();
+	mexPrintf("MAPPING SIZE: %d\n", len);
 	mwSize dims[2] = {1, (mwSize)len};
 	const char* fieldnames[] = {"loc", "cond"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, fieldnames );
@@ -257,13 +223,6 @@ void MHybridAutomaton::setLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 	autom->setLocations( std::move( locs_ptr ) );
 }
 
-// /**
-//  * @brief
-//  **/
-// void MHybridAutomaton::setTransitions(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-
-// }
-
 void MHybridAutomaton::setInitialStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - setInitialStates: One or more arguments are missing." );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - setInitialStates: One or more arguments were ignored." );
@@ -318,34 +277,16 @@ void MHybridAutomaton::addLocation( int nlhs, mxArray* plhs[], int nrhs, const m
 	autom->addLocation( *loc );
 }
 
-/**
- * @brief
- **/
-// void MHybridAutomaton::addLocation_ptr(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-// TODO???
-//}
+void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nrhs < 4)
+        mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
 
-/**
- * @brief
- **/
-// void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-//     if(nrhs < 4)
-//         mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
-//     if(nrhs > 4)
-//         mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
-
-//     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-//     hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
-//     std::unique_ptr<hypro::Transition<double>> tran = std::make_unique<hypro::Transition<double>>(*temp);
-//     // autom->addTransition(std::move(tran));
-// }
-
-/**
- * @brief
- **/
-// void MHybridAutomaton::addTransition_ptr(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-// TODO?
-//}
+    hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
+    // autom->addTransition(std::move(std::make_unique<hypro::Transition<double>>(*temp)));
+}
 
 void MHybridAutomaton::addInitialState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MHybridAutomaton - addInitialState: One or more arguments are missing." );

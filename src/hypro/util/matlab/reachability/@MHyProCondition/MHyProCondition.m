@@ -103,8 +103,12 @@ classdef MHyProCondition < handle
             out = MHyPro(5, 15, obj.ObjectHandle);
         end
         
-        function out = getDotRepresentation(obj)
-            out = MHyPro(5, 16, obj.ObjectHandle);
+        function out = getDotRepresentation(obj, vars)
+            if iscell(vars)
+                out = MHyPro(5, 16, obj.ObjectHandle);
+            else
+                error('MHyProCondition - getDotRepresentation: Wrong type of at least one argument.');
+            end
         end
         
         function out = decompose(obj)

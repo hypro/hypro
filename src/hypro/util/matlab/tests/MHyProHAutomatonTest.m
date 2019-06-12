@@ -4,19 +4,19 @@ end
 
 function testHAutomaton(testCase)
 
-% automaton = MHyProHAutomaton();
-% 
-% loc = MHyProLocation();
-% tran = MHyProTransition();
-% reset = MHyProReset();
-% guard = MHyProCondition();
-% 
-% % Set invariant
-% inv_mat = [-1 0];
-% inv_vec = 0;
-% inv = MHyProCondition(inv_mat, inv_vec);
-% loc.setInvariant(inv);
-% 
+automaton = MHyProHAutomaton();
+
+loc = MHyProLocation();
+tran = MHyProTransition();
+reset = MHyProReset();
+guard = MHyProCondition();
+
+% Set invariant
+inv_mat = [-1 0];
+inv_vec = 0;
+inv = MHyProCondition(inv_mat, inv_vec);
+loc.setInvariant(inv);
+
 % % Set flow
 % flowMatrix = [0 1 0; 0 0 -9.81; 0 0 0];
 % loc.setFlow(flowMatrix);
@@ -48,8 +48,8 @@ function testHAutomaton(testCase)
 % boxMatrix = [1 0; -1 0; 0 1; 0 -1];
 % initialCond = MHyProCondition(boxMatrix, boxVector);
 % automaton.addInitialState(loc, initialCond);
-% 
-% % Creat new automaton from locations and initial set mapping
+
+% Creat new automaton from locations and initial set mapping
 % 
 % loc1 = MHyProLocation();
 % loc2 = MHyProLocation();
@@ -63,57 +63,9 @@ function testHAutomaton(testCase)
 % initialStates(2).loc = loc2;
 % initialStates(2).cond = initialState;
 
-% automaton = MHyProHAutomaton(locs, initialStates);
+% autom1= MHyProHAutomaton(locs, initialStates);
+% 
+% init = autom1.getInitialStates()
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Tests for getters
-
-% automaton = MHyProHAutomaton();
-% disp('Create Location 1');
-% loc1 = MHyProLocation();
-% disp('Create Location 2');
-% loc2 = MHyProLocation();
-% disp('Set name');
-% loc1.setName('loc1');
-% disp('Add location');
-% automaton.addLocation(loc1);
-% disp(['Loc1 object handle: ', num2str(loc1.ObjectHandle)]);
-% disp('Get Location by name 1');
-% locs1 = automaton.getLocation_by_name('loc1');
-% disp(['Get handle of the get location 1: ', num2str(locs1.ObjectHandle)]);
-% disp('Get Location by name 2');
-% locs2 = automaton.getLocation_by_name('loc1');
-% disp(['Get handle of the get location 2: ', num2str(locs2.ObjectHandle)]);
-% disp('Get Location by name 3');
-% locs3 = automaton.getLocation_by_name('loc1');
-% disp(['Get handle of the get location 3: ', num2str(locs3.ObjectHandle)]);
-% loc1.setName('newName');
-% disp('Get Location by name 2');
-% locs2 = automaton.getLocation_by_name('loc1');
-% disp(['Get handle of the get location 2: ', num2str(locs2.ObjectHandle)]);
-% disp('Get Location by name 3');
-% locs3 = automaton.getLocation_by_name('newName');
-% disp(['Get handle of the get location 3: ', num2str(locs3.ObjectHandle)]);
-
-
-disp('New invariant:');
-cond = MHyProCondition();
-disp('New location');
-loc1 = MHyProLocation();
-disp('set invariant');
-loc1.setInvariant(cond);
-disp('get invariant');
-inv1 = loc1.getInvariant();
-disp('set matrix');
-inv1.setMatrix([1 2; 3 4]);
-inv2 = loc1.getInvariant();
-inv2.getMatrix();
-
-% automaton = MHyProHAutomaton();
-% loc1 = automaton.getLocation_by_name('bla');
-% disp(['Location 1 handle: ', num2str(loc1.ObjectHandle)]);
-
-
-%automaton_locs_init
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 end
