@@ -369,7 +369,7 @@ Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
     #endif
 }  // namespace hypro
 
-namespace std{
+namespace std {
 	/**
 	 * @brief      Hash operator for halfspaces.
 	 * @tparam     Number  The number type.

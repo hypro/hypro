@@ -54,7 +54,8 @@ TEST(StateTest, CleanUp)
 
 TEST(StateTest, Conversion)
 {
-	Box<double> b;
+	using namespace hypro;
+	hypro::Box<double> b;
 	b.insert(carl::Interval<double>(1,2));
 
 	State_t<double> s;
@@ -64,12 +65,12 @@ TEST(StateTest, Conversion)
 	s.setSetType(representation_name::support_function);
 
 	EXPECT_NO_THROW(boost::get<SupportFunction<double>>(s.getSet()));
-	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<hypro::Box<double>>(s.getSet()));
 
 	s.setSet(boost::apply_visitor(genericConversionVisitor<typename State_t<double>::repVariant, HPolytope<double>>(), s.getSet()));
 
-	EXPECT_NO_THROW(boost::get<HPolytope<double>>(s.getSet()));
-	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
+	EXPECT_NO_THROW(boost::get<hypro::HPolytope<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<hypro::Box<double>>(s.getSet()));
 	EXPECT_ANY_THROW(boost::get<SupportFunction<double>>(s.getSet()));
 	EXPECT_EQ(representation_name::polytope_h, s.getSetType());
 }

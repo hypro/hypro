@@ -2,12 +2,6 @@
 
 namespace hypro
 {
-/*
-template<typename Number, typename OutSettings, typename In>
-void convert(BoxT<Number,Converter<Number>,OutSettings>& out, const In& in) {
-    out = Converter<Number>::template toBox<OutSettings>(in);
-}
-*/
 
 template<typename Number, typename OutSettings, typename In>
 void convert(const In& in, BoxT<Number,Converter<Number>,OutSettings>& out) {
@@ -49,5 +43,11 @@ void convert(const In& in, ZonotopeT<Number,Converter<Number>,OutSettings>& out)
     out = Converter<Number>::template toZonotope<OutSettings>(in);
 }
 
+#ifdef HYPRO_USE_PPL
+template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, PolytopeT<Number,Converter<Number>,OutSettings>& out) {
+    out = Converter<Number>::template toPolytope<OutSettings>(in);
+}
+#endif
 
 } // hypro

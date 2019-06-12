@@ -720,7 +720,7 @@ Point<To> convert(const Point<From>& in) {
 
 }  // namespace hypro
 
-namespace std{
+namespace std {
 	/**
 	 * @brief      A hash operator for fast comparison.
 	 * @tparam     Number  The number type.

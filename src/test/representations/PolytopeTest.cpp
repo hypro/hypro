@@ -163,7 +163,7 @@ TYPED_TEST(PolytopeTest, Access)
 
 TYPED_TEST(PolytopeTest, PointToGenerator)
 {
-    Generator gs = polytope::pointToGenerator(this->p1);
+    Parma_Polyhedra_Library::Generator gs = polytope::pointToGenerator(this->p1);
 //    std::cout << "Generator: ";
 //    gs.print();
 //    std::cout << std::endl;
@@ -673,4 +673,3 @@ TYPED_TEST(PolytopeTest, Membership)
 
 	EXPECT_FALSE(ptpe1.contains(pt3));
 }
-

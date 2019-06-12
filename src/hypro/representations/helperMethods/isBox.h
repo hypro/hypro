@@ -19,6 +19,8 @@ boost::tuple<bool,std::vector<carl::Interval<Number>>> isBox(const matrix_t<Numb
 	}
 	Eigen::Index dimension = constraints.cols();
 	std::vector<carl::Interval<Number>> boundsDefined = std::vector<carl::Interval<Number>>(dimension, carl::Interval<Number>::unboundedInterval());
+	using optionalPair = std::pair<std::optional<Number>,std::optional<Number>>;
+	std::vector<optionalPair> boundsPairs = std::vector<optionalPair>(dimension, std::pair<std::optional<Number>,std::optional<Number>>());
 
     // collect potential intervals for each dimension
 	for(Eigen::Index r = 0; r < constraints.rows(); ++r) {
@@ -30,28 +32,42 @@ boost::tuple<bool,std::vector<carl::Interval<Number>>> isBox(const matrix_t<Numb
 			if(constraints(r,c) > carl::constant_zero<Number>().get()) {
 				Number val = constants(r)/constraints(r,c);
 				++posNonZeroCoeff;
-				if(boundsDefined[c].upperBoundType() == carl::BoundType::INFTY) {
+				if(!boundsPairs[c].second) {
 					//std::cout << "Set upper bound to " << Number(val) << std::endl;
-					boundsDefined[c].setUpperBound(val, carl::BoundType::WEAK);
-				} else if(val < boundsDefined[c].upper()) {
+					boundsPairs[c].second = val;
+				} else if(val < boundsPairs[c].second) {
 					//std::cout << "Set upper bound multiple times." << std::endl;
-					boundsDefined[c].setUpperBound(val, carl::BoundType::WEAK);
+					boundsPairs[c].second = val;
 				}
 			} else if (constraints(r,c) < carl::constant_zero<Number>().get()) {
 				Number val = constants(r)/constraints(r,c);
 				++negNonZeroCoeff;
-				if(boundsDefined[c].lowerBoundType() == carl::BoundType::INFTY) {
+				if(!boundsPairs[c].first) {
 					//std::cout << "Set lower bound to " << Number(val) << std::endl;
-					boundsDefined[c].setLowerBound(val, carl::BoundType::WEAK);
-				} else if( val > boundsDefined[c].lower()){
+					boundsPairs[c].first = val;
+				} else if( val > boundsPairs[c].first){
 					//std::cout << "Set lower bound multiple times." << std::endl;
-					boundsDefined[c].setLowerBound(val, carl::BoundType::WEAK);
+					boundsPairs[c].first = val;
 				}
 			}
             // if there exists more than one non-zero coefficient per row, return false.
 			if(posNonZeroCoeff + negNonZeroCoeff > 1) {
 				//std::cout << "Too many coefficients, described set is not a box." << std::endl;
 				return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
+			}
+		}
+	}
+	// safely construct intervals
+	for(std::size_t i = 0; i < boundsPairs.size(); ++i) {
+		if(boundsPairs[i].first) {
+			if(boundsPairs[i].second) {
+				boundsDefined[i] = carl::Interval(*boundsPairs[i].first, carl::BoundType::WEAK, *boundsPairs[i].second, carl::BoundType::WEAK);
+			} else {
+				boundsDefined[i] = carl::Interval(*boundsPairs[i].first, carl::BoundType::WEAK, *boundsPairs[i].first, carl::BoundType::INFTY);
+			}
+		} else {
+			if(boundsPairs[i].second) {
+				boundsDefined[i] = carl::Interval(*boundsPairs[i].second, carl::BoundType::INFTY, *boundsPairs[i].second,carl::BoundType::WEAK);
 			}
 		}
 	}

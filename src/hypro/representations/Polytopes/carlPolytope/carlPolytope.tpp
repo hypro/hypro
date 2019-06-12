@@ -102,6 +102,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> CarlPolytopeT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+
         DEBUG("hypro.representations.carlPolytope","Hsps " << _mat << std::endl << _vec << " and this " << *this);
         auto resPoly = this->intersect(CarlPolytopeT<Number,Converter,Setting>(_mat,_vec));
         //resPoly.removeRedundancy();
@@ -160,6 +161,7 @@ namespace hypro {
         return res;
     }
 
+
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::addConstraint(const ConstraintT<tNumber>& constraint) {
         // reset Half-space cache
@@ -180,6 +182,8 @@ namespace hypro {
         detectDimension();
     }
 
+
+
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::addConstraints(const std::vector<ConstraintT<tNumber>>& constraints) {
         // reset Half-space cache
@@ -199,6 +203,8 @@ namespace hypro {
         detectDimension();
     }
 
+
+
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::addIntervalConstraints(const carl::Interval<Number>& intv, const carl::Variable& var) {
         TRACE("hypro.representations.carlPolytope","Input interval " << intv << " for variable " << var);
@@ -215,6 +221,8 @@ namespace hypro {
         this->addConstraints(newConstraints);
     }
 
+
+
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::substituteVariable(carl::Variable oldVar, carl::Variable newVar) {
         if(this->empty()) {
@@ -227,6 +235,7 @@ namespace hypro {
         TRACE("hypro.representations.carlPolytope","After substituting " << oldVar << " by " << newVar << ": " << *this);
         detectDimension();
     }
+
 
     template<typename Number, typename Converter, typename Setting>
     std::vector<carl::Variable> CarlPolytopeT<Number,Converter,Setting>::getVariables() const {

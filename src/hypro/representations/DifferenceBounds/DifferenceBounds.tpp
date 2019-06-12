@@ -49,6 +49,11 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter, class Setting>
+    carl::Interval<tNumber> DifferenceBoundsT<Number, Converter, Setting>::getCoveredTimeInterval() const {
+        //TODO.
+    }
+
+    template <typename Number, typename Converter, class Setting>
     std::size_t DifferenceBoundsT<Number, Converter, Setting>::dimension() const{
         // number of clocks
         return this->getDBM().cols()-1;
@@ -164,6 +169,7 @@ namespace hypro {
             return hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         }
         // TODO can this be done better? especially for higher dimensions?
+        // YES! Read the values from the DBM directly!!!
         hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
         hypro::HPolytopeT<Number, Converter, HPolytopeSetting> projected = tmp.project(dimensions);
         hypro::DifferenceBoundsT<Number,Converter, Setting> res = Converter::toDifferenceBounds(projected);
@@ -647,4 +653,3 @@ namespace hypro {
         return *this;
     }
 }
-

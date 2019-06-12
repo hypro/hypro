@@ -9,10 +9,11 @@
  */
 
 #include "Converter.h"
-#include "../../util/templateDirections.h"
 #ifndef INCL_FROM_CONVERTERHEADER
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
+
+namespace hypro {
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -276,3 +277,5 @@ template<typename CarlPolySetting, typename inSetting>
 CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
 }
+
+} // namespace hypro

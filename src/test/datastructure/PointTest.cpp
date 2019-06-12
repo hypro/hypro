@@ -302,6 +302,9 @@ TYPED_TEST(PointTest, RemoveDuplicates)
 	points.emplace_back(Point<TypeParam>({0,2}));
 
 	points = Point<TypeParam>::removeDuplicatePoints(points);
+    for(const auto& p : points) {
+        std::cout << p << std::endl;
+    }
 	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({1,2})) == 1);
 	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({1,1})) == 1);
 	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({0,2})) == 1);

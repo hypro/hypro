@@ -13,7 +13,7 @@ namespace polytope {
         #endif
 
         // initialize random number generator
-        mt19937 generator;
+        std::mt19937 generator;
         std::uniform_int_distribution<int> dist = std::uniform_int_distribution<int>(0,10);
 
         // iterate over dimensions

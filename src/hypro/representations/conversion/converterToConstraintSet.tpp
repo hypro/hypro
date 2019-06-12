@@ -4,17 +4,21 @@
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
 
+namespace hypro {
+
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return ConstraintSetT<Number,CSSetting>(_source.matrix(), _source.vector());
 }
 
+
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return ConstraintSetT<Number,CSSetting>(_source.matrix(), _source.vector());
 }
+
 
 template<typename Number>
 template<typename CSSetting, typename inSetting>
@@ -61,8 +65,12 @@ ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const Zonot
 	assert(false && "NotImplemented.");
     return ConstraintSetT<Number,CSSetting>();
 }
+
+
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
 	return toConstraintSet(toHPolytope(_source, mode));
 }
+
+} // namespace hypro

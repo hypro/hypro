@@ -12,6 +12,8 @@
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
 
+namespace hypro {
+
 /*
  *Computes the arithmetic mean for a given Point Vector
  */
@@ -45,26 +47,27 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
 template <typename Number>
 template<typename ZonotopeSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const Ellipsoid& _source, const CONV_MODE  ){
-    /*
-    vector_t<Number> l(_source.dimension());
-	l.setZero();
-	vector_t<Number> evaluation;
-	std::vector<vector_t<Number>> constraints;
-	for ( std::size_t i = 0; i < _source.dimension(); i++) {
-	        l(i) = 1;
-	        evaluation = _source.evaluate(l);
-	        constraints.push_back(evaluation);
-	        l(i) = 0;
-	}
-	matrix_t<Number> constraintMatrix(constraints.size(),_source.dimension());
-	for (std::size_t i = 0; i < constraints.size(); i++){
-	    constraintMatrix.row(i) = constraints.at(i);
-	}
-	return ZonotopeT<Number,Converter> (constraintMatrix);
-	*/
+
+    //vector_t<Number> l(_source.dimension());
+	//l.setZero();
+	//vector_t<Number> evaluation;
+	//std::vector<vector_t<Number>> constraints;
+	//for ( std::size_t i = 0; i < _source.dimension(); i++) {
+	//        l(i) = 1;
+	//        evaluation = _source.evaluate(l);
+	//        constraints.push_back(evaluation);
+	//        l(i) = 0;
+	//}
+	//matrix_t<Number> constraintMatrix(constraints.size(),_source.dimension());
+	//for (std::size_t i = 0; i < constraints.size(); i++){
+	//    constraintMatrix.row(i) = constraints.at(i);
+	//}
+	//return ZonotopeT<Number,Converter> (constraintMatrix);
+
 	WARN("hypro.representations","Conversion to Zonotopes not implemented yet.");
 	return Zonotope();
 }
+
 
 //conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
@@ -79,6 +82,7 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
     return res;
 }
 
+
 template <typename Number>
 template<typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ){
@@ -91,6 +95,7 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
     return res;
 }
 
+
 template <typename Number>
 template<typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE mode ){
@@ -102,6 +107,7 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
 
     return res;
 }
+
 
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
@@ -442,3 +448,5 @@ template<typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toZonotope(toHPolytope(_source, mode));
 }
+
+} // namespace hypro

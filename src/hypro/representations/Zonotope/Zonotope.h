@@ -26,6 +26,9 @@
 #include <cmath>
 #include <algorithm>
 #include <valarray>
+#ifdef HYPRO_USE_PPL
+#include <ppl.hh>
+#endif
 
 namespace hypro {
 
