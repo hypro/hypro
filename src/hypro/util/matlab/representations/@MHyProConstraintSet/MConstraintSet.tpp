@@ -6,8 +6,14 @@ void MConstraintSet::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const m
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MConstraintSet - isAxisAligned: One or more input arguments were ignored." );
 
 	hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
-	const bool empty = temp->isAxisAligned();
-	plhs[0] = mxCreateLogicalScalar( empty );
+	const bool aligned = temp->isAxisAligned();	
+	plhs[0] = mxCreateLogicalScalar( aligned );
+
+	if(aligned){
+		mexPrintf("aligned\n");
+	}else{
+		mexPrintf("not aligned\n");
+	}
 }
 
 void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -20,8 +26,30 @@ void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const m
 	hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
 	const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro( prhs[3], cols );
 	const double offset = (const double)mxGetScalar( prhs[4] );
-
 	temp->addConstraint( hy_vec, offset );
+
+	mexPrintf("Add constraint input:\n");
+	mexPrintf("Vector: ");
+	for(int i = 0; i < hy_vec.size(); i++){
+		mexPrintf(" %f", hy_vec(i));
+	}
+	mexPrintf("\n offset: %d\n", offset);
+	hypro::matrix_t<double> mat = temp->matrix();
+	hypro::vector_t<double> vec = temp->vector();
+	mexPrintf("Output:\n");
+	mexPrintf("matrix:\n");
+	for(int i = 0; i < mat.rows(); i++){
+		for(int j = 0; j < mat.cols(); j++){
+			mexPrintf(" %f", mat(i,j));
+		}
+		mexPrintf("\n");
+	}
+	mexPrintf("\nvector: ");
+	for(int i = 0; i < vec.rows(); i++){
+		mexPrintf(" %f", vec(i));
+	}
+	mexPrintf("\n");
+
 }
 
 void MConstraintSet::type( int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[] ) {
@@ -40,8 +68,41 @@ void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int 
 	hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
 	const unsigned u = (const unsigned)mxGetScalar( prhs[3] );
 	hypro::ConstraintSet<double> obj = temp->reduceNumberRepresentation( u );
-	hypro::ConstraintSet<double>* b = new hypro::ConstraintSet<double>( obj );
-	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
+	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( new hypro::ConstraintSet<double>(obj) );
+
+	mexPrintf("Add reduceNumberRepresentataion input:\n");
+	mexPrintf("u: %d\n", u);
+
+	hypro::matrix_t<double> mat = temp->matrix();
+	hypro::vector_t<double> vec = temp->vector();
+	mexPrintf("matrix:\n");
+	for(int i = 0; i < mat.rows(); i++){
+		for(int j = 0; j < mat.cols(); j++){
+			mexPrintf(" %f", mat(i,j));
+		}
+		mexPrintf("\n");
+	}
+	mexPrintf("\nvector: ");
+	for(int i = 0; i < vec.rows(); i++){
+		mexPrintf(" %f", vec(i));
+	}
+	mexPrintf("\n");
+
+	mexPrintf("Output:\n");
+	hypro::matrix_t<double> matt = obj.matrix();
+	hypro::vector_t<double> vect = obj.vector();
+	mexPrintf("matrix:\n");
+	for(int i = 0; i < matt.rows(); i++){
+		for(int j = 0; j < matt.cols(); j++){
+			mexPrintf(" %f", matt(i,j));
+		}
+		mexPrintf("\n");
+	}
+	mexPrintf("\nvector: ");
+	for(int i = 0; i < vect.rows(); i++){
+		mexPrintf(" %f", vect(i));
+	}
+	mexPrintf("\n");
 }
 
 /**

@@ -9,19 +9,12 @@ classdef MHyProGeometricObject < handle
         Type
     end
     
-%     methods (Abstract)
-%         satisfiesHalfspace(obj, normal, offset)
-%         satisfiesHalfspaces(obj, mat, vec)
-%         project(obj, dim)
-%         linearTransformation(obj, mat)
-%         affineTransformation(obj, mat, vec)
-%     end
-%     
      methods (Access = private)
-        % Delete a MHyPro object - Destructor
+         
         function delete(obj)
             MHyPro(obj.Type, 1, obj.ObjectHandle);
         end
+        
      end
 
     methods (Access = public)
@@ -292,9 +285,9 @@ classdef MHyProGeometricObject < handle
                     objectPtrs{i} = objects{i}.ObjectHandle;
                 end
                 ptr = MHyPro(objects{1}.Type, 27, objectPtrs);
-                out = MHyProBox(ptr);
+                out = ptr2Object(objects{1}.Type, ptr);
             else
-                error('MHyProBox - uniteMultiple: Wrong type of input argument.');
+                error('MHyProGeometricObject - uniteMultiple: Wrong type of input argument.');
             end
         end
         

@@ -225,10 +225,6 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		equal( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	// if ( cmd == 8 ) {
-	// 	unequal( nlhs, plhs, nrhs, prhs );
-	// 	return;
-	// }
 	if ( cmd == 9 ) {
 		matrix( nlhs, plhs, nrhs, prhs );
 		return;

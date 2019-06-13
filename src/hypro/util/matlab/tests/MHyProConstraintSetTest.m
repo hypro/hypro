@@ -73,9 +73,7 @@ assert(emt == 0);
 
 % Project a certain dimension
 set1 = MHyProConstraintSet([1 1 0; 0 0 1; 1 0 1], [1;2;1]);
-projected = set1.project([1;2]);
-
-% assert ---> ?
+projected = set1.project([1 2]);
 
 % Perform linear transformation
 set1 = MHyProConstraintSet([1 2 0; 0 0 1; 1 0 1; 1 1 1], [3;2;4;1]);
@@ -87,8 +85,6 @@ set.dimension();
 
 vertices = set1.vertices();
 
-
-% assert ---> ?
 
 % Perform affine transformation
 mat = [2 0 0; 0 4 0; 0 0 1];
