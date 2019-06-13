@@ -135,6 +135,6 @@ uni = fct2.unite(fct1);
 % Unite multiple support functions
 fct3 = MHyProSupportFunction('intervals', [3 4; 1 3]);
 functions = {fct1,fct2, fct3};
-ufct = MHyProSupportFunction.uniteMultiple(functions);
+% ufct = MHyProSupportFunction.uniteMultiple(functions); --->!!!
 
 end

@@ -176,9 +176,9 @@ classdef MHyProSupportFunction < MHyProGeometricObject
 %             end
 %         end
 % 
-%         function reduceNumberRepresentation(obj)
-%             MHyPro(3, 35, obj.ObjectHandle);
-%         end
+        function reduceNumberRepresentation(obj)
+            MHyPro(3, 24, obj.ObjectHandle);
+        end
 
         function out = supremum(obj)
             if obj.Type == 3

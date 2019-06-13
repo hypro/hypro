@@ -9,11 +9,13 @@ void MConstraintSet::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const m
 	const bool aligned = temp->isAxisAligned();	
 	plhs[0] = mxCreateLogicalScalar( aligned );
 
+	//+++++++++++++TESTING++++++++++++++++++++
 	if(aligned){
 		mexPrintf("aligned\n");
 	}else{
 		mexPrintf("not aligned\n");
 	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -28,6 +30,7 @@ void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const m
 	const double offset = (const double)mxGetScalar( prhs[4] );
 	temp->addConstraint( hy_vec, offset );
 
+	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf("Add constraint input:\n");
 	mexPrintf("Vector: ");
 	for(int i = 0; i < hy_vec.size(); i++){
@@ -49,13 +52,18 @@ void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const m
 		mexPrintf(" %f", vec(i));
 	}
 	mexPrintf("\n");
-
+	//+++++++++++++TESTING++++++++++++++++++++
+	
 }
 
 void MConstraintSet::type( int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MConstraintSet - type: Expecting one output value!" );
 	std::string ans = "MHyProConstraintSet";
 	plhs[0] = mxCreateString( ans.c_str() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf("type\n");
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -70,6 +78,7 @@ void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int 
 	hypro::ConstraintSet<double> obj = temp->reduceNumberRepresentation( u );
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( new hypro::ConstraintSet<double>(obj) );
 
+	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf("Add reduceNumberRepresentataion input:\n");
 	mexPrintf("u: %d\n", u);
 
@@ -103,6 +112,7 @@ void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int 
 		mexPrintf(" %f", vect(i));
 	}
 	mexPrintf("\n");
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
