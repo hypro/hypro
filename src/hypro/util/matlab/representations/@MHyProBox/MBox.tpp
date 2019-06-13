@@ -318,10 +318,9 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 		return;
 	}
 	if ( cmd == 27 ) {
-		unite_vec(nlhs, plhs, nrhs, prhs);
+		unite_vec( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-
 	if ( cmd == 100 ) {
 		new_empty( nlhs, plhs, nrhs, prhs );
 		return;
@@ -342,7 +341,6 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 		boxFromIntervals( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	
 	if ( cmd == 105 ) {
 		new_mat_vec( nlhs, plhs, nrhs, prhs );
 		return;
@@ -390,7 +388,7 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 	if ( cmd == 116 ) {
 		supremum( nlhs, plhs, nrhs, prhs );
 		return;
-	}	
+	}
 	if ( cmd == 117 ) {
 		scale( nlhs, plhs, nrhs, prhs );
 		return;
@@ -399,11 +397,10 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 		makeSymmetric( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	
 	if ( cmd == 119 ) {
 		minkowskiDecomposition( nlhs, plhs, nrhs, prhs );
 		return;
-	}	
+	}
 	if ( cmd == 120 ) {
 		clear( nlhs, plhs, nrhs, prhs );
 		return;

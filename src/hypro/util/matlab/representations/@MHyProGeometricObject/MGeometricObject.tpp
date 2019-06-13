@@ -1,6 +1,5 @@
 #include "MGeometricObject.h"
 
-
 template <typename T>
 void MGeometricObject<T>::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - new_empty: One output is expected." );
@@ -34,10 +33,9 @@ void MGeometricObject<T>::new_vector( int nlhs, mxArray* plhs[], int nrhs, const
 	double* in_vector;
 	const mwSize* vec_dims;
 	int len;
-	vec_dims = mxGetDimensions(prhs[2]);
+	vec_dims = mxGetDimensions( prhs[2] );
 	len = (int)vec_dims[0];
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[2], len );
-
 
 	T* temp = new T( vector );
 	plhs[0] = convertPtr2Mat<T>( temp );
@@ -127,7 +125,7 @@ void MGeometricObject<T>::is_empty( int nlhs, mxArray* plhs[], int nrhs, const m
 	if ( nrhs < 3 ) mexErrMsgTxt( "MGeometricObject - isEmpty: One argument missing!" );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MGeometricObject - isEmpty: One or more input arguments were ignored." );
 
-	mexPrintf("IS EMPTY\n");
+	mexPrintf( "IS EMPTY\n" );
 	T* temp = convertMat2Ptr<T>( prhs[2] );
 	const bool empty = temp->empty();
 	plhs[0] = mxCreateLogicalScalar( empty );
@@ -135,8 +133,7 @@ void MGeometricObject<T>::is_empty( int nlhs, mxArray* plhs[], int nrhs, const m
 
 template <class T>
 void MGeometricObject<T>::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if(nlhs != 1)
-	    mexErrMsgTxt("MGeometricObject - vertices: Expecting an output!");
+	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - vertices: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MGeometricObject - vertices: One argument is missing!" );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MGeometricObject - vertices: One or more input arguments were ignored." );
 
@@ -254,7 +251,7 @@ void MGeometricObject<T>::satisfiesHalfspace( int nlhs, mxArray* plhs[], int nrh
 
 	const int offset = (const int)mxGetScalar( prhs[4] );
 	dims = mxGetDimensions( prhs[3] );
-	rows = (int) dims[0];
+	rows = (int)dims[0];
 	const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro( prhs[3], rows );
 	const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>( hy_normal, offset );
 
@@ -312,7 +309,7 @@ void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mx
 	std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro( prhs[3], len );
 
 	T temp = obj->project( hy_dimensions );
-	plhs[0] = convertPtr2Mat<T>(new T(temp) );
+	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 }
 
 template <class T>
@@ -399,7 +396,7 @@ void MGeometricObject<T>::intersectHalfspace( int nlhs, mxArray* plhs[], int nrh
 	mxArray *out_box, *out_cont;
 	const mwSize* dims;
 	double *in_normal, *cont;
-	int  cols;
+	int cols;
 
 	T* obj = convertMat2Ptr<T>( prhs[2] );
 	const int offset = (const int)mxGetScalar( prhs[4] );
@@ -493,7 +490,7 @@ void MGeometricObject<T>::unite_vec( int nlhs, mxArray* plhs[], int nrhs, const 
 	dims = mxGetDimensions( prhs[2] );
 	const int len = dims[1];
 	const std::vector<T> objects = ObjectHandle::objArray2Hypro<T>( prhs[2], len );
-	T united = T::unite(objects);
+	T united = T::unite( objects );
 	T* b = new T( united );
 	plhs[0] = convertPtr2Mat<T>( b );
 }

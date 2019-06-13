@@ -90,7 +90,6 @@ classdef MHyProGeometricObject < handle
             out = MHyPro(obj.Type, 13, obj.ObjectHandle);
         end
 
-        
         function [containment, out] = satisfiesHalfspace(obj, normal, offset)
             if isvector(normal)
                 normal = conv2HyProVector(normal);
@@ -99,12 +98,12 @@ classdef MHyProGeometricObject < handle
             end
             if isreal(offset)
                 [containment, ptr] = MHyPro(obj.Type, 14, obj.ObjectHandle, normal, offset);
-                out = MHyProConstraintSet(ptr);
+                out = ptr2Object(obj.Type, ptr);
             else
                 error('MHyProGeometricObject - satisfiesHalfspace: Wrong type of input argument.');
             end
         end
-        
+                
         function [containment, out] = satisfiesHalfspaces(obj, mat, vec)
             if isvector(vec)
                 vec = conv2HyProVector(vec);
@@ -113,7 +112,7 @@ classdef MHyProGeometricObject < handle
             end
             if ismatrix(mat) && size(mat,2) == size(vec,1)
                 [containment, ptr] = MHyPro(obj.Type, 15, obj.ObjectHandle, mat, vec);
-                out = MHyProConstraintSet(ptr);
+                out = ptr2Object(obj.Type, ptr);
             else
                 error('MHyProGeometricObject - satisfiesHalfspaces: Wrong type of input argument.');
             end

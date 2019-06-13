@@ -79,7 +79,7 @@ classdef MHyProBox < MHyProGeometricObject
 %                 error('MHyProBox - affineTransformation: Wrong type of input argument.');
 %             end
 %             if isreal(offset)
-%                 [containment, ptr] = MHyPro(0, 22, obj.ObjectHandle, normal, offset);
+%                 [containment, ptr] = MHyPro(0, 14, obj.ObjectHandle, normal, offset);
 %                 out = MHyProBox(ptr);
 %             else
 %                 error('MHyProBox - satisfiesHalfspace: Wrong type of input argument.');
@@ -93,7 +93,7 @@ classdef MHyProBox < MHyProGeometricObject
 %                 error('MHyProBox - affineTransformation: Wrong type of input argument.');
 %             end
 %             if ismatrix(mat) && size(mat,2) == size(vec,1)
-%                 [containment, ptr] = MHyPro(0, 23, obj.ObjectHandle, mat, vec);
+%                 [containment, ptr] = MHyPro(0, 15, obj.ObjectHandle, mat, vec);
 %                 out = MHyProBox(ptr);
 %             else
 %                 error('MHyProBox - satisfiesHalfspaces: Wrong type of input argument.');
