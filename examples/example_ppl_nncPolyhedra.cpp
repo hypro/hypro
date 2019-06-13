@@ -12,7 +12,6 @@
 #include <iostream>
 
 #ifdef HYPRO_USE_PPL
-#include <ppl.hh>
 
 using namespace Parma_Polyhedra_Library;
 using namespace hypro;
