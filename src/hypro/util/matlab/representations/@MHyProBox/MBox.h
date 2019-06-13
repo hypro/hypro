@@ -17,7 +17,6 @@ class MBox : public MGeometricObject<hypro::Box<double>> {
 	static void process( int, mxArray**, int, const mxArray** );
 
   private:
-	static void emptyBox( int, mxArray**, int, const mxArray** );
 	static void boxFromSingleInterval( int, mxArray**, int, const mxArray** );
 	static void boxFromIntervals( int, mxArray**, int, const mxArray** );
 	static void boxFromPoints( int, mxArray**, int, const mxArray** );

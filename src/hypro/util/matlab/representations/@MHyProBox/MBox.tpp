@@ -1,12 +1,5 @@
 #include "MBox.h"
 
-void MBox::emptyBox( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_empty: One output expected." );
-	if ( nrhs > 2 ) mexWarnMsgTxt( "MBox - new_empty: One or more input arguments were ignored." );
-
-	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double> );
-}
-
 void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_interval: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_interval: One or more input arguments are missing." );
@@ -253,7 +246,7 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 	int cmd = mxGetScalar( prhs[1] );
 
 	if ( cmd == 15 ) {
-		emptyBox( nlhs, plhs, nrhs, prhs );
+		new_empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 16 ) {
