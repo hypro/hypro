@@ -2,14 +2,13 @@ function out = iscelloftype(cellArray, type)
 % This function check if all elements of a cell array are of certain type.
 %   Input:
 %       cellArry: cell array containing MHyPro* (* = Objects, Flow, Location, etc.)
-%       type : string containing the name of a MHyProElement
+%       type : number representation of the type
 %
-
-    for i=(1:length(cellArray))
-        elem = cellArray(i);
-        if strcmp(elem.Type, type) == 0
-            error("iscelloftype: At least one element in cell has wrong type.");
+    out = 1;
+    for i= 1:length(cellArray) 
+        elem = cellArray{i};
+        if elem.Type ~= type
+            out = 0;
         end
     end
-    
-out = 1;
+end

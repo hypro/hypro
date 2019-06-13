@@ -1,12 +1,5 @@
 #include "MConstraintSet.h"
 
-void MConstraintSet::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MConstraintSet - new_empty: One output expected." );
-	if ( nrhs > 2 ) mexWarnMsgTxt( "MConstraintSet - new_empty: One or more input arguments were ignored." );
-
-	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( new hypro::ConstraintSet<double> );
-}
-
 void MConstraintSet::isAxisAligned( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MConstraintSet - isAxisAligned: Expecting an output!" );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MConstraintSet - isAxisAligned: One argument missing!" );
@@ -22,15 +15,11 @@ void MConstraintSet::addConstraint( int nlhs, mxArray* plhs[], int nrhs, const m
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MConstraintSet - addConstraint: One or more input arguments were ignored." );
 
 	const mwSize* dims;
-	int  cols;
-
-	hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
-	const double offset = (const double)mxGetScalar( prhs[4] );
-
 	dims = mxGetDimensions( prhs[3] );
-	cols = (int)dims[1];
-
+	int cols = (int)dims[1];
+	hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
 	const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro( prhs[3], cols );
+	const double offset = (const double)mxGetScalar( prhs[4] );
 
 	temp->addConstraint( hy_vec, offset );
 }
@@ -55,52 +44,52 @@ void MConstraintSet::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int 
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
 }
 
-void MConstraintSet::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: Expecting one output value!" );
-	if ( nrhs < 4 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: One or more arguments are missing!" );
-	if ( nrhs > 4 )
-		mexWarnMsgTxt( "MGeometricObject - lineaTransformation: One or more input arguments were ignored." );
+// void MConstraintSet::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+// 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: Expecting one output value!" );
+// 	if ( nrhs < 4 ) mexErrMsgTxt( "MGeometricObject - linearTransformation: One or more arguments are missing!" );
+// 	if ( nrhs > 4 )
+// 		mexWarnMsgTxt( "MGeometricObject - lineaTransformation: One or more input arguments were ignored." );
 
-	const mwSize* dims;
-	double* in_matrix;
-	int rows, cols;
+// 	const mwSize* dims;
+// 	double* in_matrix;
+// 	int rows, cols;
 
-	hypro::ConstraintSet<double>* obj = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
-	dims = mxGetDimensions( prhs[3] );
-	cols = (int)dims[1];
-	rows = (int)dims[0];
+// 	hypro::ConstraintSet<double>* obj = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[2] );
+// 	dims = mxGetDimensions( prhs[3] );
+// 	cols = (int)dims[1];
+// 	rows = (int)dims[0];
 
-	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
+// 	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
 
-	std::vector<hypro::Point<double>> vertices = obj->vertices();
+// 	std::vector<hypro::Point<double>> vertices = obj->vertices();
 
-	mexPrintf("before:\n");
-	for(int i = 0; i < vertices.size(); i++){
-		for(int j = 0; j < vertices[0].dimension(); j++){
-			std::size_t pos = j;
-			mexPrintf("%f ", vertices[i].coordinate(j));
-		}
-		mexPrintf("\n");
-	}
+// 	mexPrintf("before:\n");
+// 	for(int i = 0; i < vertices.size(); i++){
+// 		for(int j = 0; j < vertices[0].dimension(); j++){
+// 			std::size_t pos = j;
+// 			mexPrintf("%f ", vertices[i].coordinate(j));
+// 		}
+// 		mexPrintf("\n");
+// 	}
 
-	hypro::ConstraintSet<double> temp = obj->linearTransformation( mat );
+// 	hypro::ConstraintSet<double> temp = obj->linearTransformation( mat );
 
-	hypro::matrix_t<double> matt = temp.matrix();
+// 	hypro::matrix_t<double> matt = temp.matrix();
 
-	std::vector<hypro::Point<double>> vertices1 = temp.vertices();
+// 	std::vector<hypro::Point<double>> vertices1 = temp.vertices();
 
-	mexPrintf("after:\n");
-	for(int i = 0; i < vertices1.size(); i++){
-		for(int j = 0; j < vertices1[0].dimension(); j++){
-			std::size_t pos = j;
-			mexPrintf("%f ", vertices1[i].coordinate(j));
-		}
-		mexPrintf("\n");
-	}
+// 	mexPrintf("after:\n");
+// 	for(int i = 0; i < vertices1.size(); i++){
+// 		for(int j = 0; j < vertices1[0].dimension(); j++){
+// 			std::size_t pos = j;
+// 			mexPrintf("%f ", vertices1[i].coordinate(j));
+// 		}
+// 		mexPrintf("\n");
+// 	}
 
-	hypro::ConstraintSet<double>* b = new hypro::ConstraintSet<double>( temp );
-	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
-}
+// 	hypro::ConstraintSet<double>* b = new hypro::ConstraintSet<double>( temp );
+// 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( b );
+// }
 
 // template<typename From, typename To, typename S>
 // void MConstraintSet::convert(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -132,44 +121,28 @@ void MConstraintSet::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, 
 void MConstraintSet::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	int cmd = mxGetScalar( prhs[1] );
 
-	if ( cmd == 15 ) {
-		new_empty( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 17 ) {
-		new_mat_vec( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 16 ) {
-		copyObj( nlhs, plhs, nrhs, prhs );
-		return;
-	}
 	if ( cmd == 1 ) {
 		deleteObject( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 9 ) {
-		matrix( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 10 ) {
-		vector( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 32 ) {
-		isAxisAligned( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 33 ) {
-		addConstraint( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 11 ) {
-		is_empty( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 2 ) {
+		dimension( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 3 ) {
 		vertices( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 4 ) {
+		reduceRepresentation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 5 ) {
+		ostream( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 6 ) {
+		size( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 7 ) {
@@ -180,89 +153,220 @@ void MConstraintSet::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 		unequal( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 5 ) {
-		ostream( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 9 ) {
+		matrix( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 2 ) {
-		dimension( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 10 ) {
+		vector( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 11 ) {
+		is_empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 12 ) {
 		removeRedundancy( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 6 ) {
-		size( nlhs, plhs, nrhs, prhs );
-		return;
-	}
 	if ( cmd == 13 ) {
 		type( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 30 ) {
-		reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 18 ) {
+	if ( cmd == 14 ) {
 		satisfiesHalfspace( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 19 ) {
+	if ( cmd == 15 ) {
 		satisfiesHalfspaces( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 20 ) {
+	if ( cmd == 16 ) {
 		project( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 21 ) {
+	if ( cmd == 17 ) {
 		linearTransformation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 22 ) {
+	if ( cmd == 18 ) {
 		affineTransformation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 23 ) {
+	if ( cmd == 19 ) {
 		minkowskiSum( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 31 ) {
-		intersect( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 24 ) {
+	if ( cmd == 20 ) {
 		intersectHalfspace( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 25 ) {
+	if ( cmd == 21 ) {
 		intersectHalfspaces( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 27 ) {
+	if ( cmd == 22 ) {
 		contains_point( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 26 ) {
+	if ( cmd == 23 ) {
 		contains_object( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 28 ) {
+	if ( cmd == 24 ) {
+		reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 25 ) {
+		intersect( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 26 ) {
 		unite_single( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 29 ) {
-		unite_vec( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 27 ) {
+		unite_vec(nlhs, plhs, nrhs, prhs);
 		return;
 	}
-	if ( cmd == 4 ) {
-		reduceRepresentation( nlhs, plhs, nrhs, prhs );
+
+	if ( cmd == 100 ) {
+		new_empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 14 ) {
-		clear( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 101 ) {
+		copyObj( nlhs, plhs, nrhs, prhs );
 		return;
 	}
+	if ( cmd == 102 ) {
+		new_mat_vec( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 103 ) {
+		contains_point( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 104 ) {
+		isAxisAligned( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 105 ) {
+		addConstraint( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+
+
+
+	
+	// if ( cmd == 1 ) {
+	// 	deleteObject( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 9 ) {
+	// 	matrix( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 10 ) {
+	// 	vector( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	
+	// if ( cmd == 11 ) {
+	// 	is_empty( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 3 ) {
+	// 	vertices( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 7 ) {
+	// 	equal( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 8 ) {
+	// 	unequal( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 5 ) {
+	// 	ostream( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 2 ) {
+	// 	dimension( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 12 ) {
+	// 	removeRedundancy( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 6 ) {
+	// 	size( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 13 ) {
+	// 	type( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 30 ) {
+	// 	reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 18 ) {
+	// 	satisfiesHalfspace( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 19 ) {
+	// 	satisfiesHalfspaces( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 20 ) {
+	// 	project( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 21 ) {
+	// 	linearTransformation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 22 ) {
+	// 	affineTransformation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 23 ) {
+	// 	minkowskiSum( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 31 ) {
+	// 	intersect( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 24 ) {
+	// 	intersectHalfspace( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 25 ) {
+	// 	intersectHalfspaces( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	
+	// if ( cmd == 26 ) {
+	// 	contains_object( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 28 ) {
+	// 	unite_single( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 29 ) {
+	// 	unite_vec( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 4 ) {
+	// 	reduceRepresentation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 14 ) {
+	// 	clear( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
 	mexErrMsgTxt( "MConstraintSet - Command not recognized." );
 }

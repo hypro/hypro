@@ -27,7 +27,7 @@ inline mxArray *convertPtr2Mat(T* ptr){
     mexLock();
     mxArray *out = mxCreateNumericMatrix(1, 1, mxUINT64_CLASS, mxREAL);
     *((uint64_t *)mxGetData(out)) = reinterpret_cast<uint64_t>(new ClassHandle<T>(ptr));
-    mexPrintf("convertPtr2Mat %p\n", out);
+    // mexPrintf("convertPtr2Mat %p\n", out);
     return out;
 }
 
@@ -38,14 +38,14 @@ inline ClassHandle<T> *convertMat2HandlePtr(const mxArray* in){
     ClassHandle<T> *ptr = reinterpret_cast<ClassHandle<T> *>(*((uint64_t *)mxGetData(in)));
     if (!ptr->isValid())
         mexErrMsgTxt("Handle not valid.");
-    mexPrintf("convertMat2HandlePtr %p\n", ptr);
+    // mexPrintf("convertMat2HandlePtr %p\n", ptr);
     return ptr;
 }
 
 template<class T>
 inline T *convertMat2Ptr(const mxArray* in){
     T* temp = convertMat2HandlePtr<T>(in)->ptr();
-    mexPrintf("convertMat2Ptr %p\n", temp);
+    // mexPrintf("convertMat2Ptr %p\n", temp);
     return temp;
 }
 

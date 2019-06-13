@@ -73,8 +73,8 @@ assert(emt == 0);
 
 % Project a certain dimension
 set1 = MHyProConstraintSet([1 1 0; 0 0 1; 1 0 1], [1;2;1]);
-project = set1.project([1 2]);
-mat = project.matrix();
+projected = set1.project([1;2]);
+
 % assert ---> ?
 
 % Perform linear transformation

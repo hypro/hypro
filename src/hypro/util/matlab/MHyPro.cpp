@@ -34,14 +34,8 @@
             input arguments from wrapped functions in Matlab
 */
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-
-    // Get type of the Matlab object
-    // 0 = Box, 1 = Ellipsoid, 2 = ConstraintSet,
-    // 3 = SupportFunction, 4 = HybridAutomaton, 5 = Condition,
-    // 6 = Location, 7 = Transition, 8 = Label,
-    // 9 = linearFlow, 10 = affineFlow, 11 = Reset,
-    // 12 = Reacher, 13 = State
-    int type = mxGetScalar(prhs[0]);
+    
+    const int type = mxGetScalar(prhs[0]);
 
     if(type == 0){
         MBox::process(nlhs, plhs, nrhs, prhs);

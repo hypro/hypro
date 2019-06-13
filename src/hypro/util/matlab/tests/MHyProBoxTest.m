@@ -107,7 +107,6 @@ symmetric_box = MHyProBox('intervals', [-1 1; -1 1]);
 supremum = symmetric_box.supremum();
 assert(supremum == 1);
 
-
 % Check if points_box and copied_box are equal
 box = MHyProBox('intervals', [1 2; 1 2]);
 box_copy = MHyProBox(box);

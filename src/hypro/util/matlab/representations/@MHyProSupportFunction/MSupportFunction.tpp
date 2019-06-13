@@ -198,6 +198,7 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 
 	int cmd = mxGetScalar( prhs[1] );
 
+
 	if ( cmd == 1 ) {
 		deleteObject( nlhs, plhs, nrhs, prhs );
 		return;
@@ -226,6 +227,10 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		equal( nlhs, plhs, nrhs, prhs );
 		return;
 	}
+	// if ( cmd == 8 ) {
+	// 	unequal( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
 	if ( cmd == 9 ) {
 		matrix( nlhs, plhs, nrhs, prhs );
 		return;
@@ -246,129 +251,274 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		type( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 15 ) {
-		new_empty( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 16 ) {
-		new_matrix( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 17 ) {
-		copyObj( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 18 ) {
-		new_points( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 19 ) {
-		new_intervals( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 20 ) {
-		new_mat_vec( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 21 ) {
-		new_halfspaces( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 22 ) {
+	if ( cmd == 14 ) {
 		satisfiesHalfspace( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 23 ) {
+	if ( cmd == 15 ) {
 		satisfiesHalfspaces( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 24 ) {
+	if ( cmd == 16 ) {
 		project( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 25 ) {
+	if ( cmd == 17 ) {
 		linearTransformation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 26 ) {
+	if ( cmd == 18 ) {
 		affineTransformation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 27 ) {
+	if ( cmd == 19 ) {
 		minkowskiSum( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 28 ) {
+	if ( cmd == 20 ) {
 		intersectHalfspace( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 29 ) {
+	if ( cmd == 21 ) {
 		intersectHalfspaces( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 30 ) {
-		contains_vec( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 31 ) {
-		contains_object( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 32 ) {
+	if ( cmd == 22 ) {
 		contains_point( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 33 ) {
-		unite_single( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 23 ) {
+		contains_object( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 34 ) {
-		// unite_vec(nlhs, plhs, nrhs, prhs);
-		return;
-	}
-	if ( cmd == 35 ) {
+	if ( cmd == 24 ) {
 		reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 36 ) {
-		supremum( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 37 ) {
+	if ( cmd == 25 ) {
 		intersect( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 38 ) {
+	if ( cmd == 26 ) {
+		unite_single( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	// if ( cmd == 27 ) {
+	// 	unite_vec(nlhs, plhs, nrhs, prhs); !!!!!!!!!??????
+	// 	return;
+	// }
+	if ( cmd == 100 ) {
+		new_empty( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 101 ) {
+		new_matrix( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 102 ) {
+		copyObj( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 103 ) {
+		new_points( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 104 ) {
+		new_intervals( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 105 ) {
+		new_mat_vec( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 106 ) {
+		new_halfspaces( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 107 ) {
+		contains_point( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 108 ) {
+		supremum( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 109 ) {
 		cleanUp( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 39 ) {
+	if ( cmd == 110 ) {
 		depth( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 40 ) {
+	if ( cmd == 111 ) {
 		operationCount( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 41 ) {
+	if ( cmd == 112 ) {
 		contains_dir( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 42 ) {
+	if ( cmd == 113 ) {
 		swap( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 43 ) {
+	if ( cmd == 114 ) {
 		forceLinTransReduction( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 44 ) {
+	if ( cmd == 115 ) {
 		collectProjections( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 45 ) {
+	if ( cmd == 116 ) {
 		scale( nlhs, plhs, nrhs, prhs );
 		return;
 	}
+
+
+
+
+
+
+	// if ( cmd == 1 ) {
+	// 	deleteObject( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 2 ) {
+	// 	dimension( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 3 ) {
+	// 	vertices( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 4 ) {
+	// 	reduceRepresentation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 5 ) {
+	// 	ostream( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 6 ) {
+	// 	size( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 7 ) {
+	// 	equal( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 9 ) {
+	// 	matrix( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 10 ) {
+	// 	vector( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 11 ) {
+	// 	is_empty( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 12 ) {
+	// 	removeRedundancy( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 13 ) {
+	// 	type( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 15 ) {
+	// 	new_empty( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 16 ) {
+	// 	new_matrix( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 17 ) {
+	// 	copyObj( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 18 ) {
+	// 	new_points( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 19 ) {
+	// 	new_intervals( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 20 ) {
+	// 	new_mat_vec( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 21 ) {
+	// 	new_halfspaces( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 22 ) {
+	// 	satisfiesHalfspace( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 23 ) {
+	// 	satisfiesHalfspaces( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 24 ) {
+	// 	project( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 25 ) {
+	// 	linearTransformation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 26 ) {
+	// 	affineTransformation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 27 ) {
+	// 	minkowskiSum( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 28 ) {
+	// 	intersectHalfspace( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 29 ) {
+	// 	intersectHalfspaces( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 30 ) {
+	// 	contains_vec( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 31 ) {
+	// 	contains_object( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	
+	// if ( cmd == 33 ) {
+	// 	unite_single( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 34 ) {
+	// 	// unite_vec(nlhs, plhs, nrhs, prhs);
+	// 	return;
+	// }
+	// if ( cmd == 35 ) {
+	// 	reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 36 ) {
+	// 	supremum( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	// if ( cmd == 37 ) {
+	// 	intersect( nlhs, plhs, nrhs, prhs );
+	// 	return;
+	// }
+	
+	
 	mexErrMsgTxt( "MSupportFunction - Command not recognized." );
 }

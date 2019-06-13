@@ -30,8 +30,8 @@ class MBox : public MGeometricObject<hypro::Box<double>> {
 	static void is_symmetric( int, mxArray**, int, const mxArray** );
 	static void max( int, mxArray**, int, const mxArray** );
 	static void min( int, mxArray**, int, const mxArray** );
-	static void outstream( int, mxArray**, int, const mxArray** );
-	static void box_size( int, mxArray**, int, const mxArray** );
+	// static void outstream( int, mxArray**, int, const mxArray** );
+	// static void box_size( int, mxArray**, int, const mxArray** );
 	static void type( int, mxArray**, int, const mxArray** );
 	static void makeSymmetric( int, mxArray**, int, const mxArray** );
 	static void minkowskiDecomposition( int, mxArray**, int, const mxArray** );

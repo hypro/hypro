@@ -309,13 +309,10 @@ void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mx
 	vec_dims = mxGetDimensions( prhs[3] );
 	len = (int)vec_dims[0];
 
-	std::vector<hypro::Point<double>> vertices = obj->vertices();
 	std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro( prhs[3], len );
 
 	T temp = obj->project( hy_dimensions );
-	std::vector<hypro::Point<double>> verticest = obj->vertices();
-	T* b = new T( temp );
-	plhs[0] = convertPtr2Mat<T>( b );
+	plhs[0] = convertPtr2Mat<T>(new T(temp) );
 }
 
 template <class T>

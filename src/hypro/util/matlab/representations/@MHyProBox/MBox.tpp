@@ -173,38 +173,6 @@ void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 }
 
-void MBox::outstream( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - <<: One or more arguments are missing!" );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MBox - <<: One or more input arguments were ignored." );
-
-	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
-	if ( !box->empty() ) {
-		hypro::Point<double> min_p = box->min();
-		hypro::Point<double> max_p = box->max();
-		hypro::vector_t<double> vec_min = min_p.rawCoordinates();
-		hypro::vector_t<double> vec_max = max_p.rawCoordinates();
-		mexPrintf( "Min: [" );
-		for ( int i = 0; i < vec_min.size(); i++ ) {
-			mexPrintf( "%f ", vec_min[i] );
-		}
-		mexPrintf( "] Max: [" );
-		for ( int i = 0; i < vec_max.size(); i++ ) {
-			mexPrintf( "%f ", vec_max[i] );
-		}
-		mexPrintf( "]\n" );
-	}
-}
-
-void MBox::box_size( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - size: Expecting an output!" );
-	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - size: One or more arguments are missing!" );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MBox - size: One or more input arguments were ignored." );
-
-	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
-	std::size_t dim = box->size();
-	plhs[0] = mxCreateDoubleScalar( dim );
-}
-
 void MBox::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - type: Expecting one output value!" );
 	std::string ans = "MHyProBox";
@@ -245,92 +213,28 @@ void MBox::minkowskiDecomposition( int nlhs, mxArray *plhs[], int nrhs, const mx
 void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	int cmd = mxGetScalar( prhs[1] );
 
-	if ( cmd == 15 ) {
-		new_empty( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 16 ) {
-		copyObj( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 18 ) {
-		boxFromSingleInterval( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 19 ) {
-		boxFromIntervals( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 17 ) {
-		boxFromPoints( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 20 ) {
-		new_mat_vec( nlhs, plhs, nrhs, prhs );
-		return;
-	}
 	if ( cmd == 1 ) {
 		deleteObject( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 21 ) {
-		empty( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 35 ) {
-		intervals( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 38 ) {
-		insert( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 36 ) {
-		limits( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 9 ) {
-		matrix( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 10 ) {
-		vector( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 37 ) {
-		constraints( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 39 ) {
-		interval( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 40 ) {
-		at( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 11 ) {
-		is_empty( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 41 ) {
-		is_symmetric( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 42 ) {
-		max( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 43 ) {
-		min( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 44 ) {
-		supremum( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 2 ) {
+		dimension( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 3 ) {
 		vertices( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 4 ) {
+		reduceRepresentation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 5 ) {
+		ostream( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 6 ) {
+		size( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 7 ) {
@@ -341,101 +245,169 @@ void MBox::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
 		unequal( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 45 ) {
-		scale( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 9 ) {
+		matrix( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 5 ) {
-		outstream( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 10 ) {
+		vector( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 2 ) {
-		dimension( nlhs, plhs, nrhs, prhs );
+	if ( cmd == 11 ) {
+		is_empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 12 ) {
 		removeRedundancy( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 6 ) {
-		box_size( nlhs, plhs, nrhs, prhs );
-		return;
-	}
 	if ( cmd == 13 ) {
 		type( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 34 ) {
-		reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 46 ) {
-		makeSymmetric( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 22 ) {
+	if ( cmd == 14 ) {
 		satisfiesHalfspace( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 23 ) {
+	if ( cmd == 15 ) {
 		satisfiesHalfspaces( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 24 ) {
+	if ( cmd == 16 ) {
 		project( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 25 ) {
+	if ( cmd == 17 ) {
 		linearTransformation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 26 ) {
+	if ( cmd == 18 ) {
 		affineTransformation( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 27 ) {
+	if ( cmd == 19 ) {
 		minkowskiSum( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 47 ) {
-		minkowskiDecomposition( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 48 ) {
-		intersect( nlhs, plhs, nrhs, prhs );
-		return;
-	}
-	if ( cmd == 28 ) {
+	if ( cmd == 20 ) {
 		intersectHalfspace( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 29 ) {
+	if ( cmd == 21 ) {
 		intersectHalfspaces( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 30 ) {
+	if ( cmd == 22 ) {
 		contains_point( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 31 ) {
+	if ( cmd == 23 ) {
 		contains_object( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 32 ) {
+	if ( cmd == 24 ) {
+		reduceNumberRepresentation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 25 ) {
+		intersect( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 26 ) {
 		unite_single( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 33 ) {
+	if ( cmd == 27 ) {
 		unite_vec(nlhs, plhs, nrhs, prhs);
 		return;
 	}
-	if ( cmd == 4 ) {
-		reduceRepresentation( nlhs, plhs, nrhs, prhs );
+
+	if ( cmd == 100 ) {
+		new_empty( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	if ( cmd == 14 ) {
+	if ( cmd == 101 ) {
+		copyObj( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 102 ) {
+		boxFromPoints( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 103 ) {
+		boxFromSingleInterval( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 104 ) {
+		boxFromIntervals( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	
+	if ( cmd == 105 ) {
+		new_mat_vec( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 106 ) {
+		empty( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 107 ) {
+		intervals( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 108 ) {
+		limits( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 109 ) {
+		constraints( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 110 ) {
+		insert( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 111 ) {
+		interval( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 112 ) {
+		at( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 113 ) {
+		is_symmetric( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 114 ) {
+		max( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 115 ) {
+		min( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 116 ) {
+		supremum( nlhs, plhs, nrhs, prhs );
+		return;
+	}	
+	if ( cmd == 117 ) {
+		scale( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 118 ) {
+		makeSymmetric( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	
+	if ( cmd == 119 ) {
+		minkowskiDecomposition( nlhs, plhs, nrhs, prhs );
+		return;
+	}	
+	if ( cmd == 120 ) {
 		clear( nlhs, plhs, nrhs, prhs );
 		return;
 	}
+
 	mexErrMsgTxt( "MBox - Command not recognized." );
 }
