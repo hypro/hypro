@@ -270,18 +270,11 @@ void MReset::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	// const mwSize *dims_var, *dims_lhs, *dims_rhs;
 	// int len_var, len_lhs, len_rhs;
 
-	// dims_var = mxGetDimensions(prhs[4]);
-	// dims_lhs = mxGetDimensions(prhs[5]);
-	// dims_lhs = mxGetDimensions(prhs[6])
-	// len_var = dims_var[0];
-	// len_lhs = dims_lhs[0];
-	// len_rhs = dims_rhs[0];
-
 	// hypro::Reset<double>* lhs = convertMat2Ptr<hypro::Reset<double>>(prhs[2]);
 	// hypro::Reset<double>* rhs = convertMat2Ptr<hypro::Reset<double>>(prhs[3]);
-	// std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro(prhs[4], len_var);
-	// std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro(prhs[5], len_lhs);
-	// std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro(prhs[6], len_rhs);
+	// std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro(prhs[4]);
+	// std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro(prhs[5]);
+	// std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro(prhs[6]);
 
 	// TODO:
 	// hypro::Reset<double>* res = lhs->combine(lhs, rhs, haVar, lhsVar, rhsVar);

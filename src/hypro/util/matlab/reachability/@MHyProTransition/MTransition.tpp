@@ -334,11 +334,7 @@ void MTransition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, cons
         mexWarnMsgTxt("MTransition - getDotRepresentation: One or more arguments were ignored.");
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(plhs[2]);
-    const mwSize *dims;
-    int len;
-    dims = mxGetDimensions(prhs[3]);
-    len = dims[0];
-    std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3], len);
+    std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3]);
     std::string str = tran->getDotRepresentation(vars);
     mxCreateString(str.c_str());
 }

@@ -81,7 +81,7 @@ class ObjectHandle {
 																	const int );
 	static std::vector<carl::Term<double>> mMultivariatePoly2Hypro( const mxArray* );
 	static std::vector<std::vector<std::size_t>> mVectorOfVectors2Hypro( const mxArray*, const int, const int );
-	static std::vector<std::string> mStringVector2Hypro( const mxArray*, const int );
+	static std::vector<std::string> mStringVector2Hypro( const mxArray*);
 	static std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro( const mxArray* );
 	static std::vector<std::unique_ptr<hypro::Location<double>>> mLocsVector2Hypro( const mxArray* );
 };
@@ -431,7 +431,6 @@ std::vector<std::size_t> ObjectHandle::mSizeVector2Hypro( const mxArray* m_sizes
 std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro( const mxArray* m_intervals, int rows, int cols ) {
 	double* intervals = mxGetPr( m_intervals );
 	std::vector<carl::Interval<double>> hyPro_intervals;
-	int counter = 0;
 	for ( int i = 0; i < rows; i++ ) {
 		for ( int j = 0; j < cols; j++ ) {
 			hyPro_intervals.emplace_back(
@@ -630,15 +629,14 @@ std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxA
 /*
  * @brief Converts a cell array of strings in Matlab into a vector of strings * in HyPro.
  * @param strings Pointer to the cell array
- * @param len Length of the cell array
  */
-std::vector<std::string> ObjectHandle::mStringVector2Hypro( const mxArray* strings, const int len ) {
+std::vector<std::string> ObjectHandle::mStringVector2Hypro( const mxArray* strings) {
 	std::vector<std::string> vec;
 	mxArray* cellElement;
 	double* p;
 	std::size_t nfields = (std::size_t)mxGetNumberOfElements( strings );
 
-	for ( int i = 0; i < nfields; i++ ) {
+	for ( int i = 0; i < (int) nfields; i++ ) {
 		cellElement = mxGetCell( strings, i );
 		p = mxGetPr( cellElement );
 		char* word = reinterpret_cast<char*>( p );

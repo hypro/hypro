@@ -37,16 +37,14 @@ class MHybridAutomaton{
         static void addInitialState(int, mxArray**, int, const mxArray**);
         static void addLocalBadState(int, mxArray**, int, const mxArray**);
         static void addGlobalBadState(int, mxArray**, int, const mxArray**);
-        // static void removeTransition(int, mxArray**, int, const mxArray**);
         static void decompose(int, mxArray**, int, const mxArray**);
         static void reduce(int, mxArray**, int, const mxArray**);
-        // static void isComposedOf(int, mxArray**, int, const mxArray**);
+        static void isComposedOf(int, mxArray**, int, const mxArray**);
         static void getDotRepresentation(int, mxArray**, int, const mxArray**);
         static void getStatistics(int, mxArray**, int, const mxArray**);
         static void equals(int, mxArray**, int, const mxArray**);
         static void unequals(int, mxArray**, int, const mxArray**);
-        // static void or_operator(int, mxArray**, int, const mxArray**);
-        // static void plus(int, mxArray**, int, const mxArray**);
+        static void plus(int, mxArray**, int, const mxArray**);
         static void outstream(int, mxArray**, int, const mxArray**);
         static void checkConsistency(int, mxArray**, int, const mxArray**);
 };

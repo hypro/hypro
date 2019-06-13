@@ -175,13 +175,8 @@ void MCondition::getDotRepresentation( int nlhs, mxArray* plhs[], int nrhs, cons
 	if ( nrhs < 4 ) mexErrMsgTxt( "MCondition - getDotRepresentation: One or more input arguments are missing!" );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MCondition - getDotRepresentation: One or more input arguments were ignored!" );
 
-	const mwSize* dims;
-	int len;
-	dims = mxGetDimensions( prhs[3] );
-	len = dims[0];
-
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[2] );
-	std::vector<std::string> strs = ObjectHandle::mStringVector2Hypro( prhs[3], len );
+	std::vector<std::string> strs = ObjectHandle::mStringVector2Hypro( prhs[3]);
 
 	std::string ans = cond->getDotRepresentation( strs );
 	plhs[0] = mxCreateString( ans.c_str() );
@@ -226,20 +221,11 @@ void MCondition::combine( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	if ( nrhs < 7 ) mexErrMsgTxt( "MCondition - getDotRepresentation: One or more input arguments are missing!" );
 	if ( nrhs > 7 ) mexWarnMsgTxt( "MCondition - getDotRepresentation: One or more input arguments were ignored!" );
 
-	const mwSize *dims_haVar, *dims_lhsVar, *dims_rhsVar;
-	int len_haVar, len_lhsVar, len_rhsVar;
-	dims_haVar = mxGetDimensions( prhs[4] );
-	dims_lhsVar = mxGetDimensions( prhs[5] );
-	dims_rhsVar = mxGetDimensions( prhs[6] );
-	len_haVar = dims_haVar[0];
-	len_lhsVar = dims_lhsVar[0];
-	len_rhsVar = dims_rhsVar[0];
-
 	hypro::Condition<double>* lhs = convertMat2Ptr<hypro::Condition<double>>( prhs[2] );
 	hypro::Condition<double>* rhs = convertMat2Ptr<hypro::Condition<double>>( prhs[3] );
-	std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro( prhs[4], len_haVar );
-	std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro( prhs[5], len_lhsVar );
-	std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro( prhs[6], len_rhsVar );
+	std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro( prhs[4]);
+	std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro( prhs[5]);
+	std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro( prhs[6]);
 }
 
 void MCondition::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

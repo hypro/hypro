@@ -249,16 +249,16 @@ void HybridAutomaton<Number>::addTransition(const Transition<Number>& transition
 }
 */
 
-// template<typename Number>
-// void HybridAutomaton<Number>::addTransition(std::unique_ptr<Transition<Number>>&& transition) {
-// 	assert(transition != nullptr);
-// 	for(auto& l : mLocations) {
-// 		if(l.get() == transition->getSource()) {
-// 			l.addTransition(std::move(transition));
-// 			break;
-// 		}
-// 	}
-// }
+template<typename Number>
+void HybridAutomaton<Number>::addTransition(std::unique_ptr<Transition<Number>>&& transition) {
+	assert(transition != nullptr);
+	for(auto& l : mLocations) {
+		if(l.get() == transition->getSource()) {
+			l.addTransition(std::move(transition));
+			break;
+		}
+	}
+}
 
 /*
 template<typename Number>
@@ -279,80 +279,80 @@ void HybridAutomaton<Number>::reduce() {
 	assert(false && "NOT IMPLEMENTED.");
 }
 
-// template<typename Number>
-// bool HybridAutomaton<Number>::isComposedOf(const HybridAutomaton<Number>& rhs) const {
-// 	// trivial case.
-// 	if(*this == rhs) return true;
+template<typename Number>
+bool HybridAutomaton<Number>::isComposedOf(const HybridAutomaton<Number>& rhs) const {
+	// trivial case.
+	if(*this == rhs) return true;
 
-// 	// check variable sets
-// 	for(const auto& v : rhs.getVariables()) {
-// 		if(std::find(mVariables.begin(), mVariables.end(), v) == mVariables.end()) {
-// 			//std::cout << "Variable " << v << " not contained in this, return false" << std::endl;
-// 			return false;
-// 		}
-// 	}
+	// check variable sets
+	for(const auto& v : rhs.getVariables()) {
+		if(std::find(mVariables.begin(), mVariables.end(), v) == mVariables.end()) {
+			//std::cout << "Variable " << v << " not contained in this, return false" << std::endl;
+			return false;
+		}
+	}
 
-// 	// check locations:
-// 	// try to find *exactly* one location, which matches - matching is defined by name, flow and invariant.
-// 	for(auto& locPtr : this->mLocations) {
-// 		bool foundOne = false;
-// 		//std::cout << "Try to find a matching location for " << locPtr->getName() << std::endl;
-// 		for(auto& rhsLocPtr : rhs.getLocations()) {
-// 			//std::cout << "Consider " << rhsLocPtr->getName() << std::endl;
-// 			if(locPtr->isComposedOf(*rhsLocPtr, rhs.getVariables(), this->getVariables())) {
-// 				if(foundOne) {
-// 					//std::cout << "composed from more than one loc - return false." << std::endl;
-// 					return false;
-// 				}
-// 				foundOne = true;
-// 			}
-// 		}
-// 		if(!foundOne) {
-// 			//std::cout << "could not find a matching location in rhs." << std::endl;
-// 			return false;
-// 		}
-// 	}
+	// check locations:
+	// try to find *exactly* one location, which matches - matching is defined by name, flow and invariant.
+	for(auto& locPtr : this->mLocations) {
+		bool foundOne = false;
+		//std::cout << "Try to find a matching location for " << locPtr->getName() << std::endl;
+		for(auto& rhsLocPtr : rhs.getLocations()) {
+			//std::cout << "Consider " << rhsLocPtr->getName() << std::endl;
+			if(locPtr->isComposedOf(*rhsLocPtr, rhs.getVariables(), this->getVariables())) {
+				if(foundOne) {
+					//std::cout << "composed from more than one loc - return false." << std::endl;
+					return false;
+				}
+				foundOne = true;
+			}
+		}
+		if(!foundOne) {
+			//std::cout << "could not find a matching location in rhs." << std::endl;
+			return false;
+		}
+	}
 
-// 	// check transitions:
-// 	// try to find a matching transition. Also take loops (no-op loops) into account for the check.
-// 	for(auto& transPtr : this->mTransitions) {
-// 		bool foundOne = false;
-// 		//std::cout << "Try to find transition for " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
-// 		// first try to find no-op transitions (where the control stays in the same mode for that component)
-// 		bool loop = false;
-// 		for(auto& locPtr : rhs.getLocations()) {
-// 			//std::cout << "Find name " << locPtr->getName() << std::endl;
-// 			if(transPtr->getSource()->getName().find(locPtr->getName()) != std::string::npos && transPtr->getTarget()->getName().find(locPtr->getName()) != std::string::npos) {
-// 				//std::cout << "Found loop: " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
-// 				if(loop) {
-// 					//std::cout << "Two loops - return false" << std::endl;
-// 					return false;
-// 				}
-// 				loop = true;
-// 			}
-// 		}
-// 		if(!loop) {
-// 			for(const auto rhsTransPtr : rhs.getTransitions()) {
-// 				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
-// 				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
-// 					//std::cout << "Found " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
-// 					if(foundOne) {
-// 						//std::cout << "found two matching transitions - return false" << std::endl;
-// 						return false;
-// 					}
-// 					foundOne = true;
-// 				}
-// 			}
-// 		}
+	// check transitions:
+	// try to find a matching transition. Also take loops (no-op loops) into account for the check.
+	for(auto& transPtr : this->mTransitions) {
+		bool foundOne = false;
+		//std::cout << "Try to find transition for " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
+		// first try to find no-op transitions (where the control stays in the same mode for that component)
+		bool loop = false;
+		for(auto& locPtr : rhs.getLocations()) {
+			//std::cout << "Find name " << locPtr->getName() << std::endl;
+			if(transPtr->getSource()->getName().find(locPtr->getName()) != std::string::npos && transPtr->getTarget()->getName().find(locPtr->getName()) != std::string::npos) {
+				//std::cout << "Found loop: " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
+				if(loop) {
+					//std::cout << "Two loops - return false" << std::endl;
+					return false;
+				}
+				loop = true;
+			}
+		}
+		if(!loop) {
+			for(const auto rhsTransPtr : rhs.getTransitions()) {
+				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
+				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
+					//std::cout << "Found " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
+					if(foundOne) {
+						//std::cout << "found two matching transitions - return false" << std::endl;
+						return false;
+					}
+					foundOne = true;
+				}
+			}
+		}
 
-// 		if(!foundOne && !loop) {
-// 			//std::cout << "Did not find matching transition - return false." << std::endl;
-// 			return false;
-// 		}
-// 	}
+		if(!foundOne && !loop) {
+			//std::cout << "Did not find matching transition - return false." << std::endl;
+			return false;
+		}
+	}
 
-// 	return true;
-//}
+	return true;
+}
 
 template<typename Number>
 std::string HybridAutomaton<Number>::getDotRepresentation() const {

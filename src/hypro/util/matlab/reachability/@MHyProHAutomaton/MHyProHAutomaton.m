@@ -212,7 +212,7 @@ classdef MHyProHAutomaton < handle
         end
         
         function addLocalBadState(obj, loc, cond)
-            if isa(loc, 'MHyProLocation') && isa(cond, 'Condition')
+            if isa(loc, 'MHyProLocation') && isa(cond, 'MHyProCondition')
                 MHyPro(4, 23, obj.ObjectHandle, loc.ObjectHandle, cond.ObjectHandle);
             else
                 error('MHyProHAutomaton - addLocalBadState: Wrong type of an argument.');
@@ -220,7 +220,7 @@ classdef MHyProHAutomaton < handle
         end
         
         function addGlobalBadState(obj, cond)
-            if isa(cond, 'Condition')
+            if isa(cond, 'MHyProCondition')
                 MHyPro(4, 24, obj.ObjectHandle, cond.ObjectHandle);
             else
                 error('MHyProHAutomaton - addGlobalBadState: Wrong type of an argument.');
@@ -248,7 +248,7 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = eq(lhs, rhs)
-            if isa(lhs, 4) && isa(rhs, 4)
+            if isa(lhs, 'MHyProHAutomaton') && isa(rhs, 'MHyProHAutomaton')
                 out = MHyPro(4, 29, lhs.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - ==: Wrong type of an argument.');
@@ -256,7 +256,7 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = nq(lhs, rhs)
-           if isa(lhs, 4) && isa(rhs, 4)
+           if isa(lhs, 'MHyProHAutomaton') && isa(rhs, 'MHyProHAutomaton')
                 out = MHyPro(4, 30, lhs.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - !=: Wrong type of an argument.');
@@ -264,13 +264,21 @@ classdef MHyProHAutomaton < handle
         end 
         
         function out = plus(lhs, rhs)
-            if isa(lhs, 4) && isa(rhs, 4)
+            if isa(lhs, 'MHyProHAutomaton') && isa(rhs, 'MHyProHAutomaton')
                 out = MHyPro(4, 31, lhs.ObjectHandle, rhs.ObjectHandle);
             else
                 error('MHyProHAutomaton - +: Wrong type of an argument.');
             end
         end
-     
+        
+        function addTransition(obj, tran)
+            if isa(tran, 'MHyProTransition')
+                MHyPro(4, 32, obj.ObjectHandle, tran.ObjectHandle);
+            else
+                error('MHyProHAutomaton - addTransition: Wrong type of an argument.');
+            end
+        end
+
     end
     
 end

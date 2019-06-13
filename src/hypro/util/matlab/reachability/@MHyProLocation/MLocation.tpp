@@ -306,16 +306,10 @@ void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	if ( nrhs < 6 ) mexErrMsgTxt( "MLocation - isComposedOf: One or more arguments are missing!" );
 	if ( nrhs > 6 ) mexWarnMsgTxt( "MLocation - isComposedOf: One or more arguments were ignored." );
 
-	const mwSize *rhsvar_dim, *thisvar_dim;
-	rhsvar_dim = mxGetDimensions( prhs[4] );
-	thisvar_dim = mxGetDimensions( prhs[5] );
-	int rhsvar_len = rhsvar_dim[1];
-	int thisvar_len = thisvar_dim[1];
-
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	hypro::Location<double>* rhs = convertMat2Ptr<hypro::Location<double>>( prhs[3] );
-	std::vector<std::string> rhsVars = ObjectHandle::mStringVector2Hypro( prhs[4], rhsvar_len );
-	std::vector<std::string> thisVars = ObjectHandle::mStringVector2Hypro( prhs[5], thisvar_len );
+	std::vector<std::string> rhsVars = ObjectHandle::mStringVector2Hypro( prhs[4]);
+	std::vector<std::string> thisVars = ObjectHandle::mStringVector2Hypro( prhs[5] );
 
 	// bool ans = loc->isComposedOf(*rhs, rhsVars, thisVars);
 	// plhs[0] = mxCreateLogicalScalar(ans); ---> ?
@@ -329,13 +323,8 @@ void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 //     if(nrhs > 4)
 //         mexWarnMsgTxt("MLocation - getDotRepresentation: One or more arguments were ignored.");
 
-//     const mwSize* dims;
-//     int len;
-//     dims = mxGetDimensions(prhs[3]);
-//     len = dims[0];
-
 //     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
-//     std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3], len);
+//     std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3]);
 //     std::string rep = loc->getDotRepresentation(vars);
 //     plhs[0] = mxCreateString(rep.c_str());
 // }
