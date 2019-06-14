@@ -490,8 +490,10 @@ TYPED_TEST(SupportFunctionNewTest, Constructors){
 	SupportFunctionNew<TypeParam> sfMatVec2(mat2,vec2);
 	EXPECT_TRUE(sfMatVec2.getRoot() != nullptr);
 	EXPECT_EQ(sfMatVec2.getRoot()->getType(), SFNEW_TYPE::LEAF);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
+	//EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
+	//EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching>>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching>>*>(sfMatVec2.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
 	//Settings constructor is below
 }
 

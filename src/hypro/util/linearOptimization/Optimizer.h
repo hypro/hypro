@@ -103,8 +103,11 @@ namespace hypro {
 			#endif
 		}
 
-		Optimizer(Optimizer<Number>&& orig) = delete;
-		Optimizer(const Optimizer<Number>& orig) = delete;
+		//Optimizer(Optimizer<Number>&& orig) = delete;
+		//Optimizer(const Optimizer<Number>& orig) = delete;
+
+		Optimizer(Optimizer<Number>&& orig);
+		Optimizer(const Optimizer<Number>& orig);
 
 		/**
 		 * @brief      Constructor which sets the problem.
@@ -133,6 +136,17 @@ namespace hypro {
 
 		inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
 			return mGlpkContext;
+		}
+
+		friend void swap(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
+			std::swap(lhs.mConstraintMatrix, rhs.mConstraintMatrix);
+			std::swap(lhs.mConstraintVector, rhs.mConstraintVector);
+			std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);
+			std::swap(lhs.mRelationSymbols, rhs.mRelationSymbols);
+			std::swap(lhs.mGlpkContext, rhs.mGlpkContext);
+			std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);
+			std::swap(lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer);
+			assert(lhs.isSane() && rhs.isSane());
 		}
 
 	public:

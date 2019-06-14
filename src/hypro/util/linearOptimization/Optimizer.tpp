@@ -22,19 +22,6 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
-		TRACE("hypro.optimizer","");
-		assert(isSane());
-		mConstraintMatrix = orig.matrix();
-		mConstraintVector = orig.vector();
-		mConsistencyChecked = false;
-		cleanGLPInstance();
-		mGlpkContext = std::map<std::thread::id, glpk_context>();
-		assert(isSane());
-		return *this;
-	}
-
-	template<typename Number>
 	const matrix_t<Number>& Optimizer<Number>::matrix() const {
 		assert(isSane());
 		return mConstraintMatrix;
@@ -45,6 +32,55 @@ namespace hypro {
 		assert(isSane());
 		return mConstraintVector;
 	}
+
+	//Move ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
+		swap(*this, orig);
+	}
+	//Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
+	//	swap(*this, orig);
+	//}
+		
+	//Copy ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(const Optimizer<Number>& orig){
+		TRACE("hypro.optimizer","");
+		assert(isSane());
+		mConstraintMatrix = orig.matrix();
+		mConstraintVector = orig.vector();
+		mConsistencyChecked = false;
+		cleanGLPInstance();
+		mGlpkContext = std::map<std::thread::id, glpk_context>();
+		assert(isSane());
+	}
+
+	//Copy and move assignment via Copy-and-Swap idiom
+	//template<typename Number>
+	//Optimizer<Number>& Optimizer<Number>::operator=(Optimizer<Number>& orig) {
+	//	swap(*this, orig);
+	//	return *this;
+	//}
+
+	template<typename Number>
+	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
+		Optimizer<Number> tmp(orig);
+		swap(*this, tmp);
+		return *this;
+	}
+	
+	//template<typename Number>
+	//Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
+		//TRACE("hypro.optimizer","");
+		//assert(isSane());
+		//mConstraintMatrix = orig.matrix();
+		//mConstraintVector = orig.vector();
+		//mConsistencyChecked = false;
+		//cleanGLPInstance();
+		//mGlpkContext = std::map<std::thread::id, glpk_context>();
+		//assert(isSane());
+		//return *this;
+	//}
 
 	template<typename Number>
 	void Optimizer<Number>::setMatrix(const matrix_t<Number>& _matrix) {

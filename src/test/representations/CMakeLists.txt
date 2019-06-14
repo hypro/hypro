@@ -12,13 +12,13 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#ConverterTest.cpp
 			#DifferenceBoundsTest.cpp
 			#GridTest.cpp
-			#HPolytopeTest.cpp
+			HPolytopeTest.cpp
 			#NeighborhoodContainerTest.cpp
 			#OrthogonalPolyhedronTest.cpp
 			#PolytopeTest.cpp
 			#PolytopeUtilTest.cpp
 			#PolytopeSupportFunctionTest.cpp
-			SupportFunctionTest.cpp
+			#SupportFunctionTest.cpp
 			##TaylorModelTest.cpp
 			#VPolytopeTest.cpp
 			#ZonotopeTest.cpp
@@ -31,11 +31,11 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#ConverterTest.cpp
 			#DifferenceBoundsTest.cpp
 			#GridTest.cpp
-			#HPolytopeTest.cpp
+			HPolytopeTest.cpp
 			#NeighborhoodContainerTest.cpp
 			#OrthogonalPolyhedronTest.cpp
 			#PolytopeSupportFunctionTest.cpp
-			SupportFunctionTest.cpp
+			#SupportFunctionTest.cpp
 			##TaylorModelTest.cpp
 			#VPolytopeTest.cpp
 			#ZonotopeTest.cpp

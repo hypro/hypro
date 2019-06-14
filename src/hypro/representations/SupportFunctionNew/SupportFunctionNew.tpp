@@ -97,7 +97,9 @@ namespace hypro {
 			if(boost::get<0>(areArgsBox)){
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 			} else {
-				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
+				//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
+				using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(tmp.matrix(),tmp.vector()));
 			}	
 		}
 		assert(mRoot != nullptr);
@@ -111,7 +113,9 @@ namespace hypro {
 		if(boost::get<0>(areArgsBox)){
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 		} else {
-			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
+			//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
+			using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(mat,vec));
 		}
 		assert(mRoot != nullptr);
 		mMatrix = mat;
@@ -122,8 +126,11 @@ namespace hypro {
 	//Halfspace vector constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
-		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
-	{ /*TODO: Optimize hspace constructor with isBox() */ }
+		//: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
+	{ /*TODO: Optimize hspace constructor with isBox() */ 
+		using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
+		mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(hspaces));
+	}
 
 	/***************************************************************************
 	 * Getters & setters
