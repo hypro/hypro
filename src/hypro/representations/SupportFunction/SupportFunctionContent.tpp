@@ -1576,11 +1576,6 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 }
 
 template<typename Number, typename Setting>
-void reduceRepresentation() {
-
-}
-
-template<typename Number, typename Setting>
 void SupportFunctionContent<Number,Setting>::cleanUp() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number,Setting>>;
 	std::vector<Node> callStack;

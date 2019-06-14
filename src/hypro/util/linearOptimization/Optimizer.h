@@ -103,9 +103,6 @@ namespace hypro {
 			#endif
 		}
 
-		//Optimizer(Optimizer<Number>&& orig) = delete;
-		//Optimizer(const Optimizer<Number>& orig) = delete;
-
 		Optimizer(Optimizer<Number>&& orig);
 		Optimizer(const Optimizer<Number>& orig);
 

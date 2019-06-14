@@ -280,19 +280,37 @@ namespace hypro {
 						//newState.partiallyReduceRepresentation(i);
 					}
 					if(newState.getSetType(i) == representation_name::SFN){
+
+						auto tmpSFN = boost::apply_visitor(genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet(i));
+						tmpSFN.reduceRepresentation();
+						//auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), newState.getSet(i));
+						auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
+						if(boost::get<0>(isHPolyBox)){
+							Box<Number> tmpBox(boost::get<1>(isHPolyBox));
+							SupportFunctionNew<Number> newSet(tmpBox);
+							newState.setSet(newSet);
+						} else {
+							HPolytopeT<Number,hypro::Converter<Number>,HPolytopeOptimizerCaching> tmpHPoly(tmpSFN.matrix(), tmpSFN.vector());
+							SupportFunctionNew<Number> newSet(tmpHPoly);
+							newState.setSet(newSet);
+						}
+
 						//Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope
 						//and set it as the leaf of a new tree
-						auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), newState.getSet(i));
-						SupportFunctionNew<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
+						//auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), newState.getSet(i));
+						//SupportFunctionNew<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
 						// convert to actual support function inside the state, which might have different settings == different type.
-						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(newSet), newState.getSet(i)),i);
+						//newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(newSet), newState.getSet(i)),i);
 					}
 					if(newState.getSetType(i) == representation_name::support_function) {
 						newState.partiallyReduceRepresentation(i);
 					}
+					//if(newState.getSetType(i) == representation_name::SFN) {
+					//	newState.partiallyReduceRepresentation(i);
+					//}
 				}
 
-				DEBUG("hydra.worker.discrete","State after reduction: " << newState.vertices());
+				DEBUG("hydra.worker.discrete","State after reduction: " << newState);
 
 				// Note: Here we misuse the state's timestamp to carry the transition timing to the next stage -> just don't reset
 				// the timestamp in case no aggregation happens.

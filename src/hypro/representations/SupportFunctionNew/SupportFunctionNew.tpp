@@ -838,19 +838,20 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
-		if(!empty()){
-			polyhedralApproximation();	
+		//if(!empty()){
+		if(Setting::REDUCE_TO_BOX){
+			this->evaluateTemplate(4,true);
+		} else {
+			this->evaluateTemplate(8,false);
 		}
+			//polyhedralApproximation();	
+		//}
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::polyhedralApproximation() {
 		//Amount of directions for evaluation depends on Settings
-		if(Setting::REDUCE_TO_BOX){
-			evaluateTemplate(4,true);
-		} else {
-			evaluateTemplate(8,false);
-		}
+		
 	}
 
 	template<typename Number, typename Converter, typename Setting>
