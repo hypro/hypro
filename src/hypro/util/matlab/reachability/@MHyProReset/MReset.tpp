@@ -53,7 +53,7 @@ void MReset::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "vector %d:\n");
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\n" );

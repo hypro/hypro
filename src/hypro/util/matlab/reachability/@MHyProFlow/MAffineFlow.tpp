@@ -28,7 +28,7 @@ void MAffineFlow::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\n" );
@@ -52,7 +52,7 @@ void MAffineFlow::setTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "setTranslation input:\n" );
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -72,7 +72,7 @@ void MAffineFlow::getTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "getTranslation output:\n" );
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++

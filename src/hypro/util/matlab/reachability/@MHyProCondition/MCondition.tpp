@@ -37,7 +37,7 @@ void MCondition::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\n" );

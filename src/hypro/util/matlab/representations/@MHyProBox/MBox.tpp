@@ -38,7 +38,8 @@ void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 		carl::Interval<double> inter = intervals[j];
 		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
 	}
-	mexPrintf( "\n" );
+	mexPrintf( "\n output:\n" );
+	std::vector<hypro::Point<double>> vertices = box->vertices();
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -80,7 +81,7 @@ void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "empty input:\n" );
-	mexPrintf( "dimension: %d\n", (double)in );
+	mexPrintf( "dimension: %f\n", (double)in );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -124,7 +125,7 @@ void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "insert input:\n" );
-	mexPrintf( "interval:[%d, %d]\n", interval.lower(), interval.upper() );
+	mexPrintf( "interval:[%f, %f]\n", interval.lower(), interval.upper() );
 
 	mexPrintf( "output:\n" );
 
@@ -186,11 +187,11 @@ void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
 	for ( int i = 0; i < hSpaces.size(); i++ ) {
 		hypro::vector_t<double> normal = hSpaces[i].normal();
 		double offset = hSpaces[i].offset();
-		mexPrintf( "normal %d:", i );
+		mexPrintf( "normal %f:", i );
 		for ( int j = 0; j < normal.rows(); j++ ) {
 			mexPrintf( " %f", normal( j ) );
 		}
-		mexPrintf( "\noffset: %d\n", offset );
+		mexPrintf( "\noffset: %f\n", offset );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
@@ -209,7 +210,7 @@ void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "interval input:\n" );
-	mexPrintf( "dim: %d\n", (double)dim );
+	mexPrintf( "dim: %f\n", (double)dim );
 	mexPrintf( "output:\n" );
 	mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
 	mexPrintf( "\n" );
@@ -230,7 +231,7 @@ void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "at input:\n" );
-	mexPrintf( "dim: %d\n", (double)dim );
+	mexPrintf( "dim: %f\n", (double)dim );
 	mexPrintf( "output:\n" );
 	mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
 	mexPrintf( "\n" );

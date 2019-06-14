@@ -56,7 +56,7 @@ void MGeometricObject<T>::new_vector( int nlhs, mxArray* plhs[], int nrhs, const
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "new_vector input:\n" );
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\noutput:\n" );
@@ -120,7 +120,7 @@ void MGeometricObject<T>::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, cons
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\noutput:\n" );
@@ -205,7 +205,7 @@ void MGeometricObject<T>::scale( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\noutput:\n" );
@@ -361,7 +361,7 @@ void MGeometricObject<T>::supremum( int nlhs, mxArray* plhs[], int nrhs, const m
 	plhs[0] = mxCreateDoubleScalar( supremum );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "supremum output: %d\n", supremum );
+	mexPrintf( "supremum output: %f\n", supremum );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -376,7 +376,7 @@ void MGeometricObject<T>::dimension( int nlhs, mxArray* plhs[], int nrhs, const 
 	plhs[0] = mxCreateDoubleScalar( dim );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "dimension output: %d\n", (double)dim );
+	mexPrintf( "dimension output: %f\n", (double)dim );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -418,7 +418,7 @@ void MGeometricObject<T>::size( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	plhs[0] = mxCreateDoubleScalar( dim );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "size output: %d\n", (double)dim );
+	mexPrintf( "size output: %f\n", (double)dim );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -479,7 +479,7 @@ void MGeometricObject<T>::satisfiesHalfspace( int nlhs, mxArray* plhs[], int nrh
 	for ( int j = 0; j < hy_normal.rows(); j++ ) {
 		mexPrintf( " %f", hy_normal( j ) );
 	}
-	mexPrintf( "offset: %d\n", offset );
+	mexPrintf( "offset: %f\n", offset );
 	mexPrintf( "\noutput:\n" );
 	mexPrintf( "containment: %s\n", ans.c_str() );
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -668,10 +668,10 @@ void MGeometricObject<T>::intersectHalfspace( int nlhs, mxArray* plhs[], int nrh
 
 	const mwSize* dims;
 	dims = mxGetDimensions( prhs[3] );
-	const int cols = (int)dims[1];
+	const int rows = (int)dims[0];
 
 	T* obj = convertMat2Ptr<T>( prhs[2] );
-	const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro( prhs[3], cols );
+	const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro( prhs[3], rows );
 	const int offset = (const int)mxGetScalar( prhs[4] );
 
 	const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>( hy_normal, offset );

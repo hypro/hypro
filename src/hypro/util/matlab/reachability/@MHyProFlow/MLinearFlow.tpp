@@ -82,7 +82,7 @@ void MLinearFlow::addRow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "addRow input:\n" );
 	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.cols(); j++ ) {
+	for ( int j = 0; j < vector.rows(); j++ ) {
 		mexPrintf( " %f", vector( j ) );
 	}
 	mexPrintf( "\noutput:\n" );

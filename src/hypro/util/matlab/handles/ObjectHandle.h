@@ -3,7 +3,6 @@
  *  to Matlab and vice versa.
  */
 
-
 #pragma once
 
 #include "../../../datastructures/Halfspace.h"
@@ -81,7 +80,7 @@ class ObjectHandle {
 																	const int );
 	static std::vector<carl::Term<double>> mMultivariatePoly2Hypro( const mxArray* );
 	static std::vector<std::vector<std::size_t>> mVectorOfVectors2Hypro( const mxArray*, const int, const int );
-	static std::vector<std::string> mStringVector2Hypro( const mxArray*);
+	static std::vector<std::string> mStringVector2Hypro( const mxArray* );
 	static std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro( const mxArray* );
 	static std::vector<std::unique_ptr<hypro::Location<double>>> mLocsVector2Hypro( const mxArray* );
 };
@@ -107,7 +106,7 @@ void vector2Matlab( const std::vector<T>& vec, mxArray* m_out ) {
  * @param vec The vector
  * @param m_out_1 Pointer to output matlab vector
  * @param m_out_2 Pointer to output matlab vector
- * 
+ *
  */
 template <typename T>
 void vector2Matlab( const std::vector<T>& vec, mxArray* m_out_1, mxArray* m_out_2 ) {
@@ -447,7 +446,6 @@ std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro( const mxArra
  */
 carl::Interval<double> ObjectHandle::mInterval2Hypro( const mxArray* m_interval ) {
 	double* interval = mxGetPr( m_interval );
-	// mexPrintf("interval: [%f %f]", interval[0], interval[1]);
 	carl::Interval<double>* hyPro_interval = new carl::Interval<double>( interval[0], interval[1] );
 	return *hyPro_interval;
 }
@@ -494,14 +492,21 @@ hypro::Point<double> ObjectHandle::mPoint2Hypro( const mxArray* m_vec, int cols 
 }
 
 /*
- * @brief Converts a 2 x 2 Matlab matrix into pair of HyPro points.
+ * @brief Converts a n x 2 Matlab matrix into pair of HyPro points.
  * @param mat Pointer to the matrix
  */
 std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2Hypro( const mxArray* m_mat ) {
 	double* mat = mxGetPr( m_mat );
-	std::vector<double> temp_one{mat[0], mat[1]};
-	std::vector<double> temp_two{mat[2], mat[3]};
+	const mwSize* dims;
+	dims = mxGetDimensions( m_mat );
+	const int rows = dims[0];
+	std::vector<double> temp_one;
+	std::vector<double> temp_two;
 
+	for ( int i = 0; i < rows; i++ ) {
+		temp_one.emplace_back( mat[i] );
+		temp_two.emplace_back( mat[i + rows] );
+	}
 	hypro::Point<double>* point_one = new hypro::Point<double>( temp_one );
 	hypro::Point<double>* point_two = new hypro::Point<double>( temp_two );
 
@@ -613,7 +618,8 @@ std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro( mxArray* 
  * @param m_matrix Pointer to the input Matlab matrix
  * @parma rows, cols Dimensions
  */
-std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxArray* m_matrix, const int rows, const int cols ) {
+std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxArray* m_matrix, const int rows,
+																	   const int cols ) {
 	double* matrix = mxGetPr( m_matrix );
 	std::vector<std::vector<size_t>> vector( rows );
 	for ( int i = 0; i < rows; i++ ) {
@@ -630,13 +636,13 @@ std::vector<std::vector<size_t>> ObjectHandle::mVectorOfVectors2Hypro( const mxA
  * @brief Converts a cell array of strings in Matlab into a vector of strings * in HyPro.
  * @param strings Pointer to the cell array
  */
-std::vector<std::string> ObjectHandle::mStringVector2Hypro( const mxArray* strings) {
+std::vector<std::string> ObjectHandle::mStringVector2Hypro( const mxArray* strings ) {
 	std::vector<std::string> vec;
 	mxArray* cellElement;
 	double* p;
 	std::size_t nfields = (std::size_t)mxGetNumberOfElements( strings );
 
-	for ( int i = 0; i < (int) nfields; i++ ) {
+	for ( int i = 0; i < (int)nfields; i++ ) {
 		cellElement = mxGetCell( strings, i );
 		p = mxGetPr( cellElement );
 		char* word = reinterpret_cast<char*>( p );
@@ -674,7 +680,6 @@ std::vector<std::unique_ptr<hypro::Location<double>>> ObjectHandle::mLocsVector2
 	int loc_num;
 	loc_dims = mxGetDimensions( locsVector );
 	loc_num = loc_dims[1];
-    mexPrintf("loc num: %d\n",loc_num);
 	const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>( locsVector, loc_num );
 
 	std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;

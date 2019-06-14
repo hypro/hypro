@@ -27,11 +27,12 @@ assert(isequal(inter,intervals));
 % Construct box from a pair of points
 points_box = MHyProBox('points',points);
 intervals = points_box.intervals();
-assert(isequal(intervals, [0 0; 32 2]));
+assert(isequal(intervals, [0 2; 0 1; 0 0]));
 
 % Empty box in given dimension
-empty_box = points_box.empty(1);
-intervals = empty_box.intervals()
+empty_box = points_box.empty(7);
+intervals = empty_box.intervals();
+assert(isequal(intervals, zeros(7,2)));
 
 % Get verices of 3D box
 box = MHyProBox('intervals', [0 1; 0 1; 0 1]);
@@ -81,12 +82,12 @@ assert(isequal(h_vec, [1;-1;3;-2]));
 % Get an interval at certain position
 box = MHyProBox('intervals',inter);
 interval = box.interval(2);
-assert(isequal(interval, [3 4]));
+assert(isequal(interval, [23 179]));
 
 % Get interval representation at certain position
 box = MHyProBox('intervals',inter);
 interval = box.at(2);
-assert(isequal(interval,[3 4]));
+assert(isequal(interval,[23 179]));
 
 % Check if a matrix is symmetric
 notsymmetric_box = MHyProBox('intervals', [1 2; 1 2]);
@@ -118,7 +119,7 @@ equal = (box == box_copy);
 assert(equal == 1);
 
 % Check if points_box equals box
-box1 = MHyProBox('interval', [1 2; 3 4; 5 6]);
+box1 = MHyProBox('intervals', [1 2; 3 4; 5 6]);
 box2 = MHyProBox('intervals', [1 2; 1 2]);
 equal = (box1 == box2);
 assert(equal == 0);
@@ -154,6 +155,8 @@ hs_normal = [0; 0; -1];
 hs_offset = -1;
 [containment, ~] = box.satisfiesHalfspace(hs_normal, hs_offset);
 assert(containment == "NO");
+assert(isequal(hs_normal, [0; 0; -1]));
+assert(isequal(hs_offset, -1));
 
 % Check if the same box satisfies another halfspace
 box = MHyProBox('intervals', [3 5; 2 4]);

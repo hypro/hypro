@@ -71,7 +71,7 @@ void MTransition::new_full( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "guard vector:\n" );
-	for ( int j = 0; j < gvector.cols(); j++ ) {
+	for ( int j = 0; j < gvector.rows(); j++ ) {
 		mexPrintf( " %f", gvector( j ) );
 	}
 	hypro::matrix_t<double> rmatrix = reset->getMatrix();
@@ -84,7 +84,7 @@ void MTransition::new_full( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "reset vector:\n" );
-	for ( int j = 0; j < rvector.cols(); j++ ) {
+	for ( int j = 0; j < rvector.rows(); j++ ) {
 		mexPrintf( " %f", rvector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -153,7 +153,7 @@ void MTransition::getGuard( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "guard vector:\n" );
-	for ( int j = 0; j < gvector.cols(); j++ ) {
+	for ( int j = 0; j < gvector.rows(); j++ ) {
 		mexPrintf( " %f", gvector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -180,7 +180,7 @@ void MTransition::getReset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "reset vector:\n" );
-	for ( int j = 0; j < gvector.cols(); j++ ) {
+	for ( int j = 0; j < gvector.rows(); j++ ) {
 		mexPrintf( " %f", gvector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -364,7 +364,7 @@ void MTransition::setGuard( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "guard vector:\n" );
-	for ( int j = 0; j < gvector.cols(); j++ ) {
+	for ( int j = 0; j < gvector.rows(); j++ ) {
 		mexPrintf( " %f", gvector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -390,7 +390,7 @@ void MTransition::setReset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "reset vector:\n" );
-	for ( int j = 0; j < gvector.cols(); j++ ) {
+	for ( int j = 0; j < gvector.rows(); j++ ) {
 		mexPrintf( " %f", gvector( j ) );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
