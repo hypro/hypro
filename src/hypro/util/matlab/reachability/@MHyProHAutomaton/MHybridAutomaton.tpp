@@ -109,6 +109,13 @@ void MHybridAutomaton::getLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( locations, plhs[0], len );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getLocations output:\n" );
+	for(int i = 0; i < len; i++){
+		mexPrintf("loc %d: %s\n", i, temp[i]->getName().c_str());
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getLocation_by_hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -120,6 +127,13 @@ void MHybridAutomaton::getLocation_by_hash( int nlhs, mxArray* plhs[], int nrhs,
 	std::size_t hash = (std::size_t)mxGetScalar( prhs[3] );
 	hypro::Location<double>* loc = autom->getLocation( hash );
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *loc ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getLocation_by_hash input:\n" );
+	mexPrintf("hash: %d\n", (double) hash);
+	mexPrintf("output\n");
+	mexPrintf("loc: %s\n", loc->getName());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getLocation_by_name( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -132,6 +146,11 @@ void MHybridAutomaton::getLocation_by_name( int nlhs, mxArray* plhs[], int nrhs,
 	mxGetString( prhs[3], name, sizeof( name ) );
 	hypro::Location<double>* loc = autom->getLocation( name );
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getLocation_by_name input:\n" );
+	mexPrintf("name: %d\n", name);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -145,6 +164,18 @@ void MHybridAutomaton::getTransitions( int nlhs, mxArray* plhs[], int nrhs, cons
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( trans, plhs[0], len );
+	
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getTransitions output:\n" );
+	for(int i = 0; i < trans.size(); i++){
+		hypro::Transition<double>* curr = trans[i];
+		hypro::Location<double>* target = curr->getTarget();
+		hypro::Location<double>* source = curr->getSource();
+		std::string tName = target->getName();
+		std::string sName = source->getName();
+		mexPrintf( "transition %s -> %s\n", tName.c_str(), sName.c_str() );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getInitialStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -155,12 +186,15 @@ void MHybridAutomaton::getInitialStates( int nlhs, mxArray* plhs[], int nrhs, co
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = autom->getInitialStates();
 	int len = mapping.size();
-	mexPrintf( "MAPPING SIZE: %d\n", len );
-	
 	mwSize dims[2] = {1, (mwSize)len};
 	const char* fieldnames[] = {"loc", "cond"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, fieldnames );
 	ObjectHandle::convert2Matlab( mapping, plhs[0] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getInitialStates input:\n" );
+	mexPrintf( "mapping size: %d\n", len );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -175,7 +209,11 @@ void MHybridAutomaton::getLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, c
 	const char* fieldnames[] = {"loc", "cond"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, fieldnames );
 	ObjectHandle::convert2Matlab( mapping, plhs[0] );
-	mexPrintf( "converted" );
+	
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getLocalBadStates input:\n" );
+	mexPrintf( "mapping size: %d\n", len );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -189,6 +227,11 @@ void MHybridAutomaton::getGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, 
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( conds, plhs[0], len );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getGlobalBadStates input:\n" );
+	mexPrintf( "mapping size: %d\n", len );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getVariables( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -202,6 +245,13 @@ void MHybridAutomaton::getVariables( int nlhs, mxArray* plhs[], int nrhs, const 
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	ObjectHandle::convert2Matlab( vars, plhs[0], dims );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getVariables output:\n" );
+	for(int i = 0; i < len; i++){
+		mexPrintf("var %d: %s\n", i, vars[i].c_str());
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getLabels( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -222,6 +272,10 @@ void MHybridAutomaton::getLabels( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( labels_vec, plhs[0], len );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getLabels output:\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::setLocations( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -242,6 +296,13 @@ void MHybridAutomaton::setLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 		locs_ptr.emplace_back( std::move( loc ) );
 	}
 	autom->setLocations( std::move( locs_ptr ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setLocations input:\n" );
+	for(int i = 0; i < locs.size(); i++){
+		mexPrintf("loc %d: %s\n", i, locs[i].getName().c_str());
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::setInitialStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -252,6 +313,10 @@ void MHybridAutomaton::setInitialStates( int nlhs, mxArray* plhs[], int nrhs, co
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
 		  ObjectHandle::mLocCondMap2Hypro( prhs[3] );
 	autom->setInitialStates( mapping );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setInitialStates\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::setLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -262,6 +327,10 @@ void MHybridAutomaton::setLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, c
 	const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping =
 		  ObjectHandle::mLocCondMap2Hypro( prhs[3] );
 	autom->setLocalBadStates( mapping );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setLocalBadStates\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::setGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -276,6 +345,10 @@ void MHybridAutomaton::setGlobalBadStates( int nlhs, mxArray* plhs[], int nrhs, 
 	std::vector<hypro::Condition<double>> conds =
 		  ObjectHandle::objArray2Hypro<hypro::Condition<double>>( prhs[3], dimy );
 	autom->setGlobalBadStates( conds );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setGlobalBadStates\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::setVariables( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -285,6 +358,13 @@ void MHybridAutomaton::setVariables( int nlhs, mxArray* plhs[], int nrhs, const 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro( prhs[3] );
 	autom->setVariables( vars );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setVariables output:\n" );
+	for(int i = 0; i < vars.size(); i++){
+		mexPrintf("var %d: %s\n", i, vars[i].c_str());
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::addLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -294,6 +374,11 @@ void MHybridAutomaton::addLocation( int nlhs, mxArray* plhs[], int nrhs, const m
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[3] );
 	autom->addLocation( *loc );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "addLocation input:\n" );
+	mexPrintf("location %s\n", loc->getName().c_str());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::addTransition( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -304,6 +389,10 @@ void MHybridAutomaton::addTransition( int nlhs, mxArray* plhs[], int nrhs, const
 	hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>( prhs[3] );
 	mexErrMsgTxt( "NOT IMPLEMENTED" );
 	// autom->addTransition(std::move(std::make_unique<hypro::Transition<double>>(*temp)));
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "addTransition\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::addInitialState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -315,6 +404,9 @@ void MHybridAutomaton::addInitialState( int nlhs, mxArray* plhs[], int nrhs, con
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[4] );
 	autom->addInitialState( loc, *cond );
 
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "addInitialState\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::addLocalBadState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -325,6 +417,10 @@ void MHybridAutomaton::addLocalBadState( int nlhs, mxArray* plhs[], int nrhs, co
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[3] );
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[4] );
 	autom->addLocalBadState( &( *loc ), *cond );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "addLocalBadState\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::addGlobalBadState( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -334,6 +430,10 @@ void MHybridAutomaton::addGlobalBadState( int nlhs, mxArray* plhs[], int nrhs, c
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[3] );
 	autom->addGlobalBadState( *cond );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "addGlobalState\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::reduce( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -342,6 +442,10 @@ void MHybridAutomaton::reduce( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	autom->reduce();
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "reduce\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -352,6 +456,9 @@ void MHybridAutomaton::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[3] );
 	// autom->isComposedOf( *rhs );
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "isComposedOf\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getDotRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -362,6 +469,10 @@ void MHybridAutomaton::getDotRepresentation( int nlhs, mxArray* plhs[], int nrhs
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	// std::string rep = autom->getDotRepresentation();
 	// plhs[0] = mxCreateString( rep.c_str() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getDotRepresentation\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getStatistics( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -372,6 +483,11 @@ void MHybridAutomaton::getStatistics( int nlhs, mxArray* plhs[], int nrhs, const
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	std::string rep = autom->getStatistics();
 	plhs[0] = mxCreateString( rep.c_str() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getStatistics output:\n" );
+	mexPrintf("statistic: %s\n", rep.c_str());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -384,6 +500,15 @@ void MHybridAutomaton::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	mxLogical ans = false;
 	if ( *autom == *rhs ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "equals input:\n" );
+	if ( ans ) {
+		mexPrintf( "yes\n" );
+	} else {
+		mexPrintf( "no\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -396,6 +521,15 @@ void MHybridAutomaton::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	mxLogical ans = false;
 	if ( *autom != *rhs ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "unequals input:\n" );
+	if ( ans ) {
+		mexPrintf( "yes\n" );
+	} else {
+		mexPrintf( "no\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::plus( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -408,6 +542,10 @@ void MHybridAutomaton::plus( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	mexErrMsgTxt( "NOT IMPLEMENTED" );
 	// hypro::HybridAutomatonComp<double> temp = *autom + *rhs;
 	// plhs[0] = convertPtr2Mat<hypro::HybridAutomatonComp<double>>( &temp );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "plus\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -424,6 +562,15 @@ void MHybridAutomaton::checkConsistency( int nlhs, mxArray* plhs[], int nrhs, co
 	mxLogical ans = false;
 	if ( cons ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "checkConsistency input:\n" );
+	if ( ans ) {
+		mexPrintf( "yes\n" );
+	} else {
+		mexPrintf( "no\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

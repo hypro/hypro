@@ -29,6 +29,10 @@ void MState::del_state( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MState - del_state: One or more arguments were ignored." );
 
 	destroyObject<hypro::State_t<double>>( prhs[2] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "delete\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -48,6 +52,21 @@ void MState::vertices( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 		mexWarnMsgTxt( "MState - vertices: The object has no vertices." );
 		plhs[0] = mxCreateDoubleMatrix( 1, 1, mxREAL );
 	}
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "vertices output:\n" );
+	if ( cols != 0 ) {
+		int rows = vertices[0].dimension();
+		for ( int j = 0; j < cols; j++ ) {
+			hypro::Point<double> p = vertices[j];
+			for ( int i = 0; i < rows; i++ ) {
+				mexPrintf( " %f", p[i] );
+			}
+			mexPrintf( "\n" );
+		}
+		mexPrintf( "\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -57,6 +76,10 @@ void MState::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( st );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "copy\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -69,6 +92,11 @@ void MState::getSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	std::string ans;
 	ObjectHandle::convert2Matlab( name, ans );
 	plhs[0] = mxCreateString( ans.c_str() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getSetType output:\n" );
+	mexPrintf("type: %s\n", ans.c_str());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -84,6 +112,11 @@ void MState::getSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( states, plhs[0], len );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getSets output:\n" );
+	mexPrintf("len: %d\n", len);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -98,6 +131,11 @@ void MState::getTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	carl::Interval<double> inter( lower, upper );
 	plhs[0] = mxCreateDoubleMatrix( 1, 2, mxREAL );
 	ObjectHandle::convert2Matlab( inter, plhs[0], 1, 2 );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getTimestamp output:\n" );
+	mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::isEmpty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -109,6 +147,15 @@ void MState::isEmpty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	bool tmp = st->isEmpty();
 	mxLogical ans = tmp;
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "is_empty input:\n" );
+	if ( tmp ) {
+		mexPrintf( "empty\n" );
+	} else {
+		mexPrintf( "not empty\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -130,6 +177,15 @@ void MState::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 
 	hypro::State_t<double> new_st = st->project( dimensions, offset );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( new_st ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "project input:\n" );
+	mexPrintf(" vector:\n");
+	for ( int j = 0; j < dimensions.size(); j++ ) {
+		mexPrintf( " %f", dimensions[j] );
+	}
+	mexPrintf("\noffset: %d\n", (double) offset);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getDimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -142,6 +198,11 @@ void MState::getDimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
 	std::size_t dim = st->getDimension( offset );
 	plhs[0] = mxCreateDoubleScalar( dim );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getDimension output:\n" );
+	mexPrintf("dim: %d\n", (double) dim);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getDimensionOffset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -154,6 +215,13 @@ void MState::getDimensionOffset( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 
 	std::size_t dim = st->getDimensionOffset( offset );
 	plhs[0] = mxCreateDoubleScalar( dim );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getDimensionOffset input:\n" );
+	mexPrintf("offset: %d\n", (double)dim);
+	mexPrintf("output\n");
+	mexPrintf("dim: %d\n", dim);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -165,6 +233,11 @@ void MState::getLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	const hypro::Location<double>* tmp = st->getLocation();
 	hypro::Location<double>* loc = new hypro::Location<double>( *tmp );
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getLocations output:\n" );
+	mexPrintf("name: %s\n", loc->getName().c_str());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getNumberSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -175,6 +248,11 @@ void MState::getNumberSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
 	std::size_t tmp = st->getNumberSets();
 	plhs[0] = mxCreateDoubleScalar( tmp );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getNumberSets output:\n" );
+	mexPrintf("num: %d\n", (double) tmp);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::getTypes( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -185,9 +263,19 @@ void MState::getTypes( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
 	std::vector<hypro::representation_name> types = st->getTypes();
 	const int rows = types.size();
-	const int cols = 1;
-	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
+	plhs[0] = mxCreateDoubleMatrix( rows, 1, mxREAL );
 	vector2Matlab( types, plhs[0] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getTypes output:\n" );
+	for(int i = 0; i < types.size(); i++){
+		hypro::representation_name name = types[i];
+		std::string n;
+		ObjectHandle::convert2Matlab(name, n);
+		mexPrintf("type %d: %s\n", i, n.c_str());
+
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -197,6 +285,12 @@ void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	st->setLocation( loc );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setLocation input:\n" );
+	std::string name = loc->getName();
+	mexPrintf("name: %s\n", name.c_str());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 // void MState::setSet( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -233,6 +327,14 @@ void MState::setSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	hypro::representation_name name = ObjectHandle::mRepresentationName2Hypro( type );
 	std::size_t pos = mxGetScalar( prhs[4] );
 	st->setSetType( name, pos );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getTypes output:\n" );
+	std::string n;
+	ObjectHandle::convert2Matlab(name, n);
+	mexPrintf("type : %s\n", n.c_str());
+
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::setTimestamp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -268,6 +370,10 @@ void MState::setSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	} else {
 		mexErrMsgTxt( "MState - setSet: Unknown set type." );
 	}
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setSets\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 // void MState::setSetSave(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
@@ -300,6 +406,10 @@ void MState::setSetDirect( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	} else {
 		mexErrMsgTxt( "MState - setSetDirect: Unknown set type." );
 	}
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setSetDirect\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::setAndConvertType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -328,6 +438,10 @@ void MState::satisfies( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	ObjectHandle::convert2Matlab( p.first, cont );
 	plhs[0] = mxCreateString( cont.c_str() );
 	plhs[1] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( p.second ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "satisfies\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::satisfiesHalfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -358,6 +472,10 @@ void MState::partiallyApplyTimeStep( int nlhs, mxArray* plhs[], int nrhs, const 
 
 	hypro::State_t<double> temp = st->partiallyApplyTimeStep( *set, stepSize, index );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "partiallyApplyTimeStep\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::applyTransformation_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -387,6 +505,17 @@ void MState::linearTransformation( int nlhs, mxArray* plhs[], int nrhs, const mx
 
 	hypro::State_t<double> temp = st->linearTransformation( mat );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "linearTransformation input:\n" );
+	mexPrintf( "matrix:\n" );
+	for ( int i = 0; i < mat.rows(); i++ ) {
+		for ( int j = 0; j < mat.cols(); j++ ) {
+			mexPrintf( " %f", mat( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::affineTransformation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -408,6 +537,21 @@ void MState::affineTransformation( int nlhs, mxArray* plhs[], int nrhs, const mx
 
 	hypro::State_t<double> temp = st->affineTransformation( mat, vec );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( temp ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "affineTransformation input:\n" );
+	mexPrintf( "matrix:\n" );
+	for ( int i = 0; i < mat.rows(); i++ ) {
+		for ( int j = 0; j < mat.cols(); j++ ) {
+			mexPrintf( " %f", mat( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	mexPrintf( "\nvector: " );
+	for ( int i = 0; i < vec.rows(); i++ ) {
+		mexPrintf( " %f", vec( i ) );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::partialIntervalAssignment( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -431,6 +575,10 @@ void MState::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	const hypro::State_t<double>* rhs = convertMat2Ptr<hypro::State_t<double>>( prhs[3] );
 
 	hypro::State_t<double> temp = st->minkowskiSum( *rhs );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "minkowskiSum\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 // void MState::partiallyMinkowskiSum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
