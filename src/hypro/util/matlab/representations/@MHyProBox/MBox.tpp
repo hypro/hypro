@@ -11,7 +11,8 @@ void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxA
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "boxFromSingleInterval input:\n" );
-	mexPrintf( "inter: [%d, %d]\n", inter.lower(), inter.upper() );
+	mexPrintf( "inter: [%f, %f]\n", inter.lower(), inter.upper() );
+	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -35,7 +36,7 @@ void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 	mexPrintf( "intervals:\n" );
 	for ( int j = 0; j < intervals.size(); j++ ) {
 		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
 	}
 	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -59,7 +60,7 @@ void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", first[i] );
 	}
-	mexPrintf( "second:\n" );
+	mexPrintf( "\nsecond:\n" );
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", second[i] );
 	}
@@ -100,7 +101,7 @@ void MBox::intervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 	mexPrintf( "intervals:\n" );
 	for ( int j = 0; j < intervals.size(); j++ ) {
 		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
 	}
 	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -131,7 +132,7 @@ void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	mexPrintf( "intervals:\n" );
 	for ( int j = 0; j < intervals.size(); j++ ) {
 		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
 	}
 	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
@@ -210,7 +211,7 @@ void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 	mexPrintf( "interval input:\n" );
 	mexPrintf( "dim: %d\n", (double)dim );
 	mexPrintf( "output:\n" );
-	mexPrintf( "interval: [%d; %d]", inter.lower(), inter.upper() );
+	mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
 	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
@@ -231,7 +232,7 @@ void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	mexPrintf( "at input:\n" );
 	mexPrintf( "dim: %d\n", (double)dim );
 	mexPrintf( "output:\n" );
-	mexPrintf( "interval: [%d; %d]", inter.lower(), inter.upper() );
+	mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
 	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }

@@ -6,8 +6,8 @@ function testBox(testCase)
 %Test Basic Functionality
 %This script contains tests for all functions for HyPro Boxes.
 
-inter = [1 2; 3 4; 5 6];
-points = [0 2; 0 1];
+inter = [-6 27; 23 179; 5 153; -41 -24; -25 145];
+points = [0 2; 0 1; 32 -109];
 
 % Construct an empty box
 empty_box = MHyProBox();
@@ -27,7 +27,11 @@ assert(isequal(inter,intervals));
 % Construct box from a pair of points
 points_box = MHyProBox('points',points);
 intervals = points_box.intervals();
-assert(isequal(intervals, [0 2; 0 1]));
+assert(isequal(intervals, [0 0; 32 2]));
+
+% Empty box in given dimension
+empty_box = points_box.empty(1);
+intervals = empty_box.intervals()
 
 % Get verices of 3D box
 box = MHyProBox('intervals', [0 1; 0 1; 0 1]);

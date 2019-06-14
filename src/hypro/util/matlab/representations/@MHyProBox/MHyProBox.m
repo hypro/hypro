@@ -44,9 +44,9 @@ classdef MHyProBox < MHyProGeometricObject
             elseif nargin == 2
                 if strcmp(varargin{1}, 'points') && ismatrix(varargin{2})
                     obj.ObjectHandle = MHyPro(0, 102, varargin{2});
-                elseif strcmp(varargin{1}, 'interval') && areIntervals(varargin{2})
+                elseif strcmp(varargin{1}, 'interval') && checkIntervals(varargin{2})
                     obj.ObjectHandle = MHyPro(0, 103, varargin{2});
-                elseif strcmp(varargin{1}, 'intervals') && areIntervals(varargin{2})
+                elseif strcmp(varargin{1}, 'intervals') && checkIntervals(varargin{2})
                     obj.ObjectHandle = MHyPro(0, 104, varargin{2});
                 elseif ismatrix(varargin{1})
                     if isvector(varargin{2})
@@ -209,7 +209,7 @@ classdef MHyProBox < MHyProGeometricObject
         end
         
         function insert(obj, inter)
-            if areIntervals(inter)
+            if checkIntervals(inter)
                 MHyPro(0, 110, obj.ObjectHandle, inter);
             else
                 error('MHyProBox - insert: Wrong type of argument.');
