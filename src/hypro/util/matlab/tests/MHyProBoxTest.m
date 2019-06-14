@@ -167,6 +167,7 @@ assert(containment == "PARTIAL");
 
 % Project a box on a certain dimension
 box = MHyProBox('intervals', [3 5; 2 4; 1 2]);
+disp('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 projbox = box.project([1;2]);
 inter = projbox.intervals();
 assert(isequal(inter, [3 5; 2 4]))

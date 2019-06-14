@@ -8,6 +8,8 @@ function testConstraintSet(testCase)
 set = MHyProConstraintSet();
 mat_vec_set = MHyProConstraintSet([1 0 0 0; 0 1 0 0; 0 0 1 0],[1;2;3]);
 copied_set = MHyProConstraintSet(mat_vec_set);
+assert(isequal(mat_vec_set.matrix(), [1 0 0 0; 0 1 0 0; 0 0 1 0]));
+assert(isequal(mat_vec_set.vector(), [1; 2; 3]));
 
 % Get matrix
 mat = mat_vec_set.matrix();
@@ -66,22 +68,24 @@ assert(emt == 0);
 set1 = MHyProConstraintSet(eye(3), [1;1;1]);
 mat = [1 1 0; 0 1 1; 1 0 1];
 vec = [0;0;1];
-[containment, set] = set2.satisfiesHalfspaces(mat, vec);
+[containment, set] = set1.satisfiesHalfspaces(mat, vec);
 emt = set.isempty();
 assert(isequal(containment,'NO'));
 assert(emt == 0);
 
 % Project a certain dimension
 set1 = MHyProConstraintSet([1 1 0; 0 0 1; 1 0 1], [1;2;1]);
-projected = set1.project([1 2]);
+projected = set1.project([1 3]);
 
 % Perform linear transformation
+disp('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 set1 = MHyProConstraintSet([1 2 0; 0 0 1; 1 0 1; 1 1 1], [3;2;4;1]);
-mat = [2 0 0; 0 4 0; 0 0 1];
-transFct = set1.linearTransformation(mat);
-mat = set1.matrix();
+mat = [2 1 0 0; 0 4 2 0; 1 1 1 0];
+transSet = set1.linearTransformation(mat);
+mat = transSet.matrix()
 
-set.dimension();
+dim = set.dimension();
+assert(dim == 3);
 
 vertices = set1.vertices();
 

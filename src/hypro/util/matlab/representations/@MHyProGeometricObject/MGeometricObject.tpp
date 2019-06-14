@@ -553,7 +553,7 @@ void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mx
 	mexPrintf( "project input:\n" );
 	mexPrintf( "dims: " );
 	for ( int i = 0; i < hy_dimensions.size(); i++ ) {
-		mexPrintf( " %f", hy_dimensions[i] );
+		mexPrintf( " %d", hy_dimensions[i] );
 	}
 	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++

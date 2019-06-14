@@ -34,6 +34,15 @@ classdef MHyProConstraintSet < MHyProGeometricObject
             end
         end
 
+       function out = containsPoint(obj, pnt)
+            if isvector(pnt)
+                pnt = conv2HyProVector(pnt);
+                out = MHyPro(2, 103, obj.ObjectHandle, pnt);
+            else
+                error('MHyProConstraintSet- containsPoint: Wrong type of argument.');
+            end
+       end
+        
        function out = isAxisAligned(obj)
            out = MHyPro(2, 104, obj.ObjectHandle);
        end
@@ -45,6 +54,8 @@ classdef MHyProConstraintSet < MHyProGeometricObject
                 error('MHyProConstraintSet - addConstraint: Wrong type of argument.');
             end
        end
+       
+       
        
     end
 end
