@@ -4,8 +4,11 @@ void MHybridAutomaton::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - new_empty: Expecting an output." );
 
 	hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>();
-	mexPrintf( "Automaton Addresss %p\n", temp );
 	plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>( temp );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_empty\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::new_loc_init( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -19,6 +22,10 @@ void MHybridAutomaton::new_loc_init( int nlhs, mxArray* plhs[], int nrhs, const 
 	mexErrMsgTxt( "NOT IMPLEMENTED" );
 	// hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(locs, mapping);
 	// plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_loc_init\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -28,12 +35,19 @@ void MHybridAutomaton::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 
 	hypro::HybridAutomaton<double>* origin = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>( new hypro::HybridAutomaton<double>( *origin ) );
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "copy\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::delete_autom( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - delete_autom: Expecting an output." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MHybridAutomaton - delete_autom: One or more arguments were ignored." );
 	destroyObject<hypro::HybridAutomaton<double>>( prhs[2] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "delete\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -44,6 +58,11 @@ void MHybridAutomaton::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	hypro::HybridAutomaton<double>* obj = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	std::size_t dim = obj->dimension();
 	plhs[0] = mxCreateDoubleScalar( dim );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "dimension output:\n" );
+	mexPrintf( "dimension: %d\n", (double) dim );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -66,6 +85,10 @@ void MHybridAutomaton::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	// hypro::HybridAutomaton<double>* obj = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
 	// obj->decompose();
 	// obj->decompose(decomposition);
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "decompose" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::getLocations( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

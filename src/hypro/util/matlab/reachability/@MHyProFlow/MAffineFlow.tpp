@@ -17,6 +17,22 @@ void MAffineFlow::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	plhs[0] = convertPtr2Mat<hypro::affineFlow<double>>( new hypro::affineFlow<double>( matrix, vector ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_mat_vec input:\n" );
+	mexPrintf( "matrix:\n" );
+	for ( int i = 0; i < matrix.rows(); i++ ) {
+		for ( int j = 0; j < matrix.cols(); j++ ) {
+			mexPrintf( " %f", matrix( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	mexPrintf( "vector:\n" );
+	for ( int j = 0; j < vector.cols(); j++ ) {
+		mexPrintf( " %f", vector( j ) );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::setTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -32,6 +48,14 @@ void MAffineFlow::setTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	hypro::affineFlow<double>* flow = convertMat2Ptr<hypro::affineFlow<double>>( prhs[2] );
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	flow->setTranslation( vector );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setTranslation input:\n" );
+	mexPrintf( "vector:\n" );
+	for ( int j = 0; j < vector.cols(); j++ ) {
+		mexPrintf( " %f", vector( j ) );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::getTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -44,6 +68,14 @@ void MAffineFlow::getTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 
 	plhs[0] = mxCreateDoubleMatrix( vector.size(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( vector, plhs[0], vector.size(), 1 );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getTranslation output:\n" );
+	mexPrintf( "vector:\n" );
+	for ( int j = 0; j < vector.cols(); j++ ) {
+		mexPrintf( " %f", vector( j ) );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::hasTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -54,10 +86,49 @@ void MAffineFlow::hasTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	hypro::affineFlow<double>* flow = convertMat2Ptr<hypro::affineFlow<double>>( prhs[2] );
 	const bool ans = flow->hasTranslation();
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "hasTranslation output:\n" );
+	if ( ans ) {
+		mexPrintf( "has translation\n" );
+	} else {
+		mexPrintf( "does not have translation\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	// TODO
+	if ( nrhs < 3 ) mexErrMsgTxt( "MAffineFlow - outstream: One or more arguments are missing." );
+	if ( nrhs > 3 ) mexWarnMsgTxt( "MAffineFlow - outstream: One or more arguments were ignored." );
+
+	hypro::affineFlow<double>* flow = convertMat2Ptr<hypro::affineFlow<double>>( prhs[2] );
+	;
+	hypro::matrix_t<double> mat = flow->getFlowMatrix();
+	hypro::vector_t<double> vec = flow->getTranslation();
+
+	int rows = mat.rows();
+	int cols = mat.cols();
+
+	int len = vec.size();
+
+	mexPrintf( "Matrix: [" );
+	for ( int i = 0; i < rows; i++ ) {
+		for ( int j = 0; j < cols; j++ ) {
+			mexPrintf( "%f ", mat( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	mexPrintf( "]\n" );
+
+	mexPrintf( "Vector: [" );
+	for ( int i = 0; i < len; i++ ) {
+		mexPrintf( "%f ", vec( i ) );
+	}
+	mexPrintf( "]\n\n" );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "ostream\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

@@ -55,11 +55,11 @@ void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	hypro::Point<double> first = pair.first;
 	hypro::Point<double> second = pair.second;
 	int len = pair.first.dimension();
-	mexPrintf("first:\n");
+	mexPrintf( "first:\n" );
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", first[i] );
 	}
-	mexPrintf("second:\n");
+	mexPrintf( "second:\n" );
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", second[i] );
 	}
@@ -78,8 +78,8 @@ void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( temp ) );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("empty input:\n");
-	mexPrintf("dimension: %d\n", (double) in);
+	mexPrintf( "empty input:\n" );
+	mexPrintf( "dimension: %d\n", (double)in );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -125,9 +125,9 @@ void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	mexPrintf( "insert input:\n" );
 	mexPrintf( "interval:[%d, %d]\n", interval.lower(), interval.upper() );
 
-	mexPrintf("output:\n");
+	mexPrintf( "output:\n" );
 
-	std::vector<carl::Interval<double>> intervals = box->intervals();	
+	std::vector<carl::Interval<double>> intervals = box->intervals();
 	mexPrintf( "intervals:\n" );
 	for ( int j = 0; j < intervals.size(); j++ ) {
 		carl::Interval<double> inter = intervals[j];
@@ -153,11 +153,11 @@ void MBox::limits( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	hypro::Point<double> first = p.first;
 	hypro::Point<double> second = p.second;
 	int len = p.first.dimension();
-	mexPrintf("first:\n");
+	mexPrintf( "first:\n" );
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", first[i] );
 	}
-	mexPrintf("second:\n");
+	mexPrintf( "second:\n" );
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", second[i] );
 	}
@@ -182,14 +182,14 @@ void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "constraints output:\n" );
-	for(int i = 0; i < hSpaces.size(); i++){
+	for ( int i = 0; i < hSpaces.size(); i++ ) {
 		hypro::vector_t<double> normal = hSpaces[i].normal();
 		double offset = hSpaces[i].offset();
-		mexPrintf("normal %d:", i);
-		for(int j = 0; j < normal.rows(); j++){
-			mexPrintf(" %f", normal(j));
+		mexPrintf( "normal %d:", i );
+		for ( int j = 0; j < normal.rows(); j++ ) {
+			mexPrintf( " %f", normal( j ) );
 		}
-		mexPrintf("\noffset: %d\n", offset);
+		mexPrintf( "\noffset: %d\n", offset );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
@@ -208,10 +208,10 @@ void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "interval input:\n" );
-	mexPrintf("dim: %d\n", (double) dim);
-	mexPrintf("output:\n");
-	mexPrintf("interval: [%d; %d]", inter.lower(), inter.upper());
-	mexPrintf("\n");
+	mexPrintf( "dim: %d\n", (double)dim );
+	mexPrintf( "output:\n" );
+	mexPrintf( "interval: [%d; %d]", inter.lower(), inter.upper() );
+	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -229,10 +229,10 @@ void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "at input:\n" );
-	mexPrintf("dim: %d\n", (double) dim);
-	mexPrintf("output:\n");
-	mexPrintf("interval: [%d; %d]", inter.lower(), inter.upper());
-	mexPrintf("\n");
+	mexPrintf( "dim: %d\n", (double)dim );
+	mexPrintf( "output:\n" );
+	mexPrintf( "interval: [%d; %d]", inter.lower(), inter.upper() );
+	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -246,11 +246,11 @@ void MBox::is_symmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 	plhs[0] = mxCreateLogicalScalar( ans );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("is_symmetric output:\n");
-	if(ans){
-		mexPrintf("symmetric\n");
-	}else{
-		mexPrintf("not symmetric\n");
+	mexPrintf( "is_symmetric output:\n" );
+	if ( ans ) {
+		mexPrintf( "symmetric\n" );
+	} else {
+		mexPrintf( "not symmetric\n" );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
@@ -267,14 +267,13 @@ void MBox::max( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("max output:\n");
+	mexPrintf( "max output:\n" );
 	int len = m.dimension();
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", m[i] );
 	}
-	mexPrintf("\n");
+	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
-	
 }
 
 void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -289,12 +288,12 @@ void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("min output:\n");
+	mexPrintf( "min output:\n" );
 	int len = m.dimension();
 	for ( int i = 0; i < len; i++ ) {
 		mexPrintf( " %f", m[i] );
 	}
-	mexPrintf("\n");
+	mexPrintf( "\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -304,7 +303,7 @@ void MBox::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[] ) {
 	plhs[0] = mxCreateString( ans.c_str() );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("type:\n");
+	mexPrintf( "type:\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -318,7 +317,7 @@ void MBox::makeSymmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( symmBox ) );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("make symmetric\n");
+	mexPrintf( "make symmetric\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -334,7 +333,7 @@ void MBox::minkowskiDecomposition( int nlhs, mxArray *plhs[], int nrhs, const mx
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( dec ) );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf("minkowski decomposition\n");
+	mexPrintf( "minkowski decomposition\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 

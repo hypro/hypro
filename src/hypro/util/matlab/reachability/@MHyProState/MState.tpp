@@ -4,6 +4,10 @@ void MState::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( nlhs != 1 ) mexErrMsgTxt( "MState - new_empty: Expecting an output." );
 	hypro::State_t<double>* st = new hypro::State_t<double>();
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( st );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_empty\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::new_loc( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -14,6 +18,10 @@ void MState::new_loc( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	hypro::State_t<double>* st = new hypro::State_t<double>( loc );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( st );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_empty\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MState::del_state( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

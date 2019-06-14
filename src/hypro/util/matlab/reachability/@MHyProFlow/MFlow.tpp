@@ -6,6 +6,10 @@ void MFlow<T>::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 
 	T* temp = new T();
 	plhs[0] = convertPtr2Mat<T>( temp );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_empty\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -16,6 +20,10 @@ void MFlow<T>::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] 
 
 	T* origin = convertMat2Ptr<T>( prhs[2] );
 	plhs[0] = convertPtr2Mat<T>( new T( *origin ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "copy\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -24,6 +32,10 @@ void MFlow<T>::delete_flow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MFlow - delete_flow: One or more arguments were ignored." );
 
 	destroyObject<T>( prhs[2] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "delete\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -48,6 +60,11 @@ void MFlow<T>::type( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] 
 		ans = "timed";
 	}
 	plhs[0] = mxCreateString( ans.c_str() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "type output:\n" );
+	mexPrintf( "type: %s\n", ans.c_str() );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -59,6 +76,11 @@ void MFlow<T>::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	T* flow = convertMat2Ptr<T>( prhs[2] );
 	std::size_t dim = flow->dimension();
 	plhs[0] = mxCreateDoubleScalar( dim );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "dimension output:\n" );
+	mexPrintf( "dim: %d\n", (double)dim );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -70,6 +92,15 @@ void MFlow<T>::isTimed( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	T* flow = convertMat2Ptr<T>( prhs[2] );
 	const bool ans = flow->isTimed();
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "isTimed output:\n" );
+	if ( ans ) {
+		mexPrintf( "timed\n" );
+	} else {
+		mexPrintf( "not timed\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -81,6 +112,15 @@ void MFlow<T>::isDiscrete( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	T* flow = convertMat2Ptr<T>( prhs[2] );
 	const bool ans = flow->isDiscrete();
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "isDiscrete output:\n" );
+	if ( ans ) {
+		mexPrintf( "discrete\n" );
+	} else {
+		mexPrintf( "not discrete\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -95,6 +135,15 @@ void MFlow<T>::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	if ( *flow_1 == *flow_2 ) ans = true;
 
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "equals output:\n" );
+	if ( ans ) {
+		mexPrintf( "equal\n" );
+	} else {
+		mexPrintf( "not equal\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -109,6 +158,15 @@ void MFlow<T>::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	if ( *flow_1 != *flow_2 ) ans = true;
 
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "unequals output:\n" );
+	if ( ans ) {
+		mexPrintf( "unequal\n" );
+	} else {
+		mexPrintf( "not unequal\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -120,4 +178,9 @@ void MFlow<T>::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] 
 	T* flow = convertMat2Ptr<T>( prhs[2] );
 	std::size_t s = flow->size();
 	plhs[0] = mxCreateDoubleScalar( s );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "size output:\n" );
+	mexPrintf( "size: %d\n", (double)s );
+	//+++++++++++++TESTING++++++++++++++++++++
 }

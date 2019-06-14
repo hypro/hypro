@@ -5,6 +5,10 @@ void MReset::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 
 	hypro::Reset<double>* temp = new hypro::Reset<double>();
 	plhs[0] = convertPtr2Mat<hypro::Reset<double>>( temp );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_empty\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -14,45 +18,73 @@ void MReset::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 
 	hypro::Reset<double>* origin = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
 	plhs[0] = convertPtr2Mat<hypro::Reset<double>>( new hypro::Reset<double>( *origin ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "copy\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	mexErrMsgTxt( "Weird things happen here..." );
-	// if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_mat_vec: Expecting an output." );
-	// if ( nrhs < 4 ) mexErrMsgTxt( "MReset - new_mat_vec: One or more arguments are missing." );
-	// if ( nrhs > 4 ) mexWarnMsgTxt( "MReset - new_mat_vec: One or more arguments were ignored." );
+	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_mat_vec: Expecting an output." );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MReset - new_mat_vec: One or more arguments are missing." );
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MReset - new_mat_vec: One or more arguments were ignored." );
 
-	// const mwSize *mat_dims, *vec_dims;
-	// int mat_rows, mat_cols, len;
+	const mwSize *mat_dims, *vec_dims;
+	int mat_rows, mat_cols, len;
 
-	// mat_dims = mxGetDimensions( prhs[2] );
-	// vec_dims = mxGetDimensions( prhs[3] );
-	// mat_cols = (int)mat_dims[1];
-	// mat_rows = (int)mat_dims[0];
-	// len = (int)vec_dims[0];
+	mat_dims = mxGetDimensions( prhs[2] );
+	vec_dims = mxGetDimensions( prhs[3] );
+	mat_cols = (int)mat_dims[1];
+	mat_rows = (int)mat_dims[0];
+	len = (int)vec_dims[0];
 
-	// const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
-	// const hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
+	const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
+	const hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	// hypro::Reset<double>* reset = new hypro::Reset<double>( matrix, vector );
 	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_mat_vec input:\n" );
+
+	for ( int i = 0; i < matrix.rows(); i++ ) {
+		for ( int j = 0; j < matrix.cols(); j++ ) {
+			mexPrintf( " %f", matrix( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	mexPrintf( "vector %d:\n");
+	for ( int j = 0; j < vector.cols(); j++ ) {
+		mexPrintf( " %f", vector( j ) );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	mexErrMsgTxt( "Weird things happen here..." );
-	// if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_intervals: One output expected." );
-	// if ( nrhs < 3 ) mexErrMsgTxt( "MReset - new_intervals: One or more input arguments are missing." );
-	// if ( nrhs > 3 ) mexWarnMsgTxt( "MReset - new_intervals: One or more input arguments were ignored." );
+	if ( nlhs != 1 ) mexErrMsgTxt( "MReset - new_intervals: One output expected." );
+	if ( nrhs < 3 ) mexErrMsgTxt( "MReset - new_intervals: One or more input arguments are missing." );
+	if ( nrhs > 3 ) mexWarnMsgTxt( "MReset - new_intervals: One or more input arguments were ignored." );
 
-	// const mwSize* dims;
-	// double* in;
-	// int rows, cols;
+	const mwSize* dims;
+	double* in;
+	int rows, cols;
 
-	// dims = mxGetDimensions( prhs[2] );
-	// cols = (int)dims[1];
-	// rows = (int)dims[0];
-	// const std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], rows, cols );
+	dims = mxGetDimensions( prhs[2] );
+	cols = (int)dims[0];
+	rows = (int)dims[1];
+	const std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], rows, cols );
 	// hypro::Reset<double>* temp = new hypro::Reset<double>(intervals);
-	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(reset);
+	// plhs[0] = convertPtr2Mat<hypro::Reset<double>>(temp);
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "new_intervals input:\n" );
+	mexPrintf( "intervals:\n" );
+	for ( int j = 0; j < intervals.size(); j++ ) {
+		carl::Interval<double> inter = intervals[j];
+		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::delete_reset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -60,6 +92,10 @@ void MReset::delete_reset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MReset - delete_reset: One or more arguments were ignored." );
 
 	destroyObject<hypro::Reset<double>>( prhs[2] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "delete\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -70,6 +106,15 @@ void MReset::empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] )
 	hypro::Reset<double>* temp = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
 	const bool empty = temp->empty();
 	plhs[0] = mxCreateLogicalScalar( empty );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "empty output:\n" );
+	if ( empty ) {
+		mexPrintf( "yes\n" );
+	} else {
+		mexPrintf( "no\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -80,6 +125,11 @@ void MReset::size( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	hypro::Reset<double>* temp = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
 	std::size_t dim = temp->size();
 	plhs[0] = mxCreateDoubleScalar( dim );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "size output:\n" );
+	mexPrintf("size: %d\n", (double) dim);
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -92,6 +142,14 @@ void MReset::getVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	hypro::vector_t<double> vec = res->getVector( pos );
 	plhs[0] = mxCreateDoubleMatrix( vec.rows(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( vec, plhs[0], vec.rows(), 1 );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getVector output:\n" );
+	mexPrintf( "vector:\n" );
+	for ( int j = 0; j < vec.cols(); j++ ) {
+		mexPrintf( " %f", vec( j ) );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -104,6 +162,18 @@ void MReset::getMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	hypro::matrix_t<double> mat = cond->getMatrix( pos );
 	plhs[0] = mxCreateDoubleMatrix( mat.rows(), mat.cols(), mxREAL );
 	ObjectHandle::convert2Matlab( mat, plhs[0], mat.rows(), mat.cols() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getMatrix output:\n" );
+	mexPrintf( "matrix:\n" );
+	for ( int i = 0; i < mat.rows(); i++ ) {
+		for ( int j = 0; j < mat.cols(); j++ ) {
+			mexPrintf( " %f", mat( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -118,6 +188,16 @@ void MReset::getIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	const int cols = 2;
 	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	vector2Matlab( intervals, plhs[0] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getIntervals output:\n" );
+	mexPrintf( "intervals:\n" );
+	for ( int j = 0; j < intervals.size(); j++ ) {
+		carl::Interval<double> inter = intervals[j];
+		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getAffineReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -130,6 +210,11 @@ void MReset::getAffineReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	hypro::AffineTransformation<double> affRes = res->getAffineReset( pos );
 	hypro::ConstraintSet<double> cond = affRes.mTransformation;
 	plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>( new hypro::ConstraintSet<double>( cond ) );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getAffineReset_at input:\n" );
+	mexPrintf( "at %d:\n", (double) pos );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getAffineResets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -148,6 +233,11 @@ void MReset::getAffineResets( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab<hypro::ConstraintSet<double>>( conds, plhs[0], conds.size() );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getAffineResets output:\n" );
+	mexPrintf( "len %d:\n", (double) len );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getIntervalReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -161,6 +251,18 @@ void MReset::getIntervalReset_at( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	std::vector<carl::Interval<double>> ints = intAss.mIntervals;
 	plhs[0] = mxCreateDoubleMatrix( 1, ints.size(), mxREAL );
 	vector2Matlab<carl::Interval<double>>( ints, plhs[0] );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getIntervalReset_at input:\n" );
+	mexPrintf( "at %d:\n", (double) pos );
+	mexPrintf("output:\n");
+	mexPrintf( "intervals:\n" );
+	for ( int j = 0; j < ints.size(); j++ ) {
+		carl::Interval<double> inter = ints[j];
+		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::getIntervalResets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -185,6 +287,21 @@ void MReset::getIntervalResets( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		vector2Matlab<carl::Interval<double>>( ints[i], elem );
 		mxSetCell( plhs[0], i, elem );
 	}
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getIntervalResets output:\n" );
+	mexPrintf( "intervals:\n" );
+	for(int i = 0; i < ints.size(); i++){
+		if(ints.size() > 0){
+			std::vector<carl::Interval<double>> curr = ints[i];
+			for(int j = 0; j < curr.size(); j++){
+				carl::Interval<double> inter = curr[j];
+				mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+			}
+		}
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::setVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -199,6 +316,14 @@ void MReset::setVector( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro( prhs[3], len );
 	std::size_t at = mxGetScalar( prhs[4] );
 	res->setVector( vec, at );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setVector input:\n" );
+	mexPrintf( "vector:\n" );
+	for ( int j = 0; j < vec.cols(); j++ ) {
+		mexPrintf( " %f", vec( j ) );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -215,6 +340,18 @@ void MReset::setMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
 	std::size_t at = mxGetScalar( prhs[4] );
 	res->setMatrix( mat, at );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setMatrix output:\n" );
+	mexPrintf( "matrix:\n" );
+	for ( int i = 0; i < mat.rows(); i++ ) {
+		for ( int j = 0; j < mat.cols(); j++ ) {
+			mexPrintf( " %f", mat( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::setIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -233,6 +370,16 @@ void MReset::setIntervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[3], rows, cols );
 	std::size_t at = mxGetScalar( prhs[4] );
 	res->setIntervals( intervals, at );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "setIntervals input:\n" );
+	mexPrintf( "intervals:\n" );
+	for ( int j = 0; j < intervals.size(); j++ ) {
+		carl::Interval<double> inter = intervals[j];
+		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	}
+	mexPrintf( "\n" );
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::isIdentity( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -243,6 +390,15 @@ void MReset::isIdentity( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	hypro::Reset<double>* temp = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
 	const bool ans = temp->isIdentity();
 	plhs[0] = mxCreateLogicalScalar( ans );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "isIndentity output:\n" );
+	if ( ans ) {
+		mexPrintf( "yes\n" );
+	} else {
+		mexPrintf( "no\n" );
+	}
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MReset::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -253,6 +409,12 @@ void MReset::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>( prhs[2] );
 	std::size_t val = res->hash();
 	plhs[0] = mxCreateDoubleScalar( val );
+
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "hash output:\n" );
+	mexPrintf("hash: %d\n", (double) val);
+	//+++++++++++++TESTING++++++++++++++++++++
+
 }
 
 void MReset::decompose( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
