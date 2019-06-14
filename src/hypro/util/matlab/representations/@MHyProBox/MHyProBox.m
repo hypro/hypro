@@ -1,27 +1,5 @@
 classdef MHyProBox < MHyProGeometricObject
-    
-    
-%     methods (Static)
-% 
-%         function out = uniteMultiple(objects)
-%             if iscell(objects)
-%                 objectPtrs = cell(1, length(objects));
-%                 for i = 1:length(objects)
-%                     if isa(objects{i}, 'MHyProBox')
-%                         objectPtrs{i} = objects{i}.ObjectHandle;
-%                     else
-%                         error('MHyProBox - uniteMultiple: Wrong type of input argument.');
-%                     end
-%                 end
-%                 ptr = MHyPro(0, 33, objectPtrs);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - uniteMultiple: Wrong type of input argument.');
-%             end
-%         end
-%         
-%     end
-    
+
     methods (Access = public)
         
         % Create a HyPro box
@@ -71,130 +49,6 @@ classdef MHyProBox < MHyProGeometricObject
                 error('MHyProBox - empty: Wrong type of input argument.');
             end
         end
-       
-%         function [containment, out] = satisfiesHalfspace(obj, normal, offset)
-%             if isvector(normal)
-%                 normal = conv2HyProVector(normal);
-%             else
-%                 error('MHyProBox - affineTransformation: Wrong type of input argument.');
-%             end
-%             if isreal(offset)
-%                 [containment, ptr] = MHyPro(0, 14, obj.ObjectHandle, normal, offset);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - satisfiesHalfspace: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function [containment, out] = satisfiesHalfspaces(obj, mat, vec)
-%             if isvector(vec)
-%                 vec = conv2HyProVector(vec);
-%             else
-%                 error('MHyProBox - affineTransformation: Wrong type of input argument.');
-%             end
-%             if ismatrix(mat) && size(mat,2) == size(vec,1)
-%                 [containment, ptr] = MHyPro(0, 15, obj.ObjectHandle, mat, vec);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - satisfiesHalfspaces: Wrong type of input argument.');
-%             end
-%         end
-        
-%         function out = project(obj, dim)
-%             if isvector(dim)
-%                 dim = conv2HyProVector(dim);
-%             else
-%                 error('MHyProBox - project: Wrong type of input argument.');
-%             end
-%             max = obj.dimension();
-%             if size(dim, 1) <= max
-%                 for i = 1:length(dim)
-%                     dim(i) = dim(i)-1;
-%                 end
-%                 ptr = MHyPro(0, 24, obj.ObjectHandle, dim);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - project: Wrong type of input argument.');
-%             end
-%         end
-        
-%         function out = linearTransformation(obj, mat)
-%             if ismatrix(mat)
-%                 ptr = MHyPro(0, 25, obj.ObjectHandle, mat);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - linearTransformation: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = affineTransformation(obj, mat, vec)
-%             if isvector(vec)
-%                 vec = conv2HyProVector(vec);
-%             else
-%                 error('MHyProBox - affineTransformation: Wrong type of input argument.');
-%             end
-%    
-%             if ismatrix(mat) && size(mat,2) == size(vec,1)
-%                 ptr = MHyPro(0, 26, obj.ObjectHandle, mat, vec);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - affineTransformation: Wrong type of input argument.');
-%             end 
-%         end
-%         
-%         function out = plus(obj, rhs)
-%             if isa(rhs, 'MHyProBox')
-%                 ptr = MHyPro(0, 27, obj.ObjectHandle, rhs.ObjectHandle);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - minkowskiSum: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = intersectHalfspace(obj, nor, off)
-%             if isvector(nor)
-%                 nor = conv2HyProVector(nor);
-%             else
-%                 error('MHyProBox - intersectHalfspace: Wrong type of input argument.');
-%             end
-% 
-%             if isreal(off)
-%                 ptr = MHyPro(0, 28, obj.ObjectHandle, nor, off);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - intersectHalfspace: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = intersectHalfspaces(obj, mat, vec)
-%             if isvector(vec)
-%                 vec = conv2HyProVector(vec);
-%             else
-%                 error('MHyProBox - intersectHalfspaces: Wrong type of input argument.');
-%             end
-%             
-%             if ismatrix(mat) && size(mat,2) == size(vec,1)
-%                 ptr = MHyPro(0, 29, obj.ObjectHandle, mat, vec);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - intersectHalfspaces: Wrong type of input argument.');
-%             end
-%         end
-% 
-%         function out = contains(obj, arg)
-%             if isreal(arg)
-%                 out = MHyPro(0, 30, obj.ObjectHandle, arg);
-%             elseif isa(arg, 'MHyProBox')
-%                 out = MHyPro(0, 31, obj.ObjectHandle, arg.ObjectHandle);
-%             else
-%                 error('MHyProBox - contains: Wrong type of input argument.');
-%             end
-%         end
-%  
-%         function out = reduceNumberRepresentation(obj)
-%             ptr = MHyPro(0, 34, obj.ObjectHandle);
-%             out = MHyProBox(ptr);
-%         end
         
         function out = intervals(obj)
             out = MHyPro(0, 107, obj.ObjectHandle);
@@ -274,25 +128,6 @@ classdef MHyProBox < MHyProGeometricObject
         function out = clear(obj)
             out = MHyPro(obj.Type, 120, obj.ObjectHandle, rhs.ObjectHandle);
         end
-        
-        
-%         function out = intersect(obj, rhs)
-%             if isa(rhs, 'MHyProBox') 
-%                 ptr = MHyPro(0, 48, obj.ObjectHandle, rhs.ObjectHandle);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - intersect: Wrong type of argument.');
-%             end
-%         end
-%         
-%         function out = unite(obj, rhs)
-%             if isa(rhs, 'MHyProBox')
-%                 ptr = MHyPro(0, 32, obj.ObjectHandle, rhs.ObjectHandle);
-%                 out = MHyProBox(ptr);
-%             else
-%                 error('MHyProBox - unite: Wrong type of input argument.');
-%             end
-%         end
 
     end
 end

@@ -1,27 +1,4 @@
 classdef MHyProSupportFunction < MHyProGeometricObject
-    
-    
-%     methods (Static)
-% 
-%         function out = uniteMultiple(objects)
-%             if iscell(objects)
-%                 objectPtrs = cell(1, length(objects));
-%                 for i = 1:length(objects)
-%                     if isa(objects{i}, 'MHyProSupportFunction')
-%                         objectPtrs{i} = objects{i}.ObjectHandle;
-%                     else
-%                         error('MHyProSupportFunction - uniteMultiple: Wrong type of input argument.');
-%                     end
-%                 end
-%                 
-%                 ptr = MHyPro(3, 34, objectPtrs);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - uniteMultiple: Wrong type of input argument.');
-%             end
-%         end
-%         
-%     end
 
     methods (Access = public)
         
@@ -75,88 +52,6 @@ classdef MHyProSupportFunction < MHyProGeometricObject
                 error('MHyProSupportFunction - Constructor: wrong arguments.');
             end
         end
-
-%         function [containment, out] = satisfiesHalfspace(obj, normal, offset)
-%             if isvector(normal) && isreal(offset)
-%                 [containment, ptr] = MHyPro(3, 22, obj.ObjectHandle, normal, offset);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - satisfiesHalfspace: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function [containment, out] = satisfiesHalfspaces(obj, mat, vec)
-%             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-%                 [containment, ptr] = MHyPro(3, 23, obj.ObjectHandle, mat, vec);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - satisfiesHalfspaces: Wrong type of input argument.');
-%             end
-%         end
-        
-%         function out = project(obj, dim)
-%             if isreal(dim)
-%                 ptr = MHyPro(3, 24, obj.ObjectHandle, dim);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - project: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = linearTransformation(obj, mat)
-%             if ismatrix(mat)
-%                 ptr = MHyPro(3, 25, obj.ObjectHandle, mat);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - linearTransformation: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = affineTransformation(obj, mat, vec)
-%             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-%                 ptr = MHyPro(3, 26, obj.ObjectHandle, mat, vec);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - affineTransformation: Wrong type of input argument.');
-%             end 
-%         end
-%         
-%         function out = plus(obj, rhs)
-%             if isa(rhs, 'MHyProSupportFunction')
-%                 ptr = MHyPro(3, 27, obj.ObjectHandle, rhs.ObjectHandle);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - minkowskiSum: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = intersectHalfspace(obj, mat, vec)
-%             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-%                 ptr = MHyPro(3, 28, obj.ObjectHandle, mat, vec);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - intersectHalfspace: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = intersectHalfspaces(obj, mat, vec)
-%             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
-%                 ptr = MHyPro(3, 29, obj.ObjectHandle, mat, vec);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - intersectHalfspaces: Wrong type of input argument.');
-%             end
-%         end
-%         
-%         function out = contains(obj, arg)
-%             if isvector(arg)
-%                 out = MHyPro(3, 30, obj.ObjectHandle, arg);
-%             elseif isa(arg, 'MHyProSupportFunction')
-%                 out = MHyPro(3, 31, obj.ObjectHandle, arg.ObjectHandle);
-%             else
-%                 error('MHyProSupportFunction - contains: Wrong type of input argument.');
-%             end
-%         end
         
         function out = containsPoint(obj, pnt)
             if isvector(pnt)
@@ -166,16 +61,7 @@ classdef MHyProSupportFunction < MHyProGeometricObject
                 error('MHyProSupportFunction - containsPoint: Wrong type of argument.');
             end
         end
-        
-%         function out = unite(obj, rhs)
-%             if isa(rhs, 'MHyProSupportFunction')
-%                 ptr = MHyPro(3, 33, obj.ObjectHandle, rhs.ObjectHandle);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - unite: Wrong type of input argument.');
-%             end
-%         end
-% 
+
         function reduceNumberRepresentation(obj)
             MHyPro(3, 24, obj.ObjectHandle);
         end
@@ -187,15 +73,6 @@ classdef MHyProSupportFunction < MHyProGeometricObject
                 error('MHyProObject - supremum: Not allowed for this type of HyProObject.');
             end
         end
-
-%         function out = intersect(obj, rhs)
-%             if isa(rhs, 'MHyProSupportFunction') 
-%                 ptr = MHyPro(3, 37, obj.ObjectHandle, rhs.ObjectHandle);
-%                 out = MHyProSupportFunction(ptr);
-%             else
-%                 error('MHyProSupportFunction - intersect: Wrong type of argument.');
-%             end
-%         end
         
         function cleanUp(obj)
             MHyPro(3, 109, obj.ObjectHandle);
