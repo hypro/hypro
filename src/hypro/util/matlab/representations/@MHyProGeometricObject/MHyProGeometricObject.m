@@ -273,7 +273,6 @@ classdef MHyProGeometricObject < handle
                 plot(pgon, 'green');
             end  
         end
-        
     end
     
     methods (Static)

@@ -78,37 +78,35 @@ set1 = MHyProConstraintSet([1 1 0; 0 0 1; 1 0 1], [1;2;1]);
 projected = set1.project([1 3]);
 
 % Perform linear transformation
-disp('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-set1 = MHyProConstraintSet([1 2 0; 0 0 1; 1 0 1; 1 1 1], [3;2;4;1]);
+set1 = MHyProConstraintSet([1 2 0 3; 0 0 1 2; 1 0 1 5; 1 1 1 -7], [3;2;4;1]);
 mat = [2 1 0 0; 0 4 2 0; 1 1 1 0];
 transSet = set1.linearTransformation(mat);
-mat = transSet.matrix()
+mat = transSet.matrix();
+assert(isequal(mat,[1 2 0 3; 0 0 1 2; 1 0 1 5; 1 1 1 -7]));
 
 dim = set.dimension();
 assert(dim == 3);
-
-vertices = set1.vertices();
-
 
 % Perform affine transformation
 mat = [2 0 0; 0 4 0; 0 0 1];
 vec = [2; 1; 2];
 transFct = set1.affineTransformation(mat, vec);
 mat = transFct.matrix();
-% assert ---> ?
+assert(isequal(mat,[1 2 0 3; 0 0 1 2; 1 0 1 5; 1 1 1 -7]));
 
-% Add 
-set1 = MHyProConstraintSet(eye(3), [1;1;1]);
-set2 = MHyProConstraintSet(eye(3), [2;2;2]);
-mSum = set2 + set1;
-% assert ---> ?
+% Add
+set1 = MHyProConstraintSet([1 2 3; 2 2 2; 1 0 0], [2;1; 3]);
+set2 = MHyProConstraintSet(1*eye(3), [2;2;2]);
+mSum = set1 + set2;
+assert(isequal(mSum.matrix(),[1 2 3; 2 2 2; 1 0 0] ));
 
-% Intersect 
+% Intersect
 intersection = set1.intersect(set2);
-% assert ---> ?
+assert(isequal(intersection.matrix(),[1 2 3; 2 2 2; 1 0 0] ));
 
 % Intersect with a halfspace
-nor = [1;0];
+disp('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+nor = [1;1;0];
 off = 2;
 intersected = set1.intersectHalfspace(nor,off);
 % assert ---> ?

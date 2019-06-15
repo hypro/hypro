@@ -585,6 +585,14 @@ void MGeometricObject<T>::linearTransformation( int nlhs, mxArray* plhs[], int n
 		}
 		mexPrintf( "\n" );
 	}
+	mexPrintf("output matrix:\n");
+	hypro::matrix_t<double> m = temp.matrix();
+	for ( int i = 0; i < m.rows(); i++ ) {
+		for ( int j = 0; j < m.cols(); j++ ) {
+			mexPrintf( " %f", m( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -625,6 +633,14 @@ void MGeometricObject<T>::affineTransformation( int nlhs, mxArray* plhs[], int n
 	for ( int i = 0; i < vector.rows(); i++ ) {
 		mexPrintf( " %f", vector( i ) );
 	}
+	mexPrintf("output matrix:\n");
+	hypro::matrix_t<double> m = temp.matrix();
+	for ( int i = 0; i < m.rows(); i++ ) {
+		for ( int j = 0; j < m.cols(); j++ ) {
+			mexPrintf( " %f", m( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -641,6 +657,14 @@ void MGeometricObject<T>::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, con
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "minkowskiSum\n" );
+	mexPrintf("output matrix:\n");
+	hypro::matrix_t<double> m = sum.matrix();
+	for ( int i = 0; i < m.rows(); i++ ) {
+		for ( int j = 0; j < m.cols(); j++ ) {
+			mexPrintf( " %f", m( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -652,11 +676,19 @@ void MGeometricObject<T>::intersect( int nlhs, mxArray* plhs[], int nrhs, const 
 
 	T* obj = convertMat2Ptr<T>( prhs[2] );
 	T* obj_rhs = convertMat2Ptr<T>( prhs[3] );
-	T sum = obj->intersect( *obj_rhs );
-	plhs[0] = convertPtr2Mat<T>( new T( sum ) );
+	T intersected = obj->intersect( *obj_rhs );
+	plhs[0] = convertPtr2Mat<T>( new T( intersected ) );
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "intersect\n" );
+	mexPrintf("output matrix:\n");
+	hypro::matrix_t<double> m = intersected.matrix();
+	for ( int i = 0; i < m.rows(); i++ ) {
+		for ( int j = 0; j < m.cols(); j++ ) {
+			mexPrintf( " %f", m( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -685,6 +717,14 @@ void MGeometricObject<T>::intersectHalfspace( int nlhs, mxArray* plhs[], int nrh
 		mexPrintf( " %f", hy_normal( i ) );
 	}
 	mexPrintf( "\noffset: %d", offset );
+	mexPrintf("output matrix:\n");
+	hypro::matrix_t<double> m = temp.matrix();
+	for ( int i = 0; i < m.rows(); i++ ) {
+		for ( int j = 0; j < m.cols(); j++ ) {
+			mexPrintf( " %f", m( i, j ) );
+		}
+		mexPrintf( "\n" );
+	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -723,6 +763,14 @@ void MGeometricObject<T>::intersectHalfspaces( int nlhs, mxArray* plhs[], int nr
 	mexPrintf( "\nvector: " );
 	for ( int i = 0; i < vector.rows(); i++ ) {
 		mexPrintf( " %f", vector( i ) );
+	}
+	mexPrintf("output matrix:\n");
+	hypro::matrix_t<double> m = temp.matrix();
+	for ( int i = 0; i < m.rows(); i++ ) {
+		for ( int j = 0; j < m.cols(); j++ ) {
+			mexPrintf( " %f", m( i, j ) );
+		}
+		mexPrintf( "\n" );
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
