@@ -1248,17 +1248,15 @@ TYPED_TEST(SupportFunctionNewTest, Reduction){
 	SupportFunctionNew<TypeParam> sfEmpty;
 	sfEmpty.reduceRepresentation();
 	EXPECT_TRUE(sfEmpty.getRoot() == nullptr);
-	EXPECT_FALSE(sfEmpty.isTemplateSet());
+	EXPECT_TRUE(sfEmpty.isTemplateSet());
 
 	//Halfspace
-	
-
 
 	//Reducible SF
 	//Point<TypeParam> p1 {TypeParam(-1), TypeParam(-1)};
 	//Point<TypeParam> p2 {TypeParam(1), TypeParam(1)};
 	//Box<TypeParam> box(std::make_pair(p1,p2));
 	//SupportFunctionNew<TypeParam> sf(box);
-
+	//sf.reduceRepresentation();
 
 }

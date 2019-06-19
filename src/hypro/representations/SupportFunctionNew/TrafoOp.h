@@ -103,10 +103,6 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					std::shared_ptr<RootGrowNode<Number,Converter,Setting>> grandChild = this->getChildren().at(0);
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						//std::shared_ptr<RootGrowNode<Number,Converter,Setting>> grandChild = this->getChildren().at(0)->getChildren().at(0);
-						//this->clearChildren();
-						//this->addToChildren(grandChild);
-						//assert(this->getChildren().size() == 1);
 						grandChild = grandChild->getChildren().at(0);
 					}
 					this->clearChildren();
@@ -216,12 +212,6 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		if(v.front()) return true;
 		return false;
 	}
-
-	//transform the given matrix 
-	//matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& v) const {
-	//	assert(v.size() == 1);
-	//	return parameters->getTransformedDirections(v.front(), currentExponent);
-	//}
 
 };
 

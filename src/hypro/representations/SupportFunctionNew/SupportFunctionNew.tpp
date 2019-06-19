@@ -36,7 +36,6 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
-		//std::cout << "SFN::Settingsconversion" << std::endl;
 		if(orig.getRoot() == nullptr){ 
 			mRoot == nullptr; 
 		} else {
@@ -97,7 +96,6 @@ namespace hypro {
 			if(boost::get<0>(areArgsBox)){
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 			} else {
-				//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(tmp.matrix(),tmp.vector()));
 				using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(tmp.matrix(),tmp.vector()));
 			}	
@@ -113,7 +111,6 @@ namespace hypro {
 		if(boost::get<0>(areArgsBox)){
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 		} else {
-			//mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
 			using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(mat,vec));
 		}
@@ -126,7 +123,6 @@ namespace hypro {
 	//Halfspace vector constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
-		//: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
 	{ /*TODO: Optimize hspace constructor with isBox() */ 
 		using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
 		mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(hspaces));
@@ -474,26 +470,6 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	matrix_t<Number> SupportFunctionNewT<Number,Converter,Setting>::matrix() const {
-		/*
-		if(mRoot == nullptr) return matrix_t<Number>::Zero(dimension(), dimension());
-
-		//Do nothing
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
-
-		//Leaves return the matrix of the their representation
-		std::function<matrix_t<Number>(RootGrowNode<Number,Converter,Setting>*)> getMat =
-			[](RootGrowNode<Number,Converter,Setting>* n) -> matrix_t<Number> {
-				return n->getMatrix();
-			};
-
-		//Operations modify the matrices accordingly
-		std::function<matrix_t<Number>(RootGrowNode<Number,Converter,Setting>*, std::vector<matrix_t<Number>>)> aggregateMat =
-			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<matrix_t<Number>> v){
-				return n->getMatrix(v);
-			};
-
-		return traverse(doNothing, getMat, aggregateMat);
-		*/
 		if(mRoot == nullptr) return matrix_t<Number>::Zero(0,0);
 		if(!mTemplateSet) {
     		evaluateTemplate();
@@ -588,9 +564,6 @@ namespace hypro {
 		if(_mat.rows() == 0) {
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
-		//if(_mat.rows() == 1 && _vec.rows() == 1){
-		//	return satisfiesHalfspace(Halfspace<Number>(_mat.row(0),_vec(0)));
-		//}
 		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
@@ -838,20 +811,11 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
-		//if(!empty()){
 		if(Setting::REDUCE_TO_BOX){
 			this->evaluateTemplate(4,true);
 		} else {
 			this->evaluateTemplate(8,false);
 		}
-			//polyhedralApproximation();	
-		//}
-	}
-
-	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::polyhedralApproximation() {
-		//Amount of directions for evaluation depends on Settings
-		
 	}
 
 	template<typename Number, typename Converter, typename Setting>

@@ -463,11 +463,6 @@ EvaluationResult<Number> Halfspace<Number>::evaluate(const vector_t<Number>& dir
 
 template<typename Number>
 std::vector<EvaluationResult<Number>> Halfspace<Number>::multiEvaluate( const matrix_t<Number>& _directions, bool /*useExact*/ ) const {
-	//std::vector<EvaluationResult<Number>> res;
-	//for(int i = 0; i < _directions.rows(); ++i){
-	//	res.push_back(evaluate(_directions.row(i), true));
-	//}
-	//return res;
 	assert(_directions.cols() == this->dimension());
 	std::vector<EvaluationResult<Number>> res;
 	vector_t<Number> pointOnPlane = vector_t<Number>::Zero(dimension());

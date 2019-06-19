@@ -150,23 +150,6 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
 		}
 		return res;
 	}
-
-	//Unwantend dimensions are set to 0, keep all other entries in v
-	//matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& v) const {
-	//	assert(v.size() == 1);
-	//	matrix_t<Number> projectedParameters = matrix_t<Number>::Zero(v.front().rows(), v.front().cols());
-	//	Eigen::Index entryIndex = 0;
-	//	for(const auto& entry : dimensions) {
-	//		TRACE("hypro.representations.supportFunction","Entry: " << entry)
-	//		if(int(entry) < v.front().cols()){ 
-	//			projectedParameters.col(entry) = v.front().col(entry);
-	//			++entryIndex;
-	//		}
-	//	}
-	//	assert(std::size_t(entryIndex) == dimensions.size());
-	//	return projectedParameters;
-	//}
-
 };
 
 } //namespace hypro

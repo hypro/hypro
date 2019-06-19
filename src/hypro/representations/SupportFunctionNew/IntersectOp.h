@@ -159,16 +159,16 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		for(const auto& direction : directions){
 			
 			//Determine supportValue of direction and reverse direction for chosenOne
-			EvaluationResult<Number> chosenNegEval = chosenOne.evaluate(-direction, false);
-			EvaluationResult<Number> chosenPosEval = chosenOne.evaluate(direction, false);
+			EvaluationResult<Number> chosenNegEval = chosenOne.evaluate(-direction, false); 
+			EvaluationResult<Number> chosenPosEval = chosenOne.evaluate(direction, false);  
 
 			//Check if the supportValues don't overlap -> there is no intersection between at least two -> empty -> return true
 			//Check in both directions since directions and children do not have to be symmetrical
 			for(const auto& child : sfChildren){
-				EvaluationResult<Number> childPosEval = child.evaluate(direction, false);
+				EvaluationResult<Number> childPosEval = child.evaluate(direction, false); 
 				if(childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY) 
 					return true;
-				EvaluationResult<Number> childNegEval = child.evaluate(direction, false);
+				EvaluationResult<Number> childNegEval = child.evaluate(-direction, false); 
 				if(-childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY)
 					return true;
 			}
@@ -188,14 +188,10 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
 	//Only return true if all children contained the point before	
 	bool contains(const std::vector<bool>& v) const {
-		std::cout << "IntersectOp::contains" << std::endl;
 		for(const auto& containedInChild : v){
-			if(!containedInChild){
-				std::cout << "point was not contained in child!" << std::endl;
-				return false;	
-			} 
+			if(!containedInChild) 
+				return false;
 		}
-		std::cout << "point was contained in child!" << std::endl;
 		return true;
 	}
 

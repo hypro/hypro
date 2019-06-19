@@ -522,13 +522,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
 
-  private:
-
-	/**
-  	 * @brief     Overapproximates the root node via template evaluation and saves the result in mMatrix and mVector
-  	 */
-  	void polyhedralApproximation();
-
 };
 /** @} */
 

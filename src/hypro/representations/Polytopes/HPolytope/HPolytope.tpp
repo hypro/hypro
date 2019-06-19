@@ -6,9 +6,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT()
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 	if(Setting::OPTIMIZER_CACHING){
 		setOptimizer();
-		//mOptimizer = std::make_optional<Optimizer<Number>>();
-		//assert(mOptimizer.has_value());
-		//mUpdated = true;
 	} 
 }
 
@@ -27,7 +24,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT& orig )
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &planes )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
-	//std::cout << __func__ << ": construct from planes." << std::endl;
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
@@ -44,9 +40,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &plane
 	} else {
 		if(Setting::OPTIMIZER_CACHING){
 			setOptimizer();
-			//mOptimizer = std::make_optional<Optimizer<Number>>();
-			//assert(mOptimizer.has_value());
-			//mUpdated = true;
 		} 
 	}
 }
@@ -77,10 +70,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A )
 	}
 	if(Setting::OPTIMIZER_CACHING){
 		setOptimizer(A);
-		//mOptimizer->setMatrix(A);
-		//mOptimizer = std::make_optional<Optimizer<Number>>();
-		//assert(mOptimizer.has_value());
-		//mUpdated = true;
 	}
 }
 
@@ -310,10 +299,6 @@ bool HPolytopeT<Number, Converter, Setting>::empty() const {
 		res = !opt.checkConsistency();
 	}
 
-	//Optimizer<Number> opt;
-	//opt.setMatrix(this->matrix());
-	//opt.setVector(this->vector());
-	//bool res = !opt.checkConsistency();
 	mEmpty = (res == true ? TRIBOOL::TRUE : TRIBOOL::FALSE);
 	TRACE("hypro.representations.HPolytope","Optimizer result: " << res);
 	return res;
@@ -644,10 +629,6 @@ const HPolytopeT<Number,Converter,Setting>& HPolytopeT<Number, Converter, Settin
 			redundant = opt.redundantConstraints();
 		}
 
-		//Optimizer<Number> opt;
-		//opt.setMatrix(this->matrix());
-		//opt.setVector(this->vector());
-
 		//std::vector<std::size_t> redundant = opt.redundantConstraints();
 
 		if(!redundant.empty()){
@@ -736,16 +717,6 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 		}
 	}
 	return res;		
-
-	//Optimizer<Number> opt;
-	//opt.setMatrix(this->matrix());
-	//opt.setVector(this->vector());
-
-	//std::vector<EvaluationResult<Number>> res;
-	//for(int i = 0; i < _directions.rows(); ++i){
-	//	res.emplace_back(opt.evaluate(_directions.row(i), useExact));
-	//}
-	//return res;
 }
 
 /*
@@ -835,13 +806,6 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::l
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A );
 			auto res = Converter::toHPolytope(intermediate);
-
-			//auto tmp = Converter::toHPolytope(intermediate);
-			//HPolytopeT<Number,Converter,Setting> res(tmp);
-
-			//<Setting,Converter::VPolytope::Settings>
-			//auto res = Converter::toHPolytope(intermediate);
-			//assert(res.size() <= this->size());
 			res.setReduced();
 			return res;
 		}
@@ -1170,16 +1134,8 @@ void HPolytopeT<Number, Converter, Setting>::setOptimizer(const matrix_t<Number>
 		mOptimizer->setVector(vec);
 		mUpdated = true;
 	} else {
-		//mOptimizer = std::make_optional<Optimizer<Number>>(mat, vec);
-
-		//Optimizer<Number> opt(mat,vec);
-		//std::optional<Optimizer<Number>> tmp(opt);
-		//mOptimizer.swap(tmp);
-
 		std::optional<Optimizer<Number>> tmp(std::in_place,mat,vec);		
 		mOptimizer.swap(tmp);		
-
-		//mOptimizer = std::optional<Optimizer<Number>>(std::in_place,mat,vec);
 		assert(mOptimizer.has_value());
 		mUpdated = true;
 	}

@@ -73,8 +73,7 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 
 	//Should not be reached
 	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const { 
-		std::cout << "USED COMPUTE FROM SUMOP SUBCLASS.\n"; 
-		assert(false); 
+		assert("ERROR. USED COMPUTE FROM SUMOP SUBCLASS." && false); 
 		return std::vector<EvaluationResult<Number>>();
 	}
 

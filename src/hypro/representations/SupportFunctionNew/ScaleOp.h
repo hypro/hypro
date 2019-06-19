@@ -41,7 +41,6 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 	PointerVec mChildren;
 	std::size_t mDimension;
 	
-
 	////// Members for this class
 
 	Number factor;
@@ -140,12 +139,6 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 		if(v.front()) return true;
 		return false;
 	}
-
-	//Scales the matrix accordingly
-	//matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& v) const {
-	//	assert(v.size() == 1);
-	//	return factor * v.front();
-	//}
 };
 
 } //namespace hypro

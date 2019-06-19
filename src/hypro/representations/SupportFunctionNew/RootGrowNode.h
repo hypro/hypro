@@ -30,7 +30,7 @@
 namespace hypro {
 
 	//Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
-	enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, SUMOP, INTERSECTOP, UNIONOP};
+	enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, SUMOP, INTERSECTOP, UNIONOP, INTERSECTHSPACEOP};
 	
 	//Abstract class encapsulating all needed data to build a RootGrowNode. Only needed for Settings conversion
 	struct RGNData {
@@ -152,12 +152,8 @@ class RootGrowNode {
 	virtual vector_t<Number> reverseOp(const vector_t<Number>& point) const { return point; } //only needed for unary operations 
 	virtual bool contains(const vector_t<Number>& ) const { assert(false && "contains(p) should only be called by Leaf\n"); return true; } 
 	virtual bool contains(const std::vector<bool>&) const { assert("contains(v) should only be called by operations\n"); return false; }
-	//virtual bool contains(const std::vector<bool>&, const vector_t<Number>& point) const { assert("contains(v) should only be called by operations\n"); return false; }
-
+	
 	virtual std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const { return dims.front(); } 
-
-	//virtual matrix_t<Number> getMatrix() const { assert(false && "This should only be called by Leaf\n"); return matrix_t<Number>::Zero(getDimension(), getDimension()); }
-	//virtual matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& ) const {  assert("contains(v) should only be called by operations\n"); return matrix_t<Number>::Zero(getDimension(), getDimension()); }
 
 };
 ////// Settings conversion
