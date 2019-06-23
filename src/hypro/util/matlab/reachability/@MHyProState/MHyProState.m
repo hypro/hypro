@@ -121,6 +121,13 @@ classdef MHyProState < handle
             end      
         end
         
+        function setSet(obj, type, at)
+            if type == 0 || type == 2 || type == 7
+                MHyPro(13, 19, obj.Handle, type, at-1);
+            else
+                error('MHyProState - setSet: Wrong type of input argument.');
+            end
+        end
         
         
     end

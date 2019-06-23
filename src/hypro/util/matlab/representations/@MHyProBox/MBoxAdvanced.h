@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "../../handles/ClassHandle.h"
-#include "../../handles/ObjectHandle.h"
-#include "../@MHyProGeometricObject/MGeometricObject.h"
-#include "matrix.hpp"
+//#include "../../handles/ClassHandle.h"
+//#include "../../handles/ObjectHandle.h"
+//#include "../@MHyProGeometricObject/MGeometricObject.h"
+// #include "matrix.hpp"
 #include "mex.hpp"
 #include <iostream>
 #include <string>
