@@ -11,6 +11,7 @@ public:
     void operator()(matlab::mex::ArgumentList outputs, matlab::mex::ArgumentList inputs) {
     if (!inputs.empty()) {
         // MEX function called with no input arguments
-        MBox::process(inputs);
+        MBoxAdvanced::process(inputs);
     }
+}
 };

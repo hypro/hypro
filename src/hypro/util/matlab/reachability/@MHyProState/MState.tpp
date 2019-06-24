@@ -293,30 +293,29 @@ void MState::setLocation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
-// void MState::setSet( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-// 	if ( nrhs < 6 ) mexErrMsgTxt( "MState - setSet: One or more arguments are missing." );
-// 	if ( nrhs > 6 ) mexWarnMsgTxt( "MState - setSet: One or more arguments were ignored." );
+void MState::setSet( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+	if ( nrhs < 6 ) mexErrMsgTxt( "MState - setSet: One or more arguments are missing." );
+	if ( nrhs > 6 ) mexWarnMsgTxt( "MState - setSet: One or more arguments were ignored." );
 
-// 	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
-// 	char type[64];
-// 	mxGetString( prhs[4], type, sizeof( type ) );
-// 	std::size_t at = mxGetScalar( prhs[5] );
+	hypro::State_t<double>* st = convertMat2Ptr<hypro::State_t<double>>( prhs[2] );
+	int type = mxGetScalar(prhs[4]);
+	std::size_t at = mxGetScalar( prhs[5] );
 
-// 	if ( !strcmp( "Box", type ) ) {
-// 		hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>( prhs[3] );
-// 		st->setSet( box, at );
-// 	} else if ( !strcmp( "ConstraintSet", type ) ) {
-// 		hypro::ConstraintSet<double>* set = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[3] );
-// 		st->setSet( set, at );
-// 	} else if ( !strcmp( "SupportFunction", type ) ) {
-// 		hypro::SupportFunction<double>* fct = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[3] );
-// 		st->setSet( fct, at );
-// 	} else if ( !strcmp( "TaylorModel", type ) ) {
-// 		mexErrMsgTxt( "MState - setSet: Taylor models are not implemented yet." );
-// 	} else {
-// 		mexErrMsgTxt( "MState - setSet: Unknown set type." );
-// 	}
-// }
+	if ( type == 0 ) {
+		hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>( prhs[3] );
+		st->setSet( box, at );
+	} else if ( type == 2 ) {
+		hypro::ConstraintSet<double>* set = convertMat2Ptr<hypro::ConstraintSet<double>>( prhs[3] );
+		st->setSet( set, at );
+	} else if (type == 7) {
+		hypro::SupportFunction<double>* fct = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[3] );
+		st->setSet( fct, at );
+	} else if ( type == 8 ) {
+		mexErrMsgTxt( "MState - setSet: Taylor models are not implemented yet." );
+	} else {
+		mexErrMsgTxt( "MState - setSet: Unknown set type." );
+	}
+}
 
 void MState::setSetType( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - setSetType: One or more arguments are missing." );
@@ -679,6 +678,14 @@ void MState::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	}
 	if ( cmd == 17 ) {
 		setLocation( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 18 ) {
+		setSetType( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if ( cmd == 19 ) {
+		setSet( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	mexErrMsgTxt( "MState - Command not recognized." );

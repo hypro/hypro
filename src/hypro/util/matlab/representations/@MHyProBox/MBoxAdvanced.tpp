@@ -11,5 +11,5 @@ void MBoxAdvanced::process( matlab::mex::ArgumentList input ) {
 	// int functionNumber = input[0];
 
     
-	mexErrMsgTxt( "MBox - Command not recognized." );
+	//mexErrMsgTxt( "MBox - Command not recognized." );
 }
