@@ -168,6 +168,7 @@ void MTransition::getReset( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	hypro::Reset<double> res = tran->getReset();
 	plhs[0] = convertPtr2Mat<hypro::Reset<double>>( new hypro::Reset<double>( res ) );
 
+
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "getReset input:\n" );
 	hypro::matrix_t<double> gmatrix = res.getMatrix();

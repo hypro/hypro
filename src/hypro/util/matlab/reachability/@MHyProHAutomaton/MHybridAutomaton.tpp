@@ -104,7 +104,6 @@ void MHybridAutomaton::getLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 		locations.emplace_back( *elem );
 	}
 
-	mxArray* m_array_out;
 	int len = temp.size();
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
