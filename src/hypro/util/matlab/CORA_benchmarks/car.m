@@ -1,10 +1,10 @@
 function complete = car()
 
-sim = 1;
-reacha = 0;
+sim = 0;
+reacha = 1;
 
 % Load model
-if 1
+if 0
     % Polytope
     HA = car_ha();
     options.enclosureEnables = [3 5];
@@ -40,128 +40,105 @@ for i = 1:3
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
 
-figure 
-hold on
-
-% First location
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = 4;
-options.projectedDimensions = [3 2];
-options.plotType = 'b';
-plot(HA,'simulation',options); %plot simulation
+dim = 3;
+vis = 1;
 
-% Second location
-% Zcenter = [37.63;20;4.75];
-% options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
-% options.x0 = center(options.R0); %initial state for simulation
-% options.startLoc = 2; %initial location
-% options.finalLoc = 0; %0: no final location
-% options.tStart = 0; %start time
-% options.tFinal = 5;
-% options.projectedDimensions = [3 2];
-% options.plotType = 'b';
-% plot(HA,'simulation',options); %plot simulation
+% Simulation --------------------------------------------------------------
+
+if sim
+    N = 50;
+    tic;
+    for i=1:N
+        %set initial state, input
+        if i == 1
+            %simulate center
+            options.x0 = center(options.R0);
+        elseif i < 5
+            % simulate extreme points
+            options.x0 = randPointExtreme(options.R0);
+        else
+            % simulate random points
+            options.x0 = randPoint(options.R0);
+        end 
+
+        %simulate hybrid automaton
+        HAsim = simulate(HA,options);
+        simRes{i} = get(HAsim,'trajectory');
+    end
+    toc;
+    disp(['Time needed for the simulation: ', num2str(toc)]);
+
+    % Visualization -------------------------------------------------------
+    figure 
+    hold on
+    box on
+    options.projectedDimensions = [3 1];
+    options.plotType = {'b','m','g'};
+    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    for i = 1:length(simRes)
+       for j = 1:length(simRes{i}.x)
+           plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
+                simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
+       end
+    end
+    xlabel('t');
+    ylabel('v');
+    
+    figure 
+    hold on
+    box on
+    options.projectedDimensions = [3 2];
+    options.plotType = {'b','m','g'};
+    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+
+    for i = 1:length(simRes)
+       for j = 1:length(simRes{i}.x)
+           plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
+                simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
+       end
+    end
+    xlabel('t');
+    ylabel('d');
+end
 
 
+% Reachability ------------------------------------------------------------
+if reacha
+    tic;
+    [HA] = reach(HA,options);
+    toc;
+    disp(['Time needed for the analysis: ', num2str(toc)]);
+    
+    % Verification --------------------------------------------------------
+    
+    %TODO
+    
+% Visualization -------------------------------------------------------
+if vis    
+    figure 
+    hold on
+    options.projectedDimensions = [3 1];
 
-% 
-% dim = 3;
-% vis = 1;
-% 
-% % Simulation --------------------------------------------------------------
-% 
-% if sim
-%     N = 50;
-%     tic;
-%     for i=1:N
-%         %set initial state, input
-%         if i == 1
-%             %simulate center
-%             options.x0 = center(options.R0);
-%         elseif i < 5
-%             % simulate extreme points
-%             options.x0 = randPointExtreme(options.R0);
-%         else
-%             % simulate random points
-%             options.x0 = randPoint(options.R0);
-%         end 
-% 
-%         %simulate hybrid automaton
-%         HAsim = simulate(HA,options);
-%         simRes{i} = get(HAsim,'trajectory');
-%     end
-%     toc;
-%     disp(['Time needed for the simulation: ', num2str(toc)]);
-% 
-%     % Visualization -------------------------------------------------------
-%     figure 
-%     hold on
-%     box on
-%     options.projectedDimensions = [3 1];
-%     options.plotType = {'b','m','g'};
-%     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     for i = 1:length(simRes)
-%        for j = 1:length(simRes{i}.x)
-%            plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
-%                 simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
-%        end
-%     end
-%     xlabel('t');
-%     ylabel('v');
-%     
-%     figure 
-%     hold on
-%     box on
-%     options.projectedDimensions = [3 2];
-%     options.plotType = {'b','m','g'};
-%     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-% 
-%     for i = 1:length(simRes)
-%        for j = 1:length(simRes{i}.x)
-%            plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
-%                 simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
-%        end
-%     end
-%     xlabel('t');
-%     ylabel('d');
-% end
-% 
-% 
-% % Reachability ------------------------------------------------------------
-% if reacha
-%     tic;
-%     [HA] = reach(HA,options);
-%     toc;
-%     disp(['Time needed for the analysis: ', num2str(toc)]);
-%     
-%     % Verification --------------------------------------------------------
-%     
-%     %TODO
-%     
-% % Visualization -------------------------------------------------------
-% if vis    
-%     figure 
-%     hold on
-%     options.projectedDimensions = [3 1];
-% 
-%     options.plotType = 'b';
-%     plot(HA,'reachableSet',options); %plot reachable set
-%     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     xlabel('t');
-%     ylabel('v');
-%     
-%     figure 
-%     hold on
-%     options.projectedDimensions = [3 2];
-% 
-%     options.plotType = 'b';
-%     plot(HA,'reachableSet',options); %plot reachable set
-%     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     xlabel('t');
-%     ylabel('d');
-% end
-% end
+    options.plotType = 'b';
+    plot(HA,'reachableSet',options); %plot reachable set
+    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    xlabel('t');
+    ylabel('v');
+    
+    figure 
+    hold on
+    options.projectedDimensions = [3 2];
+
+    options.plotType = 'b';
+    plot(HA,'reachableSet',options); %plot reachable set
+    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    xlabel('t');
+    ylabel('d');
+end
+end
 
 complete = 1;
