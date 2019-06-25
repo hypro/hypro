@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"classhypro_1_1rectangularBadStateHandler.html#a1541d4db6cdd9068cb236724a65fc7f9":[6,0,1,157,3],
 "classhypro_1_1rectangularBadStateHandler.html#a3aafd90bdeddd4c3fd762fab2861d24b":[6,0,1,157,0],
 "classhypro_1_1rectangularBadStateHandler.html#a438bece6ef9e421c44043cc13a4f246f":[6,0,1,157,4],
 "classhypro_1_1rectangularBadStateHandler.html#a6957319f492343a3d3189962f27abc40":[6,0,1,157,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "example__eigenSimpleFlow_8cpp_source.html":[7,0,0,13],
 "example__eigendecomposition_8cpp_source.html":[7,0,0,11],
 "example__eigensimple2points_8cpp_source.html":[7,0,0,12],
-"example__ellipsoidPlot_8cpp_source.html":[7,0,0,14],
-"example__hashMatrix_8cpp_source.html":[7,0,0,15]
+"example__ellipsoidPlot_8cpp_source.html":[7,0,0,14]
 };
