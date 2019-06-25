@@ -50,7 +50,15 @@ namespace hypro {
 
     template <typename Number, typename Converter, class Setting>
     carl::Interval<tNumber> DifferenceBoundsT<Number, Converter, Setting>::getCoveredTimeInterval() const {
-        //TODO.
+        carl::Interval<tNumber> res{0,0};
+        auto box = Converter::toBox(*this);
+        auto intervals = box.getIntervals();
+        for(const auto& i : intervals) {
+            if(i.diameter() > res.diameter()) {
+                res = i;
+            }
+        }
+        return res;
     }
 
     template <typename Number, typename Converter, class Setting>
