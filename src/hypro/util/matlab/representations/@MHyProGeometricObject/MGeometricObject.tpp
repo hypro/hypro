@@ -150,7 +150,7 @@ void MGeometricObject<T>::deleteObject( int nlhs, mxArray* plhs[], int nrhs, con
 
 	destroyObject<T>( prhs[2] );
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "delete\n" );
+	// mexPrintf( "delete\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -287,18 +287,18 @@ void MGeometricObject<T>::vertices( int nlhs, mxArray* plhs[], int nrhs, const m
 	}
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "vertices output:\n" );
-	if ( cols != 0 ) {
-		int rows = vertices[0].dimension();
-		for ( int j = 0; j < cols; j++ ) {
-			hypro::Point<double> p = vertices[j];
-			for ( int i = 0; i < rows; i++ ) {
-				mexPrintf( " %f", p[i] );
-			}
-			mexPrintf( "\n" );
-		}
-		mexPrintf( "\n" );
-	}
+	// mexPrintf( "vertices output:\n" );
+	// if ( cols != 0 ) {
+	// 	int rows = vertices[0].dimension();
+	// 	for ( int j = 0; j < cols; j++ ) {
+	// 		hypro::Point<double> p = vertices[j];
+	// 		for ( int i = 0; i < rows; i++ ) {
+	// 			mexPrintf( " %f", p[i] );
+	// 		}
+	// 		mexPrintf( "\n" );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 

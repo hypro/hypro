@@ -109,7 +109,7 @@ void MReach::setSettings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 
 void MReach::settings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReach - setSettings: At least one input argument is missing." );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MReach- setSettings: One or more arguments were ignored." );
+	if ( nrhs > 3 ) mexWarnMsgTxt( "MReach- setSettings: One or more arguments were ignored." ); 
 
 	Reacher* reacher = convertMat2Ptr<Reacher>( prhs[2] );
 	const hypro::ReachabilitySettings currSettings = reacher->settings();

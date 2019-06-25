@@ -55,11 +55,11 @@ classdef MHyProHAutomaton < handle
         end
         
         function out = getLocations(obj)
-            locations = MHyPro(4, 7, obj.ObjectHandle);
-            len = length(locations);
-            out = cell(1,len);
-            for i = 1:length(len)
-                out{i} = MHyProLocation(locations{i});
+            ptrscell = MHyPro(4, 7, obj.ObjectHandle);
+            out = cell(1, size(ptrscell,2));
+            for i = 1:size(ptrscell,2)
+                ptr = ptrscell{i};
+                out{i} = MHyProLocation(ptr);
             end
         end
         

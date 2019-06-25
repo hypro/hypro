@@ -69,10 +69,28 @@ classdef MHyProReach < handle
         end
         
         function settings(obj)
-            MHyPro(12, 6, obj.ObjectHandle);
+             MHyPro(12, 6, obj.ObjectHandle);
+        end
+         
+        function plot(obj, flowpipes, dims)
+            num_flowpipes = length(flowpipes);
+            figure()
+            for pipe = 1:num_flowpipes
+                currentFlowpipe =  flowpipes{pipe};
+                num_states = length(currentFlowpipe);
+                disp(['Number of states: ', num2str(num_states)]);
+                
+                for state = 1:num_states
+                    currentState = currentFlowpipe{state};
+                    vertices = currentState.vertices(0);
+                    obj.plotVertices(vertices, dims);
+                    hold on
+                end 
+                hold on
+            end
         end
         
-         function plotVertices(obj, vertices, dims)
+        function plotVertices(obj, vertices, dims)
             %Compute projection
             temp = vertices(dims(1):dims(2),:);
             ver = unique(temp.','rows').';
@@ -86,39 +104,7 @@ classdef MHyProReach < handle
             ver_y = ver_y(order);
             P = [ver_x;ver_y]';
             pgon = polyshape(P, 'Simplify', false);
-            plot(pgon);           
-        end
-        
-        function plot(obj, flowpipes, type, dims)
-            num_flowpipes = length(flowpipes);
-            for pipe = 1:num_flowpipes
-                currentFlowpipe =  flowpipes{pipe};
-                num_states = length(currentFlowpipe);
-                disp(['Number of states: ', num2str(num_states)]);
-                figure()
-                for state = 1:num_states
-                    currentState = currentFlowpipe{state};
-                    vertices = currentState.vertices(1);
-                    obj.plotVertices(vertices, dims);
-                    hold on
-                end  
-            end
-        end
-        
-        function plot3D(obj, flowpipes, type, dims)
-            num_flowpipes = length(flowpipes);
-            for pipe = 1:num_flowpipes
-                currentFlowpipe =  flowpipes{pipe};
-                num_states = length(currentFlowpipe);
-                disp(['Number of states: ', num2str(num_states)]);
-                figure()
-                for state = 1:num_states
-                    currentState = currentFlowpipe{state};
-                    vertices = currentState.vertices(1);
-                    obj.plotVertices(vertices, dims);
-                    hold on
-                end  
-            end
+            plot(pgon,'FaceColor',[0.2 0.55 0.74], 'EdgeColor', [0.380, 0.482, 0.537]);           
         end
         
     end

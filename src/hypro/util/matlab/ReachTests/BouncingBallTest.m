@@ -65,7 +65,7 @@ assert(isequal(rv, constReset));
 
 
 % Setup transition
-tran.setAggregation(2);
+%tran.setAggregation(0);
 tran.setGuard(guard);
 tran.setSource(loc);
 tran.setTarget(loc);
@@ -121,7 +121,7 @@ assert(isequal(flm, alocfm));
 
 % Reachability
 
-settings = struct('timeStep', 0.001, 'timeBound', 2, 'jumpDepth', 3);
+settings = struct('timeStep', 0.01, 'timeBound', 3.2, 'jumpDepth', 3);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(2);
@@ -132,5 +132,5 @@ flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 2];
-reach.plot(flowpipes, 0, dim);
+reach.plot(flowpipes, dim);
 end
