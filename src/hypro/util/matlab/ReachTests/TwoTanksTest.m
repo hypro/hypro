@@ -426,7 +426,7 @@ assert(isequal(tLabs2{1}.getName(), 'tran7'));
 %-----------------------------------------------%
 
 % x1 = [1.5, 2.5] x2 = [1, 1]
-boxVector = [2.5; -1.5; 1; -1;];
+boxVector = [10.5; -10.5; 1; -1;];
 boxMatrix = [1 0; -1 0; 0 1; 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(loc_off_on, initialCond);
@@ -455,7 +455,7 @@ assert(isequal(aloc{4}.getName(), loc_on_on.getName()));
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.1, 'timeBound', 10, 'jumpDepth', 4);
+settings = struct('timeStep', 0.1, 'timeBound', 10, 'jumpDepth', 1);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(2);

@@ -64,14 +64,17 @@ guard1 = MHyProCondition();
 guard1.setMatrix([0 0 0 0 0 0 0 0 0 -1]); % First set the matrix then the vector!?
 guard1.setVector(-2);
 % Set reset: t := 0
-reset1 = MHyProReset();
-reset1.setMatrix([0 0 0 0 0 0 0 0 0 -1; 0 0 0 0 0 0 0 0 0 1]);
-reset1.setVector([0; 0]);
+reset = MHyProReset();
+temp = zeros(10);
+temp(10,10) = 1;
+reset.setMatrix(eye(10) - temp);
+reset.setVector(zeros(10,1));
 
 %tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(loc_qc);
 tran1.setTarget(loc_qn);
+tran1.setReset(reset);
 tran1.setLabels({MHyProLabel('tran1')});
 
 loc_qc.addTransition(tran1);
@@ -87,6 +90,7 @@ guard2.setVector(-2);
 tran2.setGuard(guard2);
 tran2.setSource(loc_qn);
 tran2.setTarget(loc_qc);
+tran2.setReset(reset);
 tran2.setLabels({MHyProLabel('tran2')});
 
 loc_qn.addTransition(tran2);
@@ -161,7 +165,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 7];
+dim = [4 9];
 reach.plot(flowpipes, dim);
 
 end

@@ -64,13 +64,14 @@ guard1.setMatrix([1 0 0; -1 0 0]); % First set the matrix then the vector!?
 guard1.setVector([510; -510]);
 % Set reset: c1 := 0
 reset1 = MHyProReset();
-reset1.setMatrix([0 1 0; 0 -1 0]);
-reset1.setVector([0; 0]);
+reset1.setMatrix([1 0 0; 0 0 0; 0 0 1]);
+reset1.setVector([0; 0; 0]);
 
 %tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(loc_rod1);
 tran1.setTarget(loc_no);
+tran1.setReset(reset1);
 tran1.setLabels({MHyProLabel('tran1')});
 
 loc_rod1.addTransition(tran1);
@@ -81,11 +82,15 @@ tran2 = MHyProTransition();
 guard2 = MHyProCondition();
 guard2.setMatrix([1 0 0; -1 0 0; 0 -1 0]); % First set the matrix then the vector!?
 guard2.setVector([550; -550; -20]);
+% reset2 = MHyProReset();
+% reset2.setMatrix(eye(3));
+% reset2.setVector([0; 0; 0]);
 
 %tran2.setAggregation(2);
 tran2.setGuard(guard2);
 tran2.setSource(loc_no);
 tran2.setTarget(loc_rod1);
+% tran2.setReset(reset2);
 tran2.setLabels({MHyProLabel('tran2')});
 
 loc_no.addTransition(tran2);
@@ -96,11 +101,15 @@ tran3 = MHyProTransition();
 guard3 = MHyProCondition();
 guard3.setMatrix([1 0 0; -1 0 0; 0 0 -1]); % First set the matrix then the vector!?
 guard3.setVector([550; -550; -20]);
+% reset3 = MHyProReset();
+% reset3.setMatrix(eye(3));
+% reset3.setVector([0; 0; 0]);
 
 %tran3.setAggregation(2);
 tran3.setGuard(guard3);
 tran3.setSource(loc_no);
 tran3.setTarget(loc_rod2);
+% tran3.setReset(reset3);
 tran3.setLabels({MHyProLabel('tran3')});
 
 loc_no.addTransition(tran3);
@@ -111,16 +120,16 @@ tran4 = MHyProTransition();
 guard4 = MHyProCondition();
 guard4.setMatrix([1 0 0; -1 0 0]); % First set the matrix then the vector!?
 guard4.setVector([510; -510]);
-
 % Set reset: c2 := 0
 reset4 = MHyProReset();
-reset4.setMatrix([0 0 -1; 0 0 1]);
-reset4.setVector([0; 0]);
+reset4.setMatrix([1 0 0; 0 1 0; 0 0 0]);
+reset4.setVector([0; 0; 0]);
 
 %tran4.setAggregation(2);
 tran4.setGuard(guard4);
 tran4.setSource(loc_rod2);
 tran4.setTarget(loc_no);
+tran4.setReset(reset4);
 tran4.setLabels({MHyProLabel('tran4')});
 
 loc_rod2.addTransition(tran4);
@@ -131,11 +140,15 @@ tran5 = MHyProTransition();
 guard5 = MHyProCondition();
 guard5.setMatrix([1 0 0; -1 0 0; 0 1 0; 0 0 1]); % First set the matrix then the vector!?
 guard5.setVector([550; -550; 20; 20]);
+% reset5 = MHyProReset();
+% reset5.setMatrix(eye(3));
+% reset5.setVector([0; 0; 0]);
 
 %tran5.setAggregation(2);
 tran5.setGuard(guard5);
 tran5.setSource(loc_no);
 tran5.setTarget(loc_sink);
+% tran5.setReset(reset5);
 tran5.setLabels({MHyProLabel('tran5')});
 
 loc_no.addTransition(tran5);
@@ -145,8 +158,8 @@ loc_no.addTransition(tran5);
 %                 Initial set
 %-----------------------------------------------%
 
-% x = [510 510] c1 = [20 20] c2 =[20 20]
-boxVector = [510; -510; 20; -20; 20; -20];
+% x = [510 510] c1 = [0 0] c2 =[20 20]
+boxVector = [510; -510; 0; -0; 20; -20];
 boxMatrix = [1 0 0; -1 0 0; 0 1 0; 0 -1 0; 0 0 1; 0 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(loc_rod1, initialCond);
@@ -161,16 +174,16 @@ automaton.addLocation(loc_sink);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 5, 'jumpDepth', 50);
+settings = struct('timeStep', 0.1, 'timeBound', 50, 'jumpDepth', 50);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(2);
-reach.settings();
+reach.setRepresentationType(0);
+%reach.settings();
 
 tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [2 3];
+dim = [1 3];
 reach.plot(flowpipes, dim);
 end
