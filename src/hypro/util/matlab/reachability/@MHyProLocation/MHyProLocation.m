@@ -76,8 +76,8 @@ classdef MHyProLocation < handle
         
         function out = getTransitions(obj)
             ptrscell = MHyPro(6, 10, obj.ObjectHandle);
-            out = cell(1, size(ptrscell,2));
-            for i = 1:size(ptrscell,2)
+            out = cell(1, length(ptrscell));
+            for i = 1:length(ptrscell)
                 ptr = ptrscell{i};
                 out{i} = MHyProTransition(ptr);
             end

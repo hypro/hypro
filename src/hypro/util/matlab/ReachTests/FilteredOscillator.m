@@ -27,6 +27,14 @@ invMat = [1 0 0 0 0 0; -0.714286 -1 0 0 0 0];
 inv_loc1 = MHyProCondition(invMat, [0;0]);
 loc1.setInvariant(inv_loc1);
 
+% test
+f = loc1.getLinearFlow();
+fm = f.getFlowMatrix();
+assert(isequal(flow_loc1, fm));
+i = loc1.getInvariant();
+assert(i == inv_loc1);
+% test end
+
 %-----------------------------------------------%
 %              Location loc2
 %-----------------------------------------------%
@@ -48,6 +56,14 @@ loc2.setFlow(flow_loc2);
 invMat = [1 0 0 0 0 0; 0.714286 1 0 0 0 0];
 inv_loc2 = MHyProCondition(invMat, [0;0]);
 loc2.setInvariant(inv_loc2);
+
+% test
+f = loc2.getLinearFlow();
+fm = f.getFlowMatrix();
+assert(isequal(flow_loc2, fm));
+i = loc2.getInvariant();
+assert(i == inv_loc2);
+% test end
 
 %-----------------------------------------------%
 %              Location loc3
@@ -71,6 +87,14 @@ invMat = [-1 0 0 0 0 0; -0.714286 -1 0 0 0 0];
 inv_loc3 = MHyProCondition(invMat, [0;0]);
 loc3.setInvariant(inv_loc3);
 
+% test
+f = loc3.getLinearFlow();
+fm = f.getFlowMatrix();
+assert(isequal(flow_loc3, fm));
+i = loc3.getInvariant();
+assert(i == inv_loc3);
+% test end
+
 %-----------------------------------------------%
 %              Location loc4
 %-----------------------------------------------%
@@ -93,6 +117,13 @@ invMat = [-1 0 0 0 0 0; 0.714286 1 0 0 0 0];
 inv_loc4 = MHyProCondition(invMat, [0;0]);
 loc4.setInvariant(inv_loc4);
 
+% test
+f = loc4.getLinearFlow();
+fm = f.getFlowMatrix();
+assert(isequal(flow_loc4, fm));
+i = loc4.getInvariant();
+assert(i == inv_loc4);
+% test end
 
 %-----------------------------------------------%
 %              loc1 -> loc3
@@ -113,6 +144,18 @@ tran1.setLabels({MHyProLabel('tran1')});
 
 loc1.addTransition(tran1);
 
+% test
+locT = loc1.getTransitions();
+assert(length(locT) == 1);
+lab1 = locT{1}.getLabels();
+assert(isequal(lab1{1}.getName(), 'tran1'));
+g = tran1.getGuard();
+assert(g == guard1);
+s = tran1.getSource();
+t = tran1.getTarget();
+assert(s == loc1);
+assert(t == loc3);
+% test end
 
 %-----------------------------------------------%
 %              loc3 -> loc4
@@ -133,6 +176,18 @@ tran2.setLabels({MHyProLabel('tran2')});
 
 loc3.addTransition(tran2);
 
+% test
+locT = loc3.getTransitions();
+assert(length(locT) == 1);
+lab1 = locT{1}.getLabels();
+assert(isequal(lab1{1}.getName(), 'tran2'));
+g = tran2.getGuard();
+assert(g == guard2);
+s = tran2.getSource();
+t = tran2.getTarget();
+assert(s == loc3);
+assert(t == loc4);
+% test end
 
 %-----------------------------------------------%
 %              loc4 -> loc2
@@ -152,6 +207,19 @@ tran3.setTarget(loc2);
 tran3.setLabels({MHyProLabel('tran3')});
 
 loc4.addTransition(tran3);
+
+% test
+locT = loc4.getTransitions();
+assert(length(locT) == 1);
+lab1 = locT{1}.getLabels();
+assert(isequal(lab1{1}.getName(), 'tran3'));
+g = tran3.getGuard();
+assert(g == guard3);
+s = tran3.getSource();
+t = tran3.getTarget();
+assert(s == loc4);
+assert(t == loc2);
+% test end
 
 
 %-----------------------------------------------%
@@ -173,6 +241,19 @@ tran4.setLabels({MHyProLabel('tran4')});
 
 loc2.addTransition(tran4);
 
+% test
+locT = loc2.getTransitions();
+assert(length(locT) == 1);
+lab1 = locT{1}.getLabels();
+assert(isequal(lab1{1}.getName(), 'tran4'));
+g = tran4.getGuard();
+assert(g == guard4);
+s = tran4.getSource();
+t = tran4.getTarget();
+assert(s == loc2);
+assert(t == loc1);
+% test end
+
 
 automaton.addLocation(loc1);
 automaton.addLocation(loc2);
@@ -189,6 +270,20 @@ boxMatrix = [eye(6); -1*eye(6)];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(loc1, initialCond);
 
+%test
+locs = automaton.getLocations();
+assert(length(locs) == 4);
+assert(isequal(locs{1}.getName(), 'loc1'));
+assert(isequal(locs{2}.getName(), 'loc2'));
+assert(isequal(locs{3}.getName(), 'loc3'));
+assert(isequal(locs{4}.getName(), 'loc4'));
+initialMapping = automaton.getInitialStates();
+assert(length(initialMapping) == 1);
+iCond = initialMapping(1).cond;
+assert(iCond == initialCond);
+iLoc = initialMapping(1).loc;
+assert(iLoc == loc1);
+%test end
 
 %-----------------------------------------------%
 %                 Reachability
@@ -206,17 +301,5 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 2];
 reach.plot(flowpipes, dim);
-
-
-
-
-
-
-
-
-
-
-
-
 
 end
