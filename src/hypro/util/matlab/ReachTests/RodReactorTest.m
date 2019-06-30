@@ -16,7 +16,7 @@ loc_rod1.setName('rod1');
 flow_rod1 = [0.1 0 0 -56; 0 0 0 1; 0 0 0 1; 0 0 0 0];
 loc_rod1.setFlow(flow_rod1);
 
-% Set inv: x >= 510 
+% Set inv: x >= 510
 inv_rod1 = MHyProCondition([-1 0 0], -510);
 loc_rod1.setInvariant(inv_rod1);
 
@@ -41,7 +41,7 @@ loc_no.setName('noRods');
 flow_no = [0.1 0 0 -50; 0 0 0 1; 0 0 0 1; 0 0 0 0];
 loc_no.setFlow(flow_no);
 
-% Set inv: x <= 550 
+% Set inv: x <= 550
 inv_no = MHyProCondition([1 0 0], 550);
 loc_no.setInvariant(inv_no);
 
@@ -66,7 +66,7 @@ loc_rod2.setName('rod2');
 flow_rod2 = [0.1 0 0 -60; 0 0 0 1; 0 0 0 1; 0 0 0 0];
 loc_rod2.setFlow(flow_rod2);
 
-% Set inv: x >= 510 
+% Set inv: x >= 510
 inv_rod2 = MHyProCondition([-1 0 0], -510);
 loc_rod2.setInvariant(inv_rod2);
 
@@ -85,8 +85,16 @@ assert(isequal(iv, -510));
 %-----------------------------------------------%
 %              Location sink
 %-----------------------------------------------%
-loc_sink = MHyProLocation();
-loc_sink.setName('sink');
+% loc_sink = MHyProLocation();
+% loc_sink.setName('sink');
+
+%-----------------------------------------------%
+%              Add locations to HA
+%-----------------------------------------------%
+
+rod1 = automaton.addLocation(loc_rod1);
+rod2 = automaton.addLocation(loc_rod2);
+noRod = automaton.addLocation(loc_no);
 
 %-----------------------------------------------%
 %              rod1 --> noRods
@@ -101,17 +109,17 @@ reset1 = MHyProReset();
 reset1.setMatrix([1 0 0; 0 0 0; 0 0 1]);
 reset1.setVector([0; 0; 0]);
 
-%tran1.setAggregation(2);
+tran1.setAggregation(1);
 tran1.setGuard(guard1);
-tran1.setSource(loc_rod1);
-tran1.setTarget(loc_no);
+tran1.setSource(rod1);
+tran1.setTarget(noRod);
 tran1.setReset(reset1);
 tran1.setLabels({MHyProLabel('tran1')});
 
-loc_rod1.addTransition(tran1);
+rod1.addTransition(tran1);
 
 % test
-locT = loc_rod1.getTransitions();
+locT = rod1.getTransitions();
 assert(length(locT) == 1);
 lab1 = locT{1}.getLabels();
 assert(isequal(lab1{1}.getName(), 'tran1'));
@@ -130,24 +138,24 @@ assert(isequal(rv, [0; 0; 0]));
 
 %-----------------------------------------------%
 %              noRods --> rod1
-%-----------------------------------------------% 
+%-----------------------------------------------%
 tran2 = MHyProTransition();
 % Set guard: x = 550 & c1 >= 20
 guard2 = MHyProCondition();
 guard2.setMatrix([1 0 0; -1 0 0; 0 -1 0]); % First set the matrix then the vector!?
 guard2.setVector([550; -550; -20]);
 
-%tran2.setAggregation(2);
+tran2.setAggregation(1);
 tran2.setGuard(guard2);
-tran2.setSource(loc_no);
-tran2.setTarget(loc_rod1);
+tran2.setSource(noRod);
+tran2.setTarget(rod1);
 tran2.setReset(dummy_reset);
 tran2.setLabels({MHyProLabel('tran2')});
 
-loc_no.addTransition(tran2);
+noRod.addTransition(tran2);
 
 % test
-locT = loc_no.getTransitions();
+locT = noRod.getTransitions();
 assert(length(locT) == 1);
 lab1 = locT{1}.getLabels();
 assert(isequal(lab1{1}.getName(), 'tran2'));
@@ -173,17 +181,17 @@ guard3 = MHyProCondition();
 guard3.setMatrix([1 0 0; -1 0 0; 0 0 -1]); % First set the matrix then the vector!?
 guard3.setVector([550; -550; -20]);
 
-%tran3.setAggregation(2);
+tran3.setAggregation(1);
 tran3.setGuard(guard3);
-tran3.setSource(loc_no);
-tran3.setTarget(loc_rod2);
+tran3.setSource(noRod);
+tran3.setTarget(rod2);
 tran3.setReset(dummy_reset);
 tran3.setLabels({MHyProLabel('tran3')});
 
-loc_no.addTransition(tran3);
+noRod.addTransition(tran3);
 
 % test
-locT = loc_no.getTransitions();
+locT = noRod.getTransitions();
 assert(length(locT) == 2);
 lab1 = locT{1}.getLabels();
 lab2 = locT{2}.getLabels();
@@ -214,20 +222,20 @@ reset4 = MHyProReset();
 reset4.setMatrix([1 0 0; 0 1 0; 0 0 0]);
 reset4.setVector([0; 0; 0]);
 
-%tran4.setAggregation(2);
+tran4.setAggregation(1);
 tran4.setGuard(guard4);
-tran4.setSource(loc_rod2);
-tran4.setTarget(loc_no);
+tran4.setSource(rod2);
+tran4.setTarget(noRod);
 tran4.setReset(reset4);
 tran4.setLabels({MHyProLabel('tran4')});
 
-loc_rod2.addTransition(tran4);
+rod2.addTransition(tran4);
 
 
 % test
-locT = loc_rod2.getTransitions();
+locT = rod2.getTransitions();
 assert(length(locT) == 1);
-lab1 = locT{1}.getLabels();;
+lab1 = locT{1}.getLabels();
 assert(isequal(lab1{1}.getName(), 'tran4'));
 g = tran4.getGuard();
 gm = g.getMatrix();
@@ -246,40 +254,40 @@ assert(isequal(rv, [0; 0; 0]));
 %              noRods --> sink
 %-----------------------------------------------%
 
-tran5 = MHyProTransition();
-% Set guard: x = 550 & c1 <= 20 & c2 <= 20
-guard5 = MHyProCondition();
-guard5.setMatrix([1 0 0; -1 0 0; 0 1 0; 0 0 1]); % First set the matrix then the vector!?
-guard5.setVector([550; -550; 20; 20]);
+% tran5 = MHyProTransition();
+% % Set guard: x = 550 & c1 <= 20 & c2 <= 20
+% guard5 = MHyProCondition();
+% guard5.setMatrix([1 0 0; -1 0 0; 0 1 0; 0 0 1]); % First set the matrix then the vector!?
+% guard5.setVector([550; -550; 20; 20]);
+%
+% %tran5.setAggregation(2);
+% tran5.setGuard(guard5);
+% tran5.setSource(noRod);
+% tran5.setTarget(sink);
+% tran5.setReset(dummy_reset);
+% tran5.setLabels({MHyProLabel('tran5')});
+%
+% noRod.addTransition(tran5);
 
-%tran5.setAggregation(2);
-tran5.setGuard(guard5);
-tran5.setSource(loc_no);
-tran5.setTarget(loc_sink);
-tran5.setReset(dummy_reset);
-tran5.setLabels({MHyProLabel('tran5')});
-
-loc_no.addTransition(tran5);
-
-% test
-locT = loc_no.getTransitions();
-assert(length(locT) == 3);
-lab1 = locT{1}.getLabels();
-lab2 = locT{2}.getLabels();
-lab3 = locT{3}.getLabels();
-assert(isequal(lab1{1}.getName(), 'tran2'));
-assert(isequal(lab2{1}.getName(), 'tran3'));
-assert(isequal(lab3{1}.getName(), 'tran5'));
-g = tran5.getGuard();
-gm = g.getMatrix();
-gv = g.getVector();
-assert(isequal(gm, [1 0 0; -1 0 0; 0 1 0; 0 0 1]));
-assert(isequal(gv, [550; -550; 20; 20]));
-r = tran5.getReset();
-rm = r.getMatrix(1);
-rv = r.getVector(1);
-assert(isequal(rm, eye(3)));
-assert(isequal(rv, [0; 0; 0]));
+% % test
+% locT = noRod.getTransitions();
+% assert(length(locT) == 3);
+% lab1 = locT{1}.getLabels();
+% lab2 = locT{2}.getLabels();
+% lab3 = locT{3}.getLabels();
+% assert(isequal(lab1{1}.getName(), 'tran2'));
+% assert(isequal(lab2{1}.getName(), 'tran3'));
+% assert(isequal(lab3{1}.getName(), 'tran5'));
+% g = tran5.getGuard();
+% gm = g.getMatrix();
+% gv = g.getVector();
+% assert(isequal(gm, [1 0 0; -1 0 0; 0 1 0; 0 0 1]));
+% assert(isequal(gv, [550; -550; 20; 20]));
+% r = tran5.getReset();
+% rm = r.getMatrix(1);
+% rv = r.getVector(1);
+% assert(isequal(rm, eye(3)));
+% assert(isequal(rv, [0; 0; 0]));
 % test end
 
 
@@ -287,37 +295,33 @@ assert(isequal(rv, [0; 0; 0]));
 %                 Initial set
 %-----------------------------------------------%
 
-% x = [510 510] c1 = [0 0] c2 =[20 20]
-boxVector = [510; -510; 0; 0; 20; -20];
+% x = [510 520] c1 = [20 20] c2 =[20 20]
+boxVector = [520; -510; 20; -20; 20; -20];
 boxMatrix = [1 0 0; -1 0 0; 0 1 0; 0 -1 0; 0 0 1; 0 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
-automaton.addInitialState(loc_rod1, initialCond);
+automaton.addInitialState(noRod, initialCond);
 
-automaton.addLocation(loc_rod1);
-automaton.addLocation(loc_rod2);
-automaton.addLocation(loc_no);
-automaton.addLocation(loc_sink);
 
 %test
 locs = automaton.getLocations();
-assert(length(locs) == 4);
+assert(length(locs) == 3);
 assert(isequal(locs{1}.getName(), 'rod1'));
 assert(isequal(locs{2}.getName(), 'rod2'));
 assert(isequal(locs{3}.getName(), 'noRods'));
-assert(isequal(locs{4}.getName(), 'sink'));
+% assert(isequal(locs{4}.getName(), 'sink'));
 initialMapping = automaton.getInitialStates();
 assert(length(initialMapping) == 1);
 iCond = initialMapping(1).cond;
 assert(iCond == initialCond);
 iLoc = initialMapping(1).loc;
-assert(iLoc == loc_rod1);
+assert(iLoc == noRod);
 %test end
 
 %-----------------------------------------------%
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.1, 'timeBound', 5, 'jumpDepth', 5);
+settings = struct('timeStep', 0.1, 'timeBound', 16, 'jumpDepth', 5);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -329,4 +333,5 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 3];
 reach.plot(flowpipes, dim);
+
 end

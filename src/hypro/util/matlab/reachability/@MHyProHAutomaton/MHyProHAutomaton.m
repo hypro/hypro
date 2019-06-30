@@ -197,9 +197,10 @@ classdef MHyProHAutomaton < handle
             MHyPro(4, 20, obj.ObjectHandle);
         end
         
-        function addLocation(obj, loc)
+        function out = addLocation(obj, loc)
             if isa(loc, 'MHyProLocation')
-                MHyPro(4, 21, obj.ObjectHandle, loc.ObjectHandle);
+                ptr = MHyPro(4, 21, obj.ObjectHandle, loc.ObjectHandle);
+                out = MHyProLocation(ptr);
             end
         end
         

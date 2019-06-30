@@ -2,6 +2,9 @@ function VehiclePlatoonTest()
 
 % Create Automaton
 automaton = MHyProHAutomaton();
+dummy_reset = MHyProReset();
+dummy_reset.setMatrix(eye(10));
+dummy_reset.setVector(zeros(10,1));
 
 %-----------------------------------------------%
 %              Location qc
@@ -53,6 +56,10 @@ loc_qn.setFlow(An);
 inv_qn = MHyProCondition([0 0 0 0 0 0 0 0 0 1], 2);
 loc_qn.setInvariant(inv_qn);
 
+
+qc = automaton.addLocation(loc_qc);
+qn = automaton.addLocation(loc_qn);
+
 %-----------------------------------------------%
 %              Transitions
 %-----------------------------------------------%
@@ -70,30 +77,30 @@ temp(10,10) = 1;
 reset.setMatrix(eye(10) - temp);
 reset.setVector(zeros(10,1));
 
-%tran1.setAggregation(2);
+tran1.setAggregation(1);
 tran1.setGuard(guard1);
-tran1.setSource(loc_qc);
-tran1.setTarget(loc_qn);
+tran1.setSource(qc);
+tran1.setTarget(qn);
 tran1.setReset(reset);
 tran1.setLabels({MHyProLabel('tran1')});
 
-loc_qc.addTransition(tran1);
+qc.addTransition(tran1);
 
 % qn --> qc
 tran2 = MHyProTransition();
 % Set guard: t >= 2
 guard2 = MHyProCondition();
-guard2.setMatrix([0 0 0 0 0 0 0 0 0 -1]); % First set the matrix then the vector!?
+guard2.setMatrix([0 0 0 0 0 0 0 0 0 -1]);
 guard2.setVector(-2);
 
-%tran2.setAggregation(2);
+tran2.setAggregation(1);
 tran2.setGuard(guard2);
-tran2.setSource(loc_qn);
-tran2.setTarget(loc_qc);
+tran2.setSource(qn);
+tran2.setTarget(qc);
 tran2.setReset(reset);
 tran2.setLabels({MHyProLabel('tran2')});
 
-loc_qn.addTransition(tran2);
+qn.addTransition(tran2);
 
 %-----------------------------------------------%
 %                 Initial set
@@ -102,32 +109,11 @@ loc_qn.addTransition(tran2);
 % e1 = [0.9 1.1] e1prime = [0.9 1.1] a1 = [0.9 1.1] e2 = [0.9 1.1] e2prime
 % =[0.9 1.1] a2 = [0.9 1.1] e3 = [0.9 1.1] e3prime = [0.9 1.1] a3 = [ 0.9 1.1]
 % t = [0 0]
-boxVector = [-0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-             -0.9; 1.1;...
-              0; 0];
-boxMatrix = [-1 0 0 0 0 0 0 0 0 0; 1 0 0 0 0 0 0 0 0 0;...
-             0 -1 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0;...
-             0 0 -1 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0;...
-             0 0 0 -1 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0;...
-             0 0 0 0 -1 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0;...
-             0 0 0 0 0 -1 0 0 0 0; 0 0 0 0 0 1 0 0 0 0;...
-             0 0 0 0 0 0 -1 0 0 0; 0 0 0 0 0 0 1 0 0 0;...
-             0 0 0 0 0 0 0 -1 0 0; 0 0 0 0 0 0 0 1 0 0;...
-             0 0 0 0 0 0 0 0 -1 0; 0 0 0 0 0 0 0 0 1 0;...
-             0 0 0 0 0 0 0 0 0 -1; 0 0 0 0 0 0 0 0 0 1];
+boxVector = [-0.9 * ones(9,1);0; 1.1*ones(9,1);0];
+boxMatrix = [-1*eye(10); eye(10)];
          
 initialCond = MHyProCondition(boxMatrix, boxVector);
-automaton.addInitialState(loc_qc, initialCond);
-
-automaton.addLocation(loc_qn);
-automaton.addLocation(loc_qc);
+automaton.addInitialState(qc, initialCond);
 
 %-----------------------------------------------%
 %                 Bad States
@@ -135,27 +121,27 @@ automaton.addLocation(loc_qc);
 
 % unsafe: e1 >= 1.7 in qc and qn
 
-badState = MHyProCondition();
-badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
-badState.setVector(-1.7);
-badStates(1).loc = loc_qc;
-badStates(1).cond = badState;
-badStates(2).loc = loc_qn;
-badStates(2).cond = badState;
-
-badState.setMatrix([1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
-badState.setVector(-1.7);
-
-badStates(3).loc = loc_qc;
-badStates(3).cond = badState;
-automaton.setLocalBadStates(badStates);
+% badState = MHyProCondition();
+% badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
+% badState.setVector(-1.7);
+% badStates(1).loc = qc;
+% badStates(1).cond = badState;
+% badStates(2).loc = qn;
+% badStates(2).cond = badState;
+% 
+% badState.setMatrix([1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
+% badState.setVector(-1.7);
+% 
+% badStates(3).loc = qc;
+% badStates(3).cond = badState;
+% automaton.setLocalBadStates(badStates);
 
 
 %-----------------------------------------------%
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 2, 'jumpDepth', 2);
+settings = struct('timeStep', 0.02, 'timeBound', 12, 'jumpDepth', 5);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);

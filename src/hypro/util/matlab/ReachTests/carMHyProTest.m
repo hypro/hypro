@@ -80,19 +80,23 @@ assert(isequal(im, [0 -1 0]));
 assert(isequal(iv, -20));
 % test end
 
+lAcc = automaton.addLocation(loc_acc);
+lBrake = automaton.addLocation(loc_brake);
+lIdle = automaton.addLocation(loc_idle);
+
 %-----------------------------------------------%
 %              acc -> brake
 %-----------------------------------------------%
 
 tran1 = MHyProTransition();
-tran1.setAggregation(0);
-tran1.setSource(loc_acc);
-tran1.setTarget(loc_brake);
+tran1.setAggregation(1);
+tran1.setSource(lAcc);
+tran1.setTarget(lBrake);
 tran1.setLabels({MHyProLabel('tran1')});
-loc_acc.addTransition(tran1);
+lAcc.addTransition(tran1);
 
 % test
-locT = loc_acc.getTransitions();
+locT = lAcc.getTransitions();
 assert(length(locT) == 1);
 lab1 = locT{1}.getLabels();
 assert(isequal(lab1{1}.getName(), 'tran1'));
@@ -109,14 +113,14 @@ guard2 = MHyProCondition();
 guard2.setMatrix([0 -1 0]);
 guard2.setVector(-20);
 tran2.setGuard(guard2);
-tran2.setAggregation(0);
-tran2.setSource(loc_brake);
-tran2.setTarget(loc_acc);
+tran2.setAggregation(1);
+tran2.setSource(lBrake);
+tran2.setTarget(lAcc);
 tran2.setLabels({MHyProLabel('tran2')});
-loc_brake.addTransition(tran2);
+lBrake.addTransition(tran2);
 
 % test
-locT = loc_brake.getTransitions();
+locT = lBrake.getTransitions();
 assert(length(locT) == 1);
 lab1 = locT{1}.getLabels();
 assert(isequal(lab1{1}.getName(), 'tran2'));
@@ -124,8 +128,8 @@ g = tran2.getGuard();
 assert(g == guard2);
 s = tran2.getSource();
 t = tran2.getTarget();
-assert(s == loc_brake);
-assert(t == loc_acc);
+assert(s == lBrake);
+assert(t == lAcc);
 % test end
 
 %-----------------------------------------------%
@@ -133,14 +137,14 @@ assert(t == loc_acc);
 %-----------------------------------------------%
 
 tran3 = MHyProTransition();
-tran3.setAggregation(0);
-tran3.setSource(loc_brake);
-tran3.setTarget(loc_idle);
+tran3.setAggregation(1);
+tran3.setSource(lBrake);
+tran3.setTarget(lIdle);
 tran3.setLabels({MHyProLabel('tran3')});
-loc_brake.addTransition(tran3);
+lBrake.addTransition(tran3);
 
 % test
-locT = loc_brake.getTransitions();
+locT = lBrake.getTransitions();
 assert(length(locT) == 2);
 lab1 = locT{1}.getLabels();
 lab2 = locT{2}.getLabels();
@@ -162,14 +166,14 @@ guard4 = MHyProCondition();
 guard4.setMatrix([0 -1 0]);
 guard4.setVector(-20);
 tran4.setGuard(guard4);
-tran4.setAggregation(0);
-tran4.setSource(loc_idle);
-tran4.setTarget(loc_acc);
+tran4.setAggregation(1);
+tran4.setSource(lIdle);
+tran4.setTarget(lAcc);
 tran4.setLabels({MHyProLabel('tran4')});
-loc_idle.addTransition(tran4);
+lIdle.addTransition(tran4);
 
 % test
-locT = loc_idle.getTransitions();
+locT = lIdle.getTransitions();
 assert(length(locT) == 1);
 lab1 = locT{1}.getLabels();
 assert(isequal(lab1{1}.getName(), 'tran4'));
@@ -179,9 +183,7 @@ assert(s == loc_idle);
 assert(t == loc_acc);
 % test end
 
-automaton.addLocation(loc_acc);
-automaton.addLocation(loc_brake);
-automaton.addLocation(loc_idle);
+
 
 %-----------------------------------------------%
 %                 Initial set
@@ -191,7 +193,7 @@ automaton.addLocation(loc_idle);
 boxVector = [13.88; -13.88; 50; -50; 0; 0];
 boxMatrix = [1 0 0; -1 0 0; 0 1 0; 0 -1 0; 0 0 1; 0 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
-automaton.addInitialState(loc_acc, initialCond);
+automaton.addInitialState(lAcc, initialCond);
 
 %test
 locs = automaton.getLocations();
@@ -211,7 +213,7 @@ assert(iLoc == loc_acc);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.1, 'timeBound', 3, 'jumpDepth', 1);
+settings = struct('timeStep', 0.1, 'timeBound', 10, 'jumpDepth', 10);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);

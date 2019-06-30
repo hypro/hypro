@@ -25,6 +25,7 @@ classdef MHyProReach < handle
         end
         
         function out = computeForwardReachability(obj)
+            test = MHyPro(12, 3, obj.ObjectHandle);
             flowpipes = MHyPro(12, 3, obj.ObjectHandle);
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
@@ -87,7 +88,7 @@ classdef MHyProReach < handle
                     
 %                     %Plot points
 %                     point = vertices(:,1);
-%                     scatter(point(3),point(2));
+%                     scatter(point(1),point(6));
                     
                     hold on
                 end 

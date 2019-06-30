@@ -124,6 +124,12 @@ f = loc_on_on.getLinearFlow();
 fm = f.getFlowMatrix();
 assert(isequal([-1 0 3; 1 -1 -5; 0 0 0], fm))
 
+
+l_ff = automaton.addLocation(loc_off_off);
+l_fn = automaton.addLocation(loc_off_on);
+l_nf = automaton.addLocation(loc_on_off);
+l_nn = automaton.addLocation(loc_on_on);
+
 %-----------------------------------------------%
 %              off_off --> on_off
 %-----------------------------------------------%
@@ -138,13 +144,13 @@ guard1.setVector(guardVector);
 reset1 = MHyProReset();
 reset1.setMatrix(eye(2));
 reset1.setVector([0; 0]);
-tran1.setAggregation(0);
+tran1.setAggregation(1);
 tran1.setGuard(guard1);
 tran1.setReset(reset1);
-tran1.setSource(loc_off_off);
-tran1.setTarget(loc_on_off);
+tran1.setSource(l_ff);
+tran1.setTarget(l_nf);
 tran1.setLabels({MHyProLabel('tran1')});
-loc_off_off.addTransition(tran1);
+l_ff.addTransition(tran1);
 
 
 % CHECK
@@ -160,7 +166,7 @@ assert(isequal(tloc.getName(), loc_on_off.getName()));
 tres = tran1.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_off_off.getTransitions();
+locT = l_ff.getTransitions();
 assert(length(locT) == 1);
 tLabs = locT{1}.getLabels();
 assert(length(tLabs) == 1);
@@ -181,14 +187,14 @@ guard2.setVector(guardVector);
 reset2 = MHyProReset();
 reset2.setMatrix(eye(2));
 reset2.setVector([0; 0]);
-tran2.setAggregation(0);
+tran2.setAggregation(1);
 tran2.setGuard(guard2);
 tran2.setReset(reset2);
-tran2.setSource(loc_off_off);
-tran2.setTarget(loc_off_on);
+tran2.setSource(l_ff);
+tran2.setTarget(l_fn);
 tran2.setLabels({MHyProLabel('tran2')});
 
-loc_off_off.addTransition(tran2);
+l_ff.addTransition(tran2);
 
 % CHECK
 % disp('Aggregation');
@@ -203,7 +209,7 @@ assert(isequal(tloc.getName(), loc_off_on.getName()));
 tres = tran2.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_off_off.getTransitions();
+locT = l_ff.getTransitions();
 assert(length(locT) == 2);
 tLabs1 = locT{1}.getLabels();
 tLabs2 = locT{2}.getLabels();
@@ -226,14 +232,14 @@ guard3.setVector(guardVector);
 reset3 = MHyProReset();
 reset3.setMatrix(eye(2));
 reset3.setVector([0; 0]);
-tran3.setAggregation(0);
+tran3.setAggregation(1);
 tran3.setReset(reset3);
 tran3.setGuard(guard3);
-tran3.setSource(loc_on_off);
-tran3.setTarget(loc_off_on);
+tran3.setSource(l_nf);
+tran3.setTarget(l_fn);
 tran3.setLabels({MHyProLabel('tran3')});
 
-loc_on_off.addTransition(tran3);
+l_nf.addTransition(tran3);
 
 % CHECK
 % disp('Aggregation');
@@ -248,7 +254,7 @@ assert(isequal(tloc.getName(), loc_off_on.getName()));
 tres = tran3.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_on_off.getTransitions();
+locT = l_nf.getTransitions();
 assert(length(locT) == 1);
 tLabs = locT{1}.getLabels();
 assert(length(tLabs) == 1);
@@ -266,14 +272,14 @@ guardMatrix = [0 1; 0 -1];
 guard4.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard4.setVector(guardVector);
 
-tran4.setAggregation(0);
+tran4.setAggregation(1);
 tran4.setReset(reset3);
 tran4.setGuard(guard4);
-tran4.setSource(loc_off_on);
-tran4.setTarget(loc_off_off);
+tran4.setSource(l_fn);
+tran4.setTarget(l_ff);
 tran4.setLabels({MHyProLabel('tran4')});
 
-loc_off_on.addTransition(tran4);
+l_fn.addTransition(tran4);
 
 % CHECK
 % disp('Aggregation');
@@ -288,7 +294,7 @@ assert(isequal(tloc.getName(), loc_off_off.getName()));
 tres = tran4.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_off_on.getTransitions();
+locT = l_fn.getTransitions();
 assert(length(locT) == 1);
 tLabs = locT{1}.getLabels();
 assert(length(tLabs) == 1);
@@ -306,14 +312,14 @@ guardMatrix = [1 0; -1 0];
 guard5.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard5.setVector(guardVector);
 
-tran5.setAggregation(0);
+tran5.setAggregation(1);
 tran5.setGuard(guard5);
 tran5.setReset(reset3);
-tran5.setSource(loc_off_on);
-tran5.setTarget(loc_on_on);
+tran5.setSource(l_fn);
+tran5.setTarget(l_nn);
 tran5.setLabels({MHyProLabel('tran5')});
 
-loc_off_on.addTransition(tran5);
+l_fn.addTransition(tran5);
 
 % CHECK
 % disp('Aggregation');
@@ -328,7 +334,7 @@ assert(isequal(tloc.getName(), loc_on_on.getName()));
 tres = tran5.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_off_on.getTransitions();
+locT = l_fn.getTransitions();
 assert(length(locT) == 2);
 tLabs1 = locT{1}.getLabels();
 tLabs2 = locT{2}.getLabels();
@@ -349,14 +355,14 @@ guardMatrix = [1 0; -1 0];
 guard6.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard6.setVector(guardVector);
 
-tran6.setAggregation(0);
+tran6.setAggregation(1);
 tran6.setGuard(guard6);
 tran6.setReset(reset3);
-tran6.setSource(loc_on_on);
-tran6.setTarget(loc_off_on);
+tran6.setSource(l_nn);
+tran6.setTarget(l_fn);
 tran6.setLabels({MHyProLabel('tran6')});
 
-loc_on_on.addTransition(tran6);
+l_nn.addTransition(tran6);
 
 % CHECK
 % disp('Aggregation');
@@ -371,7 +377,7 @@ assert(isequal(tloc.getName(), loc_off_on.getName()));
 tres = tran6.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_on_on.getTransitions();
+locT = l_nn.getTransitions();
 assert(length(locT) == 1);
 tLabs = locT{1}.getLabels();
 assert(length(tLabs) == 1);
@@ -389,14 +395,14 @@ guardMatrix = [0 1; 0 -1];
 guard7.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard7.setVector(guardVector);
 
-tran7.setAggregation(0);
+tran7.setAggregation(1);
 tran7.setGuard(guard7);
 tran7.setReset(reset3);
-tran7.setSource(loc_on_on);
-tran7.setTarget(loc_on_off);
+tran7.setSource(l_nn);
+tran7.setTarget(l_nf);
 tran7.setLabels({MHyProLabel('tran7')});
 
-loc_on_on.addTransition(tran7);
+l_nn.addTransition(tran7);
 
 % CHECK
 % disp('Aggregation');
@@ -411,7 +417,7 @@ assert(isequal(tloc.getName(), loc_on_off.getName()));
 tres = tran7.getReset();
 assert(isequal(tres.getMatrix(1), eye(2)));
 assert(isequal(tres.getVector(1), [0;0]));
-locT = loc_on_on.getTransitions();
+locT = l_nn.getTransitions();
 assert(length(locT) == 2);
 tLabs1 = locT{1}.getLabels();
 tLabs2 = locT{2}.getLabels();
@@ -430,11 +436,6 @@ boxVector = [10.5; -10.5; 1; -1;];
 boxMatrix = [1 0; -1 0; 0 1; 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(loc_off_on, initialCond);
-
-automaton.addLocation(loc_off_off);
-automaton.addLocation(loc_off_on);
-automaton.addLocation(loc_on_off);
-automaton.addLocation(loc_on_on);
 
 % CHECK
 initState = automaton.getInitialStates();
@@ -455,10 +456,10 @@ assert(isequal(aloc{4}.getName(), loc_on_on.getName()));
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.1, 'timeBound', 10, 'jumpDepth', 1);
+settings = struct('timeStep', 0.1, 'timeBound', 10, 'jumpDepth', 5);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(2);
+reach.setRepresentationType(0);
 reach.settings();
 
 tic;

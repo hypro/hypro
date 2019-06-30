@@ -46,7 +46,11 @@ boxVector = [10.2; -10; 0; 0];
 boxMatrix = [1 0; -1 0; 0 1; 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 
+l = automaton.addLocation(loc);
+
 automaton.addInitialState(loc, initialCond);
+
+
 
 % cpy = MHyProHAutomaton(automaton);
 
