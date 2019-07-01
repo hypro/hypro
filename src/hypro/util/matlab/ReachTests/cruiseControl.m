@@ -65,8 +65,8 @@ loc_3.setInvariant(inv_3);
 loc_4 = MHyProLocation();
 loc_4.setName('loc4');
 
-% Set flow: v' = -t -2.5 x' = 0 t' = 0.5
-flow_4 = [0 0 -1 -2.5;...
+% Set flow: v' = -t -1.2 x' = 0 t' = 0.5
+flow_4 = [0 0 -1 -1.2;...
           0 0 0 0;...
           0 0 0 0.5;...
           0 0 0 0];
@@ -127,10 +127,10 @@ l6 = automaton.addLocation(loc_6);
 %              loc1 --> loc2
 %-----------------------------------------------%
 tran1 = MHyProTransition();
-% Set guard: t = 2.5 
+% Set guard: t = 2.5 & 15 <= v <= 40
 guard1 = MHyProCondition();
-guard1.setMatrix([0 0 -1; 0 0 1]); 
-guard1.setVector([-2.5;2.5]);
+guard1.setMatrix([0 0 -1; 0 0 1; 0 0 -1; 0 0 1]); 
+guard1.setVector([-2.5;2.5;-15;40]);
 
 tran1.setAggregation(1);
 tran1.setGuard(guard1);
@@ -145,10 +145,10 @@ l1.addTransition(tran1);
 %              loc1 --> loc4
 %-----------------------------------------------%
 tran2 = MHyProTransition();
-% Set guard: 15 <= v <= 16
+% Set guard: 15 <= v <= 16 & 0 <= t <= 2.5
 guard2 = MHyProCondition();
-guard2.setMatrix([-1 0 0; 1 0 0]); 
-guard2.setVector([-15;16]);
+guard2.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
+guard2.setVector([-15;16;0;2.5]);
 
 tran2.setAggregation(1);
 tran2.setGuard(guard2);
@@ -229,10 +229,10 @@ l3.addTransition(tran5);
 %              loc4 --> loc1
 %-----------------------------------------------%
 tran6 = MHyProTransition();
-% Set guard: 18 <= v <= 20
+% Set guard: 18 <= v <= 20 & 0 <= t <= 1.3
 guard6 = MHyProCondition();
-guard6.setMatrix([-1 0 0; 1 0 0]); 
-guard6.setVector([-18;20]);
+guard6.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
+guard6.setVector([-18;20;0;1.3]);
 
 tran6.setAggregation(1);
 tran6.setGuard(guard6);
@@ -250,10 +250,10 @@ l4.addTransition(tran6);
 %              loc4 --> loc5
 %-----------------------------------------------%
 tran7 = MHyProTransition();
-% Set guard:  5 <= v <= 11
+% Set guard:  5 <= v <= 11 6 0 <= t <= 1.3
 guard7 = MHyProCondition();
-guard7.setMatrix([-1 0 0; 1 0 0]); 
-guard7.setVector([-5;11]);
+guard7.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
+guard7.setVector([-5;11;0;1.3]);
 
 tran7.setAggregation(1);
 tran7.setGuard(guard7);
@@ -289,10 +289,10 @@ l4.addTransition(tran71);
 %              loc5 --> loc4
 %-----------------------------------------------%
 tran8 = MHyProTransition();
-% Set guard: 13 <= v <= 15
+% Set guard: 13 <= v <= 15 & -500 <= x <= 500
 guard8 = MHyProCondition();
-guard8.setMatrix([-1 0 0; 1 0 0]); 
-guard8.setVector([-13;15]);
+guard8.setMatrix([-1 0 0; 1 0 0; 0 -1 0; 0 1 0]); 
+guard8.setVector([-13;15; 500;500]);
 
 tran8.setAggregation(1);
 tran8.setGuard(guard8);
@@ -310,10 +310,10 @@ l5.addTransition(tran8);
 %              loc5 --> loc6
 %-----------------------------------------------%
 tran9 = MHyProTransition();
-% Set guard:  -15 <= v <= -14
+% Set guard:  -15 <= v <= -14 & -500 <= x <= 500
 guard9 = MHyProCondition();
-guard9.setMatrix([-1 0 0; 1 0 0]); 
-guard9.setVector([15;-14]);
+guard9.setMatrix([-1 0 0; 1 0 0; 0 -1 0; 0 1 0]); 
+guard9.setVector([15;-14;500;500]);
 
 tran9.setAggregation(1);
 tran9.setGuard(guard9);
@@ -328,10 +328,10 @@ l5.addTransition(tran9);
 %              loc6 --> loc5
 %-----------------------------------------------%
 tran10 = MHyProTransition();
-% Set guard:-6 <= v <= -5
+% Set guard:-6 <= v <= -5 & -500 <= x <= 500
 guard10 = MHyProCondition();
-guard10.setMatrix([-1 0 0; 1 0 0]); 
-guard10.setVector([6;-5]);
+guard10.setMatrix([-1 0 0; 1 0 0; 0 -1 0; 0 1 0]); 
+guard10.setVector([6;-5; 500;500]);
 
 tran10.setAggregation(1);
 tran10.setGuard(guard10);
