@@ -4,7 +4,7 @@ sim = 0;
 reacha = 1;
 
 % Load model
-if 0
+if 1
     % Polytope
     HA = car_ha();
     options.enclosureEnables = [3 5];
