@@ -70,19 +70,34 @@ loc_2 = MHyProLocation();
 loc_2.setName('loc2');
 
 % Set flow: 
-flow_1 = zeroDynSys('zeroDyn',0);
+flow_2 = zeros(5);
     
-loc_1.setFlow(flow_1);
-
+loc_2.setFlow(flow_2);
 % Set inv:
-invMat = [-C1(1,:); -C2(1,:); -C1(3,:)];
-invVec = [d1(1); d2(1); d1(3)];
+invMat = [-1*eye(5);eye(5)];
+invVec = dist * ones(10,1);
 invVec = invVec + ones(length(dinv),1)*1e-3;
 inv_1 = MHyProCondition(invMat, invVec);
 loc_1.setInvariant(inv_1);
 
 
+%-----------------------------------------------%
+%              loc1 --> loc1
+%-----------------------------------------------%
+tran1 = MHyProTransition();
+% Set guard:
+guard2 = MHyProCondition();
+guard2.setMatrix([1 0 0 0 0; -1 0 0 0 0]); 
+guard2.setVector([2;-2]);
 
+tran2.setAggregation(1);
+tran2.setGuard(guard2);
+tran2.setSource(l2);
+tran2.setTarget(l3);
+tran2.setReset(dummy_reset);
+tran2.setLabels({MHyProLabel('tran2')});
+
+l2.addTransition(tran2);
 
 
 
