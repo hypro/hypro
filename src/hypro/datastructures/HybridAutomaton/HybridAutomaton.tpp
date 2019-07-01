@@ -232,14 +232,16 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 }
 
 template<typename Number>
-void HybridAutomaton<Number>::addLocation(const Location<Number>& location) {
-	this->addLocation(std::move(std::make_unique<Location<Number>>(location)));
+Location<Number>* HybridAutomaton<Number>::addLocation(const Location<Number>& location) {
+	return this->addLocation(std::move(std::make_unique<Location<Number>>(location)));
 }
 
 template<typename Number>
-void HybridAutomaton<Number>::addLocation(std::unique_ptr<Location<Number>>&& location) {
+Location<Number>* HybridAutomaton<Number>::addLocation(std::unique_ptr<Location<Number>>&& location) {
 	assert(location != nullptr);
     mLocations.emplace_back(std::move(location));
+	assert(location.get() == mLocations.back().get());
+	return mLocations.back().get();
 }
 
 /*

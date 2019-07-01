@@ -152,8 +152,8 @@ class HybridAutomaton
      * @brief      Extension function.
      */
     ///@{
-    void addLocation(const Location<Number>& location);
-    void addLocation(std::unique_ptr<Location<Number>>&& location);
+    Location<Number>* addLocation(const Location<Number>& location);
+    Location<Number>* addLocation(std::unique_ptr<Location<Number>>&& location);
     //void addTransition(const Transition<Number>& transition);
     void addTransition(std::unique_ptr<Transition<Number>>&& transition);
     void addInitialState(const Location<Number>* loc, const Condition<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
