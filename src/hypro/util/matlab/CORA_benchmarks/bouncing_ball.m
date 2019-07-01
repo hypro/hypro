@@ -1,62 +1,70 @@
-function res = bouncing_ball()
+function completed = bouncing_ball
 
 %set options---------------------------------------------------------------
-options.x0 = [10.1; 0.0];
-options.R0 = zonotope([options.x0, 0.1 * eye(2)]);
+options.x0 = [10.1; 0]; %initial state for simulation
+options.R0 = zonotope([options.x0, diag([0.1, 0])]); %initial state for reachability analysis
+options.startLoc = 1; %initial location
+options.finalLoc = 0; %0: no final location
+options.tStart = 0; %start time
+options.tFinal = 50; %final time
+options.timeStepLoc{1} = 0.1; %time step size for reachable set computation in location 1
 options.taylorTerms = 1;
 options.zonotopeOrder = 1;
 options.polytopeOrder = 1;
+options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.guardIntersect = 'polytope';
-options.enclosureEnables = [3 5];
+options.enclosureEnables = [3 5]; %choose enclosure method(s)
 options.originContained = 0;
-options.startLoc = 1;
-options.finalLoc = 0;
-options.tStart = 0;
-options.tFinal = 3.2;
-options.timeStepLoc{1}= 0.01;
-
-%define flows--------------------------------------------------------------
-
-A1 = [0 1 ; 0 0 ];
-B1 = zeros(2);
-c1 = [0 ;  -9.81 ];
-flow1 = linearSys('linearSys1', A1, B1, c1);
+%--------------------------------------------------------------------------
 
 
-%define invariants---------------------------------------------------------
+%specify hybrid automaton--------------------------------------------------
+%specify linear system of bouncing ball
+A = [0 1; 0 0];
+B = eye(2); % no loss of generality to specify B as the identity matrix
+c = [0; -9.81];
+linSys = linearSys('linearSys',A,B,c);
 
-inv_l =  mptPolytope(struct('A', [-1 0 ], 'b', 0));
+%invariant
+inv = halfspace([-1 0], 0);
+%guard sets
+guardA = [1 0; -1 0; 0 -1];
+guardb = [0;0;0];
+guardOpt = struct('A', guardA, 'b', guardb);
+guard = mptPolytope(guardOpt);
+%resets
+reset.A = [1 0; 0 -0.9]; reset.b = zeros(2,1);
+%transitions
+trans{1} = transition(guard,reset,1,'a','b'); %--> next loc: 1; 'a', 'b' are dummies
+%specify location
+loc{1} = location('loc1',1,inv,trans,linSys); 
+%specify hybrid automata
+HA = hybridAutomaton(loc); % for "geometric intersection"
+%--------------------------------------------------------------------------
 
-%define transitions--------------------------------------------------------
+%set input:
+options.uLoc{1} = [0; 0]; %input for simulation
+options.uLocTrans{1} = options.uLoc{1}; %input center for reachability analysis
+options.Uloc{1} = zonotope(zeros(2,1)); %input deviation for reachability analysis
 
-%  l -> l
-guard =  mptPolytope(struct('A', [1 0 ; -1 0; 0 1], 'b', [0;0;0]));
-%    v := -0.75*v 
-reset.A = [1 0 ; 0 -0.75 ];
-reset.b = [0; 0];
-trans_l{1} = transition(guard, reset, 1, 'l', 'l');
+%simulate hybrid automaton
+%HA = simulate(HA,options); 
 
-%define locations----------------------------------------------------------
+%compute reachable set
+[HA] = reach(HA,options);
 
-options.uLoc{1} = 0;
-options.uLocTrans{1} = 0;
-options.Uloc{1} = zonotope(0);
-
-
-loc{1} = location('l', 1, inv_l, trans_l, flow1);
-
-%define hybrid automaton---------------------------------------------------
-
-HA = hybridAutomaton(loc);
-[HA] = reach(HA, options);
-
-figure
+%choose projection and plot------------------------------------------------
+figure 
 hold on
 options.projectedDimensions = [1 2];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+%plot(HA,'simulation',options); %plot simulation
+%--------------------------------------------------------------------------
 
-res = 1;
+%example completed
+completed = 1;
+
