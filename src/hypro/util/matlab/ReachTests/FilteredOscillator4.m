@@ -234,7 +234,7 @@ assert(t == l2);
 %-----------------------------------------------%
 
 tran4 = MHyProTransition();
-% Set guard: x -= 0 & 0.714286x + y = 0
+% Set guard: x <= 0 & 0.714286x + y = 0
 guardMatrix = [1 0 0 0 0 0; 0.714286 1 0 0 0 0; -0.714286 -1 0 0 0 0];
 guard4 = MHyProCondition();
 guard4.setMatrix(guardMatrix); % First set the matrix then the vector!?
@@ -291,7 +291,7 @@ assert(iLoc == l3);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.001, 'timeBound', 1, 'jumpDepth', 5);
+settings = struct('timeStep', 0.01, 'timeBound', 1, 'jumpDepth', 20);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -301,7 +301,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 6];
+dim = [1 3];
 reach.plot(flowpipes, dim);
 
 end
