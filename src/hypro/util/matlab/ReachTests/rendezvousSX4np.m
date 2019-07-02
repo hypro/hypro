@@ -140,7 +140,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 3];
+dim = [3 4];
 reach.plot(flowpipes, dim);
 
 end
