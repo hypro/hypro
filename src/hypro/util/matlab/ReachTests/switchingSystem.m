@@ -1,4 +1,4 @@
-function swithchingSystem
+function switchingSystem()
 
 % vars: [x1,x2,x3,x4,x5]
 
@@ -206,7 +206,7 @@ tran4 = MHyProTransition();
 % Set guard: x1 = 0 
 guard4 = MHyProCondition();
 guard4.setMatrix([1 0 0 0 0; -1 0 0 0 0]); 
-guard4.setVector([0;-0]);
+guard4.setVector([0;0]);
 
 tran4.setAggregation(1);
 tran4.setGuard(guard4);

@@ -1,30 +1,31 @@
-function complete = cruise_control()
+function complete = linear_switch()
 
 sim = 0;
 reacha = 1;
 
 % Load model
-HA = cruise_control_ha();
+HA = linear_switch_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [12.5;0;1.25];
+Zdelta = 1e-4*ones(5,1);
 
 % options
-Zcenter = [27.5;0;1.25];
+Zcenter = [3.1;4;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.taylorTerms = 1;
-options.zonotopeOrder = 2;
-options.polytopeOrder = 1;
+
+options.taylorTerms = 10;
+options.zonotopeOrder = 20;
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
 
 %set input:
-for i = 1:6
-    options.timeStepLoc{i} = 0.1;
+for i = 1:5
+    options.timeStepLoc{i} = 0.001;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -34,9 +35,9 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 100;
+options.tFinal = 2;
 
-dim = 3;
+dim = 5;
 vis = 1;
 
 % Simulation --------------------------------------------------------------
@@ -68,7 +69,7 @@ if sim
     figure 
     hold on
     box on
-    options.projectedDimensions = [1 2];
+    options.projectedDimensions = [1 3];
     options.plotType = {'b','m','g'};
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     for i = 1:length(simRes)
@@ -97,7 +98,7 @@ if reacha
 if vis    
     figure 
     hold on
-    options.projectedDimensions = [1 2];
+    options.projectedDimensions = [1 3];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set

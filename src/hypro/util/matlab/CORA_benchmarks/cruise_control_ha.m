@@ -30,7 +30,7 @@ dynamics = linearSys('linearSys', dynA, dynB, dync);
 %   v >= 15 & v <= 40 &
 %    t >= 0 & t<= 2.5
 invA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
-invb = [-15;40;-0;2.5];
+invb = [-15;40;0;2.5];
 invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
@@ -43,11 +43,9 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 2.5 & v >= 15 & v <= 40
-guardA = [-1,0,0;1,0,0];
-guardb = [-15;40];
-guardAe = [0,0,1];
-guardbe = [2.5];
-guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
+guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+guardb = [-15;40;-2.5;2.5];
+guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 trans{1} = transition(guard, reset, 2, 'dummy', 'names');
@@ -99,11 +97,9 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 2.5 & v >= 15 & v <= 16
-guardA = [-1,0,0;1,0,0];
-guardb = [-15;16];
-guardAe = [0,0,1];
-guardbe = [2.5];
-guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
+guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+guardb = [-15;16;-2.5;2.5];
+guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 trans{1} = transition(guard, reset, 4, 'dummy', 'names');
@@ -138,11 +134,9 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 1.3 & v >= 18 & v <= 20
-guardA = [-1,0,0;1,0,0];
-guardb = [-18;20];
-guardAe = [0,0,1];
-guardbe = [1.3];
-guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
+guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+guardb = [-18;20;-2.5;2.5];
+guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 trans{1} = transition(guard, reset, 1, 'dummy', 'names');
@@ -155,11 +149,9 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 1.3 & v >= 5 & v <= 11
-guardA = [-1,0,0;1,0,0];
-guardb = [-5;11];
-guardAe = [0,0,1];
-guardbe = [1.3];
-guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
+guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+guardb = [-5;11;-1.3;1.3];
+guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 trans{2} = transition(guard, reset, 5, 'dummy', 'names');
