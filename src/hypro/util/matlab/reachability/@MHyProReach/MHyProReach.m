@@ -139,6 +139,11 @@ classdef MHyProReach < handle
             plot(pgon,'FaceColor',[0.2 0.55 0.74], 'EdgeColor', [0.380, 0.482, 0.537]);           
         end
         
+        function plotBadStates(obj, normalMat, offsetVec, dims)
+             %???
+            
+        end
+        
     end
     
 end

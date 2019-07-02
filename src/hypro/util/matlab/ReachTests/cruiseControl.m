@@ -345,6 +345,30 @@ tran10.setLabels({MHyProLabel('tran10')});
 
 l6.addTransition(tran10);
 
+%-----------------------------------------------%
+%                 Bad States
+%-----------------------------------------------%
+
+% unsafe: l1,l2,l3,l4,l5,l6: x >= 146
+
+badState = MHyProCondition();
+badState.setMatrix([0 -1 0]);
+badState.setVector(-146);
+badStates(1).loc = l1;
+badStates(1).cond = badState;
+badStates(2).loc = l2;
+badStates(2).cond = badState;
+badStates(3).loc = l3;
+badStates(3).cond = badState;
+badStates(4).loc = l4;
+badStates(4).cond = badState;
+badStates(5).loc = l5;
+badStates(5).cond = badState;
+badStates(6).loc = l6;
+badStates(6).cond = badState;
+
+automaton.setLocalBadStates(badStates);
+
 
 %-----------------------------------------------%
 %                 Initial set
