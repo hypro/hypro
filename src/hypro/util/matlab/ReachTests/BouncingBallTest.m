@@ -15,7 +15,7 @@ inv = MHyProCondition(inv_mat, inv_vec);
 loc.setInvariant(inv);
 loc.setName('loc1');
 
-% CHECK
+% TEST
 m = inv.getMatrix();
 v = inv.getVector();
 assert(isequal(m, inv_mat));
@@ -25,17 +25,19 @@ im = i.getMatrix();
 iv = i.getVector();
 assert(isequal(im, inv_mat));
 assert(isequal(iv, inv_vec));
+% TEST END
 
 % Set flow:
 % x' = v v' = -9.81
 flowMatrix = [0 1 0; 0 0 -9.81; 0 0 0];
 loc.setFlow(flowMatrix);
 
-% CHECK
+% TEST
 f = loc.getLinearFlow();
 fm = f.getFlowMatrix();
 disp('------------------');
 assert(isequal(flowMatrix, fm));
+% TEST END
 
 % Set guard:
 % x = 0 or v > 0
@@ -44,11 +46,12 @@ guardVector = [0;0;0];
 guard.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard.setVector(guardVector);
 
-% CHECK
+% TEST
 gm = guard.getMatrix();
 gv = guard.getVector();
 assert(isequal(gm, guardMatrix));
 assert(isequal(gv, guardVector));
+% TEST END
 
 % Set reset
 % x:= x v:= -0.9v
@@ -57,12 +60,12 @@ linReset = [1 0; 0 -0.9];
 reset.setMatrix(linReset);
 reset.setVector(constReset);
 
-% CHECK
+% TEST
 rm = reset.getMatrix(1);
 rv = reset.getVector(1);
 assert(isequal(rm, linReset));
 assert(isequal(rv, constReset));
-
+% TEST END
 
 % Setup transition
 %tran.setAggregation(0);
@@ -74,7 +77,7 @@ tran.setLabels({MHyProLabel('t1')});
 
 loc.addTransition(tran);
 
-% CHECK
+% TEST
 % disp('Aggregation');
 % tran.getAggregation()
 tg = tran.getGuard();
@@ -87,12 +90,13 @@ assert(isequal(tloc.getName(), loc.getName()));
 tres = tran.getReset();
 assert(isequal(tres.getMatrix(1), linReset));
 assert(isequal(tres.getVector(1), constReset));
-
 locT = loc.getTransitions();
 assert(length(locT) == 1);
 tLabs = locT{1}.getLabels();
 assert(length(tLabs) == 1);
 assert(isequal(tLabs{1}.getName(), 't1'));
+% TEST END
+
 
 % Create initial set
 % x = [10, 10.2] v = 0
@@ -102,14 +106,13 @@ initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(loc, initialCond);
 automaton.addLocation(loc);
 
-% CHECK
+% TEST
 initState = automaton.getInitialStates();
 il = initState(1).loc;
 ic = initState(1).cond;
 assert(isequal(il.getName(), loc.getName()));
 assert(isequal(ic.getMatrix(), boxMatrix));
 assert(isequal(ic.getVector(), boxVector));
-
 aloc = automaton.getLocations();
 assert(length(aloc) == 1);
 assert(isequal(aloc{1}.getName(), loc.getName()));
@@ -118,13 +121,14 @@ flm = fl.getFlowMatrix();
 alocf = aloc{1}.getLinearFlow();
 alocfm = alocf.getFlowMatrix();
 assert(isequal(flm, alocfm));
+% TEST END
 
 % Reachability
 
-settings = struct('timeStep', 0.01, 'timeBound', 3.2, 'jumpDepth', 3);
+settings = struct('timeStep', 0.01, 'timeBound', 3.2, 'jumpDepth', 2);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(2);
+reach.setRepresentationType(0);
 reach.settings();
 
 tic;

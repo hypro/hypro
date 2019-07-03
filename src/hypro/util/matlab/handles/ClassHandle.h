@@ -32,6 +32,14 @@ inline mxArray *convertPtr2Mat(T* ptr){
 }
 
 template<class T>
+inline mxArray *convertSmartPtr2Mat(T* ptr){
+    mxArray *out = mxCreateNumericMatrix(1, 1, mxUINT64_CLASS, mxREAL);
+    *((uint64_t *)mxGetData(out)) = reinterpret_cast<uint64_t>(new ClassHandle<T>(ptr));
+    // mexPrintf("convertPtr2Mat %p\n", out);
+    return out;
+}
+
+template<class T>
 inline ClassHandle<T> *convertMat2HandlePtr(const mxArray* in){
     if (mxGetNumberOfElements(in) != 1 || mxGetClassID(in) != mxUINT64_CLASS || mxIsComplex(in))
         mexErrMsgTxt("Input must be a real uint64 scalar.");
@@ -53,6 +61,11 @@ template<class T>
 inline void destroyObject(const mxArray*in){
     delete convertMat2HandlePtr<T>(in);
     mexUnlock();
+}
+
+template<class T>
+inline void destroySmartObject(const mxArray*in){
+    delete convertMat2HandlePtr<T>(in);
 }
 
 #endif 

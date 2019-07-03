@@ -9,8 +9,14 @@ classdef MHyProLocation < handle
         
         % Destructor
         function delete(obj)
-            MHyPro(6, 1, obj.ObjectHandle);
+            try
+               % MHyPro(6, 1, obj.ObjectHandle);
+            catch
+                % ohne mexUnlock
+            end
         end
+        
+        
     end
     
     methods (Access = public)
@@ -50,6 +56,10 @@ classdef MHyProLocation < handle
                 error('MHyProLocation - Constructor: Wrong type of at least one argument.');
             end
          end
+         
+         function deleteLocation(obj)
+            MHyPro(6, 30, obj.ObjectHandle);
+        end
         
         function out = getNumberFlow(obj)
             out = MHyPro(6, 6, obj.ObjectHandle);
@@ -76,8 +86,8 @@ classdef MHyProLocation < handle
         
         function out = getTransitions(obj)
             ptrscell = MHyPro(6, 10, obj.ObjectHandle);
-            out = cell(1, size(ptrscell,2));
-            for i = 1:size(ptrscell,2)
+            out = cell(1, length(ptrscell));
+            for i = 1:length(ptrscell)
                 ptr = ptrscell{i};
                 out{i} = MHyProTransition(ptr);
             end

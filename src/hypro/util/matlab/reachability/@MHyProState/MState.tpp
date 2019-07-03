@@ -31,7 +31,7 @@ void MState::del_state( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	destroyObject<hypro::State_t<double>>( prhs[2] );
 
 	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "delete\n" );
+	//mexPrintf( "delete\n" );
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 

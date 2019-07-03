@@ -112,7 +112,7 @@ void MHybridAutomaton::getLocations( int nlhs, mxArray* plhs[], int nrhs, const 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "getLocations output:\n" );
 	for(int i = 0; i < len; i++){
-		mexPrintf("loc %d: %s\n", i, temp[i]->getName().c_str());
+		mexPrintf("loc %d: %s addr: %d\n", i, temp[i]->getName().c_str(), &temp[i]);
 	}
 	//+++++++++++++TESTING++++++++++++++++++++
 }
@@ -212,6 +212,7 @@ void MHybridAutomaton::getLocalBadStates( int nlhs, mxArray* plhs[], int nrhs, c
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "getLocalBadStates input:\n" );
 	mexPrintf( "mapping size: %d\n", len );
+	
 	//+++++++++++++TESTING++++++++++++++++++++
 }
 
@@ -372,7 +373,9 @@ void MHybridAutomaton::addLocation( int nlhs, mxArray* plhs[], int nrhs, const m
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[3] );
-	autom->addLocation( *loc );
+	hypro::Location<double>* newLocPtr = autom->addLocation( *loc );
+
+	plhs[0] = convertSmartPtr2Mat<hypro::Location<double>>( newLocPtr );
 
 	//+++++++++++++TESTING++++++++++++++++++++
 	mexPrintf( "addLocation input:\n" );

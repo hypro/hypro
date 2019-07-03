@@ -25,6 +25,7 @@ classdef MHyProReach < handle
         end
         
         function out = computeForwardReachability(obj)
+            test = MHyPro(12, 3, obj.ObjectHandle);
             flowpipes = MHyPro(12, 3, obj.ObjectHandle);
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
@@ -82,17 +83,48 @@ classdef MHyProReach < handle
                 
                 for state = 1:num_states
                     currentState = currentFlowpipe{state};
-                    vertices = currentState.vertices(0);
+                    vertices = currentState.vertices(0)
                     obj.plotVertices(vertices, dims);
+                    
+%                     %Plot points
+%                     point = vertices(:,1);
+%                     scatter(point(1),point(6));
+                    
                     hold on
                 end 
                 hold on
             end
         end
         
+%         function plot(obj, flowpipes, dims)
+%             num_flowpipes = length(flowpipes);
+%             figure()
+%             for pipe = 1:num_flowpipes
+%                 currentFlowpipe =  flowpipes{pipe};
+%                 num_states = length(currentFlowpipe);
+%                 disp(['Number of states: ', num2str(num_states)]);
+%                 
+%                 for state = 1:num_states
+%                     currentState = currentFlowpipe{state};
+%                     vertices = currentState.vertices(0);
+%                     %obj.plotVertices(vertices, dims);
+%                     
+%                     %Plot points
+%                     point = vertices(:,1);
+%                     scatter(point(1),point(2));
+%                     
+%                     hold on
+%                 end 
+%                 hold on
+%             end
+%         end
+        
+        
         function plotVertices(obj, vertices, dims)
             %Compute projection
-            temp = vertices(dims(1):dims(2),:);
+            first = vertices(dims(1),:);
+            second = vertices(dims(2),:);
+            temp = [first;second];
             ver = unique(temp.','rows').';
             ver_x = ver(1,:);
             ver_y = ver(2,:);

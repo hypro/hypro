@@ -13,7 +13,7 @@ if 0
 else
     % Zono Girard
     HA = car_ha_zG();
-    options.enclosureEnables = [1 2];
+    options.enclosureEnables = [3 5];
     options.guardIntersect = 'zonoGirard';
     Zdelta = zeros(3,1);
 end
@@ -34,16 +34,18 @@ options.originContained = 0;
 
 %set input:
 for i = 1:3
-    options.timeStepLoc{i} = 0.01;
+    options.timeStepLoc{i} = 0.0001;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
 
+% First location
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 5;
+
 dim = 3;
 vis = 1;
 

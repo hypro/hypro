@@ -51,7 +51,7 @@ invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
 %% equation guard (brake -> acc):
-%   d > 0.020
+%   d > 20
 guardA = [0 -1 0];
 guardb = -20;
 guardOpt = struct('A', guardA, 'b', guardb);
