@@ -287,13 +287,12 @@ namespace hypro {
 						auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
 						if(boost::get<0>(isHPolyBox)){
 							Box<Number> tmpBox(boost::get<1>(isHPolyBox));
-							SupportFunctionNew<Number> newSet(tmpBox);
-							newState.setSet(newSet);
+							tmpSFN = SupportFunctionNew<Number>(tmpBox);
 						} else {
 							HPolytopeT<Number,hypro::Converter<Number>,HPolytopeOptimizerCaching> tmpHPoly(tmpSFN.matrix(), tmpSFN.vector());
-							SupportFunctionNew<Number> newSet(tmpHPoly);
-							newState.setSet(newSet);
+							tmpSFN = SupportFunctionNew<Number>(tmpHPoly);
 						}
+						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(tmpSFN), newState.getSet(i)),i);
 					}
 					if(newState.getSetType(i) == representation_name::support_function) {
 						newState.partiallyReduceRepresentation(i);

@@ -28,7 +28,6 @@ public:
 
 private:
 
-
 	std::shared_ptr<SupportFunctionContent<Number,Setting>> content;
 
 	mutable matrix_t<Number> mMatrix;

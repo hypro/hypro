@@ -163,6 +163,7 @@ class RootGrowNode {
 template<typename Number, typename Converter, typename Setting, typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy> 
 std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const RootGrowNode<Number,Converter,SettingRhs>* in) { 
 
+	assert(in != nullptr);
 	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> clone;
 	RGNData* tmpPtr = in->getData();
 	
@@ -229,7 +230,8 @@ std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const Ro
 					break;
 				}
 				case representation_name::polytope_h: {
-					std::shared_ptr<Leaf<N,C,S,typename C::HPolytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::HPolytope>>(dataLe);		
+					using HPolyWithOptimizerCaching = HPolytopeT<N,C,HPolytopeOptimizerCaching>;
+					std::shared_ptr<Leaf<N,C,S,HPolyWithOptimizerCaching>> leafPtr = std::make_shared<Leaf<N,C,S,HPolyWithOptimizerCaching>>(dataLe);		
 					clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
 					break;
 				}

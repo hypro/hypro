@@ -235,7 +235,7 @@ TYPED_TEST(ConverterTest, toHPolytope)
 
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
-    Converter<TypeParam>::template toSupportFunction<SupportFunctionSetting,SupportFunctionSetting>(this->support);
+    Converter<TypeParam>::template toSupportFunction<SupportFunctionSetting>(this->support);
     Converter<TypeParam>::toSupportFunction(this->hpolytope);
     Converter<TypeParam>::toSupportFunction(this->hpolytope2);
     Converter<TypeParam>::toSupportFunction(this->box);

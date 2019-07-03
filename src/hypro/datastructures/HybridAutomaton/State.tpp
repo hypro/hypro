@@ -147,7 +147,6 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
 	assert(checkConsistency());
 
-
 	if(in.size() == 0 || in.constraints().empty()) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
