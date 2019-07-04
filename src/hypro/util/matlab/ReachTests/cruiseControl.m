@@ -250,7 +250,7 @@ l4.addTransition(tran6);
 %              loc4 --> loc5
 %-----------------------------------------------%
 tran7 = MHyProTransition();
-% Set guard:  5 <= v <= 11 6 0 <= t <= 1.3
+% Set guard:  5 <= v <= 11 & 0 <= t <= 1.3
 guard7 = MHyProCondition();
 guard7.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard7.setVector([-5;11;0;1.3]);
@@ -351,23 +351,23 @@ l6.addTransition(tran10);
 
 % unsafe: l1,l2,l3,l4,l5,l6: x >= 146
 
-badState = MHyProCondition();
-badState.setMatrix([0 -1 0]);
-badState.setVector(-146);
-badStates(1).loc = l1;
-badStates(1).cond = badState;
-badStates(2).loc = l2;
-badStates(2).cond = badState;
-badStates(3).loc = l3;
-badStates(3).cond = badState;
-badStates(4).loc = l4;
-badStates(4).cond = badState;
-badStates(5).loc = l5;
-badStates(5).cond = badState;
-badStates(6).loc = l6;
-badStates(6).cond = badState;
-
-automaton.setLocalBadStates(badStates);
+% badState = MHyProCondition();
+% badState.setMatrix([0 -1 0]);
+% badState.setVector(-146);
+% badStates(1).loc = l1;
+% badStates(1).cond = badState;
+% badStates(2).loc = l2;
+% badStates(2).cond = badState;
+% badStates(3).loc = l3;
+% badStates(3).cond = badState;
+% badStates(4).loc = l4;
+% badStates(4).cond = badState;
+% badStates(5).loc = l5;
+% badStates(5).cond = badState;
+% badStates(6).loc = l6;
+% badStates(6).cond = badState;
+% 
+% automaton.setLocalBadStates(badStates);
 
 
 %-----------------------------------------------%
@@ -394,6 +394,6 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 2];
+dim = [3 1];
 reach.plot(flowpipes, dim);
 end

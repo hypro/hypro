@@ -1,7 +1,7 @@
 function complete = two_tanks()
 
-sim = 0;
-reacha = 1;
+sim = 1;
+reacha = 0;
 
 % Load model
 HA = two_tanks_ha();
@@ -35,7 +35,7 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 1;
+options.tFinal = 2;
 
 dim = 2;
 vis = 1;

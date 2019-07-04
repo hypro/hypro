@@ -1,22 +1,24 @@
 function complete = cruise_control()
 
-sim = 0;
+sim = 1;
 reacha = 1;
 
 % Load model
 HA = cruise_control_ha();
-options.enclosureEnables = [3 5];
+options.enclosureEnables = [5];
 options.guardIntersect = 'polytope';
-Zdelta = [12.5;0;1.25];
 
 % options
+% v = [15, 40] x = [0, 0]  t =[0, 2.5]
 Zcenter = [27.5;0;1.25];
+Zdelta = [1.5;0;1.25];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.taylorTerms = 1;
-options.zonotopeOrder = 2;
-options.polytopeOrder = 1;
+
+options.taylorTerms = 10;
+options.zonotopeOrder = 20;
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -68,7 +70,7 @@ if sim
     figure 
     hold on
     box on
-    options.projectedDimensions = [1 2];
+    options.projectedDimensions = [1 3];
     options.plotType = {'b','m','g'};
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     for i = 1:length(simRes)
@@ -97,7 +99,7 @@ if reacha
 if vis    
     figure 
     hold on
-    options.projectedDimensions = [1 2];
+    options.projectedDimensions = [1 3];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set

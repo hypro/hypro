@@ -46,7 +46,8 @@ reset = struct('A', resetA, 'b', resetb);
 guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
 guardb = [-15;40;-2.5;2.5];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+%guard = mptPolytope(guardOpt);
+guard = interval([15;-inf;2.5], [40; inf;2.5]);
 
 trans{1} = transition(guard, reset, 2, 'dummy', 'names');
 
@@ -60,9 +61,10 @@ reset = struct('A', resetA, 'b', resetb);
 %   t >= 0 & t <= 2.5 &
 %   v >= 15 & v <= 16
 guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
-guardb = [-0;2.5;-15;16];
+guardb = [0;2.5;-15;16];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+%guard = mptPolytope(guardOpt);
+guard = interval([15;-inf;0],[16;inf;2.5]);
 
 trans{2} = transition(guard, reset, 4, 'dummy', 'names');
 
@@ -100,7 +102,8 @@ reset = struct('A', resetA, 'b', resetb);
 guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
 guardb = [-15;16;-2.5;2.5];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+%guard = mptPolytope(guardOpt);
+guard = interval([15;-inf;2.5],[16;inf;2.5]);
 
 trans{1} = transition(guard, reset, 4, 'dummy', 'names');
 
@@ -135,9 +138,10 @@ reset = struct('A', resetA, 'b', resetb);
 %% equation:
 %   t == 1.3 & v >= 18 & v <= 20
 guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
-guardb = [-18;20;-2.5;2.5];
+guardb = [-18;20;-1.3;1.3];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+% guard = mptPolytope(guardOpt);
+guard = interval([18;-inf;1.3],[20;inf;1.3]);
 
 trans{1} = transition(guard, reset, 1, 'dummy', 'names');
 
@@ -152,7 +156,8 @@ reset = struct('A', resetA, 'b', resetb);
 guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
 guardb = [-5;11;-1.3;1.3];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+% guard = mptPolytope(guardOpt);
+guard = interval([5;-inf;1.3],[11;inf;1.3]);
 
 trans{2} = transition(guard, reset, 5, 'dummy', 'names');
 
@@ -181,37 +186,22 @@ inv = mptPolytope(invOpt);
 
 trans = {};
 %% equation:
-%   
-resetA = [1,0,0;0,1,0;0,0,1];
-resetb = [0;0;0];
-reset = struct('A', resetA, 'b', resetb);
-
-%% equation:
-%   t == 1.3 & v >= 5 & v <= 20
-guardA = [-1,0,0;1,0,0];
-guardb = [-5;20];
-guardAe = [0,0,1];
-guardbe = [1.3];
-guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
-guard = mptPolytope(guardOpt);
-
-trans{1} = transition(guard, reset, 3, 'dummy', 'names');
-
-%% equation:
 %   t := 0
 resetA = [1,0,0;0,1,0;0,0,0];
 resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
-%   t >= 0 & t <= 1.3 &
-%   v >= 18 & v <= 20
-guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
-guardb = [-0;1.3;-18;20];
-guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+%   t == 1.3 & v >= 18 & v <= 20
+guardA = [-1,0,0;1,0,0];
+guardb = [-18;20];
+guardAe = [0,0,1];
+guardbe = [1.3];
+guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
+%guard = mptPolytope(guardOpt);
+guard = interval([18;-inf;1.3],[20;inf;1.3]);
 
-trans{2} = transition(guard, reset, 1, 'dummy', 'names');
+trans{1} = transition(guard, reset, 1, 'dummy', 'names');
 
 %% equation:
 %   x := 0
@@ -220,14 +210,32 @@ resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
-%   t >= 0 & t <= 1.3 & 
+%   t >= 0 & t <= 1.3 &
 %   v >= 5 & v <= 11
 guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
 guardb = [-0;1.3;-5;11];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+% guard = mptPolytope(guardOpt);
+guard = interval([5;-inf;0],[11;inf;1.3]);
 
-trans{3} = transition(guard, reset, 5, 'dummy', 'names');
+trans{2} = transition(guard, reset, 5, 'dummy', 'names');
+
+%% equation:
+%
+resetA = [1,0,0;0,1,0;0,0,1];
+resetb = [0;0;0];
+reset = struct('A', resetA, 'b', resetb);
+
+%% equation:
+%   t == 1.3 & 
+%   v >= 5 & v <= 20
+guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
+guardb = [-1.3;1.3;-5;20];
+guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+guard = interval([5;-inf;1.3],[20;inf;1.3]);
+
+trans{3} = transition(guard, reset, 3, 'dummy', 'names');
 
 loc{4} = location('S4',4, inv, trans, dynamics);
 
@@ -265,7 +273,8 @@ reset = struct('A', resetA, 'b', resetb);
 guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
 guardb = [-13;15;500;500];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+% guard = mptPolytope(guardOpt);
+guard = interval([13;-inf;-500],[15;inf;500]);
 
 trans{1} = transition(guard, reset, 4, 'dummy', 'names');
 
@@ -281,7 +290,8 @@ reset = struct('A', resetA, 'b', resetb);
 guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
 guardb = [15;-14;500;500];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+% guard = mptPolytope(guardOpt);
+guard = interval([-15;inf;-500],[-14;inf;500]);
 
 trans{2} = transition(guard, reset, 6, 'dummy', 'names');
 
@@ -320,7 +330,8 @@ reset = struct('A', resetA, 'b', resetb);
 guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
 guardb = [6;-5;500;500];
 guardOpt = struct('A', guardA, 'b', guardb);
-guard = mptPolytope(guardOpt);
+% guard = mptPolytope(guardOpt);
+guard = interval([-6;-inf;-500],[-5;inf;500]);
 
 trans{1} = transition(guard, reset, 5, 'dummy', 'names');
 
