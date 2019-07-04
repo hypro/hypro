@@ -10,23 +10,22 @@ options.guardIntersect = 'polytope';
 
 % options
 % v = [15, 40] x = [0, 0]  t =[0, 2.5]
-Zcenter = [27.5;0;1.25];
-Zdelta = [1.5;0;1.25];
-options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
+Zcenter = interval([15;0;2.5],[15;0;2.5]);
+options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
 
-options.taylorTerms = 10;
+options.taylorTerms = 100;
 options.zonotopeOrder = 20;
 options.polytopeOrder = 10;
-options.errorOrder=2;
+options.errorOrder=10;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
 
 %set input:
 for i = 1:6
-    options.timeStepLoc{i} = 0.1;
+    options.timeStepLoc{i} = 0.0001;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -36,7 +35,7 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 100;
+options.tFinal = 10;
 
 dim = 3;
 vis = 1;

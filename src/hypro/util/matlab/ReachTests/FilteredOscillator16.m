@@ -153,7 +153,8 @@ l4 = automaton.addLocation(loc4);
 
 tran1 = MHyProTransition();
 % Set guard: x = 0 & 0.714286x + y >= 0
-guardMatrix = [1 0 0 0 0 0 0 0 0 0; -1 0 0 0 0 0 0 0 0 0; -0.714286 -1 0 0 0 0 0 0 0 0];
+guardMatrix = [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0;...
+    -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; -0.714286 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0];
 guard1 = MHyProCondition();
 guard1.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard1.setVector([0;0;0]);
