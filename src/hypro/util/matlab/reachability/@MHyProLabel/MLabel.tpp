@@ -9,10 +9,10 @@ void MLabel::new_name( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	hypro::Label* temp = new hypro::Label( name );
 	plhs[0] = convertPtr2Mat<hypro::Label>( temp );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_name input:\n" );
-	mexPrintf( "name: %s\n", name );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_name input:\n" );
+	// mexPrintf( "name: %s\n", name );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -22,10 +22,6 @@ void MLabel::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 
 	hypro::Label* origin = convertMat2Ptr<hypro::Label>( prhs[2] );
 	plhs[0] = convertPtr2Mat<hypro::Label>( new hypro::Label( *origin ) );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "copy" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::del_label( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -33,10 +29,6 @@ void MLabel::del_label( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MLabel - del_label: One or more arguments were ignored." );
 
 	destroyObject<hypro::Label>( prhs[2] );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "delete" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::getName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -48,10 +40,10 @@ void MLabel::getName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	std::string name = lab->getName();
 	plhs[0] = mxCreateString( name.c_str() );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getName output:\n" );
-	mexPrintf( "name: %s\n", name.c_str() );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getName output:\n" );
+	// mexPrintf( "name: %s\n", name.c_str() );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -63,10 +55,10 @@ void MLabel::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	mxGetString( prhs[3], name, sizeof( name ) );
 	lab->setName( name );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setName input:\n" );
-	mexPrintf( "name: %s\n", name );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setName input:\n" );
+	// mexPrintf( "name: %s\n", name );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -81,14 +73,14 @@ void MLabel::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] 
 	if ( *lab1 == *lab2 ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "equals input:\n" );
-	if ( ans ) {
-		mexPrintf( "equal\n" );
-	} else {
-		mexPrintf( "not equal\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "equals input:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "equal\n" );
+	// } else {
+	// 	mexPrintf( "not equal\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -103,14 +95,14 @@ void MLabel::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	if ( *lab1 != *lab2 ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "unequals input:\n" );
-	if ( ans ) {
-		mexPrintf( "unequal\n" );
-	} else {
-		mexPrintf( "not unequal\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "unequals input:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "unequal\n" );
+	// } else {
+	// 	mexPrintf( "not unequal\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::less( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -125,14 +117,14 @@ void MLabel::less( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) 
 	if ( *lab1 < *lab2 ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "less input:\n" );
-	if ( ans ) {
-		mexPrintf( "less\n" );
-	} else {
-		mexPrintf( "not less\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "less input:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "less\n" );
+	// } else {
+	// 	mexPrintf( "not less\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLabel::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

@@ -17,21 +17,22 @@ void MSupportFunction::new_points( int nlhs, mxArray* plhs[], int nrhs, const mx
 
 	const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro( m_in_points, rows, cols );
 	// plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
+	mexErrMsgTxt( "NOT IMPLEMENTED" );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_points input:\n" );
-	mexPrintf( "points:\n" );
-	for ( int i = 0; i < points.size(); i++ ) {
-		hypro::Point<double> point = points[i];
-		mexPrintf( "point %d:\n", i );
-		int len = point.dimension();
-		for ( int i = 0; i < len; i++ ) {
-			mexPrintf( " %f", point[i] );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_points input:\n" );
+	// mexPrintf( "points:\n" );
+	// for ( int i = 0; i < points.size(); i++ ) {
+	// 	hypro::Point<double> point = points[i];
+	// 	mexPrintf( "point %d:\n", i );
+	// 	int len = point.dimension();
+	// 	for ( int i = 0; i < len; i++ ) {
+	// 		mexPrintf( " %f", point[i] );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -47,15 +48,15 @@ void MSupportFunction::new_intervals( int nlhs, mxArray* plhs[], int nrhs, const
 	std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro( prhs[2], 2, cols );
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( intervals ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_intervals input:\n" );
-	mexPrintf( "intervals:\n" );
-	for ( int j = 0; j < intervals.size(); j++ ) {
-		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_intervals input:\n" );
+	// mexPrintf( "intervals:\n" );
+	// for ( int j = 0; j < intervals.size(); j++ ) {
+	// 	carl::Interval<double> inter = intervals[j];
+	// 	mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::new_halfspaces( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -79,18 +80,18 @@ void MSupportFunction::new_halfspaces( int nlhs, mxArray* plhs[], int nrhs, cons
 		  ObjectHandle::mHalfspaces2Hypro( m_in_matrix, m_in_vector, mat_rows, mat_cols, vec_len );
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( halfspaces ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_halfSpaces input:\n" );
-	for ( int i = 0; i < halfspaces.size(); i++ ) {
-		hypro::vector_t<double> normal = halfspaces[i].normal();
-		double offset = halfspaces[i].offset();
-		mexPrintf( "normal %d:", i );
-		for ( int j = 0; j < normal.rows(); j++ ) {
-			mexPrintf( " %f", normal( j ) );
-		}
-		mexPrintf( "\noffset: %d\n", offset );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_halfSpaces input:\n" );
+	// for ( int i = 0; i < halfspaces.size(); i++ ) {
+	// 	hypro::vector_t<double> normal = halfspaces[i].normal();
+	// 	double offset = halfspaces[i].offset();
+	// 	mexPrintf( "normal %d:", i );
+	// 	for ( int j = 0; j < normal.rows(); j++ ) {
+	// 		mexPrintf( " %f", normal( j ) );
+	// 	}
+	// 	mexPrintf( "\noffset: %d\n", offset );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::cleanUp( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -100,10 +101,6 @@ void MSupportFunction::cleanUp( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 
 	hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[2] );
 	temp->cleanUp();
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "cleanUp\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::depth( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -115,10 +112,10 @@ void MSupportFunction::depth( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	unsigned depth = temp->depth();
 	plhs[0] = mxCreateDoubleScalar( depth );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "depth output:\n" );
-	mexPrintf( "depth: %d\n", depth );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "depth output:\n" );
+	// mexPrintf( "depth: %d\n", depth );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::operationCount( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -130,20 +127,16 @@ void MSupportFunction::operationCount( int nlhs, mxArray* plhs[], int nrhs, cons
 	unsigned count = temp->operationCount();
 	plhs[0] = mxCreateDoubleScalar( count );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "operationCount output:\n" );
-	mexPrintf( "count: %d\n", count );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "operationCount output:\n" );
+	// mexPrintf( "count: %d\n", count );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::type( int nlhs, mxArray* plhs[], int rhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MSupportFunction - type: Expecting one output value!" );
 	std::string ans = "MHyProSupportFunction";
 	plhs[0] = mxCreateString( ans.c_str() );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "type\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::contains_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -161,18 +154,18 @@ void MSupportFunction::contains_vec( int nlhs, mxArray* plhs[], int nrhs, const 
 	const bool ans = obj->contains( hy_vector );
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "contains_vec input:\n" );
-	for ( int i = 0; i < hy_vector.rows(); i++ ) {
-		mexPrintf( " %f", hy_vector( i ) );
-	}
-	mexPrintf( "\noutput:\n" );
-	if ( ans ) {
-		mexPrintf( "contains\n" );
-	} else {
-		mexPrintf( "not contained\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "contains_vec input:\n" );
+	// for ( int i = 0; i < hy_vector.rows(); i++ ) {
+	// 	mexPrintf( " %f", hy_vector( i ) );
+	// }
+	// mexPrintf( "\noutput:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "contains\n" );
+	// } else {
+	// 	mexPrintf( "not contained\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::contains_dir( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -187,10 +180,10 @@ void MSupportFunction::contains_dir( int nlhs, mxArray* plhs[], int nrhs, const 
 	const bool ans = sfct_1->contains( *sfct_2, directions );
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "contains_dir input:\n" );
-	mexPrintf( "directions: %d\n", (double)directions );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "contains_dir input:\n" );
+	// mexPrintf( "directions: %d\n", (double)directions );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -204,10 +197,10 @@ void MSupportFunction::scale( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	hypro::SupportFunction<double> temp = obj->scale( factor );
 	plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>( new hypro::SupportFunction<double>( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "scalse input:\n" );
-	mexPrintf( "factor: %d\n", factor );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "scalse input:\n" );
+	// mexPrintf( "factor: %d\n", factor );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::swap( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -219,10 +212,6 @@ void MSupportFunction::swap( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	hypro::SupportFunction<double>* sfct_2 = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[4] );
 
 	origin->swap( *sfct_1, *sfct_2 );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "swap\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::forceLinTransReduction( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -232,23 +221,23 @@ void MSupportFunction::forceLinTransReduction( int nlhs, mxArray* plhs[], int nr
 	hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[2] );
 	sfct->forceLinTransReduction();
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "forceLinTransReduction output:\n" );
-	hypro::matrix_t<double> mat = sfct->matrix();
-	hypro::vector_t<double> vec = sfct->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "forceLinTransReduction output:\n" );
+	// hypro::matrix_t<double> mat = sfct->matrix();
+	// hypro::vector_t<double> vec = sfct->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::collectProjections( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -267,14 +256,14 @@ void MSupportFunction::collectProjections( int nlhs, mxArray* plhs[], int nrhs, 
 	for ( int i = 0; i < vec.size(); i++ ) {
 		out[i] = vec[i];
 	}
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "collectProjections output:\n" );
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.size(); i++ ) {
-		mexPrintf( " %f", vec[i] );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "collectProjections output:\n" );
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.size(); i++ ) {
+	// 	mexPrintf( " %f", vec[i] );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MSupportFunction::reduceNumberRepresentation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -284,10 +273,6 @@ void MSupportFunction::reduceNumberRepresentation( int nlhs, mxArray* plhs[], in
 
 	hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>( prhs[2] );
 	temp->reduceNumberRepresentation();
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "reduceNumberRepresentation\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 /*

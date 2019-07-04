@@ -23,17 +23,9 @@ flow_loc1 = [-2 0 0 0 0 0 1.4;...
 loc1.setFlow(flow_loc1);
 
 % Set inv: x <= 0 & y + 0.714286x >= 0
-invMat = [1 0 0 0 0 0; -0.714286 -1 0 0 0 0];
+invMat = [1,0,0,0,0,0;-0.714286,-1,0,0,0,0];
 inv_loc1 = MHyProCondition(invMat, [0;0]);
 loc1.setInvariant(inv_loc1);
-
-% test
-f = loc1.getLinearFlow();
-fm = f.getFlowMatrix();
-assert(isequal(flow_loc1, fm));
-i = loc1.getInvariant();
-assert(i == inv_loc1);
-% test end
 
 %-----------------------------------------------%
 %              Location loc2
@@ -56,14 +48,6 @@ loc2.setFlow(flow_loc2);
 invMat = [1 0 0 0 0 0; 0.714286 1 0 0 0 0];
 inv_loc2 = MHyProCondition(invMat, [0;0]);
 loc2.setInvariant(inv_loc2);
-
-% test
-f = loc2.getLinearFlow();
-fm = f.getFlowMatrix();
-assert(isequal(flow_loc2, fm));
-i = loc2.getInvariant();
-assert(i == inv_loc2);
-% test end
 
 %-----------------------------------------------%
 %              Location loc3
@@ -272,26 +256,11 @@ boxMatrix = [eye(6); -1*eye(6)];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(l3, initialCond);
 
-%test
-locs = automaton.getLocations();
-assert(length(locs) == 4);
-assert(isequal(locs{1}.getName(), 'loc1'));
-assert(isequal(locs{2}.getName(), 'loc2'));
-assert(isequal(locs{3}.getName(), 'loc3'));
-assert(isequal(locs{4}.getName(), 'loc4'));
-initialMapping = automaton.getInitialStates();
-assert(length(initialMapping) == 1);
-iCond = initialMapping(1).cond;
-assert(iCond == initialCond);
-iLoc = initialMapping(1).loc;
-assert(iLoc == l3);
-%test end
-
 %-----------------------------------------------%
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 1, 'jumpDepth', 20);
+settings = struct('timeStep', 0.05, 'timeBound', 20, 'jumpDepth', 40);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -301,7 +270,8 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 3];
-reach.plot(flowpipes, dim);
+dim = [1 6];
+labs = ["x","z"];
+reach.plot(flowpipes, dim,labs);
 
 end

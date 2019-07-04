@@ -33,10 +33,8 @@ inv = mptPolytope(invOpt);
 trans = {};
 %% equation:
 %   c1=0
-resetA = ...
-[1,0,0;0,0,0;0,0,1];
-resetb = ...
-[0;0;0];
+resetA = [1,0,0;0,0,0;0,0,1];
+resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
@@ -113,10 +111,8 @@ inv = mptPolytope(invOpt);
 trans = {};
 % equation:
 %   
-resetA = ...
-[1,0,0;0,1,0;0,0,1];
-resetb = ...
-[0;0;0];
+resetA = eye(3);
+resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
 
 % equation:
@@ -132,7 +128,7 @@ trans{1} = transition(guard, reset, 1, 'dummy', 'names');
 
 % equation:
 %   
-resetA = [1,0,0;0,1,0;0,0,1];
+resetA = eye(3);
 resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
 

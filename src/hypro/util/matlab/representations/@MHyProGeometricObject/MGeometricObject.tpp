@@ -3,11 +3,7 @@
 template <typename T>
 void MGeometricObject<T>::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - new_empty: One output is expected." );
-
 	plhs[0] = convertPtr2Mat<T>( new T() );
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_empty\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -26,17 +22,17 @@ void MGeometricObject<T>::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
 	plhs[0] = convertPtr2Mat<T>( new T( matrix ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_matrix input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_matrix input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -53,30 +49,30 @@ void MGeometricObject<T>::new_vector( int nlhs, mxArray* plhs[], int nrhs, const
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[2], len );
 	plhs[0] = convertPtr2Mat<T>( new T( vector ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_vector input:\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	mexPrintf( "\noutput:\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_vector input:\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// mexPrintf( "\noutput:\n" );
 
-	T* test = new T( vector );
-	hypro::matrix_t<double> mat = test->matrix();
-	hypro::vector_t<double> vec = test->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// T* test = new T( vector );
+	// hypro::matrix_t<double> mat = test->matrix();
+	// hypro::vector_t<double> vec = test->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -87,9 +83,6 @@ void MGeometricObject<T>::copyObj( int nlhs, mxArray* plhs[], int nrhs, const mx
 
 	T* origin = convertMat2Ptr<T>( prhs[2] );
 	plhs[0] = convertPtr2Mat<T>( new T( *origin ) );
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "copyObj\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <typename T>
@@ -110,37 +103,37 @@ void MGeometricObject<T>::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, cons
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	plhs[0] = convertPtr2Mat<T>( new T( matrix, vector ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_mat_vec input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	mexPrintf( "\noutput:\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_mat_vec input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// mexPrintf( "\noutput:\n" );
 
-	T* test = new T( matrix, vector );
-	hypro::matrix_t<double> mat = test->matrix();
-	hypro::vector_t<double> vec = test->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// T* test = new T( matrix, vector );
+	// hypro::matrix_t<double> mat = test->matrix();
+	// hypro::vector_t<double> vec = test->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -149,9 +142,6 @@ void MGeometricObject<T>::deleteObject( int nlhs, mxArray* plhs[], int nrhs, con
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MGeometricObject - deleteObject: One or more arguments were ignored." );
 
 	destroyObject<T>( prhs[2] );
-	//+++++++++++++TESTING++++++++++++++++++++
-	// mexPrintf( "delete\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -169,17 +159,17 @@ void MGeometricObject<T>::matrix( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	ObjectHandle::convert2Matlab( mat, plhs[0], rows, cols );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "matrix input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "matrix input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -193,39 +183,39 @@ void MGeometricObject<T>::scale( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	T temp = obj->operator*( factor );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "scale input:\n" );
-	hypro::matrix_t<double> matrix = obj->matrix();
-	hypro::vector_t<double> vector = obj->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	mexPrintf( "\noutput:\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "scale input:\n" );
+	// hypro::matrix_t<double> matrix = obj->matrix();
+	// hypro::vector_t<double> vector = obj->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// mexPrintf( "\noutput:\n" );
 
-	T* test = new T( matrix, vector );
-	hypro::matrix_t<double> mat = test->matrix();
-	hypro::vector_t<double> vec = test->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// T* test = new T( matrix, vector );
+	// hypro::matrix_t<double> mat = test->matrix();
+	// hypro::vector_t<double> vec = test->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -239,13 +229,13 @@ void MGeometricObject<T>::vector( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = mxCreateDoubleMatrix( vec.size(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( vec, plhs[0], vec.size(), 1 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "vector input:\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vec.cols(); j++ ) {
-		mexPrintf( " %f", vec( j ) );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "vector input:\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vec.cols(); j++ ) {
+	// 	mexPrintf( " %f", vec( j ) );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -258,14 +248,14 @@ void MGeometricObject<T>::is_empty( int nlhs, mxArray* plhs[], int nrhs, const m
 	const bool empty = temp->empty();
 	plhs[0] = mxCreateLogicalScalar( empty );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "is_empty input:\n" );
-	if ( empty ) {
-		mexPrintf( "empty\n" );
-	} else {
-		mexPrintf( "not empty\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "is_empty input:\n" );
+	// if ( empty ) {
+	// 	mexPrintf( "empty\n" );
+	// } else {
+	// 	mexPrintf( "not empty\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -316,14 +306,14 @@ void MGeometricObject<T>::equal( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	}
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "equal output:\n" );
-	if ( ans ) {
-		mexPrintf( "equal\n" );
-	} else {
-		mexPrintf( "not equal\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "equal output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "equal\n" );
+	// } else {
+	// 	mexPrintf( "not equal\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -340,14 +330,14 @@ void MGeometricObject<T>::unequal( int nlhs, mxArray* plhs[], int nrhs, const mx
 	}
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "unequal output:\n" );
-	if ( ans ) {
-		mexPrintf( "unequal\n" );
-	} else {
-		mexPrintf( "not unequal\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "unequal output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "unequal\n" );
+	// } else {
+	// 	mexPrintf( "not unequal\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -360,9 +350,9 @@ void MGeometricObject<T>::supremum( int nlhs, mxArray* plhs[], int nrhs, const m
 	double supremum = obj->supremum();
 	plhs[0] = mxCreateDoubleScalar( supremum );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "supremum output: %f\n", supremum );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "supremum output: %f\n", supremum );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -375,9 +365,9 @@ void MGeometricObject<T>::dimension( int nlhs, mxArray* plhs[], int nrhs, const 
 	std::size_t dim = temp->dimension();
 	plhs[0] = mxCreateDoubleScalar( dim );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "dimension output: %f\n", (double)dim );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "dimension output: %f\n", (double)dim );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -388,23 +378,23 @@ void MGeometricObject<T>::removeRedundancy( int nlhs, mxArray* plhs[], int nrhs,
 	T* temp = convertMat2Ptr<T>( prhs[2] );
 	temp->removeRedundancy();
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "removeRedundancy output:\n" );
-	hypro::matrix_t<double> mat = temp->matrix();
-	hypro::vector_t<double> vec = temp->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "removeRedundancy output:\n" );
+	// hypro::matrix_t<double> mat = temp->matrix();
+	// hypro::vector_t<double> vec = temp->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -417,9 +407,9 @@ void MGeometricObject<T>::size( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	std::size_t dim = temp->size();
 	plhs[0] = mxCreateDoubleScalar( dim );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "size output: %f\n", (double)dim );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "size output: %f\n", (double)dim );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -433,23 +423,23 @@ void MGeometricObject<T>::reduceNumberRepresentation( int nlhs, mxArray* plhs[],
 	T obj = temp->reduceNumberRepresentation();
 	plhs[0] = convertPtr2Mat<T>( new T( obj ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "reduceNumberRepresentation output:\n" );
-	hypro::matrix_t<double> mat = temp->matrix();
-	hypro::vector_t<double> vec = temp->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "reduceNumberRepresentation output:\n" );
+	// hypro::matrix_t<double> mat = temp->matrix();
+	// hypro::vector_t<double> vec = temp->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -473,16 +463,16 @@ void MGeometricObject<T>::satisfiesHalfspace( int nlhs, mxArray* plhs[], int nrh
 	plhs[0] = mxCreateString( ans.c_str() );
 	plhs[1] = convertPtr2Mat<T>( new T( p.second ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "satisfiesHalfspace input:\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < hy_normal.rows(); j++ ) {
-		mexPrintf( " %f", hy_normal( j ) );
-	}
-	mexPrintf( "offset: %f\n", offset );
-	mexPrintf( "\noutput:\n" );
-	mexPrintf( "containment: %s\n", ans.c_str() );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "satisfiesHalfspace input:\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < hy_normal.rows(); j++ ) {
+	// 	mexPrintf( " %f", hy_normal( j ) );
+	// }
+	// mexPrintf( "offset: %f\n", offset );
+	// mexPrintf( "\noutput:\n" );
+	// mexPrintf( "containment: %s\n", ans.c_str() );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -513,23 +503,23 @@ void MGeometricObject<T>::satisfiesHalfspaces( int nlhs, mxArray* plhs[], int nr
 	T* b = new T( p.second );
 	plhs[1] = convertPtr2Mat<T>( b );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "satisfiesHalfspaces input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < hy_matrix.rows(); i++ ) {
-		for ( int j = 0; j < hy_matrix.cols(); j++ ) {
-			mexPrintf( " %f", hy_matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < hy_vector.rows(); i++ ) {
-		mexPrintf( " %f", hy_vector( i ) );
-	}
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "satisfiesHalfspaces input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < hy_matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < hy_matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", hy_matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < hy_vector.rows(); i++ ) {
+	// 	mexPrintf( " %f", hy_vector( i ) );
+	// }
 
-	mexPrintf( "\noutput:\n" );
-	mexPrintf( "containment: %s\n", ans.c_str() );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "\noutput:\n" );
+	// mexPrintf( "containment: %s\n", ans.c_str() );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -549,14 +539,14 @@ void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mx
 	T temp = obj->project( hy_dimensions );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "project input:\n" );
-	mexPrintf( "dims: " );
-	for ( int i = 0; i < hy_dimensions.size(); i++ ) {
-		mexPrintf( " %d", hy_dimensions[i] );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "project input:\n" );
+	// mexPrintf( "dims: " );
+	// for ( int i = 0; i < hy_dimensions.size(); i++ ) {
+	// 	mexPrintf( " %d", hy_dimensions[i] );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -576,24 +566,24 @@ void MGeometricObject<T>::linearTransformation( int nlhs, mxArray* plhs[], int n
 	T temp = obj->linearTransformation( mat );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "linearTransformation input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf("output matrix:\n");
-	hypro::matrix_t<double> m = temp.matrix();
-	for ( int i = 0; i < m.rows(); i++ ) {
-		for ( int j = 0; j < m.cols(); j++ ) {
-			mexPrintf( " %f", m( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "linearTransformation input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf("output matrix:\n");
+	// hypro::matrix_t<double> m = temp.matrix();
+	// for ( int i = 0; i < m.rows(); i++ ) {
+	// 	for ( int j = 0; j < m.cols(); j++ ) {
+	// 		mexPrintf( " %f", m( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -620,28 +610,28 @@ void MGeometricObject<T>::affineTransformation( int nlhs, mxArray* plhs[], int n
 	T temp = obj->affineTransformation( matrix, vector );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "affineTransformation input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vector.rows(); i++ ) {
-		mexPrintf( " %f", vector( i ) );
-	}
-	mexPrintf("output matrix:\n");
-	hypro::matrix_t<double> m = temp.matrix();
-	for ( int i = 0; i < m.rows(); i++ ) {
-		for ( int j = 0; j < m.cols(); j++ ) {
-			mexPrintf( " %f", m( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "affineTransformation input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vector.rows(); i++ ) {
+	// 	mexPrintf( " %f", vector( i ) );
+	// }
+	// mexPrintf("output matrix:\n");
+	// hypro::matrix_t<double> m = temp.matrix();
+	// for ( int i = 0; i < m.rows(); i++ ) {
+	// 	for ( int j = 0; j < m.cols(); j++ ) {
+	// 		mexPrintf( " %f", m( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -655,17 +645,17 @@ void MGeometricObject<T>::minkowskiSum( int nlhs, mxArray* plhs[], int nrhs, con
 	T sum = obj->minkowskiSum( *obj_rhs );
 	plhs[0] = convertPtr2Mat<T>( new T( sum ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "minkowskiSum\n" );
-	mexPrintf("output matrix:\n");
-	hypro::matrix_t<double> m = sum.matrix();
-	for ( int i = 0; i < m.rows(); i++ ) {
-		for ( int j = 0; j < m.cols(); j++ ) {
-			mexPrintf( " %f", m( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "minkowskiSum\n" );
+	// mexPrintf("output matrix:\n");
+	// hypro::matrix_t<double> m = sum.matrix();
+	// for ( int i = 0; i < m.rows(); i++ ) {
+	// 	for ( int j = 0; j < m.cols(); j++ ) {
+	// 		mexPrintf( " %f", m( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -679,17 +669,17 @@ void MGeometricObject<T>::intersect( int nlhs, mxArray* plhs[], int nrhs, const 
 	T intersected = obj->intersect( *obj_rhs );
 	plhs[0] = convertPtr2Mat<T>( new T( intersected ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "intersect\n" );
-	mexPrintf("output matrix:\n");
-	hypro::matrix_t<double> m = intersected.matrix();
-	for ( int i = 0; i < m.rows(); i++ ) {
-		for ( int j = 0; j < m.cols(); j++ ) {
-			mexPrintf( " %f", m( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "intersect\n" );
+	// mexPrintf("output matrix:\n");
+	// hypro::matrix_t<double> m = intersected.matrix();
+	// for ( int i = 0; i < m.rows(); i++ ) {
+	// 	for ( int j = 0; j < m.cols(); j++ ) {
+	// 		mexPrintf( " %f", m( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -710,22 +700,22 @@ void MGeometricObject<T>::intersectHalfspace( int nlhs, mxArray* plhs[], int nrh
 	T temp = obj->intersectHalfspace( hSpace );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "intersectHalfspace input:\n" );
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < hy_normal.rows(); i++ ) {
-		mexPrintf( " %f", hy_normal( i ) );
-	}
-	mexPrintf( "\noffset: %d", offset );
-	mexPrintf("output matrix:\n");
-	hypro::matrix_t<double> m = temp.matrix();
-	for ( int i = 0; i < m.rows(); i++ ) {
-		for ( int j = 0; j < m.cols(); j++ ) {
-			mexPrintf( " %f", m( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "intersectHalfspace input:\n" );
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < hy_normal.rows(); i++ ) {
+	// 	mexPrintf( " %f", hy_normal( i ) );
+	// }
+	// mexPrintf( "\noffset: %d", offset );
+	// mexPrintf("output matrix:\n");
+	// hypro::matrix_t<double> m = temp.matrix();
+	// for ( int i = 0; i < m.rows(); i++ ) {
+	// 	for ( int j = 0; j < m.cols(); j++ ) {
+	// 		mexPrintf( " %f", m( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -751,28 +741,28 @@ void MGeometricObject<T>::intersectHalfspaces( int nlhs, mxArray* plhs[], int nr
 	T temp = obj->intersectHalfspaces( matrix, vector );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "intersectHalfspaces input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vector.rows(); i++ ) {
-		mexPrintf( " %f", vector( i ) );
-	}
-	mexPrintf("output matrix:\n");
-	hypro::matrix_t<double> m = temp.matrix();
-	for ( int i = 0; i < m.rows(); i++ ) {
-		for ( int j = 0; j < m.cols(); j++ ) {
-			mexPrintf( " %f", m( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "intersectHalfspaces input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vector.rows(); i++ ) {
+	// 	mexPrintf( " %f", vector( i ) );
+	// }
+	// mexPrintf("output matrix:\n");
+	// hypro::matrix_t<double> m = temp.matrix();
+	// for ( int i = 0; i < m.rows(); i++ ) {
+	// 	for ( int j = 0; j < m.cols(); j++ ) {
+	// 		mexPrintf( " %f", m( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -790,14 +780,14 @@ void MGeometricObject<T>::contains_point( int nlhs, mxArray* plhs[], int nrhs, c
 	const bool ans = obj->contains( hy_point );
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "contains_point output:\n" );
-	if ( ans ) {
-		mexPrintf( "yes\n" );
-	} else {
-		mexPrintf( "no\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "contains_point output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "yes\n" );
+	// } else {
+	// 	mexPrintf( "no\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -812,14 +802,14 @@ void MGeometricObject<T>::contains_object( int nlhs, mxArray* plhs[], int nrhs, 
 	const bool ans = obj->contains( *obj_arg );
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "contains_object output:\n" );
-	if ( ans ) {
-		mexPrintf( "yes\n" );
-	} else {
-		mexPrintf( "no\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "contains_object output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "yes\n" );
+	// } else {
+	// 	mexPrintf( "no\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -834,23 +824,23 @@ void MGeometricObject<T>::unite_single( int nlhs, mxArray* plhs[], int nrhs, con
 	T temp = obj->unite( *obj_rhs );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "unite_single output:\n" );
-	hypro::matrix_t<double> matrix = temp.matrix();
-	hypro::vector_t<double> vector = temp.vector();
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "unite_single output:\n" );
+	// hypro::matrix_t<double> matrix = temp.matrix();
+	// hypro::vector_t<double> vector = temp.vector();
 
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vector.rows(); i++ ) {
-		mexPrintf( " %f", vector( i ) );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vector.rows(); i++ ) {
+	// 	mexPrintf( " %f", vector( i ) );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -866,23 +856,23 @@ void MGeometricObject<T>::unite_vec( int nlhs, mxArray* plhs[], int nrhs, const 
 	T united = T::unite( objects );
 	plhs[0] = convertPtr2Mat<T>( new T( united ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "unite_vec output:\n" );
-	hypro::matrix_t<double> matrix = united.matrix();
-	hypro::vector_t<double> vector = united.vector();
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "unite_vec output:\n" );
+	// hypro::matrix_t<double> matrix = united.matrix();
+	// hypro::vector_t<double> vector = united.vector();
 
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vector.rows(); i++ ) {
-		mexPrintf( " %f", vector( i ) );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vector.rows(); i++ ) {
+	// 	mexPrintf( " %f", vector( i ) );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -894,23 +884,23 @@ void MGeometricObject<T>::reduceRepresentation( int nlhs, mxArray* plhs[], int n
 	T* obj = convertMat2Ptr<T>( prhs[2] );
 	obj->reduceRepresentation();
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "reduceRepresentation output:\n" );
-	hypro::matrix_t<double> mat = obj->matrix();
-	hypro::vector_t<double> vec = obj->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "reduceRepresentation output:\n" );
+	// hypro::matrix_t<double> mat = obj->matrix();
+	// hypro::vector_t<double> vec = obj->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -921,23 +911,23 @@ void MGeometricObject<T>::clear( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	T* obj = convertMat2Ptr<T>( prhs[2] );
 	obj->clear();
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "clear output:\n" );
-	hypro::matrix_t<double> mat = obj->matrix();
-	hypro::vector_t<double> vec = obj->vector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\nvector: " );
-	for ( int i = 0; i < vec.rows(); i++ ) {
-		mexPrintf( " %f", vec( i ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "clear output:\n" );
+	// hypro::matrix_t<double> mat = obj->matrix();
+	// hypro::vector_t<double> vec = obj->vector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\nvector: " );
+	// for ( int i = 0; i < vec.rows(); i++ ) {
+	// 	mexPrintf( " %f", vec( i ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 template <class T>
@@ -968,8 +958,4 @@ void MGeometricObject<T>::ostream( int nlhs, mxArray* plhs[], int nrhs, const mx
 		mexPrintf( "%f ", vec( i ) );
 	}
 	mexPrintf( "]\n\n" );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "ostream\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }

@@ -5,10 +5,6 @@ void MLocation::new_empty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
 	hypro::Location<double>* loc = new hypro::Location<double>();
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_eqmpty:\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -28,17 +24,17 @@ void MLocation::new_matrix( int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
 	hypro::Location<double>* loc = new hypro::Location<double>( mat );
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_matrix input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_matrix input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::new_mat_tran_inv( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -70,17 +66,17 @@ void MLocation::new_mat_tran_inv( int nlhs, mxArray* plhs[], int nrhs, const mxA
 
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( loc );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_mat_tran_inv input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_mat_tran_inv input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -90,20 +86,12 @@ void MLocation::copy( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 
 	hypro::Location<double>* origin = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	plhs[0] = convertPtr2Mat<hypro::Location<double>>( new hypro::Location<double>( *origin ) );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "copy\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::delete_loc( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - delete_loc: Expecting an output." );
 	if ( nrhs > 3 ) mexWarnMsgTxt( "MLocation - delete_loc: One or more arguments were ignored." );
 	destroyObject<hypro::Location<double>>( prhs[2] );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "delete\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getNumberFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -115,10 +103,10 @@ void MLocation::getNumberFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	std::size_t num = loc->getNumberFlow();
 	plhs[0] = mxCreateDoubleScalar( num );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getNumberFlow output:\n" );
-	mexPrintf( "size: %d\n", (double) num );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getNumberFlow output:\n" );
+	// mexPrintf( "size: %d\n", (double) num );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -130,23 +118,23 @@ void MLocation::getLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	hypro::linearFlow<double> flow = loc->getLinearFlow();
 	plhs[0] = convertPtr2Mat<hypro::linearFlow<double>>( new hypro::linearFlow<double>( flow ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getLinearFlow output:\n" );
-	
-	hypro::matrix_t<double> mat = flow.getFlowMatrix();
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getLinearFlow output:\n" );
 
-	int rows = mat.rows();
-	int cols = mat.cols();
+	// hypro::matrix_t<double> mat = flow.getFlowMatrix();
 
-	mexPrintf( "Matrix: [" );
-	for ( int i = 0; i < rows; i++ ) {
-		for ( int j = 0; j < cols; j++ ) {
-			mexPrintf( "%f ", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// int rows = mat.rows();
+	// int cols = mat.cols();
+
+	// mexPrintf( "Matrix: [" );
+	// for ( int i = 0; i < rows; i++ ) {
+	// 	for ( int j = 0; j < cols; j++ ) {
+	// 		mexPrintf( "%f ", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getLinearFlows( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -161,25 +149,25 @@ void MLocation::getLinearFlows( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( flows, plhs[0], len );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getLinearFlows output:\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getLinearFlows output:\n" );
 
-	for(int i = 0; i < flows.size(); i++){
-		mexPrintf("Flow number: %d\n", i);
-		hypro::matrix_t<double> mat = flows[i].getFlowMatrix();
-		int rows = mat.rows();
-		int cols = mat.cols();
-		mexPrintf( "Matrix: [" );
-		for ( int i = 0; i < rows; i++ ) {
-			for ( int j = 0; j < cols; j++ ) {
-				mexPrintf( "%f ", mat( i, j ) );
-			}
-			mexPrintf( "\n" );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf("\n");	
-	//+++++++++++++TESTING++++++++++++++++++++
+	// for(int i = 0; i < flows.size(); i++){
+	// 	mexPrintf("Flow number: %d\n", i);
+	// 	hypro::matrix_t<double> mat = flows[i].getFlowMatrix();
+	// 	int rows = mat.rows();
+	// 	int cols = mat.cols();
+	// 	mexPrintf( "Matrix: [" );
+	// 	for ( int i = 0; i < rows; i++ ) {
+	// 		for ( int j = 0; j < cols; j++ ) {
+	// 			mexPrintf( "%f ", mat( i, j ) );
+	// 		}
+	// 		mexPrintf( "\n" );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf("\n");
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -191,24 +179,24 @@ void MLocation::getInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	hypro::Condition<double> cond = loc->getInvariant();
 	plhs[0] = convertPtr2Mat<hypro::Condition<double>>( new hypro::Condition<double>( cond ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getInvariant output:\n" );
-	hypro::matrix_t<double> mat = cond.getMatrix();
-	hypro::vector_t<double> vec = cond.getVector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vec.cols(); j++ ) {
-		mexPrintf( " %f", vec( j ) );
-	}
-	mexPrintf("\n");
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getInvariant output:\n" );
+	// hypro::matrix_t<double> mat = cond.getMatrix();
+	// hypro::vector_t<double> vec = cond.getVector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vec.cols(); j++ ) {
+	// 	mexPrintf( " %f", vec( j ) );
+	// }
+	// mexPrintf("\n");
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -223,23 +211,23 @@ void MLocation::getTransitions( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 	for ( const auto& elem : temp ) {
 		transitions.emplace_back( *elem );
 	}
-	
+
 	int len = temp.size();
 	const mwSize dims[2] = {1, (mwSize)len};
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( transitions, plhs[0], len );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getTransions output:\n" );
-	for(int i = 0; i < temp.size(); i++){
-		hypro::Transition<double> tran = *temp[i];
-		hypro::Location<double>* source = tran.getSource();
-		hypro::Location<double>* target = tran.getTarget();
-		std::string s = source->getName();
-		std::string t = target->getName();
-		mexPrintf("transition %d: %s -> %s\n", i, s.c_str(), t.c_str());
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getTransions output:\n" );
+	// for(int i = 0; i < temp.size(); i++){
+	// 	hypro::Transition<double> tran = *temp[i];
+	// 	hypro::Location<double>* source = tran.getSource();
+	// 	hypro::Location<double>* target = tran.getTarget();
+	// 	std::string s = source->getName();
+	// 	std::string t = target->getName();
+	// 	mexPrintf("transition %d: %s -> %s\n", i, s.c_str(), t.c_str());
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -252,15 +240,15 @@ void MLocation::getExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = mxCreateDoubleMatrix( input.size(), 2, mxREAL );
 	vector2Matlab<carl::Interval<double>>( input, plhs[0] );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getExternalInput output:\n" );
-	mexPrintf( "intervals:\n" );
-	for ( int j = 0; j < input.size(); j++ ) {
-		carl::Interval<double> inter = input[j];
-		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getExternalInput output:\n" );
+	// mexPrintf( "intervals:\n" );
+	// for ( int j = 0; j < input.size(); j++ ) {
+	// 	carl::Interval<double> inter = input[j];
+	// 	mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::hasExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -272,14 +260,14 @@ void MLocation::hasExternalInput( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	const bool ans = loc->hasExternalInput();
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "hasExternalInput output:\n" );
-	if ( ans ) {
-		mexPrintf( "has\n" );
-	} else {
-		mexPrintf( "does not have\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "hasExternalInput output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "has\n" );
+	// } else {
+	// 	mexPrintf( "does not have\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -291,10 +279,10 @@ void MLocation::hash( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	std::size_t h = loc->hash();
 	plhs[0] = mxCreateDoubleScalar( h );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "hash output:\n" );
-	mexPrintf( "hash: %d\n", (double)h );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "hash output:\n" );
+	// mexPrintf( "hash: %d\n", (double)h );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::getName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -306,10 +294,10 @@ void MLocation::getName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	std::string name = loc->getName();
 	plhs[0] = mxCreateString( name.c_str() );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getName output:\n" );
-	mexPrintf( "name: %s\n", name.c_str() );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getName output:\n" );
+	// mexPrintf( "name: %s\n", name.c_str() );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -321,10 +309,10 @@ void MLocation::dimension( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	std::size_t h = loc->dimension();
 	plhs[0] = mxCreateDoubleScalar( h );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "dimension output:\n" );
-	mexPrintf( "hash: %d\n", (double)h );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "dimension output:\n" );
+	// mexPrintf( "hash: %d\n", (double)h );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::dimension_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -337,13 +325,13 @@ void MLocation::dimension_at( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	std::size_t h = loc->dimension( pos );
 	plhs[0] = mxCreateDoubleScalar( h );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "dimension_at input:\n" );
-	mexPrintf( "at: %d\n", (double)pos );
-	mexPrintf("output\n");
-	mexPrintf("dimension: %d\n", (double)h);
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "dimension_at input:\n" );
+	// mexPrintf( "at: %d\n", (double)pos );
+	// mexPrintf("output\n");
+	// mexPrintf("dimension: %d\n", (double)h);
 
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -354,10 +342,10 @@ void MLocation::setName( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 	char* name = mxArrayToString( prhs[3] );
 	loc->setName( std::string( name ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setName input:\n" );
-	mexPrintf( "name: %s\n", name );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setName input:\n" );
+	// mexPrintf( "name: %s\n", name );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::setFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -377,17 +365,17 @@ void MLocation::setFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 
 	loc->setFlow( mat );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setFlow input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf("\n");
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setFlow input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf("\n");
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::setLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -399,18 +387,18 @@ void MLocation::setLinearFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	std::size_t i = (std::size_t)mxGetScalar( prhs[4] );
 	loc->setLinearFlow( *flow, i );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setLinearFlow input:\n" );
-	hypro::matrix_t<double> mat = flow->getFlowMatrix();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "pos: %d\n", (double)i );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setLinearFlow input:\n" );
+	// hypro::matrix_t<double> mat = flow->getFlowMatrix();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "pos: %d\n", (double)i );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::setLinearFlow_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -427,20 +415,20 @@ void MLocation::setLinearFlow_vec( int nlhs, mxArray* plhs[], int nrhs, const mx
 		  ObjectHandle::objArray2Hypro<hypro::linearFlow<double>>( prhs[3], len );
 	loc->setLinearFlow( flows );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	for(int k = 0; k < flows.size(); k++){
-		mexPrintf( "flow %d:\n", k );
-		const hypro::linearFlow<double> flow = flows[k];
-		hypro::matrix_t<double> mat = flow.getFlowMatrix();
-		mexPrintf( "matrix:\n" );
-		for ( int i = 0; i < mat.rows(); i++ ) {
-			for ( int j = 0; j < mat.cols(); j++ ) {
-				mexPrintf( " %f", mat( i, j ) );
-			}
-			mexPrintf( "\n" );
-		}
-	}
-	//+++++++++++++TESTING++++++++++++++++++++	
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// for(int k = 0; k < flows.size(); k++){
+	// 	mexPrintf( "flow %d:\n", k );
+	// 	const hypro::linearFlow<double> flow = flows[k];
+	// 	hypro::matrix_t<double> mat = flow.getFlowMatrix();
+	// 	mexPrintf( "matrix:\n" );
+	// 	for ( int i = 0; i < mat.rows(); i++ ) {
+	// 		for ( int j = 0; j < mat.cols(); j++ ) {
+	// 			mexPrintf( " %f", mat( i, j ) );
+	// 		}
+	// 		mexPrintf( "\n" );
+	// 	}
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::setInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -451,24 +439,24 @@ void MLocation::setInvariant( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>( prhs[3] );
 	loc->setInvariant( *cond );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setInvariant output:\n" );
-	hypro::matrix_t<double> mat = cond->getMatrix();
-	hypro::vector_t<double> vec = cond->getVector();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < mat.rows(); i++ ) {
-		for ( int j = 0; j < mat.cols(); j++ ) {
-			mexPrintf( " %f", mat( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vec.cols(); j++ ) {
-		mexPrintf( " %f", vec( j ) );
-	}
-	mexPrintf("\n");
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setInvariant output:\n" );
+	// hypro::matrix_t<double> mat = cond->getMatrix();
+	// hypro::vector_t<double> vec = cond->getVector();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < mat.rows(); i++ ) {
+	// 	for ( int j = 0; j < mat.cols(); j++ ) {
+	// 		mexPrintf( " %f", mat( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vec.cols(); j++ ) {
+	// 	mexPrintf( " %f", vec( j ) );
+	// }
+	// mexPrintf("\n");
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 // void MLocation::setTransition(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
@@ -491,15 +479,15 @@ void MLocation::addTransition( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	std::unique_ptr<hypro::Transition<double>> tran( new hypro::Transition<double>( *temp ) );
 	loc->addTransition( std::move( tran ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "addTransion input:\n" );
-	
-	hypro::Location<double>* source = temp->getSource();
-	hypro::Location<double>* target = temp->getTarget();
-	std::string s = source->getName();
-	std::string t = target->getName();
-	mexPrintf("transition: %s -> %s\n", s.c_str(), t.c_str());
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "addTransion input:\n" );
+
+	// hypro::Location<double>* source = temp->getSource();
+	// hypro::Location<double>* target = temp->getTarget();
+	// std::string s = source->getName();
+	// std::string t = target->getName();
+	// mexPrintf("transition: %s -> %s\n", s.c_str(), t.c_str());
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::setExtInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -516,15 +504,15 @@ void MLocation::setExtInput( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	std::vector<carl::Interval<double>> ints = ObjectHandle::mIntervals2Hypro( prhs[3], rows, cols );
 	loc->setExtInput( ints );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setExtInput input:\n" );
-	mexPrintf( "intervals:\n" );
-	for ( int j = 0; j < ints.size(); j++ ) {
-		carl::Interval<double> inter = ints[j];
-		mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setExtInput input:\n" );
+	// mexPrintf( "intervals:\n" );
+	// for ( int j = 0; j < ints.size(); j++ ) {
+	// 	carl::Interval<double> inter = ints[j];
+	// 	mexPrintf( "[%d, %d]\n", inter.lower(), inter.upper() );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -534,7 +522,7 @@ void MLocation::isComposedOf( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	hypro::Location<double>* rhs = convertMat2Ptr<hypro::Location<double>>( prhs[3] );
-	std::vector<std::string> rhsVars = ObjectHandle::mStringVector2Hypro( prhs[4]);
+	std::vector<std::string> rhsVars = ObjectHandle::mStringVector2Hypro( prhs[4] );
 	std::vector<std::string> thisVars = ObjectHandle::mStringVector2Hypro( prhs[5] );
 
 	// bool ans = loc->isComposedOf(*rhs, rhsVars, thisVars);
@@ -575,14 +563,14 @@ void MLocation::less( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	if ( *loc_1 < *loc_2 ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "less output:\n" );
-	if ( ans ) {
-		mexPrintf( "less\n" );
-	} else {
-		mexPrintf( "not less\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "less output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "less\n" );
+	// } else {
+	// 	mexPrintf( "not less\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -597,14 +585,14 @@ void MLocation::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
 	if ( *loc_1 == *loc_2 ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "equals output:\n" );
-	if ( ans ) {
-		mexPrintf( "equal\n" );
-	} else {
-		mexPrintf( "not equal\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "equals output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "equal\n" );
+	// } else {
+	// 	mexPrintf( "not equal\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -619,27 +607,23 @@ void MLocation::unequals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	if ( *loc_1 != *loc_2 ) ans = true;
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "unequals output:\n" );
-	if ( ans ) {
-		mexPrintf( "unequal\n" );
-	} else {
-		mexPrintf( "unnot equal\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "unequals output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "unequal\n" );
+	// } else {
+	// 	mexPrintf( "unnot equal\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MLocation::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MLocation - outstream: One or more arguments are missing!" );
-	if ( nrhs > 3) mexWarnMsgTxt( "MLocation - outstream: One or more arguments were ignored." );
+	if ( nrhs > 3 ) mexWarnMsgTxt( "MLocation - outstream: One or more arguments were ignored." );
 
 	hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>( prhs[2] );
 	std::string name = loc->getName();
-	mexPrintf("%s\n", name.c_str());
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "outstream\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "%s\n", name.c_str() );
 }
 
 void MLocation::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

@@ -16,8 +16,8 @@ options.x0 = center(options.R0); %initial state for simulation
 
 
 options.taylorTerms = 10;
-options.zonotopeOrder = 200;
-options.polytopeOrder = 100;
+options.zonotopeOrder = 20;
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -103,8 +103,8 @@ if vis
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('e2');
+    ylabel('e7');
 end
 end
 

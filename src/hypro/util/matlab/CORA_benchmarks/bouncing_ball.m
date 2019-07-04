@@ -6,11 +6,11 @@ options.R0 = zonotope([options.x0, diag([0.1, 0])]); %initial state for reachabi
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 50; %final time
+options.tFinal = 10; %final time
 options.timeStepLoc{1} = 0.1; %time step size for reachable set computation in location 1
-options.taylorTerms = 1;
-options.zonotopeOrder = 1;
-options.polytopeOrder = 1;
+options.taylorTerms = 10;
+options.zonotopeOrder = 20;
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -23,7 +23,7 @@ options.originContained = 0;
 %specify hybrid automaton--------------------------------------------------
 %specify linear system of bouncing ball
 A = [0 1; 0 0];
-B = eye(2); % no loss of generality to specify B as the identity matrix
+B = zeros(2);
 c = [0; -9.81];
 linSys = linearSys('linearSys',A,B,c);
 
@@ -35,7 +35,7 @@ guardb = [0;0;0];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 %resets
-reset.A = [1 0; 0 -0.9]; reset.b = zeros(2,1);
+reset.A = [1 0; 0 -0.75]; reset.b = zeros(2,1);
 %transitions
 trans{1} = transition(guard,reset,1,'a','b'); %--> next loc: 1; 'a', 'b' are dummies
 %specify location
@@ -50,7 +50,7 @@ options.uLocTrans{1} = options.uLoc{1}; %input center for reachability analysis
 options.Uloc{1} = zonotope(zeros(2,1)); %input deviation for reachability analysis
 
 %simulate hybrid automaton
-%HA = simulate(HA,options); 
+HA = simulate(HA,options); 
 
 %compute reachable set
 [HA] = reach(HA,options);

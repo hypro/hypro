@@ -1,6 +1,5 @@
 #include "MBox.h"
 
-
 void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MBox - new_interval: One output expected." );
 	if ( nrhs < 3 ) mexErrMsgTxt( "MBox - new_interval: One or more input arguments are missing." );
@@ -10,11 +9,11 @@ void MBox::boxFromSingleInterval( int nlhs, mxArray *plhs[], int nrhs, const mxA
 	hypro::Box<double> *box = new hypro::Box<double>( inter );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "boxFromSingleInterval input:\n" );
-	mexPrintf( "inter: [%f, %f]\n", inter.lower(), inter.upper() );
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "boxFromSingleInterval input:\n" );
+	// mexPrintf( "inter: [%f, %f]\n", inter.lower(), inter.upper() );
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -32,16 +31,16 @@ void MBox::boxFromIntervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 	hypro::Box<double> *box = new hypro::Box<double>( intervals );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "boxFromIntervals input:\n" );
-	mexPrintf( "intervals:\n" );
-	for ( int j = 0; j < intervals.size(); j++ ) {
-		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
-	}
-	mexPrintf( "\n output:\n" );
-	std::vector<hypro::Point<double>> vertices = box->vertices();
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "boxFromIntervals input:\n" );
+	// mexPrintf( "intervals:\n" );
+	// for ( int j = 0; j < intervals.size(); j++ ) {
+	// 	carl::Interval<double> inter = intervals[j];
+	// 	mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
+	// }
+	// mexPrintf( "\n output:\n" );
+	// std::vector<hypro::Point<double>> vertices = box->vertices();
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -53,21 +52,21 @@ void MBox::boxFromPoints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	hypro::Box<double> *box = new hypro::Box<double>( pair );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( box );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "boxFromPoints input:\n" );
-	hypro::Point<double> first = pair.first;
-	hypro::Point<double> second = pair.second;
-	int len = pair.first.dimension();
-	mexPrintf( "first:\n" );
-	for ( int i = 0; i < len; i++ ) {
-		mexPrintf( " %f", first[i] );
-	}
-	mexPrintf( "\nsecond:\n" );
-	for ( int i = 0; i < len; i++ ) {
-		mexPrintf( " %f", second[i] );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "boxFromPoints input:\n" );
+	// hypro::Point<double> first = pair.first;
+	// hypro::Point<double> second = pair.second;
+	// int len = pair.first.dimension();
+	// mexPrintf( "first:\n" );
+	// for ( int i = 0; i < len; i++ ) {
+	// 	mexPrintf( " %f", first[i] );
+	// }
+	// mexPrintf( "\nsecond:\n" );
+	// for ( int i = 0; i < len; i++ ) {
+	// 	mexPrintf( " %f", second[i] );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -80,10 +79,10 @@ void MBox::empty( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	hypro::Box<double> temp = box->Empty( in );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( temp ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "empty input:\n" );
-	mexPrintf( "dimension: %f\n", (double)in );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "empty input:\n" );
+	// mexPrintf( "dimension: %f\n", (double)in );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::intervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -98,15 +97,15 @@ void MBox::intervals( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 	plhs[0] = mxCreateDoubleMatrix( rows, 2, mxREAL );
 	vector2Matlab( intervals, plhs[0] );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "intervals input:\n" );
-	mexPrintf( "intervals:\n" );
-	for ( int j = 0; j < intervals.size(); j++ ) {
-		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "intervals input:\n" );
+	// mexPrintf( "intervals:\n" );
+	// for ( int j = 0; j < intervals.size(); j++ ) {
+	// 	carl::Interval<double> inter = intervals[j];
+	// 	mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -124,20 +123,20 @@ void MBox::insert( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	carl::Interval<double> interval = ObjectHandle::mInterval2Hypro( prhs[3] );
 	box->insert( interval );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "insert input:\n" );
-	mexPrintf( "interval:[%f, %f]\n", interval.lower(), interval.upper() );
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "insert input:\n" );
+	// mexPrintf( "interval:[%f, %f]\n", interval.lower(), interval.upper() );
 
-	mexPrintf( "output:\n" );
+	// mexPrintf( "output:\n" );
 
-	std::vector<carl::Interval<double>> intervals = box->intervals();
-	mexPrintf( "intervals:\n" );
-	for ( int j = 0; j < intervals.size(); j++ ) {
-		carl::Interval<double> inter = intervals[j];
-		mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// std::vector<carl::Interval<double>> intervals = box->intervals();
+	// mexPrintf( "intervals:\n" );
+	// for ( int j = 0; j < intervals.size(); j++ ) {
+	// 	carl::Interval<double> inter = intervals[j];
+	// 	mexPrintf( "[%f, %f]\n", inter.lower(), inter.upper() );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::limits( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -151,21 +150,21 @@ void MBox::limits( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) 
 	plhs[0] = mxCreateDoubleMatrix( dim, 2, mxREAL );
 	pair2Matlab( p, plhs[0], dim, 2 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "limits output:\n" );
-	hypro::Point<double> first = p.first;
-	hypro::Point<double> second = p.second;
-	int len = p.first.dimension();
-	mexPrintf( "first:\n" );
-	for ( int i = 0; i < len; i++ ) {
-		mexPrintf( " %f", first[i] );
-	}
-	mexPrintf( "second:\n" );
-	for ( int i = 0; i < len; i++ ) {
-		mexPrintf( " %f", second[i] );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "limits output:\n" );
+	// hypro::Point<double> first = p.first;
+	// hypro::Point<double> second = p.second;
+	// int len = p.first.dimension();
+	// mexPrintf( "first:\n" );
+	// for ( int i = 0; i < len; i++ ) {
+	// 	mexPrintf( " %f", first[i] );
+	// }
+	// mexPrintf( "second:\n" );
+	// for ( int i = 0; i < len; i++ ) {
+	// 	mexPrintf( " %f", second[i] );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -183,18 +182,18 @@ void MBox::constraints( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
 	plhs[1] = mxCreateDoubleMatrix( rows, 1, mxREAL );
 	vector2Matlab<hypro::Halfspace<double>>( hSpaces, plhs[0], plhs[1] );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "constraints output:\n" );
-	for ( int i = 0; i < hSpaces.size(); i++ ) {
-		hypro::vector_t<double> normal = hSpaces[i].normal();
-		double offset = hSpaces[i].offset();
-		mexPrintf( "normal %f:", i );
-		for ( int j = 0; j < normal.rows(); j++ ) {
-			mexPrintf( " %f", normal( j ) );
-		}
-		mexPrintf( "\noffset: %f\n", offset );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "constraints output:\n" );
+	// for ( int i = 0; i < hSpaces.size(); i++ ) {
+	// 	hypro::vector_t<double> normal = hSpaces[i].normal();
+	// 	double offset = hSpaces[i].offset();
+	// 	mexPrintf( "normal %f:", i );
+	// 	for ( int j = 0; j < normal.rows(); j++ ) {
+	// 		mexPrintf( " %f", normal( j ) );
+	// 	}
+	// 	mexPrintf( "\noffset: %f\n", offset );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -209,13 +208,13 @@ void MBox::interval( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] 
 	plhs[0] = mxCreateDoubleMatrix( 1, 2, mxREAL );
 	ObjectHandle::convert2Matlab( inter, plhs[0], 1, 2 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "interval input:\n" );
-	mexPrintf( "dim: %f\n", (double)dim );
-	mexPrintf( "output:\n" );
-	mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "interval input:\n" );
+	// mexPrintf( "dim: %f\n", (double)dim );
+	// mexPrintf( "output:\n" );
+	// mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -230,13 +229,13 @@ void MBox::at( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	plhs[0] = mxCreateDoubleMatrix( 1, 2, mxREAL );
 	ObjectHandle::convert2Matlab( inter, plhs[0], 1, 2 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "at input:\n" );
-	mexPrintf( "dim: %f\n", (double)dim );
-	mexPrintf( "output:\n" );
-	mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "at input:\n" );
+	// mexPrintf( "dim: %f\n", (double)dim );
+	// mexPrintf( "output:\n" );
+	// mexPrintf( "interval: [%f; %f]", inter.lower(), inter.upper() );
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::is_symmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -248,14 +247,14 @@ void MBox::is_symmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 	const bool ans = box->isSymmetric();
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "is_symmetric output:\n" );
-	if ( ans ) {
-		mexPrintf( "symmetric\n" );
-	} else {
-		mexPrintf( "not symmetric\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "is_symmetric output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "symmetric\n" );
+	// } else {
+	// 	mexPrintf( "not symmetric\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::max( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -269,14 +268,14 @@ void MBox::max( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	plhs[0] = mxCreateDoubleMatrix( dim, 1, mxREAL );
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "max output:\n" );
-	int len = m.dimension();
-	for ( int i = 0; i < len; i++ ) {
-		mexPrintf( " %f", m[i] );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "max output:\n" );
+	// int len = m.dimension();
+	// for ( int i = 0; i < len; i++ ) {
+	// 	mexPrintf( " %f", m[i] );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -290,14 +289,14 @@ void MBox::min( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
 	plhs[0] = mxCreateDoubleMatrix( dim, 1, mxREAL );
 	ObjectHandle::convert2Matlab( m, plhs[0], dim, 1 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "min output:\n" );
-	int len = m.dimension();
-	for ( int i = 0; i < len; i++ ) {
-		mexPrintf( " %f", m[i] );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "min output:\n" );
+	// int len = m.dimension();
+	// for ( int i = 0; i < len; i++ ) {
+	// 	mexPrintf( " %f", m[i] );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[] ) {
@@ -305,9 +304,9 @@ void MBox::type( int nlhs, mxArray *plhs[], int rhs, const mxArray *prhs[] ) {
 	std::string ans = "MHyProBox";
 	plhs[0] = mxCreateString( ans.c_str() );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "type:\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "type:\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::makeSymmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -318,10 +317,6 @@ void MBox::makeSymmetric( int nlhs, mxArray *plhs[], int nrhs, const mxArray *pr
 	hypro::Box<double> *box = convertMat2Ptr<hypro::Box<double>>( prhs[2] );
 	hypro::Box<double> symmBox = box->makeSymmetric();
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( symmBox ) );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "make symmetric\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MBox::minkowskiDecomposition( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] ) {
@@ -334,10 +329,6 @@ void MBox::minkowskiDecomposition( int nlhs, mxArray *plhs[], int nrhs, const mx
 
 	hypro::Box<double> dec = box->minkowskiDecomposition( *box_rhs );
 	plhs[0] = convertPtr2Mat<hypro::Box<double>>( new hypro::Box<double>( dec ) );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "minkowski decomposition\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**

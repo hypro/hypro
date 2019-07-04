@@ -234,7 +234,8 @@ flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 2];
-reach.plot(flowpipes, dim);
+labs = ["x1","x2"];
+reach.plot(flowpipes, dim,labs);
 
 end
 

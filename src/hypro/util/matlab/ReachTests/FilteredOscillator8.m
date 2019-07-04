@@ -5,8 +5,8 @@ function FilteredOscillator8
 % Create Automaton
 automaton = MHyProHAutomaton();
 dummy_reset = MHyProReset();
-dummy_reset.setMatrix(eye(3));
-dummy_reset.setVector([0; 0; 0]);
+dummy_reset.setMatrix(eye(10));
+dummy_reset.setVector(zeros(10,1));
 
 %-----------------------------------------------%
 %              Location loc1
@@ -213,7 +213,7 @@ automaton.addInitialState(l3, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.05, 'timeBound', 4, 'jumpDepth', 5);
+settings = struct('timeStep', 0.01, 'timeBound', 4, 'jumpDepth', 10);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -223,8 +223,9 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 6];
-reach.plot(flowpipes, dim);
+dim = [1 3];
+labs = ["x","f4a_x1"];
+reach.plot(flowpipes, dim, labs);
 
 
 end

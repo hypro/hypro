@@ -73,9 +73,10 @@ classdef MHyProReach < handle
              MHyPro(12, 6, obj.ObjectHandle);
         end
          
-        function plot(obj, flowpipes, dims)
+        function plot(obj, flowpipes, dims, labs)
             num_flowpipes = length(flowpipes);
             figure()
+            
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
                 num_states = length(currentFlowpipe);
@@ -83,7 +84,7 @@ classdef MHyProReach < handle
                 
                 for state = 1:num_states
                     currentState = currentFlowpipe{state};
-                    vertices = currentState.vertices(0)
+                    vertices = currentState.vertices(0);
                     obj.plotVertices(vertices, dims);
                     
 %                     %Plot points
@@ -93,6 +94,8 @@ classdef MHyProReach < handle
                     hold on
                 end 
                 hold on
+                xlabel(labs(1));
+                ylabel(labs(2));
             end
         end
         

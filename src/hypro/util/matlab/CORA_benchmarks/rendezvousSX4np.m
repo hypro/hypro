@@ -31,6 +31,10 @@ function rendezvousSX4np()
 
 
 % Options -----------------------------------------------------------------
+sim = 0;
+reacha = 1;
+vis = 1;
+
 
 % debugging mode
 options.debug = 0;
@@ -46,11 +50,9 @@ options.R0=R0; % initial state for reachability analysis
 options.startLoc = 1; % initial location
 options.finalLoc = -inf; % no final location
 options.tStart=0; % start time
-options.tFinal=200; % final time
+options.tFinal=20; % final time
 options.intermediateOrder = 2;
 options.originContained = 0;
-options.timeStepLoc{1} = 2e-1;
-options.timeStepLoc{2} = 2e-2;
 
 options.zonotopeOrder=40; % zonotope order
 options.polytopeOrder=3; % polytope order
@@ -60,131 +62,85 @@ options.isHyperplaneMap=0;
 options.enclosureEnables = [3, 5]; % choose enclosure method(s)
 options.filterLength = [5,7];
 options.guardIntersect = 'polytope';
+options.errorOrder = 2;
 
 % specify hybrid automata
 HA = rendezvousSX4np_ha(); % automatically converted from SpaceEx
 
-
-
+for i = 1:5
+    options.timeStepLoc{i} = 0.01;
+    options.uLoc{i} = 0;
+    options.uLocTrans{i} = options.uLoc{i};
+    options.Uloc{i} = zonotope(options.uLoc{i});
+end
 
 % Simulation --------------------------------------------------------------
 
-% set input:
-% get locations
-loc = get(HA,'location');
-nrOfLoc = length(loc);
-for i=1:nrOfLoc
-    options.uLoc{i} = 0; % input for simulation
-    options.uLocTrans{i} = options.uLoc{i}; % input center for reachability analysis
-    options.Uloc{i} = zonotope(0); % input deviation for reachability analysis
-end
+if sim
+    N = 50;
+    tic;
+    for i=1:N
+        %set initial state, input
+        if i == 1
+            %simulate center
+            options.x0 = center(options.R0);
+        elseif i < 5
+            % simulate extreme points
+            options.x0 = randPointExtreme(options.R0);
+        else
+            % simulate random points
+            options.x0 = randPoint(options.R0);
+        end 
 
-% simulate hybrid automaton
-HA = simulate(HA,options); 
-
-
-
-% Reachability Analysis ---------------------------------------------------
-
-%reachable set computations
-warning('off','all')
-%profile on
-tic
-[HA] = reach(HA,options);
-tComp = toc;
-disp(['computation time for spacecraft rendezvous: ',num2str(tComp)]);
-%profile viewer
-warning('on','all')
-
-
-
-
-% Verification ------------------------------------------------------------
-
-tic
-Rcont = get(HA,'continuousReachableSet');
-Rcont = Rcont.OT;
-verificationVelocity = 1;
-verificationLOS = 1;
-
-% feasible velocity region as polytope
-C = [0 0 1 0 0;0 0 -1 0 0;0 0 0 1 0;0 0 0 -1 0;0 0 1 1 0;0 0 1 -1 0;0 0 -1 1 0;0 0 -1 -1 0];
-d = [3;3;3;3;4.2;4.2;4.2;4.2];
-
-% line-of-sight as polytope
-Cl = [-1 0 0 0 0;tan(pi/6) -1 0 0 0;tan(pi/6) 1 0 0 0];
-dl = [100;0;0];
-
-% randezvous attempt -> check if spacecraft inside line-of-sight
-for i = 2:length(Rcont{2})  
-
-    temp = interval(Cl*Rcont{2}{i})-dl;
-
-    if any(supremum(temp) > 0)
-       verificationLOS = 0;
-       break;
+        %simulate hybrid automaton
+        HAsim = simulate(HA,options);
+        simRes{i} = get(HAsim,'trajectory');
     end
-end
+    toc;
+    disp(['Time needed for the simulation: ', num2str(toc)]);
 
-% randezvous attempt -> check if velocity inside feasible region
-for i = 1:length(Rcont{2})  
-
-    temp = interval(C*Rcont{2}{i})-d;
-
-    if any(supremum(temp) > 0)
-       verificationVelocity = 0;
-       break;
+    % Visualization -------------------------------------------------------
+    figure 
+    hold on
+    box on
+    options.projectedDimensions = [3 4];
+    options.plotType = {'b','m','g'};
+    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    for i = 1:length(simRes)
+       for j = 1:length(simRes{i}.x)
+           plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
+                simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
+       end
     end
+    xlabel('vx');
+    ylabel('vy');
 end
 
-verificationVelocity
-verificationLOS
 
-tVer = toc;
-disp(['computation time of verification: ',num2str(tVer)]);
+% Reachability ------------------------------------------------------------
+if reacha
+    tic;
+    [HA] = reach(HA,options);
+    toc;
+    disp(['Time needed for the analysis: ', num2str(toc)]);
+    
+    % Verification --------------------------------------------------------
+    
+    %TODO
+    
+% Visualization -------------------------------------------------------
+if vis    
+    figure 
+    hold on
+    options.projectedDimensions = [3 4];
 
-
-
-
-% Visualization -----------------------------------------------------------
-
-% Figure 4 (a), (b) and (c) in reference paper [1]
-warning('off','all')
-figure 
-hold on
-grid on
-fill([-100,0,-100],[-60,0,60],'y','FaceAlpha',0.6,'EdgeColor','none');
-options.projectedDimensions = [1 2];
-options.plotType = {'b','m'};
-plot(HA,'reachableSet',options); %plot reachable set
-plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-plot(HA,'simulation',options); % plot simulation
-xlabel('x [m]');
-ylabel('y [m]');
-
-% Figure 4 (d) in reference paper[1]
-figure 
-hold on
-grid on
-fill([-3,-1.2,1.2,3,3,1.2,-1.2,-3],[-1.2,-3,-3,-1.2,1.2,3,3,1.2],'y','FaceAlpha',0.6,'EdgeColor','none');
-options.projectedDimensions = [3 4];
-options.plotType = {'b','m'};
-plot(HA,'reachableSet',options); %plot reachable set
-plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-plot(HA,'simulation',options); % plot simulation
-warning('on','all')
-xlabel('v_x [m/min]');
-ylabel('v_y [m/min]');
-
-
-
-
-% Visited Locations -------------------------------------------------------
-
-% get results
-traj = get(HA,'trajectory');
-locTraj = traj.loc;
-setTraj = unique(locTraj)
+    options.plotType = 'b';
+    plot(HA,'reachableSet',options); %plot reachable set
+    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    xlabel('vx');
+    ylabel('vy');
+end
+end
 
 
 %------------- END OF CODE --------------

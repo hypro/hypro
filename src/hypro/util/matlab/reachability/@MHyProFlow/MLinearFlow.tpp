@@ -18,17 +18,17 @@ void MLinearFlow::new_mat( int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[2], mat_rows, mat_cols );
 	plhs[0] = convertPtr2Mat<hypro::linearFlow<double>>( new hypro::linearFlow<double>( matrix ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_mat input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_mat input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
@@ -49,17 +49,17 @@ void MLinearFlow::setFlowMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], rows, cols );
 	flow->setFlowMatrix( matrix );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setFlowMatrix input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setFlowMatrix input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
@@ -79,22 +79,22 @@ void MLinearFlow::addRow( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 	const hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], rows );
 	flow->setFlowMatrix( vector );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "addRow input:\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	mexPrintf( "\noutput:\n" );
-	hypro::matrix_t<double> matrix = flow->getFlowMatrix();
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "addRow input:\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// mexPrintf( "\noutput:\n" );
+	// hypro::matrix_t<double> matrix = flow->getFlowMatrix();
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
@@ -111,17 +111,17 @@ void MLinearFlow::getFlowMatrix( int nlhs, mxArray* plhs[], int nrhs, const mxAr
 	int cols = matrix.cols();
 	plhs[0] = mxCreateDoubleMatrix( rows, cols, mxREAL );
 	ObjectHandle::convert2Matlab( matrix, plhs[0], rows, cols );
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getFlowMatrix output:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getFlowMatrix output:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
@@ -136,14 +136,14 @@ void MLinearFlow::isIdentity( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 	const bool ans = flow->isIdentity();
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "isIdentity output:\n" );
-	if ( ans ) {
-		mexPrintf( "identity\n" );
-	} else {
-		mexPrintf( "not identity\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "isIdentity output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "identity\n" );
+	// } else {
+	// 	mexPrintf( "not identity\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
@@ -158,14 +158,14 @@ void MLinearFlow::hasNoFlow( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	const bool ans = flow->hasNoFlow();
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "hasNoFlow output:\n" );
-	if ( ans ) {
-		mexPrintf( "has no flow\n" );
-	} else {
-		mexPrintf( "does not have no flow\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "hasNoFlow output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "has no flow\n" );
+	// } else {
+	// 	mexPrintf( "does not have no flow\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**
@@ -189,10 +189,6 @@ void MLinearFlow::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 		mexPrintf( "\n" );
 	}
 	mexPrintf( "]\n" );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "ostream\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 /**

@@ -25,7 +25,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:4
-    options.timeStepLoc{i} = 0.001;
+    options.timeStepLoc{i} = 0.05;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -35,7 +35,7 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 1;
+options.tFinal = 4;
 
 dim = 6;
 vis = 1;

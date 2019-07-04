@@ -18,21 +18,21 @@ void MAffineFlow::new_mat_vec( int nlhs, mxArray* plhs[], int nrhs, const mxArra
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	plhs[0] = convertPtr2Mat<hypro::affineFlow<double>>( new hypro::affineFlow<double>( matrix, vector ) );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "new_mat_vec input:\n" );
-	mexPrintf( "matrix:\n" );
-	for ( int i = 0; i < matrix.rows(); i++ ) {
-		for ( int j = 0; j < matrix.cols(); j++ ) {
-			mexPrintf( " %f", matrix( i, j ) );
-		}
-		mexPrintf( "\n" );
-	}
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	mexPrintf( "\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "new_mat_vec input:\n" );
+	// mexPrintf( "matrix:\n" );
+	// for ( int i = 0; i < matrix.rows(); i++ ) {
+	// 	for ( int j = 0; j < matrix.cols(); j++ ) {
+	// 		mexPrintf( " %f", matrix( i, j ) );
+	// 	}
+	// 	mexPrintf( "\n" );
+	// }
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// mexPrintf( "\n" );
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::setTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -49,13 +49,13 @@ void MAffineFlow::setTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[3], len );
 	flow->setTranslation( vector );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "setTranslation input:\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "setTranslation input:\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::getTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -69,13 +69,13 @@ void MAffineFlow::getTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	plhs[0] = mxCreateDoubleMatrix( vector.size(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( vector, plhs[0], vector.size(), 1 );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "getTranslation output:\n" );
-	mexPrintf( "vector:\n" );
-	for ( int j = 0; j < vector.rows(); j++ ) {
-		mexPrintf( " %f", vector( j ) );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "getTranslation output:\n" );
+	// mexPrintf( "vector:\n" );
+	// for ( int j = 0; j < vector.rows(); j++ ) {
+	// 	mexPrintf( " %f", vector( j ) );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::hasTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -87,14 +87,14 @@ void MAffineFlow::hasTranslation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	const bool ans = flow->hasTranslation();
 	plhs[0] = mxCreateLogicalScalar( ans );
 
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "hasTranslation output:\n" );
-	if ( ans ) {
-		mexPrintf( "has translation\n" );
-	} else {
-		mexPrintf( "does not have translation\n" );
-	}
-	//+++++++++++++TESTING++++++++++++++++++++
+	// //+++++++++++++TESTING++++++++++++++++++++
+	// mexPrintf( "hasTranslation output:\n" );
+	// if ( ans ) {
+	// 	mexPrintf( "has translation\n" );
+	// } else {
+	// 	mexPrintf( "does not have translation\n" );
+	// }
+	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -125,10 +125,6 @@ void MAffineFlow::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 		mexPrintf( "%f ", vec( i ) );
 	}
 	mexPrintf( "]\n\n" );
-
-	//+++++++++++++TESTING++++++++++++++++++++
-	mexPrintf( "ostream\n" );
-	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MAffineFlow::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
