@@ -25,7 +25,6 @@ classdef MHyProReach < handle
         end
         
         function out = computeForwardReachability(obj)
-            test = MHyPro(12, 3, obj.ObjectHandle);
             flowpipes = MHyPro(12, 3, obj.ObjectHandle);
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
@@ -76,7 +75,7 @@ classdef MHyProReach < handle
         function plot(obj, flowpipes, dims, labs)
             num_flowpipes = length(flowpipes);
             figure()
-            
+            disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
                 num_states = length(currentFlowpipe);
@@ -86,11 +85,6 @@ classdef MHyProReach < handle
                     currentState = currentFlowpipe{state};
                     vertices = currentState.vertices(0);
                     obj.plotVertices(vertices, dims);
-                    
-%                     %Plot points
-%                     point = vertices(:,1);
-%                     scatter(point(1),point(6));
-                    
                     hold on
                 end 
                 hold on
@@ -114,7 +108,7 @@ classdef MHyProReach < handle
 %                     
 %                     %Plot points
 %                     point = vertices(:,1);
-%                     scatter(point(1),point(2));
+%                     scatter(point(1),point(6));
 %                     
 %                     hold on
 %                 end 

@@ -11,14 +11,13 @@ loc.setName('loc');
 
 % Set flow:
 % x' = v v' = -9.81
-flowMatrix = [0 1 0; 0 0 -9.81; 0 0 0];
+flowMatrix = [0 1 0; 0 0 -9.81;0 0 0];
 loc.setFlow(flowMatrix);
 
 % Set invariant x >= 0
-inv_mat = [-1 0];
-inv_vec = 0;
-inv = MHyProCondition(inv_mat, inv_vec);
+inv = MHyProCondition([-1 0], 0);
 loc.setInvariant(inv);
+
 
 l = automaton.addLocation(loc);
 
@@ -38,7 +37,7 @@ reset = MHyProReset();
 reset.setMatrix([1 0; 0 -0.75]);
 reset.setVector([0;0]);
 
-tran.setAggregation(1);
+tran.setAggregation(0);
 tran.setGuard(guard);
 tran.setSource(l);
 tran.setTarget(l);
@@ -47,14 +46,15 @@ tran.setLabels({MHyProLabel('t1')});
 
 l.addTransition(tran);
 
+
 %-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
 
 % Create initial set
 % x = [10, 10.2] v = 0
-boxVector = [10.2; -10.2; 0; 0];
-boxMatrix = [1 0; -1 0; 0 1; 0 -1];
+boxVector = [-10; 10.2; 0; 0];
+boxMatrix = [-1 0; 1 0; 0 1; 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(l, initialCond);
 
@@ -77,10 +77,10 @@ automaton.addInitialState(l, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 10, 'jumpDepth', 5);
+settings = struct('timeStep', 0.01, 'timeBound', 40, 'jumpDepth', 20);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(0);
+reach.setRepresentationType(2);
 reach.settings();
 
 tic;

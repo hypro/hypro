@@ -26,9 +26,9 @@ void MReach::computeForwardReachability( int nlhs, mxArray* plhs[], int nrhs, co
 
 	int num_flowpipes = flowpipes.size();
 	mexPrintf( "\n" );
-	mexPrintf( "Number of flowpipes: %d\n", num_flowpipes );
+	mexPrintf( "MReach: Number of flowpipes: %d\n", num_flowpipes );
 	std::vector<hypro::State_t<double>> f = flowpipes[0].second;
-	mexPrintf( "Number of states in f1: %d\n", f.size() );
+	mexPrintf( "MReach: Number of states in f1: %d\n", f.size() );
 	mwSize dims[2] = {1, (mwSize)num_flowpipes};
 	const char* field_names[] = {"num", "flowpipe"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, field_names );

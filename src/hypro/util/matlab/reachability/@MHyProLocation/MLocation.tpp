@@ -745,5 +745,8 @@ void MLocation::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 		unequals( nlhs, plhs, nrhs, prhs );
 		return;
 	}
+	if (cmd == 30){
+		destroySmartObject<hypro::Location<double>>(prhs[2]);
+	}
 	mexErrMsgTxt( "MLocation - Command not recognized." );
 }
