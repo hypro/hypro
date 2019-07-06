@@ -22,7 +22,7 @@ function HA = cruise_control_ha(~)
 %   x' == 0 &
 %   t' == 1
 dynA = [0,0,-1;0,0,0;0,0,0];
-dynB = [0;0;0];
+dynB = zeros(3);
 dync = [-2.5;0;1];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -37,7 +37,7 @@ inv = mptPolytope(invOpt);
 trans = {};
 %% equation:
 %   
-resetA = [1,0,0;0,1,0;0,0,1];
+resetA = eye(3);
 resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
 
@@ -77,7 +77,7 @@ loc{1} = location('S1',1, inv, trans, dynamics);
 %   x' == 0 &
 %   t' ==0
 dynA = [0,0,0;0,0,0;0,0,0];
-dynB = [0;0;0];
+dynB = zeros(3);
 dync = [-5;0;0];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -114,7 +114,7 @@ loc{2} = location('S2',2, inv, trans, dynamics);
 %   x' == 0 &
 %   t' == 0
 dynA = [0,0,0;0,0,0;0,0,0];
-dynB = [0;0;0];
+dynB = zeros(3);
 dync = [-2.5;0;0];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -167,7 +167,7 @@ loc{3} = location('S3',3, inv, trans, dynamics);
 %   x' == 0 &
 %   t' == 0.5
 dynA = [0,0,-1;0,0,0;0,0,0];
-dynB = [0;0;0];
+dynB = zeros(3);
 dync = [-1.2;0;0.5];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -240,7 +240,7 @@ loc{4} = location('S4',4, inv, trans, dynamics);
 %   x' == v &
 %   t' == 0
 dynA = [-0.052,-0.001,0;1,0,0;0,0,0];
-dynB = [0;0;0];
+dynB = zeros(3);
 dync = [0;0;0];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -296,7 +296,7 @@ loc{5} = location('S5',5, inv, trans, dynamics);
 %   x' == 0 &
 %   t' == 0
 dynA = [0,0,0;0,0,0;0,0,0];
-dynB = [0;0;0];
+dynB = zeros(3);
 dync = [1.5;0;0];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 

@@ -3,12 +3,12 @@ function runMHyProBenchmarks()
 statPath = '/home/marta/Desktop';
 statFName = 'mhypro_times.txt';
 safePath = '/home/marta/Desktop';
-runAll = 1;
+runAll = 0;
 times = {};
     names = {'mhypro_bouncing_ball','mhypro_car','mhypro_cruise_control',...
         'mhypro_oscillator_4','mhypro_oscillator_8','mhypro_oscillator_16',...
         'mhypro_rendezvous','mhypro_switching_system','mhypro_two_tanks',...
-        'mhypro_vehicle_platoon'}
+        'mhypro_vehicle_platoon'};
 
 
 if runAll
@@ -30,6 +30,15 @@ if runAll
         fprintf(statFileID,'%s %f\n', names{i}, times{i});
     end
 else
-    carMHyProTest(0,safePath,names{2})
+%     BouncingBallTest(0,safePath,names{1});
+%     carMHyProTest(0,safePath,names{2});
+%       cruiseControl(1,safePath,names{3});
+%     FilteredOscillator4(1,safePath,names{4});
+%     FilteredOscillator8(1,safePath,names{5});
+    FilteredOscillator16(1,safePath,names{6});
+%     rendezvousSX4(1,safePath,names{7});
+%     switchingSystem(1,safePath,names{8});
+%     TwoTanksTest(1,safePath,names{9});
+%     VehiclePlatoonTest(1,safePath,names{10});
 end
 end

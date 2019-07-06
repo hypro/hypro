@@ -232,7 +232,7 @@ automaton.addInitialState(l1, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.0001, 'timeBound', 5, 'jumpDepth', 7);
+settings = struct('timeStep', 0.001, 'timeBound', 1, 'jumpDepth', 3);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -243,6 +243,7 @@ flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 3];
+labs = ["x1", "x3"];
 ext = 'png';
 reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end
