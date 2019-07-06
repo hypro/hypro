@@ -1,4 +1,4 @@
-function cruiseControl
+function time = cruiseControl(safe, safePath, figName)
 
 % vars: [v, x, t]
 
@@ -396,5 +396,6 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [3 1];
 labs = ["t","v"];
-reach.plot(flowpipes, dim,labs);
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end

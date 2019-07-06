@@ -1,4 +1,4 @@
-function TwoTanksTest
+function time = TwoTanksTest(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -235,8 +235,8 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 2];
 labs = ["x1","x2"];
-reach.plot(flowpipes, dim,labs);
-
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end
 
 

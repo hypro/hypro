@@ -1,4 +1,4 @@
-function switchingSystem()
+function time = switchingSystem(safe, safePath, figName)
 
 % vars: [x1,x2,x3,x4,x5]
 
@@ -243,6 +243,6 @@ flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 3];
-reach.plot(flowpipes, dim);
-
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end

@@ -1,4 +1,4 @@
-function RodReactorTest
+function time = RodReactorTest(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -178,6 +178,6 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 3];
 labs = ["x", "c2"];
-reach.plot(flowpipes, dim, labs);
-
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end

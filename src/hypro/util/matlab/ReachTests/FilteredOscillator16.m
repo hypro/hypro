@@ -1,4 +1,4 @@
-function FilteredOscillator16
+function time = FilteredOscillator16(safe, safePath, figName)
 
 % vars = [ state var x,y,f8a_f4a_x1,f8a_f4a_x2,f8a_f4a_x3,f8a_x1,f8a_f4b_x1,
 %    f8a_f4b_x2,f8a_f4b_x3,x1,f8b_f4a_x1,f8b_f4a_x2,f8b_f4a_x3,f8b_x1,
@@ -268,7 +268,6 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 6];
 labs = ["x", "f8ax1"];
-reach.plot(flowpipes, dim, labs);
-
-
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end

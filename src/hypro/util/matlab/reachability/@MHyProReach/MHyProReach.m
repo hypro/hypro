@@ -72,9 +72,9 @@ classdef MHyProReach < handle
              MHyPro(12, 6, obj.ObjectHandle);
         end
          
-        function plot(obj, flowpipes, dims, labs)
+        function plot(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);
-            figure()
+            fig = figure()
             disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
@@ -90,6 +90,10 @@ classdef MHyProReach < handle
                 hold on
                 xlabel(labs(1));
                 ylabel(labs(2));
+                if save
+                    fname = strcat(name,'.',ext);
+                    saveas(fig, fullfile(path,fname),ext);
+                end
             end
         end
         

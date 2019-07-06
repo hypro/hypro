@@ -1,4 +1,4 @@
-function carMHyProTest
+function time = carMHyProTest(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -152,7 +152,7 @@ automaton.addInitialState(lAcc, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 20, 'jumpDepth', 20);
+settings = struct('timeStep', 0.01, 'timeBound', 2, 'jumpDepth', 2);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -163,6 +163,8 @@ flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [3 2];
-reach.plot(flowpipes, dim);
+labs = ["t", "d"];
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 
 end

@@ -1,4 +1,4 @@
-function FilteredOscillator4
+function time = FilteredOscillator4(safe, safePath, figName)
 
 % vars = [x,y,x1,x2,x3,z]
 
@@ -198,6 +198,7 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [1 6];
 labs = ["x","z"];
-reach.plot(flowpipes, dim,labs);
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 
 end

@@ -1,4 +1,4 @@
-function BouncingBallTest
+function time = BouncingBallTest(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -76,7 +76,7 @@ automaton.addInitialState(l, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 3, 'jumpDepth', 2);
+settings = struct('timeStep', 0.01, 'timeBound', 4, 'jumpDepth', 2);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -88,5 +88,7 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [2 1];
 labs = ["v", "x"];
-reach.plot(flowpipes, dim, labs);
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+
 end

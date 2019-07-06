@@ -1,4 +1,4 @@
-function VehiclePlatoonTest()
+function time = VehiclePlatoonTest(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -154,7 +154,7 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [4 7];
 labs = ["e2", "e3"];
-reach.plot(flowpipes, dim,labs);
-
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end
 

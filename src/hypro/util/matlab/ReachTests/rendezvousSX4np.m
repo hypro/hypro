@@ -1,4 +1,4 @@
-function rendezvousSX4np
+function time = rendezvousSX4np(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -142,6 +142,6 @@ time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [3 4];
 labs = ["vx", "vy"];
-reach.plot(flowpipes, dim, labs);
-
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 end
