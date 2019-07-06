@@ -18,7 +18,6 @@ loc.setFlow(flowMatrix);
 inv = MHyProCondition([-1 0], 0);
 loc.setInvariant(inv);
 
-
 l = automaton.addLocation(loc);
 
 %-----------------------------------------------%
@@ -26,10 +25,10 @@ l = automaton.addLocation(loc);
 %-----------------------------------------------%
 tran = MHyProTransition();
 % Set guard:
-% x = 0 or v >= 0
+% x = 0 & v <= 0
 guard = MHyProCondition();
-guard.setMatrix([ -1 0; 0 -1]); % First set the matrix then the vector!?
-guard.setVector([0;0]);
+guard.setMatrix([ -1 0; 1 0; 0 1]); % First set the matrix then the vector!?
+guard.setVector([0;0;0]);
 
 % Set reset
 % x:= x v:= -0.75v
@@ -77,17 +76,17 @@ automaton.addInitialState(l, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 40, 'jumpDepth', 20);
+settings = struct('timeStep', 0.01, 'timeBound', 3, 'jumpDepth', 2);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(2);
+reach.setRepresentationType(0);
 reach.settings();
 
 tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 2];
-labs = ["x", "v"];
+dim = [2 1];
+labs = ["v", "x"];
 reach.plot(flowpipes, dim, labs);
 end

@@ -1,6 +1,6 @@
 function complete = filtered_oscillator_8()
 
-sim = 1;
+sim = 0;
 reacha = 1;
 
 % Load model
@@ -98,13 +98,13 @@ if reacha
 if vis    
     figure 
     hold on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [1 6];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('x');
+    ylabel('f8x1');
 end
 end
 

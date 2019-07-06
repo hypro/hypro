@@ -103,8 +103,8 @@ if vis
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('x');
+    ylabel('x1');
 end
 end
 

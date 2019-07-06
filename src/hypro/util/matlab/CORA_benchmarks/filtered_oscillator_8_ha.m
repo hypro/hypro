@@ -1,6 +1,6 @@
 function HA = filtered_oscillator_8_ha(~)
 %------------------Component system.osc_w_4th_order_1----------------------
-
+% vars: x,y,f4a_x1,f4a_x2,f4a_x3,f8_x1,f4b_x1,f4b_x2,f4b_x3,z
 %-----------------State loc1---------------------
 
 %% equation:

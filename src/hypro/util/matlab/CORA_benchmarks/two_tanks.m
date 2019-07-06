@@ -1,7 +1,7 @@
 function complete = two_tanks()
 
-sim = 1;
-reacha = 0;
+sim = 0;
+reacha = 1;
 
 % Load model
 HA = two_tanks_ha();
@@ -25,7 +25,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:4
-    options.timeStepLoc{i} = 0.1;
+    options.timeStepLoc{i} = 0.5;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
