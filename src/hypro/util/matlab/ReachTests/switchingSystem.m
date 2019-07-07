@@ -231,7 +231,7 @@ automaton.addInitialState(l1, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.00001, 'timeBound', 2, 'jumpDepth', 5);
+settings = struct('timeStep', 0.00005, 'timeBound', 0.3, 'jumpDepth', 5);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
