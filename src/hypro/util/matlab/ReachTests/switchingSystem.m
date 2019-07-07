@@ -30,7 +30,7 @@ flow_1 = [-0.8047,8.7420,-2.4591,-8.2714,-1.8640;...
 loc_1.setFlow(flow_1);
 
 % Set inv: x1 >= 3
-inv_1 = MHyProCondition([-1 0 0 0 0], -3);
+inv_1 = MHyProCondition([-1,0,0,0,0], -3);
 loc_1.setInvariant(inv_1);
 
 
@@ -55,7 +55,7 @@ flow_2 = [-0.8316,8.7658,-2.4744,-8.2608,-1.9033;...
 loc_2.setFlow(flow_2);
 
 % Set inv: x1 >= 2
-inv_2 = MHyProCondition([-1 0 0 0 0], -2);
+inv_2 = MHyProCondition([-1,0,0,0,0], -2);
 loc_2.setInvariant(inv_2);
 
 
@@ -92,12 +92,11 @@ loc_4 = MHyProLocation();
 loc_4.setName('loc4');
 
 % Set flow:
-%     x1' = -1.0145*x1 + 8.9701*x2 - 2.6207*x3 - 8.2199*x4 - 2.1469*x5
-%     x2' = -0.8316*x1 - 0.5860*x2 - 2.1006*x3 + 3.6035*x4 - 1.8423*x5
-%     x3' = 2.4511*x1 + 2.2394*x2 - 0.7538*x3 - 3.6934*x4 + 2.4585*x5
-%     x4' = 8.3858*x1 - 3.1739*x2 + 3.7822*x3 - 0.6249*x4 + 1.8829*x5
-%     x5' = 0.0076*x1 + 3.9682*x2 - 3.8578*x3 - 1.3253*x4 - 3.2477*x5
-
+%   x1' == -1.4021*x1 + 10.1647*x2 - 3.3937*x3 - 8.5139*x4 - 2.9602*x5
+%   x2' == -0.8316*x1 - 0.5860*x2 - 2.1006*x3 + 3.6035*x4 - 1.8423*x5
+%   x3' == 2.4511*x1 + 2.2394*x2 - 0.7538*x3 - 3.6934*x4 + 2.4585*x5
+%   x4' == 8.3858*x1 - 3.1739*x2 + 3.7822*x3 - 0.6249*x4 + 1.8829*x5 &
+%   x5' == -3.3585*x1 + 14.3426*x2 - 10.5703*x3 - 3.8785*x4 - 10.3111*x5
 flow_4 = [-1.4021,10.1647,-3.3937,-8.5139,-2.9602;...
 -0.8316,-0.5860,-2.1006,3.6035,-1.8423;...
 2.4511,2.2394,-0.7538,-3.6934,2.4585;
@@ -151,10 +150,10 @@ l5 = automaton.addLocation(loc_5);
 tran1 = MHyProTransition();
 % Set guard: x1 = 3 
 guard1 = MHyProCondition();
-guard1.setMatrix([1 0 0 0 0; -1 0 0 0 0]); 
-guard1.setVector([3;-3]);
+guard1.setMatrix([-1,0,0,0,0;1,0,0,0,0]); 
+guard1.setVector([-3;3]);
 
-tran1.setAggregation(1);
+tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(l1);
 tran1.setTarget(l2);
@@ -169,10 +168,10 @@ l1.addTransition(tran1);
 tran2 = MHyProTransition();
 % Set guard: x1 = 2 
 guard2 = MHyProCondition();
-guard2.setMatrix([1 0 0 0 0; -1 0 0 0 0]); 
-guard2.setVector([2;-2]);
+guard2.setMatrix([-1,0,0,0,0;1,0,0,0,0]); 
+guard2.setVector([-2;2]);
 
-tran2.setAggregation(1);
+tran2.setAggregation(2);
 tran2.setGuard(guard2);
 tran2.setSource(l2);
 tran2.setTarget(l3);
@@ -190,7 +189,7 @@ guard3 = MHyProCondition();
 guard3.setMatrix([1 0 0 0 0; -1 0 0 0 0]); 
 guard3.setVector([1;-1]);
 
-tran3.setAggregation(1);
+tran3.setAggregation(2);
 tran3.setGuard(guard3);
 tran3.setSource(l3);
 tran3.setTarget(l4);
@@ -205,10 +204,10 @@ l3.addTransition(tran3);
 tran4 = MHyProTransition();
 % Set guard: x1 = 0 
 guard4 = MHyProCondition();
-guard4.setMatrix([1 0 0 0 0; -1 0 0 0 0]); 
+guard4.setMatrix([-1,0,0,0,0;1,0,0,0,0]); 
 guard4.setVector([0;0]);
 
-tran4.setAggregation(1);
+tran4.setAggregation(2);
 tran4.setGuard(guard4);
 tran4.setSource(l4);
 tran4.setTarget(l5);
@@ -232,7 +231,7 @@ automaton.addInitialState(l1, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.001, 'timeBound', 1, 'jumpDepth', 3);
+settings = struct('timeStep', 0.00001, 'timeBound', 2, 'jumpDepth', 5);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);

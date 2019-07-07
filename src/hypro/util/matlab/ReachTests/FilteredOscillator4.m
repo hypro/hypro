@@ -196,8 +196,8 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 6];
-labs = ["x","z"];
+dim = [1 3];
+labs = ["x","x1"];
 ext = 'png';
 reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 

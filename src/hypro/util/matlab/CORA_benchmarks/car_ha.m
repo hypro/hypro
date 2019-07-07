@@ -19,17 +19,15 @@ inv = mptPolytope(invOpt);
 %% equation guard (acc -> brake):
 %   true (v <= inf)
 guardA = [1 0 0];
-guardb = inf;
+guardb = 1000;
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 %% dummy reset
 %   v = v & d = d
 resetA = eye(3);
-resetb = ...
-[0;0;0];
+resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
-
 trans1{1} = transition(guard, reset, 2, 'acc', 'brake');
 
 loc{1} = location('acc',1, inv, trans1, dynamics);
