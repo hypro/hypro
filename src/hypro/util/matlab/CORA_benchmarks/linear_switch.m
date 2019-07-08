@@ -1,16 +1,16 @@
-function complete = filtered_oscillator_4()
+function complete = linear_switch()
 
 sim = 0;
 reacha = 1;
 
 % Load model
-HA = filtered_oscillator_4_ha();
+HA = linear_switch_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
+Zdelta = 1e-4*ones(5,1);
 
 % options
-Zcenter = [0.25;0;0;0;0;0];
+Zcenter = [3.1;4;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
@@ -24,20 +24,20 @@ options.isHyperplaneMap = 0;
 options.originContained = 0;
 
 %set input:
-for i = 1:4
-    options.timeStepLoc{i} = 0.05;
+for i = 1:5
+    options.timeStepLoc{i} = 0.001;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
 
 % First location
-options.startLoc = 3; %initial location
+options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 2;
 
-dim = 6;
+dim = 5;
 vis = 1;
 
 % Simulation --------------------------------------------------------------
@@ -103,8 +103,8 @@ if vis
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    xlabel('x');
-    ylabel('x1');
+    xlabel('x1');
+    ylabel('x3');
 end
 end
 

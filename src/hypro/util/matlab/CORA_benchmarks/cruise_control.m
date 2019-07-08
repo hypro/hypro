@@ -1,43 +1,43 @@
-function complete = filtered_oscillator_4()
+function complete = cruise_control()
 
 sim = 0;
 reacha = 1;
 
 % Load model
-HA = filtered_oscillator_4_ha();
+HA = cruise_control_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
 
 % options
-Zcenter = [0.25;0;0;0;0;0];
-options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
+% v = [15, 40] x = [0, 0]  t =[0, 2.5]
+Zcenter = interval([15;0;0],[40;0;2.5]);
+options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
 
 options.taylorTerms = 10;
 options.zonotopeOrder = 20;
 options.polytopeOrder = 10;
-options.errorOrder=2;
+options.errorOrder=10;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
 
 %set input:
-for i = 1:4
-    options.timeStepLoc{i} = 0.05;
-    options.uLoc{i} = 0;
+for i = 1:6
+    options.timeStepLoc{i} = 0.1;
+    options.uLoc{i} = [0;0;0];
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
 
 % First location
-options.startLoc = 3; %initial location
+options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 100;
 
-dim = 6;
+dim = 3;
 vis = 1;
 
 % Simulation --------------------------------------------------------------
@@ -69,7 +69,7 @@ if sim
     figure 
     hold on
     box on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [3 1];
     options.plotType = {'b','m','g'};
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     for i = 1:length(simRes)
@@ -78,8 +78,8 @@ if sim
                 simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
        end
     end
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('t');
+    ylabel('v');
 end
 
 
@@ -98,13 +98,13 @@ if reacha
 if vis    
     figure 
     hold on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [3 1];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    xlabel('x');
-    ylabel('x1');
+    xlabel('t');
+    ylabel('v');
 end
 end
 

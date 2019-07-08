@@ -1,16 +1,16 @@
-function complete = filtered_oscillator_4()
+function complete = two_tanks()
 
 sim = 0;
 reacha = 1;
 
 % Load model
-HA = filtered_oscillator_4_ha();
+HA = two_tanks_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
+Zdelta = [0.5;0];
 
 % options
-Zcenter = [0.25;0;0;0;0;0];
+Zcenter = [2;1];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
@@ -25,7 +25,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:4
-    options.timeStepLoc{i} = 0.05;
+    options.timeStepLoc{i} = 0.5;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -35,9 +35,9 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 2;
 
-dim = 6;
+dim = 2;
 vis = 1;
 
 % Simulation --------------------------------------------------------------
@@ -69,7 +69,7 @@ if sim
     figure 
     hold on
     box on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [1 2];
     options.plotType = {'b','m','g'};
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     for i = 1:length(simRes)
@@ -98,13 +98,13 @@ if reacha
 if vis    
     figure 
     hold on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [1 2];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    xlabel('x');
-    ylabel('x1');
+%     xlabel('t');
+%     ylabel('v');
 end
 end
 

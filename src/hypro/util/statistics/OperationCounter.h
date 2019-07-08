@@ -1,7 +1,6 @@
 #pragma once
 
 #include "flags.h"
-
 #ifdef HYPRO_STATISTICS
 #ifndef INCL_FROM_CTR_REPO
 	static_assert(false, "This file may only be included indirectly by CounterRepository.h");

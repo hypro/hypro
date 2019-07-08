@@ -1,31 +1,30 @@
-function complete = filtered_oscillator_4()
+function complete = rod_reactor()
 
 sim = 0;
 reacha = 1;
 
 % Load model
-HA = filtered_oscillator_4_ha();
+HA = rod_reactor_HA();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
 
 % options
-Zcenter = [0.25;0;0;0;0;0];
-options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
+Zcenter = interval([510;20;20],[520;20;20]);
+options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
 
 options.taylorTerms = 10;
 options.zonotopeOrder = 20;
 options.polytopeOrder = 10;
-options.errorOrder=2;
+options.errorOrder=0;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
 
 %set input:
-for i = 1:4
-    options.timeStepLoc{i} = 0.05;
+for i = 1:3
+    options.timeStepLoc{i} = 0.01;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -35,9 +34,9 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 12;
 
-dim = 6;
+dim = 3;
 vis = 1;
 
 % Simulation --------------------------------------------------------------
@@ -78,8 +77,8 @@ if sim
                 simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
        end
     end
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('x');
+    ylabel('c2');
 end
 
 
@@ -89,11 +88,7 @@ if reacha
     [HA] = reach(HA,options);
     toc;
     disp(['Time needed for the analysis: ', num2str(toc)]);
-    
-    % Verification --------------------------------------------------------
-    
-    %TODO
-    
+
 % Visualization -------------------------------------------------------
 if vis    
     figure 
@@ -104,7 +99,7 @@ if vis
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     xlabel('x');
-    ylabel('x1');
+    ylabel('c2');
 end
 end
 

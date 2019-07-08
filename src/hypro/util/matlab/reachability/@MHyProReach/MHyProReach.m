@@ -25,7 +25,6 @@ classdef MHyProReach < handle
         end
         
         function out = computeForwardReachability(obj)
-            test = MHyPro(12, 3, obj.ObjectHandle);
             flowpipes = MHyPro(12, 3, obj.ObjectHandle);
             out = cell(1, length(flowpipes));
                 for i = 1:length(flowpipes)
@@ -73,9 +72,10 @@ classdef MHyProReach < handle
              MHyPro(12, 6, obj.ObjectHandle);
         end
          
-        function plot(obj, flowpipes, dims)
+        function plot(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);
-            figure()
+            fig = figure()
+            disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
                 num_states = length(currentFlowpipe);
@@ -83,16 +83,17 @@ classdef MHyProReach < handle
                 
                 for state = 1:num_states
                     currentState = currentFlowpipe{state};
-                    vertices = currentState.vertices(0)
+                    vertices = currentState.vertices(0);
                     obj.plotVertices(vertices, dims);
-                    
-%                     %Plot points
-%                     point = vertices(:,1);
-%                     scatter(point(1),point(6));
-                    
                     hold on
                 end 
                 hold on
+                xlabel(labs(1));
+                ylabel(labs(2));
+                if save
+                    fname = strcat(name,'.',ext);
+                    saveas(fig, fullfile(path,fname),ext);
+                end
             end
         end
         
@@ -111,7 +112,7 @@ classdef MHyProReach < handle
 %                     
 %                     %Plot points
 %                     point = vertices(:,1);
-%                     scatter(point(1),point(2));
+%                     scatter(point(1),point(6));
 %                     
 %                     hold on
 %                 end 
@@ -137,6 +138,11 @@ classdef MHyProReach < handle
             P = [ver_x;ver_y]';
             pgon = polyshape(P, 'Simplify', false);
             plot(pgon,'FaceColor',[0.2 0.55 0.74], 'EdgeColor', [0.380, 0.482, 0.537]);           
+        end
+        
+        function plotBadStates(obj, normalMat, offsetVec, dims)
+             %???
+            
         end
         
     end

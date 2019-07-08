@@ -2,17 +2,17 @@ classdef MHyProLocation < handle
     
     properties (SetAccess = public, GetAccess = public)
         ObjectHandle
-        Id
+        SmartFlag = 0; % If 1 then use delete function for smart pointers
     end
     
     methods (Access = private)
         
         % Destructor
         function delete(obj)
-            try
-               % MHyPro(6, 1, obj.ObjectHandle);
-            catch
-                % ohne mexUnlock
+            if obj.SmartFlag == 0
+               MHyPro(6, 1, obj.ObjectHandle);
+            else
+              % MHyPro(6,30,obj.ObjectHandle);
             end
         end
         

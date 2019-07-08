@@ -1,44 +1,78 @@
-function complete = filtered_oscillator_4()
+function rendezvousSX4np()
+% example_linear_reach_ARCH18_rendezvousSX4np - example of linear 
+% reachability analysis from the ARCH18 friendly competition 
+% (instance of rendevouz example)
+%
+% Syntax:  
+%    example_linear_reach_ARCH18_rendezvousSX4np
+%
+% Inputs:
+%    no
+%
+% Outputs:
+%
+% References: 
+%   [1] N. Chan et al. "Verifying safety of an autonomous spacecraft 
+%       rendezvous mission (Benchmark proposal)"
 
+% Author:       Matthias Althoff
+% Written:      20-April-2018
+% Last update:  ---
+% Last revision:---
+
+
+%------------- BEGIN CODE --------------
+
+% x_1 = v_x
+% x_2 = v_y
+% x_3 = s_x 
+% x_4 = s_y
+% x_5 = t
+
+
+% Options -----------------------------------------------------------------
 sim = 0;
 reacha = 1;
-
-% Load model
-HA = filtered_oscillator_4_ha();
-options.enclosureEnables = [3 5];
-options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
-
-% options
-Zcenter = [0.25;0;0;0;0;0];
-options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
-options.x0 = center(options.R0); %initial state for simulation
+vis = 1;
 
 
-options.taylorTerms = 10;
-options.zonotopeOrder = 20;
-options.polytopeOrder = 10;
-options.errorOrder=2;
-options.reductionTechnique = 'girard';
-options.isHyperplaneMap = 0;
+% debugging mode
+options.debug = 0;
+
+% initial set
+R0 = zonotope([[-900; -400; 0; 0; 0],diag([25;25;0;0;0])]);
+
+% initial set
+options.x0=center(R0); % initial state for simulation
+options.R0=R0; % initial state for reachability analysis
+
+% other
+options.startLoc = 1; % initial location
+options.finalLoc = -inf; % no final location
+options.tStart=0; % start time
+options.tFinal=20; % final time
+options.intermediateOrder = 2;
 options.originContained = 0;
 
-%set input:
-for i = 1:4
-    options.timeStepLoc{i} = 0.05;
+options.zonotopeOrder=40; % zonotope order
+options.polytopeOrder=3; % polytope order
+options.taylorTerms=3;
+options.reductionTechnique = 'girard';
+options.isHyperplaneMap=0;
+options.enclosureEnables = [3, 5]; % choose enclosure method(s)
+options.filterLength = [5,7];
+options.guardIntersect = 'polytope';
+options.errorOrder = 2;
+
+% specify hybrid automata
+HA = rendezvousSX4np_ha(); % automatically converted from SpaceEx
+
+for i = 1:5
+    options.timeStepLoc{i} = 0.01;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
-
-% First location
-options.startLoc = 3; %initial location
-options.finalLoc = 0; %0: no final location
-options.tStart = 0; %start time
-options.tFinal = 4;
-
-dim = 6;
-vis = 1;
 
 % Simulation --------------------------------------------------------------
 
@@ -69,7 +103,7 @@ if sim
     figure 
     hold on
     box on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [3 4];
     options.plotType = {'b','m','g'};
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     for i = 1:length(simRes)
@@ -78,8 +112,8 @@ if sim
                 simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
        end
     end
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('vx');
+    ylabel('vy');
 end
 
 
@@ -98,14 +132,15 @@ if reacha
 if vis    
     figure 
     hold on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [3 4];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    xlabel('x');
-    ylabel('x1');
+    xlabel('vx');
+    ylabel('vy');
 end
 end
 
-complete = 1;
+
+%------------- END OF CODE --------------

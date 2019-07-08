@@ -1,4 +1,4 @@
-function carMHyProTest
+function time = carMHyProTest(safe, safePath, figName)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -95,14 +95,6 @@ tran1.setTarget(lBrake);
 tran1.setLabels({MHyProLabel('tran1')});
 lAcc.addTransition(tran1);
 
-% test
-locT = lAcc.getTransitions();
-assert(length(locT) == 1);
-lab1 = locT{1}.getLabels();
-assert(isequal(lab1{1}.getName(), 'tran1'));
-% test end
-
-
 %-----------------------------------------------%
 %              brake -> acc
 %-----------------------------------------------%
@@ -119,19 +111,6 @@ tran2.setTarget(lAcc);
 tran2.setLabels({MHyProLabel('tran2')});
 lBrake.addTransition(tran2);
 
-% test
-locT = lBrake.getTransitions();
-assert(length(locT) == 1);
-lab1 = locT{1}.getLabels();
-assert(isequal(lab1{1}.getName(), 'tran2'));
-g = tran2.getGuard();
-assert(g == guard2);
-s = tran2.getSource();
-t = tran2.getTarget();
-assert(s == lBrake);
-assert(t == lAcc);
-% test end
-
 %-----------------------------------------------%
 %              brake -> idle
 %-----------------------------------------------%
@@ -142,19 +121,6 @@ tran3.setSource(lBrake);
 tran3.setTarget(lIdle);
 tran3.setLabels({MHyProLabel('tran3')});
 lBrake.addTransition(tran3);
-
-% test
-locT = lBrake.getTransitions();
-assert(length(locT) == 2);
-lab1 = locT{1}.getLabels();
-lab2 = locT{2}.getLabels();
-assert(isequal(lab1{1}.getName(), 'tran2'));
-assert(isequal(lab2{1}.getName(), 'tran3'));
-s = tran3.getSource();
-t = tran3.getTarget();
-assert(s == loc_brake);
-assert(t == loc_idle);
-% test end
 
 %-----------------------------------------------%
 %              idle -> acc
@@ -172,19 +138,6 @@ tran4.setTarget(lAcc);
 tran4.setLabels({MHyProLabel('tran4')});
 lIdle.addTransition(tran4);
 
-% test
-locT = lIdle.getTransitions();
-assert(length(locT) == 1);
-lab1 = locT{1}.getLabels();
-assert(isequal(lab1{1}.getName(), 'tran4'));
-s = tran4.getSource();
-t = tran4.getTarget();
-assert(s == loc_idle);
-assert(t == loc_acc);
-% test end
-
-
-
 %-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
@@ -195,25 +148,11 @@ boxMatrix = [1 0 0; -1 0 0; 0 1 0; 0 -1 0; 0 0 1; 0 0 -1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(lAcc, initialCond);
 
-%test
-locs = automaton.getLocations();
-assert(length(locs) == 3);
-assert(isequal(locs{1}.getName(), 'acc'));
-assert(isequal(locs{2}.getName(), 'brake'));
-assert(isequal(locs{3}.getName(), 'idle'));
-initialMapping = automaton.getInitialStates();
-assert(length(initialMapping) == 1);
-iCond = initialMapping(1).cond;
-assert(iCond == initialCond);
-iLoc = initialMapping(1).loc;
-assert(iLoc == loc_acc);
-%test end
-
 %-----------------------------------------------%
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.1, 'timeBound', 10, 'jumpDepth', 10);
+settings = struct('timeStep', 0.01, 'timeBound', 2, 'jumpDepth', 2);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -224,6 +163,8 @@ flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
 dim = [3 2];
-reach.plot(flowpipes, dim);
+labs = ["t", "d"];
+ext = 'png';
+reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
 
 end

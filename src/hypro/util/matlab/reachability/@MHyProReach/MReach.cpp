@@ -26,10 +26,10 @@ void MReach::computeForwardReachability( int nlhs, mxArray* plhs[], int nrhs, co
 
 	int num_flowpipes = flowpipes.size();
 	mexPrintf( "\n" );
-	mexPrintf( "Number of flowpipes: %d\n", num_flowpipes );
+	mexPrintf( "MReach: Number of flowpipes: %d\n", num_flowpipes );
 	std::vector<hypro::State_t<double>> f = flowpipes[0].second;
-	mexPrintf( "Number of states in f1: %d\n", f.size() );
-	mwSize dims[2] = {1, (mwSize) num_flowpipes};
+	mexPrintf( "MReach: Number of states in f1: %d\n", f.size() );
+	mwSize dims[2] = {1, (mwSize)num_flowpipes};
 	const char* field_names[] = {"num", "flowpipe"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, field_names );
 	ObjectHandle::flowpipes2Matlab( flowpipes, plhs[0], num_flowpipes );
@@ -109,7 +109,7 @@ void MReach::setSettings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 
 void MReach::settings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nrhs < 3 ) mexErrMsgTxt( "MReach - setSettings: At least one input argument is missing." );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MReach- setSettings: One or more arguments were ignored." ); 
+	if ( nrhs > 3 ) mexWarnMsgTxt( "MReach- setSettings: One or more arguments were ignored." );
 
 	Reacher* reacher = convertMat2Ptr<Reacher>( prhs[2] );
 	const hypro::ReachabilitySettings currSettings = reacher->settings();
@@ -133,10 +133,10 @@ void MReach::settings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	mexPrintf( "fileName: %s\n", fN.c_str() );
 	mexPrintf( "pplDenomimator: %d\n", pplD );
 	mexPrintf( "dims:\n" );
-	for ( int i = 0; i < (int) dim.size(); i++ ) {
+	for ( int i = 0; i < (int)dim.size(); i++ ) {
 		std::vector<std::size_t> current = dim[i];
 		mexPrintf( "[" );
-		for ( int j = 0; j < (int) dim[0].size(); j++ ) {
+		for ( int j = 0; j < (int)dim[0].size(); j++ ) {
 			mexPrintf( "%d ", current[j] );
 		}
 		mexPrintf( "]\n" );

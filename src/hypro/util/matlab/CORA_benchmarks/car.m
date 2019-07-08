@@ -1,22 +1,12 @@
 function complete = car()
 
-sim = 0;
-reacha = 1;
+sim = 1;
+reacha = 0;
 
-% Load model
-if 0
-    % Polytope
-    HA = car_ha();
-    options.enclosureEnables = [3 5];
-    options.guardIntersect = 'polytope';
-    Zdelta = 0.00001 * ones(3,1);
-else
-    % Zono Girard
-    HA = car_ha_zG();
-    options.enclosureEnables = [3 5];
-    options.guardIntersect = 'zonoGirard';
-    Zdelta = zeros(3,1);
-end
+HA = car_ha();
+options.enclosureEnables = [3 5];
+options.guardIntersect = 'polytope';
+Zdelta = 0.00001 * ones(3,1);
 
 % options
 Zcenter = [13.88;50;0];
@@ -34,7 +24,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:3
-    options.timeStepLoc{i} = 0.0001;
+    options.timeStepLoc{i} = 0.01;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});

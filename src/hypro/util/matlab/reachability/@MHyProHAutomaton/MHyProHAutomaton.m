@@ -201,6 +201,7 @@ classdef MHyProHAutomaton < handle
             if isa(loc, 'MHyProLocation')
                 ptr = MHyPro(4, 21, obj.ObjectHandle, loc.ObjectHandle);
                 out = MHyProLocation(ptr);
+                out.SmartFlag = 1;
             end
         end
         
