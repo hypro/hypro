@@ -1,4 +1,4 @@
-function time = TwoTanksTest(safe, safePath, figName)
+function time = TwoTanksTest(safe, safePath, figName, bad, diff)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -208,6 +208,55 @@ tran7.setTarget(l2);
 tran7.setLabels({MHyProLabel('tran7')});
 
 l4.addTransition(tran7);
+
+%-----------------------------------------------%
+%                 Bad States
+%-----------------------------------------------%
+
+
+if bad
+    if diff == 0
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([0 1]);
+        badState.setVector([-0.7]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+    elseif diff == 1
+        %medium
+        badState = MHyProCondition();
+        badState.setMatrix([0 1]);
+        badState.setVector([-0.7]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+    else
+        %hard
+        badState = MHyProCondition();
+        badState.setMatrix([0 1]);
+        badState.setVector([-0.7]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+    end
+    automaton.setLocalBadStates(badStates); 
+end
 
 %-----------------------------------------------%
 %                 Initial set

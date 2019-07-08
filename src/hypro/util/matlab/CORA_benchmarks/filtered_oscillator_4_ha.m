@@ -10,7 +10,7 @@ function HA = filtered_oscillator_4_ha(~)
 %   by showing their mapping to SpaceEx variable names. 
 
 % Component 1 (system.osc_w_4th_order_1):
-%  state x := [x; y; x1; x2; x3; z]
+%  state  [x; y; x1; x2; x3; z]
 %  input u := [uDummy]
 
 %------------------Component system.osc_w_4th_order_1----------------------

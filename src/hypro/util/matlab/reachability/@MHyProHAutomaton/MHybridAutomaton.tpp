@@ -427,10 +427,10 @@ void MHybridAutomaton::getStatistics( int nlhs, mxArray* plhs[], int nrhs, const
 	std::string rep = autom->getStatistics();
 	plhs[0] = mxCreateString( rep.c_str() );
 
-	// //+++++++++++++TESTING++++++++++++++++++++
-	// mexPrintf( "getStatistics output:\n" );
-	// mexPrintf("statistic: %s\n", rep.c_str());
-	// //+++++++++++++TESTING++++++++++++++++++++
+	//+++++++++++++TESTING++++++++++++++++++++
+	mexPrintf( "getStatistics output:\n" );
+	mexPrintf("statistic: %s\n", rep.c_str());
+	//+++++++++++++TESTING++++++++++++++++++++
 }
 
 void MHybridAutomaton::equals( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {

@@ -15,9 +15,9 @@ options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability a
 options.x0 = center(options.R0); %initial state for simulation
 
 
-options.taylorTerms = 10;
-options.zonotopeOrder = 20;
-options.polytopeOrder = 10;
+options.taylorTerms = 2;
+options.zonotopeOrder = 2;
+options.polytopeOrder = 2;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;

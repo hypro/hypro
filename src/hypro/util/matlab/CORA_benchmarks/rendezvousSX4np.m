@@ -126,7 +126,45 @@ if reacha
     
     % Verification --------------------------------------------------------
     
-    %TODO
+    spacecraft = interval([-0.1;-0.1;0;0;0],[0.1;0.1;0;0;0]);
+
+% feasible velocity region as polytope
+C = [0 0 1 0 0;0 0 -1 0 0;0 0 0 1 0;0 0 0 -1 0;0 0 1 1 0;0 0 1 -1 0;0 0 -1 1 0;0 0 -1 -1 0];
+d = [3;3;3;3;4.2;4.2;4.2;4.2];
+
+% line-of-sight as polytope
+Cl = [-1 0 0 0 0;tan(pi/6) -1 0 0 0;tan(pi/6) 1 0 0 0];
+dl = [100;0;0];
+
+% passive mode -> check if the spacecraft was hit
+for i = 1:length(Rcont{3})    
+    if isIntersecting(interval(Rcont{3}{i}),spacecraft)
+       verificationCollision = 0;
+       break;
+    end
+end
+
+% randezvous attempt -> check if spacecraft inside line-of-sight
+for i = 2:length(Rcont{2})  
+
+    temp = interval(Cl*Rcont{2}{i})-dl;
+
+    if any(supremum(temp) > 0)
+       verificationLOS = 0;
+       break;
+    end
+end
+
+% randezvous attempt -> check if velocity inside feasible region
+for i = 1:length(Rcont{2})  
+
+    temp = interval(C*Rcont{2}{i})-d;
+
+    if any(supremum(temp) > 0)
+       verificationVelocity = 0;
+       break;
+    end
+end
     
 % Visualization -------------------------------------------------------
 if vis    

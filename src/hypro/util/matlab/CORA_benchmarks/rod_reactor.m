@@ -37,7 +37,7 @@ options.tStart = 0; %start time
 options.tFinal = 12;
 
 dim = 3;
-vis = 1;
+vis = 0;
 
 % Simulation --------------------------------------------------------------
 
@@ -86,8 +86,32 @@ end
 if reacha
     tic;
     [HA] = reach(HA,options);
-    toc;
-    disp(['Time needed for the analysis: ', num2str(toc)]);
+    reachabilityT = toc;
+    disp(['Time needed for the analysis: ', num2str(reachabilityT)]);
+    
+    % Verification --------------------------------------------------------
+    Rset = get(HA, 'continuousReachableSet');
+    Rset = Rset.OT;
+    
+    %easy: c1 >= 35 & c2 >= 35
+    spec = [0 -1 0 -35; 0 0 -1 -35];
+    %medium: c1 >= 34.93 & c2 >= 34.93
+    spec = [0 -1 0 -34.9; 0 0 -1 -34.93];
+    %hard: c1 >= 34.861 & c2 >= 34.861
+    spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
+    
+    tic;
+    safe = verifySafetyPropertiesCORA(spec, Rset);
+    verificationT = toc;
+    
+    if safe
+        disp('Verification result: SAFE');
+    end
+    
+    disp(['Time needed for verification: ', num2str(verificationT)]);
+    
+    time = reachabilityT + verificationT;
+    disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
 
 % Visualization -------------------------------------------------------
 if vis    

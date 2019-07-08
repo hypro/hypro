@@ -1,4 +1,4 @@
-function time = RodReactorTest(safe, safePath, figName)
+function time = RodReactorTest(safe, safePath, figName, bad, diff)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -69,7 +69,7 @@ reset1 = MHyProReset();
 reset1.setMatrix([1 0 0; 0 0 0; 0 0 1]);
 reset1.setVector([0; 0; 0]);
 
-tran1.setAggregation(1);
+tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(rod1);
 tran1.setTarget(noRod);
@@ -87,7 +87,7 @@ guard2 = MHyProCondition();
 guard2.setMatrix([1 0 0; -1 0 0; 0 -1 0]); % First set the matrix then the vector!?
 guard2.setVector([550; -550; -20]);
 
-tran2.setAggregation(1);
+tran2.setAggregation(2);
 tran2.setGuard(guard2);
 tran2.setSource(noRod);
 tran2.setTarget(rod1);
@@ -105,7 +105,7 @@ guard3 = MHyProCondition();
 guard3.setMatrix([1 0 0; -1 0 0; 0 0 -1]); % First set the matrix then the vector!?
 guard3.setVector([550; -550; -20]);
 
-tran3.setAggregation(1);
+tran3.setAggregation(2);
 tran3.setGuard(guard3);
 tran3.setSource(noRod);
 tran3.setTarget(rod2);
@@ -127,7 +127,7 @@ reset4 = MHyProReset();
 reset4.setMatrix([1 0 0; 0 1 0; 0 0 0]);
 reset4.setVector([0; 0; 0]);
 
-tran4.setAggregation(1);
+tran4.setAggregation(2);
 tran4.setGuard(guard4);
 tran4.setSource(rod2);
 tran4.setTarget(noRod);
@@ -135,6 +135,42 @@ tran4.setReset(reset4);
 tran4.setLabels({MHyProLabel('tran4')});
 
 rod2.addTransition(tran4);
+
+%-----------------------------------------------%
+%                 Bad States
+%-----------------------------------------------%
+
+if bad
+    if diff == 0
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([0 1 0; 0 0 1]);
+        badState.setVector([35;35]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+    elseif diff == 1
+        %medium
+        badState = MHyProCondition();
+        badState.setMatrix([0 1 0; 0 0 1]);
+        badState.setVector([34.93;34.93]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+    else
+        %hard
+        badState = MHyProCondition();
+        badState.setMatrix([0 1 0; 0 0 1]);
+        badState.setVector([34.861;34.861]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+    end
+    automaton.setLocalBadStates(badStates);
+end
 
 %-----------------------------------------------%
 %                 Initial set

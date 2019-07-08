@@ -1,4 +1,4 @@
-function time = FilteredOscillator4(safe, safePath, figName)
+function time = FilteredOscillator4(safe, safePath, figName, bad, diff)
 
 % vars = [x,y,x1,x2,x3,z]
 
@@ -107,7 +107,7 @@ guard1 = MHyProCondition();
 guard1.setMatrix([1 0 0 0 0 0; -1 0 0 0 0 0; -0.714286 -1 0 0 0 0]);
 guard1.setVector([0;0;0]);
 
-tran1.setAggregation(1);
+tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(l1);
 tran1.setTarget(l3);
@@ -126,7 +126,7 @@ guard2 = MHyProCondition();
 guard2.setMatrix([-1 0 0 0 0 0; -0.714286 -1 0 0 0 0; 0.714286 1 0 0 0 0]);
 guard2.setVector([0;0;0]);
 
-tran2.setAggregation(1);
+tran2.setAggregation(2);
 tran2.setGuard(guard2);
 tran2.setSource(l3);
 tran2.setTarget(l4);
@@ -145,7 +145,7 @@ guard3 = MHyProCondition();
 guard3.setMatrix([-1 0 0 0 0 0; 1 0 0 0 0 0; 0.714286 1 0 0 0 0]);
 guard3.setVector([0;0;0]);
 
-tran3.setAggregation(1);
+tran3.setAggregation(2);
 tran3.setGuard(guard3);
 tran3.setSource(l4);
 tran3.setTarget(l2);
@@ -164,7 +164,7 @@ guard4 = MHyProCondition();
 guard4.setMatrix([1 0 0 0 0 0; 0.714286 1 0 0 0 0; -0.714286 -1 0 0 0 0]);
 guard4.setVector([0;0;0]);
 
-tran4.setAggregation(1);
+tran4.setAggregation(2);
 tran4.setGuard(guard4);
 tran4.setSource(l2);
 tran4.setTarget(l1);
@@ -173,6 +173,55 @@ tran4.setLabels({MHyProLabel('tran4')});
 
 l2.addTransition(tran4);
 
+%-----------------------------------------------%
+%                 Bad States
+%-----------------------------------------------%
+
+% unsafe: y >= 0.5
+
+if bad
+    if diff == 0
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([0 -1 0 0 0 0]);
+        badState.setVector(-0.5);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+    elseif diff == 1
+        %medium
+        badState = MHyProCondition();
+        badState.setMatrix([0 -1 0 0 0 0]);
+        badState.setVector(-0.4946);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+    else
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([0 -1 0 0 0 0]);
+        badState.setVector(-0.4892);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+    end
+    automaton.setLocalBadStates(badStates);
+end
 %-----------------------------------------------%
 %              Initial Set
 %-----------------------------------------------%

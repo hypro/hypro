@@ -1,4 +1,4 @@
-function time = cruiseControl(safe, safePath, figName)
+function time = cruiseControl(safe, safePath, figName, bad, diff)
 
 % vars: [v, x, t]
 
@@ -132,7 +132,7 @@ guard1 = MHyProCondition();
 guard1.setMatrix([0 0 -1; 0 0 1; 0 0 -1; 0 0 1]); 
 guard1.setVector([-2.5;2.5;-15;40]);
 
-tran1.setAggregation(1);
+tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(l1);
 tran1.setTarget(l2);
@@ -150,7 +150,7 @@ guard2 = MHyProCondition();
 guard2.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard2.setVector([-15;16;0;2.5]);
 
-tran2.setAggregation(1);
+tran2.setAggregation(2);
 tran2.setGuard(guard2);
 tran2.setSource(l1);
 tran2.setTarget(l4);
@@ -171,7 +171,7 @@ guard3 = MHyProCondition();
 guard3.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard3.setVector([-15;16;-2.5;2.5]);
 
-tran3.setAggregation(1);
+tran3.setAggregation(2);
 tran3.setGuard(guard3);
 tran3.setSource(l2);
 tran3.setTarget(l4);
@@ -192,7 +192,7 @@ guard4 = MHyProCondition();
 guard4.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard4.setVector([-18;20;-1.3;1.3]);
 
-tran4.setAggregation(1);
+tran4.setAggregation(2);
 tran4.setGuard(guard4);
 tran4.setSource(l3);
 tran4.setTarget(l1);
@@ -213,7 +213,7 @@ guard5 = MHyProCondition();
 guard5.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard5.setVector([-1.3;1.3;-5;11]);
 
-tran5.setAggregation(1);
+tran5.setAggregation(2);
 tran5.setGuard(guard4);
 tran5.setSource(l3);
 tran5.setTarget(l5);
@@ -234,7 +234,7 @@ guard6 = MHyProCondition();
 guard6.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard6.setVector([-18;20;0;1.3]);
 
-tran6.setAggregation(1);
+tran6.setAggregation(2);
 tran6.setGuard(guard6);
 tran6.setSource(l4);
 tran6.setTarget(l1);
@@ -255,7 +255,7 @@ guard7 = MHyProCondition();
 guard7.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard7.setVector([-5;11;0;1.3]);
 
-tran7.setAggregation(1);
+tran7.setAggregation(2);
 tran7.setGuard(guard7);
 tran7.setSource(l4);
 tran7.setTarget(l5);
@@ -276,7 +276,7 @@ guard71 = MHyProCondition();
 guard71.setMatrix([-1 0 0; 1 0 0; 0 0 -1; 0 0 1]); 
 guard71.setVector([-5;20;-1.3;1.3]);
 
-tran71.setAggregation(1);
+tran71.setAggregation(2);
 tran71.setGuard(guard71);
 tran71.setSource(l4);
 tran71.setTarget(l3);
@@ -294,7 +294,7 @@ guard8 = MHyProCondition();
 guard8.setMatrix([-1 0 0; 1 0 0; 0 -1 0; 0 1 0]); 
 guard8.setVector([-13;15; 500;500]);
 
-tran8.setAggregation(1);
+tran8.setAggregation(2);
 tran8.setGuard(guard8);
 tran8.setSource(l5);
 tran8.setTarget(l4);
@@ -315,7 +315,7 @@ guard9 = MHyProCondition();
 guard9.setMatrix([-1 0 0; 1 0 0; 0 -1 0; 0 1 0]); 
 guard9.setVector([15;-14;500;500]);
 
-tran9.setAggregation(1);
+tran9.setAggregation(2);
 tran9.setGuard(guard9);
 tran9.setSource(l5);
 tran9.setTarget(l6);
@@ -333,7 +333,7 @@ guard10 = MHyProCondition();
 guard10.setMatrix([-1 0 0; 1 0 0; 0 -1 0; 0 1 0]); 
 guard10.setVector([6;-5; 500;500]);
 
-tran10.setAggregation(1);
+tran10.setAggregation(2);
 tran10.setGuard(guard10);
 tran10.setSource(l6);
 tran10.setTarget(l5);
@@ -351,23 +351,62 @@ l6.addTransition(tran10);
 
 % unsafe: l1,l2,l3,l4,l5,l6: x >= 146
 
-% badState = MHyProCondition();
-% badState.setMatrix([0 -1 0]);
-% badState.setVector(-146);
-% badStates(1).loc = l1;
-% badStates(1).cond = badState;
-% badStates(2).loc = l2;
-% badStates(2).cond = badState;
-% badStates(3).loc = l3;
-% badStates(3).cond = badState;
-% badStates(4).loc = l4;
-% badStates(4).cond = badState;
-% badStates(5).loc = l5;
-% badStates(5).cond = badState;
-% badStates(6).loc = l6;
-% badStates(6).cond = badState;
-% 
-% automaton.setLocalBadStates(badStates);
+if bad
+    if diff == 0
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([1 0 0]);
+        badState.setVector(-2);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+        badStates(5).loc = l5;
+        badStates(5).cond = badState;
+        badStates(6).loc = l6;
+        badStates(6).cond = badState;
+    elseif diff == 1
+        %medium
+        badState = MHyProCondition();
+        badState.setMatrix([1 0 0]);
+        badState.setVector(-2);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+        badStates(5).loc = l5;
+        badStates(5).cond = badState;
+        badStates(6).loc = l6;
+        badStates(6).cond = badState;
+    else
+        %hard
+        badState = MHyProCondition();
+        badState.setMatrix([1 0 0]);
+        badState.setVector(-2);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+        badStates(5).loc = l5;
+        badStates(5).cond = badState;
+        badStates(6).loc = l6;
+        badStates(6).cond = badState;
+    end
+
+    automaton.setLocalBadStates(badStates);
+end
 
 
 %-----------------------------------------------%

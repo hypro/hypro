@@ -1,4 +1,4 @@
-function time = BouncingBallTest(safe, safePath, figName)
+function time = BouncingBallTest(safe, safePath, figName, bad, diff)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -36,7 +36,7 @@ reset = MHyProReset();
 reset.setMatrix([1 0; 0 -0.75]);
 reset.setVector([0;0]);
 
-tran.setAggregation(0);
+tran.setAggregation(2);
 tran.setGuard(guard);
 tran.setSource(l);
 tran.setTarget(l);
@@ -62,15 +62,35 @@ automaton.addInitialState(l, initialCond);
 %                 Bad States
 %-----------------------------------------------%
 
-% unsafe: x >= 10.7
+% unsafe: v >= 10.6467
 
-% badState = MHyProCondition();
-% badState.setMatrix([-1 0]);
-% badState.setVector(-10.7);
-% badStates(1).loc = l;
-% badStates(1).cond = badState;
+if bad
+    if diff == 0
+        % easy
+        badState = MHyProCondition();
+        badState.setMatrix([0 -1]);
+        badState.setVector(-10.7);
+        badStates(1).loc = l;
+        badStates(1).cond = badState;
+    elseif diff == 1
+        % medium
+        badState = MHyProCondition();
+        badState.setMatrix([0 -1]);
+        badState.setVector(-10.6732);
+        badStates(1).loc = l;
+        badStates(1).cond = badState;
+    else
+        % hard
+        badState = MHyProCondition();
+        badState.setMatrix([0 -1]);
+        badState.setVector(-10.6464);
+        badStates(1).loc = l;
+        badStates(1).cond = badState;
+    end
+        
 
-% automaton.setLocalBadStates(badStates);
+    automaton.setLocalBadStates(badStates);
+end
 
 %-----------------------------------------------%
 %                 Reachability
@@ -90,5 +110,6 @@ dim = [2 1];
 labs = ["v", "x"];
 ext = 'png';
 reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+
 
 end

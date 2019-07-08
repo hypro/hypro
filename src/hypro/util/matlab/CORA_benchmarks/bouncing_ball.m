@@ -14,9 +14,9 @@ options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability a
 options.x0 = center(options.R0); %initial state for simulation
 
 
-options.taylorTerms = 1;
-options.zonotopeOrder = 1;
-options.polytopeOrder = 1;
+options.taylorTerms = 10;
+options.zonotopeOrder = 20;
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -86,12 +86,33 @@ end
 if reacha
     tic;
     [HA] = reach(HA,options);
-    toc;
-    disp(['Time needed for the analysis: ', num2str(toc)]);
+    reachabilityT = toc;
+    disp(['Time needed for reachability analysis: ', num2str(reachabilityT)]);
     
     % Verification --------------------------------------------------------
+    Rset = get(HA, 'continuousReachableSet');
+    Rset = Rset.OT;
     
-    %TODO
+    %easy: v <= 10.7
+    spec = [0 1 10.7];
+    %medium: v <= 10.6732
+    spec = [0 1 10.64664];
+    %hard: v <= 10.6466
+    spec = [0 1 10.64664];
+    
+    tic;
+    safe = verifySafetyPropertiesCORA(spec, Rset);
+    verificationT = toc;
+    
+    if safe
+        disp('Verification result: SAFE');
+    end
+    
+    disp(['Time needed for verification: ', num2str(verificationT)]);
+    
+    time = reachabilityT + verificationT;
+    disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
+    
     
 % Visualization -------------------------------------------------------
 if vis    

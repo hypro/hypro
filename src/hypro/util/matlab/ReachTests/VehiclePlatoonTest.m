@@ -1,4 +1,4 @@
-function time = VehiclePlatoonTest(safe, safePath, figName)
+function time = VehiclePlatoonTest(safe, safePath, figName, bad, diff)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -69,7 +69,7 @@ qn = automaton.addLocation(loc_qn);
 tran1 = MHyProTransition();
 % Set guard: t >= 2
 guard1 = MHyProCondition();
-guard1.setMatrix([0 0 0 0 0 0 0 0 0 -1]); % First set the matrix then the vector!?
+guard1.setMatrix([0 0 0 0 0 0 0 0 0 -1]);
 guard1.setVector(-2);
 % Set reset: t := 0
 reset = MHyProReset();
@@ -78,7 +78,7 @@ temp(10,10) = 0;
 reset.setMatrix(temp);
 reset.setVector(zeros(10,1));
 
-tran1.setAggregation(1);
+tran1.setAggregation(2);
 tran1.setGuard(guard1);
 tran1.setSource(qc);
 tran1.setTarget(qn);
@@ -94,7 +94,7 @@ guard2 = MHyProCondition();
 guard2.setMatrix([0 0 0 0 0 0 0 0 0 -1]);
 guard2.setVector(-2);
 
-tran2.setAggregation(1);
+tran2.setAggregation(2);
 tran2.setGuard(guard2);
 tran2.setSource(qn);
 tran2.setTarget(qc);
@@ -122,20 +122,37 @@ automaton.addInitialState(qc, initialCond);
 
 % unsafe: e1 >= 1.7 in qc and qn
 
-% badState = MHyProCondition();
-% badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
-% badState.setVector(-1.7);
-% badStates(1).loc = qc;
-% badStates(1).cond = badState;
-% badStates(2).loc = qn;
-% badStates(2).cond = badState;
-% 
-% badState.setMatrix([1 0 0 0 0 0 0 0 0 0]); % First set the matrix then the vector!?
-% badState.setVector(-1.7);
-% 
-% badStates(3).loc = qc;
-% badStates(3).cond = badState;
-% automaton.setLocalBadStates(badStates);
+if bad
+    if diff == 0
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setVector(-1.7);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
+    elseif diff == 1
+        %medium
+        badState = MHyProCondition();
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setVector(-1.671);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
+    else
+        %hard
+        badState = MHyProCondition();
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setVector(-1.642);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
+    end
+    automaton.setLocalBadStates(badStates);
+end
 
 
 %-----------------------------------------------%

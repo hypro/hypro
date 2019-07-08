@@ -1,4 +1,4 @@
-function time = switchingSystem(safe, safePath, figName)
+function time = switchingSystem(safe, safePath, figName, bad, diff)
 
 % vars: [x1,x2,x3,x4,x5]
 
@@ -215,6 +215,60 @@ tran4.setReset(dummy_reset);
 tran4.setLabels({MHyProLabel('tran4')});
 
 l4.addTransition(tran4);
+
+%-----------------------------------------------%
+%                 Bad States
+%-----------------------------------------------%
+
+if bad
+    if diff == 0
+        %easy
+        badState = MHyProCondition();
+        badState.setMatrix([0 0 -1 0 ]);
+        badState.setVector([-1.5]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+        badStates(5).loc = l5;
+        badStates(5).cond = badState;
+    elseif diff == 1
+        %medium
+        badState = MHyProCondition();
+        badState.setMatrix([0 0 -1 0 ]);
+        badState.setVector([-1.4945]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+        badStates(5).loc = l5;
+        badStates(5).cond = badState;
+    else
+        %hard
+        badState = MHyProCondition();
+        badState.setMatrix([0 0 -1 0 ]);
+        badState.setVector([-1.489]);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+        badStates(5).loc = l5;
+        badStates(5).cond = badState;
+    end
+    automaton.setLocalBadStates(badStates);
+end
 
 
 %-----------------------------------------------%
