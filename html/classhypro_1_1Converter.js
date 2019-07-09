@@ -8,7 +8,7 @@ var classhypro_1_1Converter =
     [ "HPolytope", "classhypro_1_1Converter.html#a32d08a2438decdf831f0bfd43b6a26dc", null ],
     [ "OrthogonalPolyhedron", "classhypro_1_1Converter.html#a5d46c84139471d44b724409bdd0e9249", null ],
     [ "Polytope", "classhypro_1_1Converter.html#a3de72a7f6c5d71c0e3da384b1a840f8b", null ],
-    [ "SupportFunction", "classhypro_1_1Converter.html#a743177f4cb94a115d75791ab7549f7ed", null ],
+    [ "SupportFunction", "classhypro_1_1Converter.html#a6df39c512af66ab7073dee4024b3e61a", null ],
     [ "VPolytope", "classhypro_1_1Converter.html#aa16dfe92f43cdf5c26bb66f8aa2e5217", null ],
     [ "Zonotope", "classhypro_1_1Converter.html#ac5e717813fecebc221a5ed56d707b71b", null ]
 ];

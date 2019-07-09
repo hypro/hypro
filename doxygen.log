@@ -2269,7 +2269,7 @@ Add enum valu/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/co
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:73: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:21: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib18785.bbl: No such file or directory
+error opening bib18810.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -5030,5 +5030,5 @@ Running dot for graph 191/193
 Running dot for graph 192/193
 Running dot for graph 193/193
 Patching output file 1/1
-lookup cache used 7025/65536 hits=208082 misses=8136
+lookup cache used 7025/65536 hits=208061 misses=8136
 finished...
