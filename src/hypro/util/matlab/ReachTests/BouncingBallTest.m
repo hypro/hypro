@@ -110,6 +110,4 @@ dim = [2 1];
 labs = ["v", "x"];
 ext = 'png';
 reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
-
-
 end

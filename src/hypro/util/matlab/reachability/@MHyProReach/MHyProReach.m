@@ -74,7 +74,7 @@ classdef MHyProReach < handle
          
         function plot(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);
-            fig = figure()
+            fig = figure();
             disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
@@ -97,30 +97,6 @@ classdef MHyProReach < handle
             end
         end
         
-%         function plot(obj, flowpipes, dims)
-%             num_flowpipes = length(flowpipes);
-%             figure()
-%             for pipe = 1:num_flowpipes
-%                 currentFlowpipe =  flowpipes{pipe};
-%                 num_states = length(currentFlowpipe);
-%                 disp(['Number of states: ', num2str(num_states)]);
-%                 
-%                 for state = 1:num_states
-%                     currentState = currentFlowpipe{state};
-%                     vertices = currentState.vertices(0);
-%                     %obj.plotVertices(vertices, dims);
-%                     
-%                     %Plot points
-%                     point = vertices(:,1);
-%                     scatter(point(1),point(6));
-%                     
-%                     hold on
-%                 end 
-%                 hold on
-%             end
-%         end
-        
-        
         function plotVertices(obj, vertices, dims)
             %Compute projection
             first = vertices(dims(1),:);
@@ -137,12 +113,58 @@ classdef MHyProReach < handle
             ver_y = ver_y(order);
             P = [ver_x;ver_y]';
             pgon = polyshape(P, 'Simplify', false);
-            plot(pgon,'FaceColor',[0.2 0.55 0.74], 'EdgeColor', [0.380, 0.482, 0.537]);           
+            plot(pgon,'FaceColor',[0.2 0.55 0.74], 'EdgeColor', [0.070, 0.250, 0.972]);           
         end
         
         function plotBadStates(obj, normalMat, offsetVec, dims)
              %???
             
+        end
+        
+        function plot3D(obj, flowpipes, dims, labs, save,path, name, ext)
+            num_flowpipes = length(flowpipes);
+            fig = figure();
+            disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
+            for pipe = 1:num_flowpipes
+                currentFlowpipe =  flowpipes{pipe};
+                num_states = length(currentFlowpipe);
+                disp(['Number of states: ', num2str(num_states)]);
+                for state = 1:num_states
+                    currentState = currentFlowpipe{state};
+                    vertices = currentState.vertices(0);
+                    obj.plot3DVertices(vertices, dims);
+                    hold on
+                end 
+                hold on
+                xlabel(labs(1));
+                ylabel(labs(2));
+                zlabel(labs(3));
+                if save
+                    fname = strcat(name,'.',ext);
+                    saveas(fig, fullfile(path,fname),ext);
+                end
+            end
+        end
+        
+        function plot3DVertices(obj, vertices, dims)
+            %Compute projection
+            x = vertices(dims(1),:);
+            y = vertices(dims(2),:);
+            z = vertices(dims(3),:);
+            
+            cx = mean(x);
+            cy = mean(y);
+            a = atan2(y - cy, x - cx);
+            mat = [x;y;z;a];
+            [~, idx] = sort(mat(4,:));
+            ordered = mat(:,idx);
+            
+            x = ordered(1,:);
+            y = ordered(2,:);
+            z = ordered(3,:);
+            
+            h = fill3(x,y,z, [0.2 0.55 0.74]);
+            set(h,'edgecolor',[0.070, 0.250, 0.972]);
         end
         
     end

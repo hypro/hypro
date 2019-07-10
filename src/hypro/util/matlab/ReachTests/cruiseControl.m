@@ -433,8 +433,13 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [3 1];
-labs = ["t","v"];
+% dim = [3 1];
+% labs = ["t","v"];
+% ext = 'png';
+% reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+
+dim = [3 1 2];
+labs = ["t","v", "x"];
 ext = 'png';
-reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
 end

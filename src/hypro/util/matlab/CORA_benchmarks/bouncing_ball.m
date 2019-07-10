@@ -13,10 +13,16 @@ Zcenter = [10.1;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-
+% middle
 options.taylorTerms = 10;
 options.zonotopeOrder = 20;
 options.polytopeOrder = 10;
+
+%hard:
+% options.taylorTerms = 1;
+% options.zonotopeOrder = 6;
+% options.polytopeOrder = 1;
+
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -37,7 +43,7 @@ options.tStart = 0; %start time
 options.tFinal = 4;
 
 dim = 2;
-vis = 1;
+vis = 0;
 
 % Simulation --------------------------------------------------------------
 
@@ -94,11 +100,11 @@ if reacha
     Rset = Rset.OT;
     
     %easy: v <= 10.7
-    spec = [0 1 10.7];
+    %spec = [0 1 10.7];
     %medium: v <= 10.6732
-    spec = [0 1 10.64664];
-    %hard: v <= 10.6466
-    spec = [0 1 10.64664];
+%     spec = [0 1 10.64664];
+    %hard: v <= 10.6464
+    spec = [0 1 10.6464];
     
     tic;
     safe = verifySafetyPropertiesCORA(spec, Rset);
