@@ -33,7 +33,8 @@ function rendezvousSX4np()
 % Options -----------------------------------------------------------------
 sim = 0;
 reacha = 1;
-vis = 1;
+vis = 0;
+diff = 0;
 
 
 % debugging mode
@@ -54,9 +55,26 @@ options.tFinal=20; % final time
 options.intermediateOrder = 2;
 options.originContained = 0;
 
-options.zonotopeOrder=40; % zonotope order
-options.polytopeOrder=3; % polytope order
-options.taylorTerms=3;
+if diff == 3
+    %hard:
+    options.taylorTerms = 2;
+    options.zonotopeOrder = 5;
+    options.polytopeOrder = 1;
+elseif diff == 2
+    %medium:
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 5;
+    options.polytopeOrder = 1;
+elseif diff == 1
+    % easy
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 5;
+    options.polytopeOrder = 1;
+else
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 1;
+    options.polytopeOrder = 1;
+end
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap=0;
 options.enclosureEnables = [3, 5]; % choose enclosure method(s)
@@ -125,47 +143,47 @@ if reacha
     disp(['Time needed for the analysis: ', num2str(toc)]);
     
     % Verification --------------------------------------------------------
-    
-    spacecraft = interval([-0.1;-0.1;0;0;0],[0.1;0.1;0;0;0]);
+    if diff ~= 0
+        spacecraft = interval([-0.1;-0.1;0;0;0],[0.1;0.1;0;0;0]);
 
-% feasible velocity region as polytope
-C = [0 0 1 0 0;0 0 -1 0 0;0 0 0 1 0;0 0 0 -1 0;0 0 1 1 0;0 0 1 -1 0;0 0 -1 1 0;0 0 -1 -1 0];
-d = [3;3;3;3;4.2;4.2;4.2;4.2];
+        % feasible velocity region as polytope
+        C = [0 0 1 0 0;0 0 -1 0 0;0 0 0 1 0;0 0 0 -1 0;0 0 1 1 0;0 0 1 -1 0;0 0 -1 1 0;0 0 -1 -1 0];
+        d = [3;3;3;3;4.2;4.2;4.2;4.2];
 
-% line-of-sight as polytope
-Cl = [-1 0 0 0 0;tan(pi/6) -1 0 0 0;tan(pi/6) 1 0 0 0];
-dl = [100;0;0];
+        % line-of-sight as polytope
+        Cl = [-1 0 0 0 0;tan(pi/6) -1 0 0 0;tan(pi/6) 1 0 0 0];
+        dl = [100;0;0];
 
-% passive mode -> check if the spacecraft was hit
-for i = 1:length(Rcont{3})    
-    if isIntersecting(interval(Rcont{3}{i}),spacecraft)
-       verificationCollision = 0;
-       break;
+        % passive mode -> check if the spacecraft was hit
+        for i = 1:length(Rcont{3})    
+            if isIntersecting(interval(Rcont{3}{i}),spacecraft)
+               verificationCollision = 0;
+               break;
+            end
+        end
+
+        % randezvous attempt -> check if spacecraft inside line-of-sight
+        for i = 2:length(Rcont{2})  
+
+            temp = interval(Cl*Rcont{2}{i})-dl;
+
+            if any(supremum(temp) > 0)
+               verificationLOS = 0;
+               break;
+            end
+        end
+
+        % randezvous attempt -> check if velocity inside feasible region
+        for i = 1:length(Rcont{2})  
+
+            temp = interval(C*Rcont{2}{i})-d;
+
+            if any(supremum(temp) > 0)
+               verificationVelocity = 0;
+               break;
+            end
+        end
     end
-end
-
-% randezvous attempt -> check if spacecraft inside line-of-sight
-for i = 2:length(Rcont{2})  
-
-    temp = interval(Cl*Rcont{2}{i})-dl;
-
-    if any(supremum(temp) > 0)
-       verificationLOS = 0;
-       break;
-    end
-end
-
-% randezvous attempt -> check if velocity inside feasible region
-for i = 1:length(Rcont{2})  
-
-    temp = interval(C*Rcont{2}{i})-d;
-
-    if any(supremum(temp) > 0)
-       verificationVelocity = 0;
-       break;
-    end
-end
-    
 % Visualization -------------------------------------------------------
 if vis    
     figure 

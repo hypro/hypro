@@ -2,6 +2,7 @@ function complete = rod_reactor()
 
 sim = 0;
 reacha = 1;
+diff = 3;
 
 % Load model
 HA = rod_reactor_HA();
@@ -13,10 +14,26 @@ Zcenter = interval([510;20;20],[520;20;20]);
 options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-
-options.taylorTerms = 10;
-options.zonotopeOrder = 20;
-options.polytopeOrder = 10;
+if diff == 3
+    %hard:
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 1;
+    options.polytopeOrder = 1;
+elseif diff == 2
+    %medium:
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 1;
+    options.polytopeOrder = 1;
+elseif diff == 1
+    % easy
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 1;
+    options.polytopeOrder = 1;
+else
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 1;
+    options.polytopeOrder = 1;
+end
 options.errorOrder=0;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -37,7 +54,7 @@ options.tStart = 0; %start time
 options.tFinal = 12;
 
 dim = 3;
-vis = 0;
+vis = 1;
 
 % Simulation --------------------------------------------------------------
 
@@ -90,28 +107,34 @@ if reacha
     disp(['Time needed for the analysis: ', num2str(reachabilityT)]);
     
     % Verification --------------------------------------------------------
-    Rset = get(HA, 'continuousReachableSet');
-    Rset = Rset.OT;
-    
-    %easy: c1 >= 35 & c2 >= 35
-    spec = [0 -1 0 -35; 0 0 -1 -35];
-    %medium: c1 >= 34.93 & c2 >= 34.93
-    spec = [0 -1 0 -34.9; 0 0 -1 -34.93];
-    %hard: c1 >= 34.861 & c2 >= 34.861
-    spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
-    
-    tic;
-    safe = verifySafetyPropertiesCORA(spec, Rset);
-    verificationT = toc;
-    
-    if safe
-        disp('Verification result: SAFE');
+    if diff ~= 0
+        Rset = get(HA, 'continuousReachableSet');
+        Rset = Rset.OT;
+        
+        if diff == 1
+            %easy: c1 >= 35 & c2 >= 35
+            spec = [0 -1 0 -35; 0 0 -1 -35];
+        elseif diff == 2
+            %medium: c1 >= 34.93 & c2 >= 34.93
+            spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
+        else
+            %hard: c1 >= 34.861 & c2 >= 34.861
+            spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
+        end
+
+        tic;
+        safe = verifySafetyPropertiesCORA(spec, Rset);
+        verificationT = toc;
+
+        if safe
+            disp('Verification result: SAFE');
+        end
+
+        disp(['Time needed for verification: ', num2str(verificationT)]);
+
+        time = reachabilityT + verificationT;
+        disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
     end
-    
-    disp(['Time needed for verification: ', num2str(verificationT)]);
-    
-    time = reachabilityT + verificationT;
-    disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
 
 % Visualization -------------------------------------------------------
 if vis    
