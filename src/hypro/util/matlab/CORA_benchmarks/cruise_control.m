@@ -97,9 +97,9 @@ if reacha
     %easy: v >= -2
     spec = [-1 0 0 2];
     %medium: v >= 2
-    spec = [-1 0 0 2];
+%     spec = [-1 0 0 2];
     %hard: v >= 2
-    spec = [-1 0 0 2];
+%     spec = [-1 0 0 2];
     
     tic;
     safe = verifySafetyPropertiesCORA(spec, Rset);

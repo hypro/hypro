@@ -2,6 +2,7 @@ function complete = filtered_oscillator_8()
 
 sim = 0;
 reacha = 1;
+diff = 3;
 
 % Load model
 HA = filtered_oscillator_8_ha();
@@ -13,11 +14,26 @@ Zdelta = [0.05;0.1;0;0;0;0;0;0;0;0];
 Zcenter = [0.25;0;0;0;0;0;0;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
-
-
-options.taylorTerms = 10;
-options.zonotopeOrder = 20;
-options.polytopeOrder = 10;
+if diff == 3
+    %hard:
+    options.taylorTerms = 2;
+    options.zonotopeOrder = 6;
+    options.polytopeOrder = 1;
+elseif diff == 2
+    %medium:
+    options.taylorTerms = 3;
+    options.zonotopeOrder = 2;
+    options.polytopeOrder = 1;
+elseif diff == 1
+    % easy
+    options.taylorTerms = 2;
+    options.zonotopeOrder = 2;
+    options.polytopeOrder = 1;
+else
+    options.taylorTerms = 1;
+    options.zonotopeOrder = 1;
+    options.polytopeOrder = 1;
+end
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -91,28 +107,34 @@ if reacha
     disp(['Time needed for the analysis: ', num2str(reachabilityT)]);
     
     % Verification --------------------------------------------------------
-    Rset = get(HA, 'continuousReachableSet');
-    Rset = Rset.OT;
-    
-    %easy: y <= 0.5
-    spec = [0 1 0 0 0 0 0.5];
-    %medium: y <= 0.4916
-    spec = [0 1 0 0 0 0 0.4916];
-    %hard: y <= 0.4892
-    spec = [0 1 0 0 0 0 0.4932];
-    
-    tic;
-    safe = verifySafetyPropertiesCORA(spec, Rset);
-    verificationT = toc;
-    
-    if safe
-        disp('Verification result: SAFE');
+    if diff ~= 0
+        Rset = get(HA, 'continuousReachableSet');
+        Rset = Rset.OT;
+        
+        if diff == 1
+            %easy: y <= 0.5
+            spec = [0 1 0 0 0 0 0.5];
+        elseif diff == 2
+            %medium: y <= 0.4916
+            spec = [0 1 0 0 0 0 0.4916];
+        else
+            %hard: y <= 0.4892
+            spec = [0 1 0 0 0 0 0.4932];
+        end
+
+        tic;
+        safe = verifySafetyPropertiesCORA(spec, Rset);
+        verificationT = toc;
+
+        if safe
+            disp('Verification result: SAFE');
+        end
+
+        disp(['Time needed for verification: ', num2str(verificationT)]);
+
+        time = reachabilityT + verificationT;
+        disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
     end
-    
-    disp(['Time needed for verification: ', num2str(verificationT)]);
-    
-    time = reachabilityT + verificationT;
-    disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
     
 % Visualization -------------------------------------------------------
 if vis    

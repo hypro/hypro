@@ -163,9 +163,61 @@ classdef MHyProReach < handle
             y = ordered(2,:);
             z = ordered(3,:);
             
+            cy = mean(y);
+            cz = mean(z);
+            a = atan2(z-cz,y- cy);
+            mat = [x;y;z;a];
+            [~,idx] = sort(mat(4,:));
+            ordered = mat(:,idx);
+            
+            x = ordered(1,:);
+            y = ordered(2,:);
+            z = ordered(3,:);
+            
             h = fill3(x,y,z, [0.2 0.55 0.74]);
             set(h,'edgecolor',[0.070, 0.250, 0.972]);
         end
+        
+        function out = verify(obj, flowpipes, specMatrix)
+            out = 1;
+            num_flowpipes = length(flowpipes);
+            cols = size(specMatrix,2);
+            linComb = specMatrix(:,1:cols-1);
+            rhs = specMatrix(:,cols);
+            for pipe = 1:num_flowpipes
+                currentFlowpipe = flowpipes{pipe};
+                num_states = length(currentFlowpipe);
+                for state = 1:num_states
+                    currentState = currentFlowpipe{state};
+                    vertices = currentState.vertices(0);
+                    for s = 1:size(specMatrix,1)
+                        for v = 1:size(vertices,2)
+                            value = linComb(s,:) * vertices(:,v);
+                            if value >= rhs(s)
+                                disp(['NOT SAFE - spec. no. ' num2str(s) ' violated following specification: [' num2str(linComb(s,:)) '] <= ' num2str(rhs(s))]) ;
+                                out = 0;
+                            end
+                            if out == 0
+                                break;
+                            end
+                        end
+                        if out == 0
+                            break;
+                        end
+                    end
+                    if out == 0
+                        break;
+                    end
+                end
+                if out == 0
+                    break;
+                end
+            end
+        end
+        
+        function out = setStrategy()
+        end
+        
         
     end
     

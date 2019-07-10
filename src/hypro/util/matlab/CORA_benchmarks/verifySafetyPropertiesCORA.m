@@ -74,5 +74,5 @@ function vector = prepareValues(rSet, dim)
     for i = 1:dim
         vec(i) = interval(project(rSet,i));
     end
-     vec
+     %vec
 vector = vec.';
