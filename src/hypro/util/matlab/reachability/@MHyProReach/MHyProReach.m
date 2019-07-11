@@ -49,7 +49,7 @@ classdef MHyProReach < handle
                     if ~strcmp(currentField, 'timeBound') && ~strcmp(currentField, 'jumpDepth')...
                             && ~strcmp(currentField, 'timeStep') && ~strcmp(currentField, 'plotDimensions')...
                             && ~strcmp(currentField, 'pplDenomimator') && ~strcmp(currentField, 'uniformBloating')...
-                            && ~strcmp(currentField, 'fileName')
+                            && ~strcmp(currentField, 'fileName') && ~strcmp(currentField, 'clustering')
                         error(['MHyProReach - setSettings: Unknown field name ', currentField]);
                     end
                 end
@@ -75,11 +75,11 @@ classdef MHyProReach < handle
         function plot(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);
             fig = figure();
-            disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
+            %disp(['Reach - plot: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
                 num_states = length(currentFlowpipe);
-                disp(['Number of states: ', num2str(num_states)]);
+                %disp(['Reach - plot: number of states: ', num2str(num_states)]);
                 
                 for state = 1:num_states
                     currentState = currentFlowpipe{state};
@@ -124,11 +124,11 @@ classdef MHyProReach < handle
         function plot3D(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);
             fig = figure();
-            disp(['reach: number of flowpipes: ', num2str(num_flowpipes)])
+            %disp(['Reach - plot3D: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};
                 num_states = length(currentFlowpipe);
-                disp(['Number of states: ', num2str(num_states)]);
+                %disp(['Reach - plot3D - number of states: ', num2str(num_states)]);
                 for state = 1:num_states
                     currentState = currentFlowpipe{state};
                     vertices = currentState.vertices(0);
@@ -194,7 +194,7 @@ classdef MHyProReach < handle
                         for v = 1:size(vertices,2)
                             value = linComb(s,:) * vertices(:,v);
                             if value >= rhs(s)
-                                disp(['NOT SAFE - spec. no. ' num2str(s) ' violated following specification: [' num2str(linComb(s,:)) '] <= ' num2str(rhs(s))]) ;
+                                %disp(['NOT SAFE - spec. no. ' num2str(s) ' violated following specification: [' num2str(linComb(s,:)) '] <= ' num2str(rhs(s))]) ;
                                 out = 0;
                             end
                             if out == 0
@@ -213,11 +213,7 @@ classdef MHyProReach < handle
                     break;
                 end
             end
-        end
-        
-        function out = setStrategy()
-        end
-        
+        end 
         
     end
     

@@ -25,10 +25,10 @@ void MReach::computeForwardReachability( int nlhs, mxArray* plhs[], int nrhs, co
 	std::vector<std::pair<unsigned, flowpipe>> flowpipes = reacher->computeForwardReachability();
 
 	int num_flowpipes = flowpipes.size();
-	mexPrintf( "\n" );
-	mexPrintf( "MReach: Number of flowpipes: %d\n", num_flowpipes );
+	// mexPrintf( "\n" );
+	// mexPrintf( "MReach: Number of flowpipes: %d\n", num_flowpipes );
 	std::vector<hypro::State_t<double>> f = flowpipes[0].second;
-	mexPrintf( "MReach: Number of states in f1: %d\n", f.size() );
+	// mexPrintf( "MReach: Number of states in f1: %d\n", f.size() );
 	mwSize dims[2] = {1, (mwSize)num_flowpipes};
 	const char* field_names[] = {"num", "flowpipe"};
 	plhs[0] = mxCreateStructArray( 2, dims, 2, field_names );
@@ -66,25 +66,29 @@ void MReach::setSettings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 		if ( !strcmp( fname, "timeBound" ) ) {
 			double timeBound = mxGetScalar( tmp );
 			settings.timeBound = hypro::tNumber( timeBound );
-			mexPrintf( "%s: %f\n", fname, timeBound );
+			// mexPrintf( "%s: %f\n", fname, timeBound );
 		} else if ( !strcmp( fname, "jumpDepth" ) ) {
 			double jumpDepth = mxGetScalar( tmp );
 			settings.jumpDepth = jumpDepth;
-			mexPrintf( "%s: %f\n", fname, jumpDepth );
+			// mexPrintf( "%s: %f\n", fname, jumpDepth );
+		} else if ( !strcmp( fname, "clustering" ) ) {
+			double clustering = mxGetScalar( tmp );
+			settings.clustering = clustering;
+			// mexPrintf( "%s: %f\n", fname, clustering );
 		} else if ( !strcmp( fname, "timeStep" ) ) {
 			double timeStep = mxGetScalar( tmp );
 			settings.timeStep = carl::convert<double, hypro::tNumber>( timeStep );
-			mexPrintf( "%s: %f\n", fname, timeStep );
+			// mexPrintf( "%s: %f\n", fname, timeStep );
 		} else if ( !strcmp( fname, "fileName" ) ) {
 			char file[64];
 			mxGetString( tmp, file, sizeof( file ) );
 			std::string fileName = std::string( file );
 			settings.fileName = fileName;
-			mexPrintf( "%s: %s\n", fname, fileName.c_str() );
+			// mexPrintf( "%s: %s\n", fname, fileName.c_str() );
 		} else if ( !strcmp( fname, "pplDenomimator" ) ) {
 			double pplDenomimator = mxGetScalar( tmp );
 			settings.pplDenomimator = pplDenomimator;
-			mexPrintf( "%s: %f\n", fname, pplDenomimator );
+			// mexPrintf( "%s: %f\n", fname, pplDenomimator );
 		} else if ( !strcmp( fname, "plotDimensions" ) ) {
 			const mwSize* dims;
 			int rows, cols;
@@ -99,7 +103,7 @@ void MReach::setSettings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 			bool uB = false;
 			if ( uniformBloating == 1 ) uB = true;
 			settings.uniformBloating = uB;
-			mexPrintf( "%s: %f\n", fname, uniformBloating );
+			// mexPrintf( "%s: %f\n", fname, uniformBloating );
 		} else {
 			mexErrMsgTxt( "MHyProReach - setSettings: Unknown setting field." );
 		}
@@ -132,6 +136,7 @@ void MReach::settings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	mexPrintf( "timeStep: %f\n", tS );
 	mexPrintf( "fileName: %s\n", fN.c_str() );
 	mexPrintf( "pplDenomimator: %d\n", pplD );
+	mexPrintf("clustering: %d\n", cl);
 	mexPrintf( "dims:\n" );
 	for ( int i = 0; i < (int)dim.size(); i++ ) {
 		std::vector<std::size_t> current = dim[i];

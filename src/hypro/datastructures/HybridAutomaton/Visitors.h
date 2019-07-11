@@ -327,7 +327,7 @@ class genericIntervalAssignmentVisitor
 	template<typename B>
     inline T operator()(const B& lhs) const {
 		DEBUG("hypro.datastructures","INTERVAL ASSIGNMENT NOT IMPLEMENTED FOR THIS TYPE.");
-		std::cout << "Inteval assignment not implemented for this type." << std::endl;
+		// std::cout << "Inteval assignment not implemented for this type." << std::endl;
  		return lhs;
     }
 

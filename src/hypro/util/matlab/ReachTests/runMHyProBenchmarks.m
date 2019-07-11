@@ -3,8 +3,10 @@ function runMHyProBenchmarks()
 statPath = '/home/marta/Desktop';
 statFName = 'mhypro_times.txt';
 safePath = '/home/marta/Desktop';
+strategy = 'strat';
 runAll = 0;
 bad = 0;
+diff = 0;
 times = {};
     names = {'mhypro_bouncing_ball','mhypro_car','mhypro_cruise_control',...
         'mhypro_oscillator_4','mhypro_oscillator_8','mhypro_oscillator_16',...
@@ -32,17 +34,17 @@ if runAll
         fprintf(statFileID,'%s %f\n', names{i}, times{i});
     end
 else
-%     BouncingBallTest(0,safePath,names{1}, bad);
-%     carMHyProTest(0,safePath,names{2}, bad);
-    cruiseControl(0,safePath,names{3}, bad);
-%     FilteredOscillator4(1,safePath,names{4}, bad);
-%     FilteredOscillator8(0,safePath,names{5}, bad);
-%     FilteredOscillator16(0,safePath,names{6}, bad);
-%     rendezvousSX4npMHyPro(0,safePath,names{7}, bad);
-%     RodReactorTest(0,safePath,names{8}, bad);
-%     switchingSystem(0,safePath,names{9}, bad);
-%     TwoTanksTest(0,safePath,names{10}, bad);
-%     VehiclePlatoonTest(0,safePath,names{11}, bad);
-%     buck_boost_converter(0,safePath,names{12}, bad);
+    BouncingBallTest(0,safePath,names{1}, bad, diff, startegy);
+%     carMHyProTest(0,safePath,names{2}, bad, diff, startegy);
+%     cruiseControl(0,safePath,names{3}, bad, diff, startegy);
+%     FilteredOscillator4(1,safePath,names{4}, bad, diff, startegy);
+%     FilteredOscillator8(0,safePath,names{5}, bad, diff, startegy);
+%     FilteredOscillator16(0,safePath,names{6}, bad, diff, startegy);
+%     rendezvousSX4npMHyPro(0,safePath,names{7}, bad, diff, startegy);
+%     RodReactorTest(0,safePath,names{8}, bad, diff, startegy);
+%     switchingSystem(0,safePath,names{9}, bad, diff, startegy);
+%     TwoTanksTest(0,safePath,names{10}, bad, diff, startegy);
+%     VehiclePlatoonTest(0,safePath,names{11}, bad, diff, startegy);
+%     buck_boost_converter(0,safePath,names{12}, bad, diff, startegy);
 end
 end

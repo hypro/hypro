@@ -78,11 +78,11 @@ namespace reachability {
 		// collect all computed reachable states
 		std::vector<std::pair<unsigned, typename Reach<Number,ReacherSettings,State>::flowpipe_t>> collectedReachableStates;
 
-		if(ReacherSettings::printStatus) {
-			std::cout << std::endl << "Queue size: " << mWorkingQueue.size() << std::flush;
-		}
+		// if(ReacherSettings::printStatus) {
+		// 	std::cout << std::endl << "Queue size: " << mWorkingQueue.size() << std::flush;
+		// }
 
-		TRACE("hypro.reacher","working queue size: " << mWorkingQueue.size());
+		// TRACE("hypro.reacher","working queue size: " << mWorkingQueue.size());
 
 		if(ReacherSettings::printStatus) {
 			std::cout << std::endl;
@@ -90,9 +90,9 @@ namespace reachability {
 		while ( !mWorkingQueue.isEmpty() ) {
 			TaskTypePtr nextInitialSet = mWorkingQueue.dequeueFront();
 			TRACE("hypro.reacher","working queue after pop: " << mWorkingQueue.size());
-			if(ReacherSettings::printStatus) {
-				std::cout << "\rQueue size: " << mWorkingQueue.size() << std::flush;
-			}
+			// if(ReacherSettings::printStatus) {
+			// 	std::cout << "\rQueue size: " << mWorkingQueue.size() << std::flush;
+			// }
 
 			mCurrentLevel = nextInitialSet->first;
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second.getLocation()->getName());
@@ -150,7 +150,6 @@ namespace reachability {
 				currentSegment = boost::get<1>(initialSetup);
 			}
 			flowpipe.push_back( currentSegment );
-			std::cout << "PUSHED" << std::endl;
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(currentSegment)){
 				// clear queue to stop whole algorithm

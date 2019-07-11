@@ -96,7 +96,8 @@ end
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 4, 'jumpDepth', 2);
+baseSettings = struct('timeBound', 4, 'jumpDepth', 2);
+[settings, setRepr] = setStrategy(baseSettings, 1);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
