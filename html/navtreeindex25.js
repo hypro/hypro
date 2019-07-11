@@ -61,7 +61,7 @@ var NAVTREEINDEX25 =
 "classhypro_1_1SupportFunctionT.html#a72d1a4d3908cd5353c54c52d8be61c79":[4,1,2,41],
 "classhypro_1_1SupportFunctionT.html#a756246c8821d24dfda7dba8393c3651d":[4,1,2,10],
 "classhypro_1_1SupportFunctionT.html#a7e3a0de2365a70b918d37a1434154ad5":[4,1,2,25],
-"classhypro_1_1SupportFunctionT.html#a8acc0aaf48e7b52246b61bd28d6e0cf7":[4,1,2,59],
+"classhypro_1_1SupportFunctionT.html#a8acc0aaf48e7b52246b61bd28d6e0cf7":[4,1,2,60],
 "classhypro_1_1SupportFunctionT.html#a8b99fbdb9c9c3507de0b830c6facbfd0":[4,1,2,56],
 "classhypro_1_1SupportFunctionT.html#a928284903ac0ddeab9926c1b93db62e4":[4,1,2,0],
 "classhypro_1_1SupportFunctionT.html#a955bd8a5c840311013ce82ebff67c105":[4,1,2,44],
@@ -74,12 +74,13 @@ var NAVTREEINDEX25 =
 "classhypro_1_1SupportFunctionT.html#aae26e94bedb1f87332c1e698a58c7ae0":[4,1,2,54],
 "classhypro_1_1SupportFunctionT.html#aaed7156b1662b8a92b1943ffc1993164":[4,1,2,46],
 "classhypro_1_1SupportFunctionT.html#ab7e040a9f8a390f8fe76be2f8aaf72e5":[4,1,2,20],
-"classhypro_1_1SupportFunctionT.html#abccc6b3dff868a71c65dcbf7a4b34093":[4,1,2,58],
+"classhypro_1_1SupportFunctionT.html#abccc6b3dff868a71c65dcbf7a4b34093":[4,1,2,59],
 "classhypro_1_1SupportFunctionT.html#ac619066f9eb5841c34e00702ad5ab218":[4,1,2,47],
 "classhypro_1_1SupportFunctionT.html#ac6da19baf946b3813620bcd0dbf602ba":[4,1,2,30],
 "classhypro_1_1SupportFunctionT.html#ac84c8b77d3cd8bc8ec0f28b10d8d179b":[4,1,2,55],
 "classhypro_1_1SupportFunctionT.html#ad3d1e64d1f3efb1fa3009407b4829b82":[4,1,2,7],
 "classhypro_1_1SupportFunctionT.html#ad7c0764f73223b62178fa9018223b8e4":[4,1,2,38],
+"classhypro_1_1SupportFunctionT.html#ad91062814543cd6994fdf452dd6e6304":[4,1,2,58],
 "classhypro_1_1SupportFunctionT.html#adbf53d3975c116f11bb1034b843938fe":[4,1,2,3],
 "classhypro_1_1SupportFunctionT.html#ae122732e5a5bb93339c0468354ea45cd":[4,1,2,9],
 "classhypro_1_1SupportFunctionT.html#aebac22446eee2feaa9e35fc646fc44c0":[4,1,2,24],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "classhypro_1_1Transition.html#abca76443bc8e53537ba2c6cec0f4f1c9":[6,0,1,201,20],
 "classhypro_1_1Transition.html#abdb77bd0b27d3961ba441c7310004f29":[6,0,1,201,21],
 "classhypro_1_1Transition.html#ac0e300a1192dfe4ac7684deb31af7b58":[6,0,1,201,24],
-"classhypro_1_1Transition.html#ad296fd8807a81c377e20d499056277db":[6,0,1,201,18],
-"classhypro_1_1Transition.html#ad81ad5bf5e9c123c1817ce8f216f5c6d":[6,0,1,201,14]
+"classhypro_1_1Transition.html#ad296fd8807a81c377e20d499056277db":[6,0,1,201,18]
 };
