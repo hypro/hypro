@@ -308,6 +308,12 @@ namespace hypro{
 		return tmp.vertices();
     }
 
+	template<typename Number, typename Converter, typename Setting>
+	std::vector<Point<Number>> SupportFunctionT<Number,Converter,Setting>::vertices( const std::vector<vector_t<Number>>& additionalDirections ) const {
+		auto tmp = Converter::toHPolytope(*this, additionalDirections);
+		return tmp.vertices();
+	}
+
     template<typename Number, typename Converter, typename Setting>
     Number SupportFunctionT<Number,Converter,Setting>::supremum() const {
 		Point<Number> supPoint = content->supremumPoint();

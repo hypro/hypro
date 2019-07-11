@@ -34,9 +34,6 @@ if(STATICLIB_SWITCH)
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost_program_options_STATIC)
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC GMP_STATIC)
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC GMPXX_STATIC)
-	if(HYPRO_USE_SMTRAT)
-		#target_link_libraries(${PROJECT_NAME} PUBLIC smtrat-lib-static)
-	endif()
 	target_include_directories(${PROJECT_NAME}_static
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
@@ -79,6 +76,7 @@ else()
 	target_link_libraries(${PROJECT_NAME} PUBLIC GMP_SHARED)
 	target_link_libraries(${PROJECT_NAME} PUBLIC GMPXX_SHARED)
 	target_link_libraries(${PROJECT_NAME} PUBLIC GLPK_STATIC)
+	target_link_libraries(${PROJECT_NAME} PUBLIC COCOA_SHARED)
 	#target_link_libraries(${PROJECT_NAME} PUBLIC ANTLR4_STATIC)
 	#target_link_libraries(${PROJECT_NAME} PUBLIC pthread)
 	if(HYPRO_USE_SMTRAT)
