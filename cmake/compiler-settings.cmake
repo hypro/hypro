@@ -1,6 +1,9 @@
 
 include(apple-llvm)
 
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed")
+
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -isystem\ /usr/include/libcxxabi/ -D__STRICT_ANSI__")

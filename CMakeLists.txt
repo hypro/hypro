@@ -157,6 +157,8 @@ if(HYPRO_USE_PPL)
 endif()
 
 if(HYPRO_USE_SMTRAT)
+	#load_library(${PROJECT_NAME} smtrat-solver 0)
+	#load_library(${PROJECT_NAME} smtrat-module-LRAModule 0)
 	find_package(smtrat)
 endif()
 
