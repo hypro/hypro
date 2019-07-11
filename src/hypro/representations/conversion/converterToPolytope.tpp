@@ -85,4 +85,11 @@ PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytop
 	return PolytopeT<Number,Converter<Number>,PolytopeSetting>(source.vertices());
 }
 
+//Conversion from carlpoly to ppl poly
+template<typename Number>
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter<Number>,PolytopeSetting>(source.matrix(), source.vector());
+}
+
 } // namespace hypro
