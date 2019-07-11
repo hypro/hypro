@@ -1,4 +1,4 @@
-function time = RodReactorTest(safe, safePath, figName, bad, diff)
+function log = rod_reactor_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -69,7 +69,7 @@ reset1 = MHyProReset();
 reset1.setMatrix([1 0 0; 0 0 0; 0 0 1]);
 reset1.setVector([0; 0; 0]);
 
-tran1.setAggregation(2);
+tran1.setAggregation(aggr);
 tran1.setGuard(guard1);
 tran1.setSource(rod1);
 tran1.setTarget(noRod);
@@ -87,7 +87,7 @@ guard2 = MHyProCondition();
 guard2.setMatrix([1 0 0; -1 0 0; 0 -1 0]); % First set the matrix then the vector!?
 guard2.setVector([550; -550; -20]);
 
-tran2.setAggregation(2);
+tran2.setAggregation(aggr);
 tran2.setGuard(guard2);
 tran2.setSource(noRod);
 tran2.setTarget(rod1);
@@ -105,7 +105,7 @@ guard3 = MHyProCondition();
 guard3.setMatrix([1 0 0; -1 0 0; 0 0 -1]); % First set the matrix then the vector!?
 guard3.setVector([550; -550; -20]);
 
-tran3.setAggregation(2);
+tran3.setAggregation(aggr);
 tran3.setGuard(guard3);
 tran3.setSource(noRod);
 tran3.setTarget(rod2);
@@ -127,7 +127,7 @@ reset4 = MHyProReset();
 reset4.setMatrix([1 0 0; 0 1 0; 0 0 0]);
 reset4.setVector([0; 0; 0]);
 
-tran4.setAggregation(2);
+tran4.setAggregation(aggr);
 tran4.setGuard(guard4);
 tran4.setSource(rod2);
 tran4.setTarget(noRod);
@@ -142,34 +142,37 @@ rod2.addTransition(tran4);
 
 if bad
     if diff == 0
-        %easy
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0; 0 0 1]);
-        badState.setVector([35;35]);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
+%         %easy
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0; 0 0 1]);
+%         badState.setVector([35;35]);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+          spec = [0 -1 0 -35; 0 0 -1 -35];
     elseif diff == 1
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0; 0 0 1]);
-        badState.setVector([34.93;34.93]);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0; 0 0 1]);
+%         badState.setVector([34.93;34.93]);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+        spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
     else
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0; 0 0 1]);
-        badState.setVector([34.861;34.861]);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0; 0 0 1]);
+%         badState.setVector([34.861;34.861]);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+        spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
     end
-    automaton.setLocalBadStates(badStates);
+%     automaton.setLocalBadStates(badStates);
 end
 
 %-----------------------------------------------%
@@ -202,18 +205,42 @@ assert(iLoc == noRod);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.1, 'timeBound', 15, 'jumpDepth', 20);
+% Add basic settings
+settings.timeBound = 15;
+settings.jumpDepth = 20;
+
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(0);
-%reach.settings();
+reach.setRepresentationType(setRepr);
 
 tic;
 flowpipes = reach.computeForwardReachability();
-time = toc;
-disp(['Time needed: ', num2str(time)]);
-dim = [1 3];
-labs = ["x", "c2"];
-ext = 'png';
-reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+reachabilityTime = toc;
+verificationTime = 0;
+if bad
+    tic;
+    safe = reach.verify(flowpipes, spec);
+    verificationTime = toc;
+end
+
+time = reachabilityTime + verificationTime;
+% disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
+% disp(['Time needed for verification: ', num2str(verificationTime)]);
+% disp(['Overall time needed: ', num2str(time)]);
+log = ['rod_reactor ', num2str(strategy), ' ', num2str(diff), ' ',...
+    num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
+    num2str(time), ' ' num2str(safe)];
+
+if plotting == 1
+    dim = [1 3];
+    labs = ["x", "x2"];
+    ext = 'png';
+    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+elseif plotting == 2
+    dim = [1 2 3];
+    labs = ["x", "c1", "c2"];
+    ext = 'png';
+    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+end
+
 end

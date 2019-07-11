@@ -1,4 +1,4 @@
-function time = TwoTanksTest(safe, safePath, figName, bad, diff)
+function log = two_tanks_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -79,7 +79,7 @@ guardVector = [-1; 1];
 guardMatrix = [1 0; -1 0];
 guard1.setMatrix(guardMatrix);
 guard1.setVector(guardVector);
-tran1.setAggregation(2);
+tran1.setAggregation(aggr);
 tran1.setGuard(guard1);
 tran1.setReset(dummy_reset);
 tran1.setSource(l1);
@@ -99,7 +99,7 @@ guardVector = [1; -1];
 guardMatrix = [0 1; 0 -1];
 guard2.setMatrix(guardMatrix);
 guard2.setVector(guardVector);
-tran2.setAggregation(2);
+tran2.setAggregation(aggr);
 tran2.setGuard(guard2);
 tran2.setReset(dummy_reset);
 tran2.setSource(l1);
@@ -119,7 +119,7 @@ guardVector = [1; -1];
 guardMatrix = [0 1; 0 -1];
 guard3.setMatrix(guardMatrix);
 guard3.setVector(guardVector);
-tran3.setAggregation(2);
+tran3.setAggregation(aggr);
 tran3.setReset(dummy_reset);
 tran3.setGuard(guard3);
 tran3.setSource(l2);
@@ -140,7 +140,7 @@ guardMatrix = [0 1; 0 -1];
 guard4.setMatrix(guardMatrix);
 guard4.setVector(guardVector);
 
-tran4.setAggregation(2);
+tran4.setAggregation(aggr);
 tran4.setReset(dummy_reset);
 tran4.setGuard(guard4);
 tran4.setSource(l3);
@@ -160,7 +160,7 @@ guardVector = [-1; 1];
 guardMatrix = [1 0; -1 0];
 guard5.setMatrix(guardMatrix);
 guard5.setVector(guardVector);
-tran5.setAggregation(2);
+tran5.setAggregation(aggr);
 tran5.setGuard(guard5);
 tran5.setReset(dummy_reset);
 tran5.setSource(l3);
@@ -180,7 +180,7 @@ guardVector = [1; -1];
 guardMatrix = [1 0; -1 0];
 guard6.setMatrix(guardMatrix);
 guard6.setVector(guardVector);
-tran6.setAggregation(2);
+tran6.setAggregation(aggr);
 tran6.setGuard(guard6);
 tran6.setReset(dummy_reset);
 tran6.setSource(l4);
@@ -200,7 +200,7 @@ guardVector = [0; 0];
 guardMatrix = [0 1; 0 -1];
 guard7.setMatrix(guardMatrix); 
 guard7.setVector(guardVector);
-tran7.setAggregation(2);
+tran7.setAggregation(aggr);
 tran7.setGuard(guard7);
 tran7.setReset(dummy_reset);
 tran7.setSource(l4);
@@ -217,45 +217,48 @@ l4.addTransition(tran7);
 if bad
     if diff == 0
         %easy
-        badState = MHyProCondition();
-        badState.setMatrix([0 1]);
-        badState.setVector([-0.7]);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1]);
+%         badState.setVector([-0.7]);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        spec = [0 -1 0.7];
     elseif diff == 1
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([0 1]);
-        badState.setVector([-0.7]);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1]);
+%         badState.setVector([-0.7]);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        spec = [0 -1 0.7];
     else
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([0 1]);
-        badState.setVector([-0.7]);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1]);
+%         badState.setVector([-0.7]);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        spec = [0 -1 0.7];
     end
-    automaton.setLocalBadStates(badStates); 
+%     automaton.setLocalBadStates(badStates); 
 end
 
 %-----------------------------------------------%
@@ -272,20 +275,39 @@ automaton.addInitialState(l3, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.01, 'timeBound', 50, 'jumpDepth', 20);
+% Add basic settings
+settings.timeBound = 50;
+settings.jumpDepth = 20;
+
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(0);
-reach.settings();
+reach.setRepresentationType(setRepr);
 
 tic;
 flowpipes = reach.computeForwardReachability();
-time = toc;
-disp(['Time needed: ', num2str(time)]);
-dim = [1 2];
-labs = ["x1","x2"];
-ext = 'png';
-reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+reachabilityTime = toc;
+verificationTime = 0;
+if bad
+    tic;
+    safe = reach.verify(flowpipes, spec);
+    verificationTime = toc;
+end
+
+time = reachabilityTime + verificationTime;
+% disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
+% disp(['Time needed for verification: ', num2str(verificationTime)]);
+% disp(['Overall time needed: ', num2str(time)]);
+log = ['two_tanks ', num2str(strategy), ' ', num2str(diff), ' ',...
+    num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
+    num2str(time), ' ' num2str(safe)];
+
+if plotting == 1
+    dim = [1 2];
+    labs = ["x1", "x2"];
+    ext = 'png';
+    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+end
+
 end
 
 

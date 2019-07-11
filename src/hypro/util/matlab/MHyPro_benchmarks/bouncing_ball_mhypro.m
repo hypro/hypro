@@ -1,4 +1,4 @@
-function time = BouncingBallTest(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = bouncing_ball_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -119,9 +119,10 @@ time = reachabilityTime + verificationTime;
 % disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 % disp(['Time needed for verification: ', num2str(verificationTime)]);
 % disp(['Overall time needed: ', num2str(time)]);
-disp(['bouncing_ball ', num2str(strategy), ' ', num2str(diff), ' ',...
+
+log = ['bouncing_ball ', num2str(strategy), ' ', num2str(diff), ' ',...
     num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
-    num2str(time), ' ' num2str(safe)]);
+    num2str(time), ' ', num2str(safe)];
 
 if plotting == 1
     dim = [2 1];

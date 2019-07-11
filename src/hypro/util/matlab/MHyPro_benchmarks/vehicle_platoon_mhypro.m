@@ -1,4 +1,4 @@
-function time = VehiclePlatoonTest(safe, safePath, figName, bad, diff)
+function log = vehicle_platoon_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -78,7 +78,7 @@ temp(10,10) = 0;
 reset.setMatrix(temp);
 reset.setVector(zeros(10,1));
 
-tran1.setAggregation(2);
+tran1.setAggregation(aggr);
 tran1.setGuard(guard1);
 tran1.setSource(qc);
 tran1.setTarget(qn);
@@ -94,7 +94,7 @@ guard2 = MHyProCondition();
 guard2.setMatrix([0 0 0 0 0 0 0 0 0 -1]);
 guard2.setVector(-2);
 
-tran2.setAggregation(2);
+tran2.setAggregation(aggr);
 tran2.setGuard(guard2);
 tran2.setSource(qn);
 tran2.setTarget(qc);
@@ -124,34 +124,37 @@ automaton.addInitialState(qc, initialCond);
 
 if bad
     if diff == 0
-        %easy
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
-        badState.setVector(-1.7);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         %easy
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+%         badState.setVector(-1.7);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        spec = [1 0 0 0 0 0 0 0 0 0 1.7];
     elseif diff == 1
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
-        badState.setVector(-1.671);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+%         badState.setVector(-1.671);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        spec = [1 0 0 0 0 0 0 0 0 0 1.671];
     else
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
-        badState.setVector(-1.642);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+%         badState.setVector(-1.642);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        spec = [1 0 0 0 0 0 0 0 0 0 1.642];
     end
-    automaton.setLocalBadStates(badStates);
+%     automaton.setLocalBadStates(badStates);
 end
 
 
@@ -159,19 +162,43 @@ end
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.02, 'timeBound', 12, 'jumpDepth', 2);
+% Add basic settings
+settings.timeBound = 12;
+settings.jumpDepth = 2;
+
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
-reach.setRepresentationType(0);
-%reach.settings();
+reach.setRepresentationType(setRepr);
 
 tic;
 flowpipes = reach.computeForwardReachability();
-time = toc;
-disp(['Time needed: ', num2str(time)]);
-dim = [4 7];
-labs = ["e2", "e3"];
-ext = 'png';
-reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+reachabilityTime = toc;
+verificationTime = 0;
+if bad
+    tic;
+    safe = reach.verify(flowpipes, spec);
+    verificationTime = toc;
+end
+
+time = reachabilityTime + verificationTime;
+% disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
+% disp(['Time needed for verification: ', num2str(verificationTime)]);
+% disp(['Overall time needed: ', num2str(time)]);
+log = ['vehicle_platoon ', num2str(strategy), ' ', num2str(diff), ' ',...
+    num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
+    num2str(time), ' ' num2str(safe)];
+
+if plotting == 1
+    dim = [4 7];
+    labs = ["e2", "e3"];
+    ext = 'png';
+    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+elseif plotting == 2
+    dim = [4 7 10];
+    labs = ["e2", "e3", "t"];
+    ext = 'png';
+    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+end
+
 end
 
