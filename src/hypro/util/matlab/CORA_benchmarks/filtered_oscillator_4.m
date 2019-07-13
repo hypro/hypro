@@ -1,10 +1,5 @@
-function complete = filtered_oscillator_4()
-% difficulcy 0- no, 1 -easy, 2 -medium, 3 - hard
-sim = 0;
-reacha = 1;
-diff = 2; 
+function log = filtered_oscillator_4(saveFig,savePath,filename, diff, plot)
 
-% Load model
 HA = filtered_oscillator_4_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
@@ -17,9 +12,9 @@ options.x0 = center(options.R0); %initial state for simulation
 
 if diff == 3
     %hard:
-    options.taylorTerms = 4;
-    options.zonotopeOrder = 6;
-    options.polytopeOrder = 1;
+    options.taylorTerms = 100;
+    options.zonotopeOrder = 200;
+    options.polytopeOrder = 100;
 elseif diff == 2
     %medium:
     options.taylorTerms = 2;
@@ -55,91 +50,39 @@ options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = 4;
 
-dim = 6;
-vis = 0;
-
-% Simulation --------------------------------------------------------------
-
-if sim
-    N = 50;
-    tic;
-    for i=1:N
-        %set initial state, input
-        if i == 1
-            %simulate center
-            options.x0 = center(options.R0);
-        elseif i < 5
-            % simulate extreme points
-            options.x0 = randPointExtreme(options.R0);
-        else
-            % simulate random points
-            options.x0 = randPoint(options.R0);
-        end 
-
-        %simulate hybrid automaton
-        HAsim = simulate(HA,options);
-        simRes{i} = get(HAsim,'trajectory');
+tic;
+[HA] = reach(HA,options);
+reachabilityT = toc;
+safe = 0;
+verificationT = 0;
+time = 0;
+% Verification --------------------------------------------------------
+if diff ~= 0
+    Rset = get(HA, 'continuousReachableSet');
+    Rset = Rset.OT;
+     tic;
+    if diff == 3
+        %hard: y <= 0.4892
+        spec = [0 1 0 0 0 0 0.4892];
+    elseif diff == 2
+        %medium: y <= 0.4946
+        spec = [0 1 0 0 0 0 0.4946];
+    else
+        %easy: y <= 0.5
+        spec = [0 1 0 0 0 0 0.5];
     end
-    toc;
-    disp(['Time needed for the simulation: ', num2str(toc)]);
-
-    % Visualization -------------------------------------------------------
-    figure 
-    hold on
-    box on
-    options.projectedDimensions = [1 3];
-    options.plotType = {'b','m','g'};
-    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    for i = 1:length(simRes)
-       for j = 1:length(simRes{i}.x)
-           plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
-                simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
-       end
-    end
-%     xlabel('t');
-%     ylabel('v');
+   
+    safe = verifySafetyPropertiesCORA(spec, Rset);
+    verificationT = toc;
+    time = reachabilityT + verificationT;
 end
-
-
-% Reachability ------------------------------------------------------------
-if reacha
-    tic;
-    [HA] = reach(HA,options);
-    reachabilityT = toc;
-    disp(['Time needed for the analysis: ', num2str(reachabilityT)]);
-    
-    % Verification --------------------------------------------------------
-    if diff ~= 0
-        Rset = get(HA, 'continuousReachableSet');
-        Rset = Rset.OT;
-
-        if diff == 3
-            %hard: y <= 0.4892
-            spec = [0 1 0 0 0 0 0.4892];
-        elseif diff == 2
-            %medium: y <= 0.4946
-            spec = [0 1 0 0 0 0 0.4946];
-        else
-            %easy: y <= 0.5
-            spec = [0 1 0 0 0 0 0.5];
-        end
-        tic;
-        safe = verifySafetyPropertiesCORA(spec, Rset);
-        verificationT = toc;
-
-        if safe
-            disp('Verification result: SAFE');
-        end
-
-        disp(['Time needed for verification: ', num2str(verificationT)]);
-
-        time = reachabilityT + verificationT;
-        disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
-    end
+log = ['filtered_oscillator_4 ', num2str(diff), ' ',...
+    num2str(reachabilityT), ' ',  num2str(verificationT), ' ',...
+    num2str(time), ' ' num2str(safe)];
     
 % Visualization -------------------------------------------------------
-if vis    
-    figure 
+if plot   
+    fig = figure(); 
     hold on
     options.projectedDimensions = [1 3];
 
@@ -148,7 +91,10 @@ if vis
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     xlabel('x');
     ylabel('x1');
-end
+    if saveFig
+        fname = strcat(filename,'.','png');
+        saveas(fig, fullfile(savePath,fname),'png');
+    end
 end
 
-complete = 1;
+end

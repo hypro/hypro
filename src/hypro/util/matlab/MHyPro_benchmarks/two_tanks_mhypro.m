@@ -1,4 +1,4 @@
-function log = two_tanks_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = two_tanks_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -277,7 +277,7 @@ automaton.addInitialState(l3, initialCond);
 
 % Add basic settings
 settings.timeBound = 50;
-settings.jumpDepth = 20;
+settings.jumpDepth = 10;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
@@ -287,6 +287,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -305,7 +306,7 @@ if plotting == 1
     dim = [1 2];
     labs = ["x1", "x2"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

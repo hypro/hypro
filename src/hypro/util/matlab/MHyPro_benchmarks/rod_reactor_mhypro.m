@@ -1,4 +1,4 @@
-function log = rod_reactor_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = rod_reactor_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -217,6 +217,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -235,12 +236,12 @@ if plotting == 1
     dim = [1 3];
     labs = ["x", "x2"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x", "c1", "c2"];
     ext = 'png';
-    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

@@ -1,4 +1,4 @@
-function log = vehicle_platoon_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = vehicle_platoon_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -174,6 +174,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -192,12 +193,12 @@ if plotting == 1
     dim = [4 7];
     labs = ["e2", "e3"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
     dim = [4 7 10];
     labs = ["e2", "e3", "t"];
     ext = 'png';
-    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

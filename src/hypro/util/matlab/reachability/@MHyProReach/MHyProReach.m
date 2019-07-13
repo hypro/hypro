@@ -83,8 +83,12 @@ classdef MHyProReach < handle
                 
                 for state = 1:num_states
                     currentState = currentFlowpipe{state};
+                    warning('');
                     vertices = currentState.vertices(0);
-                    obj.plotVertices(vertices, dims);
+                    [msgstr, msgid] = lastwarn;
+                    if isempty(msgstr)
+                        obj.plotVertices(vertices, dims);
+                    end
                     hold on
                 end 
                 hold on

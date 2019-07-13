@@ -1,4 +1,4 @@
-function log = switching_system_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = switching_system_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % vars: [x1,x2,x3,x4,x5]
 
@@ -236,7 +236,7 @@ if bad
 %         badStates(4).cond = badState;
 %         badStates(5).loc = l5;
 %         badStates(5).cond = badState;
-        spec = [0 0 1 0 1.5];
+        spec = [0 0 1 0 0 1.5];
     elseif diff == 1
         %medium
 %         badState = MHyProCondition();
@@ -252,7 +252,7 @@ if bad
 %         badStates(4).cond = badState;
 %         badStates(5).loc = l5;
 %         badStates(5).cond = badState;
-        spec = [0 0 1 0 1.4945];
+        spec = [0 0 1 0 0 1.4945];
     else
         %hard
 %         badState = MHyProCondition();
@@ -268,7 +268,7 @@ if bad
 %         badStates(4).cond = badState;
 %         badStates(5).loc = l5;
 %         badStates(5).cond = badState;
-        spec = [0 0 1 0 1.489];
+        spec = [0 0 1 0 0 1.489];
     end
 %     automaton.setLocalBadStates(badStates);
 end
@@ -301,6 +301,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -319,12 +320,12 @@ if plotting == 1
     dim = [1 3];
     labs = ["x1", "x3"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x1", "x2", "x3"];
     ext = 'png';
-    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

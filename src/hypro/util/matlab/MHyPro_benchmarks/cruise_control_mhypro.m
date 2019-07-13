@@ -1,4 +1,4 @@
-function log = cruise_control_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = cruise_control_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % vars: [v, x, t]
 
@@ -438,6 +438,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -456,12 +457,12 @@ if plotting == 1
     dim = [1 2];
     labs = ["v", "x"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["v", "x", "t"];
     ext = 'png';
-    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

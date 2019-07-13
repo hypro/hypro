@@ -34,7 +34,7 @@ if runAll
         fprintf(statFileID,'%s %f\n', names{i}, times{i});
     end
 else
-    BouncingBallTest(0,safePath,names{1}, bad, diff, startegy);
+%     BouncingBallTest(0,safePath,names{1}, bad, diff, startegy);
 %     carMHyProTest(0,safePath,names{2}, bad, diff, startegy);
 %     cruiseControl(0,safePath,names{3}, bad, diff, startegy);
 %     FilteredOscillator4(1,safePath,names{4}, bad, diff, startegy);
@@ -43,8 +43,8 @@ else
 %     rendezvousSX4npMHyPro(0,safePath,names{7}, bad, diff, startegy);
 %     RodReactorTest(0,safePath,names{8}, bad, diff, startegy);
 %     switchingSystem(0,safePath,names{9}, bad, diff, startegy);
-%     TwoTanksTest(0,safePath,names{10}, bad, diff, startegy);
-%     VehiclePlatoonTest(0,safePath,names{11}, bad, diff, startegy);
+%     TwoTanksTest(0,safePath,names{10}, bad, diff);
+%     VehiclePlatoonTest(0,safePath,names{11}, bad, diff);
 %     buck_boost_converter(0,safePath,names{12}, bad, diff, startegy);
 end
 end

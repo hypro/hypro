@@ -1,4 +1,4 @@
-function log = filtered_oscillator_16_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = filtered_oscillator_16_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % vars = [ state var x,y,f8a_f4a_x1,f8a_f4a_x2,f8a_f4a_x3,f8a_x1,f8a_f4b_x1,
 %    f8a_f4b_x2,f8a_f4b_x3,x1,f8b_f4a_x1,f8b_f4a_x2,f8b_f4a_x3,f8b_x1,
@@ -326,6 +326,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -344,12 +345,12 @@ if plotting == 1
     dim = [1 6];
     labs = ["x", "f8x1"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x", "y", "f8x1"];
     ext = 'png';
-    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

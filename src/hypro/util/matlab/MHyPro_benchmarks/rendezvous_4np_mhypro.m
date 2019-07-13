@@ -1,4 +1,4 @@
-function log = rendezvous_4np_mhypro(safe, safePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function log = rendezvous_4np_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -105,20 +105,19 @@ p2.addTransition(tran);
 %                 Bad States
 %-----------------------------------------------%
 
-% unsafe: y >= 0.5
 
 if bad
     if diff == 0
         %easy
-        spec = [];
+        spec = [0 0 1 0 0 18; 0 0 0 1 0 10];
     elseif diff == 1
         %medium
-        spec = [];
+        spec = [0 0 1 0 0 17.95; 0 0 0 1 0 9.7364];
     else
         %hard
-        spec = [];
+        spec = [0 0 1 0 0 17.9; 0 0 0 1 0 9.4728];
     end
-
+end
 
 %-----------------------------------------------%
 %                 Initial set
@@ -148,6 +147,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 reachabilityTime = toc;
 verificationTime = 0;
+safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
@@ -166,12 +166,12 @@ if plotting == 1
     dim = [3 4];
     labs = ["vx", "vy"];
     ext = 'png';
-    reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
     dim = [3 4 5];
     labs = ["vx", "vy", "t"];
     ext = 'png';
-    reach.plot3D(flowpipes, dim, labs,safe,safePath,figName,ext);
+    reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end
 
 end

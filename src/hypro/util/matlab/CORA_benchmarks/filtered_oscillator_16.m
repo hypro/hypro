@@ -1,9 +1,5 @@
-function complete = filtered_oscillator_16()
+function log = filtered_oscillator_16(saveFig,savePath,filename, diff, plot)
 
-sim = 0;
-reacha = 1;
-diff = 0;
-% Load model
 HA = filtered_oscillator_16_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
@@ -16,9 +12,9 @@ options.x0 = center(options.R0); %initial state for simulation
 
 if diff == 3
     %hard:
-    options.taylorTerms = 2;
-    options.zonotopeOrder = 6;
-    options.polytopeOrder = 1;
+    options.taylorTerms = 100;
+    options.zonotopeOrder = 200;
+    options.polytopeOrder = 100;
 elseif diff == 2
     %medium:
     options.taylorTerms = 3;
@@ -53,61 +49,15 @@ options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = 4;
 
-dim = 18;
-vis = 0;
-
-% Simulation --------------------------------------------------------------
-
-if sim
-    N = 50;
-    tic;
-    for i=1:N
-        %set initial state, input
-        if i == 1
-            %simulate center
-            options.x0 = center(options.R0);
-        elseif i < 5
-            % simulate extreme points
-            options.x0 = randPointExtreme(options.R0);
-        else
-            % simulate random points
-            options.x0 = randPoint(options.R0);
-        end 
-
-        %simulate hybrid automaton
-        HAsim = simulate(HA,options);
-        simRes{i} = get(HAsim,'trajectory');
-    end
-    toc;
-    disp(['Time needed for the simulation: ', num2str(toc)]);
-
-    % Visualization -------------------------------------------------------
-    figure 
-    hold on
-    box on
-    options.projectedDimensions = [1 6];
-    options.plotType = {'b','m','g'};
-    plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    for i = 1:length(simRes)
-       for j = 1:length(simRes{i}.x)
-           plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
-                simRes{i}.x{j}(:,options.projectedDimensions(2)),'k'); 
-       end
-    end
-%     xlabel('t');
-%     ylabel('v');
-end
-
-
-% Reachability ------------------------------------------------------------
-if reacha
     tic;
     [HA] = reach(HA,options);
     reachabilityT = toc;
-    disp(['Time needed for the analysis: ', num2str(reachabilityT)]);
-    
+    safe = 0;
+    verificationT = 0;
+    time = 0;
     % Verification --------------------------------------------------------
     if diff ~= 0
+        tic;
         Rset = get(HA, 'continuousReachableSet');
         Rset = Rset.OT;
         
@@ -121,33 +71,28 @@ if reacha
             %hard: y <= 0.4637
             spec = [0 1 0 0 0 0 0.4637];
         end
-
-        tic;
         safe = verifySafetyPropertiesCORA(spec, Rset);
         verificationT = toc;
-
-        if safe
-            disp('Verification result: SAFE');
-        end
-
-        disp(['Time needed for verification: ', num2str(verificationT)]);
-
         time = reachabilityT + verificationT;
-        disp(['Time needed for reachability analysis + verification: ', num2str(time)]);
     end
+log = ['filtered_oscillator_16 ', num2str(diff), ' ',...
+num2str(reachabilityT), ' ',  num2str(verificationT), ' ',...
+num2str(time), ' ' num2str(safe)];
     
 % Visualization -------------------------------------------------------
-if vis    
-    figure 
+if plot    
+    fig = figure(); 
     hold on
     options.projectedDimensions = [1 6];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-%     xlabel('t');
-%     ylabel('v');
+    xlabel('x');
+    ylabel('f8x1');
+    if saveFig
+        fname = strcat(filename,'.','png');
+        saveas(fig, fullfile(savePath,fname),'png');
+    end
 end
 end
-
-complete = 1;
