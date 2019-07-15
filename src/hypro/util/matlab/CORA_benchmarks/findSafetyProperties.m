@@ -2,8 +2,8 @@ function out = findSafetyProperties(spec, ReachableSet)
 
 
 % Create vector with variable values
-min = -10000 * ones(size(spec,1),1);
-max = 10000 * ones(size(spec,1),1);
+min = zeros(size(spec,1),1);
+max = zeros(size(spec,1),1);
 
 spec_counter = 1;
     for row = 1:size(spec,1)
@@ -34,10 +34,10 @@ spec_counter = 1;
             end
         end
 
-        matrix = [-1 * spec; spec]
-        vect = [-1 * min - (0.01 * min); max + (0.01 * max)];
-        out = [matrix, vect];
-
+        matrix = [-1 * spec; spec];
+        vect = [-1 * min;max];
+        %out = [matrix, vect];
+        out = max;
     end
 end
 

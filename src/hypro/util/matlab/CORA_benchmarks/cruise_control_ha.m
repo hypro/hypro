@@ -175,7 +175,7 @@ dynamics = linearSys('linearSys', dynA, dynB, dync);
 %   v >= 5 & v <= 20 &
 %   t >= 0 & t <= 1.3
 invA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
-invb = [-5;20;-0;1.3];
+invb = [-5;20;0;1.3];
 invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
@@ -188,11 +188,9 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 1.3 & v >= 18 & v <= 20
-guardA = [-1,0,0;1,0,0];
-guardb = [-18;20];
-guardAe = [0,0,1];
-guardbe = [1.3];
-guardOpt = struct('A', guardA, 'b', guardb, 'Ae', guardAe, 'be', guardbe);
+guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+guardb = [-18;20;-1.3;1.3];
+guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 trans{1} = transition(guard, reset, 1, 'dummy', 'names');
@@ -207,7 +205,7 @@ reset = struct('A', resetA, 'b', resetb);
 %   t >= 0 & t <= 1.3 &
 %   v >= 5 & v <= 11
 guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
-guardb = [-0;1.3;-5;11];
+guardb = [0;1.3;-5;11];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 

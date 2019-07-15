@@ -205,7 +205,7 @@ if bad
 %         badStates(3).cond = badState;
 %         badStates(4).loc = l4;
 %         badStates(4).cond = badState;
-        spec = [0 1 0 0 0 0 0.4946];
+        spec = [0 1 0 0 0 0 0.48205];
     else
         %hard
 %         badState = MHyProCondition();
@@ -219,7 +219,7 @@ if bad
 %         badStates(3).cond = badState;
 %         badStates(4).loc = l4;
 %         badStates(4).cond = badState;
-        spec = [0 1 0 0 0 0 0.4892];
+        spec = [0 1 0 0 0 0 0.4641];
     end
 %     automaton.setLocalBadStates(badStates);
 end

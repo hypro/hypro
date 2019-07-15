@@ -78,7 +78,7 @@ if bad
 %         badState.setVector(-10.6732);
 %         badStates(1).loc = l;
 %         badStates(1).cond = badState;
-        spec = [0 1 0 10.6732];
+        spec = [0 1 0 10.6569];
     else
         % hard
 %         badState = MHyProCondition();
@@ -86,7 +86,7 @@ if bad
 %         badState.setVector(-10.6464);
 %         badStates(1).loc = l;
 %         badStates(1).cond = badState;
-        spec = [0 1 0 10.6464];
+        spec = [0 1 0 10.6138];
     end
         
 

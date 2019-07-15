@@ -142,7 +142,7 @@ if bad
 %         badStates(1).cond = badState;
 %         badStates(2).loc = qn;
 %         badStates(2).cond = badState;
-        spec = [1 0 0 0 0 0 0 0 0 0 1.671];
+        spec = [1 0 0 0 0 0 0 0 0 0 1.66815];
     else
         %hard
 %         badState = MHyProCondition();
@@ -152,7 +152,7 @@ if bad
 %         badStates(1).cond = badState;
 %         badStates(2).loc = qn;
 %         badStates(2).cond = badState;
-        spec = [1 0 0 0 0 0 0 0 0 0 1.642];
+        spec = [1 0 0 0 0 0 0 0 0 0 1.6363];
     end
 %     automaton.setLocalBadStates(badStates);
 end

@@ -1,4 +1,4 @@
-function log = filtered_oscillator_4(saveFig,savePath,filename, diff, plot)
+function log = filtered_oscillator_4(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder,strategy)
 
 HA = filtered_oscillator_4_ha();
 options.enclosureEnables = [3 5];
@@ -10,26 +10,31 @@ Zcenter = [0.25;0;0;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-if diff == 3
-    %hard:
-    options.taylorTerms = 100;
-    options.zonotopeOrder = 200;
-    options.polytopeOrder = 100;
-elseif diff == 2
-    %medium:
-    options.taylorTerms = 2;
-    options.zonotopeOrder = 2;
-    options.polytopeOrder = 1;
-elseif diff == 1
-    % easy
-    options.taylorTerms = 2;
-    options.zonotopeOrder = 2;
-    options.polytopeOrder = 1;
-else
-    options.taylorTerms = 1;
-    options.zonotopeOrder = 1;
-    options.polytopeOrder = 1;
-end
+% if diff == 3
+%     %hard:
+%     options.taylorTerms = 100;
+%     options.zonotopeOrder = 200;
+%     options.polytopeOrder = 100;
+% elseif diff == 2
+%     %medium:
+%     options.taylorTerms = 2;
+%     options.zonotopeOrder = 2;
+%     options.polytopeOrder = 1;
+% elseif diff == 1
+%     % easy
+%     options.taylorTerms = 2;
+%     options.zonotopeOrder = 2;
+%     options.polytopeOrder = 1;
+% else
+%     options.taylorTerms = 1;
+%     options.zonotopeOrder = 1;
+%     options.polytopeOrder = 1;
+% end
+
+options.taylorTerms = tTerms;
+options.zonotopeOrder = zOrder;
+options.polytopeOrder = pOrder;
+
 
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
@@ -38,7 +43,8 @@ options.originContained = 0;
 
 %set input:
 for i = 1:4
-    options.timeStepLoc{i} = 0.05;
+    %options.timeStepLoc{i} = 0.05;
+    options.timeStepLoc{i} = timeStep;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -58,15 +64,18 @@ verificationT = 0;
 time = 0;
 % Verification --------------------------------------------------------
 if diff ~= 0
-    Rset = get(HA, 'continuousReachableSet');
+    Rset = get(HA, 'reachableSet');
     Rset = Rset.OT;
      tic;
+     
+    %maxValue = findSafetyProperties([0 1 0 0 0 0], Rset); 
+    
     if diff == 3
-        %hard: y <= 0.4892
-        spec = [0 1 0 0 0 0 0.4892];
+        %hard: y <= 0.4641
+        spec = [0 1 0 0 0 0 0.4641];
     elseif diff == 2
         %medium: y <= 0.4946
-        spec = [0 1 0 0 0 0 0.4946];
+        spec = [0 1 0 0 0 0 0.4845];
     else
         %easy: y <= 0.5
         spec = [0 1 0 0 0 0 0.5];
@@ -78,10 +87,10 @@ if diff ~= 0
 end
 log = ['filtered_oscillator_4 ', num2str(diff), ' ',...
     num2str(reachabilityT), ' ',  num2str(verificationT), ' ',...
-    num2str(time), ' ' num2str(safe)];
+    num2str(time), ' ' num2str(safe), ' ', num2str(strategy)];
     
 % Visualization -------------------------------------------------------
-if plot   
+if show   
     fig = figure(); 
     hold on
     options.projectedDimensions = [1 3];

@@ -1,4 +1,4 @@
-function runMHyProAllStrategies(benchmarkNr, diff,strategy)
+function runMHyProAllStrategies(benchmarkNr, diff, strategy)
 
 statPath = '/home/marta/Desktop';
 statFName = 'mhypro_times.txt';
@@ -19,80 +19,60 @@ log_counter = 1;
         filename = strcat(names{1},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = bouncing_ball_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 2
         % CRUISE CONTROL
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{2},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = cruise_control_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 3
      % FILTERED OSCILLATOR 4
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{3},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = filtered_oscillator_4_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 4
         % FILTERED OSCILLATOR 8
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{4},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = filtered_oscillator_8_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 5
         % FILTERED OSCILLATOR 16
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{5},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = filtered_oscillator_16_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 6
         % SWITCHING SYSTEM
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{6},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = switching_system_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 7
         % RENDEZVOUZ
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{7},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = rendezvous_4np_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 8
         % ROD REACTOR
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{8},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = rod_reactor_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     elseif benchmarkNr == 9
         % TWO TANKS
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{9},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = two_tanks_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     else
         % VEHICLE PLATOON
         [settings, setRepr, aggr] = getStrategy(strategy);
         filename = strcat(names{10},'_',num2str(diff),'_',num2str(strategy));
         logs{log_counter} = vehicle_platoon_mhypro(saveFig,savePath,filename, bad, diff,settings{1},setRepr{1},aggr{1},plot, strategy);
         log_counter = log_counter + 1;
-        saveFig = 0;
-        plot = 0;
     end
     
     fileID = fopen(fullfile(savePath, 'mhypro_benchmark_results.txt'),'a');
