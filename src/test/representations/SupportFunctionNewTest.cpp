@@ -416,6 +416,46 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 	EXPECT_EQ(res.at(1).supportValue, TypeParam(2)); 
 }
 
+TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
+
+	//THIS WORKS	
+	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+	SupportFunctionNew<TypeParam> sf(box);
+	//std::cout << "made box sf" << std::endl;
+	Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(0)},TypeParam(1));
+	SupportFunctionNew<TypeParam> sfInterHalfspace = sf.intersectHalfspace(hspace);
+	//std::cout << "made sfInterHalfspace" << std::endl;
+	EXPECT_TRUE(sfInterHalfspace.getRoot()->getType() == SFNEW_TYPE::INTERSECTHSPACEOP);
+	EXPECT_EQ(sfInterHalfspace.getRoot()->getOriginCount(), unsigned(1));
+	EXPECT_EQ(sfInterHalfspace.getRoot()->getChildren().size(), std::size_t(1));
+	EXPECT_EQ(sfInterHalfspace.getRoot().use_count(), long(1));
+	//std::cout << "tested standard stuff" << std::endl;
+	EXPECT_EQ((dynamic_cast<IntersectHalfspaceOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfInterHalfspace.getRoot().get())->getHalfspace()), hspace);
+	//std::cout << "tested dynamic cast" << std::endl;
+
+	//Evaluate
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = sfInterHalfspace.multiEvaluate(directions,true);
+	EXPECT_TRUE(res.at(0).supportValue >= TypeParam(1));
+	EXPECT_TRUE(res.at(0).supportValue < TypeParam(1.002));
+	EXPECT_TRUE(res.at(1).supportValue >= TypeParam(2));
+	EXPECT_TRUE(res.at(1).supportValue < TypeParam(2.001));
+
+	//Emptiness
+	std::cout << "TEST EMPTINESS" << std::endl;
+	EXPECT_TRUE(!sfInterHalfspace.empty());
+	Halfspace<TypeParam> hspace2({TypeParam(1),TypeParam(1)},TypeParam(-1));
+	SupportFunctionNew<TypeParam> sfEmpty = sfInterHalfspace.intersectHalfspace(hspace2);
+	EXPECT_TRUE(sfEmpty.empty());
+
+	//Supremum
+	std::cout << "TEST SUPREMUM" << std::endl;
+	EXPECT_TRUE(sfInterHalfspace.supremum() >= TypeParam(2));	
+	EXPECT_TRUE(sfInterHalfspace.supremum() <= TypeParam(2.01));	
+
+	//Containment
+}
+
 TYPED_TEST(SupportFunctionNewTest, Constructors){
 
 	//Empty constructor
@@ -1023,7 +1063,6 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	//Test with empty sf
 	SupportFunctionNew<TypeParam> sfEmpty;
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> emptySatisfy = sfEmpty.satisfiesHalfspace(belowBox);		
-
 	EXPECT_TRUE(emptySatisfy.first == hypro::CONTAINMENT::BOT);
 	EXPECT_TRUE(emptySatisfy.second.empty());
 	EXPECT_TRUE(emptySatisfy.second == sfEmpty);
@@ -1039,9 +1078,10 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	EXPECT_TRUE(!withinSatisfy.second.empty());
 	Box<TypeParam> boxWithin (std::make_pair(Point<TypeParam>({TypeParam(0.1),TypeParam(0.1)}), Point<TypeParam>({TypeParam(2), TypeParam(1)})));
 	SupportFunctionNew<TypeParam> sfWithin(boxWithin);	
+	//std::cout << "TESTING CONTAINMENT" << std::endl;
 	EXPECT_TRUE(withinSatisfy.second.contains(sfWithin));
 	//EXPECT_TRUE(sfWithin.contains(withinSatisfy.second)); //DOES NOT WORK, SINCE WE OVERAPPROXIMATE
-	
+
 	//Test with aboveBox
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> aboveSatisfy = sf1.satisfiesHalfspace(aboveBox);
 	EXPECT_TRUE(aboveSatisfy.first == hypro::CONTAINMENT::FULL);

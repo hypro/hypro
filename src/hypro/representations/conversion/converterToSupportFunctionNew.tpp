@@ -20,7 +20,11 @@ SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSu
 template<typename Number>
 template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE  ) {
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
+	INFO("hypro.representations","Converting ConstraintSetT to SupportFunctionNewT, source is:\n" << _source);
+	SupportFunctionNewT<Number,Converter<Number>,SFNSetting> tmp = SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
+	assert(tmp.getRoot() != nullptr);
+	INFO("hypro.representations","Converted ConstraintSetT to SupportFunctionNewT, tmp is:\n" << tmp);
+	return tmp;
 }
 
 template<typename Number>

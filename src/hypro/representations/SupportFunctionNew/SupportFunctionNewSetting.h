@@ -6,12 +6,14 @@ namespace hypro {
 	struct SupportFunctionNewDefault {
 
 		//Whether multiple linear transformations in succession should be condensed into one linear transformation
-		static constexpr bool USE_LIN_TRANS_REDUCTION = true;
-		//If USE_LIN_TRANS_REDUCTION is true, this determines how many linear transformations are condensed. 
+		static constexpr bool LIN_TRANS_REDUCTION = true;
+		//If LIN_TRANS_REDUCTION is true, this determines how many linear transformations are condensed. 
 		//2^LIN_TRANS_REDUCTION_GROUP_SIZE many linear transformations are condensed.
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 		//Whether after a jump, the new segment should be overapproximated by a box (if not active, it will be overapproximated by an octagon)
-		static constexpr bool REDUCE_TO_BOX = true;
+		static constexpr bool APPROXIMATE_AS_BOX = true;
+		//Whether the intersection between support functions and halfspaces should be computed after Le Guernic's method
+		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = true;
 		
 	};
 
@@ -19,12 +21,14 @@ namespace hypro {
 	struct SupportFunctionNewMorePrecision {
 
 		//Whether multiple linear transformations in succession should be condensed into one linear transformation
-		static constexpr bool USE_LIN_TRANS_REDUCTION = true;
-		//If USE_LIN_TRANS_REDUCTION is true, this determines how many linear transformations are condensed. 
+		static constexpr bool LIN_TRANS_REDUCTION = true;
+		//If LIN_TRANS_REDUCTION is true, this determines how many linear transformations are condensed. 
 		//2^LIN_TRANS_REDUCTION_GROUP_SIZE many linear transformations are condensed.
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 		//Whether after a jump, the new segment should be overapproximated by a box (if not active, it will be overapproximated by an octagon)
-		static constexpr bool REDUCE_TO_BOX = false;
+		static constexpr bool APPROXIMATE_AS_BOX = false;
+		//Whether the intersection between support functions and halfspaces should be computed after Le Guernic's method
+		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = false;
 		
 	};
 
@@ -32,12 +36,13 @@ namespace hypro {
 	struct SupportFunctionNewNoReduction {
 
 		//Whether multiple linear transformations in succession should be condensed into one linear transformation
-		static constexpr bool USE_LIN_TRANS_REDUCTION = false;
-		//If USE_LIN_TRANS_REDUCTION is true, this determines how many linear transformations are condensed. 
+		static constexpr bool LIN_TRANS_REDUCTION = false;
+		//If LIN_TRANS_REDUCTION is true, this determines how many linear transformations are condensed. 
 		//2^LIN_TRANS_REDUCTION_GROUP_SIZE many linear transformations are condensed.
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 1;
 		//Whether after a jump, the new segment should be overapproximated by a box (if not active, it will be overapproximated by an octagon)
-		static constexpr bool REDUCE_TO_BOX = false;
-		
+		static constexpr bool APPROXIMATE_AS_BOX = false;
+		//Whether the intersection between support functions and halfspaces should be computed after Le Guernic's method
+		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = false;
 	};
 }

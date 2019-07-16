@@ -37,7 +37,7 @@ namespace hypro {
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
 		if(orig.getRoot() == nullptr){ 
-			mRoot == nullptr; 
+			mRoot = nullptr; 
 		} else {
 			using RGNPtr = RootGrowNode<Number,Converter,SettingRhs>*;
 			using SharedRGNPtr = std::shared_ptr<RootGrowNode<Number,Converter,Setting>>;
@@ -89,6 +89,7 @@ namespace hypro {
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r) 
 	{
 		Representation tmp = dynamic_cast<Representation&>(r);
+		DEBUG("hypro.representations","SFN generic leaf constr, got r:\n" << tmp);	
 		if(tmp.empty()){
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
 		} else {
@@ -107,14 +108,22 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec)
 	{
+		//std::cout << "SFN mat-vec-constr: mat: \n" << mat << " and vec: \n" << vec << std::endl;
+		INFO("hypro.representations","SFN mat-vec-constr: mat: \n" << mat << " and vec: \n" << vec);
 		boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(mat,vec);
 		if(boost::get<0>(areArgsBox)){
+			//std::cout << "SFN mat-vec-constr: constraints were box!" << std::endl;
+			INFO("hypro.representations","SFN mat-vec-constr: constraints were box!")
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 		} else {
+			//std::cout << "SFN mat-vec-constr: constraints were hpoly!" << std::endl;
+			INFO("hypro.representations","SFN mat-vec-constr: constraints were hpoly!")
 			using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(mat,vec));
 		}
 		assert(mRoot != nullptr);
+		//std::cout << "SFN mat-vec-constr: leaf is:\n" << *mRoot << std::endl;
+		INFO("hypro.representations","SFN mat-vec-constr: leaf is:\n" << *mRoot);
 		mMatrix = mat;
 		mVector = vec;
 		mTemplateSet = true;
@@ -444,11 +453,16 @@ namespace hypro {
 		std::function<bool(RootGrowNode<Number,Converter,Setting>*, std::vector<bool>&)> checkAndUpdateTrafo =
 			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool>& haveSubtreesTrafo) -> bool {
 				if(n->getType() == SFNEW_TYPE::TRAFO){
-					return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam, A, b);
+					auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
+					if(params->matrix() == A && params->vector() == b){
+				    	ltParam = params;
+				    } 
+				    return true;
+					//return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam, A, b);
 				} else {
 					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
 						if(hasSubTreeTrafo){
-							return true;	
+							return true;
 						} 
 					}
 				}
@@ -458,6 +472,53 @@ namespace hypro {
 		return traverse(std::move(doNothing), std::move(leavesAreNotTrafoOps), std::move(checkAndUpdateTrafo));
 	}
 
+/*
+	template<typename Number, typename Converter, typename Setting>
+	std::pair<bool, std::size_t> SupportFunctionNewT<Number,Converter,Setting>::hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const {
+
+		if(mRoot == nullptr) return std::make_pair(false,0);
+
+		//first function - parameters are not transformed
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
+
+		//second function - leaves cannot be operations
+		std::function<std::pair<bool,std::size_t>(RootGrowNode<Number,Converter,Setting>*)> leavesAreNotTrafoOps =
+			[](RootGrowNode<Number,Converter,Setting>* ) -> std::pair<bool,std::size_t> {
+				return std::make_pair(false,0);
+			};
+
+		//third function - if current node type or given result is TRAFO, then update and return true
+		std::function<std::pair<bool,std::size_t>(RootGrowNode<Number,Converter,Setting>*, std::vector<std::pair<bool,std::size_t>>&)> checkAndUpdateTrafo =
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<std::pair<bool,std::size_t>>& haveSubtreesTrafo) -> std::pair<bool,std::size_t> {
+				//#ifndef NDEBUG
+				//auto depth = haveSubtreesTrafo.front().second;
+				//for(const auto& subtree : haveSubtreesTrafo){
+				//	assert(subtree.second == depth);
+				//}
+				//#endif
+				if(n->getType() == SFNEW_TYPE::TRAFO){
+					auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
+					if(params->matrix() == A && params->vector() == b){
+				    	ltParam = params;
+				    } 
+				    return std::make_pair(true,haveSubtreesTrafo.front().second+1);
+					//return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam, A, b);
+				} else {
+					unsigned highestDepth = 0;
+					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
+						if(hasSubTreeTrafo.first){
+							if(hasSubTreeTrafo.second > highestDepth){
+								highestDepth = hasSubTreeTrafo.second;
+							}
+						} 
+					}
+					return std::make_pair(true, highestDepth+1);	
+				}
+			};
+
+		return traverse(std::move(doNothing), std::move(leavesAreNotTrafoOps), std::move(checkAndUpdateTrafo));
+	}
+*/
 	/***************************************************************************
 	 * General Interface
 	 **************************************************************************/
@@ -719,8 +780,15 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-		Halfspace<Number> copy(hspace);
-		return intersect(SupportFunctionNewT<Number,Converter,Setting>(copy));
+		if(Setting::LE_GUERNIC_HSPACE_INTERSECTION){
+			std::shared_ptr<IntersectHalfspaceOp<Number,Converter,Setting>> intersecthspace = std::make_shared<IntersectHalfspaceOp<Number,Converter,Setting>>(*this, hspace);
+			std::shared_ptr<RootGrowNode<Number,Converter,Setting>> intersecthspacePtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(intersecthspace);
+			SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(intersecthspacePtr);
+			return sf;
+		} else {
+			Halfspace<Number> copy(hspace);
+			return intersect(SupportFunctionNewT<Number,Converter,Setting>(copy));
+		}
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -770,6 +838,7 @@ namespace hypro {
     	for(const auto& direction : templateDirections) {
     		EvaluationResult<Number> thisRes = this->evaluate(direction,true);
     		EvaluationResult<Number> rhsRes = rhs.evaluate(direction,true);
+    		//std::cout << "CONTAINS: thisRes = " << thisRes << " rhsRes = " << rhsRes << std::endl;
     		assert(thisRes.errorCode != SOLUTION::INFTY && rhsRes.errorCode != SOLUTION::INFTY);
     		if(thisRes.errorCode == SOLUTION::FEAS){
     			if(rhsRes.errorCode == SOLUTION::FEAS){
@@ -795,23 +864,23 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::unite( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const {
-		std::shared_ptr<UnionOp<Number,Converter,Setting>> scale = std::make_shared<UnionOp<Number,Converter,Setting>>(*this, rhs);
-		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> scalePtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(scale);
-		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(scalePtr);
+		std::shared_ptr<UnionOp<Number,Converter,Setting>> unio = std::make_shared<UnionOp<Number,Converter,Setting>>(*this, rhs);
+		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> unioPtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(unio);
+		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(unioPtr);
 		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::unite( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const {
-		std::shared_ptr<UnionOp<Number,Converter,Setting>> scale = std::make_shared<UnionOp<Number,Converter,Setting>>(*this, rhs);
-		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> scalePtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(scale);
-		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(scalePtr);
+		std::shared_ptr<UnionOp<Number,Converter,Setting>> unio = std::make_shared<UnionOp<Number,Converter,Setting>>(*this, rhs);
+		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> unioPtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(unio);
+		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(unioPtr);
 		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
-		if(Setting::REDUCE_TO_BOX){
+		if(Setting::APPROXIMATE_AS_BOX){
 			this->evaluateTemplate(4,true);
 		} else {
 			this->evaluateTemplate(8,false);

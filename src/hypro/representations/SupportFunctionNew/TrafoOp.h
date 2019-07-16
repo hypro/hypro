@@ -84,20 +84,42 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		// in case this transformation has already been performed, parameters will be updated.
+		// The return value tells us whether trafoOps have been found and at which depth (starting with 0 from the leaves) the last one has been found
+		
+		//auto trafoInDepth = origin.hasTrafo(parameters, A, b);
+		//assert(trafoInDepth.second != 1 || ((origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && trafoInDepth.first ) );
+		
 		origin.hasTrafo(parameters, A, b);
 		
 		// best points for reduction are powers of 2 thus we only use these points for possible reduction points
-		if(Setting::USE_LIN_TRANS_REDUCTION == true){
+		if(Setting::LIN_TRANS_REDUCTION == true){
 			bool reduced;
 			do {
 				reduced = false;
-				if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO
-					&& *(dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get())->getParameters()) == *parameters
-					&& dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get())->getCurrentExponent() == currentExponent){
-					successiveTransformations = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get())->getSuccessiveTransformations()+1;
+
+				//auto child = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get());
+				////NOTE: Assuming the TrafoOp directly below us has the same matrix to save comparisons
+				//if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO 
+				//	&& trafoInDepth.first 
+				//	&& trafoInDepth.second == 1
+				//	&& child->getCurrentExponent() == currentExponent){
+				//	successiveTransformations = child->getSuccessiveTransformations()+1;
+				//} else {
+				//	successiveTransformations = 0;
+				//}
+
+				if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO){
+					auto child = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get());
+					//if(*(child->getParameters()) == *parameters && child->getCurrentExponent() == currentExponent){
+					if(child->getParameters() == parameters && child->getCurrentExponent() == currentExponent){
+						successiveTransformations = child->getSuccessiveTransformations()+1;
+					} else {
+						successiveTransformations = 0;
+					}
 				} else {
 					successiveTransformations = 0;
 				}
+				
 				if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
@@ -109,6 +131,11 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 					this->addToChildren(grandChild);
 					assert(this->getChildren().size() == 1);
 				} 
+
+				// update information whether another trafo follows/is the origin.
+				// TODO: If the next operation is not a linTrafo we can directly quit.
+				//trafoInDepth = origin.hasTrafo(parameters, A, b);
+
 			} while (reduced == true);
 		}
 	}

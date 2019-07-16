@@ -52,7 +52,7 @@ struct Parameters {
 	Parameters(){}
 	Parameters(Rargs... r) : args(std::make_tuple(r...)) {}
 	Parameters(const std::tuple<Rargs...>& r) : args(r) { std::cout << "Param copy!" << std::endl; }
-	~Parameters(){}
+	//~Parameters(){}
 
 	std::size_t size() const { 
 		return std::tuple_size<std::tuple<Rargs...>>::value;
@@ -90,6 +90,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	friend class ProjectOp<Number,Converter,Setting>;
   	friend class IntersectOp<Number,Converter,Setting>;
   	friend class UnionOp<Number,Converter,Setting>;
+  	friend class IntersectHalfspaceOp<Number,Converter,Setting>;
 
   public:
 
@@ -318,7 +319,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false. 
 	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
 	 */
-  	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
+  	//std::pair<bool,std::size_t> hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
 
 	/***************************************************************************
 	 * Operators

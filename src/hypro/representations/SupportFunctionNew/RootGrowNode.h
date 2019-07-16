@@ -44,9 +44,10 @@ namespace hypro {
 #include "SumOp.h"
 #include "TrafoOp.h"
 #include "ScaleOp.h"
+#include "UnionOp.h"
 #include "ProjectOp.h"
 #include "IntersectOp.h"
-#include "UnionOp.h"
+#include "IntersectHalfspaceOp.h"
 
 namespace hypro {
 
@@ -120,14 +121,14 @@ class RootGrowNode {
 
 	// The needed functions for evaluate. Virtual s.t. they can be implemented in the Operation/Leaf classes
 	// Three functions are needed: transform, compute and aggregate.
-	// - transform will be called by every node
-	// - compute will only be called once by leaf nodes
-	// - aggregate will only be called once by all non leaf nodes
+	// - transform will be called by every node: Needed parameters are modified via transform
+	// - compute will be called once by every leaf node: Compute computes the result in the leaf noeds from the given parameters and returns it
+	// - aggregate will be called once by every non leaf node: Given the results of its child nodes, a non leaf node A processes these to results to one from A
 	// 
 	// Order of calling:
 	// 1) From top to bottom, all nodes call transform
 	// 2) When arriving at the lowest level, leaf nodes first call transform, then call compute
-	// 3) From bottom to top, 
+	// 3) From bottom to top, all non leaf nodes call aggregate
 	//
 	// NOTE: 	All functions used as the transform must have the signature A name(A param)
 	//			All functions used as the compute must have the signature B name(A param)
@@ -140,6 +141,7 @@ class RootGrowNode {
 	virtual std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const = 0; 
 	
 	//For operations - aggregate
+	//NOTE: Double vector structure - Outer vector for every child node, inner vector for every evaluation direction
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
 
 	////// Functions for SupportFunctionNew
@@ -202,8 +204,15 @@ std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const Ro
 			break;
 		}	
 		case SFNEW_TYPE::UNIONOP: {
-			std::shared_ptr<UnionOp<Number,Converter,Setting>> sum = std::make_shared<UnionOp<Number,Converter,Setting>>(*tmpPtr);
-			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
+			std::shared_ptr<UnionOp<Number,Converter,Setting>> unio = std::make_shared<UnionOp<Number,Converter,Setting>>(*tmpPtr);
+			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(unio);
+			delete tmpPtr;
+			break;
+		}
+		case SFNEW_TYPE::INTERSECTHSPACEOP: {
+			using IntersectHalfspaceOP = IntersectHalfspaceOp<Number,Converter,Setting>;
+			std::shared_ptr<IntersectHalfspaceOP> interhspace = std::make_shared<IntersectHalfspaceOP>(*(dynamic_cast<IntersectHalfspaceData<Number>*>(tmpPtr)));
+			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(interhspace);
 			delete tmpPtr;
 			break;
 		}

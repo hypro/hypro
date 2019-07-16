@@ -30,7 +30,7 @@ struct EvaluationResult {
 		{}
 
 	friend std::ostream& operator<<(std::ostream& _out, const EvaluationResult<Number>& _in) {
-		_out << _in.supportValue << "(" << _in.errorCode << ")";
+		_out << _in.supportValue << "(" << _in.errorCode << ") : \n" << _in.optimumValue;
 		return _out;
 	}
 };

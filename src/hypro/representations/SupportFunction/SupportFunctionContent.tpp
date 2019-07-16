@@ -13,10 +13,13 @@ namespace hypro {
 
 template<typename Number, typename Setting>
 SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFunctionContent<Number,Setting>& _orig )
-	: mType( _orig.type() ), mDimension( _orig.dimension(), mDepth( _orig.depth()) ) {
+	: mType( _orig.type() ), mDimension( _orig.dimension()), mDepth( _orig.depth()) {
 	assert(_orig.checkTreeValidity());
 	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
 	switch ( mType ) {
+		case SF_TYPE::BOX: {
+			mBox = new BoxSupportFunction<Number,Setting>(_orig.box());
+		}
 		case SF_TYPE::ELLIPSOID: {
             mEllipsoid = new EllipsoidSupportFunction<Number>(*_orig.ellipsoid());
             break;
@@ -64,6 +67,65 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFun
 	}
 	assert(checkTreeValidity());
 }
+/*
+template<typename Number, typename Setting>
+template<typename FromSetting, carl::DisableIf< std::is_same<Setting,FromSetting> > >
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFunctionContent<Number,FromSetting>& _orig )
+	: mType( _orig.type() ), mDimension( _orig.dimension()), mDepth( _orig.depth()) {
+	assert(_orig.checkTreeValidity());
+	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
+	switch ( mType ) {
+		case SF_TYPE::BOX: {
+			mBox = new BoxSupportFunction<Number,Setting>(_orig.box().vertices());
+		}
+		case SF_TYPE::ELLIPSOID: {
+            mEllipsoid = new EllipsoidSupportFunction<Number>(_orig.ellipsoid()->shapeMatrix());
+            break;
+        }
+		case SF_TYPE::INFTY_BALL:
+		case SF_TYPE::TWO_BALL: {
+			mBall = new BallSupportFunction<Number>(_orig.ball()->radius(), _orig.ball()->type());
+			break;
+		}
+		case SF_TYPE::INTERSECT: {
+			mIntersectionParameters = new intersectionContent<Number,Setting>(*_orig.intersectionParameters());
+			break;
+		}
+		case SF_TYPE::LINTRAFO: {
+			mLinearTrafoParameters = new trafoContent<Number,Setting>(*_orig.linearTrafoParameters());
+			break;
+		}
+		case SF_TYPE::POLY: {
+			mPolytope = new PolytopeSupportFunction<Number,Setting>(*_orig.polytope());
+			break;
+		}
+		case SF_TYPE::PROJECTION: {
+			mProjectionParameters = new projectionContent<Number,Setting>(*_orig.projectionParameters());
+			break;
+		}
+		case SF_TYPE::SCALE: {
+			mScaleParameters = new scaleContent<Number,Setting>(*_orig.scaleParameters());
+			break;
+		}
+		case SF_TYPE::SUM: {
+			mSummands = new sumContent<Number,Setting>(*_orig.summands());
+			break;
+		}
+		case SF_TYPE::UNITE: {
+			mUnionParameters = new unionContent<Number,Setting>(*_orig.unionParameters());
+			break;
+		}
+		case SF_TYPE::NONE: {
+			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+			assert(false);
+			break;
+		}
+		default:
+			assert( false );
+	}
+	assert(checkTreeValidity());
+}
+*/
 
 template<typename Number, typename Setting>
 SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type ) {
