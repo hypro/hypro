@@ -459,8 +459,8 @@ if plotting == 1
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 elseif plotting == 2
-    dim = [1 2 3];
-    labs = ["v", "x", "t"];
+    dim = [2 1 3];
+    labs = ["x", "v", "t"];
     ext = 'png';
     reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end

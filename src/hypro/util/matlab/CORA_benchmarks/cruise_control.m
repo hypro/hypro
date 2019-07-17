@@ -7,23 +7,9 @@ options.guardIntersect = 'polytope';
 
 % options
 % v = [15, 40] x = [0, 0]  t =[0, 2.5]
-Zcenter = interval([15;0;0],[40;0.0001;2.5]);
+Zcenter = interval([15;0;0],[40;0.000001;2.5]);
 options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 % options.x0 = center(options.R0); %initial state for simulation
-
-% if diff == 1 || diff == 0
-%     options.taylorTerms = 10;
-%     options.zonotopeOrder = 20;
-%     options.polytopeOrder = 10;
-% elseif diff == 2
-%     options.taylorTerms = 10;
-%     options.zonotopeOrder = 20;
-%     options.polytopeOrder = 10;
-% else
-%     options.taylorTerms = 100;
-%     options.zonotopeOrder = 200;
-%     options.polytopeOrder = 100;
-% end
 
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;

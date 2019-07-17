@@ -85,7 +85,7 @@ classdef MHyProReach < handle
                     currentState = currentFlowpipe{state};
                     warning('');
                     vertices = currentState.vertices(0);
-                    [msgstr, msgid] = lastwarn;
+                    [msgstr, ~] = lastwarn;
                     if isempty(msgstr)
                         obj.plotVertices(vertices, dims);
                     end
@@ -121,7 +121,8 @@ classdef MHyProReach < handle
         end
         
         function plotBadStates(obj, normalMat, offsetVec, dims)
-             %???
+             
+            d = -offset
             
         end
         

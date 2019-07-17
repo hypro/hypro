@@ -43,8 +43,13 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 2.5 & v >= 15 & v <= 40
-guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
-guardb = [-15;40;-2.5;2.5];
+% guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+% guardb = [-15;40;-2.5;2.5];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+
+guardA = [0,0,-1;0,0,1];
+guardb = [-2.5;2.5];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -59,8 +64,12 @@ reset = struct('A', resetA, 'b', resetb);
 %% equation:
 %   t >= 0 & t <= 2.5 &
 %   v >= 15 & v <= 16
-guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
-guardb = [0;2.5;-15;16];
+% guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
+% guardb = [0;2.5;-15;16];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+guardA = [-1,0,0;1,0,0];
+guardb = [-15;16];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -188,8 +197,13 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   t == 1.3 & v >= 18 & v <= 20
-guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
-guardb = [-18;20;-1.3;1.3];
+% guardA = [-1,0,0;1,0,0;0,0,-1;0,0,1];
+% guardb = [-18;20;-1.3;1.3];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+
+guardA = [-1,0,0;1,0,0];
+guardb = [-18;20];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -204,8 +218,13 @@ reset = struct('A', resetA, 'b', resetb);
 %% equation:
 %   t >= 0 & t <= 1.3 &
 %   v >= 5 & v <= 11
-guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
-guardb = [0;1.3;-5;11];
+% guardA = [0,0,-1;0,0,1;-1,0,0;1,0,0];
+% guardb = [0;1.3;-5;11];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+
+guardA = [-1,0,0;1,0,0];
+guardb = [-5;11];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -260,8 +279,12 @@ reset = struct('A', resetA, 'b', resetb);
 %% equation:
 %   v >= 13 & v <= 15 &
 %   x >= -500 & x <= 500
-guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
-guardb = [-13;15;500;500];
+% guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
+% guardb = [-13;15;500;500];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+guardA = [-1,0,0;1,0,0];
+guardb = [-13;15];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -276,8 +299,12 @@ reset = struct('A', resetA, 'b', resetb);
 %% equation:
 %   v >= -15 & v <= -14 &
 %   x >= -500 & x <= 500
-guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
-guardb = [15;-14;500;500];
+% guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
+% guardb = [15;-14;500;500];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+guardA = [-1,0,0;1,0,0];
+guardb = [15;-14];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -315,8 +342,12 @@ reset = struct('A', resetA, 'b', resetb);
 %% equation:
 %   v >= -6 & v <= -5 &
 %   x >= -500 & x <= 500
-guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
-guardb = [6;-5;500;500];
+% guardA = [-1,0,0;1,0,0;0,-1,0;0,1,0];
+% guardb = [6;-5;500;500];
+% guardOpt = struct('A', guardA, 'b', guardb);
+% guard = mptPolytope(guardOpt);
+guardA = [-1,0,0;1,0,0];
+guardb = [6;-5];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
