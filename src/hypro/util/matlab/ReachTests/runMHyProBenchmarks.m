@@ -11,7 +11,7 @@ times = {};
     names = {'mhypro_bouncing_ball','mhypro_car','mhypro_cruise_control',...
         'mhypro_oscillator_4','mhypro_oscillator_8','mhypro_oscillator_16',...
         'mhypro_rendezvous', 'mhypro_rod_reactor' ,'mhypro_switching_system','mhypro_two_tanks',...
-        'mhypro_vehicle_platoon', 'buck_boost_converter'};
+        'mhypro_vehicle_platoon', 'boost_converter'};
 
 
 if runAll
@@ -45,6 +45,6 @@ else
 %     switchingSystem(0,safePath,names{9}, bad, diff, startegy);
 %     TwoTanksTest(0,safePath,names{10}, bad, diff);
 %     VehiclePlatoonTest(0,safePath,names{11}, bad, diff);
-%     buck_boost_converter(0,safePath,names{12}, bad, diff, startegy);
+    boost_converter(0,safePath,names{12}, bad);
 end
 end

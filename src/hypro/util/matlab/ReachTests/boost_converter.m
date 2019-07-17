@@ -1,6 +1,6 @@
-function time = buck_boost_converter(safe, safePath, figName, bad)
+function time = boost_converter(safe, safePath, figName, bad)
 
-% vars: [il; t; gt; vc]
+% vars: [il; vc; t; gt]
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -15,25 +15,16 @@ loc_1 = MHyProLocation();
 loc_1.setName('charge');
 
 % Set flow:
-flow_1 = [0,0,0,0,0;...
+flow_1 = [0,0,0,0,400000;...
+          0,-40000,0,0,0;...
           0,0,0,0,1;...
           0,0,0,0,1;...
-          0,0,0,-40000,0;...
           0,0,0,0,0];
 loc_1.setFlow(flow_1);
 
 % Set inv:
-invMat = [0,-1,0,0;...
-0,1,0,0;...
-0,0,-1,0;...
-0,0,1,0;...
-0,0,0,0;...
-0,0,0,0;...
--1,0,0,0;...
-1,0,0,0;...
-0,0,0,-1;...
-0,0,0,1];
-invVec = [-0;3.333e-06;0;0.00025;0.3333;0.6666;1000;1000;1000;1000];
+invMat = [-1*eye(4);eye(4)];
+invVec = [1000;1000;0;0;1000;1000;0.0000033333000000000003;0.00025];
 inv_1 = MHyProCondition(invMat, invVec);
 loc_1.setInvariant(inv_1);
 
@@ -44,18 +35,16 @@ loc_2 = MHyProLocation();
 loc_2.setName('loc2');
 
 % Set flow:
-flow_2 = [0,0,0,-20000,0;...
+flow_2 = [0,-20000,0,0,400000;...
+          40000,-40000,0,0,0;...
           0,0,0,0,1;...
           0,0,0,0,1;...
-          40000,0,0,-40000,0;...
           0,0,0,0,0];
 loc_2.setFlow(flow_2);
 
 % Set inv:
-invMat = [0,-1,0,0;0,1,0,0;0,0,-1,0;0,0,1,0;0,0,0,0;0,0,0,0;0,0,0,-1;0,0,0,1;-1,...
-0,0,0;1,0,0,0];
-invVec = [-0;6.6667e-06;-0;0.00025;0.3333;0.6666;...
-1000;1000;1000;1000];
+invMat = [-1*eye(4);eye(4)];
+invVec = [1000;1000;0;0;1000;1000;0.0000066667;0.00025];
 inv_2 = MHyProCondition(invMat, invVec);
 loc_2.setInvariant(inv_2);
 
@@ -74,11 +63,11 @@ l2 = automaton.addLocation(loc_2);
 tran1 = MHyProTransition();
 % Set guard:
 guard1 = MHyProCondition();
-guard1.setMatrix([0,-1,0,0]); 
-guard1.setVector(-3.3333e-6);
+guard1.setMatrix([0 0 -1 0]); 
+guard1.setVector(-0.0000033333000000000003);
 
 reset = MHyProReset();
-reset.setMatrix([1,0,0,0;0,0,0,0;0,0,1,0;0,0,0,1]);
+reset.setMatrix([1 0 0 0; 0 1 0 0; 0 0 0 0; 0 0 0 1]);
 reset.setVector([0;0;0;0]);
 
 tran1.setAggregation(2);
@@ -91,13 +80,13 @@ tran1.setLabels({MHyProLabel('tran1')});
 l1.addTransition(tran1);
 
 %-----------------------------------------------%
-%              loc2 --> loc41
+%              loc2 --> loc1
 %-----------------------------------------------%
 tran2 = MHyProTransition();
 % Set guard:
 guard2 = MHyProCondition();
-guard2.setMatrix([0,-1,0,0]); 
-guard2.setVector(-6.6667e-6);
+guard2.setMatrix([0 0 -1 0]); 
+guard2.setVector(-0.0000066667);
 
 tran2.setAggregation(2);
 tran2.setGuard(guard2);
@@ -125,7 +114,7 @@ end
 %-----------------------------------------------%
 
 % il; t; gt; vc = 0
-boxVector = 0.1*[ones(4,1); -1*ones(4,1)];
+boxVector = zeros(8,1);
 boxMatrix = [eye(4);-1*eye(4)];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(l1, initialCond);
@@ -134,7 +123,7 @@ automaton.addInitialState(l1, initialCond);
 %                 Reachability
 %-----------------------------------------------%
 
-settings = struct('timeStep', 0.0000001, 'timeBound', 0.001, 'jumpDepth', 100);
+settings = struct('timeStep', 0.0000001, 'timeBound',  0.1, 'jumpDepth', 999999999);
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
 reach.setRepresentationType(0);
@@ -144,7 +133,7 @@ tic;
 flowpipes = reach.computeForwardReachability();
 time = toc;
 disp(['Time needed: ', num2str(time)]);
-dim = [1 4];
+dim = [1 2];
 labs = ["il","vc"];
 ext = 'png';
 reach.plot(flowpipes, dim, labs,safe,safePath,figName,ext);
