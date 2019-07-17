@@ -113,13 +113,18 @@ safe = 0;
 if bad
     tic;
     safe = reach.verify(flowpipes, spec);
+    disp(['Verification: ', num2str(safe)]);
     verificationTime = toc;
 end
 
 time = reachabilityTime + verificationTime;
 % disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 % disp(['Time needed for verification: ', num2str(verificationTime)]);
-% disp(['Overall time needed: ', num2str(time)]);
+% disp(.'Overall time needed: ', num2str(time)]);
+
+reachedBad = reach.reachedBadStates();
+
+disp(['Reached bad states: ', num2str(reachedBad)]);
 
 log = ['bouncing_ball ', num2str(strategy), ' ', num2str(diff), ' ',...
     num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...

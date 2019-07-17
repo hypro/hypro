@@ -23,4 +23,5 @@ class MReach{
         static void setRepresentationType(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void settings(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
         static void process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]);
+        static void reachedBadStates(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]); 
 };

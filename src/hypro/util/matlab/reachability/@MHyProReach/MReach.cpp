@@ -169,6 +169,16 @@ void MReach::settings( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[
 	}
 }
 
+void MReach::reachedBadStates( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+	if ( nlhs != 1 ) mexErrMsgTxt( "MReach - reachedBadStates: Expecting an output." );
+	if ( nrhs < 3 ) mexErrMsgTxt( "MReach - reachedBadStates: One or more arguments are missing." );
+	if ( nrhs > 3 ) mexErrMsgTxt( "MReach - reachedBadStates: One or more arguments were ignored." );
+
+	Reacher* reacher = convertMat2Ptr<Reacher>( prhs[2] );
+	const bool safe = reacher->reachedBadStates();
+	plhs[0] = mxCreateLogicalScalar( safe );
+}
+
 void MReach::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	int cmd = mxGetScalar( prhs[1] );
 
@@ -194,6 +204,10 @@ void MReach::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	}
 	if ( cmd == 6 ) {
 		settings( nlhs, plhs, nrhs, prhs );
+		return;
+	}
+	if (cmd == 7){
+		reachedBadStates(nlhs, plhs, nrhs, prhs);
 		return;
 	}
 
