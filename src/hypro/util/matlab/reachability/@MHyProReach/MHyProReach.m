@@ -71,6 +71,10 @@ classdef MHyProReach < handle
         function settings(obj)
              MHyPro(12, 6, obj.ObjectHandle);
         end
+        
+        function out = reachedBadStates(obj)
+            out = MHyPro(12, 7, obj.ObjectHandle);
+        end
          
         function plot(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);

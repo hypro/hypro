@@ -1,4 +1,4 @@
-function log = two_tanks_cora(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder)
+function log = two_tanks_cora(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
 HA = two_tanks_ha();
 options.enclosureEnables = [3 5];
@@ -66,7 +66,7 @@ options.tFinal = 2;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
         
-        maxValue = findSafetyProperties([0 -1], Rset);
+       % maxValue = findSafetyProperties([0 -1], Rset);
         
         if diff == 1
             %easy: x2 >= -0.7
@@ -85,7 +85,7 @@ options.tFinal = 2;
     end
 log = ['two_tanks ', num2str(diff), ' ',...
 num2str(reachabilityT), ' ',  num2str(verificationT), ' ',...
-num2str(time), ' ' num2str(safe), ' ', num2str(maxValue)];
+num2str(time), ' ' num2str(safe), ' ' num2str(strategy)];
 
 % Visualization -------------------------------------------------------
 if show    

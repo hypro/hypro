@@ -1,36 +1,21 @@
 #!/bin/bash
 
-declare -i tout=120
+declare -i tout=90
+declare -a bench=("3" "4" "5" "6" "7" "8" "9" "10")
+declare -a arr=("31" "32" "33" "34" "35" "36" "37" "38" "39" "40" "41" "42" "43" "44" "45" "46" "47" "48" "49" "50" "51" "52" "53" "54" "55" "56" "57" "58" "59" "60")
+#"1" "2" "3" "4" "5" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24" "25" "26" "27" "28" "29" "30"
+declare -a diffic=("0" "1" "2")
 
-# bouncing ball - standard strategy: 1
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(1,0)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# cruise control - standard strategy: 2
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(2,2)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# filtered oscillator 4 - standard strategy: 3
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(3,3)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# filtered oscillator 8 - standard strategy: 3
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(4,3)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# filtered oscillator 16 - standard strategy: 3
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(5,3)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# linear switching system - standard strategy: 4
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(6,4)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# rendezvous - standard strategy: 1
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(7,1)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# rod reactor - standard strategy: 1
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(8,1)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# two tanks - standard strategy: 1
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(9,1)" -sd /home/marta/hypro/src/hypro/util/matlab
-
-# vehicle platoon - standard strategy: 5
-timeout $tout matlab -nodisplay -nosplash -r "runMHyProWithStrategy(10,5)" -sd /home/marta/hypro/src/hypro/util/matlab
-
+for d in "${diffic[@]}"
+do
+	for b in "${bench[@]}"
+	do
+		for i in "${arr[@]}"
+		do
+			echo "strategy: $i"
+			echo "benchmark: $b"
+			echo "difficulty: $d"
+			timeout $tout matlab -minimize -r "runMHyProAllStrategies($b,$d,$i);exit;" -sd /home/marta/hypro/src/hypro/util/matlab
+		done
+	done
 done
-

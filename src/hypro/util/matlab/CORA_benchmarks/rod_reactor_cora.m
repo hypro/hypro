@@ -65,7 +65,7 @@ options.tFinal = 12;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
         
-        maxValue = findSafetyProperties([0 -1 0; 0 0 -1], Rset);
+        %maxValue = findSafetyProperties([0 -1 0; 0 0 -1], Rset);
         
         if diff == 1
             %easy: c1 >= 35 & c2 >= 35
@@ -84,8 +84,7 @@ options.tFinal = 12;
     end
 log = ['rod_reactor ', num2str(diff), ' ',...
 num2str(reachabilityT), ' ',  num2str(verificationT), ' ',...
-num2str(time), ' ' num2str(safe), ' ' num2str(strategy), ' ', num2str(maxValue(1)),...
-    ' ', num2str(maxValue(2))];
+num2str(time), ' ' num2str(safe), ' ' num2str(strategy)];
 
 % Visualization -------------------------------------------------------
 if show    
