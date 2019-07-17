@@ -333,6 +333,81 @@ function [settings, setRepr, aggr] = getStrategy(nr)
         settings{1}.clustering = 3;
         setRepr{1} = 2;
         aggr{1} = 2;
+    elseif nr == 61
+        settings{1}.timeStep = 10;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+    elseif nr == 62
+        settings{1}.timeStep = 0.1;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+        settings{2}.timeStep = 0.01;
+        settings{2}.clustering = -1;
+        setRepr{2} = 0;
+        aggr{2} = 1;
+    elseif nr == 63
+        settings{1}.timeStep = 0.1;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+        settings{2}.timeStep = 0.01;
+        settings{2}.clustering = 3;
+        setRepr{2} = 0;
+        aggr{2} = 0;
+    elseif nr == 64
+        settings{1}.timeStep = 1;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+    elseif nr == 65
+        settings{1}.timeStep = 0.0002;
+        settings{1}.clustering = -1;
+        setRepr{1} = 2;
+        aggr{1} = 1;
+    elseif nr == 66
+        settings{1}.timeStep = 0.1;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+    elseif nr == 67
+        settings{1}.timeStep = 0.01;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+    elseif nr == 68
+        settings{1}.timeStep = 10;
+        settings{1}.clustering = -1;
+        setRepr{1} = 2;
+        aggr{1} = 1;
+    elseif nr == 69
+        settings{1}.timeStep = 0.01;
+        settings{1}.clustering = -1;
+        setRepr{1} = 2;
+        aggr{1} = 1;
+        settings{2}.timeStep = 0.001;
+        settings{2}.clustering = -1;
+        setRepr{2} = 2;
+        aggr{2} = 1;
+    elseif nr == 70
+        settings{1}.timeStep = 0.001;
+        settings{1}.clustering = -1;
+        setRepr{1} = 2;
+        aggr{1} = 1;
+    elseif nr == 71
+        settings{1}.timeStep = 0.1;
+        settings{1}.clustering = -1;
+        setRepr{1} = 0;
+        aggr{1} = 1;
+        settings{2}.timeStep = 0.001;
+        settings{2}.clustering = 3;
+        setRepr{2} = 0;
+        aggr{2} = 1;
+        settings{3}.timeStep = 0.1;
+        settings{3}.clustering = 3;
+        setRepr{3} = 2;
+        aggr{3} = 1;
     end
 
 end

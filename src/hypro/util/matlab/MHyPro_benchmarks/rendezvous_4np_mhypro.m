@@ -1,4 +1,4 @@
-function log = rendezvous_4np_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function [reachabilityTime, verificationTime, time, safe] = rendezvous_4np_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -182,9 +182,6 @@ time = reachabilityTime + verificationTime;
 % disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 % disp(['Time needed for verification: ', num2str(verificationTime)]);
 % disp(['Overall time needed: ', num2str(time)]);
-log = ['rendezvous_4np ', num2str(strategy), ' ', num2str(diff), ' ',...
-    num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
-    num2str(time), ' ' num2str(safe)];
 
 if plotting == 1
     dim = [3 4];

@@ -160,7 +160,6 @@ classdef MHyProHAutomaton < handle
         
         function setLocalBadStates(obj, mapping)
             len = length(mapping);
-            disp(['Set local: ', num2str(len)]);
             if isstruct(mapping) && len > 0
                 mappingObjectHandles = struct(); 
                 for i = 1:length(mapping)

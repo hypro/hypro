@@ -1,4 +1,4 @@
-function log = rod_reactor_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function [reachabilityTime, verificationTime, time, safe] = rod_reactor_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting)
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -146,30 +146,36 @@ if bad
         badState = MHyProCondition();
         badState.setMatrix([0 1 0; 0 0 1]);
         badState.setVector([35;35]);
-        badStates(1).loc = l1;
+        badStates(1).loc = rod1;
         badStates(1).cond = badState;
-        badStates(2).loc = l2;
+        badStates(2).loc = rod2;
         badStates(2).cond = badState;
+        badStates(3).loc = noRod;
+        badStates(3).cond = badState;
 %           spec = [0 -1 0 -35; 0 0 -1 -35];
     elseif diff == 1
         %medium
         badState = MHyProCondition();
         badState.setMatrix([0 1 0; 0 0 1]);
         badState.setVector([34.93;34.93]);
-        badStates(1).loc = l1;
+        badStates(1).loc = rod1;
         badStates(1).cond = badState;
-        badStates(2).loc = l2;
+        badStates(2).loc = rod2;
         badStates(2).cond = badState;
+        badStates(3).loc = noRod;
+        badStates(3).cond = badState;
 %         spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
     else
         %hard
         badState = MHyProCondition();
         badState.setMatrix([0 1 0; 0 0 1]);
         badState.setVector([34.861;34.861]);
-        badStates(1).loc = l1;
+        badStates(1).loc = rod1;
         badStates(1).cond = badState;
-        badStates(2).loc = l2;
+        badStates(2).loc = rod2;
         badStates(2).cond = badState;
+        badStates(3).loc = noRod;
+        badStates(3).cond = badState;
 %         spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
     end
     automaton.setLocalBadStates(badStates);
@@ -229,9 +235,6 @@ time = reachabilityTime + verificationTime;
 % disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 % disp(['Time needed for verification: ', num2str(verificationTime)]);
 % disp(['Overall time needed: ', num2str(time)]);
-log = ['rod_reactor ', num2str(strategy), ' ', num2str(diff), ' ',...
-    num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
-    num2str(time), ' ' num2str(safe)];
 
 if plotting == 1
     dim = [1 3];

@@ -1,4 +1,4 @@
-function log = filtered_oscillator_8_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting, strategy)
+function [reachabilityTime, verificationTime, time, safe] = filtered_oscillator_8_mhypro(saveFig, savePath, figName, bad, diff,settings,setRepr,aggr, plotting)
 
 % vars = [x,y,f4a_x1,f4a_x2,f4a_x3,f8_x1,f4b_x1,f4b_x2,f4b_x3,z]
 
@@ -287,9 +287,6 @@ time = reachabilityTime + verificationTime;
 % disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 % disp(['Time needed for verification: ', num2str(verificationTime)]);
 % disp(['Overall time needed: ', num2str(time)]);
-log = ['filtered_oscillator_8 ', num2str(strategy), ' ', num2str(diff), ' ',...
-    num2str(reachabilityTime), ' ',  num2str(verificationTime), ' ',...
-    num2str(time), ' ' num2str(safe)];
 
 if plotting == 1
     dim = [1 6];

@@ -11,7 +11,7 @@ namespace reachability {
 		if(badStateIterator != mAutomaton.getLocalBadStates().end()){
 			if(_state.satisfies(badStateIterator->second).first != CONTAINMENT::NO){
 				#ifdef REACH_DEBUG
-				std::cout << "Intersection with all local bad states" << std::endl;
+				//std::cout << "Intersection with all local bad states" << std::endl;
 				#endif
 				mIntersectedBadStates = true;
 				return true;
@@ -28,7 +28,7 @@ namespace reachability {
 				// bad state intersection
 				if(_state.satisfies(set).first != CONTAINMENT::NO){
 					#ifdef REACH_DEBUG
-					std::cout << "Intersection with global bad states" << std::endl;
+					//std::cout << "Intersection with global bad states" << std::endl;
 					#endif
 					mIntersectedBadStates = true;
 					return true;
