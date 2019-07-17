@@ -25,12 +25,21 @@ def fillTemplate(template,output):
 
 p = os.path.dirname(os.getcwd()+'/src/hypro/representations/')
 print("Create directory " + p + '/' + str(args.name))
+otherRepresentations = []
 
 def matchConversionFkt(line,otherRepresentations):
 	for i in range(len(otherRepresentations)):
+		#if re.match('\s*template<typename *>*static '+str(otherRepresentations[i]+'.*'), line):
 		if re.match('\s*static '+str(otherRepresentations[i])+'.*',line):
 			return otherRepresentations[i]
-	return None
+	return ''
+
+#def matchTemplateDefinition(line):
+#	if re.search('\s*template.*', line):
+#		print('matchTemplateDefinition: returning true')
+#		return True
+#	print('matchTemplateDefinition: returning false')
+#	return False
 
 if not os.path.exists(p+ '/' + str(args.name)):
 	# set up folder and create basic mock class
@@ -52,7 +61,7 @@ if not os.path.exists(p+ '/' + str(args.name)):
 
 	# add entries in Converter.h
 	if str(args.name) not in open(p+'/conversion/Converter.h').read():
-		otherRepresentations = []
+		#otherRepresentations = []
 		with open(p+'/conversion/Converter.h') as converter:
 			for line in converter:
 				reMatch = otherRep.match(line)
@@ -66,12 +75,13 @@ if not os.path.exists(p+ '/' + str(args.name)):
 				typedefFound = False
 				includeFound = False
 				implFound = False
-
+				
 				for line in converter:
 					otherRepConversion = matchConversionFkt(line,otherRepresentations)
-					if otherRepConversion and otherRepConversion not in addedConversion:
+					if otherRepConversion not in addedConversion:
 						addedConversion.append(otherRepConversion)
-						tmp.write('\t\tstatic ' + otherRepConversion + ' to' + otherRepConversion + '(const '+ str(args.name) + '& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+						tmp.write('\t\ttemplate<typename ' + otherRepConversion + 'Setting = typename ' + otherRepConversion + '::Settings, typename inSetting>\n');
+						tmp.write('\t\tstatic ' + otherRepConversion + 'T<Number,Converter<Number>,' + otherRepConversion + 'Setting> to' + otherRepConversion + '(const '+ str(args.name) + 'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 						tmp.write(line)
 					elif not includeFound and re.match('#include.*',line):
 						includeFound = True
@@ -88,9 +98,11 @@ if not os.path.exists(p+ '/' + str(args.name)):
 					elif conversionRE.match(line):
 						tmp.write(line)
 						tmp.write("\n")
-						tmp.write('\t\tstatic ' + str(args.name) + ' to' + str(args.name) + '(const '+ str(args.name) + '& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+						tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
+						tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(args.name) + 'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 						for i in range(len(otherRepresentations)):
-							tmp.write('\t\tstatic ' + str(args.name) + ' to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + '& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+							tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
+							tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + 'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 					else:
 						tmp.write(line)
 
@@ -109,16 +121,43 @@ if not os.path.exists(p+ '/' + str(args.name)):
 		with open(p+'/conversion/converterTo'+str(args.name)+'.tpp','w') as impl:
 			impl.write('#ifndef INCL_FROM_CONVERTERHEADER\nstatic_assert(false, "This file may only be included indirectly by Converter.h");\n#endif\n\n')
 			impl.write('template<typename Number>\n')
-			impl.write('typename Converter<Number>::'+str(args.name)+' Converter<Number>::to'+str(args.name)+'( const '+str(args.name)+'& _source, const CONV_MODE  ) {\n')
+			impl.write('template<typename ' + str(args.name) + 'Setting, typename InSetting>\n')
+			impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+str(args.name)+'T<Number,Converter<Number>,InSetting>& _source, const CONV_MODE  ) {\n')
 			impl.write('\treturn _source;\n')
 			impl.write('}\n\n')
 
 			for i in range(len(otherRepresentations)):
 				impl.write('template<typename Number>\n')
-				impl.write('typename Converter<Number>::'+str(args.name)+' Converter<Number>::to'+str(args.name)+'( const '+str(otherRepresentations[i])+'& _source, const CONV_MODE  ) {\n')
-				impl.write('\treturn Converter<Number>::'+str(args.name)+'();\n')
+				if otherRepresentations[i] == 'Ellipsoid':
+					#Ellipsoids have no Settings
+					impl.write('template<typename ' + str(args.name) + 'Setting>\n')
+				else:
+					impl.write('template<typename ' + str(args.name) + 'Setting, typename InSetting>\n')
+				if otherRepresentations[i] == 'Ellipsoid':
+					#Ellipsoids have no Settings
+					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'& _source, const CONV_MODE  ) {\n')
+				elif otherRepresentations[i] == 'ConstraintSet':
+					#ConstraintSets have no Converter template
+					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'T<Number,InSetting>& _source, const CONV_MODE  ) {\n')	
+				else:
+					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'T<Number,Converter<Number>,InSetting>& _source, const CONV_MODE  ) {\n')
+				impl.write('\treturn '+str(args.name)+'T<Number,Converter<Number>,'+str(args.name)+'Setting>();\n')
 				impl.write('}\n\n')
 
+	# extend converterTo<SomeType>.tpp with new functions
+	convertToFiles = os.listdir(p + '/conversion')
+	for file in convertToFiles:
+		for i in range(len(otherRepresentations)):
+			if re.search(str(otherRepresentations[i]),str(file)) != None:
+				print('found ' + str(otherRepresentations[i]) + ' in ' + str(file))
+				with open(p + '/conversion/' + file,'a') as openedFile:
+					openedFile.write('\ntemplate<typename Number>\n')
+					openedFile.write('template<typename ' + str(otherRepresentations[i]) + 'Setting, typename InSetting>\n')
+					openedFile.write(str(otherRepresentations[i]) + 'T<Number,Converter<Number>,' + str(otherRepresentations[i]) + 'Setting> Converter<Number>::to'+str(otherRepresentations[i])+'( const '+str(args.name)+'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {\n')
+					openedFile.write('\treturn ' + str(otherRepresentations[i]) + 'T<Number,Converter<Number>,' + str(otherRepresentations[i]) + 'Setting>();\n')
+					openedFile.write('}\n\n')
+				break
+			
 else:
 	print("Representation already exists, exiting.")
 	exit(0)
