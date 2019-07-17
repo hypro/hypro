@@ -3,8 +3,8 @@ function runMHyProAllStrategies(benchmarkNr, diff, strategy)
 statPath = '/home/marta/Desktop';
 statFName = 'mhypro_times.txt';
 savePath = '/home/marta/Desktop';
-bad = 0;
-plot = 2;
+bad = 1;
+plot = 0;
 saveFig = 0;
 logs = {};
 log_counter = 1;

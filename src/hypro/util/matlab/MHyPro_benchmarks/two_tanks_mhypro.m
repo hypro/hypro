@@ -217,48 +217,48 @@ l4.addTransition(tran7);
 if bad
     if diff == 0
         %easy
-%         badState = MHyProCondition();
-%         badState.setMatrix([0 1]);
-%         badState.setVector([-0.7]);
-%         badStates(1).loc = l1;
-%         badStates(1).cond = badState;
-%         badStates(2).loc = l2;
-%         badStates(2).cond = badState;
-%         badStates(3).loc = l3;
-%         badStates(3).cond = badState;
-%         badStates(4).loc = l4;
-%         badStates(4).cond = badState;
-        spec = [0 -1 0.7];
+        badState = MHyProCondition();
+        badState.setMatrix([0 1]);
+        badState.setVector(-0.7);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+%         spec = [0 -1 0.7];
     elseif diff == 1
         %medium
-%         badState = MHyProCondition();
-%         badState.setMatrix([0 1]);
-%         badState.setVector([-0.7]);
-%         badStates(1).loc = l1;
-%         badStates(1).cond = badState;
-%         badStates(2).loc = l2;
-%         badStates(2).cond = badState;
-%         badStates(3).loc = l3;
-%         badStates(3).cond = badState;
-%         badStates(4).loc = l4;
-%         badStates(4).cond = badState;
-        spec = [0 -1 0.7];
+        badState = MHyProCondition();
+        badState.setMatrix([0 1]);
+        badState.setVector(-0.7);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+%         spec = [0 -1 0.7];
     else
         %hard
-%         badState = MHyProCondition();
-%         badState.setMatrix([0 1]);
-%         badState.setVector([-0.7]);
-%         badStates(1).loc = l1;
-%         badStates(1).cond = badState;
-%         badStates(2).loc = l2;
-%         badStates(2).cond = badState;
-%         badStates(3).loc = l3;
-%         badStates(3).cond = badState;
-%         badStates(4).loc = l4;
-%         badStates(4).cond = badState;
-        spec = [0 -1 0.7];
+        badState = MHyProCondition();
+        badState.setMatrix([0 1]);
+        badState.setVector(-0.7);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
+%         spec = [0 -1 0.7];
     end
-%     automaton.setLocalBadStates(badStates); 
+    automaton.setLocalBadStates(badStates); 
 end
 
 %-----------------------------------------------%
@@ -290,7 +290,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-    safe = reach.verify(flowpipes, spec);
+    %     safe = reach.verify(flowpipes, spec);
+    safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 

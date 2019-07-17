@@ -125,36 +125,36 @@ automaton.addInitialState(qc, initialCond);
 if bad
     if diff == 0
 %         %easy
-%         badState = MHyProCondition();
-%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
-%         badState.setVector(-1.7);
-%         badStates(1).loc = qc;
-%         badStates(1).cond = badState;
-%         badStates(2).loc = qn;
-%         badStates(2).cond = badState;
-        spec = [1 0 0 0 0 0 0 0 0 0 1.7];
+        badState = MHyProCondition();
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setVector(-1.7);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
+%         spec = [1 0 0 0 0 0 0 0 0 0 1.7];
     elseif diff == 1
         %medium
-%         badState = MHyProCondition();
-%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
-%         badState.setVector(-1.671);
-%         badStates(1).loc = qc;
-%         badStates(1).cond = badState;
-%         badStates(2).loc = qn;
-%         badStates(2).cond = badState;
-        spec = [1 0 0 0 0 0 0 0 0 0 1.66815];
+        badState = MHyProCondition();
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setVector(-1.66815);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
+%         spec = [1 0 0 0 0 0 0 0 0 0 1.66815];
     else
         %hard
-%         badState = MHyProCondition();
-%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
-%         badState.setVector(-1.642);
-%         badStates(1).loc = qc;
-%         badStates(1).cond = badState;
-%         badStates(2).loc = qn;
-%         badStates(2).cond = badState;
-        spec = [1 0 0 0 0 0 0 0 0 0 1.6363];
+        badState = MHyProCondition();
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setVector(-1.6363);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
+%         spec = [1 0 0 0 0 0 0 0 0 0 1.6363];
     end
-%     automaton.setLocalBadStates(badStates);
+    automaton.setLocalBadStates(badStates);
 end
 
 
@@ -177,7 +177,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-    safe = reach.verify(flowpipes, spec);
+    %     safe = reach.verify(flowpipes, spec);
+    safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 

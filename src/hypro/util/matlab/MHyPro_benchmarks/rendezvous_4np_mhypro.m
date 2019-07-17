@@ -109,14 +109,37 @@ p2.addTransition(tran);
 if bad
     if diff == 0
         %easy
-        spec = [0 0 1 0 0 18; 0 0 0 1 0 10];
+        badState = MHyProCondition();
+        badState.setMatrix([0 0 -1 0 0;0 0 0 -1 0]);
+        badState.setVector([-18;10]);
+        badStates(1).loc = p2;
+        badStates(1).cond = badState;
+        badStates(2).loc = p3;
+        badStates(2).cond = badState;
+%         spec = [0 0 1 0 0 18; 0 0 0 1 0 10];
     elseif diff == 1
         %medium
-        spec = [0 0 1 0 0 17.93395; 0 0 0 1 0 9.72075];
+        badState = MHyProCondition();
+        badState.setMatrix([0 0 -1 0 0;0 0 0 -1 0]);
+        badState.setVector([-17.93395;9.72075]);
+        badStates(1).loc = p2;
+        badStates(1).cond = badState;
+        badStates(2).loc = p3;
+        badStates(2).cond = badState;
+%         spec = [0 0 1 0 0 17.93395; 0 0 0 1 0 9.72075];
     else
         %hard
-        spec = [0 0 1 0 0 17.8679; 0 0 0 1 0 9.4415];
+        badState = MHyProCondition();
+        badState.setMatrix([0 0 -1 0 0;0 0 0 -1 0]);
+        badState.setVector([-17.8679;9.4415]);
+        badStates(1).loc = p2;
+        badStates(1).cond = badState;
+        badStates(2).loc = p3;
+        badStates(2).cond = badState;
+%         spec = [0 0 1 0 0 17.8679; 0 0 0 1 0 9.4415];
     end
+    
+    automaton.setLocalBadStates(badStates);
 end
 
 %-----------------------------------------------%
@@ -150,7 +173,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-    safe = reach.verify(flowpipes, spec);
+    %     safe = reach.verify(flowpipes, spec);
+    safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 
