@@ -149,7 +149,7 @@ if not os.path.exists(p+ '/' + str(args.name)):
 	for file in convertToFiles:
 		for i in range(len(otherRepresentations)):
 			if re.search(str(otherRepresentations[i]),str(file)) != None:
-				print('found ' + str(otherRepresentations[i]) + ' in ' + str(file))
+				#print('found ' + str(otherRepresentations[i]) + ' in ' + str(file))
 				with open(p + '/conversion/' + file,'a') as openedFile:
 					openedFile.write('\ntemplate<typename Number>\n')
 					openedFile.write('template<typename ' + str(otherRepresentations[i]) + 'Setting, typename InSetting>\n')

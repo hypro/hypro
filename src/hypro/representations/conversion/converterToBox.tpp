@@ -371,3 +371,16 @@ template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
 	return BoxT<Number,Converter,BoxSetting>(source.matrix(), source.vector());
 }
+
+template<typename Number>
+template<typename BoxSetting, typename InSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
+	return BoxT<Number,Converter<Number>,BoxSetting>();
+}
+
+template<typename Number>
+template<typename BoxSetting, typename InSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
+	return BoxT<Number,Converter<Number>,BoxSetting>();
+}
+

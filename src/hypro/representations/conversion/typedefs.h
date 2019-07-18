@@ -1,3 +1,9 @@
+template<typename Number>
+using Orthoplex = typename Converter<Number>::Orthoplex;
+
+template<typename Number>
+using Simplex = typename Converter<Number>::Simplex;
+
 #pragma once
 
 template<typename Number>

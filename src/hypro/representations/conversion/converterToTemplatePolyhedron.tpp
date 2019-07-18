@@ -76,3 +76,17 @@ TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converte
 	return Converter<Number>::TemplatePolyhedron();
 }
 
+
+template<typename Number>
+template<typename TemplatePolyhedronSetting, typename InSetting>
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
+	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
+}
+
+
+template<typename Number>
+template<typename TemplatePolyhedronSetting, typename InSetting>
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
+	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
+}
+

@@ -442,3 +442,17 @@ template<typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toZonotope(toHPolytope(_source, mode));
 }
+
+template<typename Number>
+template<typename ZonotopeSetting, typename InSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
+	return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
+}
+
+
+template<typename Number>
+template<typename ZonotopeSetting, typename InSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
+	return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
+}
+
