@@ -46,8 +46,8 @@ class Converter {
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
-		//using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
-		using SupportFunction = SupportFunctionT<Number,Converter,NoBoxReduction>;
+		using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
+		//using SupportFunction = SupportFunctionT<Number,Converter,NoBoxReduction>;
 		using Zonotope = ZonotopeT<Number,Converter,ZonotopeSetting>;
 		using SupportFunctionNew = SupportFunctionNewT<Number,Converter,SupportFunctionNewDefault>;
 		//using SupportFunctionNew = SupportFunctionNewT<Number,Converter,SupportFunctionNewMorePrecision>;

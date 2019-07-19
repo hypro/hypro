@@ -120,8 +120,8 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Only return true if at least one child contained the point before	
-	bool contains(const std::vector<bool>& v) const {
-		for(auto containedInChild : v){
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
+		for(const auto& containedInChild : v){
 			if(containedInChild) return true;
 		}
 		return false;

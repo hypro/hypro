@@ -131,7 +131,7 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
 	} 
 
 	//If child contains p, then projected version will contain it too
-	bool contains(const std::vector<bool>& v) const {
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
 		assert(v.size() == 1);
 		if(v.front()) return true;
 		return false;

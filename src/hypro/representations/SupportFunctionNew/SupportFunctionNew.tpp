@@ -795,9 +795,9 @@ namespace hypro {
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		if(_mat.rows() == 1 && _vec.rows() == 1){
 			Halfspace<Number> hspace(_mat.row(0), _vec(0));
-			return intersect(SupportFunctionNewT<Number,Converter,Setting>(hspace));
+			return intersectHalfspace(hspace);
 		}
-		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));
+		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));	
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -817,9 +817,10 @@ namespace hypro {
 				return n->contains(std::get<0>(p.args));
 			};
 
+		//third function - calls contains() of operations
 		std::function<bool(RootGrowNode<Number,Converter,Setting>*, std::vector<bool>&, Parameters<vector_t<Number>>&)> aggregate =
-			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool>& v, Parameters<vector_t<Number>>& ){
-				return n->contains(v);
+			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool>& v, Parameters<vector_t<Number>>& p){
+				return n->contains(v,std::get<0>(p.args));
 			};
 
 		Parameters<vector_t<Number>> initParams = Parameters<vector_t<Number>>(point);

@@ -129,7 +129,7 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Only return true if all children contained the point before	
-	bool contains(const std::vector<bool>& v) const {
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
 		for(auto containedInChild : v){
 			if(containedInChild) return true;
 		}

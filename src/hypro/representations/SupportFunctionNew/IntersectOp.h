@@ -187,7 +187,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Only return true if all children contained the point before	
-	bool contains(const std::vector<bool>& v) const {
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
 		for(const auto& containedInChild : v){
 			if(!containedInChild) 
 				return false;

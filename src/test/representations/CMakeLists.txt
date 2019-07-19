@@ -6,7 +6,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	if(HYPRO_USE_PPL)
 		add_executable(runRepresentationTests
-
 			#BoxTest.cpp
 			#CarlPolytopeTest.cpp
 			#ConverterTest.cpp

@@ -37,8 +37,9 @@ typedef ::testing::Types<
 	mpq_class
 > rationalTypes;
 // List tests which should be typed
-/*
+
 // Algorithm
+/*
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
 
