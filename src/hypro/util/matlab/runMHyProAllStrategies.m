@@ -1,7 +1,5 @@
 function runMHyProAllStrategies(benchmarkNr, diff, strategy)
 
-statPath = '/home/marta/Desktop';
-statFName = 'mhypro_times.txt';
 savePath = '/home/marta/Desktop';
 bad = 0;
 plot = 1;

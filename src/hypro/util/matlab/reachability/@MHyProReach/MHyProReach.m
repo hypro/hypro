@@ -235,7 +235,6 @@ classdef MHyProReach < handle
         
         function plotComparison(obj, flowpipes, dims, labs)
             num_flowpipes = length(flowpipes);
-            fig = figure();
             %disp(['Reach - plot: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};

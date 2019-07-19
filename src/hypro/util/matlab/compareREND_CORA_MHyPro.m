@@ -1,16 +1,20 @@
-function compareREND_CORA_MHyPro()
-
-timeStep =0.02;
-timeHorizon = 0.5;
-tT = 10;
-zO = 20;
-pO = 10;
+function compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath)
 
 
-disp("MHyPro")
-aggr = 2;
-setRepr = 2;
-clustering = -1;
+% MHyPro
+settings.timeStep = mhStrat.timeStep;
+settings.clustering = mhStrat.clustering;
+aggr = mhStrat.aggr;
+setRepr = mhStrat.setRepr;
+
+% CORA
+timeStepC = cStrat.timeStep;
+tT = cStrat.tT;
+zO = cStrat.zO;
+pO = cStrat.pO;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -132,14 +136,14 @@ automaton.addInitialState(p2, initialCond);
 % Add basic settings
 settings.timeBound = timeHorizon;
 settings.jumpDepth = 10;
-settings.timeStep = timeStep;
-settings.clustering = clustering;
 
 reacher = MHyProReach(automaton);
 reacher.setSettings(settings);
 reacher.setRepresentationType(setRepr);
 
 flowpipes = reacher.computeForwardReachability();
+
+fig = figure();
 dim = [3 4];
 labs = ["vx", "vy"];
 reacher.plotComparison(flowpipes, dim, labs);
@@ -176,7 +180,7 @@ options.errorOrder = 2;
 HA = rendezvousSX4np_ha(); % automatically converted from SpaceEx
 
 for i = 1:5
-    options.timeStepLoc{i} = timeStep;
+    options.timeStepLoc{i} = timeStepC;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -187,5 +191,9 @@ options.projectedDimensions = [3 4];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+
+if saveFig
+    saveas(fig, fullfile(savePath,fname),'png');
+end
 
 end

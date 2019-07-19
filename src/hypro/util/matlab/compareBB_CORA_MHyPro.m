@@ -1,16 +1,20 @@
-function compareBB_CORA_MHyPro()
-
-timeStep =0.03;
-timeHorizon = 4;
-tT = 10;
-zO = 20;
-pO = 10;
+function compareBB_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath)
 
 
-disp("MHyPro")
-aggr = 2;
-setRepr = 2;
-clustering = 5;
+% MHyPro
+settings.timeStep = mhStrat.timeStep;
+settings.clustering = mhStrat.clustering;
+aggr = mhStrat.aggr;
+setRepr = mhStrat.setRepr;
+
+% CORA
+timeStepC = cStrat.timeStep;
+tT = cStrat.tT;
+zO = cStrat.zO;
+pO = cStrat.pO;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -76,8 +80,6 @@ automaton.addInitialState(l, initialCond);
 % Add basic settings
 settings.timeBound = timeHorizon;
 settings.jumpDepth = 2;
-settings.timeStep = timeStep;
-settings.clustering = clustering;
 
 reacher = MHyProReach(automaton);
 reacher.setSettings(settings);
@@ -87,6 +89,8 @@ flowpipes = reacher.computeForwardReachability();
 
 dim = [2 1];
 labs = ["v", "x"];
+fig = figure();
+hold on
 reacher.plotComparison(flowpipes, dim, labs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -122,7 +126,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:1
-    options.timeStepLoc{i} = timeStep;
+    options.timeStepLoc{i} = timeStepC;
     options.uLoc{i} = [0;0];
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -135,4 +139,8 @@ options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 
+if saveFig
+    saveas(fig, fullfile(savePath,fname),'png');
+end
 
+end
