@@ -163,8 +163,8 @@ end
 %-----------------------------------------------%
 
 % Add basic settings
-settings.timeBound = 12;
-settings.jumpDepth = 2;
+settings.timeBound = 5;
+settings.jumpDepth = 5;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
@@ -188,13 +188,29 @@ time = reachabilityTime + verificationTime;
 % disp(['Overall time needed: ', num2str(time)]);
 
 if plotting == 1
-    dim = [4 7];
-    labs = ["e2", "e3"];
+    dim = [1 7];
+    labs = ["e1", "e3"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        y = [2;2;1.7;1.7];
+        x = [1.8;0;0;1.8];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        y = [-0.7;-0.7;-1;-1];
+        x = [2.5;-1;-1;2.5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        y = [2;2;1.7;1.7];
+        x = [1.8;0;0;1.8];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
 elseif plotting == 2
-    dim = [4 7 10];
-    labs = ["e2", "e3", "t"];
+    dim = [1 7 10];
+    labs = ["e1", "e3", "t"];
     ext = 'png';
     reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
 end

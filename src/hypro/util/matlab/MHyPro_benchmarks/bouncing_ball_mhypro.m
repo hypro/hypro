@@ -66,7 +66,7 @@ if bad
     if diff == 0
         % easy
         badState = MHyProCondition();
-        badState.setMatrix([0 -1]);
+        badState.setMatrix([0 -1 0]);
         badState.setVector(-10.7);
         badStates(1).loc = l;
         badStates(1).cond = badState;
@@ -74,7 +74,7 @@ if bad
     elseif diff == 1
         % medium
         badState = MHyProCondition();
-        badState.setMatrix([0 -1]);
+        badState.setMatrix([0 -1 0]);
         badState.setVector(-10.6569);
         badStates(1).loc = l;
         badStates(1).cond = badState;
@@ -82,7 +82,7 @@ if bad
     else
         % hard
         badState = MHyProCondition();
-        badState.setMatrix([0 -1]);
+        badState.setMatrix([0 -1 0]);
         badState.setVector(-10.6138);
         badStates(1).loc = l;
         badStates(1).cond = badState;
@@ -118,7 +118,7 @@ if bad
 end
 
 time = reachabilityTime + verificationTime;
-% disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
+disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 % disp(['Time needed for verification: ', num2str(verificationTime)]);
 % disp(.'Overall time needed: ', num2str(time)]);
 % 
@@ -131,11 +131,38 @@ if plotting == 1
     labs = ["v", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        x = [15;15;10.7;10.7];
+        y = [15;-2;-2;15];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        x = [15;15;10.6569;10.6569];
+        y = [15;-2;-2;15];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        x = [15;15;10.6138;10.6138];
+        y = [15;-2;-2;15];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
 elseif plotting == 2
     dim = [2 1 3];
     labs = ["v", "x", "t"];
     ext = 'png';
     reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        [x, y] = meshgrid(-15:0.5:15,10.7:0.1:15);
+        reach.plotBadStates3D([0 -1 0], -10.7, [2 1], x,y);
+    elseif diff == 1
+        [x, y] = meshgrid(-15:0.5:15,10.6569:0.1:15);
+        reach.plotBadStates3D([0 -1 0], -10.6569, [2 1], x,y);
+    else
+        [x, y] = meshgrid(-15:0.5:15,10.6138:0.1:15);
+        reach.plotBadStates3D([0 -1 0], -10.6138, [2 1], x,y);
+    end
+    
 end
 
 end

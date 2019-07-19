@@ -14,27 +14,27 @@ names = {'cora_bouncing_ball','cora_cruise_control',...
 
     if benchmark == 1
         filename = strcat(names{1},'_',num2str(diff));
-        logs{log_counter} = bouncing_ball(saveFig,savePath,filename, diff, plot, timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_bouncing_ball(saveFig,savePath,filename, diff, plot, timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 2
         filename = strcat(names{2},'_',num2str(diff));
-        logs{log_counter} = cruise_control(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_cruise_control(saveFig,savePath,filename, diff, plot, timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 3
         filename = strcat(names{3},'_',num2str(diff));
-        logs{log_counter} = filtered_oscillator_4(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_filtered_oscillator_4(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 4
         filename = strcat(names{4},'_',num2str(diff));
-        logs{log_counter} = filtered_oscillator_8(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_filtered_oscillator_8(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 5
         filename = strcat(names{5},'_',num2str(diff));
-        logs{log_counter} = filtered_oscillator_16(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_filtered_oscillator_16(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 6
         filename = strcat(names{6},'_',num2str(diff));
-        logs{log_counter} = linear_switch(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_linear_switching_system(saveFig,savePath,filename, diff, plot,timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 7
         filename = strcat(names{7},'_',num2str(diff));

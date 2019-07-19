@@ -263,6 +263,22 @@ if plotting == 1
     labs = ["x", "x1"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        x = [0.8;0.8;0.5;0.5];
+        y = [1;-1;-1;1];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        x = [0.8;0.8;0.48205;0.48205];
+        y = [1;-1;-1;1];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        x = [0.8;0.8;0.4641;0.4641];
+        y = [1;-1;-1;1];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x", "y", "x1"];

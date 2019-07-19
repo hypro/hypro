@@ -460,11 +460,37 @@ if plotting == 1
     labs = ["v", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        x = [20;-10;-10;20];
+        y = [-2;-2;-20;-20];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        x = [20;-10;-10;20];
+        y = [-2;-2;-20;-20];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        x = [20;-10;-10;20];
+        y = [-2;-2;-20;-20];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
 elseif plotting == 2
     dim = [2 1 3];
     labs = ["x", "v", "t"];
     ext = 'png';
     reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        [x, y] = meshgrid(-10:0.5:160,-20:0.1:-2);
+        reach.plotBadStates3D([1 0 0], -2, [1 2], x,y);
+    elseif diff == 1
+        [x, y] = meshgrid(-10:0.5:160,-20:0.1:-2);
+        reach.plotBadStates3D([1 0 0], -2, [1 2], x,y);
+    else
+        [x, y] = meshgrid(-10:0.5:160,-20:0.1:-2);
+        reach.plotBadStates3D([1 0 0], -2, [1 2], x,y);
+    end
 end
 
 end

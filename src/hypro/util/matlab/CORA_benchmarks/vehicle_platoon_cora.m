@@ -90,12 +90,28 @@ num2str(time), ' ' num2str(safe), ' ', num2str(strategy)];
 if show    
     fig = figure(); 
     hold on
-    options.projectedDimensions = [4 7];
+    options.projectedDimensions = [1 7];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    xlabel('e2');
+    if diff == 0
+        y = [2;2;1.7;1.7];
+        x = [1.8;0;0;1.8];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        y = [-0.7;-0.7;-1;-1];
+        x = [2.5;-1;-1;2.5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        y = [2;2;1.7;1.7];
+        x = [1.8;0;0;1.8];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
+    xlabel('e1');
     ylabel('e7');
     if saveFig
         fname = strcat(filename,'.','png');

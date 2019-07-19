@@ -96,6 +96,22 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    if diff == 0
+        y = [-0.7;-0.7;-1;-1];
+        x = [2.5;-1;-1;2.5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        y = [-0.7;-0.7;-1;-1];
+        x = [2.5;-1;-1;2.5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        y = [-0.7;-0.7;-1;-1];
+        x = [2.5;-1;-1;2.5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
     xlabel('x1');
     ylabel('x2');
     if saveFig

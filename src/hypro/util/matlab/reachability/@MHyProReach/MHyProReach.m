@@ -123,11 +123,19 @@ classdef MHyProReach < handle
             pgon = polyshape(P, 'Simplify', false);
             plot(pgon,'FaceColor',[0.2 0.55 0.74], 'EdgeColor', [0.070, 0.250, 0.972]);           
         end
-        
-        function plotBadStates(obj, normalMat, offsetVec, dims)
-             
-            d = -offset
-            
+                
+        function plotBadStates3D(obj, normalMat, offsetVec, dims, x, y)
+            hold on
+            for i = 1:size(normalMat,1)
+                normal = normalMat(i,1:(size(normalMat,2)));
+                A = normal(dims(1));
+                B = normal(dims(2));
+                D = offsetVec(i);
+                ineq = A*x + B*y <= D;
+                f = double(ineq);
+                surf(x,y,f, 'FaceAlpha',0.5, 'EdgeColor','none', 'FaceColor',[0.831, 0, 0]);
+            end
+            hold off
         end
         
         function plot3D(obj, flowpipes, dims, labs, save,path, name, ext)

@@ -290,7 +290,7 @@ automaton.addInitialState(l1, initialCond);
 
 
 % Add basic settings
-settings.timeBound = 0.3;
+settings.timeBound = 2;
 settings.jumpDepth = 5;
 
 reach = MHyProReach(automaton);
@@ -319,6 +319,22 @@ if plotting == 1
     labs = ["x1", "x3"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    if diff == 0
+        y = [2;2;1.5;1.5];
+        x = [4;-2;-2;4];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 1
+        y = [2;2;1.4942;1.4942];
+        x = [4;-2;-2;4];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        y = [2;2;1.4884;1.4884];
+        x = [4;-2;-2;4];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x1", "x2", "x3"];
