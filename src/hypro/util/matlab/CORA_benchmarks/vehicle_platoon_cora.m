@@ -112,7 +112,7 @@ if show
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end
     xlabel('e1');
-    ylabel('e7');
+    ylabel('e3');
     if saveFig
         fname = strcat(filename,'.','png');
         saveas(fig, fullfile(savePath,fname),'png');

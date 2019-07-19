@@ -1,0 +1,220 @@
+function compareRR_CORA_MHyPro()
+
+timeStep =0.02;
+timeHorizon = 0.5;
+tT = 10;
+zO = 20;
+pO = 10;
+
+disp("MHyPro")
+aggr = 2;
+setRepr = 2;
+clustering = -1;
+
+% Create Automaton
+automaton = MHyProHAutomaton();
+dummy_reset = MHyProReset();
+dummy_reset.setMatrix(eye(3));
+dummy_reset.setVector([0; 0; 0]);
+
+%-----------------------------------------------%
+%              Location rod1
+%-----------------------------------------------%
+loc_rod1 = MHyProLocation();
+loc_rod1.setName('rod1');
+
+% Set flow: x' = 0.1x - 56 c1' = 1 c2' = 1
+flow_rod1 = [0.1 0 0 -56; 0 0 0 1; 0 0 0 1; 0 0 0 0];
+loc_rod1.setFlow(flow_rod1);
+
+% Set inv: x >= 510
+inv_rod1 = MHyProCondition([-1 0 0], -510);
+loc_rod1.setInvariant(inv_rod1);
+
+%-----------------------------------------------%
+%              Location noRods
+%-----------------------------------------------%
+loc_no = MHyProLocation();
+loc_no.setName('noRods');
+
+% Set flow: x' = 0.1x - 50 c1' = 1 c2' = 1
+flow_no = [0.1 0 0 -50; 0 0 0 1; 0 0 0 1; 0 0 0 0];
+loc_no.setFlow(flow_no);
+
+% Set inv: x <= 550
+inv_no = MHyProCondition([1 0 0], 550);
+loc_no.setInvariant(inv_no);
+
+%-----------------------------------------------%
+%              Location rod2
+%-----------------------------------------------%
+loc_rod2 = MHyProLocation();
+loc_rod2.setName('rod2');
+
+% Set flow: x' = 0.1x - 60 c1' = 1 c2' = 1
+flow_rod2 = [0.1 0 0 -60; 0 0 0 1; 0 0 0 1; 0 0 0 0];
+loc_rod2.setFlow(flow_rod2);
+
+% Set inv: x >= 510
+inv_rod2 = MHyProCondition([-1 0 0], -510);
+loc_rod2.setInvariant(inv_rod2);
+
+%-----------------------------------------------%
+%              Add locations to HA
+%-----------------------------------------------%
+
+rod1 = automaton.addLocation(loc_rod1);
+rod2 = automaton.addLocation(loc_rod2);
+noRod = automaton.addLocation(loc_no);
+
+%-----------------------------------------------%
+%              rod1 --> noRods
+%-----------------------------------------------%
+tran1 = MHyProTransition();
+% Set guard: x = 510
+guard1 = MHyProCondition();
+guard1.setMatrix([1 0 0; -1 0 0]); % First set the matrix then the vector!?
+guard1.setVector([510; -510]);
+% Set reset: c1 := 0
+reset1 = MHyProReset();
+reset1.setMatrix([1 0 0; 0 0 0; 0 0 1]);
+reset1.setVector([0; 0; 0]);
+
+tran1.setAggregation(aggr);
+tran1.setGuard(guard1);
+tran1.setSource(rod1);
+tran1.setTarget(noRod);
+tran1.setReset(reset1);
+tran1.setLabels({MHyProLabel('tran1')});
+
+rod1.addTransition(tran1);
+
+%-----------------------------------------------%
+%              noRods --> rod1
+%-----------------------------------------------%
+tran2 = MHyProTransition();
+% Set guard: x = 550 & c1 >= 20
+guard2 = MHyProCondition();
+guard2.setMatrix([1 0 0; -1 0 0; 0 -1 0]); % First set the matrix then the vector!?
+guard2.setVector([550; -550; -20]);
+
+tran2.setAggregation(aggr);
+tran2.setGuard(guard2);
+tran2.setSource(noRod);
+tran2.setTarget(rod1);
+tran2.setReset(dummy_reset);
+tran2.setLabels({MHyProLabel('tran2')});
+
+noRod.addTransition(tran2);
+
+%-----------------------------------------------%
+%              noRods --> rod2
+%-----------------------------------------------%
+tran3 = MHyProTransition();
+% Set guard: x = 550 & c2 >= 20
+guard3 = MHyProCondition();
+guard3.setMatrix([1 0 0; -1 0 0; 0 0 -1]); % First set the matrix then the vector!?
+guard3.setVector([550; -550; -20]);
+
+tran3.setAggregation(aggr);
+tran3.setGuard(guard3);
+tran3.setSource(noRod);
+tran3.setTarget(rod2);
+tran3.setReset(dummy_reset);
+tran3.setLabels({MHyProLabel('tran3')});
+
+noRod.addTransition(tran3);
+
+%-----------------------------------------------%
+%              rod2 --> noRods
+%-----------------------------------------------%
+tran4 = MHyProTransition();
+% Set guard: x = 510
+guard4 = MHyProCondition();
+guard4.setMatrix([1 0 0; -1 0 0]); % First set the matrix then the vector!?
+guard4.setVector([510; -510]);
+% Set reset: c2 := 0
+reset4 = MHyProReset();
+reset4.setMatrix([1 0 0; 0 1 0; 0 0 0]);
+reset4.setVector([0; 0; 0]);
+
+tran4.setAggregation(aggr);
+tran4.setGuard(guard4);
+tran4.setSource(rod2);
+tran4.setTarget(noRod);
+tran4.setReset(reset4);
+tran4.setLabels({MHyProLabel('tran4')});
+
+rod2.addTransition(tran4);
+
+%-----------------------------------------------%
+%                 Initial set
+%-----------------------------------------------%
+
+% x = [510 520] c1 = [20 20] c2 =[20 20]
+boxVector = [520; -510; 20; -20; 20; -20];
+boxMatrix = [1 0 0; -1 0 0; 0 1 0; 0 -1 0; 0 0 1; 0 0 -1];
+initialCond = MHyProCondition(boxMatrix, boxVector);
+automaton.addInitialState(noRod, initialCond);
+
+%-----------------------------------------------%
+%                 Reachability
+%-----------------------------------------------%
+
+% Add basic settings
+settings.timeBound = timeHorizon;
+settings.jumpDepth = 20;
+settings.timeStep = timeStep;
+settings.clustering = clustering;
+
+reacher = MHyProReach(automaton);
+reacher.setSettings(settings);
+reacher.setRepresentationType(setRepr);
+
+flowpipes = reacher.computeForwardReachability();
+dim = [1 3];
+labs = ["x", "c2"];
+reacher.plotComparison(flowpipes, dim, labs);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HA = rod_reactor_HA();
+options.enclosureEnables = [3 5];
+options.guardIntersect = 'polytope';
+
+% options
+Zcenter = interval([510;20;20],[520;20;20]);
+options.R0 = zonotope(Zcenter); %initial state for reachability analysis
+options.x0 = center(options.R0); %initial state for simulation
+
+
+options.taylorTerms = tT;
+options.zonotopeOrder = zO;
+options.polytopeOrder = pO;
+options.errorOrder=0;
+options.reductionTechnique = 'girard';
+options.isHyperplaneMap = 0;
+options.originContained = 0;
+
+%set input:
+for i = 1:3
+    options.timeStepLoc{i} = timeStep;
+    options.uLoc{i} = 0;
+    options.uLocTrans{i} = options.uLoc{i};
+    options.Uloc{i} = zonotope(options.uLoc{i});
+end
+
+% First location
+options.startLoc = 3; %initial location
+options.finalLoc = 0; %0: no final location
+options.tStart = 0; %start time
+options.tFinal = timeHorizon;
+
+[HA] = reach(HA,options);
+
+options.projectedDimensions = [1 3];
+
+options.plotType = 'b';
+plot(HA,'reachableSet',options); %plot reachable set
+plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+end

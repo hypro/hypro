@@ -10,27 +10,6 @@ Zcenter = [2;1];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-% if diff == 3
-%     %hard:
-%     options.taylorTerms = 100;
-%     options.zonotopeOrder = 200;
-%     options.polytopeOrder = 100;
-% elseif diff == 2
-%     %medium:
-%     options.taylorTerms = 1;
-%     options.zonotopeOrder = 1;
-%     options.polytopeOrder = 1;
-% elseif diff == 1
-%     % easy
-%     options.taylorTerms = 1;
-%     options.zonotopeOrder = 1;
-%     options.polytopeOrder = 1;
-% else
-%     options.taylorTerms = 10;
-%     options.zonotopeOrder = 20;
-%     options.polytopeOrder = 10;
-% end
-
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
 options.polytopeOrder = pOrder;

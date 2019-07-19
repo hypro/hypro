@@ -232,6 +232,51 @@ classdef MHyProReach < handle
             end
         end 
         
+        
+        function plotComparison(obj, flowpipes, dims, labs)
+            num_flowpipes = length(flowpipes);
+            fig = figure();
+            %disp(['Reach - plot: number of flowpipes: ', num2str(num_flowpipes)])
+            for pipe = 1:num_flowpipes
+                currentFlowpipe =  flowpipes{pipe};
+                num_states = length(currentFlowpipe);
+                %disp(['Reach - plot: number of states: ', num2str(num_states)]);
+                
+                for state = 1:num_states
+                    currentState = currentFlowpipe{state};
+                    warning('');
+                    vertices = currentState.vertices(0);
+                    [msgstr, ~] = lastwarn;
+                    if isempty(msgstr)
+                        obj.plotVerticesComparison(vertices, dims);
+                    end
+                    hold on
+                end 
+                hold on
+                xlabel(labs(1));
+                ylabel(labs(2));
+            end
+        end
+        
+        function plotVerticesComparison(obj, vertices, dims)
+            %Compute projection
+            first = vertices(dims(1),:);
+            second = vertices(dims(2),:);
+            temp = [first;second];
+            ver = unique(temp.','rows').';
+            ver_x = ver(1,:);
+            ver_y = ver(2,:);
+            cx = mean(ver_x);
+            cy = mean(ver_y);
+            a = atan2(ver_y - cy, ver_x - cx);
+            [~, order] = sort(a);
+            ver_x = ver_x(order);
+            ver_y = ver_y(order);
+            P = [ver_x;ver_y]';
+            pgon = polyshape(P, 'Simplify', false);
+            plot(pgon,'FaceColor','none', 'EdgeColor', [0.968, 0.007, 0.007]);           
+        end
+        
     end
     
 end
