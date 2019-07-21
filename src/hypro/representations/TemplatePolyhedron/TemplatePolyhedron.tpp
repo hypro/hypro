@@ -45,7 +45,7 @@ namespace hypro {
 	{
 		assert(mOptimizer.matrix() == mat);
 		assert(mOptimizer.vector() == vec);
-		assert(mOptimizer.getRelations().size() == std::size_t(mat.rows()));
+		//assert(mOptimizer.getRelations().size() == std::size_t(mat.rows()));
 		assert(vec.rows() == mMatrixPtr->rows());
 	}
 

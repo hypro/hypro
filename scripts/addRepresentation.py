@@ -81,7 +81,7 @@ if not os.path.exists(p+ '/' + str(args.name)):
 					if otherRepConversion not in addedConversion:
 						addedConversion.append(otherRepConversion)
 						tmp.write('\t\ttemplate<typename ' + otherRepConversion + 'Setting = typename ' + otherRepConversion + '::Settings, typename inSetting>\n');
-						tmp.write('\t\tstatic ' + otherRepConversion + 'T<Number,Converter<Number>,' + otherRepConversion + 'Setting> to' + otherRepConversion + '(const '+ str(args.name) + 'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+						tmp.write('\t\tstatic ' + otherRepConversion + 'T<Number,Converter<Number>,' + otherRepConversion + 'Setting> to' + otherRepConversion + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 						tmp.write(line)
 					elif not includeFound and re.match('#include.*',line):
 						includeFound = True
@@ -99,30 +99,39 @@ if not os.path.exists(p+ '/' + str(args.name)):
 						tmp.write(line)
 						tmp.write("\n")
 						tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
-						tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(args.name) + 'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+						tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 						for i in range(len(otherRepresentations)):
-							tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
-							tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + 'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+							if otherRepresentations[i] == 'Ellipsoid':
+								tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings>\n');
+								tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + 'T<Number>& source, const CONV_MODE = CONV_MODE::EXACT);\n')	
+							elif otherRepresentations[i] == 'ConstraintSet':
+								tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
+								tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + 'T<Number,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+							else:
+								tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
+								tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 					else:
 						tmp.write(line)
 
 		os.replace('tmp',p+'/conversion/Converter.h')
 
 		# write/extend typedefs
-		with open(p+'/conversion/typedefs.h','r') as tdefs:
-			with open('tmp','w') as tmp:
-				tmp.write('template<typename Number>\nusing '+str(args.name)+' = typename Converter<Number>::'+str(args.name)+';\n\n')
-				for line in tdefs:
-					tmp.write(line)
+		with open(p+'/conversion/typedefs.h','a') as tdefs:
+			tdefs.write('/**\n * Typedef for ' + str(args.name) + 'T\n */\n');
+			tdefs write('template<typename Number>\nusing '+str(args.name)+' = typename Converter<Number>::'+str(args.name)+';\n\n');
 
-		os.replace('tmp',p+'/conversion/typedefs.h')
+			#with open('tmp','w') as tmp:
+			#	tmp.write('template<typename Number>\nusing '+str(args.name)+' = typename Converter<Number>::'+str(args.name)+';\n\n')
+			#	for line in tdefs:
+			#		tmp.write(line)
+			#os.replace('tmp',p+'/conversion/typedefs.h')
 
 		# create conversion implementation tpp-file
 		with open(p+'/conversion/converterTo'+str(args.name)+'.tpp','w') as impl:
 			impl.write('#ifndef INCL_FROM_CONVERTERHEADER\nstatic_assert(false, "This file may only be included indirectly by Converter.h");\n#endif\n\n')
 			impl.write('template<typename Number>\n')
-			impl.write('template<typename ' + str(args.name) + 'Setting, typename InSetting>\n')
-			impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+str(args.name)+'T<Number,Converter<Number>,InSetting>& _source, const CONV_MODE  ) {\n')
+			impl.write('template<typename ' + str(args.name) + 'Setting, typename inSetting>\n')
+			impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+str(args.name)+'T<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {\n')
 			impl.write('\treturn _source;\n')
 			impl.write('}\n\n')
 
@@ -132,15 +141,15 @@ if not os.path.exists(p+ '/' + str(args.name)):
 					#Ellipsoids have no Settings
 					impl.write('template<typename ' + str(args.name) + 'Setting>\n')
 				else:
-					impl.write('template<typename ' + str(args.name) + 'Setting, typename InSetting>\n')
+					impl.write('template<typename ' + str(args.name) + 'Setting, typename inSetting>\n')
 				if otherRepresentations[i] == 'Ellipsoid':
 					#Ellipsoids have no Settings
 					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'& _source, const CONV_MODE  ) {\n')
 				elif otherRepresentations[i] == 'ConstraintSet':
 					#ConstraintSets have no Converter template
-					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'T<Number,InSetting>& _source, const CONV_MODE  ) {\n')	
+					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'T<Number,inSetting>& _source, const CONV_MODE  ) {\n')	
 				else:
-					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'T<Number,Converter<Number>,InSetting>& _source, const CONV_MODE  ) {\n')
+					impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+otherRepresentations[i]+'T<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {\n')
 				impl.write('\treturn '+str(args.name)+'T<Number,Converter<Number>,'+str(args.name)+'Setting>();\n')
 				impl.write('}\n\n')
 
@@ -152,11 +161,23 @@ if not os.path.exists(p+ '/' + str(args.name)):
 				#print('found ' + str(otherRepresentations[i]) + ' in ' + str(file))
 				with open(p + '/conversion/' + file,'a') as openedFile:
 					openedFile.write('\ntemplate<typename Number>\n')
-					openedFile.write('template<typename ' + str(otherRepresentations[i]) + 'Setting, typename InSetting>\n')
-					openedFile.write(str(otherRepresentations[i]) + 'T<Number,Converter<Number>,' + str(otherRepresentations[i]) + 'Setting> Converter<Number>::to'+str(otherRepresentations[i])+'( const '+str(args.name)+'T<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {\n')
+					openedFile.write('template<typename ' + str(otherRepresentations[i]) + 'Setting, typename inSetting>\n')
+					openedFile.write(str(otherRepresentations[i]) + 'T<Number,Converter<Number>,' + str(otherRepresentations[i]) + 'Setting> Converter<Number>::to'+str(otherRepresentations[i])+'( const '+str(args.name)+'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {\n')
 					openedFile.write('\treturn ' + str(otherRepresentations[i]) + 'T<Number,Converter<Number>,' + str(otherRepresentations[i]) + 'Setting>();\n')
 					openedFile.write('}\n\n')
 				break
+
+	# extend the conversion helper
+	with open(p+'conversion/conversionHelper.h','a') as cnvHelper:
+		with open('tmp','w') as tmp:
+			for line in cnvHelper:
+				if not re.match('} // hypro', line):
+					tmp.write(line)
+			tmp.write('template<typename Number, typename OutSettings, typename In>')
+			tmp.write('void convert(const In& in, ' + str(args.name) + 'T<Number,Converter<Number>,OutSettings>& out) {')
+			tmp.write('\tout = Converter<Number>::template to' + str(args.name) + '<OutSettings>(in); \n}\n')
+			tmp.write('\n} // hypro')
+	os.replace('tmp',p+'conversion/conversionHelper.h')
 			
 else:
 	print("Representation already exists, exiting.")

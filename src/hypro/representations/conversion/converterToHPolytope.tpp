@@ -291,17 +291,3 @@ template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.getHalfspaces());
 }
-
-template<typename Number>
-template<typename HPolytopeSetting, typename InSetting>
-HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>();
-}
-
-
-template<typename Number>
-template<typename HPolytopeSetting, typename InSetting>
-HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>();
-}
-

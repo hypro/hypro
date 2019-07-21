@@ -66,17 +66,3 @@ template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
 	return toConstraintSet(toHPolytope(_source, mode));
 }
-
-template<typename Number>
-template<typename ConstraintSetSetting, typename InSetting>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSetting> Converter<Number>::toConstraintSet( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return ConstraintSetT<Number,Converter<Number>,ConstraintSetSetting>();
-}
-
-
-template<typename Number>
-template<typename ConstraintSetSetting, typename InSetting>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSetting> Converter<Number>::toConstraintSet( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return ConstraintSetT<Number,Converter<Number>,ConstraintSetSetting>();
-}
-

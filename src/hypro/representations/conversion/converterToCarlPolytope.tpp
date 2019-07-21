@@ -276,17 +276,3 @@ template<typename CarlPolySetting, typename inSetting>
 CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
 }
-
-template<typename Number>
-template<typename CarlPolytopeSetting, typename InSetting>
-CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> Converter<Number>::toCarlPolytope( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting>();
-}
-
-
-template<typename Number>
-template<typename CarlPolytopeSetting, typename InSetting>
-CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> Converter<Number>::toCarlPolytope( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting>();
-}
-

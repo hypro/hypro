@@ -350,16 +350,3 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 	//exact conversion
 	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
 }
-template<typename Number>
-template<typename VPolytopeSetting, typename InSetting>
-VPolytopeT<Number,Converter<Number>,VPolytopeSetting> Converter<Number>::toVPolytope( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return VPolytopeT<Number,Converter<Number>,VPolytopeSetting>();
-}
-
-
-template<typename Number>
-template<typename VPolytopeSetting, typename InSetting>
-VPolytopeT<Number,Converter<Number>,VPolytopeSetting> Converter<Number>::toVPolytope( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return VPolytopeT<Number,Converter<Number>,VPolytopeSetting>();
-}
-

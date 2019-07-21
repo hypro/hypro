@@ -125,17 +125,3 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
-
-template<typename Number>
-template<typename DifferenceBoundsSetting, typename InSetting>
-DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Number>::toDifferenceBounds( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>();
-}
-
-
-template<typename Number>
-template<typename DifferenceBoundsSetting, typename InSetting>
-DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Number>::toDifferenceBounds( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>();
-}
-

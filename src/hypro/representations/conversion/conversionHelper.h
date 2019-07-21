@@ -49,5 +49,4 @@ void convert(const In& in, ZonotopeT<Number,Converter<Number>,OutSettings>& out)
     out = Converter<Number>::template toZonotope<OutSettings>(in);
 }
 
-
 } // hypro

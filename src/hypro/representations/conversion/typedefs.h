@@ -1,13 +1,4 @@
-template<typename Number>
-using Orthoplex = typename Converter<Number>::Orthoplex;
-
-template<typename Number>
-using Simplex = typename Converter<Number>::Simplex;
-
 #pragma once
-
-template<typename Number>
-using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;
 
 template<typename Number>
 using Box = typename Converter<Number>::Box;
@@ -58,3 +49,9 @@ using Zonotope = typename Converter<Number>::Zonotope;
  */
 template<typename Number>
 using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
+
+/**
+ * Typedef for TemplatePolyhedronT
+ */
+template<typename Number>
+using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;

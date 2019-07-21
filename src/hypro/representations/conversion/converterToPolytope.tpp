@@ -74,17 +74,3 @@ template<typename PolytopeSetting, typename inSetting>
 PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return PolytopeT<Number,Converter,PolytopeSetting>(source.vertices());
 }
-
-template<typename Number>
-template<typename PolytopeSetting, typename InSetting>
-PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const SimplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return PolytopeT<Number,Converter<Number>,PolytopeSetting>();
-}
-
-
-template<typename Number>
-template<typename PolytopeSetting, typename InSetting>
-PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const OrthoplexT<Number,Converter<Number>,InSetting>& source, const CONV_MODE ) {
-	return PolytopeT<Number,Converter<Number>,PolytopeSetting>();
-}
-
