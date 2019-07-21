@@ -23,6 +23,10 @@ template <typename Number, typename Converter, class Setting>
 class REPRESENTATIONT : public GeometricObject<Number, REPRESENTATIONT<Number,Converter,Setting>> {
   private:
   public:
+
+  	//Needed for Converter
+  	typedef Setting Settings;
+  	
   protected:
 
 	/***************************************************************************

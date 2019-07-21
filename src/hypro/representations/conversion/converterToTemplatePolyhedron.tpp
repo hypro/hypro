@@ -75,3 +75,10 @@ template<typename TemplatePolyhedronSetting, typename inSetting>
 TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::TemplatePolyhedron();
 }
+
+template<typename Number>
+template<typename TemplatePolyhedronSetting, typename inSetting>
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
+}
+

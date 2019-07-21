@@ -49,4 +49,9 @@ void convert(const In& in, ZonotopeT<Number,Converter<Number>,OutSettings>& out)
     out = Converter<Number>::template toZonotope<OutSettings>(in);
 }
 
+template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, SimplexT<Number,Converter<Number>,OutSettings>& out) {
+	out = Converter<Number>::template toSimplex<OutSettings>(in); 
+}
+
 } // hypro

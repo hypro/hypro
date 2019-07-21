@@ -55,3 +55,10 @@ using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
  */
 template<typename Number>
 using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;
+
+/**
+ * Typedef for SimplexT
+ */
+template<typename Number>
+using Simplex = typename Converter<Number>::Simplex;
+
