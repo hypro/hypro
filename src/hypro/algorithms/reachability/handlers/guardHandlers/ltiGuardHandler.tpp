@@ -4,7 +4,6 @@ namespace hypro {
     template<typename State>
 	void ltiGuardHandler<State>::handle() {
 		assert(!mGuardSatisfyingState->getTimestamp().isEmpty());
-
 		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());
 	    std::pair<CONTAINMENT,State> statePair = mGuardSatisfyingState->partiallySatisfies(mTransition->getGuard(), mIndex);
 

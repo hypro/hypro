@@ -627,8 +627,11 @@ namespace hypro {
 		}
 		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
+       	std::cout << "SupportFunctionNew::satisfiesHalfspaces, mat: \n" << _mat << std::endl;
+       	std::cout << "SupportFunctionNew::satisfiesHalfspaces, sf: " << *this << std::endl;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	DEBUG("hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
+        	std::cout << "SupportFunctionNew::satisfiesHalfspaces, mat.row(" << rowI << "): \n" << _mat.row(rowI) << std::endl;
         	EvaluationResult<Number> planeEvalRes = this->evaluate(_mat.row(rowI), false);
         	DEBUG("hypro.representations.supportFunctionNew", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){

@@ -442,6 +442,8 @@ bool Halfspace<Number>::empty() const {
 
 template<typename Number>
 EvaluationResult<Number> Halfspace<Number>::evaluate(const vector_t<Number>& direction, bool /*useExact*/) const {
+	std::cout << "Halfspace::evaluate, direction is: \n" << direction << std::endl;
+	assert(mNormal.rows() == direction.rows());
 	std::pair<bool,Number> dependent = linearDependent(mNormal, direction);
 	if(dependent.first){
 		if(dependent.second > 0){

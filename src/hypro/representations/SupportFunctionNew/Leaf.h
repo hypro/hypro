@@ -89,7 +89,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	void print(std::ostream& ostr) const {
 		ostr << "RootGrowNode address: " << this << " own type: " << this->getType();
 		if(rep != nullptr){
-			ostr << " Leaf type: " << rep->type() << " Leaf representation: \n" << *rep << std::endl;	
+			ostr << " Leaf representation type: " << rep->type() << " Leaf representation: \n" << *rep << std::endl;	
 		} else {
 			ostr << " Leaf has no representation." << std::endl;
 		}
@@ -116,6 +116,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 		//If no optimizations could be used
 		COUNT("Multi constraint evaluate.");
+		std::cout << "Leaf::compute" << std::endl;
 		return rep->multiEvaluate(param, useExact);
 	}
 

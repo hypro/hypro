@@ -22,14 +22,18 @@ protected:
 
 TYPED_TEST(SupportFunctionNewTest, LeafTest){
 
+	using N = TypeParam;
+	using C = Converter<TypeParam>;
+	using S = typename SupportFunctionNew<TypeParam>::Settings;
+
 	Box<TypeParam> box;
 	SupportFunctionNew<TypeParam> sf(box);
 	EXPECT_TRUE(sf.getRoot()->getType() == SFNEW_TYPE::LEAF);
 	EXPECT_EQ(sf.getRoot()->getOriginCount(), unsigned(0));
 	EXPECT_EQ(sf.getRoot()->getChildren().size(), std::size_t(0));
 	EXPECT_EQ(sf.getRoot().use_count(), long(1));
-	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), box);
-
+	EXPECT_EQ(*(dynamic_cast<Leaf<N,C,S,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), box);
+	
 	//Test with HPoly that is a box
 	HPolytope<TypeParam> hpoly(matrix_t<TypeParam>::Identity(2,2));
 	SupportFunctionNew<TypeParam> sfHpoly(hpoly);
@@ -38,8 +42,8 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_EQ(sfHpoly.getRoot()->getChildren().size(), std::size_t(0));
 	EXPECT_EQ(sfHpoly.getRoot().use_count(), long(1));
 	EXPECT_TRUE(boost::get<0>(isBox(hpoly.matrix(), hpoly.vector())));
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::box);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
+	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,Box<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
 
 	//Test with Halfspace
 	Halfspace<TypeParam> hspace({TypeParam(0),TypeParam(1)}, TypeParam(1));
@@ -50,15 +54,17 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_EQ(sfHpoly.getRoot().use_count(), long(1));
 	EXPECT_TRUE(boost::get<0>(isBox(hspace.matrix(), hspace.vector())));
 	EXPECT_TRUE(boost::get<0>(isBox(sfHSpace.matrix(), sfHSpace.vector())));
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Halfspace<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
+	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,Box<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,Halfspace<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,HPolytope<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
 
 }
 
 //Have a box as a leaf. Put a chain of trafoOps above the leaf. 
 //Check currentExponent, successiveTransformations and parameter values
 TYPED_TEST(SupportFunctionNewTest, TrafoOp){
+
+	using Setting = typename SupportFunctionNew<TypeParam>::Settings;
 
 	//Make the box 
 	Point<TypeParam> p({TypeParam(0),TypeParam(0)});
@@ -81,27 +87,27 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);
 
 	//Save pointer to parameters for later, checking if it remains the same object 
-	std::shared_ptr<const LinTrafoParameters<TypeParam,SupportFunctionNewDefault>> trafo0Params = nullptr;
+	std::shared_ptr<const LinTrafoParameters<TypeParam,Setting>> trafo0Params = nullptr;
 
 	//sf1
 	SupportFunctionNew<TypeParam> sf1 = sf.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf1.getRoot() != nullptr);
 	EXPECT_TRUE(sf1.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf1.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf1.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
 
 	//Fill trafo0Params
-	trafo0Params = (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getParameters();
+	trafo0Params = (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf1.getRoot().get()))->getParameters();
 
 	//sf2
 	SupportFunctionNew<TypeParam> sf2 = sf1.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf2.getRoot() != nullptr);
 	EXPECT_TRUE(sf2.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf2.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf2.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
 
 	//Check whether parameter object remained the same (whether both point to the same address)
-	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get())->getParameters()));
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf2.getRoot().get())->getParameters()));
 
 	//Evaluate
 	std::vector<EvaluationResult<TypeParam>> res = sf2.multiEvaluate(directions,true);
@@ -115,17 +121,17 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	SupportFunctionNew<TypeParam> sf3 = sf2.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf3.getRoot() != nullptr);
 	EXPECT_TRUE(sf3.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getSuccessiveTransformations(), std::size_t(2));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf3.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf3.getRoot().get()))->getSuccessiveTransformations(), std::size_t(2));
 
 	//sf4
 	SupportFunctionNew<TypeParam> sf4 = sf3.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf4.getRoot() != nullptr);
 	EXPECT_TRUE(sf4.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getCurrentExponent(), unsigned(4));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf4.getRoot().get()))->getCurrentExponent(), unsigned(4));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf4.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
 	//Check whether parameter object remained the same (whether both point to the same address)
-	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get())->getParameters()));
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf4.getRoot().get())->getParameters()));
 
 
 	//Evaluate
@@ -140,32 +146,32 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	SupportFunctionNew<TypeParam> sf5 = sf4.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf5.getRoot() != nullptr);
 	EXPECT_TRUE(sf5.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf5.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf5.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
 
 	//sf6
 	SupportFunctionNew<TypeParam> sf6 = sf5.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf6.getRoot() != nullptr);
 	EXPECT_TRUE(sf6.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf6.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf6.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
 
 	//sf7
 	SupportFunctionNew<TypeParam> sf7 = sf6.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf7.getRoot() != nullptr);
 	EXPECT_TRUE(sf7.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getSuccessiveTransformations(), std::size_t(2));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf7.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf7.getRoot().get()))->getSuccessiveTransformations(), std::size_t(2));
 
 	//sf8
 	SupportFunctionNew<TypeParam> sf8 = sf7.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf8.getRoot() != nullptr);
 	EXPECT_TRUE(sf8.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getCurrentExponent(), unsigned(4));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf8.getRoot().get()))->getCurrentExponent(), unsigned(4));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf8.getRoot().get()))->getSuccessiveTransformations(), std::size_t(1));
 
 	//Check whether parameter object remained the same (whether both point to the same address)
-	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get())->getParameters()));
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf8.getRoot().get())->getParameters()));
 
 	//Evaluate
 	res = sf8.multiEvaluate(directions,true);
@@ -179,11 +185,11 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	SupportFunctionNew<TypeParam> sf9 = sf8.affineTransformation(tMat, tVec); 
 	EXPECT_TRUE(sf9.getRoot() != nullptr);
 	EXPECT_TRUE(sf9.getRoot()->getChildren().size() == std::size_t(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getCurrentExponent(), unsigned(1));
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf9.getRoot().get()))->getCurrentExponent(), unsigned(1));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf9.getRoot().get()))->getSuccessiveTransformations(), std::size_t(0));
 
 	//Check whether parameter object remained the same (whether both point to the same address)
-	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get())->getParameters()));
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(sf9.getRoot().get())->getParameters()));
 
 	//Evaluate
 	res = sf9.multiEvaluate(directions,true);
@@ -241,7 +247,7 @@ TYPED_TEST(SupportFunctionNewTest, ScaleOp){
 	EXPECT_EQ(sfScale.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfScale.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_EQ(sfScale.getRoot().use_count(), long(1));
-	EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfScale.getRoot().get())->getFactor()), TypeParam(10));
+	EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,typename SupportFunctionNew<TypeParam>::Settings>*>(sfScale.getRoot().get())->getFactor()), TypeParam(10));
 
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
@@ -271,7 +277,7 @@ TYPED_TEST(SupportFunctionNewTest, ProjectOp){
 	EXPECT_EQ(sfProject.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfProject.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_EQ(sfProject.getRoot().use_count(), long(1));
-	EXPECT_EQ((dynamic_cast<ProjectOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfProject.getRoot().get())->getDimensions().at(0)), std::size_t(1));
+	EXPECT_EQ((dynamic_cast<ProjectOp<TypeParam,Converter<TypeParam>,typename SupportFunctionNew<TypeParam>::Settings>*>(sfProject.getRoot().get())->getDimensions().at(0)), std::size_t(1));
 
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(3,3);
@@ -527,26 +533,26 @@ TYPED_TEST(SupportFunctionNewTest, Constructors){
 	EXPECT_EQ(sf.getRoot().use_count(), long(2));
 
 	//Matrix Vector constructor - implicit box 
+	using Setting = typename SupportFunctionNew<TypeParam>::Settings;
 	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Zero(4,2);
 	mat << 1,0,-2,0,0,1,0,-2;
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Ones(4);
 	SupportFunctionNew<TypeParam> sfMatVec(mat,vec);
 	EXPECT_TRUE(sfMatVec.getRoot() != nullptr);
 	EXPECT_EQ(sfMatVec.getRoot()->getType(), SFNEW_TYPE::LEAF);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfMatVec.getRoot().get())->getRepresentation()->type()), representation_name::box);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sfMatVec.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,Setting,Box<TypeParam>>*>(sfMatVec.getRoot().get())->getRepresentation()->type()), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,Setting,Box<TypeParam>>*>(sfMatVec.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
 
 	//Matrix Vector constructor - hpoly 
+	using HPoly = HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching>;
 	matrix_t<TypeParam> mat2 = matrix_t<TypeParam>::Zero(3,2);
 	mat2 << 2,-1,1,0,-2,3;
 	vector_t<TypeParam> vec2 = vector_t<TypeParam>::Ones(3);
 	SupportFunctionNew<TypeParam> sfMatVec2(mat2,vec2);
 	EXPECT_TRUE(sfMatVec2.getRoot() != nullptr);
 	EXPECT_EQ(sfMatVec2.getRoot()->getType(), SFNEW_TYPE::LEAF);
-	//EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
-	//EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfMatVec2.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching>>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching>>*>(sfMatVec2.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,Setting,HPoly>*>(sfMatVec2.getRoot().get())->getRepresentation()->type()), representation_name::polytope_h);
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,Setting,HPoly>*>(sfMatVec2.getRoot().get())->getRepresentation()->dimension()), std::size_t(2));
 	//Settings constructor is below
 }
 
@@ -1215,9 +1221,10 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	SupportFunctionNew<TypeParam> sf(box);	
 
 	//Leaf
+	using Setting = typename SupportFunctionNew<TypeParam>::Settings;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sf2(sf);		
-	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), *(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->getRepresentation()));
-	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->isRedundant()), (dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->isRedundant()));
+	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,Setting,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), *(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->getRepresentation()));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,Setting,Box<TypeParam>>*>(sf.getRoot().get())->isRedundant()), (dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->isRedundant()));
 	EXPECT_EQ(sf2.dimension(), sf.dimension());
 	
 	//TrafoOp
@@ -1227,7 +1234,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> trafo2(trafo);
 	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>* trafo2Node = dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(trafo2.getRoot().get());
-	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo.getRoot().get())->getParameters()->power), unsigned(2));
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,Setting>*>(trafo.getRoot().get())->getParameters()->power), unsigned(2));
 	EXPECT_TRUE((trafo2Node != nullptr));
 	EXPECT_TRUE((trafo2Node->getParameters() != nullptr));
 	EXPECT_EQ((trafo2Node->getParameters()->power), unsigned(1));
@@ -1297,21 +1304,22 @@ TYPED_TEST(SupportFunctionNewTest, MatrixVector){
 
 TYPED_TEST(SupportFunctionNewTest, Reduction){
 
+	//TODO: Reactivate Test when emptiness caching implemented
 	//Empty SF
-	SupportFunctionNew<TypeParam> sfEmpty;
-	sfEmpty.reduceRepresentation();
-	EXPECT_TRUE(sfEmpty.getRoot() == nullptr);
-	EXPECT_TRUE(sfEmpty.isTemplateSet());
+	//SupportFunctionNew<TypeParam> sfEmpty;
+	//sfEmpty.reduceRepresentation();
+	//EXPECT_TRUE(sfEmpty.getRoot() == nullptr);
+	//EXPECT_TRUE(sfEmpty.isTemplateSet());
 
 	//Halfspace
 
-	//Reducible SF
-	//Point<TypeParam> p1 {TypeParam(-1), TypeParam(-1)};
-	//Point<TypeParam> p2 {TypeParam(1), TypeParam(1)};
-	//Box<TypeParam> box(std::make_pair(p1,p2));
-	//SupportFunctionNew<TypeParam> sf(box);
-	//sf.reduceRepresentation();
-
+	//Some SF
+	Point<TypeParam> p1 {TypeParam(-1), TypeParam(-1)};
+	Point<TypeParam> p2 {TypeParam(1), TypeParam(1)};
+	Box<TypeParam> box(std::make_pair(p1,p2));
+	SupportFunctionNew<TypeParam> sf(box);
+	sf.reduceRepresentation();
+	EXPECT_TRUE(sf.isTemplateSet());
 }
 
 /*
@@ -1366,6 +1374,5 @@ TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 	res = sfThreeHspace.evaluate(dir,true);
 	PRINT_STATS();	
 
-	//TODO: Unterstand the results
 }
 #endif

@@ -341,9 +341,10 @@ class Halfspace {
 
 	/**
 	 * @brief Returns the representation type of the halfspace.
-	 * @detail Since adding an own representation name for halfspaces would greatly affect the code, it just returns box as the representation name.
+	 * @detail Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name
+	 * as it is usually not used as a representation but still has defined representation name.
 	 */
-	static representation_name type() { return representation_name::box; }
+	static representation_name type() { return representation_name::constraint_set; }
 };
 
 /**

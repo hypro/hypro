@@ -103,11 +103,11 @@ class RootGrowNode {
 
 	virtual void print(std::ostream& ostr) const {
 		ostr << "RootGrowNode address: " << this << " own type: " << this->getType() << " children types(address): [";
-		for(auto c : this->getChildren()){
+		for(const auto& c : this->getChildren()){
 			ostr << c->getType() << "(" << &(*c) << ")" << ",";
 		}
 		ostr << "]" << std::endl;
-		for(auto c : this->getChildren()){
+		for(const auto& c : this->getChildren()){
 			ostr << *c;
 		}
 	}
