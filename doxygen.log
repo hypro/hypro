@@ -421,9 +421,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../H
 error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:12:39: error: expected class name [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:16:32: warning: defaulted function definitions are a C++11 extension [-Wc++11-extensions] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:28:54: error: expected class name [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:32:47: warning: defaulted function definitions are a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/IContext.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
@@ -2258,7 +2256,7 @@ Creating members for template instances...
 Computing class relations...
 Add enum valu/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/ContextFactory.h:19: warning: documented symbol `Singleton< ContextFactory< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h:14: warning: documented symbol `Singleton< HandlerFactory< State > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h:23: warning: documented symbol `Singleton< DecisionEntity< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h:24: warning: documented symbol `Singleton< DecisionEntity< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:29: warning: documented symbol `Singleton< NodeManager< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:24: warning: documented symbol `Singleton< SettingsProvider< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingProvider.h:20: warning: documented symbol `Singleton< EventTimingProvider< Number > >' was not declared or defined.
@@ -2269,7 +2267,7 @@ Add enum valu/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/co
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:73: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:21: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20071.bbl: No such file or directory
+error opening bib20090.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2570,9 +2568,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../H
 error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:12:39: error: expected class name [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:16:32: warning: defaulted function definitions are a C++11 extension [-Wc++11-extensions] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:28:54: error: expected class name [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/Exceptions.h:32:47: warning: defaulted function definitions are a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/IContext.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
@@ -5030,5 +5026,5 @@ Running dot for graph 191/193
 Running dot for graph 192/193
 Running dot for graph 193/193
 Patching output file 1/1
-lookup cache used 7025/65536 hits=208100 misses=8136
+lookup cache used 7025/65536 hits=208094 misses=8137
 finished...

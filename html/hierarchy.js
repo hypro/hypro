@@ -75,7 +75,7 @@ var hierarchy =
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::EventTimingContainer< Number >", "classhypro_1_1EventTimingContainer.html", null ],
     [ "hypro::EventTimingContainer< N >", "classhypro_1_1EventTimingContainer.html", null ],
-    [ "exception", null, [
+    [ "std::exception", null, [
       [ "hypro::FinishWithDiscreteProcessingException", "classhypro_1_1FinishWithDiscreteProcessingException.html", null ],
       [ "hypro::HardTerminateException", "classhypro_1_1HardTerminateException.html", null ]
     ] ],
