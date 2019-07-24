@@ -1,6 +1,6 @@
 function log = cora_bouncing_ball(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
-HA = bouncing_ball_ha();
+HA = cora_bouncing_ball_ha();
 Zdelta = [0.1;0];
 
 
@@ -8,20 +8,6 @@ Zdelta = [0.1;0];
 Zcenter = [10.1;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
-
-% if diff == 1 || diff == 0
-%     options.taylorTerms = 10;
-%     options.zonotopeOrder = 20;
-%     options.polytopeOrder = 10;
-% elseif diff == 2
-%     options.taylorTerms = 10;
-%     options.zonotopeOrder = 20;
-%     options.polytopeOrder = 10;
-% else
-%     options.taylorTerms = 200;
-%     options.zonotopeOrder = 2;
-%     options.polytopeOrder = 200;
-% end
 
 % First location
 options.startLoc = 1; %initial location
@@ -43,9 +29,8 @@ options.originContained = 0;
 
 %set input:
 for i = 1:1
-    %options.timeStepLoc{i} = 0.01;
     options.timeStepLoc{i} = timeStep;
-    options.uLoc{i} = [0;0];
+    options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end

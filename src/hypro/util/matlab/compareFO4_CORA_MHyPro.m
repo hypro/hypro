@@ -1,4 +1,4 @@
-function compareFO4_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath)
+function compareFO4_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
 
 % MHyPro
 settings.timeStep = mhStrat.timeStep;
@@ -210,8 +210,8 @@ reacher.setRepresentationType(setRepr);
 flowpipes = reacher.computeForwardReachability();
 
 fig = figure();
-dim = [1 3];
-labs = ["x", "x1"];
+dim = [3 2];
+labs = ["x1", "y"];
 reacher.plotComparison(flowpipes, dim, labs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -254,11 +254,29 @@ options.tFinal = timeHorizon;
 
 [HA] = reach(HA,options);
 
-options.projectedDimensions = [1 3];
+options.projectedDimensions = [3 2];
 
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    if diff == 1
+        y = [0.8;0.8;0.5;0.5];
+        x = [1;-1;-1;1];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 2
+        y = [0.8;0.8;0.48205;0.48205];
+        x = [1;-1;-1;1];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        y = [0.8;0.8;0.4641;0.4641];
+        x = [1;-1;-1;1];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    end
+    xlabel('x1');
+    ylabel('y');
 
 if saveFig
     saveas(fig, fullfile(savePath,fname),'png');

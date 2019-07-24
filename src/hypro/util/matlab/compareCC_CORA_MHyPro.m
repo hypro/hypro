@@ -1,4 +1,4 @@
-function compareCC_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath)
+function compareCC_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
 
 % MHyPro
 settings.timeStep = mhStrat.timeStep;
@@ -431,6 +431,23 @@ options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 xlabel('t');
 ylabel('v');
+
+ if diff == 1
+        x = [20;-10;-10;20];
+        y = [-2;-2;-20;-20];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 2
+        x = [20;-10;-10;20];
+        y = [-2;-2;-20;-20];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    else
+        x = [20;-10;-10;20];
+        y = [-2;-2;-20;-20];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+ end
 
 if saveFig
     saveas(fig, fullfile(savePath,fname),'png');

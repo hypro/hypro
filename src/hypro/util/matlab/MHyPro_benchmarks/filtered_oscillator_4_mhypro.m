@@ -259,26 +259,28 @@ end
 time = reachabilityTime + verificationTime;
 
 if plotting == 1
-    dim = [1 3];
-    labs = ["x", "x1"];
+    dim = [3 2];
+    labs = ["x1", "y"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if diff == 0
-        x = [0.8;0.8;0.5;0.5];
-        y = [1;-1;-1;1];
+        y = [0.8;0.8;0.5;0.5];
+        x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 1
-        x = [0.8;0.8;0.48205;0.48205];
-        y = [1;-1;-1;1];
+        y = [0.8;0.8;0.48205;0.48205];
+        x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     else
-        x = [0.8;0.8;0.4641;0.4641];
-        y = [1;-1;-1;1];
+        y = [0.8;0.8;0.4641;0.4641];
+        x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end
+    xlabel('x1');
+    ylabel('y');
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x", "y", "x1"];

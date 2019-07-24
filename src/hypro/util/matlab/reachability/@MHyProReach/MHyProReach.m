@@ -273,7 +273,7 @@ classdef MHyProReach < handle
             ver_y = ver_y(order);
             P = [ver_x;ver_y]';
             pgon = polyshape(P, 'Simplify', false);
-            plot(pgon,'FaceColor','none', 'EdgeColor', [0.968, 0.007, 0.007]);           
+            plot(pgon,'FaceColor','none', 'EdgeColor', [0.098, 0.784, 0.286]);           
         end
         
     end

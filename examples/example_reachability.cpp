@@ -13,7 +13,7 @@
 //#define PLOT_FLOWPIPE
 
 template<typename Number, typename Representation>
-static void computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
+static std::pair<double,bool> computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
@@ -27,9 +27,18 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	reacher.setRepresentationType(type);
 	reacher.initQueue();
 	auto flowpipes = reacher.computeForwardReachability();
+	bool unsafe = reacher.reachedBadStates();
+	double dur = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0;
+	std::pair<double,bool> out = std::make_pair(dur,unsafe);
+	//std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
+	//std::cout << "Finished computation of reachable states + verification: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
+	//if(unsafe){
+	//	std::cout << "Verification result: UNSAFE" << std::endl;
+	//}else{
+	//	std::cout << "Verification result: SAFE" << std::endl;
+	//}
 
-	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
-
+/*
     if(ha.second.plotDimensions.size() > 0){
 
 		clock::time_point startPlotting = clock::now();
@@ -128,8 +137,8 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 		std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
-	}
-
+	}*/
+	return out;
 }
 
 int main(int argc, char** argv) {
@@ -152,56 +161,57 @@ int main(int argc, char** argv) {
 		#ifdef HYPRO_USE_PPL
 		case 7: {
 			using Representation = hypro::Polytope<Number>;
-			std::cout << "Using a ppl-polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
+			//std::cout << "Using a ppl-polytope representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
 			break;
 		}
 		#endif
 
 		case 6: {
 			using Representation = hypro::DifferenceBounds<Number>;
-			std::cout << "Using a difference bounds representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::difference_bounds);
+			//std::cout << "Using a difference bounds representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::difference_bounds);
 			break;
 		}
 
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
-			std::cout << "Using a zonotope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
+			//std::cout << "Using a zonotope representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
 			break;
 		}
 
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
-			std::cout << "Using a support function representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
+			//std::cout << "Using a support function representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
 			break;
 		}
 
 		case 3: {
 			using Representation = hypro::VPolytope<Number>;
-			std::cout << "Using a v-polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_v);
+			//std::cout << "Using a v-polytope representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_v);
 			break;
 		}
         case 2: {
 			using Representation = hypro::HPolytope<Number>;
-			std::cout << "Using a h-polytope representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
+			//std::cout << "Using a h-polytope representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
 			break;
 		}
 
 		case 1: {
 			using Representation = hypro::Box<Number>;
-			std::cout << "Using a box representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
+			//std::cout << "Using a box representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
 			break;
 		}
 		default:{
 			using Representation = hypro::Box<Number>;
-			std::cout << "Using a box representation." << std::endl;
-			computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
+			//std::cout << "Using a box representation." << std::endl;
+			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
+			std::cout << res.first << " " << res.second << std::endl;
 		}
 	}
 
