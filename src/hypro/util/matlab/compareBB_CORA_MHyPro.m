@@ -110,7 +110,7 @@ options.x0 = center(options.R0); %initial state for simulation
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = timeHorizon;
+options.tFinal = 4;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
@@ -127,7 +127,7 @@ options.originContained = 0;
 %set input:
 for i = 1:1
     options.timeStepLoc{i} = timeStepC;
-    options.uLoc{i} = [0;0];
+    options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
@@ -148,7 +148,7 @@ plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot in
         y = [15;-2;-2;15];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    else
+    elseif diff == 3
         x = [15;15;10.6138;10.6138];
         y = [15;-2;-2;15];
         pgon = polyshape([x,y], 'Simplify', false);

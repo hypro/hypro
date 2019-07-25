@@ -10,27 +10,6 @@ Zcenter = [0.25;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-% if diff == 3
-%     %hard:
-%     options.taylorTerms = 100;
-%     options.zonotopeOrder = 200;
-%     options.polytopeOrder = 100;
-% elseif diff == 2
-%     %medium:
-%     options.taylorTerms = 3;
-%     options.zonotopeOrder = 2;
-%     options.polytopeOrder = 1;
-% elseif diff == 1
-%     % easy
-%     options.taylorTerms = 2;
-%     options.zonotopeOrder = 2;
-%     options.polytopeOrder = 1;
-% else
-%     options.taylorTerms = 1;
-%     options.zonotopeOrder = 1;
-%     options.polytopeOrder = 1;
-% end
-
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
 options.polytopeOrder = pOrder;
@@ -42,7 +21,6 @@ options.originContained = 0;
 
 %set input:
 for i = 1:4
-    %options.timeStepLoc{i} = 0.5;
     options.timeStepLoc{i} = timeStep;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
@@ -96,17 +74,17 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    if diff == 0
+    if diff == 1
         x = [0.8;0.8;0.5;0.5];
         y = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 1
+    elseif diff == 2
         x = [0.8;0.8;0.4946;0.4946];
         y = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    else
+    elseif diff == 3
         x = [0.8;0.8;0.4892;0.4892];
         y = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);

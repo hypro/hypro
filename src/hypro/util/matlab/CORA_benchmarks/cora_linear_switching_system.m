@@ -21,7 +21,6 @@ options.originContained = 0;
 
 %set input:
 for i = 1:5
-%     options.timeStepLoc{i} = 0.001;
     options.timeStepLoc{i} = timeStep;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
@@ -75,17 +74,17 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    if diff == 0
+    if diff == 1
         y = [2;2;1.5;1.5];
         x = [4;-2;-2;4];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 1
+    elseif diff == 2
         y = [2;2;1.4942;1.4942];
         x = [4;-2;-2;4];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    else
+    elseif diff == 3
         y = [2;2;1.4884;1.4884];
         x = [4;-2;-2;4];
         pgon = polyshape([x,y], 'Simplify', false);

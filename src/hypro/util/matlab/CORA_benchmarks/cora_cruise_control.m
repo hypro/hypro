@@ -78,17 +78,17 @@ if show
     options.plotType = 'b';
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     plot(HA,'reachableSet',options); %plot reachable set
-    if diff == 0
+    if diff == 1
         x = [20;-10;-10;20];
         y = [-2;-2;-20;-20];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 1
+    elseif diff == 2
         x = [20;-10;-10;20];
         y = [-2;-2;-20;-20];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    else
+    elseif diff == 3
         x = [20;-10;-10;20];
         y = [-2;-2;-20;-20];
         pgon = polyshape([x,y], 'Simplify', false);

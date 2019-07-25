@@ -14,27 +14,6 @@ options.tFinal=20; % final time
 options.intermediateOrder = 2;
 options.originContained = 0;
 
-% if diff == 3
-%     %hard:
-%     options.taylorTerms = 2;
-%     options.zonotopeOrder = 5;
-%     options.polytopeOrder = 1;
-% elseif diff == 2
-%     %medium:
-%     options.taylorTerms = 1;
-%     options.zonotopeOrder = 5;
-%     options.polytopeOrder = 1;
-% elseif diff == 1
-%     % easy
-%     options.taylorTerms = 1;
-%     options.zonotopeOrder = 5;
-%     options.polytopeOrder = 1;
-% else
-%     options.taylorTerms = 1;
-%     options.zonotopeOrder = 1;
-%     options.polytopeOrder = 1;
-% end
-
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
 options.polytopeOrder = pOrder;
@@ -50,7 +29,6 @@ options.errorOrder = 2;
 HA = rendezvousSX4np_ha(); % automatically converted from SpaceEx
 
 for i = 1:5
-    %options.timeStepLoc{i} = 0.01;
     options.timeStepLoc{i} = timeStep;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
@@ -99,7 +77,7 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    if diff == 0
+    if diff == 1
         y = [12;12;10;10];
         x = [20;-5;-5;20];
         pgon = polyshape([x,y], 'Simplify', false);
@@ -108,7 +86,7 @@ if show
         y = [12;-2;-2;12];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 1
+    elseif diff == 2
         y = [12;12;9.72075;9.72075];
         x = [20;-5;-5;20];
         pgon = polyshape([x,y], 'Simplify', false);
@@ -117,7 +95,7 @@ if show
         y = [12;-2;-2;12];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    else
+    elseif diff == 3
         y = [12;12;9.4415;9.4415];
         x = [20;-5;-5;20];
         pgon = polyshape([x,y], 'Simplify', false);

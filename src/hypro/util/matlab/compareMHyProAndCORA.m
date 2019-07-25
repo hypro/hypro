@@ -4,32 +4,62 @@ saveFig = 1;
 savePath = '/home/marta/Desktop';
 
 
-mhStrategies{1} = [20,45,4];
-mhStrategies{2} = [2,2,2]; % TODO
-mhStrategies{3} = [2,20,67];
-mhStrategies{4} = [58,23,23];
-mhStrategies{5} = [11,66,23];
-mhStrategies{6} = [4,4,71];
-mhStrategies{7} = [11,66,59];
-mhStrategies{8} = [1,1,1];%TODO
-mhStrategies{9} = [1,1,1];%TODO
-mhStrategies{10} = [28,68,68];
 
-coraStrategies{1} = [5,13,10];
-coraStrategies{2} = [1,1,1]; %TODO
-coraStrategies{3} = [9,17,1]; %TODO
-coraStrategies{4} = [8,17,14];
-coraStrategies{5} = [1,1,1]; %TODO
-coraStrategies{6} = [4,4,4];
-coraStrategies{7} = [18,18,17];
-coraStrategies{8} = [1,1,1]; %TODO
-coraStrategies{9} = [1,1,1]; %TODO
-coraStrategies{10} = [10,10,22];
+if diff > 0
+    mhStrategies{1} = [20,45,4];
+    mhStrategies{2} = [2,2,2]; % TODO
+    mhStrategies{3} = [2,20,67];
+    mhStrategies{4} = [58,23,23];
+    mhStrategies{5} = [11,66,23];
+    mhStrategies{6} = [4,4,71];
+    mhStrategies{7} = [11,66,59];
+    mhStrategies{8} = [1,1,1];%TODO
+    mhStrategies{9} = [1,1,1];%TODO
+    mhStrategies{10} = [28,68,68];
+
+    coraStrategies{1} = [5,13,10];
+    coraStrategies{2} = [1,1,1]; %TODO
+    coraStrategies{3} = [9,17,1]; %TODO
+    coraStrategies{4} = [8,17,14];
+    coraStrategies{5} = [1,1,1]; %TODO
+    coraStrategies{6} = [4,4,4];
+    coraStrategies{7} = [18,18,17];
+    coraStrategies{8} = [1,1,1]; %TODO
+    coraStrategies{9} = [1,1,1]; %TODO
+    coraStrategies{10} = [10,10,22];
+    mhStrategyNr = mhStrategies{benchmark}(diff);
+    cStrategyNr = coraStrategies{benchmark}(diff);
+else
+    % Standard strategies
+    mhStrategies{1} = 1;
+    mhStrategies{2} = 2;
+    mhStrategies{3} = 3;
+    mhStrategies{4} = 3;
+    mhStrategies{5} = 3;
+    mhStrategies{6} = 4;
+    mhStrategies{7} = 1;
+    mhStrategies{8} = 1;
+    mhStrategies{9} = 1;
+    mhStrategies{10} = 5;
+
+    coraStrategies{1} = 29;
+    coraStrategies{2} = 1; 
+    coraStrategies{3} = 9; 
+    coraStrategies{4} = 9;
+    coraStrategies{5} = 9; 
+    coraStrategies{6} = 28;
+    coraStrategies{7} = 2;
+    coraStrategies{8} = 2;
+    coraStrategies{9} = 2; 
+    coraStrategies{10} = 17;
+    
+    mhStrategyNr = mhStrategies{benchmark};
+    cStrategyNr = coraStrategies{benchmark};
+end
 
 
 
-mhStrategyNr = mhStrategies{benchmark}(diff);
-cStrategyNr = coraStrategies{benchmark}(diff);
+
 
 
 
