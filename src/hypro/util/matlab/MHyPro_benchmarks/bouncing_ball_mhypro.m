@@ -131,21 +131,23 @@ if plotting == 1
     labs = ["v", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
-    if diff == 0
-        x = [15;15;10.7;10.7];
-        y = [15;-2;-2;15];
-        pgon = polyshape([x,y], 'Simplify', false);
-        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 1
-        x = [15;15;10.6569;10.6569];
-        y = [15;-2;-2;15];
-        pgon = polyshape([x,y], 'Simplify', false);
-        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    else
-        x = [15;15;10.6138;10.6138];
-        y = [15;-2;-2;15];
-        pgon = polyshape([x,y], 'Simplify', false);
-        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    if bad
+        if diff == 0
+            x = [15;15;10.7;10.7];
+            y = [15;-2;-2;15];
+            pgon = polyshape([x,y], 'Simplify', false);
+            plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+        elseif diff == 1
+            x = [15;15;10.6569;10.6569];
+            y = [15;-2;-2;15];
+            pgon = polyshape([x,y], 'Simplify', false);
+            plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+        else
+            x = [15;15;10.6138;10.6138];
+            y = [15;-2;-2;15];
+            pgon = polyshape([x,y], 'Simplify', false);
+            plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+        end
     end
 elseif plotting == 2
     dim = [2 1 3];
