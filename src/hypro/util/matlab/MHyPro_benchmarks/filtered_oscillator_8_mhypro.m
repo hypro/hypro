@@ -289,8 +289,8 @@ time = reachabilityTime + verificationTime;
 % disp(['Overall time needed: ', num2str(time)]);
 
 if plotting == 1
-    dim = [1 6];
-    labs = ["x", "f8x1"];
+    dim = [6 2];
+    labs = ["f8_x1", "y"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if diff == 0
