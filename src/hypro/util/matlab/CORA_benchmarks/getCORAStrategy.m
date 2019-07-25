@@ -146,5 +146,50 @@ function [timeStep, tTerms, zOrder, pOrder] = getCORAStrategy(nr)
         tTerms = 100;
         zOrder = 200;
         pOrder = 100;
+    elseif nr == 29
+        timeStep = 0.01;
+        tTerms = 10;
+        zOrder = 20;
+        pOrder = 10;
+    elseif nr == 30
+        timeStep = 0.00005;
+        tTerms = 10;
+        zOrder = 20;
+        pOrder = 10;
+    elseif nr == 31
+        timeStep = 0.02;
+        tTerms = 10;
+        zOrder = 20;
+        pOrder = 10;
+    elseif nr == 32
+        timeStep = 10;
+        tTerms = 10;
+        zOrder = 20;
+        pOrder = 10;
+    elseif nr == 33
+        timeStep = 0.1;
+        tTerms = 200;
+        zOrder = 300;
+        pOrder = 200;
+    elseif nr ==  34
+        timeStep = 0.1;
+        tTerms = 200;
+        zOrder = 200;
+        pOrder = 200;
+    elseif nr == 35
+        timeStep = 1;
+        tTerms = 100;
+        zOrder = 200;
+        pOrder = 100;
+    elseif nr == 36
+        timeStep = 1;
+        tTerms = 300;
+        zOrder = 400;
+        pOrder = 300;
+    elseif nr == 37
+        timeStep = 0.01;
+        tTerms = 400;
+        zOrder = 200;
+        pOrder = 400;
     end
 end
