@@ -43,7 +43,7 @@ else
     mhStrategies{10} = 5;
 
     coraStrategies{1} = 29;
-    coraStrategies{2} = 1; 
+    coraStrategies{2} = 6; 
     coraStrategies{3} = 9; 
     coraStrategies{4} = 9;
     coraStrategies{5} = 9; 
