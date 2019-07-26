@@ -26,10 +26,10 @@ for i = 1:3
 end
 
 % First location
-options.startLoc = 3; %initial location
+options.startLoc = 2; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 12;
+options.tFinal = 20;
 
     tic;
     [HA] = reach(HA,options);

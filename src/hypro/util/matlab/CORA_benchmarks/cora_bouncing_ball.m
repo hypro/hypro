@@ -19,7 +19,7 @@ options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
 options.polytopeOrder = pOrder;
 
-options.errorOrder=2;
+options.errorOrder=1e-12;
 options.maxProjectionError=0.1;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;

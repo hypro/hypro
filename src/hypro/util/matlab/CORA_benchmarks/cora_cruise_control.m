@@ -1,13 +1,13 @@
 function log = cora_cruise_control(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
 % Load model
-HA = cruise_control_ha();
+HA = cora_cruise_control_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
 
 % options
 % v = [15, 40] x = [0, 0]  t =[0, 2.5]
-Zcenter = interval([15;0;0],[40;0.000001;2.5]);
+Zcenter = interval([15;0;0],[40;0.00001;2.5]);
 options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 % options.x0 = center(options.R0); %initial state for simulation
 
@@ -32,10 +32,9 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 10;
+options.tFinal = 100;
 
 % Reachability ------------------------------------------------------------
-
     tic;
     [HA] = reach(HA,options);
     reachabilityT = toc;

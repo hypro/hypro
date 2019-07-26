@@ -3,8 +3,6 @@ function compareMHyProAndCORA(benchmark, timeHorizon, diff)
 saveFig = 1;
 savePath = '/home/marta/Desktop';
 
-
-
 if diff > 0
     mhStrategies{1} = [20,45,4];
     mhStrategies{2} = [2,2,2]; % TODO
@@ -31,7 +29,7 @@ if diff > 0
     cStrategyNr = coraStrategies{benchmark}(diff);
 else
     % Standard strategies
-    mhStrategies{1} = 1;
+    mhStrategies{1} = 1; 
     mhStrategies{2} = 2;
     mhStrategies{3} = 3;
     mhStrategies{4} = 3;
@@ -40,10 +38,10 @@ else
     mhStrategies{7} = 1;
     mhStrategies{8} = 1;
     mhStrategies{9} = 1;
-    mhStrategies{10} = 5;
+    mhStrategies{10} = 4;
 
-    coraStrategies{1} = 29;
-    coraStrategies{2} = 6; 
+    coraStrategies{1} = 2;
+    coraStrategies{2} = 1; 
     coraStrategies{3} = 9; 
     coraStrategies{4} = 9;
     coraStrategies{5} = 9; 
@@ -56,12 +54,6 @@ else
     mhStrategyNr = mhStrategies{benchmark};
     cStrategyNr = coraStrategies{benchmark};
 end
-
-
-
-
-
-
 
 [settings, setRepr, aggr] = getStrategy(mhStrategyNr);
 mhStrat.timeStep = settings{1}.timeStep;

@@ -30,11 +30,28 @@ loc.setName('loc');
 flowMatrix = [0 1 0 0; 0 0 0 -9.81;0 0 0 1; 0 0 0 0];
 loc.setFlow(flowMatrix);
 
-% Set invariant x >= 0
-inv = MHyProCondition([-1 0 0], 0);
+% Set invariant x >= 0 & t <= 4
+inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
 loc.setInvariant(inv);
 
+%-----------------------------------------------%
+%                 loc sink
+%-----------------------------------------------%
+
+loc_sink = MHyProLocation();
+loc_sink.setName('loc');
+
+% Set flow:
+% x' = 0 v' = 0 t' = 0
+flowMatrix = zeros(4);
+loc_sink.setFlow(flowMatrix);
+
+% % Set invariant x >= 0 & t <= 4
+% inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
+% loc.setInvariant(inv);
+
 l = automaton.addLocation(loc);
+s = automaton.addLocation(loc_sink);
 
 %-----------------------------------------------%
 %                loc -> loc
@@ -61,17 +78,42 @@ tran.setLabels({MHyProLabel('t1')});
 
 l.addTransition(tran);
 
+%-----------------------------------------------%
+%                loc -> loc_sink
+%-----------------------------------------------%
+tran = MHyProTransition();
+% Set guard:
+% t == 4
+guard = MHyProCondition();
+guard.setMatrix([ 0 0 -1; 0 0 1]); % First set the matrix then the vector!?
+guard.setVector([-4;4]);
+
+% Set reset
+reset = MHyProReset();
+reset.setMatrix(eye(3));
+reset.setVector([0;0;0]);
+
+tran.setAggregation(0);
+tran.setGuard(guard);
+tran.setSource(l);
+tran.setTarget(l);
+tran.setReset(reset);
+tran.setLabels({MHyProLabel('t1')});
+
+s.addTransition(tran);
+
 
 %-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
 
 % Create initial set
-% x = [10, 10.2] v = 0
+% x = [10, 10.2] v = 0 t = 0 
 boxVector = [-10; 10.2; 0; 0; 0; 0];
 boxMatrix = [-1 0 0; 1 0 0; 0 1 0; 0 -1 0; 0 0 -1; 0 0 1];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(l, initialCond);
+
 
 %-----------------------------------------------%
 %                 Reachability
@@ -110,7 +152,7 @@ options.x0 = center(options.R0); %initial state for simulation
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = timeHorizon;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;

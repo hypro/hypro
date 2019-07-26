@@ -92,6 +92,9 @@ if show
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end
+    % Display invariant
+    %fplot(@(x) -0.714286*x, [0 0.8],'g');
+    
     xlabel('x1');
     ylabel('y');
 

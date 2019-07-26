@@ -1,4 +1,4 @@
-function compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath)
+function compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
 
 
 % MHyPro
@@ -19,10 +19,10 @@ pO = cStrat.pO;
 % Create Automaton
 automaton = MHyProHAutomaton();
 dummy_reset = MHyProReset();
-dummy_reset.setMatrix(eye(5));
-dummy_reset.setVector([0; 0; 0; 0; 0]);
+dummy_reset.setMatrix(eye(6));
+dummy_reset.setVector([0; 0; 0; 0; 0; 0]);
 
-% Variables: [x; y; vx; vy; t]
+% Variables: [x; y; vx; vy; t; gc]
 
 %-----------------------------------------------%
 %              Location p2
@@ -36,18 +36,21 @@ loc_p2.setName('p2');
 % vx'==-0.057599765881773*x+0.000200959896519766*y-2.89995083970656*vx+0.00877200894463775*vy &
 % vy'==-0.000174031357370456*x-0.0665123984901026*y-0.00875351105536225*vx-2.90300269286856*vy
 % t'==1 
+% gc' == 1
 
-flow_p2 = [0,0,1,0,0,0;...
-           0,0,0,1,0,0;...
-           -0.05759976588,0.0002009598965,-2.89995084,0.008772008945,0,0;...
-           -0.0001740313574,-0.06651239849,-0.008753511055,-2.903002693,0,0;...
-           0,0,0,0,0,1];
+flow_p2 = [0,0,1,0,0,0,0;...
+           0,0,0,1,0,0,0;...
+           -0.05759976588,0.0002009598965,-2.89995084,0.008772008945,0,0,0;...
+           -0.0001740313574,-0.06651239849,-0.008753511055,-2.903002693,0,0,0;...
+           0,0,0,0,0,0,1;...
+           0,0,0,0,0,0,1;...
+           0,0,0,0,0,0,0];
 
 loc_p2.setFlow(flow_p2);
 
-% Set invariant: x <= -100
+% Set invariant: x <= -100 & gc <= timeHorizon
 
-inv_p2 = MHyProCondition([1 0 0 0 0], -100);
+inv_p2 = MHyProCondition([1 0 0 0 0 0; 0 0 0 0 0 1], [-100;timeHorizon]);
 loc_p2.setInvariant(inv_p2);
 
 %-----------------------------------------------%
@@ -62,33 +65,45 @@ loc_p3.setName('p3');
 % vx'==-0.575999943070835*x+0.000262486079431672*y-19.2299795908647*vx+0.00876275931760007*vy &
 % vy'==-0.000262486080737868*x-0.575999940191886*y-0.00876276068239993*vx-19.2299765959399*vy
 % t' ==1
+% gc'==1
 
-flow_p3 = [0,0,1,0,0,0;...
-           0,0,0,1,0,0;...
-          -0.5759999431,0.0002624860794,-19.22997959,0.008762759318,0,0;...
-          -0.0002624860807,-0.5759999402,-0.008762760682,-19.2299766,0,0;...
-          0,0,0,0,0,1];
+flow_p3 = [0,0,1,0,0,0,0;...
+           0,0,0,1,0,0,0;...
+          -0.5759999431,0.0002624860794,-19.22997959,0.008762759318,0,0,0;...
+          -0.0002624860807,-0.5759999402,-0.008762760682,-19.2299766,0,0,0;...
+          0,0,0,0,0,0,1;...
+          0,0,0,0,0,0,1;...
+          0,0,0,0,0,0,0];
       
 loc_p3.setFlow(flow_p3);
 
 % Set invariant: y>=-100 & x+y>=-141.1 & x>=-100 & y-x<=141.1 & y<=100 &
-%     x+y<=141.1 & x<=100 & y-x>=-141.1
-invMatrix = [0,-1,0,0,0;...
-            -1,-1,0,0,0;...
-            -1,0,0,0,0;...
-            -1,1,0,0,0;...
-            0,1,0,0,0;...
-            1,1,0,0,0;...
-            1,0,0,0,0;...
-            1,-1,0,0,0];
-invVec = [100;141.1;100;141.1;100;141.1;100;141.1];
+%     x+y<=141.1 & x<=100 & y-x>=-141.1 & gc <= timeHorizon
+invMatrix = [0,-1,0,0,0,0;...
+            -1,-1,0,0,0,0;...
+            -1,0,0,0,0,0;...
+            -1,1,0,0,0,0;...
+            0,1,0,0,0,0;...
+            1,1,0,0,0,0;...
+            1,0,0,0,0,0;...
+            1,-1,0,0,0,0;...
+            0,0,0,0,0,1];
+invVec = [100;141.1;100;141.1;100;141.1;100;141.1;timeHorizon];
 
 inv_p3 = MHyProCondition(invMatrix, invVec);
 loc_p3.setInvariant(inv_p3);
 
+%-----------------------------------------------%
+%              Location sink
+%-----------------------------------------------%
+
+sink = MHyProLocation();
+sink.setName('sink');
+sink.setFlow(zeros(6));
 
 p2 = automaton.addLocation(loc_p2);
 p3 = automaton.addLocation(loc_p3);
+s = automaton.addLocation(sink);
 
 %-----------------------------------------------%
 %              p2 -> p3
@@ -97,16 +112,16 @@ p3 = automaton.addLocation(loc_p3);
 tran = MHyProTransition();
 % Set guard: y>=-100 & x+y >=-141.1 & x>=-100 & y-x<=141.1 & y<=100 &
 %            x+y<=141.1 & x<=100 & y-x>=-141.1
-guardMatrix = [0,-1,0,0,0;-1,-1,0,0,0;-1,0,0,0,0;-1,1,0,0,0;0,1,0,0,0;1,1,0,0,0;1,0,0,...
-0,0;1,-1,0,0,0];
+guardMatrix = [0,-1,0,0,0,0;-1,-1,0,0,0,0;-1,0,0,0,0,0;-1,1,0,0,0,0;0,1,0,0,0,0;1,1,0,0,0,0;1,0,0,...
+0,0,0;1,-1,0,0,0,0];
 guardVector = [100;141.1;100;141.1;100;141.1;100;141.1];
 guard = MHyProCondition();
 guard.setMatrix(guardMatrix); % First set the matrix then the vector!?
 guard.setVector(guardVector);
 
 dummy_reset = MHyProReset();
-dummy_reset.setMatrix(eye(5));
-dummy_reset.setVector([0; 0; 0;0;0]);
+dummy_reset.setMatrix(eye(6));
+dummy_reset.setVector([0;0;0;0;0;0]);
 
 tran.setAggregation(aggr);
 tran.setGuard(guard);
@@ -118,12 +133,45 @@ tran.setLabels({MHyProLabel('tran')});
 p2.addTransition(tran);
 
 %-----------------------------------------------%
+%              p2 -> sink
+%-----------------------------------------------%
+
+guardMatrix = [0 0 0 0 0 0 -1;0 0 0 0 0 0 1];
+sink_guard = MHyProCondition();
+sink_guard.setMatrix(guardMatrix);
+sink_guard.setVector([-timeHorizon;timeHorizon]);
+
+tran1s = MHyProTransition();
+tran1s.setAggregation(aggr);
+tran1s.setGuard(sink_guard);
+tran1s.setSource(p2);
+tran1s.setTarget(s);
+tran1s.setReset(dummy_reset);
+tran1s.setLabels({MHyProLabel('tran1s')});
+
+p2.addTransition(tran1s);
+
+%-----------------------------------------------%
+%              p3 -> sink
+%-----------------------------------------------%
+
+tran2s = MHyProTransition();
+tran2s.setAggregation(aggr);
+tran2s.setGuard(sink_guard);
+tran2s.setSource(p3);
+tran2s.setTarget(s);
+tran2s.setReset(dummy_reset);
+tran2s.setLabels({MHyProLabel('tran2s')});
+
+p3.addTransition(tran2s);
+
+%-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
 
-% x = [-925; -875] y = [-425; -375] vx,vy,t = 0
-boxVector = [-875; -375; 0; 0 ;0; 925; 425; 0; 0; 0];
-boxMatrix = [eye(5);-1*eye(5)];
+% x = [-925; -875] y = [-425; -375] vx,vy,t,gc = 0
+boxVector = [-875; -375; 0; 0 ;0;0; 925; 425; 0; 0; 0;0];
+boxMatrix = [eye(6);-1*eye(6)];
 initialCond = MHyProCondition(boxMatrix, boxVector);
 automaton.addInitialState(p2, initialCond);
 
@@ -191,7 +239,34 @@ options.projectedDimensions = [3 4];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-
+if diff == 1
+    y = [12;12;10;10];
+    x = [20;-5;-5;20];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    x = [20;20;18;18];
+    y = [12;-2;-2;12];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+elseif diff == 2
+    y = [12;12;9.72075;9.72075];
+    x = [20;-5;-5;20];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    x = [20;20;17.93395;17.93395];
+    y = [12;-2;-2;12];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+elseif diff == 3
+    y = [12;12;9.4415;9.4415];
+    x = [20;-5;-5;20];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    x = [20;20;17.8679;17.8679];
+    y = [12;-2;-2;12];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+end
 if saveFig
     saveas(fig, fullfile(savePath,fname),'png');
 end
