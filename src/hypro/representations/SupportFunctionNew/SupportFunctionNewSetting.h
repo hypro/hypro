@@ -13,6 +13,10 @@ namespace hypro {
 		//Whether after a jump, the new segment should be overapproximated by a box (if not active, it will be overapproximated by an octagon)
 		//Overapproximating by a box greatly reduces runtime, but also loses precision, overapproximating by an hpoly is more precise, but slower.
 		static constexpr bool APPROXIMATE_AS_BOX = true;
+		//If activated, every SupportFunctionNew, that is constructed through the generic-leaf-/matrix-vector-ctor (so only the leaves) is checked upon creation 
+		//whether it represents a box and converts it to one if this is the case. 
+		//Greatly reduces runtime if this is the case.
+		static constexpr bool DETECT_BOX = true;	
 		//Whether the intersection between support functions and halfspaces should be computed after Le Guernic's method.
 		//Reduces runtime for high dimensional problems wtih halfspace guards, else increases it.
 		//Theoretically it introduces loss of precision, but practically there is no visible difference.
@@ -24,6 +28,7 @@ namespace hypro {
 		static constexpr bool LIN_TRANS_REDUCTION = true;
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 		static constexpr bool APPROXIMATE_AS_BOX = false;
+		static constexpr bool DETECT_BOX = false;
 		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = false;
 	};
 
@@ -32,6 +37,7 @@ namespace hypro {
 		static constexpr bool LIN_TRANS_REDUCTION = false;
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 1;
 		static constexpr bool APPROXIMATE_AS_BOX = false;
+		static constexpr bool DETECT_BOX = false;
 		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = false;
 	};
 
@@ -40,6 +46,7 @@ namespace hypro {
 		static constexpr bool LIN_TRANS_REDUCTION = true;
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 		static constexpr bool APPROXIMATE_AS_BOX = true;
+		static constexpr bool DETECT_BOX = true;
 		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = true;
 	};
 }

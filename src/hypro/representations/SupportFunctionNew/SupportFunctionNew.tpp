@@ -94,7 +94,7 @@ namespace hypro {
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
 		} else {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(tmp.matrix(),tmp.vector());
-			if(boost::get<0>(areArgsBox)){
+			if(boost::get<0>(areArgsBox) && Setting::DETECT_BOX){
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 			} else {
 				using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
@@ -111,7 +111,7 @@ namespace hypro {
 		//std::cout << "SFN mat-vec-constr: mat: \n" << mat << " and vec: \n" << vec << std::endl;
 		INFO("hypro.representations","SFN mat-vec-constr: mat: \n" << mat << " and vec: \n" << vec);
 		boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(mat,vec);
-		if(boost::get<0>(areArgsBox)){
+		if(boost::get<0>(areArgsBox) && Setting::DETECT_BOX){
 			//std::cout << "SFN mat-vec-constr: constraints were box!" << std::endl;
 			INFO("hypro.representations","SFN mat-vec-constr: constraints were box!")
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));

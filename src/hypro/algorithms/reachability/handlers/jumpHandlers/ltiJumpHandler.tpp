@@ -283,20 +283,22 @@ namespace hypro {
 						//Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope (or possibly a box)
 						//and set it as the leaf of a new tree
 						auto tmpSFN = boost::apply_visitor(genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet(i));
-						std::cout << "ltiJumpHandler::applyJump, type of tmpSFN: " << typeid(tmpSFN).name() << std::endl;
-						tmpSFN.reduceRepresentation();
-						auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
-						if(boost::get<0>(isHPolyBox) && tmpSFN.getSettings().APPROXIMATE_AS_BOX){
-							Box<Number> tmpBox(boost::get<1>(isHPolyBox));
-							tmpSFN = SupportFunctionNew<Number>(tmpBox);
-							std::cout << "ltiJumpHandler::applyJump, type of tmpSFN as box: " << typeid(tmpSFN).name() << std::endl;
-						} else {
-							HPolytopeT<Number,hypro::Converter<Number>,HPolytopeOptimizerCaching> tmpHPoly(tmpSFN.matrix(), tmpSFN.vector());
-							tmpSFN = SupportFunctionNew<Number>(tmpHPoly);
-							std::cout << "ltiJumpHandler::applyJump, type of tmpSFN as hpoly: " << typeid(tmpSFN).name() << std::endl;
+						std::cout << "ltiJumpHandler::applyJump, type of tmpSFN: " << typeid(tmpSFN).name() << std::endl;	
+						if(tmpSFN.getSettings().DETECT_BOX){
+							tmpSFN.reduceRepresentation();
+							auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
+							if(boost::get<0>(isHPolyBox) && tmpSFN.getSettings().APPROXIMATE_AS_BOX){
+								Box<Number> tmpBox(boost::get<1>(isHPolyBox));
+								tmpSFN = SupportFunctionNew<Number>(tmpBox);
+								std::cout << "ltiJumpHandler::applyJump, type of tmpSFN as box: " << typeid(tmpSFN).name() << std::endl;
+							} else {
+								HPolytopeT<Number,hypro::Converter<Number>,HPolytopeOptimizerCaching> tmpHPoly(tmpSFN.matrix(), tmpSFN.vector());
+								tmpSFN = SupportFunctionNew<Number>(tmpHPoly);
+								std::cout << "ltiJumpHandler::applyJump, type of tmpSFN as hpoly: " << typeid(tmpSFN).name() << std::endl;
+							}
+							newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(tmpSFN), newState.getSet(i)),i);
+							std::cout << "ltiJumpHandler::applyJump, type of tmpSFN after internal conversion: " << typeid(newState.getSet(i)).name() << std::endl;	
 						}
-						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(tmpSFN), newState.getSet(i)),i);
-						std::cout << "ltiJumpHandler::applyJump, type of tmpSFN after internal conversion: " << typeid(newState.getSet(i)).name() << std::endl;
 					}
 					if(newState.getSetType(i) == representation_name::support_function) {
 						newState.partiallyReduceRepresentation(i);
