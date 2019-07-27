@@ -45,8 +45,6 @@ options.tFinal = 4;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
         
-        maxValue = findSafetyProperties([0 1 0 0 0 0], Rset);
-        
         if diff == 1
             %easy: y <= 0.5
             spec = [0 1 0 0 0 0 0.5];
@@ -63,7 +61,7 @@ options.tFinal = 4;
     end
 log = ['filtered_oscillator_16 ', num2str(diff), ' ',...
 num2str(reachabilityT), ' ',  num2str(verificationT), ' ',...
-num2str(time), ' ' num2str(safe), ' ' num2str(strategy),' ' num2str(maxValue)];
+num2str(time), ' ' num2str(safe), ' ' num2str(strategy)];
     
 % Visualization -------------------------------------------------------
 if show    

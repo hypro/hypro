@@ -12,6 +12,48 @@ timeStepC = cStrat.timeStep;
 tT = cStrat.tT;
 zO = cStrat.zO;
 pO = cStrat.pO;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+HA = rod_reactor_HA();
+options.enclosureEnables = [3 5];
+options.guardIntersect = 'polytope';
+
+% options
+Zcenter = interval([510;20;20],[520;20;20]);
+options.R0 = zonotope(Zcenter); %initial state for reachability analysis
+options.x0 = center(options.R0); %initial state for simulation
+
+
+options.taylorTerms = tT;
+options.zonotopeOrder = zO;
+options.polytopeOrder = pO;
+options.errorOrder=0;
+options.reductionTechnique = 'girard';
+options.isHyperplaneMap = 0;
+options.originContained = 0;
+
+%set input:
+for i = 1:3
+    options.timeStepLoc{i} = timeStepC;
+    options.uLoc{i} = 0;
+    options.uLocTrans{i} = options.uLoc{i};
+    options.Uloc{i} = zonotope(options.uLoc{i});
+end
+
+% First location
+options.startLoc = 2; %initial location
+options.finalLoc = 0; %0: no final location
+options.tStart = 0; %start time
+options.tFinal = timeHorizon;
+
+[HA] = reach(HA,options);
+
+options.projectedDimensions = [1 3];
+fig = figure();
+hold on
+options.plotType = 'b';
+plot(HA,'reachableSet',options); %plot reachable set
+plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -209,51 +251,6 @@ tran3s.setLabels({MHyProLabel('tran3s')});
 noRod.addTransition(tran3s);
 
 %-----------------------------------------------%
-%                 Bad States
-%-----------------------------------------------%
-
-if bad
-    if diff == 0
-%         %easy
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0 0; 0 0 1 0]);
-        badState.setVector([35;35]);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
-%           spec = [0 -1 0 -35; 0 0 -1 -35];
-    elseif diff == 1
-        %medium
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0 0; 0 0 1 0]);
-        badState.setVector([34.93;34.93]);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
-%         spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
-    else
-        %hard
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0 0; 0 0 1 0]);
-        badState.setVector([34.861;34.861]);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
-%         spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
-    end
-    automaton.setLocalBadStates(badStates);
-end
-
-%-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
 
@@ -278,52 +275,12 @@ reacher.setRepresentationType(setRepr);
 
 flowpipes = reacher.computeForwardReachability();
 
-fig = figure();
+% fig = figure();
 dim = [1 3];
 labs = ["x", "c2"];
 reacher.plotComparison(flowpipes, dim, labs);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-HA = rod_reactor_HA();
-options.enclosureEnables = [3 5];
-options.guardIntersect = 'polytope';
-
-% options
-Zcenter = interval([510;20;20],[520;20;20]);
-options.R0 = zonotope(Zcenter); %initial state for reachability analysis
-options.x0 = center(options.R0); %initial state for simulation
-
-
-options.taylorTerms = tT;
-options.zonotopeOrder = zO;
-options.polytopeOrder = pO;
-options.errorOrder=0;
-options.reductionTechnique = 'girard';
-options.isHyperplaneMap = 0;
-options.originContained = 0;
-
-%set input:
-for i = 1:3
-    options.timeStepLoc{i} = timeStepC;
-    options.uLoc{i} = 0;
-    options.uLocTrans{i} = options.uLoc{i};
-    options.Uloc{i} = zonotope(options.uLoc{i});
-end
-
-% First location
-options.startLoc = 2; %initial location
-options.finalLoc = 0; %0: no final location
-options.tStart = 0; %start time
-options.tFinal = timeHorizon;
-
-[HA] = reach(HA,options);
-
-options.projectedDimensions = [1 3];
-
-options.plotType = 'b';
-plot(HA,'reachableSet',options); %plot reachable set
-plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 if diff == 1
     y = [60;60;35;35];
     x = [560;500;500;560];
@@ -340,6 +297,10 @@ elseif diff == 3
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 end
+
+x=[550,550];
+y=[20,40];
+plot(x,y,'m')
 
 if saveFig
     saveas(fig, fullfile(savePath,fname),'png');

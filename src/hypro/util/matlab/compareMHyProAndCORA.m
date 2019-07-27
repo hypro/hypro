@@ -1,6 +1,6 @@
 function compareMHyProAndCORA(benchmark, timeHorizon, diff)
 
-saveFig = 1;
+saveFig = 0;
 savePath = '/home/marta/Desktop';
 
 if diff > 0

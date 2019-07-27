@@ -10,7 +10,7 @@ function HA = two_tanks_ha(~)
 %       x2' == x1 + [-0.01,0.01]
 
 dynA = [-1 0; 1 0];
-dynB = zeros(2,1);
+dynB = zeros(2);
 dync = [-2;0];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -45,7 +45,7 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   x2 == 1
-guardA = [-1 0;1 0];
+guardA = [0 -1;0 1];
 guardb = [-1;1];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
@@ -63,7 +63,7 @@ loc{1} = location('S1',1, inv, trans, dynamics);
 %    x2' == x1 + [-0.01,0.01]
 
 dynA = [-1 0; 1 0];
-dynB = zeros(2,1);
+dynB = zeros(2);
 dync = [3;0];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -101,7 +101,7 @@ loc{2} = location('S2',2, inv, trans, dynamics);
 %   x2' == x1 - x2 - 5 + [-0.01,0.01]
 
 dynA = [-1 0; 1 -1];
-dynB = zeros(2,1);
+dynB = zeros(2);
 dync = [-2;-5];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -147,7 +147,7 @@ loc{3} = location('S3',3, inv, trans, dynamics);
 %   x2' == x1 - x2 - 5 + [-0.01,0.01]
 
 dynA =[-1 0; 1 -1];
-dynB = zeros(2,1);
+dynB = zeros(2);
 dync = [3;-5];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
@@ -167,7 +167,7 @@ reset = struct('A', resetA, 'b', resetb);
 
 %% equation:
 %   x1 == 1
-guardA = [-1,0;1 0];
+guardA = [-1 0;1 0];
 guardb = [-1;1];
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);

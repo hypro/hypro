@@ -142,7 +142,7 @@ sink_guard.setMatrix(guardMatrix);
 sink_guard.setVector([-timeHorizon;timeHorizon]);
 
 tran1s = MHyProTransition();
-tran1s.setAggregation(aggr);
+tran1s.setAggregation(0);
 tran1s.setGuard(sink_guard);
 tran1s.setSource(p2);
 tran1s.setTarget(s);
@@ -156,7 +156,7 @@ p2.addTransition(tran1s);
 %-----------------------------------------------%
 
 tran2s = MHyProTransition();
-tran2s.setAggregation(aggr);
+tran2s.setAggregation(0);
 tran2s.setGuard(sink_guard);
 tran2s.setSource(p3);
 tran2s.setTarget(s);

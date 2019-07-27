@@ -29,7 +29,7 @@ end
 options.startLoc = 2; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 20;
+options.tFinal = 15;
 
     tic;
     [HA] = reach(HA,options);

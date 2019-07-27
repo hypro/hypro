@@ -22,7 +22,7 @@ options.originContained = 0;
 %set input:
 for i = 1:4
     options.timeStepLoc{i} = timeStep;
-    options.uLoc{i} = 0;
+    options.uLoc{i} = interval([-0.01;-0.01],[0.01;0.01]);
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
