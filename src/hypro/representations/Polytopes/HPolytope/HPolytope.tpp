@@ -612,6 +612,15 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 	return opt.evaluate(_direction, true);
 }
 
+template <typename Number, typename Converter, class Setting>
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions ) const {
+	std::vector<EvaluationResult<Number>> res;
+	for(int i = 0; i < _directions.rows(); ++i){
+		res.push_back(evaluate(_directions.row(i)));
+	}
+	return res;
+}
+
 /*
  * General interface
  */

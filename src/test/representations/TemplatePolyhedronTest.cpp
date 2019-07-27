@@ -28,11 +28,11 @@ protected:
 
 		middleVec = 2*vector_t<Number>::Ones(4);
 		upleftVec = vector_t<Number>::Zero(4);
-		upleftVec << -1, 3, -1, 3;
+		upleftVec << -1, 3, 3, -1;
 		uprightVec = vector_t<Number>::Zero(4);
 		uprightVec << 3, -1, 3, -1;
 		downleftVec = vector_t<Number>::Zero(4);
-		downleftVec << -1, 3, 3, -1;
+		downleftVec << -1, 3, -1, 3;
 		downrightVec = vector_t<Number>::Zero(4);
 		downrightVec << 3, -1, -1, 3;
 
@@ -141,14 +141,9 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 TYPED_TEST(TemplatePolyhedronTest, Containment){
 
 	//Point of a different dimension - should fail
-	try {
-		Point<TypeParam> p0 = Point<TypeParam>::Zero(3);
-		this->middle.contains(p0);
-		FAIL();
-	}catch(std::invalid_argument& e){
-		//Is right if it fails, in that case continue
-	}
-	
+	Point<TypeParam> p0 = Point<TypeParam>::Zero(3);
+	EXPECT_THROW(this->middle.contains(p0), std::invalid_argument);
+
 	//Point that lies within middle template poly
 	Point<TypeParam> p1 = Point<TypeParam>::Zero(2);
 	EXPECT_TRUE(this->middle.contains(p1));
@@ -169,13 +164,8 @@ TYPED_TEST(TemplatePolyhedronTest, Containment){
 	//Template Poly in a different dimension - should fail
 	matrix_t<TypeParam> diffDimMat = matrix_t<TypeParam>::Identity(3,3);
 	vector_t<TypeParam> diffDimVec = vector_t<TypeParam>::Ones(3);
-	try {
-		TemplatePolyhedron<TypeParam> t1(diffDimMat, diffDimVec);
-		this->middle.contains(t1);
-		FAIL();
-	} catch(std::invalid_argument& e){
-		//Is right if it fails, in that case continue	
-	}
+	TemplatePolyhedron<TypeParam> t1(diffDimMat, diffDimVec);
+	EXPECT_THROW(this->middle.contains(t1), std::invalid_argument);
 
 	//Template poly that lies fully within middle 
 	vector_t<TypeParam> withinVec = 0.5*vector_t<TypeParam>::Ones(4);
@@ -255,7 +245,7 @@ TYPED_TEST(TemplatePolyhedronTest, Evaluation){
 
 	//One direction evaluation - Empty TPoly
 	EvaluationResult<TypeParam> res1 = this->empty.evaluate(up, true);
-	EXPECT_EQ(res1.errorCode, SOLUTION::INFTY);
+	EXPECT_EQ(res1.errorCode, SOLUTION::INFEAS);
 	EXPECT_EQ(res1.supportValue, 0);
 	EXPECT_EQ(res1.optimumValue, vector_t<TypeParam>::Zero(0));
 
@@ -327,41 +317,42 @@ TYPED_TEST(TemplatePolyhedronTest, RemoveRedundancy){
 
 	//Multiple redundant constraints
 }
-/*
+
 TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 
-	//Define matrix and vector for linear and affine transformation
+	//Define matrix and vector for linear and affine transformation which only scale by 3 and translate by 2 in each coordinate
 	matrix_t<TypeParam> transMat = 3*matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> transVec = 2*vector_t<TypeParam>::Ones(2);
 
 	//Empty TPoly
-	EXPECT_EQ(this->empty, this->empty.linearTransformation(transMat));
-	EXPECT_EQ(this->empty, this->empty.affineTransformation(transMat, transVec));
+	EXPECT_TRUE(this->empty.linearTransformation(transMat).empty());
+	EXPECT_TRUE(this->empty.affineTransformation(transMat, transVec).empty());
 	
 	//Normal TPoly 
 	auto res1 = this->middle.linearTransformation(transMat);
 	EXPECT_EQ(res1.matrix(), this->mat);
 	EXPECT_EQ(res1.vector(), 3*this->middleVec);
+	EXPECT_EQ(res1.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 	auto res2 = this->middle.affineTransformation(transMat,transVec);
-	vector_t<TypeParam> controlVec;
-	controlVec << 7, 5, 7, 5;
+	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
+	controlVec << 8, 4, 8, 4;
 	EXPECT_EQ(res2.matrix(), this->mat);
 	EXPECT_EQ(res2.vector(), controlVec);
+	EXPECT_EQ(res2.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 }
-*/
 
 TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
-
 	auto res1 = this->middle.minkowskiSum(this->upright);
 	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
 	controlVec << 5,1,5,1;
 	auto res1Vertices = res1.vertices();
 	EXPECT_EQ(res1.vector(), controlVec);
-	EXPECT_EQ(res1Vertices.size(), 4);
+	EXPECT_EQ(res1Vertices.size(), std::size_t(4));
 	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(5),TypeParam(5)})) != res1Vertices.end());
 	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(5),TypeParam(-1)})) != res1Vertices.end());
 	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(-1),TypeParam(5)})) != res1Vertices.end());
 	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(-1),TypeParam(-1)})) != res1Vertices.end());
+	EXPECT_EQ(res1.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Intersect){
@@ -373,6 +364,7 @@ TYPED_TEST(TemplatePolyhedronTest, Intersect){
 
 	//Intersect middle and upright - Should result in resMiddleUpright
 	EXPECT_EQ(this->middle.intersect(this->upright), resMiddleUpright);
+	EXPECT_EQ(this->middle.intersect(this->upright).rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 
 	//Intersect upleft and upright - Should be empty
 	EXPECT_TRUE(this->upright.intersect(this->upleft).empty());
@@ -384,7 +376,7 @@ TYPED_TEST(TemplatePolyhedronTest, Intersect){
 	EXPECT_EQ(this->upleft.intersect(this->infeas), this->upleft);
 
 	//Intersect infeas and empty - should result in empty
-	EXPECT_EQ(this->infeas.intersect(this->empty), this->empty);
+	//EXPECT_EQ(this->infeas.intersect(this->empty), this->empty);
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Union){
@@ -396,9 +388,14 @@ TYPED_TEST(TemplatePolyhedronTest, Union){
 
 	//Unite middle and upright - Should result in resMiddleUpright
 	EXPECT_EQ(this->middle.unite(this->upright), resMiddleUpright);
+	EXPECT_EQ(this->middle.unite(this->upright).rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 
-	//Unite upleft and upright - Should be empty
-	EXPECT_TRUE(this->upright.unite(this->upleft).empty());
+	//Unite upleft and upright - Union of two disconnected sets results in the smallest set containing both
+	resVec << 3,3,3,-1;
+	TemplatePolyhedron<TypeParam> resUprightUpLeft(this->mat, resVec);
+	EXPECT_FALSE(this->upright.unite(this->upleft).empty());
+	EXPECT_EQ(this->upright.unite(this->upleft), resUprightUpLeft);
+
 
 	//Unite middle and empty - Should be middle
 	EXPECT_EQ(this->middle.unite(this->empty), this->middle);
@@ -407,7 +404,7 @@ TYPED_TEST(TemplatePolyhedronTest, Union){
 	EXPECT_EQ(this->upleft.unite(this->infeas), this->upleft);
 
 	//Unite infeas and empty - should be empty
-	EXPECT_TRUE(this->infeas.unite(this->empty).empty());
+	//EXPECT_TRUE(this->infeas.unite(this->empty).empty());
 
 	//Unite upright, middle and downleft - should work
 	vector_t<TypeParam> resVec2 = vector_t<TypeParam>::Zero(4);
@@ -416,11 +413,126 @@ TYPED_TEST(TemplatePolyhedronTest, Union){
 	std::vector<TemplatePolyhedron<TypeParam>> uniteWith;
 	uniteWith.push_back(this->middle);
 	uniteWith.push_back(this->downleft);
-	EXPECT_EQ(this->upright.unite(uniteWith), multiUnite);
+	auto tmp = this->upright.unite(uniteWith);
+	EXPECT_EQ(tmp, multiUnite);
+	EXPECT_EQ(tmp.rGetMatrixPtr(), this->upright.rGetMatrixPtr());
 
 	//Unite upright, middle and infeas - should result in resMiddleUpright
 	uniteWith.pop_back();
 	uniteWith.push_back(this->infeas);
 	EXPECT_EQ(this->upright.unite(uniteWith), resMiddleUpright);
+}
 
+TYPED_TEST(TemplatePolyhedronTest, IntersectHalfspaces){
+
+	//Halfspace to test with; initially halfspace lies completely outside and contains middle fully
+	Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(1)},TypeParam(5));
+	EXPECT_EQ(this->middle.intersectHalfspace(hspace), this->middle);
+
+	//Halfspace touches middle, only point (-2,-2) is contained
+	hspace.setOffset(-4);
+	vector_t<TypeParam> controlVec = 2*vector_t<TypeParam>::Ones(4);
+	controlVec(0) = TypeParam(-2);
+	controlVec(2) = TypeParam(-2);
+	TemplatePolyhedron<TypeParam> controlTPoly(this->mat, controlVec);
+	EXPECT_EQ(this->middle.intersectHalfspace(hspace), controlTPoly);
+
+	//Halfspace through the origin - worst case approximation: overapproximates to the original box
+	hspace.setOffset(0);
+	auto tmp = this->middle.intersectHalfspace(hspace);
+	EXPECT_EQ(tmp, this->middle);
+	EXPECT_EQ(tmp.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+
+	//Halfspace shrinking the original 
+	hspace.setOffset(-1);
+	controlVec << 1,2,1,2;
+	TemplatePolyhedron<TypeParam> controlTPoly2(this->mat, controlVec);
+	EXPECT_EQ(this->middle.intersectHalfspace(hspace), controlTPoly2);
+
+	//Multiple halfspaces lying outside
+
+	//Multiple halfspaces overapproximating back to the original
+
+	//Multiple halfspaces shrinking the original
+	matrix_t<TypeParam> hspaceNormals = matrix_t<TypeParam>::Zero(3,2);
+	hspaceNormals << 1,0,
+					 0,1,
+					 1,1;
+	vector_t<TypeParam> hspaceOffsets = vector_t<TypeParam>::Ones(3);
+	controlVec << 1,2,1,2;
+	TemplatePolyhedron<TypeParam> controlTPoly3(this->mat, controlVec);
+	auto res = this->middle.intersectHalfspaces(hspaceNormals, hspaceOffsets);
+	EXPECT_EQ(res, controlTPoly3);
+	EXPECT_EQ(res.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+
+}
+
+TYPED_TEST(TemplatePolyhedronTest, SatisfiesHalfspaces){
+
+	//Empty tpoly
+	Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(1)},TypeParam(5));
+	auto res = this->empty.satisfiesHalfspace(hspace);
+	EXPECT_EQ(res.first, CONTAINMENT::NO);
+	EXPECT_EQ(res.second, this->empty);
+
+	//middle completely inside halfspace
+	res = this->middle.satisfiesHalfspace(hspace);
+	EXPECT_EQ(res.first, CONTAINMENT::FULL);
+	EXPECT_EQ(res.second, this->middle);
+
+	//middle completely outside halfspace
+	hspace.setOffset(-5);
+	res = this->middle.satisfiesHalfspace(hspace);
+	EXPECT_EQ(res.first, CONTAINMENT::NO);
+	EXPECT_EQ(res.second, this->middle);	
+
+	//halfspace halfs middle
+	hspace.setOffset(0);
+	res = this->middle.satisfiesHalfspace(hspace);
+	EXPECT_EQ(res.first, CONTAINMENT::PARTIAL);
+	EXPECT_EQ(res.second, this->middle);
+	EXPECT_EQ(res.second.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+
+	//middle completely inside halfspaces
+	matrix_t<TypeParam> normals = matrix_t<TypeParam>::Zero(3,2);
+	normals << 1,0,
+			   1,1,
+			   0,1;
+	vector_t<TypeParam> offsets = vector_t<TypeParam>::Zero(3);
+	offsets << 3,4,3;
+	res = this->middle.satisfiesHalfspaces(normals,offsets);
+	EXPECT_EQ(res.first, CONTAINMENT::FULL);
+	EXPECT_EQ(res.second, this->middle);
+
+	//middle completeley outside halfspaces
+	offsets << -3,-5,3;
+	res = this->middle.satisfiesHalfspaces(normals,offsets);
+	EXPECT_EQ(res.first, CONTAINMENT::NO);
+	EXPECT_EQ(res.second, this->middle);
+
+	//middle partially inside halfspaces
+	offsets << 1,0,1;
+	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
+	controlVec << 1,2,1,2;
+	TemplatePolyhedron<TypeParam> control(this->mat, controlVec);
+	res = this->middle.satisfiesHalfspaces(normals,offsets);
+	EXPECT_EQ(res.first, CONTAINMENT::PARTIAL);
+	EXPECT_EQ(res.second, control);	
+	EXPECT_EQ(res.second.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+}
+
+TYPED_TEST(TemplatePolyhedronTest, Projection){
+
+	matrix_t<TypeParam> cubeMat = matrix_t<TypeParam>::Zero(6,3);
+	cubeMat << 1,0,0,
+			   -1,0,0,
+			   0,1,0,
+			   0,-1,0,
+			   0,0,1,
+			   0,0,-1;
+	vector_t<TypeParam> cubeVec = 2*vector_t<TypeParam>::Ones(6);
+	TemplatePolyhedron<TypeParam> cube(cubeMat,cubeVec);
+
+	//TODO: Not sure how semantics of projection are defined, and whether we overapproximate projections
+	SUCCEED();
 }

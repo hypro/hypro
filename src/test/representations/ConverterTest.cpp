@@ -141,6 +141,9 @@ protected:
 		pplpolytope2 = Polytope<Number>(points2);
 	#endif
 
+        tpoly = TemplatePolyhedron<Number>(matrix,distances);
+        tpoly2 = TemplatePolyhedron<Number>(matrix2,distances2);
+
     }
 
     virtual void TearDown()
@@ -174,6 +177,9 @@ protected:
     Polytope<Number> pplpolytope;
     Polytope<Number> pplpolytope2;
     #endif
+
+    TemplatePolyhedron<Number> tpoly;
+    TemplatePolyhedron<Number> tpoly2;
 };
 
 TYPED_TEST(ConverterTest, toBox)
@@ -292,5 +298,21 @@ TYPED_TEST(ConverterTest, settingsConversion)
 	hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff> res = hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff>(this->box);
     EXPECT_EQ(this->box, res);
 
+    SUCCEED();
+}
+
+TYPED_TEST(ConverterTest, toTemplatePolyhedron){
+    auto result1 = Converter<TypeParam>::toTemplatePolyhedron(this->box);
+    auto result2 = Converter<TypeParam>::toTemplatePolyhedron(this->zonotope);
+    auto result3 = Converter<TypeParam>::toTemplatePolyhedron(this->vpolytope);
+    auto result4 = Converter<TypeParam>::toTemplatePolyhedron(this->vpolytope2);
+    auto result5 = Converter<TypeParam>::toTemplatePolyhedron(this->vpolytope3);
+    auto result6 = Converter<TypeParam>::toTemplatePolyhedron(this->hpolytope);
+    auto result7 = Converter<TypeParam>::toTemplatePolyhedron(this->hpolytope2);
+    auto result8 = Converter<TypeParam>::toTemplatePolyhedron(this->support);
+    auto result9 = Converter<TypeParam>::toTemplatePolyhedron(this->support2);
+    #ifdef HYPRO_USE_PPL
+    auto result10 = Converter<TypeParam>::toTemplatePolyhedron(this->pplpolytope);
+    #endif
     SUCCEED();
 }

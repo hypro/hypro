@@ -143,11 +143,12 @@ EvaluationResult<Number> VPolytopeT<Number,Converter,S>::evaluate( const vector_
 	return tmp.evaluate(direction);
 }
 
-//template<typename Number, typename Converter, typename S>
-//std::vector<EvaluationResult<Number>> VPolytopeT<Number,Converter,S>::multiEvaluate( const matrix_t<Number>& directions) const {
-//
-//}
-//
+template<typename Number, typename Converter, typename S>
+std::vector<EvaluationResult<Number>> VPolytopeT<Number,Converter,S>::multiEvaluate( const matrix_t<Number>& directions) const {
+	typename Converter::HPolytope tmp(mVertices);
+	return tmp.multiEvaluate(directions);
+}
+
 
 template<typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project(const std::vector<std::size_t>& dimensions) const {

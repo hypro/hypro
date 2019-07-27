@@ -276,7 +276,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 }
 
 #ifdef HYPRO_USE_PPL
-
 //Convert a ppl polytope into a HPolytope. Luckily, ppl polytopes have halfspaces internally.
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
@@ -290,6 +289,12 @@ template<typename Number>
 template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.getHalfspaces());
+}
+
+template<typename Number>
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const TemplatePolyhedron<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.matrix(), source.vector());
 }
 
 template<typename Number>

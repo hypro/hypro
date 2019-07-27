@@ -59,11 +59,21 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
   	//Flag whether current TPoly has no unnecessary constraints - saves computation time
   	bool mNonRedundant = false;
 
-  public:
-
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
+
+  private:
+
+ 	/**
+	 * @brief      Shared ptr to matrix and Vector constructor. 
+	 * @param[in]  matPtr 	The shared ptr to the matrix
+	 * @param[in]  vec  	The vector
+	 * @details    Constructs a copy of the shared ptr to the matrix, so all TemplatePolyhedra can share the same matrix
+	 */ 	
+  	TemplatePolyhedronT( const std::shared_ptr<const matrix_t<Number>>& matPtr, const vector_t<Number>& vec );
+
+  public:
 
 	/**
 	 * @brief      Creates an empty TemplatePolyhedron.
@@ -155,10 +165,12 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 /**
 	  * @brief Static method for the construction of an empty TemplatePolyhedron of required dimension.
 	  * @param dimension Required dimension.
-	  * @return Empty TemplatePolyhedron.
+	  * @return Empty TemplatePolyhedron, with empty meaning it is an unfeasible inequation set.
 	  */
 	static TemplatePolyhedronT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
-		return TemplatePolyhedronT<Number,Converter,Setting>();
+		matrix_t<Number> zeroMat = matrix_t<Number>::Zero(1,dimension);
+		vector_t<Number> zeroVec = -1*vector_t<Number>::Ones(1);
+		return TemplatePolyhedronT<Number,Converter,Setting>(std::move(zeroMat), std::move(zeroVec));
 	}
 
 	/**
@@ -201,7 +213,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	template<class SettingRhs>
 	friend bool operator==( const TemplatePolyhedronT<Number,Converter,Setting>& b1, const TemplatePolyhedronT<Number,Converter,SettingRhs>& b2 ) {
-		return b1.matrix() == b2.matrix() && b1.vector() == b2.vector();
+		return (b1.rGetMatrixPtr() == nullptr && b2.rGetMatrixPtr() == nullptr) || (b1.matrix() == b2.matrix() && b1.vector() == b2.vector());
 	}
 
 	/**
@@ -231,7 +243,12 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number,Converter,Setting>& b ) {
-		std::cout << "Matrix address: " << b.rGetMatrixPtr() << std::endl << b.matrix() << "Vector: " << std::endl << b.vector() << std::endl;
+		if(b.rGetMatrixPtr() == nullptr){
+			std::cout << "Matrix address: nullptr, " << "Vector: " << std::endl << b.vector() << std::endl;
+		} else {
+			std::cout << "Matrix address: " << b.rGetMatrixPtr() << std::endl << b.matrix() << "Vector: " << std::endl << b.vector() << std::endl;
+		}
+		
 #else
 	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number,Converter,Setting>& ) {
 #endif
@@ -270,7 +287,10 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 
 	std::pair<CONTAINMENT, TemplatePolyhedronT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, TemplatePolyhedronT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	//NOTE: Probably changes the template matrix
 	TemplatePolyhedronT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
+
 	TemplatePolyhedronT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	TemplatePolyhedronT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	TemplatePolyhedronT<Number,Converter,Setting> minkowskiSum( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const;
@@ -317,6 +337,15 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @brief      Makes this TemplatePolyhedron equal to the empty TemplatePolyhedron.
 	 */
 	void clear();
+
+  private:
+
+  	/**
+	 * @brief	   Checks if the current TemplatePolyhedron lies fully within a given halfspace or fully outside
+	 * @param[in]  The normal and the offset of the halfspace to check with
+	 * @return 	   The first bool whether the this is fully inside and the second bool whether this is fully outside the halfspace.
+	 */
+  	std::pair<bool,bool> checkIfFullInsideAndOutside(const vector_t<Number>& normal, const Number& offset) const;
 
 };
 /** @} */

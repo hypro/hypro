@@ -8,7 +8,9 @@ namespace hypro {
 	//Empty constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT() 
-		: mVector(vector_t<Number>::Zero(0)), mOptimizer(Optimizer<Number>()) 
+		: mMatrixPtr(nullptr)
+		, mVector(vector_t<Number>::Zero(0))
+		, mOptimizer(Optimizer<Number>()) 
 	{}
 
 	//Regular template polyhedron constructor
@@ -45,7 +47,19 @@ namespace hypro {
 	{
 		assert(mOptimizer.matrix() == mat);
 		assert(mOptimizer.vector() == vec);
-		//assert(mOptimizer.getRelations().size() == std::size_t(mat.rows()));
+		assert(vec.rows() == mMatrixPtr->rows());
+	}
+
+	//Shared-ptr-constructor
+	template<typename Number, typename Converter, typename Setting>
+	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const std::shared_ptr<const matrix_t<Number>>& matPtr, const vector_t<Number>& vec ) 
+		: mMatrixPtr(std::shared_ptr<const matrix_t<Number>>(matPtr))
+		, mVector(vec)
+		, mOptimizer(Optimizer<Number>(*matPtr, vec))
+	{
+		assert(this->rGetMatrixPtr() == matPtr);
+		assert(mOptimizer.matrix() == *matPtr);
+		assert(mOptimizer.vector() == vec);
 		assert(vec.rows() == mMatrixPtr->rows());
 	}
 
@@ -54,10 +68,16 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const TemplatePolyhedronT<Number,Converter,Setting>& orig ) 
 		: mMatrixPtr(orig.rGetMatrixPtr())
 		, mVector(orig.vector())
-		, mOptimizer(Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector()))
+		//, mOptimizer(Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector()))
 	{
-		mOptimizer.setVector(mVector);
-		assert(mVector.rows() == mMatrixPtr->rows());	
+		if(orig.rGetMatrixPtr() == nullptr){
+			mOptimizer = Optimizer<Number>();
+			mOptimizer.setVector(orig.vector());
+		} else {
+			mOptimizer = Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector());	
+			assert(mVector.rows() == mMatrixPtr->rows());	
+		}
+		//mOptimizer.setVector(mVector);
 		assert(mMatrixPtr == orig.rGetMatrixPtr());
 	}
 
@@ -66,11 +86,18 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( TemplatePolyhedronT<Number,Converter,Setting>&& orig ) 
 		: mMatrixPtr(std::move(orig.rGetMatrixPtr()))
 		, mVector(std::move(orig.vector()))	
-		, mOptimizer(Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector()))
+		//, mOptimizer(Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector()))
 	{
-		mOptimizer.setVector(mVector);
+		if(orig.rGetMatrixPtr() == nullptr){
+			mOptimizer = Optimizer<Number>();
+			mOptimizer.setVector(orig.vector());
+		} else {
+			mOptimizer = Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector());	
+			assert(mVector.rows() == mMatrixPtr->rows());	
+		}
+		//mOptimizer.setVector(mVector);
 		orig.clear();
-		assert(mVector.rows() == mMatrixPtr->rows());		
+		//assert(mVector.rows() == mMatrixPtr->rows());		
 		assert(orig.rGetMatrixPtr() == nullptr);
 	}
 
@@ -80,10 +107,17 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT(const TemplatePolyhedronT<Number,Converter,SettingRhs>& orig)
 		: mMatrixPtr(orig.rGetMatrixPtr())
 		, mVector(orig.vector())
-		, mOptimizer(Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector()))
+		//, mOptimizer(Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector()))
 	{
-		mOptimizer.setVector(mVector);
-		assert(mVector.rows() == mMatrixPtr->rows());
+		if(orig.rGetMatrixPtr() == nullptr){
+			mOptimizer = Optimizer<Number>();
+			mOptimizer.setVector(orig.vector());
+		} else {
+			mOptimizer = Optimizer<Number>(*orig.rGetMatrixPtr(), orig.vector());	
+			assert(mVector.rows() == mMatrixPtr->rows());	
+		}
+		//mOptimizer.setVector(mVector);
+		//assert(mVector.rows() == mMatrixPtr->rows());
 		assert(mMatrixPtr == orig.rGetMatrixPtr());
 	}
 
@@ -146,7 +180,7 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> TemplatePolyhedronT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
-		if(this->empty()) return EvaluationResult<Number>( Number(0), SOLUTION::INFTY );
+		if(this->empty()) return EvaluationResult<Number>( Number(0), SOLUTION::INFEAS );
 		return mOptimizer.evaluate(_direction, true);
 	}
 
@@ -170,6 +204,7 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	void TemplatePolyhedronT<Number,Converter,Setting>::removeRedundancy() {
+		//TODO: is that even permitted to remove constraints from the matrix?
 		//HPoly method: optimize, then get redundant constraints, then remove the redundant constraints
 		//Time: LP + LP + linear
 		if(!mNonRedundant){
@@ -214,54 +249,135 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
+	std::pair<bool,bool> TemplatePolyhedronT<Number,Converter,Setting>::checkIfFullInsideAndOutside(const vector_t<Number>& normal, const Number& offset) const {
+		//Quick check: 
+		//If all coefficients of directions similar to hspace normal smaller than hspace offset, then current obj completely in hspace
+		//If all coefficients of directions not similar to hspace normal bigger than hspace offset, then current obj completely not in hspace
+		bool fullyInside = true;
+		bool fullyOutside = true;
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			if(normal.dot(mMatrixPtr->row(i)) > 0){
+				if(mVector(i) > offset){
+					fullyInside = false;
+				} 
+			} else {
+				if(-mVector(i) < offset){
+					fullyOutside = false;
+				}
+			}
+			if(!fullyInside && !fullyOutside) break;
+		}
+		assert(!(fullyInside && fullyOutside));
+		return std::make_pair(fullyInside,fullyOutside);
+	}
+
+	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-		//will be done if intersectHalfspaces ready
-		return std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>>();
+		
+		if(empty()) return std::make_pair(CONTAINMENT::NO, *this);
+
+		//Quick check
+		auto fullInfullOut = checkIfFullInsideAndOutside(rhs.normal(), rhs.offset());
+		if(fullInfullOut.first)
+			return std::make_pair(CONTAINMENT::FULL, *this);
+		if(fullInfullOut.second)
+			return std::make_pair(CONTAINMENT::NO, *this);
+
+		//Expensive part
+		auto tmp = this->intersectHalfspace(rhs);
+		if(tmp.empty()){
+			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
+		} else {
+			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
+		}
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-		//will be done if intersectHalfspaces ready
-		return std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>>();
+		
+		if(empty()) return std::make_pair(CONTAINMENT::NO, *this);
+
+		//Not so quick check:
+		bool fullyInside = true;
+		bool fullyOutside = true;
+		for(int i = 0; i < _mat.rows(); ++i){
+			auto fullInfullOut = checkIfFullInsideAndOutside(_mat.row(i), _vec(i));
+			if(!fullInfullOut.first) fullyInside = false;
+			if(!fullInfullOut.second) fullyOutside = false;
+			if(!fullyInside && !fullyOutside) break;
+		}
+
+		assert(!(fullyInside && fullyOutside));
+		if(fullyInside)
+			return std::make_pair(CONTAINMENT::FULL, *this);
+		if(fullyOutside){
+			return std::make_pair(CONTAINMENT::NO, *this);
+		}
+			
+		//Even more expensive part
+		auto tmp = this->intersectHalfspaces(_mat,_vec);
+		if(tmp.empty()){
+			return std::make_pair(CONTAINMENT::NO, *this);
+		} else {
+			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
+		}
 	}
 
+	//TODO: Write the test
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
-		//TODO: Will be done if linear Transformation ready
-		return TemplatePolyhedronT<Number,Converter,Setting>();
+		if(dimensions.empty()) return Empty();
+		if(empty()) return *this;
+		matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+		for(const auto& i : dimensions) {
+			projectionMatrix(i,i) = 1;
+		}
+		return linearTransformation(projectionMatrix);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number>& A ) const {
+		
 		//Other Idea: Effectively, a linear transformation is only a scaling of the coeff vector, but how to find scaling factors?
-		//Until then: Convert into VPoly and transform each point, then evaluate in template directions to match a point to the fitting halfspace
+		//Until then: Convert into VPoly and transform each point, then evaluate in template directions to match a point to the fitting halfspace		
 		if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
+		assert(A.cols() == (int)dimension());
 		auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
 		tmp = tmp.linearTransformation(A);
 		//auto tmpAsHpoly = typename Converter::HPolytope(tmp.vertices());
-		vector_t<Number> newVector = vector_t<Number>::Zero(dimension());
-		for(int i = 0; i < mMatrixPtr->rows(); i++){
-			EvaluationResult<Number> res = tmp.evaluate(mMatrixPtr->row(i));
-			if(std::find(tmp.vertices().begin(), tmp.vertices().end(), Point<Number>(res.optimumValue)) != tmp.vertices().end()){
-				newVector(i) = res.supportValue;
+		vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
+		std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
+		for(std::size_t i = 0; i < res.size(); ++i){
+			if(res.at(i).errorCode == SOLUTION::FEAS){
+				newVector(i) = res.at(i).supportValue;
+			} else {
+				//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
+				assert(res.at(i).errorCode == SOLUTION::INFEAS);
+				return TemplatePolyhedronT<Number,Converter,Setting>();
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, newVector);
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 		if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
+		assert(A.rows() == b.rows());
+		assert(A.cols() == (int)dimension());
 		auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
 		tmp = tmp.affineTransformation(A,b);
-		vector_t<Number> newVector = vector_t<Number>::Zero(dimension());
-		for(int i = 0; i < mMatrixPtr->rows(); i++){
-			EvaluationResult<Number> res = tmp.evaluate(mMatrixPtr->row(i));
-			if(std::find(tmp.vertices().begin(), tmp.vertices().end(), Point<Number>(res.optimumValue)) != tmp.vertices().end()){
-				newVector(i) = res.supportValue;
+		vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
+		std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
+		for(std::size_t i = 0; i < res.size(); ++i){
+			if(res.at(i).errorCode == SOLUTION::FEAS){
+				newVector(i) = res.at(i).supportValue;
+			} else {
+				//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
+				assert(res.at(i).errorCode == SOLUTION::INFEAS);
+				return TemplatePolyhedronT<Number,Converter,Setting>();
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, newVector);
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -272,7 +388,7 @@ namespace hypro {
 		for(int i = 0; i < mMatrixPtr->rows(); i++){
 			newVector(i) = this->vector()(i) + rhs.vector()(i);
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, newVector);
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -286,7 +402,7 @@ namespace hypro {
 				res(i) = rhs.vector()(i);
 			} 
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
 		//Since intersecting with an empty / unfeasible Tpoly always results in smth unfeasible, 
 		//check emptiness only once after the computation instead of two times before the computation
 		//auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
@@ -300,14 +416,61 @@ namespace hypro {
 		//return tmp;
 	}
 
+	//TODO: Is there a cheaper way? 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-		return TemplatePolyhedronT<Number,Converter,Setting>();
+		
+		//Quick check: If all coefficients of directions similar to normal smaller than hspace offset, then current obj completely in hspace
+		bool thisCompletelyInside = true;
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			if(hspace.normal().dot(mMatrixPtr->row(i)) > 0){
+				if(mVector(i) > hspace.offset()){
+					thisCompletelyInside = false;
+					break;
+				}
+			}
+		}
+		if(thisCompletelyInside) return *this;
+
+		assert(hspace.normal().rows() == mMatrixPtr->cols());
+		matrix_t<Number> mat = matrix_t<Number>::Zero(1,hspace.normal().rows());
+		mat.row(0) = hspace.normal().transpose();
+		vector_t<Number> vec = vector_t<Number>::Zero(1);
+		vec(0) = hspace.offset();
+
+		return intersectHalfspaces(mat,vec);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-		return TemplatePolyhedronT<Number,Converter,Setting>();
+		
+		//Extend a copy of the matrix to contain the extra halfspaces
+		assert(_mat.rows() == _vec.rows());
+		assert(_mat.cols() == mMatrixPtr->cols());
+		matrix_t<Number> extendedMatrix = matrix_t<Number>::Zero(mMatrixPtr->rows()+_mat.rows(),mMatrixPtr->cols());
+		extendedMatrix.block(0,0,mMatrixPtr->rows(),mMatrixPtr->cols()) = *mMatrixPtr;
+		extendedMatrix.block(mMatrixPtr->rows(),0,_mat.rows(),_mat.cols()) = _mat;
+
+		//Extend a copy of mVector to contain the halfspace offset
+		vector_t<Number> extendedVector = vector_t<Number>::Zero(mVector.rows()+_vec.rows());
+		for(int i = 0; i < mVector.rows(); ++i){
+			extendedVector(i) = mVector(i);
+		}
+		for(int i = mVector.rows(); i < mVector.rows()+_vec.rows(); ++i){
+			extendedVector(i) = _vec(i-mVector.rows());
+		}
+
+		//Build hpoly from the extended matrix and vector, then evaluate in the original directions and build overapproximating tpoly
+		auto tpolyWithHSpace = typename Converter::HPolytope(extendedMatrix, extendedVector);
+		tpolyWithHSpace.removeRedundancy();
+		auto evalInOrigDirs = tpolyWithHSpace.multiEvaluate(*mMatrixPtr);
+		vector_t<Number> newOffsetVec = vector_t<Number>::Zero(evalInOrigDirs.size());
+		for(int i = 0; i < newOffsetVec.rows(); ++i){
+			if(evalInOrigDirs.at(i).errorCode == SOLUTION::INFEAS)
+				return TemplatePolyhedronT<Number,Converter,Setting>();
+			newOffsetVec(i) = evalInOrigDirs.at(i).supportValue;
+		}
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newOffsetVec);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -342,17 +505,18 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::unite( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
-		//assert(this->matrix() == rhs.matrix());
 		//Since uniting with a empty / unfeasible TPoly can result in a feasible TPoly, check beforehand whether one of the arguments is empty.
+		//TODO: What about union of two not connected sets?
 		if(this->empty()) return rhs; 
 		if(rhs.empty()) return *this; 
+		assert(*mMatrixPtr == rhs.matrix());
 		vector_t<Number> res = mVector;
 		for(int i = 0; i < mMatrixPtr->rows(); ++i){
 			if(rhs.vector()(i) > res(i)){
 				res(i) = rhs.vector()(i);
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -379,13 +543,13 @@ namespace hypro {
 				}
 			}
 		}
-		auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
+		auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
 		return tmp;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	void TemplatePolyhedronT<Number,Converter,Setting>::reduceRepresentation() {
-
+		removeRedundancy();
 	}
 
 	template<typename Number, typename Converter, typename Setting>

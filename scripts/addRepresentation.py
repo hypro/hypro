@@ -81,10 +81,11 @@ if not os.path.exists(p+ '/' + str(args.name)):
 					elif otherRepConversion == None and lastRep in addedConversion:
 						#Case: The current line is a template definition line, so now insert the representation that we saved from before
 						tmp.write('\t\ttemplate<typename ' + lastRep + 'Setting = typename ' + lastRep + '::Settings, typename inSetting>\n');
-						if lastRep == 'ConstraintSet':
-							tmp.write('\t\tstatic ' + lastRep + 'T<Number,' + lastRep + 'Setting> to' + lastRep + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
-						else:
-							tmp.write('\t\tstatic ' + lastRep + 'T<Number,Converter<Number>,' + lastRep + 'Setting> to' + lastRep + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+						if lastRep != 'OrthogonalPolyhedron':
+							if lastRep == 'ConstraintSet':
+								tmp.write('\t\tstatic ' + lastRep + 'T<Number,' + lastRep + 'Setting> to' + lastRep + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
+							else:
+								tmp.write('\t\tstatic ' + lastRep + 'T<Number,Converter<Number>,' + lastRep + 'Setting> to' + lastRep + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 						tmp.write(line)
 						lastRep = None
 					elif not includeFound and re.match('#include.*',line):
@@ -105,7 +106,9 @@ if not os.path.exists(p+ '/' + str(args.name)):
 						tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings, typename inSetting>\n');
 						tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(args.name) + 'T<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);\n')
 						for i in range(len(otherRepresentations)):
-							if otherRepresentations[i] == 'Ellipsoid':
+							if otherRepresentations[i] == 'OrthogonalPolyhedron':
+								continue
+							elif otherRepresentations[i] == 'Ellipsoid':
 								tmp.write('\t\ttemplate<typename ' + str(args.name) + 'Setting = typename ' + str(args.name) + '::Settings>\n');
 								tmp.write('\t\tstatic ' + str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> to' + str(args.name) + '(const '+ str(otherRepresentations[i]) + '& source, const CONV_MODE = CONV_MODE::EXACT);\n')	
 							elif otherRepresentations[i] == 'ConstraintSet':

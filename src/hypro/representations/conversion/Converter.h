@@ -71,8 +71,6 @@ class Converter {
 		template<typename SimplexSetting = typename Simplex::Settings, typename inSetting>
 		static SimplexT<Number,Converter<Number>,SimplexSetting> toSimplex(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename SimplexSetting = typename Simplex::Settings, typename inSetting>
-		static SimplexT<Number,Converter<Number>,SimplexSetting> toSimplex(const OrthogonalPolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename SimplexSetting = typename Simplex::Settings, typename inSetting>
 		static SimplexT<Number,Converter<Number>,SimplexSetting> toSimplex(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename SimplexSetting = typename Simplex::Settings, typename inSetting>
 		static SimplexT<Number,Converter<Number>,SimplexSetting> toSimplex(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -99,8 +97,6 @@ class Converter {
 		static TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> toTemplatePolyhedron(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
 		static TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> toTemplatePolyhedron(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
-		static TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> toTemplatePolyhedron(const OrthogonalPolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
 		static TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> toTemplatePolyhedron(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>

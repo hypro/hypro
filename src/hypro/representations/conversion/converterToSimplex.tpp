@@ -46,12 +46,6 @@ SimplexT<Number,Converter<Number>,SimplexSetting> Converter<Number>::toSimplex( 
 
 template<typename Number>
 template<typename SimplexSetting, typename inSetting>
-SimplexT<Number,Converter<Number>,SimplexSetting> Converter<Number>::toSimplex( const OrthogonalPolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
-	return SimplexT<Number,Converter<Number>,SimplexSetting>();
-}
-
-template<typename Number>
-template<typename SimplexSetting, typename inSetting>
 SimplexT<Number,Converter<Number>,SimplexSetting> Converter<Number>::toSimplex( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return SimplexT<Number,Converter<Number>,SimplexSetting>();
 }
