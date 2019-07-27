@@ -8,7 +8,6 @@ namespace hypro {
 	    assert(mState->getLocation() != nullptr);
 
 	    TRACE("hydra.worker","Check invariant: " << mState->getLocation()->getInvariant() << " for set " << mState);
-	    std::cout << "ltiInvariantHandler" << std::endl;
 	    std::pair<CONTAINMENT,State> invariantSatisfyingPair = mState->partiallySatisfies(mState->getLocation()->getInvariant(), mIndex);
         if (invariantSatisfyingPair.first != CONTAINMENT::NO) {
 

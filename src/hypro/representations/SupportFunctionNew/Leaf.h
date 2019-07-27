@@ -116,7 +116,6 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 		//If no optimizations could be used
 		COUNT("Multi constraint evaluate.");
-		std::cout << "Leaf::compute" << std::endl;
 		return rep->multiEvaluate(param, useExact);
 	}
 

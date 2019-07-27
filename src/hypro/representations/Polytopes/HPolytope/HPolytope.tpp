@@ -48,7 +48,6 @@ template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
 	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	TRACE("hypro.representations.HPolytope","construct from Ax <= b," << std::endl  << "A: " << A << "b: " <<b);
-	std::cout << "HPolytope::mat vec ctor, is OPTIMIZER_CACHING activated?" << Setting::OPTIMIZER_CACHING << std::endl;
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.emplace_back( A.row( i ), b( i ) );
@@ -107,7 +106,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		assert( (*points.begin()).dimension() > 0 );
 		mDimension = points.begin()->dimension();
 		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
-			//std::cout << "Do we get here?\n";
 			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
 			normal(d) = 1;
 			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(normal, points.begin()->at(d)));
@@ -679,15 +677,12 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 	}
 	//reduceNumberRepresentation();
 	if(Setting::OPTIMIZER_CACHING){
-		std::cout << "HPolytope::evaluate, using optimizer caching" << std::endl;
 		assert(mOptimizer.has_value());
 		if(!mUpdated){
 			setOptimizer(this->matrix(), this->vector());
-			std::cout << "HPolytope::evaluate, was not updated, updated to: \n" << mOptimizer->matrix() << mOptimizer->vector() << std::endl;
 		} 
 		return mOptimizer->evaluate(_direction, true);
 	} else {
-		std::cout << "HPolytope::evaluate, not using optimizer caching" << std::endl;
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
@@ -703,17 +698,14 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 
 	std::vector<EvaluationResult<Number>> res;
 	if(Setting::OPTIMIZER_CACHING){
-		std::cout << "HPolytope::multiEvaluate, optimizer caching was active" << std::endl;
 		assert(mOptimizer.has_value());
 		if(!mUpdated){
-			std::cout << "HPolytope::multiEvaluate, hpoly was not up to date, set optimizer" << std::endl;
 			setOptimizer(this->matrix(), this->vector());
 		} 
 		for(int i = 0; i < _directions.rows(); ++i){
 			res.emplace_back(mOptimizer->evaluate(_directions.row(i), useExact));
 		}
 	} else {
-		std::cout << "HPolytope::multiEvaluate, optimizer caching was not active" << std::endl;
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());	
@@ -1135,14 +1127,12 @@ void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions(const std::ve
 template<typename Number, typename Converter, class Setting>
 void HPolytopeT<Number, Converter, Setting>::setOptimizer(const matrix_t<Number>& mat, const vector_t<Number>& vec) const {
 	if(mOptimizer.has_value()){	
-		std::cout << "HPolytope::setOptimizer, mOptimizer has value, setting mat: \n" << mat << "and vec: \n" << vec << std::endl;
 		mOptimizer->setMatrix(mat);
 		mOptimizer->setVector(vec);
 		mUpdated = true;
 	} else {
 		std::optional<Optimizer<Number>> tmp(std::in_place,mat,vec);		
 		mOptimizer.swap(tmp);
-		std::cout << "HPolytope::setOptimizer, mOptimizer has no value, setting mat: \n" << mOptimizer->matrix() << "and vec: \n" << mOptimizer->vector() << std::endl;		
 		assert(mOptimizer.has_value());
 		mUpdated = true;
 	}

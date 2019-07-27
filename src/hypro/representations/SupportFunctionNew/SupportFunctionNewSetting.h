@@ -28,7 +28,7 @@ namespace hypro {
 		static constexpr bool LIN_TRANS_REDUCTION = true;
 		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 		static constexpr bool APPROXIMATE_AS_BOX = false;
-		static constexpr bool DETECT_BOX = false;
+		static constexpr bool DETECT_BOX = true;
 		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = false;
 	};
 
