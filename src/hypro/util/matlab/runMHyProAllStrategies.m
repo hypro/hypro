@@ -2,7 +2,7 @@ function runMHyProAllStrategies(benchmarkNr, diff, strategy)
 
 savePath = '/home/marta/Desktop';
 bad = 1;
-plot = 1;
+plot = 0;
 saveFig = 0;
 names = {'mhypro_bouncing_ball','mhypro_cruise_control',...
     'mhypro_oscillator_4','mhypro_oscillator_8','mhypro_oscillator_16',...
