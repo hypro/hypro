@@ -51,9 +51,12 @@ options.tFinal = 15;
         elseif diff == 2
             %medium: c1 >= 34.93 & c2 >= 34.93
             spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
-        else
+        elseif diff == 3
             %hard: c1 >= 34.861 & c2 >= 34.861
             spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
+        elseif diff == 4
+            %spec: x <= 550
+            spec = [1 0 0 550];
         end
 
         safe = verifySafetyPropertiesCORA(spec, Rset);
@@ -88,6 +91,14 @@ if show
         x = [560;500;500;560];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        k = 550 : 600;
+        spec1 = 0*k + 50;
+        upper = 15 + 0*k;
+        hold on;
+        k1 = [k, fliplr(k)];
+        inBetweenUpper = [spec1, fliplr(upper)];
+        fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
     xlabel('x');
     ylabel('c2');

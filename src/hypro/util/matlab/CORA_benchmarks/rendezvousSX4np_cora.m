@@ -56,9 +56,12 @@ end
         elseif diff == 2
             %medium: vx <= 17.95 vy <= 9.7364
             spec = [0 0 1 0 0 17.95; 0 0 0 1 0 9.7364];
-        else
+        elseif diff == 3
             %hard: vx <= 17.8679 vy <= 9.4415
             spec = [0 0 1 0 0 17.8679; 0 0 0 1 0 9.4415];
+        elseif diff == 4
+            % spec: −0.558⋅vx+vy≤0.1
+            spec = [0 0 -0.558 1 0 0.1];
         end
         safe = verifySafetyPropertiesCORA(spec, Rset);
         verificationT = toc;
@@ -104,6 +107,14 @@ if show
         y = [12;-2;-2;12];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        k = 0 : 18;
+        spec1 = 0.558*k + 0.1;
+        upper = 12 + 0*k;
+        hold on;
+        k1 = [k, fliplr(k)];
+        inBetweenUpper = [spec1, fliplr(upper)];
+        fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
     xlabel('vx');
     ylabel('vy');

@@ -22,7 +22,8 @@ options.originContained = 0;
 %set input:
 for i = 1:4
     options.timeStepLoc{i} = timeStep;
-    options.uLoc{i} = interval([-0.01;-0.01],[0.01;0.01]);
+    %options.uLoc{i} = interval([-0.01;-0.01],[0.01;0.01]);
+    options.uLoc{i} = interval([0;0],[0;0]);
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
@@ -53,9 +54,12 @@ options.tFinal = 2;
         elseif diff == 2
             %medium: x2 >= -0.7
             spec = [0 -1 0.7];
-        else
+        elseif diff == 3
             %hard: x2 >= -0.7
             spec = [0 -1 0.7];
+        elseif diff == 4
+            %spec_ x1 >= -1
+            spec= [-1 0 1];
         end
 
         safe = verifySafetyPropertiesCORA(spec, Rset);
@@ -88,6 +92,11 @@ if show
     elseif diff ==  3
         y = [-0.7;-0.7;-1;-1];
         x = [2.5;-1;-1;2.5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        y = [1;1;-1.5;-1.5];
+        x = [-1;-1.5;-1.5;-1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end

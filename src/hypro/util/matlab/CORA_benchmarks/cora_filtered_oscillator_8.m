@@ -47,17 +47,19 @@ options.tFinal = 4;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
         
-        %maxValue = findSafetyProperties([0 1 0 0 0 0], Rset); 
         
         if diff == 1
             %easy: y <= 0.5
-            spec = [0 1 0 0 0 0 0.5];
+            spec = [0 1 0 0 0 0 0 0 0 0 0.5];
         elseif diff == 2
             %medium: y <= 0.4845
-            spec = [0 1 0 0 0 0 0.4845];
-        else
+            spec = [0 1 0 0 0 0 0 0 0 0 0.4845];
+        elseif diff == 3
             %hard: y <= 0.469
-            spec = [0 1 0 0 0 0 0.469];
+            spec = [0 1 0 0 0 0 0 0 0 0 0.469];
+        elseif diff == 4
+            % y + 0.8*x1 <= 0.566;
+            spec = [0 1 0 0 0 0.8 0 0 0 0 0.566];
         end
 
         safe = verifySafetyPropertiesCORA(spec, Rset);
@@ -72,7 +74,7 @@ num2str(time), ' ' num2str(safe), ' ', num2str(strategy)];
 if show   
     fig = figure(); 
     hold on
-    options.projectedDimensions = [1 6];
+    options.projectedDimensions = [2 6];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
@@ -92,8 +94,16 @@ if show
         y = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        k = -0.6 : 1;
+        spec1 = -0.8*k + 0.566;
+        upper = 1.1 + 0*k;
+        hold on;
+        k1 = [k, fliplr(k)];
+        inBetweenUpper = [spec1, fliplr(upper)];
+        fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
-    xlabel('x');
+    xlabel('y');
     ylabel('f8x1');
     if saveFig
         fname = strcat(filename,'.','png');

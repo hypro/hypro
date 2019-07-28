@@ -1,7 +1,7 @@
 function runMHyProAllStrategies(benchmarkNr, diff, strategy)
 
 savePath = '/home/marta/Desktop';
-bad = 0;
+bad = 1;
 plot = 1;
 saveFig = 0;
 names = {'mhypro_bouncing_ball','mhypro_cruise_control',...

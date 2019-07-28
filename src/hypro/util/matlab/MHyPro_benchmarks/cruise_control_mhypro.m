@@ -480,7 +480,7 @@ l6.addTransition(tran10s);
 % unsafe: l1,l2,l3,l4,l5,l6: x >= 146
 
 if bad
-    if diff == 0
+    if diff == 1
         %easy
         badState = MHyProCondition();
         badState.setMatrix([1 0 0]);
@@ -498,7 +498,7 @@ if bad
         badStates(6).loc = l6;
         badStates(6).cond = badState;
 %         spec = [-1 0 0 2];
-    elseif diff == 1
+    elseif diff == 2
         %medium
         badState = MHyProCondition();
         badState.setMatrix([1 0 0]);
@@ -589,12 +589,12 @@ if plotting == 1
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if bad
-        if diff == 0
+        if diff == 1
             x = [20;-10;-10;20];
             y = [-2;-2;-20;-20];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-        elseif diff == 1
+        elseif diff == 2
             x = [20;-10;-10;20];
             y = [-2;-2;-20;-20];
             pgon = polyshape([x,y], 'Simplify', false);

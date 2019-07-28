@@ -349,7 +349,8 @@ options.originContained = 0;
 %set input:
 for i = 1:4
     options.timeStepLoc{i} = timeStepC;
-    options.uLoc{i} = 0;
+    %options.uLoc{i} = interval([-0.01;-0.01],[0.01;0.01]);
+    options.uLoc{i} = interval([0;0],[0;0]);
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
 end
@@ -367,6 +368,9 @@ options.projectedDimensions = [1 2];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+% x=[-1;-1];
+% y=[-1;1];
+% plot(x,y,'m')
 if diff == 1
     y = [-0.7;-0.7;-1;-1];
     x = [2.5;-1;-1;2.5];
@@ -382,9 +386,14 @@ elseif diff == 3
     x = [2.5;-1;-1;2.5];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+elseif diff == 4
+    y = [1;1;-1.5;-1.5];
+    x = [-1;-1.5;-1.5;-1];
+    pgon = polyshape([x,y], 'Simplify', false);
+    plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 end
 if saveFig
-    saveas(fig, fullfile(savePath,fname),'png');
+    saveas(fig, fullfile(savePath,fname),'eps');
 end
 
 

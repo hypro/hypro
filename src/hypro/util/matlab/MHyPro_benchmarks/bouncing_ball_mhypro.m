@@ -18,8 +18,6 @@ loc.setFlow(flowMatrix);
 inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
 loc.setInvariant(inv);
 
-l = automaton.addLocation(loc);
-
 %-----------------------------------------------%
 %                 loc sink
 %-----------------------------------------------%
@@ -106,30 +104,33 @@ automaton.addInitialState(l, initialCond);
 %-----------------------------------------------%
 
 if bad
-    if diff == 0
+    if diff == 1
         % easy
         badState = MHyProCondition();
         badState.setMatrix([0 -1 0]);
         badState.setVector(-10.7);
         badStates(1).loc = l;
         badStates(1).cond = badState;
-        %spec = [0 1 0 10.7];
-    elseif diff == 1
+    elseif diff == 2
         % medium
         badState = MHyProCondition();
         badState.setMatrix([0 -1 0]);
         badState.setVector(-10.6569);
         badStates(1).loc = l;
         badStates(1).cond = badState;
-        %spec = [0 1 0 10.6569];
-    else
+    elseif diff == 3
         % hard
         badState = MHyProCondition();
         badState.setMatrix([0 -1 0]);
         badState.setVector(-10.6138);
         badStates(1).loc = l;
         badStates(1).cond = badState;
-        %spec = [0 1 0 10.6138];
+    elseif diff == 4
+        badState = MHyProCondition();
+        badState.setMatrix([1 0 0]);
+        badState.setVector(-0.000000001);
+        badStates(1).loc = l;
+        badStates(1).cond = badState;
     end
         
 
@@ -170,24 +171,29 @@ disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 %     num2str(time), ' ', num2str(safe)];
 
 if plotting == 1
-    dim = [3 1];
-    labs = ["t", "x"];
+    dim = [2 1];
+    labs = ["v", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if bad
-        if diff == 0
+        if diff == 1
             x = [15;15;10.7;10.7];
             y = [15;-2;-2;15];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-        elseif diff == 1
+        elseif diff == 2
             x = [15;15;10.6569;10.6569];
             y = [15;-2;-2;15];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-        else
+        elseif diff == 3
             x = [15;15;10.6138;10.6138];
             y = [15;-2;-2;15];
+            pgon = polyshape([x,y], 'Simplify', false);
+            plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+        elseif diff == 4
+            x = [12;-15;-15;12];
+            y = [0;0;-5;-5];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
         end

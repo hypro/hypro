@@ -51,16 +51,18 @@ end
         Rset = Rset.OT;
         
         %maxValue = findSafetyProperties([0 1], Rset)
-        
-        if diff == 3
+        if diff == 4
+            % special: x >= 0 
+            spec = [1 0 0];
+        elseif diff == 3
             %hard: v <= 10.6138
             spec = [0 1 10.6138];
         elseif diff == 2
             %medium: v <= 10.6569
             spec = [0 1 10.6569];
-        else
+        elseif diff == 1
             %easy: v <= 10.7
-            spec = [0 1 10.7];
+            spec = [0 1 10.7]; 
         end
         
         safe = verifySafetyPropertiesCORA(spec, Rset);
@@ -94,6 +96,11 @@ if show
     elseif diff == 3
         x = [15;15;10.6138;10.6138];
         y = [15;-2;-2;15];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        x = [12;-15;-15;12];
+        y = [0;0;-5;-5];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end

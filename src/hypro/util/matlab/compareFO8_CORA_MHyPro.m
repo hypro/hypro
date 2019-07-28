@@ -309,8 +309,8 @@ reacher.setRepresentationType(setRepr);
 flowpipes = reacher.computeForwardReachability();
 
 fig = figure();
-dim = [6 2];
-labs = ["f8x1", "y"];
+dim = [2 6];
+labs = ["y","f8x1"];
 reacher.plotComparison(flowpipes, dim, labs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -350,32 +350,40 @@ options.tFinal = timeHorizon;
 
 [HA] = reach(HA,options);
 
-options.projectedDimensions = [6 2];
+options.projectedDimensions = [2 6];
 
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 
 if diff == 1
-    y = [0.8;0.8;0.5;0.5];
-    x = [1;-1;-1;1];
+    x = [0.8;0.8;0.5;0.5];
+    y = [1;-1;-1;1];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 elseif diff == 2
-    y = [0.8;0.8;0.48205;0.48205];
-    x = [1;-1;-1;1];
+    x = [0.8;0.8;0.4845;0.4845];
+    y = [1;-1;-1;1];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 elseif diff == 3
-    y = [0.8;0.8;0.4641;0.4641];
-    x = [1;-1;-1;1];
+    x = [0.8;0.8;0.469;0.469];
+    y = [1;-1;-1;1];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+elseif diff == 4
+    k = -0.6 : 1;
+    spec1 = -0.8*k + 0.566;
+    upper = 1.1 + 0*k;
+    hold on;
+    k1 = [k, fliplr(k)];
+    inBetweenUpper = [spec1, fliplr(upper)];
+    fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
 end
-xlabel('f8x1');
-ylabel('y');
+xlabel('y');
+ylabel('f8x1');
 
 if saveFig
-    saveas(fig, fullfile(savePath,fname),'png');
+    saveas(fig, fullfile(savePath,fname),'eps');
 end
 end

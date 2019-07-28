@@ -53,10 +53,13 @@ if diff ~= 0
         spec = [0 1 0 0 0 0 0.4641];
     elseif diff == 2
         %medium: y <= 0.4946
-        spec = [0 1 0 0 0 0 0.4845];
-    else
+%         spec = [0 1 0 0 0 0 0.4845];
+    elseif diff == 3
         %easy: y <= 0.5
         spec = [0 1 0 0 0 0 0.5];
+    elseif diff == 4
+        % y+ 0.6*x1 <= 0.11
+        spec = [0 1 0.6 0 0 0 0.11];
     end
    
     safe = verifySafetyPropertiesCORA(spec, Rset);
@@ -91,6 +94,14 @@ if show
         x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        k = -0.7 : 1.5;
+        spec1 = -0.6*k + 0.11;
+        upper = 0.55 + 0*k;
+        hold on;
+        k1 = [k, fliplr(k)];
+        inBetweenUpper = [spec1, fliplr(upper)];
+        fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
     % Display invariant
     %fplot(@(x) -0.714286*x, [0 0.8],'g');

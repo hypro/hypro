@@ -11,9 +11,9 @@ Zcenter = interval([15;0;0],[40;0;2.5]);
 options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 % options.x0 = center(options.R0); %initial state for simulation
 
-options.taylorTerms = 100;
-options.zonotopeOrder = 200;
-options.polytopeOrder = 100;
+options.taylorTerms = tTerms;
+options.zonotopeOrder = zOrder;
+options.polytopeOrder = pOrder;
 
 options.errorOrder=1e-12;
 options.reductionTechnique = 'pca';
@@ -22,7 +22,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:6
-    options.timeStepLoc{i} = 0.1;
+    options.timeStepLoc{i} = timeStep;
     options.uLoc{i} = [0;0;0];
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});

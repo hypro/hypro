@@ -22,8 +22,6 @@ dummy_reset = MHyProReset();
 dummy_reset.setMatrix(eye(19));
 dummy_reset.setVector(zeros(19,1));
 
-timeHorizon = 4;
-
 %-----------------------------------------------%
 %              Location loc1
 %-----------------------------------------------%
@@ -422,6 +420,6 @@ xlabel('f8x1');
 ylabel('y');
 
 if saveFig
-    saveas(fig, fullfile(savePath,fname),'png');
+    saveas(fig, fullfile(savePath,fname),'eps');
 end
 end

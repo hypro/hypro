@@ -162,36 +162,42 @@ automaton.addInitialState(qc, initialCond);
 % unsafe: e1 >= 1.7 in qc and qn
 
 if bad
-    if diff == 0
+    if diff == 1
 %         %easy
         badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
         badState.setVector(-1.7);
         badStates(1).loc = qc;
         badStates(1).cond = badState;
         badStates(2).loc = qn;
         badStates(2).cond = badState;
-%         spec = [1 0 0 0 0 0 0 0 0 0 1.7];
-    elseif diff == 1
+    elseif diff == 2
         %medium
         badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
         badState.setVector(-1.66815);
         badStates(1).loc = qc;
         badStates(1).cond = badState;
         badStates(2).loc = qn;
         badStates(2).cond = badState;
-%         spec = [1 0 0 0 0 0 0 0 0 0 1.66815];
-    else
+    elseif diff == 3
         %hard
         badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0]); 
+        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
         badState.setVector(-1.6363);
         badStates(1).loc = qc;
         badStates(1).cond = badState;
         badStates(2).loc = qn;
         badStates(2).cond = badState;
-%         spec = [1 0 0 0 0 0 0 0 0 0 1.6363];
+    elseif diff == 4
+        %hard
+        badState = MHyProCondition();
+        badState.setMatrix([-0.7 0 0 0 0 0 -1 0 0 0 0 0]); 
+        badState.setVector(0.05);
+        badStates(1).loc = qc;
+        badStates(1).cond = badState;
+        badStates(2).loc = qn;
+        badStates(2).cond = badState;
     end
     automaton.setLocalBadStates(badStates);
 end

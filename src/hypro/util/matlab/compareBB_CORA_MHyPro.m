@@ -195,10 +195,15 @@ plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot in
         y = [15;-2;-2;15];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        x = [12;-15;-15;12];
+        y = [0;0;-5;-5];
+        pgon = polyshape([x,y], 'Simplify', false);
+        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end
 
 if saveFig
-    saveas(fig, fullfile(savePath,fname),'png');
+    saveas(fig, fullfile(savePath,fname),'eps');
 end
 
 end

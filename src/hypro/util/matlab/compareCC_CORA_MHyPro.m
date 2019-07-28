@@ -575,7 +575,7 @@ ylabel('v');
  end
 
 if saveFig
-    saveas(fig, fullfile(savePath,fname),'png');
+    saveas(fig, fullfile(savePath,fname),'eps');
 end
 
 end

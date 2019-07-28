@@ -52,9 +52,12 @@ options.tFinal = 12;
         elseif diff == 2
             %medium: e1 <= 1.66815
             spec = [1 0 0 0 0 0 0 0 0 0 1.66815];
-        else
+        elseif diff == 3
             %hard: e1 <= 1.6363
             spec = [1 0 0 0 0 0 0 0 0 0 1.6363];
+        elseif diff == 4
+            %spec: 0.855e1 +e3 <= -0.05
+            spec = [0.855 0 0 0 0 0 1 0 0 0 -0.05];
         end
         safe = verifySafetyPropertiesCORA(spec, Rset);
         verificationT = toc;
@@ -88,6 +91,14 @@ if show
         x = [1.8;0;0;1.8];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        k = 0 : 2;
+        spec1 = 0.7*k -0.05;
+        upper = -0.1 + 0*k;
+        hold on;
+        k1 = [k, fliplr(k)];
+        inBetweenUpper = [spec1, fliplr(upper)];
+        fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
     xlabel('e1');
     ylabel('e3');

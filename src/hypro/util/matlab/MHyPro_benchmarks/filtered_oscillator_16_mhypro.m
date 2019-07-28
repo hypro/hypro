@@ -327,7 +327,7 @@ l4.addTransition(tran4s);
 % unsafe: y >= 0.5
 
 if bad
-    if diff == 0
+    if diff == 1
         %easy
         badState = MHyProCondition();
         badState.setMatrix([0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]);
@@ -341,7 +341,7 @@ if bad
         badStates(4).loc = l4;
         badStates(4).cond = badState;
 %         spec = [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5];
-    elseif diff == 1
+    elseif diff == 2
         %medium
         badState = MHyProCondition();
         badState.setMatrix([0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]);

@@ -266,9 +266,17 @@ elseif diff == 3
     y = [12;-2;-2;12];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+elseif diff == 4
+    k = 0 : 18;
+    spec1 = 0.558*k + 0.1;
+    upper = 12 + 0*k;
+    hold on;
+    k1 = [k, fliplr(k)];
+    inBetweenUpper = [spec1, fliplr(upper)];
+    fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
 end
 if saveFig
-    saveas(fig, fullfile(savePath,fname),'png');
+    saveas(fig, fullfile(savePath,fname),'eps');
 end
 
 end

@@ -31,7 +31,7 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 1;
+options.tFinal = 0.6;
 
     tic;
     [HA] = reach(HA,options);
@@ -53,9 +53,11 @@ options.tFinal = 1;
         elseif diff == 2
             %medium: x3 <= 1.4942
             spec = [0 0 1 0 0 1.4942];
-        else
+        elseif diff == 3
             %hard: x3 <= 1.4884
             spec = [0 0 1 0 0 1.4884];
+        elseif diff == 4
+            spec = [-0.18 0 1 0 0 -0.615];
         end
         safe = verifySafetyPropertiesCORA(spec, Rset);
         verificationT = toc;
@@ -89,6 +91,14 @@ if show
         x = [4;-2;-2;4];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+    elseif diff == 4
+        k = -1.3 : 4;
+        spec1 = 0.18*k - 0.61;
+        upper = -1 + 0*k;
+        hold on;
+        k1 = [k, fliplr(k)];
+        inBetweenUpper = [spec1, fliplr(upper)];
+        fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
     xlabel('x1');
     ylabel('x3');

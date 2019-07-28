@@ -47,13 +47,13 @@ options.tFinal = 4;
         
         if diff == 1
             %easy: y <= 0.5
-            spec = [0 1 0 0 0 0 0.5];
+            spec = [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5];
         elseif diff == 2
             %medium: y <= 0.4819
-            spec = [0 1 0 0 0 0 0.4819];
+            spec = [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4819];
         else
             %hard: y <= 0.4637
-            spec = [0 1 0 0 0 0 0.4637];
+            spec = [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4637];
         end
         safe = verifySafetyPropertiesCORA(spec, Rset);
         verificationT = toc;

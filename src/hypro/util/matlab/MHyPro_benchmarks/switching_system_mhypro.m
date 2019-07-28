@@ -315,10 +315,10 @@ l5.addTransition(tran5s);
 %-----------------------------------------------%
 
 if bad
-    if diff == 0
+    if diff == 1
         %easy
         badState = MHyProCondition();
-        badState.setMatrix([0 0 -1 0 0]);
+        badState.setMatrix([0 0 -1 0 0 0]);
         badState.setVector(-1.5);
         badStates(1).loc = l1;
         badStates(1).cond = badState;
@@ -331,10 +331,10 @@ if bad
         badStates(5).loc = l5;
         badStates(5).cond = badState;
 %         spec = [0 0 1 0 0 1.5];
-    elseif diff == 1
+    elseif diff == 2
         %medium
         badState = MHyProCondition();
-        badState.setMatrix([0 0 -1 0 0]);
+        badState.setMatrix([0 0 -1 0 0 0]);
         badState.setVector(-1.4942);
         badStates(1).loc = l1;
         badStates(1).cond = badState;
@@ -347,10 +347,10 @@ if bad
         badStates(5).loc = l5;
         badStates(5).cond = badState;
 %         spec = [0 0 1 0 0 1.4942];
-    else
+    elseif diff == 3
         %hard
         badState = MHyProCondition();
-        badState.setMatrix([0 0 -1 0 0]);
+        badState.setMatrix([0 0 -1 0 0 0]);
         badState.setVector(-1.4884);
         badStates(1).loc = l1;
         badStates(1).cond = badState;
@@ -363,6 +363,18 @@ if bad
         badStates(5).loc = l5;
         badStates(5).cond = badState;
 %         spec = [0 0 1 0 0 1.4884];
+    elseif diff == 4
+        badState = MHyProCondition();
+        badState.setMatrix([-0.17 0 -1 0 0 0]);
+        badState.setVector(-0.53);
+        badStates(1).loc = l1;
+        badStates(1).cond = badState;
+        badStates(2).loc = l2;
+        badStates(2).cond = badState;
+        badStates(3).loc = l3;
+        badStates(3).cond = badState;
+        badStates(4).loc = l4;
+        badStates(4).cond = badState;
     end
     automaton.setLocalBadStates(badStates);
 end
@@ -414,21 +426,29 @@ if plotting == 1
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if bad
-        if diff == 0
+        if diff == 1
             y = [2;2;1.5;1.5];
             x = [4;-2;-2;4];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-        elseif diff == 1
+        elseif diff == 2
             y = [2;2;1.4942;1.4942];
             x = [4;-2;-2;4];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-        else
+        elseif diff == 3
             y = [2;2;1.4884;1.4884];
             x = [4;-2;-2;4];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+        elseif diff == 4
+            k = -1.3 : 4;
+            spec1 = 0.18*k - 0.61;
+            upper = -1 + 0*k;
+            hold on;
+            k1 = [k, fliplr(k)];
+            inBetweenUpper = [spec1, fliplr(upper)];
+            fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
         end
     end
 elseif plotting == 2
