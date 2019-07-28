@@ -327,8 +327,8 @@ if bad
         badStates(3).cond = badState;
         badStates(4).loc = l4;
         badStates(4).cond = badState;
-    elseif diff == 3
-        %hard
+    elseif diff == 4
+        %spec
         badState = MHyProCondition();
         badState.setMatrix([1 0 0]);
         badState.setVector(-1);
