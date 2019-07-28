@@ -1,7 +1,7 @@
 function runCORABenchmarks(benchmark, diff, strategy)
 
 savePath = '/home/marta/Desktop';
-plot = 1;
+plot = 0;
 saveFig = 0;
 logs = {};
 log_counter = 1;
