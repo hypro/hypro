@@ -53,8 +53,8 @@ if diff ~= 0
         spec = [0 1 0 0 0 0 0.4641];
     elseif diff == 2
         %medium: y <= 0.4946
-%         spec = [0 1 0 0 0 0 0.4845];
-    elseif diff == 3
+        spec = [0 1 0 0 0 0 0.4845];
+    elseif diff == 1
         %easy: y <= 0.5
         spec = [0 1 0 0 0 0 0.5];
     elseif diff == 4

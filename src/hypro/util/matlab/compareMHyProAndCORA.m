@@ -4,16 +4,16 @@ saveFig = 0;
 savePath = '/home/marta/Desktop';
 
 if diff > 0
-    mhStrategies{1} = [20,45,4,45];
+    mhStrategies{1} = [20,45,4,21];
     mhStrategies{2} = [2,2,2,2]; % TODO
-    mhStrategies{3} = [2,20,67,67];
-    mhStrategies{4} = [58,23,23,23];
-    mhStrategies{5} = [11,66,23,23];
-    mhStrategies{6} = [4,4,71,4];
-    mhStrategies{7} = [11,66,59,59];
+    mhStrategies{3} = [18,20,35,51];
+    mhStrategies{4} = [12,23,23,23];
+    mhStrategies{5} = [2,66,3,23];
+    mhStrategies{6} = [58,4,27,4];
+    mhStrategies{7} = [30,66,69,59];
     mhStrategies{8} = [1,1,1,1];%TODO
-    mhStrategies{9} = [1,1,1,1];%TODO
-    mhStrategies{10} = [28,68,68,28];
+    mhStrategies{9} = [1,1,61,61];%TODO
+    mhStrategies{10} = [55,68,28,28];
 
     coraStrategies{1} = [35,13,10,13];
     coraStrategies{2} = [1,1,1,1]; %TODO

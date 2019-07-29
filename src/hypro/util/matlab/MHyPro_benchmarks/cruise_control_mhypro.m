@@ -482,61 +482,64 @@ l6.addTransition(tran10s);
 if bad
     if diff == 1
         %easy
-        badState = MHyProCondition();
-        badState.setMatrix([1 0 0]);
-        badState.setVector(-2);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
-        badStates(5).loc = l5;
-        badStates(5).cond = badState;
-        badStates(6).loc = l6;
-        badStates(6).cond = badState;
-%         spec = [-1 0 0 2];
+%         badState = MHyProCondition();
+%         badState.setMatrix([1 0 0]);
+%         badState.setVector(-2);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+%         badStates(5).loc = l5;
+%         badStates(5).cond = badState;
+%         badStates(6).loc = l6;
+%         badStates(6).cond = badState;
+        %hard: v >= -2
+        spec = [-1 0 0 0 2];
     elseif diff == 2
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([1 0 0]);
-        badState.setVector(-2);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
-        badStates(5).loc = l5;
-        badStates(5).cond = badState;
-        badStates(6).loc = l6;
-        badStates(6).cond = badState;
-%         spec = [-1 0 0 2];
+%         badState = MHyProCondition();
+%         badState.setMatrix([1 0 0]);
+%         badState.setVector(-2);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+%         badStates(5).loc = l5;
+%         badStates(5).cond = badState;
+%         badStates(6).loc = l6;
+%         badStates(6).cond = badState;
+        %hard: v >= -2
+        spec = [-1 0 0 0 2];
     else
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([1 0 0]);
-        badState.setVector(-2);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
-        badStates(5).loc = l5;
-        badStates(5).cond = badState;
-        badStates(6).loc = l6;
-        badStates(6).cond = badState;
-%         spec = [-1 0 0 2];
+%         badState = MHyProCondition();
+%         badState.setMatrix([1 0 0]);
+%         badState.setVector(-2);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+%         badStates(5).loc = l5;
+%         badStates(5).cond = badState;
+%         badStates(6).loc = l6;
+%         badStates(6).cond = badState;
+        %hard: v >= -2
+        spec = [-1 0 0 0 2];
     end
 
-    automaton.setLocalBadStates(badStates);
+   % automaton.setLocalBadStates(badStates);
 end
 
 
@@ -569,8 +572,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-%     safe = reach.verify(flowpipes, spec);
-    safe = 1 - reach.reachedBadStates();
+    safe = reach.verify(flowpipes, spec);
+%     safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 

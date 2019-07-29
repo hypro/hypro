@@ -78,9 +78,9 @@ if show
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     if diff == 1
         y = [2;2;1.5;1.5];
-        x = [4;-2;-2;4];
-        pgon = polyshape([x,y], 'Simplify', false);
-        plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
+            x = [4;-2;-2;4];
+            pgon = polyshape([x,y], 'Simplify', false);
+            plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 2
         y = [2;2;1.4942;1.4942];
         x = [4;-2;-2;4];

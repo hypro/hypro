@@ -290,58 +290,66 @@ l4.addTransition(tran4s);
 if bad
     if diff == 1
         %easy
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0]);
-        badState.setVector(-0.7);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0]);
+%         badState.setVector(-0.7);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        %easy: x2 >= -0.7
+            spec = [0 -1 0 0.7];
     elseif diff == 2
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0]);
-        badState.setVector(-0.7);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0]);
+%         badState.setVector(-0.7);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        %medium: x2 >= -0.7
+            spec = [0 -1 0 0.7];
     elseif diff == 3
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0]);
-        badState.setVector(-0.7);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0]);
+%         badState.setVector(-0.7);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        %hard: x2 >= -0.7
+            spec = [0 -1 0 0.7];
     elseif diff == 4
         %spec
-        badState = MHyProCondition();
-        badState.setMatrix([1 0 0]);
-        badState.setVector(-1);
-        badStates(1).loc = l1;
-        badStates(1).cond = badState;
-        badStates(2).loc = l2;
-        badStates(2).cond = badState;
-        badStates(3).loc = l3;
-        badStates(3).cond = badState;
-        badStates(4).loc = l4;
-        badStates(4).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([1 0 0]);
+%         badState.setVector(-1);
+%         badStates(1).loc = l1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = l2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = l3;
+%         badStates(3).cond = badState;
+%         badStates(4).loc = l4;
+%         badStates(4).cond = badState;
+        %spec_ x1 >= -1
+            spec= [-1 0 0 1];
     end
-    automaton.setLocalBadStates(badStates); 
+    %automaton.setLocalBadStates(badStates); 
 end
 
 %-----------------------------------------------%
@@ -373,8 +381,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-    %     safe = reach.verify(flowpipes, spec);
-    safe = 1 - reach.reachedBadStates();
+        safe = reach.verify(flowpipes, spec);
+%     safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 

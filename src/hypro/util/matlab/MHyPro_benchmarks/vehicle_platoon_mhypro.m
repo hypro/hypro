@@ -164,42 +164,50 @@ automaton.addInitialState(qc, initialCond);
 if bad
     if diff == 1
 %         %easy
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
-        badState.setVector(-1.7);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
+%         badState.setVector(-1.7);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        %easy: e1 <= 1.7
+            spec = [1 0 0 0 0 0 0 0 0 0 0 1.7];
     elseif diff == 2
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
-        badState.setVector(-1.66815);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
+%         badState.setVector(-1.66815);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        %medium: e1 <= 1.66815
+            spec = [1 0 0 0 0 0 0 0 0 0 0 1.66815];
     elseif diff == 3
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
-        badState.setVector(-1.6363);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0 0 0 0 0 0 0 0 0]); 
+%         badState.setVector(-1.6363);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        %hard: e1 <= 1.6363
+            spec = [1 0 0 0 0 0 0 0 0 0 0 1.6363];
     elseif diff == 4
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([-0.7 0 0 0 0 0 -1 0 0 0 0 0]); 
-        badState.setVector(0.05);
-        badStates(1).loc = qc;
-        badStates(1).cond = badState;
-        badStates(2).loc = qn;
-        badStates(2).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-0.7 0 0 0 0 0 -1 0 0 0 0 0]); 
+%         badState.setVector(0.05);
+%         badStates(1).loc = qc;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = qn;
+%         badStates(2).cond = badState;
+        %spec: 0.855e1 +e3 <= -0.05
+            spec = [0.855 0 0 0 0 0 1 0 0 0 0 -0.05];
     end
-    automaton.setLocalBadStates(badStates);
+    %automaton.setLocalBadStates(badStates);
 end
 
 

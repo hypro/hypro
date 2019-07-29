@@ -202,53 +202,58 @@ noRod.addTransition(tran3s);
 if bad
     if diff == 1
 %         %easy
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0 0; 0 0 1 0]);
-        badState.setVector([35;35]);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
-%           spec = [0 -1 0 -35; 0 0 -1 -35];
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0 0; 0 0 1 0]);
+%         badState.setVector([35;35]);
+%         badStates(1).loc = rod1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = rod2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = noRod;
+%         badStates(3).cond = badState;
+        %easy: c1 >= 35 & c2 >= 35
+            spec = [0 -1 0 0 -35; 0 0 -1 0 -35];
     elseif diff == 2
         %medium
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0 0; 0 0 1 0]);
-        badState.setVector([34.93;34.93]);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
-%         spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0 0; 0 0 1 0]);
+%         badState.setVector([34.93;34.93]);
+%         badStates(1).loc = rod1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = rod2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = noRod;
+%         badStates(3).cond = badState;
+        %medium: c1 >= 34.93 & c2 >= 34.93
+            spec = [0 -1 0 0 -34.93; 0 0 -1 0 -34.93];
     elseif diff == 3
         %hard
-        badState = MHyProCondition();
-        badState.setMatrix([0 1 0 0; 0 0 1 0]);
-        badState.setVector([34.861;34.861]);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
-%         spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
+%         badState = MHyProCondition();
+%         badState.setMatrix([0 1 0 0; 0 0 1 0]);
+%         badState.setVector([34.861;34.861]);
+%         badStates(1).loc = rod1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = rod2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = noRod;
+%         badStates(3).cond = badState;
+        %hard: c1 >= 34.861 & c2 >= 34.861
+            spec = [0 -1 0  0 -34.861; 0 0 -1 0 -34.861];
     elseif diff == 4
         % spec
-        badState = MHyProCondition();
-        badState.setMatrix([-1 0 0 0]);
-        badState.setVector(-550);
-        badStates(1).loc = rod1;
-        badStates(1).cond = badState;
-        badStates(2).loc = rod2;
-        badStates(2).cond = badState;
-        badStates(3).loc = noRod;
-        badStates(3).cond = badState;
+%         badState = MHyProCondition();
+%         badState.setMatrix([-1 0 0 0]);
+%         badState.setVector(-550);
+%         badStates(1).loc = rod1;
+%         badStates(1).cond = badState;
+%         badStates(2).loc = rod2;
+%         badStates(2).cond = badState;
+%         badStates(3).loc = noRod;
+%         badStates(3).cond = badState;
+        %spec: x <= 550
+            spec = [1 0 0 0 550];
     end
-    automaton.setLocalBadStates(badStates);
+    %automaton.setLocalBadStates(badStates);
 end
 
 %-----------------------------------------------%
@@ -280,8 +285,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-    %     safe = reach.verify(flowpipes, spec);
-    safe = 1 - reach.reachedBadStates();
+        safe = reach.verify(flowpipes, spec);
+%     safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 
