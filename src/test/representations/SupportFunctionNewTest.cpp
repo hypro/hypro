@@ -55,7 +55,7 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_TRUE(boost::get<0>(isBox(hspace.matrix(), hspace.vector())));
 	EXPECT_TRUE(boost::get<0>(isBox(sfHSpace.matrix(), sfHSpace.vector())));
 	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,Box<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
-	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,Halfspace<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::box);
+	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,Halfspace<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::constraint_set);
 	EXPECT_EQ((dynamic_cast<Leaf<N,C,S,HPolytope<TypeParam>>*>(sfHSpace.getRoot().get())->getRepresentation())->type(), representation_name::polytope_h);
 
 }
@@ -1362,14 +1362,14 @@ TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 	RESET_STATS();
 
 	//Two intersections - one direction
-	std::cout << "===== EVALUATION COUNT: Two intersections X and Y - one direction:" << std::endl;
+	std::cout << "===== EVALUATION COUNT: Two intersections X then Y - one direction:" << std::endl;
 	SF sfTwoHspace = sfOneHspaceX.intersectHalfspace(hspaceY);
 	res = sfTwoHspace.evaluate(dir,true);
 	PRINT_STATS();	
 	RESET_STATS();
 
 	//Three intersections - one direction
-	std::cout << "===== EVALUATION COUNT: Three intersections X, Y, X and Y - one direction:" << std::endl;
+	std::cout << "===== EVALUATION COUNT: Three intersections X then Y then X and Y - one direction:" << std::endl;
 	SF sfThreeHspace = sfTwoHspace.intersectHalfspace(hspaceXY);
 	res = sfThreeHspace.evaluate(dir,true);
 	PRINT_STATS();	

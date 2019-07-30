@@ -202,6 +202,7 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 		evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
 		COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
 		Number heightOfResult = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(resultAngle)))) / Number(std::sin(carl::toDouble(resultAngle)));
+		//NOTE: This evaluation result does not return an optimal value
 		return EvaluationResult<Number>(heightOfResult, SOLUTION::FEAS);	
 	}
 

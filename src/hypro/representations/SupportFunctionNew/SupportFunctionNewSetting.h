@@ -13,7 +13,7 @@ namespace hypro {
 		//Whether after a jump, the new segment should be overapproximated by a box (if not active, it will be overapproximated by an octagon)
 		//Overapproximating by a box greatly reduces runtime, but also loses precision, overapproximating by an hpoly is more precise, but slower.
 		static constexpr bool APPROXIMATE_AS_BOX = true;
-		//If activated, every SupportFunctionNew, that is constructed through the generic-leaf-/matrix-vector-ctor (so only the leaves) is checked upon creation 
+		//If activated, every SupportFunctionNew that is constructed through the generic-leaf-/matrix-vector-ctor (so only the leaves) is checked upon creation 
 		//whether it represents a box and converts it to one if this is the case. 
 		//Greatly reduces runtime if this is the case.
 		static constexpr bool DETECT_BOX = true;	

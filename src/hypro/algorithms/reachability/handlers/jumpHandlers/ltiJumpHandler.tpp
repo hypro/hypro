@@ -285,6 +285,7 @@ namespace hypro {
 						auto tmpSFN = boost::apply_visitor(genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet(i));
 						//std::cout << "ltiJumpHandler::applyJump, type of tmpSFN: " << typeid(tmpSFN).name() << std::endl;	
 						if(tmpSFN.getSettings().DETECT_BOX){
+							std::cout << "DETECT_BOX" << std::endl;
 							tmpSFN.reduceRepresentation();
 							auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
 							if(boost::get<0>(isHPolyBox)){

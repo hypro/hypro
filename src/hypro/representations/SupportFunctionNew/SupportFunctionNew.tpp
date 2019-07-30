@@ -453,12 +453,13 @@ namespace hypro {
 		std::function<bool(RootGrowNode<Number,Converter,Setting>*, std::vector<bool>&)> checkAndUpdateTrafo =
 			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool>& haveSubtreesTrafo) -> bool {
 				if(n->getType() == SFNEW_TYPE::TRAFO){
+					//Use eigen3's isApprox() to make fuzzy matrix comparison instead of exact comparison.
+					//Saves computation time if matrices are big.
 					auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
-					if(params->matrix() == A && params->vector() == b){
-				    	ltParam = params;
+					if(params->matrix().isApprox(A) && params->vector().isApprox(b)){
+						ltParam = params;
 				    } 
 				    return true;
-					//return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam, A, b);
 				} else {
 					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
 						if(hasSubTreeTrafo){
@@ -472,53 +473,6 @@ namespace hypro {
 		return traverse(std::move(doNothing), std::move(leavesAreNotTrafoOps), std::move(checkAndUpdateTrafo));
 	}
 
-/*
-	template<typename Number, typename Converter, typename Setting>
-	std::pair<bool, std::size_t> SupportFunctionNewT<Number,Converter,Setting>::hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const {
-
-		if(mRoot == nullptr) return std::make_pair(false,0);
-
-		//first function - parameters are not transformed
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
-
-		//second function - leaves cannot be operations
-		std::function<std::pair<bool,std::size_t>(RootGrowNode<Number,Converter,Setting>*)> leavesAreNotTrafoOps =
-			[](RootGrowNode<Number,Converter,Setting>* ) -> std::pair<bool,std::size_t> {
-				return std::make_pair(false,0);
-			};
-
-		//third function - if current node type or given result is TRAFO, then update and return true
-		std::function<std::pair<bool,std::size_t>(RootGrowNode<Number,Converter,Setting>*, std::vector<std::pair<bool,std::size_t>>&)> checkAndUpdateTrafo =
-			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<std::pair<bool,std::size_t>>& haveSubtreesTrafo) -> std::pair<bool,std::size_t> {
-				//#ifndef NDEBUG
-				//auto depth = haveSubtreesTrafo.front().second;
-				//for(const auto& subtree : haveSubtreesTrafo){
-				//	assert(subtree.second == depth);
-				//}
-				//#endif
-				if(n->getType() == SFNEW_TYPE::TRAFO){
-					auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
-					if(params->matrix() == A && params->vector() == b){
-				    	ltParam = params;
-				    } 
-				    return std::make_pair(true,haveSubtreesTrafo.front().second+1);
-					//return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam, A, b);
-				} else {
-					unsigned highestDepth = 0;
-					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
-						if(hasSubTreeTrafo.first){
-							if(hasSubTreeTrafo.second > highestDepth){
-								highestDepth = hasSubTreeTrafo.second;
-							}
-						} 
-					}
-					return std::make_pair(true, highestDepth+1);	
-				}
-			};
-
-		return traverse(std::move(doNothing), std::move(leavesAreNotTrafoOps), std::move(checkAndUpdateTrafo));
-	}
-*/
 	/***************************************************************************
 	 * General Interface
 	 **************************************************************************/
@@ -632,6 +586,7 @@ namespace hypro {
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	DEBUG("hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
         	//std::cout << "SupportFunctionNew::satisfiesHalfspaces, mat.row(" << rowI << "): \n" << _mat.row(rowI) << std::endl;
+        	std::cout << "SFN::satisfiesHalfspaces: sf is: \n" << *this << std::endl;
         	EvaluationResult<Number> planeEvalRes = this->evaluate(_mat.row(rowI), false);
         	DEBUG("hypro.representations.supportFunctionNew", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){

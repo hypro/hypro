@@ -7,6 +7,8 @@ namespace hypro {
 /**
  * @brief      Struct holding linear and affine transformation parameters.
  * @tparam     Number  The used number type.
+ * @tparam     Setting A SupportFunctionNew setting, given by the calling TrafoOp obj.
+ * @detail	   Holds a map associating exponents n with the nth-timestep flow matrix A^n and vector b^n
  */
 template<typename Number, typename Setting>
 struct LinTrafoParameters {

@@ -84,10 +84,6 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		// in case this transformation has already been performed, parameters will be updated.
-		// The return value tells us whether trafoOps have been found and at which depth (starting with 0 from the leaves) the last one has been found
-		
-		//auto trafoInDepth = origin.hasTrafo(parameters, A, b);
-		//assert(trafoInDepth.second != 1 || ((origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && trafoInDepth.first ) );
 		
 		origin.hasTrafo(parameters, A, b);
 		
@@ -96,21 +92,8 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 			bool reduced;
 			do {
 				reduced = false;
-
-				//auto child = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get());
-				////NOTE: Assuming the TrafoOp directly below us has the same matrix to save comparisons
-				//if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO 
-				//	&& trafoInDepth.first 
-				//	&& trafoInDepth.second == 1
-				//	&& child->getCurrentExponent() == currentExponent){
-				//	successiveTransformations = child->getSuccessiveTransformations()+1;
-				//} else {
-				//	successiveTransformations = 0;
-				//}
-
 				if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO){
 					auto child = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get());
-					//if(*(child->getParameters()) == *parameters && child->getCurrentExponent() == currentExponent){
 					if(child->getParameters() == parameters && child->getCurrentExponent() == currentExponent){
 						successiveTransformations = child->getSuccessiveTransformations()+1;
 					} else {
@@ -131,10 +114,6 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 					this->addToChildren(grandChild);
 					assert(this->getChildren().size() == 1);
 				} 
-
-				// update information whether another trafo follows/is the origin.
-				// TODO: If the next operation is not a linTrafo we can directly quit.
-				//trafoInDepth = origin.hasTrafo(parameters, A, b);
 
 			} while (reduced == true);
 		}
@@ -189,7 +168,10 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 				if(entry.errorCode == SOLUTION::INFTY) {
 					entry.supportValue = 1;
 				} else {
+					assert(entry.errorCode != SOLUTION::INFEAS);
+					assert(entry.optimumValue != vector_t<Number>::Zero(0));
 					assert(parameterPair.first.cols() == entry.optimumValue.rows());
+					//std::cout << "parameterPair.first: \n" << parameterPair.first << "entry.optimumValue: \n" << entry.optimumValue << "parameterPair.second: \n" << parameterPair.second << std::endl;
 					entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					entry.supportValue = entry.optimumValue.dot(currentDir);
@@ -207,15 +189,6 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		assert(childrenEmpty.size() == 1);
 		if(childrenEmpty.front()) return true;
 		return false;
-	}
-
-	//Compares the parameters from the current TrafoOp with the parameters A and b from other LinTrafoParameters
-	//and sets the generally used LinTrafoParameters to parameters if they are the same
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
-	    if(parameters->matrix() == A && parameters->vector() == b){
-	    	ltParam = parameters;
-	    } 
-	    return true;
 	}
 
 	//Transform the supremum
