@@ -533,6 +533,45 @@ TYPED_TEST(TemplatePolyhedronTest, Projection){
 	vector_t<TypeParam> cubeVec = 2*vector_t<TypeParam>::Ones(6);
 	TemplatePolyhedron<TypeParam> cube(cubeMat,cubeVec);
 
-	//TODO: Not sure how semantics of projection are defined, and whether we overapproximate projections
-	SUCCEED();
+	//Project to x-y-plane
+	std::vector<std::size_t> projectDims({0,1});
+	auto xy = cube.project(projectDims);
+	matrix_t<TypeParam> controlMat = matrix_t<TypeParam>::Zero(6,3);
+	controlMat << 1,0,0,
+			   	 -1,0,0,
+			   	 0,1,0,
+			   	 0,-1,0,
+			   	 0,0,0,
+			   	 0,0,0;
+	vector_t<TypeParam> controlVec = 2*vector_t<TypeParam>::Ones(6);
+	controlVec(4) = 0;
+	controlVec(5) = 0;
+	EXPECT_NE(xy.matrix(), cubeMat);
+	EXPECT_EQ(xy.matrix(), controlMat);
+	EXPECT_EQ(xy.vector(), controlVec);
+	EXPECT_NE(xy, this->middle);
+
+	//Project to x axis
+	projectDims.pop_back();
+	auto x = cube.project(projectDims);
+	controlMat(2,1) = 0;
+	controlMat(3,1) = 0;
+	controlVec(2) = 0;
+	controlVec(3) = 0;
+	EXPECT_EQ(x.matrix(), controlMat);
+	EXPECT_EQ(x.vector(), controlVec);
+
+	//Project to no dimension
+	projectDims.pop_back();
+	auto none = cube.project(projectDims);
+	EXPECT_EQ(none, TemplatePolyhedron<TypeParam>::Empty());
+	
+
+	//Project to all dimensions
+	projectDims.push_back(0);
+	projectDims.push_back(1);
+	projectDims.push_back(2);
+	auto full = cube.project(projectDims);
+	EXPECT_EQ(full, cube);
+
 }

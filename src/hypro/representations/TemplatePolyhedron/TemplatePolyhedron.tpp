@@ -324,15 +324,44 @@ namespace hypro {
 	}
 
 	//TODO: Write the test
+	//NOTE: This returns a different tpoly with different constraints
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 		if(dimensions.empty()) return Empty();
 		if(empty()) return *this;
-		matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
-		for(const auto& i : dimensions) {
-			projectionMatrix(i,i) = 1;
+		if(dimensions.size() > this->dimension()){
+			throw(std::invalid_argument("TPoly::project, too many dimensions given"));
 		}
-		return linearTransformation(projectionMatrix);
+
+		//All coeffs not in a mentioned dimension will be projected to zero.
+		std::sort(dimensions.begin(), dimensions.end());
+		auto it = dimensions.begin();
+		matrix_t<Number> projectedMat = matrix_t<Number>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols());		
+		vector_t<Number> projectedVec = mVector;
+		for(int j = 0; j < mMatrixPtr->cols(); ++j){
+			if(j == *it){
+				assert(it != dimensions.end());
+				projectedMat.col(j) = mMatrixPtr->col(j);
+				++it;
+			} else {
+				//Collect all row indices where we would set the coeffs to 0
+				if(*it > this->dimension()){
+					throw(std::invalid_argument("TPoly::project, dimension to project to greater than dimension of TPoly"));
+				}
+				for(int i = 0; i < mMatrixPtr->rows(); ++i){
+					if(mMatrixPtr(i,j) != 0){
+						projectedVec(i) = 0;
+					}
+				}
+			}
+		}
+		assert(it == dimensions.end());
+		return TemplatePolyhedronT<Number,Converter,Setting>(projectedMat,projectedVec).removeRedundancy();
+		//matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+		//for(const auto& i : dimensions) {
+		//	projectionMatrix(i,i) = 1;
+		//}
+		//return linearTransformation(projectionMatrix);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
