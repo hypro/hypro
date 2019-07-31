@@ -12,10 +12,11 @@
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
 
+namespace hypro {
+
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
  */
-
 template <typename Number, typename Converter, typename inSetting>
 std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,inSetting>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
@@ -75,7 +76,6 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
    }
    return res;
 }
-
     /*
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
@@ -151,11 +151,13 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 	return _source;
 }
 
+
 template<typename Number>
 template<typename VPolySetting, typename inSetting>
 VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE ){
     return VPolytopeT<Number,Converter,VPolySetting>(_source.matrix(), _source.vector());
 }
+
 
 template<typename Number>
 template<typename VPolySetting>
@@ -200,6 +202,7 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 	return VPolytopeT<Number,Converter<Number>,VPolySetting>(constraintMatrix, b);
 }
 
+
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 template<typename VPolySetting, typename inSetting>
@@ -215,12 +218,14 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.vertices());
 }
 
+
 //conversion from Zonotope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 template<typename VPolySetting, typename inSetting>
 VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
 	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.vertices());
 }
+
 
 //TODO verification of alternative underapproximation (yields only one point for some reason)
 // conversion from Support Function to V-Polytope (OVER, UNDER or ALTERNATIVE)
@@ -332,7 +337,7 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 #ifdef HYPRO_USE_PPL
 template<typename Number>
 template<typename VPolySetting, typename inSetting>
-VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope(const Polytope& source, const CONV_MODE){
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
     return VPolytopeT<Number,Converter<Number>,VPolySetting>(source.vertices());
 }
 #endif
@@ -342,6 +347,7 @@ template<typename VPolySetting, typename inSetting>
 VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toVPolytope(toHPolytope(_source, mode));
 }
+
 
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -591,3 +597,5 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
     }
     return target;
 }
+
+} // namespace hypro

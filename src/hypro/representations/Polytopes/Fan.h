@@ -62,7 +62,7 @@ class Fan {
 			vectors.insert( vectors.end(), cone.begin(), cone.end() );
 		}
 		unsigned numPlanes = vectors.size();
-		unsigned elements = this->mDimension * numPlanes;
+		//unsigned elements = this->mDimension * numPlanes;
 
 		matrix_t<Number> constraints = matrix_t<Number>::Zero(this->mDimension,numPlanes);
 

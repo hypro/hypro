@@ -12,7 +12,7 @@ namespace box {
         #endif
 
         // initialize random number generator
-        mt19937 generator;
+        std::mt19937 generator;
         std::uniform_int_distribution<int> dist = std::uniform_int_distribution<int>(0,10);
 
         // iterate over dimensions
@@ -82,7 +82,7 @@ namespace box {
                 pplLhsBoxes[i].intersection_assign(pplRhsBoxes[i]);
             }
             runningTime = runTimerPPL.elapsed();
-            ress.emplace_back({"intersectPPL",runningTime/settings.iterations,d});
+            ress.emplace_back({"intersectPPL",runningTime/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec (PPL)." << std::endl;
             #endif
 

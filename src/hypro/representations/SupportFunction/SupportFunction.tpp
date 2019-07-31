@@ -308,6 +308,12 @@ namespace hypro{
 		return tmp.vertices();
     }
 
+	template<typename Number, typename Converter, typename Setting>
+	std::vector<Point<Number>> SupportFunctionT<Number,Converter,Setting>::vertices( const std::vector<vector_t<Number>>& additionalDirections ) const {
+		auto tmp = Converter::toHPolytope(*this, additionalDirections);
+		return tmp.vertices();
+	}
+
     template<typename Number, typename Converter, typename Setting>
     Number SupportFunctionT<Number,Converter,Setting>::supremum() const {
 		Point<Number> supPoint = content->supremumPoint();
@@ -435,6 +441,11 @@ namespace hypro{
     std::pair<CONTAINMENT, SupportFunctionT<Number,Converter,Setting>> SupportFunctionT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
 
+		// catch zero-constraints separately
+		if(rhs.normal() == vector_t<Number>::Zero(rhs.normal().rows())) {
+			return rhs.offset() <= 0 ? std::make_pair(CONTAINMENT::FULL, *this) : std::make_pair(CONTAINMENT::NO, *this);
+		}
+
 		bool limiting = false;
     	EvaluationResult<Number> planeEvalRes = content->evaluate(rhs.normal(), false);
     	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
@@ -464,19 +475,28 @@ namespace hypro{
 
     template<typename Number, typename Converter, typename Setting>
     std::pair<CONTAINMENT, SupportFunctionT<Number,Converter,Setting>> SupportFunctionT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-        //TRACE("hypro.representations.supportFunction","Matrix: " << _mat << std::endl << " <= " << _vec );
+        DEBUG("hypro.representations.supportFunction","Matrix: " << _mat << std::endl << " <= " << _vec );
 		if(_mat.rows() == 0) {
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
 		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
+			// catch zero-constraints separately
+			if(_mat.row(rowI).isZero()) {
+				if(_vec(rowI) > 0) {
+					DEBUG("hypro.representations.supportFunction","Row " << rowI << " failed.");
+					return std::make_pair(CONTAINMENT::NO, *this);
+				}
+				continue;
+			}
         	//TRACE("hypro.representations.supportFunction", "Evaluate against plane " << rowI );
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI), false);
         	//TRACE("hypro.representations.supportFunction", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				//TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
 				//TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );
+				DEBUG("hypro.representations.supportFunction","Row " << rowI << " failed.");
         		return std::make_pair(CONTAINMENT::NO, *this);
         	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
         	} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue,_vec(rowI)) && planeEvalRes.supportValue > _vec(rowI)){
@@ -497,6 +517,7 @@ namespace hypro{
 	            			if(secndNegEval.supportValue < -(_vec(rowI))) {
 	            				//TRACE("hypro.representations.supportFunction", "fullyOutside" );
 				                // the object lies fully outside one of the planes -> return false
+								DEBUG("hypro.representations.supportFunction","Row " << rowI << " failed -- fully outside.");
 				                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 	            			}
 	            		}
@@ -504,6 +525,7 @@ namespace hypro{
 	            		// the values are far enough away from each other to make this result a false negative.
 	            		//TRACE("hypro.representations.supportFunction", "fullyOutside, as " << invDirVal << " >= " << -(_vec(rowI)) );
 		                // the object lies fully outside one of the planes -> return false
+						DEBUG("hypro.representations.supportFunction","Row " << rowI << " failed.");
 		                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 	            	}
 	            }
@@ -537,7 +559,16 @@ namespace hypro{
 
     template<typename Number, typename Converter, typename Setting>
     void SupportFunctionT<Number,Converter,Setting>::reduceRepresentation() {
-    	content->reduceRepresentation();
+
+      // create polyhedral approximation using a template
+      if(Setting::REDUCE_TO_BOX) {
+        // force sampling - not necessary if stored template was using 4 directions.
+        this->evaluateTemplate(4,true);
+        content = std::move(SupportFunctionContent<Number,Setting>::create(SF_TYPE::BOX, mMatrix, mVector));
+      } else {
+        this->evaluateTemplate();
+        content = std::move(SupportFunctionContent<Number,Setting>::create(SF_TYPE::POLY, mMatrix, mVector));
+      }
     }
 
     template<typename Number, typename Converter, typename Setting>
@@ -567,7 +598,7 @@ namespace hypro{
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
+	const SupportFunctionT<Number,Converter,Setting>& SupportFunctionT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
 		if(!mTemplateSet || force) {
 			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directionCount);
 
@@ -597,6 +628,7 @@ namespace hypro{
 		    mVector = constants;
 		    mTemplateSet = true;
 		}
+    return *this;
 	}
 
 

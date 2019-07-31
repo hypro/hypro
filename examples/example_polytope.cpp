@@ -10,12 +10,14 @@
 
 #include "../src/hypro/config.h"
 #include "../src/hypro/representations/GeometricObject.h"
-#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/util/plotting/Plotter.h"
 #include "../src/hypro/datastructures/Point.h"
+
 
 int main() {
 
 	typedef mpq_class number_t;
+
 
 	hypro::Plotter<number_t>& plotter = hypro::Plotter<number_t>::getInstance();
 
@@ -38,6 +40,7 @@ int main() {
 	hypro::HPolytope<number_t> addition = hpoly.minkowskiSum(hpoly2);
 
 
+
 	unsigned a = plotter.addObject(hpoly.vertices());
 	unsigned b = plotter.addObject(hpoly2.vertices());
 	unsigned c = plotter.addObject(addition.vertices());
@@ -46,6 +49,8 @@ int main() {
 	plotter.setObjectColor(c, hypro::plotting::colors[hypro::plotting::orange]);
 
 	plotter.plot2d();
+
+
 
 	/*
 	if(polytope1.empty() && polytope2.empty())

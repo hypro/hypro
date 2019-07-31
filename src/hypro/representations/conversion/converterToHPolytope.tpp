@@ -9,10 +9,11 @@
  */
 
 #include "Converter.h"
-#include "../../util/templateDirections.h"
 #ifndef INCL_FROM_CONVERTERHEADER
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
+
+namespace hypro {
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -21,11 +22,13 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     return _source;
 }
 
+
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE ){
     return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(_source.matrix(), _source.vector());
 }
+
 
 template<typename Number>
 template<typename HPolySetting>
@@ -70,6 +73,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(constraintMatrix, b);
 }
 
+
 //conversion from V-Polytope to H-Polytope (EXACT or OVER)
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
@@ -100,6 +104,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
      return HPolytope(_source.matrix(), _source.vector());
 }
 
+
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
@@ -114,10 +119,15 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     return toHPolytope(vpoly, mode);
 }
 
+
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+		std::size_t templateDirectionCnt = numberOfDirections;
+		if(inSetting::REDUCE_TO_BOX) {
+			templateDirectionCnt = 4;
+		}
     //gets dimension of source object
     std::size_t dim = _source.dimension();
 
@@ -125,9 +135,9 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
 	if( projections.size() == dim ){
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
-	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, templateDirectionCnt);
 	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-	    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+	    assert (templateDirections.size() <= std::pow(templateDirectionCnt, dim));
 	    //creates a matrix with one row for each direction and one column for each dimension
 	    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
 
@@ -137,6 +147,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	    }
 	    std::size_t pos = 0;
 	    for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+					assert(additionalDirections.at(pos).rows() == templateDirectionMatrix.cols());
 	        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 	        ++pos;
 	    }
@@ -166,10 +177,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     	return HPolytope(constraints, constants);
 
 	} else {
-		//std::cout << "Projection" << std::endl;
-		//for(auto dim : projections) {
-		//	std::cout << "projection dimension " << dim << std::endl;
-		//}
 		std::list<unsigned> zeroDimensions;
 		for(unsigned i = 0; i < dim; ++i) {
 			if(std::find(projections.begin(), projections.end(), i) == projections.end()){
@@ -178,12 +185,17 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 			}
 		}
 		//std::cout << __func__ << ": compute template ... ";
-		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, numberOfDirections, dim); // TODO: ATTENTION, 8 is hardcoded here.
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, templateDirectionCnt, dim);
 		//std::cout << "done." << std::endl;
 		for(auto direction : additionalDirections) {
-			// project direction
-			for(const auto& dir : zeroDimensions) {
-				direction(dir) = Number(0);
+			// we assume that the additional direction, if it has the right number of rows, is already projected.
+			if(direction.rows() == Eigen::Index(dim)) {
+				// project direction
+				//std::cout << "project " << direction << std::endl;
+				for(const auto& dir : zeroDimensions) {
+					//std::cout << "set " << dir << " to zero" << std::endl;
+					direction(dir) = Number(0);
+				}
 			}
 			// add projected direction
 			if(direction.nonZeros() > 0 && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
@@ -196,12 +208,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//fills the matrix with the template directions
 		for (unsigned i=0; i<templateDirections.size();++i){
 			templateDirectionMatrix.row(i) = templateDirections[i];
-		}
-		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
-		std::size_t pos = 0;
-		for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
-			templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
-			++pos;
 		}
 		//std::cout << __func__ << ": TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
 
@@ -224,11 +230,10 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//std::cout << "Construct polytope from constraints " << constraints << " and constants " << constants << std::endl;
 
 		//constructs a H-Polytope out of the computed halfspaces
-    	return HPolytope(constraints, constants);
+    return HPolytope(constraints, constants);
 	}
 
 }
-
 
 // conversion from difference bounds to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -279,11 +284,27 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 //Convert a ppl polytope into a HPolytope. Luckily, ppl polytopes have halfspaces internally.
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
-	Converter<Number>::VPolytope v(source.vertices());
-	return toHPolytope(v, CONV_MODE::EXACT);
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE mode){
+	if(source.empty()) {
+		return HPolytope::Empty();
+	}
+
+	HPolytope target;
+    if (mode == EXACT){
+		target = HPolytope(source.vertices());
+    } else if (mode == OVER) {
+	    //gets vertices from source object
+	    auto vertices = source.vertices();
+
+	    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
+	    PrincipalComponentAnalysis<Number> pca(vertices);
+	    std::vector<Halfspace<Number>> planes = pca.box();
+	    target = HPolytope(planes);
+    }
+    return target;
 }
 #endif
+
 
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
@@ -410,3 +431,5 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     	return HPolytope(constraints, constants);
 	}
 }
+
+} // namespace hypro

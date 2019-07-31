@@ -59,6 +59,7 @@ Point<Number>::Point( const vector_t<Number> &_vector )
 	assert(this->dimension() >= 0);
 }
 
+
 template <typename Number>
 Point<Number>::Point( vector_t<Number>&& _vector )
 	: mCoordinates( _vector ),
@@ -66,6 +67,7 @@ Point<Number>::Point( vector_t<Number>&& _vector )
 	mComposedOf() {
 	assert(this->dimension() >= 0);
 }
+
 
 template <typename Number>
 Point<Number>::Point( const Point<Number> &_p )
@@ -81,6 +83,7 @@ Point<Number>::Point( const Point<Number> &_p )
   	assert(this->dimension() >= 0);
 }
 
+/*
 template <typename Number>
 Point<Number>::Point( Point<Number> &&_p )
 	: mCoordinates( _p.rawCoordinates() ),
@@ -89,6 +92,7 @@ Point<Number>::Point( Point<Number> &&_p )
 	mComposedOf( std::move( _p.composedOf() ) ) {
 	assert(this->dimension() >= 0);
 }
+*/
 
 /*
 template<typename Number>
@@ -222,9 +226,11 @@ void Point<Number>::setCoordinate( std::size_t dimension, const Number& _value )
 
 template <typename Number>
 void Point<Number>::swap( Point<Number> &_rhs ) {
-	this->mCoordinates = _rhs.mCoordinates;  // we cannot swap FLOAT_T yet, at
-											 // least not with mpfr_t instantiation
+	auto tmp = this->mCoordinates;
+	this->mCoordinates = _rhs.mCoordinates;
+	_rhs.mCoordinates = tmp;
 	// std::swap(this->mNeighbors, _rhs.mNeighbors);
+
 	std::swap( this->mComposedOf, _rhs.mComposedOf );
 	_rhs.mHash = 0;
 	mHash = 0;
@@ -546,6 +552,7 @@ Point<Number> &Point<Number>::operator*=( const Number _factor ) {
 	return *this;
 }
 
+/*
 template <typename Number>
 Point<Number> &Point<Number>::operator=( const Point<Number> &_in ) {
 	mCoordinates = _in.rawCoordinates();
@@ -563,6 +570,7 @@ Point<Number> &Point<Number>::operator=( Point<Number> &&_in ) {
 	mHash = 0;
 	return *this;
 }
+*/
 
 template <typename Number>
 Point<Number>& Point<Number>::operator=( const vector_t<Number>& _in ) {

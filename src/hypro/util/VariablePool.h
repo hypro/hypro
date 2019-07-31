@@ -24,6 +24,7 @@
 
 
 namespace hypro {
+
 class VariablePool : public carl::Singleton<VariablePool> {
 	friend carl::Singleton<VariablePool>;
 

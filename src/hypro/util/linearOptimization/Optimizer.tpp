@@ -154,7 +154,7 @@ namespace hypro {
 
 		//COUNT("glpk");
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
+		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
 		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
 		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);

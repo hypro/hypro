@@ -131,8 +131,8 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			//std::cout << "Points size: " << points.size() << std::endl;
-			//std::cout << "effectiveDim: " << effectiveDim << std::endl;
+			TRACE("hypro.representations.HPolytope","Points size: " << points.size());
+			TRACE("hypro.representations.HPolytope","Affine dimension: " << effectiveDim );
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
 			//std::cout << "first point: " << *points.begin() << std::endl;
@@ -141,6 +141,8 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			}
 			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal(vectorsInPlane);
 			Number planeOffset = Halfspace<Number>::computePlaneOffset(planeNormal, points[0]);
+
+			TRACE("hypro.representations.HPolytope","Shared plane normal: " << planeNormal << ", plane offset: " << planeOffset);
 
 			// project on lower dimension.
 			// Use dimensions with largest coordinate range for improved stability.
@@ -166,13 +168,17 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			//projDimensions are those who are bigger than smallest.
 			std::vector<std::size_t> projectionDimensions;
 			std::vector<std::size_t> droppedDimensions;
+			TRACE("hypro.representations.HPolytope","Project on dimensions: ");
 			for(std::size_t d=0; d < dimRange.dimension(); d++){
 				if(d != smallest){
+					TRACE("hypro.representations.HPolytope",d);
 					projectionDimensions.push_back(d);
 				} else {
 					droppedDimensions.push_back(d);
 				}
 			}
+
+
 			/*
 			std::vector<std::size_t> projectionDimensions;
 			std::vector<std::size_t> droppedDimensions;
@@ -186,6 +192,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			*/
 			std::vector<Point<Number>> projectedPoints;
 			for(const auto& point : points){
+				TRACE("hypro.representations.HPolytope","Projected point " << point.project(projectionDimensions));
 				projectedPoints.emplace_back(point.project(projectionDimensions));
 			}
 			/*
@@ -197,10 +204,15 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			HPolytopeT<Number,Converter,Setting> projectedPoly(projectedPoints);
 			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
+
+			TRACE("hypro.representations.HPolytope","After lifting " << projectedPoly);
+
 			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
 			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
 			projectedPoly.insert(Halfspace<Number>(planeNormal,planeOffset));
 			projectedPoly.insert(Halfspace<Number>(-planeNormal,-planeOffset));
+
+			TRACE("hypro.representations.HPolytope","After adding constraints " << projectedPoly);
 
 			*this = projectedPoly;
 

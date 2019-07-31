@@ -8,7 +8,11 @@
  */
 
 #include "Converter.h"
-#include "../../util/templateDirections.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
+
+namespace hypro {
 
 //conversion from DifferenceBounds to DifferenceBounds (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -25,6 +29,7 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     return toDifferenceBounds(tmp);
 }
 
+
 template<typename Number>
 template<typename DBSetting, typename inSetting>
 DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
@@ -32,6 +37,7 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
+
 
 template<typename Number>
 template<typename DBSetting, typename inSetting>
@@ -41,6 +47,7 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     return toDifferenceBounds(tmp);
 }
 
+
 template<typename Number>
 template<typename DBSetting>
 DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const Ellipsoid& source, const CONV_MODE ){
@@ -48,6 +55,7 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
+
 
 template<typename Number>
 template<typename DBSetting, typename inSetting>
@@ -107,8 +115,10 @@ template<typename Number>
 template<typename DBSetting, typename inSetting>
 DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     // TODO IMPLEMENT.
+    return toDifferenceBounds(toHPolytope(source));
 }
 #endif
+
 
 template<typename Number>
 template<typename DBSetting, typename inSetting>
@@ -133,3 +143,5 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
+
+} // namespace hypro

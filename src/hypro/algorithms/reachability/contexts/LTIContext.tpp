@@ -784,6 +784,7 @@ namespace hypro
     	TRACE("hypro.worker.discrete","Check if transition " << transition << " can be omitted.");
 		// do not use timing information -> return false
 		if(!mSettings.useGuardTimingInformation) {
+			COUNT("CannotOmitTransition");
 			return false;
 		}
 		// the timings for a transition are either empty because this node is not fully computed or because this transition cannot
@@ -836,6 +837,7 @@ namespace hypro
 	bool LTIContext<State>::omitInvariant() {
 		// do not use timing information -> return false
 		if(!mSettings.useInvariantTimingInformation) {
+			COUNT("CannotOmitInvariant");
 			return false;
 		}
 		// temporary for dbg-output
@@ -856,6 +858,7 @@ namespace hypro
 	bool LTIContext<State>::omitBadStateCheck() {
 		// do not use timing information -> return false
 		if(!mSettings.useBadStateTimingInformation) {
+			COUNT("CannotOmitBadStateCheck");
 			return false;
 		}
 		// temporary for dbg-output

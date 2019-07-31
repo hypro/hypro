@@ -302,6 +302,9 @@ TYPED_TEST(PointTest, RemoveDuplicates)
 	points.emplace_back(Point<TypeParam>({0,2}));
 
 	points = Point<TypeParam>::removeDuplicatePoints(points);
+    for(const auto& p : points) {
+        std::cout << p << std::endl;
+    }
 	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({1,2})) == 1);
 	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({1,1})) == 1);
 	EXPECT_TRUE(std::count(points.begin(), points.end(), Point<TypeParam>({0,2})) == 1);
@@ -315,4 +318,57 @@ TYPED_TEST(PointTest, Addition)
 	EXPECT_EQ(p1+p2, Point<TypeParam>({2,4}));
 	Point<TypeParam> p3({-1,-2});
 	EXPECT_EQ(p1+p3, Point<TypeParam>({0,0}));
+}
+
+template<typename N>
+    struct cmpTest {
+        bool operator()(const hypro::Point<N>& lhs, const hypro::Point<N>& rhs) const {
+            return lhs < rhs;
+        }
+    };
+
+TYPED_TEST(PointTest, SortedVector)
+{
+
+
+    std::vector<hypro::Point<TypeParam>> points = {
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        hypro::Point<TypeParam>{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    };
+    auto pointsSortedOnce = points;
+    TRACE("hypro.core","Start sorting.");
+    std::sort(pointsSortedOnce.begin(), pointsSortedOnce.end(), cmpTest<TypeParam>() );
+    TRACE("hypro.core","Done sorting.");
+    std::cout << "original:" << std::endl;
+    for(const auto& p : points) {
+        std::cout << p << std::endl;
+    }
+    std::cout << "sorted:" << std::endl;
+    for(const auto& p : pointsSortedOnce) {
+        std::cout << p << std::endl;
+    }
+
+    EXPECT_EQ(points, pointsSortedOnce); // gtest assertion
+    auto pointsSortedTwice = pointsSortedOnce;
+    std::sort(pointsSortedTwice.begin(), pointsSortedTwice.end());
+    EXPECT_EQ(pointsSortedOnce, pointsSortedTwice); ; // gtest assertion
+
+    std::cout << "original equals sorted once: " <<  (points == pointsSortedOnce) << std::endl
+        << "sorted once equals sorted twice: " << (pointsSortedOnce == pointsSortedTwice) << std::endl;
 }

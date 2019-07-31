@@ -9,6 +9,7 @@ namespace hypro {
         	// shift all clocks by timestep
         	dbm = dbm.shift(carl::convert<tNumber,Number>(this->mTimeStep));
         	this->mState->setSet(dbm,this->mIndex);
+            this->mState->addTimeToClocks(this->mTimeStep);
         }
         #ifdef HYDRA_USE_LOGGING
         // DBG

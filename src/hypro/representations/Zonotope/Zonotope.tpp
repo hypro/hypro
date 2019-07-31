@@ -1,9 +1,4 @@
 #include "Zonotope.h"
-#include <assert.h>
-#include <eigen3/Eigen/src/Core/PlainObjectBase.h>
-#include <eigen3/Eigen/LU>
-#include <cmath>
-#include <algorithm>
 
 namespace hypro {
 
@@ -884,7 +879,7 @@ ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::interse
 
 #ifdef HYPRO_USE_PPL
 template<typename Number, typename Converter, typename Setting>
-ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::intersect( const Constraint &halfspace ) const {
+ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::intersect( const Parma_Polyhedra_Library::Constraint &halfspace ) const {
 	assert( halfspace.space_dimension() == this->mDimension );
 	Number e = halfspace.inhomogeneous_term().get_d();
 	vector_t<Number> dVec;
@@ -892,7 +887,7 @@ ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::interse
 	dVec.resize( halfspace.space_dimension(), Eigen::NoChange );
 
 	for ( unsigned i = 0; i < halfspace.space_dimension(); i++ ) {
-		dVec( i ) = -1 * halfspace.coefficient( Variable( i ) ).get_d();
+		dVec( i ) = -1 * halfspace.coefficient( Parma_Polyhedra_Library::Variable( i ) ).get_d();
 	}
 
 	return this->intersectHalfspace( Halfspace<Number>(dVec, e) );
@@ -1056,7 +1051,7 @@ std::pair<CONTAINMENT,ZonotopeT<Number,Converter,Setting>> ZonotopeT<Number,Conv
 		for(int k = 0; k < mGenerators.rows(); k++){
 			summedGenerators(k) = mGenerators.row(k).array().abs().sum();
 		}
-		
+
 		//For every halfspace:
 		for(int i = 0; i < mat.rows(); i++){
 			//Build extreme point according to coefficients of halfspace
@@ -1065,7 +1060,7 @@ std::pair<CONTAINMENT,ZonotopeT<Number,Converter,Setting>> ZonotopeT<Number,Conv
 				extremum(j) = mat(i,j) > 0 ? summedGenerators(j) : Number(-1) * summedGenerators(j);
 			}
 			extremum += mCenter;
-			
+
 			//Check if extreme point is contained in current halfspace, if yes, then zonotope is fully contained
 			//else zonotope is only partially contained
 			Halfspace<Number> hs = Halfspace<Number>(mat.row(i), vec(i));
@@ -1093,13 +1088,13 @@ std::pair<CONTAINMENT,ZonotopeT<Number,Converter,Setting>> ZonotopeT<Number,Conv
 
 #ifdef HYPRO_USE_PPL
 template<typename Number, typename Converter, typename Setting>
-ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::intersect( const C_Polyhedron &rhs ) const {
+ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::intersect( const Parma_Polyhedra_Library::C_Polyhedron &rhs ) const {
 	// Get set of half spaces
-	const Constraint_System &cs = rhs.constraints();
+	const Parma_Polyhedra_Library::Constraint_System &cs = rhs.constraints();
 	ZonotopeT<Number,Converter,Setting> curZonotope( *this );
 
 	// Iterate through all constraints of the polyhedron
-	for ( Constraint constr : cs ) {
+	for ( const auto& constr : cs ) {
 		//        vector_t<Number> d_vector;
 		//        Number e;
 		//        d_vector.resize(dim,1);

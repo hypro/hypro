@@ -15,6 +15,8 @@
 
 //TODO alternative approach for H -> Box (testing which is faster)
 
+namespace hypro {
+
 // conversion from box to box (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
@@ -22,11 +24,13 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const BoxT<N
 	return _source;
 }
 
+
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE) {
 	return BoxT<Number,Converter,BoxSetting>(source.matrix(), source.vector());
 }
+
 
 template<typename Number>
 template<typename BoxSetting>
@@ -44,6 +48,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Ellips
 	}
 	return BoxT<Number,Converter,BoxSetting>(intervals);
 }
+
 
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
@@ -208,6 +213,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Polyto
 }
 #endif
 
+
 //conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
@@ -366,6 +372,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Differ
 //	return std::move(BoxT<Number,Converter,BoxSetting>( intervals ));
 //}
 
+
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
@@ -416,3 +423,5 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Suppor
 
 	return BoxT<Number,Converter,BoxSetting>( intervals );
 }
+
+} // namespace hypro

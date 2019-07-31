@@ -216,8 +216,8 @@ TYPED_TEST(ZonotopeTest, MinkowskiSum) {
 
 #ifdef HYPRO_USE_PPL
 TYPED_TEST(ZonotopeTest, IntersectionHalfspace) {
-    Variable x(0), y(1);
-    Constraint hspace(y<=x-1);
+    Parma_Polyhedra_Library::Variable x(0), y(1);
+    Parma_Polyhedra_Library::Constraint hspace(y<=x-1);
     Eigen::Matrix<TypeParam, 2,1> z_center(3,-10);
     Eigen::Matrix<TypeParam, 2,2> z_gen;
     z_gen << 0,1,
@@ -271,9 +271,9 @@ TYPED_TEST(ZonotopeTest, IntersectionPolytope) {
              1,0;
     hypro::Zonotope<TypeParam> z1(z_center, z_gen), result_zonotope(2);
 
-    C_Polyhedron poly1(2, UNIVERSE);
-    Variable x(0),y(1);
-    Constraint_System cs;
+    Parma_Polyhedra_Library::C_Polyhedron poly1(2, Parma_Polyhedra_Library::UNIVERSE);
+    Parma_Polyhedra_Library::Variable x(0),y(1);
+    Parma_Polyhedra_Library::Constraint_System cs;
     cs.insert(y<=3);
     cs.insert(y>=1);
     cs.insert(y>=x-2);

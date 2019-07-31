@@ -143,6 +143,7 @@ public:
 
     Number getTimeHorizon() const;
     void setTimeHorizon(Number horizon);
+    carl::Interval<tNumber> getCoveredTimeInterval() const;
 
     // geometric object
     std::size_t dimension() const;

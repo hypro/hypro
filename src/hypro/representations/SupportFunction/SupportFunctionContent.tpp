@@ -684,16 +684,16 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 					case SF_TYPE::INTERSECT: {
 						//TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 						assert(resultStack.back().second.size() == 2);
-						Res& resA = resultStack.back().second.at(0);
-						Res& resB = resultStack.back().second.at(1);
+						Res& resA = resultStack.back().second[0];
+						Res& resB = resultStack.back().second[1];
 						assert( resA.size() == resB.size() );
 						// in case one of the results is infeasible (the set is empty), return this result.
 						if(resA.begin()->errorCode == SOLUTION::INFEAS){
-							accumulatedResult = resA;
+							accumulatedResult = std::move(resA);
 							break;
 						}
 						if(resB.begin()->errorCode == SOLUTION::INFEAS){
-							accumulatedResult = resB;
+							accumulatedResult = std::move(resB);
 							break;
 						}
 			 			for ( unsigned i = 0; i < resA.size(); ++i ) {
@@ -723,9 +723,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 									res.optimumValue = resB[i].optimumValue;
 								}
 							}
-							auto t = convert<Number,double>(res.optimumValue);
+							//auto t = convert<Number,double>(res.optimumValue);
 							////TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulated result: " << t << " and value: " << res.supportValue );
-							accumulatedResult.emplace_back(res);
+							accumulatedResult.emplace_back(std::move(res));
 						}
 						assert(accumulatedResult.size() == std::size_t(currentParam.rows()));
 						break;
@@ -750,7 +750,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 
 				// forward result.
 				////TRACE("hypro.representations.supportFunction","Push accumulated result up.");
-				resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
+				//resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
+				resultStack.at(resultStack.back().first).second.emplace_back(std::move(accumulatedResult));
 
 				// delete result frame and close recursive call
 				callStack.pop_back();
@@ -797,14 +798,14 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						}
 						assert(entryIndex == Eigen::Index(cur->projectionParameters()->dimensions.size()));
 						callStack.push_back(cur->projectionParameters()->origin);
-						paramStack.push_back(projectedParameters);
+						paramStack.emplace_back(projectedParameters);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SCALE: {
 						// Do nothing for scaling -> processing is done afterwards.
 						callStack.push_back(cur->scaleParameters()->origin);
-						paramStack.push_back(currentParam);
+						paramStack.emplace_back(currentParam);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
@@ -812,8 +813,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						// Do nothing for sum -> processing is done afterwards.
 						callStack.push_back(cur->summands()->rhs);
 						callStack.push_back(cur->summands()->lhs);
-						paramStack.push_back(currentParam);
-						paramStack.push_back(currentParam);
+						paramStack.emplace_back(currentParam);
+						paramStack.emplace_back(currentParam);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
@@ -822,7 +823,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						// Do nothing for union -> processing is done afterwards.
 						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i) {
 							callStack.push_back(cur->unionParameters()->items.at(i));
-							paramStack.push_back(currentParam);
+							paramStack.emplace_back(currentParam);
 							resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						}
 						break;
@@ -831,8 +832,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						// Do nothing for intersection -> processing is done afterwards.
 						callStack.push_back(cur->intersectionParameters()->rhs);
 						callStack.push_back(cur->intersectionParameters()->lhs);
-						paramStack.push_back(currentParam);
-						paramStack.push_back(currentParam);
+						paramStack.emplace_back(currentParam);
+						paramStack.emplace_back(currentParam);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;

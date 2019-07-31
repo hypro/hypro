@@ -1,6 +1,6 @@
 /**
  * @brief Benchmarking of the box representation.
- * 
+ *
  * @file benchmarkBox.h
  * @author Stefan Schupp
  * @date 2018-09-28
@@ -28,6 +28,7 @@ namespace box
     Results<std::size_t> affineTransformation(const Settings& settings);
     Results<std::size_t> unite(const Settings& settings);
     Results<std::size_t> intersect(const Settings& settings);
+    Results<std::size_t> computeSupport(const Settings& settings);
     Results<std::size_t> run(const Settings& settings);
 } // box
 } // namespace benchmark

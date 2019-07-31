@@ -2,6 +2,7 @@
 #include "decomposition/Decomposition.h"
 #include "../../representations/ConstraintSet/ConstraintSet.h"
 #include "../../representations/types.h"
+#include "../../types.h"
 #include <iostream>
 #include <cstdlib>
 

@@ -2,12 +2,12 @@
 
 namespace benchmark {
 namespace sf {
-    
+
     Results<std::size_t> intersectHalfspace(const Settings& settings) {
         Results<std::size_t> ress;
-        
+
         // initialize random number generator
-        mt19937 generator;
+        std::mt19937 generator;
         std::uniform_int_distribution<int> dist = std::uniform_int_distribution<int>(0,10);
 
         // iterate over dimensions

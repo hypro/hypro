@@ -9,7 +9,7 @@ namespace hypro {
 
 		auto& vpool = VariablePool::getInstance();
 
-		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
+		// create constraints for the guard. Note that we need to properly match dimension indices with variable names at some point.
 		// create carlPolytope, as intersection is defined for those
 		CarlPolytope<typename State::NumberType> guardConstraints{mTransition->getGuard().getMatrix(mIndex), mTransition->getGuard().getVector(mIndex)};
 		// substitute variables in the formulas by the correct ones in the subspace of the state
