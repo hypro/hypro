@@ -595,7 +595,7 @@ namespace hypro {
        	std::cout << "SFN::satisfiesHalfspaces, sf: " << *this << std::endl;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	DEBUG("hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
-        	std::cout << "SFN::satisfiesHalfspaces, mat.row(" << rowI << "): \n" << _mat.row(rowI) << std::endl;
+        	//std::cout << "SFN::satisfiesHalfspaces, mat.row(" << rowI << "): \n" << _mat.row(rowI) << std::endl;
         	EvaluationResult<Number> planeEvalRes = this->evaluate(_mat.row(rowI), false);
         	DEBUG("hypro.representations.supportFunctionNew", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){

@@ -169,7 +169,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 					entry.supportValue = 1;
 				} else {
 					assert(entry.errorCode != SOLUTION::INFEAS);
-					assert(entry.optimumValue != vector_t<Number>::Zero(0));
+					assert(entry.optimumValue != vector_t<Number>::Zero(getDimension()));
 					assert(parameterPair.first.cols() == entry.optimumValue.rows());
 					//std::cout << "parameterPair.first: \n" << parameterPair.first << "entry.optimumValue: \n" << entry.optimumValue << "parameterPair.second: \n" << parameterPair.second << std::endl;
 					entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;

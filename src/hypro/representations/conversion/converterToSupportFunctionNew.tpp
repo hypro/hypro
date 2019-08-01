@@ -1,6 +1,11 @@
+#pragma once
+
+//#include "Converter.h"
 #ifndef INCL_FROM_CONVERTERHEADER
-static_assert(false, "This file may only be included indirectly by Converter.h");
+	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
+
+namespace hypro {
 
 // conversion from support function to support function (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -90,3 +95,5 @@ template<typename SFNSetting, typename inSetting>
 SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
 }
+
+} // namespace hypro
