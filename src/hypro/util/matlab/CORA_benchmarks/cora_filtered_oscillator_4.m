@@ -58,8 +58,8 @@ if diff ~= 0
         %easy: y <= 0.5
         spec = [0 1 0 0 0 0 0.5];
     elseif diff == 4
-        % y+ 0.6*x1 <= 0.11
-        spec = [0 1 0.6 0 0 0 0.11];
+        % y+ 0.95*x1 <= 0.22
+        spec = [0 1 0.95 0 0 0 0.22];
     end
    
     safe = verifySafetyPropertiesCORA(spec, Rset);
