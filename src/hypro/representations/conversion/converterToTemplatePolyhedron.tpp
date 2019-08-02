@@ -48,7 +48,7 @@ TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converte
 
 template<typename Number>
 template<typename TemplatePolyhedronSetting, typename inSetting>
-TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& /*_source*/, const CONV_MODE  ) {
 	//TODO: Is that even possible?
 	return Converter<Number>::TemplatePolyhedron();
 }

@@ -141,6 +141,7 @@ protected:
 		pplpolytope2 = Polytope<Number>(points2);
 	#endif
 
+        // TemplatePolyhedrons
         tpoly = TemplatePolyhedron<Number>(matrix,distances);
         tpoly2 = TemplatePolyhedron<Number>(matrix2,distances2);
 
@@ -203,6 +204,8 @@ TYPED_TEST(ConverterTest, toBox)
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope2);
     #endif
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->tpoly);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->tpoly2);
     SUCCEED();
 }
 
@@ -221,6 +224,8 @@ TYPED_TEST(ConverterTest, toHPolytope)
     auto result10 = Converter<TypeParam>::toHPolytope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toHPolytope(this->pplpolytope2);
     #endif
+    auto result12 = Converter<TypeParam>::toHPolytope(this->tpoly);
+    auto result13 = Converter<TypeParam>::toHPolytope(this->tpoly2);
 	SUCCEED();
 }
 
@@ -238,6 +243,8 @@ TYPED_TEST(ConverterTest, toSupportFunction)
     Converter<TypeParam>::toSupportFunction(this->pplpolytope);
     Converter<TypeParam>::toSupportFunction(this->pplpolytope2);
     #endif
+    Converter<TypeParam>::toSupportFunction(this->tpoly);
+    Converter<TypeParam>::toSupportFunction(this->tpoly2);
 	SUCCEED();
 }
 
@@ -255,6 +262,8 @@ TYPED_TEST(ConverterTest, toVPolytope)
     auto result10 = Converter<TypeParam>::toVPolytope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toVPolytope(this->pplpolytope2);
     #endif
+    auto result12 = Converter<TypeParam>::toVPolytope(this->tpoly);
+    auto result13 = Converter<TypeParam>::toVPolytope(this->tpoly2);
 	SUCCEED();
 }
 
@@ -273,6 +282,8 @@ TYPED_TEST(ConverterTest, toZonotope)
     auto result10 = Converter<TypeParam>::toZonotope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toZonotope(this->pplpolytope2);
     #endif
+    auto result12 = Converter<TypeParam>::toZonotope(this->tpoly);
+    auto result13 = Converter<TypeParam>::toZonotope(this->tpoly2);
 	SUCCEED();
 }
 
@@ -289,6 +300,8 @@ TYPED_TEST(ConverterTest, toPolytope){
 	auto result8 = Converter<TypeParam>::toPolytope(this->support);
 	auto result9 = Converter<TypeParam>::toPolytope(this->support2);
 	auto result10 = Converter<TypeParam>::toPolytope(this->pplpolytope);
+    auto result11 = Converter<TypeParam>::toPolytope(this->tpoly);
+    auto result12 = Converter<TypeParam>::toPolytope(this->tpoly2);
 	SUCCEED();
 }
 #endif

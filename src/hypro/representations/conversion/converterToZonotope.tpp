@@ -445,6 +445,13 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
 
 template<typename Number>
 template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE mode){
+    auto tmp = toVPolytope(source);
+    return Converter<Number>::toZonotope(tmp, mode);
+}
+
+template<typename Number>
+template<typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
 }

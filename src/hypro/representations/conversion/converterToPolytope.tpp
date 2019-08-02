@@ -68,11 +68,17 @@ PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const 
 	return PolytopeT<Number,Converter,PolytopeSetting>(tmp.matrix(), tmp.vector());
 }
 
-//Conversion from zonotopoe to ppl poly
+//Conversion from zonotope to ppl poly
 template<typename Number>
 template<typename PolytopeSetting, typename inSetting>
 PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return PolytopeT<Number,Converter,PolytopeSetting>(source.vertices());
+}
+
+template<typename Number>
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return PolytopeT<Number,Converter<Number>,PolytopeSetting>(source.matrix(), source.vector());
 }
 
 template<typename Number>

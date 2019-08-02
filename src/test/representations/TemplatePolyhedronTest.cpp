@@ -26,6 +26,13 @@ protected:
 		mat(2,1) = Number(1);
 		mat(3,1) = Number(-1);
 
+		triangleMat = matrix_t<Number>::Zero(3,2);
+		triangleMat << -1,2,
+						1,2,
+						0,-1;
+		triangleVec = vector_t<Number>::Zero(3);
+		triangleVec << 0,2,0;
+
 		middleVec = 2*vector_t<Number>::Ones(4);
 		upleftVec = vector_t<Number>::Zero(4);
 		upleftVec << -1, 3, 3, -1;
@@ -42,6 +49,7 @@ protected:
 		downleft = TemplatePolyhedron<Number>(mat,downleftVec);
 		downright = TemplatePolyhedron<Number>(mat,downrightVec);
 		infeas = TemplatePolyhedron<Number>(mat,-0.5*middleVec);
+		triangle = TemplatePolyhedron<Number>(triangleMat,triangleVec);
     }
     virtual void TearDown(){}
 
@@ -59,6 +67,10 @@ protected:
     TemplatePolyhedron<Number> downleft; 	//Middle of square in (-2,-2) with side length 2
     TemplatePolyhedron<Number> downright;	//Middle of square in (2,-2) with side length 2
     TemplatePolyhedron<Number> infeas;		//Middle of square in origin with side length 1 but with inverted directions
+
+    matrix_t<Number> triangleMat;
+    vector_t<Number> triangleVec;
+    TemplatePolyhedron<Number> triangle;
 };
 
 TYPED_TEST(TemplatePolyhedronTest, Constructor){
@@ -342,6 +354,8 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 }
 
 TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
+
+	//When matrices are the same
 	auto res1 = this->middle.minkowskiSum(this->upright);
 	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
 	controlVec << 5,1,5,1;
@@ -353,6 +367,9 @@ TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
 	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(-1),TypeParam(5)})) != res1Vertices.end());
 	EXPECT_TRUE(std::find(res1Vertices.begin(), res1Vertices.end(), Point<TypeParam>({TypeParam(-1),TypeParam(-1)})) != res1Vertices.end());
 	EXPECT_EQ(res1.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+
+	//When matrices differ - Happens after projections 
+	//auto res2 = this->middle.minkowskiSum(this->triangle);
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Intersect){
@@ -566,7 +583,6 @@ TYPED_TEST(TemplatePolyhedronTest, Projection){
 	auto none = cube.project(projectDims);
 	EXPECT_EQ(none, TemplatePolyhedron<TypeParam>::Empty());
 	
-
 	//Project to all dimensions
 	projectDims.push_back(0);
 	projectDims.push_back(1);

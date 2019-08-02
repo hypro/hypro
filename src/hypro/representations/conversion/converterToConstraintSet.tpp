@@ -69,6 +69,12 @@ ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const Diffe
 
 template<typename Number>
 template<typename ConstraintSetSetting, typename inSetting>
+ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return ConstraintSetT<Number,ConstraintSetSetting>(source.matrix(), source.vector());
+}
+
+template<typename Number>
+template<typename ConstraintSetSetting, typename inSetting>
 ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return ConstraintSetT<Number,ConstraintSetSetting>();
 }

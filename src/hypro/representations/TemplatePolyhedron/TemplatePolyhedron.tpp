@@ -30,11 +30,13 @@ namespace hypro {
 		
 		//compute template matrix and set it as new mMatrixPtr
 		auto templateDirs = computeTemplate<Number>(dimension, noOfSides);
-		matrix_t<Number> templateMatrix = matrix_t<Number>::Zero(templateDirs.size(), templateDirs.front().rows());
-		for(unsigned i = 0; i < templateDirs.size(); ++i){
-			templateMatrix.row(i) = templateDirs.at(i);
-		}
-		mMatrixPtr = std::make_shared<matrix_t<Number>>(templateMatrix);
+		//matrix_t<Number> templateMatrix = combineRows(templateDirs);
+		//matrix_t<Number> templateMatrix = matrix_t<Number>::Zero(templateDirs.size(), templateDirs.front().rows());
+		//for(unsigned i = 0; i < templateDirs.size(); ++i){
+		//	templateMatrix.row(i) = templateDirs.at(i);
+		//}
+		//mMatrixPtr = std::make_shared<matrix_t<Number>>(templateMatrix);
+		mMatrixPtr = std::make_shared<matrix_t<Number>>(combineRows(templateDirs));
 		mOptimizer = Optimizer<Number>(*mMatrixPtr, mVector);
 	}
 
@@ -186,8 +188,6 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<EvaluationResult<Number>> TemplatePolyhedronT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
-		//assert(_directions.rows() == mMatrixPtr->rows());
-		//assert(_directions.cols() == mMatrixPtr->cols());
 		if(this->empty()) return std::vector<EvaluationResult<Number>>();
 		std::vector<EvaluationResult<Number>> res;
 		for(int i = 0; i < _directions.rows(); i++){
@@ -323,10 +323,10 @@ namespace hypro {
 		}
 	}
 
-	//TODO: Write the test
 	//NOTE: This returns a different tpoly with different constraints
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
+		
 		if(dimensions.empty()) return Empty();
 		if(empty()) return *this;
 		if(dimensions.size() > this->dimension()){
@@ -334,46 +334,40 @@ namespace hypro {
 		}
 
 		//All coeffs not in a mentioned dimension will be projected to zero.
-		std::sort(dimensions.begin(), dimensions.end());
-		auto it = dimensions.begin();
+		std::set<std::size_t> dimsAsSet(dimensions.begin(), dimensions.end());
+		std::vector<std::size_t> dimsOrdered(dimsAsSet.begin(), dimsAsSet.end());
+		auto it = dimsOrdered.begin();
 		matrix_t<Number> projectedMat = matrix_t<Number>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols());		
 		vector_t<Number> projectedVec = mVector;
-		for(int j = 0; j < mMatrixPtr->cols(); ++j){
+		for(unsigned j = 0; j < mMatrixPtr->cols(); ++j){
 			if(j == *it){
-				assert(it != dimensions.end());
+				assert(it != dimsOrdered.end());
 				projectedMat.col(j) = mMatrixPtr->col(j);
 				++it;
 			} else {
 				//Collect all row indices where we would set the coeffs to 0
-				if(*it > this->dimension()){
-					throw(std::invalid_argument("TPoly::project, dimension to project to greater than dimension of TPoly"));
-				}
 				for(int i = 0; i < mMatrixPtr->rows(); ++i){
-					if(mMatrixPtr(i,j) != 0){
+					if((*mMatrixPtr)(i,j) != 0){
 						projectedVec(i) = 0;
 					}
 				}
 			}
 		}
-		assert(it == dimensions.end());
-		return TemplatePolyhedronT<Number,Converter,Setting>(projectedMat,projectedVec).removeRedundancy();
-		//matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
-		//for(const auto& i : dimensions) {
-		//	projectionMatrix(i,i) = 1;
-		//}
-		//return linearTransformation(projectionMatrix);
+		assert(it == dimsOrdered.end());
+		auto res = TemplatePolyhedronT<Number,Converter,Setting>(projectedMat,projectedVec);
+		//res.removeRedundancy();
+		//std::cout << "res after removeRedundancy is: " << res << std::endl;
+		return res;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number>& A ) const {
-		
 		//Other Idea: Effectively, a linear transformation is only a scaling of the coeff vector, but how to find scaling factors?
 		//Until then: Convert into VPoly and transform each point, then evaluate in template directions to match a point to the fitting halfspace		
 		if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
 		assert(A.cols() == (int)dimension());
 		auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
 		tmp = tmp.linearTransformation(A);
-		//auto tmpAsHpoly = typename Converter::HPolytope(tmp.vertices());
 		vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
 		std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
 		for(std::size_t i = 0; i < res.size(); ++i){
@@ -411,8 +405,28 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::minkowskiSum( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
+		
+		//In case rhs has a different matrix than this, overapproximate the minkowskisum of both via template directions
+		//Costly, but shouldn't happen too often
+		if(!this->matrix().isApprox(rhs.matrix())){
+			auto rhsHPoly = typename Converter::HPolytope(rhs.matrix(), rhs.vector());
+			auto thisHPoly = typename Converter::HPolytope(this->matrix(), this->vector());
+			auto summed = thisHPoly.minkowskiSum(rhsHPoly);
+			auto evalInDirs = summed.multiEvaluate(combineRows(computeTemplate<Number>(dimension(), 8)));
+			vector_t<Number> newVector = vector_t<Number>::Zero(evalInDirs.size());
+			for(std::size_t i = 0; i < evalInDirs.size(); ++i){
+				if(evalInDirs.at(i).errorCode == SOLUTION::FEAS){
+					newVector(i) = evalInDirs.at(i).supportValue;
+				} else {
+					//INFTY should not be possible since minkowskiSum of convex objects is also convex and therefore evaluable in all directions.
+					//An infeasible set could occur from minkowskiSum when both sets are empty, in which case we just return Empty()
+					assert(evalInDirs.at(i).errorCode == SOLUTION::INFEAS);
+					return TemplatePolyhedronT<Number,Converter,Setting>::Empty();
+				}
+			}
+		}
+
 		//This only works if both TPolys have the same; if MinkowskiSum with a box, use smth else
-		assert(this->matrix() == rhs.matrix());
 		vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
 		for(int i = 0; i < mMatrixPtr->rows(); i++){
 			newVector(i) = this->vector()(i) + rhs.vector()(i);

@@ -261,7 +261,6 @@ CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCar
 }
 
 #ifdef HYPRO_USE_PPL
-
 //Convert a ppl polytope into a CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>. Luckily, ppl polytopes have halfspaces internally.
 template<typename Number>
 template<typename CarlPolySetting, typename inSetting>
@@ -274,6 +273,12 @@ CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCar
 template<typename Number>
 template<typename CarlPolySetting, typename inSetting>
 CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
+}
+
+template<typename Number>
+template<typename CarlPolySetting, typename inSetting>
+CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
 }
 

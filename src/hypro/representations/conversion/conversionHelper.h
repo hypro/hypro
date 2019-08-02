@@ -50,6 +50,11 @@ void convert(const In& in, ZonotopeT<Number,Converter<Number>,OutSettings>& out)
 }
 
 template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, TemplatePolyhedronT<Number,Converter<Number>,OutSettings>& out) {
+    out = Converter<Number>::template toTemplatePolyhedron<OutSettings>(in);
+}
+
+template<typename Number, typename OutSettings, typename In>
 void convert(const In& in, SimplexT<Number,Converter<Number>,OutSettings>& out) {
 	out = Converter<Number>::template toSimplex<OutSettings>(in); 
 }

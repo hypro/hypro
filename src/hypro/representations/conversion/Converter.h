@@ -137,10 +137,11 @@ class Converter {
 		template<typename BoxSetting = typename Box::Settings, typename inSetting>
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 
-		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+
+		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
 		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
 		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>

@@ -293,7 +293,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const TemplatePolyhedron<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.matrix(), source.vector());
 }
 

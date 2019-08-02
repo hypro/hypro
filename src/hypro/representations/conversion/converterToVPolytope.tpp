@@ -352,6 +352,12 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 }
 
 template<typename Number>
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
+    return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
+}
+
+template<typename Number>
 template<typename VPolytopeSetting, typename inSetting>
 VPolytopeT<Number,Converter<Number>,VPolytopeSetting> Converter<Number>::toVPolytope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return VPolytopeT<Number,Converter<Number>,VPolytopeSetting>();

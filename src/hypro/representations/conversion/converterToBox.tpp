@@ -374,16 +374,14 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const CarlPol
 
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
-BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const TemplatePolyhedron<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
 	if(source.empty()) return BoxT<Number,Converter<Number>,BoxSetting>();
 	auto isSourceBox = isBox(source.matrix(), source.vector());
-	if(std::get<0>(isSourceBox)){
-		return BoxT<Number,Converter,BoxSetting>(std::get<1>(isSourceBox));
+	if(boost::get<0>(isSourceBox)){
+		return BoxT<Number,Converter,BoxSetting>(boost::get<1>(isSourceBox));
 	} else {
-		std::vector<vector_t<Number>> boxDirs = computeTemplate<Number>(source.dimension(),4);
-		matrix_t<Number> boxMat = combineRows(boxDirs);
 		auto tmp = typename Converter::HPolytope(source.matrix(), source.vector());
-		return typename Converter::Box(tmp, CONV_MODE::OVER);
+		return toBox(tmp);
 	}
 }
 
