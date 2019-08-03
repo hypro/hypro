@@ -28,9 +28,10 @@ guard = mptPolytope(guardOpt);
 resetA = eye(3);
 resetb = [0;0;0];
 reset = struct('A', resetA, 'b', resetb);
-trans1{1} = transition(guard, reset, 2, 'acc', 'brake');
+trans = {};
+trans{1} = transition(guard, reset, 2, 'acc', 'brake');
 
-loc{1} = location('acc',1, inv, trans1, dynamics);
+loc{1} = location('acc',1, inv, trans, dynamics);
 
 %------------------------------brake---------------------------------
 
@@ -43,19 +44,20 @@ dynamics = linearSys('linearSys', dynA, dynB, dync);
 
 %% equation invariant:
 %   v >= 0
-invA = [-1 0 0];
-invb = 0;
+invA = [1 0 0];
+invb = 1000000;
 invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
 %% equation guard (brake -> acc):
-%   d > 20
+%   d >= 20
 guardA = [0 -1 0];
 guardb = -20;
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
-trans2{1} = transition(guard, reset, 1, 'brake', 'acc');
+trans = {};
+trans{1} = transition(guard, reset, 1, 'brake', 'acc');
 
 %% equation guard (brake -> idle):
 %   true (v <= inf)
@@ -64,9 +66,9 @@ guardb = inf;
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
-trans2{2} = transition(guard, reset, 3, 'brake', 'acc');
+trans{2} = transition(guard, reset, 3, 'brake', 'acc');
 
-loc{2} = location('brake', 2, inv, trans2, dynamics);
+loc{2} = location('brake', 2, inv, trans, dynamics);
 
 %------------------------------idle---------------------------------
 
@@ -90,10 +92,10 @@ guardA = [0 -1 0];
 guardb = -20;
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
+trans = {};
+trans{1} = transition(guard, reset, 1, 'idle', 'acc');
 
-trans3{1} = transition(guard, reset, 1, 'idle', 'acc');
-
-loc{3} = location('S1',3, inv, trans3, dynamics);
+loc{3} = location('idle',3, inv, trans, dynamics);
 
 HA = hybridAutomaton(loc);
 end

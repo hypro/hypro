@@ -6,7 +6,7 @@ reacha = 0;
 HA = car_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = 0.00001 * ones(3,1);
+Zdelta = 0.001 * ones(3,1);
 
 % options
 Zcenter = [13.88;50;0];
@@ -14,17 +14,17 @@ options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability a
 options.x0 = center(options.R0); %initial state for simulation
 
 
-options.taylorTerms = 10;
-options.zonotopeOrder = 20;
-options.polytopeOrder = 10;
-options.errorOrder=2;
+options.taylorTerms = 100;
+options.zonotopeOrder = 200;
+options.polytopeOrder = 100;
+options.errorOrder=1e-12;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
 
 %set input:
 for i = 1:3
-    options.timeStepLoc{i} = 0.01;
+    options.timeStepLoc{i} = 0.0000001;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -34,7 +34,7 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 5;
+options.tFinal = 10;
 
 dim = 3;
 vis = 1;

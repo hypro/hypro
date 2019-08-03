@@ -107,4 +107,8 @@ if show
         saveas(fig, fullfile(savePath,fname),'png');
     end
 end
+
+x=[550,550];
+y=[20,40];
+plot(x,y,'m')
 end
