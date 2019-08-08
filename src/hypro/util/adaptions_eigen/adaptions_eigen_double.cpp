@@ -49,7 +49,7 @@ namespace Eigen {
 
 		for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 			// compare with 128 ULPs
-			if ( !carl::AlmostEqual2sComplement(lhs( dim ), rhs( dim ), 128) ) {
+			if ( !carl::AlmostEqual2sComplement(lhs( dim ), rhs( dim ), default_double_comparison_ulps) ) {
 				return false;
 			}
 		}
@@ -70,7 +70,7 @@ namespace Eigen {
 		for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
 			for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
 				// compare with 128 ULPs
-				if ( !carl::AlmostEqual2sComplement(lhs(rowIndex, colIndex), rhs(rowIndex, colIndex), 128) ) {
+				if ( !carl::AlmostEqual2sComplement(lhs(rowIndex, colIndex), rhs(rowIndex, colIndex), default_double_comparison_ulps) ) {
 					return false;
 				}
 			}
@@ -122,7 +122,7 @@ namespace hypro {
 	        return true;
 	    }
 
-	    return carl::AlmostEqual2sComplement(sp, constant, 128);
+	    return carl::AlmostEqual2sComplement(sp, constant);
 	}
 
 } // namespace hypro

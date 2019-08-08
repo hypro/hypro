@@ -11,6 +11,7 @@
 #pragma once
 
 #include "../../types.h"
+#include "../../config.h"
 #include "transformation.h"
 #include <carl/numbers/numbers.h>
 #include <functional>
@@ -377,7 +378,7 @@ namespace hypro {
 	        return true;
 	    }
 
-	    return carl::AlmostEqual2sComplement(sp, constant, 128);
+	    return carl::AlmostEqual2sComplement(sp, constant);
 	}
 
 } // namespace hypro

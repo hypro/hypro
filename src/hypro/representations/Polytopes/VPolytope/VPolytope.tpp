@@ -91,7 +91,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 		bool deleted = false;
 		for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 			Number res = vertex->dot( _constraints.row( rowIndex ) );
-			if ( !carl::AlmostEqual2sComplement(res, _constants( rowIndex ), 128) && res > _constants( rowIndex ) ){
+			if ( !carl::AlmostEqual2sComplement(res, _constants( rowIndex ), default_double_comparison_ulps) && res > _constants( rowIndex ) ){
 				vertex = possibleVertices.erase( vertex );
 				deleted = true;
 				break;
