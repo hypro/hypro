@@ -18,7 +18,7 @@ s = 0;
         filename = strcat(names{1},'_',num2str(diff),'_',num2str(strategy));
         
         for i = 1:length(settings)
-            [reachabilityTime, verificationTime, time, safe] = bouncing_ball_mhypro(saveFig,savePath,filename, bad, diff,settings{i},setRepr{i},aggr{i},plot);
+            [reachabilityTime, verificationTime, time, safe] = non_aligned_mhypro(saveFig,savePath,filename, bad, diff,settings{i},setRepr{i},aggr{i},plot);
             rT = rT + reachabilityTime;
             vT = vT + verificationTime;
             t = t + time;

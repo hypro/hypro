@@ -587,7 +587,7 @@ time = reachabilityTime + verificationTime;
 
 
 if plotting == 1
-    dim = [1 2];
+    dim = [1 3];
     labs = ["v", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
@@ -602,7 +602,7 @@ if plotting == 1
             y = [-2;-2;-20;-20];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-        else
+        elseif diff == 3
             x = [20;-10;-10;20];
             y = [-2;-2;-20;-20];
             pgon = polyshape([x,y], 'Simplify', false);

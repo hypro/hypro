@@ -1,6 +1,6 @@
 function log = rod_reactor_cora(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
-HA = rod_reactor_HA();
+HA = rod_reactor_HA_cora();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
 
@@ -42,18 +42,18 @@ options.tFinal = 15;
         tic;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
-        
-        maxValue = findSafetyProperties([0 0 1], Rset)
+       
+        %maxValue = findSafetyProperties([0 0 1], Rset)
         
         if diff == 1
-            %easy:  c2 <= 41.1
+            %easy: c2 <= 41.1
             spec = [0 0 1 41.1];
         elseif diff == 2
             %medium: c1 >= 34.93 & c2 >= 34.93
             spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
         elseif diff == 3
-            %hard:c2 <= 40.8600
-            spec = [ 0 0 1 40.8600];
+            %hard: c2 <= 40.86
+            spec = [0 0 1 40.86];
         elseif diff == 4
             %spec: x <= 550
             spec = [1 0 0 550];
@@ -77,8 +77,8 @@ if show
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     if diff == 1
-        y = [45;45;35;35];
-        x = [570;500;500;570];
+        y = [60;60;41.1;41.1];
+        x = [560;500;500;560];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 2
@@ -87,7 +87,7 @@ if show
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 3
-        y = [60;60;34.861;34.861];
+        y = [60;60;40.86;40.86];
         x = [560;500;500;560];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
@@ -95,7 +95,6 @@ if show
         k = 550 : 600;
         spec1 = 0*k + 50;
         upper = 15 + 0*k;
-        hold on;
         k1 = [k, fliplr(k)];
         inBetweenUpper = [spec1, fliplr(upper)];
         fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
@@ -107,4 +106,8 @@ if show
         saveas(fig, fullfile(savePath,fname),'png');
     end
 end
+
+x=[550,550];
+y=[20,40];
+plot(x,y,'m')
 end

@@ -1,23 +1,22 @@
 function complete = car()
 
-sim = 1;
-reacha = 0;
+sim = 0;
+reacha = 1;
 
 HA = car_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = 0.00001 * ones(3,1);
+Zdelta = 0.01 * ones(3,1);
 
 % options
 Zcenter = [13.88;50;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-
 options.taylorTerms = 10;
 options.zonotopeOrder = 20;
 options.polytopeOrder = 10;
-options.errorOrder=2;
+options.errorOrder=1e-12;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
@@ -34,15 +33,16 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 5;
+options.tFinal = 10;
 
 dim = 3;
 vis = 1;
+sim = 1;
 
 % Simulation --------------------------------------------------------------
 
 if sim
-    N = 50;
+    N = 1;
     tic;
     for i=1:N
         %set initial state, input

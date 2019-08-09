@@ -4,27 +4,27 @@ saveFig = 0;
 savePath = '/home/marta/Desktop';
 
 if diff > 0
-    mhStrategies{1} = [20,45,4,21];
-    mhStrategies{2} = [2,2,2,2]; % TODO
-    mhStrategies{3} = [18,20,35,51];
-    mhStrategies{4} = [12,23,23,23];
-    mhStrategies{5} = [2,66,3,23];
-    mhStrategies{6} = [58,4,27,4];
-    mhStrategies{7} = [30,66,69,59];
-    mhStrategies{8} = [1,1,1,1];%TODO
-    mhStrategies{9} = [1,1,61,61];%TODO
-    mhStrategies{10} = [55,68,28,28];
+    mhStrategies{1} = [3,3,4,23];
+    mhStrategies{2} = [29,29,29,29];
+    mhStrategies{3} = [13,38,38,38];
+    mhStrategies{4} = [17,17,23,5];
+    mhStrategies{5} = [61,61,61,68];
+    mhStrategies{6} = [70, 70, 70,70];
+    mhStrategies{7} = [66,66,56,70];
+    mhStrategies{8} = [13,13,20,20];
+    mhStrategies{9} = [68,68,68,68];
+    mhStrategies{10} = [68,68,61,61];
 
-    coraStrategies{1} = [35,13,10,13];
+    coraStrategies{1} = [35,35,10,10];
     coraStrategies{2} = [1,1,1,1]; %TODO
-    coraStrategies{3} = [9,17,17,17]; %TODO
-    coraStrategies{4} = [8,17,14,14];
+    coraStrategies{3} = [15,15,4,4]; %TODO
+    coraStrategies{4} = [16,16,14,15];
     coraStrategies{5} = [1,1,1,1]; %TODO
-    coraStrategies{6} = [29,4,4,4];
-    coraStrategies{7} = [18,18,17,17];
-    coraStrategies{8} = [31,1,1,1]; %TODO
-    coraStrategies{9} = [1,1,1,1]; %TODO
-    coraStrategies{10} = [10,10,22,22];
+    coraStrategies{6} = [20,4,4,4];
+    coraStrategies{7} = [18,18,31,4];
+    coraStrategies{8} = [11,11,11,11];
+    coraStrategies{9} = [10,10,20,20];
+    coraStrategies{10} = [10,10,21,18];
     mhStrategyNr = mhStrategies{benchmark}(diff);
     cStrategyNr = coraStrategies{benchmark}(diff);
 else

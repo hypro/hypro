@@ -130,7 +130,7 @@ reacher.setRepresentationType(setRepr);
 flowpipes = reacher.computeForwardReachability();
 
 dim = [2 1];
-labs = ["v", "x"];
+labs = ["t", "x"];
 fig = figure();
 hold on
 reacher.plotComparison(flowpipes, dim, labs);
@@ -140,11 +140,11 @@ reacher.plotComparison(flowpipes, dim, labs);
 disp('CORA');
 
 HA = cora_bouncing_ball_ha();
-Zdelta = [0.1;0];
+Zdelta = [0.1;0;0];
 
 
 % options
-Zcenter = [10.1;0];
+Zcenter = [10.1;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
@@ -179,10 +179,13 @@ end
 options.projectedDimensions = [2 1];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
+x = -30:15;
+y = 0 + 0*x;
+plot(x,y,'m--');
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     if diff == 1
         x = [15;15;10.7;10.7];
-        y = [15;-2;-2;15];
+        y = [15;-40;-40;15];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 2

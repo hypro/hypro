@@ -249,6 +249,7 @@ tran3s.setReset(dummy_reset);
 tran3s.setLabels({MHyProLabel('tran3s')});
 
 noRod.addTransition(tran3s);
+noRod.addTransition(tran3s);
 
 %-----------------------------------------------%
 %                 Initial set
@@ -267,7 +268,7 @@ automaton.addInitialState(noRod, initialCond);
 
 % Add basic settings
 settings.timeBound = timeHorizon;
-settings.jumpDepth = 1;
+settings.jumpDepth = 20;
 
 reacher = MHyProReach(automaton);
 reacher.setSettings(settings);
@@ -280,27 +281,25 @@ dim = [1 3];
 labs = ["x", "c2"];
 reacher.plotComparison(flowpipes, dim, labs);
 
-
 if diff == 1
-    y = [60;60;35;35];
-    x = [560;500;500;560];
+    y = [60;60;41.1;41.1];
+    x = [600;500;500;600];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 elseif diff == 2
     y = [60;60;34.93;34.93];
-    x = [560;500;500;560];
+    x = [600;500;500;600];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 elseif diff == 3
-    y = [60;60;34.861;34.861];
-    x = [560;500;500;560];
+    y = [60;60;40.86;40.86];
+    x = [600;500;500;600];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
 elseif diff == 4
     k = 550 : 600;
     spec1 = 0*k + 50;
     upper = 15 + 0*k;
-    hold on;
     k1 = [k, fliplr(k)];
     inBetweenUpper = [spec1, fliplr(upper)];
     fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');

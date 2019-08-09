@@ -36,8 +36,8 @@ spec_counter = 1;
 
         matrix = [-1 * spec; spec];
         vect = [-1 * min;max];
-        %out = [matrix, vect];
-        out = max;
+        out = [matrix, vect];
+        %out = max;
     end
 end
 

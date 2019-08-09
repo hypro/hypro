@@ -46,7 +46,7 @@ options.tFinal = 2;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
         
-       % maxValue = findSafetyProperties([0 -1], Rset);
+        maxValue = findSafetyProperties([0 -1], Rset)
         
         if diff == 1
             %easy: x2 >= -0.7
@@ -90,7 +90,7 @@ if show
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff ==  3
-        y = [-0.5068;-0.5068;-1;-1];
+        y = [-0.5068;-0.5068;-1.5;-1.5];
         x = [2.5;-1.5;-1.5;2.5];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');

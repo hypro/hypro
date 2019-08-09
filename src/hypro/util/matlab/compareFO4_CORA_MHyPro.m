@@ -366,8 +366,8 @@ plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot in
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 4
-        k = -0.7 : 1.5;
-        spec1 = -0.6*k + 0.11;
+        k = -0.6 : 1.5;
+        spec1 = -0.95*k + 0.22;
         upper = 0.55 + 0*k;
         hold on;
         k1 = [k, fliplr(k)];
