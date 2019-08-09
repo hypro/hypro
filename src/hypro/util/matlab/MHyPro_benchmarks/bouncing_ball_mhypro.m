@@ -84,7 +84,7 @@ tran2.setTarget(s);
 tran2.setReset(reset2);
 tran2.setLabels({MHyProLabel('t2')});
 
-s.addTransition(tran2);
+l.addTransition(tran2);
 
 
 %-----------------------------------------------%

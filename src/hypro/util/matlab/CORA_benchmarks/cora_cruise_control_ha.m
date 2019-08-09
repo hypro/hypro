@@ -324,8 +324,6 @@ trans{1} = transition(guard, reset, 5, 'dummy', 'names');
 
 loc{6} = location('S6',6, inv, trans, dynamics);
 
-
-
 HA = hybridAutomaton(loc);
 
 

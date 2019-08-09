@@ -212,7 +212,7 @@ if bad
 %         badStates(3).loc = noRod;
 %         badStates(3).cond = badState;
         %easy: c1 >= 35 & c2 >= 35
-            spec = [0 -1 0 0 -35; 0 0 -1 0 -35];
+            spec = [0 0 1 0 41.1];
     elseif diff == 2
         %medium
 %         badState = MHyProCondition();
@@ -238,7 +238,7 @@ if bad
 %         badStates(3).loc = noRod;
 %         badStates(3).cond = badState;
         %hard: c1 >= 34.861 & c2 >= 34.861
-            spec = [0 -1 0  0 -34.861; 0 0 -1 0 -34.861];
+            spec = [0 0 1 0 40.86];
     elseif diff == 4
         % spec
 %         badState = MHyProCondition();
@@ -271,7 +271,7 @@ automaton.addInitialState(noRod, initialCond);
 %-----------------------------------------------%
 
 % Add basic settings
-settings.timeBound = 15;
+settings.timeBound = timeHorizon;
 settings.jumpDepth = 20;
 
 reach = MHyProReach(automaton);
@@ -302,7 +302,7 @@ if plotting == 1
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if bad
         if diff == 1
-            y = [60;60;35;35];
+            y = [60;60;41.1;41.1];
             x = [560;500;500;560];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
@@ -312,7 +312,7 @@ if plotting == 1
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
         elseif diff == 3
-            y = [60;60;34.861;34.861];
+            y = [60;60;40.86;40.86];
             x = [560;500;500;560];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');

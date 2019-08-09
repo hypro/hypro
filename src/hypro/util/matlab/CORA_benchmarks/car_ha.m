@@ -2,6 +2,8 @@ function HA = car_ha()
 
 %------------------------------acc---------------------------------
 
+tH = 20;
+
 %% equation dynamics:
 %    v' = 5 d' = 19.44 - v t' = 1
 dynA = [0 0 0; -1 0 0 ; 0 0 0];
@@ -10,16 +12,16 @@ dync = [5; 19.44; 1];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
 %% equation invariant:
-%   d >= 20
-invA = [0 -1 0];
-invb = -20;
+%   d >= 20 & t <= tH
+invA = [0 -1 0; 0 0 1];
+invb = [-20;tH];
 invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
 %% equation guard (acc -> brake):
 %   true (v <= inf)
-guardA = [1 0 0];
-guardb = 1000;
+guardA = [-1 0 0];
+guardb = -7000;
 guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
@@ -43,9 +45,9 @@ dync = [-7; 19.44; 1];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
 %% equation invariant:
-%   v >= 0
-invA = [1 0 0];
-invb = 1000000;
+%   v >= 0 & t <= tH
+invA = [1 0 0; 0 0 1];
+invb = [1000000; tH];
 invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
@@ -80,9 +82,9 @@ dync = [0;19.44;1];
 dynamics = linearSys('linearSys', dynA, dynB, dync);
 
 %% equation invariant:
-%   d >= 20
-invA = [0 -1 0];
-invb = -20;
+%   d >= 20 & t <= tH
+invA = [0 -1 0; 0 0 1];
+invb = [-20;tH];
 invOpt = struct('A', invA, 'b', invb);
 inv = mptPolytope(invOpt);
 
