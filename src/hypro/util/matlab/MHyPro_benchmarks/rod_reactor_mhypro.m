@@ -211,8 +211,8 @@ if bad
 %         badStates(2).cond = badState;
 %         badStates(3).loc = noRod;
 %         badStates(3).cond = badState;
-        %easy: c1 >= 35 & c2 >= 35
-            spec = [0 -1 0 0 -35; 0 0 -1 0 -35];
+        %easy: c2 <= 41.1
+            spec = [0 0 1 0 41.1];
     elseif diff == 2
         %medium
 %         badState = MHyProCondition();
@@ -237,8 +237,8 @@ if bad
 %         badStates(2).cond = badState;
 %         badStates(3).loc = noRod;
 %         badStates(3).cond = badState;
-        %hard: c1 >= 34.861 & c2 >= 34.861
-            spec = [0 -1 0  0 -34.861; 0 0 -1 0 -34.861];
+        %hard: c2 <= 40.8600
+            spec = [0 0 1 0 40.8600];
     elseif diff == 4
         % spec
 %         badState = MHyProCondition();

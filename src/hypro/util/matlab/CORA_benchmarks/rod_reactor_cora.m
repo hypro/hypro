@@ -43,17 +43,17 @@ options.tFinal = 15;
         Rset = get(HA, 'reachableSet');
         Rset = Rset.OT;
         
-        %maxValue = findSafetyProperties([0 -1 0; 0 0 -1], Rset);
+        maxValue = findSafetyProperties([0 0 1], Rset)
         
         if diff == 1
-            %easy: c1 >= 35 & c2 >= 35
-            spec = [0 -1 0 -35; 0 0 -1 -35];
+            %easy:  c2 <= 41.1
+            spec = [0 0 1 41.1];
         elseif diff == 2
             %medium: c1 >= 34.93 & c2 >= 34.93
             spec = [0 -1 0 -34.93; 0 0 -1 -34.93];
         elseif diff == 3
-            %hard: c1 >= 34.861 & c2 >= 34.861
-            spec = [0 -1 0 -34.861; 0 0 -1 -34.861];
+            %hard:c2 <= 40.8600
+            spec = [ 0 0 1 40.8600];
         elseif diff == 4
             %spec: x <= 550
             spec = [1 0 0 550];
@@ -71,7 +71,7 @@ num2str(time), ' ' num2str(safe), ' ' num2str(strategy)];
 if show    
     fig = figure(); 
     hold on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [2 3];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set

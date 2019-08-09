@@ -210,7 +210,7 @@ classdef MHyProReach < handle
                     for s = 1:size(specMatrix,1)
                         for v = 1:size(vertices,2)
                             value = linComb(s,:) * vertices(:,v);
-                            if value >= rhs(s)
+                            if value > rhs(s)
                                 %disp(['NOT SAFE - spec. no. ' num2str(s) ' violated following specification: [' num2str(linComb(s,:)) '] <= ' num2str(rhs(s))]) ;
                                 out = 0;
                             end

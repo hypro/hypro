@@ -138,7 +138,7 @@ if bad
 %         badStates(1).loc = l;
 %         badStates(1).cond = badState;
         %special: x >= 0 
-        spec = [1 0 0 0];
+        spec = [-1 0 0 0];
     end
         
 

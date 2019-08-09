@@ -328,8 +328,8 @@ if bad
 %         badStates(3).cond = badState;
 %         badStates(4).loc = l4;
 %         badStates(4).cond = badState;
-        % y+ 0.6*x1 <= 0.11
-        spec = [0 1 0.6 0 0 0 0 0.11];
+        % y+ 0.95*x1 <= 0.22
+        spec = [0 1 0.95 0 0 0 0 0.22];
     end
    % automaton.setLocalBadStates(badStates);
 end

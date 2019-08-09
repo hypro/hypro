@@ -331,8 +331,8 @@ if bad
 %         badStates(3).cond = badState;
 %         badStates(4).loc = l4;
 %         badStates(4).cond = badState;
-        %hard: x2 >= -0.7
-            spec = [0 -1 0 0.7];
+        %hard: x2 >= -0.5068
+            spec = [0 -1 0 0.5068];
     elseif diff == 4
         %spec
 %         badState = MHyProCondition();
