@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "HyPro", "index.html", [
+    [ "Features", "md__home_travis_build_hypro_hypro_doc_markdown_features_features.html", null ],
     [ "Getting started", "gettingStarted.html", "gettingStarted" ],
     [ "State set representations", "stateSets.html", "stateSets" ],
     [ "Utility functions", "utilFunc.html", "utilFunc" ],
@@ -66,8 +67,8 @@ var NAVTREEINDEX =
 "classhypro_1_1ZonotopeT.html#a464dbff976fd7f00ffacb3349993dca9",
 "classhypro_1_1rectangularBadStateHandler.html#a1541d4db6cdd9068cb236724a65fc7f9",
 "example__hashMatrix_8cpp_source.html",
-"structhypro_1_1Decomposition.html",
-"structhypro_1_1pointIt.html#a09245d50039948069e84a576818315a2"
+"structhypro_1_1ChildTimingInformation.html#af4057e2d8f03edeb7bfaef53cf7e3d00",
+"structhypro_1_1pointIt.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

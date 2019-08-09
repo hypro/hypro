@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['plotting',['Plotting',['../plotting.html',1,'utilFunc']]]
+  ['installation',['Installation',['../installation.html',1,'gettingStarted']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['installation',['Installation',['../installation.html',1,'gettingStarted']]]
+  ['hypro',['HyPro',['../index.html',1,'']]]
 ];
