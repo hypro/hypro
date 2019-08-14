@@ -30,12 +30,6 @@ namespace hypro {
 		
 		//compute template matrix and set it as new mMatrixPtr
 		auto templateDirs = computeTemplate<Number>(dimension, noOfSides);
-		//matrix_t<Number> templateMatrix = combineRows(templateDirs);
-		//matrix_t<Number> templateMatrix = matrix_t<Number>::Zero(templateDirs.size(), templateDirs.front().rows());
-		//for(unsigned i = 0; i < templateDirs.size(); ++i){
-		//	templateMatrix.row(i) = templateDirs.at(i);
-		//}
-		//mMatrixPtr = std::make_shared<matrix_t<Number>>(templateMatrix);
 		mMatrixPtr = std::make_shared<matrix_t<Number>>(combineRows(templateDirs));
 		mOptimizer = Optimizer<Number>(*mMatrixPtr, mVector);
 	}

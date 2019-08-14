@@ -37,6 +37,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		std::string extendedFilename = ha.second.fileName;
 		switch (Representation::type()) {
+			case hypro::representation_name::polytope_t: {
+				extendedFilename += "_tpoly";
+				break;
+			}
 			case hypro::representation_name::ppl_polytope: {
 				extendedFilename += "_pplpoly";
 				break;
@@ -148,6 +152,13 @@ int main(int argc, char** argv) {
 #endif
 
 	switch(rep){
+
+		case 8: {
+			using Representation = hypro::TemplatePolyhedron<Number>;
+			std::cout << "Using a template polytope representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_t);
+			break;
+		}
 
 		#ifdef HYPRO_USE_PPL
 		case 7: {
