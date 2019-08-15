@@ -1,6 +1,8 @@
 var classhypro_1_1Flowpipe =
 [
     [ "Flowpipe", "classhypro_1_1Flowpipe.html#a1ee2f66ed78d01fdc103d4d4941130c4", null ],
+    [ "~Flowpipe", "classhypro_1_1Flowpipe.html#a0d482670d7817d6c55741afddba2c9f6", null ],
+    [ "Flowpipe", "classhypro_1_1Flowpipe.html#a1ee2f66ed78d01fdc103d4d4941130c4", null ],
     [ "Flowpipe", "classhypro_1_1Flowpipe.html#ad2aa06b241de21cd471f5dd88cdc14fc", null ],
     [ "Flowpipe", "classhypro_1_1Flowpipe.html#a1b7ad732d64bd9226fa7edc48256ac2e", null ],
     [ "~Flowpipe", "classhypro_1_1Flowpipe.html#a0d482670d7817d6c55741afddba2c9f6", null ],

@@ -135,6 +135,7 @@ var group__geoState =
       [ "unite", "classhypro_1_1SupportFunctionT.html#ac84c8b77d3cd8bc8ec0f28b10d8d179b", null ],
       [ "vector", "classhypro_1_1SupportFunctionT.html#a8b99fbdb9c9c3507de0b830c6facbfd0", null ],
       [ "vertices", "classhypro_1_1SupportFunctionT.html#a22553b6a517d9d2ba99ae0c7e76d0864", null ],
+      [ "vertices", "classhypro_1_1SupportFunctionT.html#ad91062814543cd6994fdf452dd6e6304", null ],
       [ "operator<<", "classhypro_1_1SupportFunctionT.html#abccc6b3dff868a71c65dcbf7a4b34093", null ],
       [ "operator==", "classhypro_1_1SupportFunctionT.html#a8acc0aaf48e7b52246b61bd28d6e0cf7", null ]
     ] ],
