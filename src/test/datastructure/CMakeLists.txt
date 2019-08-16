@@ -13,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		PointTest.cpp
 		VertexTest.cpp
 		VertexContainerTest.cpp
+		RangeTest.cpp
 		StateTest.cpp
 		StateVisitorTest.cpp
 		StrategyTest.cpp
