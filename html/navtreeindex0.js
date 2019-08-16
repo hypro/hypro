@@ -173,6 +173,7 @@ var NAVTREEINDEX0 =
 "PolytopeSetting_8h_source.html":[8,0,1,0,3,7,1],
 "PolytopeSupportFunction_8h_source.html":[8,0,1,0,3,9,5],
 "Polytope_8h_source.html":[8,0,1,0,3,7,0],
+"Range_8h_source.html":[8,0,1,0,4,12],
 "ReachTreeNode_8h_source.html":[8,0,1,0,1,1,6],
 "ReachTree_8h_source.html":[8,0,1,0,1,1,5],
 "Reach_8h.html":[8,0,1,0,0,3,4],
@@ -222,7 +223,7 @@ var NAVTREEINDEX0 =
 "TreeStatistic_8h_source.html":[8,0,1,0,1,1,14],
 "VPolytopeSettings_8h_source.html":[8,0,1,0,3,8,2,2],
 "VPolytope_8h_source.html":[8,0,1,0,3,8,2,1],
-"VariablePool_8h_source.html":[8,0,1,0,4,14],
+"VariablePool_8h_source.html":[8,0,1,0,4,15],
 "VertexContainer_8h.html":[8,0,1,0,1,9],
 "VertexContainer_8h_source.html":[8,0,1,0,1,9],
 "Vertex_8h.html":[8,0,1,0,1,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "adaptions__soplex_8h_source.html":[8,0,1,0,4,1,2,0],
 "adaptions__z3_8h_source.html":[8,0,1,0,4,1,3,0],
 "adaptions__z3__double_8cpp_source.html":[8,0,1,0,4,1,3,1],
-"affine_8h_source.html":[8,0,1,0,1,0,1,0],
-"algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html":[8,0,1,0,0,3,1,4,3]
+"affine_8h_source.html":[8,0,1,0,1,0,1,0]
 };

@@ -448,7 +448,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1projectionContent.html">projectionContent</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Range.html">Range</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Range.html">Range</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct for reachability analysis algorithm settings.  <a href="structhypro_1_1ReachabilitySettings.html#details">More...</a><br /></td></tr>
@@ -1453,6 +1453,14 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a81f55c1fc94e0f5ae75c92c2062c27d4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addPreSolution</b> (z3::optimize &amp;solver, <a class="el" href="classhypro_1_1z3Context.html">z3Context</a> &amp;c, const <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt; &amp;preSolution, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;direction, const z3::expr &amp;objective)</td></tr>
 <tr class="separator:a81f55c1fc94e0f5ae75c92c2062c27d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d75843a6fe56dac83cf35ff0df9a389"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7d75843a6fe56dac83cf35ff0df9a389"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a7d75843a6fe56dac83cf35ff0df9a389"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toContainer</b> (<a class="el" href="classhypro_1_1Range.html">Range</a>&lt; T &gt; &amp;r)</td></tr>
+<tr class="separator:a7d75843a6fe56dac83cf35ff0df9a389"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36a1e676ce93e1fbf57a6ba6b74f9b1d"><td class="memTemplParams" colspan="2"><a class="anchor" id="a36a1e676ce93e1fbf57a6ba6b74f9b1d"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a36a1e676ce93e1fbf57a6ba6b74f9b1d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Range.html">Range</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectFirstConsecutiveRange</b> (const T &amp;in, std::function&lt; bool(typename T::value_type)&gt; cmp)</td></tr>
+<tr class="separator:a36a1e676ce93e1fbf57a6ba6b74f9b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a86e665c06b8271dc9895ce33cb2ce40e"></a>
 template&lt;typename SetType , typename Number , sampling_strategy_set SMPL_STRAT&gt; </td></tr>
 <tr class="memitem:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; SimulationSample&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>sample</b> (const SetType &amp;in, unsigned k=0)</td></tr>

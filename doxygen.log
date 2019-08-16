@@ -1097,9 +1097,12 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGN
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGNode.h:60:13: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:17:7: error: redefinition of 'Flowpipe' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.tpp:6:23: error: redefinition of 'Flowpipe<Number>' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.tpp:11:23: error: redefinition of '~Flowpipe<Number>' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:8:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -2085,6 +2088,17 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:8:42: warning: in-class initialization of non-static data member is a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:9:40: warning: in-class initialization of non-static data member is a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:20:9: warning: explicit conversion functions are a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:8:44: error: use of undeclared identifier 'nullptr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:9:42: error: use of undeclared identifier 'nullptr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:31:55: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:31:68: error: expected ')' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:32:9: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:42:9: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/sampling/../logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
@@ -2199,6 +2213,8 @@ Reading /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
@@ -2238,10 +2254,7 @@ Associating documentation with classes...
 Computing nesting relations for classes...
 Building example list...
 Searching for enumerations...
-Searching for documented typedefs...
-Searching for members imported via using declarations...
-Searching for included using directives...
-Searching for documented variabl/home/travis/build/hypro/hypro/examples/example_eigensimple2points.cpp:10: warning: found documented #define but ignoring it because ENABLE_PREPROCESSING is NO.
+Searching for documented typedefs./home/travis/build/hypro/hypro/examples/example_eigensimple2points.cpp:10: warning: found documented #define but ignoring it because ENABLE_PREPROCESSING is NO.
 
 /home/travis/build/hypro/hypro/src/hypro/config.h:46: warning: found documented #define but ignoring it because ENABLE_PREPROCESSING is NO.
 
@@ -2266,7 +2279,7 @@ Searching for documented variabl/home/travis/build/hypro/hypro/examples/example_
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:73: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:21: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib19970.bbl: No such file or directory
+error opening bib20128.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2323,9 +2336,10 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp:8:11: fatal error: 'util/Plotter.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-es...
+..
+Searching for members imported via using declarations...
+Searching for included using directives...
+Searching for documented variables...
 Building interface member list...
 Building member list...
 Searching for friends...
@@ -2397,8 +2411,9 @@ Generating code for file /home/travis/build/hypro/hypro/examples/example_massif.
 Generating code for file /home/travis/build/hypro/hypro/examples/example_matrixPolyhedra.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_optimizer.cpp...
-Generating code for file /home/travis/build/hypro/hypro/examples/example_orthogonalPolyhedron.cpp...
-Generating code for file /home/travis/build/hypro/hypro/examples/example_parallel_cerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hyproerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
@@ -2481,9 +2496,8 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
-omposition.cpp...
+/hypro/examples/example_orthogonalPolyhedron.cpp...
+Generating code for file /home/travis/build/hypro/hypro/examples/example_parallel_composition.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_pca.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_plot.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_polytope.cpp...
@@ -2521,8 +2535,9 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.cpp...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.cpp...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowsterror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/parserror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -2616,15 +2631,8 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/d
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-ar/ParserWrapper.cpp...
+er/antlr4-flowstar/HybridAutomatonVisitor.cpp...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen_double.cpp...
@@ -2660,8 +2668,15 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/rea
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/BadStateHandlers.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/discreteBadStateHandler.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlerserror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/ltiBerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/rectangularBadStateHandler.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
@@ -2839,15 +2854,8 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:7:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/discreteResetHandler.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-/rectangularBadStateHandler.h...
+adStateHandler.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/rectangularBadStateHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/timedBadStateHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/FirstSegmentHandlers.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/ltiFirstSegmentHandler.h...
@@ -2877,8 +2885,15 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/representation
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/discreteResetHandler.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachaerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachabilierror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/discreteResetHandler.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/ltiResetHandler.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
@@ -3109,15 +3124,8 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:19:42: error: 
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-bility/handlers/resetHandlers/ltiResetHandler.h...
+ty/handlers/resetHandlers/discreteResetHandler.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/ltiResetHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/rectangularResetHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/ResetHandlers.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/timedResetHandler.h...
@@ -3149,8 +3157,15 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/typetraits.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Herror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hyproerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomatonComp.h:9:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
@@ -3228,9 +3243,12 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGN
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGNode.h:60:13: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:17:7: error: redefinition of 'Flowpipe' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.tpp:6:23: error: redefinition of 'Flowpipe<Number>' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.tpp:11:23: error: redefinition of '~Flowpipe<Number>' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:8:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -3314,17 +3332,8 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Tree
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeStatistic.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueue.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:12: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:22: error: expected member name or ';' after declaration specifiers [clang]
-error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:12: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:22: error: expected member name or ';' after declaration specifiers [clang]
-error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
-ybridAutomaton/HybridAutomatonComp.h...
+/datastructures/HybridAutomaton/HybridAutomaton.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomatonComp.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h...
@@ -3359,9 +3368,17 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/TimingAggregate.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeNode.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeStatistic.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueue.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h...
-Generror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueue.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:12: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:22: error: expected member name or ';' after declaration specifiers [clang]
+error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:12: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:22: error: expected member name or ';' after declaration specifiers [clang]
+error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:12: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:8:22: error: expected member name or ';' after declaration specifiers [clang]
@@ -3469,10 +3486,9 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproTransitionVisitor.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
-erating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h...
+.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h...
@@ -3508,8 +3524,10 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproLocationVisitor.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproSettingVisitor.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproTransitionVisitor.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/represerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/herror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:9:5: error: C++ requires a type specifier for all declarations [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -3734,12 +3752,8 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h:7:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:14:10: fatal error: 'BoxSupportfunction.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h:12:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-entations/Box/Box.h...
+ypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h...
@@ -3773,9 +3787,12 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/representation
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportFunction.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/EllipsoidSupportFunction.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h...
-Geerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunctionerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:14:10: fatal error: 'BoxSupportfunction.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h:12:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:2:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:5:5: error: C++ requires a type specifier for all declarations [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -4012,10 +4029,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/d
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:9:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
-nerating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h...
+.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/continuous.h...
@@ -4052,10 +4068,23 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithre
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/pca.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotData.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h...
-Generating code for file /home/travis/build/hypro/hypro/src/error: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code foerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:9:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:8:42: warning: in-class initialization of non-static data member is a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:9:40: warning: in-class initialization of non-static data member is a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:20:9: warning: explicit conversion functions are a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:8:44: error: use of undeclared identifier 'nullptr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:9:42: error: use of undeclared identifier 'nullptr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:31:55: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:31:68: error: expected ')' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:32:9: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/Range.h:42:9: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
@@ -4135,7 +4164,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/make_vector
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
-hypro/util/plotting/PlotterUtil.h...
+r file /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h...
@@ -4779,15 +4810,15 @@ Generating docs for compound hypro::Vertex...
 Generating docs for compound hypro::VertexContainer...
 Generating docs for compound hypro::VertexEnumeration...
 Generating docs for compound hypro::VPolytopeSettings...
-Generating docs for compound hypro::VPolytopeT...
-Generating docs for compound hypro::WorkQueueDefaultSetting...
-Generating docs for compound hypro::WorkQueueManager...
-Generating docs for compound hypro::WorkQueueT...
-Generating docs for compsh: 1: latex: not found
+Generating docs for compoush: 1: latex: not found
 error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
 sh: 1: dvips: not found
 error: Problems running dvips. Check your installation!
-ound hypro::z3Context...
+nd hypro::VPolytopeT...
+Generating docs for compound hypro::WorkQueueDefaultSetting...
+Generating docs for compound hypro::WorkQueueManager...
+Generating docs for compound hypro::WorkQueueT...
+Generating docs for compound hypro::z3Context...
 Generating docs for compound hypro::ZonotopeSetting...
 Generating docs for compound hypro::ZonotopeT...
 Generating docs for compound hypro::detail::gen_seq...
@@ -4849,199 +4880,200 @@ finalizing index lists...
 writing tag file...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/193
-Running dot for graph 2/193
-Running dot for graph 3/193
-Running dot for graph 4/193
-Running dot for graph 5/193
-Running dot for graph 6/193
-Running dot for graph 7/193
-Running dot for graph 8/193
-Running dot for graph 9/193
-Running dot for graph 10/193
-Running dot for graph 11/193
-Running dot for graph 12/193
-Running dot for graph 13/193
-Running dot for graph 14/193
-Running dot for graph 15/193
-Running dot for graph 16/193
-Running dot for graph 17/193
-Running dot for graph 18/193
-Running dot for graph 19/193
-Running dot for graph 20/193
-Running dot for graph 21/193
-Running dot for graph 22/193
-Running dot for graph 23/193
-Running dot for graph 24/193
-Running dot for graph 25/193
-Running dot for graph 26/193
-Running dot for graph 27/193
-Running dot for graph 28/193
-Running dot for graph 29/193
-Running dot for graph 30/193
-Running dot for graph 31/193
-Running dot for graph 32/193
-Running dot for graph 33/193
-Running dot for graph 34/193
-Running dot for graph 35/193
-Running dot for graph 36/193
-Running dot for graph 37/193
-Running dot for graph 38/193
-Running dot for graph 39/193
-Running dot for graph 40/193
-Running dot for graph 41/193
-Running dot for graph 42/193
-Running dot for graph 43/193
-Running dot for graph 44/193
-Running dot for graph 45/193
-Running dot for graph 46/193
-Running dot for graph 47/193
-Running dot for graph 48/193
-Running dot for graph 49/193
-Running dot for graph 50/193
-Running dot for graph 51/193
-Running dot for graph 52/193
-Running dot for graph 53/193
-Running dot for graph 54/193
-Running dot for graph 55/193
-Running dot for graph 56/193
-Running dot for graph 57/193
-Running dot for graph 58/193
-Running dot for graph 59/193
-Running dot for graph 60/193
-Running dot for graph 61/193
-Running dot for graph 62/193
-Running dot for graph 63/193
-Running dot for graph 64/193
-Running dot for graph 65/193
-Running dot for graph 66/193
-Running dot for graph 67/193
-Running dot for graph 68/193
-Running dot for graph 69/193
-Running dot for graph 70/193
-Running dot for graph 71/193
-Running dot for graph 72/193
-Running dot for graph 73/193
-Running dot for graph 74/193
-Running dot for graph 75/193
-Running dot for graph 76/193
-Running dot for graph 77/193
-Running dot for graph 78/193
-Running dot for graph 79/193
-Running dot for graph 80/193
-Running dot for graph 81/193
-Running dot for graph 82/193
-Running dot for graph 83/193
-Running dot for graph 84/193
-Running dot for graph 85/193
-Running dot for graph 86/193
-Running dot for graph 87/193
-Running dot for graph 88/193
-Running dot for graph 89/193
-Running dot for graph 90/193
-Running dot for graph 91/193
-Running dot for graph 92/193
-Running dot for graph 93/193
-Running dot for graph 94/193
-Running dot for graph 95/193
-Running dot for graph 96/193
-Running dot for graph 97/193
-Running dot for graph 98/193
-Running dot for graph 99/193
-Running dot for graph 100/193
-Running dot for graph 101/193
-Running dot for graph 102/193
-Running dot for graph 103/193
-Running dot for graph 104/193
-Running dot for graph 105/193
-Running dot for graph 106/193
-Running dot for graph 107/193
-Running dot for graph 108/193
-Running dot for graph 109/193
-Running dot for graph 110/193
-Running dot for graph 111/193
-Running dot for graph 112/193
-Running dot for graph 113/193
-Running dot for graph 114/193
-Running dot for graph 115/193
-Running dot for graph 116/193
-Running dot for graph 117/193
-Running dot for graph 118/193
-Running dot for graph 119/193
-Running dot for graph 120/193
-Running dot for graph 121/193
-Running dot for graph 122/193
-Running dot for graph 123/193
-Running dot for graph 124/193
-Running dot for graph 125/193
-Running dot for graph 126/193
-Running dot for graph 127/193
-Running dot for graph 128/193
-Running dot for graph 129/193
-Running dot for graph 130/193
-Running dot for graph 131/193
-Running dot for graph 132/193
-Running dot for graph 133/193
-Running dot for graph 134/193
-Running dot for graph 135/193
-Running dot for graph 136/193
-Running dot for graph 137/193
-Running dot for graph 138/193
-Running dot for graph 139/193
-Running dot for graph 140/193
-Running dot for graph 141/193
-Running dot for graph 142/193
-Running dot for graph 143/193
-Running dot for graph 144/193
-Running dot for graph 145/193
-Running dot for graph 146/193
-Running dot for graph 147/193
-Running dot for graph 148/193
-Running dot for graph 149/193
-Running dot for graph 150/193
-Running dot for graph 151/193
-Running dot for graph 152/193
-Running dot for graph 153/193
-Running dot for graph 154/193
-Running dot for graph 155/193
-Running dot for graph 156/193
-Running dot for graph 157/193
-Running dot for graph 158/193
-Running dot for graph 159/193
-Running dot for graph 160/193
-Running dot for graph 161/193
-Running dot for graph 162/193
-Running dot for graph 163/193
-Running dot for graph 164/193
-Running dot for graph 165/193
-Running dot for graph 166/193
-Running dot for graph 167/193
-Running dot for graph 168/193
-Running dot for graph 169/193
-Running dot for graph 170/193
-Running dot for graph 171/193
-Running dot for graph 172/193
-Running dot for graph 173/193
-Running dot for graph 174/193
-Running dot for graph 175/193
-Running dot for graph 176/193
-Running dot for graph 177/193
-Running dot for graph 178/193
-Running dot for graph 179/193
-Running dot for graph 180/193
-Running dot for graph 181/193
-Running dot for graph 182/193
-Running dot for graph 183/193
-Running dot for graph 184/193
-Running dot for graph 185/193
-Running dot for graph 186/193
-Running dot for graph 187/193
-Running dot for graph 188/193
-Running dot for graph 189/193
-Running dot for graph 190/193
-Running dot for graph 191/193
-Running dot for graph 192/193
-Running dot for graph 193/193
+Running dot for graph 1/194
+Running dot for graph 2/194
+Running dot for graph 3/194
+Running dot for graph 4/194
+Running dot for graph 5/194
+Running dot for graph 6/194
+Running dot for graph 7/194
+Running dot for graph 8/194
+Running dot for graph 9/194
+Running dot for graph 10/194
+Running dot for graph 11/194
+Running dot for graph 12/194
+Running dot for graph 13/194
+Running dot for graph 14/194
+Running dot for graph 15/194
+Running dot for graph 16/194
+Running dot for graph 17/194
+Running dot for graph 18/194
+Running dot for graph 19/194
+Running dot for graph 20/194
+Running dot for graph 21/194
+Running dot for graph 22/194
+Running dot for graph 23/194
+Running dot for graph 24/194
+Running dot for graph 25/194
+Running dot for graph 26/194
+Running dot for graph 27/194
+Running dot for graph 28/194
+Running dot for graph 29/194
+Running dot for graph 30/194
+Running dot for graph 31/194
+Running dot for graph 32/194
+Running dot for graph 33/194
+Running dot for graph 34/194
+Running dot for graph 35/194
+Running dot for graph 36/194
+Running dot for graph 37/194
+Running dot for graph 38/194
+Running dot for graph 39/194
+Running dot for graph 40/194
+Running dot for graph 41/194
+Running dot for graph 42/194
+Running dot for graph 43/194
+Running dot for graph 44/194
+Running dot for graph 45/194
+Running dot for graph 46/194
+Running dot for graph 47/194
+Running dot for graph 48/194
+Running dot for graph 49/194
+Running dot for graph 50/194
+Running dot for graph 51/194
+Running dot for graph 52/194
+Running dot for graph 53/194
+Running dot for graph 54/194
+Running dot for graph 55/194
+Running dot for graph 56/194
+Running dot for graph 57/194
+Running dot for graph 58/194
+Running dot for graph 59/194
+Running dot for graph 60/194
+Running dot for graph 61/194
+Running dot for graph 62/194
+Running dot for graph 63/194
+Running dot for graph 64/194
+Running dot for graph 65/194
+Running dot for graph 66/194
+Running dot for graph 67/194
+Running dot for graph 68/194
+Running dot for graph 69/194
+Running dot for graph 70/194
+Running dot for graph 71/194
+Running dot for graph 72/194
+Running dot for graph 73/194
+Running dot for graph 74/194
+Running dot for graph 75/194
+Running dot for graph 76/194
+Running dot for graph 77/194
+Running dot for graph 78/194
+Running dot for graph 79/194
+Running dot for graph 80/194
+Running dot for graph 81/194
+Running dot for graph 82/194
+Running dot for graph 83/194
+Running dot for graph 84/194
+Running dot for graph 85/194
+Running dot for graph 86/194
+Running dot for graph 87/194
+Running dot for graph 88/194
+Running dot for graph 89/194
+Running dot for graph 90/194
+Running dot for graph 91/194
+Running dot for graph 92/194
+Running dot for graph 93/194
+Running dot for graph 94/194
+Running dot for graph 95/194
+Running dot for graph 96/194
+Running dot for graph 97/194
+Running dot for graph 98/194
+Running dot for graph 99/194
+Running dot for graph 100/194
+Running dot for graph 101/194
+Running dot for graph 102/194
+Running dot for graph 103/194
+Running dot for graph 104/194
+Running dot for graph 105/194
+Running dot for graph 106/194
+Running dot for graph 107/194
+Running dot for graph 108/194
+Running dot for graph 109/194
+Running dot for graph 110/194
+Running dot for graph 111/194
+Running dot for graph 112/194
+Running dot for graph 113/194
+Running dot for graph 114/194
+Running dot for graph 115/194
+Running dot for graph 116/194
+Running dot for graph 117/194
+Running dot for graph 118/194
+Running dot for graph 119/194
+Running dot for graph 120/194
+Running dot for graph 121/194
+Running dot for graph 122/194
+Running dot for graph 123/194
+Running dot for graph 124/194
+Running dot for graph 125/194
+Running dot for graph 126/194
+Running dot for graph 127/194
+Running dot for graph 128/194
+Running dot for graph 129/194
+Running dot for graph 130/194
+Running dot for graph 131/194
+Running dot for graph 132/194
+Running dot for graph 133/194
+Running dot for graph 134/194
+Running dot for graph 135/194
+Running dot for graph 136/194
+Running dot for graph 137/194
+Running dot for graph 138/194
+Running dot for graph 139/194
+Running dot for graph 140/194
+Running dot for graph 141/194
+Running dot for graph 142/194
+Running dot for graph 143/194
+Running dot for graph 144/194
+Running dot for graph 145/194
+Running dot for graph 146/194
+Running dot for graph 147/194
+Running dot for graph 148/194
+Running dot for graph 149/194
+Running dot for graph 150/194
+Running dot for graph 151/194
+Running dot for graph 152/194
+Running dot for graph 153/194
+Running dot for graph 154/194
+Running dot for graph 155/194
+Running dot for graph 156/194
+Running dot for graph 157/194
+Running dot for graph 158/194
+Running dot for graph 159/194
+Running dot for graph 160/194
+Running dot for graph 161/194
+Running dot for graph 162/194
+Running dot for graph 163/194
+Running dot for graph 164/194
+Running dot for graph 165/194
+Running dot for graph 166/194
+Running dot for graph 167/194
+Running dot for graph 168/194
+Running dot for graph 169/194
+Running dot for graph 170/194
+Running dot for graph 171/194
+Running dot for graph 172/194
+Running dot for graph 173/194
+Running dot for graph 174/194
+Running dot for graph 175/194
+Running dot for graph 176/194
+Running dot for graph 177/194
+Running dot for graph 178/194
+Running dot for graph 179/194
+Running dot for graph 180/194
+Running dot for graph 181/194
+Running dot for graph 182/194
+Running dot for graph 183/194
+Running dot for graph 184/194
+Running dot for graph 185/194
+Running dot for graph 186/194
+Running dot for graph 187/194
+Running dot for graph 188/194
+Running dot for graph 189/194
+Running dot for graph 190/194
+Running dot for graph 191/194
+Running dot for graph 192/194
+Running dot for graph 193/194
+Running dot for graph 194/194
 Patching output file 1/1
-lookup cache used 7025/65536 hits=208118 misses=8137
+lookup cache used 7048/65536 hits=208315 misses=8170
 finished...

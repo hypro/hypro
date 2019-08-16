@@ -87,6 +87,7 @@ var hierarchy =
     ] ],
     [ "hypro::Fan< Number >", "classhypro_1_1Fan.html", null ],
     [ "Flags", "structFlags.html", null ],
+    [ "hypro::Flowpipe< State >", "classhypro_1_1Flowpipe.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1Flowpipe.html", null ],
     [ "Flowpipe_segment", "structFlowpipe__segment.html", null ],
     [ "hypro::FourierMotzkinQE< Number >", "classhypro_1_1FourierMotzkinQE.html", null ],

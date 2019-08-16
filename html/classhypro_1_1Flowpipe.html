@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>HyPro: hypro::Flowpipe&lt; Number &gt; Class Template Reference</title>
+<title>HyPro: hypro::Flowpipe&lt; State &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Flowpipe.html','');});
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhypro_1_1Flowpipe-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::Flowpipe&lt; Number &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::Flowpipe&lt; State &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -127,60 +127,88 @@ $(document).ready(function(){initNavTree('classhypro_1_1Flowpipe.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad2aa06b241de21cd471f5dd88cdc14fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2aa06b241de21cd471f5dd88cdc14fc"></a>
+<tr class="memitem:a99ca97a8b6b04d7589c165844cfc762b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99ca97a8b6b04d7589c165844cfc762b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStates</b> (const std::vector&lt; State &gt; &amp;states)</td></tr>
+<tr class="separator:a99ca97a8b6b04d7589c165844cfc762b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a725f2c4e4beca2be5301360f409f1c71"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a725f2c4e4beca2be5301360f409f1c71"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStates</b> (std::vector&lt; State &gt; &amp;&amp;states)</td></tr>
+<tr class="separator:a725f2c4e4beca2be5301360f409f1c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88cb90a12e3e9154ac21f685f49eefef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88cb90a12e3e9154ac21f685f49eefef"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addState</b> (const State &amp;state)</td></tr>
+<tr class="separator:a88cb90a12e3e9154ac21f685f49eefef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f92fd82e25c9da96dc038dd7464cd98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f92fd82e25c9da96dc038dd7464cd98"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addState</b> (State &amp;&amp;state)</td></tr>
+<tr class="separator:a5f92fd82e25c9da96dc038dd7464cd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af61825aeac2fe372722acc2e5bcf048f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af61825aeac2fe372722acc2e5bcf048f"></a>
+const std::vector&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStates</b> () const </td></tr>
+<tr class="separator:af61825aeac2fe372722acc2e5bcf048f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66510004afcc1d2d13138b30d060fe40"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66510004afcc1d2d13138b30d060fe40"></a>
+std::vector&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetStates</b> ()</td></tr>
+<tr class="separator:a66510004afcc1d2d13138b30d060fe40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d0348b1a3db5d3999d51a1cfe2d2a97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d0348b1a3db5d3999d51a1cfe2d2a97"></a>
+<a class="el" href="classhypro_1_1Range.html">Range</a>&lt; std::vector&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>selectTimestamps</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;span)</td></tr>
+<tr class="separator:a2d0348b1a3db5d3999d51a1cfe2d2a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3140d21e20b45df25d06a82fe3ba92d"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae3140d21e20b45df25d06a82fe3ba92d"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:ae3140d21e20b45df25d06a82fe3ba92d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Range.html">Range</a>&lt; std::vector&lt; State &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectSatisfyingStates</b> (const Condition&lt; Number &gt; &amp;cond)</td></tr>
+<tr class="separator:ae3140d21e20b45df25d06a82fe3ba92d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae300e3086f7fe25ae49cf6b73b6f7f7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae300e3086f7fe25ae49cf6b73b6f7f7b"></a>
+std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPlotData</b> (std::size_t refinementLevel=0, std::size_t threadId=0) const </td></tr>
+<tr class="separator:ae300e3086f7fe25ae49cf6b73b6f7f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4571323fcb8b95e1a61bf6de43eb0ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4571323fcb8b95e1a61bf6de43eb0ff"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Flowpipe</b> (const <a class="el" href="classhypro_1_1TaylorModelVec.html">TaylorModelVec</a>&lt; Number &gt; &amp;tmv_input, const <a class="el" href="classhypro_1_1Domain.html">Domain</a>&lt; Number &gt; &amp;domain_input)</td></tr>
-<tr class="separator:ad2aa06b241de21cd471f5dd88cdc14fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b7ad732d64bd9226fa7edc48256ac2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b7ad732d64bd9226fa7edc48256ac2e"></a>
+<tr class="separator:ad4571323fcb8b95e1a61bf6de43eb0ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9447c324afebe66c020eece60c987aef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9447c324afebe66c020eece60c987aef"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Flowpipe</b> (const <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; Number &gt; &amp;flowpipe)</td></tr>
-<tr class="separator:a1b7ad732d64bd9226fa7edc48256ac2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c3cdda5bb32c0bc23818772b94eae01"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c3cdda5bb32c0bc23818772b94eae01"></a>
+<tr class="separator:a9447c324afebe66c020eece60c987aef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab140ddc9b68a0b4536e4b93e3e79a92f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab140ddc9b68a0b4536e4b93e3e79a92f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
-<tr class="separator:a0c3cdda5bb32c0bc23818772b94eae01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4a8928867fdd58b5baca08dd6fa1863"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4a8928867fdd58b5baca08dd6fa1863"></a>
+<tr class="separator:ab140ddc9b68a0b4536e4b93e3e79a92f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57ade192354b41c458121bcf9351832b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57ade192354b41c458121bcf9351832b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>enclosure</b> (<a class="el" href="classhypro_1_1Range.html">Range</a>&lt; Number &gt; &amp;range)</td></tr>
-<tr class="separator:ae4a8928867fdd58b5baca08dd6fa1863"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3c132e82a8856aa57cfbe8a26c82d4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3c132e82a8856aa57cfbe8a26c82d4b"></a>
+<tr class="separator:a57ade192354b41c458121bcf9351832b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a229edf12dd16d83f34ecb175ee939"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9a229edf12dd16d83f34ecb175ee939"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>enclosure</b> (<a class="el" href="classhypro_1_1Range.html">Range</a>&lt; Number &gt; &amp;range, const exponent order)</td></tr>
-<tr class="separator:ac3c132e82a8856aa57cfbe8a26c82d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32120636a2ad844578d53253287fb836"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32120636a2ad844578d53253287fb836"></a>
+<tr class="separator:af9a229edf12dd16d83f34ecb175ee939"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af40155cc2282d5dd5bae1a830c62f69c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af40155cc2282d5dd5bae1a830c62f69c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>composition</b> (<a class="el" href="classhypro_1_1TaylorModelVec.html">TaylorModelVec</a>&lt; Number &gt; &amp;result, <a class="el" href="classhypro_1_1Domain.html">Domain</a>&lt; Number &gt; &amp;fp_domain, const exponent order)</td></tr>
-<tr class="separator:a32120636a2ad844578d53253287fb836"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab80d94f2d453dd0fa9004a07802e3edd"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab80d94f2d453dd0fa9004a07802e3edd"></a>
+<tr class="separator:af40155cc2282d5dd5bae1a830c62f69c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9362e9bf266c54352f9bf1bc50d8a6aa"><td class="memTemplParams" colspan="2"><a class="anchor" id="a9362e9bf266c54352f9bf1bc50d8a6aa"></a>
 template&lt;class Setting &gt; </td></tr>
-<tr class="memitem:ab80d94f2d453dd0fa9004a07802e3edd"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>next_picard</b> (<a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; Number &gt; &amp;result, const <a class="el" href="classhypro_1_1PolynomialODE.html">PolynomialODE</a>&lt; Number &gt; &amp;ode, const carl::Variable &amp;t, const double stepsize, const exponent order, const <a class="el" href="classhypro_1_1Range.html">Range</a>&lt; Number &gt; &amp;estimation)</td></tr>
-<tr class="separator:ab80d94f2d453dd0fa9004a07802e3edd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a671c741de2c45b011ba765e0948f3ccd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a671c741de2c45b011ba765e0948f3ccd"></a>
+<tr class="memitem:a9362e9bf266c54352f9bf1bc50d8a6aa"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>next_picard</b> (<a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; Number &gt; &amp;result, const <a class="el" href="classhypro_1_1PolynomialODE.html">PolynomialODE</a>&lt; Number &gt; &amp;ode, const carl::Variable &amp;t, const double stepsize, const exponent order, const <a class="el" href="classhypro_1_1Range.html">Range</a>&lt; Number &gt; &amp;estimation)</td></tr>
+<tr class="separator:a9362e9bf266c54352f9bf1bc50d8a6aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a601e138220c5c64c0f59fbbc0a5e8473"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a601e138220c5c64c0f59fbbc0a5e8473"></a>
 <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; Number &gt; &amp;flowpipe)</td></tr>
-<tr class="separator:a671c741de2c45b011ba765e0948f3ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b7032e1ad3810a3ae43b60507e363d5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b7032e1ad3810a3ae43b60507e363d5"></a>
+<tr class="separator:a601e138220c5c64c0f59fbbc0a5e8473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6907282e29e4da5b0f5153317efe81f7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6907282e29e4da5b0f5153317efe81f7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>output</b> (std::ostream &amp;os, const exponent order)</td></tr>
-<tr class="separator:a3b7032e1ad3810a3ae43b60507e363d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a6907282e29e4da5b0f5153317efe81f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:adb236857d1af426b69867d2b702e0ec8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb236857d1af426b69867d2b702e0ec8"></a>
+<tr class="memitem:ac9151d4fca834fb6f3f06c2eccea3816"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9151d4fca834fb6f3f06c2eccea3816"></a>
 <a class="el" href="classhypro_1_1TaylorModelVec.html">TaylorModelVec</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tmvPre</b></td></tr>
-<tr class="separator:adb236857d1af426b69867d2b702e0ec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf5dea8cd8297ae7f56129da5c2e1a11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf5dea8cd8297ae7f56129da5c2e1a11"></a>
+<tr class="separator:ac9151d4fca834fb6f3f06c2eccea3816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4cd19fa3db555fa9f752b6cad607ff9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4cd19fa3db555fa9f752b6cad607ff9"></a>
 <a class="el" href="classhypro_1_1TaylorModelVec.html">TaylorModelVec</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tmv</b></td></tr>
-<tr class="separator:abf5dea8cd8297ae7f56129da5c2e1a11"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af89ca69f978eb336c752e5add4a0b908"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af89ca69f978eb336c752e5add4a0b908"></a>
+<tr class="separator:ad4cd19fa3db555fa9f752b6cad607ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6673613547b9f66f6d391605d0f1c8ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6673613547b9f66f6d391605d0f1c8ca"></a>
 <a class="el" href="classhypro_1_1Domain.html">Domain</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>domain</b></td></tr>
-<tr class="separator:af89ca69f978eb336c752e5add4a0b908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a6673613547b9f66f6d391605d0f1c8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number&gt;<br />
-class hypro::Flowpipe&lt; Number &gt;</h3>
+<div class="textblock"><h3>template&lt;typename State&gt;<br />
+class hypro::Flowpipe&lt; State &gt;</h3>
 
 <p>Container for a flowpipe, i.e. an ordered sequence of state sets (flowpipe segments). </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Number</td><td>Used number type. </td></tr>
+    <tr><td class="paramname">State</td><td>Used state type. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Flowpipe_8h_source.html#l00017">17</a> of file <a class="el" href="Flowpipe_8h_source.html">Flowpipe.h</a>.</p>
+<p>Definition at line <a class="el" href="Flowpipe_8h_source.html#l00019">19</a> of file <a class="el" href="Flowpipe_8h_source.html">Flowpipe.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/<a class="el" href="Flowpipe_8h_source.html">Flowpipe.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/<a class="el" href="continuous_8h_source.html">continuous.h</a></li>

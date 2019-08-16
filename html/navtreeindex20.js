@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classhypro_1_1DecisionEntity.html#a9470020aeb40ec33e470206d642ff4a6":[7,0,1,25,8],
 "classhypro_1_1DecisionEntity.html#a94aa2d360ceea7af839ab8683b372d40":[7,0,1,25,10],
 "classhypro_1_1DecisionEntity.html#aaa1e3ffb251ceb9e1c9dbda71d07ad5a":[7,0,1,25,12],
 "classhypro_1_1DecisionEntity.html#abe16ddeb1ac63001fb5059e3090e97c9":[7,0,1,25,11],
@@ -127,8 +128,8 @@ var NAVTREEINDEX20 =
 "classhypro_1_1EllipsoidSupportFunction.html#a5b6b6acb9182e2cd5205506cce865e19":[7,0,1,36,6],
 "classhypro_1_1EllipsoidSupportFunction.html#a622757f58b0b2a7e223609c868138d92":[7,0,1,36,4],
 "classhypro_1_1EllipsoidSupportFunction.html#a75b07358df92f14d7070bdf6d7afb23b":[7,0,1,36,5],
-"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[7,0,1,36,7],
 "classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[7,0,1,36,8],
+"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[7,0,1,36,7],
 "classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf":[7,0,1,36,9],
 "classhypro_1_1EllipsoidSupportFunction.html#aba27832ec002e8ebeaffc4de25e103f0":[7,0,1,36,11],
 "classhypro_1_1EllipsoidSupportFunction.html#af71f93ec43507bf60e0471e44490072f":[7,0,1,36,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classhypro_1_1Facet.html#a406371e4775bdda2b38b3419bbac2497":[7,0,1,44,2],
 "classhypro_1_1Facet.html#a434ffc1b2dc46012d1d6bcff2f4350c1":[7,0,1,44,21],
 "classhypro_1_1Facet.html#a445f45c34a812f8baf02757837d537bb":[7,0,1,44,34],
-"classhypro_1_1Facet.html#a4662086df0c60ffb70438f40b853a015":[7,0,1,44,29],
-"classhypro_1_1Facet.html#a479f8f10e9e7cace2926c2f77bb80e5d":[7,0,1,44,40]
+"classhypro_1_1Facet.html#a4662086df0c60ffb70438f40b853a015":[7,0,1,44,29]
 };
