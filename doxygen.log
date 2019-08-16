@@ -845,10 +845,20 @@ error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h:1
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
@@ -2279,7 +2289,7 @@ Searching for documented typedefs./home/travis/build/hypro/hypro/examples/exampl
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:73: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:21: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20128.bbl: No such file or directory
+error opening bib20201.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2989,10 +2999,20 @@ error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoPar
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
@@ -5075,5 +5095,5 @@ Running dot for graph 192/194
 Running dot for graph 193/194
 Running dot for graph 194/194
 Patching output file 1/1
-lookup cache used 7048/65536 hits=208315 misses=8170
+lookup cache used 7039/65536 hits=208262 misses=8159
 finished...

@@ -1,8 +1,8 @@
 var classhypro_1_1LTIContext =
 [
-    [ "LTIContext", "classhypro_1_1LTIContext.html#a297b0a18c7a4793445f281adc42308bc", null ],
+    [ "LTIContext", "classhypro_1_1LTIContext.html#aa001b8e643cad962ac6441a3fc397977", null ],
     [ "~LTIContext", "classhypro_1_1LTIContext.html#ae0a3c6d6ece1578168cd85c3ce2b60ac", null ],
-    [ "LTIContext", "classhypro_1_1LTIContext.html#a1587daf484f569884b7bed459d622f00", null ],
+    [ "LTIContext", "classhypro_1_1LTIContext.html#ac43d35badbd1c1ef169b7906d4fef555", null ],
     [ "applyBacktracking", "classhypro_1_1LTIContext.html#a4cfb1a189bc39f3d3e02ba5dee01641e", null ],
     [ "applyContinuousEvolution", "classhypro_1_1LTIContext.html#a8353d808ec45042f3b408ac9dc0ac6a4", null ],
     [ "checkInvariant", "classhypro_1_1LTIContext.html#a20afc8a56fcaf3992b9456f604253819", null ],
@@ -37,7 +37,7 @@ var classhypro_1_1LTIContext =
     [ "mInvariantHandlers", "classhypro_1_1LTIContext.html#a8c65448b8146115629e23281d4b5625f", null ],
     [ "mLocalCEXQueue", "classhypro_1_1LTIContext.html#a0a32e45252c0c1febf1abb52d852069b", null ],
     [ "mLocalQueue", "classhypro_1_1LTIContext.html#a17800032856ae6619cf673250846cadd", null ],
-    [ "mLocalSegments", "classhypro_1_1LTIContext.html#a2dcf3f063d62886f5b84d1cf45829575", null ],
+    [ "mLocalSegments", "classhypro_1_1LTIContext.html#aeb866a354cdbc794c14f740412644bbc", null ],
     [ "mLocalTimings", "classhypro_1_1LTIContext.html#ad2ae8a98bd68c156bdd5b2f9f58ffdd4", null ],
     [ "mPotentialZenoTransitions", "classhypro_1_1LTIContext.html#a9acaf69633925209b41fd97dec78cfbe", null ],
     [ "mSettings", "classhypro_1_1LTIContext.html#a1ef6c86a76ff9bff892013952451ebaf", null ],

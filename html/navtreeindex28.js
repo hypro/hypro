@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"classhypro_1_1ltiResetHandler.html#a51c15fe1918bb7e7d6ef912880f1a2f5":[7,0,1,127,7],
+"classhypro_1_1ltiResetHandler.html#a62768e7cc869b6cd9a3ee4cc2e3dc2ce":[7,0,1,127,3],
 "classhypro_1_1ltiResetHandler.html#a645ade46cced83a62ca5ffaca535cbf4":[7,0,1,127,4],
 "classhypro_1_1ltiResetHandler.html#aa79f55335ffe2c3d04f634d094c83dbb":[7,0,1,127,1],
 "classhypro_1_1ltiResetHandler.html#ae4e9666808d32b1c1f3325e945acc002":[7,0,1,127,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX28 =
 "dir_f8eeed5867fcfb10b0a82b230e717047.html":[8,0,1,0,1,0,2],
 "dir_fc0efe5d2249fba2a29c6d003d9b04e9.html":[8,0,1,0,1,0],
 "discreteBadStateHandler_8h_source.html":[8,0,1,0,0,3,1,0,1],
-"discreteGuardHandler_8h_source.html":[8,0,1,0,0,3,1,2,0],
-"discreteInvariantHandler_8h_source.html":[8,0,1,0,0,3,1,3,0],
-"discreteResetHandler_8h_source.html":[8,0,1,0,0,3,1,5,0]
+"discreteGuardHandler_8h_source.html":[8,0,1,0,0,3,1,2,0]
 };

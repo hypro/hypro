@@ -1,5 +1,7 @@
 var NAVTREEINDEX29 =
 {
+"discreteInvariantHandler_8h_source.html":[8,0,1,0,0,3,1,3,0],
+"discreteResetHandler_8h_source.html":[8,0,1,0,0,3,1,5,0],
 "discreteTimeEvolutionHandler_8h_source.html":[8,0,1,0,0,3,1,6,0],
 "example_HPolytope_8cpp-example.html":[9,5],
 "example__HPolytope_8cpp_source.html":[8,0,0,17],
@@ -56,8 +58,8 @@ var NAVTREEINDEX29 =
 "flow_8h_source.html":[8,0,1,0,1,0,1,1],
 "for__each_8h_source.html":[8,0,1,0,4,7,0],
 "forwardDeclarations_8h_source.html":[8,0,1,0,0,3,1,7],
-"functions.html":[7,3,0,0],
 "functions.html":[7,3,0],
+"functions.html":[7,3,0,0],
 "functions_0x7e.html":[7,3,0,21],
 "functions_b.html":[7,3,0,1],
 "functions_c.html":[7,3,0,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX29 =
 "structhypro_1_1AffineTransformation.html#a24dbb605d25ea1d528155e0b869de0bb":[7,0,1,4,4],
 "structhypro_1_1AffineTransformation.html#a2bd92a24675bc31b84791264664faa96":[7,0,1,4,3],
 "structhypro_1_1AffineTransformation.html#a2d1282e0b4b0f84ba5c5ec12465e61c5":[7,0,1,4,5],
-"structhypro_1_1AffineTransformation.html#a3b413f008bb32b6eb5635123de12708a":[7,0,1,4,8],
-"structhypro_1_1AffineTransformation.html#a5042836c369b98c198beaced0340e4b7":[7,0,1,4,0],
-"structhypro_1_1AffineTransformation.html#a5627022c4410f3f5c8885ed9abb6f6d2":[7,0,1,4,9]
+"structhypro_1_1AffineTransformation.html#a3b413f008bb32b6eb5635123de12708a":[7,0,1,4,8]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"classhypro_1_1WorkQueueT.html#ad82edb6ba46e16c66aa5cd8919eaea4a":[7,0,1,217,7],
+"classhypro_1_1WorkQueueT.html#adf3b335ac5ed585c7db538f891d1956c":[7,0,1,217,2],
 "classhypro_1_1WorkQueueT.html#ae5ac9fcf41936a1f2383c87471848d36":[7,0,1,217,1],
 "classhypro_1_1WorkQueueT.html#aee52999fbf2fd883b9d07f9bd26d699d":[7,0,1,217,5],
 "classhypro_1_1ZonotopeT.html":[5,1,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "classhypro_1_1ltiJumpHandler.html#ad104c2634741119c0e4ace53a746506d":[7,0,1,126,4],
 "classhypro_1_1ltiResetHandler.html":[7,0,1,127],
 "classhypro_1_1ltiResetHandler.html#a1839c779fe7d525804cedab36d9c0fd4":[7,0,1,127,2],
-"classhypro_1_1ltiResetHandler.html#a2a82060214bf9f235a8de5b863d1e2be":[7,0,1,127,0],
-"classhypro_1_1ltiResetHandler.html#a51c15fe1918bb7e7d6ef912880f1a2f5":[7,0,1,127,7],
-"classhypro_1_1ltiResetHandler.html#a62768e7cc869b6cd9a3ee4cc2e3dc2ce":[7,0,1,127,3]
+"classhypro_1_1ltiResetHandler.html#a2a82060214bf9f235a8de5b863d1e2be":[7,0,1,127,0]
 };
