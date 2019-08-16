@@ -7,7 +7,7 @@ namespace hypro
 	                    const Strategy<State>& strat,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData<State>>* localSegments,
+	                    Flowpipe<State>& localSegments,
 	                    ReachabilitySettings &settings)
 		: mTask(t)
 		, mStrategy(strat)
@@ -469,7 +469,7 @@ namespace hypro
 		// For plotting.
 		if(!SettingsProvider<State>::getInstance().skipPlot()) {
 			TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
-        	mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
+        	mLocalSegments.addState(mComputationState);
 		}
     }
 

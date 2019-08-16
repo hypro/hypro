@@ -34,14 +34,14 @@ public:
             const Strategy<State>& strat,
             WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
             WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-            std::vector<PlotData<State>>* localSegments
+            Flowpipe<State>& localSegments
             );
 
     void computeForwardReachability(const std::shared_ptr<Task<State>>& task,
                                     const Strategy<State>& strat,
                                     WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
                                     WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-                                    std::vector<PlotData<State>>* localSegments);
+                                    Flowpipe<State>& localSegments);
 
     bool isValidTask(const std::shared_ptr<Task<State>>& task, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue);
 
