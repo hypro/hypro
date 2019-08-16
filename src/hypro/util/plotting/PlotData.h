@@ -20,6 +20,12 @@ struct PlotData {
 		, threadId()
 		, refinementLevel(l)
 	{}
+
+	PlotData(const State& s, std::size_t l, std::size_t t)
+		: sets(s)
+		, threadId(t)
+		, refinementLevel(l)
+	{}
 };
 
 } // hypro
