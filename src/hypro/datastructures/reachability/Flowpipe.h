@@ -34,7 +34,7 @@ public:
     Range<std::vector<State>> selectTimestamps(const carl::Interval<tNumber>& span) { return selectFirstConsecutiveRange(mStates, [&](const State& in)->bool{ return in.timeStamp.intersects(span); } ); }
 
     template<typename Number>
-    Range<std::vector<State>> selectSatisfyingStates(const Condition<Number>& cond) { return selectFirstConsecutiveRange(mStates, [&](const State& in)->bool{ return in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()); } ); }
+    Range<std::vector<State>> selectSatisfyingStates(const Condition<Number>& cond) { return selectFirstConsecutiveRange(mStates, [&](const State& in)->bool{ auto tmp = in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()).first; return tmp != CONTAINMENT::NO && tmp != CONTAINMENT::BOT; } ); }
 
     std::vector<PlotData<State>> getPlotData(std::size_t refinementLevel = 0, std::size_t threadId = 0) const;
 };
