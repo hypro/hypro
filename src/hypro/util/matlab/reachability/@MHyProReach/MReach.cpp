@@ -41,13 +41,26 @@ void MReach::setRepresentationType( int nlhs, mxArray* plhs[], int nrhs, const m
 
 	Reacher* reacher = convertMat2Ptr<Reacher>( prhs[2] );
 	int type = mxGetScalar( prhs[3] );
-	// box=0, constraint_set = 1, support_function = 2
+	// box=0, constraint_set = 1, support_function = 2, zonotope = 3, polytope_h = 4, polytope_v = 5,
+	// ppl_polytope = 6, taylor_model = 7, difference_bounds = 8
 	if ( type == 0 )
 		reacher->setRepresentationType( hypro::representation_name::box );
 	else if ( type == 1 )
 		reacher->setRepresentationType( hypro::representation_name::constraint_set );
 	else if ( type == 2 )
 		reacher->setRepresentationType( hypro::representation_name::support_function );
+	else if (type == 3)
+		reacher->setRepresentationType( hypro::representation_name::zonotope );
+	else if (type == 4)
+		reacher->setRepresentationType( hypro::representation_name::polytope_h );
+	else if (type == 5)
+		reacher->setRepresentationType( hypro::representation_name::polytope_v );
+	else if (type == 6)
+		reacher->setRepresentationType( hypro::representation_name::ppl_polytope );
+	else if (type == 7)
+		reacher->setRepresentationType( hypro::representation_name::taylor_model );
+	else if (type == 8)
+		reacher->setRepresentationType( hypro::representation_name::difference_bounds );
 	else
 		mexErrMsgTxt( "MReach - setRepresentationType: unknown type." );
 }

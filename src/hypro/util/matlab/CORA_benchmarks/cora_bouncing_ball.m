@@ -13,7 +13,7 @@ options.x0 = center(options.R0); %initial state for simulation
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 1;
 
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;

@@ -15,7 +15,7 @@ flowMatrix = [0 1 0 0; 0 0 0 -9.81;0 0 0 1; 0 0 0 0];
 loc.setFlow(flowMatrix);
 
 % Set invariant x >= 0 & t <= 4
-inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
+inv = MHyProCondition([-1 0 0; 0 0 1], [0; 5]);
 loc.setInvariant(inv);
 
 %-----------------------------------------------%
@@ -150,8 +150,8 @@ end
 %-----------------------------------------------%
 
 % Add basic settings
-settings.timeBound = 4;
-settings.jumpDepth = 2;
+settings.timeBound = 6;
+settings.jumpDepth = 3;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
@@ -211,16 +211,16 @@ elseif plotting == 2
     labs = ["v", "x", "t"];
     ext = 'png';
     reach.plot3D(flowpipes, dim, labs,saveFig,savePath,figName,ext);
-    if diff == 0
-        [x, y] = meshgrid(-15:0.5:15,10.7:0.1:15);
-        reach.plotBadStates3D([0 -1 0], -10.7, [2 1], x,y);
-    elseif diff == 1
-        [x, y] = meshgrid(-15:0.5:15,10.6569:0.1:15);
-        reach.plotBadStates3D([0 -1 0], -10.6569, [2 1], x,y);
-    else
-        [x, y] = meshgrid(-15:0.5:15,10.6138:0.1:15);
-        reach.plotBadStates3D([0 -1 0], -10.6138, [2 1], x,y);
-    end
+%     if diff == 0
+%         [x, y] = meshgrid(-15:0.5:15,10.7:0.1:15);
+%         reach.plotBadStates3D([0 -1 0], -10.7, [2 1], x,y);
+%     elseif diff == 1
+%         [x, y] = meshgrid(-15:0.5:15,10.6569:0.1:15);
+%         reach.plotBadStates3D([0 -1 0], -10.6569, [2 1], x,y);
+%     else
+%         [x, y] = meshgrid(-15:0.5:15,10.6138:0.1:15);
+%         reach.plotBadStates3D([0 -1 0], -10.6138, [2 1], x,y);
+%     end
     
 end
 

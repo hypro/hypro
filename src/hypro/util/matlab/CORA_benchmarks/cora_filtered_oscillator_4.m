@@ -1,12 +1,13 @@
 function log = cora_filtered_oscillator_4(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder,strategy)
 
-HA = filtered_oscillator_4_ha();
+% HA = filtered_oscillator_4_ha();
+HA = fo4_gc();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
+Zdelta = [0.05;0.1;0;0;0;0;0];
 
 % options
-Zcenter = [0.25;0;0;0;0;0];
+Zcenter = [0.25;0;0;0;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
@@ -32,7 +33,7 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 1;
 
 tic;
 [HA] = reach(HA,options);
@@ -74,7 +75,8 @@ log = ['filtered_oscillator_4 ', num2str(diff), ' ',...
 if show   
     fig = figure(); 
     hold on
-    options.projectedDimensions = [3 2];
+%     options.projectedDimensions = [3 2];
+    options.projectedDimensions = [7 2];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
@@ -106,9 +108,10 @@ if show
     % Display invariant
     %fplot(@(x) -0.714286*x, [0 0.8],'g');
     
-    xlabel('x1');
+%     xlabel('x1');
+    xlabel('t');
     ylabel('y');
-
+    
     if saveFig
         fname = strcat(filename,'.','png');
         saveas(fig, fullfile(savePath,fname),'png');
