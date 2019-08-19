@@ -3,6 +3,7 @@
  */
 
 #include "representations/GeometricObject.h"
+#include "representations/TaylorModel/TaylorModel.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
@@ -26,6 +27,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher(ha.first, ha.second);
 	reacher.setRepresentationType(type);
 	reacher.initQueue();
+	std::cout << "Starting reachability analysis..." << std::endl;
 	auto flowpipes = reacher.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
@@ -148,7 +150,7 @@ int main(int argc, char** argv) {
 #endif
 
 	switch(rep){
-
+		
 		#ifdef HYPRO_USE_PPL
 		case 7: {
 			using Representation = hypro::Polytope<Number>;

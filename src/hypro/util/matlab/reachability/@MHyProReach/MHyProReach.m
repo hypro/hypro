@@ -60,9 +60,11 @@ classdef MHyProReach < handle
         end
         
         function setRepresentationType(obj, type)
-            % box=0, constraint_set = 1, support_function = 2, zonotope = 3, polytope_h = 4, polytope_v = 5,
-            % ppl_polytope = 6, taylor_model = 7, difference_bounds = 8
-            if type >= 0 && type <= 8
+            %0 = box, 1 = carl_polytope, 2 = constraint_set
+            % 3 = polytope_h, 4 = polytope_v
+            % 5 = ppl_polytope, 6 = support_function, 7 = taylor_model
+            % 8 = zonotope, 9 = difference_bounds, 
+            if type >= 0 && type <= 9
                 MHyPro(12, 5, obj.ObjectHandle, type);
             else
                 error('MHyProReach - setRepresentationType: Wrong type of at least one argument.');

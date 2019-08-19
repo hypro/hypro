@@ -216,8 +216,8 @@ end
 %-----------------------------------------------%
 
 % Add basic settings
-settings.timeBound = 5;
-settings.jumpDepth = 5;
+settings.timeBound = 12;
+settings.jumpDepth = 20;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);

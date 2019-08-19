@@ -15,7 +15,7 @@ flowMatrix = [0 1 0 0; 0 0 0 -9.81;0 0 0 1; 0 0 0 0];
 loc.setFlow(flowMatrix);
 
 % Set invariant x >= 0 & t <= 4
-inv = MHyProCondition([-1 0 0; 0 0 1], [0; 5]);
+inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
 loc.setInvariant(inv);
 
 %-----------------------------------------------%
@@ -150,8 +150,8 @@ end
 %-----------------------------------------------%
 
 % Add basic settings
-settings.timeBound = 6;
-settings.jumpDepth = 3;
+settings.timeBound = 4;
+settings.jumpDepth = 2;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);

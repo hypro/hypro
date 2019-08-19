@@ -20,6 +20,7 @@
 #include "reachability/@MHyProTransition/MTransition.h"
 #include "reachability/@MHyProReset/MReset.h"
 #include "reachability/@MHyProReach/MReach.h"
+#include "representations/@MHyProZonotope/MZonotope.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -65,6 +66,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         MReach::process(nlhs, plhs, nrhs, prhs);
     }else if(type == 13){
         MState::process(nlhs, plhs, nrhs, prhs);
+    }else if(type == 14){
+        MZonotope::process(nlhs,plhs,nrhs,prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");
     }

@@ -367,7 +367,7 @@ automaton.addInitialState(l3, initialCond);
 %-----------------------------------------------%
 
 % Add basic settings
-settings.timeBound = 1;
+settings.timeBound = 2;
 settings.jumpDepth = 2;
 
 reach = MHyProReach(automaton);
