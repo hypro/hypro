@@ -9,7 +9,7 @@ namespace hypro {
 */
 
 // Hard Terminate computation
-class HardTerminateException : public exception{
+class HardTerminateException : public std::exception{
 private:
 	const char* m_msg;
 public:
@@ -25,7 +25,7 @@ public:
 
 
 // finish computation with processing of discrete transitions
-class FinishWithDiscreteProcessingException : public exception{
+class FinishWithDiscreteProcessingException : public std::exception{
 private:
 	const char* m_msg;
 public:

@@ -26,7 +26,7 @@ namespace hypro
 		Strategy<State> mStrategy;
 		WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
 		WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
-	    std::vector<PlotData<State>>* mLocalSegments;
+	    Flowpipe<State>& mLocalSegments;
 	    ReachabilitySettings mSettings;
 
 	    EventTimingContainer<Number> mLocalTimings;
@@ -57,13 +57,13 @@ namespace hypro
 
 
 	public:
-		LTIContext() = default;
+		LTIContext() = delete;
 		~LTIContext(){}
 		LTIContext(const std::shared_ptr<Task<State>>& t,
 	                    const Strategy<State>& strat,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData<State>>* localSegments,
+	                    Flowpipe<State>& localSegments,
 	                    ReachabilitySettings &settings);
 
 		virtual void execOnStart() override ;
