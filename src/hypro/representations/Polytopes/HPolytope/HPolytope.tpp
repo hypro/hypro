@@ -257,9 +257,12 @@ bool HPolytopeT<Number, Converter, Setting>::empty() const {
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty(){
-	Halfspace<Number> a({Number(1)},Number(-1));
-	Halfspace<Number> b({Number(-1)},Number(-1));
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty(std::size_t dimension){
+	vector_t<Number> normal = vector_t<Number>::Zero(dimension);
+	normal(0) = Number(1);
+	Halfspace<Number> a(normal,Number(-1));
+	normal(0) = Number(-1);
+	Halfspace<Number> b(normal,Number(-1));
 	HalfspaceVector v;
 	v.emplace_back(a);
 	v.emplace_back(b);
