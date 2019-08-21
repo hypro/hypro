@@ -25,6 +25,24 @@ void MZonotope::newZonotopeCG(int nlhs, mxArray *plhs[], int nrhs, const mxArray
 	gen_rows = (int)gen_dims[0];
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[2], len );
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], gen_rows, gen_cols );
+
+	std::cout << "new zonotope cg generators: " << std::endl;
+	for(int i = 0; i < matrix.rows(); i++){
+		for(int j = 0; j < matrix.cols(); j++){
+			std::cout << matrix(i,j) << ", ";
+		}
+		std::cout << " " << std::endl;
+	}
+
+	std::cout << "new zonotope cg center: " << std::endl;
+	for(int i = 0; i < vector.rows(); i++){
+		std::cout << vector(i) << ", ";
+	}
+	std::cout << " " << std::endl;
+	std::cout << " " << std::endl;
+
+
+	
 	plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>( matrix, vector ) );
 }
 
@@ -46,6 +64,7 @@ void MZonotope::supremum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 
 	hypro::Zonotope<double>* obj = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	double supremum = obj->supremum();
+	//std::cout << "####################### Supremum: " << supremum << std::endl;
 	plhs[0] = mxCreateDoubleScalar( supremum );
 }
 
@@ -81,10 +100,21 @@ void MZonotope::setGenerators(int nlhs, mxArray *plhs[], int nrhs, const mxArray
 	const mwSize *gen_dims;
 	int gen_rows, gen_cols;
 
-	gen_dims = mxGetDimensions( prhs[2] );
+	gen_dims = mxGetDimensions( prhs[3] );
 	gen_cols = (int)gen_dims[1];
 	gen_rows = (int)gen_dims[0];
+
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], gen_rows, gen_cols );
+
+	std::cout << "set generators: " << std::endl;
+	for(int i = 0; i < matrix.rows(); i++){
+		for(int j = 0; j < matrix.cols(); j++){
+			std::cout << matrix(i,j) << ", ";
+		}
+		std::cout << " " << std::endl;
+	}
+	std::cout << " " << std::endl;
+
 	zono->setGenerators(matrix);
 }
 
@@ -101,6 +131,17 @@ void MZonotope::addGenerators(int nlhs, mxArray *plhs[], int nrhs, const mxArray
 	gen_cols = (int)gen_dims[1];
 	gen_rows = (int)gen_dims[0];
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], gen_rows, gen_cols );
+
+	std::cout << "add generators: " << std::endl;
+	for(int i = 0; i < matrix.rows(); i++){
+		for(int j = 0; j < matrix.cols(); j++){
+			std::cout << matrix(i,j) << ", ";
+		}
+		std::cout << " " << std::endl;
+	}
+	std::cout << " " << std::endl;
+
+
 	bool added = zono->addGenerators(matrix);
 
 	mxLogical ans = false;
@@ -117,6 +158,13 @@ void MZonotope::center(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
 
 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	hypro::vector_t<double> cen = zono->center();
+
+	std::cout << "center: " << std::endl;
+	for(int i = 0; i < cen.rows(); i++){
+		std::cout << cen(i) << ", ";
+	}
+	std::cout << " " << std::endl;
+
 	plhs[0] = mxCreateDoubleMatrix( cen.rows(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( cen, plhs[0], cen.rows(), 1 );
 }
@@ -129,6 +177,15 @@ void MZonotope::generators(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 
 	hypro::matrix_t<double> mat = zono->generators();
+
+	std::cout << "generators: " << std::endl;
+	for(int i = 0; i < mat.rows(); i++){
+		for(int j = 0; j < mat.cols(); j++){
+			std::cout << mat(i,j) << ", ";
+		}
+		std::cout << " " << std::endl;
+	}
+	std::cout << " " << std::endl;
 
 	int rows = mat.rows();
 	int cols = mat.cols();
@@ -145,6 +202,8 @@ void MZonotope::order(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
 
 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	double ord = zono->order();
+
+	// std::cout << "order: " << ord << std::endl;
 	plhs[0] = mxCreateDoubleScalar( ord );
 
 }
@@ -203,6 +262,18 @@ void MZonotope::computeZonotopeBoundary(int nlhs, mxArray *plhs[], int nrhs, con
 
 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	std::vector<hypro::vector_t<double>> bound = zono->computeZonotopeBoundary();
+
+	std::cout << "computeZonotopeBoundary" << std::endl;
+	if(bound.size() > 0){
+	for(int i = 0; i < bound.size(); i++){
+		hypro::vector_t<double> b = bound[i];
+		for(int j = 0; j < bound[0].rows(); j++){
+			std::cout << b(j) << ", ";
+		}
+		std::cout << "" << std::endl;
+	}
+	std::cout << "" << std::endl;
+	}
 	if (bound.size() > 0){
 		plhs[0] = mxCreateDoubleMatrix( bound.size(), bound[0].rows(), mxREAL );
 		vector2Matlab<>( bound, plhs[0] );
@@ -211,28 +282,29 @@ void MZonotope::computeZonotopeBoundary(int nlhs, mxArray *plhs[], int nrhs, con
 	}
 }
 
-// void MZonotope::intersectHalfspacesMethod(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-// 	if ( nlhs != 1 ) mexErrMsgTxt( "MZonotope - intersectHalfspacesMethod: Expecting one output value!" );
-// 	if ( nrhs < 6 ) mexErrMsgTxt( "MZonotope - intersectHalfspacesMethod: One or more arguments are missing!" );
-// 	if ( nrhs > 6 ) mexWarnMsgTxt( "MZonotope - intersectHalfspacesMethod: One or more input arguments were ignored." );
+void MZonotope::intersectHalfspacesMethod(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+	if ( nlhs != 1 ) mexErrMsgTxt( "MZonotope - intersectHalfspacesMethod: Expecting one output value!" );
+	if ( nrhs < 6 ) mexErrMsgTxt( "MZonotope - intersectHalfspacesMethod: One or more arguments are missing!" );
+	if ( nrhs > 6 ) mexWarnMsgTxt( "MZonotope - intersectHalfspacesMethod: One or more input arguments were ignored." );
 
-// 	const mwSize *mat_dims, *vec_dims;
-// 	int mat_rows, mat_cols, vec_len;
+	const mwSize *mat_dims, *vec_dims;
+	int mat_rows, mat_cols, vec_len;
 
-// 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
-// 	mat_dims = mxGetDimensions( prhs[3] );
-// 	vec_dims = mxGetDimensions( prhs[4] );
-// 	int method = (int)mxGetScalar( prhs[5] );
-// 	mat_cols = (int)mat_dims[1];
-// 	mat_rows = (int)mat_dims[0];
-// 	vec_len = (int)vec_dims[0];
+	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
+	mat_dims = mxGetDimensions( prhs[3] );
+	vec_dims = mxGetDimensions( prhs[4] );
+	int method = (int)mxGetScalar( prhs[5] );
+	mat_cols = (int)mat_dims[1];
+	mat_rows = (int)mat_dims[0];
+	vec_len = (int)vec_dims[0];
 
-// 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], mat_rows, mat_cols );
-// 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[4], vec_len );
+	const hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], mat_rows, mat_cols );
+	const hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[4], vec_len );
 
-// 	hypro::Zonotope<double> temp = zono->intersectHalfspaces( matrix, vector, method );
-// 	plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>( temp ) );
-// }
+	mexErrMsgTxt( "NOT IMPLEMENTED" );
+	// hypro::Zonotope<double> temp = zono->intersectHalfspaces( matrix, vector, method );
+	// plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>( temp ) );
+}
 
 void MZonotope::intersectMinMax(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 	if ( nlhs != 1 ) mexErrMsgTxt( "MZonotope - intersectMinMax: Expecting one output value!" );
@@ -256,6 +328,25 @@ void MZonotope::intersectMinMax(int nlhs, mxArray *plhs[], int nrhs, const mxArr
 	
 	hypro::Zonotope<double> intersected = obj->intersect(hs, matrix, method);
 	plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>( intersected ) );
+}
+
+void MZonotope::intersectHalfspaceMethod(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+	if ( nlhs != 1 ) mexErrMsgTxt( "MZonotope - intersectHalfspaceMethod: Expecting one output value!" );
+	if ( nrhs < 6 ) mexErrMsgTxt( "MZonotope - intersectHalfspaceMethod: One or more arguments are missing!" );
+	if ( nrhs > 6 ) mexWarnMsgTxt( "MZonotope - intersectHalfspaceMethod: One or more input arguments were ignored." );
+
+	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
+	const mwSize* dims;
+	dims = mxGetDimensions( prhs[3] );
+	const int rows = (int)dims[0];
+	const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro( prhs[3], rows );
+	const int offset = (const int)mxGetScalar( prhs[4] );
+	const int method = (const int)mxGetScalar( prhs[5]);
+
+	const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>( hy_normal, offset );
+
+	hypro::Zonotope<double> temp = zono->intersect(hSpace, method);
+	plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>( temp ) );
 }
 
 void MZonotope::intervalHull(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -472,10 +563,10 @@ void MZonotope::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 		computeZonotopeBoundary( nlhs, plhs, nrhs, prhs );
 		return;
 	}
-	// if ( cmd == 118 ) {
-	// 	intersectHalfspacesMethod( nlhs, plhs, nrhs, prhs );
-	// 	return;
-	// }
+	if ( cmd == 118 ) {
+		intersectHalfspacesMethod( nlhs, plhs, nrhs, prhs );
+		return;
+	}
 	if ( cmd == 119 ) {
 		intersectMinMax( nlhs, plhs, nrhs, prhs );
 		return;
@@ -498,6 +589,10 @@ void MZonotope::process( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 	}
 	if (cmd == 124){
 		reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
+		return;
+	}
+	if (cmd == 125){
+		intersectHalfspaceMethod(nlhs,plhs,nrhs,prhs);
 		return;
 	}
 	mexErrMsgTxt( "MZonotope - Command not recognized." );

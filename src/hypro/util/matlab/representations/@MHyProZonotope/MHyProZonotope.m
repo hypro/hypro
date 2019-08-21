@@ -20,16 +20,25 @@ classdef MHyProZonotope < MHyProGeometricObject
                     error('MHyProZonotope - Constructor: Wrong type of argument.');
                 end
             elseif nargin == 2
-                if strcmp(varargin{1}, 'dimension') && isa(varargin{2}, 'int')
+                if strcmp(varargin{1}, 'dimension') && mod(varargin{2}, 1) == 0
                     obj.ObjectHandle = MHyPro(14, 100, varargin{2});
                 elseif isvector(varargin{1}) && ismatrix(varargin{2})
-                    obj.ObjectHandle = MHyPro(14, 101, varargin{2});
+                    vec = conv2HyProVector(varargin{1});
+                    obj.ObjectHandle = MHyPro(14, 101, vec, varargin{2});
                 else
                     error('MHyProZonotope - Constructor: Wrong arguments.');
                 end
             elseif nargin == 3
-                if isa(varargin{1}, 'MHyProZonotope') && isa(varargin{2}, 'int') && isa(varargin{3},'int')
-                    obj.ObjectHandle = MHyPro(14, 102, varargin{1},varargin{2},varargin{3});
+                
+                if isa(varargin{1},'MHyProZonotope') && mod(varargin{2},1) == 0 && mod(varargin{3},1) == 0 &&...
+                        varargin{2} ~= varargin{3}
+                    maxDim = varargin{1}.dimension();       
+                    if 0 <= varargin{2} && varargin{2} < maxDim && ...
+                            0 <= varargin{3} && varargin{3} < maxDim
+                        obj.ObjectHandle = MHyPro(14, 102, varargin{1}.ObjectHandle,varargin{2},varargin{3});
+                    else
+                        error('MHyProZonotope - Constructor: Wrong arguments.');
+                    end
                 else
                     error('MHyProZonotope - Constructor: Wrong arguments.');
                 end
@@ -39,7 +48,11 @@ classdef MHyProZonotope < MHyProGeometricObject
         end
         
         function out = supremum(obj)
-            out = MHyPro(14,obj.ObjectHandle, 103);
+            if ~obj.isempty()
+                out = MHyPro(14, 103, obj.ObjectHandle);
+            else
+                out = NaN;
+            end
         end
         
         function out = emptyAt(obj, dim)

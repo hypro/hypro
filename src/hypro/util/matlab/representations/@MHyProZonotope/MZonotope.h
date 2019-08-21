@@ -6,6 +6,7 @@
 
 #include "../../handles/ClassHandle.h"
 #include "../../handles/ObjectHandle.h"
+#include "../../../../representations/Zonotope/Zonotope.h"
 #include "../@MHyProGeometricObject/MGeometricObject.h"
 #include "matrix.h"
 #include "mex.h"
@@ -33,7 +34,8 @@ class MZonotope : public MGeometricObject<hypro::Zonotope<double>> {
     static void print(int, mxArray**, int, const mxArray**);
     static void reduceOrder(int, mxArray**, int, const mxArray**);
     static void computeZonotopeBoundary(int, mxArray**, int, const mxArray**);
-    // static void intersectHalfspacesMethod(int, mxArray**, int, const mxArray**);
+    static void intersectHalfspacesMethod(int, mxArray**, int, const mxArray**);
+    static void intersectHalfspaceMethod(int, mxArray**, int, const mxArray**);
     static void intersectMinMax(int, mxArray**, int, const mxArray**);
     static void intervalHull(int, mxArray**, int, const mxArray**);
     static void supremum(int, mxArray**, int, const mxArray**);
