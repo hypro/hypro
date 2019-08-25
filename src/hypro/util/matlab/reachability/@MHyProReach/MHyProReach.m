@@ -60,8 +60,11 @@ classdef MHyProReach < handle
         end
         
         function setRepresentationType(obj, type)
-            % MHyProBox=0, MHyProConstraintSet = 1, MHyProSupportFunction = 2
-            if type == 0 || type == 1 || type == 2
+            %0 = box, 1 = carl_polytope, 2 = constraint_set
+            % 3 = polytope_h, 4 = polytope_v
+            % 5 = ppl_polytope, 6 = support_function, 7 = taylor_model
+            % 8 = zonotope, 9 = difference_bounds, 
+            if type >= 0 && type <= 9
                 MHyPro(12, 5, obj.ObjectHandle, type);
             else
                 error('MHyProReach - setRepresentationType: Wrong type of at least one argument.');
@@ -211,7 +214,7 @@ classdef MHyProReach < handle
                         for v = 1:size(vertices,2)
                             value = linComb(s,:) * vertices(:,v);
                             if value > rhs(s)
-                                disp(['NOT SAFE - spec. no. ' num2str(s) ' violated following specification: [' num2str(linComb(s,:)) '] <= ' num2str(rhs(s))]) ;
+                                %disp(['NOT SAFE - spec. no. ' num2str(s) ' violated following specification: [' num2str(linComb(s,:)) '] <= ' num2str(rhs(s))]) ;
                                 out = 0;
                             end
                             if out == 0

@@ -482,9 +482,9 @@ void MHybridAutomaton::plus( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[3] );
-	mexErrMsgTxt( "NOT IMPLEMENTED" );
+	
 	// hypro::HybridAutomatonComp<double> temp = *autom + *rhs;
-	// plhs[0] = convertPtr2Mat<hypro::HybridAutomatonComp<double>>( &temp );
+	// plhs[0] = convertPtr2Mat<hypro::HybridAutomatonComp<double>>(new hypro::HybridAutomaton<double>( temp ) );
 	mexErrMsgTxt( "NOT IMPLEMENTED" );
 }
 
@@ -493,9 +493,9 @@ void MHybridAutomaton::outstream( int nlhs, mxArray* plhs[], int nrhs, const mxA
 }
 
 void MHybridAutomaton::checkConsistency( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - unequals: One output expected." );
-	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - unequals: One or more arguments are missing." );
-	if ( nrhs > 3 ) mexWarnMsgTxt( "MHybridAutomaton - unequals: One or more arguments were ignored." );
+	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - checkConsistency: One output expected." );
+	if ( nrhs < 3 ) mexErrMsgTxt( "MHybridAutomaton - checkConsistency: One or more arguments are missing." );
+	if ( nrhs > 3 ) mexWarnMsgTxt( "MHybridAutomaton - checkConsistency: One or more arguments were ignored." );
 
 	hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
 	bool cons = autom->checkConsistency();
@@ -511,6 +511,19 @@ void MHybridAutomaton::checkConsistency( int nlhs, mxArray* plhs[], int nrhs, co
 	// 	mexPrintf( "no\n" );
 	// }
 	// //+++++++++++++TESTING++++++++++++++++++++
+}
+
+void MHybridAutomaton::parallelComposition( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ){
+	if ( nlhs != 1 ) mexErrMsgTxt( "MHybridAutomaton - parallelComposition: One output expected." );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MHybridAutomaton - parallelComposition: One or more arguments are missing." );
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MHybridAutomaton - parallelComposition: One or more arguments were ignored." );
+
+	hypro::HybridAutomaton<double>* autom_lhs = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[2] );
+	hypro::HybridAutomaton<double>* autom_rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>( prhs[3] );
+
+	// hypro::HybridAutomaton<double> comp_autom = *autom_lhs || *autom_rhs;
+
+	// plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>( new hypro::HybridAutomaton<double>( comp_autom ) );
 }
 
 void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
@@ -644,5 +657,9 @@ void MHybridAutomaton::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		plus( nlhs, plhs, nrhs, prhs );
 		return;
 	}
+	if ( cmd == 32 ) {
+		parallelComposition( nlhs, plhs, nrhs, prhs );
+		return;
+	} 
 	mexErrMsgTxt( "MHybridAutomaton - Command not recognized." );
 }

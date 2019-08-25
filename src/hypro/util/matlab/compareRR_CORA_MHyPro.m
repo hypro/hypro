@@ -23,6 +23,7 @@ Zcenter = interval([510;20;20],[520;20;20]);
 options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
+options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;

@@ -1,12 +1,13 @@
 function log = cora_filtered_oscillator_4(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder,strategy)
 
-HA = filtered_oscillator_4_ha();
+% HA = filtered_oscillator_4_ha();
+HA = fo4_gc();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0];
+Zdelta = [0.05;0.1;0;0;0;0;0];
 
 % options
-Zcenter = [0.25;0;0;0;0;0];
+Zcenter = [0.25;0;0;0;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
@@ -19,6 +20,7 @@ options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
+options.intersectInvariant =1;
 
 %set input:
 for i = 1:4
@@ -108,7 +110,7 @@ if show
     
     xlabel('x1');
     ylabel('y');
-
+    
     if saveFig
         fname = strcat(filename,'.','png');
         saveas(fig, fullfile(savePath,fname),'png');

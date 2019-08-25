@@ -110,9 +110,9 @@ classdef MHyProState < handle
         
         % type = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
         % 0 = box, 1 = carl_polytope, 2 = constraint_set
-        % 3 = difference_bounds, 4 = polytope_h, 5 = polytope_v
-        % 6 = ppl_polytope, 7 = support_function, 8 = taylor_model
-        % 9 = zonotope
+        % 3 = polytope_h, 4 = polytope_v
+        % 5 = ppl_polytope, 6 = support_function, 7 = taylor_model
+        % 8 = zonotope, 9 = difference_bounds, 
         function setSetType(obj, type, pos)
             if type >= 0 && type <= 9 && mod(pos, 1) == 0
                 MHyPro(13, 18, type, pos - 1);

@@ -47,6 +47,7 @@ class MHybridAutomaton{
         static void plus(int, mxArray**, int, const mxArray**);
         static void outstream(int, mxArray**, int, const mxArray**);
         static void checkConsistency(int, mxArray**, int, const mxArray**);
+        static void parallelComposition(int, mxArray**, int, const mxArray**);
 };
 
 #include "MHybridAutomaton.tpp"

@@ -405,8 +405,8 @@ verificationTime = 0;
 safe = 0;
 if bad
     tic;
-    %     safe = reach.verify(flowpipes, spec);
-    safe = 1 - reach.reachedBadStates();
+     safe = reach.verify(flowpipes, spec);
+    %safe = 1 - reach.reachedBadStates();
     verificationTime = toc;
 end
 

@@ -1,4 +1,4 @@
-function tests = MHyProEllipsoidTest
+function tests = MHyProSupportFunctionTest
     tests = functiontests(localfunctions);
 end
 

@@ -1,6 +1,7 @@
 function compareMHyProAndCORA(benchmark, timeHorizon, diff)
 
 saveFig = 0;
+simulate = 1;
 savePath = '/home/marta/Desktop';
 
 if diff > 0
@@ -68,34 +69,34 @@ cStrat.pO = pOrder;
 
 if benchmark == 1
     fname = strcat('comp_BB','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareBB_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareBB_gc_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 2
     fname = strcat('comp_CC','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareCC_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareCC_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 3
     fname = strcat('comp_FO4','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareFO4_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareFO4_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 4
     fname = strcat('comp_FO8','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareFO8_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareFO8_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 5
     fname = strcat('comp_FO16','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareFO16_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareFO16_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 6
     fname = strcat('comp_SS','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareSS_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareSS_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 7
     fname = strcat('comp_REND','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 8
     fname = strcat('comp_RR','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareRR_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareRR_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 9
     fname = strcat('comp_TT','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareTT_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareTT_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 else
     fname = strcat('comp_VP','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareVP_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff);
+    compareVP_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 end
 
 end

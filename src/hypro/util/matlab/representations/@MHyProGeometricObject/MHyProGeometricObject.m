@@ -193,7 +193,7 @@ classdef MHyProGeometricObject < handle
         end
 
         function out = contains(obj, arg)
-            if isreal(arg)
+            if isvector(arg)
                 out = MHyPro(obj.Type, 22, obj.ObjectHandle, arg);
             elseif isRepresentation(arg) && obj.Type == arg.Type
                 out = MHyPro(obj.Type, 23, obj.ObjectHandle, arg.ObjectHandle);

@@ -16,6 +16,7 @@ options.errorOrder=0;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
+options.intersectInvariant =1;
 
 %set input:
 for i = 1:3
@@ -71,7 +72,7 @@ num2str(time), ' ' num2str(safe), ' ' num2str(strategy)];
 if show    
     fig = figure(); 
     hold on
-    options.projectedDimensions = [1 3];
+    options.projectedDimensions = [2 3];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set

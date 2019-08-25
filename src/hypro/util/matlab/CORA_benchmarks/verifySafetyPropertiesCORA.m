@@ -42,14 +42,14 @@ for i=1:length(ReachableSet)
             temp = matrix * vector;
             value = sum(temp);
             % Check for validity
-            if rhs >= 0 && supremum(value) > rhs
+            if  supremum(value) > rhs
                 % Specification was violated, exit
                 disp(['NOT SAFE - spec. no. ' num2str(row) ' violated following specification: [' num2str(spec(row,:)) '] <= ' num2str(rhs)]) ;
                 results{row} = false;
-            elseif rhs < 0 && infimum(value) < rhs
-                % Specification was violated, exit
-                disp(['NOT SAFE - spec. no. ' num2str(row) ' violated following specification: [' num2str(spec(row,:)) '] <= ' num2str(rhs)]) ;
-                results{row} = false;
+%             elseif rhs < 0 && infimum(value) < rhs
+%                 % Specification was violated, exit
+%                 disp(['NOT SAFE - spec. no. ' num2str(row) ' violated following specification: [' num2str(spec(row,:)) '] <= ' num2str(rhs)]) ;
+%                 results{row} = false;
             end
         end
         

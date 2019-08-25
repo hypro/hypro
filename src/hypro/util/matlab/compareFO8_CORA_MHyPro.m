@@ -329,6 +329,8 @@ options.taylorTerms = tT;
 options.zonotopeOrder = zO;
 options.polytopeOrder = pO;
 
+options.intersectInvariant=1;
+
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;

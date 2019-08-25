@@ -2,7 +2,7 @@ function [reachabilityTime, verificationTime, time, safe] = switching_system_mhy
 
 % vars: [x1,x2,x3,x4,x5,gc]
 
-timeHorizon = 0.6;
+timeHorizon = 1;
 
 % Create Automaton
 automaton = MHyProHAutomaton();

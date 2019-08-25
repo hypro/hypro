@@ -18,6 +18,7 @@ options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
+options.intersectInvariant =1;
 
 %set input:
 for i = 1:5
@@ -31,7 +32,7 @@ end
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 0.6;
+options.tFinal = 1;
 
     tic;
     [HA] = reach(HA,options);

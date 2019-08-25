@@ -17,6 +17,7 @@ options.originContained = 0;
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
 options.polytopeOrder = pOrder;
+options.intersectInvariant =1;
     
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap=0;

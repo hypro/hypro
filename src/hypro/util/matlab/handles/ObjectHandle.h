@@ -67,7 +67,7 @@ class ObjectHandle {
 	static hypro::matrix_t<double> mMatrix2Hypro( const mxArray*, const int, const int );
 	static hypro::vector_t<double> mVector2Hypro( const mxArray*, const int );
 	static hypro::Point<double> mPoint2Hypro( const mxArray*, const int );
-	static hypro::Halfspace<double> mHalfspace2Hypro( mxArray*, const int, double& );
+	static hypro::Halfspace<double> mHalfspace2Hypro( const mxArray*, const int, double );
 	static std::map<hypro::Location<double>, hypro::Condition<double>> mlocationConditionMap2Hypro( mxArray*,
 																									const int );
 
@@ -539,7 +539,7 @@ std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2Hypro( const mxArr
  * @param mNormal The normal vector
  * @param offset The offset
  */
-hypro::Halfspace<double> ObjectHandle::mHalfspace2Hypro( mxArray* m_normal, const int len, double& offset ) {
+hypro::Halfspace<double> ObjectHandle::mHalfspace2Hypro( const mxArray* m_normal, const int len, double offset ) {
 	hypro::vector_t<double> normalVec = ObjectHandle::mVector2Hypro( m_normal, len );
 	hypro::Halfspace<double> hSpace = hypro::Halfspace<double>( normalVec, offset );
 	return hSpace;
@@ -566,6 +566,10 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro( char* mSol ) {
  * into Hypro enum
  */
 hypro::representation_name ObjectHandle::mRepresentationName2Hypro( int type ) {
+	// 0 = box, 1 = carl_polytope, 2 = constraint_set
+	//  3 = polytope_h, 4 = polytope_v
+    //  5 = ppl_polytope, 6 = support_function, 7 = taylor_model
+    //  8 = zonotope, 9 = difference_bounds, 
 	if ( type == 0 ) {
 		return hypro::representation_name::box;
 	} else if ( type == 1 ) {
@@ -573,19 +577,19 @@ hypro::representation_name ObjectHandle::mRepresentationName2Hypro( int type ) {
 	} else if ( type == 2 ) {
 		return hypro::representation_name::constraint_set;
 	} else if ( type == 3 ) {
-		return hypro::representation_name::difference_bounds;
-	} else if ( type == 4 ) {
 		return hypro::representation_name::polytope_h;
-	} else if ( type == 5 ) {
+	} else if ( type == 4 ) {
 		return hypro::representation_name::polytope_v;
-	} else if ( type == 6 ) {
+	} else if ( type == 5 ) {
 		return hypro::representation_name::ppl_polytope;
-	} else if ( type == 7 ) {
+	} else if ( type == 6 ) {
 		return hypro::representation_name::support_function;
-	} else if ( type == 8 ) {
+	} else if ( type == 7 ) {
 		return hypro::representation_name::taylor_model;
-	} else if ( type == 9 ) {
+	} else if ( type == 8 ) {
 		return hypro::representation_name::zonotope;
+	} else if ( type == 9 ) {
+		return hypro::representation_name::difference_bounds;
 	} else {
 		return hypro::representation_name::UNDEF;
 	}

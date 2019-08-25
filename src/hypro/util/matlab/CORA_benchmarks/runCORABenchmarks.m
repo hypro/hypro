@@ -18,7 +18,7 @@ names = {'cora_bouncing_ball','cora_cruise_control',...
         log_counter = log_counter + 1;
     elseif benchmark == 2
         filename = strcat(names{2},'_',num2str(diff));
-        logs{log_counter} = boost_v1_cora(saveFig,savePath,filename, diff, plot, timeStep, tTerms, zOrder, pOrder,strategy);
+        logs{log_counter} = cora_cruise_control(saveFig,savePath,filename, diff, plot, timeStep, tTerms, zOrder, pOrder,strategy);
         log_counter = log_counter + 1;
     elseif benchmark == 3
         filename = strcat(names{3},'_',num2str(diff));

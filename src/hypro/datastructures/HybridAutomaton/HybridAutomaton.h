@@ -280,7 +280,7 @@ class HybridAutomaton
      * @param[in]  lhs   The left hand side.
      * @param[in]  rhs   The right hand side.
      * @return     Return compositional Automata of two Automata.
-      DAS HIER WAR DRIN*/
+    **/
     // friend HybridAutomatonComp<Number> operator+(const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs) {
 	// 	HybridAutomatonComp<Number> hac;
 	// 	hac.addAutomata(lhs);
