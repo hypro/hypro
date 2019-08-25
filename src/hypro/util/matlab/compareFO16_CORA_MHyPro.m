@@ -373,6 +373,8 @@ options.x0 = center(options.R0); %initial state for simulation
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
 options.polytopeOrder = pO;
+
+options.intersectInvariant=1;
     
 options.errorOrder=2;
 options.reductionTechnique = 'girard';

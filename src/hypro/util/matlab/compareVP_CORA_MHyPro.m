@@ -201,6 +201,8 @@ Zcenter = ones(10,1);
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
+options.intersectInvariant=1;
+
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
 options.polytopeOrder = pO;

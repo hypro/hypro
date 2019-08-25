@@ -1,7 +1,7 @@
 function log = cora_bouncing_ball(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
 HA = cora_bouncing_ball_ha();
-Zdelta = [0.1;0.1;0.1];
+Zdelta = [0.1;0;0];
 
 
 % options
@@ -13,7 +13,8 @@ options.x0 = center(options.R0); %initial state for simulation
 options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 1;
+options.tFinal = 4;
+options.intersectInvariant =1;
 
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
@@ -135,7 +136,7 @@ end
 if show    
     fig = figure(); 
     hold on
-    options.projectedDimensions = [3 1];
+    options.projectedDimensions = [2 1];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
@@ -169,53 +170,53 @@ if show
         saveas(fig, fullfile(savePath,fname),'png');
     end
     
-    x = [15;15;10.7;10.7];
-    y = [15;-2;-2;15];
-    pgon = polyshape([x,y], 'Simplify', false);
-    plot(pgon,'FaceColor',[0.447, 0.447, 0.454], 'FaceAlpha',0.5,'EdgeColor', 'none');
+%     x = [15;15;10.7;10.7];
+%     y = [15;-2;-2;15];
+%     pgon = polyshape([x,y], 'Simplify', false);
+%     plot(pgon,'FaceColor',[0.447, 0.447, 0.454], 'FaceAlpha',0.5,'EdgeColor', 'none');
     
 
 
-
-HAsim = simulate(HA,options);
-simRes{i} = get(HAsim,'trajectory');
-% figure 
-% hold on
-% box on
-options.projectedDimensions = [3 1];
-options.plotType = {'b','m','g'};
-plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-for i = 1:length(simRes)
-   for j = 1:length(simRes{i}.x)
-       plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
-            simRes{i}.x{j}(:,options.projectedDimensions(2)),'r'); 
-   end
-end
-xlabel('t');
-ylabel('x');
-
-offset = 0.002; % How much away from the marker the text should be.
-x = [1.41;1.41;1.42;1.42;1.43;1.43;1.44;1.44;1.45;1.45;1.46;1.46];
-y = [0.4485;0.2484;0.3097;0.1096;0.1699;-0.03023;0.02911;-0.171;-0.1126;-0.3128;-0.2554;-0.4555];
-index = 1:12;
-plot(x(index), y(index), 'or', 'LineWidth', 2);
-grid on;
-for k = 1 : length(y)
-  if index(k) && mod(k,2)== 1
-    caption = sprintf('t=%.2f, x=%.2f', x(k), y(k));
-    text(x(k) + offset, y(k) + offset, caption, 'BackgroundColor', 'w');
-  else
-      caption = sprintf('t=%.2f, x=%.2f', x(k), y(k));
-        text(x(k) - 0.025, y(k) + offset, caption, 'BackgroundColor', 'w');
-  end
-end
-plot(1.435, 0, 'ok', 'LineWidth', 3);
-caption = sprintf('t=%.3f, x=%.3f',1.435, 0);
-text(1.435 - 0.03, 0 + offset, caption, 'BackgroundColor', 'y');
-end
-x = [1.42;1.41;1.41;1.42];
-y = [0.45;0.45;0.11;0.11];
-pgon = polyshape([x,y], 'Simplify', false);
-plot(pgon,'FaceColor',[0.403, 0, 0.760], 'FaceAlpha',0.15,'EdgeColor', 'none');
+% 
+% % HAsim = simulate(HA,options);
+% % simRes{i} = get(HAsim,'trajectory');
+% % % figure 
+% % % hold on
+% % % box on
+% options.projectedDimensions = [3 1];
+% options.plotType = {'b','m','g'};
+% plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+% for i = 1:length(simRes)
+%    for j = 1:length(simRes{i}.x)
+%        plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
+%             simRes{i}.x{j}(:,options.projectedDimensions(2)),'r'); 
+%    end
+% end
+% xlabel('t');
+% ylabel('x');
+% 
+% offset = 0.001; % How much away from the marker the text should be.
+% x = [1.41;1.41;1.42;1.42;1.43;1.43;1.44;1.44;1.45;1.45;1.46;1.46];
+% y = [0.4485;0.2484;0.3097;0.1096;0.1699;-0.03023;0.02911;-0.171;-0.1126;-0.3128;-0.2554;-0.4555];
+% index = 1:12;
+% plot(x(index), y(index), 'or', 'LineWidth', 2);
+% grid on;
+% for k = 1 : length(y)
+%   if index(k) && mod(k,2)== 1
+%     caption = sprintf('t=%.2f, x=%.2f', x(k), y(k));
+%     %text(x(k) + offset, y(k) + offset, caption, 'BackgroundColor', 'w', 'FontSize',15);
+%   else
+%       caption = sprintf('t=%.2f, x=%.2f', x(k), y(k));
+%         %text(x(k) - 0.025, y(k) + offset, caption, 'BackgroundColor', 'w', 'FontSize',15);
+%   end
+% end
+% plot(1.435, 0, 'ok', 'LineWidth', 3);
+% caption = sprintf('t=%.3f, x=%.3f',1.435, 0);
+% %text(1.435 - 0.03, 0 + offset, caption, 'BackgroundColor', 'y', 'FontSize',15);
+% end
+% x = [1.42;1.41;1.41;1.42];
+% y = [0.45;0.45;0.11;0.11];
+% pgon = polyshape([x,y], 'Simplify', false);
+% plot(pgon,'FaceColor',[0.054, 0, 0.760], 'FaceAlpha',0.25,'EdgeColor', 'none');
 
 end

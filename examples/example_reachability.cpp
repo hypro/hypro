@@ -29,10 +29,15 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	reacher.initQueue();
 	std::cout << "Starting reachability analysis..." << std::endl;
 	auto flowpipes = reacher.computeForwardReachability();
-
+	bool unsafe = reacher.reachedBadStates();
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
-
-    if(ha.second.plotDimensions.size() > 0){
+	if(unsafe){
+		std::cout << "UNSAFE" << std::endl;
+	}else{
+		std::cout << "SAFE" << std::endl;
+	}
+    //if(ha.second.plotDimensions.size() > 0){
+	if( 1 == 0){
 
 		clock::time_point startPlotting = clock::now();
 

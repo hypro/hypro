@@ -16,6 +16,7 @@ options.errorOrder=0;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
+options.intersectInvariant =1;
 
 %set input:
 for i = 1:3

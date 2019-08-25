@@ -8,6 +8,8 @@ function out = ptr2Object(type, ptr)
         out = MHyProConstraintSet(ptr);
     elseif type == 3
         out = MHyProSupportFunction(ptr);
+    elseif type == 14
+        out = MHyProZonotope(ptr);
     else
         error('ptr2Object - wrong type.');
     end

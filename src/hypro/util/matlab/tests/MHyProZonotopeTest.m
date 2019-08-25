@@ -26,15 +26,15 @@ s = z1.supremum();
 assert(isnan(s) == 1);
 
 s = z3.supremum();
-assert(s == 3);
+assert(s == 4);
 
 
 z3 = MHyProZonotope([1;1;0], [1 0 0; 0 1 0; 0 0 1]);
 
 z_center = z3.center();
 z_gen = z3.generators();
-assert(isequal(z_center,[1;0;0]));
-assert(isequal(z_gen,[1;1;0]));
+assert(isequal(z_center,[1;1;0]));
+assert(isequal(z_gen,eye(3)));
 
 ord = z2.order();
 assert(ord >= 0.0769);
@@ -57,5 +57,9 @@ c = z3.center();
 
 bound = z5.computeZonotopeBoundary();
 assert(isequal(bound,[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
+
+%Plot
+z6 = MHyProZonotope([1;2;1], eye(3));
+z6.plotObj([1 3]);
 
 end

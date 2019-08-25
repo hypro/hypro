@@ -20,6 +20,7 @@ options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
+options.intersectInvariant =1;
 
 %set input:
 for i = 1:4
@@ -33,7 +34,7 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 1;
+options.tFinal = 4;
 
 tic;
 [HA] = reach(HA,options);
@@ -75,8 +76,7 @@ log = ['filtered_oscillator_4 ', num2str(diff), ' ',...
 if show   
     fig = figure(); 
     hold on
-%     options.projectedDimensions = [3 2];
-    options.projectedDimensions = [7 2];
+    options.projectedDimensions = [3 2];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
@@ -108,8 +108,7 @@ if show
     % Display invariant
     %fplot(@(x) -0.714286*x, [0 0.8],'g');
     
-%     xlabel('x1');
-    xlabel('t');
+    xlabel('x1');
     ylabel('y');
     
     if saveFig

@@ -26,24 +26,22 @@ void MZonotope::newZonotopeCG(int nlhs, mxArray *plhs[], int nrhs, const mxArray
 	hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro( prhs[2], len );
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], gen_rows, gen_cols );
 
-	std::cout << "new zonotope cg generators: " << std::endl;
-	for(int i = 0; i < matrix.rows(); i++){
-		for(int j = 0; j < matrix.cols(); j++){
-			std::cout << matrix(i,j) << ", ";
-		}
-		std::cout << " " << std::endl;
-	}
+	// std::cout << "new zonotope cg generators: " << std::endl;
+	// for(int i = 0; i < gen_rows; i++){
+	// 	for(int j = 0; j < gen_cols; j++){
+	// 		std::cout << matrix(i,j) << ", ";
+	// 	}
+	// 	std::cout << " " << std::endl;
+	// }
 
-	std::cout << "new zonotope cg center: " << std::endl;
-	for(int i = 0; i < vector.rows(); i++){
-		std::cout << vector(i) << ", ";
-	}
-	std::cout << " " << std::endl;
-	std::cout << " " << std::endl;
-
-
+	// std::cout << "new zonotope cg center: " << std::endl;
+	// for(int i = 0; i < vector.rows(); i++){
+	// 	std::cout << vector(i) << ", ";
+	// }
+	// std::cout << " " << std::endl;
+	// std::cout << " " << std::endl;
 	
-	plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>( matrix, vector ) );
+	plhs[0] = convertPtr2Mat<hypro::Zonotope<double>>( new hypro::Zonotope<double>(  vector, matrix ) );
 }
 
 void MZonotope::copyDimensions(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -64,7 +62,7 @@ void MZonotope::supremum( int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
 
 	hypro::Zonotope<double>* obj = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	double supremum = obj->supremum();
-	//std::cout << "####################### Supremum: " << supremum << std::endl;
+	// std::cout << "####################### Supremum: " << supremum << std::endl;
 	plhs[0] = mxCreateDoubleScalar( supremum );
 }
 
@@ -106,14 +104,14 @@ void MZonotope::setGenerators(int nlhs, mxArray *plhs[], int nrhs, const mxArray
 
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], gen_rows, gen_cols );
 
-	std::cout << "set generators: " << std::endl;
-	for(int i = 0; i < matrix.rows(); i++){
-		for(int j = 0; j < matrix.cols(); j++){
-			std::cout << matrix(i,j) << ", ";
-		}
-		std::cout << " " << std::endl;
-	}
-	std::cout << " " << std::endl;
+	// std::cout << "set generators: " << std::endl;
+	// for(int i = 0; i < matrix.rows(); i++){
+	// 	for(int j = 0; j < matrix.cols(); j++){
+	// 		std::cout << matrix(i,j) << ", ";
+	// 	}
+	// 	std::cout << " " << std::endl;
+	// }
+	// std::cout << " " << std::endl;
 
 	zono->setGenerators(matrix);
 }
@@ -132,14 +130,14 @@ void MZonotope::addGenerators(int nlhs, mxArray *plhs[], int nrhs, const mxArray
 	gen_rows = (int)gen_dims[0];
 	hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro( prhs[3], gen_rows, gen_cols );
 
-	std::cout << "add generators: " << std::endl;
-	for(int i = 0; i < matrix.rows(); i++){
-		for(int j = 0; j < matrix.cols(); j++){
-			std::cout << matrix(i,j) << ", ";
-		}
-		std::cout << " " << std::endl;
-	}
-	std::cout << " " << std::endl;
+	// std::cout << "add generators: " << std::endl;
+	// for(int i = 0; i < matrix.rows(); i++){
+	// 	for(int j = 0; j < matrix.cols(); j++){
+	// 		std::cout << matrix(i,j) << ", ";
+	// 	}
+	// 	std::cout << " " << std::endl;
+	// }
+	// std::cout << " " << std::endl;
 
 
 	bool added = zono->addGenerators(matrix);
@@ -159,11 +157,11 @@ void MZonotope::center(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	hypro::vector_t<double> cen = zono->center();
 
-	std::cout << "center: " << std::endl;
-	for(int i = 0; i < cen.rows(); i++){
-		std::cout << cen(i) << ", ";
-	}
-	std::cout << " " << std::endl;
+	// std::cout << "center: " << std::endl;
+	// for(int i = 0; i < cen.rows(); i++){
+	// 	std::cout << cen(i) << ", ";
+	// }
+	// std::cout << " " << std::endl;
 
 	plhs[0] = mxCreateDoubleMatrix( cen.rows(), 1, mxREAL );
 	ObjectHandle::convert2Matlab( cen, plhs[0], cen.rows(), 1 );
@@ -178,14 +176,15 @@ void MZonotope::generators(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
 
 	hypro::matrix_t<double> mat = zono->generators();
 
-	std::cout << "generators: " << std::endl;
-	for(int i = 0; i < mat.rows(); i++){
-		for(int j = 0; j < mat.cols(); j++){
-			std::cout << mat(i,j) << ", ";
-		}
-		std::cout << " " << std::endl;
-	}
-	std::cout << " " << std::endl;
+	// std::cout << "generators: " << std::endl;
+	// std::cout << "rows: " << mat.rows() << "cols: " << mat.cols() << std::endl;
+	// for(int i = 0; i < mat.rows(); i++){
+	// 	for(int j = 0; j < mat.cols(); j++){
+	// 		std::cout << mat(i,j) << ", ";
+	// 	}
+	// 	std::cout << " " << std::endl;
+	// }
+	// std::cout << " " << std::endl;
 
 	int rows = mat.rows();
 	int cols = mat.cols();
@@ -263,17 +262,17 @@ void MZonotope::computeZonotopeBoundary(int nlhs, mxArray *plhs[], int nrhs, con
 	hypro::Zonotope<double>* zono = convertMat2Ptr<hypro::Zonotope<double>>( prhs[2] );
 	std::vector<hypro::vector_t<double>> bound = zono->computeZonotopeBoundary();
 
-	std::cout << "computeZonotopeBoundary" << std::endl;
-	if(bound.size() > 0){
-	for(int i = 0; i < bound.size(); i++){
-		hypro::vector_t<double> b = bound[i];
-		for(int j = 0; j < bound[0].rows(); j++){
-			std::cout << b(j) << ", ";
-		}
-		std::cout << "" << std::endl;
-	}
-	std::cout << "" << std::endl;
-	}
+	// std::cout << "computeZonotopeBoundary" << std::endl;
+	// if(bound.size() > 0){
+	// for(int i = 0; i < bound.size(); i++){
+	// 	hypro::vector_t<double> b = bound[i];
+	// 	for(int j = 0; j < bound[0].rows(); j++){
+	// 		std::cout << b(j) << ", ";
+	// 	}
+	// 	std::cout << "" << std::endl;
+	// }
+	// std::cout << "" << std::endl;
+	// }
 	if (bound.size() > 0){
 		plhs[0] = mxCreateDoubleMatrix( bound.size(), bound[0].rows(), mxREAL );
 		vector2Matlab<>( bound, plhs[0] );

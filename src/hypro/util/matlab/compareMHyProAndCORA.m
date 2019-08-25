@@ -69,7 +69,7 @@ cStrat.pO = pOrder;
 
 if benchmark == 1
     fname = strcat('comp_BB','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareBB_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
+    compareBB_gc_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 2
     fname = strcat('comp_CC','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
     compareCC_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);

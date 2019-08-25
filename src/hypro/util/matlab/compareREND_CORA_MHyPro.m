@@ -212,6 +212,7 @@ options.tFinal=timeHorizon; % final time
 options.intermediateOrder = 2;
 options.originContained = 0;
 
+options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;

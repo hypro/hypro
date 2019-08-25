@@ -792,9 +792,9 @@ void MGeometricObject<T>::contains_point( int nlhs, mxArray* plhs[], int nrhs, c
 
 template <class T>
 void MGeometricObject<T>::contains_object( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
-	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - contains_box: Expecting one output value!" );
-	if ( nrhs < 4 ) mexErrMsgTxt( "MGeometricObject - contains_box: One or more arguments are missing!" );
-	if ( nrhs > 4 ) mexWarnMsgTxt( "MGeometricObject - contains_box: One or more input arguments were ignored." );
+	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - contains_object: Expecting one output value!" );
+	if ( nrhs < 4 ) mexErrMsgTxt( "MGeometricObject - contains_object: One or more arguments are missing!" );
+	if ( nrhs > 4 ) mexWarnMsgTxt( "MGeometricObject - contains_object: One or more input arguments were ignored." );
 
 	T* obj = convertMat2Ptr<T>( prhs[2] );
 	T* obj_arg = convertMat2Ptr<T>( prhs[3] );

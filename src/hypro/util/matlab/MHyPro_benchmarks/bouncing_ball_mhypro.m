@@ -15,27 +15,10 @@ flowMatrix = [0 1 0 0; 0 0 0 -9.81;0 0 0 1; 0 0 0 0];
 loc.setFlow(flowMatrix);
 
 % Set invariant x >= 0 & t <= 4
-inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
+inv = MHyProCondition([-1 0 0], 0);
 loc.setInvariant(inv);
 
-%-----------------------------------------------%
-%                 loc sink
-%-----------------------------------------------%
-
-loc_sink = MHyProLocation();
-loc_sink.setName('sink');
-
-% Set flow:
-% x' = 0 v' = 0 t' = 0
-flowMatrix = zeros(3);
-loc_sink.setFlow(flowMatrix);
-
-% Set invariant x >= 0
-% inv = MHyProCondition([-1 0 0], [0]);
-% loc.setInvariant(inv);
-
 l = automaton.addLocation(loc);
-s = automaton.addLocation(loc_sink);
 
 %-----------------------------------------------%
 %                loc -> loc
@@ -61,31 +44,6 @@ tran.setReset(reset);
 tran.setLabels({MHyProLabel('t1')});
 
 l.addTransition(tran);
-
-%-----------------------------------------------%
-%                loc -> loc_sink
-%-----------------------------------------------%
-tran2 = MHyProTransition();
-% Set guard:
-% t == 4
-guard2 = MHyProCondition();
-guard2.setMatrix([ 0 0 -1; 0 0 1]);
-guard2.setVector([-4;4]);
-
-% Set reset
-reset2 = MHyProReset();
-reset2.setMatrix(eye(3));
-reset2.setVector([0;0;0]);
-
-tran2.setAggregation(aggr);
-tran2.setGuard(guard2);
-tran2.setSource(l);
-tran2.setTarget(s);
-tran2.setReset(reset2);
-tran2.setLabels({MHyProLabel('t2')});
-
-l.addTransition(tran2);
-
 
 %-----------------------------------------------%
 %                 Initial set
@@ -179,8 +137,8 @@ disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 %     num2str(time), ' ', num2str(safe)];
 
 if plotting == 1
-    dim = [2 1];
-    labs = ["v", "x"];
+    dim = [3 1];
+    labs = ["t", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     if bad

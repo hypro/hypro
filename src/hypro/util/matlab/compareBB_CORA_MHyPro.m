@@ -30,28 +30,11 @@ loc.setName('loc');
 flowMatrix = [0 1 0 0; 0 0 0 -9.81;0 0 0 1; 0 0 0 0];
 loc.setFlow(flowMatrix);
 
-% Set invariant x >= 0 & t <= 4
-inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
+% Set invariant x >= 0
+inv = MHyProCondition([-1 0 0], 0);
 loc.setInvariant(inv);
 
-%-----------------------------------------------%
-%                 loc sink
-%-----------------------------------------------%
-
-loc_sink = MHyProLocation();
-loc_sink.setName('loc');
-
-% Set flow:
-% x' = 0 v' = 0 t' = 0
-flowMatrix = zeros(4);
-loc_sink.setFlow(flowMatrix);
-
-% % Set invariant x >= 0 & t <= 4
-% inv = MHyProCondition([-1 0 0; 0 0 1], [0; 4]);
-% loc.setInvariant(inv);
-
 l = automaton.addLocation(loc);
-s = automaton.addLocation(loc_sink);
 
 %-----------------------------------------------%
 %                loc -> loc
@@ -79,31 +62,6 @@ tran.setLabels({MHyProLabel('t1')});
 l.addTransition(tran);
 
 %-----------------------------------------------%
-%                loc -> loc_sink
-%-----------------------------------------------%
-tran = MHyProTransition();
-% Set guard:
-% t == 4
-guard = MHyProCondition();
-guard.setMatrix([ 0 0 -1; 0 0 1]); % First set the matrix then the vector!?
-guard.setVector([-4;4]);
-
-% Set reset
-reset = MHyProReset();
-reset.setMatrix(eye(3));
-reset.setVector([0;0;0]);
-
-tran.setAggregation(0);
-tran.setGuard(guard);
-tran.setSource(l);
-tran.setTarget(l);
-tran.setReset(reset);
-tran.setLabels({MHyProLabel('t1')});
-
-s.addTransition(tran);
-
-
-%-----------------------------------------------%
 %                 Initial set
 %-----------------------------------------------%
 
@@ -129,10 +87,12 @@ reacher.setRepresentationType(setRepr);
 
 flowpipes = reacher.computeForwardReachability();
 
-dim = [2 1];
+dim = [3 1];
 labs = ["t", "x"];
+set(gca,'FontSize',20);
 fig = figure();
 hold on
+
 reacher.plotComparison(flowpipes, dim, labs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -153,6 +113,8 @@ options.startLoc = 1; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = timeHorizon;
+
+options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
@@ -176,12 +138,13 @@ end
 
 [HA] = reach(HA,options);
 
-options.projectedDimensions = [2 1];
+options.projectedDimensions = [3 1];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
-x = -30:15;
-y = 0 + 0*x;
-plot(x,y,'m--');
+
+% x = -30:15;
+% y = 0 + 0*x;
+% plot(x,y,'m--');
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     if diff == 1
         x = [15;15;10.7;10.7];

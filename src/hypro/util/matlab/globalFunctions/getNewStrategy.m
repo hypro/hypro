@@ -428,11 +428,26 @@ elseif nr == 83
     settings.clustering = -1;
     setRepr = 8;
     aggr = 0;    
-    
-    
-    
-    
-    
+elseif nr == 84
+    settings.timeStep = 0.01;
+    settings.clustering = 5;
+    setRepr = 4; %v_polytope
+    aggr = 2;
+elseif nr == 85
+    settings.timeStep = 0.01;
+    settings.clustering = 5;
+    setRepr = 3; %h_polytope
+    aggr = 2;
+elseif nr == 86
+    settings.timeStep = 0.01;
+    settings.clustering = 5;
+    setRepr = 9; %difference bounds
+    aggr = 2;    
+elseif nr == 87
+    settings.timeStep = 0.01;
+    settings.clustering = 5;
+    setRepr = 7; %taylor model
+    aggr = 2;        
     
     
     

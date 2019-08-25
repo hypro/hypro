@@ -134,7 +134,7 @@ namespace reachability {
 			if(boost::get<2>(initialSetup) == matrix_t<Number>::Identity(boost::get<2>(initialSetup).rows(), boost::get<2>(initialSetup).cols()) &&
 				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
 				noFlow = true;
-				std::cout << "NO FLOW" << std::endl;
+				//std::cout << "NO FLOW" << std::endl;
 				// Collect potential new initial states from discrete behaviour.
 				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
 					INFO("hypro.reacher", "-- Checking Transitions from initial!");
