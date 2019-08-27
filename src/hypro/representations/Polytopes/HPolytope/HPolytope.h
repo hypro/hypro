@@ -131,7 +131,7 @@ public:
 	 * @details An empty H-polytope is constructed by creating two hyperplanes which falsify each other.
 	 * @return An empty polytope.
 	 */
-	static HPolytopeT<Number,Converter,Setting> Empty();
+	static HPolytopeT<Number,Converter,Setting> Empty(std::size_t dimension = 1);
 
 	/**
 	 * @brief Getter for the dimension of the polytope.

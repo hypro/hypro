@@ -46,7 +46,7 @@ class Converter {
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
-		using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
+		using SupportFunction = SupportFunctionT<Number,Converter,NoBoxReduction>;
 		using Zonotope = ZonotopeT<Number,Converter,ZonotopeSetting>;
 
 		/* END typedefs (do not remove this comment!) */
@@ -239,6 +239,8 @@ class Converter {
 		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
 		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
+		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
+		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#endif
 
 

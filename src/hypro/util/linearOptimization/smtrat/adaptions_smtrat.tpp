@@ -4,7 +4,7 @@
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::vector<carl::Relation>& relationSymbols, const EvaluationResult<Number>& preSolution) {
+	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols, const EvaluationResult<Number>& preSolution) {
 		EvaluationResult<Number> res;
 		smtrat::Poly objective = createObjective(_direction);
 		//#ifdef RECREATE_SOLVER

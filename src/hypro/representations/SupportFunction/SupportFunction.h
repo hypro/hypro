@@ -78,6 +78,7 @@ public:
 	void removeRedundancy();
 	void reduceNumberRepresentation() {}
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
+	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
 	SupportFunctionT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
