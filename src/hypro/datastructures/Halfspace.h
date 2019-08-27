@@ -368,7 +368,7 @@ Halfspace<To> convert(const Halfspace<From>& in) {
  */
 template <typename Number>
 std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
-	_lhs << "( " << _rhs.normal() << "; " << Number( _rhs.offset() ) << " )";
+	_lhs << "( " << vector_t<Number>(_rhs.normal().transpose()) << "; " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }
 

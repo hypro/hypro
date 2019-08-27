@@ -382,7 +382,7 @@ namespace hypro
 	void LTIContext<State>::firstSegment(){
 		DEBUG("hypro.worker","State  before first segment: " << mComputationState);
 
-		// applay handlers to state
+		// apply handlers to state
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			mFirstSegmentHandlers.at(i)->handle();
 		}
@@ -414,7 +414,6 @@ namespace hypro
     template<typename State>
 	void LTIContext<State>::checkInvariant(){
 
-		std::cout << "LTIContext::checkInvariant: before handle" << std::endl;
     	if(mInvariantHandlers.size() > 0){
     		bool deleteRequested = false;
 	    	// compute strictes containment on the fly
@@ -423,14 +422,13 @@ namespace hypro
 	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){
 				if(!omitInvariant()) {
 					mInvariantHandlers.at(i)->handle();
-					strictestContainment = mInvariantHandlers.at(i)->getContainment();
-					//if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
-					//	TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
-					//	strictestContainment = mInvariantHandlers.at(i)->getContainment();
-					//	break;
-					//} else if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::PARTIAL) {
-					//	strictestContainment = CONTAINMENT::PARTIAL;
-					//}
+					if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
+						TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
+						strictestContainment = mInvariantHandlers.at(i)->getContainment();
+						break;
+					} else if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::PARTIAL) {
+						strictestContainment = CONTAINMENT::PARTIAL;
+					}
 
 					if(mInvariantHandlers.at(i)->getMarkedForDelete()){
 						deleteRequested = true;
@@ -440,7 +438,6 @@ namespace hypro
 
 		    DEBUG("hypro.worker.continuous", "Valuation fulfills Invariant?: ");
 		    DEBUG("hypro.worker.continuous", " " << strictestContainment << std::endl);
-		    std::cout << "LTIContext::checkInvariant: before timing info" << std::endl;
 
 		    if (strictestContainment == CONTAINMENT::NO) {
 				if(mSettings.useInvariantTimingInformation) {
@@ -454,10 +451,8 @@ namespace hypro
 				}
 			}
 
-			std::cout << "LTIContext::checkInvariant: before deletion requests" << std::endl;
 			if(deleteRequested){
 				for(auto handler = mInvariantHandlers.begin(); handler != mInvariantHandlers.end(); ){
-
 					if((*handler)->getMarkedForDelete()){
 						delete *handler;
 						handler = mInvariantHandlers.erase(handler);
@@ -472,7 +467,6 @@ namespace hypro
     	TRACE("hypro.worker","State after intersection with invariant: " << mComputationState);
 
 		// For plotting.
-		std::cout << "LTIContext::checkInvariant: before plotting request" << std::endl;
 		if(!SettingsProvider<State>::getInstance().skipPlot()) {
 			TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
         	mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
@@ -506,7 +500,6 @@ namespace hypro
 						mLocalTimings.insertBadState(mComputationState.getTimestamp(),CONTAINMENT::YES);
 					}
 
-
 					// write timings.
 					if(mSettings.useBadStateTimingInformation ||
 					   mSettings.useGuardTimingInformation ||
@@ -526,7 +519,6 @@ namespace hypro
 
 				if(deleteRequested){
 					for(auto handler = mBadStateHandlers.begin(); handler != mBadStateHandlers.end(); ){
-
 						if((*handler)->getMarkedForDelete()){
 							delete *handler;
 							handler = mBadStateHandlers.erase(handler);
@@ -552,7 +544,8 @@ namespace hypro
 				DEBUG("hypro.worker","Built " << ptr->handlerName());
 			}
 		}
-		mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
+		//mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
+		mEndLoop = (mContinuousEvolutionHandlers.size() > 0);
 
 		initializeGuardHandlers();
 
@@ -901,9 +894,8 @@ namespace hypro
 			}
 		}
 
-
+		//LOLOLO
 		//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
 		TRACE("hypro.worker","Unlock node " << mTask->treeNode);

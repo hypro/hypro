@@ -467,5 +467,6 @@ TYPED_TEST(HPolytopeTest, OptimizerCaching){
 	EXPECT_EQ(hspaces.getOptimizer()->vector(), controlVecAfterInsert);	
 	EXPECT_TRUE(hspaces.getUpdated());
 	EXPECT_EQ(eval.supportValue, TypeParam(1));
-
+	EXPECT_EQ(hspaces.getOptimizer()->getGLPContexts().size(), std::size_t(1));
+	EXPECT_TRUE(hspaces.getOptimizer()->getGLPContexts().find(std::this_thread::get_id()) != hspaces.getOptimizer()->getGLPContexts().end());
 }

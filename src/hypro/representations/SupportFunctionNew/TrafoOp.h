@@ -95,6 +95,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 				if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO){
 					auto child = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get());
 					if(child->getParameters() == parameters && child->getCurrentExponent() == currentExponent){
+					//if(child->getParameters()->matrix().isApprox(parameters->matrix()) && child->getCurrentExponent() == currentExponent){
 						successiveTransformations = child->getSuccessiveTransformations()+1;
 					} else {
 						successiveTransformations = 0;

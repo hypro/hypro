@@ -751,6 +751,9 @@ TYPED_TEST(SupportFunctionNewTest, Emptiness){
 	Box<TypeParam> box1 = Box<TypeParam>::Empty(2);
 	SupportFunctionNew<TypeParam> sf1(box1);
 	EXPECT_TRUE(sf1.empty());
+	HPolytope<TypeParam> hpoly1 = HPolytope<TypeParam>::Empty();
+	sf1 = SupportFunctionNew<TypeParam>(hpoly1);
+	EXPECT_TRUE(sf1.empty());
 	
 	//Leaf
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
@@ -1079,12 +1082,21 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	Halfspace<TypeParam> withinBox ({TypeParam(0),TypeParam(1)}, TypeParam(1));
 	Halfspace<TypeParam> aboveBox ({TypeParam(0),TypeParam(1)}, TypeParam(2));
 
-	//Test with empty sf
-	SupportFunctionNew<TypeParam> sfEmpty;
-	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> emptySatisfy = sfEmpty.satisfiesHalfspace(belowBox);		
-	EXPECT_TRUE(emptySatisfy.first == hypro::CONTAINMENT::BOT);
+	//Test with undefined sf
+	SupportFunctionNew<TypeParam> sfUndef;
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> emptySatisfy = sfUndef.satisfiesHalfspace(belowBox);		
+	EXPECT_EQ(emptySatisfy.first, hypro::CONTAINMENT::BOT);
 	EXPECT_TRUE(emptySatisfy.second.empty());
-	EXPECT_TRUE(emptySatisfy.second == sfEmpty);
+	EXPECT_EQ(emptySatisfy.second, sfUndef);
+
+	//Test with unsatisfiable box
+	HPolytope<TypeParam> hpoly;
+	hpoly.insert(Halfspace<TypeParam>({TypeParam(1),TypeParam(0)},TypeParam(-1)));
+	hpoly.insert(Halfspace<TypeParam>({TypeParam(-1),TypeParam(0)},TypeParam(-1)));
+	SupportFunctionNew<TypeParam> sfUnsat(hpoly);
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> unsatSatisfy = sfUnsat.satisfiesHalfspace(belowBox);
+	EXPECT_EQ(unsatSatisfy.first, hypro::CONTAINMENT::NO);
+	EXPECT_EQ(unsatSatisfy.second, sfUnsat);
 
 	//Test with belowBox
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> belowSatisfy = sf1.satisfiesHalfspace(belowBox);
@@ -1097,7 +1109,6 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	EXPECT_TRUE(!withinSatisfy.second.empty());
 	Box<TypeParam> boxWithin (std::make_pair(Point<TypeParam>({TypeParam(0.1),TypeParam(0.1)}), Point<TypeParam>({TypeParam(2), TypeParam(1)})));
 	SupportFunctionNew<TypeParam> sfWithin(boxWithin);	
-	//std::cout << "TESTING CONTAINMENT" << std::endl;
 	EXPECT_TRUE(withinSatisfy.second.contains(sfWithin));
 	//EXPECT_TRUE(sfWithin.contains(withinSatisfy.second)); //DOES NOT WORK, SINCE WE OVERAPPROXIMATE
 
@@ -1121,6 +1132,11 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	triangleVec1 << TypeParam(-3), TypeParam(9), TypeParam(0);
 	triangleVec2 << TypeParam(0), TypeParam(6), TypeParam(0);
 	triangleVec3 << TypeParam(2), TypeParam(4), TypeParam(0);
+
+	//Unsat box and triangle do not overlap
+	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> justNo = sfUnsat.satisfiesHalfspaces(triangleMat, triangleVec1);
+	EXPECT_EQ(justNo.first, hypro::CONTAINMENT::NO);
+	EXPECT_TRUE(justNo.second.empty());
 
 	//Box and triangle do not overlap
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> noOverlap = sf1.satisfiesHalfspaces(triangleMat, triangleVec1);

@@ -692,7 +692,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 		assert(mOptimizer.has_value());
 		if(!mUpdated){
 			setOptimizer(this->matrix(), this->vector());
-		} 
+		}
 		return mOptimizer->evaluate(_direction, true);
 	} else {
 		Optimizer<Number> opt;
@@ -704,10 +704,10 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 
 template <typename Number, typename Converter, class Setting>
 std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const {
+	assert(_directions.cols() == dimension());
 	if(mHPlanes.empty()) {
 		return std::vector<EvaluationResult<Number>>(_directions.rows(), EvaluationResult<Number>(Number(1), SOLUTION::INFTY));
 	}
-
 	std::vector<EvaluationResult<Number>> res;
 	if(Setting::OPTIMIZER_CACHING){
 		assert(mOptimizer.has_value());
@@ -725,7 +725,7 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 			res.emplace_back(opt.evaluate(_directions.row(i), useExact));
 		}
 	}
-	return res;		
+	return res;	
 }
 
 /*
@@ -1080,6 +1080,9 @@ void HPolytopeT<Number, Converter, Setting>::clear() {
 	mEmpty =TRIBOOL::FALSE;
 	mNonRedundant = true;
 	mUpdated = false;
+	if(Setting::OPTIMIZER_CACHING){
+		mOptimizer->cleanGLPInstance();
+	}
 }
 
 template <typename Number, typename Converter, class Setting>

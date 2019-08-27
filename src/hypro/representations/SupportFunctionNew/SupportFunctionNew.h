@@ -113,6 +113,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
   	mutable bool mTemplateSet = false;
 
+  	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
+
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
@@ -320,8 +322,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
 	 */
 	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
-  	//std::pair<bool,std::size_t> hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
-
+  	
 	/***************************************************************************
 	 * Operators
 	 **************************************************************************/

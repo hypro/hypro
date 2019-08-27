@@ -30,6 +30,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned originCount = 2;
 	std::size_t mDimension = 0;
 	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> mChildren;
+	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	////// Special members of this class
 
@@ -66,6 +67,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	RGNData* getData() const { return new RGNData(); }
+	TRIBOOL isEmpty() const { return mEmpty; }
 	void setDimension(const std::size_t d) { mDimension = d; }
 
 	////// RootGrowNode Interface
@@ -141,21 +143,28 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
 		//Current implementation uses Solution 1: template evaluation.
 
-		//Quick check
+		//Quick check: If emptiness already computed, just return computation result
+		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE) ? true : false; 
+
+		//Quick check: If not already computed, check if at least one child is empty
 		for(const auto& child : childrenEmpty){
-			if(child) return true;
+			if(child){
+				mEmpty = TRIBOOL::TRUE;
+				return true;	
+			} 
 		}
 
-		//Turn children into SFs
+		//If no quick check worked: Turn children into SFs
 		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
 		for(std::size_t i = 0; i < this->getChildren().size(); ++i){
 			sfChildren.emplace_back(SupportFunctionNewT<Number,Converter,Setting>(this->getChildren().at(i)));
 		}
 
+		//Choose one child for which we will always evaluate in the negative direction
 		SupportFunctionNewT<Number,Converter,Setting> chosenOne = sfChildren.back();
 		sfChildren.pop_back();
 		std::vector<vector_t<Number>> directions = computeTemplate<Number>(mDimension, defaultTemplateDirectionCount);
-
+		
 		for(const auto& direction : directions){
 			
 			//Determine supportValue of direction and reverse direction for chosenOne
@@ -166,13 +175,18 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 			//Check in both directions since directions and children do not have to be symmetrical
 			for(const auto& child : sfChildren){
 				EvaluationResult<Number> childPosEval = child.evaluate(direction, false); 
-				if(childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY) 
+				if(childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY){
+					mEmpty = TRIBOOL::TRUE;
 					return true;
+				}
 				EvaluationResult<Number> childNegEval = child.evaluate(-direction, false); 
-				if(-childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY)
+				if(-childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY){
+					mEmpty = TRIBOOL::TRUE;
 					return true;
+				}
 			}
 		}
+		mEmpty = TRIBOOL::FALSE;
 		return false;
 	}
 

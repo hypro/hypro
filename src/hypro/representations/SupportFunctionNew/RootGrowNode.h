@@ -68,6 +68,7 @@ class RootGrowNode {
 	unsigned originCount = 0;							//Least amount of children needed to function properly
 	PointerVec mChildren = PointerVec();				//vector of all current children
 	std::size_t mDimension = 0;							//The dimension of the operations and representations
+	TRIBOOL mEmpty = TRIBOOL::NSET;
 	
   public:
 
@@ -81,7 +82,9 @@ class RootGrowNode {
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
 	virtual PointerVec getChildren() const { return mChildren; }
+	virtual PointerVec& rGetChildren() { return mChildren; }
 	virtual std::size_t getDimension() const { return mDimension; }
+	virtual TRIBOOL isEmpty() const { return mEmpty; }
 
 	//Gets the data from a node subclass that has no extra templates (and is therefore not the Leaf class)
 	virtual RGNData* getData() const = 0;

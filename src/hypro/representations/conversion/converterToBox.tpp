@@ -384,7 +384,7 @@ template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
 	
 	//gets dimension from the source object
-	std::size_t dim = _source.dimension();                                                                     
+	std::size_t dim = _source.dimension();               
 
 	//initialize normal matrix as zero matrix with 2*dim rows and dim columns for every dimension
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   

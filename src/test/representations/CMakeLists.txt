@@ -11,7 +11,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#ConverterTest.cpp
 			#DifferenceBoundsTest.cpp
 			#GridTest.cpp
-			#HPolytopeTest.cpp
+			HPolytopeTest.cpp
 			#NeighborhoodContainerTest.cpp
 			#OrthogonalPolyhedronTest.cpp
 			#PolytopeTest.cpp
@@ -30,7 +30,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#ConverterTest.cpp
 			#DifferenceBoundsTest.cpp
 			#GridTest.cpp
-			#HPolytopeTest.cpp
+			HPolytopeTest.cpp
 			#NeighborhoodContainerTest.cpp
 			#OrthogonalPolyhedronTest.cpp
 			#PolytopeSupportFunctionTest.cpp

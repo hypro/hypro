@@ -40,6 +40,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::LEAF;
 	unsigned originCount = 0;				//A leaf cannot have children
 	std::size_t mDimension = 0;
+	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	////// Members for this class
 
@@ -54,7 +55,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	////// Constructors & Destructors
 
-	Leaf() : mDimension(std::size_t(0)), rep(nullptr) {}
+	Leaf() = delete;
 
 	Leaf(Representation& r) : mDimension(r.dimension()), rep(std::make_shared<Representation>(r)) {}
 
@@ -77,6 +78,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	Representation* getRepresentation() const { return rep.get(); }
+	TRIBOOL isEmpty() const { return mEmpty; }
 	bool isRedundant() const { return !isNotRedundant; }
 	RGNData* getData() const { return nullptr; }
 	LeafData getLeafData() const {
@@ -127,7 +129,10 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	//Leaves call empty function of the representation
 	bool empty() const { 
-		return rep->empty(); 
+		if(mEmpty == TRIBOOL::NSET){
+			mEmpty = rep->empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		}
+		return (mEmpty == TRIBOOL::TRUE) ? true : false; 
 	}
 
 	//Compute the point that is the supremum of the representation

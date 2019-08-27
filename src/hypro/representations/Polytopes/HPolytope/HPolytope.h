@@ -280,6 +280,7 @@ public:
 		mNonRedundant = rhs.isNonRedundant();
 		mEmpty = rhs.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		if(Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()){
+			mOptimizer->cleanGLPInstance();
 			setOptimizer(rhs.matrix(), rhs.vector());
 		}
 		return *this;

@@ -396,7 +396,7 @@ namespace hypro {
 		TRACE("hypro.optimizer","");
 		assert(isSane());
 		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
-		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
+		//assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();

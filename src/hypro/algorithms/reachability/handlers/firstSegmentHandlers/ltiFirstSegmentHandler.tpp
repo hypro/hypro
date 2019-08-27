@@ -37,9 +37,8 @@ namespace hypro
         trafoMatrixResized = trafoMatrix.block(0, 0, rows - 1, cols - 1);
         translation.conservativeResize(rows - 1);
 
-        mFlow = affineFlow<Number>{trafoMatrixResized, translation};
-
         // update flow type
+        mFlow = affineFlow<Number>{trafoMatrixResized, translation};
         //mState->rGetLocation()->setFlow(mIndex,affineFlow<Number>(mTrafo,mTranslation));
 
         State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(trafoMatrixResized, translation), mTimeStep,mIndex);
