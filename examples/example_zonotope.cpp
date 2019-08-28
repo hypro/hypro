@@ -2,7 +2,7 @@
 //#include "../src/hypro/util/Plotter.h"
 #include "../src/hypro/representations/GeometricObject.h"
 #include <sys/time.h>
-
+#include <carl/interval/Interval.h>
 
 typedef int Number;
 
@@ -461,7 +461,7 @@ hypro::matrix_t<Number> cC = hypro::matrix_t<Number>(100,10);
  	std::cout << "------------------------------"<< std::endl;
 	
 	struct timeval t1, t2;
-    	double elapsedTime;
+    double elapsedTime;
 	// start timer
 	gettimeofday(&t1, NULL);
 
@@ -676,7 +676,71 @@ hypro::matrix_t<Number> cC = hypro::matrix_t<Number>(100,10);
 	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
 
 	std::cout << "Time spent: " << elapsedTime << "ms\n" << std::endl;
+	
+	std::cout << "------------------------------"<< std::endl;
+ 	std::cout << "vertices" << std::endl;
+ 	std::cout << "------------------------------"<< std::endl;
+	
+	// start timer
+	gettimeofday(&t1, NULL);
+	
+	auto v = z2.vertices();
+	
+	// stop timer
+	gettimeofday(&t2, NULL);
 
+	// compute and print the elapsed time in millisec
+	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+
+	std::cout << "Time spent: " << elapsedTime << "ms\n" << std::endl;
+	
+	
+	std::cout << "------------------------------"<< std::endl;
+ 	std::cout << "reduce order" << std::endl;
+ 	std::cout << "------------------------------"<< std::endl;
+	
+	hypro::matrix_t<Number> generators12 = hypro::matrix_t<Number>(4,10);
+    generators12 << -10 ,  6,   -13,    17,    -9,    -8,     7,     9,    -6 ,    5,
+    13 ,  -11 ,   17 ,   -6,     1,   -14 ,  -11 ,    1,    -4,     5,
+    -2  ,  -1   , -8 ,  -10  , -20  ,  -3 ,   19 ,    4 ,    9 ,   -9,
+    -13 ,    4 ,   18 ,  -20 ,  -20    ,18  ,   4,   -11,    -8,   -19;
+	
+	hypro::vector_t<Number> center12 = hypro::vector_t<Number>(4);
+	center12 << 1, 0, 5,1;
+	hypro::Zonotope<Number> z12(center12, generators12);
+	// start timer
+	gettimeofday(&t1, NULL);
+	
+	z12.reduceOrder(2);
+	
+	// stop timer
+	gettimeofday(&t2, NULL);
+
+	// compute and print the elapsed time in millisec
+	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+
+	std::cout << "Time spent: " << elapsedTime << "ms\n" << std::endl;
+	
+	
+	
+	
+		//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		
+		
+	std::cout << "------------------------------"<< std::endl;
+ 	std::cout << "bspline0" << std::endl;
+ 	std::cout << "------------------------------"<< std::endl;
+	
+	carl::Interval<Number>* intv1 = new carl::Interval<Number>(0,1);
+	carl::Interval<Number>* intv2 = new carl::Interval<Number>(1,1);
+	carl::Number<Number> *const1 = new carl::Number<Number>(5);
+
+	carl::Interval<Number> res1 =  ((*intv2 - *intv1) * (*intv2 +-*intv1) * (*intv2 - *intv1)) ;
+	res1.bloat_times(*const1);
+
+	std::cout << "Result:: " << res1.lower() << "  " << res1.upper() << std::endl;
 
     return 0;
 }

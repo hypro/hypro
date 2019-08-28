@@ -628,20 +628,20 @@ disp('---------------------------------------');
 gen3 = [1 0 1 0 1; 0 1 0 2 2; 0 1 0 -2 2; 2 0 2 0 2;0 0 0 0 2];
 cen = [2;0; 4; 1; 2];
 
-mh_z1 = MHyProZonotope(cen, gen3);
-cora_z1 = zonotope([cen, gen3]);
+mh_z4 = MHyProZonotope(cen, gen3);
+cora_z4 = zonotope([cen, gen3]);
 
 tic;
-mh_z1.uniteEqualVectors();
+mh_z4.uniteEqualVectors();
 stop = toc;
 disp(['MHyPro needed ' , num2str(stop), 's']);
 
 tic;
-cora_out = cora_z1.deleteAligned();
+cora_out = cora_z4.deleteAligned();
 stop = toc;
 disp(['CORA needed ' , num2str(stop), 's']);
 
-mh_g = mh_z1.generators();
+mh_g = mh_z4.generators();
 cora_g = cora_out.generators();
 assert(isequal(mh_g, cora_g));
 
@@ -670,5 +670,55 @@ mh_g = mh_z1.generators();
 cora_g = cora_out.generators();
 assert(isequal(mh_g, cora_g));
 
+disp(' ');
+disp('---------------------------------------');
+disp('vertices');
+disp('---------------------------------------');
+
+tic;
+mh_v = mh_z2.vertices();
+stop = toc;
+disp(['MHyPro needed ' , num2str(stop), 's']);
+
+tic;
+cora_v = cora_z2.vertices();
+stop = toc;
+disp(['CORA needed ' , num2str(stop), 's']);
+
+disp(' ');
+disp('---------------------------------------');
+disp('reduce order / reduce');
+disp('---------------------------------------');
+
+gen6 = [-10     6   -13    17    -9    -8     7     9    -6     5;...
+    13   -11    17    -6     1   -14   -11     1    -4     5;...
+    -2    -1    -8   -10   -20    -3    19     4     9    -9;...
+    -13     4    18   -20   -20    18     4   -11    -8   -19];
+cen6 = [1; 0; 5; 1];
+
+mh_z6 = MHyProZonotope(cen6, gen6);
+cora_z6 = zonotope([cen6, gen6]);
+
+mh_order = mh_z6.order();
+disp(['MHyPro order: ', num2str(mh_order)]);
+
+tic;
+mh_z6.reduceOrder(2);
+stop = toc;
+
+mh_order = mh_z6.order();
+disp(['MHyPro order: ', num2str(mh_order)]);
+disp(['MHyPro needed ' , num2str(stop), 's']);
+
+cora_gen = cora_z6.generators();
+cora_order = size(cora_gen,2) / 4;
+disp(['CORA order: ', num2str(cora_order)]);
+tic;
+cora_z6.reduce('girard',1);
+stop = toc;
+cora_gen = cora_z6.generators();
+cora_order = size(cora_gen,2) / 4;
+disp(['CORA order: ', num2str(cora_order)]);
+disp(['CORA needed ' , num2str(stop), 's']);
 
 end

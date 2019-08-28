@@ -420,6 +420,7 @@ if plotting == 1
     labs = ["y", "f8x1"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    set(gca,'FontSize',15);
     if bad
         if diff == 0
             x = [0.8;0.8;0.5;0.5];
@@ -428,7 +429,7 @@ if plotting == 1
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
         elseif diff == 1
             x = [0.8;0.8;0.4946;0.4946];
-            y = [1;-1;-1;1];
+            y = [2;-2;-2;2];
             pgon = polyshape([x,y], 'Simplify', false);
             plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
         else

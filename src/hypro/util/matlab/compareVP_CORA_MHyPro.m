@@ -1,4 +1,4 @@
-function compareVP_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
+function compareVP_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff, simulate)
 
 % MHyPro
 settings.timeStep = mhStrat.timeStep;
@@ -201,7 +201,7 @@ Zcenter = ones(10,1);
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
@@ -231,6 +231,7 @@ options.tFinal = timeHorizon;
 options.projectedDimensions = [1 7];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
+set(gca,'FontSize',15);
 %plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 if diff == 1
     y = [2;2;1.7;1.7];

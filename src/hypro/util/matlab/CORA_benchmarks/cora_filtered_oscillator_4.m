@@ -1,13 +1,13 @@
 function log = cora_filtered_oscillator_4(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder,strategy)
 
-% HA = filtered_oscillator_4_ha();
-HA = fo4_gc();
+HA = filtered_oscillator_4_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
-Zdelta = [0.05;0.1;0;0;0;0;0];
+
+Zdelta = [0.05;0.1;0;0;0;0];
 
 % options
-Zcenter = [0.25;0;0;0;0;0;0];
+Zcenter = [0.25;0;0;0;0;0];
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
@@ -34,7 +34,8 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 4;
+options.tFinal = 0.65;
+options.intersectInvariant=1;
 
 tic;
 [HA] = reach(HA,options);
@@ -81,6 +82,7 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    set(gca,'FontSize',15);
     if diff == 1
         y = [0.8;0.8;0.5;0.5];
         x = [1;-1;-1;1];
@@ -106,7 +108,7 @@ if show
         fill(k1,inBetweenUpper,[0.831, 0, 0], 'FaceAlpha',0.5, 'EdgeColor','none');
     end
     % Display invariant
-    %fplot(@(x) -0.714286*x, [0 0.8],'g');
+    fplot(@(x) -0.714286*x, [0 0.8],'g');
     
     xlabel('x1');
     ylabel('y');

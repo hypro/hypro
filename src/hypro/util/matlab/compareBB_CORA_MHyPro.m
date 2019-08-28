@@ -30,8 +30,8 @@ loc.setName('loc');
 flowMatrix = [0 1 0 0; 0 0 0 -9.81;0 0 0 1; 0 0 0 0];
 loc.setFlow(flowMatrix);
 
-% Set invariant x >= 0
-inv = MHyProCondition([-1 0 0], 0);
+% Set invariant x >= 0 t < timeHorizon
+inv = MHyProCondition([-1 0 0; 0 0 1], [0;timeHorizon]);
 loc.setInvariant(inv);
 
 l = automaton.addLocation(loc);
@@ -43,7 +43,7 @@ tran = MHyProTransition();
 % Set guard:
 % x = 0 & v <= 0
 guard = MHyProCondition();
-guard.setMatrix([ -1 0 0; 1 0 0; 0 1 0]); % First set the matrix then the vector!?
+guard.setMatrix([ -1 0 0; 1 0 0; 0 1 0]);
 guard.setVector([0;0;0]);
 
 % Set reset
@@ -87,9 +87,9 @@ reacher.setRepresentationType(setRepr);
 
 flowpipes = reacher.computeForwardReachability();
 
-dim = [3 1];
-labs = ["t", "x"];
-set(gca,'FontSize',20);
+dim = [2 1];
+labs = ["v", "x"];
+
 fig = figure();
 hold on
 
@@ -114,7 +114,7 @@ options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = timeHorizon;
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
@@ -138,10 +138,10 @@ end
 
 [HA] = reach(HA,options);
 
-options.projectedDimensions = [3 1];
+options.projectedDimensions = [2 1];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
-
+set(gca,'FontSize',15);
 % x = -30:15;
 % y = 0 + 0*x;
 % plot(x,y,'m--');

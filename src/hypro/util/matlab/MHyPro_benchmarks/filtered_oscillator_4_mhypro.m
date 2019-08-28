@@ -348,7 +348,7 @@ automaton.addInitialState(l3, initialCond);
 
 % Add basic settings
 settings.timeBound = 4;
-settings.jumpDepth = 5;
+settings.jumpDepth = 0;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
@@ -401,6 +401,10 @@ if plotting == 1
     end
     xlabel('x1');
     ylabel('y');
+    
+    %y+0.714286*x >= 0 
+    fplot(@(x) -0.714286*x, [0 0.8],'g');
+    set(gca,'FontSize',15);
 elseif plotting == 2
     dim = [1 2 3];
     labs = ["x", "y", "x1"];

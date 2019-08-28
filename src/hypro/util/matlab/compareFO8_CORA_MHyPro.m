@@ -1,4 +1,4 @@
-function compareFO8_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
+function compareFO8_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate)
 
 % MHyPro
 settings.timeStep = mhStrat.timeStep;
@@ -329,7 +329,7 @@ options.taylorTerms = tT;
 options.zonotopeOrder = zO;
 options.polytopeOrder = pO;
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
@@ -357,7 +357,7 @@ options.projectedDimensions = [2 6];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-
+set(gca,'FontSize',15);
 if diff == 1
     x = [0.8;0.8;0.5;0.5];
     y = [1;-1;-1;1];

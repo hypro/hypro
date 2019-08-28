@@ -5,16 +5,28 @@ simulate = 1;
 savePath = '/home/marta/Desktop';
 
 if diff > 0
-    mhStrategies{1} = [3,3,4,23];
-    mhStrategies{2} = [29,29,29,29];
-    mhStrategies{3} = [13,38,38,38];
-    mhStrategies{4} = [17,17,23,5];
-    mhStrategies{5} = [61,61,61,68];
-    mhStrategies{6} = [70, 70, 70,70];
-    mhStrategies{7} = [66,66,56,70];
-    mhStrategies{8} = [13,13,20,20];
-    mhStrategies{9} = [68,68,68,68];
-    mhStrategies{10} = [68,68,61,61];
+        % old strategies
+%     mhStrategies{1} = [3,3,4,23];
+%     mhStrategies{2} = [29,29,29,29];
+%     mhStrategies{3} = [13,38,38,38];
+%     mhStrategies{4} = [17,17,23,5];
+%     mhStrategies{5} = [61,61,61,68];
+%     mhStrategies{6} = [70, 70, 70,70];
+%     mhStrategies{7} = [66,66,56,70];
+%     mhStrategies{8} = [13,13,20,20];
+%     mhStrategies{9} = [68,68,68,68];
+%     mhStrategies{10} = [68,68,61,61];
+
+    mhStrategies{1} = [12,35,17,11];
+    mhStrategies{2} = [1,1,1,1]; 
+    mhStrategies{3} = [1,15,2,27]; 
+    mhStrategies{4} = [11,16,11,15];
+    mhStrategies{5} = [5,1,5,3]; 
+    mhStrategies{6} = [55,4,55,17];
+    mhStrategies{7} = [10,18,30,51];
+    mhStrategies{8} = [11,11,11,1];
+    mhStrategies{9} = [1,10,1,1];
+    mhStrategies{10} = [13,10,13,13];
 
     coraStrategies{1} = [35,35,10,10];
     coraStrategies{2} = [1,1,1,1]; %TODO
@@ -30,16 +42,28 @@ if diff > 0
     cStrategyNr = coraStrategies{benchmark}(diff);
 else
     % Standard strategies
+    % Old strategies
+%     mhStrategies{1} = 1; 
+%     mhStrategies{2} = 2;
+%     mhStrategies{3} = 3;
+%     mhStrategies{4} = 3;
+%     mhStrategies{5} = 3;
+%     mhStrategies{6} = 4;
+%     mhStrategies{7} = 1;
+%     mhStrategies{8} = 1;
+%     mhStrategies{9} = 1;
+%     mhStrategies{10} = 4;
+
     mhStrategies{1} = 1; 
     mhStrategies{2} = 2;
-    mhStrategies{3} = 3;
-    mhStrategies{4} = 3;
-    mhStrategies{5} = 3;
-    mhStrategies{6} = 4;
+    mhStrategies{3} = 9;
+    mhStrategies{4} = 9;
+    mhStrategies{5} = 9;
+    mhStrategies{6} = 17;
     mhStrategies{7} = 1;
     mhStrategies{8} = 1;
     mhStrategies{9} = 1;
-    mhStrategies{10} = 4;
+    mhStrategies{10} = 13;
 
     coraStrategies{1} = 2;
     coraStrategies{2} = 1; 
@@ -56,11 +80,11 @@ else
     cStrategyNr = coraStrategies{benchmark};
 end
 
-[settings, setRepr, aggr] = getStrategy(mhStrategyNr);
-mhStrat.timeStep = settings{1}.timeStep;
-mhStrat.clustering = settings{1}.clustering;
-mhStrat.setRepr = setRepr{1};
-mhStrat.aggr = aggr{1};
+[settings, setRepr, aggr] = getNewStrategy(mhStrategyNr);
+mhStrat.timeStep = settings.timeStep;
+mhStrat.clustering = settings.clustering;
+mhStrat.setRepr = setRepr;
+mhStrat.aggr = aggr;
 [timeStep, tTerms, zOrder, pOrder] = getCORAStrategy(cStrategyNr);
 cStrat.timeStep = timeStep;
 cStrat.tT = tTerms;
@@ -69,7 +93,7 @@ cStrat.pO = pOrder;
 
 if benchmark == 1
     fname = strcat('comp_BB','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
-    compareBB_gc_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
+    compareBB_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);
 elseif benchmark == 2
     fname = strcat('comp_CC','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));
     compareCC_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate);

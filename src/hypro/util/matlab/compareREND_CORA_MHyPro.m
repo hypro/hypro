@@ -1,4 +1,4 @@
-function compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
+function compareREND_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff,simulate)
 
 
 % MHyPro
@@ -212,7 +212,7 @@ options.tFinal=timeHorizon; % final time
 options.intermediateOrder = 2;
 options.originContained = 0;
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
@@ -240,6 +240,7 @@ options.projectedDimensions = [3 4];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+set(gca,'FontSize',15);
 if diff == 1
     y = [12;12;10;10];
     x = [20;-5;-5;20];

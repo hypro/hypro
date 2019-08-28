@@ -117,10 +117,9 @@ classdef MHyProZonotope < MHyProGeometricObject
             MHyPro(14, 114, obj.ObjectHandle);
         end
         
-        function out = reduceOrder(obj, limit)
+        function reduceOrder(obj, limit)
             if mod(limit,1) == 0
-                ptr = MHyPro(14, 116, obj.ObjectHandle, limit);
-                out = MHyProZonotope(ptr);
+                MHyPro(14, 116, obj.ObjectHandle, limit);
             else
                 error('MHyProZonotope - reduceOrder: Wrong type of argument.');
             end

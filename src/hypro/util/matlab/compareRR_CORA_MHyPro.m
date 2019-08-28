@@ -1,4 +1,4 @@
-function compareRR_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
+function compareRR_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff, simulate)
 
 
 % MHyPro
@@ -14,7 +14,7 @@ zO = cStrat.zO;
 pO = cStrat.pO;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-HA = rod_reactor_HA();
+HA = rod_reactor_HA_cora();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
 
@@ -23,7 +23,7 @@ Zcenter = interval([510;20;20],[520;20;20]);
 options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.taylorTerms = tT;
 options.zonotopeOrder = zO;
@@ -281,7 +281,7 @@ flowpipes = reacher.computeForwardReachability();
 dim = [1 3];
 labs = ["x", "c2"];
 reacher.plotComparison(flowpipes, dim, labs);
-
+set(gca,'FontSize',15);
 if diff == 1
     y = [60;60;41.1;41.1];
     x = [600;500;500;600];

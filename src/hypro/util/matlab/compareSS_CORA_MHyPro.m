@@ -1,4 +1,4 @@
-function compareSS_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff)
+function compareSS_CORA_MHyPro(mhStrat,cStrat, timeHorizon, saveFig, fname, savePath, diff, simulate)
 
 
 % MHyPro
@@ -368,7 +368,7 @@ options.taylorTerms = tT;
 options.zonotopeOrder = zO;
 options.polytopeOrder = pO;
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
@@ -394,6 +394,7 @@ options.projectedDimensions = [1 3];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k');
+set(gca,'FontSize',15);
 if diff == 1
     y = [2;2;1.5;1.5];
     x = [4;-2;-2;4];
