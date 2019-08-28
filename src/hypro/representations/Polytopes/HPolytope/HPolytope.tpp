@@ -685,7 +685,8 @@ bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const Point<Number>
 template <typename Number, typename Converter, class Setting>
 EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty()) {
-		return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
+		//return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
+		return EvaluationResult<Number>();
 	}
 	//reduceNumberRepresentation();
 	if(Setting::OPTIMIZER_CACHING){
@@ -706,7 +707,8 @@ template <typename Number, typename Converter, class Setting>
 std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const {
 	assert(_directions.cols() == dimension());
 	if(mHPlanes.empty()) {
-		return std::vector<EvaluationResult<Number>>(_directions.rows(), EvaluationResult<Number>(Number(1), SOLUTION::INFTY));
+		return std::vector<EvaluationResult<Number>>();
+		//return std::vector<EvaluationResult<Number>>(_directions.rows(), EvaluationResult<Number>(Number(1), SOLUTION::INFTY));
 	}
 	std::vector<EvaluationResult<Number>> res;
 	if(Setting::OPTIMIZER_CACHING){
