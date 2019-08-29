@@ -416,7 +416,7 @@ namespace hypro
 
     	if(mInvariantHandlers.size() > 0){
     		bool deleteRequested = false;
-	    	// compute strictes containment on the fly
+	    	// compute strictest containment on the fly
 	    	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
 	    	// apply handlers to state
 	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){

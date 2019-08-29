@@ -280,7 +280,7 @@ namespace hypro {
 						//and set it as the leaf of a new tree
 						auto tmpSFN = boost::apply_visitor(genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet(i));
 						if(tmpSFN.getSettings().DETECT_BOX){
-							if(!tmpSFN.empty()){
+							//if(!tmpSFN.empty()){
 								tmpSFN.reduceRepresentation();
 								auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
 								if(boost::get<0>(isHPolyBox)){
@@ -291,7 +291,7 @@ namespace hypro {
 									tmpSFN = SupportFunctionNew<Number>(tmpHPoly);
 								}
 								newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(tmpSFN), newState.getSet(i)),i);
-							}
+							//}
 						}
 					}					
 				}

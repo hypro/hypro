@@ -42,6 +42,7 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned originCount;
 	PointerVec mChildren;
 	std::size_t mDimension;
+	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 	
 	////// Members for this class
 
@@ -209,11 +210,21 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 	//Checks emptiness
 	bool empty(const std::vector<bool>& childrenEmpty) const {
 		assert(childrenEmpty.size() == 1);
-		if(childrenEmpty.front()) return true;
+		if(mEmpty != TRIBOOL::NSET){
+			return (mEmpty == TRIBOOL::TRUE);
+		}
+		if(childrenEmpty.front()){
+			mEmpty = TRIBOOL::TRUE;
+			return true;	
+		} 
 		SupportFunctionNewT<Number,Converter,Setting> child(this->getChildren().at(0));
 		auto posNormalEval = child.evaluate(hspace.normal(), true);
 		auto negNormalEval = child.evaluate(-hspace.normal(), true);
-		if(-negNormalEval.supportValue <= hspace.offset() && hspace.offset() <= posNormalEval.supportValue) return false;
+		if(-negNormalEval.supportValue <= hspace.offset() && hspace.offset() <= posNormalEval.supportValue){
+			mEmpty = TRIBOOL::FALSE;
+			return false;	
+		} 
+		mEmpty = TRIBOOL::TRUE;
 		return true;
 	}
 

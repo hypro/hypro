@@ -172,7 +172,6 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 					assert(entry.errorCode != SOLUTION::INFEAS);
 					assert(entry.optimumValue != vector_t<Number>::Zero(getDimension()));
 					assert(parameterPair.first.cols() == entry.optimumValue.rows());
-					//std::cout << "parameterPair.first: \n" << parameterPair.first << "entry.optimumValue: \n" << entry.optimumValue << "parameterPair.second: \n" << parameterPair.second << std::endl;
 					entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					entry.supportValue = entry.optimumValue.dot(currentDir);
@@ -214,6 +213,14 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		return false;
 	}
 
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
+		//Use eigen3's isApprox() to make fuzzy matrix comparison instead of exact comparison.
+		//Saves computation time if matrices are big.
+		if(parameters->matrix().isApprox(A) && parameters->vector().isApprox(b)){
+			ltParam = parameters;
+		} 
+		return true;		
+	}
 };
 
 } //namespace hypro

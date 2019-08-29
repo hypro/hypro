@@ -84,15 +84,11 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
 
 		std::vector<EvaluationResult<Number>> accumulatedResult;
-		for(const auto& res : resultStackBack){
-			if(res.begin()->errorCode == SOLUTION::INFEAS) return accumulatedResult;
-		}
-
 		for(unsigned index = 0; index < resultStackBack.front().size(); ++index){
 			EvaluationResult<Number> r;
 			r.optimumValue = vector_t<Number>::Zero(resultStackBack.front().front().optimumValue.rows());
 			for(const auto& res : resultStackBack){
-				assert(res[index].errorCode != SOLUTION::INFEAS);
+				if(res[index].errorCode == SOLUTION::INFEAS) return res;
 				if(res[index].errorCode == SOLUTION::INFTY){
 					r.errorCode = SOLUTION::INFTY;
 					r.supportValue = 1;

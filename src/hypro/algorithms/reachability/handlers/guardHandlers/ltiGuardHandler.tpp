@@ -6,7 +6,6 @@ namespace hypro {
 		assert(!mGuardSatisfyingState->getTimestamp().isEmpty());
 		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());
 	    std::pair<CONTAINMENT,State> statePair = mGuardSatisfyingState->partiallySatisfies(mTransition->getGuard(), mIndex);
-	    //std::cout << "ltiGuardHandler::handle, state satisfies guard? " << statePair.first << " for guard: \n" << mTransition->getGuard() << "result: \n" << statePair.second << std::endl;
 	    if(statePair.first == CONTAINMENT::NO) {
 	    	mSatisfies = false;
 	    	return;

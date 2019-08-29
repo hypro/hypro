@@ -334,7 +334,7 @@ namespace hypro {
 
 		if(mRoot == nullptr) return true;
 
-		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE) ? true : false; 
+		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE); 
 		
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
@@ -458,13 +458,12 @@ namespace hypro {
 		std::function<bool(RootGrowNode<Number,Converter,Setting>*, std::vector<bool>&)> checkAndUpdateTrafo =
 			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool>& haveSubtreesTrafo) -> bool {
 				if(n->getType() == SFNEW_TYPE::TRAFO){
-					//Use eigen3's isApprox() to make fuzzy matrix comparison instead of exact comparison.
-					//Saves computation time if matrices are big.
-					auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
-					if(params->matrix().isApprox(A) && params->vector().isApprox(b)){
-						ltParam = params;
-				    } 
-				    return true;
+					return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam,A,b);
+					//auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
+					//if(params->matrix().isApprox(A) && params->vector().isApprox(b)){
+					//	ltParam = params;
+				    //} 
+				    //return true;
 				} else {
 					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
 						if(hasSubTreeTrafo){
@@ -553,7 +552,7 @@ namespace hypro {
     	EvaluationResult<Number> planeEvalRes = this->evaluate(rhs.normal(), false);
     	//std::cout << "planeEvalRes: " << planeEvalRes << " rhs offset: " << rhs.offset() << std::endl;
     	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
-			std::cout << "SFN::satisfiesHalfspace, Is infeasible (should not happen)." << std::endl;
+			//std::cout << "SFN::satisfiesHalfspace, Is infeasible (should not happen)." << std::endl;
 			////std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 			//assert(Converter::toHPolytope(*this).empty());
     		return std::make_pair(CONTAINMENT::NO, *this);
@@ -564,17 +563,14 @@ namespace hypro {
 			// //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
     		// //std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
             if(this->evaluate(-(rhs.normal()), false ).supportValue < -(rhs.offset())){
-				//std::cout << "fullyOutside" << std::endl;
-                // the object lies fully outside one of the planes -> return false
-                std::cout << "SFN::satisfiesHalfspace, fullyOutside " << std::endl;
+				// the object lies fully outside one of the planes -> return false
+                //std::cout << "SFN::satisfiesHalfspace, fullyOutside " << std::endl;
                 return std::make_pair(CONTAINMENT::NO, this->intersectHalfspace(rhs));
             }
     	}
     	if(limiting){
-    		std::cout << "SFN::satisfiesHalfspace, partially inside " << std::endl;
     		return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
     	} else {
-    		std::cout << "SFN::satisfiesHalfspace, fully inside " << std::endl;
     		return std::make_pair(CONTAINMENT::FULL, *this);
     	}
 	}
@@ -588,26 +584,20 @@ namespace hypro {
 		if(_mat.rows() == 0) {
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
-		//if(this->empty()){
-		//	return std::make_pair(CONTAINMENT::NO, *this);
-		//}
 		assert(_mat.rows() == _vec.rows());
 		assert(_mat.cols() == dimension());
 		if(_mat.rows() == 1 && _vec.rows() == 1){
-			std::cout << "SFN::satisfiesHalfspaces, direct to satisfiesHalfspace()" << std::endl;
 			return satisfiesHalfspace(Halfspace<Number>(vector_t<Number>(_mat.row(0)), _vec(0)));
 		}
-		//std::cout << "SFN::satisfiesHalfspaces: sf: \n" << *this << std::endl;
-        std::vector<unsigned> limitingPlanes;
+		std::vector<unsigned> limitingPlanes;
        	for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	DEBUG("hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
         	EvaluationResult<Number> planeEvalRes = this->evaluate(_mat.row(rowI), false);
         	DEBUG("hypro.representations.supportFunctionNew", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				TRACE("hypro.representations.supportFunctionNew", "Is infeasible (should not happen)." );
-				std::cout << "SFN::satisfiesHalfspaces: is infeas, therefore empty" << std::endl;
-				//return std::make_pair(CONTAINMENT::NO, *this);
-				return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
+				return std::make_pair(CONTAINMENT::NO, *this);
+				//return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
         	} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
         		TRACE("hypro.representations.supportFunctionNew", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec(rowI));
         		// the actual object will be limited by the new plane
@@ -653,13 +643,13 @@ namespace hypro {
         	}
 			assert(limitingPlanes.empty());
         	TRACE("hypro.representations.supportFunctionNew", "Intersect with " << planes << ", " << distances);
-        	std::cout << "SFN::satisfiesHalfspaces(), partial 1, limiting planes: \n " << planes << "distances:\n" << distances << std::endl;
+        	//std::cout << "SFN::satisfiesHalfspaces(), partial 1, limiting planes: \n " << planes << "distances:\n" << distances << std::endl;
         	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(planes,distances));
     	} else {
     		TRACE("hypro.representations.supportFunctionNew", " Object will be fully limited but not empty");
     		assert(limitingPlanes.size() == unsigned(_mat.rows()));
     		TRACE("hypro.representations.supportFunctionNew", "Intersect with " << _mat << ", " << _vec);
-    		std::cout << "SFN::satisfiesHalfspaces(), partial 2, Intersect with " << _mat << ", " << _vec << std::endl;
+    		//std::cout << "SFN::satisfiesHalfspaces(), partial 2, Intersect with " << _mat << ", " << _vec << std::endl;
     		return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(_mat,_vec));
     	}
 	}
@@ -765,11 +755,9 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		if(_mat.rows() == 1 && _vec.rows() == 1){
-			std::cout << "SFN::intersectHalfspaces(), direct to intersectHalfspace" << std::endl;
 			Halfspace<Number> hspace(_mat.row(0), _vec(0));
 			return intersectHalfspace(hspace);
 		}
-		std::cout << "SFN::intersectHalfspaces(), intersect with _mat and _vec" << std::endl;
 		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));	
 	}
 

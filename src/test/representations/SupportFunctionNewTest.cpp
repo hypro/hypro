@@ -724,6 +724,8 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	EXPECT_TRUE(res == std::vector<EvaluationResult<TypeParam>>());
 	resOnlyOneDir = sfEmpty.evaluate(dir,true);
 	EXPECT_TRUE(resOnlyOneDir == EvaluationResult<TypeParam>());
+
+	//Evaluation of an unfeasible set should always return SOLUTION::INFEAS, through all nodes
 }
 
 TYPED_TEST(SupportFunctionNewTest, EvaluateMixedLeaves){
