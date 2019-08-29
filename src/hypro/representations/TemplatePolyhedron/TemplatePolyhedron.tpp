@@ -125,7 +125,7 @@ namespace hypro {
 		
 		//Quick checks
 		if(mMatrixPtr == nullptr) return true;
-		if(mMatrixPtr->rows() <= 1) return false;
+		//if(mMatrixPtr->rows() <= 1) return false;
 
 		//Linear time quick checks: 
 		//If all coeffs negative -> all directions point towards origin -> unbounded polyhedron infeasible therefore empty
@@ -358,43 +358,92 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number>& A ) const {
 		//Other Idea: Effectively, a linear transformation is only a scaling of the coeff vector, but how to find scaling factors?
 		//Until then: Convert into VPoly and transform each point, then evaluate in template directions to match a point to the fitting halfspace		
-		if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
-		assert(A.cols() == (int)dimension());
-		auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
-		tmp = tmp.linearTransformation(A);
-		vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
-		std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
-		for(std::size_t i = 0; i < res.size(); ++i){
-			if(res.at(i).errorCode == SOLUTION::FEAS){
-				newVector(i) = res.at(i).supportValue;
-			} else {
-				//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
-				assert(res.at(i).errorCode == SOLUTION::INFEAS);
-				return TemplatePolyhedronT<Number,Converter,Setting>();
+		//if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
+		//assert(A.cols() == (int)dimension());
+		//auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
+		//tmp = tmp.linearTransformation(A);
+		//vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
+		//std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
+		//for(std::size_t i = 0; i < res.size(); ++i){
+		//	if(res.at(i).errorCode == SOLUTION::FEAS){
+		//		newVector(i) = res.at(i).supportValue;
+		//	} else {
+		//		//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
+		//		assert(res.at(i).errorCode == SOLUTION::INFEAS);
+		//		return TemplatePolyhedronT<Number,Converter,Setting>();
+		//	}
+		//}
+		//return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+
+		//Scale all coefficients by the greatest scaling factor, which are the coordinates on the diagonal of A
+		assert(A.rows() == A.cols());
+		Number maxScaleFactor = A(0,0);
+		for(int i = 0; i < A.cols(); ++i){
+			if(A(i,i) > maxScaleFactor){
+				maxScaleFactor = A(i,i);
 			}
 		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+		vector_t<Number> newVector = mVector;
+		for(int i = 0; i < mVector.rows(); ++i){
+			newVector(i) = maxScaleFactor * newVector(i);
+		}
+
+		//To find rotation matrix, find the individual scaling factors by getting the length of the columns
+		//Rotation matrix is A with each col divided its scaling factor
+		matrix_t<Number> rotMat = matrix_t<Number>::Zero(A.rows(), A.cols());
+		for(int i = 0; i < A.cols(); ++i){
+			rotMat.col(i) = A.col(i) / norm(vector_t<Number>(A.col(i)));
+		}
+
+		//We rotate our template directions by the inverse direction and evaluate in these directions
+		matrix_t<Number> dirsRotatedInverse = (rotMat.transpose())*(*mMatrixPtr);
+		TemplatePolyhedronT<Number,Converter,Setting> res(mMatrixPtr, newVector);
+		auto evalInInvRotatedDirs = res.multiEvaluate(dirsRotatedInverse, true);
+		assert(evalInInvRotatedDirs.size() == newVector.rows());
+		for(int i = 0; i < evalInInvRotatedDirs.size(); ++i){
+			assert(evalInInvRotatedDirs.at(i).errorCode == SOLUTION::FEAS);
+			newVector(i) = evalInInvRotatedDirs.at(i).supportValue;
+		}
+		res = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+		return res;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-		if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
+		if(empty()){
+			std::cout << "TPoly::affineTransformation, this was empty" << std::endl;	
+			return TemplatePolyhedronT<Number,Converter,Setting>();	
+		} 
 		assert(A.rows() == b.rows());
 		assert(A.cols() == (int)dimension());
-		auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
-		tmp = tmp.affineTransformation(A,b);
-		vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
-		std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
-		for(std::size_t i = 0; i < res.size(); ++i){
-			if(res.at(i).errorCode == SOLUTION::FEAS){
-				newVector(i) = res.at(i).supportValue;
-			} else {
-				//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
-				assert(res.at(i).errorCode == SOLUTION::INFEAS);
-				return TemplatePolyhedronT<Number,Converter,Setting>();
-			}
-		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+
+		TemplatePolyhedronT<Number,Converter,Setting> res = linearTransformation(A);
+
+		//Translate res
+		auto tmp = res.vector() + (*(mMatrixPtr) * b);
+		res.setVector(tmp);
+
+		return res;
+		
+		//auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
+		////std::cout << "TPoly::affineTransformation, this as VPoly is: " << tmp << "A is: \n" << A << "b is: \n" << b << std::endl;
+		//tmp = tmp.affineTransformation(A,b);
+		//std::cout << "TPoly::affineTransformation, after transformation this as VPoly is: " << tmp << std::endl;
+		//vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
+		//std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
+		//for(std::size_t i = 0; i < res.size(); ++i){
+		//	if(res.at(i).errorCode == SOLUTION::FEAS){
+		//		newVector(i) = res.at(i).supportValue;
+		//	} else {
+		//		//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
+		//		assert(res.at(i).errorCode != SOLUTION::INFTY);
+		//		assert(res.at(i).errorCode == SOLUTION::INFEAS);
+		//		std::cout << "TPoly::affineTransformation, solution was infeas" << std::endl;
+		//		return TemplatePolyhedronT<Number,Converter,Setting>();
+		//	}
+		//}
+		//std::cout << "TPoly::affineTransformation, all eval solutions were feasible" << std::endl;
+		//return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 	}
 
 	template<typename Number, typename Converter, typename Setting>

@@ -59,6 +59,9 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
   	//Flag whether current TPoly has no unnecessary constraints - saves computation time
   	bool mNonRedundant = false;
 
+  	//Flag whether emptiness has been tested and if it was empty or not
+  	//TRIBOOL mEmpty;
+
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
@@ -145,7 +148,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	inline vector_t<Number> vector() const { return mVector; }
 
-	void setVector(const vector_t<Number>& vec) const { 
+	void setVector(const vector_t<Number>& vec) { 
 		assert(((vec.rows() == mMatrixPtr->rows()) && mMatrixPtr != nullptr) || mMatrixPtr == nullptr);
 		mVector = vec; 
 	}
@@ -244,7 +247,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number,Converter,Setting>& b ) {
 		if(b.rGetMatrixPtr() == nullptr){
-			std::cout << "Matrix address: nullptr, " << "Vector: " << std::endl << b.vector() << std::endl;
+			std::cout << "Matrix address: nullptr, Vector: " << std::endl << b.vector() << std::endl;
 		} else {
 			std::cout << "Matrix address: " << b.rGetMatrixPtr() << std::endl << b.matrix() << "Vector: " << std::endl << b.vector() << std::endl;
 		}

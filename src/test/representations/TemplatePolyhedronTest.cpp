@@ -337,20 +337,65 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	vector_t<TypeParam> transVec = 2*vector_t<TypeParam>::Ones(2);
 
 	//Empty TPoly
-	EXPECT_TRUE(this->empty.linearTransformation(transMat).empty());
+	//EXPECT_TRUE(this->empty.linearTransformation(transMat).empty());
 	EXPECT_TRUE(this->empty.affineTransformation(transMat, transVec).empty());
 	
 	//Normal TPoly 
-	auto res1 = this->middle.linearTransformation(transMat);
-	EXPECT_EQ(res1.matrix(), this->mat);
-	EXPECT_EQ(res1.vector(), 3*this->middleVec);
-	EXPECT_EQ(res1.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
-	auto res2 = this->middle.affineTransformation(transMat,transVec);
+	auto res = this->middle.linearTransformation(transMat);
+	EXPECT_EQ(res.matrix(), this->mat);
+	EXPECT_EQ(res.vector(), 3*this->middleVec);
+	EXPECT_EQ(res.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+	res = this->middle.affineTransformation(transMat,transVec);
 	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
 	controlVec << 8, 4, 8, 4;
-	EXPECT_EQ(res2.matrix(), this->mat);
-	EXPECT_EQ(res2.vector(), controlVec);
-	EXPECT_EQ(res2.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+	EXPECT_EQ(res.matrix(), this->mat);
+	EXPECT_EQ(res.vector(), controlVec);
+	EXPECT_EQ(res.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+
+	//Make an irregular tpoly with points {(1,0),(0,2),(1,-2),(-3,2)}
+	matrix_t<TypeParam> irregularMat = matrix_t<TypeParam>::Zero(4,2);
+	irregularMat << 0, 1, 
+					2, 1, 
+					1, 0,
+					-1, -1;
+	vector_t<TypeParam> irregularVec = vector_t<TypeParam>::Zero(4);
+	irregularVec << 2,2,1,1;
+	TemplatePolyhedron<TypeParam> irreg(irregularMat, irregularVec);
+
+	//Scale irreg by 2 in each dimension
+	matrix_t<TypeParam> scaleMat = matrix_t<TypeParam>::Identity(2,2);
+	scaleMat(0,0) = 2;
+	res = irreg.linearTransformation(scaleMat);
+	EXPECT_EQ(res.matrix(), irregularMat);
+	EXPECT_EQ(res.vector(), 2*irregularVec);
+	res = irreg.affineTransformation(scaleMat, vector_t<TypeParam>::Zero(2));
+	EXPECT_EQ(res.vector(), 2*irregularVec);
+
+	//Rotate irreg by 90 degrees anticlockwise
+	matrix_t<TypeParam> rotMat = matrix_t<TypeParam>::Zero(2,2);
+	rotMat(0,1) = -1;
+	rotMat(1,0) = 1;
+	controlVec << 1,5,2,5;
+	res = irreg.linearTransformation(rotMat);
+	EXPECT_EQ(res.matrix(), irregularMat);
+	EXPECT_EQ(res.vector(), controlVec);
+	res = irreg.affineTransformation(rotMat, vector_t<TypeParam>::Zero(2));
+	EXPECT_EQ(res.matrix(), irregularMat);
+	EXPECT_EQ(res.vector(), controlVec);
+
+	//Translate irreg by (3,2)
+	vector_t<TypeParam> translate = vector_t<TypeParam>::Zero(2);
+	translate << 3,2;
+	controlVec << 4,10,4,-4;
+	res = irreg.affineTransformation(matrix_t<TypeParam>::Identity(2,2), translate);
+	EXPECT_EQ(res.matrix(), irregularMat);
+	EXPECT_EQ(res.vector(), controlVec);	
+
+	//Combine Scaling and rotation
+	res = irreg.linearTransformation(rotMat*scaleMat);
+	EXPECT_EQ(res.matrix(), irregularMat);
+	//EXPECT_EQ(res.vector(), controlVec);
+	std::cout << "irreg.vec after combining scaling and rotation is: \n" << res.vector() << std::endl;
 }
 
 TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
