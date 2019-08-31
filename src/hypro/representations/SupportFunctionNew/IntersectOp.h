@@ -144,7 +144,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		//Current implementation uses Solution 1: template evaluation.
 
 		//Quick check: If emptiness already computed, just return computation result
-		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE) ? true : false; 
+		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE); 
 
 		//Quick check: If not already computed, check if at least one child is empty
 		for(const auto& child : childrenEmpty){

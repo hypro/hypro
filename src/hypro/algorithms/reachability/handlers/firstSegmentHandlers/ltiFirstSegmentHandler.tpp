@@ -42,6 +42,7 @@ namespace hypro
         //mState->rGetLocation()->setFlow(mIndex,affineFlow<Number>(mTrafo,mTranslation));
 
         State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(trafoMatrixResized, translation), mTimeStep,mIndex);
+        std::cout << "ltiFirstSegmentHandler::handle(), deltaValuation: " << deltaValuation << std::endl;
 
         #ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "Polytope at t=delta: " << deltaValuation);
@@ -66,6 +67,7 @@ namespace hypro
         TRACE("hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << dimension);
         #endif
 
+        std::cout << "ltiFirstSegmentHandler::handle(), computing firstSegment, errorBoxVector.size(): " << errorBoxVector.size() << " errorBoxVector[2]: " << errorBoxVector[2] << std::endl;
 		firstSegment = bloatBox(firstSegment, Number(Number(1) / Number(4)) * errorBoxVector[2], mIndex);
 
         TRACE("hypro.worker","Epsilon errorbox: " << errorBoxVector[2]);

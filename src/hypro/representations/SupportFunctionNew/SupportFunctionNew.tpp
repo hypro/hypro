@@ -353,7 +353,7 @@ namespace hypro {
 
 		mEmpty = traverse(std::move(doNothing), std::move(leafEmpty), std::move(childrenEmpty)) ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		assert(mEmpty != TRIBOOL::NSET);
-		return (mEmpty == TRIBOOL::TRUE) ? true : false; 
+		return (mEmpty == TRIBOOL::TRUE); 
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -410,7 +410,7 @@ namespace hypro {
 		if(mRoot == nullptr){
 			return std::vector<EvaluationResult<Number>>();
 		}
-		if(_directions == matrix_t<Number>::Zero(_directions.rows(), _directions.cols())){
+		if(_directions.isApprox(matrix_t<Number>::Zero(_directions.rows(), _directions.cols()))){
 			return std::vector<EvaluationResult<Number>>();
 		}
 

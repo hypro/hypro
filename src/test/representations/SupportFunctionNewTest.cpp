@@ -430,19 +430,14 @@ TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
 	//THIS WORKS	
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
 	SF sf(box);
-	//std::cout << "made box sf" << std::endl;
-	//Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(0)},TypeParam(1));
 	Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(0)},TypeParam(1));
 	SF sfInterHalfspace = sf.intersectHalfspace(hspace);
-	//std::cout << "made sfInterHalfspace" << std::endl;
 	EXPECT_TRUE(sfInterHalfspace.getRoot()->getType() == SFNEW_TYPE::INTERSECTHSPACEOP);
 	EXPECT_EQ(sfInterHalfspace.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfInterHalfspace.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_EQ(sfInterHalfspace.getRoot().use_count(), long(1));
-	//std::cout << "tested standard stuff" << std::endl;
 	EXPECT_EQ((dynamic_cast<IntersectHalfspaceOp<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>*>(sfInterHalfspace.getRoot().get())->getHalfspace()), hspace);
-	//std::cout << "tested dynamic cast" << std::endl;
-
+	
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
 	std::vector<EvaluationResult<TypeParam>> res = sfInterHalfspace.multiEvaluate(directions,true);
@@ -452,7 +447,6 @@ TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
 	EXPECT_TRUE(res.at(1).supportValue < TypeParam(2.001));
 
 	//Emptiness
-	//std::cout << "TEST EMPTINESS" << std::endl;
 	EXPECT_TRUE(!sfInterHalfspace.empty());
 	Halfspace<TypeParam> hspace2({TypeParam(1),TypeParam(1)},TypeParam(-1));
 	SF sfEmpty = sfInterHalfspace.intersectHalfspace(hspace2);
@@ -473,6 +467,7 @@ TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
 	EXPECT_TRUE(sfInterHalfspace.contains(completelyInside));
 	EXPECT_FALSE(sfInterHalfspace.contains(inSFButNotInHSpace));
 	EXPECT_FALSE(sfInterHalfspace.contains(completelyOutside));
+
 }
 
 TYPED_TEST(SupportFunctionNewTest, Constructors){
@@ -753,7 +748,10 @@ TYPED_TEST(SupportFunctionNewTest, Emptiness){
 	Box<TypeParam> box1 = Box<TypeParam>::Empty(2);
 	SupportFunctionNew<TypeParam> sf1(box1);
 	EXPECT_TRUE(sf1.empty());
-	HPolytope<TypeParam> hpoly1 = HPolytope<TypeParam>::Empty();
+	//HPolytope<TypeParam> hpoly1 = HPolytope<TypeParam>::Empty();
+	HPolytope<TypeParam> hpoly1;
+	hpoly1.insert(Halfspace<TypeParam>({TypeParam(1),TypeParam(1)},TypeParam(-1)));
+	hpoly1.insert(Halfspace<TypeParam>({TypeParam(-1),TypeParam(-1)},TypeParam(-1)));
 	sf1 = SupportFunctionNew<TypeParam>(hpoly1);
 	EXPECT_TRUE(sf1.empty());
 	
@@ -1338,6 +1336,32 @@ TYPED_TEST(SupportFunctionNewTest, Reduction){
 	SupportFunctionNew<TypeParam> sf(box);
 	sf.reduceRepresentation();
 	EXPECT_TRUE(sf.isTemplateSet());
+}
+
+//////////////////////// INTEGRATION TESTS //////////////////////////
+
+TYPED_TEST(SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp){
+	
+	//Using only support functions that use the LeGuernic hspace intersection method
+	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>;
+
+	//Create sf: First {(0,0),(2,2)} then {(0,0),(1,2)} then {(1,1),(2,3)}
+	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+	SF sf(box);
+	Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(0)},TypeParam(1));
+	SF sfInterHalfspace = sf.intersectHalfspace(hspace);
+	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Ones(2);
+	SF sfTrans = sfInterHalfspace.affineTransformation(mat, vec);
+	EXPECT_TRUE(!sfTrans.empty());
+	
+	//Test evaluation over that
+	vector_t<TypeParam> controlOptimumValue = vector_t<TypeParam>::Zero(2);
+	//controlOptimumValue(0) = 5;
+	auto res = sfTrans.evaluate(vec, false);
+	EXPECT_EQ(res.supportValue, TypeParam(5));
+	EXPECT_EQ(res.optimumValue, controlOptimumValue);
+	EXPECT_EQ(res.errorCode, SOLUTION::FEAS);
 }
 
 /*
