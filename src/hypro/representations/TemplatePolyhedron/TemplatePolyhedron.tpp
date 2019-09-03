@@ -376,36 +376,53 @@ namespace hypro {
 		//return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 
 		//Scale all coefficients by the greatest scaling factor, which are the coordinates on the diagonal of A
-		assert(A.rows() == A.cols());
-		Number maxScaleFactor = A(0,0);
-		for(int i = 0; i < A.cols(); ++i){
-			if(A(i,i) > maxScaleFactor){
-				maxScaleFactor = A(i,i);
-			}
-		}
-		vector_t<Number> newVector = mVector;
-		for(int i = 0; i < mVector.rows(); ++i){
-			newVector(i) = maxScaleFactor * newVector(i);
-		}
+		//assert(A.rows() == A.cols());
+		//Number maxScaleFactor = A(0,0);
+		//for(int i = 0; i < A.cols(); ++i){
+		//	if(A(i,i) > maxScaleFactor){
+		//		maxScaleFactor = A(i,i);
+		//	}
+		//}
+		//vector_t<Number> newVector = mVector;
+		//for(int i = 0; i < mVector.rows(); ++i){
+		//	newVector(i) = maxScaleFactor * newVector(i);
+		//}
+		////To find rotation matrix, find the individual scaling factors by getting the length of the columns
+		////Rotation matrix is A with each col divided its scaling factor
+		//matrix_t<Number> rotMat = matrix_t<Number>::Zero(A.rows(), A.cols());
+		//for(int i = 0; i < A.cols(); ++i){
+		//	rotMat.col(i) = A.col(i) / norm(vector_t<Number>(A.col(i)));
+		//}
+		////We rotate our template directions by the inverse direction and evaluate in these directions
+		//matrix_t<Number> dirsRotatedInverse = (rotMat.transpose())*(*mMatrixPtr);
+		//TemplatePolyhedronT<Number,Converter,Setting> res(mMatrixPtr, newVector);
+		//auto evalInInvRotatedDirs = res.multiEvaluate(dirsRotatedInverse, true);
+		//assert(evalInInvRotatedDirs.size() == newVector.rows());
+		//for(int i = 0; i < evalInInvRotatedDirs.size(); ++i){
+		//	assert(evalInInvRotatedDirs.at(i).errorCode == SOLUTION::FEAS);
+		//	newVector(i) = evalInInvRotatedDirs.at(i).supportValue;
+		//}
+		//res = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+		//return res;
 
-		//To find rotation matrix, find the individual scaling factors by getting the length of the columns
-		//Rotation matrix is A with each col divided its scaling factor
-		matrix_t<Number> rotMat = matrix_t<Number>::Zero(A.rows(), A.cols());
-		for(int i = 0; i < A.cols(); ++i){
-			rotMat.col(i) = A.col(i) / norm(vector_t<Number>(A.col(i)));
+		//Get singular value decomposition which decomposes every matrix into 3 matrices: rotation, scaling and another rotation matrix
+		//TODO: Why does that not work? Maybe testwise convert to double matrix
+		Eigen::BDCSVD<matrix_t<Number>> svd(A);
+		//Eigen::BDCSVD<matrix_t<Number>> svd = A.bdcSvd();
+		matrix_t<Number> singularVals = matrix_t<Number>::Zero(A.rows(), A.cols());
+		for(int i = 0; i < A.rows(); ++i){
+			singularVals(i,i) = svd.singularValues()(i);
 		}
-
-		//We rotate our template directions by the inverse direction and evaluate in these directions
-		matrix_t<Number> dirsRotatedInverse = (rotMat.transpose())*(*mMatrixPtr);
-		TemplatePolyhedronT<Number,Converter,Setting> res(mMatrixPtr, newVector);
-		auto evalInInvRotatedDirs = res.multiEvaluate(dirsRotatedInverse, true);
-		assert(evalInInvRotatedDirs.size() == newVector.rows());
-		for(int i = 0; i < evalInInvRotatedDirs.size(); ++i){
+		matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*(svd.matrixV().transpose()*singularVals);
+		auto evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
+		vector_t<Number> newVector = vector_t<Number>::Zero(mVector.rows());
+		assert(evalInInvRotatedDirs.size() == std::size_t(newVector.rows()));
+		for(std::size_t i = 0; i < evalInInvRotatedDirs.size(); ++i){
 			assert(evalInInvRotatedDirs.at(i).errorCode == SOLUTION::FEAS);
 			newVector(i) = evalInInvRotatedDirs.at(i).supportValue;
 		}
-		res = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
-		return res;
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+
 	}
 
 	template<typename Number, typename Converter, typename Setting>
