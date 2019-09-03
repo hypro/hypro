@@ -407,13 +407,42 @@ namespace hypro {
 
 		//Get singular value decomposition which decomposes every matrix into 3 matrices: rotation, scaling and another rotation matrix
 		//TODO: Why does that not work? Maybe testwise convert to double matrix
-		Eigen::BDCSVD<matrix_t<Number>> svd(A);
-		//Eigen::BDCSVD<matrix_t<Number>> svd = A.bdcSvd();
-		matrix_t<Number> singularVals = matrix_t<Number>::Zero(A.rows(), A.cols());
+		
+		//Convert A into double (Sinve eigen svd does not work with mpq_class)
+		matrix_t<double> doubleA = matrix_t<double>::Zero(A.rows(), A.cols());
 		for(int i = 0; i < A.rows(); ++i){
+			for(int j = 0; i < A.cols(); ++j){
+				doubleA(i,j) = carl::convert<Number,double>(A(i,j));
+			}
+		}
+		
+		//Convert mMatrixPtr into double (Sinve eigen svd does not work with mpq_class)
+		matrix_t<double> doublemMatrixPtr = matrix_t<double>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols());
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			for(int j = 0; j < mMatrixPtr->cols(); ++j){
+				doublemMatrixPtr(i,j) = carl::convert<Number,double>((*mMatrixPtr)(i,j));
+			}
+		}
+
+		//Compute SVD and put singularValues into a matrix 
+		Eigen::BDCSVD<matrix_t<double>> svd(doubleA);
+		matrix_t<double> singularVals = matrix_t<double>::Zero(doubleA.rows(), doubleA.cols());
+		for(int i = 0; i < doubleA.rows(); ++i){
 			singularVals(i,i) = svd.singularValues()(i);
 		}
-		matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*(svd.matrixV().transpose()*singularVals);
+		
+		//Compute transformed dirs and convert it back to Number
+		//matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*(svd.matrixV().transpose()*singularVals);
+
+		matrix_t<double> dirsRotatedInv = doublemMatrixPtr*(svd.matrixV().transpose()*singularVals);
+		matrix_t<Number> dirsRotatedInverse = matrix_t<Number>::Zero(dirsRotatedInv.rows(), dirsRotatedInv.cols());
+		for(int i = 0; i < dirsRotatedInverse.rows(); ++i){
+			for(int j = 0; j < dirsRotatedInverse.cols(); ++j){
+				dirsRotatedInverse(i,j) = carl::convert<Number,double>(dirsRotatedInv(i,j));
+			}
+		}
+
+		//Evaluate in the transformed directions
 		auto evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
 		vector_t<Number> newVector = vector_t<Number>::Zero(mVector.rows());
 		assert(evalInInvRotatedDirs.size() == std::size_t(newVector.rows()));
@@ -422,7 +451,7 @@ namespace hypro {
 			newVector(i) = evalInInvRotatedDirs.at(i).supportValue;
 		}
 		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
-
+		
 	}
 
 	template<typename Number, typename Converter, typename Setting>
