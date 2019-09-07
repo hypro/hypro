@@ -57,8 +57,8 @@ template<typename Number>
 using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;
 
 /**
- * Typedef for SimplexT
+ * Typedef for OrthoplexT
  */
 template<typename Number>
-using Simplex = typename Converter<Number>::Simplex;
+using Orthoplex = typename Converter<Number>::Orthoplex;
 

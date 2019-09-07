@@ -55,8 +55,8 @@ void convert(const In& in, TemplatePolyhedronT<Number,Converter<Number>,OutSetti
 }
 
 template<typename Number, typename OutSettings, typename In>
-void convert(const In& in, SimplexT<Number,Converter<Number>,OutSettings>& out) {
-	out = Converter<Number>::template toSimplex<OutSettings>(in); 
+void convert(const In& in, OrthoplexT<Number,Converter<Number>,OutSettings>& out) {
+	out = Converter<Number>::template toOrthoplex<OutSettings>(in); 
 }
 
 } // hypro

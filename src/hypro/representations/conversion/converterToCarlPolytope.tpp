@@ -284,7 +284,7 @@ CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCar
 
 template<typename Number>
 template<typename CarlPolytopeSetting, typename inSetting>
-CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> Converter<Number>::toCarlPolytope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> Converter<Number>::toCarlPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting>();
 }
 

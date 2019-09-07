@@ -359,7 +359,7 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 
 template<typename Number>
 template<typename VPolytopeSetting, typename inSetting>
-VPolytopeT<Number,Converter<Number>,VPolytopeSetting> Converter<Number>::toVPolytope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+VPolytopeT<Number,Converter<Number>,VPolytopeSetting> Converter<Number>::toVPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return VPolytopeT<Number,Converter<Number>,VPolytopeSetting>();
 }
 

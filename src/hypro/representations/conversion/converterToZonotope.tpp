@@ -452,7 +452,7 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
 
 template<typename Number>
 template<typename ZonotopeSetting, typename inSetting>
-ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
 }
 

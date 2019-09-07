@@ -23,6 +23,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#ZonotopeTest.cpp
 			##SupportFunctionNewTest.cpp
 			TemplatePolyhedronTest.cpp
+			OrthoplexTest.cpp
 		)
 	else()
 		add_executable(runRepresentationTests
@@ -41,6 +42,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#ZonotopeTest.cpp
 			##SupportFunctionNewTest.cpp
 			TemplatePolyhedronTest.cpp
+			OrthoplexTest.cpp
 		)
 	endif()
 

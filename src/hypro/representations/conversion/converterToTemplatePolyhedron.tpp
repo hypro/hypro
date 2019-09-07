@@ -77,7 +77,7 @@ TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converte
 
 template<typename Number>
 template<typename TemplatePolyhedronSetting, typename inSetting>
-TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	//TODO
 	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
 }

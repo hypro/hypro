@@ -2,7 +2,7 @@
 
 namespace hypro {
 	//This is the default setting
-	struct SimplexDefault {
+	struct OrthoplexDefault {
 		// put settings here
 	};
 }

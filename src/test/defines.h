@@ -74,8 +74,9 @@ TYPED_TEST_CASE(ConverterTest, allTypes);
 //TYPED_TEST_CASE(ZonotopeTest, allTypes); // problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 //TYPED_TEST_CASE(DifferenceBoundsTest, allTypes);
 //TYPED_TEST_CASE(SupportFunctionNewTest, allTypes);
-
 TYPED_TEST_CASE(TemplatePolyhedronTest, allTypes);
+TYPED_TEST_CASE(OrthoplexTest, allTypes);
+
 // Practical term
 //TYPED_TEST_CASE(PTermBoxTest, allTypes);
 //TYPED_TEST_CASE(PTermPolytopeTest, allTypes);

@@ -299,7 +299,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 
 template<typename Number>
 template<typename HPolytopeSetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>();
 }
 

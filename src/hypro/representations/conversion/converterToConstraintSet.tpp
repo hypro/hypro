@@ -75,7 +75,7 @@ ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( 
 
 template<typename Number>
 template<typename ConstraintSetSetting, typename inSetting>
-ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return ConstraintSetT<Number,ConstraintSetSetting>();
 }
 

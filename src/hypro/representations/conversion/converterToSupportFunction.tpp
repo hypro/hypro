@@ -99,7 +99,7 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
 
 template<typename Number>
 template<typename SupportFunctionSetting, typename inSetting>
-SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> Converter<Number>::toSupportFunction( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> Converter<Number>::toSupportFunction( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting>();
 }
 

@@ -83,7 +83,7 @@ PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytop
 
 template<typename Number>
 template<typename PolytopeSetting, typename inSetting>
-PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const SimplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
 	return PolytopeT<Number,Converter<Number>,PolytopeSetting>();
 }
 
