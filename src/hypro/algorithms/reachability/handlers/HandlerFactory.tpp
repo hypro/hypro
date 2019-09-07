@@ -121,11 +121,9 @@ namespace hypro
 	template<typename State>
 	ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, flowVariant<Number> flow){
 
-		/*
-		if(trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows())){
-			return nullptr;
-		}
-		*/
+		//if(trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows())){
+		//	return nullptr;
+		//}
 
 		switch(name){
  			case representation_name::difference_bounds: {
@@ -148,6 +146,9 @@ namespace hypro
 			}
 			default:
 				auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
+				if(tmp.getFlowMatrix() == matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols()) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+					return nullptr;
+				}
  				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());
  		}
  		assert(false && "SHOULD NEVER REACH THIS");

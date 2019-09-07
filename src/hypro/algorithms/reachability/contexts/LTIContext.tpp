@@ -546,7 +546,8 @@ namespace hypro
 				DEBUG("hypro.worker","Built " << ptr->handlerName());
 			}
 		}
-		mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
+		//mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
+		mEndLoop = (mContinuousEvolutionHandlers.size() >= 0);
 
 		initializeGuardHandlers();
 

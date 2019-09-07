@@ -348,7 +348,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param[in]  The normal and the offset of the halfspace to check with
 	 * @return 	   The first bool whether the this is fully inside and the second bool whether this is fully outside the halfspace.
 	 */
-  	std::pair<bool,bool> checkIfFullInsideAndOutside(const vector_t<Number>& normal, const Number& offset) const;
+  	std::pair<bool,bool> checkFullInsideFullOutside(const vector_t<Number>& normal, const Number& offset) const;
 
 };
 /** @} */

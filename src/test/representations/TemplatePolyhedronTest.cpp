@@ -338,40 +338,46 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 
 	//Empty TPoly
 	//EXPECT_TRUE(this->empty.linearTransformation(transMat).empty());
+	std::cout << "===== Empty =====" << std::endl;
 	EXPECT_TRUE(this->empty.affineTransformation(transMat, transVec).empty());
 	
 	//Normal TPoly 
+	std::cout << "===== Scaling =====" << std::endl;
 	auto res = this->middle.linearTransformation(transMat);
 	EXPECT_EQ(res.matrix(), this->mat);
 	EXPECT_EQ(res.vector(), 3*this->middleVec);
 	EXPECT_EQ(res.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
+	std::cout << "===== Scaling + Translate =====" << std::endl;
 	res = this->middle.affineTransformation(transMat,transVec);
-	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
+	vector_t<TypeParam> controlVec(4);
 	controlVec << 8, 4, 8, 4;
 	EXPECT_EQ(res.matrix(), this->mat);
 	EXPECT_EQ(res.vector(), controlVec);
 	EXPECT_EQ(res.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 
 	//Make an irregular tpoly with points {(1,0),(0,2),(1,-2),(-3,2)}
-	matrix_t<TypeParam> irregularMat = matrix_t<TypeParam>::Zero(4,2);
+	matrix_t<TypeParam> irregularMat(4,2);
 	irregularMat << 0, 1, 
 					2, 1, 
 					1, 0,
 					-1, -1;
-	vector_t<TypeParam> irregularVec = vector_t<TypeParam>::Zero(4);
+	vector_t<TypeParam> irregularVec(4);
 	irregularVec << 2,2,1,1;
 	TemplatePolyhedron<TypeParam> irreg(irregularMat, irregularVec);
 
 	//Scale irreg by 2 in each dimension
+	std::cout << "===== Scaling Irreg =====" << std::endl;
 	matrix_t<TypeParam> scaleMat = matrix_t<TypeParam>::Identity(2,2);
 	scaleMat(0,0) = 2;
+	controlVec << 2,4,2,4;
 	res = irreg.linearTransformation(scaleMat);
 	EXPECT_EQ(res.matrix(), irregularMat);
-	EXPECT_EQ(res.vector(), 2*irregularVec);
+	EXPECT_EQ(res.vector(), controlVec);
 	res = irreg.affineTransformation(scaleMat, vector_t<TypeParam>::Zero(2));
-	EXPECT_EQ(res.vector(), 2*irregularVec);
+	EXPECT_EQ(res.vector(), controlVec);
 
 	//Rotate irreg by 90 degrees anticlockwise
+	std::cout << "===== Rotate Irreg =====" << std::endl;
 	matrix_t<TypeParam> rotMat = matrix_t<TypeParam>::Zero(2,2);
 	rotMat(0,1) = -1;
 	rotMat(1,0) = 1;
@@ -384,6 +390,7 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	EXPECT_EQ(res.vector(), controlVec);
 
 	//Translate irreg by (3,2)
+	std::cout << "===== Translate Irreg =====" << std::endl;
 	vector_t<TypeParam> translate = vector_t<TypeParam>::Zero(2);
 	translate << 3,2;
 	controlVec << 4,10,4,-4;
@@ -392,6 +399,7 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	EXPECT_EQ(res.vector(), controlVec);	
 
 	//Combine Scaling and rotation
+	std::cout << "===== Scale and Rotate Irreg =====" << std::endl;
 	res = irreg.linearTransformation(rotMat*scaleMat);
 	EXPECT_EQ(res.matrix(), irregularMat);
 	//EXPECT_EQ(res.vector(), controlVec);

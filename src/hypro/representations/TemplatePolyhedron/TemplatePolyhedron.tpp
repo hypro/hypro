@@ -149,13 +149,11 @@ namespace hypro {
 		return res;
 	}
 
-	//Copy from HPoly
+	//Copy from HPoly - is also obsolete 
 	template<typename Number, typename Converter, typename Setting>
 	Number TemplatePolyhedronT<Number,Converter,Setting>::supremum() const {
 		Number max = 0;
-		if(this->empty()){
-			return max;	
-		} 
+		if(this->empty()) return max;	
 		auto tmp = this->vertices();
 		//assert(!this->empty());
 		//assert(!this->vertices().empty());
@@ -166,7 +164,7 @@ namespace hypro {
 		return max;
 	}
 
-	//The HPoly way
+	//The (slow) HPoly way
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<Point<Number>> TemplatePolyhedronT<Number,Converter,Setting>::vertices( const matrix_t<Number>& ) const {
 		if(this->empty()) return std::vector<Point<Number>>();
@@ -243,7 +241,7 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	std::pair<bool,bool> TemplatePolyhedronT<Number,Converter,Setting>::checkIfFullInsideAndOutside(const vector_t<Number>& normal, const Number& offset) const {
+	std::pair<bool,bool> TemplatePolyhedronT<Number,Converter,Setting>::checkFullInsideFullOutside(const vector_t<Number>& normal, const Number& offset) const {
 		//Quick check: 
 		//If all coefficients of directions similar to hspace normal smaller than hspace offset, then current obj completely in hspace
 		//If all coefficients of directions not similar to hspace normal bigger than hspace offset, then current obj completely not in hspace
@@ -268,10 +266,12 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 		
-		if(empty()) return std::make_pair(CONTAINMENT::NO, *this);
+		if(empty()){
+			return std::make_pair(CONTAINMENT::NO, *this);	
+		}
 
 		//Quick check
-		auto fullInfullOut = checkIfFullInsideAndOutside(rhs.normal(), rhs.offset());
+		auto fullInfullOut = checkFullInsideFullOutside(rhs.normal(), rhs.offset());
 		if(fullInfullOut.first)
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		if(fullInfullOut.second)
@@ -289,13 +289,15 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
-		if(empty()) return std::make_pair(CONTAINMENT::NO, *this);
+		if(empty()){
+			return std::make_pair(CONTAINMENT::NO, *this);
+		} 
 
 		//Not so quick check:
 		bool fullyInside = true;
 		bool fullyOutside = true;
 		for(int i = 0; i < _mat.rows(); ++i){
-			auto fullInfullOut = checkIfFullInsideAndOutside(_mat.row(i), _vec(i));
+			auto fullInfullOut = checkFullInsideFullOutside(_mat.row(i), _vec(i));
 			if(!fullInfullOut.first) fullyInside = false;
 			if(!fullInfullOut.second) fullyOutside = false;
 			if(!fullyInside && !fullyOutside) break;
@@ -322,7 +324,7 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 		
 		if(dimensions.empty()) return Empty();
-		if(empty()) return *this;
+		if(empty()) return *this;	
 		if(dimensions.size() > this->dimension()){
 			throw(std::invalid_argument("TPoly::project, too many dimensions given"));
 		}
@@ -358,22 +360,13 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number>& A ) const {
 		//Other Idea: Effectively, a linear transformation is only a scaling of the coeff vector, but how to find scaling factors?
 		//Until then: Convert into VPoly and transform each point, then evaluate in template directions to match a point to the fitting halfspace		
-		//if(empty()) return TemplatePolyhedronT<Number,Converter,Setting>();
-		//assert(A.cols() == (int)dimension());
-		//auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
-		//tmp = tmp.linearTransformation(A);
-		//vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
-		//std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
-		//for(std::size_t i = 0; i < res.size(); ++i){
-		//	if(res.at(i).errorCode == SOLUTION::FEAS){
-		//		newVector(i) = res.at(i).supportValue;
-		//	} else {
-		//		//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
-		//		assert(res.at(i).errorCode == SOLUTION::INFEAS);
-		//		return TemplatePolyhedronT<Number,Converter,Setting>();
-		//	}
-		//}
-		//return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
+		//if(empty()){
+		//	return TemplatePolyhedronT<Number,Converter,Setting>();
+		//} 
+		assert(mMatrixPtr != nullptr);
+		assert(A.cols() == (int)dimension());
+		assert(A.cols() == mMatrixPtr->cols());
+		assert(A.rows() == mMatrixPtr->cols());
 
 		//Scale all coefficients by the greatest scaling factor, which are the coordinates on the diagonal of A
 		//assert(A.rows() == A.cols());
@@ -407,44 +400,36 @@ namespace hypro {
 
 		//Get singular value decomposition which decomposes every matrix into 3 matrices: rotation, scaling and another rotation matrix
 		//TODO: Why does that not work? Maybe testwise convert to double matrix
+/*
+		//Convert A into double (Since eigen svd does not work with mpq_class)
+		matrix_t<double> doubleA = convert<Number,double>(A);
 		
-		//Convert A into double (Sinve eigen svd does not work with mpq_class)
-		matrix_t<double> doubleA = matrix_t<double>::Zero(A.rows(), A.cols());
-		for(int i = 0; i < A.rows(); ++i){
-			for(int j = 0; i < A.cols(); ++j){
-				doubleA(i,j) = carl::convert<Number,double>(A(i,j));
-			}
-		}
+		//Convert mMatrixPtr into double (Since eigen svd does not work with mpq_class)
+		matrix_t<double> doublemMatrixPtr = convert<Number,double>(*mMatrixPtr);
 		
-		//Convert mMatrixPtr into double (Sinve eigen svd does not work with mpq_class)
-		matrix_t<double> doublemMatrixPtr = matrix_t<double>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols());
-		for(int i = 0; i < mMatrixPtr->rows(); ++i){
-			for(int j = 0; j < mMatrixPtr->cols(); ++j){
-				doublemMatrixPtr(i,j) = carl::convert<Number,double>((*mMatrixPtr)(i,j));
-			}
-		}
-
 		//Compute SVD and put singularValues into a matrix 
-		Eigen::BDCSVD<matrix_t<double>> svd(doubleA);
-		matrix_t<double> singularVals = matrix_t<double>::Zero(doubleA.rows(), doubleA.cols());
+		Eigen::BDCSVD<matrix_t<double>> svd(doubleA, Eigen::ComputeFullU | Eigen::ComputeFullV);
+		matrix_t<double> singularVals(doubleA.rows(), doubleA.cols());
 		for(int i = 0; i < doubleA.rows(); ++i){
 			singularVals(i,i) = svd.singularValues()(i);
 		}
 		
 		//Compute transformed dirs and convert it back to Number
-		//matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*(svd.matrixV().transpose()*singularVals);
-
-		matrix_t<double> dirsRotatedInv = doublemMatrixPtr*(svd.matrixV().transpose()*singularVals);
-		matrix_t<Number> dirsRotatedInverse = matrix_t<Number>::Zero(dirsRotatedInv.rows(), dirsRotatedInv.cols());
-		for(int i = 0; i < dirsRotatedInverse.rows(); ++i){
-			for(int j = 0; j < dirsRotatedInverse.cols(); ++j){
-				dirsRotatedInverse(i,j) = carl::convert<Number,double>(dirsRotatedInv(i,j));
-			}
-		}
-
+		std::cout << "TPoly::linearTransformation, singularVals: \n" << singularVals << "V: \n" << svd.matrixV() << "U: \n" << svd.matrixU() << "doublemMatrixPtr: \n" << doublemMatrixPtr << std::endl;
+		matrix_t<double> dirsRotatedInv = doublemMatrixPtr*(singularVals.transpose()*svd.matrixU().transpose());
+		//matrix_t<double> dirsRotatedInv = singularVals.transpose()*(svd.matrixV().transpose()*doublemMatrixPtr.transpose());
+		//matrix_t<double> dirsRotatedInv = doublemMatrixPtr*(singularVals*svd.matrixV().transpose());
+		std::cout << "TPoly::linearTransformation, dirsRotatedInv: \n" << dirsRotatedInv << std::endl;
+		matrix_t<Number> dirsRotatedInverse = convert<double,Number>(dirsRotatedInv);
+		assert(dirsRotatedInverse.rows() == mMatrixPtr->rows());
+		assert(dirsRotatedInverse.cols() == mMatrixPtr->cols());
+*/
 		//Evaluate in the transformed directions
+		matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*A;
+		assert(dirsRotatedInverse.rows() == mMatrixPtr->rows());
+		assert(dirsRotatedInverse.cols() == mMatrixPtr->cols());
 		auto evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
-		vector_t<Number> newVector = vector_t<Number>::Zero(mVector.rows());
+		vector_t<Number> newVector(mVector.rows());
 		assert(evalInInvRotatedDirs.size() == std::size_t(newVector.rows()));
 		for(std::size_t i = 0; i < evalInInvRotatedDirs.size(); ++i){
 			assert(evalInInvRotatedDirs.at(i).errorCode == SOLUTION::FEAS);
@@ -456,8 +441,18 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+		
+		/* TODO: Add affineTransformation after Sankranayanan as Setting
+			For each mMatrixPtr row i:
+			1. Compute Taylor series approx upto m+1-th term (how to determine m? -> set as setting)
+			2. Sum first m approximations, this is first coeff vec g
+			3. m+1-th approximation is second coeff vec r
+			4. Compute this->evaluate(g) = g_max
+			5. Compute TPoly(mMatrixPtr,InvariantCoeffs).evaluate(r) = r_max
+			6. return TPoly(mMatrixPtr, g_max + r_max)
+		*/
+
 		if(empty()){
-			std::cout << "TPoly::affineTransformation, this was empty" << std::endl;	
 			return TemplatePolyhedronT<Number,Converter,Setting>();	
 		} 
 		assert(A.rows() == b.rows());
@@ -466,30 +461,10 @@ namespace hypro {
 		TemplatePolyhedronT<Number,Converter,Setting> res = linearTransformation(A);
 
 		//Translate res
-		auto tmp = res.vector() + (*(mMatrixPtr) * b);
+		vector_t<Number> tmp = res.vector() + vector_t<Number>((*(mMatrixPtr) * b));
 		res.setVector(tmp);
 
 		return res;
-		
-		//auto tmp = typename Converter::VPolytope(*mMatrixPtr, mVector);
-		////std::cout << "TPoly::affineTransformation, this as VPoly is: " << tmp << "A is: \n" << A << "b is: \n" << b << std::endl;
-		//tmp = tmp.affineTransformation(A,b);
-		//std::cout << "TPoly::affineTransformation, after transformation this as VPoly is: " << tmp << std::endl;
-		//vector_t<Number> newVector = vector_t<Number>::Zero(mMatrixPtr->rows());
-		//std::vector<EvaluationResult<Number>> res = tmp.multiEvaluate(*mMatrixPtr);
-		//for(std::size_t i = 0; i < res.size(); ++i){
-		//	if(res.at(i).errorCode == SOLUTION::FEAS){
-		//		newVector(i) = res.at(i).supportValue;
-		//	} else {
-		//		//Since SOLUTION::INFTY cannot occur from a VPoly, only consider SOLUTION::INFEAS
-		//		assert(res.at(i).errorCode != SOLUTION::INFTY);
-		//		assert(res.at(i).errorCode == SOLUTION::INFEAS);
-		//		std::cout << "TPoly::affineTransformation, solution was infeas" << std::endl;
-		//		return TemplatePolyhedronT<Number,Converter,Setting>();
-		//	}
-		//}
-		//std::cout << "TPoly::affineTransformation, all eval solutions were feasible" << std::endl;
-		//return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -526,7 +501,9 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersect( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
 		//assert(this->matrix() == rhs.matrix());
-		if(rhs.empty()) return *this;
+		if(rhs.empty()){
+			return *this;	
+		} 
 		if(this->empty()) return rhs;
 		vector_t<Number> res = mVector;
 		for(int i = 0; i < mMatrixPtr->rows(); ++i){
@@ -539,9 +516,7 @@ namespace hypro {
 		//check emptiness only once after the computation instead of two times before the computation
 		//auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(*mMatrixPtr, res);
 		//if(tmp.empty()){
-		//	if(this->empty()){
-		//		tmp = TemplatePolyhedronT<Number,Converter,Setting>();
-		//	} else {
+		//	if(this->empty()) //		tmp = TemplatePolyhedronT<Number,Converter,Setting>();
 		//		tmp = *this;	
 		//	}
 		//}
@@ -551,19 +526,14 @@ namespace hypro {
 	//TODO: Is there a cheaper way? 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-		
-		//Quick check: If all coefficients of directions similar to normal smaller than hspace offset, then current obj completely in hspace
-		bool thisCompletelyInside = true;
-		for(int i = 0; i < mMatrixPtr->rows(); ++i){
-			if(hspace.normal().dot(mMatrixPtr->row(i)) > 0){
-				if(mVector(i) > hspace.offset()){
-					thisCompletelyInside = false;
-					break;
-				}
-			}
-		}
-		if(thisCompletelyInside) return *this;
 
+		//Quick check whether fully inside halfspace or fully outside
+		auto fullInfullOut = checkFullInsideFullOutside(hspace.normal(), hspace.offset());
+		assert(!(fullInfullOut.first && fullInfullOut.second));
+		if(fullInfullOut.first) return *this;
+		if(fullInfullOut.second) return Empty();
+
+		//If partially inside halfspace
 		assert(hspace.normal().rows() == mMatrixPtr->cols());
 		matrix_t<Number> mat = matrix_t<Number>::Zero(1,hspace.normal().rows());
 		mat.row(0) = hspace.normal().transpose();
@@ -576,6 +546,9 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
+		//Emptiness check
+		if(this->empty()) return *this;
+
 		//Extend a copy of the matrix to contain the extra halfspaces
 		assert(_mat.rows() == _vec.rows());
 		assert(_mat.cols() == mMatrixPtr->cols());
@@ -592,14 +565,17 @@ namespace hypro {
 			extendedVector(i) = _vec(i-mVector.rows());
 		}
 
+		//TODO: Maybe use rotation to parallel line to acquire distance
+
 		//Build hpoly from the extended matrix and vector, then evaluate in the original directions and build overapproximating tpoly
 		auto tpolyWithHSpace = typename Converter::HPolytope(extendedMatrix, extendedVector);
 		tpolyWithHSpace.removeRedundancy();
 		auto evalInOrigDirs = tpolyWithHSpace.multiEvaluate(*mMatrixPtr);
 		vector_t<Number> newOffsetVec = vector_t<Number>::Zero(evalInOrigDirs.size());
 		for(int i = 0; i < newOffsetVec.rows(); ++i){
-			if(evalInOrigDirs.at(i).errorCode == SOLUTION::INFEAS)
+			if(evalInOrigDirs.at(i).errorCode == SOLUTION::INFEAS){
 				return TemplatePolyhedronT<Number,Converter,Setting>();
+			}
 			newOffsetVec(i) = evalInOrigDirs.at(i).supportValue;
 		}
 		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newOffsetVec);
@@ -656,13 +632,13 @@ namespace hypro {
 		#ifndef NDEBUG
 		//All tpolys we unite with must have the same matrices
 		for(const auto& elem : templatePolyhedrones){
-			assert(this->matrix() == elem.matrix());
+			assert(this->matrix().isApprox(elem.matrix()));
 		}
 		#endif
 		//Since uniting with a empty / unfeasible TPoly can result in a feasible TPoly, check for each TPoly beforehand whether it is empty, and if it is, ignore it.
 		vector_t<Number> res(mMatrixPtr->rows());
 		if(this->empty()){
-			res = -10000000*vector_t<Number>::Ones(mMatrixPtr->rows());
+			res = -10000000*vector_t<Number>::Ones(mMatrixPtr->rows());	
 		} else {
 			res = mVector;
 		}
