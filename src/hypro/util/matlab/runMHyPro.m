@@ -1,8 +1,8 @@
 function runMHyPro(benchmarkNr, diff, strategy)
 
 savePath = '/home/marta/Desktop';
-bad = 0;
-plot = 1;
+bad = 1;
+plot = 0;
 saveFig = 0;
 names = {'mhypro_bouncing_ball','mhypro_cruise_control',...
     'mhypro_oscillator_4','mhypro_oscillator_8','mhypro_oscillator_16',...
@@ -15,7 +15,7 @@ t = 0;
         % BOUNCING BALL
         [settings, setRepr, aggr] = getNewStrategy(strategy);
         filename = strcat(names{1},'_',num2str(diff),'_',num2str(strategy));
-        [reachabilityTime, verificationTime, time, safe] = bouncing_ball_mhypro(saveFig,savePath,filename, bad, diff,settings,setRepr,aggr,plot);
+        [reachabilityTime, verificationTime, time, safe] = bouncing_ball_gc_mhypro(saveFig,savePath,filename, bad, diff,settings,setRepr,aggr,plot);
         rT = rT + reachabilityTime;
         vT = vT + verificationTime;
         t = t + time;

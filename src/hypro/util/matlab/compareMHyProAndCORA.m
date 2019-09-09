@@ -1,80 +1,58 @@
 function compareMHyProAndCORA(benchmark, timeHorizon, diff)
 
 saveFig = 0;
-simulate = 1;
+simulate = 0;
 savePath = '/home/marta/Desktop';
 
 if diff > 0
-        % old strategies
-%     mhStrategies{1} = [3,3,4,23];
-%     mhStrategies{2} = [29,29,29,29];
-%     mhStrategies{3} = [13,38,38,38];
-%     mhStrategies{4} = [17,17,23,5];
-%     mhStrategies{5} = [61,61,61,68];
-%     mhStrategies{6} = [70, 70, 70,70];
-%     mhStrategies{7} = [66,66,56,70];
-%     mhStrategies{8} = [13,13,20,20];
-%     mhStrategies{9} = [68,68,68,68];
-%     mhStrategies{10} = [68,68,61,61];
 
-    mhStrategies{1} = [12,35,17,11];
-    mhStrategies{2} = [1,1,1,1]; 
-    mhStrategies{3} = [1,15,2,27]; 
-    mhStrategies{4} = [11,16,11,15];
-    mhStrategies{5} = [5,1,5,3]; 
-    mhStrategies{6} = [55,4,55,17];
-    mhStrategies{7} = [10,18,30,51];
-    mhStrategies{8} = [11,11,11,1];
-    mhStrategies{9} = [1,10,1,1];
-    mhStrategies{10} = [13,10,13,13];
+    mhStrategies{1} = [3,21,17,11]; % bb
+    mhStrategies{2} = [2,1,1,1]; % cc
+    mhStrategies{3} = [9,12,2,27]; % fo4 
+    mhStrategies{4} = [9,12,11,15]; % fo8
+    mhStrategies{5} = [9,12,5,3];  % fo16
+    mhStrategies{6} = [29,41,55,17]; % sw
+    mhStrategies{7} = [3,12,30,51]; %sr
+    mhStrategies{8} = [3,5,11,1]; %rr
+    mhStrategies{9} = [3,3,1,1]; %tt
+    mhStrategies{10} = [33,33,13,13]; %vp
 
-    coraStrategies{1} = [35,35,10,10];
-    coraStrategies{2} = [1,1,1,1]; %TODO
-    coraStrategies{3} = [15,15,4,4]; %TODO
-    coraStrategies{4} = [16,16,14,15];
-    coraStrategies{5} = [1,1,1,1]; %TODO
-    coraStrategies{6} = [20,4,4,4];
-    coraStrategies{7} = [18,18,31,4];
-    coraStrategies{8} = [11,11,11,11];
-    coraStrategies{9} = [10,10,20,20];
-    coraStrategies{10} = [10,10,21,18];
+    coraStrategies{1} = [8,17,10,10]; % bb
+    coraStrategies{2} = [1,1,1,1]; %cc
+    coraStrategies{3} = [34,34,4,4]; % fo4
+    coraStrategies{4} = [34,15,14,15]; % fo8
+    coraStrategies{5} = [36,36,1,1];  %fo16
+    coraStrategies{6} = [33,10,4,4]; % sw
+    coraStrategies{7} = [8,17,31,4]; %sr
+    coraStrategies{8} = [8,11,11,11]; %rr
+    coraStrategies{9} = [35,36,20,20]; %tt
+    coraStrategies{10} = [7,36,21,18]; %vp
     mhStrategyNr = mhStrategies{benchmark}(diff);
     cStrategyNr = coraStrategies{benchmark}(diff);
 else
-    % Standard strategies
-    % Old strategies
-%     mhStrategies{1} = 1; 
-%     mhStrategies{2} = 2;
-%     mhStrategies{3} = 3;
-%     mhStrategies{4} = 3;
-%     mhStrategies{5} = 3;
-%     mhStrategies{6} = 4;
-%     mhStrategies{7} = 1;
-%     mhStrategies{8} = 1;
-%     mhStrategies{9} = 1;
-%     mhStrategies{10} = 4;
+    % Initial strategies
 
-    mhStrategies{1} = 1; 
-    mhStrategies{2} = 2;
-    mhStrategies{3} = 9;
-    mhStrategies{4} = 9;
-    mhStrategies{5} = 9;
-    mhStrategies{6} = 17;
-    mhStrategies{7} = 1;
-    mhStrategies{8} = 1;
-    mhStrategies{9} = 1;
-    mhStrategies{10} = 13;
+    mhStrategies{1} = 3; % bb
+    mhStrategies{2} = 2; % cc
+    mhStrategies{3} = 9; % fo4
+    mhStrategies{4} = 9; % fo8
+    mhStrategies{5} = 9; % fo16
+    mhStrategies{6} = 24; % sw
+    mhStrategies{7} = 3; % sr
+    mhStrategies{8} = 3; % rr
+    mhStrategies{9} = 3; % tt
+    mhStrategies{10} = 33; % vp
 
-    coraStrategies{1} = 2;
-    coraStrategies{2} = 1; 
-    coraStrategies{3} = 9; 
-    coraStrategies{4} = 9;
-    coraStrategies{5} = 9; 
-    coraStrategies{6} = 28;
-    coraStrategies{7} = 2;
-    coraStrategies{8} = 2;
-    coraStrategies{9} = 2; 
-    coraStrategies{10} = 17;
+    coraStrategies{1} = 8; %bb
+    coraStrategies{2} = 1; %cc
+    coraStrategies{3} = 34; % fo4
+    coraStrategies{4} = 34; % fo8
+    coraStrategies{5} = 36; % fo16
+    coraStrategies{6} = 33; % sw
+    coraStrategies{7} = 8; % sr
+    coraStrategies{8} = 8; % rr
+    coraStrategies{9} = 35; % tt
+    coraStrategies{10} = 7; % vp
     
     mhStrategyNr = mhStrategies{benchmark};
     cStrategyNr = coraStrategies{benchmark};
@@ -90,6 +68,9 @@ cStrat.timeStep = timeStep;
 cStrat.tT = tTerms;
 cStrat.zO = zOrder;
 cStrat.pO = pOrder;
+
+disp(['MHyPro Strategy: ', num2str(mhStrategyNr)]);
+disp(['CORA Strategy: ', num2str(cStrategyNr)]);
 
 if benchmark == 1
     fname = strcat('comp_BB','_',num2str(mhStrategyNr),'_',num2str(cStrategyNr));

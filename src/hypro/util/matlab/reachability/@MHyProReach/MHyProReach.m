@@ -82,6 +82,7 @@ classdef MHyProReach < handle
         function plot(obj, flowpipes, dims, labs, save,path, name, ext)
             num_flowpipes = length(flowpipes);
             fig = figure();
+            
             %disp(['Reach - plot: number of flowpipes: ', num2str(num_flowpipes)])
             for pipe = 1:num_flowpipes
                 currentFlowpipe =  flowpipes{pipe};

@@ -357,23 +357,23 @@ options.projectedDimensions = [2 6];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',15);
-if diff == 1
+set(gca,'FontSize',18);
+if diff == 2
     x = [0.8;0.8;0.5;0.5];
     y = [1;-1;-1;1];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-elseif diff == 2
+elseif diff == 3
     x = [0.8;0.8;0.4845;0.4845];
     y = [1;-1;-1;1];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-elseif diff == 3
+elseif diff == 4
     x = [0.8;0.8;0.469;0.469];
     y = [1;-1;-1;1];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-elseif diff == 4
+elseif diff == 5
     k = -0.6 : 1;
     spec1 = -0.8*k + 0.566;
     upper = 1.1 + 0*k;

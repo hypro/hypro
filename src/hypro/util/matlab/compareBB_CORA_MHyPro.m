@@ -141,14 +141,14 @@ end
 options.projectedDimensions = [2 1];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
-set(gca,'FontSize',15);
+set(gca,'FontSize',18);
 % x = -30:15;
 % y = 0 + 0*x;
 % plot(x,y,'m--');
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
     if diff == 1
         x = [15;15;10.7;10.7];
-        y = [15;-40;-40;15];
+        y = [15;-4;-4;15];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 2

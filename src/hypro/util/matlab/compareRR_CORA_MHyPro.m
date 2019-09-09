@@ -281,23 +281,23 @@ flowpipes = reacher.computeForwardReachability();
 dim = [1 3];
 labs = ["x", "c2"];
 reacher.plotComparison(flowpipes, dim, labs);
-set(gca,'FontSize',15);
-if diff == 1
+set(gca,'FontSize',18);
+if diff == 2
     y = [60;60;41.1;41.1];
     x = [600;500;500;600];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-elseif diff == 2
+elseif diff == 3
     y = [60;60;34.93;34.93];
     x = [600;500;500;600];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-elseif diff == 3
+elseif diff == 4
     y = [60;60;40.86;40.86];
     x = [600;500;500;600];
     pgon = polyshape([x,y], 'Simplify', false);
     plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-elseif diff == 4
+elseif diff == 5
     k = 550 : 600;
     spec1 = 0*k + 50;
     upper = 15 + 0*k;

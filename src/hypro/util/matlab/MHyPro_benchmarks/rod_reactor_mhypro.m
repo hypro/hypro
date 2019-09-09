@@ -272,7 +272,7 @@ automaton.addInitialState(noRod, initialCond);
 
 % Add basic settings
 settings.timeBound = timeHorizon;
-settings.jumpDepth = 20;
+settings.jumpDepth = 5;
 
 reach = MHyProReach(automaton);
 reach.setSettings(settings);
@@ -300,6 +300,7 @@ if plotting == 1
     labs = ["x", "c2"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
+    set(gca,'FontSize',18);
     if bad
         if diff == 1
             y = [60;60;41.1;41.1];

@@ -20,7 +20,7 @@ options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
-options.intersectInvariant =1;
+%options.intersectInvariant =1;
 
 %set input:
 for i = 1:4
@@ -34,8 +34,8 @@ end
 options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
-options.tFinal = 0.65;
-options.intersectInvariant=1;
+options.tFinal = 4;
+
 
 tic;
 [HA] = reach(HA,options);
@@ -82,7 +82,7 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    set(gca,'FontSize',15);
+    set(gca,'FontSize',18);
     if diff == 1
         y = [0.8;0.8;0.5;0.5];
         x = [1;-1;-1;1];

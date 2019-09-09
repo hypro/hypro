@@ -322,7 +322,7 @@ options.taylorTerms = tT;
 options.zonotopeOrder = zO;
 options.polytopeOrder = pO;
 
-options.intersectInvariant=1;
+%options.intersectInvariant=1;
 
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
@@ -350,23 +350,23 @@ options.projectedDimensions = [3 2];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',15);
-    if diff == 1
+set(gca,'FontSize',18);
+    if diff == 2
         y = [0.8;0.8;0.5;0.5];
         x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 2
+    elseif diff == 3
         y = [0.8;0.8;0.48205;0.48205];
         x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 3
+    elseif diff == 4
         y = [0.8;0.8;0.4641;0.4641];
         x = [1;-1;-1;1];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    elseif diff == 4
+    elseif diff == 5
         k = -0.6 : 1.5;
         spec1 = -0.95*k + 0.22;
         upper = 0.55 + 0*k;

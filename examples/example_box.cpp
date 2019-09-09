@@ -16,22 +16,46 @@ int main()
 	struct timeval t1, t2;
     	double elapsedTime;
 
-	// create a box out of two given limit points.
-	hypro::Box<Number> box1(std::make_pair(hypro::Point<Number>({-2,2,-4}), hypro::Point<Number>({2,4,-2})));
+	carl::Interval<Number> *intv1 = new carl::Interval<Number>(0,1);
+	carl::Interval<Number> *intv2 = new carl::Interval<Number>(1,12);
+	carl::Interval<Number> *intv3 = new carl::Interval<Number>(-1,10);
+	carl::Interval<Number> *intv4 = new carl::Interval<Number>(-10,5);
+	carl::Interval<Number> *intv5 = new carl::Interval<Number>(20,34);
+	std::vector<carl::Interval<Number>> intervals;
+	intervals.emplace_back(*intv1);
+	intervals.emplace_back(*intv2);
+	intervals.emplace_back(*intv3);
+	intervals.emplace_back(*intv4);
+	intervals.emplace_back(*intv5);
+	
+	carl::Interval<Number> *intv1_2 = new carl::Interval<Number>(-10,1);
+	carl::Interval<Number> *intv2_2 = new carl::Interval<Number>(7,12);
+	carl::Interval<Number> *intv3_2 = new carl::Interval<Number>(-5,11);
+	carl::Interval<Number> *intv4_2 = new carl::Interval<Number>(-6,3);
+	carl::Interval<Number> *intv5_2 = new carl::Interval<Number>(0,3);
+	std::vector<carl::Interval<Number>> intervals2;
+	intervals2.emplace_back(*intv1_2);
+	intervals2.emplace_back(*intv2_2);
+	intervals2.emplace_back(*intv3_2);
+	intervals2.emplace_back(*intv4_2);
+	intervals2.emplace_back(*intv5_2);
+	
+	
+	hypro::Box<Number> box1(intervals);
+	hypro::Box<Number> box2(intervals2);
 
 	// create some transformation matrix.
-	hypro::matrix_t<Number> A = hypro::matrix_t<Number>::Zero(3,3);
-	A(0,0) = 1;
-	A(1,1) = carl::convert<double,Number>(carl::cos(45));
-	A(1,2) = carl::convert<double,Number>(-carl::sin(45));
-	A(2,1) = carl::convert<double,Number>(carl::sin(45));
-	A(2,2) = carl::convert<double,Number>(carl::cos(45));
+	hypro::matrix_t<Number> A = hypro::matrix_t<Number>::Zero(5,5);
+	A << 10,14,7,-9,14,14,7,-6,-8,-10,7,9,8,
+	11,1,-10,9,-10,8,-1,12,0,-3,-2,9;
 
 	// create some translation vector.
-	hypro::vector_t<Number> b = hypro::vector_t<Number>::Zero(3);
+	hypro::vector_t<Number> b = hypro::vector_t<Number>::Zero(5);
 	b(0) = 1;
 	b(1) = 2;
 	b(2) = 3;
+	b(3) = 4;
+	b(4) = 5;	
 
 	std::cout << "------------------------------"<< std::endl;
  	std::cout << "vertices" << std::endl;
@@ -63,8 +87,6 @@ int main()
  	std::cout << "Minkowski sum" << std::endl;
  	std::cout << "------------------------------"<< std::endl;
 	
-	hypro::Box<Number> box2(std::make_pair(hypro::Point<Number>({7,-12,-4}), hypro::Point<Number>({20,0,-2})));
-
 	// start timer
 	gettimeofday(&t1, NULL);
 
@@ -146,7 +168,42 @@ int main()
 	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
 
 	std::cout << "Time spent: " << elapsedTime << "ms\n" << std::endl;
+
+	std::cout << "------------------------------"<< std::endl;
+ 	std::cout << "supremum" << std::endl;
+ 	std::cout << "------------------------------"<< std::endl;
 	
+	// start timer
+	gettimeofday(&t1, NULL);
+
+	auto res5 = box1.supremum();
+	
+	// stop timer
+	gettimeofday(&t2, NULL);
+
+	// compute and print the elapsed time in millisec
+	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+
+	std::cout << "Time spent: " << elapsedTime << "ms\n" << std::endl;
+
+	std::cout << "------------------------------"<< std::endl;
+ 	std::cout << "scale" << std::endl;
+ 	std::cout << "------------------------------"<< std::endl;
+
+	// start timer
+	gettimeofday(&t1, NULL);
+
+	auto res6 = box1 * 10;
+	
+	// stop timer
+	gettimeofday(&t2, NULL);
+
+	// compute and print the elapsed time in millisec
+	elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+	elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+
+	std::cout << "Time spent: " << elapsedTime << "ms\n" << std::endl;
 	
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	

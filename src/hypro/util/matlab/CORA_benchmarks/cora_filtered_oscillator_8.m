@@ -18,11 +18,10 @@ options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
-options.intersectInvariant =1;
+%options.intersectInvariant =1;
 
 %set input:
 for i = 1:4
-    %options.timeStepLoc{i} = 0.05;
     options.timeStepLoc{i} = timeStep;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
@@ -80,6 +79,11 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+%     x = 0:2;
+%     y = x*0+0;
+%     plot(x,y,'m')
+    fplot(@(x) -0.714286*x, [0 0.8],'g');
+    set(gca,'FontSize',18);
     if diff == 1
         x = [0.8;0.8;0.5;0.5];
         y = [1;-1;-1;1];
@@ -106,6 +110,7 @@ if show
     end
     xlabel('y');
     ylabel('f8x1');
+
     if saveFig
         fname = strcat(filename,'.','png');
         saveas(fig, fullfile(savePath,fname),'png');

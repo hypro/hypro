@@ -579,28 +579,26 @@ disp('---------------------------------------');
 disp('Contains Zonotope');
 disp('---------------------------------------');
 
-disp('Does not work!');
+gen1 = [1 0 0; 0 1 0; 0 0 1];
+gen2 = [10 0 0; 0 10 0; 0 0 10];
+cen = [2;0;1];
 
-% gen1 = [1 0 0; 0 1 0; 0 0 1];
-% gen2 = [10 0 0; 0 10 0; 0 0 10];
-% cen = [2;0;1];
-% 
-% mh_z1 = MHyProZonotope(cen, gen1);
-% cora_z1 = zonotope([cen, gen1]);
-% 
-% mh_z2 = MHyProZonotope(cen, gen2);
-% cora_z2 = zonotope([cen, gen2]);
-% 
-% tic;
-% mh_out = mh_z2.contains(mh_z1)
-% stop = toc;
-% disp(['MHyPro needed ' , num2str(stop), 's']);
-% 
-% tic;
-% cora_out = cora_z1.in(cora_z2)
-% stop = toc;
-% disp(['CORA needed ' , num2str(stop), 's']);
-% 
+mh_z1 = MHyProZonotope(cen, gen1);
+cora_z1 = zonotope([cen, gen1]);
+
+mh_z2 = MHyProZonotope(cen, gen2);
+cora_z2 = zonotope([cen, gen2]);
+
+tic;
+mh_out = mh_z2.contains(mh_z1)
+stop = toc;
+disp(['MHyPro needed ' , num2str(stop), 's']);
+
+tic;
+cora_out = cora_z1.in(cora_z2)
+stop = toc;
+disp(['CORA needed ' , num2str(stop), 's']);
+
 % assert(mh_out == cora_out);
 
 disp(' ');

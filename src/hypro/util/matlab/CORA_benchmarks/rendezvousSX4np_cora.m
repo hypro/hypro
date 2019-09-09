@@ -8,7 +8,7 @@ options.R0=R0; % initial state for reachability analysis
 
 % other
 options.startLoc = 1; % initial location
-options.finalLoc = -inf; % no final location
+options.finalLoc = 0; % no final location
 options.tStart=0; % start time
 options.tFinal=20; % final time
 options.intermediateOrder = 2;
@@ -17,7 +17,7 @@ options.originContained = 0;
 options.taylorTerms = tTerms;
 options.zonotopeOrder = zOrder;
 options.polytopeOrder = pOrder;
-options.intersectInvariant =1;
+%options.intersectInvariant =1;
     
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap=0;
@@ -81,6 +81,7 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    set(gca,'FontSize',18);
     if diff == 1
         y = [12;12;10;10];
         x = [20;-5;-5;20];

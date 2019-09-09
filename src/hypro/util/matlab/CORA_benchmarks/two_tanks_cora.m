@@ -18,7 +18,7 @@ options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
 options.originContained = 0;
-options.intersectInvariant =1;
+%options.intersectInvariant =1;
 
 %set input:
 for i = 1:4
@@ -80,6 +80,7 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+    set(gca,'FontSize',18);
     if diff == 1
         y = [-0.7;-0.7;-1;-1];
         x = [2.5;-1;-1;2.5];
