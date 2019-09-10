@@ -441,10 +441,10 @@ TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
 	std::vector<EvaluationResult<TypeParam>> res = sfInterHalfspace.multiEvaluate(directions,true);
-	EXPECT_TRUE(res.at(0).supportValue >= TypeParam(1));
-	EXPECT_TRUE(res.at(0).supportValue < TypeParam(1.002));
-	EXPECT_TRUE(res.at(1).supportValue >= TypeParam(2));
-	EXPECT_TRUE(res.at(1).supportValue < TypeParam(2.001));
+	EXPECT_GE(res.at(0).supportValue, TypeParam(1));
+	EXPECT_LT(res.at(0).supportValue, TypeParam(1.002));
+	EXPECT_GE(res.at(1).supportValue, TypeParam(2));
+	EXPECT_LT(res.at(1).supportValue, TypeParam(2.001));
 
 	//Emptiness
 	EXPECT_TRUE(!sfInterHalfspace.empty());
@@ -1345,7 +1345,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp){
 	//Using only support functions that use the LeGuernic hspace intersection method
 	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>;
 
-	//Create sf: First {(0,0),(2,2)} then {(0,0),(1,2)} then {(1,1),(2,3)}
+	//Create sf: First {(0,0),(2,2)} then {(0,0),(1,2)} via intersectHalfspace then {(1,1),(3,5)} via affineTransformation
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
 	SF sf(box);
 	Halfspace<TypeParam> hspace({TypeParam(1),TypeParam(0)},TypeParam(1));
@@ -1359,7 +1359,8 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp){
 	vector_t<TypeParam> controlOptimumValue = vector_t<TypeParam>::Zero(2);
 	//controlOptimumValue(0) = 5;
 	auto res = sfTrans.evaluate(vec, false);
-	EXPECT_EQ(res.supportValue, TypeParam(5));
+	EXPECT_LE(TypeParam(8), res.supportValue);
+	EXPECT_LE(res.supportValue, TypeParam(8.002));
 	EXPECT_EQ(res.optimumValue, controlOptimumValue);
 	EXPECT_EQ(res.errorCode, SOLUTION::FEAS);
 }

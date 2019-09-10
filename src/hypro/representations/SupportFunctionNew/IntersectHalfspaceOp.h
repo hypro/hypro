@@ -94,18 +94,18 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	//Method described in LeGuernic's and Girard's paper about support functions
+	//Method described in LeGuernic's and Girard's paper about support functions, but extended to halfspaces and not only hyperplanes
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& directions) const {
 		COUNT("IntersectHalfspaceOp::aggregate");
 		TRACE("hypro.representations.supportFunction", ": INTERSECT HSPACE, accumulate results.");
 		assert(resultStackBack.size() == 1);
 		std::vector<EvaluationResult<Number>> accumulatedRes;
 		for(int i=0; i < directions.rows(); ++i){
-			//Optimization: If direction not similar to halfspace normal, then use halfspace evaluate
+			//If direction not similar to halfspace normal, then use halfspace evaluate
 			if(hspace.normal().dot(directions.row(i)) < 0){
 				accumulatedRes.push_back(resolveEvaluationResults(resultStackBack.front().at(i), directions.row(i)));
 			} else {
-				accumulatedRes.push_back(leGuernic(vector_t<Number>(directions.row(i).transpose())));	
+				accumulatedRes.push_back(leGuernicFast(vector_t<Number>(directions.row(i).transpose())));	
 			}
 		}
 		return accumulatedRes;
@@ -206,6 +206,108 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 		//NOTE: This evaluation result does not return an optimal value
 		//return EvaluationResult<Number>(heightOfResult, SOLUTION::FEAS);
 		return EvaluationResult<Number>(heightOfResult, vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
+	}
+
+	//Golden section search where the amount of evaluations made is halved
+	EvaluationResult<Number> leGuernicFast(const vector_t<Number>& direction) const {
+
+		//Projection matrix - normalize columns then put them into matrix
+		//NOTE: This is the already transposed matrix M^T
+		matrix_t<Number> projMat(direction.rows(),2);
+		projMat.col(0) = hspace.normal().transpose();
+		projMat.col(1) = direction.transpose();
+		
+		//Wiggle vector and wiggle angle
+		Number wiggleAngle = 0.0;
+		vector_t<Number> wiggleVec(2);
+		wiggleVec(0) = Number(std::cos(carl::toDouble(wiggleAngle)));
+		wiggleVec(1) = Number(std::sin(carl::toDouble(wiggleAngle)));
+
+		//Golden section search for the value f
+		Number maximumAngle = PI_UP;
+		const Number tolerance = 0.001;
+		const Number goldenRatioInv = (std::sqrt(5) - 1) / 2;
+		const Number goldenRatioInv2 = (3 - std::sqrt(5)) / 2;
+		assert(wiggleAngle < maximumAngle);
+		carl::Interval<Number> resInterval(wiggleAngle, maximumAngle);
+		std::cout << "IntersectHalfspaceOp::leGuernicFast, resInterval: " << resInterval << std::endl;
+
+		//Determine difference
+		Number h = resInterval.upper() - resInterval.lower(); //upper = b, lower = a
+		if(h <= tolerance){
+			std::cout << "IntersectHalfspaceOp::leGuernicFast, h: " << h << " was smaller than tolerance 0.001" << std::endl;
+			return EvaluationResult<Number>(((resInterval.upper() + resInterval.lower()) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
+		}
+		
+		//Compute steps needed to acquire tolerance
+		unsigned steps = static_cast<unsigned>(carl::ceil(std::log(carl::toDouble(tolerance)/carl::toDouble(h)) / std::log(carl::toDouble(goldenRatioInv))));
+		std::cout << "IntersectHalfspaceOp::leGuernicFast, h: " << h << " steps: " << steps << std::endl;
+
+		//Compute upper and lower bound
+		Number upper = resInterval.lower() + goldenRatioInv2 * h; //c
+		Number lower = resInterval.lower() + goldenRatioInv2 * h; //d
+		std::cout << "IntersectHalfspaceOp::leGuernicFast, initial upper: " << upper << " initial lower: " << lower << std::endl;
+
+		//Compute upper height
+		EvaluationResult<Number> evalInProjectedWiggleDir;
+		SupportFunctionNewT<Number,Converter,Setting> childSF(this->getChildren().at(0));
+		wiggleVec(0) = Number(std::cos(carl::toDouble(upper)));
+		wiggleVec(1) = Number(std::sin(carl::toDouble(upper)));
+		evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
+		COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
+		//yc
+		Number heightOfUpper = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(upper)))) / Number(std::sin(carl::toDouble(upper)));
+		std::cout << "IntersectHalfspaceOp::leGuernicFast, initial heightOfUpper: " << heightOfUpper << std::endl;
+		
+		//Compute lower height
+		wiggleVec(0) = Number(std::cos(carl::toDouble(lower)));
+		wiggleVec(1) = Number(std::sin(carl::toDouble(lower)));
+		evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
+		COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
+		//yd
+		Number heightOfLower = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(lower)))) / Number(std::sin(carl::toDouble(lower)));
+		std::cout << "IntersectHalfspaceOp::leGuernicFast, initial heightOfLower" << heightOfLower << std::endl;
+
+
+		for(unsigned i = 0; i < steps; ++i){
+			if(heightOfUpper < heightOfLower){
+				resInterval.setUpper(lower);
+				lower = upper;
+				heightOfLower = heightOfUpper;
+				h = goldenRatioInv * h;
+				upper = resInterval.upper() + goldenRatioInv2 * h;
+				wiggleVec(0) = Number(std::cos(carl::toDouble(upper)));
+				wiggleVec(1) = Number(std::sin(carl::toDouble(upper)));
+				evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
+				COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
+				heightOfUpper = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(upper)))) / Number(std::sin(carl::toDouble(upper)));
+				std::cout << "IntersectHalfspaceOp::leGuernicFast, UPDATE resInterval: " << resInterval << std::endl;
+				std::cout << "IntersectHalfspaceOp::leGuernicFast, UPDATE resInterval: " << resInterval << std::endl;
+				//MORE UPDATE OUTPUT
+			} else {
+				resInterval.setLower(upper);
+				upper = lower;
+				heightOfUpper = heightOfLower;
+				h = goldenRatioInv * h;
+				lower = resInterval.upper() + goldenRatioInv * h;
+				wiggleVec(0) = Number(std::cos(carl::toDouble(lower)));
+				wiggleVec(1) = Number(std::sin(carl::toDouble(lower)));
+				evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
+				COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
+				Number heightOfLower = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(lower)))) / Number(std::sin(carl::toDouble(lower)));
+				//MORE UPDATE OUTPUT
+			}
+		}
+
+		if(heightOfUpper < heightOfLower){
+			//MORE UPDATE OUTPUT
+			return EvaluationResult<Number>(((resInterval.lower() + upper) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
+		} else {
+			//MORE UPDATE OUTPUT
+			return EvaluationResult<Number>(((resInterval.upper() + lower) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
+		}
+
+		//WHY IS RESULT NaN?
 	}
 
 	//Checks emptiness

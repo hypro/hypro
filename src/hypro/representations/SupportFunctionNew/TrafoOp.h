@@ -18,7 +18,7 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
-//A data struct for TrafoOp, containing all needed info to construct a TrafoOp from it. No child info is saved.
+//A data struct for TrafoOp, containing all needed info to construct a TrafoOp from it. No connectivity info is saved.
 //TODO: Do currentExponent and successiveTransformations need to be stored?
 template<typename Number, typename Setting>
 struct TrafoData : public RGNData {
@@ -173,19 +173,20 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 					if(Setting::LE_GUERNIC_HSPACE_INTERSECTION){
 						//Generate a point that will be on the same plane as the optimal value,
 						//Since le guernic hspace intersection does not return an optimal value
-						std::cout << "TrafoOp::aggregate, current supportValue: " << entry.supportValue << std::endl;
-						std::cout << "TrafoOp::aggregate, currentDir: \n" << currentDir << std::endl;
+						//std::cout << "TrafoOp::aggregate, current supportValue: " << entry.supportValue << std::endl;
+						//std::cout << "TrafoOp::aggregate, currentDir: \n" << currentDir << std::endl;
 						vector_t<Number> pointOnPlane = vector_t<Number>::Zero(currentDir.rows());
 						unsigned i = 0;
 						while(i<currentDir.rows() && currentDir(i) == 0) {
 							++i;
 						}
 						pointOnPlane(i) = entry.supportValue;
-						std::cout << "TrafoOp::aggregate, pointOnPlane: \n" << pointOnPlane << std::endl;
-						//pointOnPlane = parameterPair.first * pointOnPlane + parameterPair.second;
-						std::cout << "TrafoOp::aggregate, pointOnPlane transformed: \n" << pointOnPlane << std::endl;
-						//entry.supportValue = pointOnPlane.dot(currentDir);
-						std::cout << "TrafoOp::aggregate, new supportValue: " << entry.supportValue << std::endl;
+						//std::cout << "TrafoOp::aggregate, pointOnPlane: \n" << pointOnPlane << std::endl;
+						//pointOnPlane += parameters->vector();
+						pointOnPlane += parameterPair.second;
+						//std::cout << "TrafoOp::aggregate, pointOnPlane transformed: \n" << pointOnPlane << std::endl;
+						entry.supportValue = pointOnPlane.dot(currentDir);
+						//std::cout << "TrafoOp::aggregate, new supportValue: " << entry.supportValue << std::endl;
 					} else {
 						assert(entry.optimumValue != vector_t<Number>::Zero(getDimension()));
 						assert(parameterPair.first.cols() == entry.optimumValue.rows());
