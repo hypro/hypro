@@ -368,62 +368,6 @@ namespace hypro {
 		assert(A.cols() == mMatrixPtr->cols());
 		assert(A.rows() == mMatrixPtr->cols());
 
-		//Scale all coefficients by the greatest scaling factor, which are the coordinates on the diagonal of A
-		//assert(A.rows() == A.cols());
-		//Number maxScaleFactor = A(0,0);
-		//for(int i = 0; i < A.cols(); ++i){
-		//	if(A(i,i) > maxScaleFactor){
-		//		maxScaleFactor = A(i,i);
-		//	}
-		//}
-		//vector_t<Number> newVector = mVector;
-		//for(int i = 0; i < mVector.rows(); ++i){
-		//	newVector(i) = maxScaleFactor * newVector(i);
-		//}
-		////To find rotation matrix, find the individual scaling factors by getting the length of the columns
-		////Rotation matrix is A with each col divided its scaling factor
-		//matrix_t<Number> rotMat = matrix_t<Number>::Zero(A.rows(), A.cols());
-		//for(int i = 0; i < A.cols(); ++i){
-		//	rotMat.col(i) = A.col(i) / norm(vector_t<Number>(A.col(i)));
-		//}
-		////We rotate our template directions by the inverse direction and evaluate in these directions
-		//matrix_t<Number> dirsRotatedInverse = (rotMat.transpose())*(*mMatrixPtr);
-		//TemplatePolyhedronT<Number,Converter,Setting> res(mMatrixPtr, newVector);
-		//auto evalInInvRotatedDirs = res.multiEvaluate(dirsRotatedInverse, true);
-		//assert(evalInInvRotatedDirs.size() == newVector.rows());
-		//for(int i = 0; i < evalInInvRotatedDirs.size(); ++i){
-		//	assert(evalInInvRotatedDirs.at(i).errorCode == SOLUTION::FEAS);
-		//	newVector(i) = evalInInvRotatedDirs.at(i).supportValue;
-		//}
-		//res = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
-		//return res;
-
-		//Get singular value decomposition which decomposes every matrix into 3 matrices: rotation, scaling and another rotation matrix
-		//TODO: Why does that not work? Maybe testwise convert to double matrix
-/*
-		//Convert A into double (Since eigen svd does not work with mpq_class)
-		matrix_t<double> doubleA = convert<Number,double>(A);
-		
-		//Convert mMatrixPtr into double (Since eigen svd does not work with mpq_class)
-		matrix_t<double> doublemMatrixPtr = convert<Number,double>(*mMatrixPtr);
-		
-		//Compute SVD and put singularValues into a matrix 
-		Eigen::BDCSVD<matrix_t<double>> svd(doubleA, Eigen::ComputeFullU | Eigen::ComputeFullV);
-		matrix_t<double> singularVals(doubleA.rows(), doubleA.cols());
-		for(int i = 0; i < doubleA.rows(); ++i){
-			singularVals(i,i) = svd.singularValues()(i);
-		}
-		
-		//Compute transformed dirs and convert it back to Number
-		std::cout << "TPoly::linearTransformation, singularVals: \n" << singularVals << "V: \n" << svd.matrixV() << "U: \n" << svd.matrixU() << "doublemMatrixPtr: \n" << doublemMatrixPtr << std::endl;
-		matrix_t<double> dirsRotatedInv = doublemMatrixPtr*(singularVals.transpose()*svd.matrixU().transpose());
-		//matrix_t<double> dirsRotatedInv = singularVals.transpose()*(svd.matrixV().transpose()*doublemMatrixPtr.transpose());
-		//matrix_t<double> dirsRotatedInv = doublemMatrixPtr*(singularVals*svd.matrixV().transpose());
-		std::cout << "TPoly::linearTransformation, dirsRotatedInv: \n" << dirsRotatedInv << std::endl;
-		matrix_t<Number> dirsRotatedInverse = convert<double,Number>(dirsRotatedInv);
-		assert(dirsRotatedInverse.rows() == mMatrixPtr->rows());
-		assert(dirsRotatedInverse.cols() == mMatrixPtr->cols());
-*/
 		//Evaluate in the transformed directions
 		matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*A;
 		assert(dirsRotatedInverse.rows() == mMatrixPtr->rows());
@@ -531,8 +475,7 @@ namespace hypro {
 		auto fullInfullOut = checkFullInsideFullOutside(hspace.normal(), hspace.offset());
 		assert(!(fullInfullOut.first && fullInfullOut.second));
 		if(fullInfullOut.first) return *this;
-		if(fullInfullOut.second) return Empty();
-
+		
 		//If partially inside halfspace
 		assert(hspace.normal().rows() == mMatrixPtr->cols());
 		matrix_t<Number> mat = matrix_t<Number>::Zero(1,hspace.normal().rows());
