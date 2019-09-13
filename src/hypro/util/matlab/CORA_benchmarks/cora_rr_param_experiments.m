@@ -10,7 +10,7 @@ options.R0 = zonotope(Zcenter); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
 options.taylorTerms = 1;
-options.zonotopeOrder = 1;
+options.zonotopeOrder = 50;
 options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';

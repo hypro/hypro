@@ -1,7 +1,7 @@
 function cora_fo4_param_experiments()
 
 HA = filtered_oscillator_4_ha();
-options.enclosureEnables = 1;
+options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
 
 Zdelta = [0.05;0.1;0;0;0;0];
@@ -12,8 +12,9 @@ options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability a
 options.x0 = center(options.R0); %initial state for simulation
 
 options.taylorTerms = 2;
-options.zonotopeOrder = 2;
+options.zonotopeOrder = 100;
 options.polytopeOrder = 10;
+
 
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
@@ -23,7 +24,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:4
-    options.timeStepLoc{i} = 0.05;
+    options.timeStepLoc{i} = 0.005;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -34,20 +35,25 @@ options.startLoc = 3; %initial location
 options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = 4;
-%options.intersectInvariant=1;
+
 
 tic;
 [HA] = reach(HA,options);
 reachabilityT = toc;
-disp(['Time needed for verification: ', num2str(reachabilityT)]);
+disp(['Reachability analysis needed: ', num2str(reachabilityT)]);
 
 % Visualization -------------------------------------------------------
-figure(); 
+ figure(); 
 hold on
 options.projectedDimensions = [3 2];
 
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',15);
+set(gca,'FontSize',15);    
+xlabel('x1');
+ylabel('y');
+    
+
+
 end
