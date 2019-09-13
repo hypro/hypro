@@ -1,4 +1,4 @@
-function log = cora_vp_param_experiments()
+function cora_vp_param_experiments()
 
 HA = vehicle_platoon_ha();
 options.enclosureEnables = [3 5];
@@ -10,9 +10,9 @@ Zcenter = ones(10,1);
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.taylorTerms = 1;
-options.zonotopeOrder = 5; % ab 4 schwachsinn
-options.polytopeOrder = 10;
+options.taylorTerms = 3;
+options.zonotopeOrder = 1600; % ab 4 schwachsinn
+options.polytopeOrder = 100;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -47,25 +47,25 @@ options.projectedDimensions = [1 7];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',18);
+set(gca,'FontSize',15);
 
-options.taylorTerms = 200;
-options.zonotopeOrder = 5; % ab 4 schwachsinn
-options.polytopeOrder = 10;
+% options.taylorTerms = 200;
+% options.zonotopeOrder = 5; % ab 4 schwachsinn
+% options.polytopeOrder = 10;
+% 
+% tic;
+% [HA] = reach(HA,options);
+% reachabilityT = toc;
+% disp(['Time needed for the reachability: ', num2str(reachabilityT)]);
 
-tic;
-[HA] = reach(HA,options);
-reachabilityT = toc;
-disp(['Time needed for the reachability: ', num2str(reachabilityT)]);
-
-
-% Visualization -------------------------------------------------------
-
-options.projectedDimensions = [1 7];
-
-options.plotType = 'g';
-plot(HA,'reachableSet',options); %plot reachable set
-plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',18);
+% 
+% % Visualization -------------------------------------------------------
+% 
+% options.projectedDimensions = [1 7];
+% 
+% options.plotType = 'g';
+% plot(HA,'reachableSet',options); %plot reachable set
+% plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+% set(gca,'FontSize',18);
 
 end

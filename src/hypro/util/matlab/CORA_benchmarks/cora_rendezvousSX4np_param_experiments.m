@@ -21,7 +21,7 @@ options.polytopeOrder = 10;
     
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap=0;
-options.enclosureEnables = [3, 5]; % choose enclosure method(s)
+options.enclosureEnables = [1]; % choose enclosure method(s)
 options.filterLength = [5,7];
 options.guardIntersect = 'polytope';
 options.errorOrder = 2;

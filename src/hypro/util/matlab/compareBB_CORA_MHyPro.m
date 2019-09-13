@@ -141,7 +141,7 @@ end
 options.projectedDimensions = [2 1];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
-set(gca,'FontSize',18);
+set(gca,'FontSize',15);
 % x = -30:15;
 % y = 0 + 0*x;
 % plot(x,y,'m--');

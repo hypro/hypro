@@ -1,7 +1,7 @@
 function cora_tt_param_experiments()
 
 HA = two_tanks_ha();
-options.enclosureEnables = [3 5];
+options.enclosureEnables = [1];
 options.guardIntersect = 'polytope';
 Zdelta = [0.5;0];
 

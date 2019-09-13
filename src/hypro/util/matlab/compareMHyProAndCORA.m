@@ -37,7 +37,7 @@ else
     mhStrategies{3} = 9; % fo4
     mhStrategies{4} = 9; % fo8
     mhStrategies{5} = 9; % fo16
-    mhStrategies{6} = 24; % sw
+    mhStrategies{6} = 39; % sw
     mhStrategies{7} = 3; % sr
     mhStrategies{8} = 3; % rr
     mhStrategies{9} = 3; % tt

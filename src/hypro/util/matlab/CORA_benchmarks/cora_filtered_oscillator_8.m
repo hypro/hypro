@@ -83,7 +83,7 @@ if show
 %     y = x*0+0;
 %     plot(x,y,'m')
     fplot(@(x) -0.714286*x, [0 0.8],'g');
-    set(gca,'FontSize',18);
+    set(gca,'FontSize',15);
     if diff == 1
         x = [0.8;0.8;0.5;0.5];
         y = [1;-1;-1;1];

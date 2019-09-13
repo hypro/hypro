@@ -420,7 +420,7 @@ if plotting == 1
     labs = ["y", "f8x1"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
-    set(gca,'FontSize',18);
+    set(gca,'FontSize',15);
     if bad
         if diff == 0
             x = [0.8;0.8;0.5;0.5];

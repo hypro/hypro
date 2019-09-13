@@ -73,7 +73,7 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    set(gca,'FontSize',18);
+    set(gca,'FontSize',15);
     if diff == 1
         x = [0.8;0.8;0.5;0.5];
         y = [1;-1;-1;1];

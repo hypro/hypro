@@ -301,7 +301,7 @@ disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 
 dim = [3 2];
 labs = ["x1", "y"];
-reach.plotColor(flowpipes, dim, labs,0,' ',' ',' ',[0.094, 0.725, 0.219]);
+%reach.plotColor(flowpipes, dim, labs,0,' ',' ',' ',[0.094, 0.725, 0.219]);
 reach.plotComparison({flowpipes,flowpipes2}, dim, labs,{[0.094, 0.725, 0.219],[0.231, 0.788, 0.172]});
 set(gca,'FontSize',15);
 

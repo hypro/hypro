@@ -1,7 +1,7 @@
 function log = vehicle_platoon_cora(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
 HA = vehicle_platoon_ha();
-options.enclosureEnables = [3 5];
+options.enclosureEnables = [3 4];
 options.guardIntersect = 'polytope';
 Zdelta = [0.1*ones(9,1);0];
 
@@ -77,15 +77,15 @@ if show
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
     plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-    set(gca,'FontSize',18);
+    set(gca,'FontSize',15);
     if diff == 1
-        y = [2;2;1.7;1.7];
-        x = [1.8;0;0;1.8];
-        pgon = polyshape([x,y], 'Simplify', false);
+        y = [1.7;1.7;2;2];
+        x = [2.5;0;0;2.5];
+        pgon = polyshape([y,x], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 2
         y = [-0.7;-0.7;-1;-1];
-        x = [2.5;-1;-1;2.5];
+        x = [2;-1;-1;2];
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     elseif diff == 3

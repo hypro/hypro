@@ -281,7 +281,7 @@ flowpipes = reacher.computeForwardReachability();
 dim = [1 3];
 labs = ["x", "c2"];
 reacher.plotComparison(flowpipes, dim, labs);
-set(gca,'FontSize',18);
+set(gca,'FontSize',15);
 if diff == 2
     y = [60;60;41.1;41.1];
     x = [600;500;500;600];

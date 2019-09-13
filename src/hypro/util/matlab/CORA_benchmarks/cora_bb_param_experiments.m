@@ -53,5 +53,5 @@ options.projectedDimensions = [2 1];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',18);
+set(gca,'FontSize',15);
 end

@@ -231,7 +231,7 @@ options.tFinal = timeHorizon;
 options.projectedDimensions = [1 7];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
-set(gca,'FontSize',18);
+set(gca,'FontSize',15);
 %plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 if diff == 1
     y = [2;2;1.7;1.7];

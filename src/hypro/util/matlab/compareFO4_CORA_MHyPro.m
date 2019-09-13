@@ -350,7 +350,7 @@ options.projectedDimensions = [3 2];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-set(gca,'FontSize',18);
+set(gca,'FontSize',15);
     if diff == 2
         y = [0.8;0.8;0.5;0.5];
         x = [1;-1;-1;1];
