@@ -192,8 +192,8 @@ reacher.setRepresentationType(setRepr);
 flowpipes = reacher.computeForwardReachability();
 
 fig = figure();
-dim = [2 4];
-labs = ["y", "vy"];
+dim = [3 4];
+labs = ["vx", "vy"];
 reacher.plotComparison(flowpipes, dim, labs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -236,7 +236,7 @@ for i = 1:5
 end
 
 [HA] = reach(HA,options);
-options.projectedDimensions = [2 4];
+options.projectedDimensions = [3 4];
 % options.projectedDimensions = [1 2];
 options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set

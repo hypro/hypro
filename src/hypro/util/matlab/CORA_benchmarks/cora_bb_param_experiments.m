@@ -1,4 +1,4 @@
-function log = cora_bouncing_ball(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
+function cora_bb_param_experiments()
 
 HA = cora_bouncing_ball_ha();
 Zdelta = [0.1;0;0];
@@ -52,7 +52,7 @@ options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 set(gca,'FontSize',15);
-xlabel('t');
+xlabel('v');
 ylabel('x');
 
 end

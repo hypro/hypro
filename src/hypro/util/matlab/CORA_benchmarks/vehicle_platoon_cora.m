@@ -1,18 +1,19 @@
 function log = vehicle_platoon_cora(saveFig,savePath,filename, diff, show, timeStep, tTerms, zOrder, pOrder, strategy)
 
 HA = vehicle_platoon_ha();
-options.enclosureEnables = [3 4];
+options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
 Zdelta = [0.1*ones(9,1);0];
 
 % options
 Zcenter = ones(10,1);
+Zcenter(10) = 0;
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.taylorTerms = tTerms;
-options.zonotopeOrder = zOrder;
-options.polytopeOrder = pOrder;
+options.taylorTerms = 1;
+options.zonotopeOrder = 5; % ab 4 schwachsinn
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -21,7 +22,7 @@ options.originContained = 0;
 
 %set input:
 for i = 1:2
-    options.timeStepLoc{i} = timeStep;
+    options.timeStepLoc{i} = 0.02;
     options.uLoc{i} = 0;
     options.uLocTrans{i} = options.uLoc{i};
     options.Uloc{i} = zonotope(options.uLoc{i});
@@ -33,12 +34,10 @@ options.finalLoc = 0; %0: no final location
 options.tStart = 0; %start time
 options.tFinal = 12;
 
-    tic;
-    [HA] = reach(HA,options);
-    reachabilityT = toc;
-    safe = 0;
-    verificationT = 0;
-    time = 0;
+tic;
+[HA] = reach(HA,options);
+reachabilityT = toc;
+disp(['Time needed for the reachability: ', num2str(reachabilityT)]);
     % Verification --------------------------------------------------------
     if diff ~= 0
         tic;

@@ -137,7 +137,7 @@ end
 if show    
     fig = figure(); 
     hold on
-    options.projectedDimensions = [2 1];
+    options.projectedDimensions = [3 1];
 
     options.plotType = 'b';
     plot(HA,'reachableSet',options); %plot reachable set
@@ -171,52 +171,52 @@ if show
         fname = strcat(filename,'.','png');
         saveas(fig, fullfile(savePath,fname),'png');
     end
-%     
+    
 %     x = [15;15;10.7;10.7];
 %     y = [15;-2;-2;15];
 %     pgon = polyshape([x,y], 'Simplify', false);
 %     plot(pgon,'FaceColor',[0.447, 0.447, 0.454], 'FaceAlpha',0.5,'EdgeColor', 'none');
-    
+%     
 
 
 
-% HAsim = simulate(HA,options);
-% simRes{i} = get(HAsim,'trajectory');
-% % figure 
-% % hold on
-% % % box on
-% options.projectedDimensions = [3 1];
-% options.plotType = {'b','m','g'};
-% plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-% for i = 1:length(simRes)
-%    for j = 1:length(simRes{i}.x)
-%        plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
-%             simRes{i}.x{j}(:,options.projectedDimensions(2)),'r');
-%         set(gca,'FontSize',18)
-%    end
-% end
-% xlabel('t');
-% ylabel('x');
-% 
-% x = 0:2;
-% y = x*0+0;
-% plot(x,y,'m')
-% 
-% 
-% offset = 0.012; % How much away from the marker the text should be.
-% x = [1.41;1.42;1.43;1.44;1.45];
-% y = [0.4485;0.3097;0.1699;0.02911;-0.1126];
-% index = 1:5;
-% plot(x(index), y(index), 'or', 'LineWidth', 2);
-% grid on;
-% for k = 1 : length(y)
-%     caption = sprintf('t=%.2f, x=%.2f', x(k), y(k));
-%     text(x(k) + offset, y(k) + offset, caption, 'BackgroundColor', 'w', 'FontSize',15);
-% end
-% plot(1.435, 0, 'ok', 'LineWidth', 3);
-% caption = sprintf('t=%.3f, x=%.3f',1.435, 0);
-% text(1.435 - 0.045, 0 + 0.004, caption, 'BackgroundColor', 'y', 'FontSize',15);
-% end
+HAsim = simulate(HA,options);
+simRes{i} = get(HAsim,'trajectory');
+% figure 
+% hold on
+% % box on
+options.projectedDimensions = [3 1];
+options.plotType = {'b','m','g'};
+plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+for i = 1:length(simRes)
+   for j = 1:length(simRes{i}.x)
+       plot(simRes{i}.x{j}(:,options.projectedDimensions(1)), ...
+            simRes{i}.x{j}(:,options.projectedDimensions(2)),'r');
+        set(gca,'FontSize',18)
+   end
+end
+xlabel('t');
+ylabel('x');
+
+x = 0:2;
+y = x*0+0;
+plot(x,y,'m')
+
+
+offset = 0.012; % How much away from the marker the text should be.
+x = [1.41;1.42;1.43;1.44;1.45];
+y = [0.4485;0.3097;0.1699;0.02911;-0.1126];
+index = 1:5;
+plot(x(index), y(index), 'or', 'LineWidth', 2);
+grid on;
+for k = 1 : length(y)
+    caption = sprintf('t=%.2f, x=%.2f', x(k), y(k));
+    text(x(k) + offset, y(k) + offset, caption, 'BackgroundColor', 'w', 'FontSize',15);
+end
+plot(1.435, 0, 'ok', 'LineWidth', 3);
+caption = sprintf('t=%.3f, x=%.3f',1.435, 0);
+text(1.435 - 0.045, 0 + 0.004, caption, 'BackgroundColor', 'y', 'FontSize',15);
+end
 
 
 end

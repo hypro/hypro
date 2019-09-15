@@ -1,6 +1,6 @@
 function  vp_param_experiments()
 
-timeHorizon = 1;
+timeHorizon = 12;
 
 % Create Automaton
 automaton = MHyProHAutomaton();
@@ -15,7 +15,7 @@ settings.jumpDepth = 20;
 %settings.uniformBloating = false;
 settings.clustering = 0;
 settings.timeStep = 0.02;
-setRepr = 0;
+setRepr = 6;
 aggr = 2; 
 
 %-----------------------------------------------%

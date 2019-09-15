@@ -40,8 +40,9 @@ An = [...
         0.7132    3.5730   -0.0964    0.8472    3.2568   -0.0876    1.2726    3.0720   -3.1356 0;...
         0         0         0         0         0          0        0         0          0 0]; 
     
-dynB = [0;0;0;0;0;0;0;0;0;1];
-dynamics = linearSys('linearSys', Ac, dynB);
+dynB = [0;0;0;0;0;0;0;0;0;0];
+dync = [0;0;0;0;0;0;0;0;0;1];
+dynamics = linearSys('linearSys', Ac, dynB,dync);
 
 %% equation:
 %   t <= 2
@@ -84,8 +85,8 @@ loc{1} = location('S1',1, inv, trans, dynamics);
 % a3' = 0.7132*e1 + 3.573*e1prime - 0.0964*a1 + 0.8472*e2 + 3.2568*e2prime - 0.0876*a2 + 1.2726*e3 + 3.072*e3prime - 3.1356*a3
 % t' = 1
 
-dynB = [0;0;0;0;0;0;0;0;0;1];
-dynamics = linearSys('linearSys', An, dynB);
+dynB = [0;0;0;0;0;0;0;0;0;0];
+dynamics = linearSys('linearSys', An, dynB,dync);
 
 %% equation:
 %   t <= 2
@@ -110,6 +111,7 @@ guardOpt = struct('A', guardA, 'b', guardb);
 guard = mptPolytope(guardOpt);
 
 trans{1} = transition(guard, reset, 1, 'dummy', 'names');
+
 
 loc{2} = location('S2',2, inv, trans, dynamics);
 

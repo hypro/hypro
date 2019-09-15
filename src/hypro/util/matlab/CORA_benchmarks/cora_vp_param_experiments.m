@@ -7,12 +7,13 @@ Zdelta = [0.1*ones(9,1);0];
 
 % options
 Zcenter = ones(10,1);
+Zcenter(10) = 0;
 options.R0 = zonotope([Zcenter,diag(Zdelta)]); %initial state for reachability analysis
 options.x0 = center(options.R0); %initial state for simulation
 
-options.taylorTerms = 3;
-options.zonotopeOrder = 1600; % ab 4 schwachsinn
-options.polytopeOrder = 100;
+options.taylorTerms = 1;
+options.zonotopeOrder = 5; % ab 4 schwachsinn
+options.polytopeOrder = 10;
 options.errorOrder=2;
 options.reductionTechnique = 'girard';
 options.isHyperplaneMap = 0;
@@ -48,24 +49,26 @@ options.plotType = 'b';
 plot(HA,'reachableSet',options); %plot reachable set
 plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
 set(gca,'FontSize',15);
+    xlabel('e1');
+    ylabel('e3');
 
-% options.taylorTerms = 200;
-% options.zonotopeOrder = 5; % ab 4 schwachsinn
-% options.polytopeOrder = 10;
-% 
-% tic;
-% [HA] = reach(HA,options);
-% reachabilityT = toc;
-% disp(['Time needed for the reachability: ', num2str(reachabilityT)]);
+options.taylorTerms = 100;
+options.zonotopeOrder = 5; % ab 4 schwachsinn
+options.polytopeOrder = 10;
 
-% 
-% % Visualization -------------------------------------------------------
-% 
-% options.projectedDimensions = [1 7];
-% 
-% options.plotType = 'g';
-% plot(HA,'reachableSet',options); %plot reachable set
-% plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
-% set(gca,'FontSize',18);
+tic;
+[HA] = reach(HA,options);
+reachabilityT = toc;
+disp(['Time needed for the reachability: ', num2str(reachabilityT)]);
+
+
+% Visualization -------------------------------------------------------
+
+options.projectedDimensions = [1 7];
+
+options.plotType = 'g';
+plot(HA,'reachableSet',options); %plot reachable set
+plotFilled(options.R0,options.projectedDimensions,'w','EdgeColor','k'); %plot initial set
+set(gca,'FontSize',15);
 
 end
