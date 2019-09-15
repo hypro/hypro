@@ -1,6 +1,6 @@
 function log = cora_linear_switching_system(saveFig,savePath,filename, diff, show,timeStep, tTerms, zOrder, pOrder,strategy)
 
-HA = linear_switch_ha();
+HA = cora_linear_switching_system_ha();
 options.enclosureEnables = [3 5];
 options.guardIntersect = 'polytope';
 Zdelta = 1e-4*ones(5,1);

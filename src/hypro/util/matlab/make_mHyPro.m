@@ -1,5 +1,25 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                            COMPILE MHyPro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% MHyPro is a Matlab-wrapper for the well known C++ tool HyPro offering
+% various state set representations and a reachability analysis tool for
+% hybrid systems. 
+%
+% This is the gateway file for MHypro. In order to compile mhypro just run
+% this file. It compiles the MEX function contained in the MHyPro.cpp file.
+%
+% NOTE: 
+%	- First HyPro has to be compiled and every time the MReach.cpp file
+%         was changed.
+%   - All folders and subfolders contained in hypro/src/hypro/util/matlab
+%     have to be added to Matlab path.
+%	- This code works only on Linux!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Name of the file containing the MEX Function
 srcFile = 'MHyPro.cpp';
+
 ipaths = {};
 if isfile('matlabInput')
     %Load the saved paths

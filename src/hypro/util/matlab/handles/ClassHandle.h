@@ -1,3 +1,7 @@
+/* This is the class handler for mhypro. It is needed for comunication between
+* Matalb and HyPro.
+*/
+
 #ifndef CLASS_HANDLE_H
 #define CLASS_HANDLE_H
 

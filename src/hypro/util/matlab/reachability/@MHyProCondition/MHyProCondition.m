@@ -1,5 +1,5 @@
 classdef MHyProCondition < handle
-    
+
     properties (SetAccess = public, GetAccess = public)
         ObjectHandle
     end

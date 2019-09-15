@@ -1,8 +1,36 @@
 function runCORABenchmarks(benchmark, diff, strategy)
 
-savePath = '/home/marta/Desktop';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% With this file all benchmarks for cora can be run.
+% Input:
+%   benchmarkNr: number of the benchmark
+%       1 - bouncing ball
+%       2 - cruise controll
+%       3 - filtered oscillator 4
+%       4 - filtered oscillator 8
+%       5 - filtered oscillator 16
+%       6 - switching system
+%       7 - spacecraft rendezvous
+%       8 - rod reactor
+%       9 - two tanks
+%      10 - vehicle platoon
+%   diff: difficulty of the specification
+%       1 - no specifications
+%       2 - easy specifications
+%   strategy: number of the strategy that should be used for the
+%             reachability analysis. The strategies can be found in
+%             the file getCORAStrategy.m
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% If this flag is set then the results will be plotted
 plot = 1;
+
+% If this flag is set then the plots will be saved
 saveFig = 0;
+
+% Path to the folder where the plots will be saved
+savePath = '/home/';
+
 logs = {};
 log_counter = 1;
 names = {'cora_bouncing_ball','cora_cruise_control',...
