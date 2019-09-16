@@ -154,7 +154,7 @@ t = 0;
         num2str(rT), ' ',  num2str(vT), ' ',num2str(t), ' ', num2str(s)];
     end
     
-    fileID = fopen(fullfile(savePath, 'mhypro_benchmark_results.txt'),'a');
-    fprintf(fileID, '%s\n',logs);
-    fclose(fileID);
+%     fileID = fopen(fullfile(savePath, 'mhypro_benchmark_results.txt'),'a');
+%     fprintf(fileID, '%s\n',logs);
+%     fclose(fileID);
 end
