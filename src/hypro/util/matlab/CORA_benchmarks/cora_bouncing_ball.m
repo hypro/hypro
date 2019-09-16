@@ -164,7 +164,7 @@ if show
         pgon = polyshape([x,y], 'Simplify', false);
         plot(pgon,'FaceColor',[0.831, 0, 0], 'FaceAlpha',0.5,'EdgeColor', 'none');
     end
-    xlabel('t');
+    xlabel('v');
     ylabel('x');
     
     if saveFig

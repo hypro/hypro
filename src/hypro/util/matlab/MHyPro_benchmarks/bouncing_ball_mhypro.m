@@ -180,7 +180,7 @@ disp(['Time needed for reachability: ', num2str(reachabilityTime)]);
 
 if plotting == 1
     dim = [2 1];
-    labs = ["t", "x"];
+    labs = ["v", "x"];
     ext = 'png';
     reach.plot(flowpipes, dim, labs,saveFig,savePath,figName,ext);
     set(gca,'FontSize',15);
