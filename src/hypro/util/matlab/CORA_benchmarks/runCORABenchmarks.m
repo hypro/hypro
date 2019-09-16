@@ -15,8 +15,8 @@ function runCORABenchmarks(benchmark, diff, strategy)
 %       9 - two tanks
 %      10 - vehicle platoon
 %   diff: difficulty of the specification
-%       1 - no specifications
-%       2 - easy specifications
+%       0 - no specifications
+%       1 - easy specifications
 %   strategy: number of the strategy that should be used for the
 %             reachability analysis. The strategies can be found in
 %             the file getCORAStrategy.m
@@ -82,11 +82,11 @@ names = {'cora_bouncing_ball','cora_cruise_control',...
         log_counter = log_counter + 1; 
     end
     
-    fileID = fopen(fullfile(savePath, 'CORA_benchmark_results.txt'),'a');
-    disp(num2str(log_counter))
-    for i = 1:length(logs)
-        fprintf(fileID, '%s\n',logs{i});
-    end
-    fclose(fileID);
+%     fileID = fopen(fullfile(savePath, 'CORA_benchmark_results.txt'),'a');
+%     disp(num2str(log_counter))
+%     for i = 1:length(logs)
+%         fprintf(fileID, '%s\n',logs{i});
+%     end
+%     fclose(fileID);
 
 end

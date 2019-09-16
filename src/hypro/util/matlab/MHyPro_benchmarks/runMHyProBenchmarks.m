@@ -15,8 +15,8 @@ function runMHyProBenchmarks(benchmarkNr, diff, strategy)
 %       9 - two tanks
 %      10 - vehicle platoon
 %   diff: difficulty of the specification
-%       1 - no specifications
-%       2 - easy specifications
+%       0 - no specifications
+%       1 - easy specifications
 %   strategy: number of the strategy that should be used for the
 %             reachability analysis. The strategies can be found in
 %             the file getNewStrategy.m
