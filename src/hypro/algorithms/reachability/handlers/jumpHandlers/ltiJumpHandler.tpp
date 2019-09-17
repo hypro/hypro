@@ -178,11 +178,11 @@ namespace hypro {
 
 	template<typename State>
 	std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHandler<State>::applyJump(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy){
-		//std::cout << "====== applyJump! ======" << std::endl;
-		// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
-		std::map<Transition<Number>*, std::vector<State>> toProcess;
+		
 		// holds a mapping of transitions to states which need to be aggregated
 		std::map<Transition<Number>*, std::vector<State>> toAggregate;
+		// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
+		std::map<Transition<Number>*, std::vector<State>> toProcess;
 		// holds a mapping of transitions to already processed (i.e. aggregated, resetted and reduced) states
 		std::map<Transition<Number>*, std::vector<State>> processedStates;
 		for (const auto& tuple : states) {

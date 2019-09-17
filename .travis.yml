@@ -101,6 +101,15 @@ matrix:
           packages: [*packages_base, clang-8 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-8
     - os: osx
+      osx_image: xcode10.2
+      addons:
+        homebrew:
+          packages:
+          - llvm
+      compiler: clang
+      env: COMPILER=clang++
+  allow_failures:
+      - os: osx
       osx_image: xcode9.1
       addons:
         homebrew:
@@ -148,14 +157,7 @@ matrix:
           - llvm
       compiler: clang
       env: COMPILER=clang++
-    - os: osx
-      osx_image: xcode10.2
-      addons:
-        homebrew:
-          packages:
-          - llvm
-      compiler: clang
-      env: COMPILER=clang++
+
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../

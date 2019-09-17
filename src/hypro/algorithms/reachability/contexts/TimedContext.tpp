@@ -102,7 +102,7 @@ namespace hypro
 		// For plotting.
 		#ifdef HYDRA_ENABLE_PLOT
 		TRACE("hydra.worker.plot","Add "<<  this->mComputationState.getSets().size() << "segments for plotting of type " << this->mComputationState.getSetType() << " and refinement level " << this->mTask->btInfo.btLevel);
-        this->mLocalSegments->push_back(PlotData<State>(this->mComputationState,this->mTask->btInfo.btLevel));
+        this->mLocalSegments.addState(this->mComputationState);
 		#endif
 	}
 
