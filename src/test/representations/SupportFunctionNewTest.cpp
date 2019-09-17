@@ -1369,6 +1369,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp){
  * A temporary test that counts the evaluation calls if le guernic hspace intersection is used on multiple 
  * NOTE: This test can only be used if the HYPRO_STATISTICS option has been enabled
  */
+
 #ifdef HYPRO_STATISTICS
 TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 

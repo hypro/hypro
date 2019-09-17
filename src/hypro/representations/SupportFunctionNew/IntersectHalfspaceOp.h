@@ -208,7 +208,8 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 		return EvaluationResult<Number>(heightOfResult, vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
 	}
 
-	//Golden section search where the amount of evaluations made is halved
+	//Golden section search where the amount of evaluations made is halved 
+	//NOTE: algorithm idea is from wikipedia "Golden section search", the variable names in the comments are mappings to the variable names in the article
 	EvaluationResult<Number> leGuernicFast(const vector_t<Number>& direction) const {
 
 		//Projection matrix - normalize columns then put them into matrix
@@ -220,94 +221,69 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 		//Wiggle vector and wiggle angle
 		Number wiggleAngle = 0.0;
 		vector_t<Number> wiggleVec(2);
-		wiggleVec(0) = Number(std::cos(carl::toDouble(wiggleAngle)));
-		wiggleVec(1) = Number(std::sin(carl::toDouble(wiggleAngle)));
-
+		
 		//Golden section search for the value f
 		Number maximumAngle = PI_UP;
 		const Number tolerance = 0.001;
 		const Number goldenRatioInv = (std::sqrt(5) - 1) / 2;
 		const Number goldenRatioInv2 = (3 - std::sqrt(5)) / 2;
 		assert(wiggleAngle < maximumAngle);
-		carl::Interval<Number> resInterval(wiggleAngle, maximumAngle);
-		std::cout << "IntersectHalfspaceOp::leGuernicFast, resInterval: " << resInterval << std::endl;
+		carl::Interval<Number> resInterval(wiggleAngle, maximumAngle); //upper = b, lower = a
 
 		//Determine difference
-		Number h = resInterval.upper() - resInterval.lower(); //upper = b, lower = a
-		if(h <= tolerance){
-			std::cout << "IntersectHalfspaceOp::leGuernicFast, h: " << h << " was smaller than tolerance 0.001" << std::endl;
-			return EvaluationResult<Number>(((resInterval.upper() + resInterval.lower()) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
-		}
+		Number h = PI_UP;
 		
 		//Compute steps needed to acquire tolerance
 		unsigned steps = static_cast<unsigned>(carl::ceil(std::log(carl::toDouble(tolerance)/carl::toDouble(h)) / std::log(carl::toDouble(goldenRatioInv))));
-		std::cout << "IntersectHalfspaceOp::leGuernicFast, h: " << h << " steps: " << steps << std::endl;
 
-		//Compute upper and lower bound
-		Number upper = resInterval.lower() + goldenRatioInv2 * h; //c
-		Number lower = resInterval.lower() + goldenRatioInv2 * h; //d
-		std::cout << "IntersectHalfspaceOp::leGuernicFast, initial upper: " << upper << " initial lower: " << lower << std::endl;
+		//Compute upper (c) and lower bound (d)
+		Number upper = resInterval.lower() + goldenRatioInv2 * h;
+		Number lower = resInterval.lower() + goldenRatioInv * h;
 
-		//Compute upper height
+		//Compute upper height yc
 		EvaluationResult<Number> evalInProjectedWiggleDir;
 		SupportFunctionNewT<Number,Converter,Setting> childSF(this->getChildren().at(0));
 		wiggleVec(0) = Number(std::cos(carl::toDouble(upper)));
 		wiggleVec(1) = Number(std::sin(carl::toDouble(upper)));
 		evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
 		COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
-		//yc
 		Number heightOfUpper = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(upper)))) / Number(std::sin(carl::toDouble(upper)));
-		std::cout << "IntersectHalfspaceOp::leGuernicFast, initial heightOfUpper: " << heightOfUpper << std::endl;
 		
-		//Compute lower height
+		//Compute lower height yd
 		wiggleVec(0) = Number(std::cos(carl::toDouble(lower)));
 		wiggleVec(1) = Number(std::sin(carl::toDouble(lower)));
 		evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
 		COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
-		//yd
 		Number heightOfLower = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(lower)))) / Number(std::sin(carl::toDouble(lower)));
-		std::cout << "IntersectHalfspaceOp::leGuernicFast, initial heightOfLower" << heightOfLower << std::endl;
 
-
+		//Update interval
 		for(unsigned i = 0; i < steps; ++i){
 			if(heightOfUpper < heightOfLower){
 				resInterval.setUpper(lower);
 				lower = upper;
 				heightOfLower = heightOfUpper;
 				h = goldenRatioInv * h;
-				upper = resInterval.upper() + goldenRatioInv2 * h;
+				upper = resInterval.lower() + goldenRatioInv2 * h;
 				wiggleVec(0) = Number(std::cos(carl::toDouble(upper)));
 				wiggleVec(1) = Number(std::sin(carl::toDouble(upper)));
 				evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
 				COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
 				heightOfUpper = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(upper)))) / Number(std::sin(carl::toDouble(upper)));
-				std::cout << "IntersectHalfspaceOp::leGuernicFast, UPDATE resInterval: " << resInterval << std::endl;
-				std::cout << "IntersectHalfspaceOp::leGuernicFast, UPDATE resInterval: " << resInterval << std::endl;
-				//MORE UPDATE OUTPUT
 			} else {
 				resInterval.setLower(upper);
 				upper = lower;
 				heightOfUpper = heightOfLower;
 				h = goldenRatioInv * h;
-				lower = resInterval.upper() + goldenRatioInv * h;
+				lower = resInterval.lower() + goldenRatioInv * h;
 				wiggleVec(0) = Number(std::cos(carl::toDouble(lower)));
 				wiggleVec(1) = Number(std::sin(carl::toDouble(lower)));
 				evalInProjectedWiggleDir = childSF.evaluate(projMat*wiggleVec, true);
 				COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
-				Number heightOfLower = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(lower)))) / Number(std::sin(carl::toDouble(lower)));
-				//MORE UPDATE OUTPUT
+				heightOfLower = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(lower)))) / Number(std::sin(carl::toDouble(lower)));
 			}
 		}
 
-		if(heightOfUpper < heightOfLower){
-			//MORE UPDATE OUTPUT
-			return EvaluationResult<Number>(((resInterval.lower() + upper) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
-		} else {
-			//MORE UPDATE OUTPUT
-			return EvaluationResult<Number>(((resInterval.upper() + lower) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
-		}
-
-		//WHY IS RESULT NaN?
+		return EvaluationResult<Number>(((heightOfLower + heightOfUpper) / 2), vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
 	}
 
 	//Checks emptiness
