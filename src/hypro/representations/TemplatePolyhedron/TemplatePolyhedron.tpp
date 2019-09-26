@@ -16,12 +16,11 @@ namespace hypro {
 	//Regular template polyhedron constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT(const std::size_t dimension, const std::size_t noOfSides, const vector_t<Number>& vec) 
-		: mVector(vec)
 	{
 		//Check if coeff vector has the right length
-		if(noOfSides != std::size_t(vec.rows())){
-			throw std::invalid_argument("Template polyhedron offset vector length not fitting.");
-		}
+		//if(noOfSides != std::size_t(vec.rows())){
+		//	throw std::invalid_argument("Template polyhedron offset vector length not fitting.");
+		//}
 
 		//Check if polyhedron will be bounded
 		if(noOfSides <= dimension){
@@ -31,6 +30,11 @@ namespace hypro {
 		//compute template matrix and set it as new mMatrixPtr
 		auto templateDirs = computeTemplate<Number>(dimension, noOfSides);
 		mMatrixPtr = std::make_shared<matrix_t<Number>>(combineRows(templateDirs));
+		if(vec != vector_t<Number>::Zero(vec.rows())){
+			mVector = vec;
+		} else {
+			mVector = vector_t<Number>::Zero(dimension);
+		}
 		mOptimizer = Optimizer<Number>(*mMatrixPtr, mVector);
 	}
 
@@ -44,6 +48,44 @@ namespace hypro {
 		assert(mOptimizer.matrix() == mat);
 		assert(mOptimizer.vector() == vec);
 		assert(vec.rows() == mMatrixPtr->rows());
+	}
+
+	//Vector of matrix and vector ctor
+	template<typename Number, typename Converter, typename Setting>
+	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT(const std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>& matVecPairs)
+	{
+		if(matVecPairs.empty()){
+
+			mMatrixPtr = std::make_shared<matrix_t<Number>>(matrix_t<Number>::Zero(1,1));
+			mVector = vector_t<Number>::Zero(1);
+			mOptimizer = Optimizer<Number>(*mMatrixPtr,mVector);
+
+		} else {
+
+			//Template size is the amount of all rows combined
+			std::size_t templateRows = 0;
+			for(const auto pair : matVecPairs){
+				templateRows += pair.first.rows();
+			}
+
+			matrix_t<Number> mat(templateRows, matVecPairs.front().first.cols());
+			vector_t<Number> vec(templateRows);
+			Eigen::Index currentRow = 0;
+			for(const auto& pair : matVecPairs){
+				assert(pair.first.rows() == pair.second.rows());
+				mat.block(currentRow, 0, pair.first.rows(), pair.first.cols()) = pair.first;
+				vec.block(currentRow, 0, pair.second.rows(), 1) = pair.second;
+				currentRow += pair.first.rows();
+			}
+			
+			mMatrixPtr = std::make_shared<matrix_t<Number>>(std::move(mat));
+			mVector = std::move(vec);
+			mOptimizer = Optimizer<Number>(*mMatrixPtr,mVector);
+
+			assert(mOptimizer.matrix() == *mMatrixPtr);
+			assert(mOptimizer.vector() == mVector);
+			assert(mVector.rows() == mMatrixPtr->rows());
+		}
 	}
 
 	//Shared-ptr-constructor
@@ -475,14 +517,15 @@ namespace hypro {
 		auto fullInfullOut = checkFullInsideFullOutside(hspace.normal(), hspace.offset());
 		assert(!(fullInfullOut.first && fullInfullOut.second));
 		if(fullInfullOut.first) return *this;
+
+		//Check whether halfspace is not already in template, if it is, take the smaller of both values
 		
-		//If partially inside halfspace
+		//If partially inside halfspace - costly
 		assert(hspace.normal().rows() == mMatrixPtr->cols());
 		matrix_t<Number> mat = matrix_t<Number>::Zero(1,hspace.normal().rows());
 		mat.row(0) = hspace.normal().transpose();
 		vector_t<Number> vec = vector_t<Number>::Zero(1);
 		vec(0) = hspace.offset();
-
 		return intersectHalfspaces(mat,vec);
 	}
 
@@ -491,6 +534,8 @@ namespace hypro {
 		
 		//Emptiness check
 		if(this->empty()) return *this;
+
+		//Check whether halfspaces are already in template, if they are, take the smaller of both values
 
 		//Extend a copy of the matrix to contain the extra halfspaces
 		assert(_mat.rows() == _vec.rows());

@@ -11,6 +11,8 @@ namespace hypro {
 	template<typename State>
 	class timedFirstSegmentHandler;
 	template<typename State>
+	class TPolyFirstSegmentHandler;
+	template<typename State>
 	class discreteInvariantHandler;
 	template<typename State>
 	class ltiInvariantHandler;
@@ -18,6 +20,8 @@ namespace hypro {
 	class rectangularInvariantHandler;
 	template<typename State>
 	class timedInvariantHandler;
+	//template<typename State>
+	//class TPolyInvariantHandler;
 	template<typename State>
 	class discreteBadStateHandler;
 	template<typename State>
@@ -26,6 +30,8 @@ namespace hypro {
 	class rectangularBadStateHandler;
 	template<typename State>
 	class timedBadStateHandler;
+	//template<typename State>
+	//class TPolyBadstateHandler;
 	template<typename State>
 	class discreteGuardHandler;
 	template<typename State>
@@ -34,6 +40,8 @@ namespace hypro {
 	class rectangularGuardHandler;
 	template<typename State>
 	class timedGuardHandler;
+	//template<typename State>
+	//class TPolyGuardHandler;
 	template<typename State>
 	class ltiTimeEvolutionHandler;
 	template<typename State>
@@ -44,6 +52,8 @@ namespace hypro {
 	class timedElapseAfterTickTimeEvolutionHandler;
 	template<typename State>
 	class timedTickTimeEvolutionHandler;
+	//template<typename State>
+	//class TPolyTimeEvolutionHandler;
 	template<typename State>
 	class ltiResetHandler;
 	template<typename State>
@@ -52,5 +62,7 @@ namespace hypro {
 	class timedResetHandler;
 	template<typename State>
 	class ltiJumpHandler;
+	//template<typename State>
+	//class TPolyResetHandler;
 
 } // hypro

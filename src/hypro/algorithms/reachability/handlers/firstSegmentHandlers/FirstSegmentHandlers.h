@@ -5,3 +5,4 @@
 #include "rectangularFirstSegmentHandler.h"
 #include "timedFirstSegmentHandler.h"
 #include "timedElapseFirstSegmentHandler.h"
+#include "TPolyFirstSegmentHandler.h"

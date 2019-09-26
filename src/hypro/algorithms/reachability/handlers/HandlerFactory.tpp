@@ -18,6 +18,9 @@ namespace hypro
 			case representation_name::carl_polytope: {
 				return new rectangularFirstSegmentHandler<State>(state,index);
 			}
+			case representation_name::polytope_t: {
+				return new TPolyFirstSegmentHandler<State>(state,index,timeStep);
+			}
 			default:
  				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
 				break;
@@ -44,6 +47,7 @@ namespace hypro
 			case representation_name::carl_polytope: {
 				return new rectangularInvariantHandler<State>(state,index);
 			}
+			//TODO: ADD CASE FOR TPOLY
 			default:
  				return new ltiInvariantHandler<State>(state,index);
 				break;
@@ -81,6 +85,7 @@ namespace hypro
 			case representation_name::carl_polytope: {
 				return new rectangularBadStateHandler<State>(state,index);
 			}
+			//TODO: ADD CASE FOR TPOLY
 			default:
  				if(noFlow){
  					return new discreteBadStateHandler<State>(state,index);
@@ -110,6 +115,7 @@ namespace hypro
 			case representation_name::carl_polytope: {
  				return new rectangularGuardHandler<State>(state,index,transition);
 			}
+			//TODO: ADD CASE FOR TPOLY
 			default:
  				return new ltiGuardHandler<State>(state,index,transition);
 
@@ -144,6 +150,7 @@ namespace hypro
 				// TODO!!
  				return new rectangularTimeEvolutionHandler<State>(state,index,boost::get<rectangularFlow<Number>>(flow));
 			}
+			//TODO: ADD CASE FOR TPOLY
 			default:
 				auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
 				if(tmp.getFlowMatrix() == matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols()) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
@@ -172,6 +179,7 @@ namespace hypro
 				assert(false);
  				return nullptr;
 			}
+			//TODO: ADD CASE FOR TPOLY
 			default:
  				return new ltiResetHandler<State>(state,index,trafo,translation);
  		}
@@ -187,6 +195,7 @@ namespace hypro
 			case representation_name::carl_polytope: {
 				return new rectangularResetHandler<State>(state,index,assignments);
 			}
+			//TODO: ADD CASE FOR TPOLY
 			default:
  				assert(false);
 				return nullptr;

@@ -121,6 +121,21 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	EXPECT_EQ(matVecTPoly.getOptimizer().matrix(), differentMatrix);
 	EXPECT_EQ(matVecTPoly.getOptimizer().vector(), differentOffset);
 
+	//Vector of matrices and vectors constructor
+	auto pair1 = std::make_pair(controlMatrix, offset);
+	auto pair2 = std::make_pair(differentMatrix, differentOffset);
+	TemplatePolyhedron<TypeParam> templ(std::vector<std::pair<matrix_t<TypeParam>,vector_t<TypeParam>>>{pair1, pair2});
+	matrix_t<TypeParam> controlMatrix2(controlMatrix.rows() + differentMatrix.rows(), controlMatrix.cols());
+	controlMatrix2.block(0,0,controlMatrix.rows(),controlMatrix.cols()) = controlMatrix;
+	controlMatrix2.block(controlMatrix.rows(),0,differentMatrix.rows(),differentMatrix.cols()) = differentMatrix;
+	vector_t<TypeParam> controlVector2(offset.rows() + differentOffset.rows(), offset.cols());
+	controlVector2.block(0,0,offset.rows(),1) = offset;
+	controlVector2.block(offset.rows(),0,differentOffset.rows(),1) = differentOffset;
+	EXPECT_EQ(templ.matrix(), controlMatrix2);
+	EXPECT_EQ(templ.vector(), controlVector2);
+	EXPECT_EQ(templ.getOptimizer().matrix(), controlMatrix2);
+	EXPECT_EQ(templ.getOptimizer().vector(), controlVector2);
+
 	//Copy constructor
 	TemplatePolyhedron<TypeParam> copy(matVecTPoly);
 	EXPECT_EQ(copy.matrix(), matVecTPoly.matrix());
@@ -147,6 +162,7 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	EXPECT_EQ(move.getOptimizer().matrix(), differentMatrix);
 	EXPECT_EQ(move.getOptimizer().vector(), differentOffset);
 	//Somehow test whether GLP instance of matVecTPoly has been cleaned
+
 }
 
 
@@ -338,16 +354,16 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 
 	//Empty TPoly
 	//EXPECT_TRUE(this->empty.linearTransformation(transMat).empty());
-	std::cout << "===== Empty =====" << std::endl;
+	//std::cout << "===== Empty =====" << std::endl;
 	EXPECT_TRUE(this->empty.affineTransformation(transMat, transVec).empty());
 	
 	//Normal TPoly 
-	std::cout << "===== Scaling =====" << std::endl;
+	//std::cout << "===== Scaling =====" << std::endl;
 	auto res = this->middle.linearTransformation(transMat);
 	EXPECT_EQ(res.matrix(), this->mat);
 	EXPECT_EQ(res.vector(), 3*this->middleVec);
 	EXPECT_EQ(res.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
-	std::cout << "===== Scaling + Translate =====" << std::endl;
+	//std::cout << "===== Scaling + Translate =====" << std::endl;
 	res = this->middle.affineTransformation(transMat,transVec);
 	vector_t<TypeParam> controlVec(4);
 	controlVec << 8, 4, 8, 4;
@@ -366,7 +382,7 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	TemplatePolyhedron<TypeParam> irreg(irregularMat, irregularVec);
 
 	//Scale irreg by 2 in each dimension
-	std::cout << "===== Scaling Irreg =====" << std::endl;
+	//std::cout << "===== Scaling Irreg =====" << std::endl;
 	matrix_t<TypeParam> scaleMat = matrix_t<TypeParam>::Identity(2,2);
 	scaleMat(0,0) = 2;
 	controlVec << 2,4,2,4;
@@ -377,7 +393,7 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	EXPECT_EQ(res.vector(), controlVec);
 
 	//Rotate irreg by 90 degrees anticlockwise
-	std::cout << "===== Rotate Irreg =====" << std::endl;
+	//std::cout << "===== Rotate Irreg =====" << std::endl;
 	matrix_t<TypeParam> rotMat = matrix_t<TypeParam>::Zero(2,2);
 	rotMat(0,1) = -1;
 	rotMat(1,0) = 1;
@@ -390,7 +406,7 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	EXPECT_EQ(res.vector(), controlVec);
 
 	//Translate irreg by (3,2)
-	std::cout << "===== Translate Irreg =====" << std::endl;
+	//std::cout << "===== Translate Irreg =====" << std::endl;
 	vector_t<TypeParam> translate = vector_t<TypeParam>::Zero(2);
 	translate << 3,2;
 	controlVec << 4,10,4,-4;
@@ -399,11 +415,11 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 	EXPECT_EQ(res.vector(), controlVec);	
 
 	//Combine Scaling and rotation
-	std::cout << "===== Scale and Rotate Irreg =====" << std::endl;
+	//std::cout << "===== Scale and Rotate Irreg =====" << std::endl;
 	res = irreg.linearTransformation(rotMat*scaleMat);
 	EXPECT_EQ(res.matrix(), irregularMat);
 	//EXPECT_EQ(res.vector(), controlVec);
-	std::cout << "irreg.vec after combining scaling and rotation is: \n" << res.vector() << std::endl;
+	//std::cout << "irreg.vec after combining scaling and rotation is: \n" << res.vector() << std::endl;
 }
 
 TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){

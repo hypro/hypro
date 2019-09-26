@@ -380,7 +380,7 @@ namespace hypro
 	void LTIContext<State>::firstSegment(){
 		DEBUG("hypro.worker","State  before first segment: " << mComputationState);
 
-		// applay handlers to state
+		// apply handlers to state
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			mFirstSegmentHandlers.at(i)->handle();
 		}

@@ -11,6 +11,10 @@ namespace hypro {
     {
 
         if(SettingsProvider<State>::getInstance().useDecider() ){
+        	if(SettingsProvider<State>::getInstance().getStrategy().getParameters(t->btInfo.btLevel).representation_type == representation_name::polytope_t){
+        		DEBUG("hydra.worker", "Using TPoly context!");
+				return new TemplatePolyhedronContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings);
+        	}
 			auto locType = SettingsProvider<State>::getInstance().getLocationTypeMap().find(t->treeNode->getStateAtLevel(t->btInfo.btLevel).getLocation())->second;
 			if(locType == hypro::LOCATIONTYPE::TIMEDLOC){
 				// either use on full timed automa or if context switch is enabled

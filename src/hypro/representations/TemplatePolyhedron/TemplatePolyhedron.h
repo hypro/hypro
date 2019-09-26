@@ -89,7 +89,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param[in]  noOfSides  amount of constraints the polyhedron should consist of. 
 	 * 			   Must be at least dimension+1 .
 	 */
-	TemplatePolyhedronT( const std::size_t dimension, const std::size_t noOfSides, const vector_t<Number>& vec);
+	TemplatePolyhedronT( const std::size_t dimension, const std::size_t noOfSides, const vector_t<Number>& vec = vector_t<Number>::Zero(1));
 
 	/**
 	 * @brief      Matrix Vector constructor. 
@@ -98,6 +98,13 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @details    Constructs a shared_ptr to a copy of the matrix allocated on the heap
 	 */
 	TemplatePolyhedronT( const matrix_t<Number>& mat, const vector_t<Number>& vec );
+
+	/**
+	 * @brief      Vector of matrices and vectors constructor. 
+	 * @param[in]  matVecPairs  The vector of pairs of matrices and vectors
+	 * @details    Used to construct a template polyhedron using initial constraints, location invariants and guards
+	 */
+	TemplatePolyhedronT(const std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>& matVecPairs);
 
 	/**
 	 * @brief      Copy constructor.
