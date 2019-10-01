@@ -228,7 +228,7 @@ class OrthoplexT : public GeometricObject<Number, OrthoplexT<Number,Converter,Se
 	 * @param[in]  Orthoplexes  The Orthoplexes.
 	 * @return     The resulting Orthoplex.
 	 */
-	static OrthoplexT<Number,Converter,Setting> unite( const std::vector<OrthoplexT<Number,Converter,Setting>>& Orthoplexes );
+	OrthoplexT<Number,Converter,Setting> unite( const std::vector<OrthoplexT<Number,Converter,Setting>>& Orthoplexes );
 
 	/**
 	 * @brief      Reduces the representation of the current Orthoplex.

@@ -254,9 +254,9 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number,Converter,Setting>& b ) {
 		if(b.rGetMatrixPtr() == nullptr){
-			std::cout << "Matrix address: nullptr, Vector: " << std::endl << b.vector() << std::endl;
+			std::cout << "Template matrix address: nullptr, Template vector: " << std::endl << b.vector() << std::endl;
 		} else {
-			std::cout << "Matrix address: " << b.rGetMatrixPtr() << std::endl << b.matrix() << "Vector: " << std::endl << b.vector() << std::endl;
+			std::cout << "Template matrix address: " << b.rGetMatrixPtr() << std::endl << b.matrix() << "Template vector: " << std::endl << b.vector() << std::endl;
 		}
 		
 #else

@@ -26,6 +26,7 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" first segment handlers");
 		// initialize first segment handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
+			std::cout << "LTIContext::initializeFirstSegmentHandlers(), mComputationState.getSetType(" << i << ") = " << mComputationState.getSetType(i) << std::endl;
 			mFirstSegmentHandlers.push_back(HandlerFactory<State>::getInstance().buildFirstSegmentHandler(mComputationState.getSetType(i), &mComputationState, i,mStrategy.getParameters(mTask->btInfo.btLevel).timeStep));
 			DEBUG("hypro.worker","Built " << mFirstSegmentHandlers.at(i)->handlerName() << "at pos " << i);
 		}

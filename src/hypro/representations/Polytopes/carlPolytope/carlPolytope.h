@@ -54,15 +54,15 @@ public:
 
     CarlPolytopeT<Number,Converter,Setting> linearTransformation( const matrix_t<Number> &A ) const;
 
-    CarlPolytopeT<Number,Converter,Setting> minkowskiSum(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    CarlPolytopeT<Number,Converter,Setting> minkowskiSum(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return *this; }
 
-    CarlPolytopeT<Number,Converter,Setting> unite(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    CarlPolytopeT<Number,Converter,Setting> unite(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return *this; }
 
-    CarlPolytopeT<Number,Converter,Setting> affineTransformation(const matrix_t<Number>& , const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    CarlPolytopeT<Number,Converter,Setting> affineTransformation(const matrix_t<Number>& , const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); return *this; }
 
     std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
-    bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return false; }
 
     std::size_t dimension() const { TRACE("hypro.representations.carlPolytope","Dimension " << mDimension << ". forced: " << mSpaceDimensionSet); return mDimension; }
     const FormulaT<tNumber>& getFormula() const { return mFormula; }

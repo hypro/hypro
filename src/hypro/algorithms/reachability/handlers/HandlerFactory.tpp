@@ -19,6 +19,7 @@ namespace hypro
 				return new rectangularFirstSegmentHandler<State>(state,index);
 			}
 			case representation_name::polytope_t: {
+				std::cout << "HandlerFactory::buildFirstSegmentHandler, build TPolyFirstSegmentHandler!" << std::endl;
 				return new TPolyFirstSegmentHandler<State>(state,index,timeStep);
 			}
 			default:

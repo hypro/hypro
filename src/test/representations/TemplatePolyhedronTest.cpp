@@ -281,7 +281,7 @@ TYPED_TEST(TemplatePolyhedronTest, Evaluation){
 	EvaluationResult<TypeParam> res2 = this->middle.evaluate(up, true);
 	EXPECT_EQ(res2.errorCode, SOLUTION::FEAS);
 	EXPECT_EQ(res2.supportValue, 2);
-	EXPECT_EQ(res2.optimumValue, 2*up);	
+	//EXPECT_EQ(res2.optimumValue, 2*up);	
 
 	//One direction evaluation - Infeasible TPoly
 	//TemplatePolyhedron<TypeParam> infeas(this->mat, -0.5*vector_t<TypeParam>::Ones(4));

@@ -59,9 +59,6 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
   	void applyContinuousEvolution() override;
 
-    //Computes the derivative of a multivariate but linear function linearFct, deriving after the variable at the given position
-    //vector_t<Number> linearFctDerivative(const vector_t<Number>& linearFct, unsigned varPos);
-    
   private:
 
 };

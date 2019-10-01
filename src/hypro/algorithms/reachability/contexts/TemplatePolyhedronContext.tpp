@@ -76,7 +76,7 @@ namespace hypro {
             }
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
-                this->mFirstSegmentHandlers.at(i)->ltiFirstSegmentHandler<State>::handle();       
+                static_cast<ltiFirstSegmentHandler<State>*>(this->mFirstSegmentHandlers.at(i))->handle();
             }
         }
         this->initializeInvariantHandlers();

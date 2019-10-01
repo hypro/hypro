@@ -217,15 +217,35 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> TemplatePolyhedronT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
 		if(this->empty()) return EvaluationResult<Number>( Number(0), SOLUTION::INFEAS );
+		assert(_direction.rows() == mMatrixPtr->cols());
+		//Quick check: If direction is a part of the template, then just return offset
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			//TODO: linear dependent better
+			if(vector_t<Number>(mMatrixPtr->row(i)) == _direction){
+				return EvaluationResult<Number>(mVector(i), SOLUTION::FEAS);
+			}
+		}
 		return mOptimizer.evaluate(_direction, true);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<EvaluationResult<Number>> TemplatePolyhedronT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
 		if(this->empty()) return std::vector<EvaluationResult<Number>>();
+		assert(_directions.cols() == mMatrixPtr->cols());
 		std::vector<EvaluationResult<Number>> res;
 		for(int i = 0; i < _directions.rows(); i++){
-			res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));
+			//Quick check: If direction is a part of the template, then just return offset
+			bool found = false;
+			for(int j = 0; j < mMatrixPtr->rows(); ++j){
+				//TODO: linear dependent better
+				if(mMatrixPtr->row(j) == _directions.row(i)){
+					res.emplace_back(EvaluationResult<Number>(mVector(j), SOLUTION::FEAS));
+					found = true;
+				}
+			}
+			if(!found){
+				res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));
+			}
 		}
 		return res;
 	}
