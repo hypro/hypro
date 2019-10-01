@@ -459,11 +459,6 @@ namespace hypro {
 			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool>& haveSubtreesTrafo) -> bool {
 				if(n->getType() == SFNEW_TYPE::TRAFO){
 					return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam,A,b);
-					//auto params = static_cast<TrafoOp<Number,Converter,Setting>*>(n)->getParameters();
-					//if(params->matrix().isApprox(A) && params->vector().isApprox(b)){
-					//	ltParam = params;
-				    //} 
-				    //return true;
 				} else {
 					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
 						if(hasSubTreeTrafo){

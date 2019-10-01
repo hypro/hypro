@@ -50,6 +50,7 @@ class Converter {
 		using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
 		using Zonotope = ZonotopeT<Number,Converter,ZonotopeSetting>;
 		using SupportFunctionNew = SupportFunctionNewT<Number,Converter,SupportFunctionNewMorePrecision>;
+		//using SupportFunctionNew = SupportFunctionNewT<Number,Converter,SupportFunctionNewHighDimension>;
 
 		/* END typedefs (do not remove this comment!) */
 

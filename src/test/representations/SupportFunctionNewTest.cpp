@@ -1381,12 +1381,12 @@ TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 	Box<TypeParam> box(std::make_pair(p1,p2));
 	SF sf(box);
 	RESET_STATS();
+	vector_t<TypeParam> dir = vector_t<TypeParam>::Ones(2);
 
 	//One intersection - one direction 
 	std::cout << "===== EVALUATION COUNT: One intersection X - one direction:" << std::endl;
 	Halfspace<TypeParam> hspaceX({TypeParam(1),TypeParam(0)},TypeParam(1.5));
 	SF sfOneHspaceX = sf.intersectHalfspace(hspaceX);
-	vector_t<TypeParam> dir = vector_t<TypeParam>::Ones(2);
 	auto res = sfOneHspaceX.evaluate(dir,true);
 	PRINT_STATS();
 	RESET_STATS();
@@ -1417,6 +1417,6 @@ TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 	SF sfThreeHspace = sfTwoHspace.intersectHalfspace(hspaceXY);
 	res = sfThreeHspace.evaluate(dir,true);
 	PRINT_STATS();	
-
+	RESET_STATS();
 }
 #endif

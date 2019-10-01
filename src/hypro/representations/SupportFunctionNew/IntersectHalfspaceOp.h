@@ -47,7 +47,7 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 	////// Members for this class
 
 	Halfspace<Number> hspace;
-
+	
   public: 
 
   	////// Constructors & Destructors
@@ -204,13 +204,14 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 		COUNT("IntersectHalfspaceOp::leGuernic::evaluate");
 		Number heightOfResult = (evalInProjectedWiggleDir.supportValue - hspace.offset()*Number(std::cos(carl::toDouble(resultAngle)))) / Number(std::sin(carl::toDouble(resultAngle)));
 		//NOTE: This evaluation result does not return an optimal value
-		//return EvaluationResult<Number>(heightOfResult, SOLUTION::FEAS);
-		return EvaluationResult<Number>(heightOfResult, vector_t<Number>::Zero(getDimension()), SOLUTION::FEAS);
+		return EvaluationResult<Number>(heightOfResult, SOLUTION::FEAS);
 	}
 
 	//Golden section search where the amount of evaluations made is halved 
 	//NOTE: algorithm idea is from wikipedia "Golden section search", the variable names in the comments are mappings to the variable names in the article
 	EvaluationResult<Number> leGuernicFast(const vector_t<Number>& direction) const {
+
+		COUNT("IntersectHalfspaceOp::leGuernic");
 
 		//Projection matrix - normalize columns then put them into matrix
 		//NOTE: This is the already transposed matrix M^T
@@ -258,6 +259,7 @@ class IntersectHalfspaceOp : public RootGrowNode<Number,Converter,Setting> {
 
 		//Update interval
 		for(unsigned i = 0; i < steps; ++i){
+			COUNT("IntersectHalfspaceOp::wobbleIterations");
 			if(heightOfUpper < heightOfLower){
 				resInterval.setUpper(lower);
 				lower = upper;

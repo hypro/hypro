@@ -29,109 +29,109 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std
     IContext* context = ContextFactory<State>::getInstance().createContext(task, strat, localQueue, localCEXQueue, localSegments, this->mSettings);
 
     try{
-        std::cout << "context->execOnStart()" << std::endl;
+        //std::cout << "context->execOnStart()" << std::endl;
         context->execOnStart();
 
         //START_BENCHMARK_OPERATION(FIRST_SEGMENT);
         // compute first segment
-        std::cout << "context->execBeforeFirstSegment()" << std::endl;
+        //std::cout << "context->execBeforeFirstSegment()" << std::endl;
         context->execBeforeFirstSegment();
-        std::cout << "context->firstSegment()" << std::endl;
+        //std::cout << "context->firstSegment()" << std::endl;
         context->firstSegment();
-        std::cout << "context->execAfterFirstSegment()" << std::endl;
+        //std::cout << "context->execAfterFirstSegment()" << std::endl;
         context->execAfterFirstSegment();
         //EVALUATE_BENCHMARK_RESULT(FIRST_SEGMENT);
 
         //START_BENCHMARK_OPERATION(CHECK_INVARIANT);
         // intersect with invariant
-        std::cout << "context->execBeforeCheckInvariant()" << std::endl;
+        //std::cout << "context->execBeforeCheckInvariant()" << std::endl;
         context->execBeforeCheckInvariant();
-        std::cout << "context->checkInvariant()" << std::endl;
+        //std::cout << "context->checkInvariant()" << std::endl;
         context->checkInvariant();
-        std::cout << "context->execAfterCheckInvariant()" << std::endl;
+        //std::cout << "context->execAfterCheckInvariant()" << std::endl;
         context->execAfterCheckInvariant();
         //EVALUATE_BENCHMARK_RESULT(CHECK_INVARIANT);
 
         //START_BENCHMARK_OPERATION(INTERSECT_BAD_STATES);
         // intersect with bad states
-        std::cout << "context->execBeforeIntersectBadStates()" << std::endl;
+        //std::cout << "context->execBeforeIntersectBadStates()" << std::endl;
         context->execBeforeIntersectBadStates();
-        std::cout << "context->intersectBadStates()" << std::endl;
+        //std::cout << "context->intersectBadStates()" << std::endl;
         context->intersectBadStates();
-        std::cout << "context->execAfterIntersectBadStates()" << std::endl;
+        //std::cout << "context->execAfterIntersectBadStates()" << std::endl;
         context->execAfterIntersectBadStates();
         //EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
 
-        std::cout << "context->execBeforeLoop()" << std::endl;
+        //std::cout << "context->execBeforeLoop()" << std::endl;
         context->execBeforeLoop();
 
         // while not done
-        std::cout << "while(!context->doneCondition())" << std::endl;
+        //std::cout << "while(!context->doneCondition())" << std::endl;
         while(!context->doneCondition()){
 
             //START_BENCHMARK_OPERATION(COMPUTE_TIMESTEP);
-            std::cout << "context->execOnLoopItEnter()" << std::endl;
+            //std::cout << "context->execOnLoopItEnter()" << std::endl;
             context->execOnLoopItEnter();
 
             //START_BENCHMARK_OPERATION(CHECK_TRANSITION);
             // intersect with transition guards
-            std::cout << "context->execBeforeCheckTransition()" << std::endl;
+            //std::cout << "context->execBeforeCheckTransition()" << std::endl;
             context->execBeforeCheckTransition();
-            std::cout << "context->checkTransition()" << std::endl;
+            //std::cout << "context->checkTransition()" << std::endl;
             context->checkTransition();
-            std::cout << "context->execAfterCheckTransition()" << std::endl;
+            //std::cout << "context->execAfterCheckTransition()" << std::endl;
             context->execAfterCheckTransition();
             //EVALUATE_BENCHMARK_RESULT(CHECK_TRANSITION);
 
             //START_BENCHMARK_OPERATION(CONTINUOUS_EVOLUTION);
             // apply continuous time step
-            std::cout << "context->execBeforeContinuousEvolution()" << std::endl;
+            //std::cout << "context->execBeforeContinuousEvolution()" << std::endl;
             context->execBeforeContinuousEvolution();
-            std::cout << "context->applyContinuousEvolution()" << std::endl;
+            //std::cout << "context->applyContinuousEvolution()" << std::endl;
             context->applyContinuousEvolution();
-            std::cout << "context->execAfterContinuousEvolution()" << std::endl;
+            //std::cout << "context->execAfterContinuousEvolution()" << std::endl;
             context->execAfterContinuousEvolution();
             //EVALUATE_BENCHMARK_RESULT(CONTINUOUS_EVOLUTION);
 
             //START_BENCHMARK_OPERATION(CHECK_INVARIANT);
             // intersect with invariant
-            std::cout << "context->execBeforeCheckInvariant()" << std::endl;
+            //std::cout << "context->execBeforeCheckInvariant()" << std::endl;
             context->execBeforeCheckInvariant();
-            std::cout << "context->checkInvariant()" << std::endl;
+            //std::cout << "context->checkInvariant()" << std::endl;
             context->checkInvariant();
-            std::cout << "context->execAfterCheckInvariant()" << std::endl;
+            //std::cout << "context->execAfterCheckInvariant()" << std::endl;
             context->execAfterCheckInvariant();
             //EVALUATE_BENCHMARK_RESULT(CHECK_INVARIANT);
 
 
             //START_BENCHMARK_OPERATION(INTERSECT_BAD_STATES);
             // intersect with bad states
-            std::cout << "context->execBeforeIntersectBadStates()" << std::endl;
+            //std::cout << "context->execBeforeIntersectBadStates()" << std::endl;
             context->execBeforeIntersectBadStates();
-            std::cout << "context->intersectBadStates()" << std::endl;
+            //std::cout << "context->intersectBadStates()" << std::endl;
             context->intersectBadStates();
-            std::cout << "context->execAfterIntersectBadStates()" << std::endl;
+            //std::cout << "context->execAfterIntersectBadStates()" << std::endl;
             context->execAfterIntersectBadStates();
             //EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
 
-            std::cout << "context->execOnLoopItExit()" << std::endl;
+            //std::cout << "context->execOnLoopItExit()" << std::endl;
             context->execOnLoopItExit();
             //EVALUATE_BENCHMARK_RESULT(COMPUTE_TIMESTEP);
 
         }
 
-        std::cout << "context->execAfterLoop()" << std::endl;
+        //std::cout << "context->execAfterLoop()" << std::endl;
         context->execAfterLoop();
 
         //START_BENCHMARK_OPERATION(DISCRETE_SUCCESSORS);
         // create discrete successor states
-        std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
+        //std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
         context->execBeforeProcessDiscreteBehavior();
-        std::cout << "context->processDiscreteBehavior()" << std::endl;
+        //std::cout << "context->processDiscreteBehavior()" << std::endl;
         context->processDiscreteBehavior();
         //context->execBeforeProcessDiscreteBehavior();
         //EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
-        std::cout << "context->execOnEnd()" << std::endl;
+        //std::cout << "context->execOnEnd()" << std::endl;
         context->execOnEnd();
     }
     catch(HardTerminateException& e1){
@@ -141,13 +141,13 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std
         DEBUG("hydra.worker", "" << e2.what());
         //START_BENCHMARK_OPERATION(DISCRETE_SUCCESSORS);
         // finish creating discrete successor states
-        std::cout << "FinishWithDiscreteProcessingException" << std::endl;
-        std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
+        //std::cout << "FinishWithDiscreteProcessingException" << std::endl;
+        //std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
         context->execBeforeProcessDiscreteBehavior();
-        std::cout << "context->processDiscreteBehavior()" << std::endl;
+        //std::cout << "context->processDiscreteBehavior()" << std::endl;
         context->processDiscreteBehavior();
         //EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
-        std::cout << "context->execOnEnd()" << std::endl;
+        //std::cout << "context->execOnEnd()" << std::endl;
         context->execOnEnd();
     }
 }

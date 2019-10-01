@@ -61,7 +61,7 @@ void HybridAutomatonLexer::action(RuleContext *context, size_t ruleIndex, size_t
   }
 }
 
-void HybridAutomatonLexer::PARAction(antlr4::RuleContext *context, size_t actionIndex) {
+void HybridAutomatonLexer::PARAction(antlr4::RuleContext *, size_t actionIndex) {
   switch (actionIndex) {
     case 0:  parsingConstants = true;  break;
 
@@ -70,7 +70,7 @@ void HybridAutomatonLexer::PARAction(antlr4::RuleContext *context, size_t action
   }
 }
 
-void HybridAutomatonLexer::CBCLOSEAction(antlr4::RuleContext *context, size_t actionIndex) {
+void HybridAutomatonLexer::CBCLOSEAction(antlr4::RuleContext *, size_t actionIndex) {
   switch (actionIndex) {
     case 1:  if(parsingConstants){ parsingConstants = false; }  break;
 
@@ -79,7 +79,7 @@ void HybridAutomatonLexer::CBCLOSEAction(antlr4::RuleContext *context, size_t ac
   }
 }
 
-void HybridAutomatonLexer::CONSTANTAction(antlr4::RuleContext *context, size_t actionIndex) {
+void HybridAutomatonLexer::CONSTANTAction(antlr4::RuleContext *, size_t actionIndex) {
   switch (actionIndex) {
     case 2:  if(!parsingConstants) { setType(VARIABLE); }  break;
 
@@ -88,7 +88,7 @@ void HybridAutomatonLexer::CONSTANTAction(antlr4::RuleContext *context, size_t a
   }
 }
 
-void HybridAutomatonLexer::VARIABLEAction(antlr4::RuleContext *context, size_t actionIndex) {
+void HybridAutomatonLexer::VARIABLEAction(antlr4::RuleContext *, size_t actionIndex) {
   switch (actionIndex) {
     case 3:  if(parsingConstants){ setType(CONSTANT); }  break;
 

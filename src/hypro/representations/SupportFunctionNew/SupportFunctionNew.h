@@ -113,6 +113,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
   	mutable bool mTemplateSet = false;
 
+  	//Cache whether the support function has been empty
   	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	/***************************************************************************
@@ -224,6 +225,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   public:
 
 	/*
+	 * traverse() explores all nodes beginning from the root and performs the given functions while going down/up.
 	 * Three functions are needed: transform, compute and aggregate.
 	 * - transform: will be called by every node and mainly transforms additional parameters
 	 * - compute: will only be called once by leaf nodes and computes a result for unmodified representations such as box, V-polytope, etc.
