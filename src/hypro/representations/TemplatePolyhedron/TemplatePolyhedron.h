@@ -60,7 +60,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
   	bool mNonRedundant = false;
 
   	//Flag whether emptiness has been tested and if it was empty or not
-  	//TRIBOOL mEmpty;
+  	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	/***************************************************************************
 	 * Constructors

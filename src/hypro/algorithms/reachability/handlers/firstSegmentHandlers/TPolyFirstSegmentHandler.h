@@ -18,6 +18,8 @@ namespace hypro {
 
 	  protected:
 
+	  	//Inherits the members from ltiFirstSegmentHandler
+
 	  public:
 
 	  	TPolyFirstSegmentHandler() = delete;
@@ -27,7 +29,9 @@ namespace hypro {
 
 		void handle();
 		const char* handlerName() {return "TPolyFirstSegmentHandler";}
-		
+	
+	  private:
+
 		//Computes the gradient of a multivariate but linear function linearFct
 	    vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);
 
@@ -38,10 +42,6 @@ namespace hypro {
 	    //since no constants are allowed.
 	    //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
 	    vector_t<Number> lieDerivative(const vector_t<Number>& dir);
-
-	    const matrix_t<typename State::NumberType>& getTrafo() const { return boost::get<affineFlow<Number>>(this->mFlow).getFlowMatrix(); }
-		const vector_t<typename State::NumberType>& getTranslation() const { return boost::get<affineFlow<Number>>(this->mFlow).getTranslation(); }
-	    //const flowVariant<typename State::NumberType>& getTransformation() const { return flowVariant<typename State::NumberType>(); }
 
 	};
 

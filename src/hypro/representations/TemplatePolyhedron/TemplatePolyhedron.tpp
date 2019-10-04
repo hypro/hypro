@@ -167,7 +167,9 @@ namespace hypro {
 		
 		//Quick checks
 		if(mMatrixPtr == nullptr) return true;
-		//if(mMatrixPtr->rows() <= 1) return false;
+	
+		//Check emptiness cache
+		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE);
 
 		//Linear time quick checks: 
 		//If all coeffs negative -> all directions point towards origin -> unbounded polyhedron infeasible therefore empty
@@ -185,10 +187,10 @@ namespace hypro {
 		if(allPositive) return false;
 		if(allNegative) return true;	
 
-		//If no quick check triggered: Solve LP
-		bool res = !mOptimizer.checkConsistency();
-		TRACE("hypro.representations.TPolytope","Optimizer result: " << res);
-		return res;
+		//If no quick check triggered: Solve LP and cache result
+		mEmpty = !mOptimizer.checkConsistency() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		TRACE("hypro.representations.TPolytope","Optimizer result: " << mEmpty);
+		return (mEmpty == TRIBOOL::TRUE);
 	}
 
 	//Copy from HPoly - is also obsolete 
@@ -284,6 +286,7 @@ namespace hypro {
 				mVector = std::move(nonRedundantVector);
 			}
 			mNonRedundant = true;
+			//Emptiness should stay the same
 		}
 		//If a plane has the same offset as another plane & normal is linearly dependent -> plane redundant
 		//Time: 
@@ -673,6 +676,7 @@ namespace hypro {
 		mMatrixPtr = nullptr;
 		mVector = vector_t<Number>::Zero(0);
 		mOptimizer.cleanGLPInstance();
+		mEmpty = TRIBOOL::NSET;
 	}
 
 } // namespace hypro
