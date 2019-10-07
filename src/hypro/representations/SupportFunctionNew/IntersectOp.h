@@ -16,14 +16,14 @@ namespace hypro {
 
 //Forward Declaration
 template<typename Number, typename Converter, typename Setting>
-class SupportFunctionNewT;	
+class SupportFunctionNewT;
 
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
 class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
   private:
-	
+
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::INTERSECTOP;
@@ -41,19 +41,19 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	IntersectOp() = delete;
 
 	//Single sibling constructor
-	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
+	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) {
 		assert(lhs.dimension() == rhs.dimension());
-		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
+		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs});
 	}
 
 	//Multiple siblings constructor
-	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
+	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) {
 		#ifndef NDEBUG
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
 		#endif
-		lhs.addOperation(this, rhs); 
+		lhs.addOperation(this, rhs);
 	}
 
 	//Data constructor
@@ -64,34 +64,34 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	////// Getters and Setters
 
 	SFNEW_TYPE getType() const override { return type; }
-	unsigned getOriginCount() const { return originCount; }
-	std::size_t getDimension() const { return mDimension; }
-	RGNData* getData() const { return new RGNData(); }
-	TRIBOOL isEmpty() const { return mEmpty; }
-	void setDimension(const std::size_t d) { mDimension = d; }
+	unsigned getOriginCount() const override { return originCount; }
+	std::size_t getDimension() const override { return mDimension; }
+	RGNData* getData() const override { return new RGNData(); }
+	TRIBOOL isEmpty() const override { return mEmpty; }
+	void setDimension(const std::size_t d) override { mDimension = d; }
 
 	////// RootGrowNode Interface
 
 	//Does nothing
-	matrix_t<Number> transform(const matrix_t<Number>& param) const {
+	matrix_t<Number> transform(const matrix_t<Number>& param) const override {
 		return param;
 	}
 
 	//Should not be reached
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const { 
-		assert(false && "IntersectOp::compute should never be called"); 
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const override {
+		assert(false && "IntersectOp::compute should never be called");
 		return std::vector<EvaluationResult<Number>>();
 	}
 
 	//Given evaluation result vecs, take the smallest supportValues coefficientwise
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const {
+	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const override {
 
 		TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 		assert(resultStackBack.size() >= 2);
 		std::vector<EvaluationResult<Number>> accumulatedResult;
 
 		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
-		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {		
+		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {
 			EvaluationResult<Number> r = resultStackBack.front().at(i);
 			for(const auto& res : resultStackBack){
 				if(res[i].errorCode == SOLUTION::INFEAS) return res;
@@ -103,13 +103,13 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 						r.optimumValue = res[i].optimumValue;
 					} else {
 						r.errorCode = SOLUTION::FEAS;
-						r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
-						r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 
+						r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue;
+						r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue;
 					}
 				}
 			}
 			accumulatedResult.emplace_back(r);
-			
+
 		}
 		return accumulatedResult;
 	}
@@ -139,19 +139,19 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	 * - If one is a halfspace and the other not: Use satisfiesHalfspace: 2*LP
 	 * - If none are halfspaces: Check linear dependency of halfspace normals: linear
 	 */
-	bool empty(const std::vector<bool>& childrenEmpty) const {
+	bool empty(const std::vector<bool>& childrenEmpty) const override {
 
 		//Current implementation uses Solution 1: template evaluation.
 
 		//Quick check: If emptiness already computed, just return computation result
-		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE); 
+		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE);
 
 		//Quick check: If not already computed, check if at least one child is empty
 		for(const auto& child : childrenEmpty){
 			if(child){
 				mEmpty = TRIBOOL::TRUE;
-				return true;	
-			} 
+				return true;
+			}
 		}
 
 		//If no quick check worked: Turn children into SFs
@@ -164,22 +164,22 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		SupportFunctionNewT<Number,Converter,Setting> chosenOne = sfChildren.back();
 		sfChildren.pop_back();
 		std::vector<vector_t<Number>> directions = computeTemplate<Number>(mDimension, defaultTemplateDirectionCount);
-		
+
 		for(const auto& direction : directions){
-			
+
 			//Determine supportValue of direction and reverse direction for chosenOne
-			EvaluationResult<Number> chosenNegEval = chosenOne.evaluate(-direction, false); 
-			EvaluationResult<Number> chosenPosEval = chosenOne.evaluate(direction, false);  
+			EvaluationResult<Number> chosenNegEval = chosenOne.evaluate(-direction, false);
+			EvaluationResult<Number> chosenPosEval = chosenOne.evaluate(direction, false);
 
 			//Check if the supportValues don't overlap -> there is no intersection between at least two -> empty -> return true
 			//Check in both directions since directions and children do not have to be symmetrical
 			for(const auto& child : sfChildren){
-				EvaluationResult<Number> childPosEval = child.evaluate(direction, false); 
+				EvaluationResult<Number> childPosEval = child.evaluate(direction, false);
 				if(childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY){
 					mEmpty = TRIBOOL::TRUE;
 					return true;
 				}
-				EvaluationResult<Number> childNegEval = child.evaluate(-direction, false); 
+				EvaluationResult<Number> childNegEval = child.evaluate(-direction, false);
 				if(-childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY){
 					mEmpty = TRIBOOL::TRUE;
 					return true;
@@ -191,7 +191,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Select smallest supremum of given suprema
-	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const override {
 		Point<Number> smallestInftyNorm = points.front();
 		for(auto& p : points){
 			if(p.dimension() == 0) return p;
@@ -200,18 +200,18 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		return smallestInftyNorm;
 	}
 
-	//Only return true if all children contained the point before	
-	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
+	//Only return true if all children contained the point before
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const override {
 		for(const auto& containedInChild : v){
-			if(!containedInChild) 
+			if(!containedInChild)
 				return false;
 		}
 		return true;
 	}
 
 	//Erases all dimensions from a copy of dimensions that are denoted in dims
-	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const {
-		
+	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const override {
+
 		// we create the intersection of all results. Therefore we iterate over the first vector and check the other
 		// result vectors, if the respective element is contained. Iterating over the first is sufficient, as elements
 		// not in the first vector will not be in the intersection anyways.

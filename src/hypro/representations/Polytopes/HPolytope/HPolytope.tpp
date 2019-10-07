@@ -6,7 +6,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT()
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 	if(Setting::OPTIMIZER_CACHING){
 		setOptimizer();
-	} 
+	}
 }
 
 //copy constructor
@@ -18,7 +18,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT& orig )
 	mEmpty = orig.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 	if(Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()){
 		setOptimizer(orig.matrix(), orig.vector());
-	} 
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -40,7 +40,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &plane
 	} else {
 		if(Setting::OPTIMIZER_CACHING){
 			setOptimizer();
-		} 
+		}
 	}
 }
 
@@ -702,13 +702,13 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
-		return opt.evaluate(_direction, true);	
+		return opt.evaluate(_direction, true);
 	}
 }
 
 template <typename Number, typename Converter, class Setting>
 std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const {
-	assert(_directions.cols() == dimension());
+	assert(_directions.cols() == Eigen::Index(dimension()));
 	if(mHPlanes.empty()) {
 		return std::vector<EvaluationResult<Number>>();
 		//return std::vector<EvaluationResult<Number>>(_directions.rows(), EvaluationResult<Number>(Number(1), SOLUTION::INFTY));
@@ -718,19 +718,19 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 		assert(mOptimizer.has_value());
 		if(!mUpdated){
 			setOptimizer(this->matrix(), this->vector());
-		} 
+		}
 		for(int i = 0; i < _directions.rows(); ++i){
 			res.emplace_back(mOptimizer->evaluate(_directions.row(i), useExact));
 		}
 	} else {
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
-		opt.setVector(this->vector());	
+		opt.setVector(this->vector());
 		for(int i = 0; i < _directions.rows(); ++i){
 			res.emplace_back(opt.evaluate(_directions.row(i), useExact));
 		}
 	}
-	return res;	
+	return res;
 }
 
 /*
@@ -1146,12 +1146,12 @@ void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions(const std::ve
 
 template<typename Number, typename Converter, class Setting>
 void HPolytopeT<Number, Converter, Setting>::setOptimizer(const matrix_t<Number>& mat, const vector_t<Number>& vec) const {
-	if(mOptimizer.has_value()){	
+	if(mOptimizer.has_value()){
 		mOptimizer->setMatrix(mat);
 		mOptimizer->setVector(vec);
 		mUpdated = true;
 	} else {
-		std::optional<Optimizer<Number>> tmp(std::in_place,mat,vec);		
+		std::optional<Optimizer<Number>> tmp(std::in_place,mat,vec);
 		mOptimizer.swap(tmp);
 		assert(mOptimizer.has_value());
 		mUpdated = true;

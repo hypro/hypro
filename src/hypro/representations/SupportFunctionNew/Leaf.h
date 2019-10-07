@@ -24,17 +24,17 @@ struct LeafData : public RGNData {
 	representation_name typeOfRep;
 	bool isNotRedundant;
 	LeafData(){};
-	LeafData(const uintptr_t addr, const representation_name rep, const bool redundancy) 
+	LeafData(const uintptr_t addr, const representation_name rep, const bool redundancy)
 		: addressToRep(addr), typeOfRep(rep), isNotRedundant(redundancy)
 	{ }
 };
 
 //Subclass of RootGrowNode, is a node with a representation of a state
-template<typename Number, typename Converter, typename Setting, typename Representation> 
+template<typename Number, typename Converter, typename Setting, typename Representation>
 class Leaf : public RootGrowNode<Number,Converter,Setting> {
-  
+
   private:
-	
+
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::LEAF;
@@ -44,13 +44,13 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	////// Members for this class
 
-	//A pointer to the representation it holds. Is shared since after a settings conversion, 
-	//both the converted and the original version point to the same representations 
-	std::shared_ptr<Representation> rep;	
+	//A pointer to the representation it holds. Is shared since after a settings conversion,
+	//both the converted and the original version point to the same representations
+	std::shared_ptr<Representation> rep;
 
 	//A flag that tells us if removeRedundancy() has been used on the representation
-	mutable bool isNotRedundant = false; 	
-	
+	mutable bool isNotRedundant = false;
+
   public:
 
 	////// Constructors & Destructors
@@ -70,46 +70,46 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 		isNotRedundant = d.isNotRedundant;
 	}
 
-	~Leaf(){} 
+	~Leaf(){}
 
 	////// Getters & Setters
 
-	SFNEW_TYPE getType() const { return type; }
-	unsigned getOriginCount() const { return originCount; }
-	std::size_t getDimension() const { return mDimension; }
+	SFNEW_TYPE getType() const override { return type; }
+	unsigned getOriginCount() const override { return originCount; }
+	std::size_t getDimension() const override { return mDimension; }
 	Representation* getRepresentation() const { return rep.get(); }
-	TRIBOOL isEmpty() const { return mEmpty; }
+	TRIBOOL isEmpty() const override { return mEmpty; }
 	bool isRedundant() const { return !isNotRedundant; }
-	RGNData* getData() const { return nullptr; }
-	LeafData getLeafData() const {
+	RGNData* getData() const override { return nullptr; }
+	LeafData getLeafData() const override {
 		return LeafData(reinterpret_cast<uintptr_t>(rep.get()), rep->type(), isNotRedundant);
 	}
-	void setDimension(const std::size_t d) { mDimension = d; }
+	void setDimension(const std::size_t d) override { mDimension = d; }
 
 	////// Displaying
 
-	void print(std::ostream& ostr) const {
+	void print(std::ostream& ostr) const override {
 		ostr << "RootGrowNode address: " << this << " own type: " << this->getType();
 		if(rep != nullptr){
-			ostr << " Leaf representation type: " << rep->type() << " Leaf representation: \n" << *rep << std::endl;	
+			ostr << " Leaf representation type: " << rep->type() << " Leaf representation: \n" << *rep << std::endl;
 		} else {
 			ostr << " Leaf has no representation." << std::endl;
 		}
 	}
-	
+
 	////// RootGrowNode Interface
 
 	//Leaves usually do not transform
-	matrix_t<Number> transform(const matrix_t<Number>&) const {
-		assert(false && "Leaf::transform should never be called\n"); 
-		return matrix_t<Number>::Zero(1,1); 
+	matrix_t<Number> transform(const matrix_t<Number>&) const override {
+		assert(false && "Leaf::transform should never be called\n");
+		return matrix_t<Number>::Zero(1,1);
 	}
 
 	//Evaluate leaf via multiEvaluate function of the representation
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const { 
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const override {
 
 		assert(rep != nullptr);
-		
+
 		//Optimization: Remove redundancy only when rep is being evaluated the first time
 		if(!isNotRedundant){
 			rep->removeRedundancy();
@@ -122,21 +122,21 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Leaves do not aggregate
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& , const matrix_t<Number>& ) const {
+	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& , const matrix_t<Number>& ) const override {
 		assert(false && "Leaf::aggregate should never be called\n");
 		return std::vector<EvaluationResult<Number>>();
 	}
 
 	//Leaves call empty function of the representation
-	bool empty() const { 
+	bool empty() const override {
 		if(mEmpty == TRIBOOL::NSET){
 			mEmpty = rep->empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		}
-		return (mEmpty == TRIBOOL::TRUE) ? true : false; 
+		return (mEmpty == TRIBOOL::TRUE) ? true : false;
 	}
 
 	//Compute the point that is the supremum of the representation
-	Point<Number> supremumPoint() const { 
+	Point<Number> supremumPoint() const override {
 		Point<Number> max = Point<Number>::Zero(rep->dimension());
 		for(auto& point : rep->vertices()){
 			max = Point<Number>::inftyNorm(max) > Point<Number>::inftyNorm(point) ? max : point;
@@ -145,8 +145,8 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Calls contains function of given representation
-	bool contains(const vector_t<Number>& point) const { 
-		return rep->contains(Point<Number>(point)); 
+	bool contains(const vector_t<Number>& point) const override {
+		return rep->contains(Point<Number>(point));
 	}
 
 };

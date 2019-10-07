@@ -15,14 +15,14 @@ namespace hypro {
 
 //Forward Declaration
 template<typename Number, typename Converter, typename Setting>
-class SupportFunctionNewT;	
+class SupportFunctionNewT;
 
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
 class SumOp : public RootGrowNode<Number,Converter,Setting> {
-  
+
   private:
-	
+
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::SUMOP;
@@ -38,18 +38,18 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 
 	SumOp() = delete;
 
-	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
+	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) {
 		assert(lhs.dimension() == rhs.dimension());
-		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
+		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs});
 	}
 
-	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
+	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) {
 		#ifndef NDEBUG
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
 		#endif
-		lhs.addOperation(this, rhs); 
+		lhs.addOperation(this, rhs);
 	}
 
 	SumOp(const RGNData& ){}
@@ -59,27 +59,27 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	////// Getters and Setters
 
 	SFNEW_TYPE getType() const override { return type; }
-	unsigned getOriginCount() const { return originCount; }
-	std::size_t getDimension() const { return mDimension; }
-	RGNData* getData() const { return new RGNData(); }
-	void setDimension(const std::size_t d) { mDimension = d; }
+	unsigned getOriginCount() const override { return originCount; }
+	std::size_t getDimension() const override { return mDimension; }
+	RGNData* getData() const override { return new RGNData(); }
+	void setDimension(const std::size_t d) override { mDimension = d; }
 
 	////// RootGrowNode Interface
 
 	//Does nothing
-	matrix_t<Number> transform(const matrix_t<Number>& param) const {
+	matrix_t<Number> transform(const matrix_t<Number>& param) const override {
 		return param;
 	}
 
 	//Should not be reached
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const { 
-		assert("ERROR. USED COMPUTE FROM SUMOP SUBCLASS." && false); 
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const override {
+		assert("ERROR. USED COMPUTE FROM SUMOP SUBCLASS." && false);
 		return std::vector<EvaluationResult<Number>>();
 	}
 
 	//Given two or more result vecs, sum them coefficientwise
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& /*currentParam*/) const {
-		
+	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& /*currentParam*/) const override {
+
 		assert(resultStackBack.size() >= 2);
 		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
 
@@ -107,7 +107,7 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 
 	//Minkowski Sum empty when all operands (children) are empty
 	//Minkowski Sum of an nonempty object with an empty object equals the nonempty object
-	bool empty(const std::vector<bool>& childrenEmpty) const {
+	bool empty(const std::vector<bool>& childrenEmpty) const override {
 		for(const auto& childEmpty : childrenEmpty){
 			if(!childEmpty) return false;
 		}
@@ -115,7 +115,7 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Sum all suprema together
-	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const override {
 		Point<Number> res = Point<Number>::Zero(points.front().dimension());
 		for(const auto& p : points){
 			if(p.dimension() == 0) return p;
@@ -124,8 +124,8 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 		return res;
 	}
 
-	//Only return true if all children contained the point before	
-	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
+	//Only return true if all children contained the point before
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const override {
 		for(auto containedInChild : v){
 			if(containedInChild) return true;
 		}
@@ -133,8 +133,8 @@ class SumOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Erases all dimensions from a copy of dimensions that are denoted in dims
-	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const {
-		
+	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const override {
+
 		// we create the intersection of all results. Therefore we iterate over the first vector and check the other
 		// result vectors, if the respective element is contained. Iterating over the first is sufficient, as elements
 		// not in the first vector will not be in the intersection anyways.

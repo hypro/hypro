@@ -28,7 +28,7 @@ namespace hypro {
 			mMatrix = std::move(orig.matrix());
 			mVector = std::move(orig.vector());
 			mTemplateSet = true;
-		}	
+		}
 		orig.clear();
 	}
 
@@ -36,8 +36,8 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
-		if(orig.getRoot() == nullptr){ 
-			mRoot = nullptr; 
+		if(orig.getRoot() == nullptr){
+			mRoot = nullptr;
 		} else {
 			using RGNPtr = RootGrowNode<Number,Converter,SettingRhs>*;
 			using SharedRGNPtr = std::shared_ptr<RootGrowNode<Number,Converter,Setting>>;
@@ -46,21 +46,21 @@ namespace hypro {
 			std::function<void(RGNPtr)> doNothing = [](RGNPtr ){ };
 
 			//Convert settings of leaves
-			std::function<SharedRGNPtr(RGNPtr)> convertLeaves = 
+			std::function<SharedRGNPtr(RGNPtr)> convertLeaves =
 				[](RGNPtr n) -> SharedRGNPtr {
 					return convertSettings<Number,Converter,Setting,SettingRhs>(n);
 				};
 
 			//Convert settings of operations, then add their children, then add the dimension
-			std::function<SharedRGNPtr(RGNPtr, std::vector<SharedRGNPtr>&)> convertOps = 
+			std::function<SharedRGNPtr(RGNPtr, std::vector<SharedRGNPtr>&)> convertOps =
 				[](RGNPtr n, std::vector<SharedRGNPtr>& v) -> SharedRGNPtr {
 					SharedRGNPtr convertedOp = convertSettings<Number,Converter,Setting,SettingRhs>(n);
 					for(auto& child : v){
-						convertedOp->addToChildren(child);	
+						convertedOp->addToChildren(child);
 					}
 					convertedOp->setDimension(v.front()->getDimension());
 					return convertedOp;
-				};		
+				};
 
 			mRoot = orig.traverse(std::move(doNothing), std::move(convertLeaves), std::move(convertOps));
 		}
@@ -68,8 +68,8 @@ namespace hypro {
 
 	//constructor for adding a new node
 	template<typename Number, typename Converter, typename Setting>
-  	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root ) 
-  		: mRoot(root) 
+  	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root )
+  		: mRoot(root)
   	{}
 
 	//Halfspace constructor
@@ -86,10 +86,10 @@ namespace hypro {
 	//Generic Leaf constructor
 	template<typename Number, typename Converter, typename Setting>
 	template<typename Representation>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r) 
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( GeometricObject<Number,Representation>& r)
 	{
 		Representation tmp = dynamic_cast<Representation&>(r);
-		DEBUG("hypro.representations","SFN generic leaf constr, got r:\n" << tmp);	
+		DEBUG("hypro.representations","SFN generic leaf constr, got r:\n" << tmp);
 		if(tmp.empty()){
 			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(Converter::Box::Empty(tmp.dimension())));
 		} else {
@@ -99,7 +99,7 @@ namespace hypro {
 			} else {
 				using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
 				mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(tmp.matrix(),tmp.vector()));
-			}	
+			}
 		}
 		assert(mRoot != nullptr);
 	}
@@ -116,7 +116,7 @@ namespace hypro {
 				assert(false);
 			} else {
 				INFO("hypro.representations","SFN mat-vec-constr: constraints were box!")
-				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));	
+				mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
 			}
 		} else {
 			INFO("hypro.representations","SFN mat-vec-constr: constraints were hpoly!")
@@ -133,7 +133,7 @@ namespace hypro {
 	//Halfspace vector constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
-	{ /*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */ 
+	{ /*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
 		using HPolyWithOptimizerCaching = HPolytopeT<Number,Converter,HPolytopeOptimizerCaching>;
 		mRoot = std::make_shared<Leaf<Number,Converter,Setting,HPolyWithOptimizerCaching>>(std::make_shared<HPolyWithOptimizerCaching>(hspaces));
 	}
@@ -168,25 +168,25 @@ namespace hypro {
 
 	//When Result type and Param type = void
 	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::traverse( 	
+	void SupportFunctionNewT<Number,Converter,Setting>::traverse(
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& transform,
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& compute, 	
-		std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& aggregate) const 
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& compute,
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& aggregate) const
 	{
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> tNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> { 
-				transform(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
-				return Parameters<Dummy>(Dummy()); 
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> tNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
+				transform(std::forward<RootGrowNode<Number,Converter,Setting>*>(n));
+				return Parameters<Dummy>(Dummy());
 			};
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> cNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> { 
-				compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
-				return Parameters<Dummy>(Dummy()); 
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> cNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
+				compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n));
+				return Parameters<Dummy>(Dummy());
 			};
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Dummy>&)> aNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>>& , Parameters<Dummy>& ) -> Parameters<Dummy> { 
-				aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
-				return Parameters<Dummy>(Dummy()); 
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Dummy>&)> aNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>>& , Parameters<Dummy>& ) -> Parameters<Dummy> {
+				aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n));
+				return Parameters<Dummy>(Dummy());
 			};
 		Parameters<Dummy> noInitParams = Parameters<Dummy>(Dummy());
 		traverse(std::move(tNotVoid), std::move(cNotVoid), std::move(aNotVoid), std::forward<Parameters<Dummy>>(noInitParams));
@@ -195,23 +195,23 @@ namespace hypro {
 	//When Param type = void, but Result type not
 	template<typename Number, typename Converter, typename Setting>
 	template<typename Result>
-	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(	
+	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& transform,
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*)>&& compute, 
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&)>&& aggregate) const 
-	{	
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> tNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> { 
-				transform(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
-				return Parameters<Dummy>(Dummy()); 
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*)>&& compute,
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&)>&& aggregate) const
+	{
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> tNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
+				transform(std::forward<RootGrowNode<Number,Converter,Setting>*>(n));
+				return Parameters<Dummy>(Dummy());
 			};
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> cNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Result { 
-				return compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n)); 
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>&)> cNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy>& ) -> Result {
+				return compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n));
 			};
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&, Parameters<Dummy>&)> aWithParams = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Result>& v, Parameters<Dummy>& ) -> Result { 
-				return aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n),std::forward<std::vector<Result>&>(v)); 
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&, Parameters<Dummy>&)> aWithParams =
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Result>& v, Parameters<Dummy>& ) -> Result {
+				return aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n),std::forward<std::vector<Result>&>(v));
 			};
 		Parameters<Dummy> noInitParams = Parameters<Dummy>(Dummy());
 		return traverse(std::move(tNotVoid), std::move(cNotVoid), std::move(aWithParams), std::forward<Parameters<Dummy>>(noInitParams));
@@ -220,21 +220,21 @@ namespace hypro {
 	//When Result type = void, but Param type not
 	template<typename Number, typename Converter, typename Setting>
 	template<typename ...Rargs>
-	void SupportFunctionNewT<Number,Converter,Setting>::traverse(	
+	void SupportFunctionNewT<Number,Converter,Setting>::traverse(
 		std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& transform,
-		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute, 
+		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute,
 		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& aggregate,
-		Parameters<Rargs...>&& initParams) const 
+		Parameters<Rargs...>&& initParams) const
 	{
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)> cNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...>& p) -> Parameters<Dummy> { 
-				compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n),std::forward<Parameters<Rargs...>>(p)); 
-				return Parameters<Dummy>(Dummy()); 
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)> cNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...>& p) -> Parameters<Dummy> {
+				compute(std::forward<RootGrowNode<Number,Converter,Setting>*>(n),std::forward<Parameters<Rargs...>>(p));
+				return Parameters<Dummy>(Dummy());
 			};
-		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Rargs...>&)> aNotVoid = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>>& v, Parameters<Rargs...>& p) -> Parameters<Dummy> { 
-				aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n),std::forward<Parameters<Rargs...>>(p)); 
-				return Parameters<Dummy>(Dummy()); 
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Rargs...>&)> aNotVoid =
+			[&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>>& v, Parameters<Rargs...>& p) -> Parameters<Dummy> {
+				aggregate(std::forward<RootGrowNode<Number,Converter,Setting>*>(n),std::forward<Parameters<Rargs...>>(p));
+				return Parameters<Dummy>(Dummy());
 			};
 		traverse(std::move(transform), std::move(cNotVoid), std::move(aNotVoid), std::forward<Parameters<Rargs...>>(initParams));
 	}
@@ -244,10 +244,10 @@ namespace hypro {
 	template<typename Result, typename ...Rargs>
 	Result SupportFunctionNewT<Number,Converter,Setting>::traverse(
 		std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& transform,
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute, 
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&, Parameters<Rargs...>&)>&& aggregate, 
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute,
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&, Parameters<Rargs...>&)>&& aggregate,
 		Parameters<Rargs...>&& initParams) const
-	{ 
+	{
 		//Usings
 		using Node = RootGrowNode<Number,Converter,Setting>*;
 		using Param = Parameters<Rargs...>;
@@ -256,7 +256,7 @@ namespace hypro {
 		//Prepare Stacks
 		std::vector<Node> callStack;
 		std::vector<Param> paramStack;
-		std::vector<std::pair<int,std::vector<Res>>> resultStack;  
+		std::vector<std::pair<int,std::vector<Res>>> resultStack;
 		callStack.push_back(mRoot.get());
 		paramStack.push_back(initParams);
 		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -275,8 +275,8 @@ namespace hypro {
 				if(currentResult.first == -1){
 
 					return std::apply(compute, std::forward_as_tuple(cur, currentParam));
-					
-				//If leaf and not end of stack is reached	
+
+				//If leaf and not end of stack is reached
 				} else {
 
 					resultStack.at(currentResult.first).second.push_back(std::apply(compute, std::forward_as_tuple(cur, currentParam)));
@@ -334,13 +334,13 @@ namespace hypro {
 
 		if(mRoot == nullptr) return true;
 
-		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE); 
-		
+		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE);
+
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
 
 		//if leaf - call empty function of representation
-		std::function<bool(RootGrowNode<Number,Converter,Setting>*)> leafEmpty = 
+		std::function<bool(RootGrowNode<Number,Converter,Setting>*)> leafEmpty =
 			[](RootGrowNode<Number,Converter,Setting>* n) -> bool {
 				return n->empty();
 			};
@@ -353,7 +353,7 @@ namespace hypro {
 
 		mEmpty = traverse(std::move(doNothing), std::move(leafEmpty), std::move(childrenEmpty)) ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		assert(mEmpty != TRIBOOL::NSET);
-		return (mEmpty == TRIBOOL::TRUE); 
+		return (mEmpty == TRIBOOL::TRUE);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -365,7 +365,7 @@ namespace hypro {
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
 
 		//leaves compute the supremum point
-		std::function<Point<Number>(RootGrowNode<Number,Converter,Setting>*)> supremumPointLeaf = 
+		std::function<Point<Number>(RootGrowNode<Number,Converter,Setting>*)> supremumPointLeaf =
 			[](RootGrowNode<Number,Converter,Setting>* n) -> Point<Number> {
 				assert(n->getType() == SFNEW_TYPE::LEAF);
 				return n->supremumPoint();
@@ -376,7 +376,7 @@ namespace hypro {
 			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<Point<Number>>& v) -> Point<Number> {
 				return n->supremumPoint(v);
 			};
-	
+
 		Point<Number> res = traverse(std::move(doNothing), std::move(supremumPointLeaf), std::move(supremumPointOp));
 		Number resNorm = Point<Number>::inftyNorm(res);
 		return resNorm;
@@ -395,10 +395,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
 		if(mRoot == nullptr){
-			return EvaluationResult<Number>();	
-		} 
+			return EvaluationResult<Number>();
+		}
 		if(_direction == vector_t<Number>::Zero(_direction.rows())){
-			return EvaluationResult<Number>(SOLUTION::INFTY);		
+			return EvaluationResult<Number>(SOLUTION::INFTY);
 		}
 		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(1,_direction.rows());
 		dirAsMatrix << _direction.transpose();
@@ -419,19 +419,19 @@ namespace hypro {
 		using EvalVec = std::vector<EvaluationResult<Number>>;
 
 		//Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
-		std::function<Matrix(RGNPtr, Matrix&)> trans = 
-			[&](RGNPtr n, Matrix& param) -> Matrix { 
-				return n->transform(std::get<0>(param.args)); 
+		std::function<Matrix(RGNPtr, Matrix&)> trans =
+			[&](RGNPtr n, Matrix& param) -> Matrix {
+				return n->transform(std::get<0>(param.args));
 			};
 
-		std::function<EvalVec(RGNPtr, Matrix&)> comp = 
-			[&](RGNPtr n, Matrix& dir) -> EvalVec { 
-				return n->compute(std::get<0>(dir.args), useExact); 
+		std::function<EvalVec(RGNPtr, Matrix&)> comp =
+			[&](RGNPtr n, Matrix& dir) -> EvalVec {
+				return n->compute(std::get<0>(dir.args), useExact);
 			};
 
-		std::function<EvalVec(RGNPtr, std::vector<EvalVec>&, Matrix&)> agg = 
-			[&](RGNPtr n, std::vector<EvalVec>& resultStackBack, Matrix& currentParam) -> EvalVec { 
-				return n->aggregate(resultStackBack, std::get<0>(currentParam.args)); 
+		std::function<EvalVec(RGNPtr, std::vector<EvalVec>&, Matrix&)> agg =
+			[&](RGNPtr n, std::vector<EvalVec>& resultStackBack, Matrix& currentParam) -> EvalVec {
+				return n->aggregate(resultStackBack, std::get<0>(currentParam.args));
 			};
 
 		//Traverse the underlying SupportFunctionNewT with the three functions and given directions as initial parameters.
@@ -463,7 +463,7 @@ namespace hypro {
 					for(const auto& hasSubTreeTrafo : haveSubtreesTrafo){
 						if(hasSubTreeTrafo){
 							return true;
-						} 
+						}
 					}
 				}
 				return false;
@@ -509,12 +509,12 @@ namespace hypro {
 	std::size_t SupportFunctionNewT<Number,Converter,Setting>::size() const {
 
 		if(mRoot == nullptr) return std::size_t(0);
-		
+
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
 
 		//leaves compute their storage size
-		std::function<std::size_t(RootGrowNode<Number,Converter,Setting>*)> sizeofLeaf = 
+		std::function<std::size_t(RootGrowNode<Number,Converter,Setting>*)> sizeofLeaf =
 			[](RootGrowNode<Number,Converter,Setting>* n) -> std::size_t {
 				assert(n->getType() == SFNEW_TYPE::LEAF);
 				return sizeof(*n);
@@ -529,7 +529,7 @@ namespace hypro {
 				}
 				return storage + sizeof(*n);
 			};
-	
+
 		return traverse(std::move(doNothing), std::move(sizeofLeaf), std::move(sizeofOp));
 	}
 
@@ -580,7 +580,7 @@ namespace hypro {
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
 		assert(_mat.rows() == _vec.rows());
-		assert(_mat.cols() == dimension());
+		assert(_mat.cols() == Eigen::Index(dimension()));
 		if(_mat.rows() == 1 && _vec.rows() == 1){
 			return satisfiesHalfspace(Halfspace<Number>(vector_t<Number>(_mat.row(0)), _vec(0)));
 		}
@@ -651,7 +651,7 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
-		
+
 		if(mRoot == nullptr) return SupportFunctionNewT<Number,Converter,Setting>();
 
 		// check for full projection
@@ -707,7 +707,7 @@ namespace hypro {
 		std::shared_ptr<SumOp<Number,Converter,Setting>> sum = std::make_shared<SumOp<Number,Converter,Setting>>(*this, rhs);
 		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> sumPtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(sumPtr);
-		return sf;	
+		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -715,7 +715,7 @@ namespace hypro {
 		std::shared_ptr<ScaleOp<Number,Converter,Setting>> scale = std::make_shared<ScaleOp<Number,Converter,Setting>>(*this, factor);
 		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> scalePtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(scale);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(scalePtr);
-		return sf;	
+		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -723,7 +723,7 @@ namespace hypro {
 		std::shared_ptr<IntersectOp<Number,Converter,Setting>> intersec = std::make_shared<IntersectOp<Number,Converter,Setting>>(*this, rhs);
 		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> intersecPtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(intersec);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(intersecPtr);
-		return sf;	
+		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -753,7 +753,7 @@ namespace hypro {
 			Halfspace<Number> hspace(_mat.row(0), _vec(0));
 			return intersectHalfspace(hspace);
 		}
-		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));	
+		return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -762,13 +762,13 @@ namespace hypro {
 		if(mRoot == nullptr) return false;
 
 		//first function - Parameters are backtransformed into the domain space of the given operation
-		std::function<Parameters<vector_t<Number>>(RootGrowNode<Number,Converter,Setting>*, Parameters<vector_t<Number>>&)> reverseOp = 
-			[](RootGrowNode<Number,Converter,Setting>* n, Parameters<vector_t<Number>>& p) -> Parameters<vector_t<Number>> { 
+		std::function<Parameters<vector_t<Number>>(RootGrowNode<Number,Converter,Setting>*, Parameters<vector_t<Number>>&)> reverseOp =
+			[](RootGrowNode<Number,Converter,Setting>* n, Parameters<vector_t<Number>>& p) -> Parameters<vector_t<Number>> {
 				return Parameters<vector_t<Number>>(n->reverseOp(std::get<0>(p.args)));
 			};
 
 		//second function - calls contains() of leaf
-		std::function<bool(RootGrowNode<Number,Converter,Setting>*, Parameters<vector_t<Number>>&)> doesLeafContain = 
+		std::function<bool(RootGrowNode<Number,Converter,Setting>*, Parameters<vector_t<Number>>&)> doesLeafContain =
 			[](RootGrowNode<Number,Converter,Setting>* n, Parameters<vector_t<Number>>& p) -> bool {
 				return n->contains(std::get<0>(p.args));
 			};
@@ -807,7 +807,7 @@ namespace hypro {
     		}
     		//If this is unbound and rhs bound, then rhs is still contained on this side
     		//If both are unbound, then both SFs are halfspaces and are only contained in each other, if the normals point to the same direction
-    		//while the offset of rhs is smaller than of this. 
+    		//while the offset of rhs is smaller than of this.
     	}
     	return true;
     }
@@ -855,15 +855,15 @@ namespace hypro {
 
 		//TODO: Check if right
 		if(mRoot == nullptr) return std::vector<std::size_t>();
-		
+
 		//first function - do nothing
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
 
 		//second function - leaves return a vector of ascending dimensions
-		std::function<std::vector<std::size_t>(RootGrowNode<Number,Converter,Setting>*)> collectLeafDimensions = 
+		std::function<std::vector<std::size_t>(RootGrowNode<Number,Converter,Setting>*)> collectLeafDimensions =
 			[](RootGrowNode<Number,Converter,Setting>* n) -> std::vector<std::size_t> {
 				std::vector<std::size_t> res;
-				for(std::size_t i = 0; i < n->getDimension(); ++i){ 
+				for(std::size_t i = 0; i < n->getDimension(); ++i){
 					res.emplace_back(i);
 				}
 				return res;
@@ -881,7 +881,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
 		if(!mTemplateSet || force) {
-			
+
 			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directionCount);
 
 		    matrix_t<Number> templateDirectionMatrix = combineRows(templateDirections);

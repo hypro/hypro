@@ -15,14 +15,14 @@ namespace hypro {
 
 //Forward Declaration
 template<typename Number, typename Converter, typename Setting>
-class SupportFunctionNewT;	
+class SupportFunctionNewT;
 
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
 class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 
   private:
-	
+
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::UNIONOP;
@@ -38,19 +38,19 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 
 	UnionOp() = delete;
 
-	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
+	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) {
 		assert(lhs.dimension() == rhs.dimension());
-		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
+		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs});
 	}
 
-	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
+	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) {
 		#ifndef NDEBUG
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
 		#endif
-		lhs.addOperation(this, rhs); 
-	}	
+		lhs.addOperation(this, rhs);
+	}
 
 	UnionOp(const RGNData& ){}
 
@@ -59,27 +59,27 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	////// Getters and Setters
 
 	SFNEW_TYPE getType() const override { return type; }
-	unsigned getOriginCount() const { return originCount; }
-	std::size_t getDimension() const { return mDimension; }
-	RGNData* getData() const { return new RGNData(); }
-	void setDimension(const std::size_t d) { mDimension = d; }
+	unsigned getOriginCount() const override { return originCount; }
+	std::size_t getDimension() const override { return mDimension; }
+	RGNData* getData() const override { return new RGNData(); }
+	void setDimension(const std::size_t d) override { mDimension = d; }
 
 	////// RootGrowNode Interface
 
 	//Does nothing
-	matrix_t<Number> transform(const matrix_t<Number>& param) const {
+	matrix_t<Number> transform(const matrix_t<Number>& param) const override {
 		return param;
 	}
 
 	//Should not be reached
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const { 
-		std::cout << "USED COMPUTE FROM UnionOp SUBCLASS.\n"; 
-		assert(false); 
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const override {
+		std::cout << "USED COMPUTE FROM UnionOp SUBCLASS.\n";
+		assert(false);
 		return std::vector<EvaluationResult<Number>>();
 	}
 
 	//Given two or more result vecs, sum them coefficientwise
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const {
+	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const override {
 		TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
 		assert(resultStackBack.size() >= 2);
 		std::vector<EvaluationResult<Number>> accumulatedResult = resultStackBack.front();
@@ -101,7 +101,7 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Only empty, if all children are empty since union of nonempty smth with empty set equals smth
-	bool empty(const std::vector<bool>& childrenEmpty) const {
+	bool empty(const std::vector<bool>& childrenEmpty) const override {
 		for(const auto childEmpty : childrenEmpty){
 			if(!childEmpty) return false;
 		}
@@ -109,7 +109,7 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Transform the supremum
-	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const override {
 		assert(points.size() > 0);
 		Point<Number> biggestInftyNorm = points.front();
 		for(const auto& p : points){
@@ -119,8 +119,8 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 		return biggestInftyNorm;
 	}
 
-	//Only return true if at least one child contained the point before	
-	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const {
+	//Only return true if at least one child contained the point before
+	bool contains(const std::vector<bool>& v, const vector_t<Number>& /*point*/) const override {
 		for(const auto& containedInChild : v){
 			if(containedInChild) return true;
 		}
@@ -128,8 +128,8 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	}
 
 	//Erases all dimensions from a copy of dimensions that are denoted in dims
-	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const {
-		
+	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const override {
+
 		// we create the intersection of all results. Therefore we iterate over the first vector and check the other
 		// result vectors, if the respective element is contained. Iterating over the first is sufficient, as elements
 		// not in the first vector will not be in the intersection anyways.
