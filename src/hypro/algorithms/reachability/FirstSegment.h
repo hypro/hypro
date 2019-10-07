@@ -77,6 +77,10 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
             in.setSetDirect(boost::get<DifferenceBounds<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toDifferenceBounds(bloatBox)));
             break;
         }
+        case representation_name::SFN: {
+            in.setSetDirect(boost::get<SupportFunctionNew<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toSupportFunctionNew(bloatBox)));
+            break;   
+        }
 		case representation_name::constraint_set:{
 			assert(false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>.");
 			break;
@@ -103,8 +107,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         double convertedTimeStep =carl::convert<tNumber,double>(timeStep);
         TRACE("hypro.reachability", "Time step size: " << timeStep << "(" << convertedTimeStep << ")" << std::endl);
         TRACE("hypro.reachability", "------" << std::endl);
-        #endif
-
+    #endif
 
     DEBUG("hypro.reachability","Check invariant: " << _state.getLocation()->getInvariant() << " for set " << _state);
     std::pair<CONTAINMENT,State> initialPair = _state.satisfies(_state.getLocation()->getInvariant());

@@ -235,9 +235,11 @@ namespace hypro
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.getParameters(mTask->btInfo.btLevel).timeStep) );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters(mTask->btInfo.btLevel).representation_type );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
+	    #ifdef HYPRO_LOGGING
 	    for(auto& ref : mTask->treeNode->rGetRefinements()){
 	    	INFO("hypro.worker",  std::this_thread::get_id() << ": " << ref);
 	    }
+	    #endif
 
 		if(mSettings.useInvariantTimingInformation ||
 		   mSettings.useGuardTimingInformation ||
@@ -380,7 +382,7 @@ namespace hypro
 	void LTIContext<State>::firstSegment(){
 		DEBUG("hypro.worker","State  before first segment: " << mComputationState);
 
-		// applay handlers to state
+		// apply handlers to state
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			mFirstSegmentHandlers.at(i)->handle();
 		}
@@ -414,13 +416,12 @@ namespace hypro
 
     	if(mInvariantHandlers.size() > 0){
     		bool deleteRequested = false;
-	    	// compute strictes containment on the fly
+	    	// compute strictest containment on the fly
 	    	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
-	    	// applay handlers to state
+	    	// apply handlers to state
 	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){
 				if(!omitInvariant()) {
 					mInvariantHandlers.at(i)->handle();
-
 					if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
 						TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
 						strictestContainment = mInvariantHandlers.at(i)->getContainment();
@@ -452,7 +453,6 @@ namespace hypro
 
 			if(deleteRequested){
 				for(auto handler = mInvariantHandlers.begin(); handler != mInvariantHandlers.end(); ){
-
 					if((*handler)->getMarkedForDelete()){
 						delete *handler;
 						handler = mInvariantHandlers.erase(handler);
@@ -500,7 +500,6 @@ namespace hypro
 						mLocalTimings.insertBadState(mComputationState.getTimestamp(),CONTAINMENT::YES);
 					}
 
-
 					// write timings.
 					if(mSettings.useBadStateTimingInformation ||
 					   mSettings.useGuardTimingInformation ||
@@ -520,7 +519,6 @@ namespace hypro
 
 				if(deleteRequested){
 					for(auto handler = mBadStateHandlers.begin(); handler != mBadStateHandlers.end(); ){
-
 						if((*handler)->getMarkedForDelete()){
 							delete *handler;
 							handler = mBadStateHandlers.erase(handler);
@@ -546,7 +544,8 @@ namespace hypro
 				DEBUG("hypro.worker","Built " << ptr->handlerName());
 			}
 		}
-		mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
+		//mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
+		mEndLoop = (mContinuousEvolutionHandlers.size() > 0);
 
 		initializeGuardHandlers();
 
@@ -895,9 +894,8 @@ namespace hypro
 			}
 		}
 
-
+		//LOLOLO
 		//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
 		TRACE("hypro.worker","Unlock node " << mTask->treeNode);

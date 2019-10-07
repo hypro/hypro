@@ -35,13 +35,12 @@ namespace hypro
         trafoMatrixResized = trafoMatrix.block(0, 0, rows - 1, cols - 1);
         translation.conservativeResize(rows - 1);
 
-        mFlow = affineFlow<Number>{trafoMatrixResized, translation};
-
         // update flow type
+        mFlow = affineFlow<Number>{trafoMatrixResized, translation};
         //mState->rGetLocation()->setFlow(mIndex,affineFlow<Number>(mTrafo,mTranslation));
 
         State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(trafoMatrixResized, translation), mTimeStep,mIndex);
-
+        
         #ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "Polytope at t=delta: " << deltaValuation);
         #endif
@@ -63,7 +62,7 @@ namespace hypro
         TRACE("hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension);
         TRACE("hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << dimension);
 
-		firstSegment = bloatBox(firstSegment, Number(Number(1) / Number(4)) * errorBoxVector[2], mIndex);
+        firstSegment = bloatBox(firstSegment, Number(Number(1) / Number(4)) * errorBoxVector[2], mIndex);
 
         TRACE("hypro.worker","Epsilon errorbox: " << errorBoxVector[2]);
 
@@ -94,19 +93,19 @@ namespace hypro
 	    //-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
 	   matrix_t<double> doubleMatrix(deltaMatrix.rows(), deltaMatrix.cols());
 	   matrix_t<double> expMatrix(deltaMatrix.rows(), deltaMatrix.cols());
-	    doubleMatrix =convert<Number, double>(deltaMatrix);
+	   doubleMatrix =convert<Number, double>(deltaMatrix);
 
-	    TRACE("hypro.worker","transformed matrix: " << doubleMatrix);
+	   TRACE("hypro.worker","transformed matrix: " << doubleMatrix);
 
-	    expMatrix = doubleMatrix.exp();
+	   expMatrix = doubleMatrix.exp();
 
-	    TRACE("hypro.worker","exp matrix: " << expMatrix);
+	   TRACE("hypro.worker","exp matrix: " << expMatrix);
 
-	    resultMatrix =convert<double, Number>(expMatrix);
+	   resultMatrix =convert<double, Number>(expMatrix);
 
-		TRACE("hypro.worker","transformed matrix: " << resultMatrix);
+	   TRACE("hypro.worker","transformed matrix: " << resultMatrix);
 
-	    return resultMatrix;
+	   return resultMatrix;
 
 	}
 } // hypro

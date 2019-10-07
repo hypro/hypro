@@ -218,8 +218,7 @@ class SupportFunctionContent {
 		return obj;
 	}
 
-	static std::shared_ptr<SupportFunctionContent<Number,Setting>> create( SF_TYPE _type, const matrix_t<Number>& _directions,
-																	const vector_t<Number>& _distances ) {
+	static std::shared_ptr<SupportFunctionContent<Number,Setting>> create( SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances ) {
 		TRACE("hypro.representations.supportFunction","");
 		auto obj = std::shared_ptr<SupportFunctionContent<Number,Setting>>( new SupportFunctionContent<Number,Setting>( _directions, _distances, _type ));
 		obj->pThis = obj;
@@ -651,7 +650,7 @@ class SupportFunctionContent {
 		return offset;
 	}
 
-	private:
+  private:
 
 	std::size_t originCount() const {
 		switch ( mType ) {
@@ -907,6 +906,7 @@ class SupportFunctionContent {
 		return level;
 	}
 };
+
 }  // namespace
 
 #include "SupportFunctionContent.tpp"

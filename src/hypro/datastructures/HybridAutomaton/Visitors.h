@@ -181,7 +181,7 @@ public:
 
 	template<typename B>
     inline std::pair<CONTAINMENT,T> operator()(const B& lhs) const {
- 		return lhs.satisfiesHalfspaces(constraints, constants);
+    	return lhs.satisfiesHalfspaces(constraints, constants);
     }
 };
 
@@ -277,7 +277,6 @@ public:
     }
 };
 
-
 class genericSetContainsVisitor
     : public boost::static_visitor<bool>
 {
@@ -327,7 +326,7 @@ class genericIntervalAssignmentVisitor
 	template<typename B>
     inline T operator()(const B& lhs) const {
 		DEBUG("hypro.datastructures","INTERVAL ASSIGNMENT NOT IMPLEMENTED FOR THIS TYPE.");
-		std::cout << "Inteval assignment not implemented for this type." << std::endl;
+		std::cout << "Interval assignment not implemented for this type." << std::endl;
  		return lhs;
     }
 

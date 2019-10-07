@@ -278,4 +278,119 @@ CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCar
 	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
 }
 
+template<typename Number>
+template<typename CarlPolySetting, typename inSetting>
+CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+
+    //gets dimension of source object
+    std::size_t dim = _source.dimension();
+
+    std::vector<std::size_t> projections = _source.collectProjections();
+    //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
+	if( projections.size() == dim ){
+		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+	    //only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+	    assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+	    //creates a matrix with one row for each direction and one column for each dimension
+	    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size()+additionalDirections.size() , dim);
+
+	    //fills the matrix with the template directions
+	    for (unsigned i=0; i<templateDirections.size();++i){
+	        templateDirectionMatrix.row(i) = templateDirections[i];
+	    }
+	    std::size_t pos = 0;
+	    for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+	        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
+	        ++pos;
+	    }
+
+	    //lets the support function evaluate the offset of the halfspaces for each direction
+	    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix, false);
+	    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
+
+	    std::vector<std::size_t> boundedConstraints;
+	    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+			//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
+	        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
+	            boundedConstraints.push_back(offsetIndex);
+	        }
+	    }
+	    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
+	    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+	    pos = boundedConstraints.size()-1;
+	    while(!boundedConstraints.empty()){
+	        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+	        constants(pos) = offsets[boundedConstraints.back()].supportValue;
+	        boundedConstraints.pop_back();
+	        --pos;
+	    }
+
+	    //constructs a H-Polytope out of the computed halfspaces
+    	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(constraints, constants);
+
+	} else {
+		//std::cout << "Projection" << std::endl;
+		//for(auto dim : projections) {
+		//	std::cout << "projection dimension " << dim << std::endl;
+		//}
+		std::list<unsigned> zeroDimensions;
+		for(unsigned i = 0; i < dim; ++i) {
+			if(std::find(projections.begin(), projections.end(), i) == projections.end()){
+				//std::cout << "Dimension " << i << " is zero." << std::endl;
+				zeroDimensions.emplace_back(i);
+			}
+		}
+		//std::cout << __func__ << ": compute template ... ";
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, numberOfDirections, dim); // TODO: ATTENTION, 8 is hardcoded here.
+		//std::cout << "done." << std::endl;
+		for(auto direction : additionalDirections) {
+			// project direction
+			for(const auto& dir : zeroDimensions) {
+				direction(dir) = Number(0);
+			}
+			// add projected direction
+			if(direction.nonZeros() > 0 && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
+				templateDirections.emplace_back(std::move(direction));
+			}
+		}
+
+		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size() , dim);
+
+		//fills the matrix with the template directions
+		for (unsigned i=0; i<templateDirections.size();++i){
+			templateDirectionMatrix.row(i) = templateDirections[i];
+		}
+		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+		std::size_t pos = 0;
+		for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+			templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
+			++pos;
+		}
+		//std::cout << __func__ << ": TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+
+		std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix, false);
+		assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
+
+		//std::cout << "Multi-Eval done, reduce to relevant dimensions" << std::endl;
+
+		std::size_t newDim = projections.size();
+		matrix_t<Number> constraints = matrix_t<Number>(offsets.size(), newDim);
+		vector_t<Number> constants = vector_t<Number>(offsets.size());
+		for(unsigned rowIndex = 0; rowIndex < Eigen::Index(offsets.size()); ++rowIndex) {
+			Eigen::Index colPos = 0;
+			for(auto projIt = projections.begin(); projIt != projections.end(); ++projIt, ++colPos) {
+				constraints(rowIndex,colPos) = templateDirectionMatrix(rowIndex, (*projIt));
+			}
+			constants(rowIndex) = offsets.at(rowIndex).supportValue;
+		}
+
+		//std::cout << "Construct polytope from constraints " << constraints << " and constants " << constants << std::endl;
+
+		//constructs a H-Polytope out of the computed halfspaces
+    	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(constraints, constants);
+	}
+
+}
+
 } // namespace hypro

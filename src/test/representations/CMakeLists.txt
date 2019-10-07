@@ -21,7 +21,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#TaylorModelTest.cpp
 			VPolytopeTest.cpp
 			ZonotopeTest.cpp
-			#SupportFunctionNewTest.cpp
+			SupportFunctionNewTest.cpp
 		)
 	else()
 		add_executable(runRepresentationTests
@@ -30,7 +30,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			ConverterTest.cpp
 			DifferenceBoundsTest.cpp
 			GridTest.cpp
-			HPolytopeTest.cpp
+			#PolytopeTest.cpp
 			NeighborhoodContainerTest.cpp
 			OrthogonalPolyhedronTest.cpp
 			PolytopeSupportFunctionTest.cpp
@@ -38,7 +38,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#TaylorModelTest.cpp
 			VPolytopeTest.cpp
 			ZonotopeTest.cpp
-			#SupportFunctionNewTest.cpp
+			SupportFunctionNewTest.cpp
 		)
 	endif()
 

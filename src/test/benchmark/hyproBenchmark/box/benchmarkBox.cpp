@@ -33,6 +33,10 @@ namespace box
         tmp.createCSV("boxUnion", "\t");
         std::cout << "Benchmarked union." << std::endl;
 
+        // satisfies half-spaces
+        //satisfiesHalfspaces(settings);
+        //std::cout << "Box benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
+
         // intersection
         tmp = workingTasks[3].get();
         tmp.createCSV("boxIntersection", "\t","intersect");

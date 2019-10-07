@@ -49,7 +49,7 @@ namespace box {
             // run instances
             Timer runTimerHyPro;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
-                box.intersectHalfspace(hsps[i]);
+                box.satisfiesHalfspace(hsps[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
@@ -67,6 +67,7 @@ namespace box {
                 }
                 Timer runTimerPPL;
                 b.refine_with_constraint(pplHsps[i]);
+                bool a = b.is_empty();
                 pplRT += runTimerPPL.elapsed();
             }
             //std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;

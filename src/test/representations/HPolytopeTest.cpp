@@ -256,7 +256,6 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 	b(2) = 0;
 	b(3) = 1;
 
-
 	HPolytope<TypeParam> poly = HPolytope<TypeParam>(A,b);
 	vector_t<TypeParam> dir(2);
 	dir(0) = 1;
@@ -393,4 +392,81 @@ TYPED_TEST(HPolytopeTest, Membership)
 
 	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), TypeParam(0)});
 	EXPECT_FALSE(hpt1.contains(p5));
+}
+
+TYPED_TEST(HPolytopeTest, MultiEvaluate)
+{
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
+	matrix_t<TypeParam> dirs = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = hpt1.multiEvaluate(dirs, true);
+	for(auto& r : res){
+		ASSERT_EQ(SOLUTION::FEAS, r.errorCode);	
+		ASSERT_EQ(TypeParam(2), r.supportValue);
+	}
+}
+
+TYPED_TEST(HPolytopeTest, OptimizerCaching){
+
+	//Empty hpoly with standard settings
+	HPolytope<TypeParam> emptyStandard;
+	EXPECT_FALSE(emptyStandard.getOptimizer().has_value());
+	EXPECT_FALSE(emptyStandard.getUpdated());
+	EXPECT_EQ(emptyStandard.getOptimizer(), std::nullopt);
+
+	//Empty hpoly with optimizer caching setting
+	HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching> empty;
+	EXPECT_TRUE(empty.getUpdated());
+	EXPECT_TRUE(empty.getOptimizer().has_value());
+	EXPECT_NE(empty.getOptimizer(), std::nullopt);
+	EXPECT_EQ(empty.getOptimizer()->matrix(), matrix_t<TypeParam>::Zero(1,1));
+	EXPECT_EQ(empty.getOptimizer()->vector(), vector_t<TypeParam>::Zero(1));
+
+	//Control matrix and vector
+	matrix_t<TypeParam> controlMat = matrix_t<TypeParam>::Zero(4,2);
+	controlMat << 	1,0,
+					0,1,
+					-1,0,
+					0,-1;
+	vector_t<TypeParam> controlVec = 2*vector_t<TypeParam>::Ones(4);
+
+	//Via HalfspaceVector-constructor
+	HPolytopeT<TypeParam,hypro::Converter<TypeParam>,HPolytopeOptimizerCaching> hspaces(this->planes1);
+	EXPECT_TRUE(hspaces.getOptimizer().has_value());
+	EXPECT_TRUE(hspaces.getUpdated());
+	EXPECT_EQ(hspaces.getOptimizer()->matrix(), controlMat);
+	EXPECT_EQ(hspaces.getOptimizer()->vector(), controlVec);
+
+	//We add a halfspace to hspaces, should not be up to date then
+	Halfspace<TypeParam> extra({TypeParam(1),(TypeParam(0))},TypeParam(1));
+	hspaces.insert(extra);
+	EXPECT_TRUE(hspaces.getOptimizer().has_value());
+	EXPECT_FALSE(hspaces.getUpdated());
+
+	//Control matrix and vector after insertion
+	matrix_t<TypeParam> controlMatAfterInsert = matrix_t<TypeParam>::Zero(5,2);
+	controlMatAfterInsert << 	1,0,
+								0,1,
+								-1,0,
+								0,-1,
+								1,0;
+	vector_t<TypeParam> controlVecAfterInsert = 2*vector_t<TypeParam>::Ones(5);	
+	controlVecAfterInsert(4) = 1;
+
+	//Assert that every normal operation continues to work with the modified versions
+	EXPECT_EQ(hspaces.matrix(), controlMatAfterInsert);
+	EXPECT_EQ(hspaces.vector(), controlVecAfterInsert);	
+	EXPECT_NE(hspaces.getOptimizer()->matrix(), controlMatAfterInsert);
+	EXPECT_NE(hspaces.getOptimizer()->vector(), controlVecAfterInsert);	
+	EXPECT_FALSE(hspaces.getUpdated());	
+
+	//Only evaluate and multievaluate need to update the cached optimizer first
+	vector_t<TypeParam> dir = vector_t<TypeParam>::Zero(2);
+	dir << 1, 0;
+	EvaluationResult<TypeParam> eval = hspaces.evaluate(dir);
+	EXPECT_EQ(hspaces.getOptimizer()->matrix(), controlMatAfterInsert);
+	EXPECT_EQ(hspaces.getOptimizer()->vector(), controlVecAfterInsert);	
+	EXPECT_TRUE(hspaces.getUpdated());
+	EXPECT_EQ(eval.supportValue, TypeParam(1));
+	EXPECT_EQ(hspaces.getOptimizer()->getGLPContexts().size(), std::size_t(1));
+	EXPECT_TRUE(hspaces.getOptimizer()->getGLPContexts().find(std::this_thread::get_id()) != hspaces.getOptimizer()->getGLPContexts().end());
 }

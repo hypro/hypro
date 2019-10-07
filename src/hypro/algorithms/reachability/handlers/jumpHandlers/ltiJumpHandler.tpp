@@ -178,6 +178,7 @@ namespace hypro {
 
 	template<typename State>
 	std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHandler<State>::applyJump(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy){
+		
 		// holds a mapping of transitions to states which need to be aggregated
 		std::map<Transition<Number>*, std::vector<State>> toAggregate;
 		// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -274,8 +275,26 @@ namespace hypro {
 					if(newState.getSetType(i) == representation_name::support_function) {
 						newState.partiallyReduceRepresentation(i);
 					}
+					if(newState.getSetType(i) == representation_name::SFN){
+						//Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope (or possibly a box)
+						//and set it as the leaf of a new tree
+						auto tmpSFN = boost::apply_visitor(genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet(i));
+						if(tmpSFN.getSettings().DETECT_BOX){
+							//if(!tmpSFN.empty()){
+								tmpSFN.reduceRepresentation();
+								auto isHPolyBox = isBox(tmpSFN.matrix(), tmpSFN.vector());
+								if(boost::get<0>(isHPolyBox)){
+									Box<Number> tmpBox(boost::get<1>(isHPolyBox));
+									tmpSFN = SupportFunctionNew<Number>(tmpBox);
+								} else {
+									HPolytopeT<Number,hypro::Converter<Number>,HPolytopeOptimizerCaching> tmpHPoly(tmpSFN.matrix(), tmpSFN.vector());
+									tmpSFN = SupportFunctionNew<Number>(tmpHPoly);
+								}
+								newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(tmpSFN), newState.getSet(i)),i);
+							//}
+						}
+					}					
 				}
-
 
 				DEBUG("hydra.worker.discrete","State after reduction: " << newState);
 

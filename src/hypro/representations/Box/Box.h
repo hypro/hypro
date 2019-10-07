@@ -53,7 +53,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
   protected:
 
     std::vector<carl::Interval<Number>> mLimits; 	/*!< Box as a vector of intervals. */
-	bool 								mEmpty; 	/*!< Cache for emptines. */
+	bool 								mEmpty; 	/*!< Cache for emptiness. */
 
   public:
 	/***************************************************************************
@@ -107,7 +107,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
-		mEmpty = false;
+		mEmpty = limits.first.dimension() > 0 ? false : true;
 		for(std::size_t i = 0; i < limits.first.dimension(); ++i) {
 			mLimits.emplace_back(carl::Interval<Number>(limits.first[i], limits.second[i]));
 			mEmpty = mEmpty || mLimits.back().isEmpty();
@@ -172,7 +172,9 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	  * @return Empty box.
 	  */
 	static BoxT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
-		return BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+		auto tmp = BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+		assert(tmp.empty());
+		return tmp;
 	}
 
 	/**

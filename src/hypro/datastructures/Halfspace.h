@@ -12,6 +12,8 @@
 #include "Point.h"
 #include "../util/VariablePool.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
+#include "../util/linearOptimization/EvaluationResult.h"
+#include "../representations/types.h"
 #include <glpk.h>
 #include <carl/formula/Constraint.h>
 #include <boost/functional/hash.hpp>
@@ -291,6 +293,58 @@ class Halfspace {
 	 * @return     The plane offset.
 	 */
 	static Number computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane);
+
+	/**
+	 * Functions for SupportFunctionNew where it is seen as a representation
+	 */
+
+	/**
+	 * @brief Return mNormal as a matrix
+	 */
+	matrix_t<Number> matrix() const;
+
+	/**
+	 * @brief Return mScalar as a vector
+	 */
+	vector_t<Number> vector() const;
+
+	/**
+	 * @brief Return whether the halfspace is empty.
+	 * @detail A halfspace itself cannot be empty, except its normal is the zero vector and the scalar is smaller than 0
+	 */
+	bool empty() const;
+
+	/**
+	 * @brief Does nothing since a halfpsace cannot have redundancy
+	 */
+	void removeRedundancy() {}
+
+	/**
+	 * @brief Return the steps needed in the given direction to reach the optimal point.
+	 * @param[in] direction The direction to evaluate
+	 * @return Whether it is feasible, and if it is, how much steps are needed.
+	 */
+	EvaluationResult<Number> evaluate(const vector_t<Number>& direction, bool /*useExact*/) const;
+ 
+ 	/**
+	 * @brief Return the evaluation result for multiple directions
+	 * @param[in] _directions The directions to evaluate
+	 * @return For each direction, whether the evaluation is feasible, and if it is, how many steps are needed
+	 */
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool /*useExact*/ ) const;
+
+	/**
+	 * @brief Returns a point representation of the halfspace. which does not exist.
+	 * @detail Although this function is nonsensical, it is needed in order to use the Halfspace class as a leaf in the SupportFunctionNew.
+	 */
+	std::vector<Point<Number>> vertices() const { return std::vector<Point<Number>>(); }
+
+	/**
+	 * @brief Returns the representation type of the halfspace.
+	 * @detail Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name
+	 * as it is usually not used as a representation but still has defined representation name.
+	 */
+	static representation_name type() { return representation_name::constraint_set; }
 };
 
 /**
@@ -314,7 +368,7 @@ Halfspace<To> convert(const Halfspace<From>& in) {
  */
 template <typename Number>
 std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
-	_lhs << "( " << _rhs.normal() << "; " << Number( _rhs.offset() ) << " )";
+	_lhs << "( " << vector_t<Number>(_rhs.normal().transpose()) << "; " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }
 

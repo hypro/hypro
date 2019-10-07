@@ -14,6 +14,7 @@
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
 #include "ConstrainSet.h"
+//#include <iostream>
 #include <string>
 
 #define FUKUDA_VERTEX_ENUM_DEBUG

@@ -35,6 +35,12 @@ template<typename Number>
 using SupportFunction = typename Converter<Number>::SupportFunction;
 
 template<typename Number>
+using SupportFunctionNew = typename Converter<Number>::SupportFunctionNew;
+
+/**
+ * Typedef for ZonotopeT.
+ */
+template<typename Number>
 using Zonotope = typename Converter<Number>::Zonotope;
 
 template<typename Number>

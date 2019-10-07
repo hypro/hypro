@@ -17,6 +17,7 @@
 #include "../SupportFunction/SupportFunction.h"
 #include "../Zonotope/Zonotope.h"
 #include "../DifferenceBounds/DifferenceBounds.h"
+#include "../SupportFunctionNew/SupportFunctionNew.h"
 #include "../../util/pca.h"
 #include "../../util/templateDirections.h"
 
@@ -46,8 +47,10 @@ class Converter {
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
-		using SupportFunction = SupportFunctionT<Number,Converter,NoBoxReduction>;
+		using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
 		using Zonotope = ZonotopeT<Number,Converter,ZonotopeSetting>;
+		using SupportFunctionNew = SupportFunctionNewT<Number,Converter,SupportFunctionNewMorePrecision>;
+		//using SupportFunctionNew = SupportFunctionNewT<Number,Converter,SupportFunctionNewHighDimension>;
 
 		/* END typedefs (do not remove this comment!) */
 
@@ -75,6 +78,8 @@ class Converter {
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 		template<typename BoxSetting = typename Box::Settings, typename inSetting>
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
+		template<typename BoxSetting = typename Box::Settings, typename inSetting>
+		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 
 
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
@@ -99,6 +104,8 @@ class Converter {
 		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
 		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
 
 
 		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
@@ -122,7 +129,9 @@ class Converter {
 	    template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
 		static ConstraintSetT<Number,CSSetting> toConstraintSet(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
-		static ConstraintSetT<Number,CSSetting> toConstraintSet(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = 	CONV_MODE::OVER);
+		static ConstraintSetT<Number,CSSetting> toConstraintSet(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
+		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
+		static ConstraintSetT<Number,CSSetting> toConstraintSet(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 
 
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
@@ -147,6 +156,8 @@ class Converter {
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
+		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 
 
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
@@ -171,6 +182,8 @@ class Converter {
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
+		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::UNDER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
 
 
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
@@ -195,6 +208,8 @@ class Converter {
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
+		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::UNDER);
 
 
 		template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
@@ -219,6 +234,9 @@ class Converter {
 		static ZonotopeT<Number,Converter<Number>,ZonotopeSetting> toZonotope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
 		static ZonotopeT<Number,Converter<Number>,ZonotopeSetting> toZonotope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
+		template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
+		static ZonotopeT<Number,Converter<Number>,ZonotopeSetting> toZonotope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
+
 
 		#ifdef HYPRO_USE_PPL
 		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
@@ -240,7 +258,9 @@ class Converter {
 		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
 		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
 		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
-		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
+		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
+		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
 		#endif
 
 
@@ -266,16 +286,41 @@ class Converter {
 		static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
 		static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
+		static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+
+
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		#ifdef HYPRO_USE_PPL
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		#endif
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const SupportFunctionT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+	    template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+
 		/* END Conversion (do not remove this comment!) */
 };
-
-
-
 
 } // namespace hypro
 
 #include "typedefs.h"
-
 #include "converterToBox.tpp"
 #include "converterToCarlPolytope.tpp"
 #include "converterToConstraintSet.tpp"
@@ -287,6 +332,7 @@ class Converter {
 #include "converterToPolytope.tpp"
 #endif
 #include "converterToDifferenceBounds.tpp"
+#include "converterToSupportFunctionNew.tpp"
 
 //#include "convenienceOperators.h"
 #include "conversionHelper.h"

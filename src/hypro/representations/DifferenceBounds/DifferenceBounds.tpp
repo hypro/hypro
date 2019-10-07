@@ -118,6 +118,21 @@ namespace hypro {
         return false;
     }
 
+    //TODO
+    template <typename Number, typename Converter, class Setting>    
+    EvaluationResult<Number> DifferenceBoundsT<Number, Converter, Setting>::evaluate(const vector_t<Number>& , bool ) const {
+        assert("Evaluate not implemented for DifferenceBounds." && false);
+        return EvaluationResult<Number>();
+    } 
+
+    //TODO
+    template <typename Number, typename Converter, class Setting>
+    std::vector<EvaluationResult<Number>> DifferenceBoundsT<Number, Converter, Setting>::multiEvaluate(const matrix_t<Number>& , bool ) const {
+        assert("multiEvaluate not implemented for DifferenceBounds." && false);
+        return std::vector<EvaluationResult<Number>>();
+    }
+
+
     template <typename Number, typename Converter, class Setting>
     std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertices( const matrix_t<Number>& ) const {
         hypro::HPolytopeT<Number,Converter, HPolytopeSetting> poly = Converter::toHPolytope(*this);

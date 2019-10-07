@@ -22,19 +22,6 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
-		TRACE("hypro.optimizer","");
-		assert(isSane());
-		mConstraintMatrix = orig.matrix();
-		mConstraintVector = orig.vector();
-		mConsistencyChecked = false;
-		cleanGLPInstance();
-		mGlpkContext = std::map<std::thread::id, glpk_context>();
-		assert(isSane());
-		return *this;
-	}
-
-	template<typename Number>
 	const matrix_t<Number>& Optimizer<Number>::matrix() const {
 		assert(isSane());
 		return mConstraintMatrix;
@@ -44,6 +31,33 @@ namespace hypro {
 	const vector_t<Number>& Optimizer<Number>::vector() const {
 		assert(isSane());
 		return mConstraintVector;
+	}
+
+	//Move ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
+		swap(*this, orig);
+	}
+		
+	//Copy ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(const Optimizer<Number>& orig){
+		TRACE("hypro.optimizer","");
+		assert(isSane());
+		mConstraintMatrix = orig.matrix();
+		mConstraintVector = orig.vector();
+		mConsistencyChecked = false;
+		cleanGLPInstance();
+		mGlpkContext = std::map<std::thread::id, glpk_context>();
+		assert(isSane());
+	}
+
+	//Copy assignment via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
+		Optimizer<Number> tmp(orig);
+		swap(*this, tmp);
+		return *this;
 	}
 
 	template<typename Number>
@@ -382,7 +396,7 @@ namespace hypro {
 		TRACE("hypro.optimizer","");
 		assert(isSane());
 		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
-		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
+		//assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();

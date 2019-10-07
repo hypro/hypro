@@ -3,7 +3,6 @@
 namespace hypro {
     template<typename State>
 	void ltiBadStateHandler<State>::handle() {
-
 	    TRACE("hydra.worker.continuous","Having a total of " << SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().size() << " local bad states.");
 	    auto localBadState = SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().find(mState->getLocation());
 	   	if(localBadState != SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().end()){

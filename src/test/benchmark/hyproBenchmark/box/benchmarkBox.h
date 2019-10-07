@@ -30,7 +30,5 @@ namespace box
     Results<std::size_t> intersect(const Settings& settings);
     Results<std::size_t> computeSupport(const Settings& settings);
     Results<std::size_t> run(const Settings& settings);
-
-
 } // box
 } // namespace benchmark

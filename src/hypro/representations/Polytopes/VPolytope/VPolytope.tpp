@@ -117,6 +117,15 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 	//reduceNumberRepresentation();
 }
 
+//template<typename Number, typename Converter, typename S>
+//matrix_t<Number> matrix() const {
+//
+//}
+//template<typename Number, typename Converter, typename S>
+//vector_t<Number> vector() const {
+//	
+//}
+
 template<typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
@@ -498,6 +507,41 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::unite( const 
 template <typename Number, typename Converter, typename S>
 void VPolytopeT<Number, Converter, S>::clear() {
 	mVertices.clear();
+}
+
+template <typename Number, typename Converter, typename S>
+EvaluationResult<Number> VPolytopeT<Number,Converter,S>::evaluate(const vector_t<Number>& direction) const {
+	if(direction == vector_t<Number>::Zero(direction.rows())) 
+		return EvaluationResult<Number>();
+	Number maxDist = Number(-1e20);
+	EvaluationResult<Number> res;
+	for(const auto& vertex : mVertices){
+		//Point with the furthest distance to the direction vector is the optimal point and is always a corner
+		Number dist = direction.dot(vertex.rawCoordinates());
+		if(dist > maxDist){
+			maxDist = dist;
+			res.optimumValue = vertex.rawCoordinates();
+		}
+	}
+	Number sumOfSquares = Number(0);
+	for(Eigen::Index i = 0; i < direction.rows(); ++i){
+		sumOfSquares += carl::pow(direction(i),2);
+	}
+	res.supportValue = Number(maxDist / sumOfSquares);
+	res.errorCode = SOLUTION::FEAS;
+	return res;
+}
+
+template <typename Number, typename Converter, typename S>
+std::vector<EvaluationResult<Number>> VPolytopeT<Number,Converter,S>::multiEvaluate(const matrix_t<Number>& directions, bool ) const {
+	if(directions == matrix_t<Number>::Zero(directions.rows(), directions.cols()))
+		return std::vector<EvaluationResult<Number>>();
+	std::vector<EvaluationResult<Number>> allRes;
+	for(int i = 0; i < directions.rows(); ++i){
+		EvaluationResult<Number> res = evaluate(directions.row(i));
+		allRes.emplace_back(res);
+	}
+	return allRes;
 }
 
 template <typename Number, typename Converter, typename S>

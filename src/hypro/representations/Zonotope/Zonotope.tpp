@@ -345,6 +345,18 @@ void ZonotopeT<Number,Converter,Setting>::reduceNumberRepresentation() {
 	*/
 }
 
+template<typename Number, typename Converter, typename Setting>
+EvaluationResult<Number> ZonotopeT<Number,Converter,Setting>::evaluate(const vector_t<Number>& ) const {
+	//TODO
+	return EvaluationResult<Number>();
+}
+
+template<typename Number, typename Converter, typename Setting>
+std::vector<EvaluationResult<Number>> ZonotopeT<Number,Converter,Setting>::multiEvaluate(const matrix_t<Number>& , bool ) const {
+	//TODO
+	return std::vector<EvaluationResult<Number>>();
+}
+
 /*****************************************************************************
 *                                                                           *
 *                           Algorithm Functions                             *

@@ -92,4 +92,13 @@ PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytop
 	return PolytopeT<Number,Converter<Number>,PolytopeSetting>(source.matrix(), source.vector());
 }
 
+//Conversion from SFN to ppl poly 
+template<typename Number>
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	//First convert to HPolytope, afterwards to ppl Polytope
+	Converter<Number>::HPolytope tmp = Converter<Number>::toHPolytope(source, std::vector<vector_t<Number>>(), CONV_MODE::EXACT, numberOfDirections);
+	return PolytopeT<Number,Converter,PolytopeSetting>(tmp.matrix(), tmp.vector());
+}
+
 } // namespace hypro

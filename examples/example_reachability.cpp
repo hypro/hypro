@@ -26,6 +26,8 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher(ha.first, ha.second);
 	reacher.setRepresentationType(type);
 	reacher.initQueue();
+	std::cout << "Initiated queues" << std::endl;
+	
 	auto flowpipes = reacher.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
@@ -65,6 +67,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 				extendedFilename += "_box";
 				break;
 			}
+			case hypro::representation_name::SFN: {
+				extendedFilename += "_sfn";
+				break;	
+			}
 			default:
 				extendedFilename += "_unknownRep";
 		}
@@ -91,6 +97,11 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 				std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
 				Representation seg = boost::get<Representation>(segment.getSet(0));
 				switch (type) {
+					case hypro::representation_name::SFN:{
+						unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
+						plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
+						break;
+					}
 					case hypro::representation_name::support_function:{
 						unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
 						plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
@@ -148,6 +159,13 @@ int main(int argc, char** argv) {
 #endif
 
 	switch(rep){
+
+		case 8: {
+			using Representation = hypro::SupportFunctionNew<Number>;
+			std::cout << "Using a generic support function representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::SFN);
+			break;
+		}
 
 		#ifdef HYPRO_USE_PPL
 		case 7: {

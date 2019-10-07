@@ -1,6 +1,7 @@
 #pragma once
 #include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
+#include <iostream>
 #include <map>
 #include <iostream>
 

@@ -69,12 +69,9 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
     if(vertices.empty()){
     	return SupportFunctionT<Number,Converter<Number>,SFSetting>();
     }
-
     HPolytope temp = HPolytope(vertices);
-
     return SupportFunctionT<Number,Converter,SFSetting>( temp.constraints() );
 }
-
 
 // conversion from PPL polytope to support function (no differentiation between conversion modes - always EXACT)
 #ifdef HYPRO_USE_PPL
@@ -99,5 +96,11 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
     return SupportFunctionT<Number,Converter,SFSetting>(_source.matrix(), _source.vector());
 }
 
+//Not implemented since SFNew made to replace SF
+template<typename Number>
+template<typename SFSetting, typename inSetting>
+SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& , const CONV_MODE ){
+    return SupportFunctionT<Number,Converter,SFSetting>();
+}
 
 } // namespace hypro

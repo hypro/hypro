@@ -547,7 +547,7 @@ namespace hypro {
 			mOffset = b1;
 		}
 		catch(std::string const& message) {
-		std::cout << message;
+			std::cout << message;
 			return false;
 		}
 		DEBUG("hypro.vertexEnumeration","positive constrains");

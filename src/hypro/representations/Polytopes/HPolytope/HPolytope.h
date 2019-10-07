@@ -18,6 +18,7 @@
 #include "HPolytopeSetting.h"
 #include <algorithm>
 #include <cassert>
+#include <optional>
 
 namespace hypro {
 
@@ -50,6 +51,7 @@ public:
 	typedef Setting Settings;
 
   private:
+
 	mutable HalfspaceVector mHPlanes;
 	std::size_t mDimension;
 
@@ -57,6 +59,11 @@ public:
 	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 	mutable bool mNonRedundant;
 
+	// A hpoly will only have an own Optimizer if the setting CACHE_OPTIMIZER = true
+	mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;
+
+	// Flag whether the content of the optimizer is still up to date
+	mutable bool mUpdated = false;
 
   public:
   	/**
@@ -68,7 +75,8 @@ public:
 	 * @brief Copy constructor.
 	 * @param orig Original H-polytope.
 	 */
-	HPolytopeT( const HPolytopeT& orig ) = default;
+	//HPolytopeT( const HPolytopeT& orig ) = default;
+	HPolytopeT( const HPolytopeT& orig );
 
 	/**
 	 * @brief Constructor from a vector of halfspaces.
@@ -105,6 +113,10 @@ public:
 	 */
 	HPolytopeT( const std::vector<Point<Number>>& points );
 
+	//Settings conversion constructor
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	HPolytopeT(const HPolytopeT<Number,Converter,SettingRhs>& orig);
+
 	/**
 	 * @brief Destructor.
 	 */
@@ -115,7 +127,7 @@ public:
 	 * @details [long description]
 	 * @return The size.
 	 */
-	double sizeOfHPolytopeT(){
+	double sizeOfHPolytopeT() const {
 		return sizeof(*this) + this->mHPlanes.size()*this->mHPlanes.at(0).sizeOfHalfspace();
 	}
 
@@ -233,7 +245,7 @@ public:
 	bool isExtremePoint( const vector_t<Number>& point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
-
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const;
 	std::vector<Point<Number>> vertexEnumeration() const;
 
 	/*
@@ -262,7 +274,17 @@ public:
 	/*
 	 * Operators
 	 */
-	HPolytopeT& operator=( const HPolytopeT<Number,Converter,Setting>& rhs ) = default;
+	HPolytopeT& operator=( const HPolytopeT<Number,Converter,Setting>& rhs ){
+		mHPlanes = rhs.constraints();
+		mDimension = rhs.dimension();
+		mNonRedundant = rhs.isNonRedundant();
+		mEmpty = rhs.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		if(Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()){
+			mOptimizer->cleanGLPInstance();
+			setOptimizer(rhs.matrix(), rhs.vector());
+		}
+		return *this;
+	}
 
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number,Converter,Setting>& rhs ) {
@@ -292,6 +314,8 @@ public:
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDim;
 		swap( a.mHPlanes, b.mHPlanes );
+		a.setUpdated(false);
+		b.setUpdated(false);
 	}
 
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
@@ -405,6 +429,14 @@ public:
 	 * @param[in]  newDimensions       The new dimensions.
 	 */
 	void insertEmptyDimensions(const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions);
+
+  public: 
+
+	//If CACHE_OPTIMIZER = true, initialize optimizer
+	std::optional<Optimizer<Number>>& getOptimizer() const { return mOptimizer; }
+	void setOptimizer(const matrix_t<Number>& mat = matrix_t<Number>::Zero(1,1), const vector_t<Number>& vec = vector_t<Number>::Zero(1)) const;
+	void setUpdated(const bool& b){ mUpdated = b; }
+	bool getUpdated() const { return mUpdated; }
 
 };
 /** @} */
