@@ -463,7 +463,7 @@ class State
         if (lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp) {
     		return false;
     	}
-        
+
         // location-based checks
         if(lhs.mLoc != nullptr) {
             if(rhs.mLoc != nullptr) {
@@ -543,10 +543,10 @@ State parallelCompose(
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, Polytope<Number>>;
+using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, Polytope<Number>>;
 #else
 template<typename Number>
-using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>>;
+using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>>;
 #endif
 
 } // namespace
