@@ -9,10 +9,8 @@ namespace hypro {
 		                    std::vector<PlotData<State>>* localSegments,
 		                    hypro::ReachabilitySettings &settings)
     {
-    	std::cout << "ContextFactory::createContext, rep type is: " << SettingsProvider<State>::getInstance().getStrategy().getParameters(t->btInfo.btLevel).representation_type << std::endl;
     	if(SettingsProvider<State>::getInstance().getStrategy().getParameters(t->btInfo.btLevel).representation_type == representation_name::polytope_t){
     		DEBUG("hydra.worker", "Using TPoly context!");
-    		std::cout << "ContextFactory::createContext, using tpoly context!" << std::endl;
 			return new TemplatePolyhedronContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings);
     	}
         if(SettingsProvider<State>::getInstance().useDecider() ){

@@ -139,12 +139,14 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std
         context->execOnEnd();
     }
     catch(HardTerminateException& e1){
+        std::cout << "HardTerminateException!!!" << std::endl;
         DEBUG("hydra.worker", "" << e1.what());
         return;
     }catch(FinishWithDiscreteProcessingException& e2){
         DEBUG("hydra.worker", "" << e2.what());
         //START_BENCHMARK_OPERATION(DISCRETE_SUCCESSORS);
         // finish creating discrete successor states
+        std::cout << "FinishWithDiscreteProcessingException!!!" << std::endl;
         std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
         context->execBeforeProcessDiscreteBehavior();
         std::cout << "context->processDiscreteBehavior()" << std::endl;

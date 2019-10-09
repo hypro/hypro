@@ -19,7 +19,6 @@ namespace hypro
 				return new rectangularFirstSegmentHandler<State>(state,index);
 			}
 			case representation_name::polytope_t: {
-				std::cout << "HandlerFactory::buildFirstSegmentHandler, build TPolyFirstSegmentHandler!" << std::endl;
 				return new TPolyFirstSegmentHandler<State>(state,index,timeStep);
 			}
 			default:
@@ -151,10 +150,16 @@ namespace hypro
 				// TODO!!
  				return new rectangularTimeEvolutionHandler<State>(state,index,boost::get<rectangularFlow<Number>>(flow));
 			}
-			//TODO: ADD CASE FOR TPOLY
+			case representation_name::polytope_t: {
+				auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
+				if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+					return nullptr;
+				}
+ 				return new TPolyTimeEvolutionHandler<State>(state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation());
+			}
 			default:
 				auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
-				if(tmp.getFlowMatrix() == matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols()) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+				if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
 					return nullptr;
 				}
  				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());
@@ -180,9 +185,8 @@ namespace hypro
 				assert(false);
  				return nullptr;
 			}
-			//TODO: ADD CASE FOR TPOLY
 			default:
- 				return new ltiResetHandler<State>(state,index,trafo,translation);
+				return new ltiResetHandler<State>(state,index,trafo,translation);
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;

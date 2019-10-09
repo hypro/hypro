@@ -35,7 +35,6 @@ namespace hypro {
             vector_t<Number> derivative(tpoly.matrix().cols()+1);
             derivative.block(0,0,tpoly.matrix().cols(),1) = tpoly.matrix().row(rowI).transpose();
             derivative(derivative.rows()-1) = 0;
-            //vector_t<Number> derivative = vector_t<Number>(tpoly.matrix().row(rowI).transpose()); 
             std::vector<tNumber> polynomCoeffs; //Ordering is from lowest to highest degree
             polynomCoeffs.emplace_back(tpoly.vector()(rowI));
             EvaluationResult<Number> evalRes;
@@ -56,8 +55,6 @@ namespace hypro {
                 if(coeffI < tpoly.matrix().rows()){
                     if(derivVarCoeffs == vector_t<Number>::Zero(derivVarCoeffs.rows())){
                         evalRes = EvaluationResult<Number>(derivative(derivative.rows()-1), SOLUTION::FEAS);
-                        //polynomCoeffs.emplace_back(carl::convert<Number,tNumber>(derivative(derivative.rows()-1)) / factorial);
-                        //break;
                     } else {
                         evalRes = tpoly.evaluate(derivative / factorial, true);    
                     }
@@ -110,6 +107,11 @@ namespace hypro {
         //Set mComputationState vector to the new coeff vec
 		tpoly.setVector(newVec);
 		this->mState->setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
+        
+        //Set flow for further computations
+        this->mTrafo = this->mState->getLocation()->getLinearFlow().getFlowMatrix().block(0,0,this->mState->getDimension(),this->mState->getDimension());
+        this->mTranslation = this->mState->getLocation()->getLinearFlow().getFlowMatrix().block(0,this->mState->getDimension(),this->mState->getDimension(),1);
+        this->mFlow = affineFlow<Number>(this->mTrafo,this->mTranslation);
 	}
 
 }

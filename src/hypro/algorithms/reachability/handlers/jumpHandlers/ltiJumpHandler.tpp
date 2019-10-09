@@ -236,7 +236,6 @@ namespace hypro {
 						AffineTransformation<Number> reset = transitionPtr->getReset().getAffineReset(i);
 						matrix_t<Number> trafo = reset.mTransformation.matrix();
 						vector_t<Number> translation = reset.mTransformation.vector();
-
 						IResetHandler* ptr = HandlerFactory<State>::getInstance().buildResetHandler(newState.getSetType(i), &newState, i, trafo,translation);
 						if(ptr){
 							ptr->handle();

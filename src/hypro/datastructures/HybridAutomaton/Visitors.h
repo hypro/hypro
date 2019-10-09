@@ -82,7 +82,7 @@ public:
 
 	template<typename B>
     inline T operator()(const B& lhs) const {
- 		return lhs.affineTransformation(mat, vec);
+    	return lhs.affineTransformation(mat, vec);
     }
 };
 

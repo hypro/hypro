@@ -461,25 +461,24 @@ class State
      */
     friend bool operator==(const State<Number,Representation,Rargs...>& lhs, const State<Number,Representation,Rargs...>& rhs) {
     	// quick checks first
-      if (lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp) {
+        if (lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp) {
     		return false;
     	}
-      // location-based checks
-      if(lhs.mLoc != nullptr) {
-        if(rhs.mLoc != nullptr) {
-          if (*(lhs.mLoc) != *(rhs.mLoc)) {
-            return false;
-          }
+        // location-based checks
+        if(lhs.mLoc != nullptr) {
+            if(rhs.mLoc != nullptr) {
+                if (*(lhs.mLoc) != *(rhs.mLoc)) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else {
-          return false;
+            if( rhs.mLoc != nullptr ) {
+                return false;
+            }
         }
-      } else {
-        if( rhs.mLoc != nullptr ) {
-          return false;
-        }
-      }
-
-      // set-based checks
+        // set-based checks
     	for(std::size_t i = 0; i < lhs.getNumberSets(); ++i) {
     		if( lhs.getSetType(i) != rhs.getSetType(i)) {
     			return false;
@@ -543,10 +542,10 @@ State parallelCompose(
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, Polytope<Number>>;
+using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, TemplatePolyhedron<Number>, Polytope<Number>>;
 #else
 template<typename Number>
-using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>>;
+using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, TemplatePolyhedron<Number>>;
 #endif
 
 } // namespace

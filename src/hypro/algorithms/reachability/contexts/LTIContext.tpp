@@ -26,7 +26,6 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" first segment handlers");
 		// initialize first segment handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			std::cout << "LTIContext::initializeFirstSegmentHandlers(), mComputationState.getSetType(" << i << ") = " << mComputationState.getSetType(i) << std::endl;
 			mFirstSegmentHandlers.push_back(HandlerFactory<State>::getInstance().buildFirstSegmentHandler(mComputationState.getSetType(i), &mComputationState, i,mStrategy.getParameters(mTask->btInfo.btLevel).timeStep));
 			DEBUG("hypro.worker","Built " << mFirstSegmentHandlers.at(i)->handlerName() << "at pos " << i);
 		}
@@ -412,8 +411,7 @@ namespace hypro
 
     template<typename State>
 	void LTIContext<State>::checkInvariant(){
-
-    	if(mInvariantHandlers.size() > 0){
+		if(mInvariantHandlers.size() > 0){
     		bool deleteRequested = false;
 	    	// compute strictes containment on the fly
 	    	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
@@ -421,7 +419,7 @@ namespace hypro
 	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){
 				if(!omitInvariant()) {
 					mInvariantHandlers.at(i)->handle();
-
+					
 					if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
 						TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
 						strictestContainment = mInvariantHandlers.at(i)->getContainment();
@@ -429,6 +427,7 @@ namespace hypro
 					} else if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::PARTIAL) {
 						strictestContainment = CONTAINMENT::PARTIAL;
 					}
+
 
 					if(mInvariantHandlers.at(i)->getMarkedForDelete()){
 						deleteRequested = true;
@@ -600,12 +599,12 @@ namespace hypro
 
     template<typename State>
 	void LTIContext<State>::checkTransition(){
+
     	DEBUG("hypro.worker","State before guard intersection: " << mComputationState);
     	// Collect potential new initial states from discrete behaviour.
         if (!(mSettings.jumpDepth < 0 || int(mTask->treeNode->getDepth()) <= mSettings.jumpDepth)) {
         	return;
         }
-
         std::vector<typename std::map<Transition<Number>*, std::vector<IGuardHandler<State>*> >::iterator> alwaysDisabledTransitions;
         std::vector<typename std::map<Transition<Number>*, std::vector<IGuardHandler<State>*> >::iterator> sortIndexChanged;
         bool urgentTransitionEnabled = false;
@@ -629,7 +628,6 @@ namespace hypro
 				}
         		continue;
         	}
-
     		TRACE("hypro.worker","Initializing " << it->second.size() <<" guard handlers for transition " << it->first->getSource()->hash() << " -> " << it->first->getTarget()->hash());
 
     		State* guardStatePtr = new State(mComputationState);
@@ -705,7 +703,6 @@ namespace hypro
             }  // handle normal transitions, but only if they cannot be omitted (they can if the timing intervals do not intersect)
             else if (guardSatisfied) {
                 TRACE("hypro.worker.discrete","hybrid transition enabled with timestamp " << guardStatePtr->getTimestamp());
-
     			DEBUG("hypro.worker","Guard satisfying state: " << *guardStatePtr);
 				COUNT("GuardEnabled");
                 mDiscreteSuccessorBuffer.push_back(boost::tuple<Transition<Number>*, State>(it->first, *(guardStatePtr)));

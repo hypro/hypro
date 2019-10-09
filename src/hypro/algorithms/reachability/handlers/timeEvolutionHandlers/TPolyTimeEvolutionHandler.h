@@ -1,8 +1,8 @@
 /**
- * TPolyFirstSegmentHandler.h
+ * TPolyTimeEvolutionHandler.h
  *
  * @author Phillip Tse
- * @date 18.9.2019
+ * @date 4.10.2019
  */
 
 #pragma once
@@ -11,26 +11,29 @@
 
 namespace hypro {
 
-	template<typename State> //TODO: inherit from IFSHandler or from ltiFSHandler?
-	class TPolyFirstSegmentHandler : public ltiFirstSegmentHandler<State> {
+	template<typename State>
+	class TPolyTimeEvolutionHandler : public ltiTimeEvolutionHandler<State> {
 
 		using Number = typename State::NumberType;
 
 	  protected:
 
-	  	//Inherits the members from ltiFirstSegmentHandler
+	  	//Inherits members from ltiTimeEvolutionHandler
 
 	  public:
 
-	  	TPolyFirstSegmentHandler() = delete;
-		TPolyFirstSegmentHandler(State* state, size_t index, tNumber timeStep)
-			: ltiFirstSegmentHandler<State>(state, index, timeStep) {}
-		~TPolyFirstSegmentHandler(){}
+		TPolyTimeEvolutionHandler() = delete;
+		TPolyTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo, vector_t<Number> translation)
+			: ltiTimeEvolutionHandler<State>(state, index, timeStep, trafo, translation)
+		{}
+		~TPolyTimeEvolutionHandler(){}
 
-		//The firstSegment approximation from [Sankaranarayanan,2008]
+		//The set integration approximation from [Sankaranarayanan,2008]
 		void handle();
-		const char* handlerName() {return "TPolyFirstSegmentHandler";}
-	
+		const char* handlerName() { return "TPolyTimeEvolutionHandler"; }
+		bool getMarkedForDelete() { return false; };
+		void setMarkedForDelete(bool ) { /*no op*/ };
+
 	  private:
 
 		//Computes the gradient of a multivariate but linear function linearFct
@@ -44,8 +47,9 @@ namespace hypro {
 	    //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
 	    vector_t<Number> lieDerivative(const vector_t<Number>& dir);
 
+
 	};
 
-} //namespace hypro
+} // namespace hypro
 
-#include "TPolyFirstSegmentHandler.tpp"
+#include "TPolyTimeEvolutionHandler.tpp"

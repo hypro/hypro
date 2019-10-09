@@ -342,6 +342,8 @@ TYPED_TEST(TemplatePolyhedronTest, RemoveRedundancy){
 	withOneRedundant.removeRedundancy();
 	EXPECT_EQ(withOneRedundant.matrix().rows(), 4);
 	EXPECT_EQ(withOneRedundant.vector().rows(), 4);
+	EXPECT_NE(withOneRedundant.matrix(), matrix_t<TypeParam>::Zero(4,2));
+	EXPECT_NE(withOneRedundant.vector(), vector_t<TypeParam>::Zero(4));
 
 	//Multiple redundant constraints
 }
@@ -590,8 +592,8 @@ TYPED_TEST(TemplatePolyhedronTest, SatisfiesHalfspaces){
 	EXPECT_EQ(res.first, CONTAINMENT::FULL);
 	EXPECT_EQ(res.second, this->middle);
 
-	//middle completeley outside halfspaces
-	offsets << -3,-5,3;
+	//middle completely outside halfspaces
+	offsets << -3,-5,-3;
 	res = this->middle.satisfiesHalfspaces(normals,offsets);
 	EXPECT_EQ(res.first, CONTAINMENT::NO);
 	EXPECT_EQ(res.second, this->middle);

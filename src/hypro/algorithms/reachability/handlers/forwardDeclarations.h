@@ -52,8 +52,8 @@ namespace hypro {
 	class timedElapseAfterTickTimeEvolutionHandler;
 	template<typename State>
 	class timedTickTimeEvolutionHandler;
-	//template<typename State>
-	//class TPolyTimeEvolutionHandler;
+	template<typename State>
+	class TPolyTimeEvolutionHandler;
 	template<typename State>
 	class ltiResetHandler;
 	template<typename State>

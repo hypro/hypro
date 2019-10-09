@@ -17,7 +17,7 @@ namespace hypro
 	public:
 
 		ltiTimeEvolutionHandler() = delete;
-		ltiTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo,vector_t<Number> translation){
+		ltiTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo, vector_t<Number> translation){
 			mState = state;
 			mIndex = index;
 			mTimeStep = timeStep;

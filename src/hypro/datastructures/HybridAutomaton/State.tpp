@@ -287,7 +287,6 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 	assert(I < mSets.size());
 	assert(checkConsistency());
 	res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafo.matrix(), trafo.vector()), mSets.at(I)), I);
-
 	return res;
 }
 

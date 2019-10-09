@@ -52,11 +52,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	void execBeforeFirstSegment() override;
 
   	void firstSegment() override;
-
-  	void checkInvariant() override;
-
-  	void intersectBadStates() override;
-
+    
   	void applyContinuousEvolution() override;
 
   private:
