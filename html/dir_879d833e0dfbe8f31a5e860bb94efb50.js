@@ -14,7 +14,6 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
       [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ]
     ] ],
     [ "Permutator.h", "Permutator_8h_source.html", null ],
-    [ "Range.h", "Range_8h_source.html", null ],
     [ "templateDirections.h", "templateDirections_8h_source.html", null ],
     [ "typetraits.h", "util_2typetraits_8h_source.html", null ],
     [ "VariablePool.h", "VariablePool_8h_source.html", null ]

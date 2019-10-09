@@ -75,7 +75,7 @@ var hierarchy =
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::EventTimingContainer< Number >", "classhypro_1_1EventTimingContainer.html", null ],
     [ "hypro::EventTimingContainer< N >", "classhypro_1_1EventTimingContainer.html", null ],
-    [ "std::exception", null, [
+    [ "exception", null, [
       [ "hypro::FinishWithDiscreteProcessingException", "classhypro_1_1FinishWithDiscreteProcessingException.html", null ],
       [ "hypro::HardTerminateException", "classhypro_1_1HardTerminateException.html", null ]
     ] ],
@@ -87,7 +87,6 @@ var hierarchy =
     ] ],
     [ "hypro::Fan< Number >", "classhypro_1_1Fan.html", null ],
     [ "Flags", "structFlags.html", null ],
-    [ "hypro::Flowpipe< State >", "classhypro_1_1Flowpipe.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1Flowpipe.html", null ],
     [ "Flowpipe_segment", "structFlowpipe__segment.html", null ],
     [ "hypro::FourierMotzkinQE< Number >", "classhypro_1_1FourierMotzkinQE.html", null ],

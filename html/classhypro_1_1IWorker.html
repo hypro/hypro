@@ -131,20 +131,14 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>Number</b> = typenam
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae5d4c1f8f4318a64a973ee5ebe441a54"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#ae5d4c1f8f4318a64a973ee5ebe441a54">IWorker</a> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
 <tr class="separator:ae5d4c1f8f4318a64a973ee5ebe441a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a911c99e8bd5ed58fa99d46a0a5080b97"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#a911c99e8bd5ed58fa99d46a0a5080b97">processTask</a> (const Workable &amp;w, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; State &gt; &amp;strategy, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments)=0</td></tr>
-<tr class="separator:a911c99e8bd5ed58fa99d46a0a5080b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4c3c995bc6555be3f37273f12097953"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4c3c995bc6555be3f37273f12097953"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>detectedUnsafety</b> () const </td></tr>
-<tr class="separator:aa4c3c995bc6555be3f37273f12097953"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4171f4df9417ca1eea8664b43d9d468d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#a4171f4df9417ca1eea8664b43d9d468d">processTask</a> (const Workable &amp;w, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; State &gt; &amp;strategy, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; State &gt;&gt; *localSegments)=0</td></tr>
+<tr class="separator:a4171f4df9417ca1eea8664b43d9d468d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a918ff4c18cb0996bb5008dc4e119c216"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a918ff4c18cb0996bb5008dc4e119c216"></a>
 <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mSettings</b></td></tr>
 <tr class="separator:a918ff4c18cb0996bb5008dc4e119c216"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a015232621f753f5c6e8fbf465784d5a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a015232621f753f5c6e8fbf465784d5a8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isUnsafe</b> = false</td></tr>
-<tr class="separator:a015232621f753f5c6e8fbf465784d5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class Workable, typename State&gt;<br />
@@ -185,7 +179,7 @@ template&lt;class Workable, typename State&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a911c99e8bd5ed58fa99d46a0a5080b97"></a>
+<a class="anchor" id="a4171f4df9417ca1eea8664b43d9d468d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -221,7 +215,7 @@ template&lt;class Workable, typename State&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; State &gt;&gt; *&#160;</td>
           <td class="paramname"><em>localSegments</em>&#160;</td>
         </tr>
         <tr>
@@ -236,7 +230,7 @@ template&lt;class Workable, typename State&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>abstract definition of the function responsible for <a class="el" href="classhypro_1_1Flowpipe.html" title="Container for a flowpipe, i.e. an ordered sequence of state sets (flowpipe segments). ">Flowpipe</a> computation. It is important that the Workable class has a constructor taking a Flowpipe! this way new Workable Elements can be constructed, which then will be added to the WorkQueue. </p>
+<p>abstract definition of the function responsible for <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a> computation. It is important that the Workable class has a constructor taking a Flowpipe! this way new Workable Elements can be constructed, which then will be added to the WorkQueue. </p>
 
 </div>
 </div>

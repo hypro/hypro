@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getting_20started',['Getting started',['../gettingStarted.html',1,'']]]
+  ['hypro',['HyPro',['../index.html',1,'']]]
 ];
