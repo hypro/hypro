@@ -11,7 +11,7 @@
 #include <algorithms/reachability/workers/ContextBasedReachabilityWorker.h>
 #include <iostream>
 
-int main(int argc, char** argv) {
+int main() {
 
     // typedefs
     using Number = double;
