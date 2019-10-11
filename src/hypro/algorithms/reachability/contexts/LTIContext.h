@@ -53,9 +53,6 @@ namespace hypro
 
         std::map<Transition<Number>*, std::vector<IGuardHandler<State>*>> mTransitionHandlerMap;
 
-        bool mEndLoop = false;
-
-
 	public:
 		LTIContext() = delete;
 		~LTIContext(){}

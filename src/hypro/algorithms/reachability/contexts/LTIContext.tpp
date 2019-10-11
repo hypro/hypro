@@ -544,8 +544,6 @@ namespace hypro
 				DEBUG("hypro.worker","Built " << ptr->handlerName());
 			}
 		}
-		//mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
-		mEndLoop = (mContinuousEvolutionHandlers.size() > 0);
 
 		initializeGuardHandlers();
 
@@ -591,8 +589,8 @@ namespace hypro
 
     template<typename State>
 	bool LTIContext<State>::doneCondition(){
-    	DEBUG("hypro.worker", "Checking done condition: CurrentLocalTime (" << carl::toDouble(mCurrentLocalTime) << ") > timeBound (" << mSettings.timeBound << ")");
-    	return !mEndLoop && (mCurrentLocalTime > mSettings.timeBound);
+    	DEBUG("hypro.worker", "Checking done condition: CurrentLocalTime (" << carl::toDouble(mCurrentLocalTime) << ") > timeBound (" << mSettings.timeBound << "), number of continuous evolution handlers: " << mContinuousEvolutionHandlers.size());
+    	return (mContinuousEvolutionHandlers.size() == 0) || (mCurrentLocalTime > mSettings.timeBound);
     }
 
     template<typename State>
@@ -741,8 +739,8 @@ namespace hypro
 
 		for(auto it = mContinuousEvolutionHandlers.begin(); it != mContinuousEvolutionHandlers.end(); ){
 			if((*it)->getMarkedForDelete()) {
-				delete *it;
 				it = mContinuousEvolutionHandlers.erase(it);
+				TRACE("hypro.worker","Removed continuous evolution handler, number of handlers after removal: " << mContinuousEvolutionHandlers.size());
 			} else {
 				++it;
 			}
