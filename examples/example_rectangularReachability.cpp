@@ -21,8 +21,8 @@ int main() {
     hypro::SettingsProvider<State>& settingsProvider = hypro::SettingsProvider<State>::getInstance();
 
     // variables
-    carl::Variable x;
-    carl::Variable y;
+    carl::Variable x = hypro::VariablePool::getInstance().carlVarByIndex(0);
+    carl::Variable y = hypro::VariablePool::getInstance().carlVarByIndex(1);
     // rectangular dynamics
     std::map<carl::Variable, carl::Interval<Number>> dynamics;
     dynamics.emplace(std::make_pair(x,carl::Interval<Number>(1,2)));
@@ -44,6 +44,9 @@ int main() {
     constraints << 1,0,-1,0,0,1,0,-1;
     hypro::vector_t<Number> constants = hypro::vector_t<Number>(4);
     constants << 1,1,1,1;
+
+    // create and add initial state
+    ha.addInitialState(&loc1, hypro::Condition<Number>(constraints,constants));
 
     // theoretically we do not need this - check if really needed.
     settingsProvider.addStrategyElement<hypro::CarlPolytope<Number>>(mpq_class(1)/mpq_class(100), hypro::AGG_SETTING::AGG, -1);
