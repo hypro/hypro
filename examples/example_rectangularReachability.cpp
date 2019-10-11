@@ -108,6 +108,9 @@ int main() {
         worker.processTask(task,settingsProvider.getStrategy(), globalQueue, globalCEXQueue, segments);
     }
 
+    for(const auto& segment : segments) {
+        std::cout << segment << std::endl;
+    }
+
     return 0;
 }
-
