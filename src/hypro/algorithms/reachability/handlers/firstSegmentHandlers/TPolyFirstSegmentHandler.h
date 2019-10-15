@@ -44,6 +44,9 @@ namespace hypro {
 	    //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
 	    vector_t<Number> lieDerivative(const vector_t<Number>& dir);
 
+	    //Computes the roots of a given polynom that lie in a given interval, and gets the highest function value at all these roots.
+	    tNumber maxValueAtRoots(const carl::UnivariatePolynomial<tNumber>& polynom, const carl::Interval<tNumber>& interval);
+
 	};
 
 } //namespace hypro

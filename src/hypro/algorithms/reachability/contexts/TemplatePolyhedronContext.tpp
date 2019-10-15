@@ -23,11 +23,11 @@ namespace hypro {
             switch(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE){
                 case(TEMPLATE_CONTENT::ONLY_INIT): {
                     //Normally initial constraints are already inside -> nothing to do 
-                    std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, ONLY_INIT setting" << std::endl;
+                    //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, ONLY_INIT setting" << std::endl;
                     break;
                 }
                 case(TEMPLATE_CONTENT::INIT_INV): {
-                    std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV setting" << std::endl;
+                    //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV setting" << std::endl;
                     assert(tpoly.matrix().cols() == this->mComputationState.getDimension());
                     std::vector<std::pair<matrix_t<Number>,vector_t<Number>>> constraints;
                     constraints.emplace_back(std::make_pair(tpoly.matrix(), tpoly.vector()));
@@ -38,7 +38,8 @@ namespace hypro {
                     break;
                 }
                 case(TEMPLATE_CONTENT::INIT_INV_GUARD): {
-                    std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV_GUARD setting" << std::endl;
+                    //TODO: Does this even make sense, as initially we usually do not satisfy the guard which can make the combined initial set empty?
+                    //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV_GUARD setting" << std::endl;
                     assert(tpoly.matrix().cols() == this->mComputationState.getDimension());
                     std::vector<std::pair<matrix_t<Number>,vector_t<Number>>> constraints;
                     constraints.emplace_back(std::make_pair(tpoly.matrix(), tpoly.vector()));
@@ -47,12 +48,21 @@ namespace hypro {
                         constraints.emplace_back(std::make_pair(transition->getGuard().getMatrix(), transition->getGuard().getVector()));
                     }
                     TemplatePolyhedron<Number> tpolyWithInvGuard(constraints);
-                    tpolyWithInvGuard.removeRedundancy();
-                    this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpolyWithInvGuard), this->mComputationState.getSet(index)),index);
+                    if(!tpolyWithInvGuard.empty()){
+                        tpolyWithInvGuard.removeRedundancy();
+                        this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpolyWithInvGuard), this->mComputationState.getSet(index)),index);    
+                    } else {
+                        //if guard not satisfied initially, fallback to init_inv
+                        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV_GUARD made the initial set empty. Fallback to init_inv" << std::endl;
+                        constraints.pop_back();
+                        TemplatePolyhedron<Number> tpolyWithoutGuard(constraints);
+                        tpolyWithInvGuard.removeRedundancy();
+                        this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpolyWithoutGuard), this->mComputationState.getSet(index)),index);
+                    } 
                     break;
                 }
                 case(TEMPLATE_CONTENT::OCTAGON): {
-                    std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, OCTAGON setting" << std::endl;
+                    //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, OCTAGON setting" << std::endl;
                     TemplatePolyhedron<Number> octagon(this->mComputationState.getDimension(), 8);
                     auto evalInOctagonDirs = tpoly.multiEvaluate(octagon.matrix());
                     vector_t<Number> evalRes(evalInOctagonDirs.size());
@@ -66,7 +76,7 @@ namespace hypro {
                 }
             }
         }        
-        std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;
+        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;
 
         //Do the stuff ltiContext would to 
         this->LTIContext<State>::execBeforeFirstSegment();
@@ -74,12 +84,15 @@ namespace hypro {
 
     template<typename State>
     void TemplatePolyhedronContext<State>::firstSegment(){
+        //std::cout << "TemplatePolyhedronContext::firstSegment" << std::endl;
         if(TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO){
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
+                //std::cout << "TemplatePolyhedronContext::firstSegment, use USE_ALTERNATIVE_REACH_ALGO!" << std::endl;
                 this->mFirstSegmentHandlers.at(i)->handle();
             }
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
+                //std::cout << "TemplatePolyhedronContext::firstSegment, use standard reach algo!" << std::endl;
                 static_cast<ltiFirstSegmentHandler<State>*>(this->mFirstSegmentHandlers.at(i))->handle();
             }
         }
@@ -90,12 +103,15 @@ namespace hypro {
 
     template<typename State>
     void TemplatePolyhedronContext<State>::applyContinuousEvolution(){
+        //std::cout << "TemplatePolyhedronContext::applyContinuousEvolution" << std::endl;
         if(TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO){
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
+                //std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use USE_ALTERNATIVE_REACH_ALGO!" << std::endl;
                 this->mContinuousEvolutionHandlers.at(i)->handle();
             }
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
+                //std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use standard reach algo!" << std::endl;
                 static_cast<ltiTimeEvolutionHandler<State>*>(this->mContinuousEvolutionHandlers.at(i))->handle();
             }
         }

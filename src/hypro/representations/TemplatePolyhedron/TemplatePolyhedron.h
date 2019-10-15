@@ -142,11 +142,6 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	
 	std::shared_ptr<const matrix_t<Number>> rGetMatrixPtr() const { return mMatrixPtr; }
 	
-	void setMatrixToNull() { 
-		mOptimizer.setMatrix(matrix_t<Number>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols()));
-		mMatrixPtr = nullptr; 
-	}
-	
 	Optimizer<Number>& getOptimizer() { return mOptimizer; }
 
 	/**
@@ -157,6 +152,8 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 
 	void setVector(const vector_t<Number>& vec) { 
 		assert(((vec.rows() == mMatrixPtr->rows()) && mMatrixPtr != nullptr) || mMatrixPtr == nullptr);
+		mNonRedundant = false;
+		mEmpty = TRIBOOL::NSET;
 		mVector = vec; 
 	}
 

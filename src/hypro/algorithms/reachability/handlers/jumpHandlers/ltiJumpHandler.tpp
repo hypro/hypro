@@ -67,7 +67,7 @@ namespace hypro {
 					// if the following is set, copy the refinement to any other refinement level.
 					#ifdef RESET_REFINEMENT
 					if(currentTargetLevel > 0) { // I think this branch can never be reached, as wasRefinementTask prevents this.
-						for(auto i = 0; i < currentTargetLevel; ++i){
+						for(std::size_t i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
 								//child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));

@@ -20,11 +20,6 @@ namespace hypro {
 		//if(noOfSides != std::size_t(vec.rows())){
 		//	throw std::invalid_argument("Template polyhedron offset vector length not fitting.");
 		//}
-
-		//Check if polyhedron will be bounded
-		if(noOfSides <= dimension){
-			throw std::invalid_argument("Template polyhedron is unbound. Please check the amount of constraints used for building this template polyhedron.");
-		}
 		
 		//compute template matrix and set it as new mMatrixPtr
 		auto templateDirs = computeTemplate<Number>(dimension, noOfSides);
@@ -182,8 +177,9 @@ namespace hypro {
 		if(allNegative) return true;	
 
 		//If no quick check triggered: Solve LP and cache result
-		std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
+		//std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
 		mEmpty = !mOptimizer.checkConsistency() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		//std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmpty == TRIBOOL::TRUE) << std::endl;
 		TRACE("hypro.representations.TPolytope","Optimizer result: " << mEmpty);
 		return (mEmpty == TRIBOOL::TRUE);
 	}
@@ -213,16 +209,19 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> TemplatePolyhedronT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
+		COUNT("Evaluate calls");
 		if(this->empty()) return EvaluationResult<Number>( Number(0), SOLUTION::INFEAS );
 		assert(_direction.rows() == mMatrixPtr->cols());
 		//Quick check: If direction is a part of the template, then just return offset
-		for(int i = 0; i < mMatrixPtr->rows(); ++i){
-			//TODO: linear dependent better
-			if(vector_t<Number>(mMatrixPtr->row(i)) == _direction){
-				return EvaluationResult<Number>(mVector(i), SOLUTION::FEAS);
+		if(mNonRedundant){
+			for(int i = 0; i < mMatrixPtr->rows(); ++i){
+				//TODO: linear dependent better
+				if(vector_t<Number>(mMatrixPtr->row(i)) == _direction){
+					return EvaluationResult<Number>(mVector(i), SOLUTION::FEAS);
+				}
 			}
 		}
-		//COUNT("Single Evaluation");
+		COUNT("Single Evaluation");
 		return mOptimizer.evaluate(_direction, true);
 	}
 
@@ -231,19 +230,25 @@ namespace hypro {
 		if(this->empty()) return std::vector<EvaluationResult<Number>>();
 		assert(_directions.cols() == mMatrixPtr->cols());
 		std::vector<EvaluationResult<Number>> res;
-		for(int i = 0; i < _directions.rows(); ++i){
-			//Quick check: If direction is a part of the template, then just return offset
-			bool found = false;
-			for(int j = 0; j < mMatrixPtr->rows(); ++j){
-				//TODO: linear dependent better
-				if(!found && mMatrixPtr->row(j) == _directions.row(i)){
-					res.emplace_back(EvaluationResult<Number>(mVector(j), SOLUTION::FEAS));
-					found = true;
+		if(mNonRedundant){
+			for(int i = 0; i < _directions.rows(); ++i){
+				//Quick check: If direction is a part of the template, then just return offset
+				bool found = false;
+				for(int j = 0; j < mMatrixPtr->rows(); ++j){
+					//TODO: linear dependent better
+					if(!found && mMatrixPtr->row(j) == _directions.row(i)){
+						res.emplace_back(EvaluationResult<Number>(mVector(j), SOLUTION::FEAS));
+						found = true;
+					}
 				}
+				if(!found){
+					//COUNT("Single Evaluation");
+					res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));
+				}	
 			}
-			if(!found){
-				//COUNT("Single Evaluation");
-				res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));
+		} else {
+			for(int i = 0; i < _directions.rows(); ++i){
+				res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));	
 			}
 		}
 		return res;
@@ -260,35 +265,34 @@ namespace hypro {
 		//TODO: is that even permitted to remove constraints from the matrix?
 		//HPoly method: optimize, then get redundant constraints, then remove the redundant constraints
 		//Time: LP + LP + linear
+		//std::cout << "TemplatePolyhedron::removeRedundancy, mNonRedundant? " << mNonRedundant << std::endl;
 		if(!mNonRedundant && !empty()){
 			std::vector<std::size_t> redundant = mOptimizer.redundantConstraints();
 			std::sort(redundant.begin(), redundant.end());
-			std::cout << "TemplatePolyhedron::removeRedundancy, redundant indices: {";
-			for(const auto& r : redundant){
-				std::cout << r << ",";
-			}
-			std::cout << "}" << std::endl;
+			//std::cout << "TemplatePolyhedron::removeRedundancy, redundant indices: {";
+			//for(const auto& r : redundant){
+			//	//std::cout << r << ",";
+			//}
+			//std::cout << "}" << std::endl;
 			if(!redundant.empty()){
 				matrix_t<Number> nonRedundantMatrix = matrix_t<Number>::Zero(mMatrixPtr->rows() - redundant.size(), mMatrixPtr->cols());
 				vector_t<Number> nonRedundantVector = vector_t<Number>::Zero(mMatrixPtr->rows() - redundant.size());
 				int topUnfilledRow = 0;
-				for(std::size_t i = 0; i < mMatrixPtr->rows(); ++i){
-					std::cout << "TemplatePolyhedron::removeRedundancy, currentRow: " << i << " redundant.size(): " << redundant.size() << " lastUnfilledRow: " << topUnfilledRow << std::endl;
-					if(redundant.empty()){
+				auto it = redundant.begin();
+				for(int i = 0; i < mMatrixPtr->rows(); ++i){
+					//std::cout << "TemplatePolyhedron::removeRedundancy, currentRow: " << i << " redundant.s: " << redundant.size() << " lastUnfilledRow: " << topUnfilledRow << std::endl;
+					//std::cout << "TemplatePolyhedron::removeRedundancy, nonRedundantMatrix: \n " << nonRedundantMatrix << "nonRedundantVector: \n" << nonRedundantVector << std::endl;
+					if(it == redundant.end() || std::size_t(i) != *it){
+						//std::cout << "TemplatePolyhedron::removeRedundancy, i: " << i << " != it: " << *it << ", add row!" << std::endl;
 						nonRedundantMatrix.row(topUnfilledRow) = mMatrixPtr->row(i);
 						nonRedundantVector(topUnfilledRow) = mVector(i);
 						topUnfilledRow++;
 					} else {
-						if(i != redundant.back()){
-							nonRedundantMatrix.row(topUnfilledRow) = mMatrixPtr->row(i);
-							nonRedundantVector(topUnfilledRow) = mVector(i);
-							topUnfilledRow++;
-						} else {
-							redundant.pop_back();
-						}
+						//std::cout << "TemplatePolyhedron::removeRedundancy, i: " << i << " == it: " << *it << ", pop back!" << std::endl;
+						++it;
 					}
 				}
-				assert(redundant.empty());
+				assert(it == redundant.end());
 				mMatrixPtr = std::move(std::make_shared<matrix_t<Number>>(nonRedundantMatrix));
 				mVector = std::move(nonRedundantVector);
 			}
@@ -361,10 +365,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
-		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(empty()){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this); 
 		}
 
@@ -386,22 +390,22 @@ namespace hypro {
 
 		assert(!(fullyInside && fullyOutside));
 		if(fullyInside){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		} 
 		if(fullyOutside){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this);
 		} 	
 			
 		//Even more expensive part
-		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
 		auto tmp = this->intersectHalfspaces(_mat,_vec);
 		if(tmp.empty()){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
-			return std::make_pair(CONTAINMENT::NO, tmp);
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
+			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
 		} else {
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
 			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
 		}
 	}
@@ -527,6 +531,7 @@ namespace hypro {
 					return TemplatePolyhedronT<Number,Converter,Setting>::Empty(dimension());
 				}
 			}
+			return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newVector);
 		}
 
 		//This only works if both TPolys have the same; if MinkowskiSum with a box, use smth else
@@ -591,124 +596,104 @@ namespace hypro {
 		vector_t<Number> vec = vector_t<Number>::Zero(1);
 		vec(0) = hspace.offset();
 		return intersectHalfspaces(mat,vec);
-	}
+	}	
 
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+
 		//Emptiness check
 		if(this->empty()) return *this;
-/*
-//TODOOOOO: Why does this not work? Pipe ends early
-		//Check whether halfspaces are already in template, if they are, take the smaller of both values
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
-		vector_t<Number> newVec = mVector;
-		//std::vector<int> toAddEvalDirs;				//A vector of all row indices of directions in _mat that need to be added to the extendedMatrix
-		//std::vector<int> toIgnoreTemplateDirs;		//A vector of all template directions that can be ignored as evaluation directions later on.
+
+		//Assume that this is currently non redundant (which should be the case since removeRedundancy() is used in most settings)
 		bool foundAll = true;
+		matrix_t<Number> extendedMatrix = *mMatrixPtr;
+		vector_t<Number> extendedVector = mVector;
+		//vector_t<Number> resultVec = vector_t<Number>::Zero(mVector.rows());
+		vector_t<Number> resultVec = mVector;
+		std::vector<int> alreadyDone;
 		for(int i = 0; i < _mat.rows(); ++i){
-			newVec(i) = _vec(i);
 			bool found = false;
 			for(int j = 0; j < mMatrixPtr->rows(); ++j){
-				std::cout << "TemplatePolyhedron::intersectHalfspaces, is _mat.row(" << i << ") = " << vector_t<Number>(_mat.row(i)) << "equal to mMatrixPtr.row(" << j << ") = " << vector_t<Number>(mMatrixPtr->row(i)) << std::endl;
 				if(_mat.row(i) == mMatrixPtr->row(j)){
+					//If constraint is already in template, take the smaller offset value
+					std::cout << "TemplatePolyhedron::intersectHalfspaces, _vec(i): " << _vec(i) << " < " << mVector(j) << "? " << (_vec(i) < mVector(j)) << std::endl;
+					resultVec(j) = _vec(i) < mVector(j) ? _vec(i) : mVector(j);
+					alreadyDone.emplace_back(j);
 					found = true;
-					std::cout << "TemplatePolyhedron::intersectHalfspaces, yes! Is mVector(" << j << ") = " << mVector(j) << " < " << "newVec(" << i << ") = " << newVec(i) << "? " << (mVector(j) < newVec(i)) << std::endl;
-					if(mVector(j) < newVec(i)){
-						newVec(i) = mVector(j);
-					}
 					break;
-					//toIgnoreTemplateDirs.emplace_back(j);
 				}
 			}
 			if(!found){
-				//toAddEvalDirs.emplace_back(i);
-				std::cout << "TemplatePolyhedron::intersectHalfspaces, this row has not been found" << std::endl;
+				//If constraint was not already in template, put it into extendedMatrix
 				foundAll = false;
-			} else {
-				std::cout << "TemplatePolyhedron::intersectHalfspaces, this row has been found" << std::endl;
+				extendedMatrix.conservativeResize(extendedMatrix.rows()+1,extendedMatrix.cols());
+				extendedMatrix.row(extendedMatrix.rows()-1) = _mat.row(i);
+				extendedVector.conservativeResize(extendedVector.rows()+1);
+				extendedVector(extendedVector.rows()-1) = _vec(i);
+				std::cout << "TemplatePolyhedron::intersectHalfspaces, row has not been found, add row! extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
 			}
 		}
-		if(foundAll){
-			auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,newVec);
-			std::cout << "TemplatePolyhedron::intersectHalfspaces, all _mat rows were found! return " << tmp << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll: " << foundAll << std::endl; //" _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		if(foundAll && alreadyDone.size() > 0){
+			//If all constraints in _mat were found, we can safely return the result
+			auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
+			std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll was true! returning: " << tmp << std::endl;
 			return tmp;
-			//return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,newVec);
-		} else {
-			std::cout << "TemplatePolyhedron::intersectHalfspaces, not all rows have been found, continue with expensive part" << std::endl;
 		}
-*/
+
+		//Else, make a new TPoly and evaluate into all non found directions and put into resultVec
+		auto itDone = alreadyDone.begin();
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, alreadyDone: {";
+		for(auto d : alreadyDone){
+			std::cout << d << ",";
+		}
+		std::cout << "}" << std::endl;
+		TemplatePolyhedronT<Number,Converter,Setting> extendedTPoly(extendedMatrix,extendedVector);
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
+		extendedTPoly.removeRedundancy();
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
+		for(int j = 0; j < mMatrixPtr->rows(); ++j){
+			if(itDone == alreadyDone.end() || j != *itDone){
+				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),true);
+				if(res.errorCode == SOLUTION::FEAS){
+					resultVec(j) = res.supportValue;
+				} else {
+					assert(res.errorCode == SOLUTION::INFEAS);
+					return TemplatePolyhedronT<Number,Converter,Setting>::Empty(dimension());
+				}
+				if(itDone != alreadyDone.end()){
+					++itDone;
+				}
+			}
+		}
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
+/*
 		//Extend a copy of the matrix to contain the extra halfspaces
 		assert(_mat.rows() == _vec.rows());
 		assert(_mat.cols() == mMatrixPtr->cols());
-		matrix_t<Number> extendedMatrix = matrix_t<Number>::Zero(mMatrixPtr->rows()+_mat.rows(),mMatrixPtr->cols());
-		extendedMatrix.block(0,0,mMatrixPtr->rows(),mMatrixPtr->cols()) = *mMatrixPtr;
-		extendedMatrix.block(mMatrixPtr->rows(),0,_mat.rows(),_mat.cols()) = _mat;
+		matrix_t<Number> extendedMat = matrix_t<Number>::Zero(mMatrixPtr->rows()+_mat.rows(),mMatrixPtr->cols());
+		extendedMat.block(0,0,mMatrixPtr->rows(),mMatrixPtr->cols()) = *mMatrixPtr;
+		extendedMat.block(mMatrixPtr->rows(),0,_mat.rows(),_mat.cols()) = _mat;
 
 		//Extend a copy of mVector to contain the halfspace offset
-		vector_t<Number> extendedVector = vector_t<Number>::Zero(mVector.rows()+_vec.rows());
+		vector_t<Number> extendedVec = vector_t<Number>::Zero(mVector.rows()+_vec.rows());
 		for(int i = 0; i < mVector.rows(); ++i){
-			extendedVector(i) = mVector(i);
+			extendedVec(i) = mVector(i);
 		}
 		for(int i = mVector.rows(); i < mVector.rows()+_vec.rows(); ++i){
-			extendedVector(i) = _vec(i-mVector.rows());
+			extendedVec(i) = _vec(i-mVector.rows());
 		}
 
 		//TODO: Maybe use rotation to parallel line to acquire distance
 
 		//Build hpoly from the extended matrix and vector, then evaluate in the original directions and build overapproximating tpoly
-		auto tpolyWithHSpace = typename Converter::HPolytope(extendedMatrix, extendedVector);
-		//std::cout << "extendedMatrix: \n" << extendedMatrix << "extendedVector: \n" << extendedVector << std::endl;
-		//TemplatePolyhedronT<Number,Converter,Setting> tpolyWithHSpace(extendedMatrix, extendedVector);
+		//auto tpolyWithHSpace = typename Converter::HPolytope(extendedMat, extendedVec);
+		//std::cout << "extendedMatrix: \n" << extendedMatrix << "extendedVec: \n" << extendedVec << std::endl;
+		TemplatePolyhedronT<Number,Converter,Setting> tpolyWithHSpace(extendedMat, extendedVec);
 		tpolyWithHSpace.removeRedundancy();
 		auto evalInOrigDirs = tpolyWithHSpace.multiEvaluate(*mMatrixPtr);
-		vector_t<Number> newOffsetVec = vector_t<Number>::Zero(evalInOrigDirs.size());
-		for(int i = 0; i < newOffsetVec.rows(); ++i){
-			if(evalInOrigDirs.at(i).errorCode == SOLUTION::INFEAS){
-				return TemplatePolyhedronT<Number,Converter,Setting>::Empty(dimension());
-			}
-			newOffsetVec(i) = evalInOrigDirs.at(i).supportValue;
-		}
-		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, newOffsetVec);
-
-/* NOTE: Not a great optimization as it cannot avoid the multiEvaluate
-		//Extend a copy of the matrix to contain the extra halfspaces collected in toAddEvalDirs
-		assert(_mat.rows() == _vec.rows());
-		assert(_mat.cols() == mMatrixPtr->cols());
-		assert(toAddEvalDirs.size() <= _mat.rows());
-		assert(toAddEvalDirs.size() + toIgnoreTemplateDirs.size() == _mat.rows());
-		matrix_t<Number> extendedMatrix = matrix_t<Number>::Zero(mMatrixPtr->rows()+toAddEvalDirs.size(),mMatrixPtr->cols());
-		extendedMatrix.block(0,0,mMatrixPtr->rows(),mMatrixPtr->cols()) = *mMatrixPtr;
-
-		//Extend a copy of mVector to contain the halfspace offset
-		vector_t<Number> extendedVector = vector_t<Number>::Zero(mVector.rows()+toAddEvalDirs.size());	
-		extendedVector.block(0,0,newVec.rows(),1) = newVec;
-
-		//Fill up extensions of _mat and _vec
-		for(int i = 0; i < toAddEvalDirs.size(); ++i){
-			extendedMatrix.block(mMatrixPtr->rows()+i,0,1,_mat.cols()) = _mat.row(toAddEvalDirs(i));
-			extendedVector(mVector.rows()+i) = _vec(toAddEvalDirs(i));
-		}
-
-		//Build evaluation matrix out of all template dirs that can not be ignored (since they did not have a corresponding halfspace in _mat)
-		int currentRow = 0;
-		auto it = toIgnoreTemplateDirs.begin();
-		matrix<Number> evalMat = matrix<Number>::Zero(mMatrixPtr->rows()-toIgnoreTemplateDirs.size(), mMatrixPtr->cols());
-		for(int i = 0; i < mMatrixPtr->rows(); ++i){
-			if(i != *it){
-				evalMat.row(currentRow) = mMatrixPtr->row(i);
-				++currentRow;
-				++it;
-			}
-		}
-
-		//Build hpoly from the extended matrix and vector, then evaluate in the original directions and build overapproximating tpoly
-		auto tpolyWithHSpace = typename Converter::HPolytope(extendedMatrix, extendedVector);
-		//std::cout << "extendedMatrix: \n" << extendedMatrix << "extendedVector: \n" << extendedVector << std::endl;
-		//TemplatePolyhedronT<Number,Converter,Setting> tpolyWithHSpace(extendedMatrix, extendedVector);
-		tpolyWithHSpace.removeRedundancy();
-		auto evalInOrigDirs = tpolyWithHSpace.multiEvaluate(evalMat);
-		//TODO: Assemble all the information in newVec n shit
 		vector_t<Number> newOffsetVec = vector_t<Number>::Zero(evalInOrigDirs.size());
 		for(int i = 0; i < newOffsetVec.rows(); ++i){
 			if(evalInOrigDirs.at(i).errorCode == SOLUTION::INFEAS){

@@ -58,11 +58,18 @@ namespace hypro {
 
             //Evaluate tpoly in direction g without last coeff (since g is dim+1 dimensional)
             //NOTE: maybe one can avoid this evaluation by maximizing it via the last computed segment and its current bounds.
-            auto evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), true);
+            EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), true);
 
             //Evaluate invPoly in direction r without last coeff
-            TemplatePolyhedron<Number> invTPoly(this->mState->getLocation()->getInvariant().getMatrix(), this->mState->getLocation()->getInvariant().getVector());
-            auto evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+            EvaluationResult<Number> evalR;
+            if(this->mState->getLocation()->getInvariant().empty()){
+                evalR = EvaluationResult<Number>(SOLUTION::INFTY);
+            } else {
+                assert(this->mState->getLocation()->getInvariant().getMatrix().rows() == this->mState->getLocation()->getInvariant().getVector().rows());
+                assert(this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
+                TemplatePolyhedron<Number> invTPoly(this->mState->getLocation()->getInvariant().getMatrix(), this->mState->getLocation()->getInvariant().getVector());
+                evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+            }
             
             //Set value in coeff vec
             assert(evalG.errorCode == SOLUTION::FEAS);
@@ -72,7 +79,7 @@ namespace hypro {
             	newVec(rowI) = evalG.supportValue + g(g.rows()-1);
             }
         }
-
+        
         //Set mComputationState vector to the new coeff vec
 		tpoly.setVector(newVec);
 		this->mState->setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);

@@ -88,20 +88,15 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	controlMatrix(2,1) = TypeParam(1);
 	controlMatrix(3,1) = TypeParam(-1);
 
-	//Regular directions constructor - Unbounded template polyhedra: Should throw
+	//Regular directions constructor - Unbounded template polyhedra: Should work
 	std::size_t noOfSides = 2;
 	vector_t<TypeParam> offset = vector_t<TypeParam>::Ones(noOfSides);
-	try {
-		TemplatePolyhedron<TypeParam> regular(2, noOfSides, offset);
-		FAIL();
-	} catch(std::invalid_argument& e){
-		//If we get here thats right. Just continue then.
-	}
-
+	TemplatePolyhedron<TypeParam> regular(2, noOfSides, offset);
+	
 	//Regular directions constructor - Bounded template polyhedra: Should work
 	noOfSides = 4;
 	offset = vector_t<TypeParam>::Ones(noOfSides);
-	TemplatePolyhedron<TypeParam> regular(2, noOfSides, offset);
+	regular = TemplatePolyhedron<TypeParam>(2, noOfSides, offset);
 	EXPECT_EQ(regular.matrix(), controlMatrix);
 	EXPECT_EQ(regular.vector(), offset);
 	EXPECT_EQ(regular.getOptimizer().matrix(), controlMatrix);
@@ -518,20 +513,26 @@ TYPED_TEST(TemplatePolyhedronTest, IntersectHalfspaces){
 	EXPECT_EQ(this->middle.intersectHalfspace(hspace), this->middle);
 
 	//Halfspace touches middle, only point (-2,-2) is contained
+	std::cout << "TemplatePolyhedronTest::IntersectHalfspaces, zweiter Test" << std::endl;
 	hspace.setOffset(-4);
 	vector_t<TypeParam> controlVec = 2*vector_t<TypeParam>::Ones(4);
 	controlVec(0) = TypeParam(-2);
 	controlVec(2) = TypeParam(-2);
 	TemplatePolyhedron<TypeParam> controlTPoly(this->mat, controlVec);
+	std::cout << "TemplatePolyhedronTest::IntersectHalfspaces, controlTPoly: " << controlTPoly << std::endl;
+	auto blub = this->middle.intersectHalfspace(hspace);
+	std::cout << "TemplatePolyhedronTest::IntersectHalfspaces, intersectHalfspaces result: " << blub << std::endl;
 	EXPECT_EQ(this->middle.intersectHalfspace(hspace), controlTPoly);
 
 	//Halfspace through the origin - worst case approximation: overapproximates to the original box
+	std::cout << "TemplatePolyhedronTest::IntersectHalfspaces, dritter Test" << std::endl;
 	hspace.setOffset(0);
 	auto tmp = this->middle.intersectHalfspace(hspace);
 	EXPECT_EQ(tmp, this->middle);
 	EXPECT_EQ(tmp.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 
 	//Halfspace shrinking the original 
+	std::cout << "TemplatePolyhedronTest::IntersectHalfspaces, vierter Test" << std::endl;
 	hspace.setOffset(-1);
 	controlVec << 1,2,1,2;
 	TemplatePolyhedron<TypeParam> controlTPoly2(this->mat, controlVec);
