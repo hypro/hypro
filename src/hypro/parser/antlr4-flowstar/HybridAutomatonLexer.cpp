@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 
 #include "HybridAutomatonLexer.h"
@@ -7,6 +7,7 @@
 
 using namespace antlr4;
 
+using namespace hypro;
 
 HybridAutomatonLexer::HybridAutomatonLexer(CharStream *input) : Lexer(input) {
   _interpreter = new atn::LexerATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);
@@ -61,7 +62,7 @@ void HybridAutomatonLexer::action(RuleContext *context, size_t ruleIndex, size_t
   }
 }
 
-void HybridAutomatonLexer::PARAction(antlr4::RuleContext *, size_t actionIndex) {
+void HybridAutomatonLexer::PARAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 0:  parsingConstants = true;  break;
 
@@ -70,7 +71,7 @@ void HybridAutomatonLexer::PARAction(antlr4::RuleContext *, size_t actionIndex) 
   }
 }
 
-void HybridAutomatonLexer::CBCLOSEAction(antlr4::RuleContext *, size_t actionIndex) {
+void HybridAutomatonLexer::CBCLOSEAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 1:  if(parsingConstants){ parsingConstants = false; }  break;
 
@@ -79,7 +80,7 @@ void HybridAutomatonLexer::CBCLOSEAction(antlr4::RuleContext *, size_t actionInd
   }
 }
 
-void HybridAutomatonLexer::CONSTANTAction(antlr4::RuleContext *, size_t actionIndex) {
+void HybridAutomatonLexer::CONSTANTAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 2:  if(!parsingConstants) { setType(VARIABLE); }  break;
 
@@ -88,7 +89,7 @@ void HybridAutomatonLexer::CONSTANTAction(antlr4::RuleContext *, size_t actionIn
   }
 }
 
-void HybridAutomatonLexer::VARIABLEAction(antlr4::RuleContext *, size_t actionIndex) {
+void HybridAutomatonLexer::VARIABLEAction(antlr4::RuleContext *context, size_t actionIndex) {
   switch (actionIndex) {
     case 3:  if(parsingConstants){ setType(CONSTANT); }  break;
 

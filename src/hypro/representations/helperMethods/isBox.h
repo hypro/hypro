@@ -6,6 +6,7 @@ namespace hypro {
 
 /**
  * @brief      Determines if a constraint set represented by a matrix and a vector in fact defines a box.
+ * @details	   Uses simple checks to syntactically detect a box-description via half-spaces. This can be used, to use a box-representation instead of a H-Polytope representation, if desired.
  * @param[in]  constraints  The constraints.
  * @param[in]  constants    The constants.
  * @tparam     Number       The used number type.

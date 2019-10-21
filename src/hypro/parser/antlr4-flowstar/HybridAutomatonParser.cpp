@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 
 #include "HybridAutomatonVisitor.h"
@@ -12,6 +12,7 @@
 
 
 using namespace antlrcpp;
+using namespace hypro;
 using namespace antlr4;
 
 HybridAutomatonParser::HybridAutomatonParser(TokenStream *input) : Parser(input) {
@@ -340,6 +341,14 @@ HybridAutomatonParser::ModesContext::ModesContext(ParserRuleContext *parent, siz
   : ParserRuleContext(parent, invokingState) {
 }
 
+tree::TerminalNode* HybridAutomatonParser::ModesContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::ModesContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
+}
+
 std::vector<HybridAutomatonParser::LocationContext *> HybridAutomatonParser::ModesContext::location() {
   return getRuleContexts<HybridAutomatonParser::LocationContext>();
 }
@@ -407,8 +416,16 @@ tree::TerminalNode* HybridAutomatonParser::LocationContext::VARIABLE() {
   return getToken(HybridAutomatonParser::VARIABLE, 0);
 }
 
+tree::TerminalNode* HybridAutomatonParser::LocationContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
 HybridAutomatonParser::ActivitiesContext* HybridAutomatonParser::LocationContext::activities() {
   return getRuleContext<HybridAutomatonParser::ActivitiesContext>(0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::LocationContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 std::vector<HybridAutomatonParser::InvariantsContext *> HybridAutomatonParser::LocationContext::invariants() {
@@ -474,6 +491,14 @@ HybridAutomatonParser::LocationContext* HybridAutomatonParser::location() {
 
 HybridAutomatonParser::ActivitiesContext::ActivitiesContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::ActivitiesContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::ActivitiesContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 tree::TerminalNode* HybridAutomatonParser::ActivitiesContext::POLY() {
@@ -597,6 +622,14 @@ HybridAutomatonParser::ActivitiesContext* HybridAutomatonParser::activities() {
 
 HybridAutomatonParser::InvariantsContext::InvariantsContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::InvariantsContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::InvariantsContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 HybridAutomatonParser::ConstrsetContext* HybridAutomatonParser::InvariantsContext::constrset() {
@@ -1089,6 +1122,18 @@ HybridAutomatonParser::IntervalContext::IntervalContext(ParserRuleContext *paren
   : ParserRuleContext(parent, invokingState) {
 }
 
+tree::TerminalNode* HybridAutomatonParser::IntervalContext::SBOPEN() {
+  return getToken(HybridAutomatonParser::SBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::IntervalContext::COMMA() {
+  return getToken(HybridAutomatonParser::COMMA, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::IntervalContext::SBCLOSE() {
+  return getToken(HybridAutomatonParser::SBCLOSE, 0);
+}
+
 std::vector<tree::TerminalNode *> HybridAutomatonParser::IntervalContext::NUMBER() {
   return getTokens(HybridAutomatonParser::NUMBER);
 }
@@ -1519,6 +1564,14 @@ HybridAutomatonParser::InitContext::InitContext(ParserRuleContext *parent, size_
   : ParserRuleContext(parent, invokingState) {
 }
 
+tree::TerminalNode* HybridAutomatonParser::InitContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::InitContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
+}
+
 std::vector<HybridAutomatonParser::InitstateContext *> HybridAutomatonParser::InitContext::initstate() {
   return getRuleContexts<HybridAutomatonParser::InitstateContext>();
 }
@@ -1586,8 +1639,16 @@ tree::TerminalNode* HybridAutomatonParser::InitstateContext::VARIABLE() {
   return getToken(HybridAutomatonParser::VARIABLE, 0);
 }
 
+tree::TerminalNode* HybridAutomatonParser::InitstateContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
 HybridAutomatonParser::ConstrsetContext* HybridAutomatonParser::InitstateContext::constrset() {
   return getRuleContext<HybridAutomatonParser::ConstrsetContext>(0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::InitstateContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 
@@ -1634,6 +1695,14 @@ HybridAutomatonParser::InitstateContext* HybridAutomatonParser::initstate() {
 
 HybridAutomatonParser::UnsafesetContext::UnsafesetContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::UnsafesetContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::UnsafesetContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 std::vector<HybridAutomatonParser::GbadstateContext *> HybridAutomatonParser::UnsafesetContext::gbadstate() {
@@ -1729,6 +1798,14 @@ HybridAutomatonParser::LbadstateContext::LbadstateContext(ParserRuleContext *par
 
 tree::TerminalNode* HybridAutomatonParser::LbadstateContext::VARIABLE() {
   return getToken(HybridAutomatonParser::VARIABLE, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::LbadstateContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::LbadstateContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 HybridAutomatonParser::ConstrsetContext* HybridAutomatonParser::LbadstateContext::constrset() {
@@ -1836,6 +1913,18 @@ HybridAutomatonParser::GbadstateContext* HybridAutomatonParser::gbadstate() {
 
 HybridAutomatonParser::JumpsContext::JumpsContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::JumpsContext::JUMPS() {
+  return getToken(HybridAutomatonParser::JUMPS, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::JumpsContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::JumpsContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 std::vector<HybridAutomatonParser::TransitionContext *> HybridAutomatonParser::JumpsContext::transition() {
@@ -2080,6 +2169,10 @@ HybridAutomatonParser::UrgentContext::UrgentContext(ParserRuleContext *parent, s
   : ParserRuleContext(parent, invokingState) {
 }
 
+tree::TerminalNode* HybridAutomatonParser::UrgentContext::URGENT() {
+  return getToken(HybridAutomatonParser::URGENT, 0);
+}
+
 
 size_t HybridAutomatonParser::UrgentContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleUrgent;
@@ -2118,6 +2211,18 @@ HybridAutomatonParser::UrgentContext* HybridAutomatonParser::urgent() {
 
 HybridAutomatonParser::GuardContext::GuardContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::GuardContext::GUARD() {
+  return getToken(HybridAutomatonParser::GUARD, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::GuardContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::GuardContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 HybridAutomatonParser::ConstrsetContext* HybridAutomatonParser::GuardContext::constrset() {
@@ -2262,6 +2367,18 @@ HybridAutomatonParser::ResetfctContext::ResetfctContext(ParserRuleContext *paren
   : ParserRuleContext(parent, invokingState) {
 }
 
+tree::TerminalNode* HybridAutomatonParser::ResetfctContext::RESET() {
+  return getToken(HybridAutomatonParser::RESET, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::ResetfctContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::ResetfctContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
+}
+
 std::vector<HybridAutomatonParser::AllocationContext *> HybridAutomatonParser::ResetfctContext::allocation() {
   return getRuleContexts<HybridAutomatonParser::AllocationContext>();
 }
@@ -2323,6 +2440,14 @@ HybridAutomatonParser::ResetfctContext* HybridAutomatonParser::resetfct() {
 
 HybridAutomatonParser::AggregationContext::AggregationContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::AggregationContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::AggregationContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 tree::TerminalNode* HybridAutomatonParser::AggregationContext::PARALLELOTOPE() {
@@ -2390,6 +2515,14 @@ HybridAutomatonParser::AggregationContext* HybridAutomatonParser::aggregation() 
 
 HybridAutomatonParser::SettingContext::SettingContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* HybridAutomatonParser::SettingContext::CBOPEN() {
+  return getToken(HybridAutomatonParser::CBOPEN, 0);
+}
+
+tree::TerminalNode* HybridAutomatonParser::SettingContext::CBCLOSE() {
+  return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
 std::vector<HybridAutomatonParser::FixedstepsContext *> HybridAutomatonParser::SettingContext::fixedsteps() {
@@ -2714,6 +2847,14 @@ std::vector<tree::TerminalNode *> HybridAutomatonParser::PlotsettingContext::VAR
 
 tree::TerminalNode* HybridAutomatonParser::PlotsettingContext::VARIABLE(size_t i) {
   return getToken(HybridAutomatonParser::VARIABLE, i);
+}
+
+std::vector<tree::TerminalNode *> HybridAutomatonParser::PlotsettingContext::COMMA() {
+  return getTokens(HybridAutomatonParser::COMMA);
+}
+
+tree::TerminalNode* HybridAutomatonParser::PlotsettingContext::COMMA(size_t i) {
+  return getToken(HybridAutomatonParser::COMMA, i);
 }
 
 

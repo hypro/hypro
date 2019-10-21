@@ -1,5 +1,5 @@
 
-// Generated from HybridSystem.g4 by ANTLR 4.7
+// Generated from HybridSystem.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -7,6 +7,8 @@
 #include "antlr4-runtime.h"
 #include "HybridSystemVisitor.h"
 
+
+namespace hypro {
 
 /**
  * This class provides an empty implementation of HybridSystemVisitor, which can be
@@ -550,3 +552,4 @@ public:
 
 };
 
+}  // namespace hypro

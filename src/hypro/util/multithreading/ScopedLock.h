@@ -2,6 +2,8 @@
 
 #include <mutex>
 
+namespace hypro {
+
 /**
  * @brief      Class for scoped lock, taken from http://stackoverflow.com/questions/14276508/how-does-scope-locking-work
  */
@@ -20,3 +22,5 @@ class ScopedLock
 			_mtx.unlock(); //unlock the mutex in the constructor
 		}
 };
+
+} // namespace hypro
