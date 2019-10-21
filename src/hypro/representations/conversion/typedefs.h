@@ -12,16 +12,19 @@ template<typename Number>
 using ConstraintSet = typename Converter<Number>::ConstraintSet;
 
 template<typename Number>
+using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
+
+template<typename Number>
 using Ellipsoid = typename Converter<Number>::Ellipsoid;
 
+template<typename Number>
+using GeneralizedStar = typename Converter<Number>::GeneralizedStar;
 
 template<typename Number>
 using HPolytope = typename Converter<Number>::HPolytope;
 
-
 template<typename Number>
 using OrthogonalPolyhedron = typename Converter<Number>::OrthogonalPolyhedron;
-
 
 template<typename Number>
 using VPolytope = typename Converter<Number>::VPolytope;
@@ -42,9 +45,5 @@ using SupportFunctionNew = typename Converter<Number>::SupportFunctionNew;
  */
 template<typename Number>
 using Zonotope = typename Converter<Number>::Zonotope;
-
-template<typename Number>
-using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
-
 
 } // namespace hypro
