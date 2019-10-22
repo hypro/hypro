@@ -7,7 +7,7 @@
 
 #include "../../config.h"
 #include "util.h"
-#include "helperMethods.h"
+//#include "helperMethods.h"
 #include "SupportFunctionSetting.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"

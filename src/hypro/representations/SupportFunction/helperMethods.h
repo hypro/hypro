@@ -209,14 +209,6 @@ Number* vector2Array( vector_t<Number> v ) {
 }
 
 /*
- *  returns the dimensionality (number of rows) of the matrix from the first initial location
- */
-//	Number getDimensionality(HybridAutomaton<Number, valuation_t<Number>>* model)
-//	{
-//           return model->dimension();
-//    }
-
-/*
 * adds a zero column at the right side of the matrix m
 */
 template<typename Number>
