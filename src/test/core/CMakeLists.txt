@@ -10,7 +10,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#LoggerTest.cpp
 		#endif
 		OptimizerTest.cpp
-		#ParserTest.cpp
+		ParserTest.cpp
 		PlotterTest.cpp
 		UtilityTest.cpp
 	)

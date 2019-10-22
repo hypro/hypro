@@ -3,6 +3,7 @@ How to generate the parser via AnTLR:
 =====================================
 @author Phillip Tse
 @date 30.5.2018
+@date 21.10.2019 (SS, update)
 
 First, make sure that AnTLR is installed.
 In the terminal, cd to the folder hypro/src/hypro/parser/antlr4-flowstar (the folder where this file lies in).

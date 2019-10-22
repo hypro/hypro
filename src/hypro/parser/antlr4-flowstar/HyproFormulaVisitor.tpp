@@ -51,8 +51,8 @@ namespace hypro {
 
 			//make multed negative/posivite depending on its minusCount
 			if(minusCount % 2 == 1){
-				multed = Number(-1)*multed;	
-			}	
+				multed = Number(-1)*multed;
+			}
 		}
 		return multed;
 	}
@@ -85,7 +85,7 @@ namespace hypro {
 			if(mTerm->VARIABLE().size() == 0){
 				dest = coeffVec.rows()-1;
 			} else if(mTerm->VARIABLE().size() == 1){
-				auto tmpVar = mTerm->VARIABLE()[0]->getText();	
+				auto tmpVar = mTerm->VARIABLE()[0]->getText();
 				for(unsigned i=0; i < vars.size(); i++){
 					if(vars[i] == tmpVar){
 						dest = i;
@@ -150,7 +150,7 @@ namespace hypro {
 			}
 		}
 		if(!found){
-			std::cerr << "ERROR: An equation has a not defined variable." << std::endl;
+			std::cerr << "ERROR: An equation contains a non-defined variable." << std::endl;
 			exit(0);
 		}
 
@@ -283,7 +283,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx){
 
-		//0. Check if our constraint set contains TRUE or FALSE and return a fitting pair of matrix and vector in that case. 
+		//0. Check if our constraint set contains TRUE or FALSE and return a fitting pair of matrix and vector in that case.
 		if(ctx->TRUE() != NULL && ctx->FALSE() == NULL){
 
 			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(1,vars.size());
@@ -291,14 +291,14 @@ namespace hypro {
 			return std::make_pair(tmpMatrix, tmpVector);
 
 		} else if (ctx->TRUE() == NULL && ctx->FALSE() != NULL) {
-			
+
 			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(1,vars.size());
 			vector_t<Number> minusOne = vector_t<Number>(1);
 			minusOne(0) = Number(-1);
 			return std::make_pair(tmpMatrix, minusOne);
 
 		} else if (ctx->TRUE() != NULL && ctx->FALSE() != NULL) {
-			
+
 			std::cerr << "ERROR: It should not be possible to have true and false in a constraint set." << std::endl;
 			exit(0);
 
