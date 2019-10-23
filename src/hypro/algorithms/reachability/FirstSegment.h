@@ -3,6 +3,7 @@
 #include "../../representations/GeometricObject.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/State.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include <boost/tuple/tuple.hpp>
 
 namespace hypro{
@@ -12,36 +13,14 @@ template <typename Number>
 matrix_t<Number> computeTrafoMatrix(const Location<Number>* _loc, Number timeStep)
 {
     auto flowMatrix = _loc->getLinearFlow().getFlowMatrix();
-    matrix_t<Number> deltaMatrix(flowMatrix.rows(), flowMatrix.cols());
-    deltaMatrix = flowMatrix * timeStep;
+    matrix_t<Number> deltaMatrix = flowMatrix * timeStep;
 
     TRACE("hypro.reachability", "Flowmatrix:\n" << flowMatrix << "\nmultiplied with time step: " << timeStep);
     TRACE("hypro.reachability", "delta Matrix: " << std::endl);
     TRACE("hypro.reachability", deltaMatrix << std::endl);
     TRACE("hypro.reachability", "------" << std::endl);
 
-    // e^(At) = resultMatrix
-    matrix_t<Number> resultMatrix(deltaMatrix.rows(), deltaMatrix.cols());
-
-    //---
-    // Workaround for:
-    // resultMatrix = deltaMatrix.exp();
-    //-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
-    matrix_t<double> doubleMatrix(deltaMatrix.rows(), deltaMatrix.cols());
-    matrix_t<double> expMatrix(deltaMatrix.rows(), deltaMatrix.cols());
-    doubleMatrix = convert<Number, double>(deltaMatrix);
-
-    TRACE("hypro.reachability","transformed matrix:\n " << doubleMatrix);
-
-    expMatrix = doubleMatrix.exp();
-
-    TRACE("hypro.reachability","exp matrix:\n " << expMatrix);
-
-    resultMatrix = convert<double, Number>(expMatrix);
-
-	TRACE("hypro.reachability","transformed matrix:\n " << resultMatrix);
-
-    return resultMatrix;
+    return matrixExponential(deltaMatrix);
 }
 
 template<typename Number, typename State>
@@ -79,7 +58,7 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
         }
         case representation_name::SFN: {
             in.setSetDirect(boost::get<SupportFunctionNew<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toSupportFunctionNew(bloatBox)));
-            break;   
+            break;
         }
 		case representation_name::constraint_set:{
 			assert(false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>.");

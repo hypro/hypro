@@ -22,10 +22,6 @@
 #include "representations/GeometricObject.h"
 #include "boost/tuple/tuple.hpp"
 
-CLANG_WARNING_DISABLE("-Wdeprecated-register")
-#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-CLANG_WARNING_RESET
-
 // Debug Flag, TODO: Add more debug levels.
 #define REACH_DEBUG
 #define USE_REDUCTION

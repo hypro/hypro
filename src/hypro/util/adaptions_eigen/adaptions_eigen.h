@@ -19,6 +19,9 @@
 #include <limits>
 #include <eigen3/Eigen/Eigenvalues>
 #include <eigen3/Eigen/Dense>
+CLANG_WARNING_DISABLE("-Wdeprecated-register")
+#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+CLANG_WARNING_RESET
 
 namespace Eigen {
 
@@ -352,6 +355,22 @@ namespace hypro {
 		}
 		st << ";\n";
 		return st.str();
+	}
+
+	/**
+	 * @brief Computes the matrix exponential via conversion to double and then using eigen::exp.
+	 *
+	 * @tparam Number The used number representation.
+	 * @param inMatrix Matrix describing the system of linear ODEs.
+	 * @return matrix_t<Number> Matrix exponential of inMatrix.
+	 */
+	template<typename Number>
+	matrix_t<Number> matrixExponential(const matrix_t<Number>& inMatrix) {
+		// convert to double to be able to use eigen::exp.
+		auto doubleMatrix = convert<Number, double>(inMatrix);
+		auto expMatrix = doubleMatrix.exp();
+		// convert back to the original number representation
+		return convert<double, Number>(expMatrix);
 	}
 
 	template<typename Number>

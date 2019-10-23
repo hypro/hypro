@@ -82,6 +82,8 @@ public:
 
 	template<typename B>
     inline T operator()(const B& lhs) const {
+		assert(Eigen::Index(lhs.dimension()) == mat.rows());
+		assert(Eigen::Index(lhs.dimension()) == vec.rows());
  		return lhs.affineTransformation(mat, vec);
     }
 };
