@@ -20,7 +20,8 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	bool GeneralizedStarT<Number,Converter,Setting>::empty() const {
-
+		assert(false && "Not implemented.");
+		return true;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -45,7 +46,8 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t GeneralizedStarT<Number,Converter,Setting>::dimension() const {
-
+		assert(false && "Not implemented.");
+		return 0;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -55,7 +57,8 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t GeneralizedStarT<Number,Converter,Setting>::size() const {
-
+		assert(false && "Not implemented.");
+		return 0;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -110,12 +113,14 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	bool GeneralizedStarT<Number,Converter,Setting>::contains( const Point<Number>& point ) const {
-
+		assert(false && "Not implemented.");
+		return false;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	bool GeneralizedStarT<Number,Converter,Setting>::contains( const GeneralizedStarT<Number,Converter,Setting>& GeneralizedStar ) const {
-
+		assert(false && "Not implemented.");
+		return false;
 	}
 
 	template<typename Number, typename Converter, typename Setting>

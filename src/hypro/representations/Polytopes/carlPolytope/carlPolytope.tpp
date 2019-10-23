@@ -120,6 +120,11 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Setting>
+    bool CarlPolytopeT<Number,Converter,Setting>::contains(const Point<Number>& point) const {
+
+    }
+
+    template<typename Number, typename Converter, typename Setting>
     const std::vector<Halfspace<Number>>& CarlPolytopeT<Number,Converter,Setting>::getHalfspaces() const {
         if(this->empty()) {
             mHalfspaces.clear();
