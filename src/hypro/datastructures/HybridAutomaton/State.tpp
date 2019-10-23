@@ -206,6 +206,82 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::computeAndApplyLinearTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const {
+	assert(flows.size() <= mSets.size());
+	assert(checkConsistency());
+
+	State<Number,Representation,Rargs...> res(*this);
+	// iterate over all sets
+	for(int i = 0; i < flows.size(); ++i) {
+		// compute matrix exponential e^{delta A}
+		matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flows[i];
+		auto expMatrix = matrixExponential(deltaMatrix);
+
+		// apply according transformation to subspace set
+		assert(boost::apply_visitor(genericDimensionVisitor(), mSets[i]) == expMatrix.rows());
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(expMatrix.matrix(), vector_t<Number>::Zero(flows[i].rows())), mSets.at(i)), i);
+	}
+	// update internal clocks
+	res.addTimeToClocks(timeStepSize);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyComputeAndApplyLinearTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I ) const {
+	// compute matrix exponential e^{delta A}
+	matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flow;
+	auto expMatrix = matrixExponential(deltaMatrix);
+	// apply according transformation
+	return this->partiallyApplyTimeStep(ConstraintSet<Number>(expMatrix), timeStepSize, I);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::computeAndApplyAffineTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const {
+	assert(flows.size() <= mSets.size());
+	assert(checkConsistency());
+
+	State<Number,Representation,Rargs...> res(*this);
+	// iterate over all sets
+	for(int i = 0; i < flows.size(); ++i) {
+		// compute matrix exponential e^{delta A}
+		matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flows[i];
+		auto expMatrix = matrixExponential(deltaMatrix);
+
+		// assumption: the flow is affine, i.e. of the form \dot(x) = Ax + b. We cut off the last col/row
+		unsigned rows = expMatrix.rows();
+		unsigned cols = expMatrix.cols();
+		vector_t<Number> translation = expMatrix.col(cols - 1);
+		matrix_t<Number> expMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+		expMatrixResized = expMatrix.block(0, 0, rows - 1, cols - 1);
+		translation.conservativeResize(rows - 1);
+
+		// apply according transformation to subspace set
+		assert(boost::apply_visitor(genericDimensionVisitor(), mSets[i]) == expMatrix.rows());
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(expMatrixResized.matrix(), translation), mSets.at(i)), i);
+	}
+	// update internal clocks
+	res.addTimeToClocks(timeStepSize);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyComputeAndApplyAffineTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I ) const {
+	assert(I < mSets.size());
+	// compute matrix exponential e^{delta A}
+	matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flow;
+	auto expMatrix = matrixExponential(deltaMatrix);
+
+	// assumption: the flow is affine, i.e. of the form \dot(x) = Ax + b. We cut off the last col/row
+	unsigned rows = expMatrix.rows();
+	unsigned cols = expMatrix.cols();
+	vector_t<Number> translation = expMatrix.col(cols - 1);
+	matrix_t<Number> expMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+	expMatrixResized = expMatrix.block(0, 0, rows - 1, cols - 1);
+	translation.conservativeResize(rows - 1);
+
+	// apply transformation after resizing.
+	return this->partiallyApplyTimeStep(ConstraintSet<Number>(expMatrixResized, translation), timeStepSize, I);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const {
 	State<Number,Representation,Rargs...> res(*this);
 	TRACE("hypro.datastructures","Apply transformation of " << mSets.size() << " sets (" << trafos.size() << " transformations).");

@@ -74,3 +74,42 @@ TEST(StateTest, Conversion)
 	EXPECT_ANY_THROW(boost::get<SupportFunction<double>>(s.getSet()));
 	EXPECT_EQ(representation_name::polytope_h, s.getSetType());
 }
+
+TEST(StateTest, letTimePassZeroFlow)
+{
+	using N = mpq_class;
+	using State = State<N,Box<N>>;
+
+	std::vector<carl::Interval<N>> intervals;
+	intervals.emplace_back(carl::Interval<N>{1,2});
+	intervals.emplace_back(carl::Interval<N>{0,1});
+	Box<N> b{intervals};
+
+	State s0{b};
+
+	matrix_t<N> dynamics = matrix_t<N>::Zero(2,2);
+
+	State s1 = s0.partiallyComputeAndApplyLinearTimeStep(dynamics, tNumber(1));
+
+	EXPECT_EQ(boost::get<Box<N>>(s1.getSet()), b);
+}
+
+TEST(StateTest, letTimePassLinearFlow)
+{
+	using N = mpq_class;
+	using State = State<N,Box<N>>;
+
+	std::vector<carl::Interval<N>> intervals;
+	intervals.emplace_back(carl::Interval<N>{1,2});
+	intervals.emplace_back(carl::Interval<N>{0,1});
+	Box<N> b{intervals};
+
+	State s0{b};
+
+	matrix_t<N> dynamics = matrix_t<N>::Zero(2,2);
+	dynamics << 1,0,0,1;
+
+	State s1 = s0.partiallyComputeAndApplyLinearTimeStep(dynamics, tNumber(1));
+
+	//EXPECT_EQ(boost::get<Box<N>>(s1.getSet()), b);
+}

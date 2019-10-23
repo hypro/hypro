@@ -155,6 +155,43 @@ class State
     }
 
     /**
+     * @brief Construct a new State object with just the state set.
+     *
+     * @param _rep  The state set.
+     * @param _timestamp
+     */
+    State( const Representation& _rep,
+    		const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval())
+    	: mLoc()
+    	, mTimestamp(_timestamp)
+    {
+    	mSets.push_back(_rep);
+    	mTypes.push_back(Representation::type());
+    }
+
+    /**
+     * @brief Construct a new State object with just the state set.
+     *
+     * @param sets The state set.
+     * @param _timestamp
+     */
+    State( const Rargs... sets,
+    		const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval())
+    	: mLoc(nullptr)
+    	, mTimestamp(_timestamp)
+    {
+    	// parameter pack expansion
+    	#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wpedantic"
+    	int dummy[sizeof...(Rargs)] = { (mSets.push_back(sets), 0)... };
+    	int dummy2[sizeof...(Rargs)] = { (mTypes.push_back(sets.type()), 0)... };
+    	#pragma GCC diagnostic pop
+    	(void) dummy;
+    	(void) dummy2;
+    	assert(checkConsistency());
+    }
+
+    /**
      * @brief      Gets the location.
      * @return     The location.
      */
@@ -344,20 +381,29 @@ class State
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.
-     * @param[in]  flows         The flows.
-     * @param[in]  timeStepSize  The time step size.
+     * @param[in]  matrixExponentials   The solution to the differential equation system.
+     * @param[in]  timeStepSize         The time step size.
      * @return     A state where each set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
      */
-    State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const;
+    State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& matrixExponentials, tNumber timeStepSize ) const;
 
     /**
      * @brief      Meta-function which applies a transformation by the passed parameters and increases the timestamp for the i-th set.
-     * @param[in]  flow          The flow.
+     * @param[in]  flow          The solution to the differential equation system (a matrix exponential).
      * @param[in]  timeStepSize  The time step size.
      * @param[in]  I             The set index.
      * @return     A state where the i-th set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
      */
-    State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I=0 ) const;
+
+
+    State<Number,Representation,Rargs...> computeAndApplyLinearTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const;
+
+    State<Number,Representation,Rargs...> partiallyComputeAndApplyLinearTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I=0 ) const;
+
+    State<Number,Representation,Rargs...> computeAndApplyAffineTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const;
+
+    State<Number,Representation,Rargs...> partiallyComputeAndApplyAffineTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I=0 ) const;
 
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained.
