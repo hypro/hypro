@@ -121,7 +121,8 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     bool CarlPolytopeT<Number,Converter,Setting>::contains(const Point<Number>& point) const {
-
+        assert(false && "NOT IMPLEMENTED");
+        return false;
     }
 
     template<typename Number, typename Converter, typename Setting>
