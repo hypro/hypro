@@ -46,6 +46,10 @@ struct ReachSettings {
 	static constexpr bool printStatus = true;
 };
 
+struct ReachQuiet : public ReachSettings {
+	static constexpr bool printStatus = false;
+};
+
 /**
  * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
  *
