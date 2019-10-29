@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
+#include "../../hypro/datastructures/HybridAutomaton/Location.h"
 #include "../../hypro/representations/GeometricObject.h"
 #include <thread>
 
@@ -111,5 +112,12 @@ TEST(StateTest, letTimePassLinearFlow)
 
 	State s1 = s0.partiallyComputeAndApplyLinearTimeStep(dynamics, tNumber(1));
 
-	//EXPECT_EQ(boost::get<Box<N>>(s1.getSet()), b);
+	std::cout << s1 << std::endl;
+
+	auto resultIntervals = boost::get<Box<N>>(s1.getSet()).intervals();
+
+	EXPECT_EQ(resultIntervals.at(0).lower(), N(6121026514868073)/N(2251799813685248));
+	EXPECT_EQ(resultIntervals.at(0).upper(), N(6121026514868073)/N(1125899906842624));
+	EXPECT_EQ(resultIntervals.at(1).lower(), N(0));
+	EXPECT_EQ(resultIntervals.at(1).upper(), N(6121026514868073)/N(2251799813685248));
 }
