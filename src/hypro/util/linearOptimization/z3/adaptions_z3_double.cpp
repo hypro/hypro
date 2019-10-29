@@ -9,7 +9,7 @@ namespace hypro {
 
 	// specialization for double as double requires to use std::stod to be created from a string (the Z3 result).
 	template<>
-	EvaluationResult<double> z3OptimizeLinear(const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const EvaluationResult<double>& preSolution ) {
+	EvaluationResult<double> z3OptimizeLinear(bool maximize, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const EvaluationResult<double>& preSolution ) {
 		//std::cout << __func__ << " in direction " << convert<double,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
 		EvaluationResult<double> res;
 		z3Context c;
@@ -37,7 +37,12 @@ namespace hypro {
 		#endif
 
 		// optimize with objective function
-		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
+		z3::optimize::handle result;
+		if(maximize) {
+			result = z3Optimizer.maximize(formulaObjectivePair.second);
+		} else {
+			result = z3Optimizer.minimize(formulaObjectivePair.second);
+		}
 
 		#ifdef DEBUG_MSG
 		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
@@ -75,7 +80,13 @@ namespace hypro {
 				// in this case the constraints introduced by the presolution made the problem infeasible
 
 				z3Optimizer.pop();
-				z3::optimize::handle z3Check = z3Optimizer.maximize(formulaObjectivePair.second);
+				z3::optimize::handle z3Check;
+				if(maximize) {
+					z3Check = z3Optimizer.maximize(formulaObjectivePair.second);
+				} else {
+					z3Check = z3Optimizer.minimize(formulaObjectivePair.second);
+				}
+
 				z3::check_result chck = z3Optimizer.check();
 				assert(z3::unknown != chck);
 				if(z3::sat == chck) {

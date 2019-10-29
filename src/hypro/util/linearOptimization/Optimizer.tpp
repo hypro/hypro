@@ -38,7 +38,7 @@ namespace hypro {
 	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
 		swap(*this, orig);
 	}
-		
+
 	//Copy ctor via Copy-and-Swap idiom
 	template<typename Number>
 	Optimizer<Number>::Optimizer(const Optimizer<Number>& orig){
@@ -84,6 +84,15 @@ namespace hypro {
 		assert(isSane());
 		mRelationSymbols = rels;
 		clearCache();
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::setMaximize(bool max) {
+		assert(isSane());
+		if(max != maximize) {
+			maximize = max;
+			clearCache();
+		}
 	}
 
 	template<typename Number>
@@ -226,7 +235,7 @@ namespace hypro {
 
 			#ifdef HYPRO_USE_Z3
 			COUNT("z3");
-			res = z3OptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
+			res = z3OptimizeLinear(maximize,_direction,mConstraintMatrix,mConstraintVector,res);
 			#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 			COUNT("smtrat");
 			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,mRelationSymbols,res);
@@ -417,7 +426,12 @@ namespace hypro {
 				glpCtx.deleteLPInstance();
 				glpCtx.createLPInstance();
 
-				glp_set_obj_dir( glpCtx.lp, GLP_MAX );
+				if(maximize) {
+					glp_set_obj_dir( glpCtx.lp, GLP_MAX );
+				} else {
+					glp_set_obj_dir( glpCtx.lp, GLP_MIN );
+				}
+
 
 				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER
