@@ -22,7 +22,7 @@ namespace hypro
 				return new TPolyFirstSegmentHandler<State>(state,index,timeStep);
 			}
 			default:
- 				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
+				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
 				break;
  		}
 	}

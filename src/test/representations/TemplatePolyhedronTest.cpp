@@ -663,3 +663,19 @@ TYPED_TEST(TemplatePolyhedronTest, Projection){
 	EXPECT_EQ(full, cube);
 
 }
+
+TYPED_TEST(TemplatePolyhedronTest, Overapproximation){
+
+	//Overapproximate Empty - If empty return this
+	EXPECT_EQ(this->empty, this->empty.overapproximate(this->mat));
+	EXPECT_EQ(this->infeas, this->infeas.overapproximate(this->mat));
+
+	//Overapproximate itself
+	EXPECT_EQ(this->middle, this->middle.overapproximate(this->mat));
+
+	//Overapproximate differently
+	vector_t<TypeParam> controlVec(4);
+	controlVec << 2,0,0.5,0;
+	EXPECT_EQ(TemplatePolyhedron<TypeParam>(this->mat,controlVec), this->triangle.overapproximate(this->mat));
+
+}

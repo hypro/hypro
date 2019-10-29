@@ -11,7 +11,7 @@
 
 namespace hypro {
 
-	template<typename State> //TODO: inherit from IFSHandler or from ltiFSHandler?
+	template<typename State>
 	class TPolyFirstSegmentHandler : public ltiFirstSegmentHandler<State> {
 
 		using Number = typename State::NumberType;

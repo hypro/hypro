@@ -163,8 +163,6 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	inline Setting getSettings() const { return Setting{}; }	
 
-  public:
-
 	/***************************************************************************
 	 * Geometric Object Interface
 	 **************************************************************************/
@@ -220,7 +218,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	template<class SettingRhs>
 	friend bool operator==( const TemplatePolyhedronT<Number,Converter,Setting>& b1, const TemplatePolyhedronT<Number,Converter,SettingRhs>& b2 ) {
-		return (b1.rGetMatrixPtr() == nullptr && b2.rGetMatrixPtr() == nullptr) || (b1.matrix() == b2.matrix() && b1.vector() == b2.vector());
+		return (b1.rGetMatrixPtr() == nullptr && b2.rGetMatrixPtr() == nullptr) || (b1.matrix().isApprox(b2.matrix()) && b1.vector().isApprox(b2.vector()));
 	}
 
 	/**
@@ -344,6 +342,13 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @brief      Makes this TemplatePolyhedron equal to the empty TemplatePolyhedron.
 	 */
 	void clear();
+
+	/**
+	 * @brief      Overapproximates the current TemplatePolyhedron with the given directions and returns the resulting TemplatePolyhedron
+	 * @param[in]  dirs The directions in which the current TemplatePolyhedron should be overapproximated.
+	 * @return 	   The overapproximated TemplatePolyhedron with dirs as its matrix. 
+	 */
+	TemplatePolyhedronT<Number,Converter,Setting> overapproximate( const matrix_t<Number>& dirs ) const;
 
   private:
 

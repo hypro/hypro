@@ -217,11 +217,11 @@ namespace hypro {
 			for(int i = 0; i < mMatrixPtr->rows(); ++i){
 				//TODO: linear dependent better
 				if(vector_t<Number>(mMatrixPtr->row(i)) == _direction){
+					COUNT("Single Evaluation avoided");
 					return EvaluationResult<Number>(mVector(i), SOLUTION::FEAS);
 				}
 			}
 		}
-		COUNT("Single Evaluation");
 		return mOptimizer.evaluate(_direction, true);
 	}
 
@@ -232,22 +232,24 @@ namespace hypro {
 		std::vector<EvaluationResult<Number>> res;
 		if(mNonRedundant){
 			for(int i = 0; i < _directions.rows(); ++i){
+				COUNT("Evaluate calls");
 				//Quick check: If direction is a part of the template, then just return offset
 				bool found = false;
 				for(int j = 0; j < mMatrixPtr->rows(); ++j){
 					//TODO: linear dependent better
 					if(!found && mMatrixPtr->row(j) == _directions.row(i)){
+						COUNT("Single Evaluation avoided");
 						res.emplace_back(EvaluationResult<Number>(mVector(j), SOLUTION::FEAS));
 						found = true;
 					}
 				}
 				if(!found){
-					//COUNT("Single Evaluation");
 					res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));
 				}	
 			}
 		} else {
 			for(int i = 0; i < _directions.rows(); ++i){
+				COUNT("Evaluate calls");
 				res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));	
 			}
 		}
@@ -365,10 +367,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
-		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(empty()){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this); 
 		}
 
@@ -390,22 +392,22 @@ namespace hypro {
 
 		assert(!(fullyInside && fullyOutside));
 		if(fullyInside){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		} 
 		if(fullyOutside){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this);
 		} 	
 			
 		//Even more expensive part
-		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
+		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
 		auto tmp = this->intersectHalfspaces(_mat,_vec);
 		if(tmp.empty()){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
 		} else {
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
 			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
 		}
 	}
@@ -792,4 +794,20 @@ namespace hypro {
 		mEmpty = TRIBOOL::NSET;
 	}
 
+	template<typename Number, typename Converter, typename Setting>
+	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::overapproximate( const matrix_t<Number>& dirs ) const {
+		std::cout << "TemplatePolyhedron::overapproximate, before approx: " << *this << std::endl;
+		if(empty()) return *this;
+		assert(dirs.cols() == mMatrixPtr->cols());
+		auto evalRes = multiEvaluate(dirs, true);
+		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
+		for(int i = 0; i < evalRes.size(); ++i){
+			assert(evalRes[i].errorCode != SOLUTION::INFEAS);
+			evalOffsets(i) = evalRes[i].supportValue;
+		}
+		auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(dirs,evalOffsets);
+		std::cout << "TemplatePolyhedron::overapproximate, after approx: " << tmp << std::endl;
+		return tmp;
+		//return TemplatePolyhedronT<Number,Converter,Setting>(dirs,evalOffsets);
+	}
 } // namespace hypro

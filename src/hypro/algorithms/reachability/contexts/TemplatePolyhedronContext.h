@@ -45,7 +45,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	    std::vector<PlotData<State>>* localSegments,
 	    ReachabilitySettings &settings) 
   		: LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings)
-  		{}
+  	{}
         
 	~TemplatePolyhedronContext(){}
   	
@@ -56,6 +56,8 @@ class TemplatePolyhedronContext : public LTIContext<State> {
   	void applyContinuousEvolution() override;
 
   private:
+
+    TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
 
 };
 

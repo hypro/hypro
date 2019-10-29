@@ -22,15 +22,15 @@ namespace hypro {
 
     template<typename State>
     tNumber TPolyFirstSegmentHandler<State>::maxValueAtRoots(const carl::UnivariatePolynomial<tNumber>& polynom, const carl::Interval<tNumber>& interval){
-        std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots" << std::endl;
+        //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots" << std::endl;
         tNumber max(-1e10);
         tNumber valueAtRoot = 0;
         std::vector<carl::RealAlgebraicNumber<tNumber>> roots = carl::rootfinder::RealRootIsolation<tNumber>(polynom, interval).get_roots();
-        std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots, roots are: {";
-        for(const auto& r : roots){
-            std::cout << r << ",";
-        }
-        std::cout << "}" << std::endl;
+        //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots, roots are: {";
+        //for(const auto& r : roots){
+        //    //std::cout << r << ",";
+        //}
+        //std::cout << "}" << std::endl;
         for(const carl::RealAlgebraicNumber<tNumber>& root : roots){
             tNumber rootNumber(0);
             if(root.isNumeric()){
@@ -142,28 +142,28 @@ namespace hypro {
                 bool decreasing = true;
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / 4)){
                     values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
-                    std::cout << "TPolyFirstSegmentHandler::handle, timeStepPart: " << timeStepPart << " values: {";
-                    for(const auto& v : values){
-                        std::cout << v << ",";
-                    }
-                    std::cout << "}" << std::endl;
+                    //std::cout << "TPolyFirstSegmentHandler::handle, timeStepPart: " << timeStepPart << " values: {";
+                    //for(const auto& v : values){
+                    //    //std::cout << v << ",";
+                    //}
+                    //std::cout << "}" << std::endl;
                     if(values.size() >= 2){
                         if(increasing && values.at(values.size()-2) > values.at(values.size()-1)){
-                            std::cout << "TPolyFirstSegmentHandler::handle, not increasing anymore!" << std::endl;
+                            //std::cout << "TPolyFirstSegmentHandler::handle, not increasing anymore!" << std::endl;
                             increasing = false;
                         }
                         if(decreasing && values.at(values.size()-2) <= values.at(values.size()-1)){
-                            std::cout << "TPolyFirstSegmentHandler::handle, not decreasing anymore!" << std::endl;
+                            //std::cout << "TPolyFirstSegmentHandler::handle, not decreasing anymore!" << std::endl;
                             decreasing = false;
                         }
                         if(!increasing && !decreasing){
-                            std::cout << "TPolyFirstSegmentHandler::handle, break!" << std::endl;
+                            //std::cout << "TPolyFirstSegmentHandler::handle, break!" << std::endl;
                             break;
                         }        
                     }
                 }
                 assert(values.size() == 5);
-                std::cout << "TPolyFirstSegmentHandler::handle, increasing: " << increasing << " decreasing: " << decreasing << std::endl;
+                //std::cout << "TPolyFirstSegmentHandler::handle, increasing: " << increasing << " decreasing: " << decreasing << std::endl;
                 if(!increasing && !decreasing){
                     //If not monotonically increasing or decreasing, then there must be a maximum in the interval -> compute expensive root enumeration
                     carl::UnivariatePolynomial<tNumber> polynomAsTNumber(var, polynomCoeffs);
@@ -180,7 +180,7 @@ namespace hypro {
                     throw std::runtime_error("TPolyFirstSegmentHandler::handle, polnom was both monotonically increasing as well as decreasing.");
                     exit(1);
                 }
-                std::cout << "TPolyFirstSegmentHandler::handle, newVec(rowI):" << newVec(rowI) << std::endl;
+                //std::cout << "TPolyFirstSegmentHandler::handle, newVec(rowI):" << newVec(rowI) << std::endl;
             }
             
             //Set value in coeff vec
