@@ -38,10 +38,10 @@ struct EvaluationResult {
 template<typename Number>
 bool operator<(const EvaluationResult<Number>& lhs, const EvaluationResult<Number>& rhs) {
 	if(lhs.errorCode == SOLUTION::INFEAS) {
-		return false;
+		return true;
 	}
 	if(rhs.errorCode == SOLUTION::INFEAS) {
-		return true;
+		return false;
 	}
 	if(lhs.errorCode == SOLUTION::INFTY) {
 		// note that if both are infty, this operator does not make sense and always will return false.
