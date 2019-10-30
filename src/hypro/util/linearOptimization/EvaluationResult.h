@@ -37,7 +37,12 @@ struct EvaluationResult {
 
 template<typename Number>
 bool operator<(const EvaluationResult<Number>& lhs, const EvaluationResult<Number>& rhs) {
-	assert(lhs.errorCode != SOLUTION::INFEAS && rhs.errorCode != SOLUTION::INFEAS);
+	if(lhs.errorCode == SOLUTION::INFEAS) {
+		return false;
+	}
+	if(rhs.errorCode == SOLUTION::INFEAS) {
+		return true;
+	}
 	if(lhs.errorCode == SOLUTION::INFTY) {
 		// note that if both are infty, this operator does not make sense and always will return false.
 		return false;
