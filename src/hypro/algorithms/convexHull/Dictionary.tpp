@@ -120,34 +120,34 @@ namespace hypro {
 	template<typename Number>
 	void Dictionary<Number>::printDictionary() const {
 		uint32_t i,j;
-	std::cout << "\n mB size=";
-	std::cout << mB.size();
-	std::cout << "\n mN size=";
-	std::cout << mN.size();
-	std::cout << "\n mDictionary size=";
-	std::cout << mDictionary.size();
-	std::cout << "\n \n";
+		std::cout << "\n mB size=";
+		std::cout << mB.size();
+		std::cout << "\n mN size=";
+		std::cout << mN.size();
+		std::cout << "\n mDictionary size=";
+		std::cout << mDictionary.size();
+		std::cout << "\n \n";
 
-	std::cout <<"mB = ";
+		std::cout <<"mB = ";
 		for(i=0; i<mB.size(); ++i){
-		std::cout << mB[i];
-		std::cout << ";  ";
+			std::cout << mB[i];
+			std::cout << ";  ";
 		}
-	std::cout <<"\nmN = ";
+		std::cout <<"\nmN = ";
 		for(j=0; j<mN.size(); ++j){
-		std::cout << mN[j];
-		std::cout << ";  ";
+			std::cout << mN[j];
+			std::cout << ";  ";
 		}
-	std::cout << "\n \n";
+		std::cout << "\n \n";
 
 		for(i=0; i<mB.size(); ++i){
 			for(j=0; j<mN.size(); ++j){
-			std::cout << mDictionary(i,j);
-			std::cout << " ; ";
+				std::cout << mDictionary(i,j);
+				std::cout << " ; ";
 			}
-		std::cout << "\n";
+			std::cout << "\n";
 		}
-	std::cout.flush();
+		std::cout.flush();
 	}
 
 

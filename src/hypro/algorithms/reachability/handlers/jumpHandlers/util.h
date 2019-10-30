@@ -79,7 +79,11 @@ struct nodeUpdater{
 		for(std::size_t i = 0; i < node->getRefinements().size(); ++i) {
 			// convert, in case this is necessary
 			if(node->getRefinements()[i].isDummy) {
+				// set state set at pos i to the newly computed one
+				node->setNewRefinement(i,update->getRefinements().at(mTargetLevel));
+				// convert to required state set representation
 				SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(node->rGetRefinements()[i].initialSet, i);
+				// unset dummy state
 				node->rGetRefinements()[i].isDummy = false;
 			}
 		}
@@ -106,11 +110,14 @@ struct nodeUpdater{
 		DEBUG("hydra.worker.refinement","Create and raise normal task.");
 		// set refinements in any case - even though it might not be used for further refinement.
 		node->setNewRefinement(mTargetLevel,update->getRefinements().at(mTargetLevel));
-		// also set intermediate refinements
+		// also set intermediate refinements in case they are not already defined
 		for(std::size_t i = 0; i < node->getRefinements().size(); ++i) {
-			// convert, in case this is necessary
-			if(node->getRefinements()[i].isDummy) {		
+			if(node->getRefinements()[i].isDummy) {
+				// set state set at pos i to the newly computed one
+				node->setNewRefinement(i,update->getRefinements().at(mTargetLevel)); 
+				// convert to required state set representation
 				SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(node->rGetRefinements()[i].initialSet, i);
+				// unset dummy state
 				node->rGetRefinements()[i].isDummy = false;
 			}
 		}

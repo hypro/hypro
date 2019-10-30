@@ -1,5 +1,5 @@
 
-// Generated from HybridSystem.g4 by ANTLR 4.7
+// Generated from HybridSystem.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "antlr4-runtime.h"
 
 
+namespace hypro {
 
 
 class  HybridSystemLexer : public antlr4::Lexer {
@@ -79,3 +80,4 @@ private:
   static Initializer _init;
 };
 
+}  // namespace hypro

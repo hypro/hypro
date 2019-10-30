@@ -135,6 +135,7 @@ if not os.path.exists(p+ '/' + str(args.name)):
 		# create conversion implementation tpp-file
 		with open(p+'/conversion/converterTo'+str(args.name)+'.tpp','w') as impl:
 			impl.write('#ifndef INCL_FROM_CONVERTERHEADER\nstatic_assert(false, "This file may only be included indirectly by Converter.h");\n#endif\n\n')
+			impl.write('namespace hypro { \n\n')
 			impl.write('template<typename Number>\n')
 			impl.write('template<typename ' + str(args.name) + 'Setting, typename inSetting>\n')
 			impl.write(str(args.name) + 'T<Number,Converter<Number>,' + str(args.name) + 'Setting> Converter<Number>::to'+str(args.name)+'( const '+str(args.name)+'T<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {\n')
@@ -165,6 +166,7 @@ if not os.path.exists(p+ '/' + str(args.name)):
 				if otherRepresentations[i] == 'Polytope':
 					impl.write('#endif\n')
 				impl.write('\n')
+			impl.write('} //namespace hypro\n')
 
 	# extend converterTo<SomeType>.tpp with new functions
 	convertToFiles = os.listdir(p + '/conversion')

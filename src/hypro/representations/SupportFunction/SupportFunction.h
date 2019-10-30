@@ -7,7 +7,7 @@
 
 #include "../../config.h"
 #include "util.h"
-#include "helperMethods.h"
+//#include "helperMethods.h"
 #include "SupportFunctionSetting.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"
@@ -27,7 +27,6 @@ public:
 	typedef Setting Settings;
 
 private:
-
 
 	std::shared_ptr<SupportFunctionContent<Number,Setting>> content;
 
@@ -78,6 +77,7 @@ public:
 	void removeRedundancy();
 	void reduceNumberRepresentation() {}
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
+	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
 	SupportFunctionT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
@@ -136,7 +136,7 @@ public:
 
 	std::vector<std::size_t> collectProjections() const;
 
-	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
+	const SupportFunctionT<Number,Converter,Setting>& evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
 
 private:
 

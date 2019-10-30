@@ -1,5 +1,8 @@
 set(glpk_version "4.45")
 
+# create build folder to be able to use it as an include folder
+file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build/include)
+
 ExternalProject_Add(
 	glpk
 	#URL ftp://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz

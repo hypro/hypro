@@ -2,6 +2,7 @@
  * @brief Example file which shows how to instanciate a concrete worker out of context handlers.
  */
 
+#include "representations/GeometricObject.h"
 #include <datastructures/reachability/SettingsProvider.h>
 #include <datastructures/reachability/ReachTree.h>
 #include <datastructures/reachability/Task.h>
@@ -15,7 +16,8 @@ int main(int argc, char** argv) {
 
     // typedefs
     using Number = double;
-    using State = hypro::State_t<Number>;
+    //using State = hypro::State_t<Number>;
+    using State = hypro::State<Number,SupportFunctionNew<Number>>
 
     // settings provider instance as reference for readability
     hypro::SettingsProvider<State>& settingsProvider = hypro::SettingsProvider<State>::getInstance();
@@ -57,9 +59,9 @@ int main(int argc, char** argv) {
     std::vector<hypro::State_t<Number>> initialStateData;
     for (auto stateMapIt = initialStates.begin(); stateMapIt != initialStates.end(); ++stateMapIt) {
 
-    	hypro::State_t<Number> copyState;
-    	copyState.setLocation(stateMapIt->first);
-    	copyState.setTimestamp(carl::Interval<hypro::tNumber>(0));
+        hypro::State_t<Number> copyState;
+        copyState.setLocation(stateMapIt->first);
+        copyState.setTimestamp(carl::Interval<hypro::tNumber>(0));
 
         // if the decider is in use - convert subspaces according to mapping
         State::repVariant _temp;
@@ -134,5 +136,6 @@ int main(int argc, char** argv) {
         worker.processTask(task,settingsProvider.getStrategy(), globalQueue, globalCEXQueue, &segments);
     }
 
-	return 0;
+    return 0;
 }
+

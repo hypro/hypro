@@ -23,7 +23,7 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( unsigned dimension )
 
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting>::PolytopeT( const Point<Number> &_point )
-	: mPolyhedron( C_Polyhedron( _point.dimension(), Parma_Polyhedra_Library::EMPTY ) ) {
+	: mPolyhedron( Parma_Polyhedra_Library::C_Polyhedron( _point.dimension(), Parma_Polyhedra_Library::EMPTY ) ) {
 	// std::cout << "Try Ppint: " << _point << std::endl;
 	mPolyhedron.add_generator( polytope::pointToGenerator( _point ) );
 	mPoints.push_back( _point );
@@ -45,8 +45,7 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<Point
 
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<vector_t<Number>> &points ) {
-	mPolyhedron =
-		  Parma_Polyhedra_Library::C_Polyhedron( points.begin()->rows(), Parma_Polyhedra_Library::EMPTY );
+	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( points.begin()->rows(), Parma_Polyhedra_Library::EMPTY );
 	for ( auto pointIt = points.begin(); pointIt != points.end(); ++pointIt ) {
 		Parma_Polyhedra_Library::Generator tmp = polytope::pointToGenerator( *pointIt );
 		mPolyhedron.add_generator( tmp );
@@ -82,7 +81,7 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const matrix_t<Number> &A ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const C_Polyhedron &_rawPoly )
+PolytopeT<Number,Converter,Setting>::PolytopeT( const Parma_Polyhedra_Library::C_Polyhedron &_rawPoly )
 	: mPolyhedron( _rawPoly ), mPoints(), mPointsUpToDate( false ) {
 }
 
@@ -224,7 +223,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::linearT
 	mpz_class divisor;
 	Number value;
 
-	for ( Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end();
+	for ( auto generatorIt = generators.begin(); generatorIt != generators.end();
 		  ++generatorIt ) {
 		// Assuming the divisor stays the same in one generator
 		divisor = generatorIt->divisor();
@@ -261,7 +260,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::linearT
 
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
-	using Parma_Polyhedra_Library::IO_Operators::operator<<;
+	//using Parma_Polyhedra_Library::IO_Operators::operator<<;
 
 	PolytopeT<Number,Converter,Setting> result;
 
@@ -275,7 +274,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineT
 	mpz_class divisor;
 	Number value;
 
-	for ( Parma_Polyhedra_Library::Generator_System::const_iterator generatorIt = generators.begin(); generatorIt != generators.end();
+	for ( auto generatorIt = generators.begin(); generatorIt != generators.end();
 		  ++generatorIt ) {
 		// Assuming the divisor stays the same in one generator
 		divisor = generatorIt->divisor();
@@ -363,7 +362,7 @@ template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::minkowskiSum( const PolytopeT<Number,Converter,Setting> &rhs ) const {
 	PolytopeT<Number,Converter,Setting> result;
 
-	result = Parma_Polyhedra_Library::C_Polyhedron( 0, EMPTY );
+	result = Parma_Polyhedra_Library::C_Polyhedron( 0, Parma_Polyhedra_Library::EMPTY );
 
 	assert( this->dimension() == rhs.dimension() );
 
@@ -390,7 +389,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 	PolytopeT<Number,Converter,Setting> result;
 	// TODO compute adjacency for this & rhs vertices (currently manually defined
 	// within the tests)
-	result = Parma_Polyhedra_Library::C_Polyhedron( 0, EMPTY );
+	result = Parma_Polyhedra_Library::C_Polyhedron( 0, Parma_Polyhedra_Library::EMPTY );
 	std::vector<Point<Number>> alreadyExploredVertices;
 
 	/**
@@ -596,7 +595,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::interse
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number> &_mat,
 														 const vector_t<Number> &_vec ) const {
-	using Parma_Polyhedra_Library::IO_Operators::operator<<;
+	//using Parma_Polyhedra_Library::IO_Operators::operator<<;
 	assert( _mat.rows() == _vec.rows() );
 	Parma_Polyhedra_Library::C_Polyhedron res = this->mPolyhedron;
 	for ( unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex ) {
@@ -643,7 +642,7 @@ std::pair<CONTAINMENT, PolytopeT<Number,Converter,Setting>> PolytopeT<Number,Con
 
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::hull() const {
-	// Generator_System gs = mPolyhedron.minimized_generators();
+	// Parma_Polyhedra_Library::Generator_System gs = mPolyhedron.minimized_generators();
 	// PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>(C_Polyhedron(gs));
 
 	if ( !mPointsUpToDate ) {

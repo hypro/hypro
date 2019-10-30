@@ -6,10 +6,10 @@ namespace sf {
     void affineTrafoCreator(std::map<std::size_t, std::vector<hypro::matrix_t<::benchmark::Number>>>& matricesMap,
                             std::map<std::size_t, std::vector<hypro::vector_t<::benchmark::Number>>>& vectorsMap,
                             std::map<std::size_t, std::vector<hypro::vector_t<::benchmark::Number>>>& directionsMap,
-                            const Settings& settings) 
+                            const Settings& settings)
     {
         // initialize random number generator
-        mt19937 generator;
+        std::mt19937 generator;
         std::uniform_int_distribution<int> dist = std::uniform_int_distribution<int>(0,10);
 
         for(std::size_t d = 1; d < settings.maxDimension; ++d) {
@@ -40,7 +40,7 @@ namespace sf {
 
     Results<std::size_t> affineTransformationEvaluation(const Settings& settings) {
         Results<std::size_t> ress;
-        
+
         std::map<std::size_t, std::vector<hypro::matrix_t<::benchmark::Number>>> matricesMap;
         std::map<std::size_t, std::vector<hypro::vector_t<::benchmark::Number>>> vectorsMap;
         std::map<std::size_t, std::vector<hypro::vector_t<::benchmark::Number>>> directionsMap;
@@ -60,7 +60,7 @@ namespace sf {
             }
             hypro::SupportFunction<::benchmark::Number> sFunct(constraints,constants);
             hypro::SupportFunctionT<::benchmark::Number,hypro::Converter<::benchmark::Number>,hypro::NoTrafoReduction> sFunctNoReduction(constraints,constants);
-            
+
             // run instances asynchronous
 
             auto& mVector = matricesMap[d];

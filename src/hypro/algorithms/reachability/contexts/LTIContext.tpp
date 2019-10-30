@@ -7,7 +7,7 @@ namespace hypro
 	                    const Strategy<State>& strat,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData<State>>* localSegments,
+	                    Flowpipe<State>& localSegments,
 	                    ReachabilitySettings &settings)
 		: mTask(t)
 		, mStrategy(strat)
@@ -235,9 +235,11 @@ namespace hypro
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.getParameters(mTask->btInfo.btLevel).timeStep) );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters(mTask->btInfo.btLevel).representation_type );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
+	    #ifdef HYPRO_LOGGING
 	    for(auto& ref : mTask->treeNode->rGetRefinements()){
 	    	INFO("hypro.worker",  std::this_thread::get_id() << ": " << ref);
 	    }
+	    #endif
 
 		if(mSettings.useInvariantTimingInformation ||
 		   mSettings.useGuardTimingInformation ||
@@ -413,13 +415,12 @@ namespace hypro
 	void LTIContext<State>::checkInvariant(){
 		if(mInvariantHandlers.size() > 0){
     		bool deleteRequested = false;
-	    	// compute strictes containment on the fly
+	    	// compute strictest containment on the fly
 	    	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
-	    	// applay handlers to state
+	    	// apply handlers to state
 	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){
 				if(!omitInvariant()) {
 					mInvariantHandlers.at(i)->handle();
-					
 					if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
 						TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
 						strictestContainment = mInvariantHandlers.at(i)->getContainment();
@@ -452,7 +453,6 @@ namespace hypro
 
 			if(deleteRequested){
 				for(auto handler = mInvariantHandlers.begin(); handler != mInvariantHandlers.end(); ){
-
 					if((*handler)->getMarkedForDelete()){
 						delete *handler;
 						handler = mInvariantHandlers.erase(handler);
@@ -469,7 +469,7 @@ namespace hypro
 		// For plotting.
 		if(!SettingsProvider<State>::getInstance().skipPlot()) {
 			TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
-        	mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
+        	mLocalSegments.addState(mComputationState);
 		}
     }
 
@@ -500,7 +500,6 @@ namespace hypro
 						mLocalTimings.insertBadState(mComputationState.getTimestamp(),CONTAINMENT::YES);
 					}
 
-
 					// write timings.
 					if(mSettings.useBadStateTimingInformation ||
 					   mSettings.useGuardTimingInformation ||
@@ -520,7 +519,6 @@ namespace hypro
 
 				if(deleteRequested){
 					for(auto handler = mBadStateHandlers.begin(); handler != mBadStateHandlers.end(); ){
-
 						if((*handler)->getMarkedForDelete()){
 							delete *handler;
 							handler = mBadStateHandlers.erase(handler);
@@ -546,9 +544,7 @@ namespace hypro
 				DEBUG("hypro.worker","Built " << ptr->handlerName());
 			}
 		}
-		//mEndLoop = (mContinuousEvolutionHandlers.size() == 0);
-		mEndLoop = (mContinuousEvolutionHandlers.size() >= 0);
-
+		
 		initializeGuardHandlers();
 
 		#ifdef SINGLE_THREAD_FIXED_POINT_TEST
@@ -593,8 +589,8 @@ namespace hypro
 
     template<typename State>
 	bool LTIContext<State>::doneCondition(){
-    	DEBUG("hypro.worker", "Checking done condition: CurrentLocalTime (" << carl::toDouble(mCurrentLocalTime) << ") > timeBound (" << mSettings.timeBound << ")");
-    	return !mEndLoop && (mCurrentLocalTime > mSettings.timeBound);
+    	DEBUG("hypro.worker", "Checking done condition: CurrentLocalTime (" << carl::toDouble(mCurrentLocalTime) << ") > timeBound (" << mSettings.timeBound << "), number of continuous evolution handlers: " << mContinuousEvolutionHandlers.size());
+    	return (mContinuousEvolutionHandlers.size() == 0) || (mCurrentLocalTime > mSettings.timeBound);
     }
 
     template<typename State>
@@ -741,8 +737,8 @@ namespace hypro
 
 		for(auto it = mContinuousEvolutionHandlers.begin(); it != mContinuousEvolutionHandlers.end(); ){
 			if((*it)->getMarkedForDelete()) {
-				delete *it;
 				it = mContinuousEvolutionHandlers.erase(it);
+				TRACE("hypro.worker","Removed continuous evolution handler, number of handlers after removal: " << mContinuousEvolutionHandlers.size());
 			} else {
 				++it;
 			}
@@ -777,6 +773,7 @@ namespace hypro
     	TRACE("hypro.worker.discrete","Check if transition " << transition << " can be omitted.");
 		// do not use timing information -> return false
 		if(!mSettings.useGuardTimingInformation) {
+			COUNT("CannotOmitTransition");
 			return false;
 		}
 		// the timings for a transition are either empty because this node is not fully computed or because this transition cannot
@@ -829,6 +826,7 @@ namespace hypro
 	bool LTIContext<State>::omitInvariant() {
 		// do not use timing information -> return false
 		if(!mSettings.useInvariantTimingInformation) {
+			COUNT("CannotOmitInvariant");
 			return false;
 		}
 		// temporary for dbg-output
@@ -849,6 +847,7 @@ namespace hypro
 	bool LTIContext<State>::omitBadStateCheck() {
 		// do not use timing information -> return false
 		if(!mSettings.useBadStateTimingInformation) {
+			COUNT("CannotOmitBadStateCheck");
 			return false;
 		}
 		// temporary for dbg-output
@@ -891,9 +890,8 @@ namespace hypro
 			}
 		}
 
-
+		//LOLOLO
 		//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
 		TRACE("hypro.worker","Unlock node " << mTask->treeNode);

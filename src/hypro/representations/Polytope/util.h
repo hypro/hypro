@@ -80,10 +80,10 @@ Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<Number>& con
 template <typename Number>
 static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_t<Number>& point ) {
 	double tmpValue;
-	Linear_Expression ls;
+	Parma_Polyhedra_Library::Linear_Expression ls;
 	for ( unsigned i = 0; i < point.rows(); ++i ) {
 		tmpValue = carl::toDouble( point( i ) ) * fReach_DENOMINATOR;
-		Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
+		Parma_Polyhedra_Library::Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
 		ls += tmp;
 	}
 	Parma_Polyhedra_Library::Generator result = Parma_Polyhedra_Library::Generator::point( ls, fReach_DENOMINATOR );

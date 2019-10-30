@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -11,6 +11,7 @@
 	#include <string>
 
 
+namespace hypro {
 
 
 class  HybridAutomatonParser : public antlr4::Parser {
@@ -155,6 +156,8 @@ public:
   public:
     ModesContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<LocationContext *> location();
     LocationContext* location(size_t i);
 
@@ -169,7 +172,9 @@ public:
     LocationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
+    antlr4::tree::TerminalNode *CBOPEN();
     ActivitiesContext *activities();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<InvariantsContext *> invariants();
     InvariantsContext* invariants(size_t i);
 
@@ -183,6 +188,8 @@ public:
   public:
     ActivitiesContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     antlr4::tree::TerminalNode *POLY();
     antlr4::tree::TerminalNode *ODE();
     antlr4::tree::TerminalNode *NUMBER();
@@ -202,6 +209,8 @@ public:
   public:
     InvariantsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -295,6 +304,9 @@ public:
   public:
     IntervalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *SBOPEN();
+    antlr4::tree::TerminalNode *COMMA();
+    antlr4::tree::TerminalNode *SBCLOSE();
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
     std::vector<antlr4::tree::TerminalNode *> VARIABLE();
@@ -374,6 +386,8 @@ public:
   public:
     InitContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<InitstateContext *> initstate();
     InitstateContext* initstate(size_t i);
 
@@ -388,7 +402,9 @@ public:
     InitstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
+    antlr4::tree::TerminalNode *CBOPEN();
     ConstrsetContext *constrset();
+    antlr4::tree::TerminalNode *CBCLOSE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
 
@@ -400,6 +416,8 @@ public:
   public:
     UnsafesetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<GbadstateContext *> gbadstate();
     GbadstateContext* gbadstate(size_t i);
     std::vector<LbadstateContext *> lbadstate();
@@ -416,6 +434,8 @@ public:
     LbadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -440,6 +460,9 @@ public:
   public:
     JumpsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *JUMPS();
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<TransitionContext *> transition();
     TransitionContext* transition(size_t i);
 
@@ -487,6 +510,7 @@ public:
   public:
     UrgentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *URGENT();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
 
@@ -498,6 +522,9 @@ public:
   public:
     GuardContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *GUARD();
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -525,6 +552,9 @@ public:
   public:
     ResetfctContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *RESET();
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<AllocationContext *> allocation();
     AllocationContext* allocation(size_t i);
 
@@ -538,6 +568,8 @@ public:
   public:
     AggregationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     antlr4::tree::TerminalNode *PARALLELOTOPE();
     antlr4::tree::TerminalNode *BOX();
     antlr4::tree::TerminalNode *INTERVALAGG();
@@ -552,6 +584,8 @@ public:
   public:
     SettingContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<FixedstepsContext *> fixedsteps();
     FixedstepsContext* fixedsteps(size_t i);
     std::vector<TimeContext *> time();
@@ -611,6 +645,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> VARIABLE();
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> COMMA();
+    antlr4::tree::TerminalNode* COMMA(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
 
@@ -736,3 +772,4 @@ private:
   static Initializer _init;
 };
 
+}  // namespace hypro

@@ -111,19 +111,25 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
 		// check each substateset agains its invariant subset
+		//DEBUG("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix(i) << std::endl << "Vector: " << std::endl << in.getVector(i));
+		//DEBUG("hypro.datastructures", "Before genericSatisfiesHalfspacesVisitor. mSets.at(" << i << ") is: "<< std::endl << mSets.at(i));
 		auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(i), in.getVector(i)), mSets.at(i));
+		//DEBUG("hypro.datastructures", "After genericSatisfiesHalfspacesVisitor.");
 		assert(resultPair.first != CONTAINMENT::YES); // assert that we have detailed information on the invariant intersection.
 
 		res.setSetDirect(resultPair.second, i);
+		//DEBUG("hypro.datastructures", "i is:" << i << "After setSetDirect.");
 
 		if(resultPair.first == CONTAINMENT::NO) {
 			DEBUG("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			strictestContainment = resultPair.first;
 			break;
 		} else if(resultPair.first == CONTAINMENT::PARTIAL) {
+			DEBUG("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") succeeded the condition - return partial.");
 			strictestContainment = CONTAINMENT::PARTIAL;
 		}
 	}
+	DEBUG("hypro.datastructures","State::satisfies: End of loop");
 	return std::make_pair(strictestContainment, res);
 }
 
@@ -140,7 +146,6 @@ template<typename Number, typename Representation, typename ...Rargs>
 std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
 	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
 	assert(checkConsistency());
-
 
 	if(in.size() == 0 || in.constraints().empty()) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
@@ -210,6 +215,82 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 
 	res.addTimeToClocks(timeStepSize);
 	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::computeAndApplyLinearTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const {
+	assert(flows.size() <= mSets.size());
+	assert(checkConsistency());
+
+	State<Number,Representation,Rargs...> res(*this);
+	// iterate over all sets
+	for(int i = 0; i < flows.size(); ++i) {
+		// compute matrix exponential e^{delta A}
+		matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flows[i];
+		auto expMatrix = matrixExponential(deltaMatrix);
+
+		// apply according transformation to subspace set
+		assert(boost::apply_visitor(genericDimensionVisitor(), mSets[i]) == expMatrix.rows());
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(expMatrix.matrix(), vector_t<Number>::Zero(flows[i].rows())), mSets.at(i)), i);
+	}
+	// update internal clocks
+	res.addTimeToClocks(timeStepSize);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyComputeAndApplyLinearTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I ) const {
+	// compute matrix exponential e^{delta A}
+	matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flow;
+	auto expMatrix = matrixExponential(deltaMatrix);
+	// apply according transformation
+	return this->partiallyApplyTimeStep(ConstraintSet<Number>(expMatrix), timeStepSize, I);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::computeAndApplyAffineTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const {
+	assert(flows.size() <= mSets.size());
+	assert(checkConsistency());
+
+	State<Number,Representation,Rargs...> res(*this);
+	// iterate over all sets
+	for(int i = 0; i < flows.size(); ++i) {
+		// compute matrix exponential e^{delta A}
+		matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flows[i];
+		auto expMatrix = matrixExponential(deltaMatrix);
+
+		// assumption: the flow is affine, i.e. of the form \dot(x) = Ax + b. We cut off the last col/row
+		unsigned rows = expMatrix.rows();
+		unsigned cols = expMatrix.cols();
+		vector_t<Number> translation = expMatrix.col(cols - 1);
+		matrix_t<Number> expMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+		expMatrixResized = expMatrix.block(0, 0, rows - 1, cols - 1);
+		translation.conservativeResize(rows - 1);
+
+		// apply according transformation to subspace set
+		assert(boost::apply_visitor(genericDimensionVisitor(), mSets[i]) == expMatrix.rows());
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(expMatrixResized.matrix(), translation), mSets.at(i)), i);
+	}
+	// update internal clocks
+	res.addTimeToClocks(timeStepSize);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyComputeAndApplyAffineTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I ) const {
+	assert(I < mSets.size());
+	// compute matrix exponential e^{delta A}
+	matrix_t<Number> deltaMatrix = carl::convert<tNumber,Number>(timeStepSize) * flow;
+	auto expMatrix = matrixExponential(deltaMatrix);
+
+	// assumption: the flow is affine, i.e. of the form \dot(x) = Ax + b. We cut off the last col/row
+	unsigned rows = expMatrix.rows();
+	unsigned cols = expMatrix.cols();
+	vector_t<Number> translation = expMatrix.col(cols - 1);
+	matrix_t<Number> expMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+	expMatrixResized = expMatrix.block(0, 0, rows - 1, cols - 1);
+	translation.conservativeResize(rows - 1);
+
+	// apply transformation after resizing.
+	return this->partiallyApplyTimeStep(ConstraintSet<Number>(expMatrixResized, translation), timeStepSize, I);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
@@ -345,6 +426,14 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::pro
 	State res(*this);
 	res.setSetDirect(boost::apply_visitor(genericProjectionVisitor<repVariant>(dimensions), mSets.at(I)));
 	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::project(const std::pair<std::size_t,std::size_t>& dimensions, std::size_t I) const {
+	std::vector<std::size_t> ds;
+	ds.push_back(dimensions.first);
+	ds.push_back(dimensions.second);
+	return this->project(ds,I);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>

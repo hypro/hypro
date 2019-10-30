@@ -22,19 +22,6 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
-		TRACE("hypro.optimizer","");
-		assert(isSane());
-		mConstraintMatrix = orig.matrix();
-		mConstraintVector = orig.vector();
-		mConsistencyChecked = false;
-		cleanGLPInstance();
-		mGlpkContext = std::map<std::thread::id, glpk_context>();
-		assert(isSane());
-		return *this;
-	}
-
-	template<typename Number>
 	const matrix_t<Number>& Optimizer<Number>::matrix() const {
 		assert(isSane());
 		return mConstraintMatrix;
@@ -44,6 +31,33 @@ namespace hypro {
 	const vector_t<Number>& Optimizer<Number>::vector() const {
 		assert(isSane());
 		return mConstraintVector;
+	}
+
+	//Move ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
+		swap(*this, orig);
+	}
+
+	//Copy ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(const Optimizer<Number>& orig){
+		TRACE("hypro.optimizer","");
+		assert(isSane());
+		mConstraintMatrix = orig.matrix();
+		mConstraintVector = orig.vector();
+		mConsistencyChecked = false;
+		cleanGLPInstance();
+		mGlpkContext = std::map<std::thread::id, glpk_context>();
+		assert(isSane());
+	}
+
+	//Copy assignment via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
+		Optimizer<Number> tmp(orig);
+		swap(*this, tmp);
+		return *this;
 	}
 
 	template<typename Number>
@@ -70,6 +84,15 @@ namespace hypro {
 		assert(isSane());
 		mRelationSymbols = rels;
 		clearCache();
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::setMaximize(bool max) {
+		assert(isSane());
+		if(max != maximize) {
+			maximize = max;
+			clearCache();
+		}
 	}
 
 	template<typename Number>
@@ -140,7 +163,7 @@ namespace hypro {
 
 		//COUNT("glpk");
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
+		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
 		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
 		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
@@ -212,7 +235,7 @@ namespace hypro {
 
 			#ifdef HYPRO_USE_Z3
 			COUNT("z3");
-			res = z3OptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
+			res = z3OptimizeLinear(maximize,_direction,mConstraintMatrix,mConstraintVector,res);
 			#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 			COUNT("smtrat");
 			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,mRelationSymbols,res);
@@ -382,7 +405,7 @@ namespace hypro {
 		TRACE("hypro.optimizer","");
 		assert(isSane());
 		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
-		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
+		//assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
 			//std::cout << "mOptimizer has not been initialized, initialize now" << std::endl;
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
@@ -404,7 +427,12 @@ namespace hypro {
 				glpCtx.deleteLPInstance();
 				glpCtx.createLPInstance();
 
-				glp_set_obj_dir( glpCtx.lp, GLP_MAX );
+				if(maximize) {
+					glp_set_obj_dir( glpCtx.lp, GLP_MAX );
+				} else {
+					glp_set_obj_dir( glpCtx.lp, GLP_MIN );
+				}
+
 
 				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER

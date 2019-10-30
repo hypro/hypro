@@ -105,9 +105,9 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	* General interface
 	**************************************************************************/
 
-	EvaluationResult<Number> evaluate( const vector_t<Number>& direction) const;
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& directions) const;
-
+	matrix_t<Number> matrix() const { assert(false && "NOT IMPLEMENTED YET"); return matrix_t<Number>::Zero(1,1); }
+	vector_t<Number> vector() const { assert(false && "NOT IMPLEMENTED YET"); return vector_t<Number>::Zero(1); }
+		
 	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
@@ -158,6 +158,9 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	 * @brief      Clears the polytope.
 	 */
 	void clear();
+
+	EvaluationResult<Number> evaluate(const vector_t<Number>& direction) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const;
 
 	/***************************************************************************
 	 * Getters, Setters, Iterators
@@ -390,13 +393,15 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 /** @} */
 
 template <typename Number, typename Converter, typename S>
-std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter, S>& lhs ) {
 #ifdef HYPRO_LOGGING
+std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter, S>& lhs ) {
 	out << "{ ";
 	for ( const auto& vector : lhs ) {
 		out << vector << " ";
 	}
 	out << "}";
+#else
+std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter, S>& ) {	
 #endif
 	return out;
 }

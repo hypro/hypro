@@ -1,5 +1,5 @@
 
-// Generated from HybridSystem.g4 by ANTLR 4.7
+// Generated from HybridSystem.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "antlr4-runtime.h"
 
 
+namespace hypro {
 
 
 class  HybridSystemParser : public antlr4::Parser {
@@ -742,7 +743,7 @@ public:
   public:
     EquationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    EquationContext() : antlr4::ParserRuleContext() { }
+    EquationContext() = default;
     void copyFrom(EquationContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -846,7 +847,7 @@ public:
   public:
     UnaryExpressionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    UnaryExpressionContext() : antlr4::ParserRuleContext() { }
+    UnaryExpressionContext() = default;
     void copyFrom(UnaryExpressionContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -910,7 +911,7 @@ public:
   public:
     ExpressionFactorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    ExpressionFactorContext() : antlr4::ParserRuleContext() { }
+    ExpressionFactorContext() = default;
     void copyFrom(ExpressionFactorContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -1199,7 +1200,7 @@ public:
   public:
     LocationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    LocationContext() : antlr4::ParserRuleContext() { }
+    LocationContext() = default;
     void copyFrom(LocationContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -1259,7 +1260,7 @@ public:
   public:
     LocationElementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    LocationElementContext() : antlr4::ParserRuleContext() { }
+    LocationElementContext() = default;
     void copyFrom(LocationElementContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -1449,7 +1450,7 @@ public:
   public:
     InvariantContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    InvariantContext() : antlr4::ParserRuleContext() { }
+    InvariantContext() = default;
     void copyFrom(InvariantContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -1521,7 +1522,7 @@ public:
   public:
     UpdateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    UpdateContext() : antlr4::ParserRuleContext() { }
+    UpdateContext() = default;
     void copyFrom(UpdateContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -1596,7 +1597,7 @@ public:
   public:
     AdressableContext(antlr4::ParserRuleContext *parent, size_t invokingState);
    
-    AdressableContext() : antlr4::ParserRuleContext() { }
+    AdressableContext() = default;
     void copyFrom(AdressableContext *context);
     using antlr4::ParserRuleContext::copyFrom;
 
@@ -1972,3 +1973,4 @@ private:
   static Initializer _init;
 };
 
+}  // namespace hypro

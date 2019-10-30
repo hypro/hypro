@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -8,6 +8,7 @@
 #include "HybridAutomatonParser.h"
 
 
+namespace hypro {
 
 /**
  * This class defines an abstract visitor for a parse tree
@@ -106,3 +107,4 @@ public:
 
 };
 
+}  // namespace hypro

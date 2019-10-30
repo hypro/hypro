@@ -2,6 +2,8 @@
 static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
 
+namespace hypro {
+
 template<typename Number>
 template<typename TemplatePolyhedronSetting, typename inSetting>
 TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
@@ -70,6 +72,12 @@ TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converte
 
 template<typename Number>
 template<typename TemplatePolyhedronSetting, typename inSetting>
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>(_source.matrix(), _source.vector());	
+}
+
+template<typename Number>
+template<typename TemplatePolyhedronSetting, typename inSetting>
 TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	auto tmp = typename Converter::HPolytope(_source.vertices());
 	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>(tmp.matrix(), tmp.vector());	
@@ -82,3 +90,4 @@ TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converte
 	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
 }
 
+} //namespace hypro

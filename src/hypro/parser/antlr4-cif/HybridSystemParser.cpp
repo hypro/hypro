@@ -1,5 +1,5 @@
 
-// Generated from HybridSystem.g4 by ANTLR 4.7
+// Generated from HybridSystem.g4 by ANTLR 4.7.2
 
 
 #include "HybridSystemVisitor.h"
@@ -8,6 +8,7 @@
 
 
 using namespace antlrcpp;
+using namespace hypro;
 using namespace antlr4;
 
 HybridSystemParser::HybridSystemParser(TokenStream *input) : Parser(input) {

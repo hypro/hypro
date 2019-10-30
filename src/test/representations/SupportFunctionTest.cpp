@@ -114,6 +114,20 @@ TYPED_TEST(SupportFunctionTest, constructor) {
 	r << TypeParam(3),TypeParam(3);
 	EXPECT_EQ(box.evaluate(this->vec1).optimumValue,r);
 
+	matrix_t<TypeParam> constraints = matrix_t<TypeParam>(3,2);
+	constraints << 1,0,0,1,0,-1;
+	vector_t<TypeParam> constants = vector_t<TypeParam>(3);
+	constants << 1,1,1;
+
+	vector_t<TypeParam> evalVec = vector_t<TypeParam>(2);
+	evalVec << 1,0;
+
+	SupportFunction<TypeParam> box2 = SupportFunction<TypeParam>(constraints, constants);
+	EXPECT_EQ(box2.sfType(),SF_TYPE::BOX);
+	EXPECT_EQ(box2.evaluate(evalVec).supportValue,TypeParam(1));
+	evalVec << -1,0;
+	EXPECT_EQ(box2.evaluate(evalVec).errorCode,SOLUTION::INFTY);
+
 	SUCCEED();
 }
 
@@ -138,12 +152,12 @@ TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
 	vector_t<TypeParam> dir = vector_t<TypeParam>::Zero(2);
 	dir(0) = TypeParam(1);
 	EvaluationResult<TypeParam> res = ball.evaluate(dir);
-	EXPECT_TRUE(carl::AlmostEqual2sComplement(res.supportValue, TypeParam(3),4));
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(res.supportValue, TypeParam(3)));
 	//EXPECT_EQ(res.supportValue, TypeParam(3));
 
 	BallSupportFunction<TypeParam> ball2(TypeParam(3), SF_TYPE::INFTY_BALL);
 	res = ball2.evaluate(dir);
-	EXPECT_TRUE(carl::AlmostEqual2sComplement(res.supportValue, TypeParam(3),4));
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(res.supportValue, TypeParam(3)));
 	//EXPECT_EQ(res.supportValue, TypeParam(3));
 }
 
@@ -163,7 +177,7 @@ TYPED_TEST(SupportFunctionTest, Supremum) {
 	SupportFunction<TypeParam> psf2 = psf1.affineTransformation(trafoMatrix, trafoVector);
 	HPolytope<TypeParam> hpt2 = hpt1.affineTransformation(trafoMatrix, trafoVector);
 
-	EXPECT_TRUE(carl::AlmostEqual2sComplement(psf2.supremum(), hpt2.supremum(), 4));
+	EXPECT_TRUE(carl::AlmostEqual2sComplement(psf2.supremum(), hpt2.supremum()));
 
 	// Ball support function supremum point
 	BallSupportFunction<TypeParam> ball(TypeParam(3), SF_TYPE::TWO_BALL);
@@ -366,8 +380,10 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	std::pair<CONTAINMENT,SupportFunction<TypeParam>> cutHalf2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 0));
 	EXPECT_TRUE(cutHalf.first != CONTAINMENT::NO);
 	EXPECT_TRUE(cutHalf2.first != CONTAINMENT::NO);
+	EXPECT_TRUE(cutHalf2.first == CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(cutHalf.second.evaluate(evalDir).supportValue == 0);
 	EXPECT_TRUE(cutHalf2.second.evaluate(evalDir).supportValue == 0);
+	EXPECT_TRUE(!cutHalf2.second.empty());
 
 	offset << -1;
 	std::pair<CONTAINMENT,SupportFunction<TypeParam>> barelyContained = psf1.satisfiesHalfspaces(normal, offset);
@@ -384,6 +400,25 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	EXPECT_FALSE(notContained2.first != CONTAINMENT::NO);
 	EXPECT_TRUE(notContained.second.empty());
 	EXPECT_TRUE(notContained2.second.empty());
+
+	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Zero(4,2);
+	mat << 1,0,-1,0,0,1,0,-1;
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(4);
+	vec << 2,-0.1,2,-0.1;
+	SupportFunction<TypeParam> sf1(mat,vec);
+	Halfspace<TypeParam> withinBox ({TypeParam(0),TypeParam(1)}, TypeParam(1));
+	std::pair<CONTAINMENT, SupportFunction<TypeParam>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
+	EXPECT_TRUE(withinSatisfy.first == hypro::CONTAINMENT::PARTIAL);
+	EXPECT_TRUE(!withinSatisfy.second.empty());
+	vec(2) = 1;
+	SupportFunction<TypeParam> sfWithin(mat,vec);
+	EXPECT_TRUE(withinSatisfy.second.contains(sfWithin));
+	//EXPECT_TRUE(sfWithin.contains(withinSatisfy.second)); //DOES NOT WORK SINCE WE OVERAPPROXIMATE
+
+	Halfspace<TypeParam> belowBox ({TypeParam(0),TypeParam(1)}, TypeParam(0));
+	std::pair<CONTAINMENT, SupportFunction<TypeParam>> belowSatisfy = sf1.satisfiesHalfspace(belowBox);
+	EXPECT_TRUE(belowSatisfy.first == hypro::CONTAINMENT::NO);
+	EXPECT_TRUE(belowSatisfy.second.empty());
 }
 
 TYPED_TEST(SupportFunctionTest, intersectHalfspaces) {

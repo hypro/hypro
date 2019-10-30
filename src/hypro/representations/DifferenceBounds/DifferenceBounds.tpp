@@ -49,6 +49,19 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter, class Setting>
+    carl::Interval<tNumber> DifferenceBoundsT<Number, Converter, Setting>::getCoveredTimeInterval() const {
+        carl::Interval<tNumber> res{0,0};
+        auto box = Converter::toBox(*this);
+        auto intervals = box.getIntervals();
+        for(const auto& i : intervals) {
+            if(i.diameter() > res.diameter()) {
+                res = i;
+            }
+        }
+        return res;
+    }
+
+    template <typename Number, typename Converter, class Setting>
     std::size_t DifferenceBoundsT<Number, Converter, Setting>::dimension() const{
         // number of clocks
         return this->getDBM().cols()-1;
@@ -104,6 +117,21 @@ namespace hypro {
         }
         return false;
     }
+
+    //TODO
+    template <typename Number, typename Converter, class Setting>    
+    EvaluationResult<Number> DifferenceBoundsT<Number, Converter, Setting>::evaluate(const vector_t<Number>& , bool ) const {
+        assert("Evaluate not implemented for DifferenceBounds." && false);
+        return EvaluationResult<Number>();
+    } 
+
+    //TODO
+    template <typename Number, typename Converter, class Setting>
+    std::vector<EvaluationResult<Number>> DifferenceBoundsT<Number, Converter, Setting>::multiEvaluate(const matrix_t<Number>& , bool ) const {
+        assert("multiEvaluate not implemented for DifferenceBounds." && false);
+        return std::vector<EvaluationResult<Number>>();
+    }
+
 
     template <typename Number, typename Converter, class Setting>
     std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertices( const matrix_t<Number>& ) const {
@@ -164,6 +192,7 @@ namespace hypro {
             return hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         }
         // TODO can this be done better? especially for higher dimensions?
+        // YES! Read the values from the DBM directly!!!
         hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
         hypro::HPolytopeT<Number, Converter, HPolytopeSetting> projected = tmp.project(dimensions);
         hypro::DifferenceBoundsT<Number,Converter, Setting> res = Converter::toDifferenceBounds(projected);
@@ -647,4 +676,3 @@ namespace hypro {
         return *this;
     }
 }
-

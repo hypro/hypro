@@ -4,12 +4,26 @@ namespace hypro {
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT()
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
+	if(Setting::OPTIMIZER_CACHING){
+		setOptimizer();
+	}
+}
+
+//copy constructor
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT& orig )
+	: mHPlanes(orig.constraints())
+	, mDimension(orig.dimension())
+	, mNonRedundant(orig.isNonRedundant()){
+	mEmpty = orig.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+	if(Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()){
+		setOptimizer(orig.matrix(), orig.vector());
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &planes )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
-	//std::cout << __func__ << ": construct from planes." << std::endl;
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
 		for ( const auto &plane : planes ) {
@@ -20,6 +34,13 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &plane
 #endif
 		reduceNumberRepresentation();
 		assert( empty == this->empty() );
+		if(Setting::OPTIMIZER_CACHING){
+			setOptimizer(this->matrix(), this->vector());
+		}
+	} else {
+		if(Setting::OPTIMIZER_CACHING){
+			setOptimizer();
+		}
 	}
 }
 
@@ -36,6 +57,9 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A, c
 #endif
 	reduceNumberRepresentation();
 	assert( empty == this->empty() );
+	if(Setting::OPTIMIZER_CACHING){
+		setOptimizer(A,b);
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -43,6 +67,9 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A )
 	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Halfspace<Number>( A.row( i ), Number( 0 ) ) );
+	}
+	if(Setting::OPTIMIZER_CACHING){
+		setOptimizer(A);
 	}
 }
 
@@ -79,11 +106,13 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		assert( (*points.begin()).dimension() > 0 );
 		mDimension = points.begin()->dimension();
 		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
-			//std::cout << "Do we get here?\n";
 			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
 			normal(d) = 1;
 			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(normal, points.begin()->at(d)));
 			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(-normal, -(points.begin()->at(d))));
+		}
+		if(Setting::OPTIMIZER_CACHING){
+			setOptimizer(this->matrix(), this->vector());
 		}
 		return;
 	}
@@ -102,8 +131,8 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			//std::cout << "Points size: " << points.size() << std::endl;
-			//std::cout << "effectiveDim: " << effectiveDim << std::endl;
+			TRACE("hypro.representations.HPolytope","Points size: " << points.size());
+			TRACE("hypro.representations.HPolytope","Affine dimension: " << effectiveDim );
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
 			//std::cout << "first point: " << *points.begin() << std::endl;
@@ -112,6 +141,8 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			}
 			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal(vectorsInPlane);
 			Number planeOffset = Halfspace<Number>::computePlaneOffset(planeNormal, points[0]);
+
+			TRACE("hypro.representations.HPolytope","Shared plane normal: " << planeNormal << ", plane offset: " << planeOffset);
 
 			// project on lower dimension.
 			// Use dimensions with largest coordinate range for improved stability.
@@ -137,13 +168,17 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			//projDimensions are those who are bigger than smallest.
 			std::vector<std::size_t> projectionDimensions;
 			std::vector<std::size_t> droppedDimensions;
+			TRACE("hypro.representations.HPolytope","Project on dimensions: ");
 			for(std::size_t d=0; d < dimRange.dimension(); d++){
 				if(d != smallest){
+					TRACE("hypro.representations.HPolytope",d);
 					projectionDimensions.push_back(d);
 				} else {
 					droppedDimensions.push_back(d);
 				}
 			}
+
+
 			/*
 			std::vector<std::size_t> projectionDimensions;
 			std::vector<std::size_t> droppedDimensions;
@@ -157,6 +192,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			*/
 			std::vector<Point<Number>> projectedPoints;
 			for(const auto& point : points){
+				TRACE("hypro.representations.HPolytope","Projected point " << point.project(projectionDimensions));
 				projectedPoints.emplace_back(point.project(projectionDimensions));
 			}
 			/*
@@ -168,12 +204,21 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			HPolytopeT<Number,Converter,Setting> projectedPoly(projectedPoints);
 			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
+
+			TRACE("hypro.representations.HPolytope","After lifting " << projectedPoly);
+
 			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
 			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
 			projectedPoly.insert(Halfspace<Number>(planeNormal,planeOffset));
 			projectedPoly.insert(Halfspace<Number>(-planeNormal,-planeOffset));
 
+			TRACE("hypro.representations.HPolytope","After adding constraints " << projectedPoly);
+
 			*this = projectedPoly;
+
+			if(Setting::OPTIMIZER_CACHING){
+				setOptimizer(this->matrix(), this->vector());
+			}
 
 			//PrincipalComponentAnalysis<Number> pca(points);
 			//std::vector<Halfspace<Number>> boxConstraints = pca.box();
@@ -201,14 +246,32 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			}
 			facets.clear();
 
+			if(Setting::OPTIMIZER_CACHING){
+				setOptimizer(this->matrix(), this->vector());
+			}
+
 		}
 	}
 
 }
 
+//conversion ctor - just like copy ctor
+template <typename Number, typename Converter, class Setting>
+template <typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > >
+HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT<Number,Converter,SettingRhs>& orig)
+	: mHPlanes(orig.constraints())
+	, mDimension(orig.dimension())
+	, mNonRedundant(orig.isNonRedundant()){
+	mEmpty = orig.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+	if(Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()){
+		setOptimizer(orig.matrix(), orig.vector());
+	}
+}
+
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::~HPolytopeT() {
 }
+
 
 /*
  * Getters and setters
@@ -234,26 +297,40 @@ bool HPolytopeT<Number, Converter, Setting>::empty() const {
 
 	TRACE("hypro.representations.HPolytope","Call to Optimizer.");
 
-	Optimizer<Number> opt;
-	opt.setMatrix(this->matrix());
-	opt.setVector(this->vector());
+	bool res = false;
+	if(Setting::OPTIMIZER_CACHING){
+		if(!mUpdated){
+			this->setOptimizer(this->matrix(), this->vector());
+		}
+		res = !mOptimizer->checkConsistency();
+	} else {
+		Optimizer<Number> opt;
+		opt.setMatrix(this->matrix());
+		opt.setVector(this->vector());
+		res = !opt.checkConsistency();
+	}
 
-	bool res = !opt.checkConsistency();
 	mEmpty = (res == true ? TRIBOOL::TRUE : TRIBOOL::FALSE);
 	TRACE("hypro.representations.HPolytope","Optimizer result: " << res);
 	return res;
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty(){
-	Halfspace<Number> a({Number(1)},Number(-1));
-	Halfspace<Number> b({Number(-1)},Number(-1));
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty(std::size_t dimension){
+	vector_t<Number> normal = vector_t<Number>::Zero(dimension);
+	normal(0) = Number(1);
+	Halfspace<Number> a(normal,Number(-1));
+	normal(0) = Number(-1);
+	Halfspace<Number> b(normal,Number(-1));
 	HalfspaceVector v;
 	v.emplace_back(a);
 	v.emplace_back(b);
 	HPolytopeT<Number, Converter, Setting> res(v);
-	res.mEmpty=TRIBOOL::TRUE;
-	res.mNonRedundant=true;
+	res.mEmpty = TRIBOOL::TRUE;
+	res.mNonRedundant = true;
+	if(Setting::OPTIMIZER_CACHING){
+		res.setOptimizer(res.matrix(), res.vector());
+	}
 	return res;
 }
 
@@ -511,13 +588,13 @@ void HPolytopeT<Number, Converter, Setting>::insert( const Halfspace<Number> &pl
 			mHPlanes.push_back( plane );
 			mEmpty = TRIBOOL::NSET;
 			mNonRedundant = false;
+			mUpdated = false;
 		}
 	}
 }
 
 template <typename Number, typename Converter, class Setting>
-void HPolytopeT<Number, Converter, Setting>::insert( const typename HalfspaceVector::iterator begin,
-								const typename HalfspaceVector::iterator end ) {
+void HPolytopeT<Number, Converter, Setting>::insert( const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end ) {
 	auto it = begin;
 	while ( it != end ) {
 		this->insert( *it );
@@ -532,6 +609,7 @@ void HPolytopeT<Number, Converter, Setting>::erase( const unsigned index ) {
 	if(mEmpty == TRIBOOL::TRUE) {
 		mEmpty = TRIBOOL::NSET;
 	}
+	mUpdated = false;
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -551,11 +629,21 @@ template <typename Number, typename Converter, class Setting>
 const HPolytopeT<Number,Converter,Setting>& HPolytopeT<Number, Converter, Setting>::removeRedundancy() {
 	//std::cout << __func__ << std::endl;
 	if(!mNonRedundant && mHPlanes.size() > 1){
-		Optimizer<Number> opt;
-		opt.setMatrix(this->matrix());
-		opt.setVector(this->vector());
 
-		std::vector<std::size_t> redundant = opt.redundantConstraints();
+		std::vector<std::size_t> redundant;
+		if(Setting::OPTIMIZER_CACHING){
+			if(!mUpdated){
+				setOptimizer(this->matrix(), this->vector());
+			}
+			redundant = mOptimizer->redundantConstraints();
+		} else {
+			Optimizer<Number> opt;
+			opt.setMatrix(this->matrix());
+			opt.setVector(this->vector());
+			redundant = opt.redundantConstraints();
+		}
+
+		//std::vector<std::size_t> redundant = opt.redundantConstraints();
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;
@@ -600,16 +688,48 @@ bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const Point<Number>
 template <typename Number, typename Converter, class Setting>
 EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty()) {
-		return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
+		//return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
+		return EvaluationResult<Number>();
 	}
-
 	//reduceNumberRepresentation();
+	if(Setting::OPTIMIZER_CACHING){
+		assert(mOptimizer.has_value());
+		if(!mUpdated){
+			setOptimizer(this->matrix(), this->vector());
+		}
+		return mOptimizer->evaluate(_direction, true);
+	} else {
+		Optimizer<Number> opt;
+		opt.setMatrix(this->matrix());
+		opt.setVector(this->vector());
+		return opt.evaluate(_direction, true);
+	}
+}
 
-	Optimizer<Number> opt;
-	opt.setMatrix(this->matrix());
-	opt.setVector(this->vector());
-
-	return opt.evaluate(_direction, true);
+template <typename Number, typename Converter, class Setting>
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const {
+	assert(_directions.cols() == Eigen::Index(dimension()));
+	if(mHPlanes.empty()) {
+		return std::vector<EvaluationResult<Number>>();
+	}
+	std::vector<EvaluationResult<Number>> res;
+	if(Setting::OPTIMIZER_CACHING){
+		assert(mOptimizer.has_value());
+		if(!mUpdated){
+			setOptimizer(this->matrix(), this->vector());
+		}
+		for(int i = 0; i < _directions.rows(); ++i){
+			res.emplace_back(mOptimizer->evaluate(_directions.row(i), useExact));
+		}
+	} else {
+		Optimizer<Number> opt;
+		opt.setMatrix(this->matrix());
+		opt.setVector(this->vector());
+		for(int i = 0; i < _directions.rows(); ++i){
+			res.emplace_back(opt.evaluate(_directions.row(i), useExact));
+		}
+	}
+	return res;
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -708,7 +828,6 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::l
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A );
 			auto res = Converter::toHPolytope(intermediate);
-			//assert(res.size() <= this->size());
 			res.setReduced();
 			return res;
 		}
@@ -839,7 +958,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &v
 	for ( const auto &plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility.
 		//std::cout << "Test plane " << plane << ": dot product: " << plane.normal().dot( vec ) << std::endl;
-		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset(), 128) && plane.normal().dot( vec ) > plane.offset()) {
+		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset()) && plane.normal().dot( vec ) > plane.offset()) {
 			//std::cout << "falsified." << std::endl;
 			return false;
 		}
@@ -973,6 +1092,10 @@ void HPolytopeT<Number, Converter, Setting>::clear() {
 	mDimension = 0;
 	mEmpty =TRIBOOL::FALSE;
 	mNonRedundant = true;
+	mUpdated = false;
+	if(Setting::OPTIMIZER_CACHING){
+		mOptimizer->cleanGLPInstance();
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1026,6 +1149,21 @@ void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions(const std::ve
 		//std::cout << "Updated halfspace: " << halfspace << std::endl;
 	}
 	mDimension = existingDimensions.size() + newDimensions.size();
+	mUpdated = false;
+}
+
+template<typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::setOptimizer(const matrix_t<Number>& mat, const vector_t<Number>& vec) const {
+	if(mOptimizer.has_value()){
+		mOptimizer->setMatrix(mat);
+		mOptimizer->setVector(vec);
+		mUpdated = true;
+	} else {
+		std::optional<Optimizer<Number>> tmp(std::in_place,mat,vec);
+		mOptimizer.swap(tmp);
+		assert(mOptimizer.has_value());
+		mUpdated = true;
+	}
 }
 
 }  // namespace hypro

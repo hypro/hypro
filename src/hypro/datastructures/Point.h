@@ -84,7 +84,7 @@ class Point {
 	 * @brief      Move-copy constructor.
 	 * @param[in]  _p  The original.
 	 */
-	Point( Point<Number>&& _p );
+	Point( Point<Number>&& _p ) = default;
 
 	/**
 	 * @brief 	Copy constructor with number type conversion.
@@ -534,8 +534,8 @@ class Point {
 	Point<Number> operator-() const;
 	Point<Number>& operator/=( unsigned _quotient );
 	Point<Number>& operator*=( const Number _factor );
-	Point<Number>& operator=( const Point<Number>& _in );
-	Point<Number>& operator=( Point<Number>&& _in );
+	Point<Number>& operator=( const Point<Number>& _in ) = default;
+	Point<Number>& operator=( Point<Number>&& _in ) = default;
 	Point<Number>& operator=( const vector_t<Number>& _in );
 	Point<Number>& operator=( vector_t<Number>&& _in );
 	//@}
@@ -720,7 +720,7 @@ Point<To> convert(const Point<From>& in) {
 
 }  // namespace hypro
 
-namespace std{
+namespace std {
 	/**
 	 * @brief      A hash operator for fast comparison.
 	 * @tparam     Number  The number type.

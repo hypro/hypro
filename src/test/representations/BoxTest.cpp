@@ -122,7 +122,11 @@ TYPED_TEST(BoxTest, Constructor)
 	EXPECT_EQ(TypeParam(1), dBox.max().at(0));
 	EXPECT_EQ(TypeParam(4), dBox.max().at(1));
 	EXPECT_EQ(true, dBox.contains(hypro::Point<TypeParam>({0,3})));
-    SUCCEED();
+
+	hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty();
+	EXPECT_TRUE(b.empty());
+	hypro::Box<TypeParam> b2 = hypro::Box<TypeParam>::Empty(2);
+	EXPECT_TRUE(b2.empty());
 }
 
 TYPED_TEST(BoxTest, Access)
@@ -538,5 +542,28 @@ TYPED_TEST(BoxTest, SettingsConversion){
 	EXPECT_EQ(box2.limits().first, p1);
 	EXPECT_EQ(box2.limits().second, p2);
 	EXPECT_EQ(box1, box2);
+
+}
+
+TYPED_TEST(BoxTest, Evaluation){
+
+	hypro::Point<TypeParam> p1({-1,-1});
+	hypro::Point<TypeParam> p2({1,1});
+	hypro::BoxT<TypeParam, hypro::Converter<TypeParam>, hypro::BoxLinearOptimizationOn> box1(std::make_pair(p1,p2));
+	hypro::vector_t<TypeParam> dirVec = hypro::vector_t<TypeParam>::Zero(2);
+	dirVec << 1, 0;
+	hypro::EvaluationResult<TypeParam> res = box1.evaluate(dirVec, true);
+	EXPECT_EQ(res.supportValue, 1);
+	EXPECT_EQ(res.errorCode, hypro::SOLUTION::FEAS);
+
+	hypro::matrix_t<TypeParam> dirMat = hypro::matrix_t<TypeParam>::Zero(3,2);
+	dirMat << 1,0,	0,-1,	1,1;
+	std::vector<hypro::EvaluationResult<TypeParam>> allRes = box1.multiEvaluate(dirMat, true);
+	EXPECT_EQ(allRes.at(0).supportValue, 1);
+	EXPECT_EQ(allRes.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(allRes.at(1).supportValue, 1);
+	EXPECT_EQ(allRes.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(allRes.at(2).supportValue, 2);
+	EXPECT_EQ(allRes.at(2).errorCode, hypro::SOLUTION::FEAS);	
 
 }

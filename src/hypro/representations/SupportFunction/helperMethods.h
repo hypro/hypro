@@ -170,20 +170,13 @@ matrix_t<Number> directionList2Matrix( std::vector<matrix_t<Number>>* list ) {
 */
 template<typename Number>
 matrix_t<Number>* list2Array( std::vector<matrix_t<Number>>* list ) {
-	// get list size
-	unsigned int counter = 0;
-	for ( auto iterator = ( *list ).begin(); iterator != ( *list ).end(); ++iterator ) {
-		counter++;
-	}
+	matrix_t<Number>* result[list->size()];
 
-	matrix_t<Number>* result[counter];
-
-	counter = 0;
+	std::size_t counter = 0;
 	for ( auto iterator = ( *list ).begin(); iterator != ( *list ).end(); ++iterator ) {
 		result[counter] = &( *iterator );
 		counter++;
 	}
-
 	return *result;
 }
 
@@ -214,14 +207,6 @@ Number* vector2Array( vector_t<Number> v ) {
 
 	return result;
 }
-
-/*
- *  returns the dimensionality (number of rows) of the matrix from the first initial location
- */
-//	Number getDimensionality(HybridAutomaton<Number, valuation_t<Number>>* model)
-//	{
-//           return model->dimension();
-//    }
 
 /*
 * adds a zero column at the right side of the matrix m

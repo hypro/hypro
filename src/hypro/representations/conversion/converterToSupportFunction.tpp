@@ -13,6 +13,8 @@
 	static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
 
+namespace hypro {
+
 // conversion from support function to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 template<typename SFSetting, typename inSetting>
@@ -28,17 +30,20 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
     return SupportFunctionT<Number,Converter,SFSetting>(_source.intervals());
 }
 
+
 template <typename Number>
 template<typename SFSetting, typename inSetting>
 SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE ){
     return SupportFunctionT<Number,Converter,SFSetting>(_source.matrix(), _source.vector());
 }
 
+
 template <typename Number>
 template<typename SFSetting>
 SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction( const Ellipsoid& _source, const CONV_MODE ){
     return SupportFunctionT<Number,Converter,SFSetting>(_source.matrix());
 }
+
 
 // conversion from V-Polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
@@ -55,6 +60,7 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
     return SupportFunctionT<Number,Converter,SFSetting>( _source.constraints() );
 }
 
+
 // conversion from Zonotope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 template<typename SFSetting, typename inSetting>
@@ -63,9 +69,7 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
     if(vertices.empty()){
     	return SupportFunctionT<Number,Converter<Number>,SFSetting>();
     }
-
     HPolytope temp = HPolytope(vertices);
-
     return SupportFunctionT<Number,Converter,SFSetting>( temp.constraints() );
 }
 
@@ -103,3 +107,11 @@ SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> Converter<Numb
 	return SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting>();
 }
 
+//Not implemented since SFNew made to replace SF
+template<typename Number>
+template<typename SFSetting, typename inSetting>
+SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& , const CONV_MODE ){
+    return SupportFunctionT<Number,Converter,SFSetting>();
+}
+
+} // namespace hypro

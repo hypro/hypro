@@ -53,6 +53,7 @@ namespace hypro {
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
 		static bool			warnInexact;
+		bool 				maximize = true;
 		std::vector<carl::Relation> mRelationSymbols;
 
 		// dependent members, all mutable
@@ -74,10 +75,11 @@ namespace hypro {
 		/**
 		 * @brief      Default constructor.
 		 */
-		Optimizer() :
+		Optimizer(bool max = true) :
 			mConstraintMatrix(),
 			mConstraintVector(),
 			mConsistencyChecked(false),
+			maximize(max),
 			mRelationSymbols(),
 			mGlpkContext()
 		{
@@ -103,18 +105,19 @@ namespace hypro {
 			#endif
 		}
 
-		Optimizer(Optimizer<Number>&& orig) = delete;
-		Optimizer(const Optimizer<Number>& orig) = delete;
+		Optimizer(Optimizer<Number>&& orig);
+		Optimizer(const Optimizer<Number>& orig);
 
 		/**
 		 * @brief      Constructor which sets the problem.
 		 * @param[in]  constraints  The constraints.
 		 * @param[in]  constants    The constants.
 		 */
-		Optimizer(const matrix_t<Number>& constraints, const vector_t<Number>& constants) :
+		Optimizer(const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool max = true) :
 			mConstraintMatrix(constraints),
 			mConstraintVector(constants),
 			mConsistencyChecked(false),
+			maximize(max),
 			mRelationSymbols(std::vector<carl::Relation>(constraints.rows(), carl::Relation::LEQ)),
 			mGlpkContext()
 		{
@@ -133,6 +136,18 @@ namespace hypro {
 
 		inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
 			return mGlpkContext;
+		}
+
+		friend void swap(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
+			std::swap(lhs.mConstraintMatrix, rhs.mConstraintMatrix);
+			std::swap(lhs.mConstraintVector, rhs.mConstraintVector);
+			std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);
+			std::swap(lhs.mRelationSymbols, rhs.mRelationSymbols);
+			std::swap(lhs.mGlpkContext, rhs.mGlpkContext);
+			std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);
+			std::swap(lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer);
+			std::swap(lhs.maximize, rhs.maximize);
+			assert(lhs.isSane() && rhs.isSane());
 		}
 
 	public:
@@ -173,6 +188,13 @@ namespace hypro {
 		 * @param rels
 		 */
 		void setRelations(const std::vector<carl::Relation>& rels);
+
+		/**
+		 * @brief Set the Maximize flag to new value to switch between maximizing and minimizing
+		 *
+		 * @param max The new flag value (true = maximize, false = minimize).
+		 */
+		void setMaximize(bool max);
 
 		/**
 		 * @brief 		Add an equality constraint.

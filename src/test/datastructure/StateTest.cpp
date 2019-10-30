@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
+#include "../../hypro/datastructures/HybridAutomaton/Location.h"
 #include "../../hypro/representations/GeometricObject.h"
 #include <thread>
 
@@ -54,7 +55,8 @@ TEST(StateTest, CleanUp)
 
 TEST(StateTest, Conversion)
 {
-	Box<double> b;
+	using namespace hypro;
+	hypro::Box<double> b;
 	b.insert(carl::Interval<double>(1,2));
 
 	State_t<double> s;
@@ -64,12 +66,58 @@ TEST(StateTest, Conversion)
 	s.setSetType(representation_name::support_function);
 
 	EXPECT_NO_THROW(boost::get<SupportFunction<double>>(s.getSet()));
-	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<hypro::Box<double>>(s.getSet()));
 
 	s.setSet(boost::apply_visitor(genericConversionVisitor<typename State_t<double>::repVariant, HPolytope<double>>(), s.getSet()));
 
-	EXPECT_NO_THROW(boost::get<HPolytope<double>>(s.getSet()));
-	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
+	EXPECT_NO_THROW(boost::get<hypro::HPolytope<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<hypro::Box<double>>(s.getSet()));
 	EXPECT_ANY_THROW(boost::get<SupportFunction<double>>(s.getSet()));
 	EXPECT_EQ(representation_name::polytope_h, s.getSetType());
+}
+
+TEST(StateTest, letTimePassZeroFlow)
+{
+	using N = mpq_class;
+	using State = State<N,Box<N>>;
+
+	std::vector<carl::Interval<N>> intervals;
+	intervals.emplace_back(carl::Interval<N>{1,2});
+	intervals.emplace_back(carl::Interval<N>{0,1});
+	Box<N> b{intervals};
+
+	State s0{b};
+
+	matrix_t<N> dynamics = matrix_t<N>::Zero(2,2);
+
+	State s1 = s0.partiallyComputeAndApplyLinearTimeStep(dynamics, tNumber(1));
+
+	EXPECT_EQ(boost::get<Box<N>>(s1.getSet()), b);
+}
+
+TEST(StateTest, letTimePassLinearFlow)
+{
+	using N = mpq_class;
+	using State = State<N,Box<N>>;
+
+	std::vector<carl::Interval<N>> intervals;
+	intervals.emplace_back(carl::Interval<N>{1,2});
+	intervals.emplace_back(carl::Interval<N>{0,1});
+	Box<N> b{intervals};
+
+	State s0{b};
+
+	matrix_t<N> dynamics = matrix_t<N>::Zero(2,2);
+	dynamics << 1,0,0,1;
+
+	State s1 = s0.partiallyComputeAndApplyLinearTimeStep(dynamics, tNumber(1));
+
+	std::cout << s1 << std::endl;
+
+	auto resultIntervals = boost::get<Box<N>>(s1.getSet()).intervals();
+
+	EXPECT_EQ(resultIntervals.at(0).lower(), N(6121026514868073)/N(2251799813685248));
+	EXPECT_EQ(resultIntervals.at(0).upper(), N(6121026514868073)/N(1125899906842624));
+	EXPECT_EQ(resultIntervals.at(1).lower(), N(0));
+	EXPECT_EQ(resultIntervals.at(1).upper(), N(6121026514868073)/N(2251799813685248));
 }

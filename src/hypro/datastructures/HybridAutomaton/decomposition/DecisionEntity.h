@@ -4,6 +4,7 @@
 #include "../HybridAutomaton.h"
 #include "../Location.h"
 #include "../flow/operations.h"
+#include "../../../types.h"
 #include "../../../representations/types.h"
 #include "../../../util/logging/Logger.h"
 #include <carl/util/Singleton.h>

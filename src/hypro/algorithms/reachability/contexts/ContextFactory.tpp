@@ -6,7 +6,7 @@ namespace hypro {
 		                    const Strategy<State>& strat,
 		                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 		                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-		                    std::vector<PlotData<State>>* localSegments,
+		                    Flowpipe<State>& localSegments,
 		                    hypro::ReachabilitySettings &settings)
     {
     	if(SettingsProvider<State>::getInstance().getStrategy().getParameters(t->btInfo.btLevel).representation_type == representation_name::polytope_t){

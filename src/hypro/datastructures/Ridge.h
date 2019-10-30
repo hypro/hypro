@@ -41,7 +41,8 @@ class Ridge {
 		mHalfspace = f.halfspace();
 	}
 
-	Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) : mHalfspace(Halfspace<Number>()) 
+	Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) 
+		: mHalfspace(Halfspace<Number>()) 
 	{
 		//   std::vector<Facet<Number>> facets;
 		//   facets.push_back(facet1);

@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
-#include "parser/flowstar/ParserWrapper.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "parser/antlr4-flowstar/ParserWrapper.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/reachability/Settings.h"
 #include <fstream>
 
 TEST(ParserTest, ParseAutomaton)
@@ -18,11 +19,11 @@ TEST(ParserTest, ParseAutomaton)
 	// test content
 
 	std::string filename = "/tmp/automaton.model";
-	boost::tuple<HybridAutomaton<mpq_class>, reachability::ReachabilitySettings> parseResult = parseFlowstarFile<mpq_class>(filename);
+	std::pair<HybridAutomaton<mpq_class>, ReachabilitySettings> parseResult = parseFlowstarFile<mpq_class>(filename);
 
-	reachability::ReachabilitySettings settings = boost::get<1>(parseResult);
-	HybridAutomaton<mpq_class> automaton = boost::get<0>(parseResult);
+	ReachabilitySettings settings = parseResult.second;
+	HybridAutomaton<mpq_class> automaton = parseResult.first;
 
-	EXPECT_EQ(automaton.locations().size(), unsigned(2));
-	EXPECT_EQ(automaton.transitions().size(), unsigned(3));
+	EXPECT_EQ(automaton.getLocations().size(), unsigned(2));
+	EXPECT_EQ(automaton.getTransitions().size(), unsigned(3));
 }

@@ -134,6 +134,9 @@ namespace hypro
 		switch(name){
  			case representation_name::difference_bounds: {
 				auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
+				if(tmp.getFlowMatrix() == matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().rows()) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+					return nullptr;
+				}
  				if(SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(state->getLocation())->second == LOCATIONTYPE::TIMEDLOC){
 					if(SettingsProvider<State>::getInstance().isFullTimed()){
 						assert(boost::apply_visitor(flowTypeVisitor(), flow) == DynamicType::timed);
@@ -159,7 +162,7 @@ namespace hypro
 			}
 			default:
 				auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
-				if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+				if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().rows())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
 					return nullptr;
 				}
  				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());

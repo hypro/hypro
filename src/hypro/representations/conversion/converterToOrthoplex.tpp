@@ -2,6 +2,8 @@
 static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
 
+namespace hypro {
+
 template<typename Number>
 template<typename OrthoplexSetting, typename inSetting>
 OrthoplexT<Number,Converter<Number>,OrthoplexSetting> Converter<Number>::toOrthoplex( const OrthoplexT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
@@ -76,3 +78,4 @@ OrthoplexT<Number,Converter<Number>,OrthoplexSetting> Converter<Number>::toOrtho
 	return OrthoplexT<Number,Converter<Number>,OrthoplexSetting>();
 }
 
+} //namespace hypro

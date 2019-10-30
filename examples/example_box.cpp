@@ -6,7 +6,7 @@
 
 #include "representations/GeometricObject.h"
 #include "datastructures/Halfspace.h"
-#include "util/Plotter.h"
+#include "util/plotting/Plotter.h"
 
 int main()
 {

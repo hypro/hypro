@@ -1,5 +1,5 @@
 
-// Generated from HybridSystem.g4 by ANTLR 4.7
+// Generated from HybridSystem.g4 by ANTLR 4.7.2
 
 
 #include "HybridSystemLexer.h"
@@ -7,6 +7,7 @@
 
 using namespace antlr4;
 
+using namespace hypro;
 
 HybridSystemLexer::HybridSystemLexer(CharStream *input) : Lexer(input) {
   _interpreter = new atn::LexerATNSimulator(this, _atn, _decisionToDFA, _sharedContextCache);

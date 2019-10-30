@@ -155,6 +155,43 @@ class State
     }
 
     /**
+     * @brief Construct a new State object with just the state set.
+     *
+     * @param _rep  The state set.
+     * @param _timestamp
+     */
+    State( const Representation& _rep,
+    		const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval())
+    	: mLoc()
+    	, mTimestamp(_timestamp)
+    {
+    	mSets.push_back(_rep);
+    	mTypes.push_back(Representation::type());
+    }
+
+    /**
+     * @brief Construct a new State object with just the state set.
+     *
+     * @param sets The state set.
+     * @param _timestamp
+     */
+    State( const Rargs... sets,
+    		const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval())
+    	: mLoc(nullptr)
+    	, mTimestamp(_timestamp)
+    {
+    	// parameter pack expansion
+    	#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wpedantic"
+    	int dummy[sizeof...(Rargs)] = { (mSets.push_back(sets), 0)... };
+    	int dummy2[sizeof...(Rargs)] = { (mTypes.push_back(sets.type()), 0)... };
+    	#pragma GCC diagnostic pop
+    	(void) dummy;
+    	(void) dummy2;
+    	assert(checkConsistency());
+    }
+
+    /**
      * @brief      Gets the location.
      * @return     The location.
      */
@@ -303,7 +340,7 @@ class State
 		mSets[I] = in;
 	}
 
-  template<typename To>
+    template<typename To>
 	void setAndConvertType( std::size_t I = 0 );
 
 	/**
@@ -346,20 +383,29 @@ class State
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.
-     * @param[in]  flows         The flows.
-     * @param[in]  timeStepSize  The time step size.
+     * @param[in]  matrixExponentials   The solution to the differential equation system.
+     * @param[in]  timeStepSize         The time step size.
      * @return     A state where each set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
      */
-    State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const;
+    State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& matrixExponentials, tNumber timeStepSize ) const;
 
     /**
      * @brief      Meta-function which applies a transformation by the passed parameters and increases the timestamp for the i-th set.
-     * @param[in]  flow          The flow.
+     * @param[in]  flow          The solution to the differential equation system (a matrix exponential).
      * @param[in]  timeStepSize  The time step size.
      * @param[in]  I             The set index.
      * @return     A state where the i-th set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
      */
-    State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I=0 ) const;
+
+
+    State<Number,Representation,Rargs...> computeAndApplyLinearTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const;
+
+    State<Number,Representation,Rargs...> partiallyComputeAndApplyLinearTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I=0 ) const;
+
+    State<Number,Representation,Rargs...> computeAndApplyAffineTimeStep(const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const;
+
+    State<Number,Representation,Rargs...> partiallyComputeAndApplyAffineTimeStep(const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I=0 ) const;
 
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained.
@@ -408,6 +454,7 @@ class State
     std::vector<Point<Number>> vertices(std::size_t I = 0) const;
 
     State<Number,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
+    State<Number,Representation,Rargs...> project(const std::pair<std::size_t,std::size_t>& dimensions, std::size_t I = 0) const;
 
     std::size_t getDimension(std::size_t I = 0) const;
     std::size_t getDimensionOffset(std::size_t I) const;
@@ -435,11 +482,17 @@ class State
      */
     #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& out, const State<Number,Representation,Rargs...>& state) {
-    	out << "location: " << state.getLocation()->getName() << " at timestamp " << carl::convert<tNumber,double>(state.getTimestamp()) << std::endl;
+        if(state.getLocation() != nullptr) {
+            out << "location: " << state.getLocation()->getName();
+        } else {
+            out << "location: NULL";
+        }
+        out << " at timestamp " << carl::convert<tNumber,double>(state.getTimestamp()) << std::endl;
+
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
     	//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
     	if(state.getNumberSets() > 0) {
-    	out << "Set: " << state.getSet(0) << std::endl;
+    	    out << "Set: " << state.getSet(0) << std::endl;
     	}
     	if(state.getNumberSets() > 1) {
     		out << "Other sets: " << std::endl;
@@ -464,6 +517,8 @@ class State
         if (lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp) {
     		return false;
     	}
+
+        //TODO: needed?
         // location-based checks
         if(lhs.mLoc != nullptr) {
             if(rhs.mLoc != nullptr) {
@@ -478,6 +533,7 @@ class State
                 return false;
             }
         }
+
         // set-based checks
     	for(std::size_t i = 0; i < lhs.getNumberSets(); ++i) {
     		if( lhs.getSetType(i) != rhs.getSetType(i)) {
@@ -542,10 +598,10 @@ State parallelCompose(
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, TemplatePolyhedron<Number>, Polytope<Number>>;
+using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, TemplatePolyhedron<Number>, Polytope<Number>>;
 #else
 template<typename Number>
-using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, TemplatePolyhedron<Number>>;
+using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, TemplatePolyhedron<Number>>;
 #endif
 
 } // namespace

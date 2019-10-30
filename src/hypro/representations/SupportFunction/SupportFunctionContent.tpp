@@ -13,10 +13,13 @@ namespace hypro {
 
 template<typename Number, typename Setting>
 SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFunctionContent<Number,Setting>& _orig )
-	: mType( _orig.type() ), mDimension( _orig.dimension(), mDepth( _orig.depth()) ) {
+	: mType( _orig.type() ), mDimension( _orig.dimension()), mDepth( _orig.depth()) {
 	assert(_orig.checkTreeValidity());
 	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
 	switch ( mType ) {
+		case SF_TYPE::BOX: {
+			mBox = new BoxSupportFunction<Number,Setting>(_orig.box());
+		}
 		case SF_TYPE::ELLIPSOID: {
             mEllipsoid = new EllipsoidSupportFunction<Number>(*_orig.ellipsoid());
             break;
@@ -64,6 +67,65 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFun
 	}
 	assert(checkTreeValidity());
 }
+/*
+template<typename Number, typename Setting>
+template<typename FromSetting, carl::DisableIf< std::is_same<Setting,FromSetting> > >
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFunctionContent<Number,FromSetting>& _orig )
+	: mType( _orig.type() ), mDimension( _orig.dimension()), mDepth( _orig.depth()) {
+	assert(_orig.checkTreeValidity());
+	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
+	switch ( mType ) {
+		case SF_TYPE::BOX: {
+			mBox = new BoxSupportFunction<Number,Setting>(_orig.box().vertices());
+		}
+		case SF_TYPE::ELLIPSOID: {
+            mEllipsoid = new EllipsoidSupportFunction<Number>(_orig.ellipsoid()->shapeMatrix());
+            break;
+        }
+		case SF_TYPE::INFTY_BALL:
+		case SF_TYPE::TWO_BALL: {
+			mBall = new BallSupportFunction<Number>(_orig.ball()->radius(), _orig.ball()->type());
+			break;
+		}
+		case SF_TYPE::INTERSECT: {
+			mIntersectionParameters = new intersectionContent<Number,Setting>(*_orig.intersectionParameters());
+			break;
+		}
+		case SF_TYPE::LINTRAFO: {
+			mLinearTrafoParameters = new trafoContent<Number,Setting>(*_orig.linearTrafoParameters());
+			break;
+		}
+		case SF_TYPE::POLY: {
+			mPolytope = new PolytopeSupportFunction<Number,Setting>(*_orig.polytope());
+			break;
+		}
+		case SF_TYPE::PROJECTION: {
+			mProjectionParameters = new projectionContent<Number,Setting>(*_orig.projectionParameters());
+			break;
+		}
+		case SF_TYPE::SCALE: {
+			mScaleParameters = new scaleContent<Number,Setting>(*_orig.scaleParameters());
+			break;
+		}
+		case SF_TYPE::SUM: {
+			mSummands = new sumContent<Number,Setting>(*_orig.summands());
+			break;
+		}
+		case SF_TYPE::UNITE: {
+			mUnionParameters = new unionContent<Number,Setting>(*_orig.unionParameters());
+			break;
+		}
+		case SF_TYPE::NONE: {
+			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+			assert(false);
+			break;
+		}
+		default:
+			assert( false );
+	}
+	assert(checkTreeValidity());
+}
+*/
 
 template<typename Number, typename Setting>
 SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type ) {
@@ -100,8 +162,7 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( Number _radius, 
 }
 
 template<typename Number, typename Setting>
-SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number> &_directions, const vector_t<Number> &_distances,
-										  SF_TYPE _type ) {
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number> &_directions, const vector_t<Number> &_distances, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals;
@@ -623,16 +684,16 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 					case SF_TYPE::INTERSECT: {
 						//TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 						assert(resultStack.back().second.size() == 2);
-						Res& resA = resultStack.back().second.at(0);
-						Res& resB = resultStack.back().second.at(1);
+						Res& resA = resultStack.back().second[0];
+						Res& resB = resultStack.back().second[1];
 						assert( resA.size() == resB.size() );
 						// in case one of the results is infeasible (the set is empty), return this result.
 						if(resA.begin()->errorCode == SOLUTION::INFEAS){
-							accumulatedResult = resA;
+							accumulatedResult = std::move(resA);
 							break;
 						}
 						if(resB.begin()->errorCode == SOLUTION::INFEAS){
-							accumulatedResult = resB;
+							accumulatedResult = std::move(resB);
 							break;
 						}
 			 			for ( unsigned i = 0; i < resA.size(); ++i ) {
@@ -662,9 +723,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 									res.optimumValue = resB[i].optimumValue;
 								}
 							}
-							auto t = convert<Number,double>(res.optimumValue);
+							//auto t = convert<Number,double>(res.optimumValue);
 							////TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulated result: " << t << " and value: " << res.supportValue );
-							accumulatedResult.emplace_back(res);
+							accumulatedResult.emplace_back(std::move(res));
 						}
 						assert(accumulatedResult.size() == std::size_t(currentParam.rows()));
 						break;
@@ -689,7 +750,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 
 				// forward result.
 				////TRACE("hypro.representations.supportFunction","Push accumulated result up.");
-				resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
+				//resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
+				resultStack.at(resultStack.back().first).second.emplace_back(std::move(accumulatedResult));
 
 				// delete result frame and close recursive call
 				callStack.pop_back();
@@ -736,14 +798,14 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						}
 						assert(entryIndex == Eigen::Index(cur->projectionParameters()->dimensions.size()));
 						callStack.push_back(cur->projectionParameters()->origin);
-						paramStack.push_back(projectedParameters);
+						paramStack.emplace_back(projectedParameters);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SCALE: {
 						// Do nothing for scaling -> processing is done afterwards.
 						callStack.push_back(cur->scaleParameters()->origin);
-						paramStack.push_back(currentParam);
+						paramStack.emplace_back(currentParam);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
@@ -751,8 +813,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						// Do nothing for sum -> processing is done afterwards.
 						callStack.push_back(cur->summands()->rhs);
 						callStack.push_back(cur->summands()->lhs);
-						paramStack.push_back(currentParam);
-						paramStack.push_back(currentParam);
+						paramStack.emplace_back(currentParam);
+						paramStack.emplace_back(currentParam);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
@@ -761,7 +823,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						// Do nothing for union -> processing is done afterwards.
 						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i) {
 							callStack.push_back(cur->unionParameters()->items.at(i));
-							paramStack.push_back(currentParam);
+							paramStack.emplace_back(currentParam);
 							resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						}
 						break;
@@ -770,8 +832,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						// Do nothing for intersection -> processing is done afterwards.
 						callStack.push_back(cur->intersectionParameters()->rhs);
 						callStack.push_back(cur->intersectionParameters()->lhs);
-						paramStack.push_back(currentParam);
-						paramStack.push_back(currentParam);
+						paramStack.emplace_back(currentParam);
+						paramStack.emplace_back(currentParam);
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
@@ -1539,7 +1601,7 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 				return scaleParameters()->origin->empty();  // Todo: What if factor is negative?
 		}
 		case SF_TYPE::SUM: {
-			return ( summands()->lhs->empty() && summands()->rhs->empty() );
+			return ( summands()->lhs->empty() || summands()->rhs->empty() );
 		}
 		case SF_TYPE::UNITE: {
 			for(const auto& item : unionParameters()->items) {
@@ -1556,12 +1618,12 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 			// TODO: Current implementation uses template evaluation.
 			std::vector<vector_t<Number>> directions = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 			for(const auto& direction : directions){
-				Number rhsPos = intersectionParameters()->rhs->evaluate(direction, false).supportValue;
-				Number lhsNeg = intersectionParameters()->lhs->evaluate(-direction, false).supportValue;
-				if(rhsPos < -lhsNeg) return true;
-				Number rhsNeg = intersectionParameters()->rhs->evaluate(-direction, false).supportValue;
-				Number lhsPos = intersectionParameters()->lhs->evaluate(direction, false).supportValue;
-				if(-rhsNeg > lhsPos) return true;
+				auto rhsPosEval = intersectionParameters()->rhs->evaluate(direction, false);
+				auto lhsNegEval = intersectionParameters()->lhs->evaluate(-direction, false);
+				if(rhsPosEval.supportValue < -lhsNegEval.supportValue && rhsPosEval.errorCode != SOLUTION::INFTY && lhsNegEval.errorCode != SOLUTION::INFTY) return true;
+				auto rhsNegEval = intersectionParameters()->rhs->evaluate(-direction, false);
+				auto lhsPosEval = intersectionParameters()->lhs->evaluate(direction, false);
+				if(-rhsNegEval.supportValue > lhsPosEval.supportValue && rhsNegEval.errorCode != SOLUTION::INFTY && lhsPosEval.errorCode != SOLUTION::INFTY) return true;
 			}
 			return false;
 		}
@@ -1574,11 +1636,6 @@ bool SupportFunctionContent<Number,Setting>::empty() const {
 			assert( false );
 			return false;
 	}
-}
-
-template<typename Number, typename Setting>
-void reduceRepresentation() {
-
 }
 
 template<typename Number, typename Setting>

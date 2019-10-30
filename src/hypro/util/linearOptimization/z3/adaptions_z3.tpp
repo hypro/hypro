@@ -5,7 +5,7 @@
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> z3OptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution) {
+	EvaluationResult<Number> z3OptimizeLinear(bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution) {
 		//std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
 		EvaluationResult<Number> res;
 		z3Context c;
@@ -33,7 +33,13 @@ namespace hypro {
 		#endif
 
 		// optimize with objective function
-		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
+		z3::optimize::handle result;
+		if(maximize) {
+			result = z3Optimizer.maximize(formulaObjectivePair.second);
+		} else {
+			result = z3Optimizer.minimize(formulaObjectivePair.second);
+		}
+
 
 		#ifdef DEBUG_MSG
 		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
@@ -77,7 +83,13 @@ namespace hypro {
 				// in this case the constraints introduced by the presolution made the problem infeasible
 
 				z3Optimizer.pop();
-				z3::optimize::handle z3Check = z3Optimizer.maximize(formulaObjectivePair.second);
+				z3::optimize::handle z3Check;
+				if(maximize) {
+					z3Check = z3Optimizer.maximize(formulaObjectivePair.second);
+				} else {
+					z3Check = z3Optimizer.minimize(formulaObjectivePair.second);
+				}
+
 				chck = z3Optimizer.check();
 				assert(z3::unknown != chck);
 				if(z3::sat == chck) {
@@ -205,7 +217,7 @@ namespace hypro {
 			z3Solver.push();
 			for(unsigned i = 0; i < formulas.size(); ++i){
 
-				//If a constraint has already been marked as redundant, we do not need to 
+				//If a constraint has already been marked as redundant, we do not need to
 				//to check satisfiability with that constraint in this current iteration.
 				bool ignore = false;
 				for(unsigned alreadyRedundant = 0; alreadyRedundant < res.size(); ++alreadyRedundant){
@@ -215,7 +227,7 @@ namespace hypro {
 				}
 				if(ignore) break;
 
-				//Add constraints 
+				//Add constraints
 				if(i == constraintIndex) {
 					z3Solver.add(negatedConstraint);
 				} else {

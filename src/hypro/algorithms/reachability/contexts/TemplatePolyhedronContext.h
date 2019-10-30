@@ -42,7 +42,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	    const Strategy<State>& strat,
 	    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 	    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	    std::vector<PlotData<State>>* localSegments,
+	    Flowpipe<State>& localSegments,
 	    ReachabilitySettings &settings) 
   		: LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings)
   	{}

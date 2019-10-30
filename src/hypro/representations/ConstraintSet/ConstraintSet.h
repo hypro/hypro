@@ -81,6 +81,18 @@ class ConstraintSetT {
 	{}
 
 	/**
+	 * @brief Constructor from a matrix and a vector.
+	 * @details Constructs a constraintSet assuming each row of the matrix is the normal to a hyperplane and its corresponding
+	 * entry in the given vector is the offset.
+	 * @param _constraints A matrix representing the constraint normals.
+	 * @param _constants A vector representing the offsets of the corresponting hyperplane.
+	 */
+	ConstraintSetT( const matrix_t<Number>& _constraints ) :
+		mConstraints(_constraints),
+		mConstants(vector_t<Number>::Zero(_constraints.rows()))
+	{}
+
+	/**
 	 * @brief Destructor.
 	 */
 	~ConstraintSetT() {}

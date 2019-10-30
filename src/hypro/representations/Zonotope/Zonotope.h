@@ -26,6 +26,9 @@
 #include <cmath>
 #include <algorithm>
 #include <valarray>
+#ifdef HYPRO_USE_PPL
+#include <ppl.hh>
+#endif
 
 namespace hypro {
 
@@ -87,6 +90,11 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter,Sett
 	*      Public Functions - Getters and Setters and some misc functions       *
 	*                                                                           *
 	*****************************************************************************/
+
+	/* TODO: not implemented */ 
+    matrix_t<Number> matrix() const { assert("Not implemented." && false); return matrix_t<Number>::Zero(0,0); }
+    /* TODO: not implemented */ 
+    vector_t<Number> vector() const { assert("Not implemented." && false); return vector_t<Number>::Zero(0); }
 
 	/**
 	 * Dimensionality of ZonotopeT
@@ -181,6 +189,10 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter,Sett
     void reduceOrder( unsigned limit = Setting::ZONOTOPE_ORDERLIMIT );
 
     void reduceNumberRepresentation();
+
+    //BOTH TODO
+    EvaluationResult<Number> evaluate(const vector_t<Number>& directions) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const;
 
 	/*****************************************************************************
 	*                                                                           *

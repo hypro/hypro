@@ -36,10 +36,10 @@ class Location;
 
 /**
  * @brief      The class which represents a box.
- * @details    A box is represented by two points, its maximal and its minimal vertex.
+ * @details    A box is represented by an ordered sequence of intervals.
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
- * \ingroup geoState @{
+ * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
 class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
@@ -53,7 +53,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
   protected:
 
     std::vector<carl::Interval<Number>> mLimits; 	/*!< Box as a vector of intervals. */
-	bool 								mEmpty; 	/*!< Cache for emptines. */
+	bool 								mEmpty; 	/*!< Cache for emptiness. */
 
   public:
 	/***************************************************************************
@@ -107,7 +107,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
-		mEmpty = false;
+		mEmpty = limits.first.dimension() > 0 ? false : true;
 		for(std::size_t i = 0; i < limits.first.dimension(); ++i) {
 			mLimits.emplace_back(carl::Interval<Number>(limits.first[i], limits.second[i]));
 			mEmpty = mEmpty || mLimits.back().isEmpty();
@@ -172,7 +172,9 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	  * @return Empty box.
 	  */
 	static BoxT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
-		return BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+		auto tmp = BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+		assert(tmp.empty());
+		return tmp;
 	}
 
 	/**
@@ -322,13 +324,15 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 
 	/**
 	 * @brief      Evaluation function (convex linear optimization).
+	 * @details    Linear optimization for boxes can be done more efficiently that for general convey polytopes as the state space dimensions are  independent. Consequently it suffices to consider the coefficient of the cost function for each dimension and either use the upper, respectively lower bound depending on its sign (positive, respectively negative) to get the vertex of the box representing the optimum.
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool = true) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization).
+	 * @details    Can be done similar to basic linear optimization in one direction.
 	 * @param[in]  _directions  The directions/cost functions.
 	 * @return     A set of maxima towards the respective directions.
 	 */
@@ -420,7 +424,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 **************************************************************************/
 
 	 /**
-	  * @brief      Getter for the space dimension.
+	  * @brief      Getter for the state space dimension.
 	  * @return     The dimension of the space.
 	  */
 	std::size_t dimension() const { return mLimits.size(); }
@@ -441,7 +445,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	/**
 	 * @brief      Function to reduce the number representation (over-approximate).
 	 * @details    The function tries to reduce the size of each interval boundary in case it is larger than some specified limit.
-	 * This is done by outward rounding.
+	 * This is done by outward rounding. Note that this function is only relevant, if the number representation may affect running times (here: rational number implementations).
 	 *
 	 * @param[in]  limit      The limit
 	 */
@@ -455,16 +459,40 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 */
 	BoxT<Number,Converter,Setting> makeSymmetric() const;
 
-
+	/**
+	 * @brief Meta-function, which allows to compute the intersection of a box with a half-space and return the resulting box as well as the information, whether the resulting box is empty.
+	 * @details The computation is done by exploiting interval arithmetic similar to contraction operations in interval constraint propagation on linear constraints.
+	 *
+	 * @param rhs
+	 * @return std::pair<CONTAINMENT, BoxT>
+	 */
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
+
+	/**
+	 * @brief Computes the linear transformation of a box by a matrix A.
+	 * @details We employ interval-arithmetic to compute the result instead of a naive approach in which a conversion to a V-polytope would be used.
+	 *
+	 * @param A Matrix used for the transformation.
+	 * @return BoxT<Number,Converter,Setting>
+	 */
 	BoxT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
+
+	/**
+	 * @brief Computes the affine transformation of a box by a matrix A and an offset vector b.
+	 * @details The computation is performed via interval arithmetic using a linear transformation operation and afterwards accounting for the translation invoked by b.
+	 * @param A
+	 * @param b
+	 * @return BoxT<Number,Converter,Setting>
+	 */
 	BoxT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	BoxT<Number,Converter,Setting> minkowskiSum( const BoxT<Number,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the Minkowski decomposition of the current box by the given box.
+	 * @details    This operation can be seen as the set-theoretic equivalent of subtraction. Note that this is not entirely true, as the operation is performed on sets which adds over-approximation errors (similarly to using addition and subtraction in interval-arithmetic).
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
@@ -477,6 +505,13 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 */
 	BoxT<Number,Converter,Setting> intersect( const BoxT<Number,Converter,Setting>& rhs ) const;
 
+	/**
+	 * @brief Allows to compute the intersection of a box with a half-space and return the resulting box.
+	 * @details The computation is done by exploiting interval arithmetic similar to contraction operations in interval constraint propagation on linear constraints.
+	 *
+	 * @param hspace
+	 * @return BoxT<Number,Converter,Setting>
+	 */
 	BoxT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
 	BoxT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
@@ -508,13 +543,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	void reduceRepresentation() { *this = std::move(this->reduceNumberRepresentation()); removeRedundancy(); }
 
 	/**
-	 * @brief      Makes this box the empty box.
+	 * @brief      Makes this box equal to the empty box.
 	 */
 	void clear();
 
 	/**
 	 * @brief      A deprecated print method. Use the outstream operator.
 	 */
+	[[deprecated("Use the outstream-operator instead.")]]
 	void print() const;
 };
 /** @} */

@@ -417,4 +417,74 @@ Number Halfspace<Number>::computePlaneOffset( const vector_t<Number>& normal, co
 	return normal.dot(pointOnPlane.rawCoordinates());
 }
 
+//Return mNormal as a matrix
+template<typename Number>
+matrix_t<Number> Halfspace<Number>::matrix() const { 
+	matrix_t<Number> mat = matrix_t<Number>::Zero(1,mNormal.rows());
+	mat.row(0) = mNormal.transpose();
+	return mat;
+}
+
+//Return mScalar as a vector
+template<typename Number>
+vector_t<Number> Halfspace<Number>::vector() const {
+	vector_t<Number> vec = vector_t<Number>::Zero(1);
+	vec(0) = mScalar;
+	return vec;
+}
+
+//A halfspace itself cannot be empty, except its normal is the zero vector and the scalar is smaller than 0
+template<typename Number>
+bool Halfspace<Number>::empty() const { 
+	if(mNormal != vector_t<Number>::Zero(mNormal.rows()) && mScalar < 0) return true;
+	return false; 
+}
+
+template<typename Number>
+EvaluationResult<Number> Halfspace<Number>::evaluate(const vector_t<Number>& direction, bool /*useExact*/) const {
+	assert(mNormal.rows() == direction.rows());
+	std::pair<bool,Number> dependent = linearDependent(mNormal, direction);
+	if(dependent.first){
+		if(dependent.second > 0){
+			// The vectors are dependent -> to find point on plane and to avoid squareroot computations, return vector
+			// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored distance.
+			vector_t<Number> pointOnPlane = vector_t<Number>::Zero(direction.rows());
+			unsigned i = 0;
+			while(i<direction.rows() && direction(i) == 0) {
+				++i;
+			}
+			pointOnPlane(i) = mScalar;
+			return EvaluationResult<Number>(mScalar,pointOnPlane,SOLUTION::FEAS);
+		} else {
+			return EvaluationResult<Number>(0,SOLUTION::INFTY);
+		}
+	} 
+	return EvaluationResult<Number>(0,SOLUTION::INFTY);
+}
+
+template<typename Number>
+std::vector<EvaluationResult<Number>> Halfspace<Number>::multiEvaluate( const matrix_t<Number>& _directions, bool /*useExact*/ ) const {
+	assert(_directions.cols() == this->dimension());
+	std::vector<EvaluationResult<Number>> res;
+	vector_t<Number> pointOnPlane = vector_t<Number>::Zero(dimension());
+	assert(mNormal.nonZeros() != 0 );
+	unsigned nonZeroPos = 0;
+	while(mNormal(nonZeroPos) == 0) { ++nonZeroPos; }
+	pointOnPlane(nonZeroPos) = mScalar;
+	for ( unsigned index = 0; index < _directions.rows(); ++index ) {
+		std::pair<bool,Number> dependent = linearDependent(vector_t<Number>(mNormal), vector_t<Number>(_directions.row(index)));
+		if( dependent.first ) {
+			if( dependent.second > 0 ) {
+				res.emplace_back(mScalar*dependent.second, pointOnPlane, SOLUTION::FEAS);
+			} else {
+				res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
+			}
+		} else {
+			res.emplace_back(1, pointOnPlane, SOLUTION::INFTY);
+		}
+	}
+	assert(res.size() == std::size_t(_directions.rows()));
+	return res;
+}
+
 } // namespace hypro

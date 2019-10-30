@@ -15,6 +15,8 @@
 
 //TODO alternative approach for H -> Box (testing which is faster)
 
+namespace hypro {
+
 // conversion from box to box (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
@@ -22,11 +24,13 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const BoxT<N
 	return _source;
 }
 
+
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE) {
 	return BoxT<Number,Converter,BoxSetting>(source.matrix(), source.vector());
 }
+
 
 template<typename Number>
 template<typename BoxSetting>
@@ -44,6 +48,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Ellips
 	}
 	return BoxT<Number,Converter,BoxSetting>(intervals);
 }
+
 
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
@@ -208,6 +213,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Polyto
 }
 #endif
 
+
 //conversion from zonotope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
@@ -366,6 +372,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Differ
 //	return std::move(BoxT<Number,Converter,BoxSetting>( intervals ));
 //}
 
+
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
@@ -391,3 +398,49 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Orthop
 	return BoxT<Number,Converter<Number>,BoxSetting>();
 }
 
+template<typename Number>
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
+	
+	//gets dimension from the source object
+	std::size_t dim = _source.dimension();               
+
+	//initialize normal matrix as zero matrix with 2*dim rows and dim columns for every dimension
+	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   
+	for ( std::size_t i = 0; i < dim; ++i ) {                                  
+		//write fixed entries (because of box) into the normal matrix (2 each column)
+		directions( 2 * i, i ) = -1;
+		directions( 2 * i + 1, i ) = 1;                                                                
+	}
+
+	//evaluate the source support function into these 2*dim directions (to get the interval end points)
+	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );                                       
+
+	std::vector<carl::Interval<Number>> intervals;
+	for ( std::size_t i = 0; i < dim; ++i ) {                                                                  
+        carl::BoundType lowerBound = carl::BoundType::WEAK;
+        carl::BoundType upperBound = carl::BoundType::WEAK;
+        //if no bound is found in that direction (infinity) set interval end point to infinity
+        if(distances[2*i].errorCode == SOLUTION::INFTY)
+            lowerBound = carl::BoundType::INFTY;
+        //if no bound is found in that direction (infinity) set interval end point to infinity
+        if(distances[2*i+1].errorCode == SOLUTION::INFTY)
+            upperBound = carl::BoundType::INFTY;
+		intervals.push_back( carl::Interval<Number>( -distances[2*i].supportValue, lowerBound, distances[2*i+1].supportValue, upperBound ) );   
+	}
+
+    // if (mode == EXACT){                                                                                      //checks if conversion was exact
+    //     bool foundEqual;
+    //     std::vector<Point<Number>> newVertices = _target.vertices();                                         //computes vertices from the just newly created box
+    //     for (const auto& newVertex : newVertices){                                                           //for every new vertex (from the box)
+    //         foundEqual = _source.contains(newVertex);                                                        //checks if source-object contains the new vertex
+    //         if (foundEqual == false){                                                                        //if source object doesn't contain any of the new vertices, the target object has to be an overapproximation (and thus no exact conversion is possible)
+    //             return false;
+    //         }
+    //     }
+    // }
+
+	return BoxT<Number,Converter,BoxSetting>( intervals );
+}
+
+} // namespace hypro

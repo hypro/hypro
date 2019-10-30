@@ -1,11 +1,11 @@
 #pragma once
 
 //#include "lib/EventSystem/EventHandler.h"
+#include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/StrategyNode.h"
 #include "../../../datastructures/reachability/Task.h"
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../types.h"
-#include "../../../util/plotting/PlotData.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include <atomic>
 #include <boost/any.hpp>
@@ -37,11 +37,14 @@ class IWorker
     						 const Strategy<State>& strategy,
     						 WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
     						 WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-    						 std::vector<PlotData<State>>* localSegments) = 0;
+    						 Flowpipe<State>& localSegments) = 0;
 
+
+    bool detectedUnsafety() const { return isUnsafe; }
 
   protected:
     ReachabilitySettings mSettings;
+    bool isUnsafe = false;
 };
 
 }  // namespace hypro

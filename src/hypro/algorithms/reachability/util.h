@@ -75,7 +75,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number
                                            const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput)
 {
 	if(initialSet.isEmpty()) {
-		return std::vector<Box<Number>>{};
+        return std::vector<Box<Number>>{};
 	}
 	assert(initialSet.getDimension() == externalInput.dimension());
 
@@ -105,7 +105,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number
           initialSet.affineTransformation(matrix_t<Number>(tmpMatrix.block(0, 0, dim - 1, dim - 1)), vector_t<Number>(tmpMatrix.block(0, dim - 1, dim - 1, 1)));
     auto b1 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Box<Number>>(), transformedInitialSet.getSet(0)));
     if(b1.empty()) {
-    	return std::vector<Box<Number>>{};
+        return std::vector<Box<Number>>{};
     }
 
     // augment b1 by a dimension for the constant parts.
@@ -119,7 +119,6 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number
     b1 = b1.makeSymmetric();
     assert(b1.isSymmetric());
     b1 = b1.linearTransformation(matrixBlock.block(0, dim, dim, dim));
-    // std::cout << "B1: " << std::endl << b1 << std::endl;
 
     matrix_t<Number> fullTransformationMatrix = (flow.getFlowMatrix() * flow.getFlowMatrix() * trafoMatrix);
     // assert(fullTransformationMatrix.row(dim-1).nonZeros() == 0);
@@ -137,7 +136,6 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number
     b2 = b2.makeSymmetric();
     assert(b2.isSymmetric());
     b2 = b2.linearTransformation(matrixBlock.block(0, 2 * dim, dim, dim));
-    // std::cout << "B2: " << std::endl << b2 << std::endl;
 
     Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
 

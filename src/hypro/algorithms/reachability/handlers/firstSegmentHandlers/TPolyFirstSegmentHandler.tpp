@@ -138,7 +138,6 @@ namespace hypro {
                 carl::Variable var = carl::freshRealVariable("t");
                 carl::UnivariatePolynomial<Number> polynom(var, polynomCoeffsAsNumber);
                 std::vector<Number> values;
-                Number valueAtRoot = 0;
                 bool increasing = true;
                 bool decreasing = true;
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / 4)){

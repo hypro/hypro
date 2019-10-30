@@ -289,24 +289,38 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 
 template<typename Number, typename Converter, class Setting>
 EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
-	assert(_direction.rows() == this->dimension());
+	DEBUG("hypro.representations.box","In evaluate. direction: " << std::endl << _direction);
+	assert(_direction.rows() == Eigen::Index(this->dimension()));
 	if(this->empty()){
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
 	}
-
 	// find the point, which represents the maximum towards the direction - compare signs.
-	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
+	vector_t<Number> furthestPoint = vector_t<Number>::Zero(this->dimension());
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
-		furthestPoint(i) = _direction(i) >= 0 ? mLimits[i].upper() : mLimits[i].lower();
+		if(_direction(i) >= 0){
+			//Unboundedness check
+			if (mLimits[i].upperBoundType() == carl::BoundType::INFTY) {
+				return EvaluationResult<Number>(0,furthestPoint,SOLUTION::INFTY);
+			}
+			furthestPoint(i) = mLimits[i].upper();
+		} else {
+			//Unboundedness check
+			if (mLimits[i].lowerBoundType() == carl::BoundType::INFTY) {
+				return EvaluationResult<Number>(0,furthestPoint,SOLUTION::INFTY);
+			}
+			furthestPoint(i) = mLimits[i].lower();
+		}
+		
 	}
 	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
 }
 
 template<typename Number, typename Converter, class Setting>
-std::vector<EvaluationResult<Number>> BoxT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool ) const {
+std::vector<EvaluationResult<Number>> BoxT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
+	DEBUG("hypro.representations.box","In Box::multiEvaluate. directions: " << std::endl << _directions);
 	std::vector<EvaluationResult<Number>> res;
 	for(Eigen::Index i = 0; i < _directions.rows(); ++i) {
-		res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i))));
+		res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i).transpose()), useExact));
 	}
 	return res;
 }
@@ -427,31 +441,32 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	if(this->empty()) {
 		return *this;
 	}
-	// create both limit matrices
-	// std::cout << __func__ << ": This: " << *this << std::endl;
-	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl;
-	//matrix_t<Number> ax(A);
-	//matrix_t<Number> bx(A);
-	Point<Number> min(vector_t<Number>::Zero(this->dimension()));
-	Point<Number> max(vector_t<Number>::Zero(this->dimension()));
+
+	//std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>(this->dimension(), carl::Interval<Number>(Number(0)));
+	//for(std::size_t i = 0; i < this->dimension(); ++i) {
+	//	for(std::size_t j = 0; j < this->dimension(); ++j){
+	//		newIntervals[i] =  newIntervals[i] + this->intervals()[i]*A(i,j);
+	//	}
+	//}
+	//BoxT<Number,Converter,Setting> res(newIntervals);
+
+	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>(this->dimension(), carl::Interval<Number>(Number(0)));
 	for (int k = 0; k < A.rows(); ++k) {
 		for (int j = 0; j < A.cols(); ++j) {
 			Number a = mLimits[j].lower()*A(k,j);
 			Number b = mLimits[j].upper()*A(k,j);
 			// std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
-				if(a > b){
-					max[k] += a;
-					min[k] += b;
-				} else {
-					max[k] += b;
-					min[k] += a;
-				}
-			// std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
+			if(a > b){
+				newIntervals[k] = newIntervals[k] + carl::Interval<Number>(b,a);
+			} else {
+				newIntervals[k] = newIntervals[k] + carl::Interval<Number>(a,b);
+			}
 		}
 	}
-	// std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
-	BoxT<Number,Converter,Setting> res(std::make_pair(min, max));
+
+	BoxT<Number,Converter,Setting> res(newIntervals);
 	res.reduceNumberRepresentation();
+
 	//std::cout << "Res: " << res << std::endl;
 	//std::cout << "min transformed: " << Point<Number>(A*this->min().rawCoordinates()) << std::endl;
 	//std::cout << "max transformed: " << Point<Number>(A*this->max().rawCoordinates()) << std::endl;
@@ -486,15 +501,14 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::affineTransformat
 	}
 	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 	//std::cout << "Linear trafo ";
-	BoxT<Number,Converter,Setting> res = this->linearTransformation(A);
-	//std::cout << "done. Affine translation";
-	//TRACE("hypro.representations.box","Result of linear trafo: " << res);
-	// apply translation
-	for(Eigen::Index i = 0; i < b.rows(); ++i) {
-		res.rIntervals()[i] += b(i);
+	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>(this->dimension());
+	for(std::size_t i = 0; i < this->dimension(); ++i) {
+		newIntervals[i] = carl::Interval<Number>{b(i)};
+		for(std::size_t j = 0; j < this->dimension(); ++j ) {
+			newIntervals[i] = newIntervals[i] + A(i,j)*this->intervals()[j];
+		}
 	}
-	//std::cout << " done." << std::endl;
-	return res;
+	return BoxT<Number,Converter,Setting>{newIntervals};
 }
 
 template<typename Number, typename Converter, class Setting>

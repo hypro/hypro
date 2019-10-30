@@ -40,7 +40,7 @@ namespace hypro {
 		assert(!valuation.isUFModel());
 		if(valuation.isMinusInfinity() || valuation.isPlusInfinity() ){
 			// std::cout << __func__ << ": INFTY" << std::endl;
-			res = EvaluationResult<Number>( 1, INFTY );
+			res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 		} else {
 			assert(valuation.isRational());
 			res = EvaluationResult<Number>( carl::convert<smtrat::Rational, Number>(valuation.asRational()),SOLUTION::FEAS );
