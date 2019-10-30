@@ -321,6 +321,8 @@ TYPED_TEST(TemplatePolyhedronTest, RemoveRedundancy){
 	EXPECT_EQ(matRows, this->middle.matrix().rows());
 	EXPECT_EQ(matCols, this->middle.matrix().cols());
 	EXPECT_EQ(vecRows, this->middle.vector().rows());
+	EXPECT_EQ(this->middle.getOptimizer().matrix(), this->mat);
+	EXPECT_EQ(this->middle.getOptimizer().vector(), this->middleVec);
 
 	//TPoly with 1 redundant constraint
 	matrix_t<TypeParam> withOneRedundantMat = matrix_t<TypeParam>::Zero(5,2);
@@ -339,6 +341,15 @@ TYPED_TEST(TemplatePolyhedronTest, RemoveRedundancy){
 	EXPECT_EQ(withOneRedundant.vector().rows(), 4);
 	EXPECT_NE(withOneRedundant.matrix(), matrix_t<TypeParam>::Zero(4,2));
 	EXPECT_NE(withOneRedundant.vector(), vector_t<TypeParam>::Zero(4));
+	matrix_t<TypeParam> controlMat = matrix_t<TypeParam>::Zero(4,2);
+	controlMat << -1,0,
+				   0,1,
+				   0,-1,
+				   4,0;
+	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
+	controlVec << 2,2,2,4;
+	EXPECT_EQ(withOneRedundant.getOptimizer().matrix(), controlMat);
+	EXPECT_EQ(withOneRedundant.getOptimizer().vector(), controlVec);
 
 	//Multiple redundant constraints
 }

@@ -64,6 +64,7 @@ namespace hypro {
             vector_t<Number> derivative(tpoly.matrix().cols()+1);
             derivative.block(0,0,tpoly.matrix().cols(),1) = tpoly.matrix().row(rowI).transpose();
             derivative(derivative.rows()-1) = 0;
+
             std::vector<tNumber> polynomCoeffs; //Ordering is from lowest to highest degree
             std::vector<Number> polynomCoeffsAsNumber; //Ordering is from lowest to highest degree
             polynomCoeffs.emplace_back(tpoly.vector()(rowI));

@@ -155,6 +155,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 		mNonRedundant = false;
 		mEmpty = TRIBOOL::NSET;
 		mVector = vec; 
+		mOptimizer.setVector(vec);
 	}
 
 	/**
@@ -218,7 +219,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	template<class SettingRhs>
 	friend bool operator==( const TemplatePolyhedronT<Number,Converter,Setting>& b1, const TemplatePolyhedronT<Number,Converter,SettingRhs>& b2 ) {
-		return (b1.rGetMatrixPtr() == nullptr && b2.rGetMatrixPtr() == nullptr) || (b1.matrix().isApprox(b2.matrix()) && b1.vector().isApprox(b2.vector()));
+		return (b1.rGetMatrixPtr() == nullptr && b2.rGetMatrixPtr() == nullptr) || (b1.matrix() == b2.matrix() && b1.vector() == b2.vector());
 	}
 
 	/**

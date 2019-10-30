@@ -59,6 +59,8 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
     TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
 
+    //void locationInvariantStrengthening();
+
 };
 
 

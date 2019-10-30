@@ -2,10 +2,21 @@
 
 namespace hypro {
 
-    //template<typename State>
-    //void TemplatePolyhedronContext<State>::execOnStart(){
-    //    //Location Invariant Strengthening
-    //}
+/*
+    template<typename State>
+    void TemplatePolyhedronContext<State>::locationInvariantStrengthening(){
+    
+        //a(0) = inv
+
+        //while a(j+1) != a(j)
+
+            //Compute pi(j) by solving Dj
+
+            //Compute a(j+1) by solving L_pi(j)
+
+        //Set result as invariant TPoly to use in TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler
+    }
+*/
 
     template<typename State>
     TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
@@ -89,6 +100,8 @@ namespace hypro {
             }
         }        
         //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;
+
+        //Call Location Invariant Strengthening
 
         //Do the stuff ltiContext would to 
         this->LTIContext<State>::execBeforeFirstSegment();
