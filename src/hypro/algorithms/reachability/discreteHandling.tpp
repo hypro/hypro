@@ -121,10 +121,12 @@ namespace reachability {
 			INFO("hypro.reacher","Apply reset.");
 			State tmp = applyReset(collectedSets, aggregationPair.first->getReset());
 			INFO("hypro.reacher","Vertices size after reset: " << tmp.vertices().size());
+			#ifdef HYPRO_LOGGING
 			for(const auto& vertex : tmp.vertices()) {
 				//std::cout << convert<Number,double>(vertex) << std::endl;
 				INFO("hypro.reacher", vertex << ", ");
 			}
+			#endif
 
 			std::pair<CONTAINMENT, State> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
 			INFO("hypro.reacher","does resetted satisfy invariant? " << invariantSatisfyingSet.first << " size of vertices: " << invariantSatisfyingSet.second.vertices().size() << " and resulting vertices: ");
