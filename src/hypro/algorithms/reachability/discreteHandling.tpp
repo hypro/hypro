@@ -8,12 +8,9 @@ namespace reachability {
 		assert(!_state.getTimestamp().isUnbounded());
 		result = _state;
 
-		//std::cout << "------ start intersecting guard!" << std::endl;
-
 		// check for continuous set guard intersection
 		std::pair<CONTAINMENT, State> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
 
-		//std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
 		INFO("hypro.reacher","------ guard satisfied? " << guardSatisfyingSet.first);
 
 		// check if the intersection is empty
@@ -22,13 +19,7 @@ namespace reachability {
 			INFO("hypro.reacher", "Transition enabled at timestamp " << _state.getTimestamp() << "!");
 			#endif
 
-			//for(unsigned rowIndex = 0; rowIndex < _trans->guard().mat.rows(); ++rowIndex) {
-			//	Halfspace<Number> tmp( vector_t<Number>(_trans->guard().mat.row(rowIndex)), _trans->guard().vec(rowIndex));
-			//	Plotter<Number>::getInstance().addObject( tmp );
-			//}
-
 			result.setSets(guardSatisfyingSet.second.getSets());
-			//std::cout << "------ end intersecting guard!" << std::endl;
 			return true;
 		} else {
 			#ifdef REACH_DEBUG
@@ -74,21 +65,15 @@ namespace reachability {
 
 			assert(!aggregationPair.second.empty());
 			carl::Interval<tNumber> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
-			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
 			State collectedSets = *aggregationPair.second.begin();
 			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
 				assert(!stateIt->getTimestamp().isUnbounded());
 				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->getTimestamp());
-				//std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
 				collectedSets = collectedSets.unite(*stateIt);
 			}
 
 			#ifdef REACH_DEBUG
 			INFO("hypro.reacher", "Unified " << aggregationPair.second.size() << " sets for aggregation.");
-			//std::cout << "CollectedSets vertices: " << std::endl;
-			//for(const auto& vertex : collectedSets.vertices()) {
-			//	std::cout << convert<Number,double>(vertex) << std::endl;
-			//}
 			#endif
 
 			State s;
@@ -121,18 +106,21 @@ namespace reachability {
 			INFO("hypro.reacher","Apply reset.");
 			State tmp = applyReset(collectedSets, aggregationPair.first->getReset());
 			INFO("hypro.reacher","Vertices size after reset: " << tmp.vertices().size());
+			#ifdef HYPRO_LOGGING
 			for(const auto& vertex : tmp.vertices()) {
 				//std::cout << convert<Number,double>(vertex) << std::endl;
 				INFO("hypro.reacher", vertex << ", ");
 			}
+			#endif
 
 			std::pair<CONTAINMENT, State> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
 			INFO("hypro.reacher","does resetted satisfy invariant? " << invariantSatisfyingSet.first << " size of vertices: " << invariantSatisfyingSet.second.vertices().size() << " and resulting vertices: ");
+			#ifdef HYPRO_LOGGING
 			for(const auto& vertex : invariantSatisfyingSet.second.vertices()) {
 				//std::cout << convert<Number,double>(vertex) << std::endl;
 				INFO("hypro.reacher", vertex << ", ");
 			}
-			std::cout << "Reset over" << std::endl;
+			#endif
 
 			if(invariantSatisfyingSet.first != CONTAINMENT::NO){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());

@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 #set -ev
-brew update --quiet
+
+function keep_waiting() {
+  while true; do
+    echo -e "."
+    sleep 60
+  done
+}
+
+keep_waiting() & brew update --quiet
 brew update cmake
 brew install llvm
+kill $!
 
 if [[ ${COMPILER} == "g++-4.8" ]]; then
 	echo "g++-4.8 is not supported"

@@ -108,8 +108,7 @@ matrix:
           - llvm
       compiler: clang
       env: COMPILER=clang++
-  allow_failures:
-      - os: osx
+    - os: osx
       osx_image: xcode9.1
       addons:
         homebrew:
