@@ -35,18 +35,22 @@ namespace hypro {
 
 	//Move ctor via Copy-and-Swap idiom
 	template<typename Number>
-	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
-		swap(*this, orig);
+	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) {// : Optimizer() {
+		std::cout << "Optimizer::move ctor" << std::endl;
+		swapper(*this, orig);
 	}
 
 	//Copy ctor via Copy-and-Swap idiom
 	template<typename Number>
 	Optimizer<Number>::Optimizer(const Optimizer<Number>& orig){
-		TRACE("hypro.optimizer","");
+		std::cout << "Optimizer::copy ctor" << std::endl;
+		//TRACE("hypro.optimizer","");
 		assert(isSane());
 		mConstraintMatrix = orig.matrix();
 		mConstraintVector = orig.vector();
 		mConsistencyChecked = false;
+		//mConsistencyChecked = orig.wasConsistencyChecked();
+		//mLastConsistencyAnswer = orig.getLastConsistencyAnswer();
 		cleanGLPInstance();
 		mGlpkContext = std::map<std::thread::id, glpk_context>();
 		assert(isSane());
@@ -55,8 +59,10 @@ namespace hypro {
 	//Copy assignment via Copy-and-Swap idiom
 	template<typename Number>
 	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
+		std::cout << "Optimizer::copy assign" << std::endl;
+		//TRACE("hypro.optimizer","");
 		Optimizer<Number> tmp(orig);
-		swap(*this, tmp);
+		swapper(*this, tmp);
 		return *this;
 	}
 
@@ -258,6 +264,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
+		std::cout << "Optimizer::checkConsistency " << std::endl;
 		assert(isSane());
 		updateConstraints();
 
@@ -279,15 +286,24 @@ namespace hypro {
 		mLastConsistencyAnswer = soplexCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		mConsistencyChecked = true;
 		#else // use glpk
+		std::cout << "Optimizer::checkConsistency: mConsistencyChecked: " << mConsistencyChecked << std::endl;
+		std::cout << "Optimizer::checkConsistency: mLastConsistencyAnswer: " << mLastConsistencyAnswer << std::endl;
 		if(!mConsistencyChecked){
+			std::cout << "Optimizer::checkConsistency: use glpk for consistency check" << std::endl;
 			//TRACE("hypro.optimizer","Use glpk for consistency check.");
 			glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, &mGlpkContext[std::this_thread::get_id()].parm);
 			glp_exact( mGlpkContext[std::this_thread::get_id()].lp, &mGlpkContext[std::this_thread::get_id()].parm );
-			mLastConsistencyAnswer = glp_get_status(mGlpkContext[std::this_thread::get_id()].lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
+			std::cout << "Optimizer::checkConsistency: glp status " << glp_get_status(mGlpkContext[std::this_thread::get_id()].lp) << std::endl;
+			mLastConsistencyAnswer = (glp_get_status(mGlpkContext[std::this_thread::get_id()].lp) == GLP_NOFEAS) ? SOLUTION::INFEAS : SOLUTION::FEAS;
 			mConsistencyChecked = true;
+		} else {
+			assert(mConsistencyChecked && ((mLastConsistencyAnswer == SOLUTION::FEAS) || (mLastConsistencyAnswer == SOLUTION::INFEAS)));
 		}
 		#endif
-
+		std::cout << "Optimizer::checkConsistency: after check mLastConsistencyAnswer: FEAS? " << (mLastConsistencyAnswer == SOLUTION::FEAS) << std::endl;
+		std::cout << "Optimizer::checkConsistency: after check mLastConsistencyAnswer: INFEAS? " << (mLastConsistencyAnswer == SOLUTION::INFEAS) << std::endl;
+		std::cout << "Optimizer::checkConsistency: after check mLastConsistencyAnswer: INFTY? " << (mLastConsistencyAnswer == SOLUTION::INFTY) << std::endl;
+		std::cout << "Optimizer::checkConsistency: after check mLastConsistencyAnswer: UNKNOWN? " << (mLastConsistencyAnswer == SOLUTION::UNKNOWN) << std::endl;
 		return (mLastConsistencyAnswer == SOLUTION::FEAS);
 	}
 
@@ -396,7 +412,7 @@ namespace hypro {
 		}
 		assert(hasContext(std::this_thread::get_id()));
 		mGlpkContext[std::this_thread::get_id()].createLPInstance();
-
+		std::cout << "Optimizer::initialize: mConsistencyChecked: " << mConsistencyChecked << std::endl;
 		TRACE("hypro.optimizer","Done.");
 	}
 
@@ -405,9 +421,11 @@ namespace hypro {
 		TRACE("hypro.optimizer","");
 		assert(isSane());
 		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
-		//assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
+		std::cout << "Optimizer::updateConstraints: mConsistencyChecked: " << mConsistencyChecked << std::endl;
+		//assert(!mConsistencyChecked);
+		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
-			//std::cout << "mOptimizer has not been initialized, initialize now" << std::endl;
+			std::cout << "Optimizer::updateConstraints: mOptimizer has not been initialized, initialize now" << std::endl;
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();
 		}
@@ -416,10 +434,10 @@ namespace hypro {
 		glpk_context& glpCtx = mGlpkContext[std::this_thread::get_id()];
 
 		if(!glpCtx.mConstraintsSet){
-			//std::cout << "!mConstraintsSet" << std::endl;
+			std::cout << "Optimizer::updateConstraints: !mConstraintsSet" << std::endl;
 
 			if(alreadyInitialized) { // clean up old setup.
-				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
+				std::cout << "Optimizer::updateConstraints: alreadyInitialized - Cleanup" << std::endl;
 				glpCtx.deleteArrays();
 
 				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " refreshes its glp instance. (@" << &mGlpkContext[std::this_thread::get_id()] << ")");
@@ -456,6 +474,7 @@ namespace hypro {
 
 			int numberOfConstraints = int(mConstraintMatrix.rows());
 			if(numberOfConstraints > 0) {
+				std::cout << "Optimizer::updateConstraints: begin construction of LP obj" << std::endl;
 				// convert constraint constants
 				glp_add_rows( glpCtx.lp, numberOfConstraints );
 				// Set relation symbols correctly - mRelationSymbols are suddenly empty in the Supremum test for TemplatePolyhedron. This is a small hack.
@@ -537,7 +556,6 @@ namespace hypro {
 				#endif
 				#endif
 			}
-
 			glpCtx.mConstraintsSet = true;
 		}
 		TRACE("hypro.optimizer","Done.");

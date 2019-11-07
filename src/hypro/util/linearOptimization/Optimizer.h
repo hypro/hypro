@@ -138,7 +138,9 @@ namespace hypro {
 			return mGlpkContext;
 		}
 
-		friend void swap(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
+		friend void swapper(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
+			//TRACE("hypro.optimizer","");
+			std::cout << "Optimizer::swap!" << std::endl;
 			std::swap(lhs.mConstraintMatrix, rhs.mConstraintMatrix);
 			std::swap(lhs.mConstraintVector, rhs.mConstraintVector);
 			std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);
@@ -152,7 +154,7 @@ namespace hypro {
 
 	public:
 		/**
-		 * @brief      Comparison operator.
+		 * @brief      Copy Assignment operator.
 		 * @param[in]  orig  The right-hand-side object.
 		 * @return     True, if both problem instances are equal, false otherwise.
 		 */
@@ -169,6 +171,9 @@ namespace hypro {
 		 * @return     The vector of constants.
 		 */
 		const vector_t<Number>& vector() const;
+
+		bool wasConsistencyChecked() const { return mConsistencyChecked; }
+		SOLUTION getLastConsistencyAnswer() const { return mLastConsistencyAnswer; }
 
 		/**
 		 * @brief      Sets the problem matrix.

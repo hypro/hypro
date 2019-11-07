@@ -2,21 +2,126 @@
 
 namespace hypro {
 
-/*
-    template<typename State>
-    void TemplatePolyhedronContext<State>::locationInvariantStrengthening(){
-    
-        //a(0) = inv
-
-        //while a(j+1) != a(j)
-
-            //Compute pi(j) by solving Dj
-
-            //Compute a(j+1) by solving L_pi(j)
-
-        //Set result as invariant TPoly to use in TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler
+	template<typename State>
+    vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
+        assert(linearFct.rows() == this->mState->getDimension() + 1);
+        vector_t<Number> gradient = linearFct;
+        gradient(gradient.rows()-1) = 0;
+        return gradient;
     }
-*/
+
+    template<typename State>
+    vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::lieDerivative(const vector_t<Number>& dir){
+        assert(dir.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
+        assert(this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().cols());
+        return this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose() * gradientOfLinearFct(dir);
+    }
+
+    template<typename State>
+    void TemplatePolyhedronContext<State>::locationInvariantStrengthening(const TemplatePolyhedron<Number>& invTPoly, const vector_t<Number>& initialOffsets){
+
+    	assert(!invTPoly.empty());
+    	assert(initialOffsets.rows() == invTPoly.vector().rows());
+
+    	unsigned invRows = invTPoly.matrix().rows();
+    	unsigned invCols = invTPoly.matrix().cols();
+    	assert(invCols == this->mComputationState.getDimension());
+        vector_t<Number> lastStrengthenedInv = invTPoly.vector(); //a(0) = inv, also a(j)
+        vector_t<Number> nextStrengthenedInv = vector_t<Number>::Zero(invTPoly.vector().rows()); //a(j+1)
+        Number scalingFactor = 0.5;	//mü
+
+        for(int rowI = 0; rowI < invRows; ++rowI){
+
+        	//TODOOO: how to start if last and next are the same?
+	        //while a(j) != a(j+1)
+	        while(lastStrengthenedInv != nextStrengthenedInv){
+
+	            //Compute pi(j) (certificate of feasibility for a(j+1)) by solving Dj
+	            //1.Construct A = (H, extended with lambda_j >= 0)^T
+	        	matrix_t<Number> A = matrix_t<Number>::Zero(invRows+invCols,invCols);
+	        	A.block(0,0,invRows,invCols) = invTPoly.matrix();
+	        	A.block(invRows,0,invCols,invCols) = -1*matrix_t<Number>::Identity(invCols,invCols);
+	        	A.transposeInPlace();
+
+	        	//2.Construct b = (mü(H_j) + H_j')^T, extended with zeros
+	        	vector_t<Number> b = vector_t<Number>::Zero(invRows+invCols)
+	        	b.block(0,0,invRows,1) = scalingFactor * invTPoly.matrix().row(rowI) + lieDerivative(invTPoly.matrix().row(rowI));
+	        	b.transposeInPlace();
+
+	        	//3.Set A and b as matrix and vector for mOptimizer
+	        	mOptimizer.setMatrix(A);
+	        	mOptimizer.setVector(b);
+	        	mOptimizer.setMaximize(false);
+
+	        	//4.Minimize into direction lastStrengthenedInv - Solution is the optimumValue of minimizeA
+	        	auto minimizeA = mOptimizer.evaluate(lastStrengthenedInv,true);
+	        	#ifndef NDEBUG
+	        	assert(minimizeA.errorCode == SOLUTION::FEAS);
+	        	assert(minimizeA.optimumValue.rows() == invRows + invCols);
+	        	for(int i = 0; i < minimizeA.optimumValue.rows(); ++i){
+	        		//make sure all values are greater than 0
+	        		assert(minimizeA.optimumValue(i) >= 0);
+	        	}
+	        	#endif
+	        	//if(minimizeA.errorCode == SOLUTION::FEAS){
+	        	//	//usually also add constant part of lie derivative h_j here, but since we only have lie derivatives of linear fcts, there is no constant part
+	        	//	minimizeA.supportValue -= scalingFactor * lastStrengthenedInv(rowI); 
+	        	//}
+	        	vector_t<Number> actualMinimizeRes = minimizeA.optimumValue.block(0,0,invRows,1);
+
+	        	//Build the system L*y = c 
+	        	//6.Build L_pi(j): Add constraints: init <= y
+	        	assert(initialOffsets.rows() == invTPoly.vector().rows());
+	        	matrix_t<Number> L = matrix_t<Number>::Zero(3*invRows,invRows);
+	        	vector_t<Number> c = vector_t<Number>::Zero(3*invRows);
+	        	L.block(0,0,invRows,invRows) = std::move(-1*matrix_t<Number>::Identity(invRows,invRows));
+	        	c.block(0,0,invRows,1) = -1*initialOffsets;
+
+	        	//7.Build L_pi(j): Add constraints: y <= inv_j
+	        	L.block(invRows,0,invRows,invRows) = std::move(matrix_t<Number>::Identity(invRows,invRows));
+	        	c.block(invRows,0,invRows,1) = invTPoly.vector();
+	        	
+	        	//8.Build L_pi(j): Add constraints. Row frozen if value >= inv
+	        	//If row j frozen, then y = inv_j
+	        	//If row j not frozen, then Delta_j^T*y - mü*y_j + h_j <= 0 
+	        	assert(lastStrengthenedInv.rows() == invRows);
+	        	for(unsigned i = 0; i < lastStrengthenedInv.rows(); ++i){
+	        		if(lastStrengthenedInv(i) >= invTPoly.vector()(i)){
+	        			//frozen row - normally, insert y_j = inv_j, but since y_j <= inv_j is already in L, insert y_j >= inv_j aka -y_j <= -inv_j
+	        			vector_t<Number> rowToInsert = vector_t<Number>::Zero(invRows);
+	        			rowToInsert(i) = -1;
+	        			L.row(2*invRows+i) = std::move(rowToInsert.transpose());
+	        			c(2*invRows+i) = -invTPoly.vector()(i);
+	        		} else {
+	        			//non frozen row
+	        			vector_t<Number> rowToInsert = actualMinimizeRes;
+	        			rowToInsert(i) = actualMinimizeRes(i) - scalingFactor;
+	        			L.row(2*invRows+i) = std::move(rowToInsert.transpose());
+	        		}
+	        	}
+
+	        	//9.Minimize L to get nextStrengthenedInv
+	        	mOptimizer.setMatrix(L);
+	        	mOptimizer.setVector(c);
+	        	mOptimizer.setMaximize(false);
+	        	auto minimizeL = mOptimizer.evaluate(vector_t<Number>::Ones(invRows));
+	        	assert(minimizeL.errorCode == SOLUTION::FEAS);
+	        	#ifndef NDEBUG
+	        	for(int i = 0; i < invRows; ++i){
+	        		assert(initialOffsets(i) <= minimizeL.optimumValue(i) && minimizeL.optimumValue(i) <= invTPoly.vector()(i));
+	        	}
+	        	#endif
+
+	        	//10.Set as next strenghtened inv 
+	        	lastStrengthenedInv = nextStrengthenedInv;
+	        	nextStrengthenedInv = minimizeL.optimumValue;
+	        }
+
+		}                 
+		//TOOOOODOOOO: Cannot return nextStrenthenedInv as it is only per row... or is it?
+		//TOOOODOOOOO: Check if we can optimize this, or first, debug it :D
+    }
+
 
     template<typename State>
     TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
@@ -84,8 +189,9 @@ namespace hypro {
         assert(this->mComputationState.getSetType() == representation_name::polytope_t);
         for(std::size_t index = 0; index < this->mComputationState.getNumberSets(); ++index){
             auto tpoly = boost::apply_visitor(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mComputationState.getSet(index));
-            if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE < TEMPLATE_CONTENT::OCTAGON){
-                this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(createTemplateContent(tpoly)), this->mComputationState.getSet(index)),index);     
+            if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE != TEMPLATE_CONTENT::OCTAGON){
+            	tpoly = createTemplateContent(tpoly)
+                this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mComputationState.getSet(index)),index);     
             } else {
                 std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, OCTAGON setting" << std::endl;
                 TemplatePolyhedron<Number> octagon(this->mComputationState.getDimension(), 8);
@@ -98,10 +204,17 @@ namespace hypro {
                 octagon.setVector(evalRes);
                 this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(octagon), this->mComputationState.getSet(index)),index);
             }
+            //Call Location Invariant Strengthening on current invariants
+	        if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV &&
+	       		this->mComputationState.getLocation()->getInvariant().rows() >= this->mComputationState.getDimension() + 1){
+	        	TemplatePolyhedron<Number> invTPoly(this->mComputationState.getLocation()->getInvariant().matrix(), this->mComputationState.getLocation()->getInvariant().vector());
+	        	invTPoly = invTPoly.overapproximate(tpoly.matrix());
+	        	vector_t<Number> relaxedInv = locationInvariantStrengthening(invTPoly, tpoly.vector());
+	        	//TOOOOOOOOODOOOOOOOOO: What to do with that?
+	        	//Set result as invariant TPoly to use in TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler
+	        }
         }        
-        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;
-
-        //Call Location Invariant Strengthening
+        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;        
 
         //Do the stuff ltiContext would to 
         this->LTIContext<State>::execBeforeFirstSegment();

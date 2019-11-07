@@ -34,6 +34,11 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
 	using Number = typename State::NumberType;
 
+  private:
+
+  	//Used for minimization of various functions during location invariant strengthening
+  	Optimizer<Number> mOptimizer;
+
   public:
 
   	TemplatePolyhedronContext() = default;
@@ -44,23 +49,41 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
 	    Flowpipe<State>& localSegments,
 	    ReachabilitySettings &settings) 
-  		: LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings)
+  		: LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings),
+  		  mOptimizer(Optimizer<Number>())
   	{}
         
 	~TemplatePolyhedronContext(){}
   	
+  	//Changes template matrix content according to setting and then call locationInvariantStrengthening
 	void execBeforeFirstSegment() override;
 
+	//First Segment computation after Sankaranarayanan
   	void firstSegment() override;
     
+    //Continuous Evolution after Sankaranarayanan
   	void applyContinuousEvolution() override;
 
   private:
 
+    //Computes the gradient of a multivariate but linear function linearFct
+    vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);
+
+    //Computes the lie derivative given a direction and an affine vector field (aka the flow)
+    //NOTE: Usually the lie derivative also works with non linear fcts, but since we cannot parse nonlinear functions yet,
+    //we will only use a simple selfwritten derivation function for linear multivariate functions
+    //DETAIL: The input vector dir is interpreted as a function, for example if dir = (3 2 -1) then dir is interpreted as 3x + 2y - z, 
+    //since no constants are allowed.
+    //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
+    vector_t<Number> lieDerivative(const vector_t<Number>& dir);
+
+    //Conducts the location invariant strengthening method from Sankranarayanan 2008.
+    //Until it converges, a tighter bound for the invariants is being computed.
+    //Returns the tighter bounds for the invariants.
+    vector_t<Number> locationInvariantStrengthening(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& initialOffsets);
+    
+    //Adds invariants, guards and bad states to the template matrix according the the setting
     TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
-
-    //void locationInvariantStrengthening();
-
 };
 
 

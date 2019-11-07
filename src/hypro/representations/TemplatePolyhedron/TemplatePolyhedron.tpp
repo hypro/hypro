@@ -177,9 +177,9 @@ namespace hypro {
 		if(allNegative) return true;	
 
 		//If no quick check triggered: Solve LP and cache result
-		//std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
+		std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
 		mEmpty = !mOptimizer.checkConsistency() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
-		//std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmpty == TRIBOOL::TRUE) << std::endl;
+		std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmpty == TRIBOOL::TRUE) << std::endl;
 		TRACE("hypro.representations.TPolytope","Optimizer result: " << mEmpty);
 		return (mEmpty == TRIBOOL::TRUE);
 	}
@@ -370,10 +370,11 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
-		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmpty: " << mEmpty << std::endl;
+		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(empty()){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this); 
 		}
 
@@ -395,22 +396,22 @@ namespace hypro {
 
 		assert(!(fullyInside && fullyOutside));
 		if(fullyInside){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		} 
 		if(fullyOutside){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this);
 		} 	
 			
 		//Even more expensive part
-		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
+		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
 		auto tmp = this->intersectHalfspaces(_mat,_vec);
 		if(tmp.empty()){
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
 		} else {
-			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
+			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
 			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
 		}
 	}
@@ -509,8 +510,7 @@ namespace hypro {
 		TemplatePolyhedronT<Number,Converter,Setting> res = linearTransformation(A);
 
 		//Translate res
-		vector_t<Number> tmp = res.vector() + vector_t<Number>((*(mMatrixPtr) * b));
-		res.setVector(tmp);
+		res.setVector(res.vector() + vector_t<Number>((*(mMatrixPtr) * b)));
 
 		return res;
 	}
@@ -606,7 +606,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		//Emptiness check
 		if(this->empty()) return *this;
@@ -623,7 +623,7 @@ namespace hypro {
 			for(int j = 0; j < mMatrixPtr->rows(); ++j){
 				if(_mat.row(i) == mMatrixPtr->row(j)){
 					//If constraint is already in template, take the smaller offset value
-					//std::cout << "TemplatePolyhedron::intersectHalfspaces, _vec(i): " << _vec(i) << " < " << mVector(j) << "? " << (_vec(i) < mVector(j)) << std::endl;
+					std::cout << "TemplatePolyhedron::intersectHalfspaces, _vec(i): " << _vec(i) << " < " << mVector(j) << "? " << (_vec(i) < mVector(j)) << std::endl;
 					resultVec(j) = _vec(i) < mVector(j) ? _vec(i) : mVector(j);
 					alreadyDone.emplace_back(j);
 					found = true;
@@ -637,28 +637,28 @@ namespace hypro {
 				extendedMatrix.row(extendedMatrix.rows()-1) = _mat.row(i);
 				extendedVector.conservativeResize(extendedVector.rows()+1);
 				extendedVector(extendedVector.rows()-1) = _vec(i);
-				//std::cout << "TemplatePolyhedron::intersectHalfspaces, row has not been found, add row! extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
+				std::cout << "TemplatePolyhedron::intersectHalfspaces, row has not been found, add row! extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
 			}
 		}
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll: " << foundAll << std::endl; //" _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll: " << foundAll << std::endl; //" _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 		if(foundAll && alreadyDone.size() > 0){
 			//If all constraints in _mat were found, we can safely return the result
 			auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
-			//std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll was true! returning: " << tmp << std::endl;
+			std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll was true! returning: " << tmp << std::endl;
 			return tmp;
 		}
 
 		//Else, make a new TPoly and evaluate into all non found directions and put into resultVec
 		auto itDone = alreadyDone.begin();
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, alreadyDone: {";
-		//for(auto d : alreadyDone){
-		//	//std::cout << d << ",";
-		//}
-		//std::cout << "}" << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, alreadyDone: {";
+		for(auto d : alreadyDone){
+			std::cout << d << ",";
+		}
+		std::cout << "}" << std::endl;
 		TemplatePolyhedronT<Number,Converter,Setting> extendedTPoly(extendedMatrix,extendedVector);
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
 		extendedTPoly.removeRedundancy();
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
 		for(int j = 0; j < mMatrixPtr->rows(); ++j){
 			if(itDone == alreadyDone.end() || j != *itDone){
 				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),true);
@@ -780,8 +780,7 @@ namespace hypro {
 				}
 			}
 		}
-		auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
-		return tmp;
+		return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr, res);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -794,6 +793,7 @@ namespace hypro {
 		mMatrixPtr = nullptr;
 		mVector = vector_t<Number>::Zero(0);
 		mOptimizer.cleanGLPInstance();
+		//mOptimizer.clear();
 		mEmpty = TRIBOOL::NSET;
 	}
 

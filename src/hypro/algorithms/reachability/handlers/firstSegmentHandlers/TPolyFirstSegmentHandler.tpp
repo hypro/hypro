@@ -4,7 +4,6 @@
 
 namespace hypro {
 
-
 	template<typename State>
     vector_t<typename State::NumberType> TPolyFirstSegmentHandler<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
         assert(linearFct.rows() == this->mState->getDimension() + 1);
