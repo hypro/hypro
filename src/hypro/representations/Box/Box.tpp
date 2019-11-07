@@ -310,7 +310,7 @@ EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_
 			}
 			furthestPoint(i) = mLimits[i].lower();
 		}
-		
+
 	}
 	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
 }
@@ -833,12 +833,11 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::unite( const std:
 		return BoxT<Number,Converter,Setting>::Empty();
 	}
 
-	std::pair<Point<Number>, Point<Number>> newLimits = boxes.begin()->limits();
-	for(const auto& box : boxes) {
-		newLimits.first = coeffWiseMin(newLimits.first, box.limits().first);
-		newLimits.second = coeffWiseMax(newLimits.first, box.limits().second);
+	auto res = boxes[0];
+	for ( std::size_t i = 0; i < boxes.size(); ++i ) {
+		res = res.unite(boxes[i]);
 	}
-	return BoxT<Number,Converter,Setting>(newLimits);
+	return res;
 }
 
 template<typename Number, typename Converter, class Setting>
