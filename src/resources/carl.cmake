@@ -17,7 +17,6 @@ ExternalProject_Add(
 	CONFIGURE_COMMAND ""
 	BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} carl
 	INSTALL_COMMAND ""
-	#INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install/fast
 )
 
 include(${CMAKE_BINARY_DIR}/resources/src/CArL-EP-build/carlConfig.cmake)
