@@ -54,7 +54,7 @@ namespace plotting {
 
 		double pointSize = 0.6;				 // pointsize
 
-		double linewidth = 0.05;				 // linewidth
+		double linewidth = 0.1;				 // linewidth
 		bool keepAspectRatio = true; 		 // keep aspect ratio for both axes
 		std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
 		bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
