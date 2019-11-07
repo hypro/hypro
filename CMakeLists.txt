@@ -103,9 +103,9 @@ foreach(p LIB BIN INCLUDE CMAKE)
   endif()
 endforeach()
 
-###########################################################################################
-
 include(compiler-settings)
+
+###########################################################################################
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C. Find system tools and libraries.
@@ -114,6 +114,11 @@ include(compiler-settings)
 # 2. Optional libraries for core.
 # 3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
+
+
+load_library(${PROJECT_NAME} GTest 0)
+
+load_library(${PROJECT_NAME} carl 0)
 
 add_subdirectory(src/resources)
 

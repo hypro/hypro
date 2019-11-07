@@ -2,10 +2,6 @@
 # initialize lists for include directories and library files
 set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
-load_library(${PROJECT_NAME} GTest 0)
-
-load_library(${PROJECT_NAME} carl 0)
-
 add_custom_target(resources)
 
 # Enable ExternalProject CMake module
@@ -44,8 +40,6 @@ if(NOT UUID_FOUND)
 	message(SEND_ERROR "Package uuid-dev required to build antlr.")
 endif()
 
-#set variable pointing to antlr tool
-#set(ANTLR4CPP_JAR_LOCATION ${PROJECT_SOURCE_DIR}/src/resources/antlr-4.7-complete.jar)
 #include external cmake file
 include(ExternalAntlr4Cpp.cmake)
 

@@ -1,9 +1,3 @@
-# File: macros.cmake
-# Authors: Igor N. Bongartz
-# Erstellt: 2015-10-29
-# Version: 2015-10-29
-#
-# This file contains several macros which are used in this project. Notice that several are copied straight from web ressources.
 
 macro(add_imported_library_interface name include)
     add_library(${name} INTERFACE IMPORTED)
@@ -12,29 +6,25 @@ macro(add_imported_library_interface name include)
 endmacro(add_imported_library_interface)
 
 macro(add_imported_library name type lib include)
-    # Workaround from https://cmake.org/Bug/view.php?id=15052
-    #file(MAKE_DIRECTORY "${include}")
-    #message("Name is: " ${name} ", type is " ${type} ", lib is " ${lib} ", include is " ${include})
-
     if("${lib}" STREQUAL "")
         if("${type}" STREQUAL "SHARED")
-        	#message(STATUS "Add imported library 1:  ${name} ${type} IMPORTED" )
+        	message(STATUS "Add imported library 1:  ${name} ${type} IMPORTED" )
             #add_library(${name} INTERFACE IMPORTED)
             add_library(${name} SHARED IMPORTED GLOBAL)
             set_target_properties(${name} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${include}")
         else()
-        	#message(STATUS "Add imported library 2:  ${name} ${type} IMPORTED" )
+        	message(STATUS "Add imported library 2:  ${name} ${type} IMPORTED" )
         	#add_library(${name} INTERFACE IMPORTED)
         	add_library(${name} STATIC IMPORTED GLOBAL)
             set_target_properties(${name} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${include}")
         endif()
     else()
-    	#message(STATUS "Add imported library 3:  ${name}_${type} ${type} IMPORTED" )
+    	message(STATUS "Add imported library 3:  ${name}_${type} ${type} IMPORTED with the include directory ${include} and the library path ${lib}" )
         add_library(${name}_${type} ${type} IMPORTED GLOBAL)
+        #add_library(${name}_${type} INTERFACE IMPORTED GLOBAL)
         set_target_properties(${name}_${type} PROPERTIES IMPORTED_LOCATION "${lib}")
         set_target_properties(${name}_${type} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${include}")
     endif()
-
 endmacro(add_imported_library)
 
 macro(export_target output TARGET)
@@ -47,7 +37,6 @@ macro(export_target output TARGET)
         if(${LOCATION} STREQUAL "LOCATION-NOTFOUND")
             get_target_property(LOCATION ${TARGET} IMPORTED_LOCATION_DEBUG)
         endif()
-        #message(STATUS "shared library, location is: ${LOCATION}")
 
         get_target_property(INCLUDE ${TARGET} INTERFACE_INCLUDE_DIRECTORIES)
         set(${output} "${${output}}
@@ -96,7 +85,6 @@ macro(load_library group name version)
     string(TOUPPER ${name} LIBNAME)
     set(Boost_USE_STATIC_LIBS OFF)
     if(${version} GREATER 0 )
-        #message(STATUS "name: ${name}, version: ${version}, argn: ${ARGN}")
         find_package(${name} ${version} ${ARGN} QUIET)
     else()
         find_package(${name} ${ARGN} QUIET)
@@ -114,11 +102,11 @@ macro(load_library group name version)
         message(STATUS "Library_dirs: ${${LIBNAME}_LIBRARY_DIRS}")
 
         if(STATICLIB_SWITCH)
-        		list(APPEND ${group}_LIBRARIES_STATIC ${${LIBNAME}_LIBRARIES})
-        		add_imported_library(${LIBNAME} STATIC "${${LIBNAME}_LIBRARIES}" "${${LIBNAME}_INCLUDE_DIR}")
+            #list(APPEND ${group}_LIBRARIES_STATIC ${${LIBNAME}_LIBRARIES})
+            add_imported_library(${LIBNAME} STATIC "${${LIBNAME}_LIBRARIES}" "${${LIBNAME}_INCLUDE_DIR}")
         else()
-                list(APPEND ${group}_LIBRARIES_DYNAMIC ${${LIBNAME}_LIBRARIES})
-                add_imported_library(${LIBNAME} SHARED "${${LIBNAME}_LIBRARIES}" "${${LIBNAME}_INCLUDE_DIR}")
+            #list(APPEND ${group}_LIBRARIES_DYNAMIC ${${LIBNAME}_LIBRARIES})
+            add_imported_library(${LIBNAME} SHARED "${${LIBNAME}_LIBRARIES}" "${${LIBNAME}_INCLUDE_DIR}")
         endif()
 
         list(APPEND ${group}_INCLUDE_DIRS ${${LIBNAME}_INCLUDE_DIR})
