@@ -10,16 +10,16 @@ function keep_waiting() {
   done
 }
 
-#git clone https://github.com/smtrat/carl.git
-#pushd carl
-#	mkdir build
-#	pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
-#		keep_waiting &
-#		make resources || return 1
-#		kill $!
-#		make carl VERBOSE=1 || return 1
-#	popd
-#popd
+git clone --branch 19.10 --depth 1 https://github.com/smtrat/carl.git
+pushd carl
+	mkdir build
+	pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
+		keep_waiting &
+		make resources || return 1
+		kill $!
+		make carl VERBOSE=1 || return 1
+	popd
+popd
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON -DCMAKE_CXX_COMPILER=$COMPILER || return 1
