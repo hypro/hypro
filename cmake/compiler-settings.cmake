@@ -92,5 +92,6 @@ if(DEVELOPER)
 		-Wunreachable-code \
 		-Wunused-function \
 		-Wunused-value \
-		-Wunused-variable")
+		-Wunused-variable\
+		-fsanitize=address")
 endif()
