@@ -44,8 +44,10 @@ addons:
       - uuid-dev
       - openjdk-9-jre
 
-
 matrix:
+  fast_finish: true
+  allow_failures:
+    - os: os x
   include:
     - os: linux
       compiler: g++-7
