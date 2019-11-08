@@ -46,8 +46,6 @@ addons:
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - os: os x
   include:
     - os: linux
       compiler: g++-7
@@ -158,6 +156,10 @@ matrix:
           - llvm
       compiler: clang
       env: COMPILER=clang++
+  allow_failures:
+    - os: osx
+      env: COMPILER=clang++
+      compiler: clang
 
 
 before_install:
