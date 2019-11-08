@@ -270,9 +270,10 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 	std::size_t d = this->dimension();
 
 	// compute 2^d: loop is faster than std::pow for integer-types
+	// background: we need 2^d bits, i is the currently available number of bits
 	std::size_t limit = 2;
-	for(int i = 0; i < d; ++i) {
-		limit = limit*limit;
+	for(std::size_t i = 1; i < d; ++i) {
+		limit = 2*limit;
 	}
 	result.reserve(limit);
 
