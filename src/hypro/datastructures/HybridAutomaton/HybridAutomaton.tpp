@@ -59,12 +59,12 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 		this->addLocalBadState(mLocations[locationMapping[otherBad.first]].get(), copy);
 	}
 
-	#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 	DEBUG("hypro.datastructures","Hybrid automaton initial states after COPY construction.");
 	for(const auto& iPair : mInitialStates) {
 		DEBUG("hypro.datastructures","Initial state in loc " << iPair.first->getName());
 	}
-	#endif
+#endif
 }
 
 /*
@@ -504,7 +504,7 @@ HybridAutomaton<Number> operator||(const HybridAutomaton<Number>& lhs, const Hyb
 		}
 	}
 
-	//std::cout << "######################## TRANSITIONS ########################" << std::endl;
+	//std::cout << "######################## TRANSITIONS########################" << std::endl;
 	//build transisitons
 	std::set<Label> lhsLabels = lhs.getLabels();
 	std::set<Label> rhsLabels = rhs.getLabels();

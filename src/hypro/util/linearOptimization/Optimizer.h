@@ -122,6 +122,10 @@ namespace hypro {
 			mGlpkContext()
 		{
 			glp_term_out( GLP_OFF );
+			assert(constraints.rows() > 0);
+			assert(constraints.cols() > 0);
+			assert(constants.rows() > 0);
+			assert(constraints.rows() == constants.rows());
 		}
 
 		/**

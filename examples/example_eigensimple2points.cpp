@@ -40,11 +40,11 @@ int main()
     Vector directLineStart = Vector(n);
     Vector directLineEnd = Vector(n);
     Vector plot_vector = Vector(n);
-    #ifdef TRAJECTORY
+#ifdef TRAJECTORY
         Number timestep = 0.02;
         Number traj_time;
         Vector plot_all_temp = Vector(n);
-    #endif
+#endif
     Number tstart = 0;
     Number tend = 4;
     Number beginElTime, curTime;
@@ -170,11 +170,11 @@ int main()
         //std::cout << "xvalueEnd" << xvalueEnd(0) << std::endl;
         Point<Number> p1(xvalueStart);
         plotter.addPoint(p1);
-        #ifdef PTS_DEBUG
+#ifdef PTS_DEBUG
             //std::cout << "pt adding: (" << beginElTime << "," << xvalueStart(DIM_PLOT) << ")" << std::endl;
             std::cout << "time (end+1)  = ["  << beginElTime            << "];" << std::endl;
             std::cout << "value(end+1)  = ["  << xvalueStart(DIM_PLOT)  << "];" << std::endl;
-        #endif
+#endif
         //std::cout << "pt" << std::endl << plot_vector << std::endl;
         //floating values assign wrong size (awkward fix)
         if (curTime+delta > tend+FLOATING_FIX) {
@@ -185,11 +185,11 @@ int main()
             plot_vector(1) = xvalueEnd(DIM_PLOT);
             Point<Number> p1(plot_vector);
             plotter.addPoint(p1);
-            #ifdef PTS_DEBUG
+#ifdef PTS_DEBUG
                 //std::cout << "pt adding: (" << curTime << "," << xvalueEnd(DIM_PLOT) << ")" << std::endl;
                 std::cout << "time (end+1)  = ["  << curTime              << "];" << std::endl;
                 std::cout << "value(end+1)  = ["  << xvalueEnd(DIM_PLOT)  << "];" << std::endl;
-            #endif
+#endif
             //std::cout << "pt" << std::endl << plot_vector << std::endl;
         }
         //plotter.addObject(p1.vertices();
@@ -198,7 +198,7 @@ int main()
         //Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
         //plotter.addObject(hsp);     //plotter.addHalfspace(hsp); did not WORK EITHER <---------------------------------------
         //on debug plot complete trajectory of e function
-        #ifdef TRAJECTORY
+#ifdef TRAJECTORY
             for (traj_time=beginElTime; traj_time<curTime; traj_time+=timestep) {
                 //calculate point
                 for (i=0; i<n; ++i) {
@@ -212,12 +212,12 @@ int main()
                 Point<Number> p1(plot_vector);
                 plotter.addPoint(p1);
             }
-        #endif
+#endif
     }
-    #ifdef TRAJECTORY
+#ifdef TRAJECTORY
         std::cout << "TRAJECTORY was set" << std::endl;
         std::cout << "stepping size of e function: " << timestep << std::endl;
-    #endif
+#endif
     //Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
     plotter.plot2d();
     //plotter.plotTex();

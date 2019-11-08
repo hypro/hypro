@@ -10,16 +10,16 @@ namespace reachability {
 		auto badStateIterator = mAutomaton.getLocalBadStates().find(_state.getLocation());
 		if(badStateIterator != mAutomaton.getLocalBadStates().end()){
 			if(_state.satisfies(badStateIterator->second).first != CONTAINMENT::NO){
-				#ifdef REACH_DEBUG
+#ifdef REACH_DEBUG
 				std::cout << "Intersection with all local bad states" << std::endl;
-				#endif
+#endif
 				mIntersectedBadStates = true;
 				return true;
 			}
-			#ifdef REACH_DEBUG
+#ifdef REACH_DEBUG
 			//std::cout << "No intersection with local bad states" << std::endl;
 			DEBUG("hypro.Reach", "No intersection with local bad states.\n");
-			#endif
+#endif
 		}
 
 		// check global bad states
@@ -27,9 +27,9 @@ namespace reachability {
 			for(const auto& set : mAutomaton.getGlobalBadStates() ) {
 				// bad state intersection
 				if(_state.satisfies(set).first != CONTAINMENT::NO){
-					#ifdef REACH_DEBUG
+#ifdef REACH_DEBUG
 					std::cout << "Intersection with global bad states" << std::endl;
-					#endif
+#endif
 					mIntersectedBadStates = true;
 					return true;
 				}

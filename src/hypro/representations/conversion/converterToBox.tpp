@@ -263,9 +263,9 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Zonoto
 		//1.For every dimension, add the coefficients of every generator for that dimension together
 		matrix_t<Number> generatorMat = _source.generators();
 		vector_t<Number> summedCoeffs = vector_t<Number>::Zero(generatorMat.rows());
-		unsigned dim = summedCoeffs.rows();
-		for(unsigned d = 0; d < dim; d++){
-			for(unsigned j = 0; j < generatorMat.cols(); j++){
+		Eigen::Index dim = summedCoeffs.rows();
+		for(Eigen::Index d = 0; d < dim; d++){
+			for(Eigen::Index j = 0; j < generatorMat.cols(); j++){
 				Number coeffAbs = generatorMat(d,j) >= 0 ? generatorMat(d,j) : Number(-1)*generatorMat(d,j);
 				summedCoeffs(d) = summedCoeffs(d) + coeffAbs;
 			}
@@ -274,15 +274,15 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Zonoto
 		//2.Double the summedcoeffs like: before summedCoeffs = (1,2) and center = (-2,1) after summedcoeffs = (-1,3,-1,3)
 		summedCoeffs += _source.center();
 		vector_t<Number> extendedSummedCoeffs = vector_t<Number>::Zero(2*summedCoeffs.rows());
-		for(unsigned i = 0; i < extendedSummedCoeffs.rows(); i++){
-			unsigned coeffIndex = i % dim;
+		for(Eigen::Index i = 0; i < extendedSummedCoeffs.rows(); i++){
+			Eigen::Index coeffIndex = i % dim;
 			extendedSummedCoeffs(i) = summedCoeffs(coeffIndex);
 		}
 
 		//2.Build every halfspace needed for a box
 		std::vector<vector_t<Number>> directions = computeTemplate<Number>(dim, 4);
 		matrix_t<Number> halfspaceMat = matrix_t<Number>::Zero(directions.size(), dim);
-		for(unsigned i = 0; i < directions.size(); i++){
+		for(Eigen::Index i = 0; i < Eigen::Index(directions.size()); i++){
 			halfspaceMat.row(i) = directions.at(i);
 		}
 		BoxT<Number,Converter<Number>,BoxSetting> box = BoxT<Number,Converter<Number>,BoxSetting>(halfspaceMat, extendedSummedCoeffs);
@@ -382,23 +382,23 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const CarlPol
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
-	
+
 	//gets dimension from the source object
-	std::size_t dim = _source.dimension();               
+	std::size_t dim = _source.dimension();
 
 	//initialize normal matrix as zero matrix with 2*dim rows and dim columns for every dimension
-	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   
-	for ( std::size_t i = 0; i < dim; ++i ) {                                  
+	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
+	for ( std::size_t i = 0; i < dim; ++i ) {
 		//write fixed entries (because of box) into the normal matrix (2 each column)
 		directions( 2 * i, i ) = -1;
-		directions( 2 * i + 1, i ) = 1;                                                                
+		directions( 2 * i + 1, i ) = 1;
 	}
 
 	//evaluate the source support function into these 2*dim directions (to get the interval end points)
-	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );                                       
+	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );
 
 	std::vector<carl::Interval<Number>> intervals;
-	for ( std::size_t i = 0; i < dim; ++i ) {                                                                  
+	for ( std::size_t i = 0; i < dim; ++i ) {
         carl::BoundType lowerBound = carl::BoundType::WEAK;
         carl::BoundType upperBound = carl::BoundType::WEAK;
         //if no bound is found in that direction (infinity) set interval end point to infinity
@@ -407,7 +407,7 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Suppor
         //if no bound is found in that direction (infinity) set interval end point to infinity
         if(distances[2*i+1].errorCode == SOLUTION::INFTY)
             upperBound = carl::BoundType::INFTY;
-		intervals.push_back( carl::Interval<Number>( -distances[2*i].supportValue, lowerBound, distances[2*i+1].supportValue, upperBound ) );   
+		intervals.push_back( carl::Interval<Number>( -distances[2*i].supportValue, lowerBound, distances[2*i+1].supportValue, upperBound ) );
 	}
 
     // if (mode == EXACT){                                                                                      //checks if conversion was exact

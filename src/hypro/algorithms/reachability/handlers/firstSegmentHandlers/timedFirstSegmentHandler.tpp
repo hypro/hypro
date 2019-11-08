@@ -21,9 +21,9 @@ namespace hypro {
                 // shift all clocks by timestep
                 dbm = dbm.intersectConstraint( i, 0, typename DifferenceBounds<Number>::DBMEntry(dbmBeforeElapse.getDBM()(i,0).first+carl::convert<tNumber,Number>(this->mTimeStep),DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ));
             }
-            #ifdef HYDRA_USE_LOGGING
+#ifdef HYDRA_USE_LOGGING
             TRACE("hydra.worker", "First Flowpipe Segment: " << dbm);
-            #endif
+#endif
 
             // set dbm
             this->mState->setSet(dbm,this->mIndex);

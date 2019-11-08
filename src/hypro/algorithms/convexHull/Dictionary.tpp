@@ -175,13 +175,13 @@ namespace hypro {
 		}
 
 		// update cell
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		Number tmpEntry = mDictionary(i,j);
-		#endif
+#endif
 		mDictionary(i,j) = Number(1) / mDictionary(i,j);
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		assert((tmpEntry < 0 && mDictionary(i,j) < 0) || (tmpEntry >= 0 && mDictionary(i,j) >= 0));
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -192,12 +192,12 @@ namespace hypro {
 		mB[i] = mN[j];
 		mN[j] = tmp;
 
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		Dictionary tmpDic(*this);
 		tmpDic.pivotDictionary(i,j);
 		tmpDic.pivotDictionary(i,j);
 		assert(this->mDictionary == tmpDic.tableau());
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -208,16 +208,16 @@ namespace hypro {
 		Eigen::Index pivot = 0;
 		Eigen::Index pivotRef = pivot;
 		if(!(mConstrains.outside(indexRef,diff,mB))) { // is there any variable out of its bounds?
-			#ifdef DICT_DBG
+#ifdef DICT_DBG
 			std::cout << "All variables are in their bounds." << std::endl;
-			#endif
+#endif
 			return false;
 		}
 		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw std::string("\n WARNING: empty set. \n");}//is there a suitable pivot
-		#ifdef DICT_DBG
+#ifdef DICT_DBG
 		std::cout << "Variable " << indexRef << " is out of bounds by " << diff << std::endl;
 		std::cout << "suitable pivot: " << pivotRef << std::endl;
-		#endif
+#endif
 		this->pivot(indexRef,pivotRef); // apply pivot.
 		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary); // update bounds.
 		return true;
@@ -368,12 +368,12 @@ namespace hypro {
 
 	template<typename Number>
 	bool Dictionary<Number>::isOptimal() const {
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		if(not(this->isPrimalFeasible() && this->isDualFeasible())) {
 			std::cout << "This is not optimal: " << std::endl;
 			printDictionary();
 		}
-		#endif
+#endif
 
 		return this->isPrimalFeasible() && this->isDualFeasible();
 	}
@@ -394,22 +394,22 @@ namespace hypro {
 
 	template<typename Number>
 	bool Dictionary<Number>::reverse(const Eigen::Index i, const Eigen::Index j) {
-		#ifdef DICT_DBG
+#ifdef DICT_DBG
 		std::cout << __func__ << " i=" << i << ", j=" << j << "? ";
-		#endif
+#endif
 		if(mDictionary(mDictionary.rows()-1,j)>=0||mDictionary(i,j)>=0) {
-			#ifdef DICT_DBG
+#ifdef DICT_DBG
 			std::cout << "False, cell content >= 0: " << (mDictionary(i,j)>=0) <<", objective coefficient >= 0: " << (mDictionary(mDictionary.rows()-1,j)>=0) << std::endl;
-			#endif
+#endif
 			return false;
 		}
 		Number maxRatio = mDictionary(i,mDictionary.cols()-1)/mDictionary(i,j); // equivalent to the lambda in the paper (almost, it is inverted in the paper)
 		// check for minimality (maximality) of the ratio itself.
 		for(int rowIndex=0;rowIndex<mDictionary.rows()-1;++rowIndex) {
 			if(mDictionary(rowIndex,j)<0 && maxRatio<mDictionary(rowIndex,mDictionary.cols()-1)/mDictionary(rowIndex,j)) {
-				#ifdef DICT_DBG
+#ifdef DICT_DBG
 				std::cout << "False, not minimal ratio. (Condition on lambda)" << std::endl;
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -418,9 +418,9 @@ namespace hypro {
 		// the selected column (some Bland stuff?) and checks, if their constant part is zero and the entry at (i,j) is larger than zero.
 		for(int rowIndex=0;rowIndex<mDictionary.rows()-1;++rowIndex) {
 			if(rowIndex!=int(i) && mB[rowIndex] < mN[j] && (mDictionary(rowIndex,mDictionary.cols()-1)==0 && mDictionary(rowIndex,j)>0 )) {
-				#ifdef DICT_DBG
+#ifdef DICT_DBG
 				std::cout << "False, third check fails." << std::endl;
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -431,16 +431,16 @@ namespace hypro {
 			if(mN[colIndex]<mB[i] &&
 				colIndex!=int(j) &&
 				mDictionary(mDictionary.rows()-1,colIndex) > mDictionary(mDictionary.rows()-1,j)*mDictionary(i,colIndex)/mDictionary(i,j)  ){
-					#ifdef DICT_DBG
+#ifdef DICT_DBG
 					std::cout << "False, fourth check fails." << std::endl;
-					#endif
+#endif
 					return false;
 				}
 
 		}
 
 
-		#ifdef DICT_DBG
+#ifdef DICT_DBG
 		std::cout << "True, manual check: ";
 		Dictionary<Number> tmp(*this);
 		tmp.pivot(i,j);
@@ -454,7 +454,7 @@ namespace hypro {
 		tmp.pivot(ti,tj);
 		std::cout << (tmp == *this) << std::endl;
 		assert(tmp == *this);
-		#endif
+#endif
 		return true;
 	}
 

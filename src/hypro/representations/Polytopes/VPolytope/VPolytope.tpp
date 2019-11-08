@@ -123,7 +123,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 //}
 //template<typename Number, typename Converter, typename S>
 //vector_t<Number> vector() const {
-//	
+//
 //}
 
 template<typename Number, typename Converter, typename S>
@@ -511,7 +511,7 @@ void VPolytopeT<Number, Converter, S>::clear() {
 
 template <typename Number, typename Converter, typename S>
 EvaluationResult<Number> VPolytopeT<Number,Converter,S>::evaluate(const vector_t<Number>& direction) const {
-	if(direction == vector_t<Number>::Zero(direction.rows())) 
+	if(direction == vector_t<Number>::Zero(direction.rows()))
 		return EvaluationResult<Number>();
 	Number maxDist = Number(-1e20);
 	EvaluationResult<Number> res;
@@ -557,7 +557,7 @@ Number VPolytopeT<Number, Converter, S>::supremum() const {
 template <typename Number, typename Converter, typename S>
 void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 	if ( !mReduced ) {
-		#ifdef USE_SMTRAT
+#ifdef USE_SMTRAT
 			std::set<Point<Number>> toDelete;
 			smtrat::SimplexSolver simplex;
 			simplex.push();
@@ -621,9 +621,9 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 			}
 
 			mReduced = true;
-		#else
+#else
 			updateNeighbors();
-		#endif
+#endif
 	}
 }
 

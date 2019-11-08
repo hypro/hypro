@@ -18,7 +18,7 @@ namespace hypro {
 		// inform and add constraints
 		z3Optimizer.add(formulaObjectivePair.first);
 
-		#ifdef USE_PRESOLUTION
+#ifdef USE_PRESOLUTION
 		z3Optimizer.push();
 		if(preSolution.errorCode ==SOLUTION::FEAS) {
 			addPreSolution(z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second);
@@ -30,7 +30,7 @@ namespace hypro {
 		} else { // if glpk already detected unboundedness we return its result.
 			return preSolution; // Todo: Check unboundedness
 		}
-		#endif
+#endif
 
 		// optimize with objective function
 		z3::optimize::handle result;
@@ -41,9 +41,9 @@ namespace hypro {
 		}
 
 
-		#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
-		#endif
+#endif
 
 		// verify and set result
 		z3::check_result chck = z3Optimizer.check();
@@ -79,7 +79,7 @@ namespace hypro {
 		       res.optimumValue = pointCoordinates;
 			}
 		} else {
-			#ifdef USE_PRESOLUTION
+#ifdef USE_PRESOLUTION
 				// in this case the constraints introduced by the presolution made the problem infeasible
 
 				z3Optimizer.pop();
@@ -127,9 +127,9 @@ namespace hypro {
 					assert(z3::unsat == chck);
 					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
-			#else
+#else
 			return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-			#endif
+#endif
 		}
 		return res;
 	}
@@ -189,9 +189,9 @@ namespace hypro {
 
 		// first call to check satisfiability
 		z3::check_result firstCheck = z3Solver.check();
-		#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 		//std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
-		#endif
+#endif
 		switch (firstCheck) {
 			case z3::check_result::unsat: {
 				return res;
@@ -209,9 +209,9 @@ namespace hypro {
 		z3Solver.pop();
 		for(unsigned constraintIndex = 0; constraintIndex < formulas.size(); ++constraintIndex) {
 			z3::expr originalConstraint = formulas[constraintIndex];
-			#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 			//std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
-			#endif
+#endif
 			z3::expr negatedConstraint = !originalConstraint;
 
 			z3Solver.push();
@@ -238,9 +238,9 @@ namespace hypro {
 			z3::check_result isRedundant = z3Solver.check();
 			assert(isRedundant != z3::check_result::unknown);
 			if(isRedundant == z3::check_result::unsat){
-				#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 				//std::cout << __func__ << " is redundant." << std::endl;
-				#endif
+#endif
 				res.push_back(constraintIndex);
 			}
 

@@ -31,11 +31,11 @@ namespace hypro {
                     std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber,typename State::NumberType>(v,newV, t, mFlow.getFlowIntervalForDimension(v));
 
                     TRACE("hydra.worker","Use flow constraints: ");
-                    #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
                     for(const auto& c : flowConstraints) {
                         TRACE("hydra.worker",c);
                     }
-                    #endif
+#endif
 
                     initial.addConstraints(flowConstraints);
                 }

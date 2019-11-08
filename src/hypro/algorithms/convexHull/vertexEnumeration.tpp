@@ -110,7 +110,7 @@ namespace hypro {
 			}
 			*/
 
-			#ifndef NDEBUG
+#ifndef NDEBUG
 			for(const auto& vertex : mPoints) {
 				for(const auto& plane : mHsv) {
 					if(!plane.contains(vertex)) {
@@ -120,7 +120,7 @@ namespace hypro {
 					assert(plane.contains(vertex));
 				}
 			}
-			#endif
+#endif
 		}
 	}
 
@@ -203,7 +203,7 @@ namespace hypro {
 				COUT("\n\n\n" << std::endl);
 				dictionary.pivot(i,j);
 				assert(dictionary.isPrimalFeasible());
-				#ifndef NDEBUG
+#ifndef NDEBUG
 				Eigen::Index tmpI,tmpJ;
 				dictionary.selectBlandPivot(tmpI,tmpJ);
 				if(!(tmpI == i && tmpJ == j)) {
@@ -212,7 +212,7 @@ namespace hypro {
 					COUT("\n\n\n" << std::endl);
 				}
 				assert(tmpI == i && tmpJ == j);
-				#endif
+#endif
 				DEBUG("hypro.vertexEnumeration","(Step down) Pivot " << i << ", " << j << " is a valid reverse pivot.");
 				if(dictionary.isLexMin()) {
 					DEBUG("hypro.vertexEnumeration","new point:");

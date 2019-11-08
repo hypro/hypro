@@ -75,6 +75,9 @@ class Halfspace {
 	 */
 	~Halfspace();
 
+	Halfspace<Number>& operator=(const Halfspace<Number>& in) = default;
+	Halfspace<Number>& operator=(Halfspace<Number>&& in) = default;
+
 	/**
 	 * @brief      Size function returning the estimated storage usage of this plane.
 	 * @return     An estimated storage usage.
@@ -315,9 +318,9 @@ class Halfspace {
 	bool empty() const;
 
 	/**
-	 * @brief Does nothing since a halfpsace cannot have redundancy
+	 * @brief Removes redundancy.
 	 */
-	void removeRedundancy() {}
+	void removeRedundancy() { /* Does nothing since a halfpsace cannot have redundancy */ }
 
 	/**
 	 * @brief Return the steps needed in the given direction to reach the optimal point.
@@ -325,7 +328,7 @@ class Halfspace {
 	 * @return Whether it is feasible, and if it is, how much steps are needed.
 	 */
 	EvaluationResult<Number> evaluate(const vector_t<Number>& direction, bool /*useExact*/) const;
- 
+
  	/**
 	 * @brief Return the evaluation result for multiple directions
 	 * @param[in] _directions The directions to evaluate
@@ -412,15 +415,15 @@ Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
 	return tmp;
 }
 
-    #ifdef EXTERNALIZE_CLASSES
+#ifdef EXTERNALIZE_CLASSES
     extern template class Halfspace<double>;
 
-    #ifdef USE_MPFR_FLOAT
+#ifdef USE_MPFR_FLOAT
     extern template class Halfspace<carl::FLOAT_T<mpfr_t>>;
-    #endif
+#endif
 
     extern template class Halfspace<carl::FLOAT_T<double>>;
-    #endif
+#endif
 }  // namespace hypro
 
 namespace std {

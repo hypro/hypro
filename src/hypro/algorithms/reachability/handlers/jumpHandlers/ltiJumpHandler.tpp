@@ -65,7 +65,7 @@ namespace hypro {
 				TRACE("hydra.worker.discrete","Regular tree extension.");
 				for(const auto& child : children) {
 					// if the following is set, copy the refinement to any other refinement level.
-					#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 					if(currentTargetLevel > 0) { // I think this branch can never be reached, as wasRefinementTask prevents this.
 						for(auto i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
@@ -75,7 +75,7 @@ namespace hypro {
 							}
 						}
 					}
-					#endif
+#endif
 
 					// add child to current reach tree.
 					mTask->treeNode->addChild(child);
@@ -87,14 +87,14 @@ namespace hypro {
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
 					std::shared_ptr<Task<State>> newTask = std::make_shared<Task<State>>(child);
 					// if we do not reset to level 0, set refinementLevel of task
-					#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 					newTask->btInfo.btLevel = currentTargetLevel;
-					#endif
+#endif
 					newTask->btInfo.timingLevel = mTask->btInfo.timingLevel;
 
 					// the first property has to be true already while the second never can be satisfied (wasREfinementTask demands NO bt-path)
 					if(!wasRefinementTask || mTask->btInfo.currentBTPosition == mTask->btInfo.btPath.size()){
-						#ifdef SINGLE_THREAD_FIXED_POINT_TEST
+#ifdef SINGLE_THREAD_FIXED_POINT_TEST
 						if(!child->getPath().hasChatteringZeno()){
 							if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
 								mLocalQueue->nonLockingEnqueue(newTask);
@@ -102,13 +102,13 @@ namespace hypro {
 								mLocalQueue->enqueue(newTask);
 							}
 						}
-						#else
+#else
 						if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
 							mLocalQueue->nonLockingEnqueue(std::move(newTask));
 						} else {
 							mLocalQueue->enqueue(std::move(newTask));
 						}
-						#endif
+#endif
 					}
 				}
 				//INFO("hydra.worker.discrete","No backtracking. localQueue is now:\n" << *(mLocalQueue) << "localCEXQueue is now:\n" << *(mLocalCEXQueue));
@@ -178,7 +178,7 @@ namespace hypro {
 
 	template<typename State>
 	std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHandler<State>::applyJump(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy){
-		
+
 		// holds a mapping of transitions to states which need to be aggregated
 		std::map<Transition<Number>*, std::vector<State>> toAggregate;
 		// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -293,7 +293,7 @@ namespace hypro {
 								newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>(tmpSFN), newState.getSet(i)),i);
 							//}
 						}
-					}					
+					}
 				}
 
 				DEBUG("hydra.worker.discrete","State after reduction: " << newState);
@@ -361,7 +361,7 @@ namespace hypro {
 				leftovers = true;
 				++setCnt;
 				++clusterCnt;
-				#ifdef CLUSTERING_NUMBER_LIMITS_SUCESSORS
+#ifdef CLUSTERING_NUMBER_LIMITS_SUCESSORS
 				if(strategy.clustering > 0 && clusterCnt == std::ceil(double(transitionStatePair.second.size())/double(strategy.clustering))) {
 					TRACE("hydra.worker.discrete","Clustering.");
 					aggregatedStates.emplace_back(aggregatedState);
@@ -374,7 +374,7 @@ namespace hypro {
 						break;
 					}
 				}
-				#else
+#else
 				if(strategy.clustering > 0 && clusterCnt == std::size_t(strategy.clustering)) {
 					TRACE("hydra.worker.discrete","Clustering.");
 					aggregatedStates.emplace_back(aggregatedState);
@@ -387,7 +387,7 @@ namespace hypro {
 						break;
 					}
 				}
-				#endif
+#endif
 			}
 			aggregatedState.setSets(currentSets);
 			//EVALUATE_BENCHMARK_RESULT(AGGREGATE);

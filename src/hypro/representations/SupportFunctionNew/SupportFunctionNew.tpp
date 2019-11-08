@@ -897,7 +897,7 @@ namespace hypro {
 		    }
 		    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), this->dimension());
 		    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
-		    unsigned pos = boundedConstraints.size()-1;
+		    std::size_t pos = boundedConstraints.size()-1;
 		    while(!boundedConstraints.empty()){
 		        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
 		        constants(pos) = offsets[boundedConstraints.back()].supportValue;

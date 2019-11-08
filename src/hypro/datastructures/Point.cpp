@@ -2,12 +2,12 @@
 
 namespace hypro
 {
-    #ifdef EXTERNALIZE_CLASSES
+#ifdef EXTERNALIZE_CLASSES
     template class Point<mpq_class>;
 
-    #ifdef USE_CLN_NUMBERS
+#ifdef USE_CLN_NUMBERS
     template class Point<cln::cl_RA>;
-    #endif
+#endif
 
-    #endif
+#endif
 } // namespace hypro

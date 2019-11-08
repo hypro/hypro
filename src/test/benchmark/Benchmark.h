@@ -8,21 +8,21 @@
  * @version 	2015-03-19
  */
 
- #pragma once
+#pragma once
 
- #include "Timer.h"
- #include "BenchmarkSetup.h"
- #include "BenchmarkGenerator.h"
- #include "ObjectGenerator.h"
- #include "Generators.h"
- #include "Executors.h"
- #include "Result.h"
- #ifdef COMPARE_POLYMAKE
+#include "Timer.h"
+#include "BenchmarkSetup.h"
+#include "BenchmarkGenerator.h"
+#include "ObjectGenerator.h"
+#include "Generators.h"
+#include "Executors.h"
+#include "Result.h"
+#ifdef COMPARE_POLYMAKE
  	#include "polymake_util/converter.h"
- #endif
+#endif
 
- #include <vector>
- #include <iostream>
+#include <vector>
+#include <iostream>
 
 namespace hypro {
 

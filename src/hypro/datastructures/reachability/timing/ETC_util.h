@@ -89,11 +89,11 @@ namespace hypro {
             if( carl::set_is_subset(intv, intervals[0]) ) {
                 return true;
             }
-            #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
             else {
                 DEBUG("hypro.datastructures.etc", "Interval: "<< intv << " is not contained in " << intervals[0]);
             }
-            #endif
+#endif
         }
         return false;
     }

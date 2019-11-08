@@ -174,10 +174,10 @@ protected:
     HPolytope<Number> hpolytope;
     HPolytope<Number> hpolytope2;
 
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     Polytope<Number> pplpolytope;
     Polytope<Number> pplpolytope2;
-    #endif
+#endif
 
     SupportFunctionNew<Number> sfn1;
     SupportFunctionNew<Number> sfn2;
@@ -200,10 +200,10 @@ TYPED_TEST(ConverterTest, toBox)
     auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2, ALTERNATIVE);
     auto result3 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope);
     auto result4 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2);
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope2);
-    #endif
+#endif
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->sfn1);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->sfn2);
     SUCCEED();
@@ -221,10 +221,10 @@ TYPED_TEST(ConverterTest, toHPolytope)
         auto result7 = Converter<TypeParam>::toHPolytope(this->vpolytope2, OVER);
         auto result8 = Converter<TypeParam>::toHPolytope(this->vpolytope3, OVER);
         auto result9 = Converter<TypeParam>::toHPolytope(this->box);
-        #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
         auto result10 = Converter<TypeParam>::toHPolytope(this->pplpolytope);
         auto result11 = Converter<TypeParam>::toHPolytope(this->pplpolytope2);
-        #endif
+#endif
         auto result12 = Converter<TypeParam>::toHPolytope(this->sfn1);
         auto result13 = Converter<TypeParam>::toHPolytope(this->sfn2);
     } catch(std::runtime_error& e){
@@ -243,10 +243,10 @@ TYPED_TEST(ConverterTest, toSupportFunction)
     Converter<TypeParam>::toSupportFunction(this->vpolytope2);
     Converter<TypeParam>::toSupportFunction(this->zonotope);
     Converter<TypeParam>::toSupportFunction(this->zonotope2);
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     Converter<TypeParam>::toSupportFunction(this->pplpolytope);
     Converter<TypeParam>::toSupportFunction(this->pplpolytope2);
-    #endif
+#endif
 	SUCCEED();
 }
 
@@ -260,10 +260,10 @@ TYPED_TEST(ConverterTest, toVPolytope)
     auto result6 = Converter<TypeParam>::toVPolytope(this->hpolytope, OVER);
     auto result7 = Converter<TypeParam>::toVPolytope(this->hpolytope2, OVER);
     auto result8 = Converter<TypeParam>::toVPolytope(this->box);
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     auto result10 = Converter<TypeParam>::toVPolytope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toVPolytope(this->pplpolytope2);
-    #endif
+#endif
     auto result12 = Converter<TypeParam>::toVPolytope(this->sfn1);
     auto result13 = Converter<TypeParam>::toVPolytope(this->sfn2);
 	SUCCEED();
@@ -280,10 +280,10 @@ TYPED_TEST(ConverterTest, toZonotope)
     auto result7 = Converter<TypeParam>::toZonotope(this->hpolytope2);
     auto result8 = Converter<TypeParam>::toZonotope(this->support, ALTERNATIVE);
     auto result9 = Converter<TypeParam>::toZonotope(this->support2, ALTERNATIVE);
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     auto result10 = Converter<TypeParam>::toZonotope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toZonotope(this->pplpolytope2);
-    #endif
+#endif
     auto result12 = Converter<TypeParam>::toZonotope(this->sfn1);
     auto result13 = Converter<TypeParam>::toZonotope(this->sfn2);
 	SUCCEED();
@@ -309,7 +309,7 @@ TYPED_TEST(ConverterTest, toPolytope){
 
 TYPED_TEST(ConverterTest, toSupportFunctionNew)
 {
-    //auto result = Converter<TypeParam>::toSupportFunctionNew(this->zonotope); //COMMENTED OUT SINCE ZONOTOPE HAVE NO MATRIX AND VECTOR FUNCTION 
+    //auto result = Converter<TypeParam>::toSupportFunctionNew(this->zonotope); //COMMENTED OUT SINCE ZONOTOPE HAVE NO MATRIX AND VECTOR FUNCTION
     auto result2 = Converter<TypeParam>::toSupportFunctionNew(this->box);
     //auto result3 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope); //COMMENTED OUT SINCE VPOLYS HAVE NO MATRIX AND VECTOR FUNCTION
     //auto result4 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope2); //COMMENTED OUT SINCE VPOLYS HAVE NO MATRIX AND VECTOR FUNCTION
@@ -318,10 +318,10 @@ TYPED_TEST(ConverterTest, toSupportFunctionNew)
     auto result7 = Converter<TypeParam>::toSupportFunctionNew(this->hpolytope2);
     auto result8 = Converter<TypeParam>::toSupportFunctionNew(this->support, ALTERNATIVE);
     auto result9 = Converter<TypeParam>::toSupportFunctionNew(this->support2, ALTERNATIVE);
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     auto result10 = Converter<TypeParam>::toSupportFunctionNew(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toSupportFunctionNew(this->pplpolytope2);
-    #endif
+#endif
     auto result12 = Converter<TypeParam>::toSupportFunctionNew(this->sfn1);
     auto result13 = Converter<TypeParam>::toSupportFunctionNew(this->sfn2);
     SUCCEED();

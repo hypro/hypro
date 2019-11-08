@@ -7,10 +7,10 @@ namespace polytope {
     Results<std::size_t> affineTransformation(const Settings& settings) {
         Results<std::size_t> ress;
         // benchmark against PPL
-        #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
         using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<benchmark::box::Double_Interval_Policy>>;
         using pplbox = Parma_Polyhedra_Library::Box<pplItv>;
-        #endif
+#endif
 
         // initialize random number generator
         std::mt19937 generator;

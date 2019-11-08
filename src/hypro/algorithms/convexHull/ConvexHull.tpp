@@ -104,14 +104,14 @@ namespace hypro {
 
 	template<typename Number>
 	void ConvexHull<Number>::convexHullVertices() {//!!modify the points
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		std::cout << __func__ << ": Input:" << std::endl;
 		std::vector<Point<Number>> originalPoints;
 		for(const auto& vertex : mPoints) {
 			std::cout << vertex << std::endl;
 			originalPoints.push_back(vertex);
 		}
-		#endif
+#endif
 
 		if(mPoints.size()==0) { // emptyset
 			// set up half-spaces which describe the empty set.
@@ -161,7 +161,7 @@ namespace hypro {
 				std::cout << plane << std::endl;
 			}
 
-			#ifndef NDEBUG
+#ifndef NDEBUG
 			for(const auto plane : mHsv) {
 				std::cout << "Plane: " << plane << std::endl;
 				for(const auto point : originalPoints) {
@@ -172,7 +172,7 @@ namespace hypro {
 					assert(plane.contains(point));
 				}
 			}
-			#endif
+#endif
 		}
 	}
 

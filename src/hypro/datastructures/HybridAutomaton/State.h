@@ -478,7 +478,7 @@ class State
      * @param[in]  state  The state.
      * @return     A reference to the outstream.
      */
-    #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& out, const State<Number,Representation,Rargs...>& state) {
         if(state.getLocation() != nullptr) {
             out << "location: " << state.getLocation()->getName();
@@ -497,9 +497,9 @@ class State
 	    	for(std::size_t i = 1; i < state.getNumberSets(); ++i)
 	    		out << state.getSet(i) << std::endl;
     	}
-    #else
+#else
     friend std::ostream& operator<<(std::ostream& out, const State<Number,Representation,Rargs...>&) {
-    #endif
+#endif
     	return out;
     }
 

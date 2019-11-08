@@ -29,6 +29,8 @@ struct EvaluationResult {
 	EvaluationResult(Number sValue, const vector_t<Number>& val, SOLUTION err) : supportValue(sValue), optimumValue(val), errorCode(err)
 		{}
 
+	~EvaluationResult() = default;
+
 	friend std::ostream& operator<<(std::ostream& _out, const EvaluationResult<Number>& _in) {
 		_out << _in.supportValue << "(" << _in.errorCode << ") : \n" << _in.optimumValue;
 		return _out;

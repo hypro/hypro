@@ -6,10 +6,10 @@ namespace box {
   Results<std::size_t> intersect(const Settings& settings) {
         Results<std::size_t> ress;
         // benchmark against PPL
-        #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
         using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<benchmark::box::Double_Interval_Policy>>;
         using pplbox = Parma_Polyhedra_Library::Box<pplItv>;
-        #endif
+#endif
 
         // initialize random number generator
         std::mt19937 generator;
@@ -20,19 +20,19 @@ namespace box {
             // create instances
             std::vector<hypro::Box<::benchmark::Number>> lhsBoxes;
             std::vector<hypro::Box<::benchmark::Number>> rhsBoxes;
-            #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
             std::vector<pplbox> pplLhsBoxes;
             std::vector<pplbox> pplRhsBoxes;
-            #endif
+#endif
             Timer creationTimer;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
                 hypro::Box<::benchmark::Number> lhsBox;
                 hypro::Box<::benchmark::Number> rhsBox;
                 // create same constraint for PPL.
-                #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
                 pplbox lhs = pplbox(d);
                 pplbox rhs = pplbox(d);
-                #endif
+#endif
 
                 for(std::size_t id = 0; id < d; ++id) {
                     ::benchmark::Number ll = -dist(generator);
@@ -45,7 +45,7 @@ namespace box {
                     assert(!lhsBox.empty());
                     assert(!rhsBox.empty());
 
-                    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
                     pplItv itvl;
                     pplItv itvr;
                     itvl.lower() = ll;
@@ -54,14 +54,14 @@ namespace box {
                     itvr.upper() = ru;
                     lhs.set_interval(Parma_Polyhedra_Library::Variable(id),itvl);
                     rhs.set_interval(Parma_Polyhedra_Library::Variable(id),itvr);
-                    #endif
+#endif
                 }
                 lhsBoxes.emplace_back(std::move(lhsBox));
                 rhsBoxes.emplace_back(std::move(rhsBox));
-                #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
                 pplLhsBoxes.emplace_back(lhs);
                 pplRhsBoxes.emplace_back(rhs);
-                #endif
+#endif
             }
             auto creationTime = creationTimer.elapsed();
             //std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
@@ -76,7 +76,7 @@ namespace box {
             ress.emplace_back({"intersect",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
-            #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
             Timer runTimerPPL;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
                 pplLhsBoxes[i].intersection_assign(pplRhsBoxes[i]);
@@ -84,7 +84,7 @@ namespace box {
             runningTime = runTimerPPL.elapsed();
             ress.emplace_back({"intersectPPL",runningTime/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec (PPL)." << std::endl;
-            #endif
+#endif
 
             ress.mRunningTime += runningTime;
         }

@@ -94,12 +94,12 @@ void Location<Number>::setRectangularFlow(const rectangularFlow<Number>& f, std:
 
 template<typename Number>
 void Location<Number>::setTransitions(transitionVector&& trans) {
-	#ifndef NDEBUG
+#ifndef NDEBUG
 	for(const auto& t : trans) {
 		// lightweight test - hash is not collosion-free
 		assert(t->getSource() == this);
 	}
-	#endif
+#endif
 	mTransitions = std::move(trans);
 	mHash = 0;
 }
@@ -456,13 +456,13 @@ void Location<Number>::decompose(const Decomposition& decomposition){
 	std::vector<rectangularFlow<Number>> newRectangularFlows;
 	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
 	for(auto set : decomposition){
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 		DEBUG("hypro.datastructures","decompose flow for set: {");
 		for(auto entry : set){
 			DEBUG("hypro.datastructures", "" << entry << ", ");
 		}
 		DEBUG("hypro.datastructures","}");
-		#endif
+#endif
 		// +1 row for last-row of affine transformation
 		matrix_t<Number> rowMat = matrix_t<Number>::Zero(set.size()+1, oldFlow.cols());
 		// -1 because of last-row

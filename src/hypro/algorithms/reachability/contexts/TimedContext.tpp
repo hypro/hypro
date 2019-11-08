@@ -100,10 +100,10 @@ namespace hypro
     	DEBUG("hydra.worker","State after intersection with invariant: " << this->mComputationState);
 
 		// For plotting.
-		#ifdef HYDRA_ENABLE_PLOT
+#ifdef HYDRA_ENABLE_PLOT
 		TRACE("hydra.worker.plot","Add "<<  this->mComputationState.getSets().size() << "segments for plotting of type " << this->mComputationState.getSetType() << " and refinement level " << this->mTask->btInfo.btLevel);
         this->mLocalSegments.addState(this->mComputationState);
-		#endif
+#endif
 	}
 
 	template<typename State>
@@ -117,14 +117,14 @@ namespace hypro
 
     	for(auto it = this->mTransitionHandlerMap.begin(); it != this->mTransitionHandlerMap.end(); ++it){
 
-    		#ifdef SINGLE_THREAD_FIXED_POINT_TEST
+#ifdef SINGLE_THREAD_FIXED_POINT_TEST
         	// if the considered transition is disabled (for one iteration), skip the test by starting the next loop iteration.
         	auto disabledTransitionIt = std::find(this->mDisabledTransitions.begin(), this->mDisabledTransitions.end(), it->first);
         	if(disabledTransitionIt != this->mDisabledTransitions.end()) {
         		this->mDisabledTransitions.erase(disabledTransitionIt);
         		continue;
         	}
-			#endif
+#endif
 
         	if(!it->first->isUrgent() && LTIContext<State>::omitTransition(it->first)){
         		// store that transition was not enabled for this time interval

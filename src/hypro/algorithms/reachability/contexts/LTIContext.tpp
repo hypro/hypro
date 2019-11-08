@@ -235,11 +235,11 @@ namespace hypro
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.getParameters(mTask->btInfo.btLevel).timeStep) );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters(mTask->btInfo.btLevel).representation_type );
 	    INFO("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
-	    #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 	    for(auto& ref : mTask->treeNode->rGetRefinements()){
 	    	INFO("hypro.worker",  std::this_thread::get_id() << ": " << ref);
 	    }
-	    #endif
+#endif
 
 		if(mSettings.useInvariantTimingInformation ||
 		   mSettings.useGuardTimingInformation ||
@@ -336,7 +336,7 @@ namespace hypro
 	    }
 
 
-	    #ifdef SINGLE_THREAD_FIXED_POINT_TEST
+#ifdef SINGLE_THREAD_FIXED_POINT_TEST
 	    // Check if the initial set satisfies the guard and if so, detect a potential Zeno-cycle.
 	    for (auto transition : mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getTransitions()) {
 
@@ -375,7 +375,7 @@ namespace hypro
 	            }
 	        }
 	    }
-		#endif
+#endif
 	}
 
     template<typename State>
@@ -547,7 +547,7 @@ namespace hypro
 
 		initializeGuardHandlers();
 
-		#ifdef SINGLE_THREAD_FIXED_POINT_TEST
+#ifdef SINGLE_THREAD_FIXED_POINT_TEST
         // finish the test for chattering Zeno by intersecting the full initial set with the guard and compare the already stored guard satisfying
         // sets with the intersection of the full set with the guard. If this is the same, we have chattering Zeno.
         for(auto transitionStatePair : mPotentialZenoTransitions) {
@@ -584,7 +584,7 @@ namespace hypro
         		potentialZenoState.setTimestamp(tmpTimespan);
         	}
         }
-		#endif
+#endif
     }
 
     template<typename State>
@@ -607,14 +607,14 @@ namespace hypro
 
     	for(auto it = mTransitionHandlerMap.begin(); it != mTransitionHandlerMap.end(); ++it){
 
-    		#ifdef SINGLE_THREAD_FIXED_POINT_TEST
+#ifdef SINGLE_THREAD_FIXED_POINT_TEST
         	// if the considered transition is disabled (for one iteration), skip the test by starting the next loop iteration.
         	auto disabledTransitionIt = std::find(mDisabledTransitions.begin(), mDisabledTransitions.end(), it->first);
         	if(disabledTransitionIt != mDisabledTransitions.end()) {
         		mDisabledTransitions.erase(disabledTransitionIt);
         		continue;
         	}
-			#endif
+#endif
 
         	if(!it->first->isUrgent() && omitTransition(it->first)){
         		// store that transition was not enabled for this time interval
@@ -745,9 +745,9 @@ namespace hypro
 				++it;
 			}
 		}
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
-		#endif
+#endif
 
 		DEBUG("hypro.worker","State after timestep: " << mComputationState << " time interval: " << tmp);
     }
@@ -783,9 +783,9 @@ namespace hypro
 		// allows to omit it.
 
 		// temporary for dbg-output
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
-		#endif
+#endif
 
 		// if the transition is irrelevant for the backtracking, we still want to find potential successors to avoid re-computation.
 		if(mTask->btInfo.currentBTPosition < mTask->btInfo.btPath.size() && mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition + 1).transition != transition) {
@@ -832,9 +832,9 @@ namespace hypro
 			return false;
 		}
 		// temporary for dbg-output
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
-		#endif
+#endif
 		if( fullCover(mLocalTimings.getInvariantTimings(), mComputationState.getTimestamp(),CONTAINMENT::FULL) ) {
 			DEBUG("hypro.worker.discrete","Omit invariant for time interval " << tmp << " as we know it was inside the invariant.");
 			COUNT("OmitInvariant");
@@ -853,9 +853,9 @@ namespace hypro
 			return false;
 		}
 		// temporary for dbg-output
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
-		#endif
+#endif
 		if( fullCover(mLocalTimings.getBadStateTimings(), mComputationState.getTimestamp(),CONTAINMENT::NO) ) {
 			DEBUG("hypro.worker.discrete","Omit bad state check for time interval " << tmp << ".");
 			COUNT("OmitBadStateCheck");

@@ -224,13 +224,13 @@ namespace hypro {
 
 		// select constrains i,j,k into new constraint vector
 		for(auto set : decomposition){
-			#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 			DEBUG("hypro.datastructures", "decompose constraint for set: {");
 			for(auto entry : set){
 				DEBUG("hypro.datastructures", "" <<  entry << ", ");
 			}
 			DEBUG("hypro.datastructures", "}");
-			#endif
+#endif
 
 			// new interval assignments are just copied, as we do not store the variable
 			//std::vector<carl::Interval<Number>> newIntervals;
