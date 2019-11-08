@@ -3,7 +3,7 @@
  * @author Jan Philipp Hafer
  */
 #pragma once
-#include "../../datastructures/HybridAutomaton/Settings.h"
+#include "../../datastructures/reachability/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../representations/conversion/Converter.h"
 #include <eigen3/Eigen/Eigenvalues>

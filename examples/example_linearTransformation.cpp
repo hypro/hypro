@@ -5,7 +5,7 @@
  *
  */
 
- #include "../src/hypro/util/Plotter.h"
+ #include "../src/hypro/util/plotting/Plotter.h"
  #include "../src/hypro/datastructures/Halfspace.h"
  #include "../src/hypro/representations/GeometricObject.h"
 
