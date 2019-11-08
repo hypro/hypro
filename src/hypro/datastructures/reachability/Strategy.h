@@ -38,8 +38,28 @@ public:
     }
 
     StrategyParameters getParameters(std::size_t lvl) const {
-        assert(lvl < mStrategy.size());
+        assert(0 <= lvl && lvl < mStrategy.size());
         return boost::apply_visitor(detail::getParametersVisitor(), mStrategy[lvl]);
+    }
+
+    void removeNode(std::size_t lvl) {
+        if(mStrategy.size() > 0){
+            assert(0 <= lvl && lvl < mStrategy.size());
+            auto it = mStrategy.begin();
+            mStrategy.erase(it + lvl);    
+        }
+    }
+
+#ifdef HYPRO_LOGGING
+    friend std::ostream& operator<<(std::ostream& ostr, const Strategy<StateType>& strat){
+        std::cout << "Current strategy is: \n";
+        for(std::size_t i = 0; i < strat.getStrategy().size(); ++i){
+            ostr << "Node " << i << ": " << strat.getParameters(i) << std::endl;
+        }
+#else
+    friend std::ostream& operator<<(std::ostream& ostr, const Strategy<StateType>& /*strat*/){        
+#endif
+        return ostr;
     }
 };
 

@@ -1,6 +1,8 @@
 #pragma once
 #include <boost/variant.hpp>
 #include <iostream>
+#include <string>
+#include <map>
 
 namespace hypro {
 

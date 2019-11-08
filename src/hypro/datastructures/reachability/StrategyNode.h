@@ -7,13 +7,27 @@ namespace hypro
 {
 
 struct StrategyParameters {
+
 	mpq_class timeStep = 0;
 	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;
 	int clustering = -1;
 	representation_name representation_type = representation_name::UNDEF;
+
+#ifdef HYPRO_LOGGING
+    friend std::ostream& operator<<(std::ostream& ostr, const StrategyParameters& sp){
+        ostr << "Representation: " << sp.representation_type;
+        ostr << " Timestep: " << sp.timeStep;
+        ostr << " Aggregation: " << sp.aggregation;
+        ostr << " clustering: " << sp.clustering << std::endl;
+#else
+    friend std::ostream& operator<<(std::ostream& ostr, const StrategyParameters& /*sp*/)
+#endif
+        return ostr;
+    }
 };
 
 namespace detail{
+
 	template<typename State>
 	struct strategyConversionVisitor : public boost::static_visitor<> {
 		State& mState;
@@ -46,7 +60,8 @@ namespace detail{
 			return n.mParameters;
 		}
 	};
-}
+
+} //namespace detail 
 
 template<typename Representation>
 struct StrategyNode {
@@ -69,6 +84,13 @@ struct StrategyNode {
 		mParameters.clustering = clu;
 		mParameters.representation_type = Representation::type();
 	}
+
+	//StrategyNode(const StrategyParameters& param){
+	//	mParameters.timeStep = param.timeStep;
+	//	mParameters.aggregation = param.aggregation;
+	//	mParameters.clustering = param.clustering;
+	//	mParameters.representation_type = Representation::type();	
+	//}
 };
 
 } // hypro
