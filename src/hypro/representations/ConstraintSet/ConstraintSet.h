@@ -17,7 +17,7 @@ struct ConstraintSetSettings {
 };
 
 /**
- * @brief      A class representing a plain constraint set.
+ * @brief      A class representing a plain constraint set. This class is intended to serve as a container.
  * @details    A constraint set in this case is a datastructure similar to a H-Polytope but without any functionality. The idea is just to
  * 			   have a container for data received from the parser or as an intermediate type.
  * @tparam     Number     The used number type.
@@ -34,7 +34,7 @@ class ConstraintSetT {
 
 	typedef S Settings;
 	typedef Number NumberType;
-  protected:
+  private:
     matrix_t<Number> mConstraints; /*!< Matrix describing the linear constraints.*/
     vector_t<Number> mConstants; /*!< Vector describing the constant parts for the respective constraints.*/
 	mutable TRIBOOL mIsBox = TRIBOOL::NSET; /*<  Cache to store whether the constraints are axis-aligned. */
@@ -57,10 +57,7 @@ class ConstraintSetT {
 	 * @brief      Copy constructor.
 	 * @param[in]  orig  The original.
 	 */
-	ConstraintSetT( const ConstraintSetT& orig )
-		: mConstraints(orig.matrix())
-		, mConstants(orig.vector())
-	{}
+	ConstraintSetT( const ConstraintSetT& orig ) = default;
 
 	/**
 	 * @brief      Move constructor.
@@ -87,7 +84,7 @@ class ConstraintSetT {
 	 * @param _constraints A matrix representing the constraint normals.
 	 * @param _constants A vector representing the offsets of the corresponting hyperplane.
 	 */
-	ConstraintSetT( const matrix_t<Number>& _constraints ) :
+	explicit ConstraintSetT( const matrix_t<Number>& _constraints ) :
 		mConstraints(_constraints),
 		mConstants(vector_t<Number>::Zero(_constraints.rows()))
 	{}
@@ -210,7 +207,7 @@ class ConstraintSetT {
 	/**
 	 * @brief      Removes redundancy (part of the general interface. Does nothing for constraintSets.)
 	 */
-	void removeRedundancy() {}
+	void removeRedundancy() { /* Constraint set only acts as a container, thus this is a no-op. */ }
 
 	/**
 	 * @brief      Storage size determination.
@@ -273,13 +270,16 @@ class ConstraintSetT {
 	/**
 	 * @brief      Does nothing as a ConstraintSet is only a container.
 	 */
-	void reduceRepresentation() {}
+	void reduceRepresentation() { /* Constraint set only acts as a container, thus this is a no-op. */ }
 
 	/**
 	 * @brief      Makes this constraintSet the empty constraintSet.
 	 */
-	//void clear() { return *this; }
-	void clear() {}
+	void clear() {
+		mConstraints = matrix_t<Number>::Zero(0,0);
+		mConstants = vector_t<Number>::Zero(0);
+		mIsBox = TRIBOOL::NSET;
+	}
 
 };
 /** @} */

@@ -109,7 +109,7 @@ class Transition
     bool isUrgent() const { return mUrgent; }
     bool isTimeTriggered() const { return mTriggerTime >= 0; }
     bool hasIdentityReset() const { return mReset.isIdentity(); }
-    std::vector<Label> getLabels() const { return mLabels; }
+    const std::vector<Label>& getLabels() const { return mLabels; }
     std::size_t hash() const;
 
     void setSource(Location<Number>* source) { mSource = source; mHash = 0; }

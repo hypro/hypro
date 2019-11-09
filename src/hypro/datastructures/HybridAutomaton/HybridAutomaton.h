@@ -37,14 +37,12 @@ class HybridAutomaton
 {
   public:
     using locationVector = std::vector<std::unique_ptr<Location<Number>>>;
-    //using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>;
     using conditionVector = std::vector<Condition<Number>>;
     using variableVector = std::vector<std::string>;
 
   private:
     locationVector mLocations; 				/// The locations of the hybrid automaton.
-    //transitionVector mTransitions; 			/// The transitions of the hybrid automaton.
     locationConditionMap mInitialStates; 	/// The set of initial states.
     locationConditionMap mLocalBadStates; 	/// The set of bad states which are bound to locations.
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
@@ -128,20 +126,12 @@ class HybridAutomaton
      * @brief      Setter function.
      */
     ///@{
-    //void setLocations(locationVector& locs) { mLocations.swap(locs); }
     void setLocations(locationVector&& locs) {
         assert(checkConsistency());
         mLocations.clear();
         mLocations = std::move(locs);
         assert(checkConsistency());
     }
-    //void setTransitions(transitionVector& trans) { mTransitions.swap(trans); }
-    //void setTransitions(transitionVector&& trans) {
-    //    assert(checkConsistency());
-    //    mTransitions.clear();
-    //    mTransitions = std::move(trans);
-    //    assert(checkConsistency());
-    //}
     void setInitialStates(const locationConditionMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
@@ -154,14 +144,12 @@ class HybridAutomaton
     ///@{
     void addLocation(const Location<Number>& location);
     void addLocation(std::unique_ptr<Location<Number>>&& location);
-    //void addTransition(const Transition<Number>& transition);
     void addTransition(std::unique_ptr<Transition<Number>>&& transition);
     void addInitialState(const Location<Number>* loc, const Condition<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    //void removeTransition(Transition<Number>* toRemove);
 
     /**
      * @brief Decomposes an automaton into the components

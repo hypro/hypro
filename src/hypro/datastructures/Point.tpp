@@ -68,17 +68,6 @@ Point<Number>::Point( vector_t<Number>&& _vector )
 	assert(this->dimension() >= 0);
 }
 
-
-template <typename Number>
-Point<Number>::Point( const Point<Number> &_p )
-	: mCoordinates( _p.rawCoordinates() ),
-	mHash(0),
-	// mNeighbors(_p.neighbors()),
-	mComposedOf( _p.composedOf() ) {
-  	assert(mCoordinates == _p.rawCoordinates());
-  	assert(this->dimension() >= 0);
-}
-
 /*
 template<typename Number>
 std::vector<Point<Number>> Point<Number>::neighbors() const {

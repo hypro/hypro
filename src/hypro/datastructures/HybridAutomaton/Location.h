@@ -54,6 +54,8 @@ public:
     Location(const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv);
     ~Location(){}
 
+    Location<Number>& operator=(const Location<Number>& in);
+
     std::size_t getNumberFlow() const { return mLinearFlows.size(); }
     linearFlow<Number> getLinearFlow(std::size_t I = 0) const { return mLinearFlows.at(I); }
     linearFlow<Number>& rGetLinearFlow(std::size_t I = 0) { return mLinearFlows[I]; }

@@ -78,7 +78,7 @@ class Point {
 	 * @brief      Copy constructor.
 	 * @param[in]  _p    The original.
 	 */
-	Point( const Point<Number>& _p );
+	Point( const Point<Number>& _p ) = default;
 
 	/**
 	 * @brief      Move-copy constructor.

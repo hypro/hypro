@@ -129,6 +129,8 @@ namespace hypro {
 			case GLP_NOFEAS: {
 				return res;
 			}
+			default:
+				break;
 		}
 
 		for(std::size_t constraintIndex = std::size_t(constraints.rows()-1); ; --constraintIndex) {

@@ -23,8 +23,7 @@ Location<Number>::Location(const Location<Number>& _loc)
 	for(const auto& f : _loc.getRectangularFlows()){
 		mRectangularFlows.emplace_back(f);
 	}
-	TRACE("hypro.datastructures","Old location hash: " << _loc.hash());
-	TRACE("hypro.datastructures","New location hash: " << this->hash());
+
 	assert(this->hash() == _loc.hash());
 }
 
@@ -48,6 +47,28 @@ Location<Number>::Location(const matrix_t<Number>& _mat, typename Location<Numbe
 	mRectangularFlows.emplace_back(rectangularFlow<Number>());
 	mHasExternalInput = false;
 	mHash = 0;
+}
+
+template<typename Number>
+Location<Number>& Location<Number>::operator=(const Location<Number>& in) {
+	mInvariant = in.getInvariant();
+	mName = in.getName();
+	mExternalInput = in.getExternalInput();
+	mHash = 0;
+	// update copied transitions
+	for(auto t : in.getTransitions()) {
+		mTransitions.emplace_back(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
+		mTransitions.back()->setSource(this);
+	}
+
+	for(const auto& f : in.getLinearFlows()){
+		mLinearFlows.emplace_back(f);
+	}
+	for(const auto& f : in.getRectangularFlows()){
+		mRectangularFlows.emplace_back(f);
+	}
+
+	assert(this->hash() == in.hash());
 }
 
 template<typename Number>
