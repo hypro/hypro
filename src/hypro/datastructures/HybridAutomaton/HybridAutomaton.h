@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Location.h"
-//#include "State.h"
 #include "Transition.h"
 #include "Condition.h"
 #include "HybridAutomatonComp.h"

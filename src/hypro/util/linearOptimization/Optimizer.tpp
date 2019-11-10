@@ -33,6 +33,12 @@ namespace hypro {
 		return mConstraintVector;
 	}
 
+	//Move ctor via Copy-and-Swap idiom
+	template<typename Number>
+	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) : Optimizer() {
+		swap(*this, orig);
+	}
+
 	//Copy ctor via Copy-and-Swap idiom
 	template<typename Number>
 	Optimizer<Number>::Optimizer(const Optimizer<Number>& orig){

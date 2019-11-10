@@ -172,13 +172,13 @@ TYPED_TEST(PointTest, OperationTest)
 TYPED_TEST(PointTest, DimensionTest)
 {
 	this->p1.setCoordinate(this->a, 14);
-    EXPECT_EQ(this->p1.dimension(), unsigned(3));
+    EXPECT_EQ(this->p1.dimension(), std::size_t(3));
 
-    std::vector<unsigned> dims;
+    std::vector<std::size_t> dims;
     dims.push_back(0);
     dims.push_back(2);
     this->p1 = this->p1.reduceToDimensions(dims);
-    EXPECT_EQ(unsigned(2), this->p1.dimension());
+    EXPECT_EQ(std::size_t(2), this->p1.dimension());
 }
 
 /**

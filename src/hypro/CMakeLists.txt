@@ -4,13 +4,25 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 
 ########################################################################################
 
+# collect targets for object libraries
+add_subdirectory(parser)
+
+########################################################################################
+
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
+# filter out all parser sources, as they will be handled individually by an object library
+#list(REMOVE_ITEM ${sources} ${PARSER_SOURCES})
+foreach(sourceFile ${PARSER_SOURCES})
+  list(REMOVE_ITEM sources parser/${sourceFile})
+endforeach(sourceFile)
+
+message("hypro sources: ${sources}" )
 
 ########################################################################################
 
 if(STATICLIB_SWITCH)
 	message(STATUS "linking static")
-	add_library(${PROJECT_NAME}_static STATIC ${sources})
+	add_library(${PROJECT_NAME}_static STATIC ${sources} $<TARGET_OBJECTS:${PROJECT_NAME}_parser>)
 	set_target_properties( ${PROJECT_NAME}_static PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"
@@ -45,7 +57,7 @@ if(STATICLIB_SWITCH)
 	#set_property(TARGET ${PROJECT_NAME}_static PROPERTY CXX_STANDARD 17)
 else()
 	message(STATUS "linking dynamic")
-	add_library(${PROJECT_NAME} SHARED ${sources})
+	add_library(${PROJECT_NAME} SHARED ${sources} $<TARGET_OBJECTS:${PROJECT_NAME}_parser>)
 	set_target_properties( ${PROJECT_NAME} PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"

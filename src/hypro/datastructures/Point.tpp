@@ -234,7 +234,7 @@ void Point<Number>::reduceDimension( unsigned _dimension ) {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) const {
+Point<Number> Point<Number>::reduceToDimensions( std::vector<std::size_t> _dimensions ) const {
 	TRACE("hypro.datastructures.point","*this: " << *this);
 	if(_dimensions.size() == 0) {
 		return Point<Number>();

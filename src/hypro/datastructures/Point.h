@@ -226,7 +226,7 @@ class Point {
 	 * @param[in]  _dimensions  The dimensions.
 	 * @return     The resulting point.
 	 */
-	Point<Number> reduceToDimensions( std::vector<unsigned> _dimensions ) const;
+	Point<Number> reduceToDimensions( std::vector<std::size_t> _dimensions ) const;
 
 	/**
 	 * @brief      Returns the variables (ordered), which are assigned to the space dimensions.

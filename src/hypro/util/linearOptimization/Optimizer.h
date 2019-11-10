@@ -105,7 +105,7 @@ namespace hypro {
 #endif
 		}
 
-		Optimizer(Optimizer<Number>&& orig) = default;
+		Optimizer(Optimizer<Number>&& orig);
 		Optimizer(const Optimizer<Number>& orig);
 
 		/**
