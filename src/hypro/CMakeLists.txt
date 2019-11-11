@@ -101,7 +101,7 @@ else()
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 		INTERFACE
-		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/antlr_build/include/antlr4-runtime>
+		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
 	)
 	add_dependencies(${PROJECT_NAME} resources)
 	#set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
