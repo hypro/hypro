@@ -9,7 +9,7 @@
 #endif
 
 #include "util.h"
-#include "VPolytopeSettings.h"
+#include "VPolytopeSetting.h"
 #include "../Cone.h"
 #include "../../../algorithms/convexHull/ConvexHull.h"
 #include "../../../util/convexHull.h"

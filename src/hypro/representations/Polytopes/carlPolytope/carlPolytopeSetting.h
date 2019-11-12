@@ -2,7 +2,7 @@
 
 namespace hypro{
 
-struct CarlPolytopeSettings {
+struct CarlPolytopeSetting {
 };
 
 } // hypro

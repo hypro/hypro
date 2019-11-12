@@ -39,12 +39,12 @@ class Converter {
 
 		using GeneralizedStar = GeneralizedStarT<Number,Converter,GeneralizedStarDefault>;
 		using Box = BoxT<Number,Converter,BoxLinearOptimizationOn>;
-		using CarlPolytope = CarlPolytopeT<Number,Converter,CarlPolytopeSettings>;
+		using CarlPolytope = CarlPolytopeT<Number,Converter,CarlPolytopeSetting>;
 		using ConstraintSet = ConstraintSetT<Number,ConstraintSetSettings>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
 		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
 		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter,BoxLinearOptimizationOn>;
-		using VPolytope = VPolytopeT<Number,Converter,VPolytopeSettings>;
+		using VPolytope = VPolytopeT<Number,Converter,VPolytopeSetting>;
 		using DifferenceBounds = DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>;
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;

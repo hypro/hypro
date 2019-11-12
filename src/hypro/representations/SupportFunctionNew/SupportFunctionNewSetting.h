@@ -42,11 +42,11 @@ namespace hypro {
 	};
 
 	//Setting which is better for high dimensional tasks
-	struct SupportFunctionNewHighDimension {
-		static constexpr bool LIN_TRANS_REDUCTION = true;
-		static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
-		static constexpr bool APPROXIMATE_AS_BOX = true;
-		static constexpr bool DETECT_BOX = true;
-		static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = true;
-	};
+	//struct SupportFunctionNewHighDimension {
+	//	static constexpr bool LIN_TRANS_REDUCTION = true;
+	//	static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
+	//	static constexpr bool APPROXIMATE_AS_BOX = true;
+	//	static constexpr bool DETECT_BOX = true;
+	//	static constexpr bool LE_GUERNIC_HSPACE_INTERSECTION = true;
+	//};
 }

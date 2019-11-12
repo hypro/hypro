@@ -1,6 +1,6 @@
 #pragma once
 
-#include "carlPolytopeSettings.h"
+#include "carlPolytopeSetting.h"
 #include "util.h"
 #include "../../../datastructures/Halfspace.h"
 #include "../../../algorithms/quantifierElimination/qe.h"
