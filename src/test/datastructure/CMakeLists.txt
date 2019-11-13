@@ -27,7 +27,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runDatastructureTests
-							${PROJECT_NAME}
+							${PROJECT_NAME}-shared
 							${GTEST_LIBRARIES}
 							)
 

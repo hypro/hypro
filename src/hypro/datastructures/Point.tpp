@@ -176,7 +176,7 @@ const vector_t<Number> &Point<Number>::rawCoordinates() const {
 template <typename Number>
 void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_value ) {
 	std::size_t dim = hypro::VariablePool::getInstance().id( _dim );
-	if ( dim >= mCoordinates.rows() ) {
+	if ( dim >= std::size_t(mCoordinates.rows()) ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates.resize( dim + 1 );
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
@@ -187,7 +187,7 @@ void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_va
 
 template <typename Number>
 void Point<Number>::setCoordinate( std::size_t dimension, const Number& _value ) {
-	if ( Eigen::Index(dimension) >= mCoordinates.rows() ) {
+	if ( dimension >= std::size_t(mCoordinates.rows()) ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates.resize( dimension + 1 );
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;

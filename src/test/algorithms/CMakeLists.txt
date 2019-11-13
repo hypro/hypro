@@ -21,7 +21,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR})
 
     target_link_libraries(runAlgorithmTests
-			${PROJECT_NAME}
+			${PROJECT_NAME}-shared
 			${GTEST_LIBRARIES}
 			)
 
