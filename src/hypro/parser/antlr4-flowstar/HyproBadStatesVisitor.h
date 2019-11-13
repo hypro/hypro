@@ -10,8 +10,8 @@
 #pragma once
 
 #include "HybridAutomatonBaseVisitor.h"
-#include "datastructures/HybridAutomaton/Location.h" 	//For locPtrComp
-#include "datastructures/HybridAutomaton/Condition.h" 	//For Condition class
+#include "../../datastructures/HybridAutomaton/Location.h" 	//For locPtrComp
+#include "../../datastructures/HybridAutomaton/Condition.h" //For Condition class
 
 namespace hypro {
 

@@ -425,7 +425,7 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
 
 	//Using only support functions that use the LeGuernic hspace intersection method
-	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>;
+	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewLeGuernic>;
 
 	//THIS WORKS	
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
@@ -436,7 +436,7 @@ TYPED_TEST(SupportFunctionNewTest, IntersectHalfspaceOp){
 	EXPECT_EQ(sfInterHalfspace.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfInterHalfspace.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_EQ(sfInterHalfspace.getRoot().use_count(), long(1));
-	EXPECT_EQ((dynamic_cast<IntersectHalfspaceOp<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>*>(sfInterHalfspace.getRoot().get())->getHalfspace()), hspace);
+	EXPECT_EQ((dynamic_cast<IntersectHalfspaceOp<TypeParam,Converter<TypeParam>,SupportFunctionNewLeGuernic>*>(sfInterHalfspace.getRoot().get())->getHalfspace()), hspace);
 	
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
@@ -1343,7 +1343,7 @@ TYPED_TEST(SupportFunctionNewTest, Reduction){
 TYPED_TEST(SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp){
 	
 	//Using only support functions that use the LeGuernic hspace intersection method
-	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>;
+	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewLeGuernic>;
 
 	//Create sf: First {(0,0),(2,2)} then {(0,0),(1,2)} via intersectHalfspace then {(1,1),(3,5)} via affineTransformation
 	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
@@ -1369,12 +1369,12 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp){
  * A temporary test that counts the evaluation calls if le guernic hspace intersection is used on multiple 
  * NOTE: This test can only be used if the HYPRO_STATISTICS option has been enabled
  */
-
+/*
 #ifdef HYPRO_STATISTICS
 TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 
 	//Using only support functions that use the LeGuernic hspace intersection method
-	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewHighDimension>;
+	using SF = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewLeGuernic>;
 
 	Point<TypeParam> p1 {TypeParam(0), TypeParam(0)};
 	Point<TypeParam> p2 {TypeParam(2), TypeParam(2)};
@@ -1420,3 +1420,4 @@ TYPED_TEST(SupportFunctionNewTest, EvaluationCount){
 	RESET_STATS();
 }
 #endif
+*/

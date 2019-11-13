@@ -1,6 +1,6 @@
 #pragma once
 
-#include "flags.h"
+#include "../../flags.h"
 
 //#ifdef HYPRO_STATISTICS
 #ifndef INCL_FROM_STATISTICS
@@ -10,7 +10,7 @@
 #define INCL_FROM_CTR_REPO
 
 #include "OperationCounter.h"
-#include "util/multithreading/ScopedLock.h"
+#include "../multithreading/ScopedLock.h"
 #include <mutex>
 #include <string>
 #include <map>

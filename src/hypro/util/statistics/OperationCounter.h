@@ -1,6 +1,6 @@
 #pragma once
 
-#include "flags.h"
+#include "../../flags.h"
 
 #ifdef HYPRO_STATISTICS
 #ifndef INCL_FROM_CTR_REPO
@@ -8,7 +8,7 @@
 #endif
 
 
-#include "util/multithreading/ScopedLock.h"
+#include "../multithreading/ScopedLock.h"
 #include <mutex>
 
 namespace hypro {
