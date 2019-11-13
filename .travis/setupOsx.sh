@@ -8,11 +8,6 @@ function keep_waiting() {
   done
 }
 
-keep_waiting() & brew update --quiet
-brew update cmake
-brew install llvm
-kill $!
-
 if [[ ${COMPILER} == "g++-4.8" ]]; then
 	echo "g++-4.8 is not supported"
 elif [[ ${COMPILER} == "g++-5" ]]; then
