@@ -1,8 +1,8 @@
 #pragma once
 
-namespace hypro{
+namespace hypro {
 
 struct CarlPolytopeSetting {
 };
 
-} // hypro
+}  // namespace hypro

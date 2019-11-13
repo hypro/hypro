@@ -2,15 +2,14 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
 #endif
 
-#include "GeneralizedStarSetting.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "GeneralizedStarSetting.h"
 
 namespace hypro {
-
 
 /**
  * @brief      The class which represents a GeneralizedStar.
@@ -20,13 +19,13 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,Converter,Setting>> {
+class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number, Converter, Setting>> {
   private:
 	vector_t<Number> mCenter;
 	matrix_t<Number> mBasis;
+
   public:
   protected:
-
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
@@ -51,9 +50,8 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @brief      Settings conversion constructor.
 	 * @param[in]  orig  The original.
 	 */
-	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	GeneralizedStarT(const GeneralizedStarT<Number,Converter,SettingRhs>& orig) {
-
+	template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
+	GeneralizedStarT( const GeneralizedStarT<Number, Converter, SettingRhs>& orig ) {
 	}
 
 	/**
@@ -73,13 +71,13 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 
 	Setting getSettings() const { return Setting{}; }
 
-	 /**
+	/**
 	  * @brief Static method for the construction of an empty GeneralizedStar of required dimension.
 	  * @param dimension Required dimension.
 	  * @return Empty GeneralizedStar.
 	  */
-	static GeneralizedStarT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
-		return GeneralizedStarT<Number,Converter,Setting>();
+	static GeneralizedStarT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
+		return GeneralizedStarT<Number, Converter, Setting>();
 	}
 
 	/**
@@ -98,7 +96,7 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @brief Getter for a vertex-representation of the current GeneralizedStar.
 	 * @return A vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 
 	/**
 	 * @brief      Evaluation function (convex linear optimization).
@@ -120,8 +118,8 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @param b2 Contains the second GeneralizedStar.
 	 * @return True, if they are equal.
 	 */
-	template<class SettingRhs>
-	friend bool operator==( const GeneralizedStarT<Number,Converter,Setting>& b1, const GeneralizedStarT<Number,Converter,SettingRhs>& b2 ) {
+	template <class SettingRhs>
+	friend bool operator==( const GeneralizedStarT<Number, Converter, Setting>& b1, const GeneralizedStarT<Number, Converter, SettingRhs>& b2 ) {
 		return false;
 	}
 
@@ -131,19 +129,19 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @param b2 A GeneralizedStar.
 	 * @return False, if both GeneralizedStares are equal.
 	 */
-	friend bool operator!=( const GeneralizedStarT<Number,Converter,Setting>& b1, const GeneralizedStarT<Number,Converter,Setting>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const GeneralizedStarT<Number, Converter, Setting>& b1, const GeneralizedStarT<Number, Converter, Setting>& b2 ) { return !( b1 == b2 ); }
 
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A GeneralizedStar.
 	 */
-	GeneralizedStarT<Number,Converter,Setting>& operator=( const GeneralizedStarT<Number,Converter,Setting>& rhs ) = default;
+	GeneralizedStarT<Number, Converter, Setting>& operator=( const GeneralizedStarT<Number, Converter, Setting>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A GeneralizedStar.
 	 */
-	GeneralizedStarT<Number,Converter,Setting>& operator=(GeneralizedStarT<Number,Converter,Setting>&& rhs) = default;
+	GeneralizedStarT<Number, Converter, Setting>& operator=( GeneralizedStarT<Number, Converter, Setting>&& rhs ) = default;
 
 	/**
 	 * @brief Outstream operator.
@@ -151,10 +149,10 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @param b A GeneralizedStar.
 	 */
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const GeneralizedStarT<Number,Converter,Setting>& b ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const GeneralizedStarT<Number, Converter, Setting>& b ) {
 		// Put outstream operations here.
 #else
-	friend std::ostream& operator<<( std::ostream& ostr, const GeneralizedStarT<Number,Converter,Setting>& ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const GeneralizedStarT<Number, Converter, Setting>& ) {
 #endif
 		return ostr;
 	}
@@ -163,7 +161,7 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * General interface
 	 **************************************************************************/
 
-	 /**
+	/**
 	  * @brief      Getter for the space dimension.
 	  * @return     The dimension of the space.
 	  */
@@ -186,25 +184,24 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @brief      Function to reduce the number representation (over-approximate).
 	 * @param[in]  limit      The limit
 	 */
-	const GeneralizedStarT<Number,Converter,Setting>& reduceNumberRepresentation();
-
+	const GeneralizedStarT<Number, Converter, Setting>& reduceNumberRepresentation();
 
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	GeneralizedStarT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
-	GeneralizedStarT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
-	GeneralizedStarT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	GeneralizedStarT<Number,Converter,Setting> minkowskiSum( const GeneralizedStarT<Number,Converter,Setting>& rhs ) const;
+	GeneralizedStarT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	GeneralizedStarT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
+	GeneralizedStarT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	GeneralizedStarT<Number, Converter, Setting> minkowskiSum( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two GeneralizedStares.
 	 * @param[in]  rhs   The right hand side GeneralizedStar.
 	 * @return     The resulting GeneralizedStar.
 	 */
-	GeneralizedStarT<Number,Converter,Setting> intersect( const GeneralizedStarT<Number,Converter,Setting>& rhs ) const;
+	GeneralizedStarT<Number, Converter, Setting> intersect( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;
 
-	GeneralizedStarT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
-	GeneralizedStarT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	GeneralizedStarT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
+	GeneralizedStarT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -212,21 +209,21 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @param[in]  GeneralizedStar   The GeneralizedStar.
 	 * @return     True, if the given GeneralizedStar is contained in the current GeneralizedStar, false otherwise.
 	 */
-	bool contains( const GeneralizedStarT<Number,Converter,Setting>& GeneralizedStar ) const;
+	bool contains( const GeneralizedStarT<Number, Converter, Setting>& GeneralizedStar ) const;
 
 	/**
 	 * @brief      Computes the union of two GeneralizedStares.
 	 * @param[in]  rhs   The right hand side GeneralizedStar.
 	 * @return     The resulting GeneralizedStar.
 	 */
-	GeneralizedStarT<Number,Converter,Setting> unite( const GeneralizedStarT<Number,Converter,Setting>& rhs ) const;
+	GeneralizedStarT<Number, Converter, Setting> unite( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current GeneralizedStar with a set of GeneralizedStares.
 	 * @param[in]  GeneralizedStares  The GeneralizedStares.
 	 * @return     The resulting GeneralizedStar.
 	 */
-	static GeneralizedStarT<Number,Converter,Setting> unite( const std::vector<GeneralizedStarT<Number,Converter,Setting>>& GeneralizedStares );
+	static GeneralizedStarT<Number, Converter, Setting> unite( const std::vector<GeneralizedStarT<Number, Converter, Setting>>& GeneralizedStares );
 
 	/**
 	 * @brief      Reduces the representation of the current GeneralizedStar.
@@ -237,11 +234,9 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @brief      Makes this GeneralizedStar equal to the empty GeneralizedStar.
 	 */
 	void clear();
-
 };
 /** @} */
 
-
-} // namespace hypro
+}  // namespace hypro
 
 #include "GeneralizedStar.tpp"

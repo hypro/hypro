@@ -1,21 +1,33 @@
 #pragma once
 #include <boost/variant.hpp>
 #include <iostream>
-#include <string>
 #include <map>
+#include <string>
 
 namespace hypro {
 
 /**
  * @brief      Enum encapsulating all provided state set representations to be able to determine a type.
  */
-enum representation_name { box=0, carl_polytope, constraint_set, polytope_h, polytope_v, ppl_polytope, support_function, taylor_model, zonotope, difference_bounds, SFN, UNDEF, genStar};
+enum representation_name { box = 0,
+						   carl_polytope,
+						   constraint_set,
+						   polytope_h,
+						   polytope_v,
+						   ppl_polytope,
+						   support_function,
+						   taylor_model,
+						   zonotope,
+						   difference_bounds,
+						   SFN,
+						   UNDEF,
+						   genStar };
 
-} // namespace hypro
+}  // namespace hypro
 
 namespace std {
 
-	/*
+/*
 	ostream& operator<<(std::ostream& out, hypro::representation_name in) {
 		switch(in){
 			case(hypro::representation_name::box): { return out << "box"; }
@@ -33,4 +45,4 @@ namespace std {
 	}
 	*/
 
-} // namespace std
+}  // namespace std

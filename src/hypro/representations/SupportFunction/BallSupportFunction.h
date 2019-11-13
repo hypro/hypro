@@ -11,9 +11,9 @@
 
 #pragma once
 
-#include "util.h"
 #include "../../config.h"
 #include "../../datastructures/Point.h"
+#include "util.h"
 
 namespace hypro {
 template <typename Number>
@@ -37,7 +37,7 @@ class BallSupportFunction {
 	Number radius() const;
 	SF_TYPE type() const;
 
-	void setDimension(unsigned dim) { mDimension = dim; }
+	void setDimension( unsigned dim ) { mDimension = dim; }
 
 	Point<Number> supremumPoint() const;
 
@@ -79,5 +79,5 @@ class BallSupportFunction {
 
 	bool empty() const;
 };
-}  // namespace
+}  // namespace hypro
 #include "BallSupportFunction.tpp"

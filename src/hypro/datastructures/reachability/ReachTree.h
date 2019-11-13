@@ -8,26 +8,25 @@
 #pragma once
 #include "ReachTreeNode.h"
 #include "TreeStatistic.h"
+
 #include <string>
 
-namespace hypro
-{
-template<typename State>
-class ReachTree
-{
+namespace hypro {
+template <typename State>
+class ReachTree {
   private:
-    ReachTreeNode<State>* mRoot;
+	ReachTreeNode<State>* mRoot;
 
   public:
-    ReachTree(ReachTreeNode<State>* _root);
+	ReachTree( ReachTreeNode<State>* _root );
 
-    ~ReachTree(){
-    	delete mRoot;
-    }
+	~ReachTree() {
+		delete mRoot;
+	}
 
-    ReachTreeNode<State>* getRoot() const;
+	ReachTreeNode<State>* getRoot() const;
 
-    std::size_t getDepth() const;
+	std::size_t getDepth() const;
 
 	std::size_t getNumberNodes() const;
 
@@ -35,10 +34,10 @@ class ReachTree
 
 	std::vector<std::size_t> getLevelCnt() const;
 
-    std::string getDotRepresentation() const;
+	std::string getDotRepresentation() const;
 
-    TreeStatistic getTreeStats() const;
+	TreeStatistic getTreeStats() const;
 };
-} // hypro
+}  // namespace hypro
 
 #include "ReachTree.tpp"

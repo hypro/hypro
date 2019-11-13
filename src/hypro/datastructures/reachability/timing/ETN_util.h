@@ -3,4 +3,4 @@
 
 namespace hypro {
 
-} // namespace hypro
+}  // namespace hypro

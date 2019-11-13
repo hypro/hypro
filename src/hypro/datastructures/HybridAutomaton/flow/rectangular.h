@@ -1,98 +1,101 @@
 #pragma once
-#include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
+#include <carl/interval/Interval.h>
 #include <iostream>
 #include <map>
-#include <iostream>
 
 namespace hypro {
 
-template<typename Number>
+template <typename Number>
 class rectangularFlow {
-private:
-    std::map<carl::Variable, carl::Interval<Number>> mFlowIntervals;
-public:
-    rectangularFlow() = default;
-    rectangularFlow(const rectangularFlow<Number>& in) = default;
-    explicit rectangularFlow(const std::map<carl::Variable, carl::Interval<Number>>& intervals) : mFlowIntervals(intervals) {}
-    virtual ~rectangularFlow() {}
+  private:
+	std::map<carl::Variable, carl::Interval<Number>> mFlowIntervals;
 
-    static DynamicType type() { return DynamicType::rectangular; }
+  public:
+	rectangularFlow() = default;
+	rectangularFlow( const rectangularFlow<Number>& in ) = default;
+	explicit rectangularFlow( const std::map<carl::Variable, carl::Interval<Number>>& intervals )
+		: mFlowIntervals( intervals ) {}
+	virtual ~rectangularFlow() {}
 
-    void setFlowIntervals(const std::map<carl::Variable, carl::Interval<Number>>& in ) { mFlowIntervals = in; }
-    void setFlowIntervalForDimension(const carl::Interval<Number>& intv, carl::Variable dim) {
-        mFlowIntervals[dim] = intv;
-    }
+	static DynamicType type() { return DynamicType::rectangular; }
 
-    const std::map<carl::Variable, carl::Interval<Number>>& getFlowIntervals() const { return mFlowIntervals; }
-    const carl::Interval<Number>& getFlowIntervalForDimension(carl::Variable dim) const { assert(mFlowIntervals.find(dim) != mFlowIntervals.end()); return mFlowIntervals.at(dim); }
+	void setFlowIntervals( const std::map<carl::Variable, carl::Interval<Number>>& in ) { mFlowIntervals = in; }
+	void setFlowIntervalForDimension( const carl::Interval<Number>& intv, carl::Variable dim ) {
+		mFlowIntervals[dim] = intv;
+	}
 
-    std::size_t dimension() const { return mFlowIntervals.size(); }
-    std::size_t size() const { return mFlowIntervals.size(); }
-    bool empty() const { return mFlowIntervals.empty(); }
+	const std::map<carl::Variable, carl::Interval<Number>>& getFlowIntervals() const { return mFlowIntervals; }
+	const carl::Interval<Number>& getFlowIntervalForDimension( carl::Variable dim ) const {
+		assert( mFlowIntervals.find( dim ) != mFlowIntervals.end() );
+		return mFlowIntervals.at( dim );
+	}
 
-    bool isTimed() const {
-        for(const auto& keyVal : mFlowIntervals) {
-            if(keyVal.second != carl::Interval<Number>(1)) {
-                return false;
-            }
-        }
-        return true;
-    }
+	std::size_t dimension() const { return mFlowIntervals.size(); }
+	std::size_t size() const { return mFlowIntervals.size(); }
+	bool empty() const { return mFlowIntervals.empty(); }
 
-    bool isDiscrete() const {
-        for(const auto& keyVal : mFlowIntervals) {
-            if(keyVal.second != carl::Interval<Number>(0)) {
-                return false;
-            }
-        }
-        return true;
-    }
+	bool isTimed() const {
+		for ( const auto& keyVal : mFlowIntervals ) {
+			if ( keyVal.second != carl::Interval<Number>( 1 ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    friend bool operator==(const rectangularFlow<Number>& lhs, const rectangularFlow<Number>& rhs) {
-        if(lhs.getFlowIntervals().size() != rhs.getFlowIntervals().size()) {
-            return false;
-        }
+	bool isDiscrete() const {
+		for ( const auto& keyVal : mFlowIntervals ) {
+			if ( keyVal.second != carl::Interval<Number>( 0 ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-        for(const auto keyVal : lhs.getFlowIntervals()) {
-            if(rhs.getFlowIntervals().find(keyVal.first) == rhs.getFlowIntervals().end()) {
-                return false;
-            } else {
-                if(keyVal.second != rhs.getFlowIntervalForDimension(keyVal.first)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+	friend bool operator==( const rectangularFlow<Number>& lhs, const rectangularFlow<Number>& rhs ) {
+		if ( lhs.getFlowIntervals().size() != rhs.getFlowIntervals().size() ) {
+			return false;
+		}
 
-    friend bool operator!=(const rectangularFlow<Number>& lhs, const rectangularFlow<Number>& rhs) {
-        return !(lhs == rhs);
-    }
+		for ( const auto keyVal : lhs.getFlowIntervals() ) {
+			if ( rhs.getFlowIntervals().find( keyVal.first ) == rhs.getFlowIntervals().end() ) {
+				return false;
+			} else {
+				if ( keyVal.second != rhs.getFlowIntervalForDimension( keyVal.first ) ) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-    friend std::ostream& operator<<(std::ostream& out, const rectangularFlow<Number>& in) {
-        for(const auto& i : in.getFlowIntervals()) {
-            out << i.first << ": " << i.second << ", ";
-        }
-        return out;
-    }
+	friend bool operator!=( const rectangularFlow<Number>& lhs, const rectangularFlow<Number>& rhs ) {
+		return !( lhs == rhs );
+	}
+
+	friend std::ostream& operator<<( std::ostream& out, const rectangularFlow<Number>& in ) {
+		for ( const auto& i : in.getFlowIntervals() ) {
+			out << i.first << ": " << i.second << ", ";
+		}
+		return out;
+	}
 };
 
-} // hypro
+}  // namespace hypro
 
 namespace std {
 
-    template<typename Number>
-    struct hash<hypro::rectangularFlow<Number>> {
-        std::size_t operator()(const hypro::rectangularFlow<Number>& f) const
-        {
-            std::size_t seed = 0;
-            for(const auto& i : f.getFlowIntervals()) {
-                carl::hash_add(seed, std::hash<carl::Variable>()(i.first));
-                carl::hash_add(seed, std::hash<carl::Interval<Number>>()(i.second));
-            }
-            return seed;
-        }
-    };
+template <typename Number>
+struct hash<hypro::rectangularFlow<Number>> {
+	std::size_t operator()( const hypro::rectangularFlow<Number>& f ) const {
+		std::size_t seed = 0;
+		for ( const auto& i : f.getFlowIntervals() ) {
+			carl::hash_add( seed, std::hash<carl::Variable>()( i.first ) );
+			carl::hash_add( seed, std::hash<carl::Interval<Number>>()( i.second ) );
+		}
+		return seed;
+	}
+};
 
 }  // namespace std

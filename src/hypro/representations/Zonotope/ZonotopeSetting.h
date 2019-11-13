@@ -8,8 +8,8 @@ namespace hypro {
 		int testCase;
 	};
 */
-	//Zonotope.h
-	struct ZonotopeSetting {
-		static constexpr unsigned ZONOTOPE_ORDERLIMIT = 4;	
-	};
-}
+//Zonotope.h
+struct ZonotopeSetting {
+	static constexpr unsigned ZONOTOPE_ORDERLIMIT = 4;
+};
+}  // namespace hypro

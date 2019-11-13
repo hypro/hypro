@@ -327,7 +327,8 @@ ContinuousSystem<Number> &ContinuousSystem<Number>::operator=( const ContinuousS
 template <typename Number>
 void ContinuousSystem<Number>::output( std::ostream &os, const exponent order ) {
 	os << "System Dynamics:" << std::endl;
-	os << ode << std::endl << std::endl;
+	os << ode << std::endl
+	   << std::endl;
 
 	os << "Initial Set:" << std::endl;
 	initialSet.output( os, order );
@@ -372,4 +373,4 @@ void output_2D_interval_gnuplot( std::list<Flowpipe<Number>> &flowpipes, std::of
 	os << "e" << std::endl;
 }
 
-}  // namespace
+}  // namespace hypro

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Cone.h"
 #include "../../datastructures/Point.h"
 #include "../../util/linearOptimization/Optimizer.h"
+#include "Cone.h"
+
 #include <carl/formula/Constraint.h>
 #include <cassert>
 
@@ -23,11 +24,15 @@ class Fan {
 	unsigned mDimension;
 
   public:
-	Fan() : mCones(), mDimension() {}
+	Fan()
+		: mCones()
+		, mDimension() {}
 
 	~Fan() { mCones.clear(); }
 
-	Fan( const Fan& _orig ) : mCones( _orig.get() ), mDimension( _orig.dimension() ) {}
+	Fan( const Fan& _orig )
+		: mCones( _orig.get() )
+		, mDimension( _orig.dimension() ) {}
 
 	/*
 	 * Getters & setters
@@ -64,11 +69,11 @@ class Fan {
 		unsigned numPlanes = vectors.size();
 		//unsigned elements = this->mDimension * numPlanes;
 
-		matrix_t<Number> constraints = matrix_t<Number>::Zero(this->mDimension,numPlanes);
+		matrix_t<Number> constraints = matrix_t<Number>::Zero( this->mDimension, numPlanes );
 
 		for ( unsigned i = 1; i <= this->mDimension; ++i ) {
 			for ( unsigned j = 1; j <= numPlanes; ++j ) {
-				constraints(i,j) = vectors.at( j ).at( i );
+				constraints( i, j ) = vectors.at( j ).at( i );
 			}
 		}
 

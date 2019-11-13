@@ -5,25 +5,25 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
 #endif
 
-#include "util.h"
-#include "VPolytopeSetting.h"
-#include "../Cone.h"
 #include "../../../algorithms/convexHull/ConvexHull.h"
+#include "../../../datastructures/Facet.h"
+#include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
-#include "../../../util/Permutator.h"
 #include "../../../util/pca.h"
 #include "../../../util/statistics/statistics.h"
-#include "../../../datastructures/Facet.h"
-#include <set>
+#include "../Cone.h"
+#include "VPolytopeSetting.h"
+#include "util.h"
+
 #include <cassert>
+#include <set>
 #include <vector>
 
 namespace hypro {
-
 
 /**
  * @brief      The class implementing the vertex representation of a convex polytope.
@@ -32,9 +32,8 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename S>
-class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>> {
+class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, S>> {
   public:
-
 	using pointVector = std::vector<Point<Number>>;
 	typedef S Settings;
 
@@ -105,8 +104,14 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	* General interface
 	**************************************************************************/
 
-	matrix_t<Number> matrix() const { assert(false && "NOT IMPLEMENTED YET"); return matrix_t<Number>::Zero(1,1); }
-	vector_t<Number> vector() const { assert(false && "NOT IMPLEMENTED YET"); return vector_t<Number>::Zero(1); }
+	matrix_t<Number> matrix() const {
+		assert( false && "NOT IMPLEMENTED YET" );
+		return matrix_t<Number>::Zero( 1, 1 );
+	}
+	vector_t<Number> vector() const {
+		assert( false && "NOT IMPLEMENTED YET" );
+		return vector_t<Number>::Zero( 1 );
+	}
 
 	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
@@ -152,15 +157,18 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	/**
 	 * @brief      Reduces the box - only in case rational types are used, the number representation is optimized.
 	 */
-	void reduceRepresentation() { reduceNumberRepresentation(); removeRedundancy(); }
+	void reduceRepresentation() {
+		reduceNumberRepresentation();
+		removeRedundancy();
+	}
 
 	/**
 	 * @brief      Clears the polytope.
 	 */
 	void clear();
 
-	EvaluationResult<Number> evaluate(const vector_t<Number>& direction) const;
-	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& direction ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& directions, bool useExact = true ) const;
 
 	/***************************************************************************
 	 * Getters, Setters, Iterators
@@ -264,7 +272,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	Point<Number>& emplace_back( Point<Number>&& i ) {
 		assert( dimension() == 0 || dimension() == i.dimension() );
 		mReduced = false;
-		mVertices.emplace_back( std::move(i) );
+		mVertices.emplace_back( std::move( i ) );
 		mNeighbors.push_back( std::set<unsigned>() );
 		return mVertices.back();
 	}
@@ -284,7 +292,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 		return mVertices.insert( mVertices.end(), begin, end );
 	}
 
-	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const { return mVertices; };
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const { return mVertices; };
 
 	bool hasVertex( const Point<Number>& vertex ) const {
 		for ( const auto point : mVertices ) {
@@ -302,44 +310,44 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 
 	void removeRedundancy();
 
-	template<typename N = Number, carl::DisableIf< carl::is_float<N> > = carl::dummy>
-	void reduceNumberRepresentation(std::size_t limit = fReach_DENOMINATOR) const {
-		if(!mVertices.empty()) {
-	 		// determine barycenter to set rounding directions
-			std::size_t dimension = std::size_t(mVertices.begin()->rawCoordinates().rows());
-			vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
-			for(const auto& vertex : mVertices) {
-				barycenter = barycenter + (vertex.rawCoordinates()/ Number(mVertices.size()));
+	template <typename N = Number, carl::DisableIf<carl::is_float<N>> = carl::dummy>
+	void reduceNumberRepresentation( std::size_t limit = fReach_DENOMINATOR ) const {
+		if ( !mVertices.empty() ) {
+			// determine barycenter to set rounding directions
+			std::size_t dimension = std::size_t( mVertices.begin()->rawCoordinates().rows() );
+			vector_t<Number> barycenter = vector_t<Number>::Zero( dimension );
+			for ( const auto& vertex : mVertices ) {
+				barycenter = barycenter + ( vertex.rawCoordinates() / Number( mVertices.size() ) );
 			}
-			for(auto& vertex : mVertices) {
+			for ( auto& vertex : mVertices ) {
 				// distance vector to the barycenter - each component now determines its own rounding direction.
 				vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
-				for(std::size_t d = 0; d < dimension; ++d) {
-					assert(d < vertex.dimension());
+				for ( std::size_t d = 0; d < dimension; ++d ) {
+					assert( d < vertex.dimension() );
 					// determine, which is larger: numerator or denominator
-					Number denom = carl::getDenom(vertex.at(d));
-					Number num = carl::getNum(vertex.at(d));
-					if(denom > limit && carl::abs(num) > limit) {
-						if(denom > num) {
-							Number newNum = num/denom*limit;
-							if(roundingDirections(d) >= 0 ) { // round up
-								newNum = carl::ceil(newNum);
-								assert(newNum/limit >= vertex.at(d));
-							} else { // round down
-								newNum = carl::floor(newNum);
-								assert(newNum/limit <= vertex.at(d));
+					Number denom = carl::getDenom( vertex.at( d ) );
+					Number num = carl::getNum( vertex.at( d ) );
+					if ( denom > limit && carl::abs( num ) > limit ) {
+						if ( denom > num ) {
+							Number newNum = num / denom * limit;
+							if ( roundingDirections( d ) >= 0 ) {  // round up
+								newNum = carl::ceil( newNum );
+								assert( newNum / limit >= vertex.at( d ) );
+							} else {  // round down
+								newNum = carl::floor( newNum );
+								assert( newNum / limit <= vertex.at( d ) );
 							}
-							vertex[d] = newNum/limit;
-						} else { // num >= denom
-							Number newDenom = denom/num*limit;
-							if(roundingDirections(d) >= 0 ) { // round up
-								newDenom = carl::floor(newDenom);
-								assert(limit/newDenom >= vertex.at(d));
-							} else { // round down
-								newDenom = carl::ceil(newDenom);
-								assert(limit/newDenom <= vertex.at(d));
+							vertex[d] = newNum / limit;
+						} else {  // num >= denom
+							Number newDenom = denom / num * limit;
+							if ( roundingDirections( d ) >= 0 ) {  // round up
+								newDenom = carl::floor( newDenom );
+								assert( limit / newDenom >= vertex.at( d ) );
+							} else {  // round down
+								newDenom = carl::ceil( newDenom );
+								assert( limit / newDenom <= vertex.at( d ) );
 							}
-							vertex[d] = limit/newDenom;
+							vertex[d] = limit / newDenom;
 						}
 					}
 				}
@@ -347,8 +355,8 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 		}
 	}
 
-	template<typename N = Number, carl::EnableIf< carl::is_float<N> > = carl::dummy>
-	void reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) const {}
+	template <typename N = Number, carl::EnableIf<carl::is_float<N>> = carl::dummy>
+	void reduceNumberRepresentation( unsigned = fReach_DENOMINATOR ) const {}
 
 	void updateNeighbors();
 
@@ -356,25 +364,25 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	/***************************************************************************
 	 * Auxiliary functions
 	 **************************************************************************/
-	static bool belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
-	static bool abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets);
+	static bool belowPlanes( const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets );
+	static bool abovePlanes( const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets );
 
-	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
-	static bool insidePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
-		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
-			if( vertex.dot(normals.row(rowIndex)) != offsets(rowIndex) ){
+	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
+	static bool insidePlanes( const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets ) {
+		for ( unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex ) {
+			if ( vertex.dot( normals.row( rowIndex ) ) != offsets( rowIndex ) ) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
-	static bool insidePlanes(const vector_t<double>& vertex, const matrix_t<double>& normals, const vector_t<double>& offsets) {
-		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
+	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
+	static bool insidePlanes( const vector_t<double>& vertex, const matrix_t<double>& normals, const vector_t<double>& offsets ) {
+		for ( unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex ) {
 			// compare with tolerance of 128 ULPs.
-			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), default_double_comparison_ulps) ){
-				DEBUG("hypro.representations.vpolytope","Values " << vertex.dot(normals.row(rowIndex)) << " and " << offsets(rowIndex) << " are not equal.");
+			if ( !carl::AlmostEqual2sComplement( vertex.dot( normals.row( rowIndex ) ), offsets( rowIndex ), default_double_comparison_ulps ) ) {
+				DEBUG( "hypro.representations.vpolytope", "Values " << vertex.dot( normals.row( rowIndex ) ) << " and " << offsets( rowIndex ) << " are not equal." );
 				return false;
 			}
 		}
@@ -401,20 +409,20 @@ std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Con
 	}
 	out << "}";
 #else
-std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter, S>& ) {	
+std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter, S>& ) {
 #endif
 	return out;
 }
 
-template<typename From, typename To, typename Converter, typename S>
-VPolytopeT<To,Converter,S> convert(const VPolytopeT<From,Converter,S>& in) {
+template <typename From, typename To, typename Converter, typename S>
+VPolytopeT<To, Converter, S> convert( const VPolytopeT<From, Converter, S>& in ) {
 	std::vector<Point<To>> convertedVertices;
-	for(const auto& vertex : in.vertices()) {
-		convertedVertices.push_back(Point<To>(convert<From,To>(vertex.rawCoordinates())));
+	for ( const auto& vertex : in.vertices() ) {
+		convertedVertices.push_back( Point<To>( convert<From, To>( vertex.rawCoordinates() ) ) );
 	}
-	return VPolytopeT<To,Converter,S>(convertedVertices);
+	return VPolytopeT<To, Converter, S>( convertedVertices );
 }
 
-}  // namespace
+}  // namespace hypro
 
 #include "VPolytope.tpp"

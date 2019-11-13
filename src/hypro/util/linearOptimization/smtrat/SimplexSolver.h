@@ -4,12 +4,11 @@
 #pragma once
 #include "../../../flags.h"
 #ifdef HYPRO_USE_SMTRAT
-#include <smtrat-solver/Manager.h>
 #include <smtrat-modules/LRAModule/LRAModule.h>
+#include <smtrat-solver/Manager.h>
 
-namespace smtrat
-{
-    /**
+namespace smtrat {
+/**
      * Simple strategy only using the LRA module of SMT-RAT
      *
      * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
@@ -17,19 +16,15 @@ namespace smtrat
      * @version		2015-12-08
      *
      */
-    class SimplexSolver:
-        public Manager
-    {
-        public:
-            SimplexSolver(): Manager() {
-				setStrategy({
-					addBackend<LRAModule<LRASettings2>>()
-				});
-			}
+class SimplexSolver : public Manager {
+  public:
+	SimplexSolver()
+		: Manager() {
+		setStrategy( {addBackend<LRAModule<LRASettings2>>()} );
+	}
+};
 
-    };
-
-} // namespace smtrat
+}  // namespace smtrat
 
 #include "convenience.h"
 #endif

@@ -12,15 +12,15 @@
 
 #pragma once
 #include "FirstSegment.h"
-#include "datastructures/reachability/Settings.h"
+#include "boost/tuple/tuple.hpp"
+#include "config.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
+#include "datastructures/reachability/Settings.h"
 #include "datastructures/reachability/workQueue/WorkQueue.h"
-#include "config.h"
-#include "util/plotting/Plotter.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
 #include "representations/GeometricObject.h"
-#include "boost/tuple/tuple.hpp"
+#include "util/plotting/Plotter.h"
 
 // Debug Flag, TODO: Add more debug levels.
 #define REACH_DEBUG
@@ -58,16 +58,16 @@ struct ReachQuiet : public ReachSettings {
  */
 template <typename Number, typename ReacherSettings, typename State>
 class Reach {
-public:
+  public:
 	using TaskType = std::pair<unsigned, State>;
 	using TaskTypePtr = std::unique_ptr<TaskType>;
 	using flowpipe_t = std::vector<State>;
 
-private:
+  private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
-    Number mBloatingFactor = 0;
+	Number mBloatingFactor = 0;
 	std::map<unsigned, std::vector<flowpipe_t>> mReachableStates;
 	WorkQueue<TaskTypePtr> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -75,14 +75,14 @@ private:
 
 	mutable bool mIntersectedBadStates;
 
-public:
+  public:
 	/**
 	 * @brief Constructor for a basic reachability analysis algorithm for linear hybrid automata.
 	 *
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
+	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings() );
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
@@ -105,7 +105,6 @@ public:
 	 * @return The id of the computed flowpipe.
 	 */
 	flowpipe_t computeForwardTimeClosure( const State& _state );
-
 
 	/**
 	 * @brief Returns whether the bad states were reachable so far.
@@ -134,16 +133,15 @@ public:
 	 */
 	bool intersectGuard( Transition<Number>* _trans, const State& _segment, State& result ) const;
 
-	bool checkTransitions(const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State>>& nextInitialSets) const;
+	bool checkTransitions( const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State>>& nextInitialSets ) const;
 
 	const ReachabilitySettings& settings() const { return mSettings; }
-	void setSettings(const ReachabilitySettings& settings) { mSettings = settings; }
+	void setSettings( const ReachabilitySettings& settings ) { mSettings = settings; }
 
 	representation_name getRepresentationType() const { return mType; }
-	void setRepresentationType(const representation_name& type) { mType = type; }
+	void setRepresentationType( const representation_name& type ) { mType = type; }
 
-private:
-
+  private:
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
 	//boost::tuple<bool, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State& _state ) const;
 	bool intersectBadStates( const State& _state ) const;

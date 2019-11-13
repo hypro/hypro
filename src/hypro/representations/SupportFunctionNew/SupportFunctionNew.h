@@ -16,23 +16,23 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
 #endif
 
-#include <memory>
-#include "SupportFunctionNewSetting.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/templateDirections.h"
 #include "../helperMethods/isBox.h"
-
 #include "RootGrowNode.h"
+#include "SupportFunctionNewSetting.h"
+
+#include <memory>
 
 namespace hypro {
 
 //Needed as a filler class to turn Parameters<> into Parameters<Dummy>
 struct Dummy {
-	friend std::ostream& operator<<(std::ostream& str, const Dummy& ){
+	friend std::ostream& operator<<( std::ostream& str, const Dummy& ) {
 		str << "Dummy struct!";
 		return str;
 	}
@@ -42,27 +42,27 @@ struct Dummy {
 //All parameters for a std::function must be placed inside a Parameters object.
 //Ensures that traversal() gets only one argument instead of 20 or 30!
 //If no parameter should be inside, please insert the dummy struct, as empty parameters are broken.
-template<typename ...Rargs>
+template <typename... Rargs>
 struct Parameters {
-	
-  public: 
-
+  public:
 	std::tuple<Rargs...> args;
 
-	Parameters(){}
-	Parameters(Rargs... r) : args(std::make_tuple(r...)) {}
-	Parameters(const std::tuple<Rargs...>& r) : args(r) { std::cout << "Param copy!" << std::endl; }
+	Parameters() {}
+	Parameters( Rargs... r )
+		: args( std::make_tuple( r... ) ) {}
+	Parameters( const std::tuple<Rargs...>& r )
+		: args( r ) { std::cout << "Param copy!" << std::endl; }
 	//~Parameters(){}
 
-	std::size_t size() const { 
+	std::size_t size() const {
 		return std::tuple_size<std::tuple<Rargs...>>::value;
 	}
 
-	friend std::ostream& operator<<(std::ostream& str, const Parameters<Rargs...>& param){
+	friend std::ostream& operator<<( std::ostream& str, const Parameters<Rargs...>& param ) {
 		str << "Param << operator, ";
-		if(param.size() > 0){
+		if ( param.size() > 0 ) {
 			str << "size is: " << param.size() << std::endl;
-			str << std::get<0>(param.args) << std::endl;
+			str << std::get<0>( param.args ) << std::endl;
 		} else {
 			str << "param.args is empty" << std::endl;
 		}
@@ -78,55 +78,50 @@ struct Parameters {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number,Converter,Setting>> {
-
+class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number, Converter, Setting>> {
 	/***************************************************************************
 	 * Friends, Usings, typedefs 
 	 **************************************************************************/
 
-  	friend class SumOp<Number,Converter,Setting>;
-  	friend class TrafoOp<Number,Converter,Setting>;
-  	friend class ScaleOp<Number,Converter,Setting>;
-  	friend class ProjectOp<Number,Converter,Setting>;
-  	friend class IntersectOp<Number,Converter,Setting>;
-  	friend class UnionOp<Number,Converter,Setting>;
-  	friend class IntersectHalfspaceOp<Number,Converter,Setting>;
+	friend class SumOp<Number, Converter, Setting>;
+	friend class TrafoOp<Number, Converter, Setting>;
+	friend class ScaleOp<Number, Converter, Setting>;
+	friend class ProjectOp<Number, Converter, Setting>;
+	friend class IntersectOp<Number, Converter, Setting>;
+	friend class UnionOp<Number, Converter, Setting>;
+	friend class IntersectHalfspaceOp<Number, Converter, Setting>;
 
   public:
-
-  	//Needed for Converter.h
-  	typedef Setting Settings;
+	//Needed for Converter.h
+	typedef Setting Settings;
 
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 
   protected:
+	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this supportfunction, the nodes above root are not known.
+	mutable std::shared_ptr<RootGrowNode<Number, Converter, Setting>> mRoot = nullptr;
 
-  	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this supportfunction, the nodes above root are not known.
-  	mutable std::shared_ptr<RootGrowNode<Number,Converter,Setting>> mRoot = nullptr;
+	//The matrix and the vector that represent the SupportFunction
+	mutable matrix_t<Number> mMatrix;
+	mutable vector_t<Number> mVector;
 
-  	//The matrix and the vector that represent the SupportFunction 
-  	mutable matrix_t<Number> mMatrix;
-  	mutable vector_t<Number> mVector;
+	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
+	mutable bool mTemplateSet = false;
 
-  	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
-  	mutable bool mTemplateSet = false;
-
-  	//Cache whether the support function has been empty
-  	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
+	//Cache whether the support function has been empty
+	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
 
   private:
-
-  	//constructor for adding a new node
-  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root );
+	//constructor for adding a new node
+	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number, Converter, Setting>>& root );
 
   public:
-
 	//Halfspace constructor
 	SupportFunctionNewT( const Halfspace<Number>& hspace );
 
@@ -151,41 +146,40 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @brief      Settings conversion constructor.
 	 * @param[in]  orig  The original.
 	 */
-	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,SettingRhs>& orig);
+	template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
+	SupportFunctionNewT( const SupportFunctionNewT<Number, Converter, SettingRhs>& orig );
 
 	/**
 	 * @brief      Generic Leaf constructor.
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
-	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>& r);
+	template <typename Representation>
+	SupportFunctionNewT( GeometricObject<Number, Representation>& r );
 
 	/**
 	 * @brief      Matrix vector constructor
 	 * @param[in]  mat 	The given matrix
 	 * @param[in]  vec  The given vector
 	 */
-	SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec);
+	SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec );
 
 	/**
 	 * @brief      Vector of halfspaces constructor
 	 * @param[in]  hspaces  The vector of halfspaces
 	 */
-	SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces);
+	SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces );
 
 	/**
 	 * @brief Destructor.
 	 */
-	~SupportFunctionNewT() { }
+	~SupportFunctionNewT() {}
 
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
 
   public:
-
-  	/**
+	/**
 	  * @brief 	   Returns the Settings
 	  * @return    The current settings of the SupportFunctionNew.
 	  */
@@ -195,17 +189,17 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	  * @brief 	   Returns a shared pointer reference to the current root
 	  * @return    A shared pointer reference to the root
 	  */
-	inline std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& getRoot() const { return mRoot; }
+	inline std::shared_ptr<RootGrowNode<Number, Converter, Setting>>& getRoot() const { return mRoot; }
 
 	inline bool isTemplateSet() const { return mTemplateSet; }
 
-	 /**
+	/**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
 	  * @param dimension Required dimension.
 	  * @return Empty SupportFunctionNew.
 	  */
-	static SupportFunctionNewT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
-		return SupportFunctionNewT<Number,Converter,Setting>();
+	static SupportFunctionNewT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
+		return SupportFunctionNewT<Number, Converter, Setting>();
 	}
 
 	/***************************************************************************
@@ -213,17 +207,15 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 **************************************************************************/
 
   private:
-
-  	/**
+	/**
 	 * @brief      Connects a given node with the current root. mRoot stays the same.
 	 * @param[in]  newRoot  The node to connect the current root with.
 	 * @param[in]  rhs 		Possible siblings of the current root that should also be connected to newRoot
 	 */
-  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot) const;
-  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
-  
-  public:
+	void addOperation( RootGrowNode<Number, Converter, Setting>* newRoot ) const;
+	void addOperation( RootGrowNode<Number, Converter, Setting>* newRoot, const std::vector<SupportFunctionNewT<Number, Converter, Setting>>& rhs ) const;
 
+  public:
 	/*
 	 * traverse() explores all nodes beginning from the root and performs the given functions while going down/up.
 	 * Three functions are needed: transform, compute and aggregate.
@@ -251,33 +243,33 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//When Result type and Param type = void
 	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
-	void traverse(	std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& transform,
-					std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& compute, 	
-					std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& aggregate) const;
+	void traverse( std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& transform,
+				   std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& compute,
+				   std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& aggregate ) const;
 
 	//When Param type = void, but Result type not
 	//Wrap transform and compute into other functions that take Parameter (or smth else) additionally as input
-	template<typename Result>
-	Result traverse(std::function<void(RootGrowNode<Number,Converter,Setting>*)>&& transform,
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*)>&& compute, 
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&)>&& aggregate) const;
+	template <typename Result>
+	Result traverse( std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& transform,
+					 std::function<Result( RootGrowNode<Number, Converter, Setting>* )>&& compute,
+					 std::function<Result( RootGrowNode<Number, Converter, Setting>*, std::vector<Result>& )>&& aggregate ) const;
 
 	//When Result type = void, but Param type not
 	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
-	template<typename ...Rargs>
-	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& transform,
-					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute, 
-					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& aggregate,
-					Parameters<Rargs...>&& initParams) const;
+	template <typename... Rargs>
+	void traverse( std::function<Parameters<Rargs...>( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )>&& transform,
+				   std::function<void( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )>&& compute,
+				   std::function<void( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )>&& aggregate,
+				   Parameters<Rargs...>&& initParams ) const;
 
 	//Actual traverse function
 	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
 	//we can assume that we do not get functions returning void / that have no parameters
-	template<typename Result, typename ...Rargs>
-	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& transform,
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>&)>&& compute, 
-					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>&, Parameters<Rargs...>&)>&& aggregate, 
-					Parameters<Rargs...>&& initParams) const;
+	template <typename Result, typename... Rargs>
+	Result traverse( std::function<Parameters<Rargs...>( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )>&& transform,
+					 std::function<Result( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )>&& compute,
+					 std::function<Result( RootGrowNode<Number, Converter, Setting>*, std::vector<Result>&, Parameters<Rargs...>& )>&& aggregate,
+					 Parameters<Rargs...>&& initParams ) const;
 
 	/***************************************************************************
 	 * General Interface
@@ -299,14 +291,14 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @brief Getter for a vertex-representation of the current SupportFunctionNew.
 	 * @return A vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 
 	/**
 	 * @brief      Evaluation function (convex linear optimization).
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization). 
@@ -323,8 +315,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false. 
 	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
 	 */
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
-  	
+	bool hasTrafo( std::shared_ptr<const LinTrafoParameters<Number, Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+
 	/***************************************************************************
 	 * Operators
 	 **************************************************************************/
@@ -335,8 +327,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param b2 Contains the second SupportFunctionNew.
 	 * @return True, if they are equal.
 	 */
-	template<class SettingRhs>
-	friend bool operator==( const SupportFunctionNewT<Number,Converter,Setting>& b1, const SupportFunctionNewT<Number,Converter,SettingRhs>& b2 ) {
+	template <class SettingRhs>
+	friend bool operator==( const SupportFunctionNewT<Number, Converter, Setting>& b1, const SupportFunctionNewT<Number, Converter, SettingRhs>& b2 ) {
 		return b1.getRoot() == b2.getRoot();
 	}
 
@@ -346,19 +338,19 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param b2 A SupportFunctionNew.
 	 * @return False, if both SupportFunctionNewes are equal.
 	 */
-	friend bool operator!=( const SupportFunctionNewT<Number,Converter,Setting>& b1, const SupportFunctionNewT<Number,Converter,Setting>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const SupportFunctionNewT<Number, Converter, Setting>& b1, const SupportFunctionNewT<Number, Converter, Setting>& b2 ) { return !( b1 == b2 ); }
 
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A SupportFunctionNew.
 	 */
-	SupportFunctionNewT<Number,Converter,Setting>& operator=( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) = default;
+	SupportFunctionNewT<Number, Converter, Setting>& operator=( const SupportFunctionNewT<Number, Converter, Setting>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A SupportFunctionNew.
 	 */
-	SupportFunctionNewT<Number,Converter,Setting>& operator=(SupportFunctionNewT<Number,Converter,Setting>&& rhs) = default;
+	SupportFunctionNewT<Number, Converter, Setting>& operator=( SupportFunctionNewT<Number, Converter, Setting>&& rhs ) = default;
 
 	/**
 	 * @brief Outstream operator.
@@ -366,10 +358,10 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param b A SupportFunctionNew.
 	 */
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number,Converter,Setting>& b ) {
-		ostr << *(b.getRoot()) << std::endl;
+	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number, Converter, Setting>& b ) {
+		ostr << *( b.getRoot() ) << std::endl;
 #else
-	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number,Converter,Setting>& ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number, Converter, Setting>& ) {
 #endif
 		return ostr;
 	}
@@ -399,7 +391,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Removes redundancy.
 	 */
-	inline void removeRedundancy() { }
+	inline void removeRedundancy() {}
 
 	/**
 	 * @brief      Storage size determination.
@@ -417,7 +409,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @brief      Function to reduce the number representation (over-approximate).
 	 * @param[in]  limit      The limit
 	 */
-	inline const SupportFunctionNewT<Number,Converter,Setting>& reduceNumberRepresentation(){ return *this; }
+	inline const SupportFunctionNewT<Number, Converter, Setting>& reduceNumberRepresentation() { return *this; }
 
 	/**
 	 * @brief      Computes the region of the SupportFunction that is contained in the halfspace and how much is contained
@@ -432,7 +424,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  dimensions  The dimensions to project onto, all other dimensions will be ignored
 	 * @return 	   The projected SupportFunction
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
+	SupportFunctionNewT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
 
 	/**
 	 * @brief	   Computes a affine transformation of the SupportFunction
@@ -440,39 +432,39 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  b 	The transformation vector
 	 * @return 	   The transformed SupportFunction
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
-	SupportFunctionNewT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	SupportFunctionNewT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
+	SupportFunctionNewT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
 	 * @brief	   Computes the minkowskiSum with one or more SupportFunctionNew
 	 * @param[in]  rhs   The right had side SupportFunctionNew
 	 * @return 	   The resulting minkowskiSum
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
-	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
+	SupportFunctionNewT<Number, Converter, Setting> minkowskiSum( const SupportFunctionNewT<Number, Converter, Setting>& rhs ) const;
+	SupportFunctionNewT<Number, Converter, Setting> minkowskiSum( const std::vector<SupportFunctionNewT<Number, Converter, Setting>>& rhs ) const;
 
 	/**
 	 * @brief	   Scales the SupportFunctionNew by the given factor
 	 * @param[in]  factor  The scaling factor
 	 * @return 	   The scaled SupportFunction
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> scale( const Number& _factor = 1 ) const;
+	SupportFunctionNewT<Number, Converter, Setting> scale( const Number& _factor = 1 ) const;
 
 	/**
 	 * @brief      Computes the intersection of two SupportFunctionNewes.
 	 * @param[in]  rhs   The right hand side SupportFunctionNew.
 	 * @return     The resulting SupportFunctionNew.
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> intersect( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
-	SupportFunctionNewT<Number,Converter,Setting> intersect( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
+	SupportFunctionNewT<Number, Converter, Setting> intersect( const SupportFunctionNewT<Number, Converter, Setting>& rhs ) const;
+	SupportFunctionNewT<Number, Converter, Setting> intersect( const std::vector<SupportFunctionNewT<Number, Converter, Setting>>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of a SupportFunctionNew with a Halfspace.
 	 * @param[in]  hspace   The Halfspace to intersect with
 	 * @return     The resulting SupportFunctionNew.
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
-	SupportFunctionNewT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	SupportFunctionNewT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
+	SupportFunctionNewT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
 	/**
 	 * @brief      Containment check for a point.
@@ -487,22 +479,22 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  SupportFunctionNew   The SupportFunctionNew.
 	 * @return     True, if the given SupportFunctionNew is contained in the current SupportFunctionNew, false otherwise.
 	 */
-	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
-	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions) const;	
+	bool contains( const SupportFunctionNewT<Number, Converter, Setting>& rhs ) const;
+	bool contains( const SupportFunctionNewT<Number, Converter, Setting>& rhs, std::size_t directions ) const;
 
 	/**
 	 * @brief      Computes the union of two SupportFunctionNewes.
 	 * @param[in]  rhs   The right hand side SupportFunctionNew.
 	 * @return     The resulting SupportFunctionNew.
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> unite( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
+	SupportFunctionNewT<Number, Converter, Setting> unite( const SupportFunctionNewT<Number, Converter, Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current SupportFunctionNew with a set of SupportFunctionNewes.
 	 * @param[in]  SupportFunctionNewes  The SupportFunctionNewes.
 	 * @return     The resulting SupportFunctionNew.
 	 */
-	SupportFunctionNewT<Number,Converter,Setting> unite( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
+	SupportFunctionNewT<Number, Converter, Setting> unite( const std::vector<SupportFunctionNewT<Number, Converter, Setting>>& rhs ) const;
 
 	/**
 	 * @brief      Reduces the representation of the current SupportFunctionNew.
@@ -525,12 +517,10 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  directionCount  Number of directions to be evaluated
 	 * @param[in]  force  		   Whether this should be done although a matrix vector representation is already cached
 	 */
-	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
-
+	void evaluateTemplate( std::size_t directionCount = defaultTemplateDirectionCount, bool force = false ) const;
 };
 /** @} */
 
-
-} // namespace hypro
+}  // namespace hypro
 
 #include "SupportFunctionNew.tpp"

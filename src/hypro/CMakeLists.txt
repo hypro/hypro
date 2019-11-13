@@ -16,14 +16,11 @@ target_include_directories(${PROJECT_NAME}-objects
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
 
-message("hypro sources: ${sources}" )
-
 ########################################################################################
 # Create static and shared libraries
 
 	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
 	set_target_properties( ${PROJECT_NAME}-static PROPERTIES
-		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"
 		SOVERSION "${PROJECT_VERSION}"
 		OUTPUT_NAME ${PROJECT_NAME}

@@ -5,9 +5,10 @@
 
 #pragma once
 
-#include <map>
-#include <cassert>
 #include "../../datastructures/Halfspace.h"
+
+#include <cassert>
+#include <map>
 
 namespace hypro {
 
@@ -21,15 +22,15 @@ class EllipsoidT {
   private:
 	unsigned mDimension;
 	matrix_t<Number> mShapeMatrix;
-        bool mIsEmpty;
+	bool mIsEmpty;
+
   public:
 	EllipsoidT( Number _radius, std::size_t _dimension );
 	EllipsoidT( matrix_t<Number> _shapeMatrix );
-	EllipsoidT( const EllipsoidT<Number,Converter>& _orig );
+	EllipsoidT( const EllipsoidT<Number, Converter>& _orig );
 	~EllipsoidT();
 
-
-        /**
+	/**
 	 * Returns the shape matrix of the object.
 	 * @return
 	 */
@@ -52,14 +53,21 @@ class EllipsoidT {
 	 *
 	 * @param rhs An EllipsoidT.
 	 */
-	EllipsoidT<Number,Converter>& operator=( const EllipsoidT<Number,Converter>& rhs ) = default;
+	EllipsoidT<Number, Converter>& operator=( const EllipsoidT<Number, Converter>& rhs ) = default;
 
-	friend bool operator==( const EllipsoidT<Number,Converter>& b1, const EllipsoidT<Number,Converter>& b2 ) { return (b1.mShapeMatrix == b2.mShapeMatrix ? true : false); }
-	friend bool operator!=( const EllipsoidT<Number,Converter>& b1, const EllipsoidT<Number,Converter>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator==( const EllipsoidT<Number, Converter>& b1, const EllipsoidT<Number, Converter>& b2 ) { return ( b1.mShapeMatrix == b2.mShapeMatrix ? true : false ); }
+	friend bool operator!=( const EllipsoidT<Number, Converter>& b1, const EllipsoidT<Number, Converter>& b2 ) { return !( b1 == b2 ); }
 
-	friend std::ostream& operator<<( std::ostream& ostr, const EllipsoidT<Number,Converter>& b ) { return ostr; }
+	friend std::ostream& operator<<( std::ostream& ostr, const EllipsoidT<Number, Converter>& b ) { return ostr; }
 	void print() const;
 
+	/**
+         *
+         * @param A a linear transformation matrix
+         * @param b shiftvector. ignored here and just included to fit the lin. trans of other representations
+         * @return ellipsoid obtained by applying the linear transformation
+         */
+	EllipsoidT<Number, Converter> linearTransformation( const matrix_t<Number>& _A ) const;
 
 	/**
          *
@@ -67,39 +75,31 @@ class EllipsoidT {
          * @param b shiftvector. ignored here and just included to fit the lin. trans of other representations
          * @return ellipsoid obtained by applying the linear transformation
          */
-	EllipsoidT<Number,Converter> linearTransformation( const matrix_t<Number>& _A) const;
+	EllipsoidT<Number, Converter> affineTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
 
 	/**
-         *
-         * @param A a linear transformation matrix
-         * @param b shiftvector. ignored here and just included to fit the lin. trans of other representations
-         * @return ellipsoid obtained by applying the linear transformation
-         */
-	EllipsoidT<Number,Converter> affineTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b) const;
-
-        /**
          *
          * @param rhs second ellipsoid used for the minkowskiSum,
          * @param l direction of tight approximation
          * @return ellipsoid overapproximating the mink sum of two ellipsoids
          */
-	EllipsoidT<Number,Converter> minkowskiSum( const EllipsoidT<Number,Converter>& _rhs, bool _approx = true) const;
+	EllipsoidT<Number, Converter> minkowskiSum( const EllipsoidT<Number, Converter>& _rhs, bool _approx = true ) const;
 
-    /**
+	/**
      *
      * @param l direction in which to evaluate
      * @return vector to outmost point in direction l
      */
-    vector_t<Number> evaluate(vector_t<Number> const l) const;
+	vector_t<Number> evaluate( vector_t<Number> const l ) const;
 
-    /**
+	/**
      *
      * @param _matrix a shapematrix of an ellipsoid
      * @return matrix overapproximating the ellipsoid defined by _matrix
      */
-    matrix_t<Number> approxEllipsoidTMatrix(const matrix_t<Number> _matrix) const;
+	matrix_t<Number> approxEllipsoidTMatrix( const matrix_t<Number> _matrix ) const;
 
-    /*
+	/*
     explicit operator BoxT<Number,Converter>() const {
         vector_t<Number> l(mDimension);
         vector_t<Number> evaluation;
@@ -219,7 +219,6 @@ class EllipsoidT {
 		}
 
 	*/
-
 };
-}
+}  // namespace hypro
 #include "Ellipsoid.tpp"

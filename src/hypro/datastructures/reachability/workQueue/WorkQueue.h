@@ -1,97 +1,92 @@
 #pragma once
 
-#include "WorkQueueSettings.h"
+#include "../../../util/logging/Logger.h"
 #include "../../../util/multithreading/Spinlock.h"
 #include "../../../util/typetraits.h"
-#include "../../../util/logging/Logger.h"
+#include "WorkQueueSettings.h"
 
+#include <assert.h>
 #include <chrono>
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <queue>
 #include <string>
-#include <assert.h>
 
 namespace hypro {
-
-
 
 /**
  * Class encapsulating a thread safe queue in order to be accessed by
  * multiple workers.
  */
 template <class Workable, class Setting>
-class WorkQueueT
-{
-    static_assert(std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value || is_unique_ptr<Workable>::value, "WorkQueue requires pointer type." );
+class WorkQueueT {
+	static_assert( std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value || is_unique_ptr<Workable>::value, "WorkQueue requires pointer type." );
 
   public:
+	WorkQueueT() = default;
+	WorkQueueT( WorkQueueT<Workable, Setting>&& in ) = delete;
+	WorkQueueT( const WorkQueueT<Workable, Setting>& in ) = delete;
 
-    WorkQueueT() = default;
-    WorkQueueT(WorkQueueT<Workable,Setting>&& in) = delete;
-    WorkQueueT(const WorkQueueT<Workable,Setting>& in) = delete;
-
-    /**
+	/**
      * Destructor
      **/
-    ~WorkQueueT(){};
+	~WorkQueueT(){};
 
-    /**
+	/**
      * Pushed an Workable to the front of the queue.
      *
      * @param item item to be pushed at the front
      */
-    void pushFront(const Workable& item);
-    void nonLockingPushFront(const Workable& item);
+	void pushFront( const Workable& item );
+	void nonLockingPushFront( const Workable& item );
 
-    /**
+	/**
      * enqueues an item
      * @param item item to be enqueued
      */
-    void enqueue(Workable&& item);
-	void nonLockingEnqueue(Workable&& item);
+	void enqueue( Workable&& item );
+	void nonLockingEnqueue( Workable&& item );
 
-
-    /**
+	/**
      *  dequeues an item by removing it from the queue and returning it
      *
      *  @return the Workable
      */
-    Workable dequeueFront();
-    Workable nonLockingDequeueFront();
+	Workable dequeueFront();
+	Workable nonLockingDequeueFront();
 
-    Workable dequeueBack();
-    Workable nonLockingDequeueBack();
+	Workable dequeueBack();
+	Workable nonLockingDequeueBack();
 
-    /**
+	/**
      * checks whether the queue is empty
      *
      * @return true iff no Workable is left.
      */
-    bool isEmpty() const;
-    bool nonLockingIsEmpty() const;
+	bool isEmpty() const;
+	bool nonLockingIsEmpty() const;
 
-    std::size_t size() const;
-    std::size_t nonLockingSize() const;
+	std::size_t size() const;
+	std::size_t nonLockingSize() const;
 
-    bool exists(const Workable& item);
-    bool nonLockingExists(const Workable& item);
+	bool exists( const Workable& item );
+	bool nonLockingExists( const Workable& item );
 
-    std::mutex& getMutex() { return mSpinlock; }
+	std::mutex& getMutex() { return mSpinlock; }
 
-    friend std::ostream& operator<< (std::ostream& out, const WorkQueueT& queue) {
-        for(auto elem : queue.getQueue()){
-            out << elem << std::endl;
-        }
-        return out;
-    }
+	friend std::ostream& operator<<( std::ostream& out, const WorkQueueT& queue ) {
+		for ( auto elem : queue.getQueue() ) {
+			out << elem << std::endl;
+		}
+		return out;
+	}
 
   private:
-  	inline const std::deque<Workable>& getQueue() const { return mQueue; }
+	inline const std::deque<Workable>& getQueue() const { return mQueue; }
 
-    // TODO move NodeOperator struct somewhere and only leave its declaration here. There is no need to instantiate it with every compile.
-    /*
+	// TODO move NodeOperator struct somewhere and only leave its declaration here. There is no need to instantiate it with every compile.
+	/*
     struct DataOperator {
         bool operator()(Workable const& lhs, Workable const& rhs)
         {
@@ -107,15 +102,15 @@ class WorkQueueT
 
     };
     */
-    std::deque<Workable> mQueue;
-    //std::priority_queue<Workable, std::vector<Workable>, DataOperator> mQueue;
-    mutable std::mutex mSpinlock;
-    //std::condition_variable_any cond_var;
+	std::deque<Workable> mQueue;
+	//std::priority_queue<Workable, std::vector<Workable>, DataOperator> mQueue;
+	mutable std::mutex mSpinlock;
+	//std::condition_variable_any cond_var;
 };
 
-template<typename Workable>
-using WorkQueue = WorkQueueT<Workable,WorkQueueDefaultSetting>;
+template <typename Workable>
+using WorkQueue = WorkQueueT<Workable, WorkQueueDefaultSetting>;
 
-} // hypro
+}  // namespace hypro
 
 #include "WorkQueue.tpp"

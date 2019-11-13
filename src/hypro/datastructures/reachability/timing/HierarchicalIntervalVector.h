@@ -2,6 +2,7 @@
 #include "../../../types.h"
 #include "../../../util/convenienceOperators.h"
 #include "../../../util/logging/Logger.h"
+
 #include <carl/interval/Interval.h>
 #include <carl/interval/set_theory.h>
 #include <utility>
@@ -14,7 +15,9 @@ struct endPoint {
 	T type;
 	Number timePoint;
 
-	endPoint( const T& t, const Number& n ) : type( t ), timePoint( n ) {}
+	endPoint( const T& t, const Number& n )
+		: type( t )
+		, timePoint( n ) {}
 
 	friend bool operator==( const endPoint<T, Number>& lhs, const endPoint<T, Number>& rhs ) {
 		return ( lhs.type == rhs.type && lhs.timePoint == rhs.timePoint );
@@ -37,9 +40,11 @@ class HierarchicalIntervalVector {
 
   public:
 	HierarchicalIntervalVector() = delete;
-	HierarchicalIntervalVector( const std::vector<T>& order ) : mOrder( order ) {}
+	HierarchicalIntervalVector( const std::vector<T>& order )
+		: mOrder( order ) {}
 	HierarchicalIntervalVector( const HierarchicalIntervalVector<T, Number>& in )
-		: mOrder( in.getTypeOrder() ), mIntervals( in.getIntervals() ) {}
+		: mOrder( in.getTypeOrder() )
+		, mIntervals( in.getIntervals() ) {}
 
 	HierarchicalIntervalVector<T, Number>& operator=( const HierarchicalIntervalVector<T, Number>& orig ) = default;
 	HierarchicalIntervalVector<T, Number>& operator=( HierarchicalIntervalVector<T, Number>&& orig ) = default;
@@ -121,13 +126,11 @@ class HierarchicalIntervalVector {
 		return out;
 	}
 
-	friend bool operator==( const HierarchicalIntervalVector<T, Number>& lhs,
-							const HierarchicalIntervalVector<T, Number>& rhs ) {
+	friend bool operator==( const HierarchicalIntervalVector<T, Number>& lhs, const HierarchicalIntervalVector<T, Number>& rhs ) {
 		return ( lhs.mOrder == rhs.mOrder && lhs.mIntervals == rhs.mIntervals );
 	}
 
-	friend bool operator!=( const HierarchicalIntervalVector<T, Number>& lhs,
-							const HierarchicalIntervalVector<T, Number>& rhs ) {
+	friend bool operator!=( const HierarchicalIntervalVector<T, Number>& lhs, const HierarchicalIntervalVector<T, Number>& rhs ) {
 		return !( lhs == rhs );
 	}
 

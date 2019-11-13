@@ -1340,4 +1340,4 @@ std::ostream &operator<<( std::ostream &os, const TaylorModelVec<N> &tmv ) {
 
 	return os;
 }
-}  // namespace
+}  // namespace hypro

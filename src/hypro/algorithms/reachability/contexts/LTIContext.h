@@ -1,105 +1,106 @@
 #pragma once
 
-#include "IContext.h"
-#include "../handlers/IHandler.h"
-#include "../handlers/HandlerFactory.h"
-#include "../handlers/guardHandlers/GuardHandlers.h"
-#include "../workers/IWorker.h"
-#include "../../../datastructures/reachability/workQueue/WorkQueue.h"
+#include "../../../datastructures/HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../datastructures/reachability/SettingsProvider.h"
 #include "../../../datastructures/reachability/Strategy.h"
 #include "../../../datastructures/reachability/Task.h"
 #include "../../../datastructures/reachability/timing/EventTimingContainer.h"
 #include "../../../datastructures/reachability/timing/EventTimingProvider.h"
-#include "../../../datastructures/HybridAutomaton/decomposition/DecisionEntity.h"
+#include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
+#include "../handlers/HandlerFactory.h"
+#include "../handlers/IHandler.h"
+#include "../handlers/guardHandlers/GuardHandlers.h"
+#include "../workers/IWorker.h"
+#include "Exceptions.h"
+#include "IContext.h"
 
-namespace hypro
-{
-	template<typename State>
-	class LTIContext : public IContext{
-		using Number = typename State::NumberType;
-	protected:
-		std::shared_ptr<Task<State>> mTask;
-		Strategy<State> mStrategy;
-		WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
-		WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
-	    Flowpipe<State>& mLocalSegments;
-	    ReachabilitySettings mSettings;
+namespace hypro {
+template <typename State>
+class LTIContext : public IContext {
+	using Number = typename State::NumberType;
 
-	    EventTimingContainer<Number> mLocalTimings;
-    	HierarchicalIntervalVector<CONTAINMENT, tNumber> mTransitionTimings;
+  protected:
+	std::shared_ptr<Task<State>> mTask;
+	Strategy<State> mStrategy;
+	WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
+	WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
+	Flowpipe<State>& mLocalSegments;
+	ReachabilitySettings mSettings;
 
-   		std::vector<boost::tuple<Transition<Number>*, State>> mDiscreteSuccessorBuffer;
+	EventTimingContainer<Number> mLocalTimings;
+	HierarchicalIntervalVector<CONTAINMENT, tNumber> mTransitionTimings;
 
-	    std::map<Transition<Number>*, State> mPotentialZenoTransitions;
-	    std::vector<Transition<Number>*> mDisabledTransitions;
+	std::vector<boost::tuple<Transition<Number>*, State>> mDiscreteSuccessorBuffer;
 
-   		tNumber mCurrentLocalTime;
-   		carl::Interval<tNumber> mCurrentGlobalTimeInterval;
-	    carl::Interval<tNumber> mCurrentTimeInterval;
+	std::map<Transition<Number>*, State> mPotentialZenoTransitions;
+	std::vector<Transition<Number>*> mDisabledTransitions;
 
-        // a copy of the state to perform the computation in, the state in the task is untouched
-        State mComputationState;
+	tNumber mCurrentLocalTime;
+	carl::Interval<tNumber> mCurrentGlobalTimeInterval;
+	carl::Interval<tNumber> mCurrentTimeInterval;
 
-        // the handlers to process each operation in the specific subset
-        // this is a 1:1 relation, for each subset at index I, there is a corresponding handler at index I
-        std::vector<IFirstSegmentHandler<State>*> mFirstSegmentHandlers;
-        std::vector<IInvariantHandler*> mInvariantHandlers;
-        std::vector<IBadStateHandler*> mBadStateHandlers;
-        std::vector<ITimeEvolutionHandler*> mContinuousEvolutionHandlers;
+	// a copy of the state to perform the computation in, the state in the task is untouched
+	State mComputationState;
 
-        std::map<Transition<Number>*, std::vector<IGuardHandler<State>*>> mTransitionHandlerMap;
+	// the handlers to process each operation in the specific subset
+	// this is a 1:1 relation, for each subset at index I, there is a corresponding handler at index I
+	std::vector<IFirstSegmentHandler<State>*> mFirstSegmentHandlers;
+	std::vector<IInvariantHandler*> mInvariantHandlers;
+	std::vector<IBadStateHandler*> mBadStateHandlers;
+	std::vector<ITimeEvolutionHandler*> mContinuousEvolutionHandlers;
 
-	public:
-		LTIContext() = delete;
-		~LTIContext(){}
-		LTIContext(const std::shared_ptr<Task<State>>& t,
-	                    const Strategy<State>& strat,
-	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    Flowpipe<State>& localSegments,
-	                    ReachabilitySettings &settings);
+	std::map<Transition<Number>*, std::vector<IGuardHandler<State>*>> mTransitionHandlerMap;
 
-		virtual void execOnStart() override ;
+  public:
+	LTIContext() = delete;
+	~LTIContext() {}
+	LTIContext( const std::shared_ptr<Task<State>>& t,
+				const Strategy<State>& strat,
+				WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+				WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+				Flowpipe<State>& localSegments,
+				ReachabilitySettings& settings );
 
-		virtual void execBeforeFirstSegment() override;
+	virtual void execOnStart() override;
 
-	    virtual void firstSegment() override ;
+	virtual void execBeforeFirstSegment() override;
 
-		virtual void execAfterFirstSegment() override;
+	virtual void firstSegment() override;
 
-	    virtual void checkInvariant() override ;
+	virtual void execAfterFirstSegment() override;
 
-	    virtual void intersectBadStates() override ;
+	virtual void checkInvariant() override;
 
-	    virtual void execBeforeLoop() override;
+	virtual void intersectBadStates() override;
 
-	    virtual bool doneCondition() override ;
+	virtual void execBeforeLoop() override;
 
-	    virtual void checkTransition() override ;
+	virtual bool doneCondition() override;
 
-	    virtual void applyContinuousEvolution() override ;
+	virtual void checkTransition() override;
 
-	    virtual void execOnLoopItExit() override;
+	virtual void applyContinuousEvolution() override;
 
-	    virtual void processDiscreteBehavior() override ;
+	virtual void execOnLoopItExit() override;
 
-	    virtual void execOnEnd() override;
+	virtual void processDiscreteBehavior() override;
 
-	    void initalizeFirstSegmentHandlers();
-	    void initializeInvariantHandlers();
-	    void initializeBadStateHandlers();
-	    void initializeGuardHandlers();
+	virtual void execOnEnd() override;
 
-	    void applyBacktracking();
+	void initalizeFirstSegmentHandlers();
+	void initializeInvariantHandlers();
+	void initializeBadStateHandlers();
+	void initializeGuardHandlers();
 
-	    bool omitTransition(Transition<Number>* transition);
-		bool omitInvariant();
-		bool omitBadStateCheck();
-	};
-} // hypro
+	void applyBacktracking();
+
+	bool omitTransition( Transition<Number>* transition );
+	bool omitInvariant();
+	bool omitBadStateCheck();
+};
+}  // namespace hypro
 
 #include "LTIContext.tpp"

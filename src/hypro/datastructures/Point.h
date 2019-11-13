@@ -7,9 +7,10 @@
  */
 #pragma once
 
-#include "../types.h"
 #include "../config.h"
+#include "../types.h"
 #include "../util/VariablePool.h"
+
 #include <set>
 #include <vector>
 
@@ -109,8 +110,8 @@ class Point {
 	 */
 	std::size_t hash() const {
 		//std::cout << "request hash for " << *this << std::endl;
-		if(mHash == 0) {
-			mHash = std::hash<vector_t<Number>>()(mCoordinates);
+		if ( mHash == 0 ) {
+			mHash = std::hash<vector_t<Number>>()( mCoordinates );
 			//std::cout << "Computed hash: " << mHash << std::endl;
 		}
 		return mHash;
@@ -120,10 +121,10 @@ class Point {
 	 * @brief      Extends the space the point lies in by one dimension and sets its coordinate.
 	 * @param[in]  val   The new coordinate.
 	 */
-	void extend(const Number& val) {
-		mCoordinates.conservativeResize(mCoordinates.rows() +1);
-		mCoordinates(mCoordinates.rows()-1) = val;
-        mHash = 0;
+	void extend( const Number& val ) {
+		mCoordinates.conservativeResize( mCoordinates.rows() + 1 );
+		mCoordinates( mCoordinates.rows() - 1 ) = val;
+		mHash = 0;
 	}
 
 	/**
@@ -149,7 +150,7 @@ class Point {
 	 * @param[in]  _dim  The dimension.
 	 * @return     The origin point.
 	 */
-	static Point<Number> Zero( std::size_t _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( Eigen::Index(_dim) )); }
+	static Point<Number> Zero( std::size_t _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( Eigen::Index( _dim ) ) ); }
 
 	/**
 	 * @brief      Returns the origin of the current space.
@@ -207,7 +208,7 @@ class Point {
 	 * @brief      Sets the coordinates.
 	 * @param[in]  vector  The vector.
 	 */
-	void setCoordinates(const vector_t<Number> &vector);
+	void setCoordinates( const vector_t<Number>& vector );
 
 	/**
 	 * @brief      Returns the space dimension.
@@ -304,7 +305,7 @@ class Point {
 	 * @param[in]  _p2   The second point.
 	 * @return     The resulting point.
 	 */
-	static Point<Number> coeffWiseMax(const Point<Number> &_p1, const Point<Number> &_p2) {
+	static Point<Number> coeffWiseMax( const Point<Number>& _p1, const Point<Number>& _p2 ) {
 		assert( _p1.dimension() == _p2.dimension() );
 		vector_t<Number> coordinates = vector_t<Number>( _p1.dimension() );
 		for ( unsigned i = 0; i < _p1.dimension(); ++i ) {
@@ -319,7 +320,7 @@ class Point {
 	 * @param[in]  _p2   The second point.
 	 * @return     The resulting point.
 	 */
-	static Point<Number> coeffWiseMin(const Point<Number> &_p1, const Point<Number> &_p2) {
+	static Point<Number> coeffWiseMin( const Point<Number>& _p1, const Point<Number>& _p2 ) {
 		assert( _p1.dimension() == _p2.dimension() );
 		vector_t<Number> coordinates = vector_t<Number>( _p1.dimension() );
 		for ( unsigned i = 0; i < _p1.dimension(); ++i ) {
@@ -337,7 +338,7 @@ class Point {
 		Number res = 0;
 		vector_t<Number> coord = _p.rawCoordinates();
 		for ( unsigned i = 0; i < _p.dimension(); ++i ) {
-			Number absolute = coord(i) < 0 ? Number(-1)*coord(i) : coord(i); // workaround for abs
+			Number absolute = coord( i ) < 0 ? Number( -1 ) * coord( i ) : coord( i );  // workaround for abs
 			res = res > absolute ? res : absolute;
 		}
 		return res;
@@ -349,22 +350,21 @@ class Point {
 	 * @param[in] PointVec the point vector which should get checked for duplicates.
 	 * @return A point vector that is duplicate-free.
 	 */
-	static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec){
-		  std::set<Point<Number>> pointSet;
-		  //writes all the point entries into a set (set removes duplicates)
-		  for (unsigned i = 0; i<pointVec.size(); ++i){
-			  pointSet.insert(pointVec.at(i));
-		  }
-		  //write all the set entries into the return vector
-		  std::vector<Point<Number>> res;
-		  for (const auto& point : pointSet){
-			  res.push_back(point);
-		  }
+	static std::vector<Point<Number>> removeDuplicatePoints( const std::vector<Point<Number>>& pointVec ) {
+		std::set<Point<Number>> pointSet;
+		//writes all the point entries into a set (set removes duplicates)
+		for ( unsigned i = 0; i < pointVec.size(); ++i ) {
+			pointSet.insert( pointVec.at( i ) );
+		}
+		//write all the set entries into the return vector
+		std::vector<Point<Number>> res;
+		for ( const auto& point : pointSet ) {
+			res.push_back( point );
+		}
 
-		  //std::copy(pointSet.begin(), pointSet.end(), res.begin());
-		  return res;
+		//std::copy(pointSet.begin(), pointSet.end(), res.begin());
+		return res;
 	}
-
 
 	/**
 	 * @brief      Increments the coordinate according to the passed dimension by 1.
@@ -488,7 +488,7 @@ class Point {
 	 */
 	bool operator==( const Point<Number>& _p2 ) const {
 		assert( dimension() == _p2.dimension() );
-		if (this->hash() != _p2.hash()) {
+		if ( this->hash() != _p2.hash() ) {
 			return false;
 		}
 
@@ -503,7 +503,7 @@ class Point {
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
 	bool operator==( const Point<F>& _p2 ) const {
 		assert( dimension() == _p2.dimension() );
-		if (this->hash() != _p2.hash()) {
+		if ( this->hash() != _p2.hash() ) {
 			return false;
 		}
 		for ( unsigned d = 0; d < this->dimension(); ++d ) {
@@ -566,9 +566,9 @@ class Point {
 	friend std::ostream& operator<<( std::ostream& _ostr, const Point<Number>& _p ) {
 		_ostr << "( ";
 		for ( unsigned i = 0; i < _p.rawCoordinates().rows() - 1; ++i ) {
-			_ostr << _p.at( i ) << "[" << i  << "] , ";
+			_ostr << _p.at( i ) << "[" << i << "] , ";
 		}
-		_ostr << _p.at( unsigned(_p.rawCoordinates().rows()) - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";
+		_ostr << _p.at( unsigned( _p.rawCoordinates().rows() ) - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";
 		_ostr << ")";
 		return _ostr;
 	}
@@ -662,20 +662,20 @@ const Point<Number> operator*( const Number& _factor, const Point<Number>& _rhs 
  * @tparam     Number    The number type.
  * @return     The spanned dimension.
  */
-template<typename Number>
-int effectiveDimension(const std::vector<Point<Number>>& vertices) {
-	if(!vertices.empty()){
-		if(vertices.size() == 1) {
+template <typename Number>
+int effectiveDimension( const std::vector<Point<Number>>& vertices ) {
+	if ( !vertices.empty() ) {
+		if ( vertices.size() == 1 ) {
 			return 0;
 		}
 		long maxDim = vertices.begin()->rawCoordinates().rows();
-		matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
+		matrix_t<Number> matr = matrix_t<Number>( vertices.size() - 1, maxDim );
 		// use first vertex as origin, start at second vertex
 		long rowIndex = 0;
-		for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
-			matr.row(rowIndex) = (vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates()).transpose();
+		for ( auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex ) {
+			matr.row( rowIndex ) = ( vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates() ).transpose();
 		}
-		return int(matr.fullPivLu().rank());
+		return int( matr.fullPivLu().rank() );
 	}
 	return -1;
 }
@@ -686,20 +686,20 @@ int effectiveDimension(const std::vector<Point<Number>>& vertices) {
  * @tparam     Number    The number type.
  * @return     The spanned dimension.
  */
-template<typename Number>
-int effectiveDimension(const std::set<Point<Number>>& vertices) {
-	if(!vertices.empty()){
-		if(vertices.size() == 1) {
+template <typename Number>
+int effectiveDimension( const std::set<Point<Number>>& vertices ) {
+	if ( !vertices.empty() ) {
+		if ( vertices.size() == 1 ) {
 			return 0;
 		}
 		long maxDim = vertices.begin()->rawCoordinates().rows();
-		matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
+		matrix_t<Number> matr = matrix_t<Number>( vertices.size() - 1, maxDim );
 		// use first vertex as origin, start at second vertex
 		long rowIndex = 0;
-		for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
-			matr.row(rowIndex) = (vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates()).transpose();
+		for ( auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex ) {
+			matr.row( rowIndex ) = ( vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates() ).transpose();
 		}
-		return int(matr.fullPivLu().rank());
+		return int( matr.fullPivLu().rank() );
 	}
 	return -1;
 }
@@ -711,26 +711,24 @@ int effectiveDimension(const std::set<Point<Number>>& vertices) {
  * @tparam     To    The target number type.
  * @return     A point in the targeted number type.
  */
-template<typename From, typename To>
-Point<To> convert(const Point<From>& in) {
-	return Point<To>(convert<From,To>(in.rawCoordinates()));
+template <typename From, typename To>
+Point<To> convert( const Point<From>& in ) {
+	return Point<To>( convert<From, To>( in.rawCoordinates() ) );
 }
-
 
 }  // namespace hypro
 
 namespace std {
-	/**
+/**
 	 * @brief      A hash operator for fast comparison.
 	 * @tparam     Number  The number type.
 	 */
-    template<class Number>
-    struct hash<hypro::Point<Number>> {
-        std::size_t operator()(hypro::Point<Number> const& point) const
-        {
-            return std::hash<hypro::vector_t<Number>>()(point.rawCoordinates());
-        }
-    };
-} //namespace std
+template <class Number>
+struct hash<hypro::Point<Number>> {
+	std::size_t operator()( hypro::Point<Number> const& point ) const {
+		return std::hash<hypro::vector_t<Number>>()( point.rawCoordinates() );
+	}
+};
+}  //namespace std
 
 #include "Point.tpp"

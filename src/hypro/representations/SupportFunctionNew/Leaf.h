@@ -14,7 +14,7 @@
 
 namespace hypro {
 
-template<typename Number, typename Converter, typename Setting>
+template <typename Number, typename Converter, typename Setting>
 class RootGrowNode;
 
 //A data struct for leaves, containing all needed info to construct a leaf from it
@@ -24,21 +24,20 @@ struct LeafData : public RGNData {
 	representation_name typeOfRep;
 	bool isNotRedundant;
 	LeafData(){};
-	LeafData(const uintptr_t addr, const representation_name rep, const bool redundancy)
-		: addressToRep(addr), typeOfRep(rep), isNotRedundant(redundancy)
-	{ }
+	LeafData( const uintptr_t addr, const representation_name rep, const bool redundancy )
+		: addressToRep( addr )
+		, typeOfRep( rep )
+		, isNotRedundant( redundancy ) {}
 };
 
 //Subclass of RootGrowNode, is a node with a representation of a state
-template<typename Number, typename Converter, typename Setting, typename Representation>
-class Leaf : public RootGrowNode<Number,Converter,Setting> {
-
+template <typename Number, typename Converter, typename Setting, typename Representation>
+class Leaf : public RootGrowNode<Number, Converter, Setting> {
   private:
-
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::LEAF;
-	unsigned originCount = 0;				//A leaf cannot have children
+	unsigned originCount = 0;  //A leaf cannot have children
 	std::size_t mDimension = 0;
 	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
@@ -52,25 +51,28 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	mutable bool isNotRedundant = false;
 
   public:
-
 	////// Constructors & Destructors
 
 	Leaf() = delete;
 
-	Leaf(Representation& r) : mDimension(r.dimension()), rep(std::make_shared<Representation>(r)) {}
+	Leaf( Representation& r )
+		: mDimension( r.dimension() )
+		, rep( std::make_shared<Representation>( r ) ) {}
 
-	Leaf(const std::shared_ptr<Representation>& ptr) : mDimension(ptr->dimension()), rep(ptr) {}
+	Leaf( const std::shared_ptr<Representation>& ptr )
+		: mDimension( ptr->dimension() )
+		, rep( ptr ) {}
 
-	Leaf(const LeafData& d){
-		assert(Representation::type() == d.typeOfRep);
-		assert(d.addressToRep != 0);
-		rep = std::make_shared<Representation>(*(reinterpret_cast<Representation*>(d.addressToRep)));
-		assert(rep != nullptr);
+	Leaf( const LeafData& d ) {
+		assert( Representation::type() == d.typeOfRep );
+		assert( d.addressToRep != 0 );
+		rep = std::make_shared<Representation>( *( reinterpret_cast<Representation*>( d.addressToRep ) ) );
+		assert( rep != nullptr );
 		mDimension = rep->dimension();
 		isNotRedundant = d.isNotRedundant;
 	}
 
-	~Leaf(){}
+	~Leaf() {}
 
 	////// Getters & Setters
 
@@ -82,16 +84,17 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	bool isRedundant() const { return !isNotRedundant; }
 	RGNData* getData() const override { return nullptr; }
 	LeafData getLeafData() const override {
-		return LeafData(reinterpret_cast<uintptr_t>(rep.get()), rep->type(), isNotRedundant);
+		return LeafData( reinterpret_cast<uintptr_t>( rep.get() ), rep->type(), isNotRedundant );
 	}
-	void setDimension(const std::size_t d) override { mDimension = d; }
+	void setDimension( const std::size_t d ) override { mDimension = d; }
 
 	////// Displaying
 
-	void print(std::ostream& ostr) const override {
+	void print( std::ostream& ostr ) const override {
 		ostr << "RootGrowNode address: " << this << " own type: " << this->getType();
-		if(rep != nullptr){
-			ostr << " Leaf representation type: " << rep->type() << " Leaf representation: \n" << *rep << std::endl;
+		if ( rep != nullptr ) {
+			ostr << " Leaf representation type: " << rep->type() << " Leaf representation: \n"
+				 << *rep << std::endl;
 		} else {
 			ostr << " Leaf has no representation." << std::endl;
 		}
@@ -100,55 +103,53 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	////// RootGrowNode Interface
 
 	//Leaves usually do not transform
-	matrix_t<Number> transform(const matrix_t<Number>&) const override {
-		assert(false && "Leaf::transform should never be called\n");
-		return matrix_t<Number>::Zero(1,1);
+	matrix_t<Number> transform( const matrix_t<Number>& ) const override {
+		assert( false && "Leaf::transform should never be called\n" );
+		return matrix_t<Number>::Zero( 1, 1 );
 	}
 
 	//Evaluate leaf via multiEvaluate function of the representation
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const override {
-
-		assert(rep != nullptr);
+	std::vector<EvaluationResult<Number>> compute( const matrix_t<Number>& param, bool useExact ) const override {
+		assert( rep != nullptr );
 
 		//Optimization: Remove redundancy only when rep is being evaluated the first time
-		if(!isNotRedundant){
+		if ( !isNotRedundant ) {
 			rep->removeRedundancy();
 			isNotRedundant = true;
 		}
 
 		//If no optimizations could be used
-		COUNT("Multi constraint evaluate.");
-		return rep->multiEvaluate(param, useExact);
+		COUNT( "Multi constraint evaluate." );
+		return rep->multiEvaluate( param, useExact );
 	}
 
 	//Leaves do not aggregate
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& , const matrix_t<Number>& ) const override {
-		assert(false && "Leaf::aggregate should never be called\n");
+	std::vector<EvaluationResult<Number>> aggregate( std::vector<std::vector<EvaluationResult<Number>>>&, const matrix_t<Number>& ) const override {
+		assert( false && "Leaf::aggregate should never be called\n" );
 		return std::vector<EvaluationResult<Number>>();
 	}
 
 	//Leaves call empty function of the representation
 	bool empty() const override {
-		if(mEmpty == TRIBOOL::NSET){
+		if ( mEmpty == TRIBOOL::NSET ) {
 			mEmpty = rep->empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		}
-		return (mEmpty == TRIBOOL::TRUE) ? true : false;
+		return ( mEmpty == TRIBOOL::TRUE ) ? true : false;
 	}
 
 	//Compute the point that is the supremum of the representation
 	Point<Number> supremumPoint() const override {
-		Point<Number> max = Point<Number>::Zero(rep->dimension());
-		for(auto& point : rep->vertices()){
-			max = Point<Number>::inftyNorm(max) > Point<Number>::inftyNorm(point) ? max : point;
+		Point<Number> max = Point<Number>::Zero( rep->dimension() );
+		for ( auto& point : rep->vertices() ) {
+			max = Point<Number>::inftyNorm( max ) > Point<Number>::inftyNorm( point ) ? max : point;
 		}
 		return max;
 	}
 
 	//Calls contains function of given representation
-	bool contains(const vector_t<Number>& point) const override {
-		return rep->contains(Point<Number>(point));
+	bool contains( const vector_t<Number>& point ) const override {
+		return rep->contains( Point<Number>( point ) );
 	}
-
 };
 
-} //namespace hypro
+}  //namespace hypro

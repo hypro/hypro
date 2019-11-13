@@ -6,6 +6,7 @@
 #pragma once
 
 #include "../../datastructures/Vertex.h"
+
 #include <map>
 
 namespace hypro {

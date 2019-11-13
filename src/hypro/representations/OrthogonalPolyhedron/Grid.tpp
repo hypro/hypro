@@ -33,7 +33,9 @@ Grid<Number>::Grid( const std::vector<Vertex<Number>> &_vertices )
 
 template <typename Number>
 Grid<Number>::Grid( const Grid<Number> &copy )
-	: mVertices( copy.mVertices ), mGridMap( copy.mGridMap ), mInducedGridPoints( copy.mInducedGridPoints ) {
+	: mVertices( copy.mVertices )
+	, mGridMap( copy.mGridMap )
+	, mInducedGridPoints( copy.mInducedGridPoints ) {
 }
 
 /*
@@ -214,7 +216,7 @@ void Grid<Number>::colorAll() const {
 
 template <typename Number>
 std::vector<Point<std::size_t>> Grid<Number>::iNeighborhoodInduced( const Point<std::size_t> &_inducedPoint,
-																 std::size_t _dimension ) const {
+																	std::size_t _dimension ) const {
 	// std::cout << __func__ << " " << _inducedPoint << " " << _dimension <<
 	// std::endl;
 	assert( _dimension < mInducedGridPoints.size() );
@@ -239,7 +241,7 @@ std::vector<Point<std::size_t>> Grid<Number>::iNeighborhoodInduced( const Point<
 	pointIt<std::size_t> pIt( possibleCoords );
 
 	while ( !pIt.end ) {
-		result.emplace_back( ++pIt  );
+		result.emplace_back( ++pIt );
 	}
 	return ( result );
 }
@@ -357,7 +359,7 @@ std::vector<Point<std::size_t>> Grid<Number>::neighborhoodInduced( const Point<s
 
 	// get all 2^d i-neighbors by combination of the point and its direct
 	// predecessor
-	for ( std::size_t i = 0; i < std::size_t(std::pow( 2, d )); ++i ) {
+	for ( std::size_t i = 0; i < std::size_t( std::pow( 2, d ) ); ++i ) {
 		std::bitset<MAX_DIMENSION_LIMIT> map( i );
 		std::size_t pos = 0;
 		Point<std::size_t> neighbor( directPredecessor );
@@ -477,12 +479,12 @@ void Grid<Number>::addCoordinate( Number value, std::size_t dimension ) {
 		mInducedGridPoints[dimension] = std::vector<Number>();
 		mInducedGridPoints[dimension].push_back( Number( 0 ) );
 	}
-	assert(mInducedGridPoints.find( dimension ) != mInducedGridPoints.end());
-	assert(!mInducedGridPoints[dimension].empty());
+	assert( mInducedGridPoints.find( dimension ) != mInducedGridPoints.end() );
+	assert( !mInducedGridPoints[dimension].empty() );
 
 	typename std::vector<Number>::iterator pos = mInducedGridPoints[dimension].begin();
 
-	while ( pos != mInducedGridPoints[dimension].end() && *pos < value  ) {
+	while ( pos != mInducedGridPoints[dimension].end() && *pos < value ) {
 		++pos;
 	}
 
@@ -590,11 +592,11 @@ std::pair<Point<std::size_t>, bool> Grid<Number>::calculateInduced( const Point<
 		// insert the index of the element one before the element found above
 		if ( inducedGridPoints[pos] <= point.at( dim ) ) {  // here the points coordinate is either equal or we reached
 															// the last element and it is larger
-			coordinates[Eigen::Index(dim)] = pos;
+			coordinates[Eigen::Index( dim )] = pos;
 		} else {
 			// std::cout << "dim: " <<  dim << ", " << inducedGridPoints[pos] << " > "
 			// <<  point.at(dim) << std::endl;
-			coordinates[Eigen::Index(dim)] = pos - 1;
+			coordinates[Eigen::Index( dim )] = pos - 1;
 			precise = false;
 		}
 	}
@@ -638,4 +640,4 @@ vSet<Number> Grid<Number>::translateToOriginal( const vSet<std::size_t> &induced
 	}
 	return original;
 }
-}
+}  // namespace hypro

@@ -9,34 +9,35 @@ namespace hypro {
 */
 
 // Hard Terminate computation
-class HardTerminateException : public std::exception{
-private:
+class HardTerminateException : public std::exception {
+  private:
 	const char* m_msg;
-public:
+
+  public:
 	HardTerminateException() = default;
-	HardTerminateException(const char* msg){
+	HardTerminateException( const char* msg ) {
 		m_msg = msg;
 	}
 
-	const char* what() const throw(){
+	const char* what() const throw() {
 		return m_msg;
 	}
 };
-
 
 // finish computation with processing of discrete transitions
-class FinishWithDiscreteProcessingException : public std::exception{
-private:
+class FinishWithDiscreteProcessingException : public std::exception {
+  private:
 	const char* m_msg;
-public:
+
+  public:
 	FinishWithDiscreteProcessingException() = default;
-	FinishWithDiscreteProcessingException(const char* msg){
+	FinishWithDiscreteProcessingException( const char* msg ) {
 		m_msg = msg;
 	}
 
-	const char* what() const throw(){
+	const char* what() const throw() {
 		return m_msg;
 	}
 };
 
-} // hypro
+}  // namespace hypro

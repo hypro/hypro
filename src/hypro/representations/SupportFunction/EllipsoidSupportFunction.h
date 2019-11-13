@@ -30,7 +30,7 @@ class EllipsoidSupportFunction {
 
   public:
 	EllipsoidSupportFunction( const EllipsoidSupportFunction<Number>& _orig );
-	EllipsoidSupportFunction( matrix_t<Number> _shapeMatrix);
+	EllipsoidSupportFunction( matrix_t<Number> _shapeMatrix );
 	~EllipsoidSupportFunction();
 
 	/**
@@ -49,22 +49,22 @@ class EllipsoidSupportFunction {
 	 */
 	//EvaluationResult<Number> evaluate( const vector_t<Number>& _l ) const;
 
-	template<typename N = Number, carl::DisableIf< std::is_same<N,double> > = carl::dummy>
-	EvaluationResult<Number> evaluate( const vector_t<Number> &_l ) const {
-	    EvaluationResult<Number> result ;
-	    result.supportValue = carl::sqrt_safe(_l.dot(this->mShapeMatrix * _l)).first;
-	    result.optimumValue = result.supportValue * _l;
-	    result.errorCode = SOLUTION::FEAS;
-	    return result;
+	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _l ) const {
+		EvaluationResult<Number> result;
+		result.supportValue = carl::sqrt_safe( _l.dot( this->mShapeMatrix * _l ) ).first;
+		result.optimumValue = result.supportValue * _l;
+		result.errorCode = SOLUTION::FEAS;
+		return result;
 	}
 
-	template<typename N = Number, carl::EnableIf< std::is_same<N,double> > = carl::dummy>
-	EvaluationResult<Number> evaluate( const vector_t<Number> &_l ) const {
-	    EvaluationResult<Number> result ;
-	    result.supportValue = std::sqrt(_l.dot(this->mShapeMatrix * _l));
-	    result.optimumValue = result.supportValue * _l;
-	    result.errorCode = SOLUTION::FEAS;
-	    return result;
+	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _l ) const {
+		EvaluationResult<Number> result;
+		result.supportValue = std::sqrt( _l.dot( this->mShapeMatrix * _l ) );
+		result.optimumValue = result.supportValue * _l;
+		result.errorCode = SOLUTION::FEAS;
+		return result;
 	}
 
 	/**
@@ -97,7 +97,6 @@ class EllipsoidSupportFunction {
 	bool contains( const vector_t<Number>& _point ) const;
 
 	bool empty() const;
-
 };
-}  // namespace
+}  // namespace hypro
 #include "EllipsoidSupportFunction.tpp"

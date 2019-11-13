@@ -2,6 +2,6 @@
 
 namespace hypro {
 
-	struct DifferenceBoundsSetting {
-	};	
-}
+struct DifferenceBoundsSetting {
+};
+}  // namespace hypro

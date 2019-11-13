@@ -8,10 +8,11 @@
 
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Vertex.h"
-#include <carl/core/Variable.h>
-#include <vector>
-#include <map>
+
 #include <bitset>
+#include <carl/core/Variable.h>
+#include <map>
+#include <vector>
 
 namespace hypro {
 
@@ -26,7 +27,8 @@ struct pointIt {
 	std::vector<typename std::vector<Number>::const_iterator> it;
 	bool end = false;
 
-	pointIt( const std::vector<std::vector<Number>>& _v ) : v( _v ) {
+	pointIt( const std::vector<std::vector<Number>>& _v )
+		: v( _v ) {
 		for ( std::size_t i = 0; i < v.size(); ++i ) it.push_back( v.at( i ).begin() );
 
 		end = false;
@@ -54,7 +56,7 @@ struct pointIt {
 
 	Point<Number> current() {
 		assert( v.size() == it.size() );
-		Point<Number> res(vector_t<Number>::Zero(v.size()));
+		Point<Number> res( vector_t<Number>::Zero( v.size() ) );
 		for ( std::size_t i = 0; i < v.size(); ++i ) res[i] = *it.at( i );
 
 		return res;
@@ -126,7 +128,7 @@ class Grid {
 	std::vector<Point<std::size_t>> iSliceInduced( std::size_t i ) const;
 	std::vector<Point<Number>> iSlice( std::size_t i, Number pos ) const;
 	std::vector<Point<std::size_t>> iNeighborhoodInduced( const Point<std::size_t>& _inducedPoint,
-													   std::size_t _dimension ) const;
+														  std::size_t _dimension ) const;
 	std::vector<Point<Number>> iNeighborhood( const Point<Number>& _point, std::size_t _dimension ) const;
 	std::vector<Point<std::size_t>> neighborhoodInduced( const Point<std::size_t>& _inducedPoint ) const;
 	std::vector<Point<Number>> neighborhood( const Point<Number>& _point ) const;
@@ -203,13 +205,15 @@ class Grid {
 	friend std::ostream& operator<<( std::ostream& out, const Grid<Number>& grid ) {
 		out << "[";
 		for ( std::size_t d = 0; d < grid.mInducedGridPoints.size(); ++d ) {
-			out << std::endl << d << ": ";
+			out << std::endl
+				<< d << ": ";
 			for ( std::size_t p = 0; p < grid.mInducedGridPoints.at( d ).size(); ++p )
 				out << grid.mInducedGridPoints.at( d ).at( p ) << " ";
 		}
-		out << std::endl << "]" << std::endl;
+		out << std::endl
+			<< "]" << std::endl;
 		return out;
 	}
 };
-}
+}  // namespace hypro
 #include "Grid.tpp"

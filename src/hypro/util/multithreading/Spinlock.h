@@ -1,24 +1,24 @@
 #pragma once
-#include <unistd.h>
 #include <atomic>
+#include <unistd.h>
 
 namespace hypro {
 
 class Spinlock {
   public:
-    Spinlock() {}
-    /**
+	Spinlock() {}
+	/**
      * lock Spinlock
      */
-    void lock();
+	void lock();
 
-    /**
+	/**
      * unlock Spinlock
      **/
-    void unlock();
+	void unlock();
 
   private:
-    std::atomic_flag state_ = ATOMIC_FLAG_INIT;
+	std::atomic_flag state_ = ATOMIC_FLAG_INIT;
 };
 
-} // hypro
+}  // namespace hypro

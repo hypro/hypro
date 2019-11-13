@@ -7,12 +7,11 @@
 
 namespace hypro {
 
-    struct guardHandlerSorter{
+struct guardHandlerSorter {
+	template <typename State>
+	inline bool operator()( IGuardHandler<State>* lhs, IGuardHandler<State>* rhs ) {
+		return lhs->getSortIndex() < rhs->getSortIndex();
+	}
+};
 
-        template<typename State>
-		inline bool operator()(IGuardHandler<State>* lhs, IGuardHandler<State>* rhs){
-			return lhs->getSortIndex() < rhs->getSortIndex();
-		}
-	};
-
-} // hypro
+}  // namespace hypro

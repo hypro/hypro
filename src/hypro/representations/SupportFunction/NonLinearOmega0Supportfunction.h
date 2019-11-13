@@ -23,7 +23,7 @@ namespace hypro {
 * nonlinear optimization
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent evaluationResult
 */
-template<class Setting>
+template <class Setting>
 class NonLinearOmega0Supportfunction : public SupportFunctionContent {
   private:
 	// dimensionality of this object
@@ -52,7 +52,6 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 	* Computes a SupportFunctionContent being a symmetric box (centered at the origin) around the specified support function
 	*/
 	SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>* boxoperator( SupportFunctionContent* sf ) {
-		
 		std::string method = "boxoperator:";
 
 		matrix_t<double> e = getZeroVector( dimensions );
@@ -62,9 +61,8 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 
 		auto iterator = directionsAlongDimensions.begin();
 		for ( unsigned int i = 0; i < dimensions; i++ ) {
-
-			if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXOPERATOR_VERBOSE){
-				TRACE("hypro.NLOmega0SF",method << " start loop-iteration " << i << '\n');
+			if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXOPERATOR_VERBOSE ) {
+				TRACE( "hypro.NLOmega0SF", method << " start loop-iteration " << i << '\n' );
 			}
 
 			// get 2 successive directions    (they are sorted such that they point both in the opposite direction along
@@ -74,9 +72,9 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 			l2 = *iterator;
 			++iterator;
 
-			if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXOPERATOR_VERBOSE){
-				TRACE("hypro.NLOmega0SF",method << " l1 = " << l1 << '\n');
-				TRACE("hypro.NLOmega0SF",method << " l2 = " << l2 << '\n');
+			if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXOPERATOR_VERBOSE ) {
+				TRACE( "hypro.NLOmega0SF", method << " l1 = " << l1 << '\n' );
+				TRACE( "hypro.NLOmega0SF", method << " l2 = " << l2 << '\n' );
 			}
 
 			// get the correspondent evaluation results
@@ -86,44 +84,43 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 			// set entry in e to the correspondent maximum value
 			e( i, 0 ) = std::max( a.supportValue, b.supportValue );
 
-			if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXOPERATOR_VERBOSE){
-				TRACE("hypro.NLOmega0SF",method << " omega(l1) = " << a.supportValue << '\n');
-				TRACE("hypro.NLOmega0SF",method << " omega(l2) = " << b.supportValue << '\n');
-				TRACE("hypro.NLOmega0SF",method << "e(" << i << ") = " << e( i, 0 ) << BL);
-				TRACE("hypro.NLOmega0SF",method << " end loop-iteration " << i << '\n');
+			if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXOPERATOR_VERBOSE ) {
+				TRACE( "hypro.NLOmega0SF", method << " omega(l1) = " << a.supportValue << '\n' );
+				TRACE( "hypro.NLOmega0SF", method << " omega(l2) = " << b.supportValue << '\n' );
+				TRACE( "hypro.NLOmega0SF", method << "e(" << i << ") = " << e( i, 0 ) << BL );
+				TRACE( "hypro.NLOmega0SF", method << " end loop-iteration " << i << '\n' );
 			}
 		}
 
-		if(Setting::TEST_){
+		if ( Setting::TEST_ ) {
 			SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>* result = new SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>( e, getAD() );
 			matrix_t<double> values( directionsAlongDimensions.size(), 1 );
 			result->multiEvaluate( &directionsAlongDimensions, &values );
-			TRACE("hypro.NLOmega0SF","boxoperator(sF): result multiEvaluation: " << BL << values << BL);
+			TRACE( "hypro.NLOmega0SF", "boxoperator(sF): result multiEvaluation: " << BL << values << BL );
 
 			sf->multiEvaluate( &directionsAlongDimensions, &values );
-			TRACE("hypro.NLOmega0SF","boxoperator(sF): sF multiEvaluation: " << BL << values << BL);
+			TRACE( "hypro.NLOmega0SF", "boxoperator(sF): sF multiEvaluation: " << BL << values << BL );
 			return result;
 		} else {
-			return new SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>( e, getAD() );	
+			return new SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>( e, getAD() );
 		}
-
 	}
 
 	/*
 	* computes the matrices edA and phi2
 	*/
 	matrix_t<double> calcvalues( matrix_t<double>* A, unsigned int i, unsigned int j, unsigned int k, unsigned int l ) {
-
 		std::string method = "calcvalues:";
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " A = " << *A << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " A = " << *A << '\n' );
 		}
 
 		matrix_t<double> temp = matrix_t<double>::Zero( 3 * dimensions, 3 * dimensions );
 		matrix_t<double> Ad = ( *A ) * delta;
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " Ad = " << '\n' << Ad << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " Ad = " << '\n'
+											  << Ad << '\n' );
 		}
 
 		// copy Ad into temp
@@ -133,14 +130,16 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 			}
 		}
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " temp (with Ad) = " << '\n' << temp << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " temp (with Ad) = " << '\n'
+											  << temp << '\n' );
 		}
 
 		matrix_t<double> Id = matrix_t<double>::Identity( dimensions, dimensions ) * delta;
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " Id = " << '\n' << Id << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " Id = " << '\n'
+											  << Id << '\n' );
 		}
 
 		// copy Id into temp
@@ -151,17 +150,17 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 			}
 		}
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " temp = " << temp << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " temp = " << temp << '\n' );
 		}
 
 		matrix_t<double> exptemp = exponentialmatrix( temp );  // compute exponential of temp
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " exptemp = " << exptemp << '\n');
-			TRACE("hypro.NLOmega0SF","i: " << i << " j: " << j << " k: " << k << " l: " << l << '\n');
-			TRACE("hypro.NLOmega0SF","expcols: " << exptemp.cols() << '\n');
-			TRACE("hypro.NLOmega0SF","exprows: " << exptemp.rows() << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCVALUES_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " exptemp = " << exptemp << '\n' );
+			TRACE( "hypro.NLOmega0SF", "i: " << i << " j: " << j << " k: " << k << " l: " << l << '\n' );
+			TRACE( "hypro.NLOmega0SF", "expcols: " << exptemp.cols() << '\n' );
+			TRACE( "hypro.NLOmega0SF", "exprows: " << exptemp.rows() << '\n' );
 		}
 
 		// extract the specified part of the exponential matrix exptemp
@@ -175,30 +174,30 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 		matrix_t<double> Asquare = ( ( *A ) * ( *A ) );
 
 		std::string method = "calcepsilon:";
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " A = " << *A << '\n');
-			TRACE("hypro.NLOmega0SF",method << " Asquare = " << Asquare << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " A = " << *A << '\n' );
+			TRACE( "hypro.NLOmega0SF", method << " Asquare = " << Asquare << '\n' );
 		}
 
 		// e_p
 		MultiplicationSupportfunction* a2x0 = X0->multiply( Asquare );
 		SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>* a2x0_box = boxoperator( a2x0 );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " a2x0_box constructed" << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " a2x0_box constructed" << '\n' );
 		}
 
 		MultiplicationSupportfunction* temp = a2x0_box->multiply( phi2.transpose() );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " phi2.transpose() * &a2x0_box constructed" << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " phi2.transpose() * &a2x0_box constructed" << '\n' );
 		}
 
 		SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>* result = boxoperator( temp );
 		e_p = result->getE();
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " e_p = " << e_p << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " e_p = " << e_p << '\n' );
 		}
 
 		// cleanup heap
@@ -214,8 +213,8 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 		result = boxoperator( temp );
 		e_n = result->getE();
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " e_n = " << e_n << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " e_n = " << e_n << '\n' );
 		}
 
 		// cleanup heap
@@ -227,27 +226,27 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 		// epsilonpsi
 		MultiplicationSupportfunction* au = V->multiply( *A );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " au " << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " au " << '\n' );
 		}
 
 		SymmetricCenteredBoxSupportFunction<BoxSupportFunctionSetting>* au_box = boxoperator( au );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " au_box " << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " au_box " << '\n' );
 		}
 
 		delete au;
 		temp = au_box->multiply( phi2.transpose() );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " temp " << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " temp " << '\n' );
 		}
 
 		epsilonpsi = boxoperator( temp );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " epsilonpsi " << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE && Setting::CALCEPSILON_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " epsilonpsi " << '\n' );
 		}
 
 		delete temp;
@@ -305,10 +304,10 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 	* glpk)
 	*/
 	evaluationResult specificEvaluation( matrix_t<double> l ) {
-
 		std::string method = "NonLinearOmega0Supportfunction: evaluate: ";
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " l: " << '\n' << l << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " l: " << '\n'
+											  << l << '\n' );
 		}
 
 		// precompute values needed during optimization (dependent on l)
@@ -320,13 +319,13 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 		epsilonpsires = epsilonpsi->evaluate( &l );
 		absl = l.array().abs().matrix();
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF","NonLinearOmega0Supportfunction: evaluate: precomputed constants:" << BL);
-			TRACE("hypro.NLOmega0SF","x0(l): " << x0res.supportValue << BL);
-			TRACE("hypro.NLOmega0SF","edX0res(l): " << edX0res.supportValue << BL);
-			TRACE("hypro.NLOmega0SF","Vres(l): " << Vres.supportValue << BL);
-			TRACE("hypro.NLOmega0SF","epsilonpsires(l): " << epsilonpsires.supportValue << BL);
-			TRACE("hypro.NLOmega0SF","absl: " << absl << BL);
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", "NonLinearOmega0Supportfunction: evaluate: precomputed constants:" << BL );
+			TRACE( "hypro.NLOmega0SF", "x0(l): " << x0res.supportValue << BL );
+			TRACE( "hypro.NLOmega0SF", "edX0res(l): " << edX0res.supportValue << BL );
+			TRACE( "hypro.NLOmega0SF", "Vres(l): " << Vres.supportValue << BL );
+			TRACE( "hypro.NLOmega0SF", "epsilonpsires(l): " << epsilonpsires.supportValue << BL );
+			TRACE( "hypro.NLOmega0SF", "absl: " << absl << BL );
 		}
 
 		// optimization parameter and start value
@@ -352,9 +351,8 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 
 		// catch error case
 		if ( result <= 0 ) {
-
-			if(Setting::SUPPORTFUNCTION_VERBOSE){
-				TRACE("hypro.NLOmega0SF",method << " NLOPT Failure");
+			if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+				TRACE( "hypro.NLOmega0SF", method << " NLOPT Failure" );
 			}
 
 			// avoid program crash
@@ -370,9 +368,11 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 		oV( 0, 0 ) = x[0];
 		eR.optimumValue = oV;
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " eR.supportValue: " << '\n' << eR.supportValue << '\n');
-			TRACE("hypro.NLOmega0SF",method << " eR.optimumValue: " << '\n' << eR.optimumValue << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " eR.supportValue: " << '\n'
+											  << eR.supportValue << '\n' );
+			TRACE( "hypro.NLOmega0SF", method << " eR.optimumValue: " << '\n'
+											  << eR.optimumValue << '\n' );
 		}
 
 		return eR;
@@ -394,19 +394,18 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 	NonLinearOmega0Supportfunction( matrix_t<double>* A, SupportFunctionContent* V, SupportFunctionContent* X0, double delta,
 									artificialDirections* aD )
 		: SupportFunctionContent( SupportFunctionType::NonLinear_Type, aD ) {
-
 		std::string method = "NonLinearOmega0Supportfunction:";
 
 		// initialize values used by boxoperators
 		dimensions = ( *A ).rows();
 		directionsAlongDimensions = vectorgenerator(
 			  dimensions );  // 2 last directions are equivalent to artificial - caugth by SupportFunctionContent.evaluate
-// TODO: could be more efficient if the directions in the additional dimension are exactly the same (in memory with same
-// pointer) as in aD
-// in this case SupportFunctionContent.evaluate needs no second nested if branch
+							 // TODO: could be more efficient if the directions in the additional dimension are exactly the same (in memory with same
+							 // pointer) as in aD
+							 // in this case SupportFunctionContent.evaluate needs no second nested if branch
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " generated Vectors along dimensions:" << BL);
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " generated Vectors along dimensions:" << BL );
 			printDirectionList( directionsAlongDimensions );
 		}
 
@@ -415,30 +414,31 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 		this->X0 = X0;
 		this->delta = delta;
 
-
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " initialized class attributes with constructor values" << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " initialized class attributes with constructor values" << '\n' );
 		}
 
 		// absolute value of A
 		absA = ( *A ).array().abs().matrix();
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " computed Abs(A):" << '\n');
-			TRACE("hypro.NLOmega0SF",absA << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " computed Abs(A):" << '\n' );
+			TRACE( "hypro.NLOmega0SF", absA << '\n' );
 		}
 
 		// compute edA and phi2
 		unsigned int zero = 0;
 		edA = calcvalues( A, zero, dimensions, zero, dimensions );
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " computed edA: " << '\n' << edA << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " computed edA: " << '\n'
+											  << edA << '\n' );
 		}
 
 		phi2 = calcvalues( &absA, zero, dimensions, 2 * dimensions, dimensions );
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF",method << " computed phi2: " << '\n' << phi2 << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", method << " computed phi2: " << '\n'
+											  << phi2 << '\n' );
 		}
 
 		// compute epsilonpsi, e_p and e_n
@@ -450,17 +450,16 @@ class NonLinearOmega0Supportfunction : public SupportFunctionContent {
 
 	// destructor
 	~NonLinearOmega0Supportfunction() {
-
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF"," NonLinearOmega0Supportfunction: destructor " << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", " NonLinearOmega0Supportfunction: destructor " << '\n' );
 		}
 
 		delete epsilonpsi;  // has been explicitely copied to heap and can be deleted at this point
 		delete edX0;
 
-		if(Setting::SUPPORTFUNCTION_VERBOSE){
-			TRACE("hypro.NLOmega0SF"," NonLinearOmega0Supportfunction: destructor - complete" << '\n');
+		if ( Setting::SUPPORTFUNCTION_VERBOSE ) {
+			TRACE( "hypro.NLOmega0SF", " NonLinearOmega0Supportfunction: destructor - complete" << '\n' );
 		}
 	}
 };
-}
+}  // namespace hypro
