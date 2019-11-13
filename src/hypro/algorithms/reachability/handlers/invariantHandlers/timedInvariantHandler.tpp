@@ -16,12 +16,12 @@ namespace hypro {
 	    DEBUG("hydra.worker", "Set after intersection with invariant:\n" << res.second);
 	    if (res.first != CONTAINMENT::NO) {
 
-        	#ifdef HYDRA_USE_LOGGING
+#ifdef HYDRA_USE_LOGGING
         	// DBG
         	DEBUG("hydra.worker","Invariant satisfying segment: " << res.second);
 	        Box<Number> tmp = Converter<Number>::toBox(res.second);
 	        DEBUG("hydra.worker","Invariant satisfying segment (box): " << tmp);
-	        #endif
+#endif
 
 	        this->mContainment = res.first;
 	        this->mState->setSetDirect(res.second,this->mIndex);

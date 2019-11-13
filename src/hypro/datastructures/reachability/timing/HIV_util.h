@@ -56,7 +56,7 @@ namespace hypro {
     template<typename T, typename N>
     static bool fullCover(const HierarchicalIntervalVector<T,N>& in, const carl::Interval<N>& intv, T type) {
 
-        #ifndef NDEBUG
+#ifndef NDEBUG
         bool verifiedRes = false;
         // get all intervals that satisfy bot criteria: Intersection interval-wise and correct type.
         auto intervals = in.getIntersectionIntervals(intv,type);
@@ -67,7 +67,7 @@ namespace hypro {
                 verifiedRes = true;
             }
         }
-        #endif
+#endif
 
         if(in.coversEntry(intv,type)) {
             assert(verifiedRes);

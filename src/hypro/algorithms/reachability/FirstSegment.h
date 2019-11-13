@@ -47,9 +47,9 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 			break;
 		}
 		case representation_name::ppl_polytope: {
-            #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 			in.setSetDirect(boost::get<Polytope<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toPolytope(bloatBox)));
-            #endif
+#endif
 			break;
 		}
         case representation_name::difference_bounds: {
@@ -81,20 +81,15 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
     // check if initial Valuation fulfills Invariant
     assert(_state.getLocation() != nullptr);
 
-    #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
         TRACE("hypro.reachability", "Location: " << _state.getLocation()->getName() << std::endl);
         double convertedTimeStep =carl::convert<tNumber,double>(timeStep);
         TRACE("hypro.reachability", "Time step size: " << timeStep << "(" << convertedTimeStep << ")" << std::endl);
         TRACE("hypro.reachability", "------" << std::endl);
-    #endif
+#endif
 
     DEBUG("hypro.reachability","Check invariant: " << _state.getLocation()->getInvariant() << " for set " << _state);
     std::pair<CONTAINMENT,State> initialPair = _state.satisfies(_state.getLocation()->getInvariant());
-
-    #ifdef HYPRO_LOGGING
-    //Box<Number> tmp3 = boost::get<>(boost::apply_visitor(genericConversionVisitor<typename State::repVariant,Number>(representation_name::box),initialPair.second.getSet(0)));
-    //TRACE("hypro.reachability","Initial pair segment: " << tmp3);
-    #endif
 
     if (initialPair.first != CONTAINMENT::NO) {
 
@@ -113,11 +108,11 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         // R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
         matrix_t<Number> trafoMatrix = computeTrafoMatrix(_state.getLocation(), carl::convert<tNumber,Number>(timeStep));
 
-        #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
         TRACE("hypro.reachability", "e^(deltaMatrix): " << std::endl);
         TRACE("hypro.reachability", trafoMatrix << std::endl);
         TRACE("hypro.reachability", "------" << std::endl);
-        #endif
+#endif
 
         // e^(At)*X0 = polytope at t=delta
         unsigned rows = trafoMatrix.rows();
@@ -129,9 +124,9 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
 
         State deltaValuation = initialPair.second.partiallyApplyTimeStep(ConstraintSet<Number>(trafoMatrixResized, translation), timeStep,0);
 
-        #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
         TRACE("hypro.reachability", "Polytope at t=delta: " << deltaValuation);
-        #endif
+#endif
 
         State firstSegment(_state.getLocation());
         unsigned dimension = initialPair.second.getDimension(0);
@@ -152,9 +147,9 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         firstSegment = deltaValuation.unite(initialPair.second);
 
         if (!errorBoxVector.empty()) {
-        	#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
             TRACE("hypro.reachability", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension);
-            #endif
+#endif
 
             //firstSegment.setSet(bloatBox<Number, Representation>(boost::get<Representation>(firstSegment.getSet()), Number(Number(1) / Number(4)) * errorBoxVector[0]));
 
@@ -166,9 +161,9 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
             //assert(firstSegment.contains(initialPair.second));
             //assert(firstSegment.contains(deltaValuation));
 
-            #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
             TRACE("hypro.reachability", "first Flowpipe Segment (after minkowski Sum): " << firstSegment);
-            #endif
+#endif
         } else {
             return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(CONTAINMENT::NO);
         }
@@ -229,11 +224,11 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         TRACE("hypro.reachability","Check invariant - done.");
         if (fullSegment.first != CONTAINMENT::NO) {
         	//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
-        	#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
         	// DBG
 	        //Box<Number> tmp = Converter<Number>::toBox(boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<typename State::repVariant,Number>(representation_name::box),fullSegment.second.getSet())));
 	        //TRACE("hypro.reachability","First segment: " << tmp);
-	        #endif
+#endif
 
         	assert(fullSegment.second.getLocation() != nullptr);
 

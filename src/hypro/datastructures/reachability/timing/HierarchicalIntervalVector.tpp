@@ -232,11 +232,11 @@ namespace hypro {
 			}
 		}
 		// assert that all intervals are pairwise disjunct -- similar to sanity check.
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		for(auto it = res.begin(); it != res.end(); ++it) {
 			assert(it == res.begin() || !carl::set_have_intersection(*it, *std::prev(it)));
 		}
-		#endif
+#endif
 		DEBUG("hypro.datastructures.hiv", "Found " << res.size() << " intersecting intervals.");
 		return res;
 	}
@@ -276,11 +276,11 @@ namespace hypro {
 			}
 		}
 		// assert that all intervals are pairwise disjunct -- similar to sanity check.
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		for(auto it = res.begin(); it != res.end(); ++it) {
 			assert(it == res.begin() || !carl::set_have_intersection(*it, *std::prev(it)));
 		}
-		#endif
+#endif
 		DEBUG("hypro.datastructures.hiv", "Found " << res.size() << " intersecting intervals.");
 		return res;
 	}

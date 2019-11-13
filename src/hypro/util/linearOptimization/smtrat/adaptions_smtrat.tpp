@@ -17,7 +17,7 @@ namespace hypro {
 		}
 		// std::cout << "Informed basic constraints defining the object." << std::endl;
 
-		#ifdef USE_PRESOLUTION
+#ifdef USE_PRESOLUTION
 		simplex.push();
 		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
 		if(preSolution.errorCode ==SOLUTION::FEAS) {
@@ -31,24 +31,24 @@ namespace hypro {
 			return preSolution;
 		}
 		//std::cout << "SMTRAT: Without presolution." << std::endl;
-		#endif // USE_PRESOLUTION
+#endif // USE_PRESOLUTION
 		simplex.addObjective(objective, false);
 
-		#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 		//std::cout << "(push)" << std::endl;
 		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
 		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
-		#endif
+#endif
 
-		#ifdef VERIFY_RESULT
+#ifdef VERIFY_RESULT
 		outputToSmtlibFormat(simplex , 0, objective, "Collected_out_");
-		#endif
+#endif
 
 		smtrat::Answer smtratCheck = simplex.check();
 
-		#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 		//std::cout << "Done checking." << std::endl;
-		#endif
+#endif
 
 		switch(smtratCheck) {
 			case smtrat::Answer::SAT:{
@@ -56,7 +56,7 @@ namespace hypro {
 				return extractSolution<Number>(simplex,objective,constraints.cols());
 			}
 			default:{
-				#ifdef USE_PRESOLUTION
+#ifdef USE_PRESOLUTION
 				// in this case the constraints introduced by the presolution made the problem infeasible
 				simplex.pop();
 				simplex.addObjective(objective, false);
@@ -72,12 +72,12 @@ namespace hypro {
 					assert(smtratCheck == smtrat::Answer::UNSAT);
 					return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 				}
-				#else // NOT USE_PRESOLUTION
+#else // NOT USE_PRESOLUTION
 				// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 				assert(smtratCheck == smtrat::Answer::UNSAT);
 				// std::cout << "smtrat: UNSAT" << std::endl;
 				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-				#endif // USE_PRESOLUTION
+#endif // USE_PRESOLUTION
 				break;
 			}
 		}
@@ -197,9 +197,9 @@ namespace hypro {
 
 		// first call to check satisfiability
 		smtrat::Answer firstCheck = simplex.check();
-		#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 		//std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
-		#endif
+#endif
 		switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
 					return res;
@@ -214,17 +214,17 @@ namespace hypro {
 		}
 
 		std::size_t count = 0;
-		#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 		//std::cout << __func__ << " Original Formula: " << std::endl;
 		//simplex.printAssertions();
-		#endif
+#endif
 
 		std::size_t formulaSize = simplex.formula().size();
 		for(auto formulaIt = simplex.formulaBegin(); count < formulaSize; ++count) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
-			#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 			//std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
-			#endif
+#endif
 			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::turnAroundRelation( (*formulaIt).formula().constraint().relation() ) );
 			unsigned currentFormulaSize = simplex.formula().size();
 			simplex.inform(negatedConstraint);
@@ -232,16 +232,16 @@ namespace hypro {
 
 			if(simplex.formula().size() > currentFormulaSize) {
 				formulaIt = simplex.remove(formulaIt);
-				#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 				//std::cout << __func__ << " Negated Constraint: " << negatedConstraint << std::endl;
-				#endif
+#endif
 
 				smtrat::Answer isRedundant = simplex.check();
 				assert(isRedundant != smtrat::Answer::UNKNOWN);
 				if(isRedundant == smtrat::Answer::UNSAT){
-					#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 					//std::cout << __func__ << " is redundant." << std::endl;
-					#endif
+#endif
 					assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
 					assert(unsigned(formulaMapping.at(originalConstraint)) < constraints.rows());
 					res.push_back(formulaMapping.at(originalConstraint));

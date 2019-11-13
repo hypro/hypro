@@ -11,8 +11,8 @@
 
 #include "../../../hypro/types.h"
 
- #ifdef COMPARE_POLYMAKE
- #include <polymake/Main.h>
+#ifdef COMPARE_POLYMAKE
+#include <polymake/Main.h>
  //#include <polymake/Matrix.h>
  //#include <polymake/Rational.h>
 
@@ -20,4 +20,4 @@
 
  } //namespace
 
- #endif
+#endif

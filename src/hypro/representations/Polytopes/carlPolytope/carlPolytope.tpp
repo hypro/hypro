@@ -376,13 +376,13 @@ namespace hypro {
         for(const auto& dir : directions) {
             evalResult.emplace_back(std::move(opt.evaluate(dir,true)));
         }
-        vector_t<Number> constants = vector_t<Number>(directions.rows());
+        vector_t<Number> constants = vector_t<Number>(directions.size());
         Eigen::Index pos = 0;
         for(const auto& res : evalResult) {
             constants(pos) = res.supportValue;
             ++pos;
         }
-        return CarlPolytopeT<Number,Converter,Setting>(directions,constants);
+        return CarlPolytopeT<Number,Converter,Setting>(combineRows(directions),constants);
     }
 
     template<typename Number, typename Converter, typename Setting>
@@ -455,7 +455,7 @@ namespace hypro {
     template<typename Number, typename Converter, typename Setting>
     bool CarlPolytopeT<Number,Converter,Setting>::dimensionWasCorrectlySet() const {
         bool res = true;
-        #ifndef NDEBUG
+#ifndef NDEBUG
         auto tmpDim = mDimension;
         std::size_t d = 0;
         // get maximal state space dimension based on the variables used in mFormula.
@@ -465,7 +465,7 @@ namespace hypro {
             //std::cout << "Dimension of this " << *this << " was set to " << tmpDim << " but actually is " << d << std::endl;
             return false;
         }
-        #endif
+#endif
         return res;
     }
 

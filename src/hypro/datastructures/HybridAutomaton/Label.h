@@ -18,15 +18,10 @@ class Label {
 
   public:
     Label() = delete;
-    Label(const Label& in)
-    	: mName()
-    {
-    	mName = in.getName();
-    }
-
+    Label(const Label& in) = default;
     Label(Label&& in) = default;
 
-    Label(const std::string& name) { mName = name; };
+    explicit Label(const std::string& name) : mName(name) {};
 
     ~Label() {};
 

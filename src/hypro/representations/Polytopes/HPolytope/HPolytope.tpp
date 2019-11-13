@@ -444,7 +444,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 
 	// verify against reverse-search algorithm.
 	/*
-	#ifndef NDEBUG
+#ifndef NDEBUG
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
 	ev.enumerateVertices();
 	//std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
@@ -466,7 +466,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 		assert(found);
 	}
 	return ev.getPoints();
-	#endif
+#endif
 	*/
 	return vertices;
 /*

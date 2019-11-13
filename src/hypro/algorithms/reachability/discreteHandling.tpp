@@ -15,16 +15,16 @@ namespace reachability {
 
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first != CONTAINMENT::NO ) {
-			#ifdef REACH_DEBUG
+#ifdef REACH_DEBUG
 			INFO("hypro.reacher", "Transition enabled at timestamp " << _state.getTimestamp() << "!");
-			#endif
+#endif
 
 			result.setSets(guardSatisfyingSet.second.getSets());
 			return true;
 		} else {
-			#ifdef REACH_DEBUG
+#ifdef REACH_DEBUG
 			INFO("hypro.reacher", "Continuous guard invalidated.");
-			#endif
+#endif
 			return false;
 		}
 	}
@@ -72,23 +72,23 @@ namespace reachability {
 				collectedSets = collectedSets.unite(*stateIt);
 			}
 
-			#ifdef REACH_DEBUG
+#ifdef REACH_DEBUG
 			INFO("hypro.reacher", "Unified " << aggregationPair.second.size() << " sets for aggregation.");
-			#endif
+#endif
 
 			State s;
 			s.setLocation(aggregationPair.first->getTarget());
 
 			// reduce new initial sets.
 			//collectedSets.removeRedundancy();
-			#ifdef USE_SMART_AGGREGATION
+#ifdef USE_SMART_AGGREGATION
 			collectedSets.removeRedundancy();
 			if(collectedSets.getSetType(0) == representation_name::support_function) {
 				// Forced reduction to a box template.
 				applyReduction<Number>(boost::get<hypro::SupportFunction<Number>>(collectedSets.rGetSet(0)));
 			}
 			//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
-			#endif
+#endif
 
 			//TODO: Maybe use smth else or use setSetsSave in all functions
 			//s.setSetsSave(collectedSets.getSets());
@@ -106,21 +106,21 @@ namespace reachability {
 			INFO("hypro.reacher","Apply reset.");
 			State tmp = applyReset(collectedSets, aggregationPair.first->getReset());
 			INFO("hypro.reacher","Vertices size after reset: " << tmp.vertices().size());
-			#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 			for(const auto& vertex : tmp.vertices()) {
 				//std::cout << convert<Number,double>(vertex) << std::endl;
 				INFO("hypro.reacher", vertex << ", ");
 			}
-			#endif
+#endif
 
 			std::pair<CONTAINMENT, State> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
 			INFO("hypro.reacher","does resetted satisfy invariant? " << invariantSatisfyingSet.first << " size of vertices: " << invariantSatisfyingSet.second.vertices().size() << " and resulting vertices: ");
-			#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 			for(const auto& vertex : invariantSatisfyingSet.second.vertices()) {
 				//std::cout << convert<Number,double>(vertex) << std::endl;
 				INFO("hypro.reacher", vertex << ", ");
 			}
-			#endif
+#endif
 
 			if(invariantSatisfyingSet.first != CONTAINMENT::NO){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
@@ -154,9 +154,9 @@ namespace reachability {
 				assert(guardSatisfyingState.getTimestamp() == state.getTimestamp());
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 				assert(!guardSatisfyingState.getTimestamp().isUnbounded());
-				#ifdef USE_FORCE_REDUCTION
+#ifdef USE_FORCE_REDUCTION
 				applyReduction(guardSatisfyingState);
-				#endif
+#endif
 				nextInitialSets.emplace_back(transition, guardSatisfyingState);
 				transitionEnabled = true;
 			}

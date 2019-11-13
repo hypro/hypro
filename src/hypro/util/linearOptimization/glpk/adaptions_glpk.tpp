@@ -68,19 +68,19 @@ namespace hypro {
 					// we search for d non-basic variables at their upper bound, which define the optimal point.
 					int status = glp_get_row_stat( context.lp, i);
 					if( status == GLP_NU ) {
-						#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 						//std::cout << "Row " << i << " is at its upper bounds." << std::endl;
-						#endif
+#endif
 						exactSolutionMatrix.row(pos) = constraints.row(i-1);
 						exactSolutionVector(pos) = constants(i-1);
 						++pos;
 					}
 				}
 				exactSolution = Eigen::FullPivLU<matrix_t<Number>>(exactSolutionMatrix).solve(exactSolutionVector);
-				#ifdef DEBUG_MSG
+#ifdef DEBUG_MSG
 				//std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
 				//std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
-				#endif
+#endif
 				return EvaluationResult<Number>(_direction.dot(exactSolution), exactSolution, SOLUTION::FEAS);
 				break;
 			}
@@ -129,6 +129,8 @@ namespace hypro {
 			case GLP_NOFEAS: {
 				return res;
 			}
+			default:
+				break;
 		}
 
 		for(std::size_t constraintIndex = std::size_t(constraints.rows()-1); ; --constraintIndex) {

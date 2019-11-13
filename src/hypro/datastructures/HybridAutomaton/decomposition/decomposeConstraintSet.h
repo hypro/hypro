@@ -1,5 +1,6 @@
 #pragma once
 #include "Decomposition.h"
+#include "../../../types.h"
 
 namespace hypro {
 

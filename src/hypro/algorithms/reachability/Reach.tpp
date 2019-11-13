@@ -46,12 +46,12 @@ namespace reachability {
 						s.setSetDirect(ConstraintSet<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
-					#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 					case representation_name::ppl_polytope: {
 						s.setSetDirect(Polytope<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
-					#endif
+#endif
 					case representation_name::SFN: {
 						s.setSetDirect(SupportFunctionNew<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;

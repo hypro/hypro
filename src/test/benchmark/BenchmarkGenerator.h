@@ -11,8 +11,8 @@
 #pragma once
 
 #include "Timer.h"
- #include "Generators.h"
- #include <vector>
+#include "Generators.h"
+#include <vector>
 
 namespace hypro {
 	template<typename Representation, typename Number, int operation>
@@ -56,4 +56,3 @@ namespace hypro {
 		}
 	};
 }
-

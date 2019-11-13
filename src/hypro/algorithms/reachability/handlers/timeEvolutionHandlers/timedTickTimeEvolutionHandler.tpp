@@ -11,11 +11,11 @@ namespace hypro {
         	this->mState->setSet(dbm,this->mIndex);
             this->mState->addTimeToClocks(this->mTimeStep);
         }
-        #ifdef HYDRA_USE_LOGGING
+#ifdef HYDRA_USE_LOGGING
         // DBG
         DEBUG("hydra.worker","Set after timestep: " << this->mState->getSet(this->mIndex));
         hypro::Box<Number> tmp = hypro::Converter<Number>::toBox(boost::get<hypro::DifferenceBounds<Number>>(this->mState->getSet(this->mIndex)));
         DEBUG("hydra.worker","Set after timestep(box): " << tmp);
-        #endif
+#endif
     }
 } // hypro

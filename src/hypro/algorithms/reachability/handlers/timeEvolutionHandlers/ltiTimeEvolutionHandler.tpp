@@ -8,10 +8,5 @@ namespace hypro {
         State res = mState->partiallyApplyTimeStep(hypro::ConstraintSet<Number>(mTrafo, mTranslation), mTimeStep, mIndex);
 	    mState->setSetDirect(res.getSet(mIndex),mIndex);
         mState->setSetType(res.getSetType(mIndex),mIndex);
-        #ifdef HYDRA_USE_LOGGING
-        // DBG
-        //hypro::Box<Number> tmp = hypro::Converter<Number>::toBox(boost::get<Representation>(mState->getSet(mIndex)));
-        //DEBUG("hydra.worker","Set after timestep: " << tmp);
-        #endif
     }
 } // hypro

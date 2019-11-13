@@ -44,8 +44,8 @@ addons:
       - uuid-dev
       - openjdk-9-jre
 
-
 matrix:
+  fast_finish: true
   include:
     - os: linux
       compiler: g++-7
@@ -156,6 +156,10 @@ matrix:
           - llvm
       compiler: clang
       env: COMPILER=clang++
+  allow_failures:
+    - os: osx
+      env: COMPILER=clang++
+      compiler: clang
 
 
 before_install:

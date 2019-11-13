@@ -3,115 +3,95 @@
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/flags.h )
 
 ########################################################################################
-
+# Create object library first
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
-########################################################################################
-
-if(STATICLIB_SWITCH)
-	message(STATUS "linking static")
-	add_library(${PROJECT_NAME}_static STATIC ${sources})
-	set_target_properties( ${PROJECT_NAME}_static PROPERTIES
-		# create *nix style library versions + symbolic links
-		VERSION "${PROJECT_VERSION}"
-		SOVERSION "${PROJECT_VERSION}"
-		# allow creating static and shared libs without conflicts
-		CLEAN_DIRECT_OUTPUT 1
-		# avoid conflicts between library and binary target names
-		OUTPUT_NAME hypro
-		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		LINKER_LANGUAGE CXX
-	)
-	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
-	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
-	#message("hypro sources: " ${sources})
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC carl-static)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC COCOA_STATIC)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC EIGEN3)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost_STATIC)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost_program_options_STATIC)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC COCOA_STATIC)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC GMP_STATIC)
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC GMPXX_STATIC)
-	target_include_directories(${PROJECT_NAME}_static
+add_library(${PROJECT_NAME}-objects OBJECT ${sources})
+add_dependencies(${PROJECT_NAME}-objects resources)
+target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC EIGEN3 COCOA_SHARED Boost_SHARED Boost_program_options_SHARED carl-shared GMP_SHARED GMPXX_SHARED GLPK_STATIC ANTLR4_SHARED)
+target_include_directories(${PROJECT_NAME}-objects
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
-	add_dependencies(${PROJECT_NAME}_static resources)
-	set_property(TARGET ${PROJECT_NAME}_static PROPERTY CXX_STANDARD 17)
-else()
-	message(STATUS "linking dynamic")
-	add_library(${PROJECT_NAME} SHARED ${sources})
-	set_target_properties( ${PROJECT_NAME} PROPERTIES
+
+message("hypro sources: ${sources}" )
+
+########################################################################################
+# Create static and shared libraries
+
+	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
+	set_target_properties( ${PROJECT_NAME}-static PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"
 		SOVERSION "${PROJECT_VERSION}"
-		# allow creating static and shared libs without conflicts
-		CLEAN_DIRECT_OUTPUT 1
-		# avoid conflicts between library and binary target names
-		OUTPUT_NAME hypro
+		OUTPUT_NAME ${PROJECT_NAME}
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC carl-static)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC COCOA_STATIC)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC EIGEN3)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_STATIC)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_program_options_STATIC)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC COCOA_STATIC)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC GMP_STATIC)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC GMPXX_STATIC)
+	target_include_directories(${PROJECT_NAME}-static
+		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
+		PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+	)
 
-	#get_target_property(IFL carl INTERFACE_LINK_LIBRARIES)
-	#message(STATUS "Carl interface link libraries: ${IFL}")
-	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
-	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
-	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
-	#message(STATUS "hypro libraries dynamic: " "${${PROJECT_NAME}_LIBRARIES_DYNAMIC}")
-	#message(STATUS "hypro interface include dir: ${CMAKE_CURRENT_SOURCE_DIR}")
-	#message("hypro include dirs: " ${${PROJECT_NAME}_INCLUDE_DIRS})
-	#message("hypro sources: " ${sources})
-	target_link_libraries(${PROJECT_NAME} PUBLIC COCOA_SHARED)
-	target_link_libraries(${PROJECT_NAME} PUBLIC EIGEN3)
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC} pthread)
-	target_link_libraries(${PROJECT_NAME} PUBLIC carl-shared)
-	target_link_libraries(${PROJECT_NAME} PUBLIC Boost_SHARED)
-	target_link_libraries(${PROJECT_NAME} PUBLIC COCOA_SHARED)
-	target_link_libraries(${PROJECT_NAME} PUBLIC Boost_program_options_SHARED)
-	target_link_libraries(${PROJECT_NAME} PUBLIC GMP_SHARED)
-	target_link_libraries(${PROJECT_NAME} PUBLIC GMPXX_SHARED)
-	target_link_libraries(${PROJECT_NAME} PUBLIC GLPK_STATIC)
-	target_link_libraries(${PROJECT_NAME} PUBLIC COCOA_SHARED)
-	#target_link_libraries(${PROJECT_NAME} PUBLIC ANTLR4_STATIC)
-	#target_link_libraries(${PROJECT_NAME} PUBLIC pthread)
+	add_library(${PROJECT_NAME}-shared SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
+	set_target_properties( ${PROJECT_NAME}-shared PROPERTIES
+		VERSION "${PROJECT_VERSION}"
+		SOVERSION "${PROJECT_VERSION}"
+		OUTPUT_NAME ${PROJECT_NAME}
+		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+		LINKER_LANGUAGE CXX
+	)
+	target_link_libraries(${PROJECT_NAME}-shared EIGEN3)
+	target_link_libraries(${PROJECT_NAME}-shared ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
+	target_link_libraries(${PROJECT_NAME}-shared carl-shared)
+	target_link_libraries(${PROJECT_NAME}-shared Boost_SHARED)
+	target_link_libraries(${PROJECT_NAME}-shared COCOA_SHARED)
+	target_link_libraries(${PROJECT_NAME}-shared Boost_program_options_SHARED)
+	target_link_libraries(${PROJECT_NAME}-shared GMP_SHARED)
+	target_link_libraries(${PROJECT_NAME}-shared GMPXX_SHARED)
+	target_link_libraries(${PROJECT_NAME}-shared GLPK_STATIC)
+	target_link_libraries(${PROJECT_NAME}-shared ANTLR4_SHARED)
+	target_link_libraries(${PROJECT_NAME}-shared pthread)
 	if(HYPRO_USE_SMTRAT)
-		target_link_libraries(${PROJECT_NAME} PUBLIC smtrat-solver-shared smtrat-module-LRAModule-shared)
+		target_link_libraries(${PROJECT_NAME}-shared PUBLIC smtrat-solver-shared smtrat-module-LRAModule-shared)
+		target_link_libraries(${PROJECT_NAME}-static PUBLIC smtrat-solver-static smtrat-module-LRAModule-static)
 	endif()
 
-	target_include_directories(${PROJECT_NAME}
+	target_include_directories(${PROJECT_NAME}-shared
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 		INTERFACE
-		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/antlr_build/include/antlr4-runtime>
+		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
 	)
-	add_dependencies(${PROJECT_NAME} resources)
-	set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
-endif()
 
-if(STATICLIB_SWITCH)
-	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-		set_target_properties(${PROJECT_NAME}_static PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
-	else()
-		set_target_properties(${PROJECT_NAME}_static PROPERTIES LINKER_LANGUAGE CXX)
-	endif()
-	set(HYPRO_TARGETS ${PROJECT_NAME}_static CACHE STRING INTERNAL FORCE)
-else()
-	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
-	else()
-		set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-	endif()
-	set(HYPRO_TARGETS ${PROJECT_NAME} CACHE STRING INTERNAL FORCE)
+	add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
+	add_dependencies(${PROJECT_NAME} resources)
+
+
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
+	set_target_properties(${PROJECT_NAME}-static PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
 endif()
+set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" CACHE STRING INTERNAL FORCE)
+
 
 # Options for static linking
 if (APPLE)
@@ -122,22 +102,20 @@ endif()
 
 ########################################################################################
 
-cotire(${PROJECT_NAME})
+cotire(${PROJECT_NAME}-shared)
+cotire(${PROJECT_NAME}-static)
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.tpp")
 
-if(STATICLIB_SWITCH)
-install(TARGETS ${PROJECT_NAME}_static
-		EXPORT ${PROJECT_NAME}_static
-		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
-else()
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS ${PROJECT_NAME}-static
 		EXPORT ${PROJECT_NAME}
 		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
 		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
-endif()
+install(TARGETS ${PROJECT_NAME}-shared
+		EXPORT ${PROJECT_NAME}
+		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
 
 
 

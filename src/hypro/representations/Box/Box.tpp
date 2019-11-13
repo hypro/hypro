@@ -269,7 +269,12 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 	}
 	std::size_t d = this->dimension();
 
-	std::size_t limit = std::size_t(pow( 2, d ));
+	// compute 2^d: loop is faster than std::pow for integer-types
+	// background: we need 2^d bits, i is the currently available number of bits
+	std::size_t limit = 2;
+	for(std::size_t i = 1; i < d; ++i) {
+		limit = 2*limit;
+	}
 	result.reserve(limit);
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
@@ -472,7 +477,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	//std::cout << "max transformed: " << Point<Number>(A*this->max().rawCoordinates()) << std::endl;
 	assert(res.contains(Point<Number>(A*this->min().rawCoordinates())));
 	assert(res.contains(Point<Number>(A*this->max().rawCoordinates())));
-	#ifndef NDEBUG
+#ifndef NDEBUG
 	std::vector<Point<Number>> vertices = this->vertices();
 	Point<Number> manualMin = Point<Number>(A*(vertices.begin()->rawCoordinates()));
 	Point<Number> manualMax = Point<Number>(A*(vertices.begin()->rawCoordinates()));
@@ -490,7 +495,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	}
 	//assert(manualMin == res.min());
 	//assert(manualMax == res.max());
-	#endif
+#endif
 	return res;
 }
 

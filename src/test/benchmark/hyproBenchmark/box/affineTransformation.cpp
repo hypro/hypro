@@ -7,10 +7,10 @@ namespace box {
         Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
-        #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
         using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<benchmark::box::Double_Interval_Policy>>;
         using pplbox = Parma_Polyhedra_Library::Box<pplItv>;
-        #endif
+#endif
         box.insert(carl::Interval<::benchmark::Number>(-1,1));
 
         // initialize random number generator

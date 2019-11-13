@@ -130,7 +130,10 @@ namespace hypro {
 			// Todo: This is a corrected, yet ineffective method. Improve!
 			newMat = matrix_t<Number>::Zero(haVar.size(), haVar.size());
 			newVec = vector_t<Number>::Zero(haVar.size());
-			std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
+			std::size_t lhsIR = 0;
+			std::size_t lhsIC = 0;
+			std::size_t rhsIR = 0;
+			std::size_t rhsIC = 0;
 			bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
 			// iterate over all rows
 			for( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
@@ -224,13 +227,13 @@ namespace hypro {
 
 		// select constrains i,j,k into new constraint vector
 		for(auto set : decomposition){
-			#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 			DEBUG("hypro.datastructures", "decompose constraint for set: {");
 			for(auto entry : set){
 				DEBUG("hypro.datastructures", "" <<  entry << ", ");
 			}
 			DEBUG("hypro.datastructures", "}");
-			#endif
+#endif
 
 			// new interval assignments are just copied, as we do not store the variable
 			//std::vector<carl::Interval<Number>> newIntervals;

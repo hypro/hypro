@@ -145,13 +145,13 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 	std::vector<ConstraintSetT<Number>> newCset;
 	// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
 	for(auto set : decomposition){
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 		DEBUG("hypro.datastructures", "decompose constraint for set: {");
 		for(auto entry : set){
 			DEBUG("hypro.datastructures", ""<<  entry << ", ");
 		}
 		DEBUG("hypro.datastructures","}");
-		#endif
+#endif
 
 		// for each row of the constraints check if it contains an entry for one of the variables of the set
 		// and add the corresponding rows to a list of indices that are later added to a matrix
@@ -159,12 +159,10 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 		for(Eigen::Index i = 0; i < constraintsOld.rows(); i++){
 			bool containsVar = false;
 			for(Eigen::Index j = 0; j < constraintsOld.cols(); j++){
-				if(constraintsOld(i,j) != 0){
-					if(std::find(set.begin(),set.end(), j) != set.end()){
-						//set contains variable j, which is also contained in this constraint
-						containsVar = true;
-						break;
-					}
+				if(constraintsOld(i,j) != 0 && std::find(set.begin(),set.end(), j) != set.end()){
+					//set contains variable j, which is also contained in this constraint
+					containsVar = true;
+					break;
 				}
 			}
 			if(containsVar){
@@ -208,10 +206,10 @@ void Condition<Number>::checkAxisAligned(std::size_t i) const {
 //template<typename Number>
 //template<typename Representation, typename ...Rargs>
 //std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {
-//	#ifdef HYDRA_USE_LOGGING
+//#ifdef HYDRA_USE_LOGGING
 //	DEBUG("hydra.datastructures","Checking condition.");
 //	DEBUG("hydra.datastructures","State: " << inState);
-//	#endif
+//#endif
 //
 //	// TODO: Overthink order here - it would be nice to test clocks first, then discrete assignments and continuous sets last.
 //	State<Number,Representation> res(inState);

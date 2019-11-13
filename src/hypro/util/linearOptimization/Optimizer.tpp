@@ -157,22 +157,19 @@ namespace hypro {
 			return EvaluationResult<Number>(); // defaults to infeasible.
 		}
 
-		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		EvaluationResult<Number> res;
-		#endif
+#endif
 
 		//COUNT("glpk");
-		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
-		#else
+#else
 		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
 		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
-		#endif
+#endif
 
-		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-		#ifdef DEBUG_MSG
-		//std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
-		#endif
+#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 
 		// At this point we can check, whether the glpk result is already exact and optimal.
 		// We do this by inserting the solution into the constraints. The solution is exact,
@@ -233,27 +230,24 @@ namespace hypro {
 
 			if(( closestLinearDependentConstraint != -1 && mConstraintMatrix.row(closestLinearDependentConstraint).dot(res.optimumValue) != mConstraintVector(closestLinearDependentConstraint) )) {COUNT("linear dependence failure")};
 
-			#ifdef HYPRO_USE_Z3
+#ifdef HYPRO_USE_Z3
 			COUNT("z3");
 			res = z3OptimizeLinear(maximize,_direction,mConstraintMatrix,mConstraintVector,res);
-			#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
+#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 			COUNT("smtrat");
 			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,mRelationSymbols,res);
-			#elif defined(HYPRO_USE_SOPLEX)
+#elif defined(HYPRO_USE_SOPLEX)
 			COUNT("soplex");
 			res = soplexOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
-			#endif
+#endif
 		}
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
 		//assert(res.errorCode  !=SOLUTION::FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
 		//assert(res.errorCode  !=SOLUTION::FEAS || checkPoint(Point<Number>(res.optimumValue)));
-		#ifdef DEBUG_MSG
-		//std::cout << "Final solution distance: " << res.supportValue << std::endl;
-		#endif
 		return res;
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -268,17 +262,17 @@ namespace hypro {
 
 		//std::cout << __func__ << ": matrix: " << mConstraintMatrix << std::endl << "Vector: " << mConstraintVector << std::endl;
 
-		#ifdef HYPRO_USE_SMTRAT
+#ifdef HYPRO_USE_SMTRAT
 		//TRACE("hypro.optimizer","Use smtrat for consistency check.");
 		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector,mRelationSymbols) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		mConsistencyChecked = true;
-        #elif defined(HYPRO_USE_Z3)
+#elif defined(HYPRO_USE_Z3)
 		mLastConsistencyAnswer = z3CheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		mConsistencyChecked = true;
-		#elif defined(HYPRO_USE_SOPLEX)
+#elif defined(HYPRO_USE_SOPLEX)
 		mLastConsistencyAnswer = soplexCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		mConsistencyChecked = true;
-		#else // use glpk
+#else // use glpk
 		if(!mConsistencyChecked){
 			//TRACE("hypro.optimizer","Use glpk for consistency check.");
 			glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, &mGlpkContext[std::this_thread::get_id()].parm);
@@ -286,7 +280,7 @@ namespace hypro {
 			mLastConsistencyAnswer = glp_get_status(mGlpkContext[std::this_thread::get_id()].lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
 			mConsistencyChecked = true;
 		}
-		#endif
+#endif
 
 		return (mLastConsistencyAnswer == SOLUTION::FEAS);
 	}
@@ -301,15 +295,15 @@ namespace hypro {
 			return true;
 		}
 
-		#ifdef HYPRO_USE_Z3
+#ifdef HYPRO_USE_Z3
 		return z3CheckPoint(mConstraintMatrix,mConstraintVector,_point);
-		#elif defined(HYPRO_USE_SMTRAT)
+#elif defined(HYPRO_USE_SMTRAT)
 		return smtratCheckPoint(mConstraintMatrix, mConstraintVector,mRelationSymbols, _point);
-		#elif defined(HYPRO_USE_SOPLEX)
+#elif defined(HYPRO_USE_SOPLEX)
 		return soplexCheckPoint(mConstraintMatrix, mConstraintVector, _point);
-		#else
+#else
 		return glpkCheckPoint(mGlpkContext[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point);
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -325,17 +319,17 @@ namespace hypro {
 
 		EvaluationResult<Number> res;
 
-		#ifdef HYPRO_USE_SMTRAT
+#ifdef HYPRO_USE_SMTRAT
 		res = smtratGetInternalPoint(mConstraintMatrix, mConstraintVector,mRelationSymbols);
 		mConsistencyChecked = true;
 		mLastConsistencyAnswer = res.errorCode;
-		#else
+#else
 
 		res = glpkGetInternalPoint<Number>(mGlpkContext[std::this_thread::get_id()], mConstraintMatrix.cols(), false);
 		mConsistencyChecked = true;
 		mLastConsistencyAnswer = res.errorCode;
 
-		#endif
+#endif
 		return res;
 	}
 
@@ -349,13 +343,13 @@ namespace hypro {
 			return res;
 		}
 
-		#ifdef HYPRO_USE_Z3
+#ifdef HYPRO_USE_Z3
 		res = z3RedundantConstraints(mConstraintMatrix, mConstraintVector);
-		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
+#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		res = smtratRedundantConstraints(mConstraintMatrix, mConstraintVector,mRelationSymbols);
-		#else
+#else
 		res = glpkRedundantConstraints( mGlpkContext[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector);
-		#endif
+#endif
 
 		std::sort(res.begin(), res.end());
 
@@ -370,7 +364,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::isSane() const {
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		/*
 		TRACE("hypro.optimizer","Have " << mGlpkContext.size() << " instances to check.");
 		for(const auto& glpPair : mGlpkContext) {
@@ -381,7 +375,7 @@ namespace hypro {
 			TRACE("hypro.optimizer","Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
 		}
 		*/
-		#endif
+#endif
 		return true;
 	}
 
@@ -433,8 +427,8 @@ namespace hypro {
 				}
 
 
-				#ifdef HYPRO_USE_SMTRAT
-				#ifndef RECREATE_SOLVER
+#ifdef HYPRO_USE_SMTRAT
+#ifndef RECREATE_SOLVER
 				mSmtratSolver.pop();
 				if(!mSmtratSolver.formula().empty()){
 					//std::cout << "THIS SHOULD NOT HAPPEN -> INCORRECT TRACKING OF BT-POINTS." << std::endl;
@@ -449,8 +443,8 @@ namespace hypro {
 
 				mSmtratSolver.push();
 				//std::cout << "Cleanup - done." << std::endl;
-				#endif
-				#endif
+#endif
+#endif
 			}
 
 			int numberOfConstraints = int(mConstraintMatrix.rows());
@@ -511,8 +505,8 @@ namespace hypro {
 					glp_set_obj_coef( glpCtx.lp, i + 1, 1.0 ); // not needed?
 				}
 
-				#ifdef HYPRO_USE_SMTRAT
-				#ifndef RECREATE_SOLVER
+#ifdef HYPRO_USE_SMTRAT
+#ifndef RECREATE_SOLVER
 				mFormulaMapping = createFormula(mConstraintMatrix, mConstraintVector);
 
 				//std::cout << "Set new constraints." << std::endl;
@@ -525,8 +519,8 @@ namespace hypro {
 				//std::cout << "Set new constraints - done." << std::endl;
 
 				mCurrentFormula = smtrat::FormulaT(mSmtratSolver.formula());
-				#endif
-				#endif
+#endif
+#endif
 			}
 
 			glpCtx.mConstraintsSet = true;

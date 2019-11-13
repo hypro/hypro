@@ -68,32 +68,6 @@ Point<Number>::Point( vector_t<Number>&& _vector )
 	assert(this->dimension() >= 0);
 }
 
-
-template <typename Number>
-Point<Number>::Point( const Point<Number> &_p )
-	: mCoordinates( _p.rawCoordinates() ),
-	mHash(0),
-	// mNeighbors(_p.neighbors()),
-	mComposedOf( _p.composedOf() ) {
-	// std::cout << "This coordinates " << mCoordinates << " vs. " << _p.rawCoordinates() << std::endl;
-  	// std::cout << "This hash " << this->hash() << " vs. " << std::endl;
-  	// std::cout << _p.hash() << std::endl;
-  	assert(mCoordinates == _p.rawCoordinates());
-  	//assert(_p.hash() == this->hash());
-  	assert(this->dimension() >= 0);
-}
-
-/*
-template <typename Number>
-Point<Number>::Point( Point<Number> &&_p )
-	: mCoordinates( _p.rawCoordinates() ),
-	mHash(0),
-	// mNeighbors(std::move(_p.neighbors())),
-	mComposedOf( std::move( _p.composedOf() ) ) {
-	assert(this->dimension() >= 0);
-}
-*/
-
 /*
 template<typename Number>
 std::vector<Point<Number>> Point<Number>::neighbors() const {
@@ -201,9 +175,8 @@ const vector_t<Number> &Point<Number>::rawCoordinates() const {
 
 template <typename Number>
 void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_value ) {
-	unsigned dim = hypro::VariablePool::getInstance().id( _dim );
-	assert( dim >= 0 );
-	if ( dim >= mCoordinates.rows() ) {
+	std::size_t dim = hypro::VariablePool::getInstance().id( _dim );
+	if ( dim >= std::size_t(mCoordinates.rows()) ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates.resize( dim + 1 );
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
@@ -214,8 +187,7 @@ void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_va
 
 template <typename Number>
 void Point<Number>::setCoordinate( std::size_t dimension, const Number& _value ) {
-	assert( dimension >= 0 );
-	if ( Eigen::Index(dimension) >= mCoordinates.rows() ) {
+	if ( dimension >= std::size_t(mCoordinates.rows()) ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates.resize( dimension + 1 );
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
@@ -262,7 +234,7 @@ void Point<Number>::reduceDimension( unsigned _dimension ) {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::reduceToDimensions( std::vector<unsigned> _dimensions ) const {
+Point<Number> Point<Number>::reduceToDimensions( std::vector<std::size_t> _dimensions ) const {
 	TRACE("hypro.datastructures.point","*this: " << *this);
 	if(_dimensions.size() == 0) {
 		return Point<Number>();
@@ -589,7 +561,7 @@ Point<Number>& Point<Number>::operator=( vector_t<Number>&& _in ) {
 
 template <typename Number>
 Number &Point<Number>::operator[]( const carl::Variable &_i ) {
-	unsigned dim = hypro::VariablePool::getInstance().id( _i );
+	std::size_t dim = hypro::VariablePool::getInstance().id( _i );
 	return mCoordinates( dim );
 }
 
@@ -600,7 +572,7 @@ Number &Point<Number>::operator[]( std::size_t _i ) {
 
 template <typename Number>
 const Number &Point<Number>::operator[]( const carl::Variable &_i ) const {
-	unsigned dim = hypro::VariablePool::getInstance().id( _i );
+	std::size_t dim = hypro::VariablePool::getInstance().id( _i );
 	return mCoordinates( dim );
 }
 

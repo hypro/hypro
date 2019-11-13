@@ -5,9 +5,9 @@ namespace hypro {
 	template<typename Number>
 	EventTimingProvider<Number>::EventTimingProvider() : mRoot(new EventTimingNode<Number>()){
 		TRACE("hypro.datastructures.timing","Root is " << mRoot);
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		writeTree();
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -35,9 +35,9 @@ namespace hypro {
 		}
 		*/
 
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		writeTree();
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -50,9 +50,9 @@ namespace hypro {
 		mRoot->addChild(child);
 		TRACE("hypro.datastructures.timing","Add initial node " << child);
 
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		writeTree();
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -240,9 +240,9 @@ namespace hypro {
 		std::lock_guard<std::mutex> lock(toUpdate->rGetTimings().getMutex());
 
 		toUpdate->rGetTimings().merge(update);
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		writeTree();
-		#endif
+#endif
 	}
 
 	template<typename Number>
@@ -253,9 +253,9 @@ namespace hypro {
 		// set up tree
 		newChild->addParent(parent);
 		parent->addChild(newChild);
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		writeTree();
-		#endif
+#endif
 		return newChild;
 	}
 

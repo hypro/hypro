@@ -50,9 +50,11 @@ private:
 public:
     Location();
     Location(const Location& loc);
-    Location(const matrix_t<Number>& mat);
+    explicit Location(const matrix_t<Number>& mat);
     Location(const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv);
     ~Location(){}
+
+    Location<Number>& operator=(const Location<Number>& in);
 
     std::size_t getNumberFlow() const { return mLinearFlows.size(); }
     linearFlow<Number> getLinearFlow(std::size_t I = 0) const { return mLinearFlows.at(I); }
@@ -177,7 +179,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
-    #ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl;
 	    for(size_t i = 0; i < l.getNumberFlow();i++){
 	    	ostr << i << ": " << l.getLinearFlow(i) << ", rect.: " << l.getRectangularFlow(i) << std::endl;
@@ -191,7 +193,7 @@ public:
 	    }
         ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 	    ostr << std::endl << ")";
-	#endif
+#endif
 	    return ostr;
     }
 };

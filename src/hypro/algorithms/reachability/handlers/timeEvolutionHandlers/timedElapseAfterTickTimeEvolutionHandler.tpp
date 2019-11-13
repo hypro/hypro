@@ -18,10 +18,9 @@ namespace hypro {
             this->mState->setSet(dbm,this->mIndex);
             mComputed = true;
         }
-        #ifdef HYDRA_USE_LOGGING
-        // DBG
+#ifdef HYDRA_USE_LOGGING
         Box<Number> tmp = Converter<Number>::toBox(boost::get<DifferenceBounds<Number>>(this->mState->getSet(this->mIndex)));
         DEBUG("hydra.worker","Set after timestep: " << tmp);
-        #endif
+#endif
     }
 } // hypro

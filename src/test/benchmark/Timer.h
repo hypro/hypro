@@ -1,16 +1,16 @@
 /**
  * Implementation of a timer used for benchmarks.
  * @file Timer.h
- * 
+ *
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * 
+ *
  * @since 	2015-03-19
  * @version 	2015-03-19
  */
 
- #pragma once
+#pragma once
 
- #include <chrono>
+#include <chrono>
 
 namespace hypro {
 
@@ -18,7 +18,7 @@ class Timer {
 private:
 	std::chrono::high_resolution_clock::time_point mStart;
 public:
-	Timer() : 
+	Timer() :
 		mStart (std::chrono::high_resolution_clock::now())
 	{}
 
@@ -28,4 +28,3 @@ public:
 	}
 };
 }
-

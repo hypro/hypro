@@ -78,7 +78,7 @@ class Point {
 	 * @brief      Copy constructor.
 	 * @param[in]  _p    The original.
 	 */
-	Point( const Point<Number>& _p );
+	Point( const Point<Number>& _p ) = default;
 
 	/**
 	 * @brief      Move-copy constructor.
@@ -226,7 +226,7 @@ class Point {
 	 * @param[in]  _dimensions  The dimensions.
 	 * @return     The resulting point.
 	 */
-	Point<Number> reduceToDimensions( std::vector<unsigned> _dimensions ) const;
+	Point<Number> reduceToDimensions( std::vector<std::size_t> _dimensions ) const;
 
 	/**
 	 * @brief      Returns the variables (ordered), which are assigned to the space dimensions.
@@ -639,7 +639,6 @@ template <typename Number>
 Number operator*( const Point<Number>& _lhs, const Point<Number>& _rhs ) {
 	vector_t<Number> p1Coord = _lhs.rawCoordinates();
 	vector_t<Number> p2Coord = _rhs.rawCoordinates();
-	;
 	return p1Coord.dot( p2Coord );
 }
 

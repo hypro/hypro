@@ -9,13 +9,12 @@ namespace hypro {
 
 template<typename Number>
 class rectangularFlow {
-public:
-protected:
+private:
     std::map<carl::Variable, carl::Interval<Number>> mFlowIntervals;
 public:
     rectangularFlow() = default;
     rectangularFlow(const rectangularFlow<Number>& in) = default;
-    rectangularFlow(const std::map<carl::Variable, carl::Interval<Number>>& intervals) : mFlowIntervals(intervals) {}
+    explicit rectangularFlow(const std::map<carl::Variable, carl::Interval<Number>>& intervals) : mFlowIntervals(intervals) {}
     virtual ~rectangularFlow() {}
 
     static DynamicType type() { return DynamicType::rectangular; }

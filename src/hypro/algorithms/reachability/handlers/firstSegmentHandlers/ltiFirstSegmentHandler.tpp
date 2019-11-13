@@ -40,10 +40,10 @@ namespace hypro
         //mState->rGetLocation()->setFlow(mIndex,affineFlow<Number>(mTrafo,mTranslation));
 
         State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(trafoMatrixResized, translation), mTimeStep,mIndex);
-        
-        #ifdef HYDRA_USE_LOGGING
+
+#ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "Polytope at t=delta: " << deltaValuation);
-        #endif
+#endif
 
         State firstSegment{mState->getLocation()};
         unsigned dimension = mState->getDimension(mIndex);

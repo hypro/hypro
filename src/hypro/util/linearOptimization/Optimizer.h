@@ -50,22 +50,22 @@ namespace hypro {
 		matrix_t<Number>	mConstraintMatrix;
 		vector_t<Number> 	mConstraintVector;
 
-		mutable bool 				mConsistencyChecked;
+		mutable bool 				mConsistencyChecked = false;
 		mutable SOLUTION 			mLastConsistencyAnswer;
 		static bool			warnInexact;
 		bool 				maximize = true;
 		std::vector<carl::Relation> mRelationSymbols;
 
 		// dependent members, all mutable
-		#ifdef HYPRO_USE_SMTRAT
+#ifdef HYPRO_USE_SMTRAT
 		mutable smtrat::SimplexSolver mSmtratSolver;
 		mutable smtrat::FormulaT mCurrentFormula;
 		mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
-		#ifdef VERIFY_RESULT
+#ifdef VERIFY_RESULT
 		mutable unsigned fileCounter;
 		std::string filenamePrefix = "optimizer_error_out_";
-		#endif
-		#endif
+#endif
+#endif
 		// Glpk as a presolver
 		mutable std::mutex mGlpkLock;
 		mutable std::map<std::thread::id, glpk_context> mGlpkContext;
@@ -84,7 +84,7 @@ namespace hypro {
 			mGlpkContext()
 		{
 			glp_term_out( GLP_OFF );
-			#ifdef VERIFY_RESULT
+#ifdef VERIFY_RESULT
 			struct stat buffer;
 			unsigned cnt = 0;
 			while(true){
@@ -95,14 +95,14 @@ namespace hypro {
 				++cnt;
 			}
 			fileCounter = cnt;
-			#endif
-			#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
+#endif
+#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
 			if(!Optimizer<Number>::warnInexact && carl::is_rational<Number>().value){
 				// only warn once
 				Optimizer<Number>::warnInexact = true;
 				WARN("hypro.optimizer","Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
 			}
-			#endif
+#endif
 		}
 
 		Optimizer(Optimizer<Number>&& orig);
@@ -122,6 +122,10 @@ namespace hypro {
 			mGlpkContext()
 		{
 			glp_term_out( GLP_OFF );
+			assert(constraints.rows() > 0);
+			assert(constraints.cols() > 0);
+			assert(constants.rows() > 0);
+			assert(constraints.rows() == constants.rows());
 		}
 
 		/**

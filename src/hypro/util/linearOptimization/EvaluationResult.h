@@ -17,7 +17,7 @@ struct EvaluationResult {
 	EvaluationResult() : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(SOLUTION::INFEAS)
 		{}
 
-	EvaluationResult(SOLUTION err) : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(err)
+	explicit EvaluationResult(SOLUTION err) : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(err)
 		{}
 
 	EvaluationResult(const Number& val, SOLUTION err) : supportValue(val), optimumValue(vector_t<Number>::Zero(0)), errorCode(err)
@@ -28,6 +28,8 @@ struct EvaluationResult {
 
 	EvaluationResult(Number sValue, const vector_t<Number>& val, SOLUTION err) : supportValue(sValue), optimumValue(val), errorCode(err)
 		{}
+
+	~EvaluationResult() = default;
 
 	friend std::ostream& operator<<(std::ostream& _out, const EvaluationResult<Number>& _in) {
 		_out << _in.supportValue << "(" << _in.errorCode << ") : \n" << _in.optimumValue;

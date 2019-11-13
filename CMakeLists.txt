@@ -103,9 +103,9 @@ foreach(p LIB BIN INCLUDE CMAKE)
   endif()
 endforeach()
 
-###########################################################################################
-
 include(compiler-settings)
+
+###########################################################################################
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C. Find system tools and libraries.
@@ -115,18 +115,20 @@ include(compiler-settings)
 # 3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-# # # # # # # # # # # # # # # # # # # # # #
-# C.1. Required libraries for core.
-# # # # # # # # # # # # # # # # # # # # # #
-
-# initialize lists for include directories and library files
-set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
 load_library(${PROJECT_NAME} GTest 0)
 
 load_library(${PROJECT_NAME} carl 0)
 
 add_subdirectory(src/resources)
+
+# # # # # # # # # # # # # # # # # # # # # #
+# C.3. Development and debug libraries.
+# # # # # # # # # # # # # # # # # # # # # #
+
+if(CREATE_DOC)
+	add_subdirectory(doc EXCLUDE_FROM_ALL)
+endif()
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -143,53 +145,6 @@ if(CLANG_TIDY)
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
 
-# # # # # # # # # # # # # # # # # # # # # #
-# C.2. Optional libraries
-# # # # # # # # # # # # # # # # # # # # # #
-
-if(HYPRO_USE_COTIRE)
-	# We use cotire, simply include it
-	message(STATUS "using cotire")
-	include(cotire)
-else()
-	# We do not use cotire, create dummy function.
-	message(STATUS "not using cotire")
-	function(cotire)
-	endfunction(cotire)
-endif()
-
-if(HYPRO_USE_PPL)
-	load_library(${PROJECT_NAME} PPL 0)
-endif()
-
-if(HYPRO_USE_SMTRAT)
-	#load_library(${PROJECT_NAME} smtrat-solver 0)
-	#load_library(${PROJECT_NAME} smtrat-module-LRAModule 0)
-	find_package(smtrat)
-endif()
-
-if(HYPRO_USE_Z3)
-	load_library(${PROJECT_NAME} z3 0)
-endif()
-
-if(HYPRO_USE_SOPLEX)
-	load_library(${PROJECT_NAME} soplex 0)
-endif()
-
-if(HYPRO_USE_OPENMP)
-	load_library(${PROJECT_NAME} OpenMP 0)
-	if(OPENMP_FOUND)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
-	endif()
-endif()
-
-# # # # # # # # # # # # # # # # # # # # # #
-# C.3. Development and debug libraries.
-# # # # # # # # # # # # # # # # # # # # # #
-
-if(CREATE_DOC)
-	add_subdirectory(doc EXCLUDE_FROM_ALL)
-endif()
 
 enable_testing()
 
