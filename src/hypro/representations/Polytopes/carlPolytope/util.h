@@ -50,9 +50,9 @@ vector_t<D> constraintNormal( const ConstraintT<N>& c, std::size_t dim ) {
 	TRACE( "hypro.representations.carlPolytope", "Compute normal from " << c << " with dimension " << dim );
 	vector_t<D> normal = vector_t<D>::Zero( dim );
 	for ( const auto& var : c.variables() ) {
-		assert( VariablePool::getInstance().hasDimension( var ) );
+		assert( VariablePool::getInstance().hasDimension( std::get<carl::Variable>( var ) ) );
 		assert( c.lhs().isLinear() );
-		assert( c.lhs().coeff( var, 1 ).isNumber() );
+		assert( c.lhs().coeff( std::get<carl::Variable>( var ), 1 ).isNumber() );
 		TRACE( "hypro.representations.carlPolytope",
 			   "Variable " << std::get<carl::Variable>( var ) << " with dimension "
 						   << VariablePool::getInstance().id( std::get<carl::Variable>( var ) ) );
