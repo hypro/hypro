@@ -876,9 +876,11 @@ namespace hypro
 		mTask->treeNode->setNewRefinement(mTask->btInfo.btLevel, updatedRefinementSetting);
 		TRACE("hypro.worker.refinement",std::this_thread::get_id() << ": Refinements of node " << mTask->treeNode << " after leaving loop:");
 
+		#ifndef NDEBUG
 		for(const auto& ref : mTask->treeNode->getRefinements()) {
 			TRACE("hypro.worker.refinement", std::this_thread::get_id() << ": Node: " << mTask->treeNode << ": " << ref);
 		}
+		#endif
 
 		if(mSettings.useInvariantTimingInformation ||
 		   mSettings.useGuardTimingInformation ||

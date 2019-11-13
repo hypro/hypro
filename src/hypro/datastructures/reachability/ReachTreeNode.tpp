@@ -102,14 +102,16 @@ bool ReachTreeNode<State>::isFullyComputedOnSomeLevel() const {
 
 template<typename State>
 void ReachTreeNode<State>::updateContent(ReachTreeNode<State>* updatedNode) {
+	#ifndef NDEBUG
 	TRACE("hypro.datastructure","Update refinements: ");
-	for(const auto ref: mRefinements) {
+	for(const auto& ref: mRefinements) {
 		TRACE("hypro.datastructure", ref);
 	}
 	TRACE("hypro.datastructures","With new refinements: ");
-	for(const auto ref: updatedNode->getRefinements()) {
+	for(const auto& ref: updatedNode->getRefinements()) {
 		TRACE("hypro.datastructure", ref);
 	}
+	#endif
 	mPath = updatedNode->getPath();
 	//mLoc = updatedNode->getLocation();
 	// carefully update refinements - do not override old ones.

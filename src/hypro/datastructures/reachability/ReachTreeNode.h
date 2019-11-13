@@ -41,9 +41,11 @@ struct RefinementSetting {
 	bool hitBadStates = false;	/// denotes that this setup lead to an intersection with the bad states. Currently only used for tree
 	                          	/// plotting.
 
-	RefinementSetting<State>() = default;
+	RefinementSetting() = default;
+    RefinementSetting(const RefinementSetting<State>& orig) = default;
+    RefinementSetting(RefinementSetting<State>&& orig) = default;
 
-	RefinementSetting(const Location<Number>* loc)
+	explicit RefinementSetting(const Location<Number>* loc)
 		: initialSet(State(loc))
 		, mTimings()
 		, fullyComputed()
@@ -51,7 +53,7 @@ struct RefinementSetting {
 		, isEmpty(false)
 	{	}
 
-	RefinementSetting(const State& state)
+	explicit RefinementSetting(const State& state)
 		: initialSet(state)
 		, mTimings()
 		, fullyComputed()
