@@ -25,22 +25,16 @@ namespace hypro {
 template <typename Number>
 class Halfspace {
   private:
-	vector_t<Number> mNormal;
-	Number mScalar;
+	vector_t<Number> mNormal = vector_t<Number>::Zero(0);
+	Number mScalar = Number(0);
     size_t mHash = 0;
-    bool mIsInteger;
+    bool mIsInteger = false;
 
   public:
-  	/**
-  	 * @brief      Default constructor.
-  	 */
-	Halfspace();
-
 	/**
-	 * @brief      Copy constructor.
-	 * @param[in]  _orig  The original.
+	 * @brief Default constructor
 	 */
-	Halfspace( const Halfspace<Number>& _orig );
+	Halfspace() {}
 
 	/**
 	 * @brief      Constructor from a normal vector given as a point and an offset.
@@ -74,9 +68,6 @@ class Halfspace {
 	 * @brief      Destroys the object.
 	 */
 	~Halfspace();
-
-	Halfspace<Number>& operator=(const Halfspace<Number>& in) = default;
-	Halfspace<Number>& operator=(Halfspace<Number>&& in) = default;
 
 	/**
 	 * @brief      Size function returning the estimated storage usage of this plane.
