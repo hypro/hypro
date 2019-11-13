@@ -20,7 +20,7 @@ struct StrategyParameters {
         ostr << " Aggregation: " << sp.aggregation;
         ostr << " clustering: " << sp.clustering << std::endl;
 #else
-    friend std::ostream& operator<<(std::ostream& ostr, const StrategyParameters& /*sp*/)
+    friend std::ostream& operator<<(std::ostream& ostr, const StrategyParameters& /*sp*/){
 #endif
         return ostr;
     }
