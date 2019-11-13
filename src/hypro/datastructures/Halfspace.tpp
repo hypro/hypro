@@ -11,15 +11,6 @@
 #include "Halfspace.h"
 
 namespace hypro {
-template <typename Number>
-Halfspace<Number>::Halfspace()
-	: mNormal( vector_t<Number>::Zero( 1 ) ), mScalar( Number( 0 ) ), mIsInteger( true ) {
-}
-
-template <typename Number>
-Halfspace<Number>::Halfspace( const Halfspace<Number> &_orig )
-	: mNormal( _orig.mNormal ), mScalar( _orig.mScalar ), mIsInteger( _orig.isInteger() ) {
-}
 
 template <typename Number>
 Halfspace<Number>::Halfspace( const Point<Number> &_vector, const Number &_off )
@@ -419,7 +410,7 @@ Number Halfspace<Number>::computePlaneOffset( const vector_t<Number>& normal, co
 
 //Return mNormal as a matrix
 template<typename Number>
-matrix_t<Number> Halfspace<Number>::matrix() const { 
+matrix_t<Number> Halfspace<Number>::matrix() const {
 	matrix_t<Number> mat = matrix_t<Number>::Zero(1,mNormal.rows());
 	mat.row(0) = mNormal.transpose();
 	return mat;
@@ -435,9 +426,9 @@ vector_t<Number> Halfspace<Number>::vector() const {
 
 //A halfspace itself cannot be empty, except its normal is the zero vector and the scalar is smaller than 0
 template<typename Number>
-bool Halfspace<Number>::empty() const { 
+bool Halfspace<Number>::empty() const {
 	if(mNormal != vector_t<Number>::Zero(mNormal.rows()) && mScalar < 0) return true;
-	return false; 
+	return false;
 }
 
 template<typename Number>
@@ -458,7 +449,7 @@ EvaluationResult<Number> Halfspace<Number>::evaluate(const vector_t<Number>& dir
 		} else {
 			return EvaluationResult<Number>(0,SOLUTION::INFTY);
 		}
-	} 
+	}
 	return EvaluationResult<Number>(0,SOLUTION::INFTY);
 }
 
