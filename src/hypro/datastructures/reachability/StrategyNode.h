@@ -15,7 +15,7 @@ struct StrategyParameters {
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const StrategyParameters& sp){
-        ostr << "Representation: " << sp.representation_type;
+        //ostr << "Representation: " << sp.representation_type;
         ostr << " Timestep: " << sp.timeStep;
         ostr << " Aggregation: " << sp.aggregation;
         ostr << " clustering: " << sp.clustering << std::endl;
