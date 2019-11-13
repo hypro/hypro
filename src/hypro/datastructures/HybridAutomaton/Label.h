@@ -21,7 +21,7 @@ class Label {
     Label(const Label& in) = default;
     Label(Label&& in) = default;
 
-    explicit Label(const std::string& name) { mName = name; };
+    explicit Label(const std::string& name) : mName(name) {};
 
     ~Label() {};
 

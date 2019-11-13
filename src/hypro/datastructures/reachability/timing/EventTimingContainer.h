@@ -1,9 +1,11 @@
 #pragma once
 #include "HierarchicalIntervalVector.h"
-#include "../../HybridAutomaton/Transition.h"
 #include <carl/interval/Interval.h>
 
 namespace hypro {
+
+template<typename N>
+class Transition;
 
 template<typename Number>
 class EventTimingContainer {

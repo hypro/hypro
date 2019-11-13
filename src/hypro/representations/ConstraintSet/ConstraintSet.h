@@ -26,7 +26,6 @@ struct ConstraintSetSettings {
  */
 template <typename Number, typename S=ConstraintSetSettings>
 class ConstraintSetT {
-  private:
   public:
 	/***************************************************************************
 	 * Members

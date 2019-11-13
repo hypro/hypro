@@ -202,7 +202,7 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 	std::set<Label> labels;
 	for(const auto& loc : mLocations) {
 		for(auto tra: loc->getTransitions()) {
-			std::for_each(tra->getLabels().begin(), tra->getLabels().end(), [&](auto l){labels.emplace(l);});
+			std::for_each(tra->getLabels().begin(), tra->getLabels().end(), [&labels](auto l){labels.emplace(l);});
 		}
 	}
 	return labels;
@@ -495,7 +495,7 @@ HybridAutomaton<Number> operator||(const HybridAutomaton<Number>& lhs, const Hyb
 	// set initial states
 	for(const auto& initialStateLhs: lhs.getInitialStates()) {
 		for(const auto& initialStateRhs: rhs.getInitialStates()) {
-			std::cout << "WARNING: parallel composition of initial states not implemented yet." << std::endl;
+			FATAL("hypro","WARNING: parallel composition of initial states not implemented yet.");
 			assert(false);
 		}
 	}

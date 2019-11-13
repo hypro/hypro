@@ -50,7 +50,7 @@ private:
 public:
     Location();
     Location(const Location& loc);
-    Location(const matrix_t<Number>& mat);
+    explicit Location(const matrix_t<Number>& mat);
     Location(const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv);
     ~Location(){}
 

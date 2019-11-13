@@ -9,7 +9,6 @@ namespace hypro {
 
 template<typename Number>
 class rectangularFlow {
-public:
 private:
     std::map<carl::Variable, carl::Interval<Number>> mFlowIntervals;
 public:

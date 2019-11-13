@@ -639,7 +639,6 @@ template <typename Number>
 Number operator*( const Point<Number>& _lhs, const Point<Number>& _rhs ) {
 	vector_t<Number> p1Coord = _lhs.rawCoordinates();
 	vector_t<Number> p2Coord = _rhs.rawCoordinates();
-	;
 	return p1Coord.dot( p2Coord );
 }
 

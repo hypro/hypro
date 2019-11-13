@@ -159,12 +159,10 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 		for(Eigen::Index i = 0; i < constraintsOld.rows(); i++){
 			bool containsVar = false;
 			for(Eigen::Index j = 0; j < constraintsOld.cols(); j++){
-				if(constraintsOld(i,j) != 0){
-					if(std::find(set.begin(),set.end(), j) != set.end()){
-						//set contains variable j, which is also contained in this constraint
-						containsVar = true;
-						break;
-					}
+				if(constraintsOld(i,j) != 0 && std::find(set.begin(),set.end(), j) != set.end()){
+					//set contains variable j, which is also contained in this constraint
+					containsVar = true;
+					break;
 				}
 			}
 			if(containsVar){

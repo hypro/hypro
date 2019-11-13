@@ -154,7 +154,7 @@ class Transition
      * @return     Reference to the outstream.
      */
     friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
-		#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 	    ostr << "transition(" << std::endl
               << "\t hash = " << t.hash() << std::endl
 	          << "\t Source = " << t.getSource()->hash() << std::endl
@@ -166,7 +166,7 @@ class Transition
 	    ostr  << "\t Guard = " << t.getGuard() << std::endl
 	          << "\t Reset = " << t.getReset() << std::endl
 	          << ")";
-		#endif
+#endif
 	    return ostr;
     }
 
