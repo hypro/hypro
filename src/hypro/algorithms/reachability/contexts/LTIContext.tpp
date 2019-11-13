@@ -865,9 +865,11 @@ void LTIContext<State>::execOnEnd() {
 	mTask->treeNode->setNewRefinement( mTask->btInfo.btLevel, updatedRefinementSetting );
 	TRACE( "hypro.worker.refinement", std::this_thread::get_id() << ": Refinements of node " << mTask->treeNode << " after leaving loop:" );
 
+#ifndef NDEBUG
 	for ( const auto& ref : mTask->treeNode->getRefinements() ) {
 		TRACE( "hypro.worker.refinement", std::this_thread::get_id() << ": Node: " << mTask->treeNode << ": " << ref );
 	}
+#endif
 
 	if ( mSettings.useInvariantTimingInformation ||
 		 mSettings.useGuardTimingInformation ||
@@ -880,13 +882,14 @@ void LTIContext<State>::execOnEnd() {
 			currentTimingNode->setTimings( mLocalTimings );
 		}
 	}
-
-	//LOLOLO
-	//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
-	TRACE( "hypro.worker.refinement", "Done printing refinements." );
-	TRACE( "hypro.worker", "Unlock node " << mTask->treeNode );
-	mTask->treeNode->getMutex().unlock();
 }
+
+//LOLOLO
+//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+
+TRACE( "hypro.worker.refinement", "Done printing refinements." );
+TRACE( "hypro.worker", "Unlock node " << mTask->treeNode );
+mTask->treeNode->getMutex().unlock();
+}  // namespace hypro
 
 }  // namespace hypro
