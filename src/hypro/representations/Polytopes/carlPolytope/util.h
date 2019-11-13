@@ -52,9 +52,9 @@ namespace hypro {
             assert(c.lhs().coeff(var,1).isNumber());
             TRACE("hypro.representations.carlPolytope","Variable " << var << " with dimension " << VariablePool::getInstance().id(var));
             if(c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS || c.relation() == carl::Relation::EQ) {
-                normal(VariablePool::getInstance().id(var)) = carl::convert<N,D>(c.lhs().coeff(var,1).constantPart());
+                normal(VariablePool::getInstance().id(std::get<carl::Variable>(var))) = carl::convert<N,D>(c.lhs().coeff(std::get<carl::Variable>(var),1).constantPart());
             } else {
-                normal(VariablePool::getInstance().id(var)) = -carl::convert<N,D>(c.lhs().coeff(var,1).constantPart());
+                normal(VariablePool::getInstance().id(std::get<carl::Variable>(var))) = -carl::convert<N,D>(c.lhs().coeff(std::get<carl::Variable>(var),1).constantPart());
             }
         }
         return normal;
