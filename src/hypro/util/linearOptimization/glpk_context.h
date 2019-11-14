@@ -43,6 +43,10 @@ struct glpk_context {
 	glpk_context( glpk_context&& orig ) = delete;
 
 	glpk_context& operator=( const glpk_context& orig ) {
+		// compare problem instances to avoid self-assignment
+		if(lp == orig.lp) {
+			return *this;
+		}
 		deleteLPInstance();
 		deleteArrays();
 		if ( orig.mInitialized ) {
