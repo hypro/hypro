@@ -80,6 +80,7 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 			return res;
 		}
 		default:
+			break;
 	}
 
 	for ( int constraintIndex = int( constraints.rows() - 1 ); constraintIndex >= 0; --constraintIndex ) {

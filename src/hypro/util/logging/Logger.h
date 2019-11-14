@@ -7,9 +7,9 @@
 #include <thread>
 
 #define COUT( expr ) \
-	{ std::cout << expr }
+	{ std::cout << expr; }
 #define CERR( expr ) \
-	{ std::cerr << expr }
+	{ std::cerr << expr; }
 
 #ifndef HYPRO_LOGGING
 // define to be no-ops, note that expr still gets evaluated.
@@ -39,14 +39,14 @@ static int initvar = initializeLogging( initvar );
 	}
 
 #define TRACE( channel, expr ) \
-	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_TRACE, channel, expr ) }
+	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_TRACE, channel, expr ); }
 #define DEBUG( channel, expr ) \
-	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_DEBUG, channel, expr ) }
+	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_DEBUG, channel, expr ); }
 #define INFO( channel, expr ) \
-	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_INFO, channel, expr ) }
+	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_INFO, channel, expr ); }
 #define WARN( channel, expr ) \
-	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_WARN, channel, expr ) }
+	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_WARN, channel, expr ); }
 #define FATAL( channel, expr ) \
-	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_FATAL, channel, expr ) }
+	{ __HYPRO_LOG( carl::logging::LogLevel::LVL_FATAL, channel, expr ); }
 
 #endif

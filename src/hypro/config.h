@@ -39,10 +39,10 @@ extern "C" {
  * @{
  */
 
-constexpr double PI_UP 3.1415926535897932384626433832795028841972;
-constexpr double PI_DN 3.1415926535897932384626433832795028841971;
+constexpr double PI_UP = 3.1415926535897932384626433832795028841972;
+constexpr double PI_DN = 3.1415926535897932384626433832795028841971;
 /// Do we eliminate dimensions according to a dynamic heuristic.
-constexpr int DYNAMICHEURISTIC 0;
+constexpr int DYNAMICHEURISTIC = 0;
 
 constexpr unsigned long fReach_DENOMINATOR = 1000000000;  //!< @brief The common denominator used for the PPL wrapper class.
 
