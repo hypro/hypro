@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -163,9 +169,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae122732e5a5bb93339c0468354ea45cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae122732e5a5bb93339c0468354ea45cd"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;inBox)</td></tr>
 <tr class="separator:ae122732e5a5bb93339c0468354ea45cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7c0764f73223b62178fa9018223b8e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7c0764f73223b62178fa9018223b8e4"></a>
+<tr class="memitem:a065ca05589d86168f01083fb88243b7d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a065ca05589d86168f01083fb88243b7d"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; _orig)</td></tr>
-<tr class="separator:ad7c0764f73223b62178fa9018223b8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a065ca05589d86168f01083fb88243b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ecf7b23a99bee42718795d1628b1058"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ecf7b23a99bee42718795d1628b1058"></a>
 <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction, bool useExact=true) const </td></tr>
 <tr class="separator:a5ecf7b23a99bee42718795d1628b1058"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -226,30 +232,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresent
 <tr class="memitem:a22553b6a517d9d2ba99ae0c7e76d0864"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a22553b6a517d9d2ba99ae0c7e76d0864">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
 <tr class="memdesc:a22553b6a517d9d2ba99ae0c7e76d0864"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a22553b6a517d9d2ba99ae0c7e76d0864">More...</a><br /></td></tr>
 <tr class="separator:a22553b6a517d9d2ba99ae0c7e76d0864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad91062814543cd6994fdf452dd6e6304"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad91062814543cd6994fdf452dd6e6304"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> (const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;additionalDirections) const </td></tr>
+<tr class="separator:ad91062814543cd6994fdf452dd6e6304"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaac9782c64d75a87ed9382aaad420ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afaac9782c64d75a87ed9382aaad420ad"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><b>supremum</b> () const </td></tr>
 <tr class="separator:afaac9782c64d75a87ed9382aaad420ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d1a4d3908cd5353c54c52d8be61c79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a72d1a4d3908cd5353c54c52d8be61c79">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:a72d1a4d3908cd5353c54c52d8be61c79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a72d1a4d3908cd5353c54c52d8be61c79">More...</a><br /></td></tr>
-<tr class="separator:a72d1a4d3908cd5353c54c52d8be61c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed6b6760b44185bfc9b7afd589ba63b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#aed6b6760b44185bfc9b7afd589ba63b4">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
-<tr class="memdesc:aed6b6760b44185bfc9b7afd589ba63b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#aed6b6760b44185bfc9b7afd589ba63b4">More...</a><br /></td></tr>
-<tr class="separator:aed6b6760b44185bfc9b7afd589ba63b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1937f1f668b8c0ca60fabd93c73f0b9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#aa1937f1f668b8c0ca60fabd93c73f0b9">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
-<tr class="memdesc:aa1937f1f668b8c0ca60fabd93c73f0b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#aa1937f1f668b8c0ca60fabd93c73f0b9">More...</a><br /></td></tr>
-<tr class="separator:aa1937f1f668b8c0ca60fabd93c73f0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0aaf947faa9143591d985cb2d95ae6fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a0aaf947faa9143591d985cb2d95ae6fe">minkowskiSum</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="memdesc:a0aaf947faa9143591d985cb2d95ae6fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a0aaf947faa9143591d985cb2d95ae6fe">More...</a><br /></td></tr>
-<tr class="separator:a0aaf947faa9143591d985cb2d95ae6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebea730c2cb795c666f34940a8bbe60d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebea730c2cb795c666f34940a8bbe60d"></a>
+<tr class="memitem:a410d21065308ec6cb20fa23aca47bf46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a410d21065308ec6cb20fa23aca47bf46">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:a410d21065308ec6cb20fa23aca47bf46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a410d21065308ec6cb20fa23aca47bf46">More...</a><br /></td></tr>
+<tr class="separator:a410d21065308ec6cb20fa23aca47bf46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a125d7582565f0f6f3e160465f4e336fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a125d7582565f0f6f3e160465f4e336fc">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memdesc:a125d7582565f0f6f3e160465f4e336fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a125d7582565f0f6f3e160465f4e336fc">More...</a><br /></td></tr>
+<tr class="separator:a125d7582565f0f6f3e160465f4e336fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ba36ab0cb7410405d1f251c860150e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a1ba36ab0cb7410405d1f251c860150e5">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memdesc:a1ba36ab0cb7410405d1f251c860150e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a1ba36ab0cb7410405d1f251c860150e5">More...</a><br /></td></tr>
+<tr class="separator:a1ba36ab0cb7410405d1f251c860150e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa77e336906565067540c0a7619ecf6d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#aa77e336906565067540c0a7619ecf6d9">minkowskiSum</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
+<tr class="memdesc:aa77e336906565067540c0a7619ecf6d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#aa77e336906565067540c0a7619ecf6d9">More...</a><br /></td></tr>
+<tr class="separator:aa77e336906565067540c0a7619ecf6d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fff3f1991b49c87233fd94022c24db1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fff3f1991b49c87233fd94022c24db1"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="separator:aebea730c2cb795c666f34940a8bbe60d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26045900b9956db4b02aa3e86f4f9956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a26045900b9956db4b02aa3e86f4f9956">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hs) const </td></tr>
-<tr class="memdesc:a26045900b9956db4b02aa3e86f4f9956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a26045900b9956db4b02aa3e86f4f9956">More...</a><br /></td></tr>
-<tr class="separator:a26045900b9956db4b02aa3e86f4f9956"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a266c7a5a380871fb725966d36a828a3f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a266c7a5a380871fb725966d36a828a3f">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
-<tr class="memdesc:a266c7a5a380871fb725966d36a828a3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#a266c7a5a380871fb725966d36a828a3f">More...</a><br /></td></tr>
-<tr class="separator:a266c7a5a380871fb725966d36a828a3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3fff3f1991b49c87233fd94022c24db1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f820f5bbb06b8a16b995084c24ada33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a0f820f5bbb06b8a16b995084c24ada33">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hs) const </td></tr>
+<tr class="memdesc:a0f820f5bbb06b8a16b995084c24ada33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a0f820f5bbb06b8a16b995084c24ada33">More...</a><br /></td></tr>
+<tr class="separator:a0f820f5bbb06b8a16b995084c24ada33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a153e854ec1df3ec3de821effad8bf225"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a153e854ec1df3ec3de821effad8bf225">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:a153e854ec1df3ec3de821effad8bf225"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#a153e854ec1df3ec3de821effad8bf225">More...</a><br /></td></tr>
+<tr class="separator:a153e854ec1df3ec3de821effad8bf225"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa85a615edcdd2b86890c290d78f4c9a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#aa85a615edcdd2b86890c290d78f4c9a1">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
 <tr class="memdesc:aa85a615edcdd2b86890c290d78f4c9a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#aa85a615edcdd2b86890c290d78f4c9a1">More...</a><br /></td></tr>
 <tr class="separator:aa85a615edcdd2b86890c290d78f4c9a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -262,12 +271,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:a4439b905cb9e7952142d8c8b77a37640"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4439b905cb9e7952142d8c8b77a37640"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs, std::size_t directions) const </td></tr>
 <tr class="separator:a4439b905cb9e7952142d8c8b77a37640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac84c8b77d3cd8bc8ec0f28b10d8d179b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#ac84c8b77d3cd8bc8ec0f28b10d8d179b">unite</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="memdesc:ac84c8b77d3cd8bc8ec0f28b10d8d179b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#ac84c8b77d3cd8bc8ec0f28b10d8d179b">More...</a><br /></td></tr>
-<tr class="separator:ac84c8b77d3cd8bc8ec0f28b10d8d179b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac619066f9eb5841c34e00702ad5ab218"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac619066f9eb5841c34e00702ad5ab218"></a>
+<tr class="memitem:ad9096442f3b1384ba0921c77404a1507"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#ad9096442f3b1384ba0921c77404a1507">unite</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
+<tr class="memdesc:ad9096442f3b1384ba0921c77404a1507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#ad9096442f3b1384ba0921c77404a1507">More...</a><br /></td></tr>
+<tr class="separator:ad9096442f3b1384ba0921c77404a1507"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb2da3055c41b5c125df5672ae72eee5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb2da3055c41b5c125df5672ae72eee5"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>scale</b> (const Number &amp;_factor=1) const </td></tr>
-<tr class="separator:ac619066f9eb5841c34e00702ad5ab218"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:aeb2da3055c41b5c125df5672ae72eee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0da4ee1b3d9670de7a1f54d7108d3ac8"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a0da4ee1b3d9670de7a1f54d7108d3ac8">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:a0da4ee1b3d9670de7a1f54d7108d3ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a0da4ee1b3d9670de7a1f54d7108d3ac8">More...</a><br /></td></tr>
 <tr class="separator:a0da4ee1b3d9670de7a1f54d7108d3ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -301,9 +310,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresen
 <tr class="memitem:a1e2840274cc7549defd3f6ac310b8ca6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e2840274cc7549defd3f6ac310b8ca6"></a>
 std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjections</b> () const </td></tr>
 <tr class="separator:a1e2840274cc7549defd3f6ac310b8ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebac22446eee2feaa9e35fc646fc44c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebac22446eee2feaa9e35fc646fc44c0"></a>
-const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluateTemplate</b> (std::size_t directionCount=defaultTemplateDirectionCount, bool force=false) const </td></tr>
-<tr class="separator:aebac22446eee2feaa9e35fc646fc44c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8a4ed668fe94ad1e2a6e8326f588e49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8a4ed668fe94ad1e2a6e8326f588e49"></a>
+const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluateTemplate</b> (std::size_t directionCount=<a class="el" href="group__globals.html#ga6416b4b09ad3984e740a0e19ef391467">defaultTemplateDirectionCount</a>, bool force=false) const </td></tr>
+<tr class="separator:ac8a4ed668fe94ad1e2a6e8326f588e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter, Setting &gt; &gt;</a></td></tr>
 <tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28cf65685f4fa5e04c3dbf428a9d97b0"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
@@ -315,9 +324,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a854a9bc00d7cb33802b9ea3e31262976"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a854a9bc00d7cb33802b9ea3e31262976"></a>
 static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> ()</td></tr>
 <tr class="separator:a854a9bc00d7cb33802b9ea3e31262976"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5368a627915c072bc65bcd66ebe2710"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad5368a627915c072bc65bcd66ebe2710"></a>
+<tr class="memitem:a374a85368803d197f9f182e03bb37dda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a374a85368803d197f9f182e03bb37dda"></a>
 static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const std::vector&lt; <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&gt; &amp;_rhs)</td></tr>
-<tr class="separator:ad5368a627915c072bc65bcd66ebe2710"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a374a85368803d197f9f182e03bb37dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -343,7 +352,7 @@ class hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</h3>
 
 <p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00024">24</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aa1937f1f668b8c0ca60fabd93c73f0b9"></a>
+<a class="anchor" id="a1ba36ab0cb7410405d1f251c860150e5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -353,7 +362,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
@@ -378,7 +387,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Applies an affine transformation with the matrix A and the translation vector b to the set. </p>
-<p>The resulting set R is the result of the affine transformation of the set S with A and b such that <img class="formulaInl" alt="$ R = \{ x | x \in A\cdot S + b \} $" src="form_2.png"/> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The resulting set R is the result of the affine transformation of the set S with A and b such that \( R = \{ x | x \in A\cdot S + b \} \) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The vector. </td></tr>
@@ -506,7 +515,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a26045900b9956db4b02aa3e86f4f9956"></a>
+<a class="anchor" id="a0f820f5bbb06b8a16b995084c24ada33"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -516,7 +525,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
@@ -543,7 +552,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a266c7a5a380871fb725966d36a828a3f"></a>
+<a class="anchor" id="a153e854ec1df3ec3de821effad8bf225"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -553,7 +562,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
@@ -578,7 +587,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Computes the intersection of the set with a set of halfspaces. </p>
-<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = <img class="formulaInl" alt="$ \{ x | x \in S \land A\cdot x \leq b \} $" src="form_0.png"/>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = \( \{ x | x \in S \land A\cdot x \leq b \} \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
@@ -591,7 +600,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aed6b6760b44185bfc9b7afd589ba63b4"></a>
+<a class="anchor" id="a125d7582565f0f6f3e160465f4e336fc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -601,7 +610,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
@@ -616,7 +625,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Applies a linear transformation with the matrix A to the set. </p>
-<p>The resulting set R is the result of the linear transformation of the set S with A such that <img class="formulaInl" alt="$ R = \{ x | x \in A\cdot S \} $" src="form_1.png"/> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The resulting set R is the result of the linear transformation of the set S with A such that \( R = \{ x | x \in A\cdot S \} \) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
   </table>
@@ -628,7 +637,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0aaf947faa9143591d985cb2d95ae6fe"></a>
+<a class="anchor" id="aa77e336906565067540c0a7619ecf6d9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -638,7 +647,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
@@ -683,7 +692,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a72d1a4d3908cd5353c54c52d8be61c79"></a>
+<a class="anchor" id="a410d21065308ec6cb20fa23aca47bf46"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -693,7 +702,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
@@ -792,7 +801,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set. </p>
-<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = <img class="formulaInl" alt="$ \{ x | x \in S \land A\cdot x \leq b \} $" src="form_0.png"/>. Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = \( \{ x | x \in S \land A\cdot x \leq b \} \). Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
@@ -805,7 +814,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac84c8b77d3cd8bc8ec0f28b10d8d179b"></a>
+<a class="anchor" id="ad9096442f3b1384ba0921c77404a1507"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -815,7 +824,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
@@ -855,7 +864,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vertices </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(0,0)</code></td><td>)</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(&#160;0,&#160;0&#160;)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>

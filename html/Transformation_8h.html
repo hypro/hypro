@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -149,10 +155,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a022a3007876dc9cfea5cde7563e6c888"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hypro::Vector</b> = vector_t&lt; Number &gt;</td></tr>
 <tr class="separator:a022a3007876dc9cfea5cde7563e6c888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a803685c9f2650952d3b2cab810740981"><td class="memTemplParams" colspan="2"><a class="anchor" id="a803685c9f2650952d3b2cab810740981"></a>
+<tr class="memitem:a3124395c1a4066fd5506cc77b5bc11f0"><td class="memTemplParams" colspan="2"><a class="anchor" id="a3124395c1a4066fd5506cc77b5bc11f0"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a803685c9f2650952d3b2cab810740981"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hypro::DiagonalMatrix</b> = Eigen::DiagonalMatrix&lt; Number, Eigen::Dynamic &gt;</td></tr>
-<tr class="separator:a803685c9f2650952d3b2cab810740981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3124395c1a4066fd5506cc77b5bc11f0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hypro::DiagonalMatrix</b> = Eigen::DiagonalMatrix&lt; Number, Eigen::Dynamic &gt;</td></tr>
+<tr class="separator:a3124395c1a4066fd5506cc77b5bc11f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e89a72f14a40bdef856027c9326c4cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e89a72f14a40bdef856027c9326c4cc"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>hypro::DiagonalMatrixdouble</b> = Eigen::DiagonalMatrix&lt; double, Eigen::Dynamic &gt;</td></tr>
 <tr class="separator:a6e89a72f14a40bdef856027c9326c4cc"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -161,33 +167,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariantTimings</
 <tr class="memitem:a7e010664cfc1481804d243cb3ea9a000"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e010664cfc1481804d243cb3ea9a000"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBadStateTimings</b> (const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timings)</td></tr>
 <tr class="separator:a7e010664cfc1481804d243cb3ea9a000"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af45f944fed262df1fe6951e36ab8d25e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af45f944fed262df1fe6951e36ab8d25e"></a>
+<tr class="memitem:a7dad2902b469a3a40ec4fb1b05f4f7f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7dad2902b469a3a40ec4fb1b05f4f7f0"></a>
 const std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionTimings</b> () const </td></tr>
-<tr class="separator:af45f944fed262df1fe6951e36ab8d25e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa86e3a647ab92e5081aa794f34db5e15"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa86e3a647ab92e5081aa794f34db5e15"></a>
+<tr class="separator:a7dad2902b469a3a40ec4fb1b05f4f7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c11f305707f11284dde1afb84ecec3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85c11f305707f11284dde1afb84ecec3"></a>
 std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetTransitionTimings</b> ()</td></tr>
-<tr class="separator:aa86e3a647ab92e5081aa794f34db5e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9cbf8960ec98a78255a6cac546544e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9cbf8960ec98a78255a6cac546544e3"></a>
+<tr class="separator:a85c11f305707f11284dde1afb84ecec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84daf3fe43e8897aa0fc8b50e2d6ac3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84daf3fe43e8897aa0fc8b50e2d6ac3e"></a>
 const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionTimings</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
-<tr class="separator:aa9cbf8960ec98a78255a6cac546544e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa5028151fab08e5d3ca943446d6e0ce7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5028151fab08e5d3ca943446d6e0ce7"></a>
+<tr class="separator:a84daf3fe43e8897aa0fc8b50e2d6ac3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac188be65ca9d4949b7adb38ecc0008"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ac188be65ca9d4949b7adb38ecc0008"></a>
 const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInvariantTimings</b> () const </td></tr>
-<tr class="separator:aa5028151fab08e5d3ca943446d6e0ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a5c614cd276c45012396cd3552f5383"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a5c614cd276c45012396cd3552f5383"></a>
+<tr class="separator:a0ac188be65ca9d4949b7adb38ecc0008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10b3da4a2196abf70d77ee146a496fb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10b3da4a2196abf70d77ee146a496fb9"></a>
 <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetInvariantTimings</b> ()</td></tr>
-<tr class="separator:a3a5c614cd276c45012396cd3552f5383"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9373a171bff24841160e3417a55dc820"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9373a171bff24841160e3417a55dc820"></a>
+<tr class="separator:a10b3da4a2196abf70d77ee146a496fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab63d113ceee03f26f0e864579d8d0450"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab63d113ceee03f26f0e864579d8d0450"></a>
 const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getBadStateTimings</b> () const </td></tr>
-<tr class="separator:a9373a171bff24841160e3417a55dc820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ab63d113ceee03f26f0e864579d8d0450"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a101a4f500020ea6cd466a9206d864c1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a101a4f500020ea6cd466a9206d864c1e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransitionEvent</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
 <tr class="separator:a101a4f500020ea6cd466a9206d864c1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94ed983d089c083ca7c8f3d914686271"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94ed983d089c083ca7c8f3d914686271"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransitionEvent</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
 <tr class="separator:a94ed983d089c083ca7c8f3d914686271"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58872a671ef53e4b2724d82fab1acb8a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58872a671ef53e4b2724d82fab1acb8a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransitionInformation</b> (const carl::Interval&lt; mpq_class &gt; &amp;timeInterval, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
-<tr class="separator:a58872a671ef53e4b2724d82fab1acb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a132640ca65d5225ac3d6046d0a8add31"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a132640ca65d5225ac3d6046d0a8add31"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransitionInformation</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
+<tr class="separator:a132640ca65d5225ac3d6046d0a8add31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e8ae83cb33525c2c79b74bc002ea386"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e8ae83cb33525c2c79b74bc002ea386"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t) const </td></tr>
 <tr class="separator:a0e8ae83cb33525c2c79b74bc002ea386"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,9 +212,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasBadStateEvent</b> 
 <tr class="memitem:adf2d8d7cf5fc26bd4cad81c0c9966b92"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf2d8d7cf5fc26bd4cad81c0c9966b92"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasBadStateEvent</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> type) const </td></tr>
 <tr class="separator:adf2d8d7cf5fc26bd4cad81c0c9966b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd030cc22fe497a806da26001e208d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accd030cc22fe497a806da26001e208d8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasPositiveBadStateEvent</b> (const carl::Interval&lt; mpq_class &gt; &amp;timeInterval) const </td></tr>
-<tr class="separator:accd030cc22fe497a806da26001e208d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e4d4288dfee884f157b065e437987f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e4d4288dfee884f157b065e437987f6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasPositiveBadStateEvent</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval) const </td></tr>
+<tr class="separator:a4e4d4288dfee884f157b065e437987f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb3a459a5eb2f8f7456cdd5aebdf8158"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb3a459a5eb2f8f7456cdd5aebdf8158"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>insertTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> type)</td></tr>
 <tr class="separator:acb3a459a5eb2f8f7456cdd5aebdf8158"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,7 +245,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 class hypro::EventTimingContainer&lt; Number &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00009">9</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+<p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00012">12</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/<a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a></li>
 </ul>

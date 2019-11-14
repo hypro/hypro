@@ -17,7 +17,7 @@ var classhypro_1_1PolytopeSupportFunction =
     [ "getDotRepresentation", "classhypro_1_1PolytopeSupportFunction.html#aeb3a1ecbffa7c44778cf0ead33b2743f", null ],
     [ "isTemplate", "classhypro_1_1PolytopeSupportFunction.html#a1ceeeb0795e454b7d99e97990e5100d5", null ],
     [ "multiEvaluate", "classhypro_1_1PolytopeSupportFunction.html#a529e87d4b2a345cba2f99d78c03eabda", null ],
-    [ "operator=", "classhypro_1_1PolytopeSupportFunction.html#a4e7f89b8a42fe4d0d80c3c488b7723a2", null ],
+    [ "operator=", "classhypro_1_1PolytopeSupportFunction.html#a1450f953528385ebed8c4f3722ebc96b", null ],
     [ "print", "classhypro_1_1PolytopeSupportFunction.html#aaf0dc0eef9ce0095ec22c5aa88cad20b", null ],
     [ "supremumPoint", "classhypro_1_1PolytopeSupportFunction.html#ac52844b6e38dc5a4b2b63fd678873ed6", null ],
     [ "type", "classhypro_1_1PolytopeSupportFunction.html#abd5a5b093160822f7d45d29ac5efd6ec", null ],

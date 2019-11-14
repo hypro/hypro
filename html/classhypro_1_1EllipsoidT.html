@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -144,18 +150,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a199671eeb4f539f294a335e66d045772"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a199671eeb4f539f294a335e66d045772">empty</a> () const </td></tr>
 <tr class="memdesc:a199671eeb4f539f294a335e66d045772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, if the ellipsoid is empty.  <a href="#a199671eeb4f539f294a335e66d045772">More...</a><br /></td></tr>
 <tr class="separator:a199671eeb4f539f294a335e66d045772"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73f80c2c557e2c8512244eaac00d7150"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a73f80c2c557e2c8512244eaac00d7150">operator=</a> (const <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs)=default</td></tr>
-<tr class="memdesc:a73f80c2c557e2c8512244eaac00d7150"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="#a73f80c2c557e2c8512244eaac00d7150">More...</a><br /></td></tr>
-<tr class="separator:a73f80c2c557e2c8512244eaac00d7150"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09b6077985bd6d52a5b0e97b656624cc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a09b6077985bd6d52a5b0e97b656624cc">operator=</a> (const <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs)=default</td></tr>
+<tr class="memdesc:a09b6077985bd6d52a5b0e97b656624cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="#a09b6077985bd6d52a5b0e97b656624cc">More...</a><br /></td></tr>
+<tr class="separator:a09b6077985bd6d52a5b0e97b656624cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ccd03d5a990b71070594d62b06c4d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05ccd03d5a990b71070594d62b06c4d1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> () const </td></tr>
 <tr class="separator:a05ccd03d5a990b71070594d62b06c4d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6639d482bec7823aa721b8c9f047b4ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a6639d482bec7823aa721b8c9f047b4ba">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A) const </td></tr>
-<tr class="separator:a6639d482bec7823aa721b8c9f047b4ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16810649fc8b69755a3218da79096791"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a16810649fc8b69755a3218da79096791">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_b) const </td></tr>
-<tr class="separator:a16810649fc8b69755a3218da79096791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a409e7a7ce3e1ca02c1f4692dd10e80be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a409e7a7ce3e1ca02c1f4692dd10e80be">minkowskiSum</a> (const <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs, bool _approx=true) const </td></tr>
-<tr class="separator:a409e7a7ce3e1ca02c1f4692dd10e80be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46860824926b03eb17d7808fb9448e56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a46860824926b03eb17d7808fb9448e56">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A) const </td></tr>
+<tr class="separator:a46860824926b03eb17d7808fb9448e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a115ebc3dd1d6efaea612bd754aa6585a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a115ebc3dd1d6efaea612bd754aa6585a">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_b) const </td></tr>
+<tr class="separator:a115ebc3dd1d6efaea612bd754aa6585a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4382a193988c69d7233dfab76ab9c0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#ad4382a193988c69d7233dfab76ab9c0e">minkowskiSum</a> (const <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs, bool _approx=true) const </td></tr>
+<tr class="separator:ad4382a193988c69d7233dfab76ab9c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa44ff6b3f3d6220b412792f16c084828"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#aa44ff6b3f3d6220b412792f16c084828">evaluate</a> (<a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; const l) const </td></tr>
 <tr class="separator:aa44ff6b3f3d6220b412792f16c084828"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79c1ecde6daff4381898b5f9cf6a9af7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html#a79c1ecde6daff4381898b5f9cf6a9af7">approxEllipsoidTMatrix</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; _matrix) const </td></tr>
@@ -185,16 +191,16 @@ class hypro::EllipsoidT&lt; Number, Converter &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Ellipsoid_8h_source.html#l00020">20</a> of file <a class="el" href="Ellipsoid_8h_source.html">Ellipsoid.h</a>.</p>
+<p>Definition at line <a class="el" href="Ellipsoid_8h_source.html#l00021">21</a> of file <a class="el" href="Ellipsoid_8h_source.html">Ellipsoid.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a16810649fc8b69755a3218da79096791"></a>
+<a class="anchor" id="a115ebc3dd1d6efaea612bd754aa6585a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::affineTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::affineTransformation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_A</em>, </td>
@@ -313,14 +319,14 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6639d482bec7823aa721b8c9f047b4ba"></a>
+<a class="anchor" id="a46860824926b03eb17d7808fb9448e56"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::linearTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::linearTransformation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_A</em></td><td>)</td>
@@ -357,14 +363,14 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a409e7a7ce3e1ca02c1f4692dd10e80be"></a>
+<a class="anchor" id="ad4382a193988c69d7233dfab76ab9c0e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::minkowskiSum </td>
+          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::minkowskiSum </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_rhs</em>, </td>
@@ -393,7 +399,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a73f80c2c557e2c8512244eaac00d7150"></a>
+<a class="anchor" id="a09b6077985bd6d52a5b0e97b656624cc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -403,7 +409,7 @@ template&lt;typename Number , typename Converter &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt;&amp; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt;&amp; <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::operator= </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>

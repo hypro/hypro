@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -271,7 +277,7 @@ template&lt;typename Representation &gt; </div>
 </div><div class="memdoc">
 
 <p>Applies an affine transformation with the matrix A and the translation vector b to the set. </p>
-<p>The resulting set R is the result of the affine transformation of the set S with A and b such that <img class="formulaInl" alt="$ R = \{ x | x \in A\cdot S + b \} $" src="form_2.png"/> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The resulting set R is the result of the affine transformation of the set S with A and b such that \( R = \{ x | x \in A\cdot S + b \} \) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The vector. </td></tr>
@@ -467,7 +473,7 @@ template&lt;typename Representation &gt; </div>
 </div><div class="memdoc">
 
 <p>Computes the intersection of the set with a set of halfspaces. </p>
-<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = <img class="formulaInl" alt="$ \{ x | x \in S \land A\cdot x \leq b \} $" src="form_0.png"/>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = \( \{ x | x \in S \land A\cdot x \leq b \} \). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
@@ -507,7 +513,7 @@ template&lt;typename Representation &gt; </div>
 </div><div class="memdoc">
 
 <p>Applies a linear transformation with the matrix A to the set. </p>
-<p>The resulting set R is the result of the linear transformation of the set S with A such that <img class="formulaInl" alt="$ R = \{ x | x \in A\cdot S \} $" src="form_1.png"/> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The resulting set R is the result of the linear transformation of the set S with A such that \( R = \{ x | x \in A\cdot S \} \) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
   </table>
@@ -675,7 +681,7 @@ template&lt;typename Representation &gt; </div>
 </div><div class="memdoc">
 
 <p>Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set. </p>
-<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = <img class="formulaInl" alt="$ \{ x | x \in S \land A\cdot x \leq b \} $" src="form_0.png"/>. Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = \( \{ x | x \in S \land A\cdot x \leq b \} \). Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
@@ -742,7 +748,7 @@ template&lt;typename Representation &gt; </div>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::vertices </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(0,0)</code></td><td>)</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(&#160;0,&#160;0&#160;)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>

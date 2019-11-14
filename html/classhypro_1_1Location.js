@@ -26,6 +26,7 @@ var classhypro_1_1Location =
     [ "isComposedOf", "classhypro_1_1Location.html#a280bb96bba67484bc038bf6337d706a8", null ],
     [ "operator!=", "classhypro_1_1Location.html#a7ec7a51dc8ec407509089a585b583f4b", null ],
     [ "operator<", "classhypro_1_1Location.html#a8f33a74a18d96cf7bd207ad4491ee815", null ],
+    [ "operator=", "classhypro_1_1Location.html#a4f958e5e293653fbee5880e2f4fdb69b", null ],
     [ "operator==", "classhypro_1_1Location.html#ae0e07f4791ea563dee80590661758c89", null ],
     [ "rGetLinearFlow", "classhypro_1_1Location.html#a2aea8b94a29b2e2b0874118c7414a0ce", null ],
     [ "rGetRectangularFlow", "classhypro_1_1Location.html#a7154d06faf592373da5ee9286842fd5a", null ],

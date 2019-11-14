@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -127,6 +133,9 @@ static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>HYPR
 <tr class="memitem:a81ec27a145e00b5cd5f146394a3e29ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81ec27a145e00b5cd5f146394a3e29ef"></a>
 static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>USE_INTERVAL_ARITHMETIC</b> = true</td></tr>
 <tr class="separator:a81ec27a145e00b5cd5f146394a3e29ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac557c2926d2b97ba83609b28b1d2425d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac557c2926d2b97ba83609b28b1d2425d"></a>
+static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>DETECT_BOX</b> = true</td></tr>
+<tr class="separator:ac557c2926d2b97ba83609b28b1d2425d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">

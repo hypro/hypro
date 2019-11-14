@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -178,18 +184,20 @@ $(document).ready(function(){initNavTree('functions_func_p.html','');});
 <li>polyhedriclHull()
 : <a class="el" href="classhypro_1_1ConvexHull.html#ad211bd75ad9a017703f091fa8b1b3ce0">hypro::ConvexHull&lt; Number &gt;</a>
 </li>
+<li>processDiscreteBehaviour()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a5adec8a8764b6be94c35f441cd513515">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
 <li>processTask()
-: <a class="el" href="classhypro_1_1IWorker.html#a4171f4df9417ca1eea8664b43d9d468d">hypro::IWorker&lt; Workable, State &gt;</a>
+: <a class="el" href="classhypro_1_1IWorker.html#a911c99e8bd5ed58fa99d46a0a5080b97">hypro::IWorker&lt; Workable, State &gt;</a>
 </li>
 <li>project()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ac20dd4235621c4b4ec13000d1b3c9a33">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a170554e95a35020137721f2c835494f5">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
 , <a class="el" href="classhypro_1_1Halfspace.html#aab70d617cb946cda88d97ca12591ffbd">hypro::Halfspace&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Point.html#a85ee0a31b04917d4e99502da849458a3">hypro::Point&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#af250252bfe30434d5a181ea98d17a031">hypro::StatisticWrapper&lt; Representation &gt;</a>
-, <a class="el" href="classhypro_1_1SupportFunctionT.html#a72d1a4d3908cd5353c54c52d8be61c79">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#ad166621523a57d596d48a38a3a3d67a4">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
-, <a class="el" href="classhypro_1_1ZonotopeT.html#a8b1cb53409e197227389ad9de61066b1">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionT.html#a410d21065308ec6cb20fa23aca47bf46">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ZonotopeT.html#a16b2b454a24694f333f87a604b917df5">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>projectOnDimensions()
 : <a class="el" href="classhypro_1_1Halfspace.html#adfd292f7da8ddd63caca62837cee02fa">hypro::Halfspace&lt; Number &gt;</a>

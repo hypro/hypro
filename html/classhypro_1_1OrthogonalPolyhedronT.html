@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -146,7 +152,7 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>OrthogonalPolyhedronT</b> (const <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt; &amp;&amp;move)</td></tr>
 <tr class="separator:aa40a46b97733ebb2cef6981fb871a40c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a916f7837aea398e7251bc9deda4065ad"><td class="memTemplParams" colspan="2"><a class="anchor" id="a916f7837aea398e7251bc9deda4065ad"></a>
-template&lt;class SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, SettingRhs &gt; &gt;  = carl::dummy&gt; </td></tr>
+template&lt;class SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, SettingRhs &gt;&gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:a916f7837aea398e7251bc9deda4065ad"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>OrthogonalPolyhedronT</b> (const <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, SettingRhs, Type &gt; &amp;copy)</td></tr>
 <tr class="separator:a916f7837aea398e7251bc9deda4065ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0be2dd05bb054d0e2f0d65b4ea231d8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0be2dd05bb054d0e2f0d65b4ea231d8c"></a>
@@ -155,9 +161,9 @@ std::vector&lt; carl::Variable &gt;&#160;</td><td class="memItemRight" valign="b
 <tr class="memitem:ab5d36157d19405c7b0fddb7b61085678"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5d36157d19405c7b0fddb7b61085678"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> () const </td></tr>
 <tr class="separator:ab5d36157d19405c7b0fddb7b61085678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79359d4300e9fa66fb5dbf32bc6899bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79359d4300e9fa66fb5dbf32bc6899bd"></a>
+<tr class="memitem:a14c87bab9bcd04f3262f8601c25e7766"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a14c87bab9bcd04f3262f8601c25e7766"></a>
 BoxT&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>boundaryBox</b> () const </td></tr>
-<tr class="separator:a79359d4300e9fa66fb5dbf32bc6899bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a14c87bab9bcd04f3262f8601c25e7766"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7524d8341db4772523e92dacfc19fcd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7524d8341db4772523e92dacfc19fcd"></a>
 const <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>grid</b> () const </td></tr>
 <tr class="separator:ab7524d8341db4772523e92dacfc19fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,7 +274,7 @@ class hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;</h3
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00041">41</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
+<p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00042">42</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/<a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a></li>
 </ul>

@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -118,7 +124,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1EllipsoidT.html','');});
 
 <p>This is the complete list of members for <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a16810649fc8b69755a3218da79096791">affineTransformation</a>(const matrix_t&lt; Number &gt; &amp;_A, const vector_t&lt; Number &gt; &amp;_b) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a115ebc3dd1d6efaea612bd754aa6585a">affineTransformation</a>(const matrix_t&lt; Number &gt; &amp;_A, const vector_t&lt; Number &gt; &amp;_b) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a79c1ecde6daff4381898b5f9cf6a9af7">approxEllipsoidTMatrix</a>(const matrix_t&lt; Number &gt; _matrix) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#af87ef5b5ad142d9098523e97348d1f62">dimension</a>() const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>EllipsoidT</b>(Number _radius, std::size_t _dimension) (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
@@ -126,12 +132,12 @@ $(document).ready(function(){initNavTree('classhypro_1_1EllipsoidT.html','');});
   <tr bgcolor="#f0f0f0"><td class="entry"><b>EllipsoidT</b>(const EllipsoidT&lt; Number, Converter &gt; &amp;_orig) (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a199671eeb4f539f294a335e66d045772">empty</a>() const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#aa44ff6b3f3d6220b412792f16c084828">evaluate</a>(vector_t&lt; Number &gt; const l) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a6639d482bec7823aa721b8c9f047b4ba">linearTransformation</a>(const matrix_t&lt; Number &gt; &amp;_A) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a46860824926b03eb17d7808fb9448e56">linearTransformation</a>(const matrix_t&lt; Number &gt; &amp;_A) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a6ed0c767e2e6e0578a8c4e60613f8a23">matrix</a>() const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a409e7a7ce3e1ca02c1f4692dd10e80be">minkowskiSum</a>(const EllipsoidT&lt; Number, Converter &gt; &amp;_rhs, bool _approx=true) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#ad4382a193988c69d7233dfab76ab9c0e">minkowskiSum</a>(const EllipsoidT&lt; Number, Converter &gt; &amp;_rhs, bool _approx=true) const </td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>operator!=</b> (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator&lt;&lt;</b> (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a73f80c2c557e2c8512244eaac00d7150">operator=</a>(const EllipsoidT&lt; Number, Converter &gt; &amp;rhs)=default</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html#a09b6077985bd6d52a5b0e97b656624cc">operator=</a>(const EllipsoidT&lt; Number, Converter &gt; &amp;rhs)=default</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator==</b> (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>print</b>() const  (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>~EllipsoidT</b>() (defined in <a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1EllipsoidT.html">hypro::EllipsoidT&lt; Number, Converter &gt;</a></td><td class="entry"></td></tr>

@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -128,6 +134,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa4ee4644ebc04af396e4357ffbb08380"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4ee4644ebc04af396e4357ffbb08380"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>HierarchicalIntervalVector</b> (const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, Number &gt; &amp;in)</td></tr>
 <tr class="separator:aa4ee4644ebc04af396e4357ffbb08380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af595d8c5356eb4a3c30caf6c9f6a9304"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af595d8c5356eb4a3c30caf6c9f6a9304"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#af595d8c5356eb4a3c30caf6c9f6a9304">~HierarchicalIntervalVector</a> ()</td></tr>
+<tr class="memdesc:af595d8c5356eb4a3c30caf6c9f6a9304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Hierarchical Interval Vector object. <br /></td></tr>
+<tr class="separator:af595d8c5356eb4a3c30caf6c9f6a9304"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b8b1e1de1466d9109b270e02127801"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23b8b1e1de1466d9109b270e02127801"></a>
+<a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, Number &gt; &amp;orig)=default</td></tr>
+<tr class="separator:a23b8b1e1de1466d9109b270e02127801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a275f879f3f59ec19441238369df49848"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a275f879f3f59ec19441238369df49848"></a>
+<a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, Number &gt; &amp;&amp;orig)=default</td></tr>
+<tr class="separator:a275f879f3f59ec19441238369df49848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cc1925a0b5f5ab3ebdb56a41f457624"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9cc1925a0b5f5ab3ebdb56a41f457624"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>initialize</b> (const T &amp;baseElement, Number endTime)</td></tr>
 <tr class="separator:a9cc1925a0b5f5ab3ebdb56a41f457624"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,9 +198,9 @@ std::vector&lt; carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItem
 <tr class="memitem:a6fe4f6ea6bfee240828bc840e7d6fe1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6fe4f6ea6bfee240828bc840e7d6fe1f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>merge</b> (const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, Number &gt; &amp;rhs)</td></tr>
 <tr class="separator:a6fe4f6ea6bfee240828bc840e7d6fe1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0508f5aa299dcb6a6ffd6114f792e271"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0508f5aa299dcb6a6ffd6114f792e271"></a>
+<tr class="memitem:a99c3e03689566a8973bc1e1c5164ba6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99c3e03689566a8973bc1e1c5164ba6d"></a>
 const <a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt; T, Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () const </td></tr>
-<tr class="separator:a0508f5aa299dcb6a6ffd6114f792e271"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a99c3e03689566a8973bc1e1c5164ba6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a642ce27cd39467acd2a62d253551ed83"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a642ce27cd39467acd2a62d253551ed83"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
 <tr class="separator:a642ce27cd39467acd2a62d253551ed83"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,9 +210,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </
 <tr class="memitem:aadae50a58a508791e4451bc67118af93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aadae50a58a508791e4451bc67118af93"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><b>getTimeHorizon</b> () const </td></tr>
 <tr class="separator:aadae50a58a508791e4451bc67118af93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b318b4805666f5d3db5d275b505b239"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b318b4805666f5d3db5d275b505b239"></a>
+<tr class="memitem:a822d093e21aeca19d54cdbc30330424d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a822d093e21aeca19d54cdbc30330424d"></a>
 const std::vector&lt; <a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt; T, Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntervals</b> () const </td></tr>
-<tr class="separator:a3b318b4805666f5d3db5d275b505b239"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a822d093e21aeca19d54cdbc30330424d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -215,7 +231,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 class hypro::HierarchicalIntervalVector&lt; T, Number &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00035">35</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
+<p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00034">34</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a9258adb71802345bd1820d69f5b775d4"></a>
 <div class="memitem">

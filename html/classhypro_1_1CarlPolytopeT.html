@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -146,30 +152,39 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afa27e496c8ab04ba85228f55c2981f7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa27e496c8ab04ba85228f55c2981f7e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CarlPolytopeT</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervals)</td></tr>
 <tr class="separator:afa27e496c8ab04ba85228f55c2981f7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6252e1da9b8f510a958348aaf7481e78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6252e1da9b8f510a958348aaf7481e78"></a>
+<tr class="memitem:a5ee53116820a8a294bf09b3ef7c32604"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ee53116820a8a294bf09b3ef7c32604"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (const <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const </td></tr>
-<tr class="separator:a6252e1da9b8f510a958348aaf7481e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5757dbf87716ed615e3b5a66c2da38b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5757dbf87716ed615e3b5a66c2da38b"></a>
+<tr class="separator:a5ee53116820a8a294bf09b3ef7c32604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0deb50657b9163cf2d65303ec55aa51d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0deb50657b9163cf2d65303ec55aa51d"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="separator:ac5757dbf87716ed615e3b5a66c2da38b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae5eda399c1fb584eaf733639f722d80"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae5eda399c1fb584eaf733639f722d80"></a>
+<tr class="separator:a0deb50657b9163cf2d65303ec55aa51d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb6b029654e6a216abd783af9b9c47cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb6b029654e6a216abd783af9b9c47cc"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linearTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
-<tr class="separator:aae5eda399c1fb584eaf733639f722d80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed6ae0b73a7ed77fc71b4d85013790b7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed6ae0b73a7ed77fc71b4d85013790b7"></a>
+<tr class="separator:abb6b029654e6a216abd783af9b9c47cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fd3b22587a3f8c2ae0885e329da4369"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fd3b22587a3f8c2ae0885e329da4369"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;) const </td></tr>
-<tr class="separator:aed6ae0b73a7ed77fc71b4d85013790b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a395e8994f5eb9d460d0603a53eb6e1f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a395e8994f5eb9d460d0603a53eb6e1f4"></a>
+<tr class="separator:a3fd3b22587a3f8c2ae0885e329da4369"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76c5913bef6e553ae8817a59cbfb7940"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76c5913bef6e553ae8817a59cbfb7940"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;) const </td></tr>
-<tr class="separator:a395e8994f5eb9d460d0603a53eb6e1f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7628f3ff6586e1976d0f72c0d76b11af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7628f3ff6586e1976d0f72c0d76b11af"></a>
+<tr class="separator:a76c5913bef6e553ae8817a59cbfb7940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a819a86a0e2249771cde5051fd8447832"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a819a86a0e2249771cde5051fd8447832"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>affineTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;) const </td></tr>
-<tr class="separator:a7628f3ff6586e1976d0f72c0d76b11af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a386eb566fbd631515c26dc4c814f6566"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a386eb566fbd631515c26dc4c814f6566"></a>
+<tr class="separator:a819a86a0e2249771cde5051fd8447832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add2119ed7ed682e5bfd8c47400bdcb12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add2119ed7ed682e5bfd8c47400bdcb12"></a>
 std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspaces</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
-<tr class="separator:a386eb566fbd631515c26dc4c814f6566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:add2119ed7ed682e5bfd8c47400bdcb12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa6cd3f53215e0633cf7a0bcf37689b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa6cd3f53215e0633cf7a0bcf37689b4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const </td></tr>
+<tr class="separator:aaa6cd3f53215e0633cf7a0bcf37689b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33f465683c6c17bbd1962988d5143691"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33f465683c6c17bbd1962988d5143691"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;) const </td></tr>
 <tr class="separator:a33f465683c6c17bbd1962988d5143691"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8611e454b586996c225f6d6724ebe941"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8611e454b586996c225f6d6724ebe941"></a>
+<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;) const </td></tr>
+<tr class="separator:a8611e454b586996c225f6d6724ebe941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec2129a8ccc6e58ee1121364927fe2d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec2129a8ccc6e58ee1121364927fe2d0"></a>
+std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>multiEvaluate</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;, bool) const </td></tr>
+<tr class="separator:aec2129a8ccc6e58ee1121364927fe2d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02cbb589d3081aa1ef88864154a7845a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a02cbb589d3081aa1ef88864154a7845a"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
 <tr class="separator:a02cbb589d3081aa1ef88864154a7845a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,9 +239,9 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () co
 <tr class="memitem:aefae3b73dd578d6b74a99ce36f1cb76c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefae3b73dd578d6b74a99ce36f1cb76c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </td></tr>
 <tr class="separator:aefae3b73dd578d6b74a99ce36f1cb76c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f90dd2c729c0b45dcc06250b287984e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f90dd2c729c0b45dcc06250b287984e"></a>
+<tr class="memitem:a178e6d429348a1de143fe6fd74140090"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a178e6d429348a1de143fe6fd74140090"></a>
 <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>make_rectangular</b> () const </td></tr>
-<tr class="separator:a3f90dd2c729c0b45dcc06250b287984e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a178e6d429348a1de143fe6fd74140090"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c56da11a6c53c3b2242fd0f91c8065a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c56da11a6c53c3b2242fd0f91c8065a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> ()</td></tr>
 <tr class="separator:a7c56da11a6c53c3b2242fd0f91c8065a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,9 +254,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>choseOrder</b> (QEQue
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a7988b204c6a8f10d77d33d0fb27f7b11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7988b204c6a8f10d77d33d0fb27f7b11"></a>
+<tr class="memitem:a2ffecaf38d6a534dcb0277cee45c4e53"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2ffecaf38d6a534dcb0277cee45c4e53"></a>
 static <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Empty</b> ()</td></tr>
-<tr class="separator:a7988b204c6a8f10d77d33d0fb27f7b11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a2ffecaf38d6a534dcb0277cee45c4e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8431434039abbbc27593740c7d7024ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8431434039abbbc27593740c7d7024ff"></a>
 static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> ()</td></tr>
 <tr class="separator:a8431434039abbbc27593740c7d7024ff"><td class="memSeparator" colspan="2">&#160;</td></tr>

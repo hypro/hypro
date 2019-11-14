@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -157,10 +163,11 @@ $(document).ready(function(){initNavTree('functions_v.html','');});
 , <a class="el" href="classhypro_1_1Vertex.html#a9f860802fbdcd9334bbe8ad0c5c67edc">hypro::Vertex&lt; Number &gt;</a>
 </li>
 <li>vector()
-: <a class="el" href="classhypro_1_1Optimizer.html#af794665f4c5ec520cdfed3a9aeb7bfb2">hypro::Optimizer&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Halfspace.html#aeece7a108153d254a7e92f732cc732fc">hypro::Halfspace&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1Optimizer.html#af794665f4c5ec520cdfed3a9aeb7bfb2">hypro::Optimizer&lt; Number &gt;</a>
 </li>
 <li>Vertex()
-: <a class="el" href="classhypro_1_1Vertex.html#a9a3c97bcedc4f01ec01f823d634de46d">hypro::Vertex&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Vertex.html#a1b3a11216b140a2535259d10b7f8b867">hypro::Vertex&lt; Number &gt;</a>
 </li>
 <li>vertexSet
 : <a class="el" href="classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a">hypro::Ridge&lt; Number &gt;</a>
@@ -168,35 +175,20 @@ $(document).ready(function(){initNavTree('functions_v.html','');});
 <li>vertices()
 : <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad80390a9e2669637155ee4517ace424b">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
+, <a class="el" href="classhypro_1_1Halfspace.html#a8fff4736952b821ea77f2aed25038022">hypro::Halfspace&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#a820b9a08215f47bcc69d440584d60751">hypro::StatisticWrapper&lt; Representation &gt;</a>
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#a22553b6a517d9d2ba99ae0c7e76d0864">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#aec5bcb9e9075e060cc3151ac06284bb7">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#ae729817e5a9322a5eac75c5fb2889154">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
-<li>visitExpressions()
-: <a class="el" href="classExpressionsBaseVisitor.html#a650fa6672a3922f767e89a158319c0dc">ExpressionsBaseVisitor</a>
-, <a class="el" href="classExpressionsVisitor.html#a86f0ac43f0260f3ed629d4891e5db319">ExpressionsVisitor</a>
-</li>
-<li>visitLocations()
-: <a class="el" href="classCIFLocationBaseVisitor.html#a22fab507533d6a361a7d429dc4ed915e">CIFLocationBaseVisitor</a>
-, <a class="el" href="classCIFLocationVisitor.html#a80cea897a5b8e7399d40fe01fa54a475">CIFLocationVisitor</a>
-</li>
-<li>visitOptIoDecls()
-: <a class="el" href="classInputOutputBaseVisitor.html#af768ba48aca5c14fc6f1a6e563d49350">InputOutputBaseVisitor</a>
-, <a class="el" href="classInputOutputVisitor.html#ac2d6251f65bf378c801e0a7e2a7b2755">InputOutputVisitor</a>
-</li>
 <li>visitSpecification()
-: <a class="el" href="classHybridSystemBaseVisitor.html#ab1873b21675647d5d173b7f5219afd58">HybridSystemBaseVisitor</a>
-, <a class="el" href="classHybridSystemVisitor.html#a7bbe7139e6ae59f3e42562cfb5db483f">HybridSystemVisitor</a>
-, <a class="el" href="classhypro_1_1HybridCIFVisitor.html#abb602216606f8bfe8da020274e977a29">hypro::HybridCIFVisitor&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1HybridCIFVisitor.html#abb602216606f8bfe8da020274e977a29">hypro::HybridCIFVisitor&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1HybridSystemBaseVisitor.html#a8736a106bd359e333a1e480e9881a6f8">hypro::HybridSystemBaseVisitor</a>
+, <a class="el" href="classhypro_1_1HybridSystemVisitor.html#af6d8fe8ab7fa35f24cae4ed3e9aa2998">hypro::HybridSystemVisitor</a>
 </li>
 <li>visitStart()
-: <a class="el" href="classHybridAutomatonBaseVisitor.html#a148a04491c9a519f5668f04e1b34c3df">HybridAutomatonBaseVisitor</a>
-, <a class="el" href="classHybridAutomatonVisitor.html#a02f36d765afd14764cb7ea9397cb75e4">HybridAutomatonVisitor</a>
+: <a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html#abcefee6685b55dfb52f984badcfa2e0c">hypro::HybridAutomatonBaseVisitor</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#ac2b98a5f8c2878717aaacc6fc29036ce">hypro::HybridAutomatonVisitor</a>
 , <a class="el" href="classhypro_1_1HyproHAVisitor.html#a0777a41ca552bd961b7250d752ce9e04">hypro::HyproHAVisitor&lt; Number &gt;</a>
-</li>
-<li>VPolytopeT()
-: <a class="el" href="classhypro_1_1VPolytopeT.html#aed898680aeba332b98a85eadd20037a6">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

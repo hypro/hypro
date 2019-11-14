@@ -5,6 +5,7 @@ var classhypro_1_1Vertex =
     [ "Vertex", "classhypro_1_1Vertex.html#aaf79505ac887d69dee4888813413f31a", null ],
     [ "Vertex", "classhypro_1_1Vertex.html#a1b3a11216b140a2535259d10b7f8b867", null ],
     [ "Vertex", "classhypro_1_1Vertex.html#a71ed34a0a233e6417ebad90d672bf7b6", null ],
+    [ "~Vertex", "classhypro_1_1Vertex.html#a09df1f7c19b8f1696c9027b20e06faaa", null ],
     [ "at", "classhypro_1_1Vertex.html#ae71a6387aaeb37a13ff216431c42d4d8", null ],
     [ "at", "classhypro_1_1Vertex.html#a50d63a64bc4ce8ca311e8ce535f2d1f7", null ],
     [ "color", "classhypro_1_1Vertex.html#a2c16bc5cafc02c562d09fe45f10e287b", null ],

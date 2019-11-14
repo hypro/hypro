@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -181,7 +187,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setHybridAutomaton</b
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setReachabilitySettings</b> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;rs)</td></tr>
 <tr class="separator:a68535b7fe45d5cd3e9aaa8a6b892e13f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a670e1cb8b5b0f8ad1527c330e948b6c5"><td class="memTemplParams" colspan="2"><a class="anchor" id="a670e1cb8b5b0f8ad1527c330e948b6c5"></a>
-template&lt;typename N  = Number, typename T  = tNumber, carl::DisableIf&lt; std::is_same&lt; N, T &gt; &gt;  = carl::dummy&gt; </td></tr>
+template&lt;typename N  = Number, typename T  = tNumber, carl::DisableIf&lt; std::is_same&lt; N, T &gt;&gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:a670e1cb8b5b0f8ad1527c330e948b6c5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>setReachabilitySettings</b> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;rs)</td></tr>
 <tr class="separator:a670e1cb8b5b0f8ad1527c330e948b6c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89648e73b16bebd30fdbac58b7aa44c7"><td class="memTemplParams" colspan="2"><a class="anchor" id="a89648e73b16bebd30fdbac58b7aa44c7"></a>
@@ -189,10 +195,10 @@ template&lt;typename Representation &gt; </td></tr>
 <tr class="memitem:a89648e73b16bebd30fdbac58b7aa44c7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addStrategyElement</b> (<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep, AGG_SETTING agg, int clustering)</td></tr>
 <tr class="separator:a89648e73b16bebd30fdbac58b7aa44c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88c9bf1d08ac42ca41034d9016020c8d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88c9bf1d08ac42ca41034d9016020c8d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setStrategy</b> (const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; State &gt; &amp;strat)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStrategy</b> (const Strategy&lt; State &gt; &amp;strat)</td></tr>
 <tr class="separator:a88c9bf1d08ac42ca41034d9016020c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c434e36bee4e38fd9db32c40c95e474"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c434e36bee4e38fd9db32c40c95e474"></a>
-const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStrategy</b> () const </td></tr>
+const Strategy&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStrategy</b> () const </td></tr>
 <tr class="separator:a6c434e36bee4e38fd9db32c40c95e474"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4059805159ddbc7d9d7a06413f237cce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4059805159ddbc7d9d7a06413f237cce"></a>
 const <a class="el" href="classhypro_1_1LockedFileWriter.html">LockedFileWriter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDotFileWriter</b> () const </td></tr>

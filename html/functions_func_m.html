@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -153,15 +159,16 @@ $(document).ready(function(){initNavTree('functions_func_m.html','');});
 </li>
 <li>matrix()
 : <a class="el" href="classhypro_1_1EllipsoidT.html#a6ed0c767e2e6e0578a8c4e60613f8a23">hypro::EllipsoidT&lt; Number, Converter &gt;</a>
+, <a class="el" href="classhypro_1_1Halfspace.html#a30151c271babe86614df6bba4f4649f0">hypro::Halfspace&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Optimizer.html#abce506a254bbcd7b47a8cdd149fb3c6d">hypro::Optimizer&lt; Number &gt;</a>
 </li>
 <li>minkowskiSum()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a07fb24a02b012dc2650f5f04cc8b8a97">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1EllipsoidT.html#a409e7a7ce3e1ca02c1f4692dd10e80be">hypro::EllipsoidT&lt; Number, Converter &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad371c877078c034207e8d544654e5832">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1EllipsoidT.html#ad4382a193988c69d7233dfab76ab9c0e">hypro::EllipsoidT&lt; Number, Converter &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#aa1bb3d2456dc059fa406ee888cbc1520">hypro::StatisticWrapper&lt; Representation &gt;</a>
-, <a class="el" href="classhypro_1_1SupportFunctionT.html#a0aaf947faa9143591d985cb2d95ae6fe">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1ZonotopeT.html#a464dbff976fd7f00ffacb3349993dca9">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionT.html#aa77e336906565067540c0a7619ecf6d9">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ZonotopeT.html#af9f2cb37184dad510299f48fc42cb422">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>modifyAssignment()
 : <a class="el" href="classhypro_1_1ConstrainSet.html#a9bea754899d2de8a99607cb2cfc10d8d">hypro::ConstrainSet&lt; Number &gt;</a>
@@ -170,6 +177,7 @@ $(document).ready(function(){initNavTree('functions_func_m.html','');});
 : <a class="el" href="classhypro_1_1BallSupportFunction.html#a4058036e49850340ef2139aa987ef7de">hypro::BallSupportFunction&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1BoxSupportFunction.html#a86af07583ac67af4d1f00e8718131526">hypro::BoxSupportFunction&lt; Number, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf">hypro::EllipsoidSupportFunction&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1Halfspace.html#ae97cc578d5d1fc0c77054eb131aadfff">hypro::Halfspace&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a529e87d4b2a345cba2f99d78c03eabda">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;</a>
 </li>
 <li>multiplicationsPerEvaluation()

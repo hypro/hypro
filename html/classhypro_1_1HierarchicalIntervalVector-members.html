@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -136,7 +142,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1HierarchicalIntervalVect
   <tr><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#ae875d22627e3549286f585213d34b20a">hasEntry</a>(const carl::Interval&lt; Number &gt; &amp;timeInterval) const </td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
   <tr class="even"><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a21ab3f5b0a553182a7583e960f7f94f0">hasEntry</a>(const carl::Interval&lt; Number &gt; &amp;timeInterval, const T &amp;type) const </td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>HierarchicalIntervalVector</b>()=delete (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>HierarchicalIntervalVector</b>(const std::vector&lt; T &gt; &amp;order) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>HierarchicalIntervalVector</b>(const std::vector&lt; T &gt; &amp;order) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>HierarchicalIntervalVector</b>(const HierarchicalIntervalVector&lt; T, Number &gt; &amp;in) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>initialize</b>(const T &amp;baseElement, Number endTime) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>insertInterval</b>(const T &amp;type, const carl::Interval&lt; Number &gt; &amp;timespan) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
@@ -144,9 +150,12 @@ $(document).ready(function(){initNavTree('classhypro_1_1HierarchicalIntervalVect
   <tr bgcolor="#f0f0f0"><td class="entry"><b>merge</b>(const HierarchicalIntervalVector&lt; T, Number &gt; &amp;rhs) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator!=</b> (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>operator&lt;&lt;</b> (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator=</b>(const HierarchicalIntervalVector&lt; T, Number &gt; &amp;orig)=default (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>operator=</b>(HierarchicalIntervalVector&lt; T, Number &gt; &amp;&amp;orig)=default (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator==</b> (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
   <tr bgcolor="#f0f0f0"><td class="entry"><b>setTypeOrder</b>(const std::vector&lt; T &gt; &amp;in) (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
   <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>size</b>() const  (defined in <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>)</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#af595d8c5356eb4a3c30caf6c9f6a9304">~HierarchicalIntervalVector</a>()</td><td class="entry"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

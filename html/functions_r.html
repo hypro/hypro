@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -152,14 +158,17 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 <li>rawCoordinates()
 : <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;</a>
 </li>
+<li>Reach()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#aa42d7888aac0e1b2d546db2b19044546">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
 <li>ReachabilitySettings()
 : <a class="el" href="structhypro_1_1ReachabilitySettings.html#af91b99cf64b956259347ba1595d0ad4d">hypro::ReachabilitySettings</a>
 </li>
+<li>reachedBadStates()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a3d01651acfd13484fbd42d123cd5d591">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
 <li>reduce()
 : <a class="el" href="classhypro_1_1HybridAutomaton.html#a18ace72be9084ee3df5c54aead596737">hypro::HybridAutomaton&lt; Number &gt;</a>
-</li>
-<li>reduced()
-: <a class="el" href="classhypro_1_1VPolytopeT.html#a7f1d3b3c38761d773df2acc4e5961ffc">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 </li>
 <li>reduceDimension()
 : <a class="el" href="classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484">hypro::Point&lt; Number &gt;</a>
@@ -168,11 +177,10 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 : <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#a1beee2b99f7a5f440edc300bfec26e02">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#a584ddb1d0d1446e534a45a19b3542865">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>reduceToDimensions()
-: <a class="el" href="classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac">hypro::Point&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Point.html#ae16e7b5a07b33a60357365eb9b895414">hypro::Point&lt; Number &gt;</a>
 </li>
 <li>redundantConstraints()
 : <a class="el" href="classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084">hypro::Optimizer&lt; Number &gt;</a>
@@ -186,14 +194,17 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 <li>removeEmptyGenerators()
 : <a class="el" href="classhypro_1_1ZonotopeT.html#a2a2f65a547b6e619fb00e1d2a0cd2c2b">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
+<li>removeRedundancy()
+: <a class="el" href="classhypro_1_1Halfspace.html#a0f1b1674a6bc28e92e8402efca56d019">hypro::Halfspace&lt; Number &gt;</a>
+</li>
 <li>reset()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#abe61c18a8a34cda3821b0293c73ac8ec">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a47c8497fe7e552c15f46bcb8818c8678">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>reverse()
 : <a class="el" href="classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7">hypro::Dictionary&lt; Number &gt;</a>
 </li>
 <li>rewind()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a909a0530fdf24274da0939d3dd01c28c">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a0cf2b095acbfd013647d0967a61f8274">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>rGetNode()
 : <a class="el" href="classhypro_1_1EventTimingProvider.html#a26ffa86e373f27dae9e8646ec5cd0b0a">hypro::EventTimingProvider&lt; Number &gt;</a>

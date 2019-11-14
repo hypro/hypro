@@ -10,7 +10,7 @@ var classhypro_1_1OrthogonalPolyhedronT =
     [ "OrthogonalPolyhedronT", "classhypro_1_1OrthogonalPolyhedronT.html#a916f7837aea398e7251bc9deda4065ad", null ],
     [ "addVertex", "classhypro_1_1OrthogonalPolyhedronT.html#ac5dfc513857f6ce7c6b0ee6a6e77dc34", null ],
     [ "addVertices", "classhypro_1_1OrthogonalPolyhedronT.html#a85981dae32d76795f1b7a4ccd0086fe2", null ],
-    [ "boundaryBox", "classhypro_1_1OrthogonalPolyhedronT.html#a79359d4300e9fa66fb5dbf32bc6899bd", null ],
+    [ "boundaryBox", "classhypro_1_1OrthogonalPolyhedronT.html#a14c87bab9bcd04f3262f8601c25e7766", null ],
     [ "color", "classhypro_1_1OrthogonalPolyhedronT.html#ad88f76694ce2b339dbc78ed3c87c2753", null ],
     [ "contains", "classhypro_1_1OrthogonalPolyhedronT.html#abf868fe263ab0b40e1ddc217d7583a0c", null ],
     [ "contains", "classhypro_1_1OrthogonalPolyhedronT.html#aa83ef626fc50d8cc7c85c404471bc5d4", null ],

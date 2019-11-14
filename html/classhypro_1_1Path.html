@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -129,12 +135,12 @@ $(document).ready(function(){initNavTree('classhypro_1_1Path.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a10fd505bf8db529c874cf6d00ffca3f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10fd505bf8db529c874cf6d00ffca3f4"></a>
+<tr class="memitem:a3a1d60720dc47826a48f44551a0cc792"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a1d60720dc47826a48f44551a0cc792"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>TIterator</b> = typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&gt;::iterator</td></tr>
-<tr class="separator:a10fd505bf8db529c874cf6d00ffca3f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01a0b17f0fe75c38dcec584196535c27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01a0b17f0fe75c38dcec584196535c27"></a>
+<tr class="separator:a3a1d60720dc47826a48f44551a0cc792"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab41a60b45f20c36ddd2b8e24a7cdfab8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab41a60b45f20c36ddd2b8e24a7cdfab8"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>TIterator_const</b> = typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&gt;::const_iterator</td></tr>
-<tr class="separator:a01a0b17f0fe75c38dcec584196535c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ab41a60b45f20c36ddd2b8e24a7cdfab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -207,18 +213,18 @@ TIterator_const&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> 
 <tr class="memitem:af52324f7e39ae142d55cbce5a21be92a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af52324f7e39ae142d55cbce5a21be92a"></a>
 TIterator_const&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const </td></tr>
 <tr class="separator:af52324f7e39ae142d55cbce5a21be92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58a9564ee8a509660f642f2ea0568d03"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58a9564ee8a509660f642f2ea0568d03"></a>
+<tr class="memitem:ab273c579858bf5b6eec7bc1a1fcc4cc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab273c579858bf5b6eec7bc1a1fcc4cc5"></a>
 const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () const </td></tr>
-<tr class="separator:a58a9564ee8a509660f642f2ea0568d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c84d7b9c8c40ba820c09eacdc8dcc0f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c84d7b9c8c40ba820c09eacdc8dcc0f"></a>
+<tr class="separator:ab273c579858bf5b6eec7bc1a1fcc4cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78f459110570e25af6be0fdada3fcf98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a78f459110570e25af6be0fdada3fcf98"></a>
 const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> () const </td></tr>
-<tr class="separator:a3c84d7b9c8c40ba820c09eacdc8dcc0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a78f459110570e25af6be0fdada3fcf98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1b47ff49192164d8bf24107503e0cd7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1b47ff49192164d8bf24107503e0cd7"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
 <tr class="separator:aa1b47ff49192164d8bf24107503e0cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b0d0472df349fb02afc1604f6c1ba66"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b0d0472df349fb02afc1604f6c1ba66"></a>
+<tr class="memitem:ad3cf136d86de4753e133b4370aa812d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3cf136d86de4753e133b4370aa812d1"></a>
 <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (int index) const </td></tr>
-<tr class="separator:a2b0d0472df349fb02afc1604f6c1ba66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ad3cf136d86de4753e133b4370aa812d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e382cee2027a1d06bb110432c865521"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e382cee2027a1d06bb110432c865521"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>pop_front</b> ()</td></tr>
 <tr class="separator:a8e382cee2027a1d06bb110432c865521"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,7 +262,7 @@ class hypro::Path&lt; Number, tNumber &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00108">108</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00106">106</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="Path_8h_source.html">Path.h</a></li>
 </ul>

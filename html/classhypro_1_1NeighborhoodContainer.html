@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -136,6 +142,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a980008edb21a0ada58f795e31ca9ed78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a980008edb21a0ada58f795e31ca9ed78"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>NeighborhoodContainer</b> (const <a class="el" href="classhypro_1_1NeighborhoodContainer.html">NeighborhoodContainer</a> &amp;copy)</td></tr>
 <tr class="separator:a980008edb21a0ada58f795e31ca9ed78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6bbc5b74dfe627c250057b98a23261a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6bbc5b74dfe627c250057b98a23261a"></a>
+<a class="el" href="classhypro_1_1NeighborhoodContainer.html">NeighborhoodContainer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classhypro_1_1NeighborhoodContainer.html">NeighborhoodContainer</a> &amp;orig)=default</td></tr>
+<tr class="separator:af6bbc5b74dfe627c250057b98a23261a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84def79347e7647731f58cf0b78e40a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84def79347e7647731f58cf0b78e40a4"></a>
+<a class="el" href="classhypro_1_1NeighborhoodContainer.html">NeighborhoodContainer</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classhypro_1_1NeighborhoodContainer.html">NeighborhoodContainer</a> &amp;&amp;orig)=default</td></tr>
+<tr class="separator:a84def79347e7647731f58cf0b78e40a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aada67dba36f838c463655ad4824524b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aada67dba36f838c463655ad4824524b5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="separator:aada67dba36f838c463655ad4824524b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,7 +162,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A neighborhood container which maps points to their set of neighbor points. </p>
 
-<p>Definition at line <a class="el" href="NeighborhoodContainer_8h_source.html#l00017">17</a> of file <a class="el" href="NeighborhoodContainer_8h_source.html">NeighborhoodContainer.h</a>.</p>
+<p>Definition at line <a class="el" href="NeighborhoodContainer_8h_source.html#l00018">18</a> of file <a class="el" href="NeighborhoodContainer_8h_source.html">NeighborhoodContainer.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a3ccd1c9cc2534f45b4349f844ac75ed7"></a>
 <div class="memitem">
@@ -185,7 +197,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Vector filled with neighbors in all dimensions </dd></dl>
 
-<p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00014">14</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00013">13</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
 
 </div>
 </div>
@@ -229,7 +241,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00029">29</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
+<p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00027">27</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
 
 </div>
 </div>

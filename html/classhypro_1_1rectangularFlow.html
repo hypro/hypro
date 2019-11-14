@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -114,7 +120,6 @@ $(document).ready(function(){initNavTree('classhypro_1_1rectangularFlow.html',''
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1rectangularFlow-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -163,12 +168,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0b2b63f7d52a57585014e563c37e078b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b2b63f7d52a57585014e563c37e078b"></a>
 static <a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882">DynamicType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> ()</td></tr>
 <tr class="separator:a0b2b63f7d52a57585014e563c37e078b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-Protected Attributes</h2></td></tr>
-<tr class="memitem:a578ed7449eb6b14fec50bc463ac41ed0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a578ed7449eb6b14fec50bc463ac41ed0"></a>
-std::map&lt; carl::Variable, carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowIntervals</b></td></tr>
-<tr class="separator:a578ed7449eb6b14fec50bc463ac41ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>

@@ -9,5 +9,5 @@ var searchData=
   ['findzeros',['findZeros',['../classhypro_1_1Dictionary.html#ab55276d984eb36c7c4b213427505f944',1,'hypro::Dictionary']]],
   ['fixoutofbounds',['fixOutOfBounds',['../classhypro_1_1Dictionary.html#a253f033e04084926ba46d144c63e283e',1,'hypro::Dictionary']]],
   ['forcelintransreduction',['forceLinTransReduction',['../classhypro_1_1SupportFunctionT.html#a7e3a0de2365a70b918d37a1434154ad5',1,'hypro::SupportFunctionT']]],
-  ['free',['free',['../classhypro_1_1DifferenceBoundsT.html#a72c94c20831b84d978834c9345e0dcdf',1,'hypro::DifferenceBoundsT']]]
+  ['free',['free',['../classhypro_1_1DifferenceBoundsT.html#a3b702ce0faa68af89edf776b2e4a5a0e',1,'hypro::DifferenceBoundsT']]]
 ];

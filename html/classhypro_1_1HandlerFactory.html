@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -143,7 +149,7 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classhypro_1_1IResetHandler.html">IResetHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>buildResetHandler</b> (<a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> name, State *state, size_t index, const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;assignments)</td></tr>
 <tr class="separator:a0cf2e2316166db7e941bfa1b92aed40a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a924dbf74fdb45bf7b58ad5fcc2ab7418"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a924dbf74fdb45bf7b58ad5fcc2ab7418"></a>
-<a class="el" href="classhypro_1_1IJumpHandler.html">IJumpHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>buildDiscreteSuccessorHandler</b> (std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; *successorBuffer, std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; task, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition, <a class="el" href="structhypro_1_1StrategyParameters.html">StrategyParameters</a> sPars, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, const <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; typename State::NumberType &gt; &amp;timings)</td></tr>
+<a class="el" href="classhypro_1_1IJumpHandler.html">IJumpHandler</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>buildDiscreteSuccessorHandler</b> (std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; *successorBuffer, std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; task, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition, StrategyParameters sPars, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, const <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; typename State::NumberType &gt; &amp;timings)</td></tr>
 <tr class="separator:a924dbf74fdb45bf7b58ad5fcc2ab7418"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -151,7 +157,7 @@ Public Member Functions</h2></td></tr>
 class hypro::HandlerFactory&lt; State &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="HandlerFactory_8h_source.html#l00012">12</a> of file <a class="el" href="HandlerFactory_8h_source.html">HandlerFactory.h</a>.</p>
+<p>Definition at line <a class="el" href="HandlerFactory_8h_source.html#l00011">11</a> of file <a class="el" href="HandlerFactory_8h_source.html">HandlerFactory.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="HandlerFactory_8h_source.html">HandlerFactory.h</a></li>
 </ul>

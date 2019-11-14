@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -122,9 +128,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1LTIContext.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1587daf484f569884b7bed459d622f00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1587daf484f569884b7bed459d622f00"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LTIContext</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; &amp;t, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; State &gt; &amp;strat, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; State &gt;&gt; *localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
-<tr class="separator:a1587daf484f569884b7bed459d622f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac43d35badbd1c1ef169b7906d4fef555"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac43d35badbd1c1ef169b7906d4fef555"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>LTIContext</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; &amp;t, const Strategy&lt; State &gt; &amp;strat, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
+<tr class="separator:ac43d35badbd1c1ef169b7906d4fef555"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d6a75161db0409ec835607f596feee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d6a75161db0409ec835607f596feee0"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execOnStart</b> () override</td></tr>
 <tr class="separator:a6d6a75161db0409ec835607f596feee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -232,7 +238,7 @@ Protected Attributes</h2></td></tr>
 std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTask</b></td></tr>
 <tr class="separator:aaa7012bba9d4d47faff3ea07cfcb5f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d0f5d9bac1817452324c4466bb98f3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d0f5d9bac1817452324c4466bb98f3e"></a>
-<a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mStrategy</b></td></tr>
+Strategy&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mStrategy</b></td></tr>
 <tr class="separator:a6d0f5d9bac1817452324c4466bb98f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17800032856ae6619cf673250846cadd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a17800032856ae6619cf673250846cadd"></a>
 <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalQueue</b></td></tr>
@@ -240,9 +246,9 @@ std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; S
 <tr class="memitem:a0a32e45252c0c1febf1abb52d852069b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a32e45252c0c1febf1abb52d852069b"></a>
 <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalCEXQueue</b></td></tr>
 <tr class="separator:a0a32e45252c0c1febf1abb52d852069b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dcf3f063d62886f5b84d1cf45829575"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2dcf3f063d62886f5b84d1cf45829575"></a>
-std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; State &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalSegments</b></td></tr>
-<tr class="separator:a2dcf3f063d62886f5b84d1cf45829575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb866a354cdbc794c14f740412644bbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb866a354cdbc794c14f740412644bbc"></a>
+<a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalSegments</b></td></tr>
+<tr class="separator:aeb866a354cdbc794c14f740412644bbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ef6c86a76ff9bff892013952451ebaf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ef6c86a76ff9bff892013952451ebaf"></a>
 <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mSettings</b></td></tr>
 <tr class="separator:a1ef6c86a76ff9bff892013952451ebaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -288,9 +294,6 @@ std::vector&lt; <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html">IT
 <tr class="memitem:ac0c9b8d304c94ce29f8a2190bb4f1c0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0c9b8d304c94ce29f8a2190bb4f1c0a"></a>
 std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, std::vector&lt; <a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a>&lt; State &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTransitionHandlerMap</b></td></tr>
 <tr class="separator:ac0c9b8d304c94ce29f8a2190bb4f1c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af884a49d59dcc9653444c18c7b8ff3bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af884a49d59dcc9653444c18c7b8ff3bf"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mEndLoop</b> = false</td></tr>
-<tr class="separator:af884a49d59dcc9653444c18c7b8ff3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />

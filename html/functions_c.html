@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -173,7 +179,6 @@ $(document).ready(function(){initNavTree('functions_c.html','');});
 <li>clear()
 : <a class="el" href="classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa">hypro::Optimizer&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1VertexContainer.html#a280b28c01374269d49da1a21cf626a5d">hypro::VertexContainer&lt; Number &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#a8deca740d6de50d3d120782ce4f0474e">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#af680218b607d2490143379ca327ed34e">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>clustering
@@ -194,6 +199,12 @@ $(document).ready(function(){initNavTree('functions_c.html','');});
 <li>composedOf()
 : <a class="el" href="classhypro_1_1Point.html#a72eb033baf9da144122b8189d0ac08dd">hypro::Point&lt; Number &gt;</a>
 </li>
+<li>computeForwardReachability()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a10779cf610460de24cf0f30e24f650bf">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
+<li>computeForwardTimeClosure()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a2eadfe3bf981539052012a246cf33be6">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
 <li>computePlaneNormal()
 : <a class="el" href="classhypro_1_1Halfspace.html#adb5e2938f230976484893135809dd6c6">hypro::Halfspace&lt; Number &gt;</a>
 </li>
@@ -206,9 +217,6 @@ $(document).ready(function(){initNavTree('functions_c.html','');});
 <li>computeZonotopeBoundary()
 : <a class="el" href="classhypro_1_1ZonotopeT.html#abc9b71526711085fd4d184d338ad9a37">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
-<li>cone()
-: <a class="el" href="classhypro_1_1VPolytopeT.html#a1b10d464f47e71a118121c5fd197e0f3">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
-</li>
 <li>conicHull()
 : <a class="el" href="classhypro_1_1ConvexHull.html#a7154e0b98a29f63698ab13b1b9f183e2">hypro::ConvexHull&lt; Number &gt;</a>
 </li>
@@ -218,11 +226,10 @@ $(document).ready(function(){initNavTree('functions_c.html','');});
 , <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a100e2df570177f1b74010e4fd6fdf3da">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1EllipsoidSupportFunction.html#a56afa108f18097bcd97af5d7e10a4498">hypro::EllipsoidSupportFunction&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
-, <a class="el" href="classhypro_1_1Halfspace.html#ac90b79b046c3881aea83113cbe0c1984">hypro::Halfspace&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1Halfspace.html#adf52bdfc5023b2de4396e3b8577f49fb">hypro::Halfspace&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a9c236c2df249f7046a700c247033f8d4">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#ad766d6db3f116ed6769d92103292edce">hypro::StatisticWrapper&lt; Representation &gt;</a>
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#aa85a615edcdd2b86890c290d78f4c9a1">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#a374243972b61a9bc3071a6a11847553e">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#a10cf05df0ad797e576a4c3ead8d679f7">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>convexHullVertices()
@@ -236,7 +243,7 @@ $(document).ready(function(){initNavTree('functions_c.html','');});
 : <a class="el" href="classhypro_1_1Point.html#ab90b8ddb5ba4fcb0cab0554b36359ac3">hypro::Point&lt; Number &gt;</a>
 </li>
 <li>copy()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a8f9b8d741c790e73cd5227fdbd37d0fb">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a709086fb271a760df70de8e42c273762">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>coversEntry()
 : <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a9258adb71802345bd1820d69f5b775d4">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>

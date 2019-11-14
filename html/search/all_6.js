@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['gbadstatecontext',['GbadstateContext',['../classHybridAutomatonParser_1_1GbadstateContext.html',1,'HybridAutomatonParser']]],
+  ['gbadstatecontext',['GbadstateContext',['../classhypro_1_1HybridAutomatonParser_1_1GbadstateContext.html',1,'hypro::HybridAutomatonParser']]],
   ['gen_5fseq',['gen_seq',['../structhypro_1_1detail_1_1gen__seq.html',1,'hypro::detail']]],
   ['gen_5fseq_3c_200_2c_20is_2e_2e_2e_20_3e',['gen_seq&lt; 0, Is... &gt;',['../structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html',1,'hypro::detail']]],
+  ['generalizedstardefault',['GeneralizedStarDefault',['../structhypro_1_1GeneralizedStarDefault.html',1,'hypro']]],
   ['genericaffinetransformationvisitor',['genericAffineTransformationVisitor',['../classhypro_1_1genericAffineTransformationVisitor.html',1,'hypro']]],
   ['genericcomparevisitor',['genericCompareVisitor',['../classhypro_1_1genericCompareVisitor.html',1,'hypro']]],
   ['genericconversionvisitor',['genericConversionVisitor',['../classhypro_1_1genericConversionVisitor.html',1,'hypro']]],
@@ -26,7 +27,6 @@ var searchData=
   ['geometricobject_2eh',['GeometricObject.h',['../GeometricObject_8h.html',1,'']]],
   ['geometricobject_3c_20number_2c_20differenceboundst_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20supportfunctiont_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
-  ['geometricobject_3c_20number_2c_20vpolytopet_3c_20number_2c_20converter_2c_20s_20_3e_20_3e',['GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter, S &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20zonotopet_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20statisticwrapper_3c_20representation_20_3e_20_3e',['GeometricObject&lt; StatisticWrapper&lt; Representation &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['get',['get',['../classhypro_1_1Dictionary.html#a18ee536c203d3ec1efadc70f99637e34',1,'hypro::Dictionary']]],
@@ -41,7 +41,6 @@ var searchData=
   ['getneighborhood',['getNeighborhood',['../classhypro_1_1NeighborhoodContainer.html#a3ccd1c9cc2534f45b4349f844ac75ed7',1,'hypro::NeighborhoodContainer']]],
   ['getneighborhoodfordimension',['getNeighborhoodForDimension',['../classhypro_1_1NeighborhoodContainer.html#acb94eae30d81ef3dd8c0ef56b5adabd9',1,'hypro::NeighborhoodContainer']]],
   ['getopensuccessorcount',['getOpenSuccessorCount',['../classhypro_1_1TimingAggregate.html#a72a5268cc3d99be0c2e345b0a7608a9a',1,'hypro::TimingAggregate']]],
-  ['getparametersvisitor',['getParametersVisitor',['../structhypro_1_1detail_1_1getParametersVisitor.html',1,'hypro::detail']]],
   ['getpivot',['getPivot',['../classhypro_1_1ConstrainSet.html#a58c79e7f8082e0d30e5ff9da3443a0e4',1,'hypro::ConstrainSet']]],
   ['getpredecessorindimension',['getPredecessorInDimension',['../classhypro_1_1Point.html#a71a6dd8a1d77e1b455ac9d184dd14055',1,'hypro::Point::getPredecessorInDimension(const carl::Variable &amp;_d) const '],['../classhypro_1_1Point.html#a8c67930a7d980d4229bfc8a570a6eeba',1,'hypro::Point::getPredecessorInDimension(unsigned _d) const ']]],
   ['getsubspacedecomposition',['getSubspaceDecomposition',['../classhypro_1_1DecisionEntity.html#a94aa2d360ceea7af839ab8683b372d40',1,'hypro::DecisionEntity']]],
@@ -55,10 +54,10 @@ var searchData=
   ['global_20definitions_20and_20constants',['Global definitions and constants',['../group__globals.html',1,'']]],
   ['glpk_5fcontext',['glpk_context',['../structhypro_1_1glpk__context.html',1,'hypro']]],
   ['gnuplotsettings',['gnuplotSettings',['../structhypro_1_1plotting_1_1gnuplotSettings.html',1,'hypro::plotting']]],
-  ['grid',['Grid',['../classhypro_1_1Grid.html#ade7f4c1b9cd1f2fa92ca2a27024037b9',1,'hypro::Grid']]],
   ['grid',['Grid',['../classhypro_1_1Grid.html',1,'hypro']]],
-  ['groupbodycontext',['GroupBodyContext',['../classHybridSystemParser_1_1GroupBodyContext.html',1,'HybridSystemParser']]],
-  ['groupdeclcontext',['GroupDeclContext',['../classHybridSystemParser_1_1GroupDeclContext.html',1,'HybridSystemParser']]],
-  ['guardcontext',['GuardContext',['../classHybridAutomatonParser_1_1GuardContext.html',1,'HybridAutomatonParser']]],
+  ['grid',['Grid',['../classhypro_1_1Grid.html#ade7f4c1b9cd1f2fa92ca2a27024037b9',1,'hypro::Grid']]],
+  ['groupbodycontext',['GroupBodyContext',['../classhypro_1_1HybridSystemParser_1_1GroupBodyContext.html',1,'hypro::HybridSystemParser']]],
+  ['groupdeclcontext',['GroupDeclContext',['../classhypro_1_1HybridSystemParser_1_1GroupDeclContext.html',1,'hypro::HybridSystemParser']]],
+  ['guardcontext',['GuardContext',['../classhypro_1_1HybridAutomatonParser_1_1GuardContext.html',1,'hypro::HybridAutomatonParser']]],
   ['guardhandlersorter',['guardHandlerSorter',['../structhypro_1_1guardHandlerSorter.html',1,'hypro']]]
 ];

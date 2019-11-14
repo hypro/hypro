@@ -1,9 +1,9 @@
 var classhypro_1_1Transformation =
 [
     [ "conditionVector", "classhypro_1_1Transformation.html#a94315e93daa051aeb2cf42b2590edaa5", null ],
-    [ "locationComputationSTMap", "classhypro_1_1Transformation.html#a07b83baab0a6705fb96aa40530032362", null ],
+    [ "locationComputationSTMap", "classhypro_1_1Transformation.html#a9d8a13fe1505275625b95b46009402b9", null ],
     [ "locationConditionMap", "classhypro_1_1Transformation.html#a026ebf234bddc34e58d4c21381efc5eb", null ],
-    [ "locationPtrMap", "classhypro_1_1Transformation.html#ad8eeafe9463a4dec39a6bcb8d7e7daf8", null ],
+    [ "locationPtrMap", "classhypro_1_1Transformation.html#a7eca6c16f6d889393c1698f293668653", null ],
     [ "locationStateMap", "classhypro_1_1Transformation.html#af37071374bda0a51b52d4b8a95869bc1", null ],
     [ "locationVector", "classhypro_1_1Transformation.html#aa56ab6bb3f2ff009e3f47f9e768e1b73", null ],
     [ "setVector", "classhypro_1_1Transformation.html#a4a7d8bb0ea1c6f2f3a1f32a8fbcfc676", null ],

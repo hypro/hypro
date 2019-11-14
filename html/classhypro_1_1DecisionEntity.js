@@ -6,7 +6,7 @@ var classhypro_1_1DecisionEntity =
     [ "addEdgesForRectMap", "classhypro_1_1DecisionEntity.html#a77154fbdf0551c22c0365c7a06e8ed59", null ],
     [ "addEdgesForRectTrafo", "classhypro_1_1DecisionEntity.html#aebf927addb140af1d1fcf113d377f21b", null ],
     [ "checkDecomposed", "classhypro_1_1DecisionEntity.html#a5389c4ccfa1667d644708d21f84589c1", null ],
-    [ "decomposeAutomaton", "classhypro_1_1DecisionEntity.html#ac246654600b421f133c4575ca7bfc920", null ],
+    [ "decomposeAutomaton", "classhypro_1_1DecisionEntity.html#a3c3db0b6d063910b7255fe6386ae9098", null ],
     [ "getRepresentationForAutomaton", "classhypro_1_1DecisionEntity.html#a403e8cfe89b7bb95fbac155983de9304", null ],
     [ "getRepresentationForLocation", "classhypro_1_1DecisionEntity.html#a9470020aeb40ec33e470206d642ff4a6", null ],
     [ "getRepresentationForSubspace", "classhypro_1_1DecisionEntity.html#a127b3ab919084ad4222ede1d68c2f8db", null ],

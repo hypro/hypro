@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -146,12 +152,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>conditionVector</b> 
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#a4a7d8bb0ea1c6f2f3a1f32a8fbcfc676">setVector</a> = std::vector&lt; std::pair&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt;&gt;</td></tr>
 <tr class="memdesc:a4a7d8bb0ea1c6f2f3a1f32a8fbcfc676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector of conditions. <br /></td></tr>
 <tr class="separator:a4a7d8bb0ea1c6f2f3a1f32a8fbcfc676"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8eeafe9463a4dec39a6bcb8d7e7daf8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8eeafe9463a4dec39a6bcb8d7e7daf8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>locationPtrMap</b> = std::map&lt; const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt; Number &gt; &gt;</td></tr>
-<tr class="separator:ad8eeafe9463a4dec39a6bcb8d7e7daf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07b83baab0a6705fb96aa40530032362"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07b83baab0a6705fb96aa40530032362"></a>
+<tr class="memitem:a7eca6c16f6d889393c1698f293668653"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7eca6c16f6d889393c1698f293668653"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>locationPtrMap</b> = std::map&lt; const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:a7eca6c16f6d889393c1698f293668653"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d8a13fe1505275625b95b46009402b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d8a13fe1505275625b95b46009402b9"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>locationComputationSTMap</b> = std::map&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; Number &gt;, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt; Number &gt;&gt;</td></tr>
-<tr class="separator:a07b83baab0a6705fb96aa40530032362"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a9d8a13fe1505275625b95b46009402b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -190,7 +196,7 @@ class hypro::Transformation&lt; Number &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Transformation_8h_source.html#l00055">55</a> of file <a class="el" href="Transformation_8h_source.html">Transformation.h</a>.</p>
+<p>Definition at line <a class="el" href="Transformation_8h_source.html#l00061">61</a> of file <a class="el" href="Transformation_8h_source.html">Transformation.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a2b1f642223965eb3d2ae293a3e38e9a4"></a>
 <div class="memitem">

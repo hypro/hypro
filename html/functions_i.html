@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -166,33 +172,33 @@ $(document).ready(function(){initNavTree('functions_i.html','');});
 , <a class="el" href="classhypro_1_1VertexContainer.html#afa722d7b9fd046bbe49fb4d79b412ec3">hypro::VertexContainer&lt; Number &gt;</a>
 </li>
 <li>intersect()
-: <a class="el" href="classhypro_1_1VPolytopeT.html#a0c0c8ae688c0881abd291d2e426eb910">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
-, <a class="el" href="classhypro_1_1ZonotopeT.html#a373eb66acb818769ea3df28a3ccda53c">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1ZonotopeT.html#a0e9e9163eccb6efafed8729a7ed8be9e">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>intersectConstraint()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a2dba465f73887a087db8f64f16daa4d3">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad6e4a39f0151de209e9afd52aabcfaa0">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>intersectConstraints()
 : <a class="el" href="classhypro_1_1DifferenceBoundsT.html#abc1785282aa9ed96ed2e075db48e8fcc">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
+<li>intersectGuard()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a2f25f35e12b287f6179e4cbef2d06140">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
 <li>intersectHalfspace()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#aad11bf076ede7a30899484810ddb353e">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ab4e1959da352ff0a68bde977ac6867f6">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#a94bd49dae3add00d97064377f7745462">hypro::StatisticWrapper&lt; Representation &gt;</a>
-, <a class="el" href="classhypro_1_1SupportFunctionT.html#a26045900b9956db4b02aa3e86f4f9956">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#a08b500a10ad108eb2d274a6df6d3d7cc">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
-, <a class="el" href="classhypro_1_1ZonotopeT.html#a7a91ed12a8492ab93e49e998d6c3caf9">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionT.html#a0f820f5bbb06b8a16b995084c24ada33">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ZonotopeT.html#ac8695d7a9e62fd85ede9f167cdd38b6b">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>intersectHalfspaces()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#aa2ec742cd500c3d1d26838c44981ae83">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a8157c942d2080e2e91e884e459567e22">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#abba004538aa543aa17735e950d49007e">hypro::StatisticWrapper&lt; Representation &gt;</a>
-, <a class="el" href="classhypro_1_1SupportFunctionT.html#a266c7a5a380871fb725966d36a828a3f">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1VPolytopeT.html#a9de63816bd07bcde372d1e76e4382c83">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
-, <a class="el" href="classhypro_1_1ZonotopeT.html#aeea41b415c84422b039bc3fb438ebcf2">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionT.html#a153e854ec1df3ec3de821effad8bf225">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ZonotopeT.html#a551ad0e49945245a0cbed098469ee546">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>intersection()
-: <a class="el" href="classhypro_1_1Halfspace.html#a3e8e3ac6a8105361f8d4237a46948f38">hypro::Halfspace&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Halfspace.html#a5cd50785f167eeca74122d1c489fe1ea">hypro::Halfspace&lt; Number &gt;</a>
 </li>
 <li>intersectionVector()
 : <a class="el" href="classhypro_1_1Halfspace.html#a5ff5825856dbcd3841ced99d12042490">hypro::Halfspace&lt; Number &gt;</a>
@@ -201,7 +207,7 @@ $(document).ready(function(){initNavTree('functions_i.html','');});
 : <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a25d382da20c395021470807983bcde6e">hypro::HierarchicalIntervalVector&lt; T, Number &gt;</a>
 </li>
 <li>intervalHull()
-: <a class="el" href="classhypro_1_1ZonotopeT.html#a4212ab2c8310706570aa07bce84207bb">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1ZonotopeT.html#a1af729c296ecb290609609ea529d4170">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>invert()
 : <a class="el" href="classhypro_1_1Halfspace.html#add63f3e4fa20331e03570eda43654558">hypro::Halfspace&lt; Number &gt;</a>

@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -159,9 +165,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2d02be86ce59868b79cd65283fcf220"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2d02be86ce59868b79cd65283fcf220"></a>
 std::mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getMutex</b> () const </td></tr>
 <tr class="separator:ae2d02be86ce59868b79cd65283fcf220"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5df41d2630d8a682cca8cd6681f0f2fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5df41d2630d8a682cca8cd6681f0f2fe"></a>
+<tr class="memitem:a2403bf096819a045949b982326524a52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2403bf096819a045949b982326524a52"></a>
 const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPath</b> () const </td></tr>
-<tr class="separator:a5df41d2630d8a682cca8cd6681f0f2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a2403bf096819a045949b982326524a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21dcd6c8e4efb9f4e3331ad7bb4b7c2b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21dcd6c8e4efb9f4e3331ad7bb4b7c2b"></a>
 const State::repVariant &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSetAtLevel</b> (unsigned level) const </td></tr>
 <tr class="separator:a21dcd6c8e4efb9f4e3331ad7bb4b7c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -262,9 +268,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setParent</b> (<a cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a7134bce94306977b508408489bd49dd0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7134bce94306977b508408489bd49dd0"></a>
+<tr class="memitem:a5e8312bd165cf9e7a076bb977f09f785"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e8312bd165cf9e7a076bb977f09f785"></a>
 <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mPath</b></td></tr>
-<tr class="separator:a7134bce94306977b508408489bd49dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a5e8312bd165cf9e7a076bb977f09f785"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f70ad4cf1c030acd54a1fb0e364f451"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f70ad4cf1c030acd54a1fb0e364f451"></a>
 std::vector&lt; <a class="el" href="structhypro_1_1RefinementSetting.html">RefinementSetting</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a2f70ad4cf1c030acd54a1fb0e364f451">mRefinements</a></td></tr>
 <tr class="memdesc:a2f70ad4cf1c030acd54a1fb0e364f451"><td class="mdescLeft">&#160;</td><td class="mdescRight">path cache. <br /></td></tr>
@@ -306,7 +312,7 @@ template&lt;typename S &gt; </td></tr>
 class hypro::ReachTreeNode&lt; State &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00112">112</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
+<p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00108">108</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a2a90e36bd25f3c6f1a1e79913592f3a9"></a>
 <div class="memitem">

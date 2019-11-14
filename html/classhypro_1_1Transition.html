@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -180,9 +186,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isTimeTriggered</b> (
 <tr class="memitem:a413143bd515a0c890aa701404a1e590c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a413143bd515a0c890aa701404a1e590c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasIdentityReset</b> () const </td></tr>
 <tr class="separator:a413143bd515a0c890aa701404a1e590c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af80022a6afc328342f840fdf8b7ea2e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af80022a6afc328342f840fdf8b7ea2e8"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLabels</b> () const </td></tr>
-<tr class="separator:af80022a6afc328342f840fdf8b7ea2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a932784cf9bdea6779a3e042a964e7318"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a932784cf9bdea6779a3e042a964e7318"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLabels</b> () const </td></tr>
+<tr class="separator:a932784cf9bdea6779a3e042a964e7318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc9db2fdd7aa5a914c7c28bbee711845"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc9db2fdd7aa5a914c7c28bbee711845"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>hash</b> () const </td></tr>
 <tr class="separator:abc9db2fdd7aa5a914c7c28bbee711845"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -429,7 +435,7 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00098">98</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00103">103</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -459,7 +465,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <p>decomposes guard and reset of this transition. </p>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00144">144</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00192">192</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -623,7 +629,7 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00202">202</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00250">250</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -671,7 +677,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00156">156</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00204">204</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -719,7 +725,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both transitions are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00179">179</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00227">227</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -766,7 +772,7 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00212">212</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00260">260</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>

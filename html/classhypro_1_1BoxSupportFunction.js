@@ -14,7 +14,7 @@ var classhypro_1_1BoxSupportFunction =
     [ "getDotRepresentation", "classhypro_1_1BoxSupportFunction.html#a9060cd287388524e1d6d77204ebb39c1", null ],
     [ "getIntervals", "classhypro_1_1BoxSupportFunction.html#a49f0f5bb6d8b5281a060cb67a9391e63", null ],
     [ "multiEvaluate", "classhypro_1_1BoxSupportFunction.html#a86af07583ac67af4d1f00e8718131526", null ],
-    [ "operator=", "classhypro_1_1BoxSupportFunction.html#ac859d02e895aa172f91ba58920fba070", null ],
+    [ "operator=", "classhypro_1_1BoxSupportFunction.html#a587ba4100d6d568988981eaedbbc9736", null ],
     [ "supremumPoint", "classhypro_1_1BoxSupportFunction.html#aaa5a5a19214baed61b31646a82acd202", null ],
     [ "type", "classhypro_1_1BoxSupportFunction.html#a30fbbcde31d2f24f2a624388518bd8f7", null ],
     [ "vertices", "classhypro_1_1BoxSupportFunction.html#a3596fda1b4c4ac35e34c7938be106276", null ],

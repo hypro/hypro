@@ -2,6 +2,8 @@ var structhypro_1_1RefinementSetting =
 [
     [ "Number", "structhypro_1_1RefinementSetting.html#a5aabc29003c8c7e326bd4331a14832b3", null ],
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#aef4ab59d09d621981204dd0c3533cc38", null ],
+    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a0a652b8ce470b70f212a3521406d1feb", null ],
+    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a1010629c8dba168337bf9fb97922a2de", null ],
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a1976676ce5f63d1bc5c1fab1a848d910", null ],
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#abbd9ae816a0c61ff34f271b64605619a", null ],
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a411d83cb14cda4b7ef3c2293e19c1f9f", null ],

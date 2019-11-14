@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -137,9 +143,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5389c4ccfa1667d644708d21f84589c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5389c4ccfa1667d644708d21f84589c1"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkDecomposed</b> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
 <tr class="separator:a5389c4ccfa1667d644708d21f84589c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac246654600b421f133c4575ca7bfc920"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac246654600b421f133c4575ca7bfc920"></a>
+<tr class="memitem:a3c3db0b6d063910b7255fe6386ae9098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c3db0b6d063910b7255fe6386ae9098"></a>
 std::pair&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt;, <a class="el" href="structhypro_1_1Decomposition.html">Decomposition</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>decomposeAutomaton</b> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
-<tr class="separator:ac246654600b421f133c4575ca7bfc920"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3c3db0b6d063910b7255fe6386ae9098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c9a10f45bd2ae49b1ce8f5674882f71"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c9a10f45bd2ae49b1ce8f5674882f71"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addEdgesForLinTrafo</b> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; linTrafo, boost::adjacency_list&lt; boost::vecS, boost::vecS, boost::undirectedS &gt; &amp;graph)</td></tr>
 <tr class="separator:a8c9a10f45bd2ae49b1ce8f5674882f71"><td class="memSeparator" colspan="2">&#160;</td></tr>

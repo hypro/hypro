@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -135,11 +141,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba27832ec002e8ebeaffc4de25e103f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba27832ec002e8ebeaffc4de25e103f0"></a>
 <a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const </td></tr>
 <tr class="separator:aba27832ec002e8ebeaffc4de25e103f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae1d8a34744daf77f2c8656a351c71f3"><td class="memTemplParams" colspan="2">template&lt;typename N  = Number, carl::DisableIf&lt; std::is_same&lt; N, double &gt; &gt;  = carl::dummy&gt; </td></tr>
+<tr class="memitem:aae1d8a34744daf77f2c8656a351c71f3"><td class="memTemplParams" colspan="2">template&lt;typename N  = Number, carl::DisableIf&lt; std::is_same&lt; N, double &gt;&gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:aae1d8a34744daf77f2c8656a351c71f3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3">evaluate</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_l) const </td></tr>
 <tr class="separator:aae1d8a34744daf77f2c8656a351c71f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae1d8a34744daf77f2c8656a351c71f3"><td class="memTemplParams" colspan="2"><a class="anchor" id="aae1d8a34744daf77f2c8656a351c71f3"></a>
-template&lt;typename N  = Number, carl::EnableIf&lt; std::is_same&lt; N, double &gt; &gt;  = carl::dummy&gt; </td></tr>
+template&lt;typename N  = Number, carl::EnableIf&lt; std::is_same&lt; N, double &gt;&gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:aae1d8a34744daf77f2c8656a351c71f3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_l) const </td></tr>
 <tr class="separator:aae1d8a34744daf77f2c8656a351c71f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafd5aa9372ea951c906fefd900333cdf"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf">multiEvaluate</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A) const </td></tr>
@@ -244,7 +250,7 @@ template&lt;typename Number &gt; </div>
 <div class="memtemplate">
 template&lt;typename Number &gt; </div>
 <div class="memtemplate">
-template&lt;typename N  = Number, carl::DisableIf&lt; std::is_same&lt; N, double &gt; &gt;  = carl::dummy&gt; </div>
+template&lt;typename N  = Number, carl::DisableIf&lt; std::is_same&lt; N, double &gt;&gt;  = carl::dummy&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

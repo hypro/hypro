@@ -11,7 +11,7 @@ var classhypro_1_1Transition =
     [ "getAggregation", "classhypro_1_1Transition.html#aa891865153ad24a3daa30a0d06736da0", null ],
     [ "getDotRepresentation", "classhypro_1_1Transition.html#a57bf912b402b15cf55b062e3779c59b0", null ],
     [ "getGuard", "classhypro_1_1Transition.html#af2f6f476a5a58427b80f35d3564b4ff7", null ],
-    [ "getLabels", "classhypro_1_1Transition.html#af80022a6afc328342f840fdf8b7ea2e8", null ],
+    [ "getLabels", "classhypro_1_1Transition.html#a932784cf9bdea6779a3e042a964e7318", null ],
     [ "getReset", "classhypro_1_1Transition.html#a1ad48682dd22f1aa1d9e226f87ef0464", null ],
     [ "getSource", "classhypro_1_1Transition.html#a350c7e35994cae3bd861240879d7aaf2", null ],
     [ "getTarget", "classhypro_1_1Transition.html#ad81ad5bf5e9c123c1817ce8f216f5c6d", null ],

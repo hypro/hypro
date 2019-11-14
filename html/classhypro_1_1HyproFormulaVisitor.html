@@ -22,6 +22,12 @@
 <script type="text/javascript">
   $(document).ready(function() { init_search(); });
 </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -33,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.10</span>
+   &#160;<span id="projectnumber">19.11</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -139,114 +145,114 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>HyproBadStatesVisito
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_methods_classHybridAutomatonBaseVisitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classHybridAutomatonBaseVisitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classHybridAutomatonBaseVisitor.html">HybridAutomatonBaseVisitor</a></td></tr>
-<tr class="memitem:a148a04491c9a519f5668f04e1b34c3df inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonBaseVisitor.html#a148a04491c9a519f5668f04e1b34c3df">visitStart</a> (<a class="el" href="classHybridAutomatonParser_1_1StartContext.html">HybridAutomatonParser::StartContext</a> *ctx) override</td></tr>
-<tr class="separator:a148a04491c9a519f5668f04e1b34c3df inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88c0039d82834a9fb00c2b2d084a6c8e inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88c0039d82834a9fb00c2b2d084a6c8e"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitVardeclaration</b> (<a class="el" href="classHybridAutomatonParser_1_1VardeclarationContext.html">HybridAutomatonParser::VardeclarationContext</a> *ctx) override</td></tr>
-<tr class="separator:a88c0039d82834a9fb00c2b2d084a6c8e inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac81f07b53c0e93313aaad12bba848cbd inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac81f07b53c0e93313aaad12bba848cbd"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitConstantdeclaration</b> (<a class="el" href="classHybridAutomatonParser_1_1ConstantdeclarationContext.html">HybridAutomatonParser::ConstantdeclarationContext</a> *ctx) override</td></tr>
-<tr class="separator:ac81f07b53c0e93313aaad12bba848cbd inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad531bed85098c3dd85c52b6ede81b43e inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad531bed85098c3dd85c52b6ede81b43e"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitModes</b> (<a class="el" href="classHybridAutomatonParser_1_1ModesContext.html">HybridAutomatonParser::ModesContext</a> *ctx) override</td></tr>
-<tr class="separator:ad531bed85098c3dd85c52b6ede81b43e inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23c17a3fa0b4a8a1df93a47dcdf5c8e5 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23c17a3fa0b4a8a1df93a47dcdf5c8e5"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitLocation</b> (<a class="el" href="classHybridAutomatonParser_1_1LocationContext.html">HybridAutomatonParser::LocationContext</a> *ctx) override</td></tr>
-<tr class="separator:a23c17a3fa0b4a8a1df93a47dcdf5c8e5 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb9163bfa2db71360eb35f9804e9fddb inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb9163bfa2db71360eb35f9804e9fddb"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitActivities</b> (<a class="el" href="classHybridAutomatonParser_1_1ActivitiesContext.html">HybridAutomatonParser::ActivitiesContext</a> *ctx) override</td></tr>
-<tr class="separator:afb9163bfa2db71360eb35f9804e9fddb inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af216ad35e4f3b281a60164e1d8df0e47 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af216ad35e4f3b281a60164e1d8df0e47"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInvariants</b> (<a class="el" href="classHybridAutomatonParser_1_1InvariantsContext.html">HybridAutomatonParser::InvariantsContext</a> *ctx) override</td></tr>
-<tr class="separator:af216ad35e4f3b281a60164e1d8df0e47 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1b5421b874c854efee6434c11349987 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1b5421b874c854efee6434c11349987"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitReplacedexpr</b> (<a class="el" href="classHybridAutomatonParser_1_1ReplacedexprContext.html">HybridAutomatonParser::ReplacedexprContext</a> *ctx) override</td></tr>
-<tr class="separator:af1b5421b874c854efee6434c11349987 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05b2c193afa6df1223e0818bc4e41ec6 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05b2c193afa6df1223e0818bc4e41ec6"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitConstantexpr</b> (<a class="el" href="classHybridAutomatonParser_1_1ConstantexprContext.html">HybridAutomatonParser::ConstantexprContext</a> *ctx) override</td></tr>
-<tr class="separator:a05b2c193afa6df1223e0818bc4e41ec6 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9d11927b647896fb7c6edd1c1000ff8 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9d11927b647896fb7c6edd1c1000ff8"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitConnector</b> (<a class="el" href="classHybridAutomatonParser_1_1ConnectorContext.html">HybridAutomatonParser::ConnectorContext</a> *ctx) override</td></tr>
-<tr class="separator:ad9d11927b647896fb7c6edd1c1000ff8 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb75fa4d697287b968199821df2e5344 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb75fa4d697287b968199821df2e5344"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitTerm</b> (<a class="el" href="classHybridAutomatonParser_1_1TermContext.html">HybridAutomatonParser::TermContext</a> *ctx) override</td></tr>
-<tr class="separator:acb75fa4d697287b968199821df2e5344 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a456e6aab9c65519caf0a0c9dca67f07d inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a456e6aab9c65519caf0a0c9dca67f07d"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInit</b> (<a class="el" href="classHybridAutomatonParser_1_1InitContext.html">HybridAutomatonParser::InitContext</a> *ctx) override</td></tr>
-<tr class="separator:a456e6aab9c65519caf0a0c9dca67f07d inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a747711da8e265db9617656898083c538 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a747711da8e265db9617656898083c538"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInitstate</b> (<a class="el" href="classHybridAutomatonParser_1_1InitstateContext.html">HybridAutomatonParser::InitstateContext</a> *ctx) override</td></tr>
-<tr class="separator:a747711da8e265db9617656898083c538 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7550ec39bcae3a6eca9ef7c3158a7fb2 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7550ec39bcae3a6eca9ef7c3158a7fb2"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnsafeset</b> (<a class="el" href="classHybridAutomatonParser_1_1UnsafesetContext.html">HybridAutomatonParser::UnsafesetContext</a> *ctx) override</td></tr>
-<tr class="separator:a7550ec39bcae3a6eca9ef7c3158a7fb2 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab871fb13ed707b5f495305059d7a0388 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab871fb13ed707b5f495305059d7a0388"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitLbadstate</b> (<a class="el" href="classHybridAutomatonParser_1_1LbadstateContext.html">HybridAutomatonParser::LbadstateContext</a> *ctx) override</td></tr>
-<tr class="separator:ab871fb13ed707b5f495305059d7a0388 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79f0d1480b8af2487729364476a2b0fe inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79f0d1480b8af2487729364476a2b0fe"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitGbadstate</b> (<a class="el" href="classHybridAutomatonParser_1_1GbadstateContext.html">HybridAutomatonParser::GbadstateContext</a> *ctx) override</td></tr>
-<tr class="separator:a79f0d1480b8af2487729364476a2b0fe inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afea8b361344f915b62b55fc8b3ecc603 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afea8b361344f915b62b55fc8b3ecc603"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitJumps</b> (<a class="el" href="classHybridAutomatonParser_1_1JumpsContext.html">HybridAutomatonParser::JumpsContext</a> *ctx) override</td></tr>
-<tr class="separator:afea8b361344f915b62b55fc8b3ecc603 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d46606f6efcb2584b419439bf30309a inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3d46606f6efcb2584b419439bf30309a"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitTransition</b> (<a class="el" href="classHybridAutomatonParser_1_1TransitionContext.html">HybridAutomatonParser::TransitionContext</a> *ctx) override</td></tr>
-<tr class="separator:a3d46606f6efcb2584b419439bf30309a inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac75ddfe95ca662bb0117060ccdd0516c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac75ddfe95ca662bb0117060ccdd0516c"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFromto</b> (<a class="el" href="classHybridAutomatonParser_1_1FromtoContext.html">HybridAutomatonParser::FromtoContext</a> *ctx) override</td></tr>
-<tr class="separator:ac75ddfe95ca662bb0117060ccdd0516c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7d86d31acfe9e9d3910d4d64672176c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7d86d31acfe9e9d3910d4d64672176c"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUrgent</b> (<a class="el" href="classHybridAutomatonParser_1_1UrgentContext.html">HybridAutomatonParser::UrgentContext</a> *ctx) override</td></tr>
-<tr class="separator:ac7d86d31acfe9e9d3910d4d64672176c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35482113a16df6baf541343d0167ff90 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35482113a16df6baf541343d0167ff90"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitGuard</b> (<a class="el" href="classHybridAutomatonParser_1_1GuardContext.html">HybridAutomatonParser::GuardContext</a> *ctx) override</td></tr>
-<tr class="separator:a35482113a16df6baf541343d0167ff90 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfa2b10bc20726e69fb224a7541b61d8 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adfa2b10bc20726e69fb224a7541b61d8"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitAllocation</b> (<a class="el" href="classHybridAutomatonParser_1_1AllocationContext.html">HybridAutomatonParser::AllocationContext</a> *ctx) override</td></tr>
-<tr class="separator:adfa2b10bc20726e69fb224a7541b61d8 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0eda8402c4c01a8f4fb8389d898f8f05 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0eda8402c4c01a8f4fb8389d898f8f05"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitResetfct</b> (<a class="el" href="classHybridAutomatonParser_1_1ResetfctContext.html">HybridAutomatonParser::ResetfctContext</a> *ctx) override</td></tr>
-<tr class="separator:a0eda8402c4c01a8f4fb8389d898f8f05 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a954888eee6405188cc5f2c2931a0d739 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a954888eee6405188cc5f2c2931a0d739"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitAggregation</b> (<a class="el" href="classHybridAutomatonParser_1_1AggregationContext.html">HybridAutomatonParser::AggregationContext</a> *ctx) override</td></tr>
-<tr class="separator:a954888eee6405188cc5f2c2931a0d739 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adaf0211222906a41bce80a72035e0221 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adaf0211222906a41bce80a72035e0221"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitSetting</b> (<a class="el" href="classHybridAutomatonParser_1_1SettingContext.html">HybridAutomatonParser::SettingContext</a> *ctx) override</td></tr>
-<tr class="separator:adaf0211222906a41bce80a72035e0221 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab27194c60e35736c26285c6a7cc89a62 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab27194c60e35736c26285c6a7cc89a62"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFixedsteps</b> (<a class="el" href="classHybridAutomatonParser_1_1FixedstepsContext.html">HybridAutomatonParser::FixedstepsContext</a> *ctx) override</td></tr>
-<tr class="separator:ab27194c60e35736c26285c6a7cc89a62 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ac14f6a5f737e625a0dd5d120733f51 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ac14f6a5f737e625a0dd5d120733f51"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitTime</b> (<a class="el" href="classHybridAutomatonParser_1_1TimeContext.html">HybridAutomatonParser::TimeContext</a> *ctx) override</td></tr>
-<tr class="separator:a7ac14f6a5f737e625a0dd5d120733f51 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab37e2b5c8869a531570c834397264ac8 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab37e2b5c8869a531570c834397264ac8"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitPlotsetting</b> (<a class="el" href="classHybridAutomatonParser_1_1PlotsettingContext.html">HybridAutomatonParser::PlotsettingContext</a> *ctx) override</td></tr>
-<tr class="separator:ab37e2b5c8869a531570c834397264ac8 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af451c20beaa497ecd3f7baacb74f7cc5 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af451c20beaa497ecd3f7baacb74f7cc5"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFilename</b> (<a class="el" href="classHybridAutomatonParser_1_1FilenameContext.html">HybridAutomatonParser::FilenameContext</a> *ctx) override</td></tr>
-<tr class="separator:af451c20beaa497ecd3f7baacb74f7cc5 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae02c61ed067aa6f144100ebcf3ca370c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae02c61ed067aa6f144100ebcf3ca370c"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitMaxjumps</b> (<a class="el" href="classHybridAutomatonParser_1_1MaxjumpsContext.html">HybridAutomatonParser::MaxjumpsContext</a> *ctx) override</td></tr>
-<tr class="separator:ae02c61ed067aa6f144100ebcf3ca370c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37c661e7b5cb35699b923ee901c143e0 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37c661e7b5cb35699b923ee901c143e0"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitPrint</b> (<a class="el" href="classHybridAutomatonParser_1_1PrintContext.html">HybridAutomatonParser::PrintContext</a> *ctx) override</td></tr>
-<tr class="separator:a37c661e7b5cb35699b923ee901c143e0 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fb3efd3dafaf48381b9343b1fedca76 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fb3efd3dafaf48381b9343b1fedca76"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitRemainder</b> (<a class="el" href="classHybridAutomatonParser_1_1RemainderContext.html">HybridAutomatonParser::RemainderContext</a> *ctx) override</td></tr>
-<tr class="separator:a8fb3efd3dafaf48381b9343b1fedca76 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a350c21e0153cfbc2210acf8c7756e7f9 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a350c21e0153cfbc2210acf8c7756e7f9"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitIdentity</b> (<a class="el" href="classHybridAutomatonParser_1_1IdentityContext.html">HybridAutomatonParser::IdentityContext</a> *ctx) override</td></tr>
-<tr class="separator:a350c21e0153cfbc2210acf8c7756e7f9 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a082f2e3c3abb26600a03e73faaf67a1c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a082f2e3c3abb26600a03e73faaf67a1c"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFixedorders</b> (<a class="el" href="classHybridAutomatonParser_1_1FixedordersContext.html">HybridAutomatonParser::FixedordersContext</a> *ctx) override</td></tr>
-<tr class="separator:a082f2e3c3abb26600a03e73faaf67a1c inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d80865945bca9ebf6f871ba0e682a17 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d80865945bca9ebf6f871ba0e682a17"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitCutoff</b> (<a class="el" href="classHybridAutomatonParser_1_1CutoffContext.html">HybridAutomatonParser::CutoffContext</a> *ctx) override</td></tr>
-<tr class="separator:a0d80865945bca9ebf6f871ba0e682a17 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b48a824a8ed55d584b5f2c4ca2b4aa5 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b48a824a8ed55d584b5f2c4ca2b4aa5"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitPrecision</b> (<a class="el" href="classHybridAutomatonParser_1_1PrecisionContext.html">HybridAutomatonParser::PrecisionContext</a> *ctx) override</td></tr>
-<tr class="separator:a6b48a824a8ed55d584b5f2c4ca2b4aa5 inherit pub_methods_classHybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1HybridAutomatonBaseVisitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html">hypro::HybridAutomatonBaseVisitor</a></td></tr>
+<tr class="memitem:abcefee6685b55dfb52f984badcfa2e0c inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html#abcefee6685b55dfb52f984badcfa2e0c">visitStart</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1StartContext.html">HybridAutomatonParser::StartContext</a> *ctx) override</td></tr>
+<tr class="separator:abcefee6685b55dfb52f984badcfa2e0c inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12f3d67fd8f98b258765996fdf12d421 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12f3d67fd8f98b258765996fdf12d421"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitVardeclaration</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1VardeclarationContext.html">HybridAutomatonParser::VardeclarationContext</a> *ctx) override</td></tr>
+<tr class="separator:a12f3d67fd8f98b258765996fdf12d421 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af718185069a22dc3feaec3cf651d3990 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af718185069a22dc3feaec3cf651d3990"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitConstantdeclaration</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstantdeclarationContext.html">HybridAutomatonParser::ConstantdeclarationContext</a> *ctx) override</td></tr>
+<tr class="separator:af718185069a22dc3feaec3cf651d3990 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed725e7c1e6e171c4c817aac846be78 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ed725e7c1e6e171c4c817aac846be78"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitModes</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ModesContext.html">HybridAutomatonParser::ModesContext</a> *ctx) override</td></tr>
+<tr class="separator:a0ed725e7c1e6e171c4c817aac846be78 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34a90838ad9fd3106c04ffe96bc2067b inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34a90838ad9fd3106c04ffe96bc2067b"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitLocation</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LocationContext.html">HybridAutomatonParser::LocationContext</a> *ctx) override</td></tr>
+<tr class="separator:a34a90838ad9fd3106c04ffe96bc2067b inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae415736c70d1dd22e575682344b173fa inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae415736c70d1dd22e575682344b173fa"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitActivities</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html">HybridAutomatonParser::ActivitiesContext</a> *ctx) override</td></tr>
+<tr class="separator:ae415736c70d1dd22e575682344b173fa inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d24bc306f1eebb8c6a081369c2106e inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9d24bc306f1eebb8c6a081369c2106e"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInvariants</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InvariantsContext.html">HybridAutomatonParser::InvariantsContext</a> *ctx) override</td></tr>
+<tr class="separator:ac9d24bc306f1eebb8c6a081369c2106e inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11b5b2b284b36e1d64334c3b86848a24 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11b5b2b284b36e1d64334c3b86848a24"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitReplacedexpr</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ReplacedexprContext.html">HybridAutomatonParser::ReplacedexprContext</a> *ctx) override</td></tr>
+<tr class="separator:a11b5b2b284b36e1d64334c3b86848a24 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa30116cc56accae1e9c3ba5d29f8f31 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa30116cc56accae1e9c3ba5d29f8f31"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitConstantexpr</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstantexprContext.html">HybridAutomatonParser::ConstantexprContext</a> *ctx) override</td></tr>
+<tr class="separator:aaa30116cc56accae1e9c3ba5d29f8f31 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13e2b8beac32388af5f3a3864043b405 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13e2b8beac32388af5f3a3864043b405"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitConnector</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConnectorContext.html">HybridAutomatonParser::ConnectorContext</a> *ctx) override</td></tr>
+<tr class="separator:a13e2b8beac32388af5f3a3864043b405 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a3badbb27e823d65a3962e4c7c9d005 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a3badbb27e823d65a3962e4c7c9d005"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitTerm</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TermContext.html">HybridAutomatonParser::TermContext</a> *ctx) override</td></tr>
+<tr class="separator:a4a3badbb27e823d65a3962e4c7c9d005 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a163fd843f300916ec126584bac6fce4b inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a163fd843f300916ec126584bac6fce4b"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInit</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitContext.html">HybridAutomatonParser::InitContext</a> *ctx) override</td></tr>
+<tr class="separator:a163fd843f300916ec126584bac6fce4b inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adae4b4b6ea238c84b15805636db74e74 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adae4b4b6ea238c84b15805636db74e74"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInitstate</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitstateContext.html">HybridAutomatonParser::InitstateContext</a> *ctx) override</td></tr>
+<tr class="separator:adae4b4b6ea238c84b15805636db74e74 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf014a534aa26af9161cfb6a80b5aa82 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf014a534aa26af9161cfb6a80b5aa82"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnsafeset</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1UnsafesetContext.html">HybridAutomatonParser::UnsafesetContext</a> *ctx) override</td></tr>
+<tr class="separator:acf014a534aa26af9161cfb6a80b5aa82 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb24c5413cfd306a61288f52c8a793f4 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb24c5413cfd306a61288f52c8a793f4"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitLbadstate</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html">HybridAutomatonParser::LbadstateContext</a> *ctx) override</td></tr>
+<tr class="separator:afb24c5413cfd306a61288f52c8a793f4 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1305dbb835f73d7099790b8410f7dd01 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1305dbb835f73d7099790b8410f7dd01"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitGbadstate</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1GbadstateContext.html">HybridAutomatonParser::GbadstateContext</a> *ctx) override</td></tr>
+<tr class="separator:a1305dbb835f73d7099790b8410f7dd01 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa165d3cd8378b8280cfaf54f925a071d inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa165d3cd8378b8280cfaf54f925a071d"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitJumps</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1JumpsContext.html">HybridAutomatonParser::JumpsContext</a> *ctx) override</td></tr>
+<tr class="separator:aa165d3cd8378b8280cfaf54f925a071d inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae55e7ef394f8bd03ca43585f279e2706 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae55e7ef394f8bd03ca43585f279e2706"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitTransition</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html">HybridAutomatonParser::TransitionContext</a> *ctx) override</td></tr>
+<tr class="separator:ae55e7ef394f8bd03ca43585f279e2706 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a387e00b13af0e2871b0be9c41b69ae56 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a387e00b13af0e2871b0be9c41b69ae56"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFromto</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FromtoContext.html">HybridAutomatonParser::FromtoContext</a> *ctx) override</td></tr>
+<tr class="separator:a387e00b13af0e2871b0be9c41b69ae56 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20db3a4041d9761f1245afa6003d9e11 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20db3a4041d9761f1245afa6003d9e11"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUrgent</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1UrgentContext.html">HybridAutomatonParser::UrgentContext</a> *ctx) override</td></tr>
+<tr class="separator:a20db3a4041d9761f1245afa6003d9e11 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30a4aa78bdf5abee7818612465eef45c inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a30a4aa78bdf5abee7818612465eef45c"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitGuard</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1GuardContext.html">HybridAutomatonParser::GuardContext</a> *ctx) override</td></tr>
+<tr class="separator:a30a4aa78bdf5abee7818612465eef45c inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08c04fc467c43533d5a039683ce0c6bd inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a08c04fc467c43533d5a039683ce0c6bd"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitAllocation</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1AllocationContext.html">HybridAutomatonParser::AllocationContext</a> *ctx) override</td></tr>
+<tr class="separator:a08c04fc467c43533d5a039683ce0c6bd inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbd4e7742ec7d9b5a00076896478eb9a inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbd4e7742ec7d9b5a00076896478eb9a"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitResetfct</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ResetfctContext.html">HybridAutomatonParser::ResetfctContext</a> *ctx) override</td></tr>
+<tr class="separator:afbd4e7742ec7d9b5a00076896478eb9a inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9d0d354d900101fb2a9f1d9939af4ef inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9d0d354d900101fb2a9f1d9939af4ef"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitAggregation</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1AggregationContext.html">HybridAutomatonParser::AggregationContext</a> *ctx) override</td></tr>
+<tr class="separator:ad9d0d354d900101fb2a9f1d9939af4ef inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7633b353e44cfa7a112fb35a732360fa inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7633b353e44cfa7a112fb35a732360fa"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitSetting</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1SettingContext.html">HybridAutomatonParser::SettingContext</a> *ctx) override</td></tr>
+<tr class="separator:a7633b353e44cfa7a112fb35a732360fa inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a874057aab79425aedebb3186acf91c3c inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a874057aab79425aedebb3186acf91c3c"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFixedsteps</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FixedstepsContext.html">HybridAutomatonParser::FixedstepsContext</a> *ctx) override</td></tr>
+<tr class="separator:a874057aab79425aedebb3186acf91c3c inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25f103dfa4f7834d15429262ed6935e3 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25f103dfa4f7834d15429262ed6935e3"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitTime</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TimeContext.html">HybridAutomatonParser::TimeContext</a> *ctx) override</td></tr>
+<tr class="separator:a25f103dfa4f7834d15429262ed6935e3 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a392a9cc29df295a37b860ca0fa9e6798 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a392a9cc29df295a37b860ca0fa9e6798"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitPlotsetting</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PlotsettingContext.html">HybridAutomatonParser::PlotsettingContext</a> *ctx) override</td></tr>
+<tr class="separator:a392a9cc29df295a37b860ca0fa9e6798 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa35fd06e74495f334ac019e37bbe0078 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa35fd06e74495f334ac019e37bbe0078"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFilename</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FilenameContext.html">HybridAutomatonParser::FilenameContext</a> *ctx) override</td></tr>
+<tr class="separator:aa35fd06e74495f334ac019e37bbe0078 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8520e2d6e0bc57ddbd7a4729766058d9 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8520e2d6e0bc57ddbd7a4729766058d9"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitMaxjumps</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1MaxjumpsContext.html">HybridAutomatonParser::MaxjumpsContext</a> *ctx) override</td></tr>
+<tr class="separator:a8520e2d6e0bc57ddbd7a4729766058d9 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed877c54c5b15fbc00ee1419a402620 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ed877c54c5b15fbc00ee1419a402620"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitPrint</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PrintContext.html">HybridAutomatonParser::PrintContext</a> *ctx) override</td></tr>
+<tr class="separator:a0ed877c54c5b15fbc00ee1419a402620 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12dafef1c6bd92693576c2e948d310d0 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12dafef1c6bd92693576c2e948d310d0"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitRemainder</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1RemainderContext.html">HybridAutomatonParser::RemainderContext</a> *ctx) override</td></tr>
+<tr class="separator:a12dafef1c6bd92693576c2e948d310d0 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d8918042263cd4d30f10ce8a8e4de41 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d8918042263cd4d30f10ce8a8e4de41"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitIdentity</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IdentityContext.html">HybridAutomatonParser::IdentityContext</a> *ctx) override</td></tr>
+<tr class="separator:a4d8918042263cd4d30f10ce8a8e4de41 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a806060530adb167204321b0f60694d74 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a806060530adb167204321b0f60694d74"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFixedorders</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FixedordersContext.html">HybridAutomatonParser::FixedordersContext</a> *ctx) override</td></tr>
+<tr class="separator:a806060530adb167204321b0f60694d74 inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cdc79f9e036a1123f4fbbcff33a182d inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cdc79f9e036a1123f4fbbcff33a182d"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitCutoff</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1CutoffContext.html">HybridAutomatonParser::CutoffContext</a> *ctx) override</td></tr>
+<tr class="separator:a8cdc79f9e036a1123f4fbbcff33a182d inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af75532909ce7d997ee7d922a27175a7e inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af75532909ce7d997ee7d922a27175a7e"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitPrecision</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html">HybridAutomatonParser::PrecisionContext</a> *ctx) override</td></tr>
+<tr class="separator:af75532909ce7d997ee7d922a27175a7e inherit pub_methods_classhypro_1_1HybridAutomatonBaseVisitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />

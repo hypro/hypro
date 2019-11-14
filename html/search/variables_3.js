@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jumpdepth',['jumpDepth',['../structhypro_1_1ReachabilitySettings.html#a4047c1ba8fb5430fc87add593f9fee64',1,'hypro::ReachabilitySettings']]]
+  ['epsilon',['EPSILON',['../group__globals.html#ga75f355966e0a97665eaf5a4c79baa7af',1,'config.h']]]
 ];
