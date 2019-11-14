@@ -27,7 +27,7 @@
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -274,7 +274,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00111">111</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084">hypro::Optimizer&lt; Number &gt;::redundantConstraints()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1Optimizer.html#af794665f4c5ec520cdfed3a9aeb7bfb2">hypro::Optimizer&lt; Number &gt;::vector()</a>.</p>
 
 </div>
 </div>
@@ -492,8 +492,6 @@ template&lt;typename Number &gt; </div>
 <p>Determines the set of redundant constraints. </p>
 <p>A constraint is redundant, whenever the removal of this constraint does not modify the set of possible solutions. </p><dl class="section return"><dt>Returns</dt><dd>A vector of row-indices which represent redundant constraints. </dd></dl>
 
-<p>Referenced by <a class="el" href="Optimizer_8h_source.html#l00074">hypro::Optimizer&lt; Number &gt;::Optimizer()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a3af3093ab6949ce7448109036feacaa2"></a>
@@ -653,6 +651,8 @@ template&lt;typename Number &gt; </div>
 
 <p>Returns the problem constants as a vector. </p>
 <dl class="section return"><dt>Returns</dt><dd>The vector of constants. </dd></dl>
+
+<p>Referenced by <a class="el" href="Optimizer_8h_source.html#l00074">hypro::Optimizer&lt; Number &gt;::Optimizer()</a>.</p>
 
 </div>
 </div>
