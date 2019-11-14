@@ -74,6 +74,11 @@ class Vertex {
 		, mColor( v.color() ) {}
 
 	/**
+	 * @brief Destroy the Vertex object
+	 */
+	~Vertex() {}
+
+	/**
 	 *
 	 * @return the color of the vertex.
 	 */

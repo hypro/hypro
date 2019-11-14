@@ -26,6 +26,41 @@ struct glpk_context {
 		TRACE( "hypro.optimizer", "Create glpk_context " << this );
 	}
 
+	glpk_context( const glpk_context& orig ) {
+		if ( orig.mInitialized ) {
+			glp_copy_prob( lp, orig.lp, GLP_ON );
+			parm = orig.parm;
+			glp_init_smcp( &parm );
+			parm.msg_lev = GLP_MSG_OFF;
+			glp_set_obj_dir( lp, GLP_MAX );
+		}
+		mInitialized = orig.mInitialized;
+		// We do not attempt to copy the arrays
+		arraysCreated = false;
+		mConstraintsSet = false;
+	}
+
+	glpk_context( glpk_context&& orig ) = delete;
+
+	glpk_context& operator=( const glpk_context& orig ) {
+		deleteLPInstance();
+		deleteArrays();
+		if ( orig.mInitialized ) {
+			glp_copy_prob( lp, orig.lp, GLP_ON );
+			parm = orig.parm;
+			glp_init_smcp( &parm );
+			parm.msg_lev = GLP_MSG_OFF;
+			glp_set_obj_dir( lp, GLP_MAX );
+		}
+		mInitialized = orig.mInitialized;
+		// We do not attempt to copy the arrays
+		arraysCreated = false;
+		mConstraintsSet = false;
+		return *this;
+	}
+
+	glpk_context& operator=( glpk_context&& orig ) = delete;
+
 	void createArrays( unsigned size ) {
 		TRACE( "hypro.optimizer", "" );
 		if ( arraysCreated ) {
@@ -43,6 +78,9 @@ struct glpk_context {
 			delete[] ia;
 			delete[] ja;
 			delete[] ar;
+			ia = nullptr;
+			ja = nullptr;
+			ar = nullptr;
 			arraysCreated = false;
 		}
 	}

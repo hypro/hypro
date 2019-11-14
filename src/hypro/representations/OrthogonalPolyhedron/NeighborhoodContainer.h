@@ -29,6 +29,11 @@ class NeighborhoodContainer {
 		mNeighborhoods.insert( copy.mNeighborhoods.begin(), copy.mNeighborhoods.end() );
 	}
 
+	NeighborhoodContainer& operator=( const NeighborhoodContainer& orig ) = default;
+	NeighborhoodContainer& operator=( NeighborhoodContainer&& orig ) = default;
+
+	~NeighborhoodContainer() {}
+
 	void clear() { mNeighborhoods.clear(); }
 
 	bool empty() const { return mNeighborhoods.empty(); }

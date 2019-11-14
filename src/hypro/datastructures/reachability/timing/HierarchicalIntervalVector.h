@@ -46,6 +46,11 @@ class HierarchicalIntervalVector {
 		: mOrder( in.getTypeOrder() )
 		, mIntervals( in.getIntervals() ) {}
 
+	/**
+	 * @brief Destroy the Hierarchical Interval Vector object
+	 */
+	~HierarchicalIntervalVector() {}
+
 	HierarchicalIntervalVector<T, Number>& operator=( const HierarchicalIntervalVector<T, Number>& orig ) = default;
 	HierarchicalIntervalVector<T, Number>& operator=( HierarchicalIntervalVector<T, Number>&& orig ) = default;
 
