@@ -101,15 +101,6 @@ matrix:
           packages: [*packages_base, clang-8 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-8
     - os: osx
-      osx_image: xcode10.2
-      addons:
-        homebrew:
-          packages:
-          - llvm
-          update: true
-      compiler: clang
-      env: COMPILER=clang++
-    - os: osx
       osx_image: xcode9.1
       addons:
         homebrew:
@@ -156,6 +147,51 @@ matrix:
       env: COMPILER=clang++
     - os: osx
       osx_image: xcode10.1
+      addons:
+        homebrew:
+          packages:
+          - llvm
+          update: true
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode10.2
+      addons:
+        homebrew:
+          packages:
+          - llvm
+          update: true
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode10.3
+      addons:
+        homebrew:
+          packages:
+          - llvm
+          update: true
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode11
+      addons:
+        homebrew:
+          packages:
+          - llvm
+          update: true
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode11.1
+      addons:
+        homebrew:
+          packages:
+          - llvm
+          update: true
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode11.2
       addons:
         homebrew:
           packages:
