@@ -71,7 +71,7 @@ class Optimizer {
 	/**
 		 * @brief      Default constructor.
 		 */
-	Optimizer( bool max = true )
+	explicit Optimizer( bool max = true )
 		: mConstraintMatrix()
 		, mConstraintVector()
 		, mConsistencyChecked( false )

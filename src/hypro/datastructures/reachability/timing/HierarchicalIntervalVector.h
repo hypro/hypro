@@ -40,7 +40,7 @@ class HierarchicalIntervalVector {
 
   public:
 	HierarchicalIntervalVector() = delete;
-	HierarchicalIntervalVector( const std::vector<T>& order )
+	explicit HierarchicalIntervalVector( const std::vector<T>& order )
 		: mOrder( order ) {}
 	HierarchicalIntervalVector( const HierarchicalIntervalVector<T, Number>& in )
 		: mOrder( in.getTypeOrder() )

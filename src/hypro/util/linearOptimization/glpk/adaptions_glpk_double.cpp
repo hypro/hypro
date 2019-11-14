@@ -79,6 +79,7 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 		case GLP_NOFEAS: {
 			return res;
 		}
+		default:
 	}
 
 	for ( int constraintIndex = int( constraints.rows() - 1 ); constraintIndex >= 0; --constraintIndex ) {

@@ -26,7 +26,7 @@ class EventTimingContainer {
 		DEBUG( "hydra.datastructures.etc", "Created new empty ETC: " << *this );
 	}
 
-	EventTimingContainer( tNumber timeHorizon )
+	explicit EventTimingContainer( tNumber timeHorizon )
 		: mInvariantEvents( std::vector<CONTAINMENT>( {CONTAINMENT::BOT, CONTAINMENT::PARTIAL, CONTAINMENT::FULL, CONTAINMENT::YES, CONTAINMENT::NO} ) )
 		, mTransitionEvents()
 		, mBadStateEvents( std::vector<CONTAINMENT>( {CONTAINMENT::BOT, CONTAINMENT::PARTIAL, CONTAINMENT::FULL, CONTAINMENT::YES, CONTAINMENT::NO} ) ) {

@@ -205,6 +205,8 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::SOLUTION& _in 
 			_out << "UNKNOWN";
 			break;
 		}
+		default:
+			_out << "Something went terribly wrong.";
 	}
 	return _out;
 }

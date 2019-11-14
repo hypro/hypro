@@ -6,18 +6,20 @@
 #include <iostream>
 #include <thread>
 
+#define COUT( expr ) \
+	{ std::cout << expr }
+#define CERR( expr ) \
+	{ std::cerr << expr }
+
+#ifndef HYPRO_LOGGING
+// define to be no-ops, note that expr still gets evaluated.
 #define DEBUG( channel, expr )
 #define TRACE( channel, expr )
 #define INFO( channel, expr )
 #define WARN( channel, expr )
 #define FATAL( channel, expr )
 
-#define COUT( expr ) \
-	{ std::cout << expr }
-#define CERR( expr ) \
-	{ std::cerr << expr }
-
-#ifdef HYPRO_LOGGING
+#else
 
 #include <carl/core/carlLogging.h>
 
@@ -28,12 +30,6 @@ int initializeLogging( int& i );
 static int initvar = initializeLogging( initvar );
 
 }  // namespace hypro
-
-#undef DEBUG
-#undef TRACE
-#undef INFO
-#undef WARN
-#undef FATAL
 
 #define __HYPRO_LOG( lvl, channel, expr )                                                                                        \
 	{                                                                                                                            \
