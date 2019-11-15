@@ -37,6 +37,35 @@ inline void printProblem( glp_prob* glpkProblem ) {
 }
 
 template <typename Number>
+vector_t<Number> refineSolution( glpk_context& context, const matrix_t<Number>& constraints, const vector_t<Number>& constants ) {
+	matrix_t<Number> exactSolutionMatrix = matrix_t<Number>::Zero( constraints.cols(), constraints.cols() );
+	vector_t<Number> exactSolutionVector = vector_t<Number>::Zero( constraints.cols() );
+	unsigned pos = 0;
+	if ( glp_get_obj_dir( context.lp ) == GLP_MAX ) {
+		for ( unsigned i = 1; i <= constraints.rows(); ++i ) {
+			// we search for d non-basic variables at their upper bound, which define the optimal point.
+			if ( glp_get_row_stat( context.lp, i ) == GLP_NU ) {
+				exactSolutionMatrix.row( pos ) = constraints.row( i - 1 );
+				exactSolutionVector( pos ) = constants( i - 1 );
+				++pos;
+			}
+		}
+	} else {
+		assert( glp_get_obj_dir( context.lp ) == GLP_MIN );
+		for ( unsigned i = 1; i <= constraints.rows(); ++i ) {
+			// we search for d non-basic variables at their lower bound, which define the optimal point.
+			if ( glp_get_row_stat( context.lp, i ) == GLP_NL ) {
+				exactSolutionMatrix.row( pos ) = constraints.row( i - 1 );
+				exactSolutionVector( pos ) = constants( i - 1 );
+				++pos;
+			}
+		}
+	}
+	// solve and return
+	return Eigen::FullPivLU<matrix_t<Number>>( exactSolutionMatrix ).solve( exactSolutionVector );
+}
+
+template <typename Number>
 EvaluationResult<Number> glpkOptimizeLinear( glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact ) {
 	/*
 		std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << std::endl;
@@ -60,27 +89,8 @@ EvaluationResult<Number> glpkOptimizeLinear( glpk_context& context, const vector
 	switch ( glp_get_status( context.lp ) ) {
 		case GLP_OPT:
 		case GLP_FEAS: {
-			// if satisfiable, derive exact solution by intersecting all constraints, which are at their upper bounds (we always maximize).
-			matrix_t<Number> exactSolutionMatrix = matrix_t<Number>::Zero( constraints.cols(), constraints.cols() );
-			vector_t<Number> exactSolutionVector = vector_t<Number>::Zero( constraints.cols() );
-			unsigned pos = 0;
-			for ( unsigned i = 1; i <= constraints.rows(); ++i ) {
-				// we search for d non-basic variables at their upper bound, which define the optimal point.
-				int status = glp_get_row_stat( context.lp, i );
-				if ( status == GLP_NU ) {
-#ifdef DEBUG_MSG
-					//std::cout << "Row " << i << " is at its upper bounds." << std::endl;
-#endif
-					exactSolutionMatrix.row( pos ) = constraints.row( i - 1 );
-					exactSolutionVector( pos ) = constants( i - 1 );
-					++pos;
-				}
-			}
-			exactSolution = Eigen::FullPivLU<matrix_t<Number>>( exactSolutionMatrix ).solve( exactSolutionVector );
-#ifdef DEBUG_MSG
-			//std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
-			//std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
-#endif
+			// if satisfiable, derive exact solution by intersecting all constraints, which are at their upper respectively lower bounds .
+			vector_t<Number> exactSolution = refineSolution( context, constraints, constants );
 			return EvaluationResult<Number>( _direction.dot( exactSolution ), exactSolution, SOLUTION::FEAS );
 			break;
 		}
@@ -126,9 +136,8 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 
 	switch ( glp_get_status( context.lp ) ) {
 		case GLP_INFEAS:
-		case GLP_NOFEAS: {
+		case GLP_NOFEAS:
 			return res;
-		}
 		default:
 			break;
 	}
@@ -175,14 +184,12 @@ EvaluationResult<Number> glpkGetInternalPoint( glpk_context& context, std::size_
 
 	switch ( glp_get_status( context.lp ) ) {
 		case GLP_OPT:
-		case GLP_FEAS: {
+		case GLP_FEAS:
 			return EvaluationResult<Number>( glp_get_obj_val( context.lp ), glpkModel, SOLUTION::FEAS );
 			break;
-		}
-		case GLP_UNBND: {
+		case GLP_UNBND:
 			return EvaluationResult<Number>( 1, glpkModel, SOLUTION::INFTY );
 			break;
-		}
 		default:
 			return EvaluationResult<Number>( 0, vector_t<Number>::Zero( 1 ), SOLUTION::INFEAS );
 	}

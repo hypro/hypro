@@ -76,9 +76,8 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 
 	switch ( glp_get_status( context.lp ) ) {
 		case GLP_INFEAS:
-		case GLP_NOFEAS: {
+		case GLP_NOFEAS:
 			return res;
-		}
 		default:
 			break;
 	}

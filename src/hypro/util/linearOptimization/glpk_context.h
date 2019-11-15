@@ -44,7 +44,7 @@ struct glpk_context {
 
 	glpk_context& operator=( const glpk_context& orig ) {
 		// compare problem instances to avoid self-assignment
-		if(lp == orig.lp) {
+		if ( *this == orig ) {
 			return *this;
 		}
 		deleteLPInstance();
@@ -64,6 +64,10 @@ struct glpk_context {
 	}
 
 	glpk_context& operator=( glpk_context&& orig ) = delete;
+
+	bool operator==( const glpk_context& rhs ) {
+		return this->lp == rhs.lp;
+	}
 
 	void createArrays( unsigned size ) {
 		TRACE( "hypro.optimizer", "" );

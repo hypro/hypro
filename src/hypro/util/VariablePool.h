@@ -27,9 +27,7 @@ namespace hypro {
 
 class VariablePool : public carl::Singleton<VariablePool> {
 	friend carl::Singleton<VariablePool>;
-
-  private:
-/**
+	/**
 	 * Typedefs
 	 */
 #ifdef HYPRO_USE_PPL

@@ -219,26 +219,23 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::SOLUTION& _in 
  */
 inline std::ostream& operator<<( std::ostream& _out, const hypro::CONTAINMENT& _in ) {
 	switch ( _in ) {
-		case hypro::CONTAINMENT::NO: {
+		case hypro::CONTAINMENT::NO:
 			_out << "N";
 			break;
-		}
-		case hypro::CONTAINMENT::YES: {
+		case hypro::CONTAINMENT::YES:
 			_out << "Y";
 			break;
-		}
-		case hypro::CONTAINMENT::FULL: {
+		case hypro::CONTAINMENT::FULL:
 			_out << "F";
 			break;
-		}
-		case hypro::CONTAINMENT::PARTIAL: {
+		case hypro::CONTAINMENT::PARTIAL:
 			_out << "P";
 			break;
-		}
-		case hypro::CONTAINMENT::BOT: {
+		case hypro::CONTAINMENT::BOT:
 			_out << "B";
 			break;
-		}
+		default:
+			_out << "Something went terribly wrong.";
 	}
 	return _out;
 }

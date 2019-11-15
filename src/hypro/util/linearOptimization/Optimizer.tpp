@@ -6,18 +6,18 @@ template <typename Number>
 void Optimizer<Number>::cleanGLPInstance() {
 	assert( isSane() );
 	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " attempts to erase its glp instance. (@" << this << ")" );
-	{
-		std::lock_guard<std::mutex> lock( mGlpkLock );
-		auto ctxtIt = mGlpkContext.find( std::this_thread::get_id() );
-		if ( ctxtIt != mGlpkContext.end() ) {
-			TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContext.size() );
-			TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its glp instance. (@" << this << ")" );
-			ctxtIt->second.deleteLPInstance();
-			TRACE( "hypro.optimizer", "Deleted lp instance." );
-			mGlpkContext.erase( ctxtIt );
-			TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContext.size() );
-		}
+
+	std::lock_guard<std::mutex> lock( mGlpkLock );
+	auto ctxtIt = mGlpkContext.find( std::this_thread::get_id() );
+	if ( ctxtIt != mGlpkContext.end() ) {
+		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContext.size() );
+		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its glp instance. (@" << this << ")" );
+		ctxtIt->second.deleteLPInstance();
+		TRACE( "hypro.optimizer", "Deleted lp instance." );
+		mGlpkContext.erase( ctxtIt );
+		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContext.size() );
 	}
+
 	assert( isSane() );
 }
 
@@ -460,23 +460,18 @@ void Optimizer<Number>::updateConstraints() const {
 			for ( int i = 0; i < numberOfConstraints; i++ ) {
 				// Set relation symbols correctly
 				switch ( mRelationSymbols[i] ) {
-					case carl::Relation::LEQ: {
+					case carl::Relation::LEQ:
 						// set upper bounds, lb-values (here 0.0) are ignored.
 						glp_set_row_bnds( glpCtx.lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector( i ) ) );
 						break;
-					}
-					case carl::Relation::GEQ: {
+					case carl::Relation::GEQ:
 						// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
 						glp_set_row_bnds( glpCtx.lp, i + 1, GLP_LO, carl::toDouble( mConstraintVector( i ) ), 0.0 );
 						break;
-					}
-					case carl::Relation::EQ: {
+					case carl::Relation::EQ:
 						// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
 						glp_set_row_bnds( glpCtx.lp, i + 1, GLP_FX, carl::toDouble( mConstraintVector( i ) ), 0.0 );
 						break;
-					}
-					case carl::Relation::LESS:
-					case carl::Relation::GREATER:
 					default:
 						// glpk cannot handle strict inequalities.
 						assert( false );

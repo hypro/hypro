@@ -148,7 +148,6 @@ class Optimizer {
 		assert( lhs.isSane() && rhs.isSane() );
 	}
 
-  public:
 	/**
 		 * @brief      Comparison operator.
 		 * @param[in]  orig  The right-hand-side object.
