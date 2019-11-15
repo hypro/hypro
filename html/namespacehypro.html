@@ -27,7 +27,7 @@
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
+</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -151,6 +151,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1CarlPolytopeSetting.html">CarlPolytopeSetting</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for representing polytopes as CArL-formulas.  <a href="classhypro_1_1CarlPolytopeT.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ChildTimingInformation.html">ChildTimingInformation</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1465,6 +1466,10 @@ template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a98621e28b64149f811a18be367484a82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98621e28b64149f811a18be367484a82"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printProblem</b> (glp_prob *glpkProblem)</td></tr>
 <tr class="separator:a98621e28b64149f811a18be367484a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa3b6b533dbbf74f6cf8d68e7fb1dec9"><td class="memTemplParams" colspan="2"><a class="anchor" id="aaa3b6b533dbbf74f6cf8d68e7fb1dec9"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:aaa3b6b533dbbf74f6cf8d68e7fb1dec9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>refineSolution</b> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;context, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants)</td></tr>
+<tr class="separator:aaa3b6b533dbbf74f6cf8d68e7fb1dec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ef82ab47d75f847e5d6b5124b46bc8e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7ef82ab47d75f847e5d6b5124b46bc8e"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a7ef82ab47d75f847e5d6b5124b46bc8e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkOptimizeLinear</b> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;context, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants, bool useExact)</td></tr>
@@ -2273,8 +2278,6 @@ template&lt;typename Number &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The inverted halfspace. </dd></dl>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00404">404</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
-
-<p>References <a class="el" href="classhypro_1_1Halfspace.html#a3da0328011a987417205c32154c554d4">hypro::Halfspace&lt; Number &gt;::evaluate()</a>.</p>
 
 </div>
 </div>

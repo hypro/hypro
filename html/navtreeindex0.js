@@ -1,13 +1,13 @@
 var NAVTREEINDEX0 =
 {
 ".html":[7,0,0],
-".html":[7,0,2],
-".html":[7,0,3],
-".html":[7,0,4],
 ".html":[7,0,1,0],
 ".html":[7,0,1,1],
 ".html":[7,0,1,2],
 ".html":[7,0,1,3],
+".html":[7,0,2],
+".html":[7,0,3],
+".html":[7,0,4],
 "BadStateHandlers_8h_source.html":[8,0,1,0,0,3,1,0,0],
 "BallSupportFunction_8h_source.html":[8,0,1,0,3,10,0],
 "BoxSetting_8h_source.html":[8,0,1,0,3,0,1],
@@ -36,6 +36,7 @@ var NAVTREEINDEX0 =
 "ETC__util_8h_source.html":[8,0,1,0,1,1,0,1],
 "ETN__util_8h_source.html":[8,0,1,0,1,1,0,2],
 "EllipsoidSupportFunction_8h_source.html":[8,0,1,0,3,10,2],
+"Ellipsoid_8h.html":[8,0,1,0,3,4,0],
 "Ellipsoid_8h_source.html":[8,0,1,0,3,4,0],
 "ErrorListener_8cpp_source.html":[8,0,1,0,2,1,0],
 "ErrorListener_8h_source.html":[8,0,1,0,2,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "citelist.html":[4],
 "classes.html":[7,1],
 "classhypro_1_1BallSupportFunction.html":[7,0,1,6],
-"classhypro_1_1BallSupportFunction.html#a006b5de1fd70fa2761b7390dc92a3471":[7,0,1,6,10],
-"classhypro_1_1BallSupportFunction.html#a01411ac148f35abe5a6190b1cc42f9d5":[7,0,1,6,5]
+"classhypro_1_1BallSupportFunction.html#a006b5de1fd70fa2761b7390dc92a3471":[7,0,1,6,10]
 };

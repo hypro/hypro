@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classhypro_1_1rectangularInvariantHandler.html#addaba4f625e8bfcb734ddfd5422bf2f3":[7,0,1,180,7],
 "classhypro_1_1rectangularInvariantHandler.html#adfd38a3e668819bcdaa1983030ae4199":[7,0,1,180,1],
 "classhypro_1_1rectangularInvariantHandler.html#aeb0002139ef324f5b5150c26c68a1fb6":[7,0,1,180,8],
 "classhypro_1_1rectangularResetHandler.html":[7,0,1,181],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "functions_func_g.html":[7,3,1,6],
 "functions_func_h.html":[7,3,1,7],
 "functions_func_i.html":[7,3,1,8],
-"functions_func_l.html":[7,3,1,9],
-"functions_func_m.html":[7,3,1,10]
+"functions_func_l.html":[7,3,1,9]
 };
