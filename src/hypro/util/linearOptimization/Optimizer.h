@@ -140,7 +140,7 @@ namespace hypro {
 
 		friend void swapper(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
 			//TRACE("hypro.optimizer","");
-			std::cout << "Optimizer::swap!" << std::endl;
+			//std::cout << "Optimizer::swap!" << std::endl;
 			std::swap(lhs.mConstraintMatrix, rhs.mConstraintMatrix);
 			std::swap(lhs.mConstraintVector, rhs.mConstraintVector);
 			std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);

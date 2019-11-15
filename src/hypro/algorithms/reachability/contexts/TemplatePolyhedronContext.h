@@ -38,6 +38,8 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
   	//Used for minimization of various functions during location invariant strengthening
   	Optimizer<Number> mOptimizer;
+  	//The result of the location invariant strengthening. Is passed to TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler.
+  	vector_t<Number> mRelaxedInvariant;
 
   public:
 
@@ -78,9 +80,10 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     vector_t<Number> lieDerivative(const vector_t<Number>& dir);
 
     //Conducts the location invariant strengthening method from Sankranarayanan 2008.
-    //Until it converges, a tighter bound for the invariants is being computed.
-    //Returns the tighter bounds for the invariants.
-    vector_t<Number> locationInvariantStrengthening(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& initialOffsets);
+    //Only works for closed invariants where the normals point into the inside. 
+    //Until it converges, a relaxed bound for the invariants is being computed, thereby shrinking in the region of possible values (strengthening).
+    //Returns the relaxed bounds for the invariants.
+    vector_t<Number> locationInvariantStrengthening(const TemplatePolyhedron<Number>& invTPpoly, const vector_t<Number>& initialOffsets);
     
     //Adds invariants, guards and bad states to the template matrix according the the setting
     TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
