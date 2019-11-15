@@ -1,7 +1,3 @@
-/*
- * @file   VPolytope.h
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- */
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
@@ -27,6 +23,7 @@ namespace hypro {
 
 /**
  * @brief      The class implementing the vertex representation of a convex polytope.
+ *
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
  * \ingroup geoState @{
@@ -37,9 +34,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	using pointVector = std::vector<Point<Number>>;
 	typedef S Settings;
 
-	/***************************************************************************
-	 * Members
-	 **************************************************************************/
   private:
 	mutable pointVector mVertices;
 	Cone<Number> mCone;
@@ -48,10 +42,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	std::vector<std::set<unsigned>> mNeighbors;
 
   public:
-	/***************************************************************************
-	 * Constructors
-	 **************************************************************************/
-
 	/**
 	 * @brief      Default constructor.
 	 */
@@ -99,10 +89,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	 */
 	~VPolytopeT() {
 	}
-
-	/***************************************************************************
-	* General interface
-	**************************************************************************/
 
 	matrix_t<Number> matrix() const {
 		assert( false && "NOT IMPLEMENTED YET" );
@@ -169,10 +155,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 
 	EvaluationResult<Number> evaluate( const vector_t<Number>& direction ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& directions, bool useExact = true ) const;
-
-	/***************************************************************************
-	 * Getters, Setters, Iterators
-	 **************************************************************************/
 
 	/**
 	 * @brief      Checks if the polytope represents the empty set.
@@ -361,9 +343,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	void updateNeighbors();
 
   private:
-	/***************************************************************************
-	 * Auxiliary functions
-	 **************************************************************************/
 	static bool belowPlanes( const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets );
 	static bool abovePlanes( const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets );
 
@@ -389,9 +368,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 		return true;
 	}
 
-	/***************************************************************************
-	 * Operators
-	 **************************************************************************/
   public:
 	VPolytopeT<Number, Converter, S>& operator=( const VPolytopeT<Number, Converter, S>& rhs ) = default;
 	VPolytopeT<Number, Converter, S>& operator=( VPolytopeT<Number, Converter, S>&& rhs ) = default;

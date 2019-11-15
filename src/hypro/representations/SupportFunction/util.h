@@ -1,5 +1,5 @@
 /**
- * @file   util.h
+ * @file   representations/SupportFunction/util.h
  */
 
 //#define HYPRO_USE_VECTOR_CACHING

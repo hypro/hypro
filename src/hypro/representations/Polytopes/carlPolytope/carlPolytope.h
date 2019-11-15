@@ -1,5 +1,9 @@
 #pragma once
 
+#ifndef INCL_FROM_GOHEADER
+static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+#endif
+
 #include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../carlTypes.h"
 #include "../../../datastructures/Halfspace.h"
@@ -11,6 +15,14 @@
 
 namespace hypro {
 
+/**
+ * @brief Class for representing polytopes as CArL-formulas.
+ *
+ * @tparam Number
+ * @tparam Converter
+ * @tparam Setting
+ * \ingroup geoState @{
+ */
 template <typename Number, typename Converter, typename Setting>
 class CarlPolytopeT {
   public:
@@ -145,6 +157,8 @@ class CarlPolytopeT {
      */
 	bool dimensionWasCorrectlySet() const;
 };
+
+/** @} */
 
 }  // namespace hypro
 

@@ -1,5 +1,5 @@
 /**
- * @file EllipsoidT.h
+ * @file Ellipsoid.h
  * @author Phillip Florian
  */
 

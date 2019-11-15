@@ -37,11 +37,13 @@ CLANG_WARNING_RESET
 namespace hypro {
 
 /**
-	 * @brief      A wrapper class encapsulating PPL-polytopes.
-	 *
-	 * @tparam     Number     The used number type.
-	 * @tparam     Converter  The used converter.
-	 */
+ * @brief      A wrapper class encapsulating PPL-polytopes.
+ *
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The used converter.
+ *
+ * \ingroup geoState @{
+ */
 template <typename Number, typename Converter, class Setting>
 class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Setting>> {
   public:
@@ -67,57 +69,57 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	virtual ~PolytopeT();
 
 	/**
-		 * Getters and Setters
-		 */
+	 * Getters and Setters
+	 */
 
 	static representation_name type() { return representation_name::ppl_polytope; }
 
 	/**
-		 * Returns true, if the generatorset is empty.
-		 * @return
-		 */
+	 * Returns true, if the generatorset is empty.
+	 * @return
+	 */
 	bool empty() const;
 
 	/**
-		 * Adds a point to the polytope. Note that if the point lies inside the
-		 * current polytope, this has no effect.
-		 * @param point
-		 */
+	 * Adds a point to the polytope. Note that if the point lies inside the
+	 * current polytope, this has no effect.
+	 * @param point
+	 */
 	void addPoint( const Point<Number>& point );
 
 	void updatePoints() const;
 
 	/**initConvexHull
-		 * Returns the set of points which form the polytope.
-		 * @return Pointset.
-		 */
+	 * Returns the set of points which form the polytope.
+	 * @return Pointset.
+	 */
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 
 	/*
-		 * returns the fan of the Polytope
-		 */
+	* returns the fan of the Polytope
+	*/
 	const Fan<Number>& fan();
 
 	/*
-		 * returns a reference to the fan of the Polytope
-		 */
+	* returns a reference to the fan of the Polytope
+	*/
 	Fan<Number>& rFan();
 
 	/*
-		 * sets the fan of the Polytope
-		 */
+	* sets the fan of the Polytope
+	*/
 	void setFan( const Fan<Number>& _fan );
 
 	void calculateFan();
 
 	/**
-		 * Prints the polytopes' generators obtained from the PPL to stdout.
-		 */
+	 * Prints the polytopes' generators obtained from the PPL to stdout.
+	 */
 	void print() const;
 
 	/*
-		 *
-		 */
+	*
+	*/
 	friend std::ostream& operator<<( std::ostream& lhs, const PolytopeT<Number, Converter, Setting>& rhs ) {
 		using Parma_Polyhedra_Library::IO_Operators::operator<<;
 		lhs << "[";
@@ -127,13 +129,13 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	}
 
 	/**
-		 * PPL related functions
-		 */
+	 * PPL related functions
+	 */
 	const Parma_Polyhedra_Library::C_Polyhedron& rawPolyhedron() const;
 
 	/**
-		 * Geometric Object interface
-		 */
+	 * Geometric Object interface
+	 */
 	std::size_t dimension() const;
 	PolytopeT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	PolytopeT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
@@ -154,14 +156,14 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	//  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
 	/**
-		 * @brief      Reduces the polytope by removing redundant constraints. The number representation is already optimized
-		 * by PPL internally.
-		 */
+	 * @brief      Reduces the polytope by removing redundant constraints. The number representation is already optimized
+	 * by PPL internally.
+	 */
 	void reduceRepresentation() { removeRedundancy(); }
 
 	/**
-		 * Polytope related
-		 */
+	 * Polytope related
+	 */
 	Number supremum() const;
 
 	void removeRedundancy() {}
@@ -169,13 +171,16 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	//PolytopeT<Number,Converter,Setting>& operator= (const PolytopeT<Number,Converter,Setting>& rhs);
 
 	/**
-		 * Auxiliary functions
-		 */
+	 * Auxiliary functions
+	 */
 	int computeMaxVDegree();
 	Point<Number> computeMaxPoint();
 	Point<Number> computeInitVertex( PolytopeT<Number, Converter, Setting> _secondPoly );
 	Point<Number> localSearch( Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget );
 };
+
+/** @} */
+
 }  // namespace hypro
 
 #include "Polytope.tpp"

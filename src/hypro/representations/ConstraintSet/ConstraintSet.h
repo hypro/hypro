@@ -1,9 +1,5 @@
 #pragma once
-/*
-#ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
-#endif
-*/
+
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/linearOptimization/Optimizer.h"
@@ -12,6 +8,9 @@
 
 namespace hypro {
 
+/**
+ * @brief Dummy struct for settings. *
+ */
 struct ConstraintSetSettings {
 };
 
@@ -281,6 +280,7 @@ class ConstraintSetT {
 		mIsBox = TRIBOOL::NSET;
 	}
 };
+
 /** @} */
 
 /**

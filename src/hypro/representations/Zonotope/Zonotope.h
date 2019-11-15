@@ -1,7 +1,7 @@
 /* *
  * Zonotope class representation for use in reachability analysis
  *
- * File:   Zonotope.h
+ * @file   Zonotope.h
  * @author Jonathan Gan, Ibtissem Ben Makhlouf {gan, makhlouf} @ embedded.rwth-aachen.de
  * @version 1.0 on June 19, 2014, 10:25 PM
  *

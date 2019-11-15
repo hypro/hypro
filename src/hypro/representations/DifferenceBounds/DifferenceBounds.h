@@ -14,6 +14,8 @@ class Point;
  * @brief      Class wrapping the difference bounds content.
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
+ *
+ * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
 class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Number, Converter, Setting>> {
@@ -352,5 +354,8 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
 		return true;
 	}
 };
+
+/** @} */
+
 }  // namespace hypro
 #include "DifferenceBounds.tpp"

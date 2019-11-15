@@ -1,6 +1,6 @@
 /**
  * Specialization of some helper functions for computing template directions
- * @file helperFunctions.h
+ * @file templateDirections.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  * @author Simon Froitzheim
  *

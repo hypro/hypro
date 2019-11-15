@@ -29,9 +29,17 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 namespace hypro {
 
+/**
+ * @brief Forward declaration of class Vertex
+ * @tparam Number
+ */
 template <typename Number>
 class Vertex;
 
+/**
+ * @brief Forward declaration of class Location *
+ * @tparam Number
+ */
 template <typename Number>
 class Location;
 
@@ -40,6 +48,7 @@ class Location;
  * @details    A box is represented by an ordered sequence of intervals.
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
+ *
  * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
@@ -558,6 +567,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 */
 	[[deprecated( "Use the outstream-operator instead." )]] void print() const;
 };
+
 /** @} */
 
 /**
