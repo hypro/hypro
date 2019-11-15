@@ -3335,10 +3335,7 @@ Determining the scope of groups...
 Sorting lists...
 Freeing entry tree
 Determining which enums are documented
-Computing member relations.error opening bib20948.bbl: No such file or directory
-bibtex command failed: No such file or directory
-error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
+Computing member relations.error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/cstddef:50:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/cstddef:50:10: fatal error: 'stddef.h' file not found [clang]
