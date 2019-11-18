@@ -803,7 +803,7 @@ namespace hypro {
 		assert(dirs.cols() == mMatrixPtr->cols());
 		auto evalRes = multiEvaluate(dirs, true);
 		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
-		for(int i = 0; i < evalRes.size(); ++i){
+		for(std::size_t i = 0; i < evalRes.size(); ++i){
 			assert(evalRes[i].errorCode != SOLUTION::INFEAS);
 			evalOffsets(i) = evalRes[i].supportValue;
 		}

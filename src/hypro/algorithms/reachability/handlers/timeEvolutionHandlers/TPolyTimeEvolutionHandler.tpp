@@ -4,7 +4,7 @@ namespace hypro {
 
 	template<typename State>
     vector_t<typename State::NumberType> TPolyTimeEvolutionHandler<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
-        assert(linearFct.rows() == this->mState->getDimension() + 1);
+        assert((unsigned)linearFct.rows() == this->mState->getDimension() + 1);
         vector_t<Number> gradient = linearFct;
         gradient(gradient.rows()-1) = 0;
         return gradient;

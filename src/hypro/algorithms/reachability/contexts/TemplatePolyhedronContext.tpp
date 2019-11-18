@@ -4,7 +4,7 @@ namespace hypro {
 
 	template<typename State>
     vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
-        assert(linearFct.rows() == this->mState->getDimension() + 1);
+        assert(linearFct.rows() == this->mComputationState.getDimension() + 1);
         vector_t<Number> gradient = linearFct;
         gradient(gradient.rows()-1) = 0;
         return gradient;
@@ -12,9 +12,9 @@ namespace hypro {
 
     template<typename State>
     vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::lieDerivative(const vector_t<Number>& dir){
-        assert(dir.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
-        assert(this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().cols());
-        return this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose() * gradientOfLinearFct(dir);
+        assert(dir.rows() == this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
+        assert(this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() == this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose().cols());
+        return this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose() * gradientOfLinearFct(dir);
     }
 
     template<typename State>
@@ -51,17 +51,16 @@ namespace hypro {
             matrix_t<Number> certificate = matrix_t<Number>::Zero(invRows,invRows);
 
             //For each row solve Dj
-            for(int rowI = 0; rowI < invRows; ++rowI){
+            for(unsigned rowI = 0; rowI < invRows; ++rowI){
 
 	        	//2.Construct b = (mü(H_j) + H_j')^T, extended with zeros to make sure that the optimumValue only contains positive entries.
 	        	vector_t<Number> b = vector_t<Number>::Zero(invRows+invCols);
 	        	b.block(0,0,invRows,1) = scalingFactor * invTPoly.matrix().row(rowI) + lieDerivative(invTPoly.matrix().row(rowI));
-	        	b.transposeInPlace();
                 std::cout << "TemplatePolyhedronContext::LIS, for rowI: " << rowI << " b is: " << b << std::endl;
 
 	        	//3.Set A and b as matrix and vector for mOptimizer
 	        	mOptimizer.setMatrix(A);
-	        	mOptimizer.setVector(b);
+	        	mOptimizer.setVector(b.transpose());
 	        	mOptimizer.setMaximize(false);
 
 	        	//4.Minimize into direction nextStrengthenedInv - Solution is the optimumValue of minimizeA, 
@@ -127,10 +126,10 @@ namespace hypro {
         	mOptimizer.setMatrix(L);
         	mOptimizer.setVector(c);
         	mOptimizer.setMaximize(false);
-        	auto minimizeL = mOptimizer.evaluate(vector_t<Number>::Ones(invRows));
+        	auto minimizeL = mOptimizer.evaluate(vector_t<Number>::Ones(invRows),true);
         	assert(minimizeL.errorCode == SOLUTION::FEAS);
         	#ifndef NDEBUG
-        	for(int i = 0; i < invRows; ++i){
+        	for(unsigned i = 0; i < invRows; ++i){
         		assert(initialOffsets(i) <= minimizeL.optimumValue(i) && minimizeL.optimumValue(i) <= invTPoly.vector()(i));
         	}
         	#endif
@@ -150,7 +149,7 @@ namespace hypro {
     TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
         
         //Start with initial set 
-        assert(tpoly.matrix().cols() == this->mComputationState.getDimension());
+        assert((unsigned)tpoly.matrix().cols() == this->mComputationState.getDimension());
         std::size_t templateSize = tpoly.matrix().rows();
         matrix_t<Number> extendedMatrix = tpoly.matrix();
         std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, ONLY_INIT setting" << std::endl;

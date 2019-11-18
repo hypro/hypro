@@ -6,7 +6,7 @@ namespace hypro {
 
 	template<typename State>
     vector_t<typename State::NumberType> TPolyFirstSegmentHandler<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
-        assert(linearFct.rows() == this->mState->getDimension() + 1);
+        assert((unsigned)linearFct.rows() == this->mState->getDimension() + 1);
         vector_t<Number> gradient = linearFct;
         gradient(gradient.rows()-1) = 0;
         return gradient;
@@ -40,7 +40,8 @@ namespace hypro {
                 throw std::runtime_error("TPolyFirstSegmentHandler::handle, unknown time number type.");
                 exit(1);
             }
-            valueAtRoot = polynom.evaluate(rootNumber);
+            //valueAtRoot = polynom.evaluate(rootNumber);
+            valueAtRoot = carl::evaluate(polynom,rootNumber);
             if(valueAtRoot > max){
                 max = valueAtRoot;
             }
@@ -95,7 +96,7 @@ namespace hypro {
                         evalRes = EvaluationResult<Number>(SOLUTION::INFTY);
                     } else {
                         assert(this->mState->getLocation()->getInvariant().getMatrix().rows() == this->mState->getLocation()->getInvariant().getVector().rows());
-                        assert(this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
+                        assert((unsigned)this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
                         TemplatePolyhedron<Number> invTPoly(this->mState->getLocation()->getInvariant().getMatrix(), this->mState->getLocation()->getInvariant().getVector());
                         evalRes = invTPoly.evaluate(derivVarCoeffs / factorial, true);    
                     }
@@ -121,11 +122,13 @@ namespace hypro {
                 //Compute roots that lie in interval and check for maximal value there
                 tNumber max = maxValueAtRoots(polynomDeriv, carl::Interval<tNumber>(tNumber(0),this->mTimeStep));    
                 //Get value for 0 and for this->mTimeStep and then somehow compute firstSegment
-                tNumber valueAtRoot = polynom.evaluate(tNumber(0));
+                //tNumber valueAtRoot = polynom.evaluate(tNumber(0));
+                tNumber valueAtRoot = carl::evaluate(polynom, tNumber(0));
                 if(valueAtRoot > max){
                     max = valueAtRoot;
                 }
-                valueAtRoot = polynom.evaluate(this->mTimeStep);
+                //valueAtRoot = polynom.evaluate(this->mTimeStep);
+                valueAtRoot = carl::evaluate(polynom, this->mTimeStep);
                 if(valueAtRoot > max){
                     max = valueAtRoot;
                 }  
@@ -140,7 +143,8 @@ namespace hypro {
                 bool increasing = true;
                 bool decreasing = true;
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / 4)){
-                    values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
+                    values.emplace_back(carl::evaluate(polynom,carl::convert<tNumber,Number>(timeStepPart)));
+                    //values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
                     //std::cout << "TPolyFirstSegmentHandler::handle, timeStepPart: " << timeStepPart << " values: {";
                     //for(const auto& v : values){
                     //    //std::cout << v << ",";
