@@ -8,10 +8,6 @@
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../types.h"
 
-#include <atomic>
-#include <boost/any.hpp>
-#include <mutex>
-
 namespace hypro {
 template <class Workable, typename State>
 class IWorker {

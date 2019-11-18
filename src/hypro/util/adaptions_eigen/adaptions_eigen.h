@@ -18,7 +18,7 @@
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Eigenvalues>
 #include <functional>
-#include <iostream>
+#include <iosfwd>
 #include <limits>
 CLANG_WARNING_DISABLE( "-Wdeprecated-register" )
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>

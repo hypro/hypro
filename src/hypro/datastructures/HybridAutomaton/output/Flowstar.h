@@ -3,7 +3,7 @@
 #include "../Condition.h"
 #include "../HybridAutomaton.h"
 
-#include <iostream>
+#include <iosfwd>
 
 namespace hypro {
 

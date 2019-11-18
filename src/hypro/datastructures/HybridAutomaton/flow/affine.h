@@ -2,7 +2,7 @@
 #include "../../../types.h"
 #include "linear.h"
 
-#include <iostream>
+#include <iosfwd>
 
 namespace hypro {
 

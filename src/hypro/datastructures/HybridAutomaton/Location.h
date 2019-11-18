@@ -15,7 +15,7 @@
 #include "flow/visitors.h"
 
 #include <boost/variant.hpp>
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 namespace hypro {

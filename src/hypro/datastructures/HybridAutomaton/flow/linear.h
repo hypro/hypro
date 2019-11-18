@@ -1,7 +1,7 @@
 #pragma once
 #include "../../../types.h"
 
-#include <iostream>
+#include <iosfwd>
 
 namespace hypro {
 

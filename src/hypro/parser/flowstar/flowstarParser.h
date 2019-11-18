@@ -10,7 +10,7 @@
 #pragma clang diagnostic ignored "-Woverloaded-shift-op-parentheses"
 #endif
 
-#include <iostream>
+#include <iosfwd>
 #include <fstream>
 #include <vector>
 

@@ -7,7 +7,7 @@
  */
 
 #pragma once
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 namespace hypro {

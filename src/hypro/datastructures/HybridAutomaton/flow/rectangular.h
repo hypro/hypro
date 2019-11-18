@@ -1,7 +1,7 @@
 #pragma once
 #include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
-#include <iostream>
+#include <iosfwd>
 #include <map>
 
 namespace hypro {

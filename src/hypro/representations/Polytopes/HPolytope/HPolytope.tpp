@@ -234,12 +234,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 				setOptimizer( this->matrix(), this->vector() );
 			}
 
-			//PrincipalComponentAnalysis<Number> pca(points);
-			//std::vector<Halfspace<Number>> boxConstraints = pca.box();
-			//for(const auto& constraint : boxConstraints){
-			//	mHPlanes.emplace_back(constraint);
-			//}
-
 			// Alternative version
 			// We need a copy of the set of points since auxiliary points will be added
 			//std::vector<Point<Number>> auxiliaryPoints(points);

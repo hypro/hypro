@@ -162,7 +162,7 @@ std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertic
 			counter++;
 		}
 
-		assert( false );
+		//assert( false );
 		FATAL( "hypro", "Not implemented." );
 
 		//auto polyNew( HPolyConstraints, HPolyConstants );

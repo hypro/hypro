@@ -8,7 +8,7 @@
 #include <assert.h>
 #include <chrono>
 #include <condition_variable>
-#include <iostream>
+#include <iosfwd>
 #include <mutex>
 #include <queue>
 #include <string>

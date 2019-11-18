@@ -4,6 +4,7 @@
 
 #include <carl/io/streamingOperators.h>
 #include <iostream>
+#include <sstream>
 #include <thread>
 
 #define COUT( expr ) \

@@ -16,7 +16,7 @@
 
 #include <carl/core/Variable.h>
 #include <fstream>
-#include <iostream>
+#include <iosfwd>
 #include <list>
 #include <map>
 #include <string>

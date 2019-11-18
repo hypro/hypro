@@ -4,8 +4,8 @@
 #include "../../types.h"
 #include "decomposition/Decomposition.h"
 
-#include <cstdlib>
-#include <iostream>
+#include <boost/variant.hpp>
+#include <iosfwd>
 
 namespace hypro {
 

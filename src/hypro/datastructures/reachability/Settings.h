@@ -2,7 +2,7 @@
 #include "../../types.h"
 
 #include <carl/numbers/numbers.h>
-#include <iostream>
+#include <iosfwd>
 #include <string>
 
 namespace hypro {

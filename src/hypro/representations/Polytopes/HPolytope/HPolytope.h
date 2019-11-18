@@ -13,7 +13,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
-#include "../../../util/pca.h"
 #include "../../../util/templateDirections.h"
 #include "HPolytopeSetting.h"
 

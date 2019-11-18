@@ -882,14 +882,13 @@ void LTIContext<State>::execOnEnd() {
 			currentTimingNode->setTimings( mLocalTimings );
 		}
 	}
+
+	//LOLOLO
+	//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+
+	TRACE( "hypro.worker.refinement", "Done printing refinements." );
+	TRACE( "hypro.worker", "Unlock node " << mTask->treeNode );
+	mTask->treeNode->getMutex().unlock();
 }
-
-//LOLOLO
-//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
-TRACE( "hypro.worker.refinement", "Done printing refinements." );
-TRACE( "hypro.worker", "Unlock node " << mTask->treeNode );
-mTask->treeNode->getMutex().unlock();
-}  // namespace hypro
 
 }  // namespace hypro

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/operators.hpp>
+//#include <boost/operators.hpp>
 #include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
 #include <carl/numbers/numbers.h>
@@ -8,7 +8,7 @@
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-#include <iostream>
+#include <iosfwd>
 
 // global typedefs
 namespace hypro {

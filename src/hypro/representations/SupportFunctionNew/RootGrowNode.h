@@ -21,7 +21,7 @@
 #include <cassert>
 #include <functional>
 #include <ios>
-#include <iostream>
+#include <iosfwd>
 #include <memory>
 #include <string>
 #include <tuple>

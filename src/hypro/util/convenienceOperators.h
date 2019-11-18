@@ -2,7 +2,7 @@
 
 #include "../types.h"
 
-#include <iostream>
+#include <iosfwd>
 #include <map>
 #include <set>
 #include <utility>
