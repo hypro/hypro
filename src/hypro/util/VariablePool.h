@@ -12,6 +12,7 @@
 
 #include "../flags.h"
 
+#include <algorithm>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
 #include <carl/util/Singleton.h>
