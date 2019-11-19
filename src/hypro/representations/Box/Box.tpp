@@ -29,8 +29,8 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 	if ( !boxDefined && Setting::DETECT_BOX ) {
 		auto boolIntervalsTuple = isBox( _constraints, _constants );
 		TRACE( "hypro.representations", "Is box, use interval constructor." );
-		if ( boost::get<0>( boolIntervalsTuple ) ) {
-			*this = BoxT<Number, Converter, Setting>( boost::get<1>( boolIntervalsTuple ) );
+		if ( std::get<0>( boolIntervalsTuple ) ) {
+			*this = BoxT<Number, Converter, Setting>( std::get<1>( boolIntervalsTuple ) );
 			boxDefined = true;
 		}
 	}

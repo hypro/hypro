@@ -4,7 +4,7 @@
  * Class representing a SupportFunction.
  * Here, a SupportFunction is a tree where a new node is set as the parent of the current root, thus growing at the root.
  * The SupportFunction itself knows and owns the root node, which in turn knows its children and so on.
- * Note that the pointer to the root node will not be shifted when a new node is added. 
+ * Note that the pointer to the root node will not be shifted when a new node is added.
  * Through this, it is possible to query an evaluation of the operations from each node in the tree.
  * Each leaf node in this tree holds a representation of a state, i.e. a box, a V-polytope, etc.
  * Each node that is not a leaf represents an operation that is performed on its children.
@@ -80,7 +80,7 @@ struct Parameters {
 template <typename Number, typename Converter, class Setting>
 class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number, Converter, Setting>> {
 	/***************************************************************************
-	 * Friends, Usings, typedefs 
+	 * Friends, Usings, typedefs
 	 **************************************************************************/
 
 	friend class SumOp<Number, Converter, Setting>;
@@ -222,22 +222,22 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * - transform: will be called by every node and mainly transforms additional parameters
 	 * - compute: will only be called once by leaf nodes and computes a result for unmodified representations such as box, V-polytope, etc.
 	 * - aggregate: will only be called once by all non leaf nodes and accumulates the results of its children
-	 * 
+	 *
 	 * Order of calling:
 	 * 1) From top to bottom, all nodes call transform
 	 * 2) When arriving at the lowest level, leaf nodes first call transform, then call compute
 	 * 3) From bottom to top, each node that is not a leaf node calls aggregate
 	 *
-	 * There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations 
+	 * There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations
 	 * made during the actual traversal still remain valid:
 	 * - Result = void,	Params = void:	"void transform()" 		&& "void compute()" 	&& "void aggregate()" 					&& no initParams
 	 * - Result = int, 	Params = void: 	"void transform()" 		&& "int compute()"		&& "int aggregate(vector<int>)" 		&& no initParams
 	 * - Result = void, Params = int:	"int transform(int)" 	&& "void compute(int)" 	&& "void aggregate(int)"				&& initParams
 	 * - Result = int, 	Params = int: 	"int transform(int)" 	&& "int compute(int)" 	&& "int aggregate(vector<int>, int)" 	&& initParams
-	 * If the parameter type does not exist (so, Rargs... = empty set), then additional parameters can be left out in all three functions, 
+	 * If the parameter type does not exist (so, Rargs... = empty set), then additional parameters can be left out in all three functions,
 	 * and if parameters would be returned, void is returned instead (i.e. transform).
 	 * If the result type is void, then the vector to be aggregated for the aggregate function can be left out.
-	 * Below, the four possibilites are implemented, functions returning void or having no additional parameters are wrapped into functions that return 
+	 * Below, the four possibilites are implemented, functions returning void or having no additional parameters are wrapped into functions that return
 	 * empty parameters & receive one additional parameter.
 	*/
 
@@ -301,7 +301,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
 
 	/**
-	 * @brief      Multi-evaluation function (convex linear optimization). 
+	 * @brief      Multi-evaluation function (convex linear optimization).
 	 * @param[in]  _directions  The directions/cost functions.
 	 * @return     A set of maxima towards the respective directions.
 	 */
@@ -309,10 +309,10 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	/**
 	 * @brief 		Answers whether the tree has at least one TrafoOp with the given parameters inside and updates ltParam if needed
-	 * @param[in]	ltParam 	Actually used parameters which A and b are compared to 
+	 * @param[in]	ltParam 	Actually used parameters which A and b are compared to
 	 * @param[in]	A 			Matrix to compare to ltParam
 	 * @param[in]	b 			Vector to compare to ltParam
-	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false. 
+	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false.
 	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
 	 */
 	bool hasTrafo( std::shared_ptr<const LinTrafoParameters<Number, Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b ) const;
@@ -414,7 +414,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Computes the region of the SupportFunction that is contained in the halfspace and how much is contained
 	 * @param[in]  rhs   The halfspace to intersect with
-	 * @return     How much of the current SupportFunction is contained and the resulting SupportFunctionNew 
+	 * @return     How much of the current SupportFunction is contained and the resulting SupportFunctionNew
 	 */
 	std::pair<CONTAINMENT, SupportFunctionNewT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, SupportFunctionNewT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
@@ -508,7 +508,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	/**
 	 * @brief	   Traverses the tree and computes dimensions remaining after all projection operations considered.
-	 * @return 	   A vector containing the indices of the dimensions remaining  
+	 * @return 	   A vector containing the indices of the dimensions remaining
 	 */
 	std::vector<std::size_t> collectProjections() const;
 

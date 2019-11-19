@@ -93,9 +93,9 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( GeometricO
 	if ( tmp.empty() ) {
 		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( tmp.dimension() ) ) );
 	} else {
-		boost::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( tmp.matrix(), tmp.vector() );
-		if ( boost::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( boost::get<1>( areArgsBox ) ) );
+		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( tmp.matrix(), tmp.vector() );
+		if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		} else {
 			using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( tmp.matrix(), tmp.vector() ) );
@@ -110,14 +110,14 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 	INFO( "hypro.representations", "SFN mat-vec-constr: mat: \n"
 										 << mat << " and vec: \n"
 										 << vec );
-	boost::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( mat, vec );
-	if ( boost::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
-		if ( boost::get<1>( areArgsBox ).size() == 0 ) {
+	std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( mat, vec );
+	if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
+		if ( std::get<1>( areArgsBox ).size() == 0 ) {
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( mat.cols() ) ) );
 			assert( false );
 		} else {
 			INFO( "hypro.representations", "SFN mat-vec-constr: constraints were box!" )
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( boost::get<1>( areArgsBox ) ) );
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		}
 	} else {
 		INFO( "hypro.representations", "SFN mat-vec-constr: constraints were hpoly!" )

@@ -40,7 +40,7 @@ TYPED_TEST( SupportFunctionNewTest, LeafTest ) {
 	EXPECT_EQ( sfHpoly.getRoot()->getOriginCount(), unsigned( 0 ) );
 	EXPECT_EQ( sfHpoly.getRoot()->getChildren().size(), std::size_t( 0 ) );
 	EXPECT_EQ( sfHpoly.getRoot().use_count(), long( 1 ) );
-	EXPECT_TRUE( boost::get<0>( isBox( hpoly.matrix(), hpoly.vector() ) ) );
+	EXPECT_TRUE( std::get<0>( isBox( hpoly.matrix(), hpoly.vector() ) ) );
 	EXPECT_EQ( ( dynamic_cast<Leaf<N, C, S, Box<TypeParam>>*>( sfHpoly.getRoot().get() )->getRepresentation() )->type(),
 			   representation_name::box );
 
@@ -51,8 +51,8 @@ TYPED_TEST( SupportFunctionNewTest, LeafTest ) {
 	EXPECT_EQ( sfHpoly.getRoot()->getOriginCount(), unsigned( 0 ) );
 	EXPECT_EQ( sfHpoly.getRoot()->getChildren().size(), std::size_t( 0 ) );
 	EXPECT_EQ( sfHpoly.getRoot().use_count(), long( 1 ) );
-	EXPECT_TRUE( boost::get<0>( isBox( hspace.matrix(), hspace.vector() ) ) );
-	EXPECT_TRUE( boost::get<0>( isBox( sfHSpace.matrix(), sfHSpace.vector() ) ) );
+	EXPECT_TRUE( std::get<0>( isBox( hspace.matrix(), hspace.vector() ) ) );
+	EXPECT_TRUE( std::get<0>( isBox( sfHSpace.matrix(), sfHSpace.vector() ) ) );
 	EXPECT_EQ( ( dynamic_cast<Leaf<N, C, S, Halfspace<TypeParam>>*>( sfHSpace.getRoot().get() )->getRepresentation() )
 					 ->type(),
 			   representation_name::constraint_set );

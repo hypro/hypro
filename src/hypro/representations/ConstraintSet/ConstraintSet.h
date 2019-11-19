@@ -104,7 +104,7 @@ class ConstraintSetT {
 
 	bool isAxisAligned() const {
 		if ( mIsBox == TRIBOOL::NSET ) {
-			mIsBox = boost::get<0>( isBox( mConstraints, mConstants ) ) == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+			mIsBox = std::get<0>( isBox( mConstraints, mConstants ) ) == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		}
 		return mIsBox == TRIBOOL::TRUE;
 	}

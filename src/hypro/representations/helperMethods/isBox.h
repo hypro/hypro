@@ -1,8 +1,8 @@
 #pragma once
 #include "../../types.h"
 
-#include <boost/tuple/tuple.hpp>
 #include <carl/interval/Interval.h>
+#include <tuple>
 
 namespace hypro {
 
@@ -15,10 +15,10 @@ namespace hypro {
  * @return     True if box, False otherwise.
  */
 template <typename Number>
-boost::tuple<bool, std::vector<carl::Interval<Number>>> isBox( const matrix_t<Number>& constraints, const vector_t<Number>& constants ) {
+std::tuple<bool, std::vector<carl::Interval<Number>>> isBox( const matrix_t<Number>& constraints, const vector_t<Number>& constants ) {
 	// dimensions do not match
 	if ( constraints.rows() != constants.rows() ) {
-		return boost::tuple<bool, std::vector<carl::Interval<Number>>>( false );
+		return std::tuple<bool, std::vector<carl::Interval<Number>>>( false, {} );
 	}
 	Eigen::Index dimension = constraints.cols();
 	std::vector<carl::Interval<Number>> boundsDefined = std::vector<carl::Interval<Number>>( dimension, carl::Interval<Number>::unboundedInterval() );
@@ -56,7 +56,7 @@ boost::tuple<bool, std::vector<carl::Interval<Number>>> isBox( const matrix_t<Nu
 			// if there exists more than one non-zero coefficient per row, return false.
 			if ( posNonZeroCoeff + negNonZeroCoeff > 1 ) {
 				//std::cout << "Too many coefficients, described set is not a box." << std::endl;
-				return boost::tuple<bool, std::vector<carl::Interval<Number>>>( false );
+				return std::tuple<bool, std::vector<carl::Interval<Number>>>( false, std::vector<carl::Interval<Number>>() );
 			}
 		}
 	}
@@ -75,7 +75,7 @@ boost::tuple<bool, std::vector<carl::Interval<Number>>> isBox( const matrix_t<Nu
 		}
 	}
 	// return true and the collected intervals.
-	return boost::tuple<bool, std::vector<carl::Interval<Number>>>( true, boundsDefined );
+	return std::tuple<bool, std::vector<carl::Interval<Number>>>( true, boundsDefined );
 }
 
 }  // namespace hypro

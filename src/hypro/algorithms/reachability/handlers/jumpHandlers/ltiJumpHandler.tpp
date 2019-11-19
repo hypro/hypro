@@ -280,8 +280,8 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 						//if(!tmpSFN.empty()){
 						tmpSFN.reduceRepresentation();
 						auto isHPolyBox = isBox( tmpSFN.matrix(), tmpSFN.vector() );
-						if ( boost::get<0>( isHPolyBox ) ) {
-							Box<Number> tmpBox( boost::get<1>( isHPolyBox ) );
+						if ( std::get<0>( isHPolyBox ) ) {
+							Box<Number> tmpBox( std::get<1>( isHPolyBox ) );
 							tmpSFN = SupportFunctionNew<Number>( tmpBox );
 						} else {
 							HPolytopeT<Number, hypro::Converter<Number>, HPolytopeOptimizerCaching> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );

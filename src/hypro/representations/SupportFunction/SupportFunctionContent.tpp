@@ -167,13 +167,13 @@ template <typename Number, typename Setting>
 SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			boost::tuple<bool, std::vector<carl::Interval<Number>>> intervals;
+			std::tuple<bool, std::vector<carl::Interval<Number>>> intervals;
 			if ( Setting::DETECT_BOX ) {
 				intervals = isBox( _directions, _distances );
 			}
-			if ( boost::get<0>( intervals ) ) {
+			if ( std::get<0>( intervals ) ) {
 				//TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
-				mBox = new BoxSupportFunction<Number, Setting>( boost::get<1>( intervals ) );
+				mBox = new BoxSupportFunction<Number, Setting>( std::get<1>( intervals ) );
 				mType = SF_TYPE::BOX;
 			} else {
 				//TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
@@ -186,13 +186,13 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<
 			break;
 		}
 		case SF_TYPE::BOX: {
-			boost::tuple<bool, std::vector<carl::Interval<Number>>> intervals;
+			std::tuple<bool, std::vector<carl::Interval<Number>>> intervals;
 			if ( Setting::DETECT_BOX ) {
 				intervals = isBox( _directions, _distances );
 			}
-			if ( boost::get<0>( intervals ) ) {
+			if ( std::get<0>( intervals ) ) {
 				//TRACE("hypro.representations.supportFunction","Handed box indeed is a box.")
-				mBox = new BoxSupportFunction<Number, Setting>( boost::get<1>( intervals ) );
+				mBox = new BoxSupportFunction<Number, Setting>( std::get<1>( intervals ) );
 				mType = SF_TYPE::BOX;
 			} else {
 				//TRACE("hypro.representations.supportFunction","Handed box actually is a polytope, use H-representation.")
