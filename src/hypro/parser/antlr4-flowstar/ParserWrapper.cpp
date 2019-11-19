@@ -48,7 +48,7 @@ namespace hypro {
 	}
 /*
 	template<>
-	boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
+	std::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
@@ -106,7 +106,7 @@ namespace hypro {
 
 			delete errListener;
 
-			return boost::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings>(h, visitor.getSettings());
+			return std::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings>(h, visitor.getSettings());
 
 		} else {
 
@@ -116,12 +116,12 @@ namespace hypro {
 
 			delete errListener;
 
-			return boost::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings>(h, visitor.getSettings());
+			return std::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings>(h, visitor.getSettings());
 		}
 	}
 */
 	template<>
-	//boost::tuple<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
+	//std::tuple<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 	std::pair<HybridAutomaton<mpq_class>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
@@ -182,7 +182,7 @@ namespace hypro {
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
+			//return std::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 
 		} else {
@@ -194,14 +194,14 @@ namespace hypro {
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
+			//return std::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 		}
 	}
 
 
 	template<>
-	//boost::tuple<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
+	//std::tuple<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 	std::pair<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
@@ -257,12 +257,10 @@ namespace hypro {
 
 			HyproHAVisitor<double> visitor;
 
-			//HybridAutomaton<double> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>();
 			HybridAutomaton<double> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>()) };
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 
 		} else {
@@ -270,11 +268,9 @@ namespace hypro {
 			HyproHAVisitor<double> visitor;
 
 			HybridAutomaton<double> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>()) };
-			//HybridAutomaton<double> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>());
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 		}
 	}

@@ -120,7 +120,7 @@ class Reach {
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State>>& _newInitialSets );
+	void processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -133,7 +133,7 @@ class Reach {
 	 */
 	bool intersectGuard( Transition<Number>* _trans, const State& _segment, State& result ) const;
 
-	bool checkTransitions( const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State>>& nextInitialSets ) const;
+	bool checkTransitions( const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<std::tuple<Transition<Number>*, State>>& nextInitialSets ) const;
 
 	const ReachabilitySettings& settings() const { return mSettings; }
 	void setSettings( const ReachabilitySettings& settings ) { mSettings = settings; }
@@ -143,7 +143,7 @@ class Reach {
 
   private:
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
-	//boost::tuple<bool, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State& _state ) const;
+	//std::tuple<bool, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State& _state ) const;
 	bool intersectBadStates( const State& _state ) const;
 };
 

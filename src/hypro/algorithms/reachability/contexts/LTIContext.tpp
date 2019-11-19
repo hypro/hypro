@@ -315,7 +315,7 @@ void LTIContext<State>::execBeforeFirstSegment() {
 				if ( guardSatisfied ) {
 					// Only jump, if maximal jump depth is not already reached.
 					if ( int( mTask->treeNode->getDepth() ) != mSettings.jumpDepth ) {
-						mDiscreteSuccessorBuffer.push_back( boost::tuple<Transition<Number>*, State>( transition, guardSatisfyingState ) );
+						mDiscreteSuccessorBuffer.push_back( std::tuple<Transition<Number>*, State>( transition, guardSatisfyingState ) );
 					}
 					locallyUrgent = true;
 				}
@@ -684,7 +684,7 @@ void LTIContext<State>::checkTransition() {
 		if ( it->first->isUrgent() ) {
 			TRACE( "hypro.worker.discrete", "Checking urgent transition " << it->first->getSource()->hash() << " -> " << it->first->getTarget()->hash() );
 			if ( guardSatisfied ) {
-				mDiscreteSuccessorBuffer.push_back( boost::tuple<Transition<Number>*, State>( it->first, *guardStatePtr ) );
+				mDiscreteSuccessorBuffer.push_back( std::tuple<Transition<Number>*, State>( it->first, *guardStatePtr ) );
 				urgentTransitionEnabled = true;
 			}
 		}  // handle normal transitions, but only if they cannot be omitted (they can if the timing intervals do not intersect)
@@ -693,7 +693,7 @@ void LTIContext<State>::checkTransition() {
 
 			DEBUG( "hypro.worker", "Guard satisfying state: " << *guardStatePtr );
 			COUNT( "GuardEnabled" );
-			mDiscreteSuccessorBuffer.push_back( boost::tuple<Transition<Number>*, State>( it->first, *( guardStatePtr ) ) );
+			mDiscreteSuccessorBuffer.push_back( std::tuple<Transition<Number>*, State>( it->first, *( guardStatePtr ) ) );
 			//mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::YES);
 			if ( mSettings.useGuardTimingInformation ) {
 				mLocalTimings.insertTransition( it->first, mComputationState.getTimestamp(), CONTAINMENT::YES );

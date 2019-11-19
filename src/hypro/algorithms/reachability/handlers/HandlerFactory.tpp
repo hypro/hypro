@@ -192,7 +192,7 @@ IResetHandler* HandlerFactory<State>::buildResetHandler( representation_name nam
 }
 
 template <typename State>
-IJumpHandler* HandlerFactory<State>::buildDiscreteSuccessorHandler( std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
+IJumpHandler* HandlerFactory<State>::buildDiscreteSuccessorHandler( std::vector<std::tuple<Transition<Number>*, State>>* successorBuffer,
 																	std::shared_ptr<Task<State>> task,
 																	Transition<Number>* transition,
 																	StrategyParameters sPars,

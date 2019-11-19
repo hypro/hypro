@@ -21,7 +21,7 @@ class HandlerFactory : public carl::Singleton<HandlerFactory<State>> {
 	IResetHandler* buildResetHandler( representation_name name, State* state, size_t index, matrix_t<Number> trafo, vector_t<Number> translation );
 	IResetHandler* buildResetHandler( representation_name name, State* state, size_t index, const std::vector<carl::Interval<Number>>& assignments );
 
-	IJumpHandler* buildDiscreteSuccessorHandler( std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
+	IJumpHandler* buildDiscreteSuccessorHandler( std::vector<std::tuple<Transition<Number>*, State>>* successorBuffer,
 												 std::shared_ptr<Task<State>> task,
 												 Transition<Number>* transition,
 												 StrategyParameters sPars,

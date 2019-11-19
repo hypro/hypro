@@ -125,19 +125,19 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 #endif
 	// new empty Flowpipe
 	typename Reach<Number, ReacherSettings, State>::flowpipe_t flowpipe;
-	std::vector<boost::tuple<Transition<Number>*, State>> nextInitialSets;
+	std::vector<std::tuple<Transition<Number>*, State>> nextInitialSets;
 
-	boost::tuple<hypro::CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number, State>( _state, mSettings.timeStep );
+	std::tuple<hypro::CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number, State>( _state, mSettings.timeStep );
 #ifdef REACH_DEBUG
-	INFO( "hypro.reacher", "Valuation fulfills Invariant?: " << boost::get<0>( initialSetup ) );
+	INFO( "hypro.reacher", "Valuation fulfills Invariant?: " << std::get<0>( initialSetup ) );
 #endif
-	if ( boost::get<0>( initialSetup ) != CONTAINMENT::NO ) {  // see convenienceOperators for details
-		assert( !boost::get<1>( initialSetup ).getTimestamp().isUnbounded() );
+	if ( std::get<0>( initialSetup ) != CONTAINMENT::NO ) {  // see convenienceOperators for details
+		assert( !std::get<1>( initialSetup ).getTimestamp().isUnbounded() );
 		bool noFlow = false;
 
 		// if the location does not have dynamic behaviour, check guards and exit loop.
-		if ( boost::get<2>( initialSetup ) == matrix_t<Number>::Identity( boost::get<2>( initialSetup ).rows(), boost::get<2>( initialSetup ).cols() ) &&
-			 boost::get<3>( initialSetup ) == vector_t<Number>::Zero( boost::get<3>( initialSetup ).rows() ) ) {
+		if ( std::get<2>( initialSetup ) == matrix_t<Number>::Identity( std::get<2>( initialSetup ).rows(), std::get<2>( initialSetup ).cols() ) &&
+			 std::get<3>( initialSetup ) == vector_t<Number>::Zero( std::get<3>( initialSetup ).rows() ) ) {
 			noFlow = true;
 			// Collect potential new initial states from discrete behaviour.
 			if ( int( mCurrentLevel ) <= mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {

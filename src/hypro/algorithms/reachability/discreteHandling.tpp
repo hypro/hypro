@@ -29,19 +29,19 @@ bool Reach<Number, ReacherSettings, State>::intersectGuard( Transition<Number>* 
 }
 
 template <typename Number, typename ReacherSettings, typename State>
-void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State>>& _newInitialSets ) {
+void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets ) {
 	std::map<Transition<Number>*, std::vector<State>> toAggregate;
 
 	for ( const auto& tuple : _newInitialSets ) {
-		if ( boost::get<0>( tuple )->getAggregation() == Aggregation::none ) {
+		if ( std::get<0>( tuple )->getAggregation() == Aggregation::none ) {
 			TRACE( "hypro.reacher", "No aggregation." );
 			// copy state - as there is no aggregation, the containing set and timestamp is already valid
-			State s = boost::get<1>( tuple );
+			State s = std::get<1>( tuple );
 			assert( !s.getTimestamp().isUnbounded() );
-			s.setLocation( boost::get<0>( tuple )->getTarget() );
+			s.setLocation( std::get<0>( tuple )->getTarget() );
 
-			s = applyReset( s, boost::get<0>( tuple )->getReset() );
-			std::pair<CONTAINMENT, State> invariantPair = s.satisfies( boost::get<0>( tuple )->getTarget()->getInvariant() );
+			s = applyReset( s, std::get<0>( tuple )->getReset() );
+			std::pair<CONTAINMENT, State> invariantPair = s.satisfies( std::get<0>( tuple )->getTarget()->getInvariant() );
 			if ( invariantPair.first != CONTAINMENT::NO ) {
 				TRACE( "hypro.reacher", "Enqueue " << invariantPair.second << " for level " << mCurrentLevel + 1 << ", current queue size (before) is " << mWorkingQueue.size() );
 				mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel + 1, invariantPair.second ) ) );
@@ -49,10 +49,10 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 		} else {  // aggregate all
 			// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
 			// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
-			if ( toAggregate.find( boost::get<0>( tuple ) ) == toAggregate.end() ) {
-				toAggregate[boost::get<0>( tuple )] = std::vector<State>();
+			if ( toAggregate.find( std::get<0>( tuple ) ) == toAggregate.end() ) {
+				toAggregate[std::get<0>( tuple )] = std::vector<State>();
 			}
-			toAggregate[boost::get<0>( tuple )].push_back( boost::get<1>( tuple ) );
+			toAggregate[std::get<0>( tuple )].push_back( std::get<1>( tuple ) );
 		}
 	}
 
@@ -137,7 +137,7 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 }
 
 template <typename Number, typename ReacherSettings, typename State>
-bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state, const carl::Interval<tNumber>&, std::vector<boost::tuple<Transition<Number>*, State>>& nextInitialSets ) const {
+bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state, const carl::Interval<tNumber>&, std::vector<std::tuple<Transition<Number>*, State>>& nextInitialSets ) const {
 	State guardSatisfyingState;
 	bool transitionEnabled = false;
 	//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;

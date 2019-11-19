@@ -166,7 +166,7 @@ void ltiJumpHandler<State>::handle() {
 		// in case only one transition was processed, only delete its nodes.
 		// Todo: Attention, can it happen, that the transition is already in that set due to previous reasons?
 		for ( auto tupleIt = mSuccessorBuffer->begin(); tupleIt != mSuccessorBuffer->end(); ) {
-			if ( boost::get<0>( *tupleIt ) == mTransition ) {
+			if ( std::get<0>( *tupleIt ) == mTransition ) {
 				tupleIt = mSuccessorBuffer->erase( tupleIt );
 			} else {
 				++tupleIt;
@@ -176,7 +176,7 @@ void ltiJumpHandler<State>::handle() {
 }
 
 template <typename State>
-std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHandler<State>::applyJump( const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy ) {
+std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHandler<State>::applyJump( const std::vector<std::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy ) {
 	// holds a mapping of transitions to states which need to be aggregated
 	std::map<Transition<Number>*, std::vector<State>> toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -185,24 +185,24 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 	std::map<Transition<Number>*, std::vector<State>> processedStates;
 	for ( const auto& tuple : states ) {
 		// only handle sets related to the passed transition, in case any is passed.
-		if ( transition == nullptr || boost::get<0>( tuple ) == transition ) {
+		if ( transition == nullptr || std::get<0>( tuple ) == transition ) {
 			// check aggregation settings
 			if ( ( strategy.aggregation == AGG_SETTING::NO_AGG && strategy.clustering == -1 ) ||
-				 ( strategy.aggregation == AGG_SETTING::MODEL && boost::get<0>( tuple )->getAggregation() == Aggregation::none ) ) {
+				 ( strategy.aggregation == AGG_SETTING::MODEL && std::get<0>( tuple )->getAggregation() == Aggregation::none ) ) {
 				// just copy the states to the toProcess map.
-				if ( toProcess.find( boost::get<0>( tuple ) ) == toProcess.end() ) {
-					toProcess[boost::get<0>( tuple )] = std::vector<State>();
+				if ( toProcess.find( std::get<0>( tuple ) ) == toProcess.end() ) {
+					toProcess[std::get<0>( tuple )] = std::vector<State>();
 				}
-				toProcess[boost::get<0>( tuple )].emplace_back( boost::get<1>( tuple ) );
+				toProcess[std::get<0>( tuple )].emplace_back( std::get<1>( tuple ) );
 
 			} else {  // store for aggregation
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
 				// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
 				// Note: Whenever such a "chunk" is complete we call this method. However we need to treat this on node stage.
-				if ( toAggregate.find( boost::get<0>( tuple ) ) == toAggregate.end() ) {
-					toAggregate[boost::get<0>( tuple )] = std::vector<State>();
+				if ( toAggregate.find( std::get<0>( tuple ) ) == toAggregate.end() ) {
+					toAggregate[std::get<0>( tuple )] = std::vector<State>();
 				}
-				toAggregate[boost::get<0>( tuple )].emplace_back( boost::get<1>( tuple ) );
+				toAggregate[std::get<0>( tuple )].emplace_back( std::get<1>( tuple ) );
 			}
 		}
 	}

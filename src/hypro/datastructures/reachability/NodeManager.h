@@ -20,7 +20,7 @@
 
 namespace hypro {
 template <typename State>
-using initialData = boost::tuple<const Location<typename State::NumberType>*, typename State::repVariant, typename State::NumberType, representation_name>;
+using initialData = std::tuple<const Location<typename State::NumberType>*, typename State::repVariant, typename State::NumberType, representation_name>;
 
 template <typename State>
 class NodeManager : public carl::Singleton<NodeManager<State>> {

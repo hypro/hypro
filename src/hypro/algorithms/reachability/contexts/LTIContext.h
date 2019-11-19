@@ -17,6 +17,8 @@
 #include "Exceptions.h"
 #include "IContext.h"
 
+#include <tuple>
+
 namespace hypro {
 template <typename State>
 class LTIContext : public IContext {
@@ -33,7 +35,7 @@ class LTIContext : public IContext {
 	EventTimingContainer<Number> mLocalTimings;
 	HierarchicalIntervalVector<CONTAINMENT, tNumber> mTransitionTimings;
 
-	std::vector<boost::tuple<Transition<Number>*, State>> mDiscreteSuccessorBuffer;
+	std::vector<std::tuple<Transition<Number>*, State>> mDiscreteSuccessorBuffer;
 
 	std::map<Transition<Number>*, State> mPotentialZenoTransitions;
 	std::vector<Transition<Number>*> mDisabledTransitions;

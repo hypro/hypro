@@ -159,7 +159,7 @@ void TimedContext<State>::checkTransition() {
 		if ( it->first->isUrgent() ) {
 			TRACE( "hydra.worker.discrete", "Checking urgent transition " << it->first->getSource()->hash() << " -> " << it->first->getTarget()->hash() );
 			if ( guardSatisfied ) {
-				this->mDiscreteSuccessorBuffer.push_back( boost::tuple<hypro::Transition<Number>*, State>( it->first, *guardStatePtr ) );
+				this->mDiscreteSuccessorBuffer.push_back( std::tuple<hypro::Transition<Number>*, State>( it->first, *guardStatePtr ) );
 				urgentTransitionEnabled = true;
 			}
 		}  // handle normal transitions, but only if they cannot be omitted (they can if the timing intervals do not intersect)
@@ -173,7 +173,7 @@ void TimedContext<State>::checkTransition() {
 				guardStatePtr->setTimestamp( timeStamp );
 				TRACE( "hydra.worker.discrete", "hybrid transition enabled with timestamp " << guardStatePtr->getTimestamp() );
 				TRACE( "hydra.worker.discrete", "Enqueued state: " << *( guardStatePtr ) );
-				this->mDiscreteSuccessorBuffer.push_back( boost::tuple<hypro::Transition<Number>*, State>( it->first, *( guardStatePtr ) ) );
+				this->mDiscreteSuccessorBuffer.push_back( std::tuple<hypro::Transition<Number>*, State>( it->first, *( guardStatePtr ) ) );
 				if ( SettingsProvider<State>::getInstance().useLocalTiming() ) {
 					carl::Interval<tNumber> entryTimeStamp = this->mTask->treeNode->getStateAtLevel( this->mTask->btInfo.btLevel ).getTimestamp();
 					carl::Interval<tNumber> guardSatTimeStamp = entryTimeStamp + guardStatePtr->getTimestamp();

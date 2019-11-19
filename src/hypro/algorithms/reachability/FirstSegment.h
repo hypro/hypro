@@ -76,7 +76,7 @@ void bloatBox( State& in, const Box<Number>& bloatBox ) {
 }
 
 template <typename Number, typename State>
-boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> computeFirstSegment( const State& _state, tNumber timeStep ) {
+std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> computeFirstSegment( const State& _state, tNumber timeStep ) {
 	assert( !_state.getTimestamp().isEmpty() );
 	// check if initial Valuation fulfills Invariant
 	assert( _state.getLocation() != nullptr );
@@ -100,7 +100,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
 			unsigned dimension = initialPair.second.getDimension( 0 );
 			Box<Number> externalInputTmp( std::make_pair( Point<Number>( vector_t<Number>::Zero( dimension + 1 ) ),
 														  Point<Number>( vector_t<Number>::Zero( dimension + 1 ) ) ) );
-			return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( initialPair.first, initialPair.second, matrix_t<Number>::Identity( rows, rows ), vector_t<Number>::Zero( rows ), externalInputTmp );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( initialPair.first, initialPair.second, matrix_t<Number>::Identity( rows, rows ), vector_t<Number>::Zero( rows ), externalInputTmp );
 		}
 
 		// approximate R_[0,delta](X0)
@@ -162,7 +162,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
 			TRACE( "hypro.reachability", "first Flowpipe Segment (after minkowski Sum): " << firstSegment );
 #endif
 		} else {
-			return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
 		}
 
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
@@ -229,14 +229,14 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
 
 			assert( fullSegment.second.getLocation() != nullptr );
 
-			return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized,
-																									  translation, errorBoxVector[1] );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized,
+																									translation, errorBoxVector[1] );
 		} else {
-			return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
 		}
 	}  // if set does not satisfy the invariant, return false
 	else {
-		return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
+		return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
 	}
 }
 

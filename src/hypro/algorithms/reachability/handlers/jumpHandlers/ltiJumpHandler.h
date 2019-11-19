@@ -15,7 +15,7 @@ template <typename State>
 class ltiJumpHandler : public IJumpHandler {
 	using Number = typename State::NumberType;
 
-	std::vector<boost::tuple<Transition<Number>*, State>>* mSuccessorBuffer;
+	std::vector<std::tuple<Transition<Number>*, State>>* mSuccessorBuffer;
 	std::shared_ptr<Task<State>> mTask;
 	Transition<Number>* mTransition;
 	StrategyParameters mStrategy;
@@ -25,7 +25,7 @@ class ltiJumpHandler : public IJumpHandler {
 
   public:
 	ltiJumpHandler() = delete;
-	ltiJumpHandler( std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
+	ltiJumpHandler( std::vector<std::tuple<Transition<Number>*, State>>* successorBuffer,
 					std::shared_ptr<Task<State>> task,
 					Transition<Number>* transition,
 					StrategyParameters strategy,
@@ -42,7 +42,7 @@ class ltiJumpHandler : public IJumpHandler {
 
 	void handle();
 	const char* handlerName() { return "ltiJumpHandler"; }
-	std::map<Transition<Number>*, std::vector<State>> applyJump( const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy );
+	std::map<Transition<Number>*, std::vector<State>> applyJump( const std::vector<std::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy );
 	void aggregate( std::map<Transition<Number>*, std::vector<State>>& processedStates, const std::map<Transition<Number>*, std::vector<State>>& toAggregate, const StrategyParameters& strategy ) const;
 	typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
 };
