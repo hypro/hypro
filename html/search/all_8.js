@@ -61,7 +61,7 @@ var searchData=
   ['is_5fshared_5fptr_3c_20std_3a_3ashared_5fptr_3c_20t_20_3e_20_3e',['is_shared_ptr&lt; std::shared_ptr&lt; T &gt; &gt;',['../structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html',1,'hypro']]],
   ['is_5funique_5fptr',['is_unique_ptr',['../structhypro_1_1is__unique__ptr.html',1,'hypro']]],
   ['is_5funique_5fptr_3c_20std_3a_3aunique_5fptr_3c_20t_2c_20d_20_3e_20_3e',['is_unique_ptr&lt; std::unique_ptr&lt; T, D &gt; &gt;',['../structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html',1,'hypro']]],
-  ['isbox',['isBox',['../namespacehypro.html#a94a15b44e8eab2a901dee60da30c9127',1,'hypro']]],
+  ['isbox',['isBox',['../namespacehypro.html#a1ac526782355d03bd9abd156bb90fcf8',1,'hypro']]],
   ['iscomposedof',['isComposedOf',['../classhypro_1_1HybridAutomaton.html#a473b1cedb272fed6b77b7b5c6e8cf848',1,'hypro::HybridAutomaton::isComposedOf()'],['../classhypro_1_1Location.html#a280bb96bba67484bc038bf6337d706a8',1,'hypro::Location::isComposedOf()'],['../classhypro_1_1Transition.html#ad296fd8807a81c377e20d499056277db',1,'hypro::Transition::isComposedOf()']]],
   ['isdiscretestep',['isDiscreteStep',['../structhypro_1_1TPathElement.html#a451a1f73c31990c6937b9b6161c54992',1,'hypro::TPathElement']]],
   ['isempty',['isEmpty',['../classhypro_1_1WorkQueueT.html#a199625e1a119380566df3f1e8fd7946c',1,'hypro::WorkQueueT']]],

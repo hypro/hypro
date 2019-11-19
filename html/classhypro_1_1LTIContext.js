@@ -31,7 +31,7 @@ var classhypro_1_1LTIContext =
     [ "mCurrentLocalTime", "classhypro_1_1LTIContext.html#a33f1c41c1ae4e12594706c2f8751d55f", null ],
     [ "mCurrentTimeInterval", "classhypro_1_1LTIContext.html#a673f649fe587be7963c6ddfa58ae2e19", null ],
     [ "mDisabledTransitions", "classhypro_1_1LTIContext.html#af027dc0b231ffa60df8a6354bff215c0", null ],
-    [ "mDiscreteSuccessorBuffer", "classhypro_1_1LTIContext.html#afb517c1208cd41b235ff2bf8a7a1da18", null ],
+    [ "mDiscreteSuccessorBuffer", "classhypro_1_1LTIContext.html#a8d4d9fc9fa94f090f8705e8462e673fb", null ],
     [ "mFirstSegmentHandlers", "classhypro_1_1LTIContext.html#aafdad9c4b1cf85d29e86d94a9757a280", null ],
     [ "mInvariantHandlers", "classhypro_1_1LTIContext.html#a8c65448b8146115629e23281d4b5625f", null ],
     [ "mLocalCEXQueue", "classhypro_1_1LTIContext.html#a0a32e45252c0c1febf1abb52d852069b", null ],

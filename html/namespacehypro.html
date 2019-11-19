@@ -707,14 +707,14 @@ template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:afe5f8a848eb79878ada5d18bc3d04310"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe5f8a848eb79878ada5d18bc3d04310"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>QEQuery</b> = std::vector&lt; std::pair&lt; QuantifierType, std::vector&lt; carl::Variable &gt; &gt; &gt;</td></tr>
 <tr class="separator:afe5f8a848eb79878ada5d18bc3d04310"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31decbcbbef9dddddad7f5d7735654e4"><td class="memTemplParams" colspan="2"><a class="anchor" id="a31decbcbbef9dddddad7f5d7735654e4"></a>
+<tr class="memitem:a7e902fc6c718791cc884dd557485c63b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7e902fc6c718791cc884dd557485c63b"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a31decbcbbef9dddddad7f5d7735654e4"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>flowVariant</b> = boost::variant&lt; <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt;&gt;</td></tr>
-<tr class="separator:a31decbcbbef9dddddad7f5d7735654e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a236b69abbbbdd03ce1a3260f22bf4a64"><td class="memTemplParams" colspan="2"><a class="anchor" id="a236b69abbbbdd03ce1a3260f22bf4a64"></a>
+<tr class="memitem:a7e902fc6c718791cc884dd557485c63b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>flowVariant</b> = std::variant&lt; <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:a7e902fc6c718791cc884dd557485c63b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef026b0db53549136c8683d82b9505e"><td class="memTemplParams" colspan="2"><a class="anchor" id="adef026b0db53549136c8683d82b9505e"></a>
 template&lt;typename State &gt; </td></tr>
-<tr class="memitem:a236b69abbbbdd03ce1a3260f22bf4a64"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>initialData</b> = boost::tuple&lt; const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; typename State::NumberType &gt; *, typename State::repVariant, typename State::NumberType, <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> &gt;</td></tr>
-<tr class="separator:a236b69abbbbdd03ce1a3260f22bf4a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef026b0db53549136c8683d82b9505e"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>initialData</b> = std::tuple&lt; const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; typename State::NumberType &gt; *, typename State::repVariant, typename State::NumberType, <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> &gt;</td></tr>
+<tr class="separator:adef026b0db53549136c8683d82b9505e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e14cff58608d514ffe2a331873979a6"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a0e14cff58608d514ffe2a331873979a6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a0e14cff58608d514ffe2a331873979a6">TTransitionTimings</a> = std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, std::vector&lt; carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&gt;&gt;</td></tr>
 <tr class="separator:a0e14cff58608d514ffe2a331873979a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1253,10 +1253,10 @@ template&lt;typename Number , typename OutSettings , typename In &gt; </td></tr>
 template&lt;typename Number , typename OutSettings , typename In &gt; </td></tr>
 <tr class="memitem:ac9d0f7e35f5232c673d9599b7770134e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>convert</b> (const In &amp;in, PolytopeT&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;, OutSettings &gt; &amp;out)</td></tr>
 <tr class="separator:ac9d0f7e35f5232c673d9599b7770134e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94a15b44e8eab2a901dee60da30c9127"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a94a15b44e8eab2a901dee60da30c9127"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; bool, std::vector&lt; carl::Interval&lt; Number &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a94a15b44e8eab2a901dee60da30c9127">isBox</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants)</td></tr>
-<tr class="memdesc:a94a15b44e8eab2a901dee60da30c9127"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a constraint set represented by a matrix and a vector in fact defines a box.  <a href="#a94a15b44e8eab2a901dee60da30c9127">More...</a><br /></td></tr>
-<tr class="separator:a94a15b44e8eab2a901dee60da30c9127"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ac526782355d03bd9abd156bb90fcf8"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a1ac526782355d03bd9abd156bb90fcf8"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; bool, std::vector&lt; carl::Interval&lt; Number &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a1ac526782355d03bd9abd156bb90fcf8">isBox</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants)</td></tr>
+<tr class="memdesc:a1ac526782355d03bd9abd156bb90fcf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a constraint set represented by a matrix and a vector in fact defines a box.  <a href="#a1ac526782355d03bd9abd156bb90fcf8">More...</a><br /></td></tr>
+<tr class="separator:a1ac526782355d03bd9abd156bb90fcf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a472b90e12df7df640129c2b8af34ce16"><td class="memTemplParams" colspan="2"><a class="anchor" id="a472b90e12df7df640129c2b8af34ce16"></a>
 template&lt;typename N , typename D &gt; </td></tr>
 <tr class="memitem:a472b90e12df7df640129c2b8af34ce16"><td class="memTemplItemLeft" align="right" valign="top">FormulasT&lt; N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>halfspacesToConstraints</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; D &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; D &gt; &amp;constants)</td></tr>
@@ -1935,14 +1935,14 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a94a15b44e8eab2a901dee60da30c9127"></a>
+<a class="anchor" id="a1ac526782355d03bd9abd156bb90fcf8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">boost::tuple&lt;bool, std::vector&lt;carl::Interval&lt;Number&gt; &gt; &gt; hypro::isBox </td>
+          <td class="memname">std::tuple&lt;bool, std::vector&lt;carl::Interval&lt;Number&gt; &gt; &gt; hypro::isBox </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>constraints</em>, </td>

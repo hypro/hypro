@@ -163,15 +163,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>initQueue</b> ()</td>
 <tr class="memitem:a3d01651acfd13484fbd42d123cd5d591"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a3d01651acfd13484fbd42d123cd5d591">reachedBadStates</a> () const </td></tr>
 <tr class="memdesc:a3d01651acfd13484fbd42d123cd5d591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the bad states were reachable so far.  <a href="#a3d01651acfd13484fbd42d123cd5d591">More...</a><br /></td></tr>
 <tr class="separator:a3d01651acfd13484fbd42d123cd5d591"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5adec8a8764b6be94c35f441cd513515"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a5adec8a8764b6be94c35f441cd513515">processDiscreteBehaviour</a> (const std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; &amp;_newInitialSets)</td></tr>
-<tr class="memdesc:a5adec8a8764b6be94c35f441cd513515"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes one time step and one discrete step, i.e. increases the depth of the search by one.  <a href="#a5adec8a8764b6be94c35f441cd513515">More...</a><br /></td></tr>
-<tr class="separator:a5adec8a8764b6be94c35f441cd513515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a349e5da9bc26bc84f85fd6c69a8d62cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a349e5da9bc26bc84f85fd6c69a8d62cb">processDiscreteBehaviour</a> (const std::vector&lt; std::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; &amp;_newInitialSets)</td></tr>
+<tr class="memdesc:a349e5da9bc26bc84f85fd6c69a8d62cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes one time step and one discrete step, i.e. increases the depth of the search by one.  <a href="#a349e5da9bc26bc84f85fd6c69a8d62cb">More...</a><br /></td></tr>
+<tr class="separator:a349e5da9bc26bc84f85fd6c69a8d62cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f25f35e12b287f6179e4cbef2d06140"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a2f25f35e12b287f6179e4cbef2d06140">intersectGuard</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *_trans, const State &amp;_segment, State &amp;result) const </td></tr>
 <tr class="memdesc:a2f25f35e12b287f6179e4cbef2d06140"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.  <a href="#a2f25f35e12b287f6179e4cbef2d06140">More...</a><br /></td></tr>
 <tr class="separator:a2f25f35e12b287f6179e4cbef2d06140"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76a79dbbc941edd7be25065f0baecaa0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76a79dbbc941edd7be25065f0baecaa0"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkTransitions</b> (const State &amp;_state, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;currentTime, std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; &amp;nextInitialSets) const </td></tr>
-<tr class="separator:a76a79dbbc941edd7be25065f0baecaa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83257bb824a2bc6b9a02864c48dbf7cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83257bb824a2bc6b9a02864c48dbf7cf"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkTransitions</b> (const State &amp;_state, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;currentTime, std::vector&lt; std::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; &amp;nextInitialSets) const </td></tr>
+<tr class="separator:a83257bb824a2bc6b9a02864c48dbf7cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40db4dd09cebc5c779e9885ce4219cb3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a40db4dd09cebc5c779e9885ce4219cb3"></a>
 const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>settings</b> () const </td></tr>
 <tr class="separator:a40db4dd09cebc5c779e9885ce4219cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -334,7 +334,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5adec8a8764b6be94c35f441cd513515"></a>
+<a class="anchor" id="a349e5da9bc26bc84f85fd6c69a8d62cb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -343,7 +343,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings, State &gt;::processDiscreteBehaviour </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, State &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_newInitialSets</em></td><td>)</td>
           <td></td>
         </tr>

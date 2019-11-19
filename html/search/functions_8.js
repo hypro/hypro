@@ -18,7 +18,7 @@ var searchData=
   ['intervalhull',['intervalHull',['../classhypro_1_1ZonotopeT.html#a1af729c296ecb290609609ea529d4170',1,'hypro::ZonotopeT']]],
   ['invert',['invert',['../classhypro_1_1Halfspace.html#add63f3e4fa20331e03570eda43654558',1,'hypro::Halfspace']]],
   ['invertcolor',['invertColor',['../classhypro_1_1Vertex.html#aba2719a95c51fb51ea2e5b39ad6e85e1',1,'hypro::Vertex']]],
-  ['isbox',['isBox',['../namespacehypro.html#a94a15b44e8eab2a901dee60da30c9127',1,'hypro']]],
+  ['isbox',['isBox',['../namespacehypro.html#a1ac526782355d03bd9abd156bb90fcf8',1,'hypro']]],
   ['iscomposedof',['isComposedOf',['../classhypro_1_1HybridAutomaton.html#a473b1cedb272fed6b77b7b5c6e8cf848',1,'hypro::HybridAutomaton::isComposedOf()'],['../classhypro_1_1Location.html#a280bb96bba67484bc038bf6337d706a8',1,'hypro::Location::isComposedOf()'],['../classhypro_1_1Transition.html#ad296fd8807a81c377e20d499056277db',1,'hypro::Transition::isComposedOf()']]],
   ['isdiscretestep',['isDiscreteStep',['../structhypro_1_1TPathElement.html#a451a1f73c31990c6937b9b6161c54992',1,'hypro::TPathElement']]],
   ['isempty',['isEmpty',['../classhypro_1_1WorkQueueT.html#a199625e1a119380566df3f1e8fd7946c',1,'hypro::WorkQueueT']]],

@@ -112,7 +112,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAut
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -216,7 +216,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionN
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -597,7 +597,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/../../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
@@ -609,10 +609,10 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:5:9: warn
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../decomposition/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -687,7 +687,12 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/f
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:8:12: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:9:16: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:9:26: error: 'F' does not refer to a value [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:9:29: error: expected expression [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:15:12: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:22:12: error: unknown type name 'DynamicType' [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -708,7 +713,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/P
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -716,7 +721,7 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:2:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/decomposeConstraintSet.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/decomposeConstraintSet.h...
@@ -759,7 +764,7 @@ Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutom
 Reading /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/StateUtil.h...
 Paerror: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:9:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -784,7 +789,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGN
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGNode.h:55:13: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:8:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -1041,7 +1046,7 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:9:1: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:9:12: error: unknown type name 'constexpr' [clang]
@@ -1070,10 +1075,10 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:40:22: error: expected member name or ';' after declaration specifiers [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/convenienceOperators.h:6:1: error: C++ requires a type specifier for all declarations [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -1144,7 +1149,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/conve
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/Converter.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/Converter.h:4:1: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/typedefs.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/typedefs.h:6:13: warning: alias declarations are a C++11 extension [-Wc++11-extensions] [clang]
@@ -1204,7 +1209,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds
 error: /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBoundsSetting.h:7:22: warning: no newline at end of file [-Wnewline-eof] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h...
@@ -1290,7 +1295,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPo
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:5:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -1316,7 +1321,7 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 s/Ellipsoid.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h...
@@ -1458,7 +1463,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionN
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectOp.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/Leaf.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -1592,7 +1597,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:12:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:15:1: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZonotopeSetting.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZonotopeSetting.h:13:12: error: unknown type name 'constexpr' [clang]
@@ -1673,7 +1678,7 @@ Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimiz
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/uerror: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/../../VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/convenience.h:4:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -1753,7 +1758,7 @@ error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c+
 error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/pca.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -1909,7 +1914,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:17:27: error: 
 error: /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:17:38: error: 'T' does not refer to a value [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:3: warning: Example example_box.cpp was already documented. Ignoring documentation found here.
 /home/travis/build/hypro/hypro/examples/example_eigensimple2points.cpp:9: warning: found documented #define but ignoring it because ENABLE_PREPROCESSING is NO.
 
@@ -1933,8 +1938,8 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15:10: fatal
 
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:74: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:22: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20810.bbl: No such file or directory
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
+error opening bib20821.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 h...
@@ -2062,7 +2067,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionN
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2178,7 +2183,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAut
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2397,7 +2402,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPo
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:7:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -2448,7 +2453,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/../../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
@@ -2460,10 +2465,10 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:5:9: warn
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../decomposition/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -2543,7 +2548,12 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:17:27: error: 
 error: /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:17:38: error: 'T' does not refer to a value [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:8:12: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:9:16: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:9:26: error: 'F' does not refer to a value [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:9:29: error: expected expression [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:15:12: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:22:12: error: unknown type name 'DynamicType' [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -2564,7 +2574,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/P
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -2572,10 +2582,10 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:2:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:9:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/../../datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -2600,7 +2610,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGN
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGNode.h:55:13: warning: 'auto' type specifier is a C++11 extension [-Wc++11-extensions] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:8:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/../../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -2847,7 +2857,7 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:9:1: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:9:12: error: unknown type name 'constexpr' [clang]
@@ -2876,10 +2886,10 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:40:22: error: expected member name or ';' after declaration specifiers [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/convenienceOperators.h:6:1: error: C++ requires a type specifier for all declarations [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2953,7 +2963,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/conve
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/Converter.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/Converter.h:4:1: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/typedefs.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/typedefs.h:6:13: warning: alias declarations are a C++11 extension [-Wc++11-extensions] [clang]
@@ -3013,7 +3023,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds
 error: /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBoundsSetting.h:7:22: warning: no newline at end of file [-Wnewline-eof] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:6:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:2:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:5:1: error: C++ requires a type specifier for all declarations [clang]
@@ -3053,7 +3063,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPo
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSetting.h:8:22: warning: no newline at end of file [-Wnewline-eof] [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:5:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -3209,7 +3219,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionN
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectOp.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/Leaf.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
@@ -3308,7 +3318,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:12:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:15:1: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZonotopeSetting.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZonotopeSetting.h:13:12: error: unknown type name 'constexpr' [clang]
@@ -3339,7 +3349,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimize
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/../../VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/convenience.h:4:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
 perMethods.h...
@@ -3453,7 +3463,7 @@ error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c+
 error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/pca.h:10:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/../util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/../../types.h:3:10: fatal error: 'carl/numbers/numbers.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -3553,7 +3563,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/make_vector
 error: /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/make_vector.h:9:35: error: expected expression [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:11:9: warning: #pragma once in main file [-Wpragma-once-outside-header] [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15:10: fatal error: 'carl/core/Variable.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 ds.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/SimplexSolver.h...
@@ -4113,406 +4123,416 @@ finalizing index lists...
 writing tag file...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/200
-Running dot for graph 2/200
-Running dot for graph 3/200
-Running dot for graph 4/200
-Running dot for graph 5/200
-Running dot for graph 6/200
-Running dot for graph 7/200
-Running dot for graph 8/200
-Running dot for graph 9/200
-Running dot for graph 10/200
-Running dot for graph 11/200
-Running dot for graph 12/200
-Running dot for graph 13/200
-Running dot for graph 14/200
-Running dot for graph 15/200
-Running dot for graph 16/200
-Running dot for graph 17/200
-Running dot for graph 18/200
-Running dot for graph 19/200
-Running dot for graph 20/200
-Running dot for graph 21/200
-Running dot for graph 22/200
-Running dot for graph 23/200
-Running dot for graph 24/200
-Running dot for graph 25/200
-Running dot for graph 26/200
-Running dot for graph 27/200
-Running dot for graph 28/200
-Running dot for graph 29/200
-Running dot for graph 30/200
-Running dot for graph 31/200
-Running dot for graph 32/200
-Running dot for graph 33/200
-Running dot for graph 34/200
-Running dot for graph 35/200
-Running dot for graph 36/200
-Running dot for graph 37/200
-Running dot for graph 38/200
-Running dot for graph 39/200
-Running dot for graph 40/200
-Running dot for graph 41/200
-Running dot for graph 42/200
-Running dot for graph 43/200
-Running dot for graph 44/200
-Running dot for graph 45/200
-Running dot for graph 46/200
-Running dot for graph 47/200
-Running dot for graph 48/200
-Running dot for graph 49/200
-Running dot for graph 50/200
-Running dot for graph 51/200
-Running dot for graph 52/200
-Running dot for graph 53/200
-Running dot for graph 54/200
-Running dot for graph 55/200
-Running dot for graph 56/200
-Running dot for graph 57/200
-Running dot for graph 58/200
-Running dot for graph 59/200
-Running dot for graph 60/200
-Running dot for graph 61/200
-Running dot for graph 62/200
-Running dot for graph 63/200
-Running dot for graph 64/200
-Running dot for graph 65/200
-Running dot for graph 66/200
-Running dot for graph 67/200
-Running dot for graph 68/200
-Running dot for graph 69/200
-Running dot for graph 70/200
-Running dot for graph 71/200
-Running dot for graph 72/200
-Running dot for graph 73/200
-Running dot for graph 74/200
-Running dot for graph 75/200
-Running dot for graph 76/200
-Running dot for graph 77/200
-Running dot for graph 78/200
-Running dot for graph 79/200
-Running dot for graph 80/200
-Running dot for graph 81/200
-Running dot for graph 82/200
-Running dot for graph 83/200
-Running dot for graph 84/200
-Running dot for graph 85/200
-Running dot for graph 86/200
-Running dot for graph 87/200
-Running dot for graph 88/200
-Running dot for graph 89/200
-Running dot for graph 90/200
-Running dot for graph 91/200
-Running dot for graph 92/200
-Running dot for graph 93/200
-Running dot for graph 94/200
-Running dot for graph 95/200
-Running dot for graph 96/200
-Running dot for graph 97/200
-Running dot for graph 98/200
-Running dot for graph 99/200
-Running dot for graph 100/200
-Running dot for graph 101/200
-Running dot for graph 102/200
-Running dot for graph 103/200
-Running dot for graph 104/200
-Running dot for graph 105/200
-Running dot for graph 106/200
-Running dot for graph 107/200
-Running dot for graph 108/200
-Running dot for graph 109/200
-Running dot for graph 110/200
-Running dot for graph 111/200
-Running dot for graph 112/200
-Running dot for graph 113/200
-Running dot for graph 114/200
-Running dot for graph 115/200
-Running dot for graph 116/200
-Running dot for graph 117/200
-Running dot for graph 118/200
-Running dot for graph 119/200
-Running dot for graph 120/200
-Running dot for graph 121/200
-Running dot for graph 122/200
-Running dot for graph 123/200
-Running dot for graph 124/200
-Running dot for graph 125/200
-Running dot for graph 126/200
-Running dot for graph 127/200
-Running dot for graph 128/200
-Running dot for graph 129/200
-Running dot for graph 130/200
-Running dot for graph 131/200
-Running dot for graph 132/200
-Running dot for graph 133/200
-Running dot for graph 134/200
-Running dot for graph 135/200
-Running dot for graph 136/200
-Running dot for graph 137/200
-Running dot for graph 138/200
-Running dot for graph 139/200
-Running dot for graph 140/200
-Running dot for graph 141/200
-Running dot for graph 142/200
-Running dot for graph 143/200
-Running dot for graph 144/200
-Running dot for graph 145/200
-Running dot for graph 146/200
-Running dot for graph 147/200
-Running dot for graph 148/200
-Running dot for graph 149/200
-Running dot for graph 150/200
-Running dot for graph 151/200
-Running dot for graph 152/200
-Running dot for graph 153/200
-Running dot for graph 154/200
-Running dot for graph 155/200
-Running dot for graph 156/200
-Running dot for graph 157/200
-Running dot for graph 158/200
-Running dot for graph 159/200
-Running dot for graph 160/200
-Running dot for graph 161/200
-Running dot for graph 162/200
-Running dot for graph 163/200
-Running dot for graph 164/200
-Running dot for graph 165/200
-Running dot for graph 166/200
-Running dot for graph 167/200
-Running dot for graph 168/200
-Running dot for graph 169/200
-Running dot for graph 170/200
-Running dot for graph 171/200
-Running dot for graph 172/200
-Running dot for graph 173/200
-Running dot for graph 174/200
-Running dot for graph 175/200
-Running dot for graph 176/200
-Running dot for graph 177/200
-Running dot for graph 178/200
-Running dot for graph 179/200
-Running dot for graph 180/200
-Running dot for graph 181/200
-Running dot for graph 182/200
-Running dot for graph 183/200
-Running dot for graph 184/200
-Running dot for graph 185/200
-Running dot for graph 186/200
-Running dot for graph 187/200
-Running dot for graph 188/200
-Running dot for graph 189/200
-Running dot for graph 190/200
-Running dot for graph 191/200
-Running dot for graph 192/200
-Running dot for graph 193/200
-Running dot for graph 194/200
-Running dot for graph 195/200
-Running dot for graph 196/200
-Running dot for graph 197/200
-Running dot for graph 198/200
-Running dot for graph 199/200
-Running dot for graph 200/200
-Patching output file 1/201
-Patching output file 2/201
-Patching output file 3/201
-Patching output file 4/201
-Patching output file 5/201
-Patching output file 6/201
-Patching output file 7/201
-Patching output file 8/201
-Patching output file 9/201
-Patching output file 10/201
-Patching output file 11/201
-Patching output file 12/201
-Patching output file 13/201
-Patching output file 14/201
-Patching output file 15/201
-Patching output file 16/201
-Patching output file 17/201
-Patching output file 18/201
-Patching output file 19/201
-Patching output file 20/201
-Patching output file 21/201
-Patching output file 22/201
-Patching output file 23/201
-Patching output file 24/201
-Patching output file 25/201
-Patching output file 26/201
-Patching output file 27/201
-Patching output file 28/201
-Patching output file 29/201
-Patching output file 30/201
-Patching output file 31/201
-Patching output file 32/201
-Patching output file 33/201
-Patching output file 34/201
-Patching output file 35/201
-Patching output file 36/201
-Patching output file 37/201
-Patching output file 38/201
-Patching output file 39/201
-Patching output file 40/201
-Patching output file 41/201
-Patching output file 42/201
-Patching output file 43/201
-Patching output file 44/201
-Patching output file 45/201
-Patching output file 46/201
-Patching output file 47/201
-Patching output file 48/201
-Patching output file 49/201
-Patching output file 50/201
-Patching output file 51/201
-Patching output file 52/201
-Patching output file 53/201
-Patching output file 54/201
-Patching output file 55/201
-Patching output file 56/201
-Patching output file 57/201
-Patching output file 58/201
-Patching output file 59/201
-Patching output file 60/201
-Patching output file 61/201
-Patching output file 62/201
-Patching output file 63/201
-Patching output file 64/201
-Patching output file 65/201
-Patching output file 66/201
-Patching output file 67/201
-Patching output file 68/201
-Patching output file 69/201
-Patching output file 70/201
-Patching output file 71/201
-Patching output file 72/201
-Patching output file 73/201
-Patching output file 74/201
-Patching output file 75/201
-Patching output file 76/201
-Patching output file 77/201
-Patching output file 78/201
-Patching output file 79/201
-Patching output file 80/201
-Patching output file 81/201
-Patching output file 82/201
-Patching output file 83/201
-Patching output file 84/201
-Patching output file 85/201
-Patching output file 86/201
-Patching output file 87/201
-Patching output file 88/201
-Patching output file 89/201
-Patching output file 90/201
-Patching output file 91/201
-Patching output file 92/201
-Patching output file 93/201
-Patching output file 94/201
-Patching output file 95/201
-Patching output file 96/201
-Patching output file 97/201
-Patching output file 98/201
-Patching output file 99/201
-Patching output file 100/201
-Patching output file 101/201
-Patching output file 102/201
-Patching output file 103/201
-Patching output file 104/201
-Patching output file 105/201
-Patching output file 106/201
-Patching output file 107/201
-Patching output file 108/201
-Patching output file 109/201
-Patching output file 110/201
-Patching output file 111/201
-Patching output file 112/201
-Patching output file 113/201
-Patching output file 114/201
-Patching output file 115/201
-Patching output file 116/201
-Patching output file 117/201
-Patching output file 118/201
-Patching output file 119/201
-Patching output file 120/201
-Patching output file 121/201
-Patching output file 122/201
-Patching output file 123/201
-Patching output file 124/201
-Patching output file 125/201
-Patching output file 126/201
-Patching output file 127/201
-Patching output file 128/201
-Patching output file 129/201
-Patching output file 130/201
-Patching output file 131/201
-Patching output file 132/201
-Patching output file 133/201
-Patching output file 134/201
-Patching output file 135/201
-Patching output file 136/201
-Patching output file 137/201
-Patching output file 138/201
-Patching output file 139/201
-Patching output file 140/201
-Patching output file 141/201
-Patching output file 142/201
-Patching output file 143/201
-Patching output file 144/201
-Patching output file 145/201
-Patching output file 146/201
-Patching output file 147/201
-Patching output file 148/201
-Patching output file 149/201
-Patching output file 150/201
-Patching output file 151/201
-Patching output file 152/201
-Patching output file 153/201
-Patching output file 154/201
-Patching output file 155/201
-Patching output file 156/201
-Patching output file 157/201
-Patching output file 158/201
-Patching output file 159/201
-Patching output file 160/201
-Patching output file 161/201
-Patching output file 162/201
-Patching output file 163/201
-Patching output file 164/201
-Patching output file 165/201
-Patching output file 166/201
-Patching output file 167/201
-Patching output file 168/201
-Patching output file 169/201
-Patching output file 170/201
-Patching output file 171/201
-Patching output file 172/201
-Patching output file 173/201
-Patching output file 174/201
-Patching output file 175/201
-Patching output file 176/201
-Patching output file 177/201
-Patching output file 178/201
-Patching output file 179/201
-Patching output file 180/201
-Patching output file 181/201
-Patching output file 182/201
-Patching output file 183/201
-Patching output file 184/201
-Patching output file 185/201
-Patching output file 186/201
-Patching output file 187/201
-Patching output file 188/201
-Patching output file 189/201
-Patching output file 190/201
-Patching output file 191/201
-Patching output file 192/201
-Patching output file 193/201
-Patching output file 194/201
-Patching output file 195/201
-Patching output file 196/201
-Patching output file 197/201
-Patching output file 198/201
-Patching output file 199/201
-Patching output file 200/201
-Patching output file 201/201
-lookup cache used 5594/65536 hits=82833 misses=6708
+Running dot for graph 1/205
+Running dot for graph 2/205
+Running dot for graph 3/205
+Running dot for graph 4/205
+Running dot for graph 5/205
+Running dot for graph 6/205
+Running dot for graph 7/205
+Running dot for graph 8/205
+Running dot for graph 9/205
+Running dot for graph 10/205
+Running dot for graph 11/205
+Running dot for graph 12/205
+Running dot for graph 13/205
+Running dot for graph 14/205
+Running dot for graph 15/205
+Running dot for graph 16/205
+Running dot for graph 17/205
+Running dot for graph 18/205
+Running dot for graph 19/205
+Running dot for graph 20/205
+Running dot for graph 21/205
+Running dot for graph 22/205
+Running dot for graph 23/205
+Running dot for graph 24/205
+Running dot for graph 25/205
+Running dot for graph 26/205
+Running dot for graph 27/205
+Running dot for graph 28/205
+Running dot for graph 29/205
+Running dot for graph 30/205
+Running dot for graph 31/205
+Running dot for graph 32/205
+Running dot for graph 33/205
+Running dot for graph 34/205
+Running dot for graph 35/205
+Running dot for graph 36/205
+Running dot for graph 37/205
+Running dot for graph 38/205
+Running dot for graph 39/205
+Running dot for graph 40/205
+Running dot for graph 41/205
+Running dot for graph 42/205
+Running dot for graph 43/205
+Running dot for graph 44/205
+Running dot for graph 45/205
+Running dot for graph 46/205
+Running dot for graph 47/205
+Running dot for graph 48/205
+Running dot for graph 49/205
+Running dot for graph 50/205
+Running dot for graph 51/205
+Running dot for graph 52/205
+Running dot for graph 53/205
+Running dot for graph 54/205
+Running dot for graph 55/205
+Running dot for graph 56/205
+Running dot for graph 57/205
+Running dot for graph 58/205
+Running dot for graph 59/205
+Running dot for graph 60/205
+Running dot for graph 61/205
+Running dot for graph 62/205
+Running dot for graph 63/205
+Running dot for graph 64/205
+Running dot for graph 65/205
+Running dot for graph 66/205
+Running dot for graph 67/205
+Running dot for graph 68/205
+Running dot for graph 69/205
+Running dot for graph 70/205
+Running dot for graph 71/205
+Running dot for graph 72/205
+Running dot for graph 73/205
+Running dot for graph 74/205
+Running dot for graph 75/205
+Running dot for graph 76/205
+Running dot for graph 77/205
+Running dot for graph 78/205
+Running dot for graph 79/205
+Running dot for graph 80/205
+Running dot for graph 81/205
+Running dot for graph 82/205
+Running dot for graph 83/205
+Running dot for graph 84/205
+Running dot for graph 85/205
+Running dot for graph 86/205
+Running dot for graph 87/205
+Running dot for graph 88/205
+Running dot for graph 89/205
+Running dot for graph 90/205
+Running dot for graph 91/205
+Running dot for graph 92/205
+Running dot for graph 93/205
+Running dot for graph 94/205
+Running dot for graph 95/205
+Running dot for graph 96/205
+Running dot for graph 97/205
+Running dot for graph 98/205
+Running dot for graph 99/205
+Running dot for graph 100/205
+Running dot for graph 101/205
+Running dot for graph 102/205
+Running dot for graph 103/205
+Running dot for graph 104/205
+Running dot for graph 105/205
+Running dot for graph 106/205
+Running dot for graph 107/205
+Running dot for graph 108/205
+Running dot for graph 109/205
+Running dot for graph 110/205
+Running dot for graph 111/205
+Running dot for graph 112/205
+Running dot for graph 113/205
+Running dot for graph 114/205
+Running dot for graph 115/205
+Running dot for graph 116/205
+Running dot for graph 117/205
+Running dot for graph 118/205
+Running dot for graph 119/205
+Running dot for graph 120/205
+Running dot for graph 121/205
+Running dot for graph 122/205
+Running dot for graph 123/205
+Running dot for graph 124/205
+Running dot for graph 125/205
+Running dot for graph 126/205
+Running dot for graph 127/205
+Running dot for graph 128/205
+Running dot for graph 129/205
+Running dot for graph 130/205
+Running dot for graph 131/205
+Running dot for graph 132/205
+Running dot for graph 133/205
+Running dot for graph 134/205
+Running dot for graph 135/205
+Running dot for graph 136/205
+Running dot for graph 137/205
+Running dot for graph 138/205
+Running dot for graph 139/205
+Running dot for graph 140/205
+Running dot for graph 141/205
+Running dot for graph 142/205
+Running dot for graph 143/205
+Running dot for graph 144/205
+Running dot for graph 145/205
+Running dot for graph 146/205
+Running dot for graph 147/205
+Running dot for graph 148/205
+Running dot for graph 149/205
+Running dot for graph 150/205
+Running dot for graph 151/205
+Running dot for graph 152/205
+Running dot for graph 153/205
+Running dot for graph 154/205
+Running dot for graph 155/205
+Running dot for graph 156/205
+Running dot for graph 157/205
+Running dot for graph 158/205
+Running dot for graph 159/205
+Running dot for graph 160/205
+Running dot for graph 161/205
+Running dot for graph 162/205
+Running dot for graph 163/205
+Running dot for graph 164/205
+Running dot for graph 165/205
+Running dot for graph 166/205
+Running dot for graph 167/205
+Running dot for graph 168/205
+Running dot for graph 169/205
+Running dot for graph 170/205
+Running dot for graph 171/205
+Running dot for graph 172/205
+Running dot for graph 173/205
+Running dot for graph 174/205
+Running dot for graph 175/205
+Running dot for graph 176/205
+Running dot for graph 177/205
+Running dot for graph 178/205
+Running dot for graph 179/205
+Running dot for graph 180/205
+Running dot for graph 181/205
+Running dot for graph 182/205
+Running dot for graph 183/205
+Running dot for graph 184/205
+Running dot for graph 185/205
+Running dot for graph 186/205
+Running dot for graph 187/205
+Running dot for graph 188/205
+Running dot for graph 189/205
+Running dot for graph 190/205
+Running dot for graph 191/205
+Running dot for graph 192/205
+Running dot for graph 193/205
+Running dot for graph 194/205
+Running dot for graph 195/205
+Running dot for graph 196/205
+Running dot for graph 197/205
+Running dot for graph 198/205
+Running dot for graph 199/205
+Running dot for graph 200/205
+Running dot for graph 201/205
+Running dot for graph 202/205
+Running dot for graph 203/205
+Running dot for graph 204/205
+Running dot for graph 205/205
+Patching output file 1/206
+Patching output file 2/206
+Patching output file 3/206
+Patching output file 4/206
+Patching output file 5/206
+Patching output file 6/206
+Patching output file 7/206
+Patching output file 8/206
+Patching output file 9/206
+Patching output file 10/206
+Patching output file 11/206
+Patching output file 12/206
+Patching output file 13/206
+Patching output file 14/206
+Patching output file 15/206
+Patching output file 16/206
+Patching output file 17/206
+Patching output file 18/206
+Patching output file 19/206
+Patching output file 20/206
+Patching output file 21/206
+Patching output file 22/206
+Patching output file 23/206
+Patching output file 24/206
+Patching output file 25/206
+Patching output file 26/206
+Patching output file 27/206
+Patching output file 28/206
+Patching output file 29/206
+Patching output file 30/206
+Patching output file 31/206
+Patching output file 32/206
+Patching output file 33/206
+Patching output file 34/206
+Patching output file 35/206
+Patching output file 36/206
+Patching output file 37/206
+Patching output file 38/206
+Patching output file 39/206
+Patching output file 40/206
+Patching output file 41/206
+Patching output file 42/206
+Patching output file 43/206
+Patching output file 44/206
+Patching output file 45/206
+Patching output file 46/206
+Patching output file 47/206
+Patching output file 48/206
+Patching output file 49/206
+Patching output file 50/206
+Patching output file 51/206
+Patching output file 52/206
+Patching output file 53/206
+Patching output file 54/206
+Patching output file 55/206
+Patching output file 56/206
+Patching output file 57/206
+Patching output file 58/206
+Patching output file 59/206
+Patching output file 60/206
+Patching output file 61/206
+Patching output file 62/206
+Patching output file 63/206
+Patching output file 64/206
+Patching output file 65/206
+Patching output file 66/206
+Patching output file 67/206
+Patching output file 68/206
+Patching output file 69/206
+Patching output file 70/206
+Patching output file 71/206
+Patching output file 72/206
+Patching output file 73/206
+Patching output file 74/206
+Patching output file 75/206
+Patching output file 76/206
+Patching output file 77/206
+Patching output file 78/206
+Patching output file 79/206
+Patching output file 80/206
+Patching output file 81/206
+Patching output file 82/206
+Patching output file 83/206
+Patching output file 84/206
+Patching output file 85/206
+Patching output file 86/206
+Patching output file 87/206
+Patching output file 88/206
+Patching output file 89/206
+Patching output file 90/206
+Patching output file 91/206
+Patching output file 92/206
+Patching output file 93/206
+Patching output file 94/206
+Patching output file 95/206
+Patching output file 96/206
+Patching output file 97/206
+Patching output file 98/206
+Patching output file 99/206
+Patching output file 100/206
+Patching output file 101/206
+Patching output file 102/206
+Patching output file 103/206
+Patching output file 104/206
+Patching output file 105/206
+Patching output file 106/206
+Patching output file 107/206
+Patching output file 108/206
+Patching output file 109/206
+Patching output file 110/206
+Patching output file 111/206
+Patching output file 112/206
+Patching output file 113/206
+Patching output file 114/206
+Patching output file 115/206
+Patching output file 116/206
+Patching output file 117/206
+Patching output file 118/206
+Patching output file 119/206
+Patching output file 120/206
+Patching output file 121/206
+Patching output file 122/206
+Patching output file 123/206
+Patching output file 124/206
+Patching output file 125/206
+Patching output file 126/206
+Patching output file 127/206
+Patching output file 128/206
+Patching output file 129/206
+Patching output file 130/206
+Patching output file 131/206
+Patching output file 132/206
+Patching output file 133/206
+Patching output file 134/206
+Patching output file 135/206
+Patching output file 136/206
+Patching output file 137/206
+Patching output file 138/206
+Patching output file 139/206
+Patching output file 140/206
+Patching output file 141/206
+Patching output file 142/206
+Patching output file 143/206
+Patching output file 144/206
+Patching output file 145/206
+Patching output file 146/206
+Patching output file 147/206
+Patching output file 148/206
+Patching output file 149/206
+Patching output file 150/206
+Patching output file 151/206
+Patching output file 152/206
+Patching output file 153/206
+Patching output file 154/206
+Patching output file 155/206
+Patching output file 156/206
+Patching output file 157/206
+Patching output file 158/206
+Patching output file 159/206
+Patching output file 160/206
+Patching output file 161/206
+Patching output file 162/206
+Patching output file 163/206
+Patching output file 164/206
+Patching output file 165/206
+Patching output file 166/206
+Patching output file 167/206
+Patching output file 168/206
+Patching output file 169/206
+Patching output file 170/206
+Patching output file 171/206
+Patching output file 172/206
+Patching output file 173/206
+Patching output file 174/206
+Patching output file 175/206
+Patching output file 176/206
+Patching output file 177/206
+Patching output file 178/206
+Patching output file 179/206
+Patching output file 180/206
+Patching output file 181/206
+Patching output file 182/206
+Patching output file 183/206
+Patching output file 184/206
+Patching output file 185/206
+Patching output file 186/206
+Patching output file 187/206
+Patching output file 188/206
+Patching output file 189/206
+Patching output file 190/206
+Patching output file 191/206
+Patching output file 192/206
+Patching output file 193/206
+Patching output file 194/206
+Patching output file 195/206
+Patching output file 196/206
+Patching output file 197/206
+Patching output file 198/206
+Patching output file 199/206
+Patching output file 200/206
+Patching output file 201/206
+Patching output file 202/206
+Patching output file 203/206
+Patching output file 204/206
+Patching output file 205/206
+Patching output file 206/206
+lookup cache used 5584/65536 hits=82806 misses=6698
 finished...
