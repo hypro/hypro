@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classhypro_1_1HybridAutomatonBaseVisitor.html#a392a9cc29df295a37b860ca0fa9e6798":[7,0,1,86,27],
 "classhypro_1_1HybridAutomatonBaseVisitor.html#a395b96a42c815191f447e381d9bb3c9d":[7,0,1,86,28],
 "classhypro_1_1HybridAutomatonBaseVisitor.html#a4a3badbb27e823d65a3962e4c7c9d005":[7,0,1,86,36],
 "classhypro_1_1HybridAutomatonBaseVisitor.html#a4d8918042263cd4d30f10ce8a8e4de41":[7,0,1,86,16],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ab35319160ca07d6a66afeebff3af9795":[7,0,1,89,0,5],
 "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#abf9f749978c2a9d34aef056e8911e519":[7,0,1,89,0,8],
 "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#acb2e6ece9622f4c11f738d494ae4fbe4":[7,0,1,89,0,10],
-"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ae0eb24e68d232cf8bcee8806d4578660":[7,0,1,89,0,4]
+"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ae0eb24e68d232cf8bcee8806d4578660":[7,0,1,89,0,4],
+"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#af0f1068e72758fd0a9bafbd9f99959f5":[7,0,1,89,0,9]
 };

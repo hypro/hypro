@@ -85,7 +85,6 @@ var hierarchy =
     [ "hypro::detail::gen_seq< N, Is >", "structhypro_1_1detail_1_1gen__seq.html", null ],
     [ "hypro::GeneralizedStarDefault", "structhypro_1_1GeneralizedStarDefault.html", null ],
     [ "GenericNumTraits", null, [
-      [ "Eigen::NumTraits< carl::Interval< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", null ],
       [ "Eigen::NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],

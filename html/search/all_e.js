@@ -46,7 +46,6 @@ var searchData=
   ['projectioncontent',['projectionContent',['../structhypro_1_1projectionContent.html',1,'hypro']]],
   ['projectioncontext',['ProjectionContext',['../classhypro_1_1HybridSystemParser_1_1ProjectionContext.html',1,'hypro::HybridSystemParser']]],
   ['projectionscontext',['ProjectionsContext',['../classhypro_1_1HybridSystemParser_1_1ProjectionsContext.html',1,'hypro::HybridSystemParser']]],
-  ['projectondimensions',['projectOnDimensions',['../classhypro_1_1Halfspace.html#adfd292f7da8ddd63caca62837cee02fa',1,'hypro::Halfspace']]],
   ['projectop',['ProjectOp',['../classhypro_1_1ProjectOp.html',1,'hypro']]],
   ['projectpointonplane',['projectPointOnPlane',['../classhypro_1_1Halfspace.html#a608609251d6e74f69dc60ea69168a2e1',1,'hypro::Halfspace']]],
   ['pushfront',['pushFront',['../classhypro_1_1WorkQueueT.html#ac675b19ebeaa41ab596d8dd1577ff128',1,'hypro::WorkQueueT']]],
