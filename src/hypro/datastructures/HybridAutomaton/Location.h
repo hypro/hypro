@@ -14,16 +14,16 @@
 #include "flow/typetraits.h"
 #include "flow/visitors.h"
 
-#include <boost/variant.hpp>
 #include <iosfwd>
 #include <string>
+#include <variant>
 
 namespace hypro {
 template <typename Number>
 class Transition;
 
 template <typename Number>
-using flowVariant = boost::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
+using flowVariant = std::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 /**
  * @brief      Class for location.
@@ -236,11 +236,9 @@ struct hash<hypro::Location<Number>> {
 		//Flows
 		std::size_t seed = 0;
 		for ( const auto& f : loc.getLinearFlows() ) {
-			//TRACE("hypro.datastructures","Add flow hash " << (boost::apply_visitor(hypro::flowHashVisitor(), f)) );
 			carl::hash_add( seed, std::hash<hypro::linearFlow<Number>>()( f ) );
 		}
 		for ( const auto& f : loc.getRectangularFlows() ) {
-			//TRACE("hypro.datastructures","Add flow hash " << (boost::apply_visitor(hypro::flowHashVisitor(), f)) );
 			carl::hash_add( seed, std::hash<hypro::rectangularFlow<Number>>()( f ) );
 		}
 

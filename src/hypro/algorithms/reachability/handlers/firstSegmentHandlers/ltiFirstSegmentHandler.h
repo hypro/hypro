@@ -28,8 +28,8 @@ class ltiFirstSegmentHandler : public IFirstSegmentHandler<State> {
 	const char* handlerName() { return "ltiFirstSegmentHandler"; }
 	matrix_t<typename State::NumberType> computeTrafoMatrix( const Location<typename State::NumberType>* _loc ) const;
 
-	const matrix_t<typename State::NumberType>& getTrafo() const { return boost::get<affineFlow<Number>>( mFlow ).getTranslation(); }
-	const vector_t<typename State::NumberType>& getTranslation() const { return boost::get<affineFlow<Number>>( mFlow ).getFlowMatrix(); }
+	const matrix_t<typename State::NumberType>& getTrafo() const { return std::get<affineFlow<Number>>( mFlow ).getTranslation(); }
+	const vector_t<typename State::NumberType>& getTranslation() const { return std::get<affineFlow<Number>>( mFlow ).getFlowMatrix(); }
 	const flowVariant<typename State::NumberType>& getTransformation() const { return mFlow; }
 };
 

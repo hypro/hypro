@@ -120,13 +120,13 @@ ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler( r
 
 	switch ( name ) {
 		case representation_name::difference_bounds: {
-			auto tmp = boost::get<affineFlow<typename State::NumberType>>( flow );
+			auto tmp = std::get<affineFlow<typename State::NumberType>>( flow );
 			if ( tmp.getFlowMatrix() == matrix_t<Number>::Identity( tmp.getFlowMatrix().rows(), tmp.getFlowMatrix().rows() ) && tmp.getTranslation() == vector_t<Number>::Zero( tmp.getFlowMatrix().rows() ) ) {
 				return nullptr;
 			}
 			if ( SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find( state->getLocation() )->second == LOCATIONTYPE::TIMEDLOC ) {
 				if ( SettingsProvider<State>::getInstance().isFullTimed() ) {
-					assert( boost::apply_visitor( flowTypeVisitor(), flow ) == DynamicType::timed );
+					assert( std::visit( flowTypeVisitor(), flow ) == DynamicType::timed );
 					return new timedElapseTimeEvolutionHandler<State>( state, index, timeStep, timeBound, tmp.getFlowMatrix(), tmp.getTranslation() );
 				}
 				// on mixed contexts a first segment with tick was computed
@@ -138,10 +138,10 @@ ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler( r
 		}
 		case representation_name::carl_polytope: {
 			// TODO!!
-			return new rectangularTimeEvolutionHandler<State>( state, index, boost::get<rectangularFlow<Number>>( flow ) );
+			return new rectangularTimeEvolutionHandler<State>( state, index, std::get<rectangularFlow<Number>>( flow ) );
 		}
 		default:
-			auto tmp = boost::get<affineFlow<typename State::NumberType>>( flow );
+			auto tmp = std::get<affineFlow<typename State::NumberType>>( flow );
 			if ( tmp.getFlowMatrix() == matrix_t<Number>::Identity( tmp.getFlowMatrix().rows(), tmp.getFlowMatrix().rows() ) && tmp.getTranslation() == vector_t<Number>::Zero( tmp.getFlowMatrix().rows() ) ) {
 				return nullptr;
 			}

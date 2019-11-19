@@ -35,7 +35,7 @@ void LTIContext<State>::initializeInvariantHandlers() {
 	// initialize invariant handlers
 	for ( std::size_t i = 0; i < mComputationState.getNumberSets(); i++ ) {
 		if ( getFlowType( mFirstSegmentHandlers.at( i )->getTransformation() ) == DynamicType::affine ) {
-			auto flow = boost::get<affineFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() );
+			auto flow = std::get<affineFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() );
 			matrix_t<Number> trafo = flow.getFlowMatrix();
 			vector_t<Number> translation = flow.getTranslation();
 			bool noFlow = ( trafo == matrix_t<Number>::Identity( trafo.rows(), trafo.rows() ) && translation == vector_t<Number>::Zero( trafo.rows() ) );
@@ -46,7 +46,7 @@ void LTIContext<State>::initializeInvariantHandlers() {
 			}
 
 		} else if ( getFlowType( mFirstSegmentHandlers.at( i )->getTransformation() ) == DynamicType::rectangular ) {
-			bool noFlow = boost::get<rectangularFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() ).isDiscrete();
+			bool noFlow = std::get<rectangularFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() ).isDiscrete();
 			IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler( mComputationState.getSetType( i ), &mComputationState, i, noFlow );
 			if ( ptr ) {
 				mInvariantHandlers.push_back( ptr );
@@ -62,7 +62,7 @@ void LTIContext<State>::initializeBadStateHandlers() {
 	// initalize bad state handlers
 	for ( std::size_t i = 0; i < mComputationState.getNumberSets(); i++ ) {
 		if ( getFlowType( mFirstSegmentHandlers.at( i )->getTransformation() ) == DynamicType::affine ) {
-			auto flow = boost::get<affineFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() );
+			auto flow = std::get<affineFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() );
 			matrix_t<Number> trafo = flow.getFlowMatrix();
 			vector_t<Number> translation = flow.getTranslation();
 			bool noFlow = ( trafo == matrix_t<Number>::Identity( trafo.rows(), trafo.rows() ) && translation == vector_t<Number>::Zero( trafo.rows() ) );
@@ -72,7 +72,7 @@ void LTIContext<State>::initializeBadStateHandlers() {
 				DEBUG( "hypro.worker", "Built " << ptr->handlerName() << "at pos " << i );
 			}
 		} else if ( getFlowType( mFirstSegmentHandlers.at( i )->getTransformation() ) == DynamicType::rectangular ) {
-			bool noFlow = boost::get<rectangularFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() ).isDiscrete();
+			bool noFlow = std::get<rectangularFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() ).isDiscrete();
 			IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler( mComputationState.getSetType( i ), &mComputationState, i, noFlow );
 			if ( ptr ) {
 				mBadStateHandlers.push_back( ptr );
@@ -92,7 +92,7 @@ void LTIContext<State>::initializeGuardHandlers() {
 		std::shared_ptr<State> shGuardPtr = std::shared_ptr<State>( guardStatePtr );
 		for ( std::size_t i = 0; i < mComputationState.getNumberSets(); i++ ) {
 			if ( getFlowType( mFirstSegmentHandlers.at( i )->getTransformation() ) == DynamicType::affine ) {
-				auto flow = boost::get<affineFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() );
+				auto flow = std::get<affineFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() );
 				matrix_t<Number> trafo = flow.getFlowMatrix();
 				vector_t<Number> translation = flow.getTranslation();
 				bool noFlow = ( trafo == matrix_t<Number>::Identity( trafo.rows(), trafo.rows() ) && translation == vector_t<Number>::Zero( trafo.rows() ) );
@@ -102,7 +102,7 @@ void LTIContext<State>::initializeGuardHandlers() {
 					DEBUG( "hypro.worker", "Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() );
 				}
 			} else if ( getFlowType( mFirstSegmentHandlers.at( i )->getTransformation() ) == DynamicType::rectangular ) {
-				bool noFlow = boost::get<rectangularFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() ).isDiscrete();
+				bool noFlow = std::get<rectangularFlow<Number>>( mFirstSegmentHandlers.at( i )->getTransformation() ).isDiscrete();
 				IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler( guardStatePtr->getSetType( i ), shGuardPtr, i, transition, noFlow );
 				if ( ptr ) {
 					guardHandlers.push_back( ptr );

@@ -106,8 +106,8 @@ std::string toFlowstarFormat( const flowVariant<Number>& f,
 			break;
 		}
 		case DynamicType::affine: {
-			matrix_t<Number> flow = boost::get<affineFlow<Number>>( f ).getFlowMatrix();
-			vector_t<Number> constPart = boost::get<affineFlow<Number>>( f ).getTranslation();
+			matrix_t<Number> flow = std::get<affineFlow<Number>>( f ).getFlowMatrix();
+			vector_t<Number> constPart = std::get<affineFlow<Number>>( f ).getTranslation();
 			for ( Eigen::Index rowI = 0; rowI < flow.rows(); ++rowI ) {
 				std::stringstream tmp;
 				tmp << prefix << "\t\t" << varNameMap.at( rowI ) << "' = ";
@@ -118,7 +118,7 @@ std::string toFlowstarFormat( const flowVariant<Number>& f,
 			break;
 		}
 		case DynamicType::rectangular: {
-			auto flow = boost::get<rectangularFlow<Number>>( f ).getFlowIntervals();
+			auto flow = std::get<rectangularFlow<Number>>( f ).getFlowIntervals();
 			for ( const auto& vFlowPair : flow ) {
 				out << prefix << "\t\t" << vFlowPair.first << "' = " << vFlowPair.second << std::endl;
 			}
