@@ -432,5 +432,3 @@ inline mpq_class max( const mpq_class& x, const mpq_class& y ) {
 }
 
 }  // namespace std
-
-//#include "adaptions_eigen_double.tpp"

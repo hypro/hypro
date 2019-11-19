@@ -603,4 +603,3 @@ BoxT<To, Converter, Setting> convert( const BoxT<From, Converter, Setting>& in )
 }  // namespace hypro
 
 #include "Box.tpp"
-//#include "Box_double.h"

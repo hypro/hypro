@@ -13,11 +13,7 @@
 
 #ifdef COMPARE_POLYMAKE
 #include <polymake/Main.h>
- //#include <polymake/Matrix.h>
- //#include <polymake/Rational.h>
 
- namespace hypro {
-
- } //namespace
+namespace hypro {}  // namespace hypro
 
 #endif

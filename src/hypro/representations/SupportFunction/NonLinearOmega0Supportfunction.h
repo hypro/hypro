@@ -10,7 +10,6 @@
 //#define CALCVALUES_VERBOSE
 //#define TEST_
 
-//#include "hyreach_utils.h"
 #include "BoxSupportfunction.h"
 
 // NLopt includes

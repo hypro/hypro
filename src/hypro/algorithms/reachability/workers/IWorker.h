@@ -1,6 +1,5 @@
 #pragma once
 
-//#include "lib/EventSystem/EventHandler.h"
 #include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../datastructures/reachability/StrategyNode.h"

@@ -6,7 +6,7 @@
 #include "../../../datastructures/Point.h"
 #include "../EvaluationResult.h"
 #include "../glpk_context.h"
-//#include "../../../../resources/glpk-4.45/build/include/glpk.h"
+
 #include <glpk.h>
 
 namespace hypro {

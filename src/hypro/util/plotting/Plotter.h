@@ -13,6 +13,7 @@
 #include "../../datastructures/Point.h"
 #include "PlotterUtil.h"
 
+#include <carl/interval/Interval.h>
 #include <carl/util/Singleton.h>
 #include <stack>
 #include <string>

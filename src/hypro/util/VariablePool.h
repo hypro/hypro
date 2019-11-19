@@ -11,7 +11,6 @@
 #pragma once
 
 #include "../flags.h"
-#include "logging/Logger.h"
 
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
@@ -126,7 +125,6 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	const carl::Variable& newCarlVariable( std::string _name = "" ) {
 		assert( mCarlVariables.size() == mPplId );
 #ifdef HYPRO_USE_PPL
-		DEBUG( "hypro.variablePool", "mCarlVariables.size(): " << int( mCarlVariables.size() ) << ", mPplVariables.size(): " << int( mPplVariables.size() ) << ", pplId: " << int( mPplId ) );
 		assert( mPplVariables.size() == mPplId );
 #endif
 		carl::Variable cVar = carl::VariablePool::getInstance().findVariableWithName( _name );

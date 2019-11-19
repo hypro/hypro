@@ -61,12 +61,6 @@ unsigned Halfspace<Number>::dimension() const {
 }
 
 template <typename Number>
-void Halfspace<Number>::projectOnDimensions( std::vector<unsigned> _dimensions ) {
-	// TODO
-	this->mHash = 0;
-}
-
-template <typename Number>
 const vector_t<Number> &Halfspace<Number>::normal() const {
 	return mNormal;
 }

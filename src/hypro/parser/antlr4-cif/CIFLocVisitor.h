@@ -1,15 +1,14 @@
 #pragma once
 
 
-#include "antlr4-runtime.h"
-#include "HybridSystemVisitor.h"
-#include "HybridSystemBaseVisitor.h"
-#include "CIFExprVisitor.h"
-#include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
 #include "../../datastructures/HybridAutomaton/Transition.h"
-//#include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../types.h"
+#include "CIFExprVisitor.h"
+#include "HybridSystemBaseVisitor.h"
+#include "HybridSystemVisitor.h"
+#include "antlr4-runtime.h"
 
 using namespace antlr4;
 

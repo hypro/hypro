@@ -1,14 +1,13 @@
 #pragma once
 
 
-#include "antlr4-runtime.h"
-#include "HybridSystemVisitor.h"
-#include "HybridSystemBaseVisitor.h"
-#include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
 #include "../../datastructures/HybridAutomaton/Transition.h"
-//#include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../types.h"
+#include "HybridSystemBaseVisitor.h"
+#include "HybridSystemVisitor.h"
+#include "antlr4-runtime.h"
 
 
 using namespace antlr4;
@@ -48,7 +47,7 @@ class CIFExprVisitor : public HybridSystemBaseVisitor {
 
 
 		//things we can't handle
-		antlrcpp::Any visitStdLibFunction(HybridSystemParser::StdLibFunctionContext *ctx) override;		
+		antlrcpp::Any visitStdLibFunction(HybridSystemParser::StdLibFunctionContext *ctx) override;
 		antlrcpp::Any visitUnaryExpr(HybridSystemParser::UnaryExprContext *ctx) override;
 		antlrcpp::Any visitEquationNonDerivate(HybridSystemParser::EquationNonDerivateContext *ctx) override;
 
@@ -57,7 +56,7 @@ class CIFExprVisitor : public HybridSystemBaseVisitor {
 
 		CIFExprVisitor(std::vector<std::string> varVec);
 		~CIFExprVisitor();
-		
+
 		antlrcpp::Any visitExpressions(HybridSystemParser::ExpressionsContext *ctx) override;
 		antlrcpp::Any visitExpression(HybridSystemParser::ExpressionContext *ctx) override;
 		antlrcpp::Any visitEquations(HybridSystemParser::EquationsContext *ctx) override;

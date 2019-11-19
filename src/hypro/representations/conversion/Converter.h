@@ -361,8 +361,6 @@ class Converter {
 #ifdef HYPRO_USE_PPL
 #include "converterToPolytope.tpp"
 #endif
+#include "conversionHelper.h"
 #include "converterToDifferenceBounds.tpp"
 #include "converterToSupportFunctionNew.tpp"
-
-//#include "convenienceOperators.h"
-#include "conversionHelper.h"

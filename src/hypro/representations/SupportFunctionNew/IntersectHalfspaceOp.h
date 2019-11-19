@@ -12,7 +12,6 @@
 
 #include "../../config.h"
 #include "RootGrowNode.h"
-//#include "../../util/statistics/statistics.h"
 
 namespace hypro {
 

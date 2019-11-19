@@ -11,7 +11,6 @@
 #include "StrategyNode.h"
 
 #include <carl/util/Singleton.h>
-//#include <hypro/representations/GeometricObject.h>
 
 namespace hypro {
 /**

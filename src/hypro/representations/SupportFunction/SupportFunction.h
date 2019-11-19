@@ -6,11 +6,10 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #endif
 
 #include "../../config.h"
-#include "util.h"
-//#include "helperMethods.h"
 #include "../../util/templateDirections.h"
 #include "SupportFunctionContent.h"
 #include "SupportFunctionSetting.h"
+#include "util.h"
 
 namespace hypro {
 

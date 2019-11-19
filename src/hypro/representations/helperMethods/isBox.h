@@ -2,6 +2,7 @@
 #include "../../types.h"
 
 #include <boost/tuple/tuple.hpp>
+#include <carl/interval/Interval.h>
 
 namespace hypro {
 

@@ -153,5 +153,3 @@ class Reach {
 #include "Reach.tpp"
 #include "discreteHandling.tpp"
 #include "terminationHandling.tpp"
-
-//#include "Reach_SF.h"

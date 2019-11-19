@@ -1,10 +1,7 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
-	################################
-	# Core Unit Tests
-	################################
-
-	add_executable(runCoreTests
+	# reduce compiler optimization for tests
+	set(core_test_sources
 		EigenAdaptionsTest.cpp
 		#ifdef LOGGING_HYPRO
 		#LoggerTest.cpp
@@ -13,6 +10,16 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		ParserTest.cpp
 		PlotterTest.cpp
 		UtilityTest.cpp
+	)
+
+	SET_SOURCE_FILES_PROPERTIES(${core_test_sources} PROPERTIES COMPILE_FLAGS -O0)
+
+	################################
+	# Core Unit Tests
+	################################
+
+	add_executable(runCoreTests
+		${core_test_sources}
 	)
 
 	add_dependencies(runCoreTests resources)

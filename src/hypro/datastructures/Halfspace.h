@@ -16,7 +16,6 @@
 #include "Point.h"
 
 #include <boost/functional/hash.hpp>
-#include <carl/formula/Constraint.h>
 #include <cassert>
 #include <glpk.h>
 
@@ -82,12 +81,6 @@ class Halfspace {
 	 * @return     The space dimension.
 	 */
 	unsigned dimension() const;
-
-	/**
-	 * @brief      Projects the plane on the given dimensions.
-	 * @param[in]  _dimensions  The dimensions as a vector.
-	 */
-	void projectOnDimensions( std::vector<unsigned> _dimensions );
 
 	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
 	void makeInteger() {

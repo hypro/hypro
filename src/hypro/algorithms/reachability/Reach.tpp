@@ -1,7 +1,5 @@
 #include "Reach.h"
 
-//#include <chrono>
-
 namespace hypro {
 namespace reachability {
 
