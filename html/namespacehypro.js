@@ -88,6 +88,7 @@ var namespacehypro =
     [ "genericSatisfiesHalfspacesVisitor", "classhypro_1_1genericSatisfiesHalfspacesVisitor.html", "classhypro_1_1genericSatisfiesHalfspacesVisitor" ],
     [ "genericSetContainsVisitor", "classhypro_1_1genericSetContainsVisitor.html", "classhypro_1_1genericSetContainsVisitor" ],
     [ "genericSupremumVisitor", "classhypro_1_1genericSupremumVisitor.html", "classhypro_1_1genericSupremumVisitor" ],
+    [ "genericToStringVisitor", "classhypro_1_1genericToStringVisitor.html", "classhypro_1_1genericToStringVisitor" ],
     [ "genericTypeVisitor", "classhypro_1_1genericTypeVisitor.html", "classhypro_1_1genericTypeVisitor" ],
     [ "genericUniteVisitor", "classhypro_1_1genericUniteVisitor.html", "classhypro_1_1genericUniteVisitor" ],
     [ "genericVerticesVisitor", "classhypro_1_1genericVerticesVisitor.html", "classhypro_1_1genericVerticesVisitor" ],
