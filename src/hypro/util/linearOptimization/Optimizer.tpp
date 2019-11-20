@@ -37,7 +37,7 @@ namespace hypro {
 	template<typename Number>
 	Optimizer<Number>::Optimizer(Optimizer<Number>&& orig) {// : Optimizer() {
 		//std::cout << "Optimizer::move ctor" << std::endl;
-		swapper(*this, orig);
+		swap(*this, orig);
 	}
 
 	//Copy ctor via Copy-and-Swap idiom
@@ -62,7 +62,7 @@ namespace hypro {
 		//std::cout << "Optimizer::copy assign" << std::endl;
 		//TRACE("hypro.optimizer","");
 		Optimizer<Number> tmp(orig);
-		swapper(*this, tmp);
+		swap(*this, tmp);
 		return *this;
 	}
 
@@ -288,7 +288,7 @@ namespace hypro {
 		#else // use glpk
 		//std::cout << "Optimizer::checkConsistency: mConsistencyChecked: " << mConsistencyChecked << std::endl;
 		//std::cout << "Optimizer::checkConsistency: mLastConsistencyAnswer: " << mLastConsistencyAnswer << std::endl;
-		if(!mConsistencyChecked){
+		if(!mConsistencyChecked || mLastConsistencyAnswer == SOLUTION::UNKNOWN){
 			//std::cout << "Optimizer::checkConsistency: use glpk for consistency check" << std::endl;
 			//TRACE("hypro.optimizer","Use glpk for consistency check.");
 			glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, &mGlpkContext[std::this_thread::get_id()].parm);
@@ -423,7 +423,7 @@ namespace hypro {
 		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
 		//std::cout << "Optimizer::updateConstraints: mConsistencyChecked: " << mConsistencyChecked << std::endl;
 		//assert(!mConsistencyChecked);
-		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
+		//assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
 			//std::cout << "Optimizer::updateConstraints: mOptimizer has not been initialized, initialize now" << std::endl;
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");

@@ -690,3 +690,21 @@ TYPED_TEST(TemplatePolyhedronTest, Overapproximation){
 	EXPECT_EQ(TemplatePolyhedron<TypeParam>(this->mat,controlVec), this->triangle.overapproximate(this->mat));
 
 }
+
+TYPED_TEST(TemplatePolyhedronTest, Boundedness){
+	
+	//Bounded - empty
+	EXPECT_TRUE(this->empty.isBounded());
+	//Bounded - infeasible
+	EXPECT_TRUE(this->infeas.isBounded());
+	//Bounded - normal
+	EXPECT_TRUE(this->middle.isBounded());
+	//Unbounded
+	matrix_t<TypeParam> m(1,2);
+	m << -1,0;
+	TemplatePolyhedron<TypeParam> unbounded(m,vector_t<TypeParam>::Zero(1));
+	EXPECT_FALSE(unbounded.isBounded());
+
+
+
+}

@@ -350,6 +350,11 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	TemplatePolyhedronT<Number,Converter,Setting> overapproximate( const matrix_t<Number>& dirs ) const;
 
+	/**
+	 * @brief      Checks whether the TemplatePolyhedron is bounded. 
+	 */
+	bool isBounded() const;
+
   private:
 
   	/**

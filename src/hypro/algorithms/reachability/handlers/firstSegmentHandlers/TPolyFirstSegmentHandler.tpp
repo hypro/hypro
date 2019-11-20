@@ -87,11 +87,13 @@ namespace hypro {
                     if(derivVarCoeffs == vector_t<Number>::Zero(derivVarCoeffs.rows())){
                         evalRes = EvaluationResult<Number>(derivative(derivative.rows()-1), SOLUTION::FEAS);
                     } else {
-                        evalRes = tpoly.evaluate(derivative / factorial, true);    
+                        //std::cout << "TPolyFirstSegmentHandler::handle, tpoly is: " << tpoly << " derivative is: \n" << derivative << std::endl;
+                        evalRes = tpoly.evaluate(derivVarCoeffs / factorial, true);
                     }
                 } else {
                     //NOTE: How to treat remainder? Normally, use tpoly.matrix() as matrix, and use giant coeffs where bounds do not exist but evaluating then does not make any sense.
                     //If using the invariant matrix we either get the same or better results.
+                    //NOTE: IDEA IS one overapproximates the set with the template directions i guess
                     if(this->mState->getLocation()->getInvariant().empty()){
                         evalRes = EvaluationResult<Number>(SOLUTION::INFTY);
                     } else {
@@ -165,6 +167,11 @@ namespace hypro {
                         }        
                     }
                 }
+                //std::cout << "TPolyFirstSegmentHandler::values are: {";
+                //for(const auto& v : values){
+                //    std::cout << v << ",";
+                //}
+                //std::cout << "}" << std::endl;
                 assert(values.size() == 5);
                 //std::cout << "TPolyFirstSegmentHandler::handle, increasing: " << increasing << " decreasing: " << decreasing << std::endl;
                 if(!increasing && !decreasing){
@@ -180,7 +187,7 @@ namespace hypro {
                     newVec(rowI) = values.back();
                 } else {
                     //Should not be possible
-                    throw std::runtime_error("TPolyFirstSegmentHandler::handle, polnom was both monotonically increasing as well as decreasing.");
+                    throw std::runtime_error("TPolyFirstSegmentHandler::handle, polynom was both monotonically increasing as well as decreasing.");
                     exit(1);
                 }
                 //std::cout << "TPolyFirstSegmentHandler::handle, newVec(rowI):" << newVec(rowI) << std::endl;

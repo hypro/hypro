@@ -50,8 +50,8 @@ namespace hypro {
 		matrix_t<Number>	mConstraintMatrix;
 		vector_t<Number> 	mConstraintVector;
 
-		mutable bool 				mConsistencyChecked;
-		mutable SOLUTION 			mLastConsistencyAnswer;
+		mutable bool 				mConsistencyChecked = false;
+		mutable SOLUTION 			mLastConsistencyAnswer = SOLUTION::UNKNOWN;
 		static bool			warnInexact;
 		bool 				maximize = true;
 		std::vector<carl::Relation> mRelationSymbols;
@@ -138,7 +138,7 @@ namespace hypro {
 			return mGlpkContext;
 		}
 
-		friend void swapper(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
+		friend void swap(Optimizer<Number>& lhs, Optimizer<Number>& rhs){
 			//TRACE("hypro.optimizer","");
 			//std::cout << "Optimizer::swap!" << std::endl;
 			std::swap(lhs.mConstraintMatrix, rhs.mConstraintMatrix);

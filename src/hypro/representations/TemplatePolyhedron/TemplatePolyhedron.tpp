@@ -168,8 +168,7 @@ namespace hypro {
 		for(int i = 0; i < mVector.rows(); i++){
 			if(mVector(i) < 0){
 				allPositive = false;
-			} 
-			if(mVector(i) > 0){
+			} else if(mVector(i) > 0){
 				allNegative = false;
 			}
 		}
@@ -744,6 +743,7 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::unite( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
 		//Since uniting with a empty / unfeasible TPoly can result in a feasible TPoly, check beforehand whether one of the arguments is empty.
 		//TODO: What about union of two not connected sets?
+		std::cout << "TemplatePolyhedron::unite, this: \n" << *this << " rhs: \n" << rhs << std::endl;
 		if(this->empty()) return rhs; 
 		if(rhs.empty()) return *this; 
 		assert(*mMatrixPtr == rhs.matrix());
@@ -804,9 +804,31 @@ namespace hypro {
 		auto evalRes = multiEvaluate(dirs, true);
 		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
 		for(std::size_t i = 0; i < evalRes.size(); ++i){
-			assert(evalRes[i].errorCode != SOLUTION::INFEAS);
+			assert(evalRes[i].errorCode == SOLUTION::FEAS);
 			evalOffsets(i) = evalRes[i].supportValue;
 		}
 		return TemplatePolyhedronT<Number,Converter,Setting>(dirs,evalOffsets);
 	}
+
+	template<typename Number, typename Converter, typename Setting>
+	bool TemplatePolyhedronT<Number,Converter,Setting>::isBounded() const {
+		//The empty set is bounded 
+		if(empty()) return true;
+		//Check if every variable occurs at least dimension-times.
+		std::vector<unsigned> varOccurrences(dimension(), 0);
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			for(int j = 0; j < mMatrixPtr->cols(); ++j){
+				if((*mMatrixPtr)(i,j) != 0){
+					varOccurrences[j]++;
+				}
+			}
+		}
+		for(unsigned i = 0; i < varOccurrences.size(); ++i){
+			if(varOccurrences.at(i) < dimension()){
+				return false;
+			}
+		}
+		return true;
+	}
+
 } // namespace hypro

@@ -77,7 +77,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     //DETAIL: The input vector dir is interpreted as a function, for example if dir = (3 2 -1) then dir is interpreted as 3x + 2y - z, 
     //since no constants are allowed.
     //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
-    vector_t<Number> lieDerivative(const vector_t<Number>& dir);
+    std::pair<vector_t<typename State::NumberType>,typename State::NumberType> lieDerivative(const vector_t<Number>& dir);
 
     //Conducts the location invariant strengthening method from Sankranarayanan 2008.
     //Only works for closed invariants where the normals point into the inside. 
@@ -87,6 +87,9 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     
     //Adds invariants, guards and bad states to the template matrix according the the setting
     TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
+
+    //Tests whether the given tpoly is a positive invariant and therefore admissible for location invariant strengthening
+    bool isPositiveInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);
 };
 
 
