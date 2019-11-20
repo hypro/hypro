@@ -5,8 +5,6 @@
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "util.h"
 
-#include <boost/tuple/tuple.hpp>
-
 namespace hypro {
 namespace reachability {
 
@@ -28,37 +26,37 @@ template <typename Number, typename State>
 void bloatBox( State& in, const Box<Number>& bloatBox ) {
 	switch ( in.getSetType( 0 ) ) {
 		case representation_name::box: {
-			in.setSetDirect( boost::get<Box<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toBox( bloatBox ) ) );
+			in.setSetDirect( std::get<Box<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toBox( bloatBox ) ) );
 			break;
 		}
 		case representation_name::polytope_h: {
-			in.setSetDirect( boost::get<HPolytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toHPolytope( bloatBox ) ) );
+			in.setSetDirect( std::get<HPolytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toHPolytope( bloatBox ) ) );
 			break;
 		}
 		case representation_name::polytope_v: {
-			in.setSetDirect( boost::get<VPolytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toVPolytope( bloatBox ) ) );
+			in.setSetDirect( std::get<VPolytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toVPolytope( bloatBox ) ) );
 			break;
 		}
 		case representation_name::zonotope: {
-			in.setSetDirect( boost::get<Zonotope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toZonotope( bloatBox ) ) );
+			in.setSetDirect( std::get<Zonotope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toZonotope( bloatBox ) ) );
 			break;
 		}
 		case representation_name::support_function: {
-			in.setSetDirect( boost::get<SupportFunction<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toSupportFunction( bloatBox ) ) );
+			in.setSetDirect( std::get<SupportFunction<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toSupportFunction( bloatBox ) ) );
 			break;
 		}
 		case representation_name::ppl_polytope: {
 #ifdef HYPRO_USE_PPL
-			in.setSetDirect( boost::get<Polytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toPolytope( bloatBox ) ) );
+			in.setSetDirect( std::get<Polytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toPolytope( bloatBox ) ) );
 #endif
 			break;
 		}
 		case representation_name::difference_bounds: {
-			in.setSetDirect( boost::get<DifferenceBounds<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toDifferenceBounds( bloatBox ) ) );
+			in.setSetDirect( std::get<DifferenceBounds<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toDifferenceBounds( bloatBox ) ) );
 			break;
 		}
 		case representation_name::SFN: {
-			in.setSetDirect( boost::get<SupportFunctionNew<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toSupportFunctionNew( bloatBox ) ) );
+			in.setSetDirect( std::get<SupportFunctionNew<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toSupportFunctionNew( bloatBox ) ) );
 			break;
 		}
 		case representation_name::constraint_set: {
@@ -148,7 +146,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 			TRACE( "hypro.reachability", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension );
 #endif
 
-			//firstSegment.setSet(bloatBox<Number, Representation>(boost::get<Representation>(firstSegment.getSet()), Number(Number(1) / Number(4)) * errorBoxVector[0]));
+			//firstSegment.setSet(bloatBox<Number, Representation>(std::get<Representation>(firstSegment.getSet()), Number(Number(1) / Number(4)) * errorBoxVector[0]));
 
 			bloatBox<Number, State>( firstSegment, Number( Number( 1 ) / Number( 4 ) ) * errorBoxVector[2] );
 
@@ -223,7 +221,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 			//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
 #ifdef HYPRO_LOGGING
 			// DBG
-			//Box<Number> tmp = Converter<Number>::toBox(boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<typename State::repVariant,Number>(representation_name::box),fullSegment.second.getSet())));
+			//Box<Number> tmp = Converter<Number>::toBox(std::get<Box<Number>>(std::visit(genericConversionVisitor<typename State::repVariant,Number>(representation_name::box),fullSegment.second.getSet())));
 			//TRACE("hypro.reachability","First segment: " << tmp);
 #endif
 

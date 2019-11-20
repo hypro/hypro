@@ -8,6 +8,7 @@
 
 #include <carl/interval/Interval.h>
 #include <carl/util/tuple_util.h>
+#include <variant>
 
 namespace hypro {
 template <typename Number>
@@ -28,12 +29,12 @@ class Location;
 template <typename Number, typename Representation, typename... Rargs>
 class State {
   public:
-	using repVariant = boost::variant<Representation, Rargs...>;  /// Boost variant type for all possible state set representations.
+	using repVariant = std::variant<Representation, Rargs...>;  /// variant type for all possible state set representations.
 	typedef Number NumberType;
 
   protected:
 	const Location<Number>* mLoc = nullptr;												/// Location of the state.
-	std::vector<repVariant> mSets;														/// The state sets wrapped in boost variant (repVariant).
+	std::vector<repVariant> mSets;														/// The state sets wrapped in variant (repVariant).
 	std::vector<representation_name> mTypes;											/// A vector holding the actual types corresponding to the state sets.
 	carl::Interval<tNumber> mTimestamp = carl::Interval<tNumber>::unboundedInterval();  /// A timestamp.
 	bool mIsEmpty = false;																/// A flag which can be set to allow for a quick check for emptiness.
@@ -209,14 +210,14 @@ class State {
      * @param[in]  i     Set index.
      * @return     The set.
      */
-	const boost::variant<Representation, Rargs...>& getSet( std::size_t i = 0 ) const;
+	const std::variant<Representation, Rargs...>& getSet( std::size_t i = 0 ) const;
 
 	/**
      * @brief      Gets a reference to the i-th set.
      * @param[in]  i     Set index.
      * @return     The set.
      */
-	boost::variant<Representation, Rargs...>& rGetSet( std::size_t i = 0 );
+	std::variant<Representation, Rargs...>& rGetSet( std::size_t i = 0 );
 
 	/**
      * @brief      Gets the type of the i-th set.
@@ -306,7 +307,7 @@ class State {
      * @details     Note that this method directly sets the sets while ignoring the consistency of the previously stored types
      * @param[in]   sets  The sets.
      */
-	void setSets( const std::vector<boost::variant<Representation, Rargs...>>& sets ) { mSets = sets; }
+	void setSets( const std::vector<std::variant<Representation, Rargs...>>& sets ) { mSets = sets; }
 
 	/**
      * @brief       Sets the sets.
@@ -314,13 +315,13 @@ class State {
      *              in terms of length and content when being set.
      * @param[in]   sets    The sets to set.
      */
-	void setSetsSave( const std::vector<boost::variant<Representation, Rargs...>>& sets );
+	void setSetsSave( const std::vector<std::variant<Representation, Rargs...>>& sets );
 
 	/**
 	 * @brief      Sets the set.
 	 * @details    Does not update the type for the respective position - can be used if type does not change to avoid unpacking.
 	 *
-	 * @param[in]  in    The set as a boost::variant.
+	 * @param[in]  in    The set as a std::variant.
 	 * @param[in]  I     The position in the sets vector.
 	 */
 	void setSetDirect( const repVariant& in, std::size_t I = 0 ) {
@@ -482,14 +483,14 @@ class State {
 		out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
 
 		//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
-		//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+		//out << "Set: " << std::visit(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
 		if ( state.getNumberSets() > 0 ) {
-			out << "Set: " << state.getSet( 0 ) << std::endl;
+			out << "Set: " << std::visit( genericToStringVisitor(), state.getSet( 0 ) ) << std::endl;
 		}
 		if ( state.getNumberSets() > 1 ) {
 			out << "Other sets: " << std::endl;
 			for ( std::size_t i = 1; i < state.getNumberSets(); ++i )
-				out << state.getSet( i ) << std::endl;
+				out << std::visit( genericToStringVisitor(), state.getSet( i ) ) << std::endl;
 		}
 #else
 	friend std::ostream& operator<<( std::ostream& out, const State<Number, Representation, Rargs...>& ) {
@@ -530,7 +531,7 @@ class State {
 			if ( lhs.getSetType( i ) != rhs.getSetType( i ) ) {
 				return false;
 			}
-			if ( !boost::apply_visitor( genericCompareVisitor(), lhs.getSet( i ), rhs.getSet( i ) ) ) {
+			if ( !std::visit( genericCompareVisitor(), lhs.getSet( i ), rhs.getSet( i ) ) ) {
 				return false;
 			}
 		}
@@ -565,8 +566,8 @@ State parallelCompose(
 
     // set constraint
     // TODO: Move this.
-    ConstraintSet<Number> lhsConstraintSet = boost::get<ConstraintSet<Number>>(lhsInitState.getSet(0));
-    ConstraintSet<Number> rhsConstraintSet = boost::get<ConstraintSet<Number>>(rhsInitState.getSet(0));
+    ConstraintSet<Number> lhsConstraintSet = std::get<ConstraintSet<Number>>(lhsInitState.getSet(0));
+    ConstraintSet<Number> rhsConstraintSet = std::get<ConstraintSet<Number>>(rhsInitState.getSet(0));
     matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
     matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
     vector_t<Number> lhsVector = lhsConstraintSet.vector();

@@ -144,9 +144,9 @@ TEST_F( HybridAutomataOutputTest, HybridAutomatonTest ) {
 	out.clearFile();
 	out << toFlowstarFormat( hybrid );
 
-	// boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings> parsedResult =
+	// std::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings> parsedResult =
 	// parseFlowstarFile<double>(std::string("tmp.model")); std::remove("tmp.model");
 
-	// EXPECT_EQ(boost::get<0>(parsedResult), h1);
+	// EXPECT_EQ(std::get<0>(parsedResult), h1);
 	SUCCEED();
 }

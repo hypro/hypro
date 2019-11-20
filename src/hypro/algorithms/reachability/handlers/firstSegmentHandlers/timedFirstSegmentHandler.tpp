@@ -7,14 +7,14 @@ void timedFirstSegmentHandler<State>::handle() {
 	// check if initial Valuation fulfills Invariant
 	assert( this->mState->getLocation() != nullptr );
 
-	DifferenceBounds<Number> dbmBeforeElapse = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
+	DifferenceBounds<Number> dbmBeforeElapse = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
 	//elapse the zone, then cut it by its old value + timestep in each clock direction
 	if ( dbmBeforeElapse.dimension() > 0 ) {
 		// elapse the dbm
-		this->mState->setSet( boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).elapse(), this->mIndex );
+		this->mState->setSet( std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).elapse(), this->mIndex );
 
 		// cut it
-		DifferenceBounds<Number> dbm = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
+		DifferenceBounds<Number> dbm = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
 		size_t numclocks = dbm.dimension();
 		for ( size_t i = 1; i <= numclocks; i++ ) {
 			// shift all clocks by timestep

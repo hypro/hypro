@@ -405,10 +405,10 @@ TYPED_TEST( HybridAutomataTest, State ) {
 
 	EXPECT_EQ( s1.getLocation()->hash(), this->loc1->hash() );
 	EXPECT_EQ( s2.getLocation()->hash(), this->loc1->hash() );
-	EXPECT_EQ( boost::get<ConstraintSet<TypeParam>>( s2.getSet() ).matrix(), matr );
-	EXPECT_EQ( boost::get<ConstraintSet<TypeParam>>( s2.getSet() ).vector(), vec );
-	EXPECT_EQ( boost::get<ConstraintSet<TypeParam>>( s2.getSet( 0 ) ).matrix(), matr );
-	EXPECT_EQ( boost::get<ConstraintSet<TypeParam>>( s2.getSet( 0 ) ).vector(), vec );
+	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet() ).matrix(), matr );
+	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet() ).vector(), vec );
+	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet( 0 ) ).matrix(), matr );
+	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet( 0 ) ).vector(), vec );
 }
 
 TYPED_TEST( HybridAutomataTest, HashTest ) {

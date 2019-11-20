@@ -27,7 +27,7 @@ struct StrategyParameters {
 namespace detail {
 
 template <typename State>
-struct strategyConversionVisitor : public boost::static_visitor<> {
+struct strategyConversionVisitor {
 	State& mState;
 	std::size_t mSubsetIndex;
 
@@ -39,11 +39,11 @@ struct strategyConversionVisitor : public boost::static_visitor<> {
 	template <typename Node>
 	void operator()( Node& ) const {
 		TRACE( "hypro.utility", "Expect conversion of state set at pos " << mSubsetIndex << " to type " << typeid( typename Node::representationType ).name() << " and is actually " << mState.getSetType( mSubsetIndex ) );
-		//auto tmp = boost::apply_visitor(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet(mSubsetIndex));
-		//auto tmp = boost::apply_visitor(::hypro::genericConvertAndGetVisitor<typename Node::representationType>(), mState.getSet(mSubsetIndex));
+		//auto tmp = std::visit(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet(mSubsetIndex));
+		//auto tmp = std::visit(::hypro::genericConvertAndGetVisitor<typename Node::representationType>(), mState.getSet(mSubsetIndex));
 		//TRACE("hypro.utility","Conversion result: " << tmp);
 		//mState.setSet(tmp);
-		mState.setSet( boost::apply_visitor(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet( mSubsetIndex ) ), mSubsetIndex );
+		mState.setSet( std::visit(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet( mSubsetIndex ) ), mSubsetIndex );
 		//mState.setSetType(Node::representationType::type(),mSubsetIndex);
 
 		TRACE( "hypro.utility", "Should be of type " << Node::representationType::type() );
@@ -51,7 +51,7 @@ struct strategyConversionVisitor : public boost::static_visitor<> {
 	}
 };
 
-struct getParametersVisitor : public boost::static_visitor<StrategyParameters> {
+struct getParametersVisitor {
 	getParametersVisitor() = default;
 
 	template <typename Node>

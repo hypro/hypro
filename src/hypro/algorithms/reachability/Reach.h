@@ -12,7 +12,6 @@
 
 #pragma once
 #include "FirstSegment.h"
-#include "boost/tuple/tuple.hpp"
 #include "config.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"

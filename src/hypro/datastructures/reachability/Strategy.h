@@ -10,8 +10,8 @@ namespace detail {
 template <typename T>
 struct StrategyVariant;
 template <typename... Ts>
-struct StrategyVariant<boost::variant<Ts...>> {
-	using types = boost::variant<StrategyNode<Ts>...>;
+struct StrategyVariant<std::variant<Ts...>> {
+	using types = std::variant<StrategyNode<Ts>...>;
 };
 }  // namespace detail
 
@@ -36,12 +36,12 @@ class Strategy {
 
 	void advanceToLevel( StateType& state, std::size_t lvl, std::size_t subset = 0 ) const {
 		DEBUG( "hypro.datastructures", "Call to set state subset " << subset << " to strategy level " << lvl );
-		boost::apply_visitor( detail::strategyConversionVisitor<StateType>( state, subset ), mStrategy[lvl] );
+		std::visit( detail::strategyConversionVisitor<StateType>( state, subset ), mStrategy[lvl] );
 	}
 
 	StrategyParameters getParameters( std::size_t lvl ) const {
 		assert( 0 <= lvl && lvl < mStrategy.size() );
-		return boost::apply_visitor( detail::getParametersVisitor(), mStrategy[lvl] );
+		return std::visit( detail::getParametersVisitor(), mStrategy[lvl] );
 	}
 
 	void removeNode( std::size_t lvl ) {

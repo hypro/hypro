@@ -2,7 +2,6 @@
 #include "../../hypro/parser/antlr4-flowstar/ParserWrapper.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <boost/tuple/tuple.hpp>
 #include <fstream>
 #include <iostream>
 
@@ -58,7 +57,7 @@ class AntlrParserTest : public ::testing::Test {
 				if( lhs.getSetType(i) != rhs.getSetType(i)) {
 					return false;
 				}
-				if(!boost::apply_visitor(genericCompareVisitor(), lhs.getSet(i), rhs.getSet(i))) {
+				if(!std::visit(genericCompareVisitor(), lhs.getSet(i), rhs.getSet(i))) {
 					return false;
 				}
 			}
@@ -132,7 +131,7 @@ TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 	/*
 		std::string path("../../../../src/test/core/examples/test_minimal_accepted_file.txt");
 		//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_minimal_accepted_file.txt");
-		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h;
+		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h;
 		try{
 			h = parseFlowstarFile<TypeParam>(path);
 		} catch(const std::runtime_error& e){
@@ -151,9 +150,9 @@ TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 		std::vector<std::vector<std::size_t>> plotDims;
 		//plotDims.push_back(dimensions);
 		controlSettings.plotDimensions = plotDims;
-		EXPECT_EQ(boost::get<1>(h).plotDimensions.size(), size_t(0));
-		EXPECT_EQ(boost::get<1>(h).plotDimensions.size(), controlSettings.plotDimensions.size());
-		EXPECT_EQ(boost::get<1>(h), controlSettings);
+		EXPECT_EQ(std::get<1>(h).plotDimensions.size(), size_t(0));
+		EXPECT_EQ(std::get<1>(h).plotDimensions.size(), controlSettings.plotDimensions.size());
+		EXPECT_EQ(std::get<1>(h), controlSettings);
 
 		//Build hybrid automaton HA
 		//The location
@@ -183,10 +182,10 @@ TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 
 		//Test if parsed HybridAutomaton has the same content as HA
 		//NOTE: We cannot check for equality via operator== yet as locations differ in their id
-		//EXPECT_EQ(boost::get<0>(h), controlHA);
+		//EXPECT_EQ(std::get<0>(h), controlHA);
 
 		//Check location - this hybrid automaton should only have one location
-		HybridAutomaton<TypeParam, State_t<TypeParam>>& parsedHA = boost::get<0>(h);
+		HybridAutomaton<TypeParam, State_t<TypeParam>>& parsedHA = std::get<0>(h);
 		EXPECT_EQ(parsedHA.getLocations().size(), std::size_t(1));
 		EXPECT_TRUE(this->equals(parsedHA.getLocation(name), controlHA.getLocation(name)));
 		//Check Transitions - this automaton has no transitions
@@ -215,15 +214,15 @@ TYPED_TEST(AntlrParserTest, parallelComposition){
 
 	try{
 		std::cout << "Parser A" << std::endl;
-		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> hA =
+		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> hA =
 parseFlowstarFile<TypeParam>(pathA);
 
 		std::cout << "Parser B" << std::endl;
-		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> hB =
+		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> hB =
 parseFlowstarFile<TypeParam>(pathB);
 
-		HybridAutomaton<TypeParam,State_t<TypeParam>> haA = boost::get<0>(hA);
-		HybridAutomaton<TypeParam,State_t<TypeParam>> haB = boost::get<0>(hB);
+		HybridAutomaton<TypeParam,State_t<TypeParam>> haA = std::get<0>(hA);
+		HybridAutomaton<TypeParam,State_t<TypeParam>> haB = std::get<0>(hB);
 
 		haA||haB;
 
@@ -238,7 +237,7 @@ TYPED_TEST(AntlrParserTest, bouncing_ball_with_label){
 	std::string path("/home/tobias/RWTH/8_WS2017/BA/examples/bouncing_ball_with_label.model");
 
 	try{
-		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
+		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
 parseFlowstarFile<TypeParam>(path); SUCCEED(); } catch(const std::runtime_error& e){ std::cout << e.what() << std::endl;
 		FAIL();
 	}
@@ -248,7 +247,7 @@ TYPED_TEST(AntlrParserTest, railraod_crossing){
 	std::string path("/home/tobias/RWTH/8_WS2017/BA/examples/railraod_crossing.model");
 
 	try{
-		boost::tuple<HybridAutomatonComp<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
+		std::tuple<HybridAutomatonComp<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
 parseFlowstarCompFile<TypeParam>(path); SUCCEED(); } catch(const std::runtime_error& e){ std::cout << e.what() <<
 std::endl; FAIL();
 	}
@@ -269,9 +268,10 @@ std::endl; FAIL();
 //	std::string path("../../../../src/test/core/examples/test_only_start.txt");
 //	//std::string path("../../src/test/core/examples/test_only_start.txt");
 //	try{
-//		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
-// parseFlowstarFile<TypeParam>(path); 		FAIL(); 	} catch(const std::runtime_error& e){ 		std::cout << e.what() <<
-// std::endl; 		SUCCEED();
+//		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
+// parseFlowstarFile<TypeParam>(path); 		FAIL(); 	} catch(const std::runtime_error& e){ 		std::cout <<
+// e.what()
+// << std::endl; 		SUCCEED();
 //	}
 //
 //}

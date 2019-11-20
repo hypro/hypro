@@ -4,8 +4,8 @@
 #include "../../types.h"
 #include "decomposition/Decomposition.h"
 
-#include <boost/variant.hpp>
 #include <iosfwd>
+#include <variant>
 
 namespace hypro {
 
@@ -25,7 +25,7 @@ class Condition {
 		: mConstraints( constraints )
 		, mConditionIsBox( {TRIBOOL::NSET} )
 		, mHash( 0 ) {}
-	explicit Condition( const std::vector<boost::variant<ConstraintSetT<Number>>>& sets );
+	explicit Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets );
 	Condition( const Condition& orig ) = default;
 	Condition( Condition&& orig ) = default;
 	Condition& operator=( const Condition& orig ) = default;

@@ -63,7 +63,7 @@ void Reach<Number, ReacherSettings, State>::initQueue() {
 				}
 			}
 			TRACE( "hypro.reacher.preprocessing", "convert." );
-			//s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State::repVariant, Number>(mType), s.getSet()));
+			//s.setSetDirect(std::visit(genericConversionVisitor<typename State::repVariant, Number>(mType), s.getSet()));
 			s.setSetType( mType );
 			TRACE( "hypro.reacher.preprocessing", "Type after conversion is " << s.getSetType( 0 ) );
 
@@ -120,7 +120,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 	INFO( "hypro.reacher", "Location printed : " << *( _state.getLocation() ) );
 	INFO( "hypro.reacher", "Time step size: " << mSettings.timeStep );
 	//INFO("hypro.reacher", "Initial valuation: " << _state);
-	//std::cout << boost::get<State>(_state) << std::endl;
+	//std::cout << std::get<State>(_state) << std::endl;
 	//std::cout << _state << std::endl;
 #endif
 	// new empty Flowpipe
@@ -151,7 +151,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 		if ( noFlow ) {
 			currentSegment = _state;
 		} else {
-			currentSegment = boost::get<1>( initialSetup );
+			currentSegment = std::get<1>( initialSetup );
 		}
 		flowpipe.push_back( currentSegment );
 
@@ -199,7 +199,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 
 			// perform linear transformation on the last segment of the flowpipe
 #ifdef USE_SYSTEM_SEPARATION
-			autonomPart = autonomPart.partiallyApplyTimeStep( ConstraintSet<Number>( boost::get<2>( initialSetup ), boost::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
+			autonomPart = autonomPart.partiallyApplyTimeStep( ConstraintSet<Number>( std::get<2>( initialSetup ), std::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
 #ifdef USE_ELLIPSOIDS
 			if ( mBloatingFactor != 0 ) {
 				Representation temp = Representation( totalBloating );
@@ -214,11 +214,11 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 				nextSegment = autonomPart;
 			}
 #endif
-			// nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-			nonautonomPart = nonautonomPart.linearTransformation( boost::get<2>( initialSetup ) );
+			// nonautonomPart = nonautonomPart.linearTransformation( std::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
+			nonautonomPart = nonautonomPart.linearTransformation( std::get<2>( initialSetup ) );
 			totalBloating = totalBloating.minkowskiSum( nonautonomPart );
 #else
-			nextSegment = currentSegment.partiallyApplyTimeStep( ConstraintSet<Number>( boost::get<2>( initialSetup ), boost::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
+			nextSegment = currentSegment.partiallyApplyTimeStep( ConstraintSet<Number>( std::get<2>( initialSetup ), std::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
 #endif
 			// extend flowpipe (only if still within Invariant of location)
 			std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant() );

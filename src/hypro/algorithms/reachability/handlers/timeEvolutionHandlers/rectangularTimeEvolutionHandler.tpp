@@ -4,10 +4,10 @@ namespace hypro {
 template <typename State>
 void rectangularTimeEvolutionHandler<State>::handle() {
 	if ( !mComputed ) {
-		DEBUG( "hydra.worker", "Applying timestep to " << mState->getSet( mIndex ) );
+		//DEBUG( "hydra.worker", "Applying timestep to " << mState->getSet( mIndex ) );
 		auto& vpool = hypro::VariablePool::getInstance();
 		// get initial state
-		CarlPolytope<Number> initial = boost::get<CarlPolytope<Number>>( mState->getSet( mIndex ) );
+		CarlPolytope<Number> initial = std::get<CarlPolytope<Number>>( mState->getSet( mIndex ) );
 		// storage to build elimination query
 		std::vector<carl::Variable> variablesToEliminate;
 		// add variable for time elapse

@@ -3,7 +3,6 @@
 #include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/statistics/statistics.h"
 
-#include <boost/unordered_map.hpp>
 #include <list>
 
 namespace std {

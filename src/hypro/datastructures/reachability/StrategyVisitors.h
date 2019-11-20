@@ -1,13 +1,11 @@
 #pragma once
 #include "../../types.h"
 
-#include <boost/variant.hpp>
-#include <boost/variant/static_visitor.hpp>
-
+#include <variant>
 namespace hypro {
 
 template <typename State>
-struct setCreationVisitor : public boost::static_visitor<typename State::repVariant> {
+struct setCreationVisitor {
 	matrix_t<typename State::NumberType> mMatrix;
 	vector_t<typename State::NumberType> mVector;
 

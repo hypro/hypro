@@ -15,7 +15,6 @@
 #include "../util/linearOptimization/EvaluationResult.h"
 #include "Point.h"
 
-#include <boost/functional/hash.hpp>
 #include <cassert>
 #include <glpk.h>
 

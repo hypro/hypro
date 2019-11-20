@@ -202,7 +202,7 @@ carl::Interval<tNumber> TimedContext<State>::computeShortestElapsedTimeIntervalF
 	carl::Interval<tNumber> minInterval = carl::Interval<tNumber>::emptyInterval();
 	tNumber minDiameter = -1.0;
 	// this should always be a dbm. If not, we deliberately throw the bad get exception
-	hypro::DifferenceBounds<Number> dbm = boost::get<hypro::DifferenceBounds<Number>>( in.getSet( index ) );
+	hypro::DifferenceBounds<Number> dbm = std::get<hypro::DifferenceBounds<Number>>( in.getSet( index ) );
 	if ( dbm.dimension() > 0 ) {
 		size_t numclocks = dbm.dimension();
 		for ( size_t i = 0; i < numclocks; i++ ) {
@@ -311,8 +311,8 @@ carl::Interval<tNumber> TimedContext<State>::handshakeTimestamps( State& preOp, 
 			continue;
 		}
 
-		hypro::DifferenceBounds<Number> preOpDBM = boost::get<hypro::DifferenceBounds<Number>>( preOp.getSet( index ) );
-		hypro::DifferenceBounds<Number> postOpDBM = boost::get<hypro::DifferenceBounds<Number>>( postOp.getSet( index ) );
+		hypro::DifferenceBounds<Number> preOpDBM = std::get<hypro::DifferenceBounds<Number>>( preOp.getSet( index ) );
+		hypro::DifferenceBounds<Number> postOpDBM = std::get<hypro::DifferenceBounds<Number>>( postOp.getSet( index ) );
 		for ( int i = 1; i < postOpDBM.getDBM().rows(); i++ ) {
 			Number lowerBound = preOpDBM.getDBM()( 0, i ).first;
 

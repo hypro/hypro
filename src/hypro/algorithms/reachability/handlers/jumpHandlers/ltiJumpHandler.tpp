@@ -275,7 +275,7 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 				if ( newState.getSetType( i ) == representation_name::SFN ) {
 					//Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope (or possibly a box)
 					//and set it as the leaf of a new tree
-					auto tmpSFN = boost::apply_visitor( genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet( i ) );
+					auto tmpSFN = std::visit( genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), newState.getSet( i ) );
 					if ( tmpSFN.getSettings().DETECT_BOX ) {
 						//if(!tmpSFN.empty()){
 						tmpSFN.reduceRepresentation();
@@ -287,7 +287,7 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 							HPolytopeT<Number, hypro::Converter<Number>, HPolytopeOptimizerCaching> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );
 							tmpSFN = SupportFunctionNew<Number>( tmpHPoly );
 						}
-						newState.setSet( boost::apply_visitor( genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>( tmpSFN ), newState.getSet( i ) ), i );
+						newState.setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>( tmpSFN ), newState.getSet( i ) ), i );
 						//}
 					}
 				}
@@ -345,7 +345,7 @@ void ltiJumpHandler<State>::aggregate( std::map<Transition<Number>*, std::vector
 					continue;
 				} else {
 					//START_BENCHMARK_OPERATION(UNION);
-					currentSets[i] = boost::apply_visitor( genericUniteVisitor<typename State::repVariant>(), currentSets[i], stateIt->getSet( i ) );
+					currentSets[i] = std::visit( genericUniteVisitor<typename State::repVariant>(), currentSets[i], stateIt->getSet( i ) );
 					//EVALUATE_BENCHMARK_RESULT(UNION);
 				}
 			}

@@ -3,7 +3,7 @@
 namespace hypro {
 template <typename State>
 void ltiTimeEvolutionHandler<State>::handle() {
-	TRACE( "hydra.worker", "Applying timestep to " << mState->getSet( mIndex ) );
+	TRACE( "hydra.worker", "Applying timestep to " << mState );
 	TRACE( "hydra.worker", "Flow trafo: \n"
 								 << mTrafo << "\n Flow translation: \n"
 								 << mTranslation );

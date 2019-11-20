@@ -23,7 +23,7 @@ void rectangularBadStateHandler<State>::handle() {
 		}
 
 		// intersect
-		auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( badStateConstraints );
+		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( badStateConstraints );
 
 		// reduction
 		resultingSet.removeRedundancy();
@@ -59,7 +59,7 @@ void rectangularBadStateHandler<State>::handle() {
 			}
 
 			// intersect
-			auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( badStateConstraints );
+			auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( badStateConstraints );
 
 			// reduction
 			resultingSet.removeRedundancy();

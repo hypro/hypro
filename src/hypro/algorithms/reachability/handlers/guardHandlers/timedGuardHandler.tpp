@@ -7,7 +7,7 @@ void timedGuardHandler<State>::handle() {
 																  << " -> " << this->mTransition->getTarget()->getName() << "(" << this->mTransition->getTarget()->hash() << ")" );
 	TRACE( "hydra.worker.discrete", "Check guard constraint :" << this->mTransition->getGuard().getMatrix( this->mIndex ) << "\n Transition: " << this->mTransition->getGuard().getVector( this->mIndex ) );
 
-	std::pair<CONTAINMENT, hypro::DifferenceBounds<Number>> res = boost::get<hypro::DifferenceBounds<Number>>( this->mGuardSatisfyingState->getSet( this->mIndex ) ).intersectConstraints( this->mTransition->getGuard().getMatrix( this->mIndex ), this->mTransition->getGuard().getVector( this->mIndex ), hypro::CONTAINMENT::FULL );
+	std::pair<CONTAINMENT, hypro::DifferenceBounds<Number>> res = std::get<hypro::DifferenceBounds<Number>>( this->mGuardSatisfyingState->getSet( this->mIndex ) ).intersectConstraints( this->mTransition->getGuard().getMatrix( this->mIndex ), this->mTransition->getGuard().getVector( this->mIndex ), hypro::CONTAINMENT::FULL );
 
 	if ( res.first == CONTAINMENT::NO ) {
 		TRACE( "hydra.worker.discrete", "Guard violating dbm: " << res.second );

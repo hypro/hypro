@@ -17,7 +17,7 @@ void timedBadStateHandler<State>::handle() {
 				matrix_t<Number> constraints = badConditions.getMatrix( this->mIndex );
 				vector_t<Number> constants = badConditions.getVector( this->mIndex );
 
-				std::pair<CONTAINMENT, DifferenceBounds<Number>> badStatePair = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).intersectConstraints( constraints, constants, CONTAINMENT::NO );
+				std::pair<CONTAINMENT, DifferenceBounds<Number>> badStatePair = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).intersectConstraints( constraints, constants, CONTAINMENT::NO );
 
 				if ( badStatePair.first != CONTAINMENT::NO ) {
 					DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << badStatePair.first << ")" );
@@ -35,7 +35,7 @@ void timedBadStateHandler<State>::handle() {
 			matrix_t<Number> constraints = badState.getMatrix( this->mIndex );
 			vector_t<Number> constants = badState.getVector( this->mIndex );
 
-			std::pair<CONTAINMENT, DifferenceBounds<Number>> badStatePair = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).intersectConstraints( constraints, constants, CONTAINMENT::NO );
+			std::pair<CONTAINMENT, DifferenceBounds<Number>> badStatePair = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).intersectConstraints( constraints, constants, CONTAINMENT::NO );
 
 			if ( badStatePair.first != CONTAINMENT::NO ) {
 				DEBUG( "hydra.worker", "Intersection with global bad states" );

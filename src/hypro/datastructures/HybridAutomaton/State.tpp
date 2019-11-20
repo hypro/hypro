@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Number, typename Representation, typename... Rargs>
-const boost::variant<Representation, Rargs...>& State<Number, Representation, Rargs...>::getSet( std::size_t i ) const {
+const std::variant<Representation, Rargs...>& State<Number, Representation, Rargs...>::getSet( std::size_t i ) const {
 	DEBUG( "hypro.datastructures", "Attempt to get set at pos " << i << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size() );
 	assert( mTypes.size() == mSets.size() );
 	assert( i < mSets.size() );
@@ -12,7 +12,7 @@ const boost::variant<Representation, Rargs...>& State<Number, Representation, Ra
 }
 
 template <typename Number, typename Representation, typename... Rargs>
-boost::variant<Representation, Rargs...>& State<Number, Representation, Rargs...>::rGetSet( std::size_t i ) {
+std::variant<Representation, Rargs...>& State<Number, Representation, Rargs...>::rGetSet( std::size_t i ) {
 	DEBUG( "hypro.datastructures", "Attempt to get set reference at pos " << i << ", mSets.size() = " << mSets.size() );
 	assert( mTypes.size() == mSets.size() );
 	assert( checkConsistency() );
@@ -48,8 +48,7 @@ void State<Number, Representation, Rargs...>::setSet( const State<Number, Repres
 		mTypes.push_back( Representation::type() );  // some default set type.
 	}
 	mSets[i] = s;
-	mTypes[i] = boost::apply_visitor( genericTypeVisitor(), s );
-	TRACE( "hypro.datastructures", "Set set to:" << s << ", type: " << mTypes[i] );
+	mTypes[i] = std::visit( genericTypeVisitor(), s );
 	DEBUG( "hypro.datastructures", "Set set at pos " << i << ", mSets.size() = " << mSets.size() );
 	assert( mSets.size() > i );
 	assert( checkConsistency() );
@@ -79,7 +78,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
 		TRACE( "hypro.datastructures", "Apply unite vistor for set " << i );
-		res.setSetDirect( boost::apply_visitor( genericUniteVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
+		res.setSetDirect( std::visit( genericUniteVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
 	}
 
 	TRACE( "hypro.datastructures", "Done union." );
@@ -114,7 +113,7 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 		// check each substateset agains its invariant subset
 		//DEBUG("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix(i) << std::endl << "Vector: " << std::endl << in.getVector(i));
 		//DEBUG("hypro.datastructures", "Before genericSatisfiesHalfspacesVisitor. mSets.at(" << i << ") is: "<< std::endl << mSets.at(i));
-		auto resultPair = boost::apply_visitor( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( i ), in.getVector( i ) ), mSets.at( i ) );
+		auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( i ), in.getVector( i ) ), mSets.at( i ) );
 		//DEBUG("hypro.datastructures", "After genericSatisfiesHalfspacesVisitor.");
 		assert( resultPair.first != CONTAINMENT::YES );  // assert that we have detailed information on the invariant intersection.
 
@@ -158,7 +157,7 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 
 	TRACE( "hypro.datastructures", "Invoking satisfiesHalfspaces visitor." );
 	assert( mSets.size() > I );
-	auto resultPair = boost::apply_visitor( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( I ), in.getVector( I ) ), mSets.at( I ) );
+	auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( I ), in.getVector( I ) ), mSets.at( I ) );
 	TRACE( "hypro.datastructures", "Done satisfiesHalfspaces visitor, attempt to set result." );
 	res.setSetDirect( resultPair.second, I );
 
@@ -175,7 +174,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( res.getTimestamp() == this->getTimestamp() );
 	assert( mSets.size() > I );
 
-	auto resultPair = boost::apply_visitor( genericSatisfiesHalfspacesVisitor<repVariant, Number>( constraints, constants ), mSets.at( I ) );
+	auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( constraints, constants ), mSets.at( I ) );
 	res.setSetDirect( resultPair.second, I );
 
 	return res;
@@ -189,7 +188,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( flows.size() == mSets.size() );
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
-		res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( flows.at( i ).first, flows.at( i ).second ), mSets.at( i ) ), i );
+		res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( flows.at( i ).first, flows.at( i ).second ), mSets.at( i ) ), i );
 	}
 	res.addTimeToClocks( timeStepSize );
 	return res;
@@ -200,7 +199,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	State<Number, Representation, Rargs...> res( *this );
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( flow.matrix(), flow.vector() ), mSets.at( I ) ), I );
+	res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( flow.matrix(), flow.vector() ), mSets.at( I ) ), I );
 
 	res.addTimeToClocks( timeStepSize );
 	return res;
@@ -219,8 +218,8 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 		auto expMatrix = matrixExponential( deltaMatrix );
 
 		// apply according transformation to subspace set
-		assert( boost::apply_visitor( genericDimensionVisitor(), mSets[i] ) == expMatrix.rows() );
-		res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( expMatrix.matrix(), vector_t<Number>::Zero( flows[i].rows() ) ), mSets.at( i ) ), i );
+		assert( std::visit( genericDimensionVisitor(), mSets[i] ) == expMatrix.rows() );
+		res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( expMatrix.matrix(), vector_t<Number>::Zero( flows[i].rows() ) ), mSets.at( i ) ), i );
 	}
 	// update internal clocks
 	res.addTimeToClocks( timeStepSize );
@@ -256,8 +255,8 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 		translation.conservativeResize( rows - 1 );
 
 		// apply according transformation to subspace set
-		assert( boost::apply_visitor( genericDimensionVisitor(), mSets[i] ) == expMatrix.rows() );
-		res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( expMatrixResized.matrix(), translation ), mSets.at( i ) ), i );
+		assert( std::visit( genericDimensionVisitor(), mSets[i] ) == expMatrix.rows() );
+		res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( expMatrixResized.matrix(), translation ), mSets.at( i ) ), i );
 	}
 	// update internal clocks
 	res.addTimeToClocks( timeStepSize );
@@ -289,7 +288,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( trafos.size() == mSets.size() );
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
-		res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( trafos.at( i ).matrix(), trafos.at( i ).vector() ), mSets.at( i ) ), i );
+		res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( trafos.at( i ).matrix(), trafos.at( i ).vector() ), mSets.at( i ) ), i );
 	}
 	return res;
 }
@@ -300,7 +299,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
 	INFO( "hypro.datastructures", "Apply transformation of set at pos " << I << ", using transformation " << trafo );
-	res.setSet( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( I ) ), I );
+	res.setSet( std::visit( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( I ) ), I );
 	return res;
 }
 
@@ -311,7 +310,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( mSets.size() == 1 );
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
-		res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( i ) ), i );
+		res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( i ) ), i );
 	}
 	return res;
 }
@@ -334,7 +333,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	State<Number, Representation, Rargs...> res( *this );
 	TRACE( "hypro.datastructures", "Apply interval assignment for subspace " << I << "." );
 	// Note: We abuse empty intervals to indicate identity assignments -> change to a map later! (TODO)
-	res.setSetDirect( boost::apply_visitor( genericIntervalAssignmentVisitor<repVariant, Number>( assignments ), mSets.at( I ) ), I );
+	res.setSetDirect( std::visit( genericIntervalAssignmentVisitor<repVariant, Number>( assignments ), mSets.at( I ) ), I );
 	return res;
 }
 
@@ -345,7 +344,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < sets.size(); ++i ) {
 		assert( sets.at( i ) < mSets.size() );
-		res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( trafos.at( i ).matrix(), trafos.at( i ).vector() ), mSets.at( sets.at( i ) ) ), sets.at( i ) );
+		res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( trafos.at( i ).matrix(), trafos.at( i ).vector() ), mSets.at( sets.at( i ) ) ), sets.at( i ) );
 	}
 	return res;
 }
@@ -355,23 +354,23 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	State<Number, Representation, Rargs...> res( *this );
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	res.setSetDirect( boost::apply_visitor( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( I ) ), I );
+	res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( I ) ), I );
 
 	return res;
 }
 
 template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::minkowskiSum( const State<Number, Representation, Rargs...>& rhs ) const {
-	//If only one representation given: avoid boost visitor
+	//If only one representation given: avoid visitor
 	//if(mTypes.size() == 1){
-	//	return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
+	//	return std::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
 	//}
-	//For more representations: use boost visitor
+	//For more representations: use visitor
 	State<Number, Representation, Rargs...> res( *this );
 	assert( mSets.size() == rhs.getSets().size() );
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < rhs.getSets().size(); i++ ) {
-		res.setSetDirect( boost::apply_visitor( genericMinkowskiSumVisitor<repVariant>(), mSets.at( i ), rhs.getSet( i ) ), i );
+		res.setSetDirect( std::visit( genericMinkowskiSumVisitor<repVariant>(), mSets.at( i ), rhs.getSet( i ) ), i );
 	}
 	return res;
 }
@@ -381,13 +380,13 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( I < mSets.size() );
 	assert( I < rhs.getSets().size() );
 	assert( checkConsistency() );
-	//If only one representation given: avoid boost visitor
+	//If only one representation given: avoid visitor
 	//if(mTypes.size() == 1){
-	//	return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
+	//	return std::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
 	//}
-	//For more representations avaiable: use boost visitor
+	//For more representations avaiable: use visitor
 	State<Number, Representation, Rargs...> res( *this );
-	res.setSetDirect( boost::apply_visitor( genericMinkowskiSumVisitor<repVariant>(), mSets.at( I ), rhs.getSet( I ) ), I );
+	res.setSetDirect( std::visit( genericMinkowskiSumVisitor<repVariant>(), mSets.at( I ), rhs.getSet( I ) ), I );
 	return res;
 }
 
@@ -396,7 +395,7 @@ bool State<Number, Representation, Rargs...>::contains( const State<Number, Repr
 	assert( checkConsistency() );
 	assert( rhs.getNumberSets() == this->getNumberSets() );
 	for ( std::size_t i = 0; i < this->getNumberSets(); ++i ) {
-		if ( !boost::apply_visitor( genericSetContainsVisitor(), this->getSet( i ), rhs.getSet( i ) ) ) {
+		if ( !std::visit( genericSetContainsVisitor(), this->getSet( i ), rhs.getSet( i ) ) ) {
 			return false;
 		}
 	}
@@ -406,13 +405,13 @@ bool State<Number, Representation, Rargs...>::contains( const State<Number, Repr
 template <typename Number, typename Representation, typename... Rargs>
 std::vector<Point<Number>> State<Number, Representation, Rargs...>::vertices( std::size_t I ) const {
 	assert( checkConsistency() );
-	return boost::apply_visitor( genericVerticesVisitor<Number>(), mSets.at( I ) );
+	return std::visit( genericVerticesVisitor<Number>(), mSets.at( I ) );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::project( const std::vector<std::size_t>& dimensions, std::size_t I ) const {
 	State res( *this );
-	res.setSetDirect( boost::apply_visitor( genericProjectionVisitor<repVariant>( dimensions ), mSets.at( I ) ) );
+	res.setSetDirect( std::visit( genericProjectionVisitor<repVariant>( dimensions ), mSets.at( I ) ) );
 	return res;
 }
 
@@ -428,7 +427,7 @@ template <typename Number, typename Representation, typename... Rargs>
 std::size_t State<Number, Representation, Rargs...>::getDimension( std::size_t I ) const {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	return boost::apply_visitor( genericDimensionVisitor(), mSets.at( I ) );
+	return std::visit( genericDimensionVisitor(), mSets.at( I ) );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
@@ -446,25 +445,25 @@ template <typename Number, typename Representation, typename... Rargs>
 Number State<Number, Representation, Rargs...>::getSupremum( std::size_t I ) const {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	//If only one representation given: avoid boost visitor
+	//If only one representation given: avoid visitor
 	//if(mTypes.size() == 1){
-	//	return boost::get<Representation>(mSets.at(0)).supremum();
+	//	return std::get<Representation>(mSets.at(0)).supremum();
 	//}
-	//For more representations avaiable: use boost visitor
-	return boost::apply_visitor( genericSupremumVisitor<Number>(), mSets.at( I ) );
+	//For more representations avaiable: use visitor
+	return std::visit( genericSupremumVisitor<Number>(), mSets.at( I ) );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::removeRedundancy() {
-	//If only one representation given: avoid boost visitor
+	//If only one representation given: avoid visitor
 	//if(mTypes.size() == 1){
-	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();
+	//	return std::get<Representation>(mSets.at(0)).removeRedundancy();
 	//}
-	//For more representations avaiable: use boost visitor
+	//For more representations avaiable: use visitor
 	assert( checkConsistency() );
 	State<Number, Representation, Rargs...> res( *this );
 	for ( std::size_t i = 0; i < mSets.size(); i++ ) {
-		res.setSetDirect( boost::apply_visitor( genericRedundancyVisitor<repVariant, Number>(), mSets.at( i ) ), i );
+		res.setSetDirect( std::visit( genericRedundancyVisitor<repVariant, Number>(), mSets.at( i ) ), i );
 	}
 }
 
@@ -472,19 +471,19 @@ template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::partiallyRemoveRedundancy( std::size_t I ) {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	//If only one representation given: avoid boost visitor
+	//If only one representation given: avoid visitor
 	//if(mTypes.size() == 1){
-	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();
+	//	return std::get<Representation>(mSets.at(0)).removeRedundancy();
 	//}
-	//For more representations avaiable: use boost visitor
-	mSets[I] = boost::apply_visitor( genericRedundancyVisitor<repVariant, Number>(), mSets[I] );
+	//For more representations avaiable: use visitor
+	mSets[I] = std::visit( genericRedundancyVisitor<repVariant, Number>(), mSets[I] );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::reduceRepresentation() {
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); i++ ) {
-		this->setSetDirect( boost::apply_visitor( genericReductionVisitor<repVariant, Number>(), mSets.at( i ) ), i );
+		this->setSetDirect( std::visit( genericReductionVisitor<repVariant, Number>(), mSets.at( i ) ), i );
 	}
 }
 
@@ -492,7 +491,7 @@ template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::partiallyReduceRepresentation( std::size_t I ) {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	this->setSetDirect( boost::apply_visitor( genericReductionVisitor<repVariant, Number>(), mSets.at( I ) ), I );
+	this->setSetDirect( std::visit( genericReductionVisitor<repVariant, Number>(), mSets.at( I ) ), I );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
@@ -502,22 +501,22 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 		return false;
 	}
 	for ( std::size_t i = 0; i < mSets.size(); i++ ) {
-		if ( mTypes.at( i ) != boost::apply_visitor( genericTypeVisitor(), mSets.at( i ) ) ) {
-			std::cout << "Types do not match (expected: " << mTypes.at( i ) << ", is: " << boost::apply_visitor( genericTypeVisitor(), mSets.at( i ) ) << ")" << std::endl;
+		if ( mTypes.at( i ) != std::visit( genericTypeVisitor(), mSets.at( i ) ) ) {
+			std::cout << "Types do not match (expected: " << mTypes.at( i ) << ", is: " << std::visit( genericTypeVisitor(), mSets.at( i ) ) << ")" << std::endl;
 			return false;
 			//} else {
-			//std::cout << "Types matched, in mTypes: " << mTypes.at(i) << " actual type in mSets is:" << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << std::endl;
+			//std::cout << "Types matched, in mTypes: " << mTypes.at(i) << " actual type in mSets is:" << std::visit(genericTypeVisitor(), mSets.at(i)) << std::endl;
 		}
 	}
 	return true;
 }
 
 template <typename Number, typename Representation, typename... Rargs>
-void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<boost::variant<Representation, Rargs...>>& sets ) {
+void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<std::variant<Representation, Rargs...>>& sets ) {
 	assert( checkConsistency() );
 	//std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
 	for ( std::size_t i = 0; i < sets.size(); i++ ) {
-		setSetType( boost::apply_visitor( genericTypeVisitor(), sets.at( i ) ), i );
+		setSetType( std::visit( genericTypeVisitor(), sets.at( i ) ), i );
 	}
 	mSets = sets;
 	assert( checkConsistency() );
@@ -529,8 +528,8 @@ void State<Number, Representation, Rargs...>::decompose( const Decomposition& de
 		// no decomposition/already decomposed
 	}
 	// initial set is a constraint set
-	matrix_t<Number> constraintsOld( boost::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).matrix() );
-	vector_t<Number> constantsOld( boost::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).vector() );
+	matrix_t<Number> constraintsOld( std::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).matrix() );
+	vector_t<Number> constantsOld( std::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).vector() );
 	int i = 0;
 	for ( auto decomp : decomposition ) {
 		DEBUG( "hypro.datastructures", "Trying to project set: \n " << mSets.at( 0 ) << "\n to dimensions: " );
@@ -604,7 +603,7 @@ void State<Number, Representation, Rargs...>::setAndConvertType( std::size_t I )
 	assert( I < mTypes.size() );
 
 	// convert set to type
-	mSets[I] = boost::apply_visitor( genericConversionVisitor<repVariant, To>( To::type() ), mSets[I] );
+	mSets[I] = std::visit( genericConversionVisitor<repVariant, To>( To::type() ), mSets[I] );
 	mTypes[I] = To::type();
 
 	assert( checkConsistency() );

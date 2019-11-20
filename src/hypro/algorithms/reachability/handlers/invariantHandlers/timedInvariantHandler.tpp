@@ -5,14 +5,14 @@ template <typename State>
 void timedInvariantHandler<State>::handle() {
 	// check if initial Valuation fulfills Invariant
 	DEBUG( "hydra.worker", "Check invariant: " << this->mState->getLocation()->getInvariant() );
-	DEBUG( "hydra.worker", "Set before intersection with invariant:\n: " << this->mState->getSet( this->mIndex ) );
+	//DEBUG( "hydra.worker", "Set before intersection with invariant:\n: " << this->mState->getSet( this->mIndex ) );
 
 	Condition<Number> invariant = this->mState->getLocation()->getInvariant();
 
 	matrix_t<Number> constraints = this->mState->getLocation()->getInvariant().getMatrix( this->mIndex );
 	vector_t<Number> constants = this->mState->getLocation()->getInvariant().getVector( this->mIndex );
 
-	std::pair<CONTAINMENT, DifferenceBounds<Number>> res = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).intersectConstraints( this->mState->getLocation()->getInvariant().getMatrix( this->mIndex ), this->mState->getLocation()->getInvariant().getVector( this->mIndex ), CONTAINMENT::FULL );
+	std::pair<CONTAINMENT, DifferenceBounds<Number>> res = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).intersectConstraints( this->mState->getLocation()->getInvariant().getMatrix( this->mIndex ), this->mState->getLocation()->getInvariant().getVector( this->mIndex ), CONTAINMENT::FULL );
 	DEBUG( "hydra.worker", "Set after intersection with invariant:\n"
 								 << res.second );
 	if ( res.first != CONTAINMENT::NO ) {

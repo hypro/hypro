@@ -22,10 +22,10 @@ void rectangularInvariantHandler<State>::handle() {
 	}
 
 	// intersect
-	auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( invariantConstraints );
+	auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( invariantConstraints );
 
 	// determine full vs. partial containment
-	if ( resultingSet == boost::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ) ) {
+	if ( resultingSet == std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ) ) {
 		mContainment = CONTAINMENT::FULL;
 	}
 

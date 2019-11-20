@@ -7,8 +7,7 @@
 namespace hypro {
 
 template <typename T>
-class genericUniteVisitor
-	: public boost::static_visitor<T> {
+class genericUniteVisitor {
   public:
 	template <typename A, typename B>
 	inline T operator()( const A& lhs, const B& ) const {
@@ -27,8 +26,7 @@ class genericUniteVisitor
 };
 
 template <typename T>
-class genericMinkowskiSumVisitor
-	: public boost::static_visitor<T> {
+class genericMinkowskiSumVisitor {
   public:
 	template <typename A, typename B>
 	inline T operator()( const A& lhs, const B& ) const {
@@ -45,8 +43,7 @@ class genericMinkowskiSumVisitor
 };
 
 template <typename T>
-class genericIntersectVisitor
-	: public boost::static_visitor<T> {
+class genericIntersectVisitor {
   public:
 	template <typename A, typename B>
 	inline T operator()( const A& lhs, const B& ) const {
@@ -60,8 +57,7 @@ class genericIntersectVisitor
 };
 
 template <typename T, typename Number>
-class genericAffineTransformationVisitor
-	: public boost::static_visitor<T> {
+class genericAffineTransformationVisitor {
   protected:
 	const matrix_t<Number>& mat;
 	const vector_t<Number>& vec;
@@ -81,8 +77,7 @@ class genericAffineTransformationVisitor
 };
 
 template <typename T, typename To>
-class genericConversionVisitor
-	: public boost::static_visitor<T> {
+class genericConversionVisitor {
   public:
 	template <typename B>
 	inline T operator()( const B& lhs ) const {
@@ -93,8 +88,7 @@ class genericConversionVisitor
 };
 
 template <typename T, typename Ext>
-class genericInternalConversionVisitor
-	: public boost::static_visitor<T> {
+class genericInternalConversionVisitor {
   protected:
 	Ext mExt;
 
@@ -112,8 +106,7 @@ class genericInternalConversionVisitor
 };
 
 template <typename OutType>
-class genericConvertAndGetVisitor
-	: public boost::static_visitor<OutType> {
+class genericConvertAndGetVisitor {
   protected:
   public:
 	template <typename B>
@@ -125,8 +118,7 @@ class genericConvertAndGetVisitor
 };
 
 template <typename T, typename Number>
-class genericRedundancyVisitor
-	: public boost::static_visitor<T> {
+class genericRedundancyVisitor {
   public:
 	template <typename A>
 	inline T operator()( A lhs ) const {
@@ -136,8 +128,7 @@ class genericRedundancyVisitor
 };
 
 template <typename T, typename Number>
-class genericReductionVisitor
-	: public boost::static_visitor<T> {
+class genericReductionVisitor {
   public:
 	template <typename A>
 	inline T operator()( A lhs ) const {
@@ -147,8 +138,7 @@ class genericReductionVisitor
 };
 
 template <typename T, typename Number>
-class genericSatisfiesHalfspacesVisitor
-	: public boost::static_visitor<std::pair<CONTAINMENT, T>> {
+class genericSatisfiesHalfspacesVisitor {
   protected:
 	const matrix_t<Number>& constraints;
 	const vector_t<Number>& constants;
@@ -165,8 +155,7 @@ class genericSatisfiesHalfspacesVisitor
 	}
 };
 
-class genericCompareVisitor
-	: public boost::static_visitor<bool> {
+class genericCompareVisitor {
   public:
 	template <typename A, typename B>
 	inline bool operator()( const A&, const B& ) const {
@@ -179,8 +168,7 @@ class genericCompareVisitor
 	}
 };
 
-class genericOutstreamVisitor
-	: public boost::static_visitor<std::ostream&> {
+class genericOutstreamVisitor {
   protected:
 	std::ostream& out;
 
@@ -195,8 +183,7 @@ class genericOutstreamVisitor
 	}
 };
 
-class genericDimensionVisitor
-	: public boost::static_visitor<std::size_t> {
+class genericDimensionVisitor {
   public:
 	template <typename T>
 	inline std::size_t operator()( const T& shape ) const {
@@ -205,8 +192,7 @@ class genericDimensionVisitor
 };
 
 template <typename T>
-class genericSupremumVisitor
-	: public boost::static_visitor<T> {
+class genericSupremumVisitor {
   public:
 	template <typename A>
 	inline T operator()( const A& shape ) const {
@@ -214,8 +200,7 @@ class genericSupremumVisitor
 	}
 };
 
-class genericTypeVisitor
-	: public boost::static_visitor<representation_name> {
+class genericTypeVisitor {
   public:
 	template <typename A>
 	inline representation_name operator()( const A& ) const {
@@ -224,8 +209,7 @@ class genericTypeVisitor
 };
 
 template <typename Number>
-class genericVerticesVisitor
-	: public boost::static_visitor<std::vector<Point<Number>>> {
+class genericVerticesVisitor {
   public:
 	template <typename B>
 	inline std::vector<Point<Number>> operator()( const B& lhs ) const {
@@ -234,8 +218,7 @@ class genericVerticesVisitor
 };
 
 template <typename T>
-class genericProjectionVisitor
-	: public boost::static_visitor<T> {
+class genericProjectionVisitor {
   protected:
 	std::vector<std::size_t> mDimensions;
 
@@ -250,8 +233,7 @@ class genericProjectionVisitor
 	}
 };
 
-class genericSetContainsVisitor
-	: public boost::static_visitor<bool> {
+class genericSetContainsVisitor {
   public:
 	template <typename A, typename B>
 	inline bool operator()( const A&, const B& ) const {
@@ -267,8 +249,7 @@ class genericSetContainsVisitor
 };
 
 template <typename T, typename Number>
-class genericIntervalAssignmentVisitor
-	: public boost::static_visitor<T> {
+class genericIntervalAssignmentVisitor {
 	const std::vector<carl::Interval<Number>>& mAssignments;
 
   public:
@@ -300,6 +281,16 @@ class genericIntervalAssignmentVisitor
 		DEBUG( "hypro.datastructures", "INTERVAL ASSIGNMENT NOT IMPLEMENTED FOR THIS TYPE." );
 		std::cout << "Interval assignment not implemented for this type." << std::endl;
 		return lhs;
+	}
+};
+
+class genericToStringVisitor {
+  public:
+	template <typename A>
+	inline std::string operator()( const A& in ) const {
+		std::stringstream ss;
+		ss << in;
+		return ss.str();
 	}
 };
 

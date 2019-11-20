@@ -4,9 +4,9 @@ namespace hypro {
 template <typename State>
 void timedElapseAfterTickTimeEvolutionHandler<State>::handle() {
 	if ( !mComputed ) {  //only compute once
-		DifferenceBounds<Number> dbmBeforeElapse = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
-		this->mState->setSet( boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).elapse(), this->mIndex );
-		DifferenceBounds<Number> dbm = boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
+		DifferenceBounds<Number> dbmBeforeElapse = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
+		this->mState->setSet( std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ).elapse(), this->mIndex );
+		DifferenceBounds<Number> dbm = std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) );
 		// intersect the zone in each clock direction with the timeHorizon
 		if ( dbm.dimension() > 0 ) {
 			size_t numclocks = dbm.dimension();
@@ -19,7 +19,7 @@ void timedElapseAfterTickTimeEvolutionHandler<State>::handle() {
 		mComputed = true;
 	}
 #ifdef HYDRA_USE_LOGGING
-	Box<Number> tmp = Converter<Number>::toBox( boost::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ) );
+	Box<Number> tmp = Converter<Number>::toBox( std::get<DifferenceBounds<Number>>( this->mState->getSet( this->mIndex ) ) );
 	DEBUG( "hydra.worker", "Set after timestep: " << tmp );
 #endif
 }

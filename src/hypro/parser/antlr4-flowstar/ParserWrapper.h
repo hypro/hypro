@@ -4,7 +4,6 @@
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HyproHAVisitor.h"
-#include <boost/tuple/tuple.hpp>
 
 
 namespace hypro {

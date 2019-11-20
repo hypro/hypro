@@ -97,7 +97,7 @@ std::string toFlowstarFormat( const flowVariant<Number>& f,
 		case DynamicType::timed:
 		case DynamicType::discrete:
 		case DynamicType::linear: {
-			matrix_t<Number> flow = boost::get<linearFlow<Number>>( f ).getFlowMatrix();
+			matrix_t<Number> flow = std::get<linearFlow<Number>>( f ).getFlowMatrix();
 			for ( Eigen::Index rowI = 0; rowI < flow.rows(); ++rowI ) {
 				std::stringstream tmp;
 				tmp << prefix << "\t\t" << varNameMap.at( rowI ) << "' = ";

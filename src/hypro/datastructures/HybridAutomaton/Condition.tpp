@@ -3,9 +3,9 @@
 namespace hypro {
 
 template <typename Number>
-Condition<Number>::Condition( const std::vector<boost::variant<ConstraintSetT<Number>>>& sets ) {
+Condition<Number>::Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets ) {
 	for ( const auto& item : sets ) {
-		mConstraints.push_back( boost::get<ConstraintSetT<Number>>( item ) );
+		mConstraints.push_back( std::get<ConstraintSetT<Number>>( item ) );
 	}
 	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(), TRIBOOL::NSET};
 	mHash = 0;

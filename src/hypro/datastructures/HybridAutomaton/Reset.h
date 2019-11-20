@@ -4,7 +4,6 @@
 #include "ResetTypes.h"
 #include "decomposition/Decomposition.h"
 
-#include <boost/variant.hpp>
 #include <functional>
 
 namespace hypro {
@@ -12,7 +11,7 @@ namespace hypro {
 namespace detail {
 
 template <typename ReturnType, typename Function>
-struct ResetVisitor : public boost::static_visitor<ReturnType> {
+struct ResetVisitor {
 	Function function;
 
 	ResetVisitor() = delete;

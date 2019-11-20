@@ -21,10 +21,10 @@ void rectangularGuardHandler<State>::handle() {
 	}
 
 	// intersect
-	auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( guardConstraints );
+	auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( guardConstraints );
 
 	// determine full vs. partial containment
-	if ( resultingSet == boost::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ) ) {
+	if ( resultingSet == std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ) ) {
 		mContainment = CONTAINMENT::FULL;
 	}
 
@@ -35,7 +35,7 @@ void rectangularGuardHandler<State>::handle() {
 	if ( resultingSet.empty() ) {
 		mContainment = CONTAINMENT::NO;
 	} else if ( mContainment != CONTAINMENT::FULL ) {
-		//assert(resultingSet != boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)));
+		//assert(resultingSet != std::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)));
 		mContainment = CONTAINMENT::PARTIAL;
 	}
 	mState->setSet( resultingSet, mIndex );
