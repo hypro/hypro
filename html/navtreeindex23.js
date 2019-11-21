@@ -1,5 +1,7 @@
 var NAVTREEINDEX23 =
 {
+"structhypro_1_1reachability_1_1ReachSettings.html":[7,0,1,2,2],
+"structhypro_1_1scaleContent.html":[7,0,1,189],
 "structhypro_1_1scaleContent.html#a276ea8b741a7979ca707a18998530179":[7,0,1,189,0],
 "structhypro_1_1scaleContent.html#a8bced65d39d8b83c83988735f025dd44":[7,0,1,189,2],
 "structhypro_1_1scaleContent.html#aa7795cfdee1b9c6d9af38853de204a86":[7,0,1,189,4],
@@ -103,15 +105,15 @@ var NAVTREEINDEX23 =
 "usage.html":[2,1],
 "utilFunc.html":[3],
 "util_2convenienceOperators_8h_source.html":[8,0,1,0,4,8],
-"util_2linearOptimization_2Strategy_8h_source.html":[8,0,1,0,4,1,8],
+"util_2linearOptimization_2Strategy_8h_source.html":[8,0,1,0,4,1,9],
 "util_2typetraits_8h_source.html":[8,0,1,0,4,14],
 "utility_8h_source.html":[8,0,1,0,0,3,1,1,5],
 "vertexEnumeration_8h.html":[8,0,1,0,0,0,3],
 "vertexEnumeration_8h_source.html":[8,0,1,0,0,0,3],
 "visitors_8h_source.html":[8,0,1,0,1,0,1,7],
 "volumeApproximation_8h_source.html":[8,0,1,0,3,16],
-"z3Context_8cpp_source.html":[8,0,1,0,4,1,3,3],
-"z3Context_8h_source.html":[8,0,1,0,4,1,3,4],
-"z3Convenience_8h_source.html":[8,0,1,0,4,1,3,5],
-"z3_2helper__methods_8h_source.html":[8,0,1,0,4,1,3,2]
+"z3Context_8cpp_source.html":[8,0,1,0,4,1,4,3],
+"z3Context_8h_source.html":[8,0,1,0,4,1,4,4],
+"z3Convenience_8h_source.html":[8,0,1,0,4,1,4,5],
+"z3_2helper__methods_8h_source.html":[8,0,1,0,4,1,4,2]
 };

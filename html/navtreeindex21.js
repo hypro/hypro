@@ -1,5 +1,7 @@
 var NAVTREEINDEX21 =
 {
+"functions_func_g.html":[7,3,1,6],
+"functions_func_h.html":[7,3,1,7],
 "functions_func_i.html":[7,3,1,8],
 "functions_func_l.html":[7,3,1,9],
 "functions_func_m.html":[7,3,1,10],
@@ -32,7 +34,7 @@ var NAVTREEINDEX21 =
 "functions_z.html":[7,3,0,20],
 "generalStateSets.html":[2,0],
 "gettingStarted.html":[1],
-"glpk__context_8h_source.html":[8,0,1,0,4,1,5],
+"glpk__context_8h_source.html":[8,0,1,0,4,1,6],
 "group__geoState.html":[5,1],
 "group__globals.html":[5,0],
 "group__globals.html#ga607d8cb76bcf54172542359fda640812":[5,0,2],
@@ -118,7 +120,7 @@ var NAVTREEINDEX21 =
 "sampling_8h.html#af4c85ea08f845de363019cfc27f271e5":[8,0,1,0,4,5,0,3],
 "sampling_8h_source.html":[8,0,1,0,4,5,0],
 "simplex_8h_source.html":[8,0,1,0,3,9,1,2],
-"smtrat_2helper__methods_8h_source.html":[8,0,1,0,4,1,1,2],
+"smtrat_2helper__methods_8h_source.html":[8,0,1,0,4,1,2,2],
 "stateSets.html":[2],
 "statistics_8h_source.html":[8,0,1,0,4,6,2],
 "structDependent__part__funct.html":[7,0,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX21 =
 "structhypro_1_1LeafData.html#a30b7c9b0be29cbc855c44f97640b7dfd":[7,0,1,129,4],
 "structhypro_1_1LeafData.html#a9c2d4ef8a5b186f6041637bca0a81a6a":[7,0,1,129,2],
 "structhypro_1_1LeafData.html#aad783c8d97140ae982b17eefb8729d14":[7,0,1,129,3],
-"structhypro_1_1LeafData.html#ad510285b110796af76547e1c85372f27":[7,0,1,129,0],
-"structhypro_1_1LeafData.html#af0d1c08f500fd92a24a0e2139bfd74cc":[7,0,1,129,1],
-"structhypro_1_1LinTrafoParameters.html":[7,0,1,131]
+"structhypro_1_1LeafData.html#ad510285b110796af76547e1c85372f27":[7,0,1,129,0]
 };

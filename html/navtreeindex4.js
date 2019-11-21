@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classhypro_1_1HybridAutomatonBaseVisitor.html#a387e00b13af0e2871b0be9c41b69ae56":[7,0,1,87,13],
 "classhypro_1_1HybridAutomatonBaseVisitor.html#a392a9cc29df295a37b860ca0fa9e6798":[7,0,1,87,27],
 "classhypro_1_1HybridAutomatonBaseVisitor.html#a395b96a42c815191f447e381d9bb3c9d":[7,0,1,87,28],
 "classhypro_1_1HybridAutomatonBaseVisitor.html#a4a3badbb27e823d65a3962e4c7c9d005":[7,0,1,87,36],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ab35295c7b6b8280ac88bff9f35c147e8":[7,0,1,90,0,12],
 "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ab35319160ca07d6a66afeebff3af9795":[7,0,1,90,0,5],
 "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#abf9f749978c2a9d34aef056e8911e519":[7,0,1,90,0,8],
-"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#acb2e6ece9622f4c11f738d494ae4fbe4":[7,0,1,90,0,10],
-"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ae0eb24e68d232cf8bcee8806d4578660":[7,0,1,90,0,4]
+"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#acb2e6ece9622f4c11f738d494ae4fbe4":[7,0,1,90,0,10]
 };

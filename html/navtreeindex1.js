@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classhypro_1_1BallSupportFunction.html#a006b5de1fd70fa2761b7390dc92a3471":[7,0,1,6,10],
 "classhypro_1_1BallSupportFunction.html#a01411ac148f35abe5a6190b1cc42f9d5":[7,0,1,6,5],
 "classhypro_1_1BallSupportFunction.html#a2e58ec7d0780edaa6afaf8eb0a70d19b":[7,0,1,6,6],
 "classhypro_1_1BallSupportFunction.html#a347e56c460a8db5cf964a7efd92120fa":[7,0,1,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classhypro_1_1Dictionary.html#af5b45608cedaf14db298ff65d2424c4f":[7,0,1,28,15],
 "classhypro_1_1Dictionary.html#af60c39f6eb9d35e23d1a9925a3ede97d":[7,0,1,28,20],
 "classhypro_1_1Dictionary.html#af8faa40ed6857cc23f7c2f3d31869fe2":[7,0,1,28,0],
-"classhypro_1_1Dictionary.html#afa9ef5ca0958957c322476207e5a4f6d":[7,0,1,28,23],
-"classhypro_1_1DifferenceBoundsT.html":[5,1,0]
+"classhypro_1_1Dictionary.html#afa9ef5ca0958957c322476207e5a4f6d":[7,0,1,28,23]
 };
