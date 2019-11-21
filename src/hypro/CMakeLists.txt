@@ -8,7 +8,7 @@ file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 add_library(${PROJECT_NAME}-objects OBJECT ${sources})
 add_dependencies(${PROJECT_NAME}-objects resources)
-target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC EIGEN3 COCOA_SHARED Boost_SHARED Boost_program_options_SHARED carl-shared GMP_SHARED GMPXX_SHARED GLPK_STATIC ANTLR4_SHARED)
+target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC EIGEN3 COCOA_SHARED Boost_SHARED Boost_program_options_SHARED carl-shared GMP_SHARED GMPXX_SHARED GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC)
 target_include_directories(${PROJECT_NAME}-objects
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
@@ -35,6 +35,9 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_program_options_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC COCOA_STATIC)
+	if(HYPRO_USE_CLP)
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC clp_STATIC)
+	endif()
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC GMP_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC GMPXX_STATIC)
 	target_include_directories(${PROJECT_NAME}-static
@@ -62,6 +65,9 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_link_libraries(${PROJECT_NAME}-shared GMP_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared GMPXX_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared GLPK_STATIC)
+	if(HYPRO_USE_CLP)
+	target_link_libraries(${PROJECT_NAME}-shared clp_STATIC)
+	endif()
 	target_link_libraries(${PROJECT_NAME}-shared ANTLR4_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared pthread)
 	if(HYPRO_USE_SMTRAT)
@@ -80,8 +86,6 @@ target_include_directories(${PROJECT_NAME}-objects
 
 	add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
 	add_dependencies(${PROJECT_NAME} resources)
-
-
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")

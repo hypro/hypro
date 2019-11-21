@@ -18,6 +18,9 @@
 #ifdef HYPRO_USE_SOPLEX
 #include "soplex/adaptions_soplex.h"
 #endif
+#ifdef HYPRO_USE_CLP
+#include "clp/adaptions_clp.h"
+#endif
 
 #include "glpk/adaptions_glpk.h"
 #include "glpk_context.h"

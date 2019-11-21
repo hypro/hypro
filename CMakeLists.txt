@@ -58,10 +58,21 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 
+if(NOT PRIMARY_SOLVER_BACKEND)
+	set(PRIMARY_SOLVER_BACKEND "glpk" CACHE STRING "Primary backend-solver. Options are: glpk, clp")
+endif()
+set_property(CACHE PRIMARY_SOLVER_BACKEND PROPERTY STRINGS "clp" "glpk")
+
 if(NOT SECONDARY_SOLVER_BACKEND)
 	set(SECONDARY_SOLVER_BACKEND "none" CACHE STRING "Secondary backend-solver used after invoking glpk. Options are: none, smtrat, z3, soplex")
 endif()
 set_property(CACHE SECONDARY_SOLVER_BACKEND PROPERTY STRINGS "none" "smtrat" "z3" "soplex")
+
+if(${PRIMARY_SOLVER_BACKEND} STREQUAL "clp")
+	set(HYPRO_USE_CLP "ON")
+elseif(${PRIMARY_SOLVER_BACKEND} STREQUAL "glpk")
+	set(HYPRO_USE_GLPK "ON")
+endif()
 
 if(${SECONDARY_SOLVER_BACKEND} STREQUAL "smtrat")
 	set(HYPRO_USE_SMTRAT "ON")
