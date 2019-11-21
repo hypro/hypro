@@ -90,7 +90,7 @@ EvaluationResult<Number> glpkOptimizeLinear( glpk_context& context, const vector
 		case GLP_OPT:
 		case GLP_FEAS: {
 			// if satisfiable, derive exact solution by intersecting all constraints, which are at their upper respectively lower bounds .
-			vector_t<Number> exactSolution = refineSolution( context, constraints, constants );
+			exactSolution = refineSolution( context, constraints, constants );
 			return EvaluationResult<Number>( _direction.dot( exactSolution ), exactSolution, SOLUTION::FEAS );
 			break;
 		}
