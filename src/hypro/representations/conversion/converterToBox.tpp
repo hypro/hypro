@@ -375,8 +375,8 @@ template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
 	if(source.empty()) return BoxT<Number,Converter<Number>,BoxSetting>();
 	auto isSourceBox = isBox(source.matrix(), source.vector());
-	if(boost::get<0>(isSourceBox)){
-		return BoxT<Number,Converter,BoxSetting>(boost::get<1>(isSourceBox));
+	if(std::get<0>(isSourceBox)){
+		return BoxT<Number,Converter,BoxSetting>(std::get<1>(isSourceBox));
 	} else {
 		auto tmp = typename Converter::HPolytope(source.matrix(), source.vector());
 		return toBox(tmp);

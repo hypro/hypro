@@ -454,9 +454,13 @@ void Optimizer<Number>::updateConstraints() const {
 		}
 
 		int numberOfConstraints = int( mConstraintMatrix.rows() );
-		if ( numberOfConstraints > 0 ) {
+		if ( numberOfConstraints > 0) {
 			// convert constraint constants
 			glp_add_rows( glpCtx.lp, numberOfConstraints );
+			if(mRelationSymbols.empty()){
+				//This is just a hotfix for a problem with TemplatePolyhedra
+				mRelationSymbols = std::vector<carl::Relation>(numberOfConstraints, carl::Relation::LEQ);
+			}
 			for ( int i = 0; i < numberOfConstraints; i++ ) {
 				// Set relation symbols correctly
 				switch ( mRelationSymbols[i] ) {

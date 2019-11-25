@@ -18,6 +18,7 @@
 #include <stack>
 #include <string>
 #include <vector>
+#include <fstream>
 
 namespace hypro {
 

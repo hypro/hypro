@@ -14,7 +14,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../ConstraintSet/ConstraintSet.h"
 #include "../DifferenceBounds/DifferenceBounds.h"
 #include "../Ellipsoids/Ellipsoid.h"
-#include "../GeneralizedStar/GeneralizedStar.h"
 #include "../OrthogonalPolyhedron/OrthogonalPolyhedron.h"
 #include "../Polytope/Polytope.h"
 #include "../Polytopes/HPolytope/HPolytope.h"
@@ -45,12 +44,12 @@ class Converter {
 		using Orthoplex = OrthoplexT<Number,Converter,OrthoplexDefault>;
 		using TemplatePolyhedron = TemplatePolyhedronT<Number,Converter,TemplatePolyhedronDefault>;
 		using Box = BoxT<Number,Converter,BoxLinearOptimizationOn>;
-		using CarlPolytope = CarlPolytopeT<Number,Converter,CarlPolytopeSettings>;
+		using CarlPolytope = CarlPolytopeT<Number,Converter,CarlPolytopeSetting>;
 		using ConstraintSet = ConstraintSetT<Number,ConstraintSetSettings>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
 		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
 		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter,BoxLinearOptimizationOn>;
-		using VPolytope = VPolytopeT<Number,Converter,VPolytopeSettings>;
+		using VPolytope = VPolytopeT<Number,Converter,VPolytopeSetting>;
 		using DifferenceBounds = DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>;
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
@@ -153,34 +152,34 @@ class Converter {
 		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::OVER);
 
 
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#ifdef HYPRO_USE_PPL
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		#endif
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const SupportFunctionT<Number,Converter<Number>,inSetting>& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		template<typename CarlPolytopeSettings = typename CarlPolytope::Settings, typename inSetting>
-		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSettings> toCarlPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const SupportFunctionT<Number,Converter<Number>,inSetting>& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
 
 
 		template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
@@ -433,7 +432,6 @@ class Converter {
 #include "converterToBox.tpp"
 #include "converterToCarlPolytope.tpp"
 #include "converterToConstraintSet.tpp"
-#include "converterToGeneralizedStar.tpp"
 #include "converterToHPolytope.tpp"
 #include "converterToSupportFunction.tpp"
 #include "converterToVPolytope.tpp"

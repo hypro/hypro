@@ -95,7 +95,7 @@ CarlPolytopeT<Number, Converter<Number>, CarlPolySetting> Converter<Number>::toC
 	if ( vertices.empty() ) {
 		return CarlPolytopeT<Number, Converter<Number>, CarlPolySetting>();
 	}
-	VPolytope vpoly = VPolytope( vertices );
+	Converter<Number>::VPolytope vpoly = VPolytope( vertices );
 
 	return toCarlPolytope( vpoly, mode );
 }

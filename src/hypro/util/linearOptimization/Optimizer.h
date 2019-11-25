@@ -54,7 +54,7 @@ class Optimizer {
 	mutable SOLUTION mLastConsistencyAnswer = SOLUTION::UNKNOWN;
 	static bool warnInexact;
 	bool maximize = true;
-	std::vector<carl::Relation> mRelationSymbols;
+	mutable std::vector<carl::Relation> mRelationSymbols;
 
 	// dependent members, all mutable
 #ifdef HYPRO_USE_SMTRAT
@@ -153,9 +153,9 @@ class Optimizer {
 	}
 
 	/**
-		 * @brief      Comparison operator.
+		 * @brief      Copy Assign operator.
 		 * @param[in]  orig  The right-hand-side object.
-		 * @return     True, if both problem instances are equal, false otherwise.
+		 * @return     A reference to the the current object with the values of orig.
 		 */
 	Optimizer<Number>& operator=( const Optimizer<Number>& orig );
 

@@ -110,7 +110,7 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	if ( vertices.empty() ) {
 		return HPolytopeT<Number, Converter<Number>, HPolytopeSetting>();
 	}
-	VPolytope vpoly = VPolytope( vertices );
+	Converter<Number>::VPolytope vpoly = VPolytope( vertices );
 
 	return toHPolytope( vpoly, mode );
 }

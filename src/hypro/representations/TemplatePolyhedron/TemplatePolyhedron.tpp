@@ -743,7 +743,6 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::unite( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
 		//Since uniting with a empty / unfeasible TPoly can result in a feasible TPoly, check beforehand whether one of the arguments is empty.
 		//TODO: What about union of two not connected sets?
-		std::cout << "TemplatePolyhedron::unite, this: \n" << *this << " rhs: \n" << rhs << std::endl;
 		if(this->empty()) return rhs; 
 		if(rhs.empty()) return *this; 
 		assert(*mMatrixPtr == rhs.matrix());

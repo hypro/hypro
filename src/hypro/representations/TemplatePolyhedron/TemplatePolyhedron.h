@@ -174,6 +174,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	  * @return Empty TemplatePolyhedron, with empty meaning it is an unfeasible inequation set.
 	  */
 	static TemplatePolyhedronT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
+		if(dimension == 0) return TemplatePolyhedronT<Number,Converter,Setting>();
 		matrix_t<Number> zeroMat = matrix_t<Number>::Zero(1,dimension);
 		vector_t<Number> zeroVec = -1*vector_t<Number>::Ones(1);
 		return TemplatePolyhedronT<Number,Converter,Setting>(std::move(zeroMat), std::move(zeroVec));
