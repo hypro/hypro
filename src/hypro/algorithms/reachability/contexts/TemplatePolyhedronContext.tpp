@@ -58,16 +58,15 @@ namespace hypro {
         //1.1 Construct A = (H, extended with lambda_j >= 0)^T
         //NOTE: Since A is the same in every iteration, we construct A once the loop 
         //NOTEEEEEEEEE: First transpose A, then add lambda constraints. A overall is (d+m) x m 
-        matrix_t<Number> A = matrix_t<Number>::Zero(invRows+invCols,invCols);
-        A.block(0,0,invRows,invCols) = invTPoly.matrix();
-        A.block(invRows,0,invCols,invCols) = -1*matrix_t<Number>::Identity(invCols,invCols);
-        A.transposeInPlace();
+        matrix_t<Number> A = matrix_t<Number>::Zero(invRows+invCols,invRows);
+        A.block(0,0,invCols,invRows) = invTPoly.matrix().transpose();
+        A.block(invCols,0,invRows,invRows) = -1*matrix_t<Number>::Identity(invRows,invRows);
         std::cout << "TemplatePolyhedronContext::LIS, A is: \n" << A << std::endl;
 
         //1.2. Extend nextStrenthenedInv by the same amount of zeros
-        vector_t<Number> nextStrengthenedInvExtended = vector_t<Number>::Zero(invRows+invCols);
-        nextStrengthenedInvExtended.block(0,0,invRows,1) = invTPoly.vector();
-        nextStrengthenedInvExtended.block(invRows,0,invCols)
+        //vector_t<Number> nextStrengthenedInvExtended = vector_t<Number>::Zero(invRows+invCols);
+        //nextStrengthenedInvExtended.block(0,0,invRows,1) = invTPoly.vector();
+        //nextStrengthenedInvExtended.block(invRows,0,invCols);
 
         //while a(j) != a(j+1)
         while(lastStrengthenedInv != nextStrengthenedInv){
@@ -80,7 +79,7 @@ namespace hypro {
 
 	        	//2.Construct b = (mü(H_j) + H_j')^T, extended with zeros to make sure that the optimumValue only contains non negative entries.
                 //NOOOOTEEEEEEE: b is d+m x 1, since there are m lambdas
-	        	vector_t<Number> b = vector_t<Number>::Zero(invCols);
+	        	vector_t<Number> b = vector_t<Number>::Zero(invCols+invRows);
                 //assert(b.rows() == A.rows());
                 //std::cout << "invTPoly.matrix().row(rowI): \n" << invTPoly.matrix().row(rowI).transpose() << " lieDerivative(invTPoly.matrix().row(rowI)).first: \n" << lieDerivative(invTPoly.matrix().row(rowI).transpose()).first << std::endl;
                 //vector_t<Number> invTPolyRow = vector_t<Number>(invTPoly.matrix().row(rowI));
@@ -103,7 +102,7 @@ namespace hypro {
 	        	auto minimizeA = mOptimizer.evaluate(nextStrengthenedInv,true);
 	        	#ifndef NDEBUG
 	        	assert(minimizeA.errorCode == SOLUTION::FEAS);
-	        	assert(minimizeA.optimumValue.rows() == invRows + invCols);
+	        	assert(minimizeA.optimumValue.rows() == invRows);
 	        	for(int i = 0; i < minimizeA.optimumValue.rows(); ++i){
 	        		//make sure all values are greater equal than 0
 	        		assert(minimizeA.optimumValue(i) >= 0);
@@ -116,16 +115,17 @@ namespace hypro {
 	        	//}
 
                 //5.Save into certificate for later construction of L
-	        	certificate.row(rowI) = minimizeA.optimumValue.block(0,0,invRows,1).transpose();
+	        	certificate.row(rowI) = minimizeA.optimumValue.transpose();
                 std::cout << "TemplatePolyhedronContext::LIS, certificate is now: \n" << certificate << std::endl;
 
             }
 
         	//Build the system L*y = c 
-        	//6.Build L_pi(j): Add constraints: init <= y
         	assert(initialOffsets.rows() == invTPoly.vector().rows());
         	matrix_t<Number> L = matrix_t<Number>::Zero(3*invRows,invRows);
         	vector_t<Number> c = vector_t<Number>::Zero(3*invRows);
+
+        	//6.Build L_pi(j): Add constraints: init <= y
         	L.block(0,0,invRows,invRows) = std::move(-1*matrix_t<Number>::Identity(invRows,invRows));
         	c.block(0,0,invRows,1) = -1*initialOffsets;
             std::cout << "TemplatePolyhedronContext::LIS, added init <= y to L and c: L: \n" << L << "c: \n" << c << std::endl;

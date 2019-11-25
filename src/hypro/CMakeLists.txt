@@ -23,9 +23,9 @@ if(STATICLIB_SWITCH)
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
-	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
-	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
-	#message("hypro sources: " ${sources})
+	message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
+	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC carl-static)
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC COCOA_STATIC)
