@@ -1,27 +1,28 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
 #endif
 #define INCL_FROM_CONVERTERHEADER true
 
 #include "../../flags.h"
 #include "../Orthoplex/Orthoplex.h"
 #include "../TemplatePolyhedron/TemplatePolyhedron.h"
-#include "../Box/Box.h"
-#include "../ConstraintSet/ConstraintSet.h"
-#include "../Ellipsoids/Ellipsoid.h"
-#include "../OrthogonalPolyhedron/OrthogonalPolyhedron.h"
-#include "../Polytope/Polytope.h"
-#include "../Polytopes/carlPolytope/carlPolytope.h"
-#include "../Polytopes/HPolytope/HPolytope.h"
-#include "../Polytopes/VPolytope/VPolytope.h"
-#include "../SupportFunction/SupportFunction.h"
-#include "../Zonotope/Zonotope.h"
-#include "../DifferenceBounds/DifferenceBounds.h"
-#include "../SupportFunctionNew/SupportFunctionNew.h"
 #include "../../util/pca.h"
 #include "../../util/templateDirections.h"
+#include "../Box/Box.h"
+#include "../ConstraintSet/ConstraintSet.h"
+#include "../DifferenceBounds/DifferenceBounds.h"
+#include "../Ellipsoids/Ellipsoid.h"
+#include "../GeneralizedStar/GeneralizedStar.h"
+#include "../OrthogonalPolyhedron/OrthogonalPolyhedron.h"
+#include "../Polytope/Polytope.h"
+#include "../Polytopes/HPolytope/HPolytope.h"
+#include "../Polytopes/VPolytope/VPolytope.h"
+#include "../Polytopes/carlPolytope/carlPolytope.h"
+#include "../SupportFunction/SupportFunction.h"
+#include "../SupportFunctionNew/SupportFunctionNew.h"
+#include "../Zonotope/Zonotope.h"
 
 namespace hypro {
 
@@ -30,10 +31,13 @@ namespace hypro {
  */
 
 enum CONV_MODE {
-	EXACT, OVER, UNDER, ALTERNATIVE
+	EXACT,
+	OVER,
+	UNDER,
+	ALTERNATIVE
 };
 
-template<typename Number>
+template <typename Number>
 class Converter {
 	public:
 		/* BEGIN typedefs (do not remove this comment!) */
@@ -418,10 +422,10 @@ class Converter {
 		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
 		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 
-		/* END Conversion (do not remove this comment!) */
+	/* END Conversion (do not remove this comment!) */
 };
 
-} // namespace hypro
+}  // namespace hypro
 
 #include "typedefs.h"
 #include "converterToOrthoplex.tpp"
@@ -429,15 +433,15 @@ class Converter {
 #include "converterToBox.tpp"
 #include "converterToCarlPolytope.tpp"
 #include "converterToConstraintSet.tpp"
+#include "converterToGeneralizedStar.tpp"
 #include "converterToHPolytope.tpp"
-#include "converterToVPolytope.tpp"
 #include "converterToSupportFunction.tpp"
+#include "converterToVPolytope.tpp"
 #include "converterToZonotope.tpp"
+#include "typedefs.h"
 #ifdef HYPRO_USE_PPL
 #include "converterToPolytope.tpp"
 #endif
+#include "conversionHelper.h"
 #include "converterToDifferenceBounds.tpp"
 #include "converterToSupportFunctionNew.tpp"
-
-//#include "convenienceOperators.h"
-#include "conversionHelper.h"

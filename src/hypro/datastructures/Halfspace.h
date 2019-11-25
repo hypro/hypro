@@ -9,38 +9,30 @@
  */
 
 #pragma once
-#include "Point.h"
+#include "../representations/types.h"
 #include "../util/VariablePool.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
 #include "../util/linearOptimization/EvaluationResult.h"
-#include "../representations/types.h"
-#include <glpk.h>
-#include <carl/formula/Constraint.h>
-#include <boost/functional/hash.hpp>
-#include <cassert>
+#include "Point.h"
 
+#include <cassert>
+#include <glpk.h>
 
 namespace hypro {
 
 template <typename Number>
 class Halfspace {
   private:
-	vector_t<Number> mNormal;
-	Number mScalar;
-    size_t mHash = 0;
-    bool mIsInteger;
+	vector_t<Number> mNormal = vector_t<Number>::Zero( 0 );
+	Number mScalar = Number( 0 );
+	size_t mHash = 0;
+	bool mIsInteger = false;
 
   public:
-  	/**
-  	 * @brief      Default constructor.
-  	 */
-	Halfspace();
-
 	/**
-	 * @brief      Copy constructor.
-	 * @param[in]  _orig  The original.
+	 * @brief Default constructor
 	 */
-	Halfspace( const Halfspace<Number>& _orig );
+	Halfspace() {}
 
 	/**
 	 * @brief      Constructor from a normal vector given as a point and an offset.
@@ -79,8 +71,8 @@ class Halfspace {
 	 * @brief      Size function returning the estimated storage usage of this plane.
 	 * @return     An estimated storage usage.
 	 */
-	double sizeOfHalfspace(){
-	return sizeof(*this) + this->mNormal.size()* sizeof(Number);
+	double sizeOfHalfspace() {
+		return sizeof( *this ) + this->mNormal.size() * sizeof( Number );
 	}
 
 	/**
@@ -89,32 +81,26 @@ class Halfspace {
 	 */
 	unsigned dimension() const;
 
-	/**
-	 * @brief      Projects the plane on the given dimensions.
-	 * @param[in]  _dimensions  The dimensions as a vector.
-	 */
-	void projectOnDimensions( std::vector<unsigned> _dimensions );
-
-	template<typename N = Number, carl::DisableIf< std::is_same<N,double> > = carl::dummy>
+	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
 	void makeInteger() {
-		if(!mIsInteger){
-			Number scaling = Number(carl::getDenom(mScalar));
-			for(unsigned i = 0; i < mNormal.rows(); ++i) {
-				scaling = scaling * Number(carl::getDenom(mNormal(i)));
+		if ( !mIsInteger ) {
+			Number scaling = Number( carl::getDenom( mScalar ) );
+			for ( unsigned i = 0; i < mNormal.rows(); ++i ) {
+				scaling = scaling * Number( carl::getDenom( mNormal( i ) ) );
 			}
 
-			mScalar = mScalar*scaling;
-			assert(carl::isInteger(mScalar));
+			mScalar = mScalar * scaling;
+			assert( carl::isInteger( mScalar ) );
 
-			for(unsigned i = 0; i < mNormal.rows(); ++i) {
-				mNormal(i) = mNormal(i)*scaling;
-				assert(carl::isInteger(mNormal(i)));
+			for ( unsigned i = 0; i < mNormal.rows(); ++i ) {
+				mNormal( i ) = mNormal( i ) * scaling;
+				assert( carl::isInteger( mNormal( i ) ) );
 			}
 			mIsInteger = true;
 		}
 	}
 
-	template<typename N = Number, carl::EnableIf< std::is_same<N,double> > = carl::dummy>
+	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
 	void makeInteger() {
 		mIsInteger = true;
 		// TODO: As this function is currently only used for number reduction, do nothing for doubles -> fix!
@@ -224,7 +210,7 @@ class Halfspace {
 	vector_t<Number> intersectionVector( const Halfspace<Number>& _rhs ) const;
 
 	static vector_t<Number> fastIntersect( const std::vector<Halfspace<Number>>& _planes );
-	static vector_t<Number> saveIntersect( const std::vector<Halfspace<Number>>& _planes, Number threshold = 0);
+	static vector_t<Number> saveIntersect( const std::vector<Halfspace<Number>>& _planes, Number threshold = 0 );
 
 	/**
 	 * @brief      Determines, whether the point given as a vector is contained in the halfspace.
@@ -245,7 +231,7 @@ class Halfspace {
 	 * @param[in]  _points  The points.
 	 * @return     True, if all points are contained, false otherwise.
 	 */
-	bool contains( const std::vector<Point<Number>>& _points) const;
+	bool contains( const std::vector<Point<Number>>& _points ) const;
 
 	/**
 	 * @brief      Determines, whether the point given as a vector saturates the halfspace, i.e. lies on
@@ -259,14 +245,14 @@ class Halfspace {
 	 * @brief      Computes and stores a hash value representing the plane for fast comparison.
 	 * @return     The hash value.
 	 */
-    size_t hash() {
-        if (this->mHash == 0) {
-            this->mHash = std::hash<Halfspace<Number>>()(*this);
-        }
-        return mHash;
-    }
+	size_t hash() {
+		if ( this->mHash == 0 ) {
+			this->mHash = std::hash<Halfspace<Number>>()( *this );
+		}
+		return mHash;
+	}
 
-    /**
+	/**
      * @brief      The swap operator.
      * @param      a     The left-hand-side.
      * @param      b     The right-hand-side.
@@ -292,7 +278,7 @@ class Halfspace {
 	 * @param[in]  pointOnPlane  The point on plane.
 	 * @return     The plane offset.
 	 */
-	static Number computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane);
+	static Number computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane );
 
 	/**
 	 * Functions for SupportFunctionNew where it is seen as a representation
@@ -315,18 +301,19 @@ class Halfspace {
 	bool empty() const;
 
 	/**
-	 * @brief Does nothing since a halfpsace cannot have redundancy
+	 * @brief Removes redundancy.
 	 */
-	void removeRedundancy() {}
+	void removeRedundancy() { /* Does nothing since a halfpsace cannot have redundancy */
+	}
 
 	/**
 	 * @brief Return the steps needed in the given direction to reach the optimal point.
 	 * @param[in] direction The direction to evaluate
 	 * @return Whether it is feasible, and if it is, how much steps are needed.
 	 */
-	EvaluationResult<Number> evaluate(const vector_t<Number>& direction, bool /*useExact*/) const;
- 
- 	/**
+	EvaluationResult<Number> evaluate( const vector_t<Number>& direction, bool /*useExact*/ ) const;
+
+	/**
 	 * @brief Return the evaluation result for multiple directions
 	 * @param[in] _directions The directions to evaluate
 	 * @return For each direction, whether the evaluation is feasible, and if it is, how many steps are needed
@@ -354,9 +341,9 @@ class Halfspace {
  * @tparam     To    The target number type.
  * @return     A halfspace in the desired number type.
  */
-template<typename From, typename To>
-Halfspace<To> convert(const Halfspace<From>& in) {
-	return Halfspace<To>(convert<From,To>(in.normal()), carl::convert<From,To>(in.offset()));
+template <typename From, typename To>
+Halfspace<To> convert( const Halfspace<From>& in ) {
+	return Halfspace<To>( convert<From, To>( in.normal() ), carl::convert<From, To>( in.offset() ) );
 }
 
 /**
@@ -368,7 +355,7 @@ Halfspace<To> convert(const Halfspace<From>& in) {
  */
 template <typename Number>
 std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
-	_lhs << "( " << vector_t<Number>(_rhs.normal().transpose()) << "; " << Number( _rhs.offset() ) << " )";
+	_lhs << "( " << vector_t<Number>( _rhs.normal().transpose() ) << "; " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }
 
@@ -407,41 +394,40 @@ bool operator<( const Halfspace<Number>& lhs, const Halfspace<Number>& rhs ) {
  */
 template <typename Number>
 Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
-	Halfspace<Number> tmp(_in);
+	Halfspace<Number> tmp( _in );
 	tmp.invert();
 	return tmp;
 }
 
-    #ifdef EXTERNALIZE_CLASSES
-    extern template class Halfspace<double>;
+#ifdef EXTERNALIZE_CLASSES
+extern template class Halfspace<double>;
 
-    #ifdef USE_MPFR_FLOAT
-    extern template class Halfspace<carl::FLOAT_T<mpfr_t>>;
-    #endif
+#ifdef USE_MPFR_FLOAT
+extern template class Halfspace<carl::FLOAT_T<mpfr_t>>;
+#endif
 
-    extern template class Halfspace<carl::FLOAT_T<double>>;
-    #endif
+extern template class Halfspace<carl::FLOAT_T<double>>;
+#endif
 }  // namespace hypro
 
 namespace std {
-	/**
+/**
 	 * @brief      Hash operator for halfspaces.
 	 * @tparam     Number  The number type.
 	 */
-    template<class Number>
-    struct hash<hypro::Halfspace<Number>> {
-        std::size_t operator()(hypro::Halfspace<Number> const& Halfspace) const
-        {
-            size_t seed = 0;
-            hypro::vector_t<Number> normal = Halfspace.normal();
-            Number scalar = Halfspace.scalar();
-            std::hash<hypro::vector_t<Number>> vectorHasher;
-            std::hash<Number> numberHasher;
-            seed = vectorHasher(normal);
-            carl::hash_add(seed, numberHasher(scalar));
-  	        return seed;
-        }
-    };
-} //namespace std
+template <class Number>
+struct hash<hypro::Halfspace<Number>> {
+	std::size_t operator()( hypro::Halfspace<Number> const& Halfspace ) const {
+		size_t seed = 0;
+		hypro::vector_t<Number> normal = Halfspace.normal();
+		Number scalar = Halfspace.scalar();
+		std::hash<hypro::vector_t<Number>> vectorHasher;
+		std::hash<Number> numberHasher;
+		seed = vectorHasher( normal );
+		carl::hash_add( seed, numberHasher( scalar ) );
+		return seed;
+	}
+};
+}  //namespace std
 
 #include "Halfspace.tpp"

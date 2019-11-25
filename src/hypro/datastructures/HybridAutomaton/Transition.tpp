@@ -2,143 +2,143 @@
 
 namespace hypro {
 
-template<typename Number>
+template <typename Number>
 std::size_t Transition<Number>::hash() const {
-	if(mHash == 0) {
-		mHash = std::hash<Transition<Number>>()(*this);
+	if ( mHash == 0 ) {
+		mHash = std::hash<Transition<Number>>()( *this );
 	}
 	return mHash;
 }
 
-template<typename Number>
-std::string Transition<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
-   	std::stringstream o;
-   	o << this->getSource()->hash() << " -> " << this->getTarget()->hash();
-   	if(getLabels().size() != 0 || (mReset.size() > 0 && !mReset.isIdentity()) || mGuard.size() != 0) {
-   		o << "[label=< <TABLE>";
-    	// sync labels
-    	for(const auto& l : getLabels()) {
-    		o << "<TR><TD>" << l << "</TD></TR>";
-    	}
-    	// guard
-		o << mGuard.getDotRepresentation(vars);
+template <typename Number>
+std::string Transition<Number>::getDotRepresentation( const std::vector<std::string>& vars ) const {
+	std::stringstream o;
+	o << this->getSource()->hash() << " -> " << this->getTarget()->hash();
+	if ( getLabels().size() != 0 || ( mReset.size() > 0 && !mReset.isIdentity() ) || mGuard.size() != 0 ) {
+		o << "[label=< <TABLE>";
+		// sync labels
+		for ( const auto& l : getLabels() ) {
+			o << "<TR><TD>" << l << "</TD></TR>";
+		}
+		// guard
+		o << mGuard.getDotRepresentation( vars );
 		// reset
-		if(mReset.size() > 0 && !mReset.isIdentity()) {
+		if ( mReset.size() > 0 && !mReset.isIdentity() ) {
 			const matrix_t<Number>& reset = mReset.getMatrix();
 			o << "<TR><TD ROWSPAN=\"" << reset.rows() << "\">";
-			for(unsigned i = 0; i < reset.rows(); ++i) {
+			for ( unsigned i = 0; i < reset.rows(); ++i ) {
 				o << vars[i] << "' = ";
 				bool allZero = true;
-				for(unsigned j = 0; j < reset.cols(); ++j) {
-					if(reset(i,j) != 0) {
-						o << reset(i,j) << "*" << vars[j] << " + ";
+				for ( unsigned j = 0; j < reset.cols(); ++j ) {
+					if ( reset( i, j ) != 0 ) {
+						o << reset( i, j ) << "*" << vars[j] << " + ";
 						allZero = false;
 					}
 				}
-				if(mReset.getVector()(i) != 0 || allZero) o << " + " << mReset.getVector()(i);
-				if(i < reset.rows() -1)
+				if ( mReset.getVector()( i ) != 0 || allZero ) o << " + " << mReset.getVector()( i );
+				if ( i < reset.rows() - 1 )
 					o << "<BR/>";
 			}
 			o << "</TD>";
 			o << "</TR>";
 		}
-    	o << "</TABLE>>];";
-   	}
-   	o << "\n";
-   	return o.str();
+		o << "</TABLE>>];";
+	}
+	o << "\n";
+	return o.str();
 }
 
-template<typename Number>
-bool Transition<Number>::isComposedOf(const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const {
+template <typename Number>
+bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
 	// compare source and target location
-	if(this->getSource()->getName().find(rhs.getSource()->getName()) == std::string::npos ||
-		this->getTarget()->getName().find(rhs.getTarget()->getName()) == std::string::npos) {
+	if ( this->getSource()->getName().find( rhs.getSource()->getName() ) == std::string::npos ||
+		 this->getTarget()->getName().find( rhs.getTarget()->getName() ) == std::string::npos ) {
 		//std::cout << "source or target did not match." << std::endl;
 		return false;
 	}
 
 	// check labels
-	for(const auto& l1 : rhs.getLabels()) {
+	for ( const auto& l1 : rhs.getLabels() ) {
 		bool found = false;
-		for(const auto l2 : this->getLabels()) {
-			if(l2 == l1){
+		for ( const auto l2 : this->getLabels() ) {
+			if ( l2 == l1 ) {
 				found = true;
 				break;
 			}
 		}
-		if(!found){
+		if ( !found ) {
 			//std::cout << "Labels did not match." << std::endl;
 			return false;
 		}
 	}
 
-    // compare guard constraints. As the order is not fixed, we consider each row, one by one and try to match rows (outer two loops).
-    // This is similar to the invariant comparison in Location.tpp
-    if(rhs.getGuard().size() != 0 ) {
-		if(this->getGuard().size() == 0 ) {
+	// compare guard constraints. As the order is not fixed, we consider each row, one by one and try to match rows (outer two loops).
+	// This is similar to the invariant comparison in Location.tpp
+	if ( rhs.getGuard().size() != 0 ) {
+		if ( this->getGuard().size() == 0 ) {
 			//std::cout << "guards do not match." << std::endl;
 			return false;
 		}
 		//std::cout << "Compare guards " << rhs.getGuard().getMatrix() << " <= " << rhs.getGuard().getVector() << " and " << this->getGuard().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
 
 		// try to find matching rows.
-		for(Eigen::Index rowI = 0; rowI != rhs.getGuard().getMatrix().rows(); ++rowI) {
+		for ( Eigen::Index rowI = 0; rowI != rhs.getGuard().getMatrix().rows(); ++rowI ) {
 			//std::cout << "original row " << rowI << std::endl;
 			bool foundConstraint = false;
-			for(Eigen::Index rowPos = 0; rowPos != this->getGuard().getMatrix().rows(); ++rowPos) {
+			for ( Eigen::Index rowPos = 0; rowPos != this->getGuard().getMatrix().rows(); ++rowPos ) {
 				bool allMatched = true;
-				for(Eigen::Index colI = 0; colI != rhs.getGuard().getMatrix().cols(); ++colI) {
+				for ( Eigen::Index colI = 0; colI != rhs.getGuard().getMatrix().cols(); ++colI ) {
 					//std::cout << "original col " << colI << std::endl;
 					// find corresponding positions in the current flow matrix
 					Eigen::Index colPos = 0;
-					while(thisVars[colPos] != rhsVars[colI]) ++colPos;
+					while ( thisVars[colPos] != rhsVars[colI] ) ++colPos;
 					//std::cout << "matching col " << colPos << std::endl;
-					if(this->getGuard().getMatrix()(rowPos,colPos) != rhs.getGuard().getMatrix()(rowI,colI)) {
+					if ( this->getGuard().getMatrix()( rowPos, colPos ) != rhs.getGuard().getMatrix()( rowI, colI ) ) {
 						allMatched = false;
 						break;
 					}
 				}
 				// also compare constants.
-				if(allMatched) {
-					if(this->getGuard().getVector()(rowPos) == rhs.getGuard().getVector()(rowI)) {
+				if ( allMatched ) {
+					if ( this->getGuard().getVector()( rowPos ) == rhs.getGuard().getVector()( rowI ) ) {
 						//std::cout << "matched row " << rowPos << std::endl;
 						foundConstraint = true;
 						break;
 					}
 				}
 			}
-			if(!foundConstraint) {
+			if ( !foundConstraint ) {
 				//std::cout << "Cound not find invariant constraint." << std::endl;
 				return false;
-	 		}
+			}
 		}
 	}
 
-    // compare reset function:
-    // Find corresponding rows, then compare relevant entries.
-	for(Eigen::Index rowI = 0; rowI != rhs.getReset().getMatrix().rows(); ++rowI) {
+	// compare reset function:
+	// Find corresponding rows, then compare relevant entries.
+	for ( Eigen::Index rowI = 0; rowI != rhs.getReset().getMatrix().rows(); ++rowI ) {
 		Eigen::Index rowPos = 0;
 		//std::cout << "Search for: " << rhsVars[rowI] << std::endl;
-		while(thisVars[rowPos] != rhsVars[rowI]) ++rowPos;
-		for(Eigen::Index colI = 0; colI != rhs.getReset().getMatrix().cols(); ++colI) {
+		while ( thisVars[rowPos] != rhsVars[rowI] ) ++rowPos;
+		for ( Eigen::Index colI = 0; colI != rhs.getReset().getMatrix().cols(); ++colI ) {
 			// find corresponding positions in the current reset matrix
 			Eigen::Index colPos = 0;
-			while(thisVars[colPos] != rhsVars[colI]) ++colPos;
+			while ( thisVars[colPos] != rhsVars[colI] ) ++colPos;
 			//std::cout << "rowPos " << rowPos << ", rowI " << rowI << ", colPos " << colPos << ", colI " << colI << std::endl;
-			if(this->getReset().getMatrix()(rowPos,colPos) != rhs.getReset().getMatrix()(rowI,colI)) {
+			if ( this->getReset().getMatrix()( rowPos, colPos ) != rhs.getReset().getMatrix()( rowI, colI ) ) {
 				//std::cout << "reset matrix entries do not match." << std::endl;
 				return false;
 			}
 		}
 
 		// compare constant part (b)
-		if(this->getReset().getVector()(rowPos) != rhs.getReset().getVector()(rowI)) {
+		if ( this->getReset().getVector()( rowPos ) != rhs.getReset().getVector()( rowI ) ) {
 			//std::cout << "constant parts do not match." << std::endl;
 			return false;
 		}
 	}
 
-    return true;
+	return true;
 }
 
 /*
@@ -238,4 +238,4 @@ std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lh
 }
 */
 
-} //namespace hypro
+}  //namespace hypro

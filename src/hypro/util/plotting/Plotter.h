@@ -8,61 +8,62 @@
 
 #pragma once
 
-#include "PlotterUtil.h"
 #include "../../config.h"
-#include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
+#include "../../datastructures/Point.h"
+#include "PlotterUtil.h"
+
+#include <carl/interval/Interval.h>
 #include <carl/util/Singleton.h>
-#include <vector>
-#include <string>
 #include <stack>
+#include <string>
+#include <vector>
 
 namespace hypro {
 
 namespace plotting {
 
-	/**
+/**
 	 * Enum required for referencing colors in the color array.
 	 */
-	enum {
-		petrol = 0,
-		turquoise,
-		green,
-		maygreen,
-		orange,
-		red,
-		bordeaux,
-		violett,
-		lila,
-		blue
-	};
-	/**
+enum {
+	petrol = 0,
+	turquoise,
+	green,
+	maygreen,
+	orange,
+	red,
+	bordeaux,
+	violett,
+	lila,
+	blue
+};
+/**
 	 * Color array holding a set of colors.
 	 */
-	const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
-							0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F};
+const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
+							  0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F};
 
-	/**
+/**
 	 * @brief      A struct holding a basic set of options for the gnuplot plotting.
 	 */
-	struct gnuplotSettings {
-		std::string name = "";				// filename
-		std::size_t color = colors[blue];  // default blue
-		bool fill = false;					 // do not fill
-		bool axes = true;					 // plot axes
-		bool grid = true;					 // plot grid
+struct gnuplotSettings {
+	std::string name = "";			   // filename
+	std::size_t color = colors[blue];  // default blue
+	bool fill = false;				   // do not fill
+	bool axes = true;				   // plot axes
+	bool grid = true;				   // plot grid
 
-		double pointSize = 0.6;				 // pointsize
+	double pointSize = 0.6;  // pointsize
 
-		double linewidth = 0.05;				 // linewidth
-		bool keepAspectRatio = true; 		 // keep aspect ratio for both axes
-		std::pair<unsigned, unsigned> dimensions = std::make_pair(0,1); // dimensions to plot
-		bool cummulative = false;			 // if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
-		bool plain = false;
-	};
+	double linewidth = 0.1;												// linewidth
+	bool keepAspectRatio = true;										// keep aspect ratio for both axes
+	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );  // dimensions to plot
+	bool cummulative = false;											// if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
+	bool plain = false;
+};
 
-} // namespace plotting
-
+}  // namespace plotting
 
 /**
  * @brief      Class implementing a plotter. The plotter is implemented using carl::Singleton.
@@ -86,7 +87,9 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	unsigned mId;
 
   protected:
-	Plotter() : mLastDimensions(std::make_pair(-1,-1)), mId( 1 ) {}
+	Plotter()
+		: mLastDimensions( std::make_pair( -1, -1 ) )
+		, mId( 1 ) {}
 
   public:
 	~Plotter();
@@ -213,6 +216,6 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	static bool isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c );
 	void prepareObjects() const;
 };
-}
+}  // namespace hypro
 
 #include "Plotter.tpp"

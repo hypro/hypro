@@ -11,17 +11,18 @@
 
 #pragma once
 
-#include "util.h"
-#include "SupportFunctionSetting.h"
 #include "../../config.h"
-#include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
-#include "../../util/convexHull.h"
+#include "../../datastructures/Point.h"
+#include "../../util/Permutator.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
+#include "../../util/convexHull.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/statistics/statistics.h"
-#include "../../util/Permutator.h"
+#include "SupportFunctionSetting.h"
+#include "util.h"
+
 #include <map>
 #include <queue>
 
@@ -37,7 +38,6 @@ namespace hypro {
 template <typename Number, class Setting>
 class PolytopeSupportFunction {
   private:
-
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
 	mutable Optimizer<Number> mOpt;
@@ -48,10 +48,10 @@ class PolytopeSupportFunction {
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
 	PolytopeSupportFunction( const std::vector<Halfspace<Number>>& _planes );
 	PolytopeSupportFunction( const std::vector<Point<Number>>& _points );
-	PolytopeSupportFunction( const PolytopeSupportFunction<Number,Setting>& _origin );
+	PolytopeSupportFunction( const PolytopeSupportFunction<Number, Setting>& _origin );
 	~PolytopeSupportFunction();
 
-    PolytopeSupportFunction<Number,Setting>& operator=(const PolytopeSupportFunction& _orig);
+	PolytopeSupportFunction<Number, Setting>& operator=( const PolytopeSupportFunction& _orig );
 
 	/**
 	 * Returns the dimension of the object.
@@ -109,31 +109,31 @@ class PolytopeSupportFunction {
 
 	void cleanUp() const;
 
-    void print() const;
+	void print() const;
 
-    std::string getDotRepresentation() const;
+	std::string getDotRepresentation() const;
 
-    std::string createCode( unsigned index = 0 ) const;
+	std::string createCode( unsigned index = 0 ) const;
 
-    friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number,Setting>& rhs ) {
-    	lhs << "[";
-    	for(unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows()-1; ++rowIndex) {
-    		lhs << "  ";
-    		for(unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
-    			lhs << carl::toDouble(rhs.mConstraints(rowIndex,d)) << " ";
-    		}
-    		lhs << "<= " << carl::toDouble(rhs.mConstraintConstants(rowIndex)) << std::endl;
-    	}
-    	lhs << "  ";
-    	for(unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
-    			lhs << carl::toDouble(rhs.mConstraints(rhs.mConstraints.rows()-1,d)) << " ";
-    	}
-    	lhs << "<= " << carl::toDouble(rhs.mConstraintConstants(rhs.mConstraints.rows()-1)) << " ]" << std::endl;
-    	return lhs;
+	friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number, Setting>& rhs ) {
+		lhs << "[";
+		for ( unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows() - 1; ++rowIndex ) {
+			lhs << "  ";
+			for ( unsigned d = 0; d < rhs.mConstraints.cols(); ++d ) {
+				lhs << carl::toDouble( rhs.mConstraints( rowIndex, d ) ) << " ";
+			}
+			lhs << "<= " << carl::toDouble( rhs.mConstraintConstants( rowIndex ) ) << std::endl;
+		}
+		lhs << "  ";
+		for ( unsigned d = 0; d < rhs.mConstraints.cols(); ++d ) {
+			lhs << carl::toDouble( rhs.mConstraints( rhs.mConstraints.rows() - 1, d ) ) << " ";
+		}
+		lhs << "<= " << carl::toDouble( rhs.mConstraintConstants( rhs.mConstraints.rows() - 1 ) ) << " ]" << std::endl;
+		return lhs;
 	}
 
-private:
+  private:
 	void removeRedundancy();
 };
-}  // namespace
+}  // namespace hypro
 #include "PolytopeSupportFunction.tpp"

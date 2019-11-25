@@ -1,28 +1,27 @@
 #include "ReachTreeNode.h"
 
-namespace hypro
-{
+namespace hypro {
 
-template<typename State>
-const typename State::repVariant& ReachTreeNode<State>::getSetAtLevel(unsigned level) const {
-	assert(mRefinements.size() > level);
-	assert(!mRefinements.at(level).isDummy);
-	return mRefinements.at(level).initialSet.getSet();
+template <typename State>
+const typename State::repVariant& ReachTreeNode<State>::getSetAtLevel( unsigned level ) const {
+	assert( mRefinements.size() > level );
+	assert( !mRefinements.at( level ).isDummy );
+	return mRefinements.at( level ).initialSet.getSet();
 }
 
-template<typename State>
-const State& ReachTreeNode<State>::getStateAtLevel(unsigned level) const {
-	TRACE("hypro.datastructures","Access level " << level << " on a node with " << mRefinements.size() << " refinements.");
-	assert(mRefinements.size() > level);
-	assert(!mRefinements.at(level).isDummy);
-	return mRefinements.at(level).initialSet;
+template <typename State>
+const State& ReachTreeNode<State>::getStateAtLevel( unsigned level ) const {
+	TRACE( "hypro.datastructures", "Access level " << level << " on a node with " << mRefinements.size() << " refinements." );
+	assert( mRefinements.size() > level );
+	assert( !mRefinements.at( level ).isDummy );
+	return mRefinements.at( level ).initialSet;
 	//return State(mLoc, mRefinements.at(level).initialSet, mDiscreteAssignment, mRefinements.at(level).clockAssignment, carl::Interval<Number>(-1));
 }
 
-template<typename State>
-const carl::Interval<tNumber>& ReachTreeNode<State>::getTimestamp(unsigned level) const {
-	assert(level < mRefinements.size());
-	return mRefinements.at(level).entryTimestamp;
+template <typename State>
+const carl::Interval<tNumber>& ReachTreeNode<State>::getTimestamp( unsigned level ) const {
+	assert( level < mRefinements.size() );
+	return mRefinements.at( level ).entryTimestamp;
 }
 
 /*
@@ -37,132 +36,134 @@ std::vector<carl::Interval<tNumber>> ReachTreeNode<State>::getTimeIntervals(hypr
 }
 */
 
-template<typename State>
+template <typename State>
 unsigned ReachTreeNode<State>::getLatestBTLevel() const {
-	unsigned level = mRefinements.size()-1;
-	while(level > 0 && mRefinements.at(level).isDummy == true) {
+	unsigned level = mRefinements.size() - 1;
+	while ( level > 0 && mRefinements.at( level ).isDummy == true ) {
 		--level;
 	}
 	//assert(!mRefinements.at(level).isDummy);
 	return level;
 }
 
-template<typename State>
+template <typename State>
 unsigned ReachTreeNode<State>::getLatestFullyComputedLevel() const {
-	unsigned level = mRefinements.size()-1;
-	while(level > 0 && mRefinements.at(level).fullyComputed == false) {
+	unsigned level = mRefinements.size() - 1;
+	while ( level > 0 && mRefinements.at( level ).fullyComputed == false ) {
 		--level;
 	}
-	assert(!mRefinements.at(level).isDummy);
+	assert( !mRefinements.at( level ).isDummy );
 	return level;
 }
 
-template<typename State>
-void ReachTreeNode<State>::getLevelCnt(std::vector<std::size_t>& levels) const {
-	for(std::size_t pos = 0; pos < mRefinements.size(); ++pos) {
-		if(mRefinements[pos].fullyComputed) {
-			while(levels.size() <= pos ) {
-				levels.push_back(0);
+template <typename State>
+void ReachTreeNode<State>::getLevelCnt( std::vector<std::size_t>& levels ) const {
+	for ( std::size_t pos = 0; pos < mRefinements.size(); ++pos ) {
+		if ( mRefinements[pos].fullyComputed ) {
+			while ( levels.size() <= pos ) {
+				levels.push_back( 0 );
 			}
 			levels[pos] += 1;
 		}
 	}
-	for(const auto child : this->getChildren()) {
-		child->getLevelCnt(levels);
+	for ( const auto child : this->getChildren() ) {
+		child->getLevelCnt( levels );
 	}
 }
 
-template<typename State>
-std::vector<ReachTreeNode<State>*> ReachTreeNode<State>::getChildrenForTransition(hypro::Transition<Number>* transition) const {
+template <typename State>
+std::vector<ReachTreeNode<State>*> ReachTreeNode<State>::getChildrenForTransition( hypro::Transition<Number>* transition ) const {
 	// get all children
 	ReachTreeNode<State>::NodeList_t children = this->getChildren();
 	std::vector<ReachTreeNode<State>*> res;
-	TRACE("hypro.datastructures", "Total number of children: " << children.size() << ", transition: " << transition);
+	TRACE( "hypro.datastructures", "Total number of children: " << children.size() << ", transition: " << transition );
 	// delete all children not being a result of the transition
-	for(auto childIt = children.begin(); childIt != children.end(); ++childIt) {
+	for ( auto childIt = children.begin(); childIt != children.end(); ++childIt ) {
 		// Note: The offset -1 for the depth results from the additional root node.
 		ReachTreeNode<State>* castChild = *childIt;
-		if(castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() == transition ) {
-			TRACE("hypro.datastructures", "Transition: " << castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() << " == " << transition);
-			res.emplace_back(castChild);
+		if ( castChild->getPath().getTransitionSequence( castChild->getPath().begin(), castChild->getPath().end() ).back() == transition ) {
+			TRACE( "hypro.datastructures", "Transition: " << castChild->getPath().getTransitionSequence( castChild->getPath().begin(), castChild->getPath().end() ).back() << " == " << transition );
+			res.emplace_back( castChild );
 		}
 	}
 	return res;
 }
 
-template<typename State>
+template <typename State>
 bool ReachTreeNode<State>::isFullyComputedOnSomeLevel() const {
-	for(const auto& ref : mRefinements) {
-		if(ref.fullyComputed && !ref.hitBadStates) {
+	for ( const auto& ref : mRefinements ) {
+		if ( ref.fullyComputed && !ref.hitBadStates ) {
 			return true;
 		}
 	}
 	return false;
 }
 
-template<typename State>
-void ReachTreeNode<State>::updateContent(ReachTreeNode<State>* updatedNode) {
-	TRACE("hypro.datastructure","Update refinements: ");
-	for(const auto ref: mRefinements) {
-		TRACE("hypro.datastructure", ref);
+template <typename State>
+void ReachTreeNode<State>::updateContent( ReachTreeNode<State>* updatedNode ) {
+#ifndef NDEBUG
+	TRACE( "hypro.datastructure", "Update refinements: " );
+	for ( const auto& ref : mRefinements ) {
+		TRACE( "hypro.datastructure", ref );
 	}
-	TRACE("hypro.datastructures","With new refinements: ");
-	for(const auto ref: updatedNode->getRefinements()) {
-		TRACE("hypro.datastructure", ref);
+	TRACE( "hypro.datastructures", "With new refinements: " );
+	for ( const auto& ref : updatedNode->getRefinements() ) {
+		TRACE( "hypro.datastructure", ref );
 	}
+#endif
 	mPath = updatedNode->getPath();
 	//mLoc = updatedNode->getLocation();
 	// carefully update refinements - do not override old ones.
-	for(unsigned refPos = 0; refPos < updatedNode->getRefinements().size(); ++refPos) {
-		if(refPos < mRefinements.size() && !mRefinements.at(refPos).isDummy){
+	for ( unsigned refPos = 0; refPos < updatedNode->getRefinements().size(); ++refPos ) {
+		if ( refPos < mRefinements.size() && !mRefinements.at( refPos ).isDummy ) {
 			continue;
 		}
-		if(!updatedNode->getRefinements().at(refPos).isDummy || (updatedNode->getRefinements().at(refPos).isDummy && mRefinements.size() <= refPos )){
-			if(mRefinements.size() <= refPos){
+		if ( !updatedNode->getRefinements().at( refPos ).isDummy || ( updatedNode->getRefinements().at( refPos ).isDummy && mRefinements.size() <= refPos ) ) {
+			if ( mRefinements.size() <= refPos ) {
 				//assert(mRefinements.size() == refPos); // indirectly the difference cannot be more than one here.
 				//Note: The difference can be more than one since the order the tasks are worked on is not predictable.
-				TRACE("hypro.datastructures","Refinements are extended to level " << refPos << " by " << updatedNode->getRefinements().at(refPos));
-				mRefinements.push_back(updatedNode->getRefinements().at(refPos));
+				TRACE( "hypro.datastructures", "Refinements are extended to level " << refPos << " by " << updatedNode->getRefinements().at( refPos ) );
+				mRefinements.push_back( updatedNode->getRefinements().at( refPos ) );
 			} else {
-				TRACE("hypro.datastructures","Ref @" << refPos << ": " << mRefinements[refPos] << " is replaced by " << updatedNode->getRefinements().at(refPos));
-				mRefinements[refPos] = updatedNode->getRefinements().at(refPos);
+				TRACE( "hypro.datastructures", "Ref @" << refPos << ": " << mRefinements[refPos] << " is replaced by " << updatedNode->getRefinements().at( refPos ) );
+				mRefinements[refPos] = updatedNode->getRefinements().at( refPos );
 			}
 		}
 	}
 	//mTransitionTimings = updatedNode->getTransitionTimings();
 }
 
-template<typename State>
-void ReachTreeNode<State>::addRefinement(const RefinementSetting<State>& ref) {
-	mRefinements.push_back(ref);
+template <typename State>
+void ReachTreeNode<State>::addRefinement( const RefinementSetting<State>& ref ) {
+	mRefinements.push_back( ref );
 }
 
-template<typename State>
-void ReachTreeNode<State>::setNewRefinement(unsigned level, const RefinementSetting<State>& ref) {
-	if(mRefinements.size() > level) {
+template <typename State>
+void ReachTreeNode<State>::setNewRefinement( unsigned level, const RefinementSetting<State>& ref ) {
+	if ( mRefinements.size() > level ) {
 		mRefinements[level] = ref;
-	} else if(level == mRefinements.size()) {
-		mRefinements.push_back(ref);
-	}else{
-		while(mRefinements.size() < level) {
-			mRefinements.push_back(RefinementSetting<State>(ref.initialSet.getLocation()));
+	} else if ( level == mRefinements.size() ) {
+		mRefinements.push_back( ref );
+	} else {
+		while ( mRefinements.size() < level ) {
+			mRefinements.push_back( RefinementSetting<State>( ref.initialSet.getLocation() ) );
 		}
-		mRefinements.push_back(ref);
+		mRefinements.push_back( ref );
 	}
-	DEBUG("hypro.datastructures","Set new refinement for level " << level << " for this " << this );
-	assert(mRefinements.at(level) == ref);
+	DEBUG( "hypro.datastructures", "Set new refinement for level " << level << " for this " << this );
+	assert( mRefinements.at( level ) == ref );
 }
 
-template<typename State>
-void ReachTreeNode<State>::convertRefinement(unsigned fromLevel, unsigned toLevel) {
-	assert(mRefinements.size() > fromLevel);
+template <typename State>
+void ReachTreeNode<State>::convertRefinement( unsigned fromLevel, unsigned toLevel ) {
+	assert( mRefinements.size() > fromLevel );
 	// move refinement to level 0, convert type in case necessary
-	RefinementSetting tmpRefinement = mRefinements.at(fromLevel);
-	SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(tmpRefinement.initialSet, toLevel);
-	this->setNewRefinement(toLevel,tmpRefinement);
-	assert(mRefinements.at(toLevel).fullyComputed == false);
+	RefinementSetting tmpRefinement = mRefinements.at( fromLevel );
+	SettingsProvider<State>::getInstance().getStrategy().advanceToLevel( tmpRefinement.initialSet, toLevel );
+	this->setNewRefinement( toLevel, tmpRefinement );
+	assert( mRefinements.at( toLevel ).fullyComputed == false );
 	//assert(mRefinements.size() == 1);
-	assert(!mRefinements.at(toLevel).initialSet.getTimestamp().isEmpty());
+	assert( !mRefinements.at( toLevel ).initialSet.getTimestamp().isEmpty() );
 }
 
 /*
@@ -173,9 +174,8 @@ void ReachTreeNode<State>::setInitSet(const State::repVariant& _initSet)
 }
 */
 
-template<typename State>
-void ReachTreeNode<State>::setTimestamp( unsigned level, const carl::Interval<tNumber>& timeInterval)
-{
+template <typename State>
+void ReachTreeNode<State>::setTimestamp( unsigned level, const carl::Interval<tNumber>& timeInterval ) {
 	mRefinements[level].entryTimestamp = timeInterval;
 	// Todo-check: The timestamp of the initial set should be a local one,
 	// whereas the entry timestamp is also local, but in the scope of the parent node.
@@ -253,17 +253,17 @@ void ReachTreeNode<State>::refineIntervals()
 }
 */
 
-template<typename State>
-bool ReachTreeNode<State>::hasFixedPoint(const State& s, ReachTreeNode<State>::Node_t skip) const {
-	if(this == skip) {
-		for(const auto& r : mRefinements) {
-			if(r.fullyComputed && r.initialSet.contains(s)) {
+template <typename State>
+bool ReachTreeNode<State>::hasFixedPoint( const State& s, ReachTreeNode<State>::Node_t skip ) const {
+	if ( this == skip ) {
+		for ( const auto& r : mRefinements ) {
+			if ( r.fullyComputed && r.initialSet.contains( s ) ) {
 				return true;
 			}
 		}
-	} else if(this->getMutex().try_lock()) {
-		for(const auto& r : mRefinements) {
-			if(r.fullyComputed && r.initialSet.contains(s)) {
+	} else if ( this->getMutex().try_lock() ) {
+		for ( const auto& r : mRefinements ) {
+			if ( r.fullyComputed && r.initialSet.contains( s ) ) {
 				this->getMutex().unlock();
 				return true;
 			}
@@ -271,28 +271,28 @@ bool ReachTreeNode<State>::hasFixedPoint(const State& s, ReachTreeNode<State>::N
 		this->getMutex().unlock();
 	}
 
-	for(const auto c : this->getChildren()) {
-		if(c->hasFixedPoint(s,skip))
+	for ( const auto c : this->getChildren() ) {
+		if ( c->hasFixedPoint( s, skip ) )
 			return true;
 	}
 	return false;
 }
 
-template<typename State>
-void ReachTreeNode<State>::setParent(ReachTreeNode<State>* parent) {
-	TreeNode<ReachTreeNode<State>>::setParent(parent);
+template <typename State>
+void ReachTreeNode<State>::setParent( ReachTreeNode<State>* parent ) {
+	TreeNode<ReachTreeNode<State>>::setParent( parent );
 	mPath = parent->getPath();
 }
 
-template<typename State>
-std::size_t ReachTreeNode<State>::getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const {
+template <typename State>
+std::size_t ReachTreeNode<State>::getDotRepresentation( std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels ) const {
 	std::stringstream s;
 	s << "node" << startIndex << " [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">";
 	std::size_t cnt = 0;
 	// add common info
-	std::size_t colspan = 1 > mRefinements.size()? 1 : mRefinements.size();
+	std::size_t colspan = 1 > mRefinements.size() ? 1 : mRefinements.size();
 	//if(this->getParent() == nullptr){
-		s << "<TR><TD COLSPAN=\""<< colspan << "\">@" << this;
+	s << "<TR><TD COLSPAN=\"" << colspan << "\">@" << this;
 	//} else {
 	//	s << "<TR><TD COLSPAN=\""<< colspan << "\">@" << this << "<BR/>"<< this->getLocation()->getName() << "(" << this->getLocation()->getId() <<")";
 	//}
@@ -302,42 +302,42 @@ std::size_t ReachTreeNode<State>::getDotRepresentation(std::size_t startIndex, s
 	//}
 	// add refinement info
 	s << "</TD></TR><TR>";
-	if(mRefinements.empty()){
+	if ( mRefinements.empty() ) {
 		s << "<TD> </TD>";
 	}
-	for(const auto& ref : mRefinements) {
+	for ( const auto& ref : mRefinements ) {
 		s << "<TD";
-		if(ref.fullyComputed && !ref.hitBadStates){
+		if ( ref.fullyComputed && !ref.hitBadStates ) {
 			s << " BGCOLOR=\"green\">";
-			if(levels.size() <= cnt) levels.push_back(0);
+			if ( levels.size() <= cnt ) levels.push_back( 0 );
 			levels[cnt] += 1;
-		} else if(ref.hitBadStates) {
+		} else if ( ref.hitBadStates ) {
 			s << " BGCOLOR=\"red\">";
-			if(levels.size() <= cnt) levels.push_back(0);
+			if ( levels.size() <= cnt ) levels.push_back( 0 );
 			levels[cnt] += 1;
-		} else if(!ref.isEmpty && !ref.isDummy) {
+		} else if ( !ref.isEmpty && !ref.isDummy ) {
 			s << " BGCOLOR=\"yellow\">";
-		} else if(ref.isDummy){
+		} else if ( ref.isDummy ) {
 			s << ">";
 		} else {
 			s << "> ";
 		}
 		s << "<FONT POINT-SIZE=\"8.0\">";
-		if(!ref.isEmpty && !ref.isDummy) {
+		if ( !ref.isEmpty && !ref.isDummy ) {
 			//if(ref.eventTimings.hasInvariantEvent(hypro::CONTAINMENT::FULL)) {
 			//	s <<  cnt << "<BR/>inv(f): " << ref.eventTimings.getInvariantTimings(hypro::CONTAINMENT::FULL);
 			//} else {
-				s << cnt << " (" << ref.initialSet.getLocation()->hash() << ")";
+			s << cnt << " (" << ref.initialSet.getLocation()->hash() << ")";
 			//}
 		}
-		if(ref.hitBadStates){
+		if ( ref.hitBadStates ) {
 			//assert(ref.eventTimings.hasBadStateEvent());
 			//if(ref.eventTimings.hasBadStateEvent()) {
 			//	s << "<BR/>bs: " << ref.eventTimings.getBadStateTimings()[0];
 			//}
 			s << "B";
 		}
-		if(ref.isDummy){
+		if ( ref.isDummy ) {
 			s << "D";
 		}
 		s << "</FONT>";
@@ -348,30 +348,32 @@ std::size_t ReachTreeNode<State>::getDotRepresentation(std::size_t startIndex, s
 	s << "</TABLE>>];" << std::endl;
 	nodes += s.str();
 	std::size_t offset = ++startIndex;
-	if(!this->getChildren().empty()){
-		for(const auto child : this->getChildren()) {
+	if ( !this->getChildren().empty() ) {
+		for ( const auto child : this->getChildren() ) {
 			std::stringstream t;
 
 			//carl::Interval<tNumber> timestamp = child->getTimestamp(child->getRefinements().size()-1);
-			t << "node" << (startIndex-1) << " -> node" << offset << " [label=\" ";
-			for(auto& ref : child->getRefinements()){
-				t << carl::Interval<double>(carl::convert<tNumber,double>(ref.entryTimestamp.lower()), carl::convert<tNumber,double>(ref.entryTimestamp.upper())) << "\n";
+			t << "node" << ( startIndex - 1 ) << " -> node" << offset << " [label=\" ";
+			for ( auto& ref : child->getRefinements() ) {
+				t << carl::Interval<double>( carl::convert<tNumber, double>( ref.entryTimestamp.lower() ), carl::convert<tNumber, double>( ref.entryTimestamp.upper() ) ) << "\n";
 			}
-			t <<"\"];" << std::endl;
-			transitions += t.str();;
-			offset = child->getDotRepresentation(offset,nodes,transitions,levels);
+			t << "\"];" << std::endl;
+			transitions += t.str();
+			;
+			offset = child->getDotRepresentation( offset, nodes, transitions, levels );
 		}
 	}
 	return offset;
 }
 
-template<typename State>
-std::ostream& operator<< (std::ostream &out, const ReachTreeNode<State>& reachTreeNode) {
-    // TODO JNE refine operator
-    out << "ReachTreeNode " << &reachTreeNode << ": path: " << reachTreeNode.mPath << std::endl << "Refinements: " << std::endl;
-    for(const auto& ref : reachTreeNode.getRefinements())
-    	out << ref << std::endl;
-    return out;
+template <typename State>
+std::ostream& operator<<( std::ostream& out, const ReachTreeNode<State>& reachTreeNode ) {
+	// TODO JNE refine operator
+	out << "ReachTreeNode " << &reachTreeNode << ": path: " << reachTreeNode.mPath << std::endl
+		<< "Refinements: " << std::endl;
+	for ( const auto& ref : reachTreeNode.getRefinements() )
+		out << ref << std::endl;
+	return out;
 }
 
-} // hypro
+}  // namespace hypro

@@ -1,5 +1,6 @@
 .idea
 CMakeFiles
+CMakeCache.txt
 nbproject
 .project
 build

@@ -7,12 +7,11 @@
 
 #pragma once
 
-#include <vector>
-
-#include <carl/interval/Interval.h>
-#include <carl/interval/set_theory.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/VariablePool.h>
+#include <carl/interval/Interval.h>
+#include <carl/interval/set_theory.h>
+#include <vector>
 
 using namespace carl;
 
@@ -252,6 +251,6 @@ class TaylorModelVec {
 	friend class Flowpipe<Number>;
 };
 
-}  // namespace
+}  // namespace hypro
 
 #include "TaylorModel.tpp"

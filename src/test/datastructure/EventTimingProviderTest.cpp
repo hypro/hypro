@@ -162,7 +162,7 @@ TEST_F(EventTimingTest, FindPath3)
     EventTimingNode<double>* ch2 = tProvider.addChildToNode(initNode, 10);
     EventTimingNode<double>* ch3 = tProvider.addChildToNode(initNode, 10);
 
-    EXPECT_EQ(3, initNode->getChildren().size());
+    EXPECT_EQ(std::size_t(3), initNode->getChildren().size());
     // add transition event to parent
     initNode->rGetTimings().insertTransition(tRaw,carl::Interval<T>(1,4), CONTAINMENT::YES);
     initNode->rGetTimings().insertTransition(tRaw2,carl::Interval<T>(1,3), CONTAINMENT::YES);    // set properties of child 1

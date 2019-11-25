@@ -9,8 +9,6 @@
 #include <fstream>
 #include <string>
 
-//#include <sys/time.h>
-
 #include "../src/hypro/config.h"
 #include "../src/hypro/util/Plotter.h"
 #include "../src/hypro/representations/GeometricObject.h"
@@ -28,7 +26,7 @@ int main()
     vCenter(2) = 0;
 
     // Just creates the Generators (3 for now)
-    matrix_t<Number> vGenerators = matrix_t<Number>(3,4);
+    matrix_t<Number> vGenerators = matrix_t<Number>(3, 4);
 
     vGenerators(0, 0) = 1;
     vGenerators(1, 0) = 0;
@@ -62,11 +60,16 @@ int main()
     // All we want now is write to see the results
     std::ofstream results("example_zonotope.txt");
 
-    results << "Dimension: " << zonoExample.dimension() << "\n\n\n" << "Center: " << vCenter << "\n\n\n" << "Generators: \n" << zonoExample.generators() << "\n\n\n";
+    results << "Dimension: " << zonoExample.dimension() << "\n\n\n"
+            << "Center: " << vCenter << "\n\n\n"
+            << "Generators: \n"
+            << zonoExample.generators() << "\n\n\n";
 
     zonoExample.uniteEqualVectors();
 
-    results << "Number of Generators: " << zonoExample.generators().size() << "\n\n\n" << "new Generators: \n" << zonoExample.generators() << "\n\n\n";
+    results << "Number of Generators: " << zonoExample.generators().size() << "\n\n\n"
+            << "new Generators: \n"
+            << zonoExample.generators() << "\n\n\n";
 
     //struct timeval t1, t2;
     //double elapsedTime;
@@ -74,7 +77,8 @@ int main()
     // start timer
     //gettimeofday(&t1, NULL);
 
-    results << "Corners:\n" << zonoExample.vertices() << "\n\n\n"; // Here we unite equal vectors (for optimization), and calculate (recursive) the corners!!
+    results << "Corners:\n"
+            << zonoExample.vertices() << "\n\n\n"; // Here we unite equal vectors (for optimization), and calculate (recursive) the corners!!
 
     // stop timer
     //gettimeofday(&t2, NULL);

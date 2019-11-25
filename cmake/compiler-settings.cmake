@@ -4,7 +4,6 @@ include(apple-llvm)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -isystem\ /usr/include/libcxxabi/ -D__STRICT_ANSI__")
 	if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 5)
 		message(FATAL_ERROR "gcc version should be larger or equal than 5.")
 	endif()
@@ -54,7 +53,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 		message(FATAL_ERROR "gcc version should be larger or equal than 7.")
 	endif()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1")
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed")
@@ -73,24 +72,24 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-attributes -pedantic 
 if(STATICLIB_SWITCH)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	SET(BUILD_SHARED_LIBRARIES OFF)
+	set(BUILD_SHARED_LIBRARIES OFF)
 else()
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.dylib")
-	SET(BUILD_SHARED_LIBRARIES ON)
+	set(BUILD_SHARED_LIBRARIES ON)
 endif()
 
 if(DEVELOPER)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} \
-		-Wswitch \
-		-Wno-deprecated-declarations \
-		-Wempty-body \
-		-Wconversion \
-		-Wreturn-type \
-		-Wparentheses \
-		-Wno-format \
-		-Wuninitialized \
-		-Wunreachable-code \
-		-Wunused-function \
-		-Wunused-value \
-		-Wunused-variable")
+	target_compile_options(${PROJECT_NAME} PRIVATE -Wswitch
+	-Wno-deprecated-declarations
+	-Wempty-body
+	-Wconversion
+	-Wreturn-type
+	-Wparentheses
+	-Wno-format
+	-Wuninitialized
+	-Wunreachable-code
+	-Wunused-function
+	-Wunused-value
+	-Wunused-variable
+	-fsanitize=address)
 endif()

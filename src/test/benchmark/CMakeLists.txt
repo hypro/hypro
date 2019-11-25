@@ -12,7 +12,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	target_include_directories(runBenchmark PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runBenchmark
-							${PROJECT_NAME}
+							${PROJECT_NAME}-shared
 							${GTEST_LIBRARIES})
 
 	cotire(runBenchmark)
@@ -27,7 +27,7 @@ add_executable(benchmark
 	${BM_SOURCES}
 )
 target_link_libraries(benchmark
-						${PROJECT_NAME}
+						${PROJECT_NAME}-shared
 )
 cotire(runBenchmark)
 cotire(benchmark)

@@ -7,10 +7,10 @@ namespace box {
         Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
-        #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
         using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<benchmark::box::Double_Interval_Policy>>;
         using pplbox = Parma_Polyhedra_Library::Box<pplItv>;
-        #endif
+#endif
         box.insert(carl::Interval<::benchmark::Number>(-1,1));
 
         // initialize random number generator
@@ -21,9 +21,9 @@ namespace box {
         for(std::size_t d = 1; d < settings.maxDimension; ++d) {
             // create instances
             std::vector<hypro::Halfspace<::benchmark::Number>> hsps;
-            #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
             std::vector<Parma_Polyhedra_Library::Constraint> pplHsps;
-            #endif
+#endif
             Timer creationTimer;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
                 hypro::vector_t<::benchmark::Number> normal = hypro::vector_t<::benchmark::Number>(d);
@@ -32,7 +32,7 @@ namespace box {
                 }
                 hsps.emplace_back(hypro::Halfspace<::benchmark::Number>(normal,0));
                 // create same constraint for PPL.
-                #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
                 Parma_Polyhedra_Library::Constraint c;
                 Parma_Polyhedra_Library::Linear_Expression e;
                 for (Parma_Polyhedra_Library::dimension_type i = 0; i < d; ++i )
@@ -40,7 +40,7 @@ namespace box {
                 e += -hsps.back().offset();
                 c = e <= 0;
                 pplHsps.emplace_back(c);
-                #endif
+#endif
             }
             auto creationTime = creationTimer.elapsed();
             std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
@@ -63,7 +63,7 @@ namespace box {
             ress.emplace_back({"intersectHalfspaceNaive",runningTimeNaive/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTimeNaive.count() << " sec." << std::endl;
 
-            #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
             std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();
             for(std::size_t i = 0; i < settings.iterations; ++i) {
                 // construct fresh box
@@ -80,7 +80,7 @@ namespace box {
             }
             ress.emplace_back({"intersectHalfspacePPL",pplRT/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
-            #endif
+#endif
 
             ress.mRunningTime += runningTime;
 

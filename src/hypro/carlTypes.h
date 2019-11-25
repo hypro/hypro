@@ -5,23 +5,24 @@
 
 namespace hypro {
 
-enum class QuantifierType { EXISTS, FORALL };
+enum class QuantifierType { EXISTS,
+							FORALL };
 
-template<typename Number>
+template <typename Number>
 using PolyT = carl::MultivariatePolynomial<Number>;
 
-template<typename Number>
+template <typename Number>
 using ConstraintT = carl::Constraint<PolyT<Number> >;
 
-template<typename Number>
+template <typename Number>
 using ConstraintsT = std::vector<ConstraintT<Number> >;
 
-template<typename Number>
+template <typename Number>
 using FormulaT = carl::Formula<PolyT<Number> >;
 
-template<typename Number>
+template <typename Number>
 using FormulasT = std::vector<FormulaT<Number> >;
 
 using QEQuery = std::vector<std::pair<QuantifierType, std::vector<carl::Variable> > >;
 
-} // hypro
+}  // namespace hypro

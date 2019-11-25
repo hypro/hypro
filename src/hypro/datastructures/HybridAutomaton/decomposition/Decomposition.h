@@ -1,23 +1,20 @@
 #pragma once
 #include <vector>
 
-namespace hypro
-{
-    
-    struct Decomposition
-    {
-        std::vector<std::vector<std::size_t>> mDecomposition;
+namespace hypro {
 
-        std::size_t size() const { return mDecomposition.size(); }
+struct Decomposition {
+	std::vector<std::vector<std::size_t>> mDecomposition;
 
-        void push_back(const std::vector<std::size_t>& decomp) {mDecomposition.push_back(decomp);}
-        const std::vector<std::size_t>& at(std::size_t pos) const {return mDecomposition.at(pos);}
+	std::size_t size() const { return mDecomposition.size(); }
 
-        std::vector<std::vector<std::size_t>>::iterator begin() {return mDecomposition.begin();}
-        std::vector<std::vector<std::size_t>>::const_iterator begin() const {return mDecomposition.begin();}
-        std::vector<std::vector<std::size_t>>::iterator end() {return mDecomposition.end();}
-        std::vector<std::vector<std::size_t>>::const_iterator end() const {return mDecomposition.end();}
+	void push_back( const std::vector<std::size_t>& decomp ) { mDecomposition.push_back( decomp ); }
+	const std::vector<std::size_t>& at( std::size_t pos ) const { return mDecomposition.at( pos ); }
 
-    };
-    
-} // hypro
+	std::vector<std::vector<std::size_t>>::iterator begin() { return mDecomposition.begin(); }
+	std::vector<std::vector<std::size_t>>::const_iterator begin() const { return mDecomposition.begin(); }
+	std::vector<std::vector<std::size_t>>::iterator end() { return mDecomposition.end(); }
+	std::vector<std::vector<std::size_t>>::const_iterator end() const { return mDecomposition.end(); }
+};
+
+}  // namespace hypro

@@ -2,26 +2,24 @@
 
 namespace hypro {
 
-template<typename Object>
+template <typename Object>
 class LockableObjectWrapper {
-
-private:
+  private:
 	Object instance;
 	std::recursive_mutex mutex;
 	int numLocks = 0;
 
-public:
+  public:
 	LockableObjectWrapper() = delete;
 
 	~LockableObjectWrapper() {
 		// ensure the lock is freed upon destruction.
-		while(numLocks > 0)
+		while ( numLocks > 0 )
 			mutex.unlock();
 	}
 
-	LockableObjectWrapper(Object instance)
-		:instance(instance)
-	{}
+	LockableObjectWrapper( Object instance )
+		: instance( instance ) {}
 
 	Object& getLockedInstance() {
 		mutex.lock();
@@ -37,7 +35,6 @@ public:
 	int getNumLocks() const {
 		return numLocks;
 	}
-
 };
 
-} // namespace
+}  // namespace hypro

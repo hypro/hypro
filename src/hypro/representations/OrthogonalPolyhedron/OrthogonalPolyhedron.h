@@ -11,24 +11,25 @@
 #include "../../datastructures/Vertex.h"
 #include "../../datastructures/VertexContainer.h"
 #include "../Box/Box.h"
-#include "NeighborhoodContainer.h"
 #include "Grid.h"
-
-#include <iostream>
-#include <string>
-#include <map>
-#include <list>
-#include <vector>
-#include <fstream>
+#include "NeighborhoodContainer.h"
 
 #include <carl/core/Variable.h>
+#include <fstream>
+#include <iosfwd>
+#include <list>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace hypro {
 
 /**
  * @brief      Enum holding the type identification of the different representations of orthogonal polyhedra.
  */
-enum ORTHO_TYPE { VERTEX, NEIGHBORHOOD, EXTREME_VERTEX };
+enum ORTHO_TYPE { VERTEX,
+				  NEIGHBORHOOD,
+				  EXTREME_VERTEX };
 
 /**
  * @brief      Class for orthogonal polyhedra.
@@ -41,8 +42,8 @@ template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type = 
 class OrthogonalPolyhedronT {
   private:
 	// VertexContainer<Number> mVertices; // the container of all vertices
-	Grid<Number> mGrid;				   // the grid the polyhedron is defined on
-	mutable BoxT<Number,Converter,Setting> mBoundaryBox;  // the cached boundary box (mutable to allow performance optimization)
+	Grid<Number> mGrid;										// the grid the polyhedron is defined on
+	mutable BoxT<Number, Converter, Setting> mBoundaryBox;  // the cached boundary box (mutable to allow performance optimization)
 	mutable bool mBoxUpToDate = false;
 
   public:
@@ -58,9 +59,11 @@ class OrthogonalPolyhedronT {
 	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& copy );
 	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>&& move );
 
-	template<class SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& copy)
-		: mGrid( copy.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {	
+	template <class SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
+	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& copy )
+		: mGrid( copy.vertices() )
+		, mBoundaryBox()
+		, mBoxUpToDate( false ) {
 	}
 
 	/***********************************************************************
@@ -69,7 +72,7 @@ class OrthogonalPolyhedronT {
 
 	std::vector<carl::Variable> variables() const;
 	std::vector<Vertex<Number>> vertices() const;
-	BoxT<Number,Converter,Setting> boundaryBox() const;
+	BoxT<Number, Converter, Setting> boundaryBox() const;
 	const Grid<Number>& grid() const;
 	void addVertex( const Vertex<Number>& _vertex );
 	void addVertices( const std::vector<Vertex<Number>>& _vertices );
@@ -95,7 +98,7 @@ class OrthogonalPolyhedronT {
 	 * Geometric Object functions
 	 ***********************************************************************/
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type> linearTransformation( const matrix_t<Number>& A,
-															 const vector_t<Number>& b ) const;
+																				  const vector_t<Number>& b ) const;
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type> minkowskiSum( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type> intersect( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type> hull() const;
@@ -115,14 +118,14 @@ class OrthogonalPolyhedronT {
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type>& operator=( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& _in ) = default;
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type>& operator=( OrthogonalPolyhedronT<Number, Converter, Setting, Type>&& ) = default;
 
-	template<typename SettingRhs>
+	template <typename SettingRhs>
 	friend bool operator==( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1,
 							const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& op2 ) {
 		//return op1.mGrid == op2.mGrid;
 		return op1.grid() == op2.grid();
 	}
 
-	template<typename SettingRhs>
+	template <typename SettingRhs>
 	friend bool operator!=( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1,
 							const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op2 ) {
 		//return op1.mGrid != op2.mGrid;
@@ -140,6 +143,6 @@ class OrthogonalPolyhedronT {
 	void updateBoundaryBox() const;
 };
 
-}  // namespace
+}  // namespace hypro
 
 #include "OrthogonalPolyhedron.tpp"

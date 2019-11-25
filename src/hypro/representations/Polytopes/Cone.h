@@ -5,12 +5,12 @@
 #pragma once
 #include "../../datastructures/Halfspace.h"
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace hypro {
 
-template<typename Number>
+template <typename Number>
 using vectorSet = std::set<vector_t<Number>>;
 
 template <typename Number>

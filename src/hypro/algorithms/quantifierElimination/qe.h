@@ -5,10 +5,10 @@
 
 namespace hypro {
 
-template<typename Number>
-FormulaT<Number> eliminateQuantifiers(const FormulaT<Number>& qfree, const QEQuery& quantifiers) {
-	FourierMotzkinQE<Number> elim(qfree, quantifiers);
+template <typename Number>
+FormulaT<Number> eliminateQuantifiers( const FormulaT<Number>& qfree, const QEQuery& quantifiers ) {
+	FourierMotzkinQE<Number> elim( qfree, quantifiers );
 	return elim.eliminateQuantifiers();
 }
 
-} // hypro
+}  // namespace hypro

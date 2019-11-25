@@ -13,38 +13,52 @@
 namespace hypro {
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT()
-	: mGrid(), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid()
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const Vertex<Number> &_vertex )
-	: mGrid(), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid()
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 	mGrid.insert( _vertex.point(), _vertex.color() );
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const VertexContainer<Number> &_vertices )
-	: mGrid( _vertices.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid( _vertices.vertices() )
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const std::set<Vertex<Number>> &_vertices )
-	: mGrid( _vertices ), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid( _vertices )
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const std::vector<Vertex<Number>> &_vertices )
-	: mGrid( _vertices ), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid( _vertices )
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &copy )
-	: mGrid( copy.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid( copy.vertices() )
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &&move )
-	: mGrid( std::move( move.mGrid ) ), mBoundaryBox(), mBoxUpToDate( false ) {
+	: mGrid( std::move( move.mGrid ) )
+	, mBoundaryBox()
+	, mBoxUpToDate( false ) {
 }
 
 /**********************************
@@ -68,7 +82,7 @@ std::vector<Vertex<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Ty
  * Returns and if necessary calculates the boundary box.
  */
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-BoxT<Number,Converter,Setting> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::boundaryBox() const {
+BoxT<Number, Converter, Setting> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::boundaryBox() const {
 	if ( !mBoxUpToDate ) {
 		updateBoundaryBox();
 	}
@@ -144,13 +158,13 @@ bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::color( const Point
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNeighborhood( const Point<Number> &_point,
-																			  unsigned i ) const {
+																								   unsigned i ) const {
 	return mGrid.iNeighborhood( _point, i );
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNegNeighborhood( const Point<Number> &_point,
-																				 unsigned i ) const {
+																									  unsigned i ) const {
 	return mGrid.iNeighborhood( mGrid.iPredecessor( _point, i ), i );
 }
 
@@ -280,9 +294,9 @@ OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Nu
 		updateBoundaryBox();
 	}
 
-	std::size_t nrofVertices = std::size_t(pow( 2, dimension() ));
+	std::size_t nrofVertices = std::size_t( pow( 2, dimension() ) );
 	VertexContainer<Number> container;
-	Vertex<Number> vertex(vector_t<Number>(this->dimension()));
+	Vertex<Number> vertex( vector_t<Number>( this->dimension() ) );
 
 	for ( std::size_t vertexNr = 0; vertexNr < nrofVertices; vertexNr++ ) {
 		int i = 0;
@@ -395,7 +409,7 @@ OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Nu
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 std::vector<std::vector<Point<Number>>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::preparePlot( unsigned _xDim,
-																						 unsigned _yDim ) const {
+																											  unsigned _yDim ) const {
 	std::vector<std::vector<Point<Number>>> result;
 
 	std::vector<Point<Number>> points = mGrid.allBlack();
@@ -435,10 +449,10 @@ void OrthogonalPolyhedronT<Number, Converter, Setting, Type>::updateBoundaryBox(
 
 	std::vector<Vertex<Number>> vertices = mGrid.vertices();
 	std::vector<Point<Number>> points;
-	std::for_each(vertices.begin(), vertices.end(), [&](const Vertex<Number>& v){points.push_back(Point<Number>(v.rawCoordinates()));});
+	std::for_each( vertices.begin(), vertices.end(), [&]( const Vertex<Number> &v ) { points.push_back( Point<Number>( v.rawCoordinates() ) ); } );
 
-	mBoundaryBox = BoxT<Number,Converter,Setting>( points );
+	mBoundaryBox = BoxT<Number, Converter, Setting>( points );
 
 	mBoxUpToDate = true;
 }
-}
+}  // namespace hypro

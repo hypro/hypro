@@ -178,10 +178,10 @@ protected:
     HPolytope<Number> hpolytope;
     HPolytope<Number> hpolytope2;
 
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     Polytope<Number> pplpolytope;
     Polytope<Number> pplpolytope2;
-    #endif
+#endif
 
     TemplatePolyhedron<Number> tpoly;
     TemplatePolyhedron<Number> tpoly2;
@@ -207,10 +207,10 @@ TYPED_TEST(ConverterTest, toBox)
     auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2, ALTERNATIVE);
     auto result3 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope);
     auto result4 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2);
-    #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope2);
-    #endif
+#endif
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->tpoly);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->tpoly2);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->sfn1);
@@ -230,10 +230,10 @@ TYPED_TEST(ConverterTest, toHPolytope)
         auto result7 = Converter<TypeParam>::toHPolytope(this->vpolytope2, OVER);
         auto result8 = Converter<TypeParam>::toHPolytope(this->vpolytope3, OVER);
         auto result9 = Converter<TypeParam>::toHPolytope(this->box);
-        #ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
         auto result10 = Converter<TypeParam>::toHPolytope(this->pplpolytope);
         auto result11 = Converter<TypeParam>::toHPolytope(this->pplpolytope2);
-        #endif
+#endif
         auto result12 = Converter<TypeParam>::toHPolytope(this->sfn1);
         auto result13 = Converter<TypeParam>::toHPolytope(this->sfn2);
         auto result14 = Converter<TypeParam>::toHPolytope(this->tpoly);

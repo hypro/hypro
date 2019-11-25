@@ -3,26 +3,32 @@
 
 namespace hypro {
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT()
-	: mPolyhedron( 0, Parma_Polyhedra_Library::EMPTY ), mPoints(), mPointsUpToDate( false ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT()
+	: mPolyhedron( 0, Parma_Polyhedra_Library::EMPTY )
+	, mPoints()
+	, mPointsUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const PolytopeT<Number,Converter,Setting> &orig )
-	: mPolyhedron( orig.mPolyhedron ), mPoints( orig.mPoints ), mPointsUpToDate( orig.mPointsUpToDate ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( const PolytopeT<Number, Converter, Setting> &orig )
+	: mPolyhedron( orig.mPolyhedron )
+	, mPoints( orig.mPoints )
+	, mPointsUpToDate( orig.mPointsUpToDate ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::~PolytopeT() {
+PolytopeT<Number, Converter, Setting>::~PolytopeT() {
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( unsigned dimension )
-	: mPolyhedron( dimension, Parma_Polyhedra_Library::EMPTY ), mPoints(), mPointsUpToDate( true ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( unsigned dimension )
+	: mPolyhedron( dimension, Parma_Polyhedra_Library::EMPTY )
+	, mPoints()
+	, mPointsUpToDate( true ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const Point<Number> &_point )
+PolytopeT<Number, Converter, Setting>::PolytopeT( const Point<Number> &_point )
 	: mPolyhedron( Parma_Polyhedra_Library::C_Polyhedron( _point.dimension(), Parma_Polyhedra_Library::EMPTY ) ) {
 	// std::cout << "Try Ppint: " << _point << std::endl;
 	mPolyhedron.add_generator( polytope::pointToGenerator( _point ) );
@@ -31,7 +37,7 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const Point<Number> &_point )
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<Point<Number>> &points ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( const typename std::vector<Point<Number>> &points ) {
 	// mPolyhedron.initialize();
 	// std::cout << "Try Points" << std::endl;
 	mPolyhedron =
@@ -44,7 +50,7 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<Point
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<vector_t<Number>> &points ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( const typename std::vector<vector_t<Number>> &points ) {
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( points.begin()->rows(), Parma_Polyhedra_Library::EMPTY );
 	for ( auto pointIt = points.begin(); pointIt != points.end(); ++pointIt ) {
 		Parma_Polyhedra_Library::Generator tmp = polytope::pointToGenerator( *pointIt );
@@ -56,12 +62,12 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<vecto
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b ) {
 	assert( A.rows() == b.rows() );
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( A.cols(), Parma_Polyhedra_Library::UNIVERSE );
 	for ( unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex ) {
 		//std::cout << "Process row " << rowIndex << std::endl;
-		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(vector_t<Number>(A.row(rowIndex)), b(rowIndex));
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint( vector_t<Number>( A.row( rowIndex ) ), b( rowIndex ) );
 
 		mPolyhedron.add_constraint( constraint );
 	}
@@ -69,10 +75,10 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const matrix_t<Number> &A, const
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const matrix_t<Number> &A ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( const matrix_t<Number> &A ) {
 	mPolyhedron = Parma_Polyhedra_Library::C_Polyhedron( A.rows(), Parma_Polyhedra_Library::UNIVERSE );
 	for ( unsigned rowIndex = 0; rowIndex < A.rows(); ++rowIndex ) {
-		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(vector_t<Number>(A.row(rowIndex)), Number(0));
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint( vector_t<Number>( A.row( rowIndex ) ), Number( 0 ) );
 
 		mPolyhedron.add_constraint( constraint );
 		// mPolyhedron.add_generator(gen);
@@ -81,17 +87,19 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const matrix_t<Number> &A ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting>::PolytopeT( const Parma_Polyhedra_Library::C_Polyhedron &_rawPoly )
-	: mPolyhedron( _rawPoly ), mPoints(), mPointsUpToDate( false ) {
+PolytopeT<Number, Converter, Setting>::PolytopeT( const Parma_Polyhedra_Library::C_Polyhedron &_rawPoly )
+	: mPolyhedron( _rawPoly )
+	, mPoints()
+	, mPointsUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-bool PolytopeT<Number,Converter,Setting>::empty() const {
+bool PolytopeT<Number, Converter, Setting>::empty() const {
 	return mPolyhedron.is_empty();
 }
 
 template <typename Number, typename Converter, class Setting>
-void PolytopeT<Number,Converter,Setting>::addPoint( const Point<Number> &point ) {
+void PolytopeT<Number, Converter, Setting>::addPoint( const Point<Number> &point ) {
 	Parma_Polyhedra_Library::Generator tmp = polytope::pointToGenerator( point );
 	if ( mPolyhedron.space_dimension() != tmp.space_dimension() ) {
 		mPolyhedron.add_space_dimensions_and_embed( tmp.space_dimension() );
@@ -101,7 +109,7 @@ void PolytopeT<Number,Converter,Setting>::addPoint( const Point<Number> &point )
 }
 
 template <typename Number, typename Converter, class Setting>
-void PolytopeT<Number,Converter,Setting>::updatePoints() const {
+void PolytopeT<Number, Converter, Setting>::updatePoints() const {
 	//using Parma_Polyhedra_Library::IO_Operators::operator<<;
 	if ( !mPointsUpToDate ) {
 		//std::cout << __func__ << ": " << *this << std::endl;
@@ -115,7 +123,7 @@ void PolytopeT<Number,Converter,Setting>::updatePoints() const {
 }
 
 template <typename Number, typename Converter, class Setting>
-std::vector<Point<Number>> PolytopeT<Number,Converter,Setting>::vertices( const matrix_t<Number>& ) const {
+std::vector<Point<Number>> PolytopeT<Number, Converter, Setting>::vertices( const matrix_t<Number> & ) const {
 	if ( !mPointsUpToDate ) {
 		updatePoints();
 	}
@@ -124,23 +132,23 @@ std::vector<Point<Number>> PolytopeT<Number,Converter,Setting>::vertices( const 
 
 // returns the fan of the Polytope
 template <typename Number, typename Converter, class Setting>
-const Fan<Number> &PolytopeT<Number,Converter,Setting>::fan() {
+const Fan<Number> &PolytopeT<Number, Converter, Setting>::fan() {
 	return mFan;
 }
 
 template <typename Number, typename Converter, class Setting>
-Fan<Number> &PolytopeT<Number,Converter,Setting>::rFan() {
+Fan<Number> &PolytopeT<Number, Converter, Setting>::rFan() {
 	return mFan;
 }
 
 // sets the fan of the Polytope
 template <typename Number, typename Converter, class Setting>
-void PolytopeT<Number,Converter,Setting>::setFan( const Fan<Number> &_fan ) {
+void PolytopeT<Number, Converter, Setting>::setFan( const Fan<Number> &_fan ) {
 	mFan = _fan;
 }
 
 template <typename Number, typename Converter, class Setting>
-void PolytopeT<Number,Converter,Setting>::calculateFan() {
+void PolytopeT<Number, Converter, Setting>::calculateFan() {
 	std::vector<Facet<Number>> facets = convexHull( mPoints );
 	std::set<Point<Number>> preresult;
 	for ( unsigned i = 0; i < facets.size(); i++ ) {
@@ -193,25 +201,25 @@ void PolytopeT<Number,Converter,Setting>::calculateFan() {
 }
 
 template <typename Number, typename Converter, class Setting>
-void PolytopeT<Number,Converter,Setting>::print() const {
+void PolytopeT<Number, Converter, Setting>::print() const {
 	std::cout << *this << std::endl;
 }
 
 template <typename Number, typename Converter, class Setting>
-const Parma_Polyhedra_Library::C_Polyhedron &PolytopeT<Number,Converter,Setting>::rawPolyhedron() const {
+const Parma_Polyhedra_Library::C_Polyhedron &PolytopeT<Number, Converter, Setting>::rawPolyhedron() const {
 	return mPolyhedron;
 }
 
 template <typename Number, typename Converter, class Setting>
-std::size_t PolytopeT<Number,Converter,Setting>::dimension() const {
+std::size_t PolytopeT<Number, Converter, Setting>::dimension() const {
 	return mPolyhedron.space_dimension();
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number> &A ) const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number> &A ) const {
 	using Parma_Polyhedra_Library::IO_Operators::operator<<;
 
-	PolytopeT<Number,Converter,Setting> result;
+	PolytopeT<Number, Converter, Setting> result;
 
 	const Parma_Polyhedra_Library::Generator_System generators = this->mPolyhedron.generators();
 
@@ -228,9 +236,9 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::linearT
 		// Assuming the divisor stays the same in one generator
 		divisor = generatorIt->divisor();
 		for ( unsigned varIndex = 0; varIndex < this->dimension(); ++varIndex ) {
-			coefficient = generatorIt->coefficient( VariablePool::getInstance().pplVarByIndex(varIndex) );
-			mpq_class tmpValue(coefficient,divisor);
-			value = carl::convert<mpq_class,Number>(tmpValue);
+			coefficient = generatorIt->coefficient( VariablePool::getInstance().pplVarByIndex( varIndex ) );
+			mpq_class tmpValue( coefficient, divisor );
+			value = carl::convert<mpq_class, Number>( tmpValue );
 			polytopeMatrix( varIndex, gCount ) = value;
 		}
 		++gCount;
@@ -259,10 +267,10 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::linearT
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	//using Parma_Polyhedra_Library::IO_Operators::operator<<;
 
-	PolytopeT<Number,Converter,Setting> result;
+	PolytopeT<Number, Converter, Setting> result;
 
 	const Parma_Polyhedra_Library::Generator_System generators = this->mPolyhedron.generators();
 
@@ -279,9 +287,9 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineT
 		// Assuming the divisor stays the same in one generator
 		divisor = generatorIt->divisor();
 		for ( unsigned varIndex = 0; varIndex < this->dimension(); ++varIndex ) {
-			coefficient = generatorIt->coefficient( VariablePool::getInstance().pplVarByIndex(varIndex) );
-			mpq_class tmpValue(coefficient,divisor);
-			value = carl::convert<mpq_class,Number>(tmpValue);
+			coefficient = generatorIt->coefficient( VariablePool::getInstance().pplVarByIndex( varIndex ) );
+			mpq_class tmpValue( coefficient, divisor );
+			value = carl::convert<mpq_class, Number>( tmpValue );
 			polytopeMatrix( varIndex, gCount ) = value;
 		}
 		++gCount;
@@ -345,22 +353,22 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineT
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::project( const std::vector<std::size_t> &dimensions ) const {
 	// create inverse of dimensions to get the variables to unconstrain
 	Parma_Polyhedra_Library::Variables_Set vars;
-	for(unsigned i = 0; i < this->dimension(); ++i) {
-		if(std::find(dimensions.begin(), dimensions.end(), i) == dimensions.end()) {
-			vars.insert(VariablePool::getInstance().pplVarByIndex(i));
+	for ( unsigned i = 0; i < this->dimension(); ++i ) {
+		if ( std::find( dimensions.begin(), dimensions.end(), i ) == dimensions.end() ) {
+			vars.insert( VariablePool::getInstance().pplVarByIndex( i ) );
 		}
 	}
 	Parma_Polyhedra_Library::C_Polyhedron tmp = mPolyhedron;
-	tmp.remove_space_dimensions(vars);
-	return PolytopeT(tmp);
+	tmp.remove_space_dimensions( vars );
+	return PolytopeT( tmp );
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::minkowskiSum( const PolytopeT<Number,Converter,Setting> &rhs ) const {
-	PolytopeT<Number,Converter,Setting> result;
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::minkowskiSum( const PolytopeT<Number, Converter, Setting> &rhs ) const {
+	PolytopeT<Number, Converter, Setting> result;
 
 	result = Parma_Polyhedra_Library::C_Polyhedron( 0, Parma_Polyhedra_Library::EMPTY );
 
@@ -385,8 +393,8 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::minkows
  * Minkowski Sum computation based on Fukuda
  */
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMinkowskiSum( PolytopeT<Number,Converter,Setting> &rhs ) {
-	PolytopeT<Number,Converter,Setting> result;
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::altMinkowskiSum( PolytopeT<Number, Converter, Setting> &rhs ) {
+	PolytopeT<Number, Converter, Setting> result;
 	// TODO compute adjacency for this & rhs vertices (currently manually defined
 	// within the tests)
 	result = Parma_Polyhedra_Library::C_Polyhedron( 0, Parma_Polyhedra_Library::EMPTY );
@@ -405,7 +413,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 	result.addPoint( initVertex );
 	alreadyExploredVertices.push_back( initVertex );
 
-	if(Setting::fukuda_DEBUG){
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "---------------" << std::endl;
 		std::cout << "following Vertex is part of result: " << initVertex << std::endl;
 		std::cout << "---------------" << std::endl;
@@ -429,10 +437,10 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 	counter.first = 1;
 	counter.second = 0;
 
-/**
+	/**
  * Reverse Search Algorithm
  */
-	if(Setting::fukuda_DEBUG){
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "-------------------------" << std::endl;
 		std::cout << "-------------------------" << std::endl;
 		std::cout << "The Preprocessing Ends here - Start of Algorithm" << std::endl;
@@ -447,8 +455,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 
 	do {
 		while ( counter.first < 2 || ( counter.first == 2 && counter.second < delta_2 ) ) {
-
-			if(Setting::fukuda_DEBUG){
+			if ( Setting::fukuda_DEBUG ) {
 				std::cout << "Max. Vertex Degree in Poly 1: " << delta_1 << std::endl;
 				std::cout << "Max. Vertex Degree in Poly 2: " << delta_2 << std::endl;
 			}
@@ -463,7 +470,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 				counter.second += 1;
 			}
 
-			if(Setting::fukuda_DEBUG){
+			if ( Setting::fukuda_DEBUG ) {
 				std::cout << "Counter tuple: (" << counter.first << "," << counter.second << ")" << std::endl;
 			}
 
@@ -478,13 +485,13 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 				for ( unsigned i = 0; i < alreadyExploredVertices.size(); ++i ) {
 					if ( nextVertex == alreadyExploredVertices.at( i ) ) {
 						alreadyExplored = true;
-						if(Setting::fukuda_DEBUG){
+						if ( Setting::fukuda_DEBUG ) {
 							std::cout << "Vertex has already been explored: " << nextVertex << std::endl;
 						}
 					}
 				}
 				if ( alreadyExplored ) {
-					if(Setting::fukuda_DEBUG){
+					if ( Setting::fukuda_DEBUG ) {
 						std::cout << "continue with next loop iteration" << std::endl;
 						std::cout << "-------------------------" << std::endl;
 					}
@@ -499,7 +506,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 
 					// add to result Poly
 					result.addPoint( currentVertex );
-					if(Setting::fukuda_DEBUG){
+					if ( Setting::fukuda_DEBUG ) {
 						std::cout << "---------------" << std::endl;
 						std::cout << "following Vertex is part of result: " << currentVertex << std::endl;
 						std::cout << "---------------" << std::endl;
@@ -509,7 +516,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 					// store the current counter value - needed if DFS comes back this
 					// vertex
 					counterMemory.push_back( counter );
-					if(Setting::fukuda_DEBUG){
+					if ( Setting::fukuda_DEBUG ) {
 						std::cout << "---------------" << std::endl;
 						std::cout << "Counter Memory Stack - add Counter: (" << counter.first << "," << counter.second
 								  << ")" << std::endl;
@@ -522,7 +529,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 				}
 			}
 		}
-		if(Setting::fukuda_DEBUG){
+		if ( Setting::fukuda_DEBUG ) {
 			std::cout << "---------------" << std::endl;
 			std::cout << "While Loop left" << std::endl;
 			std::cout << "---------------" << std::endl;
@@ -534,7 +541,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 			// from the parentMap
 			currentVertex = parentMap.at( currentVertex );
 
-			if(Setting::fukuda_DEBUG){
+			if ( Setting::fukuda_DEBUG ) {
 				std::cout << "Local Search finished" << std::endl;
 				std::cout << "counterMemory size: " << counterMemory.size() << std::endl;
 			}
@@ -544,7 +551,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 			counter = counterMemory.at( counterMemory.size() - 1 );
 			counterMemory.pop_back();
 
-			if(Setting::fukuda_DEBUG){
+			if ( Setting::fukuda_DEBUG ) {
 				std::cout << "---------------" << std::endl;
 				std::cout << "Counter restored to: (" << counter.first << "," << counter.second << ")" << std::endl;
 				std::cout << "While Loop Condition: "
@@ -564,84 +571,84 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::altMink
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::intersect( const PolytopeT<Number,Converter,Setting> &rhs ) const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::intersect( const PolytopeT<Number, Converter, Setting> &rhs ) const {
 	// std::cout << __func__ << ": " << *this << " and " << rhs << std::endl;
 	if ( rhs.dimension() == 0 ) {
-		return PolytopeT<Number,Converter,Setting>();
+		return PolytopeT<Number, Converter, Setting>();
 	} else {
 		Parma_Polyhedra_Library::C_Polyhedron res = mPolyhedron;
 		res.intersection_assign( rhs.rawPolyhedron() );
-		PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>( res );
+		PolytopeT<Number, Converter, Setting> result = PolytopeT<Number, Converter, Setting>( res );
 
 		return result;
 	}
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
-		return PolytopeT<Number,Converter,Setting>();
+		return PolytopeT<Number, Converter, Setting>();
 	} else {
 		Parma_Polyhedra_Library::C_Polyhedron res = mPolyhedron;
-		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(rhs.normal(), rhs.offset());
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint( rhs.normal(), rhs.offset() );
 
 		res.add_constraint( constraint );
-		PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>( res );
+		PolytopeT<Number, Converter, Setting> result = PolytopeT<Number, Converter, Setting>( res );
 
 		return result;
 	}
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number> &_mat,
-														 const vector_t<Number> &_vec ) const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number> &_mat,
+																								  const vector_t<Number> &_vec ) const {
 	//using Parma_Polyhedra_Library::IO_Operators::operator<<;
 	assert( _mat.rows() == _vec.rows() );
 	Parma_Polyhedra_Library::C_Polyhedron res = this->mPolyhedron;
 	for ( unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex ) {
-		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint(vector_t<Number>(_mat.row(rowIndex)), _vec(rowIndex));
+		Parma_Polyhedra_Library::Constraint constraint = polytope::createConstraint( vector_t<Number>( _mat.row( rowIndex ) ), _vec( rowIndex ) );
 		res.refine_with_constraint( constraint );
 	}
-	return PolytopeT(res);
+	return PolytopeT( res );
 }
 
 template <typename Number, typename Converter, class Setting>
-std::pair<CONTAINMENT, PolytopeT<Number,Converter,Setting>> PolytopeT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
-	TRACE("hypro.pplPolytope",*this << " and halfspace " << rhs);
-	PolytopeT<Number,Converter,Setting> res = this->intersectHalfspace(rhs);
-	if(!res.empty()){
-		for(auto point : this->vertices()){
-			if(!res.contains(point)){
-				return std::make_pair(CONTAINMENT::PARTIAL, res);
+std::pair<CONTAINMENT, PolytopeT<Number, Converter, Setting>> PolytopeT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
+	TRACE( "hypro.pplPolytope", *this << " and halfspace " << rhs );
+	PolytopeT<Number, Converter, Setting> res = this->intersectHalfspace( rhs );
+	if ( !res.empty() ) {
+		for ( auto point : this->vertices() ) {
+			if ( !res.contains( point ) ) {
+				return std::make_pair( CONTAINMENT::PARTIAL, res );
 			}
 		}
-		return std::make_pair(CONTAINMENT::FULL, res);
+		return std::make_pair( CONTAINMENT::FULL, res );
 		//return std::make_pair(CONTAINMENT::YES, res);
 	} else {
-		return std::make_pair(CONTAINMENT::NO, res);
+		return std::make_pair( CONTAINMENT::NO, res );
 	}
 }
 
 template <typename Number, typename Converter, class Setting>
-std::pair<CONTAINMENT, PolytopeT<Number,Converter,Setting>> PolytopeT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number> &_mat,
-														 const vector_t<Number> &_vec ) const {
-	TRACE("hypro.pplPolytope",*this << " and halfspaces " << _mat << " <= " << _vec);
-	PolytopeT<Number,Converter,Setting> res = this->intersectHalfspaces(_mat,_vec);
-	if(!res.empty()){
-		for(auto point : this->vertices()){
-			if(!res.contains(point)){
-				return std::make_pair(CONTAINMENT::PARTIAL, res);
+std::pair<CONTAINMENT, PolytopeT<Number, Converter, Setting>> PolytopeT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number> &_mat,
+																														  const vector_t<Number> &_vec ) const {
+	TRACE( "hypro.pplPolytope", *this << " and halfspaces " << _mat << " <= " << _vec );
+	PolytopeT<Number, Converter, Setting> res = this->intersectHalfspaces( _mat, _vec );
+	if ( !res.empty() ) {
+		for ( auto point : this->vertices() ) {
+			if ( !res.contains( point ) ) {
+				return std::make_pair( CONTAINMENT::PARTIAL, res );
 			}
 		}
-		return std::make_pair(CONTAINMENT::FULL, res);
+		return std::make_pair( CONTAINMENT::FULL, res );
 		//return std::make_pair(CONTAINMENT::YES, res);
 	} else {
-		return std::make_pair(CONTAINMENT::NO, res);
+		return std::make_pair( CONTAINMENT::NO, res );
 	}
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::hull() const {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::hull() const {
 	// Parma_Polyhedra_Library::Generator_System gs = mPolyhedron.minimized_generators();
 	// PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>(C_Polyhedron(gs));
 
@@ -682,7 +689,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::hull() 
 		points.push_back( point );
 	}
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>( points );
+	PolytopeT<Number, Converter, Setting> result = PolytopeT<Number, Converter, Setting>( points );
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	mPointsUpToDate = false;
 
@@ -690,26 +697,26 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::hull() 
 }
 
 template <typename Number, typename Converter, class Setting>
-bool PolytopeT<Number,Converter,Setting>::contains( const Point<Number> &point ) const {
-	return mPolyhedron.contains( PolytopeT<Number,Converter,Setting>( point ).rawPolyhedron() );
+bool PolytopeT<Number, Converter, Setting>::contains( const Point<Number> &point ) const {
+	return mPolyhedron.contains( PolytopeT<Number, Converter, Setting>( point ).rawPolyhedron() );
 }
 
 template <typename Number, typename Converter, class Setting>
-bool PolytopeT<Number,Converter,Setting>::contains( const PolytopeT<Number,Converter,Setting> &poly ) const {
+bool PolytopeT<Number, Converter, Setting>::contains( const PolytopeT<Number, Converter, Setting> &poly ) const {
 	return mPolyhedron.contains( poly.rawPolyhedron() );
 }
 
 template <typename Number, typename Converter, class Setting>
-PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::unite( const PolytopeT<Number,Converter,Setting> &rhs ) const {
-	if(rhs.empty()) {
+PolytopeT<Number, Converter, Setting> PolytopeT<Number, Converter, Setting>::unite( const PolytopeT<Number, Converter, Setting> &rhs ) const {
+	if ( rhs.empty() ) {
 		return *this;
 	}
 
 	updatePoints();
 
 	Parma_Polyhedra_Library::C_Polyhedron res = mPolyhedron;
-	res.poly_hull_assign(rhs.rawPolyhedron());
-	PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>(res);
+	res.poly_hull_assign( rhs.rawPolyhedron() );
+	PolytopeT<Number, Converter, Setting> result = PolytopeT<Number, Converter, Setting>( res );
 	return result;
 }
 /*
@@ -730,7 +737,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::unite(c
 }
 */
 template <typename Number, typename Converter, class Setting>
-Number PolytopeT<Number,Converter,Setting>::supremum() const {
+Number PolytopeT<Number, Converter, Setting>::supremum() const {
 	Number max = 0;
 	for ( auto &point : this->vertices() ) {
 		Number inftyNorm = hypro::Point<Number>::inftyNorm( point );
@@ -753,11 +760,11 @@ PolytopeT<Number,Converter,Setting>& PolytopeT<Number,Converter,Setting>::operat
 */
 
 template <typename Number, typename Converter, class Setting>
-bool operator==( const PolytopeT<Number,Converter,Setting> &rhs, const PolytopeT<Number,Converter,Setting> &lhs ) {
+bool operator==( const PolytopeT<Number, Converter, Setting> &rhs, const PolytopeT<Number, Converter, Setting> &lhs ) {
 	return ( rhs.rawPolyhedron() == lhs.rawPolyhedron() );
 }
 template <typename Number, typename Converter, class Setting>
-bool operator!=( const PolytopeT<Number,Converter,Setting> &rhs, const PolytopeT<Number,Converter,Setting> &lhs ) {
+bool operator!=( const PolytopeT<Number, Converter, Setting> &rhs, const PolytopeT<Number, Converter, Setting> &lhs ) {
 	return ( rhs.rawPolyhedron() != lhs.rawPolyhedron() );
 }
 
@@ -770,7 +777,7 @@ bool operator!=( const PolytopeT<Number,Converter,Setting> &rhs, const PolytopeT
  * returns the maximum vertex degree in a polytope
  */
 template <typename Number, typename Converter, class Setting>
-int PolytopeT<Number,Converter,Setting>::computeMaxVDegree() {
+int PolytopeT<Number, Converter, Setting>::computeMaxVDegree() {
 	std::vector<Point<Number>> points = this->points();
 	int max = 0;
 
@@ -787,7 +794,7 @@ int PolytopeT<Number,Converter,Setting>::computeMaxVDegree() {
  * returns the vertex with maximum x-value for a given polytope
  */
 template <typename Number, typename Converter, class Setting>
-Point<Number> PolytopeT<Number,Converter,Setting>::computeMaxPoint() {
+Point<Number> PolytopeT<Number, Converter, Setting>::computeMaxPoint() {
 	Point<Number> result;
 
 	if ( !mPoints.empty() ) {
@@ -808,7 +815,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::computeMaxPoint() {
  * returns one vertex of the sum polytope P = P1+P2
  */
 template <typename Number, typename Converter, class Setting>
-Point<Number> PolytopeT<Number,Converter,Setting>::computeInitVertex( PolytopeT<Number,Converter,Setting> _secondPoly ) {
+Point<Number> PolytopeT<Number, Converter, Setting>::computeInitVertex( PolytopeT<Number, Converter, Setting> _secondPoly ) {
 	Point<Number> p1 = this->computeMaxPoint();
 	Point<Number> p2 = _secondPoly.computeMaxPoint();
 
@@ -825,9 +832,8 @@ Point<Number> PolytopeT<Number,Converter,Setting>::computeInitVertex( PolytopeT<
  * computes the parent of a given vertex w.r.t the sink of the spanning tree
  */
 template <typename Number, typename Converter, class Setting>
-Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_vertex, Point<Number> &_sinkMaximizerTarget ) {
-
-	if(Setting::fukuda_DEBUG){
+Point<Number> PolytopeT<Number, Converter, Setting>::localSearch( Point<Number> &_vertex, Point<Number> &_sinkMaximizerTarget ) {
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "-------------------------" << std::endl;
 		std::cout << "in the following: Local Search for Vertex " << _vertex << std::endl;
 		std::cout << "-------------------------" << std::endl;
@@ -840,7 +846,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 	// compute the ray direction (a vector)
 	vector_t<Number> ray = polytope::computeEdge( maximizerTarget, _sinkMaximizerTarget );
 
-	if(Setting::fukuda_DEBUG){
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "Starting Point of Ray: " << maximizerTarget << std::endl;
 		std::cout << "End Point of Ray: " << _sinkMaximizerTarget << std::endl;
 	}
@@ -855,14 +861,14 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 
 	std::vector<Halfspace<Number> *> planes = cone->get();
 
-	if(Setting::fukuda_DEBUG){
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "-----------------" << std::endl;
 		std::cout << "Ray: " << ray << std::endl;
 	}
 
 	for ( typename std::vector<Halfspace<Number> *>::iterator it = planes.begin(); it != planes.end(); ++it ) {
 		if ( ( *it )->intersection( factor, ray ) ) {
-			if(Setting::fukuda_DEBUG){
+			if ( Setting::fukuda_DEBUG ) {
 				std::cout << "Intersection found " << std::endl;
 			}
 			intersectedPlane = *( *it );
@@ -872,7 +878,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 
 	Point<Number> secondOrigin;
 
-	if(Setting::fukuda_DEBUG){
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "-----------------" << std::endl;
 		std::cout << "Normal of Intersection Plane: " << intersectedPlane.normal() << std::endl;
 		std::cout << "Offset of Intersection Plane: " << intersectedPlane.offset() << std::endl;
@@ -889,7 +895,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 		dotProduct = std::round( dotProduct.toDouble() * 1000000 );
 		normFactor = std::round( normFactor.toDouble() * 1000000 );
 
-		if(Setting::fukuda_DEBUG){
+		if ( Setting::fukuda_DEBUG ) {
 			std::cout << "Dot Product: " << dotProduct << std::endl;
 			std::cout << "Norm Factor: " << normFactor << std::endl;
 			std::cout << "Parallelism Factor: " << dotProduct / normFactor << std::endl;
@@ -899,8 +905,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 		if ( ( dotProduct / normFactor == 1 + EPSILON ) || ( dotProduct / normFactor == 1 - EPSILON ) ||
 			 ( dotProduct / normFactor == -1 + EPSILON ) || ( dotProduct / normFactor == -1 - EPSILON ) ||
 			 ( dotProduct / normFactor == -1 ) || ( dotProduct / normFactor == 1 ) ) {
-
-			if(Setting::fukuda_DEBUG){
+			if ( Setting::fukuda_DEBUG ) {
 				std::cout << "Parallel Edge found" << std::endl;
 				std::cout << "-----------------" << std::endl;
 			}
@@ -931,7 +936,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 	// add this normal cone to fan of polytope
 	this->mFan.add( cone );
 
-	if(Setting::fukuda_DEBUG){
+	if ( Setting::fukuda_DEBUG ) {
 		std::cout << "-------------------------" << std::endl;
 		std::cout << "Local Search result: " << secondOrigin << std::endl;
 		std::cout << "-------------------------" << std::endl;
@@ -939,4 +944,4 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 
 	return secondOrigin;
 }
-}
+}  // namespace hypro

@@ -10,12 +10,12 @@ namespace hypro {
  * 			   desired refinementLevel. The Bt-Path also contains the location in which the bad state
  * 			   was hit.
  */
-template<typename Number>
+template <typename Number>
 struct TBacktrackingInfo {
 	/**
 	 * Holds the whole Path to the root. Note that the actual(current) path starts at btPath.at(currentBTPosition).
 	 */
-	Path<Number,tNumber> btPath;
+	Path<Number, tNumber> btPath;
 	/**
 	 * Index referencing the current position. Note that we cannot simply truncate the path whenever a part of it has
 	 * been refined as we require the full path to determine possible prefixes for other BT-runs.
@@ -26,92 +26,87 @@ struct TBacktrackingInfo {
 	 */
 	unsigned btLevel = 0;
 
-	unsigned timingLevel = 0; /// required for the correct entry node in the timing tree
+	unsigned timingLevel = 0;  /// required for the correct entry node in the timing tree
 
-	TBacktrackingInfo<Number>() :
-		btPath(),
-		currentBTPosition(0),
-		btLevel(0)
-	{}
+	TBacktrackingInfo<Number>()
+		: btPath()
+		, currentBTPosition( 0 )
+		, btLevel( 0 ) {}
 
-	friend bool operator==(const TBacktrackingInfo& lhs, const TBacktrackingInfo& rhs) {
-		return (lhs.currentBTPosition == rhs.currentBTPosition && lhs.btLevel == rhs.btLevel && lhs.btPath == rhs.btPath);
+	friend bool operator==( const TBacktrackingInfo& lhs, const TBacktrackingInfo& rhs ) {
+		return ( lhs.currentBTPosition == rhs.currentBTPosition && lhs.btLevel == rhs.btLevel && lhs.btPath == rhs.btPath );
 	}
 };
 
-template<typename State>
+template <typename State>
 struct Task {
-
 	using Number = typename State::NumberType;
 
 	ReachTreeNode<State>* treeNode = nullptr;
 	TBacktrackingInfo<Number> btInfo = TBacktrackingInfo<Number>();
 
-	Task(ReachTreeNode<State>* node)
-		: treeNode(node)
-		, btInfo()
-	{
-		assert(btInfo.btPath.size() <= 0 || btInfo.btLevel > 0);
+	Task( ReachTreeNode<State>* node )
+		: treeNode( node )
+		, btInfo() {
+		assert( btInfo.btPath.size() <= 0 || btInfo.btLevel > 0 );
 	}
 
-	Task(ReachTreeNode<State>* node, const TBacktrackingInfo<Number>& btI)
-		: treeNode(node)
-		, btInfo(btI)
-	{}
+	Task( ReachTreeNode<State>* node, const TBacktrackingInfo<Number>& btI )
+		: treeNode( node )
+		, btInfo( btI ) {}
 
-	friend std::ostream& operator<<(std::ostream& out, const Task<State>& task) {
+	friend std::ostream& operator<<( std::ostream& out, const Task<State>& task ) {
 		//out << *task.treeNode;
 		out << task.treeNode;
 		return out;
 	}
 
-	friend bool operator==(const Task<State>& lhs, const Task<State>& rhs) {
-		return (lhs.treeNode == rhs.treeNode && lhs.btInfo == rhs.btInfo);
+	friend bool operator==( const Task<State>& lhs, const Task<State>& rhs ) {
+		return ( lhs.treeNode == rhs.treeNode && lhs.btInfo == rhs.btInfo );
 	}
 
-	friend bool operator!=(const Task<State>& lhs, const Task<State>& rhs) {
-		return !(lhs == rhs);
+	friend bool operator!=( const Task<State>& lhs, const Task<State>& rhs ) {
+		return !( lhs == rhs );
 	}
 
-	friend bool operator<(const Task<State>& lhs, const Task<State>& rhs) {
-		DEBUG("hypro.workQueue", "Compare " << lhs << " and " << rhs << ": ");
-        if (lhs == rhs) { // strict weak ordering requires this, thus rhs is inserted before lhs.
-            // however, this should never happen(?)
-            assert(false);
-            DEBUG("hypro.workQueue", "Should not happen.");
-            return false;
-        }
+	friend bool operator<( const Task<State>& lhs, const Task<State>& rhs ) {
+		DEBUG( "hypro.workQueue", "Compare " << lhs << " and " << rhs << ": " );
+		if ( lhs == rhs ) {  // strict weak ordering requires this, thus rhs is inserted before lhs.
+			// however, this should never happen(?)
+			assert( false );
+			DEBUG( "hypro.workQueue", "Should not happen." );
+			return false;
+		}
 
-        if (lhs.btInfo.btPath.size() > 0 && rhs.btInfo.btPath.size() > 0) {
-            // check whether there are common nodes in the btPath.
-            if (lhs.btInfo.btPath.sharesPrefix(rhs.btInfo.btPath)) {
-                // we simply don't care but can return an arbitrary value. keep strict ordering by btLevel
-                DEBUG("hypro.workQueue", (lhs.btInfo.btLevel > rhs.btInfo.btLevel));
-                return lhs.btInfo.btLevel > rhs.btInfo.btLevel;
-            }
+		if ( lhs.btInfo.btPath.size() > 0 && rhs.btInfo.btPath.size() > 0 ) {
+			// check whether there are common nodes in the btPath.
+			if ( lhs.btInfo.btPath.sharesPrefix( rhs.btInfo.btPath ) ) {
+				// we simply don't care but can return an arbitrary value. keep strict ordering by btLevel
+				DEBUG( "hypro.workQueue", ( lhs.btInfo.btLevel > rhs.btInfo.btLevel ) );
+				return lhs.btInfo.btLevel > rhs.btInfo.btLevel;
+			}
 
-            // TODO we have a node in common - how do we handle this?
+			// TODO we have a node in common - how do we handle this?
+		}
 
-        }
+		if ( lhs.btInfo.btLevel == rhs.btInfo.btLevel && lhs.btInfo.btLevel != 0 ) {
+			DEBUG( "hypro.workQueue", ( lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size() ) );
+			return lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size();  // insert longer path first
+		}
 
-        if (lhs.btInfo.btLevel == rhs.btInfo.btLevel && lhs.btInfo.btLevel != 0) {
-        	DEBUG("hypro.workQueue", (lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size()));
-            return lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size(); // insert longer path first
-        }
+		DEBUG( "hypro.workQueue", ( lhs.btInfo.btLevel > rhs.btInfo.btLevel ) );
 
-        DEBUG("hypro.workQueue", (lhs.btInfo.btLevel > rhs.btInfo.btLevel));
+		if ( lhs.btInfo.btLevel == rhs.btInfo.btLevel && lhs.btInfo.btLevel == 0 ) {
+			return lhs.treeNode->getDepth() < rhs.treeNode->getDepth();
+		}
 
-        if (lhs.btInfo.btLevel == rhs.btInfo.btLevel && lhs.btInfo.btLevel == 0) {
-        	return lhs.treeNode->getDepth() < rhs.treeNode->getDepth();
-        }
-
-        return lhs.btInfo.btLevel > rhs.btInfo.btLevel; // insert higher btLevel first
+		return lhs.btInfo.btLevel > rhs.btInfo.btLevel;  // insert higher btLevel first
 	}
 };
 
-template<typename Number, typename State>
-bool operator==(const std::shared_ptr<Task<State>>& lhs, const std::shared_ptr<Task<State>>& rhs) {
+template <typename Number, typename State>
+bool operator==( const std::shared_ptr<Task<State>>& lhs, const std::shared_ptr<Task<State>>& rhs ) {
 	return *lhs == *rhs;
 }
 
-} // hypro
+}  // namespace hypro

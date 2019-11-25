@@ -11,13 +11,9 @@
 
 #include "../../../hypro/types.h"
 
- #ifdef COMPARE_POLYMAKE
- #include <polymake/Main.h>
- //#include <polymake/Matrix.h>
- //#include <polymake/Rational.h>
+#ifdef COMPARE_POLYMAKE
+#include <polymake/Main.h>
 
- namespace hypro {
+namespace hypro {}  // namespace hypro
 
- } //namespace
-
- #endif
+#endif

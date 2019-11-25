@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "TaylorModel.h"
 #include "ContinuousSetting.h"
+#include "TaylorModel.h"
 
 namespace hypro {
 
@@ -31,7 +31,7 @@ class Flowpipe {
 
 	void composition( TaylorModelVec<Number>& result, Domain<Number>& fp_domain, const exponent order );
 
-	template<class Setting>
+	template <class Setting>
 	int next_picard( Flowpipe<Number>& result, const PolynomialODE<Number>& ode, const carl::Variable& t,
 					 const double stepsize, const exponent order, const Range<Number>& estimation );
 
@@ -64,6 +64,6 @@ template <typename Number>
 void output_2D_interval_gnuplot( std::list<Flowpipe<Number>>& flowpipes, std::ofstream& os, const std::string& fileName,
 								 const carl::Variable& axis_x, const carl::Variable& axis_y );
 
-}  // namespace
+}  // namespace hypro
 
 #include "continuous.tpp"

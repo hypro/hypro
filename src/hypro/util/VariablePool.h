@@ -11,41 +11,39 @@
 #pragma once
 
 #include "../flags.h"
-#include "logging/Logger.h"
+
+#include <algorithm>
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
 #include <carl/util/Singleton.h>
+#include <cassert>
 #include <map>
 #include <vector>
-#include <cassert>
 #ifdef HYPRO_USE_PPL
 #include <ppl.hh>
 #endif
-
 
 namespace hypro {
 
 class VariablePool : public carl::Singleton<VariablePool> {
 	friend carl::Singleton<VariablePool>;
-
-  private:
 	/**
 	 * Typedefs
 	 */
-	#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 	using carlPplMap = std::map<carl::Variable, Parma_Polyhedra_Library::Variable>;
 	using pplCarlMap = std::map<Parma_Polyhedra_Library::Variable, carl::Variable, Parma_Polyhedra_Library::Variable::Compare>;
-	#endif
+#endif
 
 	/**
 	 * Members
 	 */
 	std::vector<carl::Variable> mCarlVariables;
-	#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 	std::vector<Parma_Polyhedra_Library::Variable> mPplVariables;
 	carlPplMap mCarlToPpl;
 	pplCarlMap mPplToCarl;
-	#endif
+#endif
 	std::size_t mPplId;
 	carl::VariablePool& mPool;
 
@@ -53,15 +51,17 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	/**
 	 * Default constructor and destructor
 	 */
-	VariablePool() : mPplId( 0 ), mPool( carl::VariablePool::getInstance() ) { mPool.clear(); }
+	VariablePool()
+		: mPplId( 0 )
+		, mPool( carl::VariablePool::getInstance() ) { mPool.clear(); }
 
   public:
 	~VariablePool() {}
 
-	/*
+/*
 	 * Access
 	 */
-	#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 	const carl::Variable& variable( const Parma_Polyhedra_Library::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
@@ -97,97 +97,96 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mPplVariables.size() == mPplId );
 		return mPplVariables.at( _index );
 	}
-	#endif
+#endif
 
 	const carl::Variable& carlVarByIndex( std::size_t _index ) {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		if ( _index >= mPplId ) {
 			for ( std::size_t curr = mPplId; curr <= _index; ++curr ) {
 				carl::Variable cVar = carl::freshRealVariable();
 				mCarlVariables.push_back( cVar );
-				#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mPplVariables.push_back( pVar );
-				#else
+#else
 				++mPplId;
-				#endif
+#endif
 			}
 		}
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		return mCarlVariables.at( _index );
 	}
 
 	const carl::Variable& newCarlVariable( std::string _name = "" ) {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
-		DEBUG("hypro.variablePool", "mCarlVariables.size(): " << int(mCarlVariables.size()) << ", mPplVariables.size(): " << int(mPplVariables.size()) << ", pplId: " << int(mPplId) );
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		carl::Variable cVar = carl::VariablePool::getInstance().findVariableWithName( _name );
-		if(cVar == carl::Variable::NO_VARIABLE) {
+		if ( cVar == carl::Variable::NO_VARIABLE ) {
 			cVar = carl::freshRealVariable( _name );
 		}
 		mCarlVariables.push_back( cVar );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mPplVariables.push_back( pVar );
-		#else
+#else
 		++mPplId;
-		#endif
+#endif
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		return mCarlVariables.back();
 	}
 
 	std::size_t addCarlVariable( carl::Variable var ) {
-		if(std::find(mCarlVariables.begin(), mCarlVariables.end(), var) == mCarlVariables.end()) {
-			mCarlVariables.push_back(var);
-			#ifdef HYPRO_USE_PPL
+		if ( std::find( mCarlVariables.begin(), mCarlVariables.end(), var ) == mCarlVariables.end() ) {
+			mCarlVariables.push_back( var );
+#ifdef HYPRO_USE_PPL
 			Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 			mPplVariables.push_back( pVar );
-			#else
+#else
 			++mPplId;
-			#endif
+#endif
 		}
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		// return id - decrease by one as we start counting from zero.
-		return mCarlVariables.size()-1;
+		return mCarlVariables.size() - 1;
 	}
 
-	#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 	const Parma_Polyhedra_Library::Variable& newPplVariable() {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		carl::Variable cVar = carl::freshRealVariable();
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mCarlVariables.push_back( cVar );
 		mPplVariables.push_back( pVar );
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		return mPplVariables.back();
 	}
-	#endif
+#endif
 
 	bool hasDimension( const carl::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		for ( std::size_t pos = 0; pos < mCarlVariables.size(); ++pos ) {
 			if ( _var == mCarlVariables[pos] ) {
 				return true;
@@ -198,82 +197,82 @@ class VariablePool : public carl::Singleton<VariablePool> {
 
 	bool hasDimension( std::size_t i ) const {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		return mCarlVariables.size() > i;
 	}
 
-	#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 	std::size_t inline id( const Parma_Polyhedra_Library::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
 		for ( std::size_t pos = 0; pos < mPplVariables.size(); ++pos ) {
 			if ( _var.id() == mPplVariables[pos].id() ) return pos;
 		}
-		assert(false);
+		assert( false );
 		return 0;
 	}
-	#endif
+#endif
 
 	std::size_t inline id( const carl::Variable& _var ) {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		for ( std::size_t pos = 0; pos < mCarlVariables.size(); ++pos ) {
-			if ( _var == mCarlVariables[pos] ){
+			if ( _var == mCarlVariables[pos] ) {
 				return pos;
 			}
 		}
 		// if the variable is not registered yet, add and return its associated dimension.
-		return addCarlVariable(_var);
+		return addCarlVariable( _var );
 	}
 
 	std::vector<carl::Variable> carlVariables() const {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		return mCarlVariables;
 	}
 
-	#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 	std::vector<Parma_Polyhedra_Library::Variable> pplVariables() const {
 		assert( mCarlVariables.size() == mPplId );
 		assert( mPplVariables.size() == mPplId );
 		return mPplVariables;
 	}
-	#endif
+#endif
 
 	std::size_t size() const {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		return mCarlVariables.size();
 	}
 
 	void clear() {
 		assert( mCarlVariables.size() == mPplId );
 		mCarlVariables.clear();
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
 		mPplVariables.clear();
-		#endif
+#endif
 		mPool.clear();
 		mPplId = 0;
 	}
 
 	void print() const {
 		assert( mCarlVariables.size() == mPplId );
-		#ifdef HYPRO_USE_PPL
+#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
-		#endif
+#endif
 		for ( std::size_t pos = 0; pos < mCarlVariables.size(); ++pos ) {
 			std::cout << mCarlVariables[pos] << " -> " << std::endl;  // mPplVariables[pos] << std::endl; //TODO: fix
 		}
 	}
 };
 
-} // namespace hypro
+}  // namespace hypro

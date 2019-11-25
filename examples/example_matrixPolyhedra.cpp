@@ -3,7 +3,7 @@
 #ifdef HYPRO_USE_PPL
 #include <ppl.hh>
 
-int main(int argc, char** argv) {
+int main() {
 
     using namespace Parma_Polyhedra_Library::IO_Operators;
 

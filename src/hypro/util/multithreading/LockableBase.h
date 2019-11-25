@@ -4,12 +4,11 @@
 namespace hypro {
 
 class LockableBase {
-
-private:
+  private:
 	mutable std::mutex mutex;
 
-public:
+  public:
 	std::mutex& getMutex() const { return mutex; }
 };
 
-} // namespace
+}  // namespace hypro

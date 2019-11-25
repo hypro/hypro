@@ -105,6 +105,6 @@ class OrthogonalPolyhedron {
   private:
 };
 
-}  // namespace
+}  // namespace hypro
 
 #include "Neighborhood.tpp"

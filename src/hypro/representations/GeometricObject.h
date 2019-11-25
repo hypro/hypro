@@ -9,21 +9,21 @@
 
 #define INCL_FROM_GOHEADER true
 
-#include "types.h"
-#include "../flags.h"
 #include "../config.h"
+#include "../flags.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
 #include "../util/logging/Logger.h"
+#include "types.h"
 
 namespace hypro {
 
-template<typename Number>
+template <typename Number>
 class Point;
 
-template<typename Number>
+template <typename Number>
 class Halfspace;
 
-template<typename Number>
+template <typename Number>
 class Location;
 
 /**
@@ -31,17 +31,15 @@ class Location;
  * @tparam     Number  The used number type.
  * \ingroup geoState @{
  */
-template<typename Number, typename DerivedShape>
+template <typename Number, typename DerivedShape>
 class GeometricObject {
-
-public:
-
+  public:
 	typedef Number NumberType;
 
 	/**
 	 * @brief      Destroys the object.
 	 */
-	virtual ~GeometricObject(){}
+	virtual ~GeometricObject() {}
 
 	/**
 	 * @brief      Returns the space dimension of the object.
@@ -59,7 +57,7 @@ public:
 	 * @brief      Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.
 	 * @return     A set of extreme vertices.
 	 */
-	virtual std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const = 0;
+	virtual std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const = 0;
 
 	/**
 	 * @brief      Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.
@@ -85,7 +83,7 @@ public:
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The resulting set.
 	 */
-	virtual DerivedShape project(const std::vector<std::size_t>& dimensions) const = 0;
+	virtual DerivedShape project( const std::vector<std::size_t>& dimensions ) const = 0;
 
 	/**
 	 * @brief      Applies a linear transformation with the matrix A to the set.
@@ -158,13 +156,13 @@ public:
 	 * @param[in]  obj   The object.
 	 * @return     Reference to the passed outstream.
 	 */
-	friend std::ostream& operator<<(std::ostream& out, const GeometricObject<Number,DerivedShape>& in){
-		return out << static_cast<DerivedShape>(in);
+	friend std::ostream& operator<<( std::ostream& out, const GeometricObject<Number, DerivedShape>& in ) {
+		return out << static_cast<DerivedShape>( in );
 	}
 };
 
 /** @} */
 
-} // namespace hypro
+}  // namespace hypro
 
 #include "conversion/Converter.h"

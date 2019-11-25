@@ -12,10 +12,10 @@
 
 #pragma once
 
+#include "Point.h"
+
 #include <boost/functional/hash.hpp>
 #include <list>
-
-#include "Point.h"
 
 namespace hypro {
 template <typename Number>
@@ -45,23 +45,38 @@ class Vertex {
 	 * @param dimension
 	 * @param color
 	 */
-	explicit Vertex( bool color = false ) : mPoint(), mColor( color ) {}
+	explicit Vertex( bool color = false )
+		: mPoint()
+		, mColor( color ) {}
 
 	/**
 	 *
 	 * @param p
 	 * @param color
 	 */
-	Vertex( const Point<Number>& p, bool color = false ) : mPoint( p ), mColor( color ) {}
-	Vertex( const vector_t<Number>& p, bool color = false ) : mPoint( p ), mColor( color ) {}
+	Vertex( const Point<Number>& p, bool color = false )
+		: mPoint( p )
+		, mColor( color ) {}
+	Vertex( const vector_t<Number>& p, bool color = false )
+		: mPoint( p )
+		, mColor( color ) {}
 
 	/**
 	 *
 	 * @param v
 	 */
-	Vertex( const Vertex<Number>& v ) : mPoint( v.point() ), mColor( v.color() ) {}
+	Vertex( const Vertex<Number>& v )
+		: mPoint( v.point() )
+		, mColor( v.color() ) {}
 
-	Vertex( const Vertex<Number>&& v ) : mPoint( std::move( v.point() ) ), mColor( v.color() ) {}
+	Vertex( const Vertex<Number>&& v )
+		: mPoint( std::move( v.point() ) )
+		, mColor( v.color() ) {}
+
+	/**
+	 * @brief Destroy the Vertex object
+	 */
+	~Vertex() {}
 
 	/**
 	 *
@@ -167,10 +182,10 @@ class Vertex {
 	 * @return true, if they are equal.
 	 */
 	friend bool operator==( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) {
-		if ( _v1.mColor != _v2.mColor ){
+		if ( _v1.mColor != _v2.mColor ) {
 			return false;
 		}
-		if ( _v1.mPoint != _v2.mPoint ){
+		if ( _v1.mPoint != _v2.mPoint ) {
 			return false;
 		}
 		return true;
@@ -194,13 +209,13 @@ class Vertex {
 	 * @return
 	 */
 	friend bool operator<( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) {
-		if ( _v1.mPoint < _v2.mPoint ){
+		if ( _v1.mPoint < _v2.mPoint ) {
 			return true;
 		}
-		if ( _v1.mPoint > _v2.mPoint ){
+		if ( _v1.mPoint > _v2.mPoint ) {
 			return false;
 		}
-		if ( !_v1.mColor && _v2.mColor ){
+		if ( !_v1.mColor && _v2.mColor ) {
 			return true;
 		}
 		return false;
@@ -237,15 +252,15 @@ class Vertex {
 }  // namespace hypro
 
 namespace std {
-    template<class Number>
-    struct hash<hypro::Vertex<Number>> {
-        std::size_t operator()(const hypro::Vertex<Number>& vertex) {
-            std::hash<hypro::Point<Number>> pointHasher;
-            std::hash<bool> boolHasher;
-            std::size_t seed;
-            seed = pointHasher(vertex.point());
-            carl::hash_add(seed, boolHasher(vertex.color()));
-            return seed;
-        }
-    };
-} // namespace std
+template <class Number>
+struct hash<hypro::Vertex<Number>> {
+	std::size_t operator()( const hypro::Vertex<Number>& vertex ) {
+		std::hash<hypro::Point<Number>> pointHasher;
+		std::hash<bool> boolHasher;
+		std::size_t seed;
+		seed = pointHasher( vertex.point() );
+		carl::hash_add( seed, boolHasher( vertex.color() ) );
+		return seed;
+	}
+};
+}  // namespace std

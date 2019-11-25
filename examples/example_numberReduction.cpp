@@ -5,7 +5,7 @@
  *
  */
 
- #include "util/Plotter.h"
+ #include "util/plotting/Plotter.h"
  #include "datastructures/Halfspace.h"
  #include "representations/GeometricObject.h"
 

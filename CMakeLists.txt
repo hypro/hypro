@@ -60,10 +60,21 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 
+if(NOT PRIMARY_SOLVER_BACKEND)
+	set(PRIMARY_SOLVER_BACKEND "glpk" CACHE STRING "Primary backend-solver. Options are: glpk, clp")
+endif()
+set_property(CACHE PRIMARY_SOLVER_BACKEND PROPERTY STRINGS "clp" "glpk")
+
 if(NOT SECONDARY_SOLVER_BACKEND)
 	set(SECONDARY_SOLVER_BACKEND "none" CACHE STRING "Secondary backend-solver used after invoking glpk. Options are: none, smtrat, z3, soplex")
 endif()
 set_property(CACHE SECONDARY_SOLVER_BACKEND PROPERTY STRINGS "none" "smtrat" "z3" "soplex")
+
+if(${PRIMARY_SOLVER_BACKEND} STREQUAL "clp")
+	set(HYPRO_USE_CLP "ON")
+elseif(${PRIMARY_SOLVER_BACKEND} STREQUAL "glpk")
+	set(HYPRO_USE_GLPK "ON")
+endif()
 
 if(${SECONDARY_SOLVER_BACKEND} STREQUAL "smtrat")
 	set(HYPRO_USE_SMTRAT "ON")
@@ -105,9 +116,9 @@ foreach(p LIB BIN INCLUDE CMAKE)
   endif()
 endforeach()
 
-###########################################################################################
-
 include(compiler-settings)
+
+###########################################################################################
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C. Find system tools and libraries.
@@ -117,12 +128,6 @@ include(compiler-settings)
 # 3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-# # # # # # # # # # # # # # # # # # # # # #
-# C.1. Required libraries for core.
-# # # # # # # # # # # # # # # # # # # # # #
-
-# initialize lists for include directories and library files
-set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
 load_library(${PROJECT_NAME} GTest 0)
 
@@ -130,10 +135,20 @@ load_library(${PROJECT_NAME} carl 0)
 
 add_subdirectory(src/resources)
 
+# # # # # # # # # # # # # # # # # # # # # #
+# C.3. Development and debug libraries.
+# # # # # # # # # # # # # # # # # # # # # #
+
+if(CREATE_DOC)
+	add_subdirectory(doc EXCLUDE_FROM_ALL)
+endif()
+
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-	set(CLANG_TIDY_CHECKS "*")
-	set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-llvm-header-guard")
+	set(CLANG_TIDY_CHECKS "google,modernize,performance,portability,readability")
+	#set(CLANG_TIDY_CHECKS "*")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-llvm-header-guard")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-cppcoreguidelines")
 	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-namespace-comments,-llvm-namespace-comment")
 	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-braces-around-statements,-readability-braces-around-statements")
 	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-readability-else-after-return")
@@ -145,53 +160,6 @@ if(CLANG_TIDY)
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
 
-# # # # # # # # # # # # # # # # # # # # # #
-# C.2. Optional libraries
-# # # # # # # # # # # # # # # # # # # # # #
-
-if(HYPRO_USE_COTIRE)
-	# We use cotire, simply include it
-	message(STATUS "using cotire")
-	include(cotire)
-else()
-	# We do not use cotire, create dummy function.
-	message(STATUS "not using cotire")
-	function(cotire)
-	endfunction(cotire)
-endif()
-
-if(HYPRO_USE_PPL)
-	load_library(${PROJECT_NAME} PPL 0)
-endif()
-
-if(HYPRO_USE_SMTRAT)
-	#load_library(${PROJECT_NAME} smtrat-solver 0)
-	#load_library(${PROJECT_NAME} smtrat-module-LRAModule 0)
-	find_package(smtrat)
-endif()
-
-if(HYPRO_USE_Z3)
-	load_library(${PROJECT_NAME} z3 0)
-endif()
-
-if(HYPRO_USE_SOPLEX)
-	load_library(${PROJECT_NAME} soplex 0)
-endif()
-
-if(HYPRO_USE_OPENMP)
-	load_library(${PROJECT_NAME} OpenMP 0)
-	if(OPENMP_FOUND)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
-	endif()
-endif()
-
-# # # # # # # # # # # # # # # # # # # # # #
-# C.3. Development and debug libraries.
-# # # # # # # # # # # # # # # # # # # # # #
-
-if(CREATE_DOC)
-	add_subdirectory(doc EXCLUDE_FROM_ALL)
-endif()
 
 enable_testing()
 

@@ -6,7 +6,7 @@
 
 #pragma once
 #include "../../types.h"
-#include <boost/tuple/tuple.hpp>
+
 #include <vector>
 
 //#define HELPER_METHODS_VERBOSE
@@ -15,7 +15,7 @@ namespace hypro {
 /*
 * Checks wether the list contains the specified direction
 */
-template<typename Number>
+template <typename Number>
 bool contains( std::vector<matrix_t<Number>> list, matrix_t<Number> direction, unsigned int length ) {
 #ifdef HELPER_METHODS_VERBOSE
 	std::cout << "contains: check wether a list contains a specific direction ...  ";
@@ -31,7 +31,8 @@ bool contains( std::vector<matrix_t<Number>> list, matrix_t<Number> direction, u
 
 		if ( equal ) {
 #ifdef HELPER_METHODS_VERBOSE
-			std::cout << "list contains \n" << a << std::endl;
+			std::cout << "list contains \n"
+					  << a << std::endl;
 #endif
 
 			return true;
@@ -49,7 +50,7 @@ bool contains( std::vector<matrix_t<Number>> list, matrix_t<Number> direction, u
 * Returns the index of the position of direction in directions if it is contained.
 * In case direction is not in directions, this method returns -1
 */
-template<typename Number>
+template <typename Number>
 int contains( std::vector<matrix_t<Number>>* directions, matrix_t<Number>* direction ) {
 #ifdef HELPER_METHODS_VERBOSE
 	std::string method = "contains(...) ";
@@ -66,7 +67,8 @@ int contains( std::vector<matrix_t<Number>>* directions, matrix_t<Number>* direc
 
 		if ( equal ) {
 #ifdef HELPER_METHODS_VERBOSE
-			std::cout << method << "list contains" << std::endl << temp << std::endl;
+			std::cout << method << "list contains" << std::endl
+					  << temp << std::endl;
 #endif
 
 			return i;
@@ -84,7 +86,7 @@ int contains( std::vector<matrix_t<Number>>* directions, matrix_t<Number>* direc
 /*
 * Delegator
 */
-template<typename Number>
+template <typename Number>
 int contains( std::vector<matrix_t<Number>>* directions, matrix_t<Number> direction ) {
 	return contains( directions, &direction );
 }
@@ -92,7 +94,7 @@ int contains( std::vector<matrix_t<Number>>* directions, matrix_t<Number> direct
 /*
 * This method computes a mapping of directions to the opposite directions using an array of indices
 */
-template<typename Number>
+template <typename Number>
 int* computeDirectionMapping( std::vector<matrix_t<Number>>* directions ) {
 	int* result = new int[directions->size()];
 #ifdef HELPER_METHODS_VERBOSE
@@ -120,7 +122,7 @@ int* computeDirectionMapping( std::vector<matrix_t<Number>>* directions ) {
 /*
 * Returns true if the list of integers "list" contains the value "item"
 */
-template<typename Number>
+template <typename Number>
 bool listContains( std::vector<Number>* list, Number item ) {
 	for ( auto iterator = list->begin(); iterator != list->end(); ++iterator ) {
 		if ( *iterator == item ) {
@@ -133,7 +135,7 @@ bool listContains( std::vector<Number>* list, Number item ) {
 /**
 *  Converts a list of directions into a matrix containing directions
 */
-template<typename Number>
+template <typename Number>
 matrix_t<Number> directionList2Matrix( std::vector<matrix_t<Number>>* list ) {
 	// get list size
 	unsigned int counter = 0;
@@ -168,7 +170,7 @@ matrix_t<Number> directionList2Matrix( std::vector<matrix_t<Number>>* list ) {
 /*
 * Converts a forward list of matrices into an array of matrices
 */
-template<typename Number>
+template <typename Number>
 matrix_t<Number>* list2Array( std::vector<matrix_t<Number>>* list ) {
 	matrix_t<Number>* result[list->size()];
 
@@ -183,7 +185,7 @@ matrix_t<Number>* list2Array( std::vector<matrix_t<Number>>* list ) {
 /*
 * Converts a nx1 matrix into an array of Numbers
 */
-template<typename Number>
+template <typename Number>
 Number* matrix2Array( matrix_t<Number> m ) {
 	Number* result = new Number[m.rows()];
 
@@ -197,7 +199,7 @@ Number* matrix2Array( matrix_t<Number> m ) {
 /*
 * Converts a vector into an array of Numbers
 */
-template<typename Number>
+template <typename Number>
 Number* vector2Array( vector_t<Number> v ) {
 	Number* result = new Number[v.size()];
 
@@ -211,7 +213,7 @@ Number* vector2Array( vector_t<Number> v ) {
 /*
 * adds a zero column at the right side of the matrix m
 */
-template<typename Number>
+template <typename Number>
 matrix_t<Number> addZeroColumn( matrix_t<Number> m ) {
 	// matrix_t<Number> result = matrix_t<Number>::Zero(m.rows(), m.cols()+1);
 	int newcols = m.cols() + 1;
@@ -246,17 +248,20 @@ matrix_t<Number> addZeroColumn( matrix_t<Number> m ) {
 /*
 * adds a zero row at the bottom of a matrix
 */
-template<typename Number>
+template <typename Number>
 matrix_t<Number> addZeroRow( matrix_t<Number> m ) {
 	matrix_t<Number> result( m.rows() + 1, m.cols() );
 	result.block( 0, 0, m.rows(), m.cols() ) = m;
 	result.block( m.rows(), 0, 1, m.cols() ) = matrix_t<Number>::Zero( 1, m.cols() );
 
 #ifdef HELPER_METHODS_VERBOSE
-	std::cout << "addZeroRow(m): m:" << std::endl << m << std::endl << "extended m: " << std::endl << result
+	std::cout << "addZeroRow(m): m:" << std::endl
+			  << m << std::endl
+			  << "extended m: " << std::endl
+			  << result
 			  << std::endl;
 #endif
 
 	return result;
 }
-}
+}  // namespace hypro

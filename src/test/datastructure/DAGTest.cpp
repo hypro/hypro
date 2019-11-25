@@ -33,7 +33,7 @@ TEST(DAGNodeTest, Construction)
     child2->addParent(child);
     child->addChild(child2);
 
-    EXPECT_EQ(2, child2->getParents().size());
+    EXPECT_EQ(std::size_t(2), child2->getParents().size());
     EXPECT_TRUE(std::find(child2->getParents().begin(), child2->getParents().end(), root) != child2->getParents().end());
     EXPECT_TRUE(std::find(child2->getParents().begin(), child2->getParents().end(), child) != child2->getParents().end());
     EXPECT_TRUE(std::find(child->getParents().begin(), child->getParents().end(), root) != child->getParents().end());

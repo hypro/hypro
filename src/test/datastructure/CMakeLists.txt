@@ -1,10 +1,7 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
-	################################
-	# Unit Tests
-	################################
-
-	add_executable(runDatastructureTests
+	# reduce compiler optimization for tests
+	set(datastructure_test_sources
 		DAGTest.cpp
 		EventTimingProviderTest.cpp
 		FlowpipeTest.cpp
@@ -23,11 +20,21 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#HybridAutomataParallelCompositionTest.cpp
 	)
 
+	SET_SOURCE_FILES_PROPERTIES(${datastructure_test_sources} PROPERTIES COMPILE_FLAGS -O0)
+
+	################################
+	# Unit Tests
+	################################
+
+	add_executable(runDatastructureTests
+		${datastructure_test_sources}
+	)
+
 	add_dependencies(runDatastructureTests resources)
 	target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runDatastructureTests
-							${PROJECT_NAME}
+							${PROJECT_NAME}-shared
 							${GTEST_LIBRARIES}
 							)
 

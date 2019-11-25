@@ -41,9 +41,8 @@ class Ridge {
 		mHalfspace = f.halfspace();
 	}
 
-	Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) 
-		: mHalfspace(Halfspace<Number>()) 
-	{
+	Ridge( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 )
+		: mHalfspace( Halfspace<Number>() ) {
 		//   std::vector<Facet<Number>> facets;
 		//   facets.push_back(facet1);
 		//   facets.push_back(facet2);
@@ -87,19 +86,19 @@ std::ostream& operator<<( std::ostream& _ostr, const Ridge<Number>& _f ) {
 	return _ostr;
 }
 
-}  // namespace
+}  // namespace hypro
 
 namespace std {
-    template<class Number>
-    struct hash<hypro::Ridge<Number>>{
-        std::size_t operator() (const hypro::Ridge<Number>& ridge) const {
-            std::size_t seed;
-            std::hash<hypro::Point<Number>> pointHasher;
-            std::vector<hypro::Point<Number>> vertices = ridge.vertices();
-            for (int i = 0; i < vertices.rows(); i++) {
-                carl::hash_add(seed, pointHasher(vertices(i)));
-            }
-            return seed;
-        }
-    };
-}
+template <class Number>
+struct hash<hypro::Ridge<Number>> {
+	std::size_t operator()( const hypro::Ridge<Number>& ridge ) const {
+		std::size_t seed;
+		std::hash<hypro::Point<Number>> pointHasher;
+		std::vector<hypro::Point<Number>> vertices = ridge.vertices();
+		for ( int i = 0; i < vertices.rows(); i++ ) {
+			carl::hash_add( seed, pointHasher( vertices( i ) ) );
+		}
+		return seed;
+	}
+};
+}  // namespace std

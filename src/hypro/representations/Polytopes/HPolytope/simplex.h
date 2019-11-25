@@ -6,6 +6,7 @@
  */
 
 #include "../../../config.h"
+
 #include <cassert>
 
 namespace hypro {
@@ -28,9 +29,11 @@ static void pivot( std::vector<unsigned> B, std::vector<unsigned> N,
 
 	// set pivoting row first, assuming r,s = row, colum
 
-	std::cout << __func__ << " A: " << std::endl << A << std::endl;
+	std::cout << __func__ << " A: " << std::endl
+			  << A << std::endl;
 
-	std::cout << __func__ << "A.row(r): " << A.row( r ) << std::endl << "A(r,s): " << A( r, s ) << std::endl;
+	std::cout << __func__ << "A.row(r): " << A.row( r ) << std::endl
+			  << "A(r,s): " << A( r, s ) << std::endl;
 
 	A.row( r ) = A.row( r ) / A( r, s );
 	A.row( r ) = -A.row( r );
@@ -60,7 +63,8 @@ static void pivot( std::vector<unsigned> B, std::vector<unsigned> N,
 	B.push_back( s );
 	N.push_back( r );
 
-	std::cout << __func__ << " Res: " << std::endl << A << std::endl;
+	std::cout << __func__ << " Res: " << std::endl
+			  << A << std::endl;
 }
 
 template <typename Number>
@@ -181,9 +185,11 @@ static void search( std::vector<unsigned> B, std::vector<unsigned> N,
 
 		if ( i <= m ) {
 			pivot( B, N, A, i, j );
-			std::cout << __func__ << ": Solution candidate: " << std::endl << A << std::endl;
+			std::cout << __func__ << ": Solution candidate: " << std::endl
+					  << A << std::endl;
 			if ( lexMin( B, N, A ) ) {
-				std::cout << __func__ << ": Found dictionary: " << std::endl << A << std::endl;
+				std::cout << __func__ << ": Found dictionary: " << std::endl
+						  << A << std::endl;
 				// generate output
 			}
 			std::cout << __func__ << ": Solution is not the lexicographical minimum." << std::endl;
@@ -196,5 +202,5 @@ static void search( std::vector<unsigned> B, std::vector<unsigned> N,
 		}
 	} while ( i < m || B[m] != m );
 }
-}
-}
+}  // namespace hpolytope
+}  // namespace hypro

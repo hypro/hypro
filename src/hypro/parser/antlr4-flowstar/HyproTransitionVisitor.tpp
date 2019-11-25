@@ -150,7 +150,7 @@ namespace hypro {
 			exit(0);
 		}
 
-		boost::variant<vector_t<Number>, carl::Interval<Number>> alloc;
+		std::variant<vector_t<Number>, carl::Interval<Number>> alloc;
 
 		//assert(ctx-polynom() == NULL || ctx->interval() == NULL);
 		//1.Call HyproFormulaVisitor::visitPolynom()
@@ -179,7 +179,7 @@ namespace hypro {
 		}
 
 		//1.Iteratively call visit(allocation) to get a values for the row of resetMatrix and a value for resetVector
-		using allocVariant = boost::variant<vector_t<Number>, carl::Interval<Number>>;
+		using allocVariant = std::variant<vector_t<Number>, carl::Interval<Number>>;
 
 		matrix_t<Number> resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
 		vector_t<Number> resetVector = vector_t<Number>::Zero(vars.size());
@@ -188,8 +188,8 @@ namespace hypro {
 		std::size_t intervalAssignmentCnt = 0;
 		for(unsigned i=0; i < ctx->allocation().size(); i++){
 			std::pair<allocVariant,unsigned> valuesNPos = visit(ctx->allocation()[i]);
-			if(valuesNPos.first.type() == typeid(vector_t<Number>)) {
-				auto assignment = boost::get<vector_t<Number>>(valuesNPos.first);
+			if(valuesNPos.first.index() == 0) {
+				auto assignment = std::get<vector_t<Number>>(valuesNPos.first);
 				if(static_cast<unsigned>(assignment.rows()) != vars.size()+1){
 					std::cerr << "ERROR: Visiting Allocation brought forth vec of size: " << assignment.rows() << " but we need: " << vars.size() << std::endl;
 					exit(0);
@@ -201,10 +201,10 @@ namespace hypro {
 				intervalResets[valuesNPos.second] = carl::Interval<Number>::emptyInterval(); // not really neccessary
 				++affineAssignmentCnt;
 			} else {
-				assert(valuesNPos.first.type() == typeid(carl::Interval<Number>));
+				assert(valuesNPos.first.index() == 1);
 				//resetMatrix.row(valuesNPos.second) = vector_t<Number>::Zero(vars.size());
 				//resetVector(valuesNPos.second) = 0;
-				intervalResets[valuesNPos.second] = boost::get<carl::Interval<Number>>(valuesNPos.first);
+				intervalResets[valuesNPos.second] = std::get<carl::Interval<Number>>(valuesNPos.first);
 				++intervalAssignmentCnt;
 			}
 		}

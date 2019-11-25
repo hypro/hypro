@@ -8,31 +8,30 @@
 
 #pragma once
 
-#include "HybridAutomaton.h"
 #include "../../types.h"
-
+#include "HybridAutomaton.h"
 
 namespace hypro {
 
-  template <typename Number>
-  class HybridAutomaton;
+template <typename Number>
+class HybridAutomaton;
 
-  /**
+/**
     * @brief      Class for linear hybrid automata with components.
     * @tparam     Number  Number type.
   */
-  template <typename Number>
-  class HybridAutomatonComp {
-    private:
-      std::set<HybridAutomaton<Number>*> mAutomatas;
+template <typename Number>
+class HybridAutomatonComp {
+  private:
+	std::set<HybridAutomaton<Number>*> mAutomatas;
 
-    public:
-      HybridAutomatonComp() {};
+  public:
+	HybridAutomatonComp(){};
 
-      ~HybridAutomatonComp() {};
+	~HybridAutomatonComp(){};
 
-      void addAutomata(HybridAutomaton<Number>* automata) { mAutomatas.insert(automata); }
-  };
-}
+	void addAutomata( HybridAutomaton<Number>* automata ) { mAutomatas.insert( automata ); }
+};
+}  // namespace hypro
 
 #include "HybridAutomatonComp.tpp"

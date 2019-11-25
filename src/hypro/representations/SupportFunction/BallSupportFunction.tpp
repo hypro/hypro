@@ -16,13 +16,17 @@ namespace hypro {
 
 template <typename Number>
 BallSupportFunction<Number>::BallSupportFunction( Number _radius, SF_TYPE _type )
-	: mDimension( 0 ), mRadius( _radius ), mType( _type ) {
+	: mDimension( 0 )
+	, mRadius( _radius )
+	, mType( _type ) {
 	assert( _type == SF_TYPE::INFTY_BALL || _type == SF_TYPE::TWO_BALL );
 }
 
 template <typename Number>
 BallSupportFunction<Number>::BallSupportFunction( const BallSupportFunction<Number> &_orig )
-	: mDimension( 0 ), mRadius( _orig.radius() ), mType( _orig.type() ) {
+	: mDimension( 0 )
+	, mRadius( _orig.radius() )
+	, mType( _orig.type() ) {
 }
 
 template <typename Number>
@@ -44,9 +48,9 @@ SF_TYPE BallSupportFunction<Number>::type() const {
 	return mType;
 }
 
-template<typename Number>
+template <typename Number>
 Point<Number> BallSupportFunction<Number>::supremumPoint() const {
-	Point<Number> res(vector_t<Number>::Zero(this->dimension()));
+	Point<Number> res( vector_t<Number>::Zero( this->dimension() ) );
 	res[0] = mRadius;
 	return res;
 }
@@ -55,16 +59,16 @@ template <typename Number>
 EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
 	EvaluationResult<Number> result;
 	// the ball is empty.
-	if(mRadius < 0) {
+	if ( mRadius < 0 ) {
 		return result;
 	}
 	// there is no cost function but the ball is not empty.
-	if(l.rows() == 0){
-		return EvaluationResult<Number>(SOLUTION::FEAS);
+	if ( l.rows() == 0 ) {
+		return EvaluationResult<Number>( SOLUTION::FEAS );
 	}
 	// there is a cost function, but it is zero (we know its dimension nonetheless) and the ball is not empty.
-	if(l.nonZeros() == 0) {
-		return EvaluationResult<Number>(l, SOLUTION::FEAS);
+	if ( l.nonZeros() == 0 ) {
+		return EvaluationResult<Number>( l, SOLUTION::FEAS );
 	}
 
 	// there is a non-zero cost function and the ball is not empty.
@@ -75,18 +79,18 @@ EvaluationResult<Number> BallSupportFunction<Number>::evaluate( const vector_t<N
 				max = abs( l( i ) ) > abs( l( max ) ) ? i : max;
 			}
 			result.supportValue = ( mRadius / abs( l( max ) ) );
-			result.optimumValue = result.supportValue * normalize(l);
+			result.optimumValue = result.supportValue * normalize( l );
 			result.errorCode = SOLUTION::FEAS;
 			break;
 		}
 		case SF_TYPE::TWO_BALL: {
-			Number length = norm(l,true);
-			if(length == 0) {
-				return EvaluationResult<Number>(l, SOLUTION::FEAS);
+			Number length = norm( l, true );
+			if ( length == 0 ) {
+				return EvaluationResult<Number>( l, SOLUTION::FEAS );
 			}
-			DEBUG("hypro.representations.BallSupportFunction", "l: " << l << ", length: " << length);
+			DEBUG( "hypro.representations.BallSupportFunction", "l: " << l << ", length: " << length );
 			result.supportValue = ( mRadius / length );
-			result.optimumValue = result.supportValue * normalize(l);
+			result.optimumValue = result.supportValue * normalize( l );
 			result.errorCode = SOLUTION::FEAS;
 			break;
 		}
@@ -102,13 +106,13 @@ std::vector<EvaluationResult<Number>> BallSupportFunction<Number>::multiEvaluate
 	EvaluationResult<Number> r;
 	r.supportValue = mRadius;
 	r.errorCode = mRadius > 0 ? SOLUTION::FEAS : SOLUTION::INFEAS;
-	std::vector<EvaluationResult<Number>> res(_A.rows(), r);
+	std::vector<EvaluationResult<Number>> res( _A.rows(), r );
 	unsigned cnt = 0;
-	for(auto& singleRes : res ){
-		singleRes.optimumValue = singleRes.supportValue * normalize(vector_t<Number>(_A.row(cnt)));
+	for ( auto &singleRes : res ) {
+		singleRes.optimumValue = singleRes.supportValue * normalize( vector_t<Number>( _A.row( cnt ) ) );
 		++cnt;
 	}
-	assert(res.size() == unsigned(_A.rows()));
+	assert( res.size() == unsigned( _A.rows() ) );
 
 	return res;
 }
@@ -126,7 +130,7 @@ bool BallSupportFunction<Number>::contains( const vector_t<Number> &_point ) con
 			break;
 		}
 		case SF_TYPE::TWO_BALL: {
-			return ( norm(_point,true) <= mRadius );
+			return ( norm( _point, true ) <= mRadius );
 			break;
 		}
 		default:
@@ -139,4 +143,4 @@ template <typename Number>
 bool BallSupportFunction<Number>::empty() const {
 	return ( mRadius == 0 );
 }
-}  // namespace
+}  // namespace hypro

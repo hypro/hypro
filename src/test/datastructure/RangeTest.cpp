@@ -11,5 +11,5 @@ TEST(RangeTest, Constructor)
 
     // conversion to vector
     auto v = toContainer(r);
-    EXPECT_EQ((std::size_t)6, v.size());
+    EXPECT_EQ(std::size_t(6), v.size());
 }

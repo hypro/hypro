@@ -29,9 +29,12 @@ class VertexContainer {
 	 * Constructors & Destructors
 	 **********************************************************************/
 	VertexContainer() {}
-	VertexContainer( const Vertex<Number>& _vertex ) : mVertices() { mVertices.insert( _vertex ); }
-	VertexContainer( const vSet<Number>& vertices ) : mVertices( vertices ) {}
-	VertexContainer( const std::vector<Vertex<Number>>& _vertices ) : mVertices() {
+	VertexContainer( const Vertex<Number>& _vertex )
+		: mVertices() { mVertices.insert( _vertex ); }
+	VertexContainer( const vSet<Number>& vertices )
+		: mVertices( vertices ) {}
+	VertexContainer( const std::vector<Vertex<Number>>& _vertices )
+		: mVertices() {
 		mVertices.insert( _vertices.begin(), _vertices.end() );
 	}
 	VertexContainer( const VertexContainer& orig ) { mVertices = orig.mVertices; }
@@ -253,9 +256,9 @@ class VertexContainer {
 	 * @return Hash value
 	 */
 	std::size_t getHash() const {
-		if (this->mHash == 0) {
+		if ( this->mHash == 0 ) {
 			// regenerate hash
-			this->mHash = std::hash<vSet<Number>>()(this->vertices());
+			this->mHash = std::hash<vSet<Number>>()( this->vertices() );
 		}
 		return this->mHash;
 	}
@@ -267,7 +270,7 @@ class VertexContainer {
 	 * @return true, if they are equal.
 	 */
 	friend bool operator==( const VertexContainer<Number>& c1, const VertexContainer<Number>& c2 ) {
-		if (c1.getHash() != c2.getHash()) {
+		if ( c1.getHash() != c2.getHash() ) {
 			return false;
 		}
 
@@ -281,7 +284,7 @@ class VertexContainer {
 	 * @return true, if they are not equal.
 	 */
 	friend bool operator!=( const VertexContainer<Number>& c1, const VertexContainer<Number>& c2 ) {
-		return !(c1 == c2);
+		return !( c1 == c2 );
 	}
 
 	/**
@@ -298,26 +301,25 @@ class VertexContainer {
 		return ostr;
 	}
 };
-} // namespace hypro
+}  // namespace hypro
 
 namespace std {
-	template<class Number>
-	struct hash<hypro::VertexContainer<Number>> {
-		std::size_t operator()(hypro::VertexContainer<Number> const &vertexContainer) const {
-			return std::hash<hypro::vSet<Number>>()(vertexContainer.vertices());
-		}
-	};
+template <class Number>
+struct hash<hypro::VertexContainer<Number>> {
+	std::size_t operator()( hypro::VertexContainer<Number> const& vertexContainer ) const {
+		return std::hash<hypro::vSet<Number>>()( vertexContainer.vertices() );
+	}
+};
 
-	template<class Number>
-	struct hash<set<hypro::Vertex<Number>>> {
-		std::size_t operator()(hypro::vSet<Number> const& set) const
-		{
-			size_t result = 0;
-			hash<hypro::Vertex<Number>> vertexHasher;
-			for (auto it = set.begin(); it != set.end(); it++) {
-				carl::hash_add(result, vertexHasher(*it));
-			}
-			return result;
+template <class Number>
+struct hash<set<hypro::Vertex<Number>>> {
+	std::size_t operator()( hypro::vSet<Number> const& set ) const {
+		size_t result = 0;
+		hash<hypro::Vertex<Number>> vertexHasher;
+		for ( auto it = set.begin(); it != set.end(); it++ ) {
+			carl::hash_add( result, vertexHasher( *it ) );
 		}
-	};
-} //namespace std
+		return result;
+	}
+};
+}  //namespace std

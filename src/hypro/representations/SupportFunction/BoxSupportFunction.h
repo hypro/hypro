@@ -6,10 +6,11 @@
 
 #pragma once
 
-#include "util.h"
-#include "../../util/logging/Logger.h"
 #include "../../util/Permutator.h"
+#include "../../util/logging/Logger.h"
 #include "../../util/statistics/statistics.h"
+#include "util.h"
+
 #include <carl/interval/Interval.h>
 #include <map>
 
@@ -22,14 +23,15 @@ namespace hypro {
 template <typename Number, typename Setting>
 class BoxSupportFunction {
   private:
-  	std::vector<carl::Interval<Number>> mBox;
+	std::vector<carl::Interval<Number>> mBox;
+
   public:
 	BoxSupportFunction( const std::vector<carl::Interval<Number>>& intervals );
 	BoxSupportFunction( const std::vector<Point<Number>>& _points );
-	BoxSupportFunction( const BoxSupportFunction<Number,Setting>& _origin );
+	BoxSupportFunction( const BoxSupportFunction<Number, Setting>& _origin );
 	~BoxSupportFunction();
 
-    BoxSupportFunction<Number,Setting>& operator=(const BoxSupportFunction<Number,Setting>& _orig);
+	BoxSupportFunction<Number, Setting>& operator=( const BoxSupportFunction<Number, Setting>& _orig );
 
 	/**
 	 * Returns the dimension of the object.
@@ -84,16 +86,16 @@ class BoxSupportFunction {
 
 	bool empty() const;
 
-    const std::vector<carl::Interval<Number>>& getIntervals() const { return mBox; }
+	const std::vector<carl::Interval<Number>>& getIntervals() const { return mBox; }
 
-    std::string getDotRepresentation() const;
+	std::string getDotRepresentation() const;
 
-    friend std::ostream& operator<<( std::ostream& lhs, const BoxSupportFunction<Number,Setting>& rhs ) {
-    	for(const auto& i : rhs.mBox){
-    		lhs << i << std::endl;
-    	}
-    	return lhs;// << rhs.getBox();
+	friend std::ostream& operator<<( std::ostream& lhs, const BoxSupportFunction<Number, Setting>& rhs ) {
+		for ( const auto& i : rhs.mBox ) {
+			lhs << i << std::endl;
+		}
+		return lhs;  // << rhs.getBox();
 	}
 };
-}  // namespace
+}  // namespace hypro
 #include "BoxSupportFunction.tpp"
