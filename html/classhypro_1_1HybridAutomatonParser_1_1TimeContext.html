@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,26 +124,128 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridAutomatonParser_1_
 <div class="title">hypro::HybridAutomatonParser::TimeContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa8ee345c29d32213a1fb2466bf4fe1f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa8ee345c29d32213a1fb2466bf4fe1f3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TimeContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:aa8ee345c29d32213a1fb2466bf4fe1f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TimeContext.html#aa8ee345c29d32213a1fb2466bf4fe1f3">TimeContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:aa8ee345c29d32213a1fb2466bf4fe1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2df93d5b94a5d4051a8d69fb299016ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2df93d5b94a5d4051a8d69fb299016ca"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:a2df93d5b94a5d4051a8d69fb299016ca"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TimeContext.html#a2df93d5b94a5d4051a8d69fb299016ca">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:a2df93d5b94a5d4051a8d69fb299016ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4da0e0c2ac453afe47791295a91bac68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4da0e0c2ac453afe47791295a91bac68"></a>
-antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><b>NUMBER</b> ()</td></tr>
+<tr class="memitem:a4da0e0c2ac453afe47791295a91bac68"><td class="memItemLeft" align="right" valign="top">antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TimeContext.html#a4da0e0c2ac453afe47791295a91bac68">NUMBER</a> ()</td></tr>
 <tr class="separator:a4da0e0c2ac453afe47791295a91bac68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85822da268d93ef140e0e035f65800ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85822da268d93ef140e0e035f65800ce"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a85822da268d93ef140e0e035f65800ce"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TimeContext.html#a85822da268d93ef140e0e035f65800ce">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a85822da268d93ef140e0e035f65800ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00630">630</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="aa8ee345c29d32213a1fb2466bf4fe1f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridAutomatonParser::TimeContext::TimeContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02794">2794</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02794">TimeContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02794">TimeContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a85822da268d93ef140e0e035f65800ce"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridAutomatonParser::TimeContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02807">2807</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2df93d5b94a5d4051a8d69fb299016ca"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridAutomatonParser::TimeContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02803">2803</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">hypro::HybridAutomatonParser::getRuleNames()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00040">hypro::HybridAutomatonParser::RuleTime</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4da0e0c2ac453afe47791295a91bac68"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tree::TerminalNode * HybridAutomatonParser::TimeContext::NUMBER </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02798">2798</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a></li>
 </ul>

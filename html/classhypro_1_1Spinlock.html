@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,9 +124,13 @@ $(document).ready(function(){initNavTree('classhypro_1_1Spinlock.html','');});
 <div class="title">hypro::Spinlock Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="Spinlock_8h_source.html">Spinlock.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a3caefe1ab1cca880ca90ce590b1365e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Spinlock.html#a3caefe1ab1cca880ca90ce590b1365e3">Spinlock</a> ()</td></tr>
+<tr class="separator:a3caefe1ab1cca880ca90ce590b1365e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc8cc1b2ad8c33d28efaf99dddf1fea3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Spinlock.html#abc8cc1b2ad8c33d28efaf99dddf1fea3">lock</a> ()</td></tr>
 <tr class="separator:abc8cc1b2ad8c33d28efaf99dddf1fea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeb9a41a5adfb6d22679b2e263014464"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Spinlock.html#afeb9a41a5adfb6d22679b2e263014464">unlock</a> ()</td></tr>
@@ -135,7 +139,33 @@ Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="Spinlock_8h_source.html#l00007">7</a> of file <a class="el" href="Spinlock_8h_source.html">Spinlock.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a3caefe1ab1cca880ca90ce590b1365e3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::Spinlock::Spinlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Spinlock_8h_source.html#l00009">9</a> of file <a class="el" href="Spinlock_8h_source.html">Spinlock.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="abc8cc1b2ad8c33d28efaf99dddf1fea3"></a>
 <div class="memitem">
 <div class="memproto">

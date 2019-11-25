@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -125,68 +125,495 @@ $(document).ready(function(){initNavTree('structhypro_1_1glpk__context.html','')
 <div class="title">hypro::glpk_context Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac24e12fec700f77fb9bbb41e3cdd1868"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac24e12fec700f77fb9bbb41e3cdd1868"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>glpk_context</b> (const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;orig)</td></tr>
+<tr class="memitem:ab23c8d90c66b5928ad781619b10b51c8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#ab23c8d90c66b5928ad781619b10b51c8">glpk_context</a> ()</td></tr>
+<tr class="separator:ab23c8d90c66b5928ad781619b10b51c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac24e12fec700f77fb9bbb41e3cdd1868"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#ac24e12fec700f77fb9bbb41e3cdd1868">glpk_context</a> (const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;orig)</td></tr>
 <tr class="separator:ac24e12fec700f77fb9bbb41e3cdd1868"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b51b0e070effc42d46299681eb28fd6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b51b0e070effc42d46299681eb28fd6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>glpk_context</b> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&amp;orig)=delete</td></tr>
+<tr class="memitem:a3b51b0e070effc42d46299681eb28fd6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a3b51b0e070effc42d46299681eb28fd6">glpk_context</a> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&amp;orig)=delete</td></tr>
 <tr class="separator:a3b51b0e070effc42d46299681eb28fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29867e915faa5e43836bec67f4bf1c62"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29867e915faa5e43836bec67f4bf1c62"></a>
-<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;orig)</td></tr>
+<tr class="memitem:a29867e915faa5e43836bec67f4bf1c62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a29867e915faa5e43836bec67f4bf1c62">operator=</a> (const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;orig)</td></tr>
 <tr class="separator:a29867e915faa5e43836bec67f4bf1c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae14b115a3a0e7184349a8314c966c068"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae14b115a3a0e7184349a8314c966c068"></a>
-<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&amp;orig)=delete</td></tr>
+<tr class="memitem:ae14b115a3a0e7184349a8314c966c068"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#ae14b115a3a0e7184349a8314c966c068">operator=</a> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&amp;orig)=delete</td></tr>
 <tr class="separator:ae14b115a3a0e7184349a8314c966c068"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30335779877264a3202373eb1a70c0e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a30335779877264a3202373eb1a70c0e5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;rhs)</td></tr>
+<tr class="memitem:a30335779877264a3202373eb1a70c0e5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a30335779877264a3202373eb1a70c0e5">operator==</a> (const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;rhs)</td></tr>
 <tr class="separator:a30335779877264a3202373eb1a70c0e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a325fb7c0a103dda1dffe0e2d2fd2d2d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a325fb7c0a103dda1dffe0e2d2fd2d2d7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createArrays</b> (unsigned size)</td></tr>
+<tr class="memitem:a325fb7c0a103dda1dffe0e2d2fd2d2d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a325fb7c0a103dda1dffe0e2d2fd2d2d7">createArrays</a> (unsigned size)</td></tr>
 <tr class="separator:a325fb7c0a103dda1dffe0e2d2fd2d2d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac17f844cae26b15091f2c6541343f238"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac17f844cae26b15091f2c6541343f238"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>deleteArrays</b> ()</td></tr>
+<tr class="memitem:ac17f844cae26b15091f2c6541343f238"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#ac17f844cae26b15091f2c6541343f238">deleteArrays</a> ()</td></tr>
 <tr class="separator:ac17f844cae26b15091f2c6541343f238"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7749aae179a9b9d5f05fc7c1cdac5e35"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7749aae179a9b9d5f05fc7c1cdac5e35"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createLPInstance</b> ()</td></tr>
+<tr class="memitem:a7749aae179a9b9d5f05fc7c1cdac5e35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35">createLPInstance</a> ()</td></tr>
 <tr class="separator:a7749aae179a9b9d5f05fc7c1cdac5e35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa257c8cc75e722278eacf844cef92829"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa257c8cc75e722278eacf844cef92829"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>deleteLPInstance</b> ()</td></tr>
+<tr class="memitem:aa257c8cc75e722278eacf844cef92829"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#aa257c8cc75e722278eacf844cef92829">deleteLPInstance</a> ()</td></tr>
 <tr class="separator:aa257c8cc75e722278eacf844cef92829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a510166cf79b28ab6e2541778955fcbfe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a510166cf79b28ab6e2541778955fcbfe">~glpk_context</a> ()</td></tr>
+<tr class="separator:a510166cf79b28ab6e2541778955fcbfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a9ea064ea8fa691a62657844e64ae5073"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ea064ea8fa691a62657844e64ae5073"></a>
-glp_prob *&#160;</td><td class="memItemRight" valign="bottom"><b>lp</b> = nullptr</td></tr>
+<tr class="memitem:a9ea064ea8fa691a62657844e64ae5073"><td class="memItemLeft" align="right" valign="top">glp_prob *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a9ea064ea8fa691a62657844e64ae5073">lp</a> = nullptr</td></tr>
 <tr class="separator:a9ea064ea8fa691a62657844e64ae5073"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84a70b9d3d2c4d8d73791a49f4f54750"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84a70b9d3d2c4d8d73791a49f4f54750"></a>
-glp_smcp&#160;</td><td class="memItemRight" valign="bottom"><b>parm</b></td></tr>
+<tr class="memitem:a84a70b9d3d2c4d8d73791a49f4f54750"><td class="memItemLeft" align="right" valign="top">glp_smcp&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a84a70b9d3d2c4d8d73791a49f4f54750">parm</a></td></tr>
 <tr class="separator:a84a70b9d3d2c4d8d73791a49f4f54750"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cf930b33f0329e8d89ddc6fab809860"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cf930b33f0329e8d89ddc6fab809860"></a>
-int *&#160;</td><td class="memItemRight" valign="bottom"><b>ia</b> = nullptr</td></tr>
+<tr class="memitem:a7cf930b33f0329e8d89ddc6fab809860"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a7cf930b33f0329e8d89ddc6fab809860">ia</a> = nullptr</td></tr>
 <tr class="separator:a7cf930b33f0329e8d89ddc6fab809860"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53524e6a5136e0965959c774187673ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53524e6a5136e0965959c774187673ad"></a>
-int *&#160;</td><td class="memItemRight" valign="bottom"><b>ja</b> = nullptr</td></tr>
+<tr class="memitem:a53524e6a5136e0965959c774187673ad"><td class="memItemLeft" align="right" valign="top">int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a53524e6a5136e0965959c774187673ad">ja</a> = nullptr</td></tr>
 <tr class="separator:a53524e6a5136e0965959c774187673ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22b3016cc69e59a36e5ebe67e87a358e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22b3016cc69e59a36e5ebe67e87a358e"></a>
-double *&#160;</td><td class="memItemRight" valign="bottom"><b>ar</b> = nullptr</td></tr>
+<tr class="memitem:a22b3016cc69e59a36e5ebe67e87a358e"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a22b3016cc69e59a36e5ebe67e87a358e">ar</a> = nullptr</td></tr>
 <tr class="separator:a22b3016cc69e59a36e5ebe67e87a358e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6731cf145286af345d5a801dcd25e03e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6731cf145286af345d5a801dcd25e03e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>arraysCreated</b> = false</td></tr>
+<tr class="memitem:a6731cf145286af345d5a801dcd25e03e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a6731cf145286af345d5a801dcd25e03e">arraysCreated</a> = false</td></tr>
 <tr class="separator:a6731cf145286af345d5a801dcd25e03e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a161cfaf59da4a76f01e3431996906920"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a161cfaf59da4a76f01e3431996906920"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mInitialized</b> = false</td></tr>
+<tr class="memitem:a161cfaf59da4a76f01e3431996906920"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#a161cfaf59da4a76f01e3431996906920">mInitialized</a> = false</td></tr>
 <tr class="separator:a161cfaf59da4a76f01e3431996906920"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbf09c6ccea590c9e1337061b34e4ef7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acbf09c6ccea590c9e1337061b34e4ef7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mConstraintsSet</b> = false</td></tr>
+<tr class="memitem:acbf09c6ccea590c9e1337061b34e4ef7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html#acbf09c6ccea590c9e1337061b34e4ef7">mConstraintsSet</a> = false</td></tr>
 <tr class="separator:acbf09c6ccea590c9e1337061b34e4ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00007">7</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ab23c8d90c66b5928ad781619b10b51c8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::glpk_context::glpk_context </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00017">17</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00013">arraysCreated</a>, <a class="el" href="glpk__context_8h_source.html#l00017">glpk_context()</a>, <a class="el" href="glpk__context_8h_source.html#l00015">mConstraintsSet</a>, and <a class="el" href="glpk__context_8h_source.html#l00014">mInitialized</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00017">glpk_context()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac24e12fec700f77fb9bbb41e3cdd1868"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::glpk_context::glpk_context </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td>
+          <td class="paramname"><em>orig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00029">29</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00013">arraysCreated</a>, <a class="el" href="glpk__context_8h_source.html#l00015">mConstraintsSet</a>, and <a class="el" href="glpk__context_8h_source.html#l00014">mInitialized</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b51b0e070effc42d46299681eb28fd6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::glpk_context::glpk_context </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>orig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a510166cf79b28ab6e2541778955fcbfe"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::glpk_context::~glpk_context </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00123">123</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00083">deleteArrays()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a325fb7c0a103dda1dffe0e2d2fd2d2d7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::glpk_context::createArrays </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00072">72</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00013">arraysCreated</a>, and <a class="el" href="glpk__context_8h_source.html#l00083">deleteArrays()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7749aae179a9b9d5f05fc7c1cdac5e35"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::glpk_context::createLPInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00096">96</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00015">mConstraintsSet</a>, and <a class="el" href="glpk__context_8h_source.html#l00014">mInitialized</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac17f844cae26b15091f2c6541343f238"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::glpk_context::deleteArrays </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00083">83</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00013">arraysCreated</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00072">createArrays()</a>, <a class="el" href="glpk__context_8h_source.html#l00045">operator=()</a>, and <a class="el" href="glpk__context_8h_source.html#l00123">~glpk_context()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa257c8cc75e722278eacf844cef92829"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::glpk_context::deleteLPInstance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00109">109</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00015">mConstraintsSet</a>, and <a class="el" href="glpk__context_8h_source.html#l00014">mInitialized</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00045">operator=()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a29867e915faa5e43836bec67f4bf1c62"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a>&amp; hypro::glpk_context::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td>
+          <td class="paramname"><em>orig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00045">45</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>References <a class="el" href="glpk__context_8h_source.html#l00013">arraysCreated</a>, <a class="el" href="glpk__context_8h_source.html#l00083">deleteArrays()</a>, <a class="el" href="glpk__context_8h_source.html#l00109">deleteLPInstance()</a>, <a class="el" href="glpk__context_8h_source.html#l00015">mConstraintsSet</a>, <a class="el" href="glpk__context_8h_source.html#l00014">mInitialized</a>, and <a class="el" href="glpk__context_8h_source.html#l00068">operator==()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae14b115a3a0e7184349a8314c966c068"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a>&amp; hypro::glpk_context::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>orig</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a30335779877264a3202373eb1a70c0e5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::glpk_context::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00068">68</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00045">operator=()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a22b3016cc69e59a36e5ebe67e87a358e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* hypro::glpk_context::ar = nullptr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00012">12</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6731cf145286af345d5a801dcd25e03e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::glpk_context::arraysCreated = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00013">13</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00072">createArrays()</a>, <a class="el" href="glpk__context_8h_source.html#l00083">deleteArrays()</a>, <a class="el" href="glpk__context_8h_source.html#l00017">glpk_context()</a>, and <a class="el" href="glpk__context_8h_source.html#l00045">operator=()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7cf930b33f0329e8d89ddc6fab809860"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int* hypro::glpk_context::ia = nullptr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00010">10</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a53524e6a5136e0965959c774187673ad"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int* hypro::glpk_context::ja = nullptr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00011">11</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9ea064ea8fa691a62657844e64ae5073"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glp_prob* hypro::glpk_context::lp = nullptr</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00008">8</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acbf09c6ccea590c9e1337061b34e4ef7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::glpk_context::mConstraintsSet = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00015">15</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00096">createLPInstance()</a>, <a class="el" href="glpk__context_8h_source.html#l00109">deleteLPInstance()</a>, <a class="el" href="glpk__context_8h_source.html#l00017">glpk_context()</a>, and <a class="el" href="glpk__context_8h_source.html#l00045">operator=()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a161cfaf59da4a76f01e3431996906920"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::glpk_context::mInitialized = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00014">14</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+<p>Referenced by <a class="el" href="glpk__context_8h_source.html#l00096">createLPInstance()</a>, <a class="el" href="glpk__context_8h_source.html#l00109">deleteLPInstance()</a>, <a class="el" href="glpk__context_8h_source.html#l00017">glpk_context()</a>, and <a class="el" href="glpk__context_8h_source.html#l00045">operator=()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a84a70b9d3d2c4d8d73791a49f4f54750"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glp_smcp hypro::glpk_context::parm</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="glpk__context_8h_source.html#l00009">9</a> of file <a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/<a class="el" href="glpk__context_8h_source.html">glpk_context.h</a></li>
 </ul>
 </div><!-- contents -->

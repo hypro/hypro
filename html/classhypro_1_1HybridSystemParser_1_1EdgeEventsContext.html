@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,29 +124,150 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridSystemParser_1_1Ed
 <div class="title">hypro::HybridSystemParser::EdgeEventsContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af02fb1870d1aba0548c79a34431c6bc4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af02fb1870d1aba0548c79a34431c6bc4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>EdgeEventsContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:af02fb1870d1aba0548c79a34431c6bc4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventsContext.html#af02fb1870d1aba0548c79a34431c6bc4">EdgeEventsContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:af02fb1870d1aba0548c79a34431c6bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a603c50e1c54e7e6c7e62aeb23e3e8d9c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a603c50e1c54e7e6c7e62aeb23e3e8d9c"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:a603c50e1c54e7e6c7e62aeb23e3e8d9c"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventsContext.html#a603c50e1c54e7e6c7e62aeb23e3e8d9c">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:a603c50e1c54e7e6c7e62aeb23e3e8d9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f433b60458246b56c3e073a43eb3f3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f433b60458246b56c3e073a43eb3f3a"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventContext.html">EdgeEventContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>edgeEvent</b> ()</td></tr>
+<tr class="memitem:a9f433b60458246b56c3e073a43eb3f3a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventContext.html">EdgeEventContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventsContext.html#a9f433b60458246b56c3e073a43eb3f3a">edgeEvent</a> ()</td></tr>
 <tr class="separator:a9f433b60458246b56c3e073a43eb3f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab48bd5b48e2ffa6adfe4341c2ed1f637"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab48bd5b48e2ffa6adfe4341c2ed1f637"></a>
-<a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventContext.html">EdgeEventContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>edgeEvent</b> (size_t i)</td></tr>
+<tr class="memitem:ab48bd5b48e2ffa6adfe4341c2ed1f637"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventContext.html">EdgeEventContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventsContext.html#ab48bd5b48e2ffa6adfe4341c2ed1f637">edgeEvent</a> (size_t i)</td></tr>
 <tr class="separator:ab48bd5b48e2ffa6adfe4341c2ed1f637"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d645c47263b34a2a29961217e5a351a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d645c47263b34a2a29961217e5a351a"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a1d645c47263b34a2a29961217e5a351a"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventsContext.html#a1d645c47263b34a2a29961217e5a351a">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a1d645c47263b34a2a29961217e5a351a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridSystemParser_8h_source.html#l01396">1396</a> of file <a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="af02fb1870d1aba0548c79a34431c6bc4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridSystemParser::EdgeEventsContext::EdgeEventsContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l06498">6498</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l06498">EdgeEventsContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l06498">EdgeEventsContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a1d645c47263b34a2a29961217e5a351a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridSystemParser::EdgeEventsContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l06515">6515</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9f433b60458246b56c3e073a43eb3f3a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventContext.html">HybridSystemParser::EdgeEventContext</a> * &gt; HybridSystemParser::EdgeEventsContext::edgeEvent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l06502">6502</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l06522">hypro::HybridSystemParser::edgeEvents()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab48bd5b48e2ffa6adfe4341c2ed1f637"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridSystemParser_1_1EdgeEventContext.html">HybridSystemParser::EdgeEventContext</a> * HybridSystemParser::EdgeEventsContext::edgeEvent </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l06506">6506</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a603c50e1c54e7e6c7e62aeb23e3e8d9c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridSystemParser::EdgeEventsContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l06511">6511</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l00026">hypro::HybridSystemParser::getRuleNames()</a>, and <a class="el" href="HybridSystemParser_8h_source.html#l00065">hypro::HybridSystemParser::RuleEdgeEvents</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a></li>
 </ul>

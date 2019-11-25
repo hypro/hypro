@@ -1,12 +1,16 @@
 var searchData=
 [
-  ['_7egeometricobject',['~GeometricObject',['../classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0',1,'hypro::GeometricObject::~GeometricObject()'],['../classhypro_1_1StatisticWrapper.html#ad4f5950c248ebb3f23c410cdac78fc60',1,'hypro::StatisticWrapper::~GeometricObject()']]],
-  ['_7ehalfspace',['~Halfspace',['../classhypro_1_1Halfspace.html#acc71891d16a4412a37355ba896255be4',1,'hypro::Halfspace']]],
-  ['_7ehierarchicalintervalvector',['~HierarchicalIntervalVector',['../classhypro_1_1HierarchicalIntervalVector.html#af595d8c5356eb4a3c30caf6c9f6a9304',1,'hypro::HierarchicalIntervalVector']]],
-  ['_7ehybridautomaton',['~HybridAutomaton',['../classhypro_1_1HybridAutomaton.html#a5aed1a8b1d4bae2fad8a01a6bd635e0c',1,'hypro::HybridAutomaton']]],
-  ['_7eoptimizer',['~Optimizer',['../classhypro_1_1Optimizer.html#a992438299160290cb0f08e243ded782c',1,'hypro::Optimizer']]],
-  ['_7epoint',['~Point',['../classhypro_1_1Point.html#a37c7ca9da96913e24c9bb83dcc219499',1,'hypro::Point']]],
-  ['_7etransition',['~Transition',['../classhypro_1_1Transition.html#a538386202b6b77ca1e296332931db302',1,'hypro::Transition']]],
-  ['_7evertex',['~Vertex',['../classhypro_1_1Vertex.html#a09df1f7c19b8f1696c9027b20e06faaa',1,'hypro::Vertex']]],
-  ['_7eworkqueuet',['~WorkQueueT',['../classhypro_1_1WorkQueueT.html#a57ee87bd75ed2aa560fc67a9c979f245',1,'hypro::WorkQueueT']]]
+  ['what',['what',['../classhypro_1_1HardTerminateException.html#a73d7a3c023f08ad04f8d71f4ee81b2ec',1,'hypro::HardTerminateException::what()'],['../classhypro_1_1FinishWithDiscreteProcessingException.html#ad88a623b91bde6e89cfacb1a2b68145e',1,'hypro::FinishWithDiscreteProcessingException::what()']]],
+  ['workqueue',['WorkQueue',['../namespacehypro.html#ab35d78181722676f0636d7a390fe5848',1,'hypro']]],
+  ['workqueue_2eh',['WorkQueue.h',['../WorkQueue_8h.html',1,'']]],
+  ['workqueuedefaultsetting',['WorkQueueDefaultSetting',['../structhypro_1_1WorkQueueDefaultSetting.html',1,'hypro']]],
+  ['workqueuemanager',['WorkQueueManager',['../classhypro_1_1WorkQueueManager.html',1,'hypro']]],
+  ['workqueuemanager_2eh',['WorkQueueManager.h',['../WorkQueueManager_8h.html',1,'']]],
+  ['workqueuesettings_2eh',['WorkQueueSettings.h',['../WorkQueueSettings_8h.html',1,'']]],
+  ['workqueuet',['WorkQueueT',['../classhypro_1_1WorkQueueT.html#a1e7a3571755a19ce1212d6e155fc8e54',1,'hypro::WorkQueueT::WorkQueueT()=default'],['../classhypro_1_1WorkQueueT.html#ae5ac9fcf41936a1f2383c87471848d36',1,'hypro::WorkQueueT::WorkQueueT(WorkQueueT&lt; Workable, Setting &gt; &amp;&amp;in)=delete'],['../classhypro_1_1WorkQueueT.html#adf3b335ac5ed585c7db538f891d1956c',1,'hypro::WorkQueueT::WorkQueueT(const WorkQueueT&lt; Workable, Setting &gt; &amp;in)=delete']]],
+  ['workqueuet',['WorkQueueT',['../classhypro_1_1WorkQueueT.html',1,'hypro']]],
+  ['workqueuet_3c_20std_3a_3ashared_5fptr_3c_20hypro_3a_3atask_3c_20state_20_3e_20_3e_20_3e',['WorkQueueT&lt; std::shared_ptr&lt; hypro::Task&lt; State &gt; &gt; &gt;',['../classhypro_1_1WorkQueueT.html',1,'hypro']]],
+  ['workqueuet_3c_20tasktypeptr_20_3e',['WorkQueueT&lt; TaskTypePtr &gt;',['../classhypro_1_1WorkQueueT.html',1,'hypro']]],
+  ['workqueuet_3c_20workable_20_3e',['WorkQueueT&lt; Workable &gt;',['../classhypro_1_1WorkQueueT.html',1,'hypro']]],
+  ['ws',['WS',['../classhypro_1_1HybridSystemLexer.html#aac68a34d2f9a0f1cb515d50d6f8e9571a9a7cd7bc69d8e5e0f8c3fa877f580e4a',1,'hypro::HybridSystemLexer::WS()'],['../classhypro_1_1HybridSystemParser.html#a9c121a6c37b4b8b710d290327ee0d165affd51c9ea967dd74f5dce23ccbe88bdd',1,'hypro::HybridSystemParser::WS()'],['../classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a0430d53531c2c3d2a09d1838b9ba2cf6',1,'hypro::HybridAutomatonLexer::WS()'],['../classhypro_1_1HybridAutomatonParser.html#a6a14f59a09f6a16a62f43c4dbd6f8257ad053a2711d4763d5eb3b6fd96393b52b',1,'hypro::HybridAutomatonParser::WS()']]]
 ];

@@ -1,5 +1,9 @@
 var dir_519994d85a4cf46cf1798a8eeb04af9e =
 [
-    [ "ContextBasedReachabilityWorker.h", "ContextBasedReachabilityWorker_8h_source.html", null ],
-    [ "IWorker.h", "IWorker_8h_source.html", null ]
+    [ "ContextBasedReachabilityWorker.h", "ContextBasedReachabilityWorker_8h.html", [
+      [ "ContextBasedReachabilityWorker", "classhypro_1_1ContextBasedReachabilityWorker.html", "classhypro_1_1ContextBasedReachabilityWorker" ]
+    ] ],
+    [ "IWorker.h", "IWorker_8h.html", [
+      [ "IWorker", "classhypro_1_1IWorker.html", "classhypro_1_1IWorker" ]
+    ] ]
 ];

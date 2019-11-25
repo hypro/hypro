@@ -10,10 +10,12 @@ var NAVTREE =
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
         [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ]
+        [ "Enumerations", "namespacemembers_enum.html", null ],
+        [ "Enumerator", "namespacemembers_eval.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [
@@ -23,13 +25,21 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Enumerator", "functions_eval.html", "functions_eval" ],
         [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", null, [
-      [ "File List", "files.html", "files" ]
+      [ "File List", "files.html", "files" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
+        [ "Typedefs", "globals_type.html", null ]
+      ] ]
     ] ],
     [ "Examples", "examples.html", "examples" ]
   ] ]
@@ -38,29 +48,32 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classhypro_1_1BallSupportFunction.html#a006b5de1fd70fa2761b7390dc92a3471",
-"classhypro_1_1DifferenceBoundsT.html",
-"classhypro_1_1Flowpipe.html",
-"classhypro_1_1HybridAutomatonBaseVisitor.html#a387e00b13af0e2871b0be9c41b69ae56",
-"classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html#ae0eb24e68d232cf8bcee8806d4578660",
-"classhypro_1_1HybridAutomatonParser_1_1SettingContext.html",
-"classhypro_1_1HybridSystemBaseVisitor.html#aceb03e560d8625198761f0fa07bbc38d",
-"classhypro_1_1HybridSystemParser.html#a8d81f060e7cd68f77516c057fce7d13ca0f053b8b28ae15add545e06618fb9c02",
-"classhypro_1_1HybridSystemParser.html#a9c121a6c37b4b8b710d290327ee0d165af8cf3d9ff750cc00c32e1bdcbd4fb6da",
-"classhypro_1_1HybridSystemParser_1_1EventsContext.html#a9e17ea65eccffe6b52cf2f06ce959178",
-"classhypro_1_1HybridSystemParser_1_1LocElemInvContext.html",
-"classhypro_1_1HybridSystemParser_1_1SpecificationContext.html#a7ba70ac20148ea48a5af82c3d3ef2f21",
-"classhypro_1_1HybridSystemVisitor.html#aba8c1f7172ad3fcf9df8621bc1c090da",
-"classhypro_1_1LTIContext.html#aeb866a354cdbc794c14f740412644bbc",
-"classhypro_1_1Path.html#ac626c1b57e1dce829cb925f74725e53b",
-"classhypro_1_1Reset.html#a519225333c976d3c64fd91cda40e6bfe",
-"classhypro_1_1SupportFunctionT.html#a955bd8a5c840311013ce82ebff67c105",
-"classhypro_1_1UnionOp.html#ad1199b384a07255a3412a066d1010374",
-"classhypro_1_1genericAffineTransformationVisitor.html",
-"classhypro_1_1rectangularInvariantHandler.html#a9b21e3a10e4ecd75b9c2a7b7f19d6ba1",
-"functions_func_g.html",
-"structhypro_1_1LeafData.html#af0d1c08f500fd92a24a0e2139bfd74cc",
-"structhypro_1_1reachability_1_1ReachSettings.html"
+"Optimizer_8cpp_source.html",
+"adaptions__eigen_8h.html#a65833df199579a0852a41bcae1c6b7bb",
+"classhypro_1_1Converter.html#ac41c2231b430ff6251436978f12aeed8",
+"classhypro_1_1EventTimingNode.html#a34b7d2efb5c8b470463d985d40a9b62f",
+"classhypro_1_1HandlerFactory.html#adceda09fec39791f134bf404e1d886ac",
+"classhypro_1_1HybridAutomatonParser.html#a6a14f59a09f6a16a62f43c4dbd6f8257ad053a2711d4763d5eb3b6fd96393b52b",
+"classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext.html#ae94c807dd1185bb66dace78bda7e1f13",
+"classhypro_1_1HybridSystemBaseVisitor.html#a1289612eb1744f7d44a75b0f74571ef4",
+"classhypro_1_1HybridSystemLexer.html#aac68a34d2f9a0f1cb515d50d6f8e9571adec78a221822a4a00396eaa650b535fe",
+"classhypro_1_1HybridSystemParser.html#a9c121a6c37b4b8b710d290327ee0d165a530f206f3d80e810b420912935e6228d",
+"classhypro_1_1HybridSystemParser_1_1ControllabilityContext.html#abca212e1234cac3f97c58c16db9dec63",
+"classhypro_1_1HybridSystemParser_1_1GroupDeclContext.html#a78eccca8bf099c1fd0830e9b7f43a803",
+"classhypro_1_1HybridSystemParser_1_1OptGroupDeclsContext.html#acd2af539a640c19f8fd8767fef99588a",
+"classhypro_1_1HybridSystemParser_1_1UpdatesContext.html#afc3604a8742bfb3e860ec084822402a7",
+"classhypro_1_1IWorker.html#aa4c3c995bc6555be3f37273f12097953",
+"classhypro_1_1OrthogonalPolyhedron.html#a366e4644bbf3321140ce3ece37600b3c",
+"classhypro_1_1PrincipalComponentAnalysis.html#ac07cd587b12838018ca767aad07f6b2a",
+"classhypro_1_1SumOp.html#a8b7c47e0f8ecb97471e5e7d406e71580",
+"classhypro_1_1TrafoParameters.html",
+"classhypro_1_1ZonotopeT.html",
+"classhypro_1_1ltiResetHandler.html#a1839c779fe7d525804cedab36d9c0fd4",
+"dir_68267d1309a1af8e8297ef4c3efbcdba.html",
+"flow_8h.html",
+"qe_8h_source.html",
+"structhypro_1_1ProjectData.html#a7db29b824049ff21bbeabe83196ac928",
+"structhypro_1_1trafoContent.html#a9488650341da5f7093a0f075067c5b6a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tribool',['TRIBOOL',['../namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d',1,'hypro']]]
+  ['locationtype',['LOCATIONTYPE',['../namespacehypro.html#a591ce576c89c11741bb7ee90db71c677',1,'hypro']]]
 ];

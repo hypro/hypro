@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['ellipsoid_2eh',['Ellipsoid.h',['../Ellipsoid_8h.html',1,'']]],
-  ['example_5fplot_2ecpp',['example_plot.cpp',['../example__plot_8cpp.html',1,'']]],
-  ['example_5fppl_5fnncpolyhedra_2ecpp',['example_ppl_nncPolyhedra.cpp',['../example__ppl__nncPolyhedra_8cpp.html',1,'']]]
+  ['badstatehandlers_2eh',['BadStateHandlers.h',['../BadStateHandlers_8h.html',1,'']]],
+  ['ballsupportfunction_2eh',['BallSupportFunction.h',['../BallSupportFunction_8h.html',1,'']]],
+  ['box_2eh',['Box.h',['../Box_8h.html',1,'']]],
+  ['boxsetting_2eh',['BoxSetting.h',['../BoxSetting_8h.html',1,'']]],
+  ['boxsupportfunction_2eh',['BoxSupportFunction.h',['../BoxSupportFunction_8h.html',1,'']]]
 ];

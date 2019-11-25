@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,29 +124,185 @@ $(document).ready(function(){initNavTree('classhypro_1_1IInvariantHandler.html',
 <div class="title">hypro::IInvariantHandler Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="IHandler_8h_source.html">IHandler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1f7696a550caa72de0eb0044b567ee65"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f7696a550caa72de0eb0044b567ee65"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()=0</td></tr>
+<tr class="memitem:a42fe116f0075c19bfd3a28b14852c3d7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IInvariantHandler.html#a42fe116f0075c19bfd3a28b14852c3d7">~IInvariantHandler</a> ()</td></tr>
+<tr class="separator:a42fe116f0075c19bfd3a28b14852c3d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f7696a550caa72de0eb0044b567ee65"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IInvariantHandler.html#a1f7696a550caa72de0eb0044b567ee65">handle</a> ()=0</td></tr>
 <tr class="separator:a1f7696a550caa72de0eb0044b567ee65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add166dbc2346cc590c2072b91031ff4e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add166dbc2346cc590c2072b91031ff4e"></a>
-virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()=0</td></tr>
+<tr class="memitem:add166dbc2346cc590c2072b91031ff4e"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IInvariantHandler.html#add166dbc2346cc590c2072b91031ff4e">handlerName</a> ()=0</td></tr>
 <tr class="separator:add166dbc2346cc590c2072b91031ff4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9222380caa5335fcead6817f57fac1c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9222380caa5335fcead6817f57fac1c3"></a>
-virtual <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getContainment</b> ()=0</td></tr>
+<tr class="memitem:a9222380caa5335fcead6817f57fac1c3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IInvariantHandler.html#a9222380caa5335fcead6817f57fac1c3">getContainment</a> ()=0</td></tr>
 <tr class="separator:a9222380caa5335fcead6817f57fac1c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97cf69aa4bac20b0247ab09906c090fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97cf69aa4bac20b0247ab09906c090fc"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getMarkedForDelete</b> ()=0</td></tr>
+<tr class="memitem:a97cf69aa4bac20b0247ab09906c090fc"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IInvariantHandler.html#a97cf69aa4bac20b0247ab09906c090fc">getMarkedForDelete</a> ()=0</td></tr>
 <tr class="separator:a97cf69aa4bac20b0247ab09906c090fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e922d6a9f62368420a4155933fef223"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e922d6a9f62368420a4155933fef223"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setMarkedForDelete</b> (bool toDelete)=0</td></tr>
+<tr class="memitem:a6e922d6a9f62368420a4155933fef223"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IInvariantHandler.html#a6e922d6a9f62368420a4155933fef223">setMarkedForDelete</a> (bool toDelete)=0</td></tr>
 <tr class="separator:a6e922d6a9f62368420a4155933fef223"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="IHandler_8h_source.html#l00023">23</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a42fe116f0075c19bfd3a28b14852c3d7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual hypro::IInvariantHandler::~IInvariantHandler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IHandler_8h_source.html#l00025">25</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a9222380caa5335fcead6817f57fac1c3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> hypro::IInvariantHandler::getContainment </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiInvariantHandler.html#a8b6567c98fe581814b58325bd54d0499">hypro::ltiInvariantHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#ab0966c7d987dc9a0c0d275a37dfb0df0">hypro::rectangularInvariantHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a97cf69aa4bac20b0247ab09906c090fc"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool hypro::IInvariantHandler::getMarkedForDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiInvariantHandler.html#a462759f3a671e0f6d02ceec15616a087">hypro::ltiInvariantHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#a0ea24042a02fbd00706cc1ebe502782e">hypro::rectangularInvariantHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1f7696a550caa72de0eb0044b567ee65"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void hypro::IInvariantHandler::handle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1IHandler.html#a66e0cc4f490d1e7389b096289df681f8">hypro::IHandler</a>.</p>
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiInvariantHandler.html#a14a929258ad102a8b3be4df7216b19f3">hypro::ltiInvariantHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#a9b21e3a10e4ecd75b9c2a7b7f19d6ba1">hypro::rectangularInvariantHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedInvariantHandler.html#a27aebef521d03fd04973b4483a89a196">hypro::timedInvariantHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteInvariantHandler.html#ac93d4984433c99f9ca02842ad8f057f1">hypro::discreteInvariantHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="add166dbc2346cc590c2072b91031ff4e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* hypro::IInvariantHandler::handlerName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1IHandler.html#a09f4265a24e3f3d825ed7e778b9d9fa5">hypro::IHandler</a>.</p>
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiInvariantHandler.html#a5e7280e17a61bbef660e3545a1cf3ea5">hypro::ltiInvariantHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#a27a510ce3dc3f085c4e35fb58298dcdc">hypro::rectangularInvariantHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedInvariantHandler.html#aee7feb3f8e6aa87e90ae4667c7f97040">hypro::timedInvariantHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteInvariantHandler.html#aacf1a74b558bec17cf35f697166921df">hypro::discreteInvariantHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6e922d6a9f62368420a4155933fef223"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void hypro::IInvariantHandler::setMarkedForDelete </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>toDelete</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiInvariantHandler.html#a209414c5cc04e2e216a58528378b0dca">hypro::ltiInvariantHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#abd24f40cfa6cb6489884905bc2a41972">hypro::rectangularInvariantHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="IHandler_8h_source.html">IHandler.h</a></li>
 </ul>
 </div><!-- contents -->

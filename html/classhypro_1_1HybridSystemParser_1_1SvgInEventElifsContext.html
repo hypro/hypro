@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,35 +124,189 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridSystemParser_1_1Sv
 <div class="title">hypro::HybridSystemParser::SvgInEventElifsContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3e4e59f0340e917d8ae470db7bc312c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e4e59f0340e917d8ae470db7bc312c3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SvgInEventElifsContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:a3e4e59f0340e917d8ae470db7bc312c3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#a3e4e59f0340e917d8ae470db7bc312c3">SvgInEventElifsContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:a3e4e59f0340e917d8ae470db7bc312c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa457d56f310901d323cfd10b53a138d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa457d56f310901d323cfd10b53a138d2"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:aa457d56f310901d323cfd10b53a138d2"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#aa457d56f310901d323cfd10b53a138d2">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:aa457d56f310901d323cfd10b53a138d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a814a83c9cf3f12ef2b8ab0925abad377"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a814a83c9cf3f12ef2b8ab0925abad377"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>expression</b> ()</td></tr>
+<tr class="memitem:a814a83c9cf3f12ef2b8ab0925abad377"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#a814a83c9cf3f12ef2b8ab0925abad377">expression</a> ()</td></tr>
 <tr class="separator:a814a83c9cf3f12ef2b8ab0925abad377"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d2743e24d1f425dcac3a93db2e2e8d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d2743e24d1f425dcac3a93db2e2e8d7"></a>
-<a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>expression</b> (size_t i)</td></tr>
+<tr class="memitem:a5d2743e24d1f425dcac3a93db2e2e8d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#a5d2743e24d1f425dcac3a93db2e2e8d7">expression</a> (size_t i)</td></tr>
 <tr class="separator:a5d2743e24d1f425dcac3a93db2e2e8d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0c1176b5c9d304222fe799a1a22a5ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0c1176b5c9d304222fe799a1a22a5ab"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html">NameContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>name</b> ()</td></tr>
+<tr class="memitem:ac0c1176b5c9d304222fe799a1a22a5ab"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html">NameContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#ac0c1176b5c9d304222fe799a1a22a5ab">name</a> ()</td></tr>
 <tr class="separator:ac0c1176b5c9d304222fe799a1a22a5ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93df5ec011d7d66a2f0be8e8adece019"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93df5ec011d7d66a2f0be8e8adece019"></a>
-<a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html">NameContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>name</b> (size_t i)</td></tr>
+<tr class="memitem:a93df5ec011d7d66a2f0be8e8adece019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html">NameContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#a93df5ec011d7d66a2f0be8e8adece019">name</a> (size_t i)</td></tr>
 <tr class="separator:a93df5ec011d7d66a2f0be8e8adece019"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6adc09623c7ed0ce24604c26c9a0bef8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6adc09623c7ed0ce24604c26c9a0bef8"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a6adc09623c7ed0ce24604c26c9a0bef8"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1SvgInEventElifsContext.html#a6adc09623c7ed0ce24604c26c9a0bef8">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a6adc09623c7ed0ce24604c26c9a0bef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridSystemParser_8h_source.html#l01839">1839</a> of file <a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a3e4e59f0340e917d8ae470db7bc312c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridSystemParser::SvgInEventElifsContext::SvgInEventElifsContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08471">8471</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l08471">SvgInEventElifsContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l08471">SvgInEventElifsContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a6adc09623c7ed0ce24604c26c9a0bef8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridSystemParser::SvgInEventElifsContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08496">8496</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a814a83c9cf3f12ef2b8ab0925abad377"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">HybridSystemParser::ExpressionContext</a> * &gt; HybridSystemParser::SvgInEventElifsContext::expression </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08475">8475</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5d2743e24d1f425dcac3a93db2e2e8d7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">HybridSystemParser::ExpressionContext</a> * HybridSystemParser::SvgInEventElifsContext::expression </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08479">8479</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa457d56f310901d323cfd10b53a138d2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridSystemParser::SvgInEventElifsContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08492">8492</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l00026">hypro::HybridSystemParser::getRuleNames()</a>, and <a class="el" href="HybridSystemParser_8h_source.html#l00071">hypro::HybridSystemParser::RuleSvgInEventElifs</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac0c1176b5c9d304222fe799a1a22a5ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html">HybridSystemParser::NameContext</a> * &gt; HybridSystemParser::SvgInEventElifsContext::name </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08483">8483</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l08503">hypro::HybridSystemParser::svgInEventElifs()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a93df5ec011d7d66a2f0be8e8adece019"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html">HybridSystemParser::NameContext</a> * HybridSystemParser::SvgInEventElifsContext::name </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l08487">8487</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a></li>
 </ul>

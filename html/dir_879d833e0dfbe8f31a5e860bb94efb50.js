@@ -8,14 +8,23 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     [ "sampling", "dir_d93f25bb6eeed2fcb95055e30f52c726.html", "dir_d93f25bb6eeed2fcb95055e30f52c726" ],
     [ "statistics", "dir_57790bb148fd18efc2431dd25a248521.html", "dir_57790bb148fd18efc2431dd25a248521" ],
     [ "tuple_expansion", "dir_3a35ee46332157846b55808bff5bb8c8.html", "dir_3a35ee46332157846b55808bff5bb8c8" ],
-    [ "convenienceOperators.h", "util_2convenienceOperators_8h_source.html", null ],
-    [ "convexHull.h", "convexHull_8h_source.html", null ],
+    [ "convenienceOperators.h", "util_2convenienceOperators_8h.html", "util_2convenienceOperators_8h" ],
+    [ "convexHull.h", "convexHull_8h.html", null ],
     [ "pca.h", "pca_8h.html", [
       [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ]
     ] ],
-    [ "Permutator.h", "Permutator_8h_source.html", null ],
-    [ "Range.h", "Range_8h_source.html", null ],
+    [ "Permutator.h", "Permutator_8h.html", [
+      [ "Permutator", "classhypro_1_1Permutator.html", "classhypro_1_1Permutator" ]
+    ] ],
+    [ "Range.h", "Range_8h.html", "Range_8h" ],
     [ "templateDirections.h", "templateDirections_8h.html", null ],
-    [ "typetraits.h", "util_2typetraits_8h_source.html", null ],
-    [ "VariablePool.h", "VariablePool_8h_source.html", null ]
+    [ "typetraits.h", "util_2typetraits_8h.html", [
+      [ "is_shared_ptr", "structhypro_1_1is__shared__ptr.html", null ],
+      [ "is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ],
+      [ "is_unique_ptr", "structhypro_1_1is__unique__ptr.html", null ],
+      [ "is_unique_ptr< std::unique_ptr< T, D > >", "structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html", null ]
+    ] ],
+    [ "VariablePool.h", "VariablePool_8h.html", [
+      [ "VariablePool", "classhypro_1_1VariablePool.html", "classhypro_1_1VariablePool" ]
+    ] ]
 ];

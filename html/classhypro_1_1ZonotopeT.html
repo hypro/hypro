@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -134,154 +134,136 @@ $(document).ready(function(){initNavTree('classhypro_1_1ZonotopeT.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:af9155d15961fae5e76c53b92d944d3e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9155d15961fae5e76c53b92d944d3e6"></a>
-typedef Setting&#160;</td><td class="memItemRight" valign="bottom"><b>Settings</b></td></tr>
+<tr class="memitem:af9155d15961fae5e76c53b92d944d3e6"><td class="memItemLeft" align="right" valign="top">typedef Setting&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#af9155d15961fae5e76c53b92d944d3e6">Settings</a></td></tr>
 <tr class="separator:af9155d15961fae5e76c53b92d944d3e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;</a></td></tr>
-<tr class="memitem:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90226c553b38c46eb616d3674f7926dd"></a>
-typedef Number&#160;</td><td class="memItemRight" valign="bottom"><b>NumberType</b></td></tr>
+<tr class="memitem:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd">NumberType</a></td></tr>
 <tr class="separator:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a1a2ee2c092b4d450823b6c9cee2d3d03"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1a2ee2c092b4d450823b6c9cee2d3d03">ZonotopeT</a> ()</td></tr>
+<tr class="separator:a1a2ee2c092b4d450823b6c9cee2d3d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa46d97439cd78827946127ab7fda247a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#aa46d97439cd78827946127ab7fda247a">ZonotopeT</a> (std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html#ac569fd79a879cc0c07a768aefcfcb5ab">dimension</a>)</td></tr>
 <tr class="separator:aa46d97439cd78827946127ab7fda247a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1de71e12de0c0d01779d40330e7a022d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1de71e12de0c0d01779d40330e7a022d">ZonotopeT</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;center, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;generators)</td></tr>
+<tr class="memitem:a1de71e12de0c0d01779d40330e7a022d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1de71e12de0c0d01779d40330e7a022d">ZonotopeT</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;<a class="el" href="classhypro_1_1ZonotopeT.html#aa19d7b906a7e1404487076b09eb7e01d">center</a>, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;<a class="el" href="classhypro_1_1ZonotopeT.html#aec30497b9cf4a3dcd954d6d3265bd5e9">generators</a>)</td></tr>
 <tr class="separator:a1de71e12de0c0d01779d40330e7a022d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06175c02604e47c76697689cad7797f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a06175c02604e47c76697689cad7797f0">ZonotopeT</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;other)=default</td></tr>
+<tr class="memitem:a06175c02604e47c76697689cad7797f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a06175c02604e47c76697689cad7797f0">ZonotopeT</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;other)=default</td></tr>
 <tr class="separator:a06175c02604e47c76697689cad7797f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a1f9864ef1bac792c35a23c2fbe85a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a8a1f9864ef1bac792c35a23c2fbe85a8">ZonotopeT</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;other, unsigned d1, unsigned d2)</td></tr>
+<tr class="memitem:a8a1f9864ef1bac792c35a23c2fbe85a8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a8a1f9864ef1bac792c35a23c2fbe85a8">ZonotopeT</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;other, unsigned d1, unsigned d2)</td></tr>
 <tr class="separator:a8a1f9864ef1bac792c35a23c2fbe85a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0238a85104445d0b0c67320d7be101ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0238a85104445d0b0c67320d7be101ce"></a>
-<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>matrix</b> () const </td></tr>
+<tr class="memitem:a763356f7149b72b641ea2895aeafe0e7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a763356f7149b72b641ea2895aeafe0e7">~ZonotopeT</a> ()</td></tr>
+<tr class="separator:a763356f7149b72b641ea2895aeafe0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0238a85104445d0b0c67320d7be101ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a0238a85104445d0b0c67320d7be101ce">matrix</a> () const </td></tr>
 <tr class="separator:a0238a85104445d0b0c67320d7be101ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afae1cef4e049cdc0d3a0ad573ba32fad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afae1cef4e049cdc0d3a0ad573ba32fad"></a>
-<a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vector</b> () const </td></tr>
+<tr class="memitem:afae1cef4e049cdc0d3a0ad573ba32fad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#afae1cef4e049cdc0d3a0ad573ba32fad">vector</a> () const </td></tr>
 <tr class="separator:afae1cef4e049cdc0d3a0ad573ba32fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac569fd79a879cc0c07a768aefcfcb5ab"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ac569fd79a879cc0c07a768aefcfcb5ab">dimension</a> () const </td></tr>
 <tr class="separator:ac569fd79a879cc0c07a768aefcfcb5ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaa62bda1fc642059ecd92ba69181857"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abaa62bda1fc642059ecd92ba69181857"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>supremum</b> () const </td></tr>
+<tr class="memitem:abaa62bda1fc642059ecd92ba69181857"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#abaa62bda1fc642059ecd92ba69181857">supremum</a> () const </td></tr>
 <tr class="separator:abaa62bda1fc642059ecd92ba69181857"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3946046fffd0957de2ebd9ca149ab408"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a3946046fffd0957de2ebd9ca149ab408">empty</a> () const </td></tr>
 <tr class="separator:a3946046fffd0957de2ebd9ca149ab408"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21e81d4b99aff3d8a12265ace16d63ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a21e81d4b99aff3d8a12265ace16d63ac">setCenter</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;center)</td></tr>
+<tr class="memitem:a21e81d4b99aff3d8a12265ace16d63ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a21e81d4b99aff3d8a12265ace16d63ac">setCenter</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;<a class="el" href="classhypro_1_1ZonotopeT.html#aa19d7b906a7e1404487076b09eb7e01d">center</a>)</td></tr>
 <tr class="separator:a21e81d4b99aff3d8a12265ace16d63ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ab6fef12544bece1aa9df4270499888"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a0ab6fef12544bece1aa9df4270499888">setGenerators</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;generators_)</td></tr>
+<tr class="memitem:a0ab6fef12544bece1aa9df4270499888"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a0ab6fef12544bece1aa9df4270499888">setGenerators</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;generators_)</td></tr>
 <tr class="separator:a0ab6fef12544bece1aa9df4270499888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f59e04172b514229a25d8c9946f1355"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a9f59e04172b514229a25d8c9946f1355">addGenerators</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;generators)</td></tr>
+<tr class="memitem:a9f59e04172b514229a25d8c9946f1355"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a9f59e04172b514229a25d8c9946f1355">addGenerators</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;<a class="el" href="classhypro_1_1ZonotopeT.html#aec30497b9cf4a3dcd954d6d3265bd5e9">generators</a>)</td></tr>
 <tr class="separator:a9f59e04172b514229a25d8c9946f1355"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa19d7b906a7e1404487076b09eb7e01d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa19d7b906a7e1404487076b09eb7e01d"></a>
-const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>center</b> () const </td></tr>
+<tr class="memitem:aa19d7b906a7e1404487076b09eb7e01d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#aa19d7b906a7e1404487076b09eb7e01d">center</a> () const </td></tr>
 <tr class="separator:aa19d7b906a7e1404487076b09eb7e01d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec30497b9cf4a3dcd954d6d3265bd5e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec30497b9cf4a3dcd954d6d3265bd5e9"></a>
-const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>generators</b> () const </td></tr>
+<tr class="memitem:aec30497b9cf4a3dcd954d6d3265bd5e9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#aec30497b9cf4a3dcd954d6d3265bd5e9">generators</a> () const </td></tr>
 <tr class="separator:aec30497b9cf4a3dcd954d6d3265bd5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a494602399af7c0507a9c2158c79ff0b7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a494602399af7c0507a9c2158c79ff0b7"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>order</b> () const </td></tr>
+<tr class="memitem:a494602399af7c0507a9c2158c79ff0b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a494602399af7c0507a9c2158c79ff0b7">order</a> () const </td></tr>
 <tr class="separator:a494602399af7c0507a9c2158c79ff0b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a040863053ab1f1af805ac8f22ceeebe0"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a040863053ab1f1af805ac8f22ceeebe0">size</a> () const </td></tr>
 <tr class="separator:a040863053ab1f1af805ac8f22ceeebe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a2f65a547b6e619fb00e1d2a0cd2c2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a2a2f65a547b6e619fb00e1d2a0cd2c2b">removeEmptyGenerators</a> ()</td></tr>
 <tr class="separator:a2a2f65a547b6e619fb00e1d2a0cd2c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3881e5d68c5a65631b8b9181b05e308"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3881e5d68c5a65631b8b9181b05e308"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>uniteEqualVectors</b> ()</td></tr>
+<tr class="memitem:af3881e5d68c5a65631b8b9181b05e308"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#af3881e5d68c5a65631b8b9181b05e308">uniteEqualVectors</a> ()</td></tr>
 <tr class="separator:af3881e5d68c5a65631b8b9181b05e308"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedbecf1c0b7608c6f68e729d2dfaa183"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#aedbecf1c0b7608c6f68e729d2dfaa183">changeDimension</a> (std::size_t new_dim)</td></tr>
 <tr class="separator:aedbecf1c0b7608c6f68e729d2dfaa183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af680218b607d2490143379ca327ed34e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#af680218b607d2490143379ca327ed34e">clear</a> ()</td></tr>
 <tr class="separator:af680218b607d2490143379ca327ed34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17d0c4135fab2f671532dc37edabe64a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a17d0c4135fab2f671532dc37edabe64a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> () const </td></tr>
+<tr class="memitem:a17d0c4135fab2f671532dc37edabe64a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a17d0c4135fab2f671532dc37edabe64a">print</a> () const </td></tr>
 <tr class="separator:a17d0c4135fab2f671532dc37edabe64a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3dd1ab2f50c8fbe5b83c912af32dab6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3dd1ab2f50c8fbe5b83c912af32dab6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:ae3dd1ab2f50c8fbe5b83c912af32dab6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae3dd1ab2f50c8fbe5b83c912af32dab6">operator==</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const </td></tr>
 <tr class="separator:ae3dd1ab2f50c8fbe5b83c912af32dab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a648c4dddf715382314f1910e64f17e3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a648c4dddf715382314f1910e64f17e3a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> () const </td></tr>
+<tr class="memitem:a648c4dddf715382314f1910e64f17e3a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a648c4dddf715382314f1910e64f17e3a">removeRedundancy</a> () const </td></tr>
 <tr class="separator:a648c4dddf715382314f1910e64f17e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ca07528e34888d71b21268b5423b245"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ca07528e34888d71b21268b5423b245"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceOrder</b> (unsigned limit=Setting::ZONOTOPE_ORDERLIMIT)</td></tr>
+<tr class="memitem:a4ca07528e34888d71b21268b5423b245"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a4ca07528e34888d71b21268b5423b245">reduceOrder</a> (unsigned limit=Setting::ZONOTOPE_ORDERLIMIT)</td></tr>
 <tr class="separator:a4ca07528e34888d71b21268b5423b245"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d2195cc78e65c1ed42c51dd50e63650"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d2195cc78e65c1ed42c51dd50e63650"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresentation</b> ()</td></tr>
+<tr class="memitem:a2d2195cc78e65c1ed42c51dd50e63650"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a2d2195cc78e65c1ed42c51dd50e63650">reduceNumberRepresentation</a> ()</td></tr>
 <tr class="separator:a2d2195cc78e65c1ed42c51dd50e63650"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1439d5b32fec1ac9e86fb8824fcb5cc3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1439d5b32fec1ac9e86fb8824fcb5cc3"></a>
-<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;directions) const </td></tr>
+<tr class="memitem:a1439d5b32fec1ac9e86fb8824fcb5cc3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1439d5b32fec1ac9e86fb8824fcb5cc3">evaluate</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;directions) const </td></tr>
 <tr class="separator:a1439d5b32fec1ac9e86fb8824fcb5cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66646a4175382989800216c1f9631bf8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66646a4175382989800216c1f9631bf8"></a>
-std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>multiEvaluate</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;directions, bool useExact=true) const </td></tr>
+<tr class="memitem:a66646a4175382989800216c1f9631bf8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a66646a4175382989800216c1f9631bf8">multiEvaluate</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;directions, bool useExact=true) const </td></tr>
 <tr class="separator:a66646a4175382989800216c1f9631bf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9f2cb37184dad510299f48fc42cb422"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#af9f2cb37184dad510299f48fc42cb422">minkowskiSum</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:af9f2cb37184dad510299f48fc42cb422"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#af9f2cb37184dad510299f48fc42cb422">minkowskiSum</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:af9f2cb37184dad510299f48fc42cb422"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#af9f2cb37184dad510299f48fc42cb422">More...</a><br /></td></tr>
 <tr class="separator:af9f2cb37184dad510299f48fc42cb422"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16b2b454a24694f333f87a604b917df5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a16b2b454a24694f333f87a604b917df5">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memitem:a16b2b454a24694f333f87a604b917df5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a16b2b454a24694f333f87a604b917df5">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:a16b2b454a24694f333f87a604b917df5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a16b2b454a24694f333f87a604b917df5">More...</a><br /></td></tr>
 <tr class="separator:a16b2b454a24694f333f87a604b917df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9782bd1e57f0182e0a64721ff573f8e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a9782bd1e57f0182e0a64721ff573f8e4">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memitem:a9782bd1e57f0182e0a64721ff573f8e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a9782bd1e57f0182e0a64721ff573f8e4">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a9782bd1e57f0182e0a64721ff573f8e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a9782bd1e57f0182e0a64721ff573f8e4">More...</a><br /></td></tr>
 <tr class="separator:a9782bd1e57f0182e0a64721ff573f8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5580f24922aeace57a5438c22a9e5084"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a5580f24922aeace57a5438c22a9e5084">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memitem:a5580f24922aeace57a5438c22a9e5084"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a5580f24922aeace57a5438c22a9e5084">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b) const </td></tr>
 <tr class="memdesc:a5580f24922aeace57a5438c22a9e5084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a5580f24922aeace57a5438c22a9e5084">More...</a><br /></td></tr>
 <tr class="separator:a5580f24922aeace57a5438c22a9e5084"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc9b71526711085fd4d184d338ad9a37"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#abc9b71526711085fd4d184d338ad9a37">computeZonotopeBoundary</a> ()</td></tr>
+<tr class="memitem:abc9b71526711085fd4d184d338ad9a37"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#abc9b71526711085fd4d184d338ad9a37">computeZonotopeBoundary</a> ()</td></tr>
 <tr class="separator:abc9b71526711085fd4d184d338ad9a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae729817e5a9322a5eac75c5fb2889154"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae729817e5a9322a5eac75c5fb2889154">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
+<tr class="memitem:ae729817e5a9322a5eac75c5fb2889154"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae729817e5a9322a5eac75c5fb2889154">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::Zero(0, 0)) const </td></tr>
 <tr class="memdesc:ae729817e5a9322a5eac75c5fb2889154"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute a set of points containing the extreme points of a zonotopeT.  <a href="#ae729817e5a9322a5eac75c5fb2889154">More...</a><br /></td></tr>
 <tr class="separator:ae729817e5a9322a5eac75c5fb2889154"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac8695d7a9e62fd85ede9f167cdd38b6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ac8695d7a9e62fd85ede9f167cdd38b6b">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:ac8695d7a9e62fd85ede9f167cdd38b6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ac8695d7a9e62fd85ede9f167cdd38b6b">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:ac8695d7a9e62fd85ede9f167cdd38b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#ac8695d7a9e62fd85ede9f167cdd38b6b">More...</a><br /></td></tr>
 <tr class="separator:ac8695d7a9e62fd85ede9f167cdd38b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a551ad0e49945245a0cbed098469ee546"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a551ad0e49945245a0cbed098469ee546">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;vec) const </td></tr>
+<tr class="memitem:a551ad0e49945245a0cbed098469ee546"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a551ad0e49945245a0cbed098469ee546">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;vec) const </td></tr>
 <tr class="memdesc:a551ad0e49945245a0cbed098469ee546"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#a551ad0e49945245a0cbed098469ee546">More...</a><br /></td></tr>
 <tr class="separator:a551ad0e49945245a0cbed098469ee546"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82c2a1eedb666231c8364d13fb471235"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a82c2a1eedb666231c8364d13fb471235">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:a82c2a1eedb666231c8364d13fb471235"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a82c2a1eedb666231c8364d13fb471235">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:a82c2a1eedb666231c8364d13fb471235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a82c2a1eedb666231c8364d13fb471235">More...</a><br /></td></tr>
 <tr class="separator:a82c2a1eedb666231c8364d13fb471235"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2499af468349f23337b1b813934275f3"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a2499af468349f23337b1b813934275f3">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;vec) const </td></tr>
+<tr class="memitem:a2499af468349f23337b1b813934275f3"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a2499af468349f23337b1b813934275f3">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;vec) const </td></tr>
 <tr class="memdesc:a2499af468349f23337b1b813934275f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#a2499af468349f23337b1b813934275f3">More...</a><br /></td></tr>
 <tr class="separator:a2499af468349f23337b1b813934275f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e9e9163eccb6efafed8729a7ed8be9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a0e9e9163eccb6efafed8729a7ed8be9e">intersect</a> (const Parma_Polyhedra_Library::Constraint &amp;halfspace) const </td></tr>
+<tr class="memitem:a0e9e9163eccb6efafed8729a7ed8be9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a0e9e9163eccb6efafed8729a7ed8be9e">intersect</a> (const Parma_Polyhedra_Library::Constraint &amp;halfspace) const </td></tr>
 <tr class="separator:a0e9e9163eccb6efafed8729a7ed8be9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a901e7bb2973d8b8968a75d9300854151"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a901e7bb2973d8b8968a75d9300854151">intersect</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs, int method)</td></tr>
+<tr class="memitem:a901e7bb2973d8b8968a75d9300854151"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a901e7bb2973d8b8968a75d9300854151">intersect</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs, int method)</td></tr>
 <tr class="separator:a901e7bb2973d8b8968a75d9300854151"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6f107e1ae711daed62a354e4519e888"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae6f107e1ae711daed62a354e4519e888">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; vec, int method)</td></tr>
+<tr class="memitem:ae6f107e1ae711daed62a354e4519e888"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae6f107e1ae711daed62a354e4519e888">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; vec, int method)</td></tr>
 <tr class="separator:ae6f107e1ae711daed62a354e4519e888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdfd7d7955099c3a0327628d9e47681a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#abdfd7d7955099c3a0327628d9e47681a">intersect</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;minMaxOfLine, int method)</td></tr>
+<tr class="memitem:abdfd7d7955099c3a0327628d9e47681a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#abdfd7d7955099c3a0327628d9e47681a">intersect</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;minMaxOfLine, int method)</td></tr>
 <tr class="separator:abdfd7d7955099c3a0327628d9e47681a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab442b4dc1d7eaf4f9a7a9b44c8b2cf45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ab442b4dc1d7eaf4f9a7a9b44c8b2cf45">intersect</a> (const Parma_Polyhedra_Library::C_Polyhedron &amp;rhs) const </td></tr>
+<tr class="memitem:ab442b4dc1d7eaf4f9a7a9b44c8b2cf45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ab442b4dc1d7eaf4f9a7a9b44c8b2cf45">intersect</a> (const Parma_Polyhedra_Library::C_Polyhedron &amp;rhs) const </td></tr>
 <tr class="separator:ab442b4dc1d7eaf4f9a7a9b44c8b2cf45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18e5a631af83a88dfe422f1ab2566ffb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a18e5a631af83a88dfe422f1ab2566ffb">unite</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;other) const </td></tr>
+<tr class="memitem:a18e5a631af83a88dfe422f1ab2566ffb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a18e5a631af83a88dfe422f1ab2566ffb">unite</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;other) const </td></tr>
 <tr class="memdesc:a18e5a631af83a88dfe422f1ab2566ffb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a18e5a631af83a88dfe422f1ab2566ffb">More...</a><br /></td></tr>
 <tr class="separator:a18e5a631af83a88dfe422f1ab2566ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a877e9010a178e05e1d1634f28b10b40d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a877e9010a178e05e1d1634f28b10b40d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d">reduceRepresentation</a> ()</td></tr>
-<tr class="memdesc:a877e9010a178e05e1d1634f28b10b40d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the zonotope by reducing order, number representation and removing redundant generators. <br /></td></tr>
+<tr class="memitem:a877e9010a178e05e1d1634f28b10b40d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d">reduceRepresentation</a> ()</td></tr>
+<tr class="memdesc:a877e9010a178e05e1d1634f28b10b40d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the zonotope by reducing order, number representation and removing redundant generators.  <a href="#a877e9010a178e05e1d1634f28b10b40d">More...</a><br /></td></tr>
 <tr class="separator:a877e9010a178e05e1d1634f28b10b40d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1af729c296ecb290609609ea529d4170"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1af729c296ecb290609609ea529d4170">intervalHull</a> () const </td></tr>
+<tr class="memitem:a1af729c296ecb290609609ea529d4170"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1af729c296ecb290609609ea529d4170">intervalHull</a> () const </td></tr>
 <tr class="separator:a1af729c296ecb290609609ea529d4170"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10cf05df0ad797e576a4c3ead8d679f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a10cf05df0ad797e576a4c3ead8d679f7">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const </td></tr>
+<tr class="memitem:a10cf05df0ad797e576a4c3ead8d679f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a10cf05df0ad797e576a4c3ead8d679f7">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;point) const </td></tr>
 <tr class="memdesc:a10cf05df0ad797e576a4c3ead8d679f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a10cf05df0ad797e576a4c3ead8d679f7">More...</a><br /></td></tr>
 <tr class="separator:a10cf05df0ad797e576a4c3ead8d679f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3289e2efcf1bae15ebf23f6a2c03dd2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3289e2efcf1bae15ebf23f6a2c03dd2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;) const </td></tr>
+<tr class="memitem:ae3289e2efcf1bae15ebf23f6a2c03dd2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ae3289e2efcf1bae15ebf23f6a2c03dd2">contains</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;) const </td></tr>
 <tr class="separator:ae3289e2efcf1bae15ebf23f6a2c03dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;</a></td></tr>
-<tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28cf65685f4fa5e04c3dbf428a9d97b0"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
-<tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br /></td></tr>
+<tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
+<tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object.  <a href="#a28cf65685f4fa5e04c3dbf428a9d97b0">More...</a><br /></td></tr>
 <tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a9e88d41ae2abc6926bfed62ed62d10e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e88d41ae2abc6926bfed62ed62d10e5"></a>
-static <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Empty</b> (std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html#ac569fd79a879cc0c07a768aefcfcb5ab">dimension</a>=1)</td></tr>
+<tr class="memitem:a9e88d41ae2abc6926bfed62ed62d10e5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a9e88d41ae2abc6926bfed62ed62d10e5">Empty</a> (std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html#ac569fd79a879cc0c07a768aefcfcb5ab">dimension</a>=1)</td></tr>
 <tr class="separator:a9e88d41ae2abc6926bfed62ed62d10e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa966fc7fc138e04d9e618164f713447f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa966fc7fc138e04d9e618164f713447f"></a>
-static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> ()</td></tr>
+<tr class="memitem:aa966fc7fc138e04d9e618164f713447f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#aa966fc7fc138e04d9e618164f713447f">type</a> ()</td></tr>
 <tr class="separator:aa966fc7fc138e04d9e618164f713447f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af08224d30dfe636aa77b326aa64f1b80"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af08224d30dfe636aa77b326aa64f1b80"></a>
-static <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const std::vector&lt; <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&gt; &amp;sets)</td></tr>
+<tr class="memitem:af08224d30dfe636aa77b326aa64f1b80"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#af08224d30dfe636aa77b326aa64f1b80">unite</a> (const std::vector&lt; <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&gt; &amp;sets)</td></tr>
 <tr class="separator:af08224d30dfe636aa77b326aa64f1b80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -298,7 +280,41 @@ class hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</h3>
 </dl>
 
 <p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00042">42</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="af9155d15961fae5e76c53b92d944d3e6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Setting <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html#af9155d15961fae5e76c53b92d944d3e6">Settings</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00044">44</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a1a2ee2c092b4d450823b6c9cee2d3d03"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aa46d97439cd78827946127ab7fda247a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -309,7 +325,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>dimension</em></td><td>)</td>
@@ -338,15 +354,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>center</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>generators</em>&#160;</td>
         </tr>
         <tr>
@@ -376,9 +392,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>other</em></td><td>)</td>
           <td></td>
         </tr>
@@ -405,9 +421,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>other</em>, </td>
         </tr>
         <tr>
@@ -440,6 +456,31 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a763356f7149b72b641ea2895aeafe0e7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::~<a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a9f59e04172b514229a25d8c9946f1355"></a>
 <div class="memitem">
@@ -448,9 +489,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::addGenerators </td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::addGenerators </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>generators</em></td><td>)</td>
           <td></td>
         </tr>
@@ -476,15 +517,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
@@ -514,6 +555,23 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aa19d7b906a7e1404487076b09eb7e01d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&amp; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::center </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aedbecf1c0b7608c6f68e729d2dfaa183"></a>
 <div class="memitem">
 <div class="memproto">
@@ -521,7 +579,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::changeDimension </td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::changeDimension </td>
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>new_dim</em></td><td>)</td>
@@ -546,7 +604,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::clear </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::clear </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -564,7 +622,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::computeZonotopeBoundary </td>
+          <td class="memname">std::vector&lt;<a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::computeZonotopeBoundary </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -585,9 +643,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>point</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -612,6 +670,36 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ae3289e2efcf1bae15ebf23f6a2c03dd2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00300">300</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ac569fd79a879cc0c07a768aefcfcb5ab"></a>
 <div class="memitem">
 <div class="memproto">
@@ -622,7 +710,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::dimension </td>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::dimension </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -650,7 +738,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::empty </td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::empty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -668,6 +756,69 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a9e88d41ae2abc6926bfed62ed62d10e5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::Empty </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>dimension</em> = <code>1</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00118">118</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1439d5b32fec1ac9e86fb8824fcb5cc3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::evaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>directions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aec30497b9cf4a3dcd954d6d3265bd5e9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&amp; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::generators </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0e9e9163eccb6efafed8729a7ed8be9e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -675,7 +826,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
           <td>(</td>
           <td class="paramtype">const Parma_Polyhedra_Library::Constraint &amp;&#160;</td>
           <td class="paramname"><em>halfspace</em></td><td>)</td>
@@ -701,9 +852,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em>, </td>
         </tr>
         <tr>
@@ -737,15 +888,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>minMaxOfLine</em>, </td>
         </tr>
         <tr>
@@ -780,7 +931,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
           <td>(</td>
           <td class="paramtype">const Parma_Polyhedra_Library::C_Polyhedron &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
@@ -809,9 +960,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -846,15 +997,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vec</em>&#160;</td>
         </tr>
         <tr>
@@ -891,15 +1042,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>mat</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td>
           <td class="paramname"><em>vec</em>, </td>
         </tr>
         <tr>
@@ -933,7 +1084,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intervalHull </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intervalHull </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -960,9 +1111,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -987,6 +1138,33 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a0238a85104445d0b0c67320d7be101ce"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::matrix </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00094">94</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="af9f2cb37184dad510299f48fc42cb422"></a>
 <div class="memitem">
 <div class="memproto">
@@ -997,9 +1175,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1024,6 +1202,96 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a66646a4175382989800216c1f9631bf8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::multiEvaluate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>directions</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useExact</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae3dd1ab2f50c8fbe5b83c912af32dab6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00178">178</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a494602399af7c0507a9c2158c79ff0b7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::order </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a17d0c4135fab2f671532dc37edabe64a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::print </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a16b2b454a24694f333f87a604b917df5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1034,7 +1302,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
@@ -1061,6 +1329,72 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a2d2195cc78e65c1ed42c51dd50e63650"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::reduceNumberRepresentation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4ca07528e34888d71b21268b5423b245"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::reduceOrder </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>limit</em> = <code>Setting::ZONOTOPE_ORDERLIMIT</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a877e9010a178e05e1d1634f28b10b40d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::reduceRepresentation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reduces the zonotope by reducing order, number representation and removing redundant generators. </p>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00285">285</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a2a2f65a547b6e619fb00e1d2a0cd2c2b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1068,7 +1402,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::removeEmptyGenerators </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::removeEmptyGenerators </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1076,6 +1410,33 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Removes empty (null) columns in generator matrix </p>
+
+</div>
+</div>
+<a class="anchor" id="a648c4dddf715382314f1910e64f17e3a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::removeRedundancy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00191">191</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
 
 </div>
 </div>
@@ -1089,9 +1450,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspace </td>
+          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspace </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1126,15 +1487,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspaces </td>
+          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspaces </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vec</em>&#160;</td>
         </tr>
         <tr>
@@ -1171,9 +1532,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::setCenter </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::setCenter </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>center</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1195,9 +1556,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::setGenerators </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::setGenerators </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>generators_</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1219,7 +1580,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::size </td>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::size </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1227,6 +1588,50 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>Number of generators </p><dl class="section return"><dt>Returns</dt><dd>number of generators </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abaa62bda1fc642059ecd92ba69181857"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::supremum </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa966fc7fc138e04d9e618164f713447f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::type </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00122">122</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
 
 </div>
 </div>
@@ -1240,9 +1645,9 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1267,6 +1672,76 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="af08224d30dfe636aa77b326aa64f1b80"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>sets</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af3881e5d68c5a65631b8b9181b05e308"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::uniteEqualVectors </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afae1cef4e049cdc0d3a0ad573ba32fad"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vector </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00099">99</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ae729817e5a9322a5eac75c5fb2889154"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1277,10 +1752,10 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vertices </td>
+          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vertices </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;&#160;Number&#160;&gt;::Zero(0,&#160;0)</code></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;&#160;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;&gt;::Zero(0,&#160;0)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>

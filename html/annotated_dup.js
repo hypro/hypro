@@ -1,13 +1,8 @@
 var annotated_dup =
 [
-    [ "Eigen", null, [
-      [ "NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4" ],
-      [ "NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", "structEigen_1_1NumTraits_3_01mpq__class_01_4" ]
-    ] ],
+    [ "Eigen", "namespaceEigen.html", "namespaceEigen" ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
-    [ "smtrat", null, [
-      [ "SimplexSolver", "classsmtrat_1_1SimplexSolver.html", "classsmtrat_1_1SimplexSolver" ]
-    ] ],
+    [ "smtrat", "namespacesmtrat.html", "namespacesmtrat" ],
     [ "std", null, [
       [ "hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4" ],
       [ "hash< hypro::AffineTransformation< Number > >", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4" ],
@@ -29,9 +24,7 @@ var annotated_dup =
       [ "hash< set< hypro::Vertex< Number > > >", "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html", "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4" ],
       [ "hash< std::pair< first, second > >", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4" ]
     ] ],
-    [ "ZUtility", null, [
-      [ "Line_t", "structZUtility_1_1Line__t.html", "structZUtility_1_1Line__t" ]
-    ] ],
+    [ "ZUtility", "namespaceZUtility.html", "namespaceZUtility" ],
     [ "Dependent_part_funct", "structDependent__part__funct.html", "structDependent__part__funct" ],
     [ "Eval_functions", "structEval__functions.html", "structEval__functions" ],
     [ "Flags", "structFlags.html", "structFlags" ],

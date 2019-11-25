@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -132,45 +132,193 @@ $(document).ready(function(){initNavTree('structhypro_1_1plotting_1_1gnuplotSett
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad3e9a2e11d309052a706f3fe7cbc131d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3e9a2e11d309052a706f3fe7cbc131d"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name</b> = &quot;&quot;</td></tr>
+<tr class="memitem:ad3e9a2e11d309052a706f3fe7cbc131d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d">name</a> = &quot;&quot;</td></tr>
 <tr class="separator:ad3e9a2e11d309052a706f3fe7cbc131d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4c7b4907f1cd59c7de8e76ad30db9ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4c7b4907f1cd59c7de8e76ad30db9ea"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>color</b> = colors[blue]</td></tr>
+<tr class="memitem:af4c7b4907f1cd59c7de8e76ad30db9ea"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#af4c7b4907f1cd59c7de8e76ad30db9ea">color</a> = <a class="el" href="namespacehypro_1_1plotting.html#a31216c28dc0381f9cc35fc0cb5d29719">colors</a>[<a class="el" href="namespacehypro_1_1plotting.html#ab13f85a10232140e0565d5d892631328aaf7c67f0b31fa55f6a8c93dfd8d04edc">blue</a>]</td></tr>
 <tr class="separator:af4c7b4907f1cd59c7de8e76ad30db9ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fd3767d34c88518b3287758311b4a3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fd3767d34c88518b3287758311b4a3e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>fill</b> = false</td></tr>
+<tr class="memitem:a2fd3767d34c88518b3287758311b4a3e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#a2fd3767d34c88518b3287758311b4a3e">fill</a> = false</td></tr>
 <tr class="separator:a2fd3767d34c88518b3287758311b4a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4c831cb695d8c24d471d1b46f3411d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4c831cb695d8c24d471d1b46f3411d1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>axes</b> = true</td></tr>
+<tr class="memitem:ad4c831cb695d8c24d471d1b46f3411d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#ad4c831cb695d8c24d471d1b46f3411d1">axes</a> = true</td></tr>
 <tr class="separator:ad4c831cb695d8c24d471d1b46f3411d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd230e8c60e90101c6dd02defb3f9ef7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd230e8c60e90101c6dd02defb3f9ef7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>grid</b> = true</td></tr>
+<tr class="memitem:abd230e8c60e90101c6dd02defb3f9ef7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#abd230e8c60e90101c6dd02defb3f9ef7">grid</a> = true</td></tr>
 <tr class="separator:abd230e8c60e90101c6dd02defb3f9ef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1157e4047220ce782086d72f2051dac6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1157e4047220ce782086d72f2051dac6"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>pointSize</b> = 0.6</td></tr>
+<tr class="memitem:a1157e4047220ce782086d72f2051dac6"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6">pointSize</a> = 0.6</td></tr>
 <tr class="separator:a1157e4047220ce782086d72f2051dac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0595d1fe82343d0610c78e36dbd3a118"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0595d1fe82343d0610c78e36dbd3a118"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>linewidth</b> = 0.1</td></tr>
+<tr class="memitem:a0595d1fe82343d0610c78e36dbd3a118"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#a0595d1fe82343d0610c78e36dbd3a118">linewidth</a> = 0.1</td></tr>
 <tr class="separator:a0595d1fe82343d0610c78e36dbd3a118"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4637892cb3c7bff314df47fecc8c353f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4637892cb3c7bff314df47fecc8c353f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>keepAspectRatio</b> = true</td></tr>
+<tr class="memitem:a4637892cb3c7bff314df47fecc8c353f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f">keepAspectRatio</a> = true</td></tr>
 <tr class="separator:a4637892cb3c7bff314df47fecc8c353f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab65196566bbe095d5bdadb43b40e4800"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab65196566bbe095d5bdadb43b40e4800"></a>
-std::pair&lt; unsigned, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>dimensions</b> = std::make_pair( 0, 1 )</td></tr>
+<tr class="memitem:ab65196566bbe095d5bdadb43b40e4800"><td class="memItemLeft" align="right" valign="top">std::pair&lt; unsigned, unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#ab65196566bbe095d5bdadb43b40e4800">dimensions</a> = std::make_pair( 0, 1 )</td></tr>
 <tr class="separator:ab65196566bbe095d5bdadb43b40e4800"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50a13c98532eef47b41211361ed19303"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50a13c98532eef47b41211361ed19303"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>cummulative</b> = false</td></tr>
+<tr class="memitem:a50a13c98532eef47b41211361ed19303"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#a50a13c98532eef47b41211361ed19303">cummulative</a> = false</td></tr>
 <tr class="separator:a50a13c98532eef47b41211361ed19303"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3591c6d9451b17e32b233d188e6b70e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3591c6d9451b17e32b233d188e6b70e1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>plain</b> = false</td></tr>
+<tr class="memitem:a3591c6d9451b17e32b233d188e6b70e1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html#a3591c6d9451b17e32b233d188e6b70e1">plain</a> = false</td></tr>
 <tr class="separator:a3591c6d9451b17e32b233d188e6b70e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A struct holding a basic set of options for the gnuplot plotting. </p>
 
 <p>Definition at line <a class="el" href="Plotter_8h_source.html#l00050">50</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ad4c831cb695d8c24d471d1b46f3411d1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::plotting::gnuplotSettings::axes = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00054">54</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af4c7b4907f1cd59c7de8e76ad30db9ea"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t hypro::plotting::gnuplotSettings::color = <a class="el" href="namespacehypro_1_1plotting.html#a31216c28dc0381f9cc35fc0cb5d29719">colors</a>[<a class="el" href="namespacehypro_1_1plotting.html#ab13f85a10232140e0565d5d892631328aaf7c67f0b31fa55f6a8c93dfd8d04edc">blue</a>]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00052">52</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a50a13c98532eef47b41211361ed19303"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::plotting::gnuplotSettings::cummulative = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00062">62</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab65196566bbe095d5bdadb43b40e4800"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;unsigned, unsigned&gt; hypro::plotting::gnuplotSettings::dimensions = std::make_pair( 0, 1 )</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00061">61</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2fd3767d34c88518b3287758311b4a3e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::plotting::gnuplotSettings::fill = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00053">53</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abd230e8c60e90101c6dd02defb3f9ef7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::plotting::gnuplotSettings::grid = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00055">55</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4637892cb3c7bff314df47fecc8c353f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::plotting::gnuplotSettings::keepAspectRatio = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00060">60</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__supportFunction_8cpp_source.html#l00008">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0595d1fe82343d0610c78e36dbd3a118"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double hypro::plotting::gnuplotSettings::linewidth = 0.1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00059">59</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__supportFunction_8cpp_source.html#l00008">main()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad3e9a2e11d309052a706f3fe7cbc131d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string hypro::plotting::gnuplotSettings::name = &quot;&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00051">51</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3591c6d9451b17e32b233d188e6b70e1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::plotting::gnuplotSettings::plain = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00063">63</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1157e4047220ce782086d72f2051dac6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double hypro::plotting::gnuplotSettings::pointSize = 0.6</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00057">57</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/util/plotting/<a class="el" href="Plotter_8h_source.html">Plotter.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -179,7 +327,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>plain</b> = false</td
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacehypro.html">hypro</a></li><li class="navelem"><b>plotting</b></li><li class="navelem"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">gnuplotSettings</a></li>
+    <li class="navelem"><a class="el" href="namespacehypro.html">hypro</a></li><li class="navelem"><a class="el" href="namespacehypro_1_1plotting.html">plotting</a></li><li class="navelem"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">gnuplotSettings</a></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>

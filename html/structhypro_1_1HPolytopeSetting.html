@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,23 +124,89 @@ $(document).ready(function(){initNavTree('structhypro_1_1HPolytopeSetting.html',
 <div class="title">hypro::HPolytopeSetting Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HPolytopeSetting_8h_source.html">HPolytopeSetting.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a6d8b42dbe2aa571c1168da4942e1779e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d8b42dbe2aa571c1168da4942e1779e"></a>
-static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>REDUCE_NUMBERS</b> = true</td></tr>
+<tr class="memitem:a6d8b42dbe2aa571c1168da4942e1779e"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1HPolytopeSetting.html#a6d8b42dbe2aa571c1168da4942e1779e">REDUCE_NUMBERS</a> = true</td></tr>
 <tr class="separator:a6d8b42dbe2aa571c1168da4942e1779e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad799718fb82e1ff9a1403d6ba4bde39d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad799718fb82e1ff9a1403d6ba4bde39d"></a>
-static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>AVOID_CONVERSION</b> = true</td></tr>
+<tr class="memitem:ad799718fb82e1ff9a1403d6ba4bde39d"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1HPolytopeSetting.html#ad799718fb82e1ff9a1403d6ba4bde39d">AVOID_CONVERSION</a> = true</td></tr>
 <tr class="separator:ad799718fb82e1ff9a1403d6ba4bde39d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2320813db856092f265c73963401c07d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2320813db856092f265c73963401c07d"></a>
-static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>OPTIMIZER_CACHING</b> = false</td></tr>
+<tr class="memitem:a2320813db856092f265c73963401c07d"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1HPolytopeSetting.html#a2320813db856092f265c73963401c07d">OPTIMIZER_CACHING</a> = false</td></tr>
 <tr class="separator:a2320813db856092f265c73963401c07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HPolytopeSetting_8h_source.html#l00006">6</a> of file <a class="el" href="HPolytopeSetting_8h_source.html">HPolytopeSetting.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ad799718fb82e1ff9a1403d6ba4bde39d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::HPolytopeSetting::AVOID_CONVERSION = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HPolytopeSetting_8h_source.html#l00008">8</a> of file <a class="el" href="HPolytopeSetting_8h_source.html">HPolytopeSetting.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2320813db856092f265c73963401c07d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::HPolytopeSetting::OPTIMIZER_CACHING = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HPolytopeSetting_8h_source.html#l00009">9</a> of file <a class="el" href="HPolytopeSetting_8h_source.html">HPolytopeSetting.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6d8b42dbe2aa571c1168da4942e1779e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::HPolytopeSetting::REDUCE_NUMBERS = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HPolytopeSetting_8h_source.html#l00007">7</a> of file <a class="el" href="HPolytopeSetting_8h_source.html">HPolytopeSetting.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/<a class="el" href="HPolytopeSetting_8h_source.html">HPolytopeSetting.h</a></li>
 </ul>
 </div><!-- contents -->

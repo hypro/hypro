@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,17 +124,18 @@ $(document).ready(function(){initNavTree('classhypro_1_1IFirstSegmentHandler.htm
 <div class="title">hypro::IFirstSegmentHandler&lt; State &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="IHandler_8h_source.html">IHandler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae036fd1ee03b14ed18a1c78391d87609"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae036fd1ee03b14ed18a1c78391d87609"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()=0</td></tr>
+<tr class="memitem:a5342bc3134da08a83d9ba8d2bcd3285c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IFirstSegmentHandler.html#a5342bc3134da08a83d9ba8d2bcd3285c">~IFirstSegmentHandler</a> ()</td></tr>
+<tr class="separator:a5342bc3134da08a83d9ba8d2bcd3285c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae036fd1ee03b14ed18a1c78391d87609"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IFirstSegmentHandler.html#ae036fd1ee03b14ed18a1c78391d87609">handle</a> ()=0</td></tr>
 <tr class="separator:ae036fd1ee03b14ed18a1c78391d87609"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec75a64a583e9fa8b32325f2585629ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec75a64a583e9fa8b32325f2585629ed"></a>
-virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()=0</td></tr>
+<tr class="memitem:aec75a64a583e9fa8b32325f2585629ed"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IFirstSegmentHandler.html#aec75a64a583e9fa8b32325f2585629ed">handlerName</a> ()=0</td></tr>
 <tr class="separator:aec75a64a583e9fa8b32325f2585629ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b85b3836aaf70a7c3bd345776995415"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b85b3836aaf70a7c3bd345776995415"></a>
-virtual const flowVariant&lt; typename State::NumberType &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransformation</b> () const =0</td></tr>
+<tr class="memitem:a0b85b3836aaf70a7c3bd345776995415"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="namespacehypro.html#a7e902fc6c718791cc884dd557485c63b">flowVariant</a>&lt; typename State::NumberType &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IFirstSegmentHandler.html#a0b85b3836aaf70a7c3bd345776995415">getTransformation</a> () const =0</td></tr>
 <tr class="separator:a0b85b3836aaf70a7c3bd345776995415"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -143,7 +144,121 @@ class hypro::IFirstSegmentHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="IHandler_8h_source.html#l00014">14</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a5342bc3134da08a83d9ba8d2bcd3285c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">hypro::IFirstSegmentHandler</a>&lt; State &gt;::~<a class="el" href="classhypro_1_1IFirstSegmentHandler.html">IFirstSegmentHandler</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IHandler_8h_source.html#l00016">16</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0b85b3836aaf70a7c3bd345776995415"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const <a class="el" href="namespacehypro.html#a7e902fc6c718791cc884dd557485c63b">flowVariant</a>&lt;typename State::NumberType&gt;&amp; <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">hypro::IFirstSegmentHandler</a>&lt; State &gt;::getTransformation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiFirstSegmentHandler.html#a2c7d0c0a2012286a862037cb501eda63">hypro::ltiFirstSegmentHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ac60b3668ee68e42b07ea6f2a9c4cf7ea">hypro::rectangularFirstSegmentHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae036fd1ee03b14ed18a1c78391d87609"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">hypro::IFirstSegmentHandler</a>&lt; State &gt;::handle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1IHandler.html#a66e0cc4f490d1e7389b096289df681f8">hypro::IHandler</a>.</p>
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiFirstSegmentHandler.html#a09605cef97738c0aee1d64e20e037df8">hypro::ltiFirstSegmentHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ad14637653d69ad9770a97ed3517b7941">hypro::rectangularFirstSegmentHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedElapseFirstSegmentHandler.html#a544e598f10dcb1d7a03bda9f26121bda">hypro::timedElapseFirstSegmentHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1timedFirstSegmentHandler.html#a91619c252db155f260697a0d33465ded">hypro::timedFirstSegmentHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec75a64a583e9fa8b32325f2585629ed"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">hypro::IFirstSegmentHandler</a>&lt; State &gt;::handlerName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1IHandler.html#a09f4265a24e3f3d825ed7e778b9d9fa5">hypro::IHandler</a>.</p>
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiFirstSegmentHandler.html#a89ab70be5839f9451a8f89778d09c343">hypro::ltiFirstSegmentHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#af0a7a2bb1c27f6aec022ab4689858966">hypro::rectangularFirstSegmentHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedElapseFirstSegmentHandler.html#ae74cfad6c4967f4bf9b0f113900d93c4">hypro::timedElapseFirstSegmentHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1timedFirstSegmentHandler.html#a4c6ac6122a89987e96c3fdb3a55b2dc1">hypro::timedFirstSegmentHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="IHandler_8h_source.html">IHandler.h</a></li>
 </ul>
 </div><!-- contents -->

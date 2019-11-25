@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -133,9 +133,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1StatisticWrapper.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad4f5950c248ebb3f23c410cdac78fc60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4f5950c248ebb3f23c410cdac78fc60"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ad4f5950c248ebb3f23c410cdac78fc60">~GeometricObject</a> ()</td></tr>
-<tr class="memdesc:ad4f5950c248ebb3f23c410cdac78fc60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br /></td></tr>
+<tr class="memitem:ad4f5950c248ebb3f23c410cdac78fc60"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ad4f5950c248ebb3f23c410cdac78fc60">~GeometricObject</a> ()</td></tr>
+<tr class="memdesc:ad4f5950c248ebb3f23c410cdac78fc60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object.  <a href="#ad4f5950c248ebb3f23c410cdac78fc60">More...</a><br /></td></tr>
 <tr class="separator:ad4f5950c248ebb3f23c410cdac78fc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61020c457d7c541354662b8edcd6a350"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a61020c457d7c541354662b8edcd6a350">dimension</a> () const </td></tr>
 <tr class="memdesc:a61020c457d7c541354662b8edcd6a350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the space dimension of the object.  <a href="#a61020c457d7c541354662b8edcd6a350">More...</a><br /></td></tr>
@@ -143,34 +142,34 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:a39f0e487e07964f992093e7c8c9e44d5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a39f0e487e07964f992093e7c8c9e44d5">empty</a> () const </td></tr>
 <tr class="memdesc:a39f0e487e07964f992093e7c8c9e44d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, whether the set is empty.  <a href="#a39f0e487e07964f992093e7c8c9e44d5">More...</a><br /></td></tr>
 <tr class="separator:a39f0e487e07964f992093e7c8c9e44d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a820b9a08215f47bcc69d440584d60751"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a820b9a08215f47bcc69d440584d60751">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
+<tr class="memitem:a820b9a08215f47bcc69d440584d60751"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a820b9a08215f47bcc69d440584d60751">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::Zero(0, 0)) const </td></tr>
 <tr class="memdesc:a820b9a08215f47bcc69d440584d60751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a820b9a08215f47bcc69d440584d60751">More...</a><br /></td></tr>
 <tr class="separator:a820b9a08215f47bcc69d440584d60751"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22a02aa2d116054fd960d6f87a557b76"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a22a02aa2d116054fd960d6f87a557b76">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:a22a02aa2d116054fd960d6f87a557b76"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a22a02aa2d116054fd960d6f87a557b76">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:a22a02aa2d116054fd960d6f87a557b76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a22a02aa2d116054fd960d6f87a557b76">More...</a><br /></td></tr>
 <tr class="separator:a22a02aa2d116054fd960d6f87a557b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9782e8b9f355dd20959cb7745f9f0d2"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ab9782e8b9f355dd20959cb7745f9f0d2">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memitem:ab9782e8b9f355dd20959cb7745f9f0d2"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ab9782e8b9f355dd20959cb7745f9f0d2">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
 <tr class="memdesc:ab9782e8b9f355dd20959cb7745f9f0d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#ab9782e8b9f355dd20959cb7745f9f0d2">More...</a><br /></td></tr>
 <tr class="separator:ab9782e8b9f355dd20959cb7745f9f0d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af250252bfe30434d5a181ea98d17a031"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#af250252bfe30434d5a181ea98d17a031">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:af250252bfe30434d5a181ea98d17a031"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#af250252bfe30434d5a181ea98d17a031">More...</a><br /></td></tr>
 <tr class="separator:af250252bfe30434d5a181ea98d17a031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07bf45a2b81953bd3b9211d563ac6c04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a07bf45a2b81953bd3b9211d563ac6c04">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memitem:a07bf45a2b81953bd3b9211d563ac6c04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a07bf45a2b81953bd3b9211d563ac6c04">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a07bf45a2b81953bd3b9211d563ac6c04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a07bf45a2b81953bd3b9211d563ac6c04">More...</a><br /></td></tr>
 <tr class="separator:a07bf45a2b81953bd3b9211d563ac6c04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83534c60329e0480ccd9249f4c5c409f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a83534c60329e0480ccd9249f4c5c409f">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memitem:a83534c60329e0480ccd9249f4c5c409f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a83534c60329e0480ccd9249f4c5c409f">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b) const </td></tr>
 <tr class="memdesc:a83534c60329e0480ccd9249f4c5c409f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a83534c60329e0480ccd9249f4c5c409f">More...</a><br /></td></tr>
 <tr class="separator:a83534c60329e0480ccd9249f4c5c409f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1bb3d2456dc059fa406ee888cbc1520"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#aa1bb3d2456dc059fa406ee888cbc1520">minkowskiSum</a> (const <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:aa1bb3d2456dc059fa406ee888cbc1520"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#aa1bb3d2456dc059fa406ee888cbc1520">More...</a><br /></td></tr>
 <tr class="separator:aa1bb3d2456dc059fa406ee888cbc1520"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94bd49dae3add00d97064377f7745462"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a94bd49dae3add00d97064377f7745462">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:a94bd49dae3add00d97064377f7745462"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#a94bd49dae3add00d97064377f7745462">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:a94bd49dae3add00d97064377f7745462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a94bd49dae3add00d97064377f7745462">More...</a><br /></td></tr>
 <tr class="separator:a94bd49dae3add00d97064377f7745462"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abba004538aa543aa17735e950d49007e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#abba004538aa543aa17735e950d49007e">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memitem:abba004538aa543aa17735e950d49007e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#abba004538aa543aa17735e950d49007e">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
 <tr class="memdesc:abba004538aa543aa17735e950d49007e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#abba004538aa543aa17735e950d49007e">More...</a><br /></td></tr>
 <tr class="separator:abba004538aa543aa17735e950d49007e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad766d6db3f116ed6769d92103292edce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ad766d6db3f116ed6769d92103292edce">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const </td></tr>
+<tr class="memitem:ad766d6db3f116ed6769d92103292edce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ad766d6db3f116ed6769d92103292edce">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;point) const </td></tr>
 <tr class="memdesc:ad766d6db3f116ed6769d92103292edce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#ad766d6db3f116ed6769d92103292edce">More...</a><br /></td></tr>
 <tr class="separator:ad766d6db3f116ed6769d92103292edce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb83ec47a14432cf669007b093259543"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#aeb83ec47a14432cf669007b093259543">unite</a> (const <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &amp;rhs) const </td></tr>
@@ -204,28 +203,25 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:a44bae859470ea4cb3bc74c16f94b9638 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt; &gt; &amp;point) const =0</td></tr>
 <tr class="memdesc:a44bae859470ea4cb3bc74c16f94b9638 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a44bae859470ea4cb3bc74c16f94b9638">More...</a><br /></td></tr>
 <tr class="separator:a44bae859470ea4cb3bc74c16f94b9638 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09bf3d067ae2eaa4588b3ec8cc2812a4"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const DerivedShape &amp;rhs) const =0</td></tr>
+<tr class="memitem:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4">contains</a> (const DerivedShape &amp;rhs) const =0</td></tr>
 <tr class="separator:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a> (const DerivedShape &amp;rhs) const =0</td></tr>
 <tr class="memdesc:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3ed4020101437144b34b62cc01d5bf01">More...</a><br /></td></tr>
 <tr class="separator:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d5153ab5460051f4a44131136ba082a inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d5153ab5460051f4a44131136ba082a"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">reduceRepresentation</a> ()=0</td></tr>
-<tr class="memdesc:a6d5153ab5460051f4a44131136ba082a inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function called to reduce the representation - implementation is dependent on the actual representation and might affect number representations as well as reducing the complexity of the set at the cost of precision - the actual implementation should be settings-dependent. <br /></td></tr>
+<tr class="memitem:a6d5153ab5460051f4a44131136ba082a inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">reduceRepresentation</a> ()=0</td></tr>
+<tr class="memdesc:a6d5153ab5460051f4a44131136ba082a inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function called to reduce the representation - implementation is dependent on the actual representation and might affect number representations as well as reducing the complexity of the set at the cost of precision - the actual implementation should be settings-dependent.  <a href="#a6d5153ab5460051f4a44131136ba082a">More...</a><br /></td></tr>
 <tr class="separator:a6d5153ab5460051f4a44131136ba082a inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:ab508a9d104127d4a3248a53b1292fb25"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ab508a9d104127d4a3248a53b1292fb25">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt; Number, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&gt; &amp;in)</td></tr>
+<tr class="memitem:ab508a9d104127d4a3248a53b1292fb25"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1StatisticWrapper.html#ab508a9d104127d4a3248a53b1292fb25">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&gt; &amp;in)</td></tr>
 <tr class="memdesc:ab508a9d104127d4a3248a53b1292fb25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#ab508a9d104127d4a3248a53b1292fb25">More...</a><br /></td></tr>
 <tr class="separator:ab508a9d104127d4a3248a53b1292fb25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_types_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; StatisticWrapper&lt; Representation &gt; &gt;</a></td></tr>
-<tr class="memitem:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90226c553b38c46eb616d3674f7926dd"></a>
-typedef <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>NumberType</b></td></tr>
+<tr class="memitem:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd">NumberType</a></td></tr>
 <tr class="separator:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -241,7 +237,39 @@ class hypro::StatisticWrapper&lt; Representation &gt;</h3>
 </dl>
 
 <p>Definition at line <a class="el" href="StatisticWrapper_8h_source.html#l00010">10</a> of file <a class="el" href="StatisticWrapper_8h_source.html">StatisticWrapper.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ad4f5950c248ebb3f23c410cdac78fc60"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Representation &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::~<a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the object. </p>
+
+<p>Reimplemented from <a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">hypro::GeometricObject&lt; StatisticWrapper&lt; Representation &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="StatisticWrapper_8h_source.html#l00018">18</a> of file <a class="el" href="StatisticWrapper_8h_source.html">StatisticWrapper.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a83534c60329e0480ccd9249f4c5c409f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -254,13 +282,13 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt;Representation&gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::affineTransformation </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
@@ -304,7 +332,7 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::contains </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>point</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -411,7 +439,7 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt;Representation&gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::intersectHalfspace </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -450,13 +478,13 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt;Representation&gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::intersectHalfspaces </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vec</em>&#160;</td>
         </tr>
         <tr>
@@ -500,7 +528,7 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt;Representation&gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::linearTransformation </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -619,7 +647,7 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt;Representation&gt; &gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::satisfiesHalfspace </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -658,13 +686,13 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt;Representation&gt; &gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::satisfiesHalfspaces </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vec</em>&#160;</td>
         </tr>
         <tr>
@@ -745,10 +773,10 @@ template&lt;typename Representation &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::vertices </td>
+          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1StatisticWrapper.html">hypro::StatisticWrapper</a>&lt; Representation &gt;::vertices </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(&#160;0,&#160;0&#160;)</code></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;::Zero(&#160;0,&#160;0&#160;)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -787,7 +815,7 @@ template&lt;typename Representation &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt; Number, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1StatisticWrapper.html">StatisticWrapper</a>&lt; Representation &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>in</em>&#160;</td>
         </tr>
         <tr>

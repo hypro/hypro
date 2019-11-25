@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -125,20 +125,21 @@ $(document).ready(function(){initNavTree('classhypro_1_1HyproInitialSetVisitor.h
 <div class="title">hypro::HyproInitialSetVisitor&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HyproFormulaVisitor_8h_source.html">HyproFormulaVisitor.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7a9aca6c425ac741cce5d1309e9132b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a9aca6c425ac741cce5d1309e9132b4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>HyproInitialSetVisitor</b> (std::vector&lt; std::string &gt; &amp;varVec, std::set&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; * &gt; &amp;lSet)</td></tr>
+<tr class="memitem:a7a9aca6c425ac741cce5d1309e9132b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HyproInitialSetVisitor.html#a7a9aca6c425ac741cce5d1309e9132b4">HyproInitialSetVisitor</a> (std::vector&lt; std::string &gt; &amp;varVec, std::set&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; * &gt; &amp;lSet)</td></tr>
 <tr class="separator:a7a9aca6c425ac741cce5d1309e9132b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c6c6aed403af457ac1549eca8af178c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c6c6aed403af457ac1549eca8af178c"></a>
-antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitInit</b> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitContext.html">HybridAutomatonParser::InitContext</a> *ctx) override</td></tr>
+<tr class="memitem:a0ae24d9ebc4f2d0d61c04a2b6ea35ef8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HyproInitialSetVisitor.html#a0ae24d9ebc4f2d0d61c04a2b6ea35ef8">~HyproInitialSetVisitor</a> ()</td></tr>
+<tr class="separator:a0ae24d9ebc4f2d0d61c04a2b6ea35ef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c6c6aed403af457ac1549eca8af178c"><td class="memItemLeft" align="right" valign="top">antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HyproInitialSetVisitor.html#a2c6c6aed403af457ac1549eca8af178c">visitInit</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitContext.html">HybridAutomatonParser::InitContext</a> *ctx) override</td></tr>
 <tr class="separator:a2c6c6aed403af457ac1549eca8af178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:aefad9e7bb2a635a29c9203f6ba7a9e77"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefad9e7bb2a635a29c9203f6ba7a9e77"></a>
-class&#160;</td><td class="memItemRight" valign="bottom"><b>HyproHAVisitor&lt; Number &gt;</b></td></tr>
+<tr class="memitem:aefad9e7bb2a635a29c9203f6ba7a9e77"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HyproInitialSetVisitor.html#aefad9e7bb2a635a29c9203f6ba7a9e77">HyproHAVisitor&lt; Number &gt;</a></td></tr>
 <tr class="separator:aefad9e7bb2a635a29c9203f6ba7a9e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -147,7 +148,107 @@ class hypro::HyproInitialSetVisitor&lt; Number &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="HyproFormulaVisitor_8h_source.html#l00032">32</a> of file <a class="el" href="HyproFormulaVisitor_8h_source.html">HyproFormulaVisitor.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a7a9aca6c425ac741cce5d1309e9132b4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HyproInitialSetVisitor.html">hypro::HyproInitialSetVisitor</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1HyproInitialSetVisitor.html">HyproInitialSetVisitor</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>varVec</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::set&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lSet</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0ae24d9ebc4f2d0d61c04a2b6ea35ef8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HyproInitialSetVisitor.html">hypro::HyproInitialSetVisitor</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::~<a class="el" href="classhypro_1_1HyproInitialSetVisitor.html">HyproInitialSetVisitor</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a2c6c6aed403af457ac1549eca8af178c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any <a class="el" href="classhypro_1_1HyproInitialSetVisitor.html">hypro::HyproInitialSetVisitor</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::visitInit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitContext.html">HybridAutomatonParser::InitContext</a> *&#160;</td>
+          <td class="paramname"><em>ctx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html#a163fd843f300916ec126584bac6fce4b">hypro::HybridAutomatonBaseVisitor</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="aefad9e7bb2a635a29c9203f6ba7a9e77"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classhypro_1_1HyproHAVisitor.html">HyproHAVisitor</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HyproInitialSetVisitor_8h_source.html#l00031">31</a> of file <a class="el" href="HyproInitialSetVisitor_8h_source.html">HyproInitialSetVisitor.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HyproFormulaVisitor_8h_source.html">HyproFormulaVisitor.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HyproInitialSetVisitor_8h_source.html">HyproInitialSetVisitor.h</a></li>
 </ul>

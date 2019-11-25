@@ -1,9 +1,17 @@
 var dir_68bcb6b1c85a445267426edd88bf35d3 =
 [
-    [ "FirstSegmentHandlers.h", "FirstSegmentHandlers_8h_source.html", null ],
-    [ "ltiFirstSegmentHandler.h", "ltiFirstSegmentHandler_8h_source.html", null ],
-    [ "rectangularFirstSegmentHandler.h", "rectangularFirstSegmentHandler_8h_source.html", null ],
-    [ "timedElapseFirstSegmentHandler.h", "timedElapseFirstSegmentHandler_8h_source.html", null ],
-    [ "timedFirstSegmentHandler.h", "timedFirstSegmentHandler_8h_source.html", null ],
-    [ "utility.h", "utility_8h_source.html", null ]
+    [ "FirstSegmentHandlers.h", "FirstSegmentHandlers_8h.html", null ],
+    [ "ltiFirstSegmentHandler.h", "ltiFirstSegmentHandler_8h.html", [
+      [ "ltiFirstSegmentHandler", "classhypro_1_1ltiFirstSegmentHandler.html", "classhypro_1_1ltiFirstSegmentHandler" ]
+    ] ],
+    [ "rectangularFirstSegmentHandler.h", "rectangularFirstSegmentHandler_8h.html", [
+      [ "rectangularFirstSegmentHandler", "classhypro_1_1rectangularFirstSegmentHandler.html", "classhypro_1_1rectangularFirstSegmentHandler" ]
+    ] ],
+    [ "timedElapseFirstSegmentHandler.h", "timedElapseFirstSegmentHandler_8h.html", [
+      [ "timedElapseFirstSegmentHandler", "classhypro_1_1timedElapseFirstSegmentHandler.html", "classhypro_1_1timedElapseFirstSegmentHandler" ]
+    ] ],
+    [ "timedFirstSegmentHandler.h", "timedFirstSegmentHandler_8h.html", [
+      [ "timedFirstSegmentHandler", "classhypro_1_1timedFirstSegmentHandler.html", "classhypro_1_1timedFirstSegmentHandler" ]
+    ] ],
+    [ "utility.h", "utility_8h.html", "utility_8h" ]
 ];

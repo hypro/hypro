@@ -1,25 +1,9 @@
 var namespacehypro =
 [
-    [ "detail", null, [
-      [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
-      [ "gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html", null ],
-      [ "ResetVisitor", "structhypro_1_1detail_1_1ResetVisitor.html", "structhypro_1_1detail_1_1ResetVisitor" ],
-      [ "seq", "structhypro_1_1detail_1_1seq.html", null ]
-    ] ],
-    [ "plotting", null, [
-      [ "gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", "structhypro_1_1plotting_1_1gnuplotSettings" ]
-    ] ],
-    [ "reachability", null, [
-      [ "Reach", "classhypro_1_1reachability_1_1Reach.html", "classhypro_1_1reachability_1_1Reach" ],
-      [ "ReachQuiet", "structhypro_1_1reachability_1_1ReachQuiet.html", null ],
-      [ "ReachSettings", "structhypro_1_1reachability_1_1ReachSettings.html", null ]
-    ] ],
-    [ "statistics", null, [
-      [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1AtomicOperationCounter.html", "structhypro_1_1statistics_1_1AtomicOperationCounter" ],
-      [ "CounterRepository", "classhypro_1_1statistics_1_1CounterRepository.html", "classhypro_1_1statistics_1_1CounterRepository" ],
-      [ "OperationCounter", "structhypro_1_1statistics_1_1OperationCounter.html", "structhypro_1_1statistics_1_1OperationCounter" ],
-      [ "Statistician", "classhypro_1_1statistics_1_1Statistician.html", "classhypro_1_1statistics_1_1Statistician" ]
-    ] ],
+    [ "detail", "namespacehypro_1_1detail.html", "namespacehypro_1_1detail" ],
+    [ "plotting", "namespacehypro_1_1plotting.html", "namespacehypro_1_1plotting" ],
+    [ "reachability", "namespacehypro_1_1reachability.html", "namespacehypro_1_1reachability" ],
+    [ "statistics", "namespacehypro_1_1statistics.html", "namespacehypro_1_1statistics" ],
     [ "affineFlow", "classhypro_1_1affineFlow.html", "classhypro_1_1affineFlow" ],
     [ "AffineTransformation", "structhypro_1_1AffineTransformation.html", "structhypro_1_1AffineTransformation" ],
     [ "BallSupportFunction", "classhypro_1_1BallSupportFunction.html", "classhypro_1_1BallSupportFunction" ],

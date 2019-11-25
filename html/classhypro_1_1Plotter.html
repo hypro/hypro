@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Plotter.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classhypro_1_1Plotter-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::Plotter&lt; Number &gt; Class Template Reference</div>  </div>
@@ -132,6 +133,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1Plotter.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aef4bc5b60e024e2b0ebb22c691ef7d31"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#aef4bc5b60e024e2b0ebb22c691ef7d31">~Plotter</a> ()</td></tr>
+<tr class="separator:aef4bc5b60e024e2b0ebb22c691ef7d31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52ef9dfe2f19bc99090df94327f206fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd">setFilename</a> (const std::string &amp;_filename=&quot;out&quot;)</td></tr>
 <tr class="memdesc:a52ef9dfe2f19bc99090df94327f206fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the filename.  <a href="#a52ef9dfe2f19bc99090df94327f206fd">More...</a><br /></td></tr>
 <tr class="separator:a52ef9dfe2f19bc99090df94327f206fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,41 +153,43 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a28dbb6edd1dce9156bd22d339f810fed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed">plotTex</a> () const </td></tr>
 <tr class="memdesc:a28dbb6edd1dce9156bd22d339f810fed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a LaTeX file of the currently passed objects.  <a href="#a28dbb6edd1dce9156bd22d339f810fed">More...</a><br /></td></tr>
 <tr class="separator:a28dbb6edd1dce9156bd22d339f810fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04d0eec05e76743057fc6e2de615ce30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04d0eec05e76743057fc6e2de615ce30"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30">plotGen</a> () const </td></tr>
-<tr class="memdesc:a04d0eec05e76743057fc6e2de615ce30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a .gen file of the currently passed objects, which can be used in gnuplot as well. <br /></td></tr>
+<tr class="memitem:a04d0eec05e76743057fc6e2de615ce30"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30">plotGen</a> () const </td></tr>
+<tr class="memdesc:a04d0eec05e76743057fc6e2de615ce30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a .gen file of the currently passed objects, which can be used in gnuplot as well.  <a href="#a04d0eec05e76743057fc6e2de615ce30">More...</a><br /></td></tr>
 <tr class="separator:a04d0eec05e76743057fc6e2de615ce30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54b1944b908e221164588894ea4050dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54b1944b908e221164588894ea4050dc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a54b1944b908e221164588894ea4050dc">plotEps</a> () const </td></tr>
-<tr class="memdesc:a54b1944b908e221164588894ea4050dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a .eps file of the currently passed objects, which can be used in gnuplot as well. <br /></td></tr>
+<tr class="memitem:a54b1944b908e221164588894ea4050dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a54b1944b908e221164588894ea4050dc">plotEps</a> () const </td></tr>
+<tr class="memdesc:a54b1944b908e221164588894ea4050dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a .eps file of the currently passed objects, which can be used in gnuplot as well.  <a href="#a54b1944b908e221164588894ea4050dc">More...</a><br /></td></tr>
 <tr class="separator:a54b1944b908e221164588894ea4050dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+<tr class="memitem:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;_points)</td></tr>
 <tr class="memdesc:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter, which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.  <a href="#a5993c1c7ece6f9f3c2c03b61a58d60ce">More...</a><br /></td></tr>
 <tr class="separator:a5993c1c7ece6f9f3c2c03b61a58d60ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8ef90979468904cd117d87b6a85e575"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#ab8ef90979468904cd117d87b6a85e575">addObject</a> (const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt;&gt; &amp;_points)</td></tr>
+<tr class="memitem:ab8ef90979468904cd117d87b6a85e575"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#ab8ef90979468904cd117d87b6a85e575">addObject</a> (const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&gt; &amp;_points)</td></tr>
 <tr class="memdesc:ab8ef90979468904cd117d87b6a85e575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds several objects represented as a vector of vectors of points. Duplicates and points inside will be removed by the plotter, which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.  <a href="#ab8ef90979468904cd117d87b6a85e575">More...</a><br /></td></tr>
 <tr class="separator:ab8ef90979468904cd117d87b6a85e575"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af6e38efc9c90b715b66a0b11ccfb6ee5">addObject</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;_planes)</td></tr>
+<tr class="memitem:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af6e38efc9c90b715b66a0b11ccfb6ee5">addObject</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;_planes)</td></tr>
 <tr class="memdesc:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a set of halfspaces to the plotter.  <a href="#af6e38efc9c90b715b66a0b11ccfb6ee5">More...</a><br /></td></tr>
 <tr class="separator:af6e38efc9c90b715b66a0b11ccfb6ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af707083cfce0adf7d6e88022efae3a99"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af707083cfce0adf7d6e88022efae3a99">addObject</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;_plane)</td></tr>
+<tr class="memitem:af707083cfce0adf7d6e88022efae3a99"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af707083cfce0adf7d6e88022efae3a99">addObject</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_plane)</td></tr>
 <tr class="memdesc:af707083cfce0adf7d6e88022efae3a99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a halfspace to the plotter.  <a href="#af707083cfce0adf7d6e88022efae3a99">More...</a><br /></td></tr>
 <tr class="separator:af707083cfce0adf7d6e88022efae3a99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6084a89f7e0b18be7141234f684d492"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af6084a89f7e0b18be7141234f684d492">addPoint</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point)</td></tr>
+<tr class="memitem:af6084a89f7e0b18be7141234f684d492"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#af6084a89f7e0b18be7141234f684d492">addPoint</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_point)</td></tr>
 <tr class="memdesc:af6084a89f7e0b18be7141234f684d492"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a point to the plotter.  <a href="#af6084a89f7e0b18be7141234f684d492">More...</a><br /></td></tr>
 <tr class="separator:af6084a89f7e0b18be7141234f684d492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa499a644438df4e310fac48b8637f831"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#aa499a644438df4e310fac48b8637f831">addPoints</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_points)</td></tr>
+<tr class="memitem:aa499a644438df4e310fac48b8637f831"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#aa499a644438df4e310fac48b8637f831">addPoints</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;_points)</td></tr>
 <tr class="memdesc:aa499a644438df4e310fac48b8637f831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds points to the plotter.  <a href="#aa499a644438df4e310fac48b8637f831">More...</a><br /></td></tr>
 <tr class="separator:aa499a644438df4e310fac48b8637f831"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa6b73d2194f0fa8b40da351f4d356ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#afa6b73d2194f0fa8b40da351f4d356ab">addVector</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vector)</td></tr>
+<tr class="memitem:afa6b73d2194f0fa8b40da351f4d356ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#afa6b73d2194f0fa8b40da351f4d356ab">addVector</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vector)</td></tr>
 <tr class="memdesc:afa6b73d2194f0fa8b40da351f4d356ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a vector to the plotter.  <a href="#afa6b73d2194f0fa8b40da351f4d356ab">More...</a><br /></td></tr>
 <tr class="separator:afa6b73d2194f0fa8b40da351f4d356ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fca511abc240a333e905d4431627119"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a> (unsigned _id, const std::size_t _color)</td></tr>
 <tr class="memdesc:a1fca511abc240a333e905d4431627119"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the object color.  <a href="#a1fca511abc240a333e905d4431627119">More...</a><br /></td></tr>
 <tr class="separator:a1fca511abc240a333e905d4431627119"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4bc6ab251645fee90fca29653d61b26"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4bc6ab251645fee90fca29653d61b26"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="memitem:aa4bc6ab251645fee90fca29653d61b26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#aa4bc6ab251645fee90fca29653d61b26">clear</a> ()</td></tr>
 <tr class="separator:aa4bc6ab251645fee90fca29653d61b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a888edb5563dcdbeb671a341b9e3065d2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a888edb5563dcdbeb671a341b9e3065d2">Plotter</a> ()</td></tr>
+<tr class="separator:a888edb5563dcdbeb671a341b9e3065d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
@@ -197,10 +202,59 @@ class hypro::Plotter&lt; Number &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a4">example_benchmark.cpp</a>, <a class="el" href="example_bouncingBall_8cpp-example.html#_a13">example_bouncingBall.cpp</a>, <a class="el" href="example_box_8cpp-example.html#_a0">example_box.cpp</a>, <a class="el" href="example_differenceBounds_8cpp-example.html#_a1">example_differenceBounds.cpp</a>, <a class="el" href="example_HPolytope_8cpp-example.html#_a0">example_HPolytope.cpp</a>, and <a class="el" href="example_plot_8cpp-example.html#_a0">example_plot.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a4">example_benchmark.cpp</a>, <a class="el" href="example_bouncingBall_8cpp-example.html#_a16">example_bouncingBall.cpp</a>, <a class="el" href="example_box_8cpp-example.html#_a2">example_box.cpp</a>, <a class="el" href="example_differenceBounds_8cpp-example.html#_a43">example_differenceBounds.cpp</a>, <a class="el" href="example_HPolytope_8cpp-example.html#_a2">example_HPolytope.cpp</a>, and <a class="el" href="example_plot_8cpp-example.html#_a2">example_plot.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="Plotter_8h_source.html#l00073">73</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a888edb5563dcdbeb671a341b9e3065d2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Plotter.html">Plotter</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Plotter_8h_source.html#l00090">90</a> of file <a class="el" href="Plotter_8h_source.html">Plotter.h</a>.</p>
+
+<p>References <a class="el" href="Plotter_8h_source.html#l00090">hypro::Plotter&lt; Number &gt;::Plotter()</a>.</p>
+
+<p>Referenced by <a class="el" href="Plotter_8h_source.html#l00090">hypro::Plotter&lt; Number &gt;::Plotter()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aef4bc5b60e024e2b0ebb22c691ef7d31"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::~<a class="el" href="classhypro_1_1Plotter.html">Plotter</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a5993c1c7ece6f9f3c2c03b61a58d60ce"></a>
 <div class="memitem">
 <div class="memproto">
@@ -208,9 +262,9 @@ class hypro::Plotter&lt; Number &gt;</h3>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addObject </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_points</em></td><td>)</td>
           <td></td>
         </tr>
@@ -225,7 +279,7 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A unique id, which allows to reference the object to change its colors. </dd></dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a3">example_differenceBounds.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a1">example_HPolytope.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a45">example_differenceBounds.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a3">example_HPolytope.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -236,9 +290,9 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addObject </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_points</em></td><td>)</td>
           <td></td>
         </tr>
@@ -263,9 +317,9 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addObject </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_planes</em></td><td>)</td>
           <td></td>
         </tr>
@@ -290,9 +344,9 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addObject </td>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addObject </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_plane</em></td><td>)</td>
           <td></td>
         </tr>
@@ -317,9 +371,9 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addPoint </td>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addPoint </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_point</em></td><td>)</td>
           <td></td>
         </tr>
@@ -344,9 +398,9 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addPoints </td>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addPoints </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_points</em></td><td>)</td>
           <td></td>
         </tr>
@@ -371,9 +425,9 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::addVector </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addVector </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_vector</em></td><td>)</td>
           <td></td>
         </tr>
@@ -390,6 +444,24 @@ template&lt;typename Number&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aa4bc6ab251645fee90fca29653d61b26"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a44">example_differenceBounds.cpp</a>.</dd>
+</dl>
+</div>
+</div>
 <a class="anchor" id="a020e89ed0c39a091bf49a0b400e511f8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -397,7 +469,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::plot2d </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::plot2d </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -407,8 +479,46 @@ template&lt;typename Number&gt; </div>
 
 <p>Creates a gnuplot file of the currently passed objects. </p>
 <p>The resulting *.plt file can be compiled to a pdf invoking gnuplot. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a6">example_differenceBounds.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a3">example_HPolytope.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a51">example_differenceBounds.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a7">example_HPolytope.cpp</a>.</dd>
 </dl>
+</div>
+</div>
+<a class="anchor" id="a54b1944b908e221164588894ea4050dc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::plotEps </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a .eps file of the currently passed objects, which can be used in gnuplot as well. </p>
+
+</div>
+</div>
+<a class="anchor" id="a04d0eec05e76743057fc6e2de615ce30"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::plotGen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a .gen file of the currently passed objects, which can be used in gnuplot as well. </p>
+
 </div>
 </div>
 <a class="anchor" id="a28dbb6edd1dce9156bd22d339f810fed"></a>
@@ -418,7 +528,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::plotTex </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::plotTex </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -438,7 +548,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::rSettings </td>
+          <td class="memname"><a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::rSettings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -458,7 +568,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::setFilename </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::setFilename </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>_filename</em> = <code>&quot;out&quot;</code></td><td>)</td>
@@ -474,7 +584,7 @@ template&lt;typename Number&gt; </div>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a5">example_differenceBounds.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a50">example_differenceBounds.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -485,7 +595,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::setObjectColor </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::setObjectColor </td>
           <td>(</td>
           <td class="paramtype">unsigned&#160;</td>
           <td class="paramname"><em>_id</em>, </td>
@@ -512,7 +622,7 @@ template&lt;typename Number&gt; </div>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a4">example_differenceBounds.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a2">example_HPolytope.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_differenceBounds_8cpp-example.html#a46">example_differenceBounds.cpp</a>, and <a class="el" href="example_HPolytope_8cpp-example.html#a4">example_HPolytope.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -523,7 +633,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::settings </td>
+          <td class="memname">const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::settings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -543,7 +653,7 @@ template&lt;typename Number&gt; </div>
 template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; Number &gt;::updateSettings </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1Plotter.html">hypro::Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::updateSettings </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> &amp;&#160;</td>
           <td class="paramname"><em>_settings</em></td><td>)</td>

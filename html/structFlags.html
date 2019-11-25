@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -127,29 +127,108 @@ $(document).ready(function(){initNavTree('structFlags.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aad595a7b7c0d44aabb8ccf1ae561ab4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad595a7b7c0d44aabb8ccf1ae561ab4c"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>DIM_PLOT</b></td></tr>
+<tr class="memitem:aad595a7b7c0d44aabb8ccf1ae561ab4c"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFlags.html#aad595a7b7c0d44aabb8ccf1ae561ab4c">DIM_PLOT</a></td></tr>
 <tr class="separator:aad595a7b7c0d44aabb8ccf1ae561ab4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47d59eb0bd2a0e7ca8c2e7ce70d929a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47d59eb0bd2a0e7ca8c2e7ce70d929a1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>ORIG_SYS_PLOT</b></td></tr>
+<tr class="memitem:a47d59eb0bd2a0e7ca8c2e7ce70d929a1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFlags.html#a47d59eb0bd2a0e7ca8c2e7ce70d929a1">ORIG_SYS_PLOT</a></td></tr>
 <tr class="separator:a47d59eb0bd2a0e7ca8c2e7ce70d929a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae55d592d2815d42effe93db8ca0913c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae55d592d2815d42effe93db8ca0913c1"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>HULLCONSTR</b></td></tr>
+<tr class="memitem:ae55d592d2815d42effe93db8ca0913c1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFlags.html#ae55d592d2815d42effe93db8ca0913c1">HULLCONSTR</a></td></tr>
 <tr class="separator:ae55d592d2815d42effe93db8ca0913c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86060954cf6340ad27d5c6f1edbe4c4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86060954cf6340ad27d5c6f1edbe4c4f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>HULL_PLOT</b></td></tr>
+<tr class="memitem:a86060954cf6340ad27d5c6f1edbe4c4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFlags.html#a86060954cf6340ad27d5c6f1edbe4c4f">HULL_PLOT</a></td></tr>
 <tr class="separator:a86060954cf6340ad27d5c6f1edbe4c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b78fbc048625cad2017688b209856c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b78fbc048625cad2017688b209856c3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>TRAJECTORY_PLOT</b></td></tr>
+<tr class="memitem:a1b78fbc048625cad2017688b209856c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFlags.html#a1b78fbc048625cad2017688b209856c3">TRAJECTORY_PLOT</a></td></tr>
 <tr class="separator:a1b78fbc048625cad2017688b209856c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad68638e8bc3bf03527dba7732ff2c273"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad68638e8bc3bf03527dba7732ff2c273"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>ERROR_PLOT</b></td></tr>
+<tr class="memitem:ad68638e8bc3bf03527dba7732ff2c273"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structFlags.html#ad68638e8bc3bf03527dba7732ff2c273">ERROR_PLOT</a></td></tr>
 <tr class="separator:ad68638e8bc3bf03527dba7732ff2c273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00014">14</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aad595a7b7c0d44aabb8ccf1ae561ab4c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t Flags::DIM_PLOT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00017">17</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad68638e8bc3bf03527dba7732ff2c273"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Flags::ERROR_PLOT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00022">22</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a86060954cf6340ad27d5c6f1edbe4c4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Flags::HULL_PLOT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00020">20</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae55d592d2815d42effe93db8ca0913c1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Flags::HULLCONSTR</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00019">19</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a47d59eb0bd2a0e7ca8c2e7ce70d929a1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Flags::ORIG_SYS_PLOT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00018">18</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1b78fbc048625cad2017688b209856c3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Flags::TRAJECTORY_PLOT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00021">21</a> of file <a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/examples/<a class="el" href="example__eigenSimpleFlow_8cpp_source.html">example_eigenSimpleFlow.cpp</a></li>
 </ul>
 </div><!-- contents -->

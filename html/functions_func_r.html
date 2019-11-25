@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -93,6 +93,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li class="current"><a href="functions_func.html"><span>Functions</span></a></li>
       <li><a href="functions_vars.html"><span>Variables</span></a></li>
       <li><a href="functions_type.html"><span>Typedefs</span></a></li>
+      <li><a href="functions_enum.html"><span>Enumerations</span></a></li>
+      <li><a href="functions_eval.html"><span>Enumerator</span></a></li>
       <li><a href="functions_rela.html"><span>Related&#160;Functions</span></a></li>
     </ul>
   </div>
@@ -107,6 +109,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_g.html#index_g"><span>g</span></a></li>
       <li><a href="functions_func_h.html#index_h"><span>h</span></a></li>
       <li><a href="functions_func_i.html#index_i"><span>i</span></a></li>
+      <li><a href="functions_func_j.html#index_j"><span>j</span></a></li>
       <li><a href="functions_func_l.html#index_l"><span>l</span></a></li>
       <li><a href="functions_func_m.html#index_m"><span>m</span></a></li>
       <li><a href="functions_func_n.html#index_n"><span>n</span></a></li>
@@ -117,6 +120,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_t.html#index_t"><span>t</span></a></li>
       <li><a href="functions_func_u.html#index_u"><span>u</span></a></li>
       <li><a href="functions_func_v.html#index_v"><span>v</span></a></li>
+      <li><a href="functions_func_w.html#index_w"><span>w</span></a></li>
       <li><a href="functions_func_z.html#index_z"><span>z</span></a></li>
       <li><a href="functions_func_0x7e.html#index_0x7e"><span>~</span></a></li>
     </ul>
@@ -154,11 +158,21 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 &#160;
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>radius()
+: <a class="el" href="classhypro_1_1BallSupportFunction.html#a3bad6a2d15c0425a8792fbbc84cff0b8">hypro::BallSupportFunction&lt; Number &gt;</a>
+</li>
+<li>Range()
+: <a class="el" href="classhypro_1_1Range.html#adcba927ab91807b950fe4a774ab37cb5">hypro::Range&lt; Number &gt;</a>
+</li>
 <li>rawCoordinates()
 : <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1Vertex.html#a70dc2c478ffe00ca431736ec82b15568">hypro::Vertex&lt; Number &gt;</a>
 </li>
 <li>Reach()
 : <a class="el" href="classhypro_1_1reachability_1_1Reach.html#aa42d7888aac0e1b2d546db2b19044546">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
+<li>reach_picard()
+: <a class="el" href="classhypro_1_1ContinuousSystem.html#ac051c2879c5f3a2c734f6de61f41e167">hypro::ContinuousSystem&lt; Number &gt;</a>
 </li>
 <li>ReachabilitySettings()
 : <a class="el" href="structhypro_1_1ReachabilitySettings.html#af91b99cf64b956259347ba1595d0ad4d">hypro::ReachabilitySettings</a>
@@ -166,15 +180,60 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>reachedBadStates()
 : <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a3d01651acfd13484fbd42d123cd5d591">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
 </li>
+<li>ReachTree()
+: <a class="el" href="classhypro_1_1ReachTree.html#a09cbb5b0e434e16d6578a337b27d29ab">hypro::ReachTree&lt; State &gt;</a>
+</li>
+<li>ReachTreeNode()
+: <a class="el" href="classhypro_1_1ReachTreeNode.html#a352c3da40b920a27db05a3f7597bf479">hypro::ReachTreeNode&lt; State &gt;</a>
+</li>
+<li>real_val()
+: <a class="el" href="classhypro_1_1z3Context.html#ae20d9cbee771f6283abab9adda0d6d6a">hypro::z3Context</a>
+</li>
+<li>REALNUMBER()
+: <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExprFactRealNumberContext.html#ad45875da9c40cba335a4878e23525631">hypro::HybridSystemParser::ExprFactRealNumberContext</a>
+</li>
+<li>rectangularBadStateHandler()
+: <a class="el" href="classhypro_1_1rectangularBadStateHandler.html#a3aafd90bdeddd4c3fd762fab2861d24b">hypro::rectangularBadStateHandler&lt; State &gt;</a>
+</li>
+<li>rectangularFirstSegmentHandler()
+: <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#a0a9dc18e8428807f2b11591f7e696a00">hypro::rectangularFirstSegmentHandler&lt; State &gt;</a>
+</li>
+<li>rectangularFlow()
+: <a class="el" href="classhypro_1_1rectangularFlow.html#a5ad51d96795e9842ca796859f47180e3">hypro::rectangularFlow&lt; Number &gt;</a>
+</li>
+<li>rectangularGuardHandler()
+: <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a05cf75223b14b1f79334691fe0a3b125">hypro::rectangularGuardHandler&lt; State &gt;</a>
+</li>
+<li>rectangularInvariantHandler()
+: <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#a627b4b70f5303adfdb963024359bbca9">hypro::rectangularInvariantHandler&lt; State &gt;</a>
+</li>
+<li>rectangularResetHandler()
+: <a class="el" href="classhypro_1_1rectangularResetHandler.html#ace62fdefca52b4513cb2ec483bb6bfb4">hypro::rectangularResetHandler&lt; State &gt;</a>
+</li>
+<li>rectangularTimeEvolutionHandler()
+: <a class="el" href="classhypro_1_1rectangularTimeEvolutionHandler.html#a8aeda1d4c3f7d1bd50e8b9446274b0de">hypro::rectangularTimeEvolutionHandler&lt; State &gt;</a>
+</li>
 <li>reduce()
 : <a class="el" href="classhypro_1_1HybridAutomaton.html#a18ace72be9084ee3df5c54aead596737">hypro::HybridAutomaton&lt; Number &gt;</a>
 </li>
 <li>reduceDimension()
 : <a class="el" href="classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484">hypro::Point&lt; Number &gt;</a>
 </li>
+<li>reduceLinTrans()
+: <a class="el" href="structhypro_1_1trafoContent.html#aadfca57d1f3e44a3b33922073b574cce">hypro::trafoContent&lt; Number, Setting &gt;</a>
+</li>
+<li>reduceNumberRepresentation()
+: <a class="el" href="classhypro_1_1SupportFunctionT.html#a984e8f701a7be81a3831b129e769a468">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ZonotopeT.html#a2d2195cc78e65c1ed42c51dd50e63650">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+</li>
+<li>reduceOrder()
+: <a class="el" href="classhypro_1_1ZonotopeT.html#a4ca07528e34888d71b21268b5423b245">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+</li>
 <li>reduceRepresentation()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1CarlPolytopeT.html#a818c0a9d8428d0c8e7aa70a48d8221f6">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionContent.html#a323f5ad075fd370d1d16194d863a8abe">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#a1beee2b99f7a5f440edc300bfec26e02">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
@@ -184,8 +243,28 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>redundantConstraints()
 : <a class="el" href="classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084">hypro::Optimizer&lt; Number &gt;</a>
 </li>
+<li>refineIntervals()
+: <a class="el" href="classhypro_1_1ReachTreeNode.html#a13006848113bd236d5f24768f33b4370">hypro::ReachTreeNode&lt; State &gt;</a>
+</li>
 <li>RefinementSetting()
 : <a class="el" href="structhypro_1_1RefinementSetting.html#aef4ab59d09d621981204dd0c3533cc38">hypro::RefinementSetting&lt; State &gt;</a>
+</li>
+<li>reinitialize()
+: <a class="el" href="classhypro_1_1discreteGuardHandler.html#a6407082d15765ece43c10738dbb8dd75">hypro::discreteGuardHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1IGuardHandler.html#a1a9444b5b1e51139a120de974a232bc4">hypro::IGuardHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1ltiGuardHandler.html#afba85a39f5265f6d513dc93e209df2e8">hypro::ltiGuardHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a9e980142b862938ea226a3a1d411a9fb">hypro::rectangularGuardHandler&lt; State &gt;</a>
+</li>
+<li>RELATIVENAME()
+: <a class="el" href="classhypro_1_1HybridSystemParser_1_1GroupDeclContext.html#af2b899aeea55aabc3059876024fc5a8e">hypro::HybridSystemParser::GroupDeclContext</a>
+, <a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html#af241dc6c4987a5892f804f95a63268a0">hypro::HybridSystemParser::NameContext</a>
+</li>
+<li>remainder()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser.html#a109f223a65cc7df20fa13c1c47b78028">hypro::HybridAutomatonParser</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a85c2ed8e7bdd375f8e658573bd9f6f38">hypro::HybridAutomatonParser::SettingContext</a>
+</li>
+<li>RemainderContext()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1RemainderContext.html#a4c07f597d05ea280f6d59303566e0e5b">hypro::HybridAutomatonParser::RemainderContext</a>
 </li>
 <li>removeDuplicatePoints()
 : <a class="el" href="classhypro_1_1Point.html#a7a8c12183c854b044cdfc6122ad385ed">hypro::Point&lt; Number &gt;</a>
@@ -193,23 +272,142 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 <li>removeEmptyGenerators()
 : <a class="el" href="classhypro_1_1ZonotopeT.html#a2a2f65a547b6e619fb00e1d2a0cd2c2b">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
+<li>removeNeighbor()
+: <a class="el" href="classhypro_1_1Facet.html#ae6a0f0851598ffb1a37b3f53c9a95621">hypro::Facet&lt; Number &gt;</a>
+</li>
+<li>removePointFromOutsideSet()
+: <a class="el" href="classhypro_1_1Facet.html#a9cf545028fe72d7ca0b5630c49f590ee">hypro::Facet&lt; Number &gt;</a>
+</li>
 <li>removeRedundancy()
-: <a class="el" href="classhypro_1_1Halfspace.html#a0f1b1674a6bc28e92e8402efca56d019">hypro::Halfspace&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1CarlPolytopeT.html#a7c56da11a6c53c3b2242fd0f91c8065a">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a7b9a7912d7ffbf786b357d1698865519">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1Halfspace.html#a0f1b1674a6bc28e92e8402efca56d019">hypro::Halfspace&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionT.html#a955bd8a5c840311013ce82ebff67c105">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ZonotopeT.html#a648c4dddf715382314f1910e64f17e3a">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+</li>
+<li>removeSharedPrefix()
+: <a class="el" href="classhypro_1_1Path.html#ac626c1b57e1dce829cb925f74725e53b">hypro::Path&lt; Number, tNumber &gt;</a>
+</li>
+<li>replacedexpr()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstantdeclarationContext.html#ae20cc0bd468fc67296273a6b86f62dd5">hypro::HybridAutomatonParser::ConstantdeclarationContext</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonParser.html#a2753d3ba030f7dddaac7db527e387898">hypro::HybridAutomatonParser</a>
+</li>
+<li>ReplacedexprContext()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ReplacedexprContext.html#a5eb6499c737812502c9e8bb0b773a01b">hypro::HybridAutomatonParser::ReplacedexprContext</a>
 </li>
 <li>reset()
 : <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a47c8497fe7e552c15f46bcb8818c8678">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
+<li>RESET()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ResetfctContext.html#afce65151a2e524a4a66919804de90b61">hypro::HybridAutomatonParser::ResetfctContext</a>
+</li>
+<li>Reset()
+: <a class="el" href="classhypro_1_1Reset.html#a99a242db90fa1bd71ab715dc1da189d5">hypro::Reset&lt; Number &gt;</a>
+</li>
+<li>reset()
+: <a class="el" href="classhypro_1_1statistics_1_1CounterRepository.html#a536caabe0dd9860483607251a73efceb">hypro::statistics::CounterRepository</a>
+, <a class="el" href="structhypro_1_1statistics_1_1OperationCounter.html#ad2d5973cd9c9d9d191a6f8f195ba3a1d">hypro::statistics::OperationCounter</a>
+, <a class="el" href="classhypro_1_1statistics_1_1Statistician.html#abbeb403188929576d411f148a806cd13">hypro::statistics::Statistician</a>
+</li>
+<li>resetfct()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser.html#aa8cf89dcefc78b662b41a96de6adf1e7">hypro::HybridAutomatonParser</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a39165466f1196af652c8df3a42470d0b">hypro::HybridAutomatonParser::TransitionContext</a>
+</li>
+<li>ResetfctContext()
+: <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ResetfctContext.html#aff36421d5d00affe3be6353c81826a80">hypro::HybridAutomatonParser::ResetfctContext</a>
+</li>
+<li>ResetVisitor()
+: <a class="el" href="structhypro_1_1detail_1_1ResetVisitor.html#a5c5504864ba5dac70c60d661667651de">hypro::detail::ResetVisitor&lt; ReturnType, Function &gt;</a>
+</li>
+<li>resolveEvaluationResults()
+: <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#a7845ab5222164b14e62ac8b9d1d1711c">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>
+</li>
 <li>reverse()
 : <a class="el" href="classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7">hypro::Dictionary&lt; Number &gt;</a>
+</li>
+<li>reverse_old()
+: <a class="el" href="classhypro_1_1Dictionary.html#afa9ef5ca0958957c322476207e5a4f6d">hypro::Dictionary&lt; Number &gt;</a>
+</li>
+<li>reverseDual()
+: <a class="el" href="classhypro_1_1Dictionary.html#ac6a5b2e8beccedb8f19b820617055b91">hypro::Dictionary&lt; Number &gt;</a>
+</li>
+<li>reverseDual_old()
+: <a class="el" href="classhypro_1_1Dictionary.html#ac3437fac1db081c31a93260d91d65507">hypro::Dictionary&lt; Number &gt;</a>
+</li>
+<li>reverseOp()
+: <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#a3fe3eb20d9400d044a2aa54160ae6d5a">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ProjectOp.html#af1bf41be30b2c41e3552deb20ab19ea3">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1RootGrowNode.html#aae3cea666daf995e5bf22e78d04ec018">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1ScaleOp.html#aa05decbb056fbc386051b11153d7a339">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1TrafoOp.html#a1d55de4fd928833525747ac9e72e994a">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>rewind()
 : <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a0cf2b095acbfd013647d0967a61f8274">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
+<li>rGetChildren()
+: <a class="el" href="classhypro_1_1RootGrowNode.html#acf8810280ac279d6e2692a8349ec8fdb">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>
+</li>
+<li>rGetIntervals()
+: <a class="el" href="classhypro_1_1Reset.html#a6cbe6f78cf5d05a62387f5d1cb1dffdd">hypro::Reset&lt; Number &gt;</a>
+</li>
+<li>rGetInvariantTimings()
+: <a class="el" href="classhypro_1_1EventTimingContainer.html#a10b3da4a2196abf70d77ee146a496fb9">hypro::EventTimingContainer&lt; Number &gt;</a>
+</li>
+<li>rGetLinearFlow()
+: <a class="el" href="classhypro_1_1Location.html#a2aea8b94a29b2e2b0874118c7414a0ce">hypro::Location&lt; Number &gt;</a>
+</li>
+<li>rGetMatrix()
+: <a class="el" href="classhypro_1_1Reset.html#a6c0112886f748c9667a2c12aaaa5b2a0">hypro::Reset&lt; Number &gt;</a>
+</li>
 <li>rGetNode()
 : <a class="el" href="classhypro_1_1EventTimingProvider.html#a26ffa86e373f27dae9e8646ec5cd0b0a">hypro::EventTimingProvider&lt; Number &gt;</a>
 </li>
+<li>rGetQueue()
+: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a9fe5309dbe91b02be7424807f6367860">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+</li>
+<li>rGetRectangularFlow()
+: <a class="el" href="classhypro_1_1Location.html#a7154d06faf592373da5ee9286842fd5a">hypro::Location&lt; Number &gt;</a>
+</li>
+<li>rGetRefinements()
+: <a class="el" href="classhypro_1_1ReachTreeNode.html#a69bfef741e967c0032ee974aa9255113">hypro::ReachTreeNode&lt; State &gt;</a>
+</li>
+<li>rGetStates()
+: <a class="el" href="classhypro_1_1Flowpipe.html#ad3eebe527efdbdac01da07d2954c4b55">hypro::Flowpipe&lt; State &gt;</a>
+</li>
+<li>rGetTimingAggregate()
+: <a class="el" href="classhypro_1_1EventTimingNode.html#a47d97bc0c44f04f226dac34a3ab1ec92">hypro::EventTimingNode&lt; Number &gt;</a>
+</li>
+<li>rGetTimings()
+: <a class="el" href="classhypro_1_1EventTimingNode.html#a7c9f65e753a691e4d0358f52ce3f5498">hypro::EventTimingNode&lt; Number &gt;</a>
+</li>
+<li>rGetTransitions()
+: <a class="el" href="classhypro_1_1Location.html#a71ed6bfd985e5c9410b58a99b645212a">hypro::Location&lt; Number &gt;</a>
+</li>
+<li>rGetTransitionTimings()
+: <a class="el" href="classhypro_1_1EventTimingContainer.html#a85c11f305707f11284dde1afb84ecec3">hypro::EventTimingContainer&lt; Number &gt;</a>
+</li>
+<li>rGetVector()
+: <a class="el" href="classhypro_1_1Reset.html#a85a165fb6d4d191cf6fa677c76db0f97">hypro::Reset&lt; Number &gt;</a>
+</li>
+<li>RGNData()
+: <a class="el" href="structhypro_1_1RGNData.html#a8b7e4889cb966659f6de455a7965c141">hypro::RGNData</a>
+</li>
 <li>Ridge()
-: <a class="el" href="classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1">hypro::Ridge&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Ridge.html#a826da5a6a927fa7f2ca49877880723ea">hypro::Ridge&lt; Number &gt;</a>
+</li>
+<li>rmConstantTerm()
+: <a class="el" href="classhypro_1_1TaylorModel.html#ac4e89a8da67a80517ab56e0c90ba6076">hypro::TaylorModel&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1TaylorModelVec.html#a8e2e7c2ed1bef64428cdb3d8a46d6d5a">hypro::TaylorModelVec&lt; Number &gt;</a>
+</li>
+<li>rNeighbors()
+: <a class="el" href="classhypro_1_1Facet.html#a93e301d40a6768b3772841b6e28c5503">hypro::Facet&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1Ridge.html#ab180f8e99e430f205d0b533534b55bdb">hypro::Ridge&lt; Number &gt;</a>
+</li>
+<li>RootGrowNode()
+: <a class="el" href="classhypro_1_1RootGrowNode.html#af97c608ebf715c3ca5464a979d97ea71">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>
+</li>
+<li>ROOTNAME()
+: <a class="el" href="classhypro_1_1HybridSystemParser_1_1NameContext.html#ae8889da2870cf38c2b4cb26f06d7c4b3">hypro::HybridSystemParser::NameContext</a>
 </li>
 <li>rPoint()
 : <a class="el" href="classhypro_1_1Vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff">hypro::Vertex&lt; Number &gt;</a>
@@ -218,7 +416,9 @@ $(document).ready(function(){initNavTree('functions_func_r.html','');});
 : <a class="el" href="classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d">hypro::Plotter&lt; Number &gt;</a>
 </li>
 <li>rVertices()
-: <a class="el" href="classhypro_1_1Ridge.html#a84490edc4c394c50a2f642450ec1d1a5">hypro::Ridge&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Facet.html#a445f45c34a812f8baf02757837d537bb">hypro::Facet&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1Ridge.html#a84490edc4c394c50a2f642450ec1d1a5">hypro::Ridge&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1VertexContainer.html#a210a537e62f2d51916e8e550af99c1d2">hypro::VertexContainer&lt; Number &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,35 +124,185 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridAutomatonParser_1_
 <div class="title">hypro::HybridAutomatonParser::LbadstateContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a045493e809b33cf671159bc4cda30057"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a045493e809b33cf671159bc4cda30057"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LbadstateContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:a045493e809b33cf671159bc4cda30057"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#a045493e809b33cf671159bc4cda30057">LbadstateContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:a045493e809b33cf671159bc4cda30057"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af11b8ecf68b29e3c1b577289c6488606"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af11b8ecf68b29e3c1b577289c6488606"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:af11b8ecf68b29e3c1b577289c6488606"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#af11b8ecf68b29e3c1b577289c6488606">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:af11b8ecf68b29e3c1b577289c6488606"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0826b1610e36484d2a30dd50f596095"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab0826b1610e36484d2a30dd50f596095"></a>
-antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><b>VARIABLE</b> ()</td></tr>
+<tr class="memitem:ab0826b1610e36484d2a30dd50f596095"><td class="memItemLeft" align="right" valign="top">antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#ab0826b1610e36484d2a30dd50f596095">VARIABLE</a> ()</td></tr>
 <tr class="separator:ab0826b1610e36484d2a30dd50f596095"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a992f0b92a5a574a8d2eff821427f6624"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a992f0b92a5a574a8d2eff821427f6624"></a>
-antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><b>CBOPEN</b> ()</td></tr>
+<tr class="memitem:a992f0b92a5a574a8d2eff821427f6624"><td class="memItemLeft" align="right" valign="top">antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#a992f0b92a5a574a8d2eff821427f6624">CBOPEN</a> ()</td></tr>
 <tr class="separator:a992f0b92a5a574a8d2eff821427f6624"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaafc3a54541b2be62b5f2d7449881774"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaafc3a54541b2be62b5f2d7449881774"></a>
-antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><b>CBCLOSE</b> ()</td></tr>
+<tr class="memitem:aaafc3a54541b2be62b5f2d7449881774"><td class="memItemLeft" align="right" valign="top">antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#aaafc3a54541b2be62b5f2d7449881774">CBCLOSE</a> ()</td></tr>
 <tr class="separator:aaafc3a54541b2be62b5f2d7449881774"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5950e09470d38a3637e911e9ff31fe3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5950e09470d38a3637e911e9ff31fe3"></a>
-<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html">ConstrsetContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>constrset</b> ()</td></tr>
+<tr class="memitem:ac5950e09470d38a3637e911e9ff31fe3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html">ConstrsetContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#ac5950e09470d38a3637e911e9ff31fe3">constrset</a> ()</td></tr>
 <tr class="separator:ac5950e09470d38a3637e911e9ff31fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d5a6af1f724533cb9feda7321989360"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d5a6af1f724533cb9feda7321989360"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a4d5a6af1f724533cb9feda7321989360"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#a4d5a6af1f724533cb9feda7321989360">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a4d5a6af1f724533cb9feda7321989360"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00432">432</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a045493e809b33cf671159bc4cda30057"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridAutomatonParser::LbadstateContext::LbadstateContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01795">1795</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01795">LbadstateContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01795">LbadstateContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a4d5a6af1f724533cb9feda7321989360"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridAutomatonParser::LbadstateContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01820">1820</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aaafc3a54541b2be62b5f2d7449881774"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tree::TerminalNode * HybridAutomatonParser::LbadstateContext::CBCLOSE </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01807">1807</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a992f0b92a5a574a8d2eff821427f6624"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tree::TerminalNode * HybridAutomatonParser::LbadstateContext::CBOPEN </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01803">1803</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac5950e09470d38a3637e911e9ff31fe3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html">HybridAutomatonParser::ConstrsetContext</a> * HybridAutomatonParser::LbadstateContext::constrset </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01811">1811</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af11b8ecf68b29e3c1b577289c6488606"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridAutomatonParser::LbadstateContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01816">1816</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">hypro::HybridAutomatonParser::getRuleNames()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00037">hypro::HybridAutomatonParser::RuleLbadstate</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab0826b1610e36484d2a30dd50f596095"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tree::TerminalNode * HybridAutomatonParser::LbadstateContext::VARIABLE </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01799">1799</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a></li>
 </ul>

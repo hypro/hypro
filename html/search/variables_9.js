@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['uniformbloating',['uniformBloating',['../structhypro_1_1ReachabilitySettings.html#a75dab1f6c8dcf210c5e8319ece734829',1,'hypro::ReachabilitySettings']]],
-  ['useinvarianttiminginformation',['useInvariantTimingInformation',['../structhypro_1_1ReachabilitySettings.html#aa879f947713bf99a791174af672ba59d',1,'hypro::ReachabilitySettings']]]
+  ['ja',['ja',['../structhypro_1_1glpk__context.html#a53524e6a5136e0965959c774187673ad',1,'hypro::glpk_context']]],
+  ['jumpdepth',['jumpDepth',['../structhypro_1_1ReachabilitySettings.html#a4047c1ba8fb5430fc87add593f9fee64',1,'hypro::ReachabilitySettings']]]
 ];

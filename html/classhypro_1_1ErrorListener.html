@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,17 +124,128 @@ $(document).ready(function(){initNavTree('classhypro_1_1ErrorListener.html','');
 <div class="title">hypro::ErrorListener Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ErrorListener_8h_source.html">ErrorListener.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad13c40c12659dd540f79399807f3c5e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad13c40c12659dd540f79399807f3c5e7"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>syntaxError</b> (Recognizer *, Token *, size_t line, size_t charPositionInLine, const std::string &amp;msg, std::exception_ptr)</td></tr>
+<tr class="memitem:ac3a1137c0531866e86a9e037223e1146"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ErrorListener.html#ac3a1137c0531866e86a9e037223e1146">ErrorListener</a> ()</td></tr>
+<tr class="separator:ac3a1137c0531866e86a9e037223e1146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8e6c71321d5f2c55e934dbbfc78fe8b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ErrorListener.html#ac8e6c71321d5f2c55e934dbbfc78fe8b">~ErrorListener</a> ()</td></tr>
+<tr class="separator:ac8e6c71321d5f2c55e934dbbfc78fe8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad13c40c12659dd540f79399807f3c5e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ErrorListener.html#ad13c40c12659dd540f79399807f3c5e7">syntaxError</a> (Recognizer *, Token *, size_t line, size_t charPositionInLine, const std::string &amp;msg, std::exception_ptr)</td></tr>
 <tr class="separator:ad13c40c12659dd540f79399807f3c5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="ErrorListener_8h_source.html#l00021">21</a> of file <a class="el" href="ErrorListener_8h_source.html">ErrorListener.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ac3a1137c0531866e86a9e037223e1146"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::ErrorListener::ErrorListener </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ErrorListener_8h_source.html#l00025">25</a> of file <a class="el" href="ErrorListener_8h_source.html">ErrorListener.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac8e6c71321d5f2c55e934dbbfc78fe8b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::ErrorListener::~ErrorListener </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ErrorListener_8h_source.html#l00026">26</a> of file <a class="el" href="ErrorListener_8h_source.html">ErrorListener.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad13c40c12659dd540f79399807f3c5e7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::ErrorListener::syntaxError </td>
+          <td>(</td>
+          <td class="paramtype">Recognizer *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Token *&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>charPositionInLine</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::exception_ptr&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ErrorListener_8cpp_source.html#l00005">5</a> of file <a class="el" href="ErrorListener_8cpp_source.html">ErrorListener.cpp</a>.</p>
+
+<p>References <a class="el" href="for__each_8h_source.html#l00048">hypro::for_each_in_tuple()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="ErrorListener_8h_source.html">ErrorListener.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="ErrorListener_8cpp_source.html">ErrorListener.cpp</a></li>
 </ul>

@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,23 +124,89 @@ $(document).ready(function(){initNavTree('structhypro_1_1BoxLinearOptimizationOf
 <div class="title">hypro::BoxLinearOptimizationOff Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="BoxSetting_8h_source.html">BoxSetting.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a38bbc496b4624816814a23796fe6b8d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38bbc496b4624816814a23796fe6b8d1"></a>
-static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION</b> = true</td></tr>
+<tr class="memitem:a38bbc496b4624816814a23796fe6b8d1"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1BoxLinearOptimizationOff.html#a38bbc496b4624816814a23796fe6b8d1">HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION</a> = true</td></tr>
 <tr class="separator:a38bbc496b4624816814a23796fe6b8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81ec27a145e00b5cd5f146394a3e29ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81ec27a145e00b5cd5f146394a3e29ef"></a>
-static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>USE_INTERVAL_ARITHMETIC</b> = true</td></tr>
+<tr class="memitem:a81ec27a145e00b5cd5f146394a3e29ef"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1BoxLinearOptimizationOff.html#a81ec27a145e00b5cd5f146394a3e29ef">USE_INTERVAL_ARITHMETIC</a> = true</td></tr>
 <tr class="separator:a81ec27a145e00b5cd5f146394a3e29ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac557c2926d2b97ba83609b28b1d2425d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac557c2926d2b97ba83609b28b1d2425d"></a>
-static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>DETECT_BOX</b> = true</td></tr>
+<tr class="memitem:ac557c2926d2b97ba83609b28b1d2425d"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1BoxLinearOptimizationOff.html#ac557c2926d2b97ba83609b28b1d2425d">DETECT_BOX</a> = true</td></tr>
 <tr class="separator:ac557c2926d2b97ba83609b28b1d2425d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="BoxSetting_8h_source.html#l00016">16</a> of file <a class="el" href="BoxSetting_8h_source.html">BoxSetting.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ac557c2926d2b97ba83609b28b1d2425d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::BoxLinearOptimizationOff::DETECT_BOX = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="BoxSetting_8h_source.html#l00022">22</a> of file <a class="el" href="BoxSetting_8h_source.html">BoxSetting.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a38bbc496b4624816814a23796fe6b8d1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::BoxLinearOptimizationOff::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="BoxSetting_8h_source.html#l00018">18</a> of file <a class="el" href="BoxSetting_8h_source.html">BoxSetting.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a81ec27a145e00b5cd5f146394a3e29ef"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::BoxLinearOptimizationOff::USE_INTERVAL_ARITHMETIC = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="BoxSetting_8h_source.html#l00020">20</a> of file <a class="el" href="BoxSetting_8h_source.html">BoxSetting.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/Box/<a class="el" href="BoxSetting_8h_source.html">BoxSetting.h</a></li>
 </ul>
 </div><!-- contents -->

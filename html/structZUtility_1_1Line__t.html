@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -125,20 +125,21 @@ $(document).ready(function(){initNavTree('structZUtility_1_1Line__t.html','');})
 <div class="title">ZUtility::Line_t&lt; Number &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="ZUtility_8h_source.html">ZUtility.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1bffc5560e7ea02502609660e4013076"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1bffc5560e7ea02502609660e4013076"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Line_t</b> (Eigen::Matrix&lt; Number, 2, 1 &gt; pt_, Eigen::Matrix&lt; Number, 2, 1 &gt; direction_)</td></tr>
+<tr class="memitem:a5f7ebb8bd3923b4e585a59ef203df526"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZUtility_1_1Line__t.html#a5f7ebb8bd3923b4e585a59ef203df526">Line_t</a> ()</td></tr>
+<tr class="separator:a5f7ebb8bd3923b4e585a59ef203df526"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bffc5560e7ea02502609660e4013076"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZUtility_1_1Line__t.html#a1bffc5560e7ea02502609660e4013076">Line_t</a> (<a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1 &gt; pt_, <a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1 &gt; direction_)</td></tr>
 <tr class="separator:a1bffc5560e7ea02502609660e4013076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:addc58f7867d007f5f57c1f5adc1ec6ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="addc58f7867d007f5f57c1f5adc1ec6ab"></a>
-Eigen::Matrix&lt; Number, 2, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>point</b></td></tr>
+<tr class="memitem:addc58f7867d007f5f57c1f5adc1ec6ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZUtility_1_1Line__t.html#addc58f7867d007f5f57c1f5adc1ec6ab">point</a></td></tr>
 <tr class="separator:addc58f7867d007f5f57c1f5adc1ec6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac760d2b49588d112c5da7a6715cf9eb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac760d2b49588d112c5da7a6715cf9eb9"></a>
-Eigen::Matrix&lt; Number, 2, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>direction</b></td></tr>
+<tr class="memitem:ac760d2b49588d112c5da7a6715cf9eb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structZUtility_1_1Line__t.html#ac760d2b49588d112c5da7a6715cf9eb9">direction</a></td></tr>
 <tr class="separator:ac760d2b49588d112c5da7a6715cf9eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -147,7 +148,110 @@ struct ZUtility::Line_t&lt; Number &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="ZUtility_8h_source.html#l00086">86</a> of file <a class="el" href="ZUtility_8h_source.html">ZUtility.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a5f7ebb8bd3923b4e585a59ef203df526"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structZUtility_1_1Line__t.html">ZUtility::Line_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="structZUtility_1_1Line__t.html">Line_t</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ZUtility_8h_source.html#l00087">87</a> of file <a class="el" href="ZUtility_8h_source.html">ZUtility.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1bffc5560e7ea02502609660e4013076"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structZUtility_1_1Line__t.html">ZUtility::Line_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="structZUtility_1_1Line__t.html">Line_t</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1 &gt;&#160;</td>
+          <td class="paramname"><em>pt_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1 &gt;&#160;</td>
+          <td class="paramname"><em>direction_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ZUtility_8h_source.html#l00088">88</a> of file <a class="el" href="ZUtility_8h_source.html">ZUtility.h</a>.</p>
+
+<p>References <a class="el" href="ZUtility_8h_source.html#l00088">ZUtility::Line_t&lt; Number &gt;::Line_t()</a>.</p>
+
+<p>Referenced by <a class="el" href="ZUtility_8h_source.html#l00081">ZUtility::compareXVal()</a>, <a class="el" href="ZUtility_8h_source.html#l00076">ZUtility::compareYVal()</a>, <a class="el" href="ZUtility_8h_source.html#l00047">ZUtility::getCornersRecursive()</a>, and <a class="el" href="ZUtility_8h_source.html#l00088">ZUtility::Line_t&lt; Number &gt;::Line_t()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ac760d2b49588d112c5da7a6715cf9eb9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1&gt; <a class="el" href="structZUtility_1_1Line__t.html">ZUtility::Line_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::direction</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ZUtility_8h_source.html#l00094">94</a> of file <a class="el" href="ZUtility_8h_source.html">ZUtility.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="addc58f7867d007f5f57c1f5adc1ec6ab"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__sfIntersection_8cpp.html#aa48d29dce723cf114a1f09bf95afd235">Eigen::Matrix</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, 2, 1&gt; <a class="el" href="structZUtility_1_1Line__t.html">ZUtility::Line_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::point</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ZUtility_8h_source.html#l00093">93</a> of file <a class="el" href="ZUtility_8h_source.html">ZUtility.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/<a class="el" href="ZUtility_8h_source.html">ZUtility.h</a></li>
 </ul>
 </div><!-- contents -->
@@ -156,7 +260,7 @@ struct ZUtility::Line_t&lt; Number &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>ZUtility</b></li><li class="navelem"><a class="el" href="structZUtility_1_1Line__t.html">Line_t</a></li>
+    <li class="navelem"><a class="el" href="namespaceZUtility.html">ZUtility</a></li><li class="navelem"><a class="el" href="structZUtility_1_1Line__t.html">Line_t</a></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>

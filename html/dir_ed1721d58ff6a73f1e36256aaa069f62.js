@@ -1,15 +1,57 @@
 var dir_ed1721d58ff6a73f1e36256aaa069f62 =
 [
-    [ "IntersectHalfspaceOp.h", "IntersectHalfspaceOp_8h_source.html", null ],
-    [ "IntersectOp.h", "IntersectOp_8h_source.html", null ],
-    [ "Leaf.h", "Leaf_8h_source.html", null ],
-    [ "LinTrafoParameters.h", "LinTrafoParameters_8h_source.html", null ],
-    [ "ProjectOp.h", "ProjectOp_8h_source.html", null ],
-    [ "RootGrowNode.h", "RootGrowNode_8h_source.html", null ],
-    [ "ScaleOp.h", "ScaleOp_8h_source.html", null ],
-    [ "SumOp.h", "SumOp_8h_source.html", null ],
-    [ "SupportFunctionNew.h", "SupportFunctionNew_8h_source.html", null ],
-    [ "SupportFunctionNewSetting.h", "SupportFunctionNewSetting_8h_source.html", null ],
-    [ "TrafoOp.h", "TrafoOp_8h_source.html", null ],
-    [ "UnionOp.h", "UnionOp_8h_source.html", null ]
+    [ "IntersectHalfspaceOp.h", "IntersectHalfspaceOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "IntersectHalfspaceData", "structhypro_1_1IntersectHalfspaceData.html", "structhypro_1_1IntersectHalfspaceData" ],
+      [ "IntersectHalfspaceOp", "classhypro_1_1IntersectHalfspaceOp.html", "classhypro_1_1IntersectHalfspaceOp" ]
+    ] ],
+    [ "IntersectOp.h", "IntersectOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "IntersectOp", "classhypro_1_1IntersectOp.html", "classhypro_1_1IntersectOp" ]
+    ] ],
+    [ "Leaf.h", "Leaf_8h.html", [
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "LeafData", "structhypro_1_1LeafData.html", "structhypro_1_1LeafData" ],
+      [ "Leaf", "classhypro_1_1Leaf.html", "classhypro_1_1Leaf" ]
+    ] ],
+    [ "LinTrafoParameters.h", "LinTrafoParameters_8h.html", [
+      [ "LinTrafoParameters", "structhypro_1_1LinTrafoParameters.html", "structhypro_1_1LinTrafoParameters" ]
+    ] ],
+    [ "ProjectOp.h", "ProjectOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "ProjectData", "structhypro_1_1ProjectData.html", "structhypro_1_1ProjectData" ],
+      [ "ProjectOp", "classhypro_1_1ProjectOp.html", "classhypro_1_1ProjectOp" ]
+    ] ],
+    [ "RootGrowNode.h", "RootGrowNode_8h.html", "RootGrowNode_8h" ],
+    [ "ScaleOp.h", "ScaleOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "ScaleData", "structhypro_1_1ScaleData.html", "structhypro_1_1ScaleData" ],
+      [ "ScaleOp", "classhypro_1_1ScaleOp.html", "classhypro_1_1ScaleOp" ]
+    ] ],
+    [ "SumOp.h", "SumOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "SumOp", "classhypro_1_1SumOp.html", "classhypro_1_1SumOp" ]
+    ] ],
+    [ "SupportFunctionNew.h", "SupportFunctionNew_8h.html", null ],
+    [ "SupportFunctionNewSetting.h", "SupportFunctionNewSetting_8h.html", [
+      [ "SupportFunctionNewDefault", "structhypro_1_1SupportFunctionNewDefault.html", null ],
+      [ "SupportFunctionNewMorePrecision", "structhypro_1_1SupportFunctionNewMorePrecision.html", null ],
+      [ "SupportFunctionNewNoReduction", "structhypro_1_1SupportFunctionNewNoReduction.html", null ],
+      [ "SupportFunctionNewLeGuernic", "structhypro_1_1SupportFunctionNewLeGuernic.html", null ]
+    ] ],
+    [ "TrafoOp.h", "TrafoOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "TrafoData", "structhypro_1_1TrafoData.html", "structhypro_1_1TrafoData" ],
+      [ "TrafoOp", "classhypro_1_1TrafoOp.html", "classhypro_1_1TrafoOp" ]
+    ] ],
+    [ "UnionOp.h", "UnionOp_8h.html", [
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
+      [ "UnionOp", "classhypro_1_1UnionOp.html", "classhypro_1_1UnionOp" ]
+    ] ]
 ];

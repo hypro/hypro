@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,35 +124,189 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridSystemParser_1_1Op
 <div class="title">hypro::HybridSystemParser::OptElifFuncStatsContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a711fc0da5dba576f4823f023708e08bc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a711fc0da5dba576f4823f023708e08bc"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>OptElifFuncStatsContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:a711fc0da5dba576f4823f023708e08bc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a711fc0da5dba576f4823f023708e08bc">OptElifFuncStatsContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:a711fc0da5dba576f4823f023708e08bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f88911201101da3790009bbd4bc0fe6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f88911201101da3790009bbd4bc0fe6"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:a7f88911201101da3790009bbd4bc0fe6"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a7f88911201101da3790009bbd4bc0fe6">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:a7f88911201101da3790009bbd4bc0fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52778e6e31ce6b02c25117552b9074fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a52778e6e31ce6b02c25117552b9074fa"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>expression</b> ()</td></tr>
+<tr class="memitem:a52778e6e31ce6b02c25117552b9074fa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a52778e6e31ce6b02c25117552b9074fa">expression</a> ()</td></tr>
 <tr class="separator:a52778e6e31ce6b02c25117552b9074fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1395d523f943ca9c9fd2722b6e241e98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1395d523f943ca9c9fd2722b6e241e98"></a>
-<a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>expression</b> (size_t i)</td></tr>
+<tr class="memitem:a1395d523f943ca9c9fd2722b6e241e98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">ExpressionContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a1395d523f943ca9c9fd2722b6e241e98">expression</a> (size_t i)</td></tr>
 <tr class="separator:a1395d523f943ca9c9fd2722b6e241e98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af98af4225d7dbb34da312879b5f6bb1b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af98af4225d7dbb34da312879b5f6bb1b"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementsContext.html">FuncStatementsContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>funcStatements</b> ()</td></tr>
+<tr class="memitem:af98af4225d7dbb34da312879b5f6bb1b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementsContext.html">FuncStatementsContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#af98af4225d7dbb34da312879b5f6bb1b">funcStatements</a> ()</td></tr>
 <tr class="separator:af98af4225d7dbb34da312879b5f6bb1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d64579c244b90bb827cc7c1032c9007"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d64579c244b90bb827cc7c1032c9007"></a>
-<a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementsContext.html">FuncStatementsContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>funcStatements</b> (size_t i)</td></tr>
+<tr class="memitem:a4d64579c244b90bb827cc7c1032c9007"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementsContext.html">FuncStatementsContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a4d64579c244b90bb827cc7c1032c9007">funcStatements</a> (size_t i)</td></tr>
 <tr class="separator:a4d64579c244b90bb827cc7c1032c9007"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a887470d2d84ce6aeb7ab31b812d19df8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a887470d2d84ce6aeb7ab31b812d19df8"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a887470d2d84ce6aeb7ab31b812d19df8"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a887470d2d84ce6aeb7ab31b812d19df8">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a887470d2d84ce6aeb7ab31b812d19df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridSystemParser_8h_source.html#l00496">496</a> of file <a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a711fc0da5dba576f4823f023708e08bc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridSystemParser::OptElifFuncStatsContext::OptElifFuncStatsContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02004">2004</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l02004">OptElifFuncStatsContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l02004">OptElifFuncStatsContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a887470d2d84ce6aeb7ab31b812d19df8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridSystemParser::OptElifFuncStatsContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02029">2029</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a52778e6e31ce6b02c25117552b9074fa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">HybridSystemParser::ExpressionContext</a> * &gt; HybridSystemParser::OptElifFuncStatsContext::expression </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02008">2008</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1395d523f943ca9c9fd2722b6e241e98"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridSystemParser_1_1ExpressionContext.html">HybridSystemParser::ExpressionContext</a> * HybridSystemParser::OptElifFuncStatsContext::expression </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02012">2012</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af98af4225d7dbb34da312879b5f6bb1b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementsContext.html">HybridSystemParser::FuncStatementsContext</a> * &gt; HybridSystemParser::OptElifFuncStatsContext::funcStatements </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02016">2016</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l02036">hypro::HybridSystemParser::optElifFuncStats()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4d64579c244b90bb827cc7c1032c9007"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementsContext.html">HybridSystemParser::FuncStatementsContext</a> * HybridSystemParser::OptElifFuncStatsContext::funcStatements </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02020">2020</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7f88911201101da3790009bbd4bc0fe6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridSystemParser::OptElifFuncStatsContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l02025">2025</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l00026">hypro::HybridSystemParser::getRuleNames()</a>, and <a class="el" href="HybridSystemParser_8h_source.html#l00050">hypro::HybridSystemParser::RuleOptElifFuncStats</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a></li>
 </ul>

@@ -1,8 +1,19 @@
 var dir_1d177bd438e269a304e1f07d1a6d36f2 =
 [
-    [ "ContextFactory.h", "ContextFactory_8h_source.html", null ],
-    [ "Exceptions.h", "Exceptions_8h_source.html", null ],
-    [ "IContext.h", "IContext_8h_source.html", null ],
-    [ "LTIContext.h", "LTIContext_8h_source.html", null ],
-    [ "TimedContext.h", "TimedContext_8h_source.html", null ]
+    [ "ContextFactory.h", "ContextFactory_8h.html", [
+      [ "ContextFactory", "classhypro_1_1ContextFactory.html", "classhypro_1_1ContextFactory" ]
+    ] ],
+    [ "Exceptions.h", "Exceptions_8h.html", [
+      [ "HardTerminateException", "classhypro_1_1HardTerminateException.html", "classhypro_1_1HardTerminateException" ],
+      [ "FinishWithDiscreteProcessingException", "classhypro_1_1FinishWithDiscreteProcessingException.html", "classhypro_1_1FinishWithDiscreteProcessingException" ]
+    ] ],
+    [ "IContext.h", "IContext_8h.html", [
+      [ "IContext", "classhypro_1_1IContext.html", "classhypro_1_1IContext" ]
+    ] ],
+    [ "LTIContext.h", "LTIContext_8h.html", [
+      [ "LTIContext", "classhypro_1_1LTIContext.html", "classhypro_1_1LTIContext" ]
+    ] ],
+    [ "TimedContext.h", "TimedContext_8h.html", [
+      [ "TimedContext", "classhypro_1_1TimedContext.html", "classhypro_1_1TimedContext" ]
+    ] ]
 ];

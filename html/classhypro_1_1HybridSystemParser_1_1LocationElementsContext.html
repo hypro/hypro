@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,29 +124,150 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridSystemParser_1_1Lo
 <div class="title">hypro::HybridSystemParser::LocationElementsContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aab5575ef09ad0da6dfa75ec6a736c752"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab5575ef09ad0da6dfa75ec6a736c752"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LocationElementsContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:aab5575ef09ad0da6dfa75ec6a736c752"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementsContext.html#aab5575ef09ad0da6dfa75ec6a736c752">LocationElementsContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:aab5575ef09ad0da6dfa75ec6a736c752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef21e989ea0efc09462c81783e122eda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef21e989ea0efc09462c81783e122eda"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:aef21e989ea0efc09462c81783e122eda"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementsContext.html#aef21e989ea0efc09462c81783e122eda">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:aef21e989ea0efc09462c81783e122eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26a4e748c79590739bee52e4a0cd4f99"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26a4e748c79590739bee52e4a0cd4f99"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementContext.html">LocationElementContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>locationElement</b> ()</td></tr>
+<tr class="memitem:a26a4e748c79590739bee52e4a0cd4f99"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementContext.html">LocationElementContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementsContext.html#a26a4e748c79590739bee52e4a0cd4f99">locationElement</a> ()</td></tr>
 <tr class="separator:a26a4e748c79590739bee52e4a0cd4f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a721f40e1a98575c965d58ca0fd2537fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a721f40e1a98575c965d58ca0fd2537fd"></a>
-<a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementContext.html">LocationElementContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>locationElement</b> (size_t i)</td></tr>
+<tr class="memitem:a721f40e1a98575c965d58ca0fd2537fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementContext.html">LocationElementContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementsContext.html#a721f40e1a98575c965d58ca0fd2537fd">locationElement</a> (size_t i)</td></tr>
 <tr class="separator:a721f40e1a98575c965d58ca0fd2537fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0762e6b2391b6e3e284b1b799023b680"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0762e6b2391b6e3e284b1b799023b680"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a0762e6b2391b6e3e284b1b799023b680"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementsContext.html#a0762e6b2391b6e3e284b1b799023b680">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a0762e6b2391b6e3e284b1b799023b680"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridSystemParser_8h_source.html#l01246">1246</a> of file <a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="aab5575ef09ad0da6dfa75ec6a736c752"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridSystemParser::LocationElementsContext::LocationElementsContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l05906">5906</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l05906">LocationElementsContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l05906">LocationElementsContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0762e6b2391b6e3e284b1b799023b680"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridSystemParser::LocationElementsContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l05923">5923</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aef21e989ea0efc09462c81783e122eda"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridSystemParser::LocationElementsContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l05919">5919</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l00026">hypro::HybridSystemParser::getRuleNames()</a>, and <a class="el" href="HybridSystemParser_8h_source.html#l00063">hypro::HybridSystemParser::RuleLocationElements</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a26a4e748c79590739bee52e4a0cd4f99"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementContext.html">HybridSystemParser::LocationElementContext</a> * &gt; HybridSystemParser::LocationElementsContext::locationElement </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l05910">5910</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l05930">hypro::HybridSystemParser::locationElements()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a721f40e1a98575c965d58ca0fd2537fd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridSystemParser_1_1LocationElementContext.html">HybridSystemParser::LocationElementContext</a> * HybridSystemParser::LocationElementsContext::locationElement </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l05914">5914</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a></li>
 </ul>

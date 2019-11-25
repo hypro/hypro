@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,23 +124,128 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridSystemParser_1_1Ad
 <div class="title">hypro::HybridSystemParser::AdressableContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab6f50b5fe255515e2f5c184f656c5928"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6f50b5fe255515e2f5c184f656c5928"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>AdressableContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:ab6f50b5fe255515e2f5c184f656c5928"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html#ab6f50b5fe255515e2f5c184f656c5928">AdressableContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:ab6f50b5fe255515e2f5c184f656c5928"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a733b7d7827c83ace2ba275177f291321"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a733b7d7827c83ace2ba275177f291321"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>copyFrom</b> (<a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html">AdressableContext</a> *context)</td></tr>
+<tr class="memitem:a5c5a27039e314e2d67c9afdd8661d161"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html#a5c5a27039e314e2d67c9afdd8661d161">AdressableContext</a> ()=default</td></tr>
+<tr class="separator:a5c5a27039e314e2d67c9afdd8661d161"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a733b7d7827c83ace2ba275177f291321"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html#a733b7d7827c83ace2ba275177f291321">copyFrom</a> (<a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html">AdressableContext</a> *context)</td></tr>
 <tr class="separator:a733b7d7827c83ace2ba275177f291321"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb42fdf2d327d4c851d27feb31ecb318"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb42fdf2d327d4c851d27feb31ecb318"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:afb42fdf2d327d4c851d27feb31ecb318"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html#afb42fdf2d327d4c851d27feb31ecb318">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:afb42fdf2d327d4c851d27feb31ecb318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridSystemParser_8h_source.html#l01596">1596</a> of file <a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ab6f50b5fe255515e2f5c184f656c5928"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridSystemParser::AdressableContext::AdressableContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l07332">7332</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l07332">AdressableContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l07332">AdressableContext()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c5a27039e314e2d67c9afdd8661d161"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">hypro::HybridSystemParser::AdressableContext::AdressableContext </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a733b7d7827c83ace2ba275177f291321"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HybridSystemParser::AdressableContext::copyFrom </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1HybridSystemParser_1_1AdressableContext.html">AdressableContext</a> *&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l07341">7341</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridSystemParser_8cpp_source.html#l07351">hypro::HybridSystemParser::AdressableIdContext::AdressableIdContext()</a>, <a class="el" href="HybridSystemParser_8cpp_source.html#l07387">hypro::HybridSystemParser::AdressablePairContext::AdressablePairContext()</a>, and <a class="el" href="HybridSystemParser_8cpp_source.html#l07369">hypro::HybridSystemParser::AdressableProjContext::AdressableProjContext()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afb42fdf2d327d4c851d27feb31ecb318"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridSystemParser::AdressableContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridSystemParser_8cpp_source.html#l07337">7337</a> of file <a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridSystemParser_8cpp_source.html#l00026">hypro::HybridSystemParser::getRuleNames()</a>, and <a class="el" href="HybridSystemParser_8h_source.html#l00067">hypro::HybridSystemParser::RuleAdressable</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8h_source.html">HybridSystemParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/<a class="el" href="HybridSystemParser_8cpp_source.html">HybridSystemParser.cpp</a></li>
 </ul>

@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -125,41 +125,38 @@ $(document).ready(function(){initNavTree('classhypro_1_1ltiTimeEvolutionHandler.
 <div class="title">hypro::ltiTimeEvolutionHandler&lt; State &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a297ddd7db09e87fdf31807769c33510c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a297ddd7db09e87fdf31807769c33510c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ltiTimeEvolutionHandler</b> (State *state, size_t index, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; trafo, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; translation)</td></tr>
+<tr class="memitem:ad31a64eebb1de7f18b0470ec465dbe44"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#ad31a64eebb1de7f18b0470ec465dbe44">ltiTimeEvolutionHandler</a> ()=delete</td></tr>
+<tr class="separator:ad31a64eebb1de7f18b0470ec465dbe44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a297ddd7db09e87fdf31807769c33510c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#a297ddd7db09e87fdf31807769c33510c">ltiTimeEvolutionHandler</a> (State *state, size_t index, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; trafo, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; translation)</td></tr>
 <tr class="separator:a297ddd7db09e87fdf31807769c33510c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af55c73a5565224c022e1ee168408a84f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af55c73a5565224c022e1ee168408a84f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()</td></tr>
+<tr class="memitem:af55c73a5565224c022e1ee168408a84f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#af55c73a5565224c022e1ee168408a84f">handle</a> ()</td></tr>
 <tr class="separator:af55c73a5565224c022e1ee168408a84f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99c5c5d01b6fa420ff8ec112d29fb072"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99c5c5d01b6fa420ff8ec112d29fb072"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()</td></tr>
+<tr class="memitem:a99c5c5d01b6fa420ff8ec112d29fb072"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#a99c5c5d01b6fa420ff8ec112d29fb072">handlerName</a> ()</td></tr>
 <tr class="separator:a99c5c5d01b6fa420ff8ec112d29fb072"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac909a74b35168d8a92b99d46b31713c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac909a74b35168d8a92b99d46b31713c3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>getMarkedForDelete</b> ()</td></tr>
+<tr class="memitem:ac909a74b35168d8a92b99d46b31713c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#ac909a74b35168d8a92b99d46b31713c3">getMarkedForDelete</a> ()</td></tr>
 <tr class="separator:ac909a74b35168d8a92b99d46b31713c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaea0773d53ea974233e9a8cc54011be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afaea0773d53ea974233e9a8cc54011be"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMarkedForDelete</b> (bool)</td></tr>
+<tr class="memitem:afaea0773d53ea974233e9a8cc54011be"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#afaea0773d53ea974233e9a8cc54011be">setMarkedForDelete</a> (bool)</td></tr>
 <tr class="separator:afaea0773d53ea974233e9a8cc54011be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhypro_1_1ITimeEvolutionHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1ITimeEvolutionHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html">hypro::ITimeEvolutionHandler</a></td></tr>
+<tr class="memitem:ae38ccf848f4643989787abf83234b702 inherit pub_methods_classhypro_1_1ITimeEvolutionHandler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ITimeEvolutionHandler.html#ae38ccf848f4643989787abf83234b702">~ITimeEvolutionHandler</a> ()</td></tr>
+<tr class="separator:ae38ccf848f4643989787abf83234b702 inherit pub_methods_classhypro_1_1ITimeEvolutionHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a3e1673de84bd39d45f07a55f82fe40d4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e1673de84bd39d45f07a55f82fe40d4"></a>
-State *&#160;</td><td class="memItemRight" valign="bottom"><b>mState</b></td></tr>
+<tr class="memitem:a3e1673de84bd39d45f07a55f82fe40d4"><td class="memItemLeft" align="right" valign="top">State *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#a3e1673de84bd39d45f07a55f82fe40d4">mState</a></td></tr>
 <tr class="separator:a3e1673de84bd39d45f07a55f82fe40d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a818b0b752a62483505b9a56201819f7d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a818b0b752a62483505b9a56201819f7d"></a>
-<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTrafo</b></td></tr>
+<tr class="memitem:a818b0b752a62483505b9a56201819f7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#a818b0b752a62483505b9a56201819f7d">mTrafo</a></td></tr>
 <tr class="separator:a818b0b752a62483505b9a56201819f7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab272bfba9dc380cf336b06e4126c7f46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab272bfba9dc380cf336b06e4126c7f46"></a>
-<a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTranslation</b></td></tr>
+<tr class="memitem:ab272bfba9dc380cf336b06e4126c7f46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#ab272bfba9dc380cf336b06e4126c7f46">mTranslation</a></td></tr>
 <tr class="separator:ab272bfba9dc380cf336b06e4126c7f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc2cfa7298c81892980f346a0029727a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc2cfa7298c81892980f346a0029727a"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mIndex</b></td></tr>
+<tr class="memitem:abc2cfa7298c81892980f346a0029727a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#abc2cfa7298c81892980f346a0029727a">mIndex</a></td></tr>
 <tr class="separator:abc2cfa7298c81892980f346a0029727a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cf8cd4b2fff5a2b1023f51d9d839e97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8cf8cd4b2fff5a2b1023f51d9d839e97"></a>
-<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mTimeStep</b></td></tr>
+<tr class="memitem:a8cf8cd4b2fff5a2b1023f51d9d839e97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#a8cf8cd4b2fff5a2b1023f51d9d839e97">mTimeStep</a></td></tr>
 <tr class="separator:a8cf8cd4b2fff5a2b1023f51d9d839e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -168,7 +165,338 @@ class hypro::ltiTimeEvolutionHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="forwardDeclarations_8h_source.html#l00038">38</a> of file <a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ad31a64eebb1de7f18b0470ec465dbe44"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">ltiTimeEvolutionHandler</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a297ddd7db09e87fdf31807769c33510c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">ltiTimeEvolutionHandler</a> </td>
+          <td>(</td>
+          <td class="paramtype">State *&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td>
+          <td class="paramname"><em>timeStep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td>
+          <td class="paramname"><em>trafo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td>
+          <td class="paramname"><em>translation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00020">20</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+<p>References <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00020">hypro::ltiTimeEvolutionHandler&lt; State &gt;::ltiTimeEvolutionHandler()</a>.</p>
+
+<p>Referenced by <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00020">hypro::ltiTimeEvolutionHandler&lt; State &gt;::ltiTimeEvolutionHandler()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac909a74b35168d8a92b99d46b31713c3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::getMarkedForDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html#ab8950dd6a1cc6fc4305866e553bb5e2f">hypro::ITimeEvolutionHandler</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html#ab66e7e27612eab66c58817c212e5805f">hypro::timedElapseAfterTickTimeEvolutionHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedElapseTimeEvolutionHandler.html#a9655fb11ffca205e98897a329fe6b1d7">hypro::timedElapseTimeEvolutionHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1timedTickTimeEvolutionHandler.html#a98d1fa70f857defaee091d920dcfccc2">hypro::timedTickTimeEvolutionHandler&lt; State &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00030">30</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af55c73a5565224c022e1ee168408a84f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::handle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html#ac04ee35a16603d925ee44052f86b0bb0">hypro::ITimeEvolutionHandler</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html#ad0f113842e82fd994313679e0d7f2f10">hypro::timedElapseAfterTickTimeEvolutionHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedElapseTimeEvolutionHandler.html#a1e1f9257a9a860e5c41e770fd60caea8">hypro::timedElapseTimeEvolutionHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1timedTickTimeEvolutionHandler.html#ab753092dbcf2e42b83b09975fc00983a">hypro::timedTickTimeEvolutionHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a99c5c5d01b6fa420ff8ec112d29fb072"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::handlerName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html#abb5f4666d1b72987a409436b3f560d35">hypro::ITimeEvolutionHandler</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html#a8d9bc21cb26c7187d556bc8edae1a778">hypro::timedElapseAfterTickTimeEvolutionHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedElapseTimeEvolutionHandler.html#a701e4e37423acf9f227ba1db9287681f">hypro::timedElapseTimeEvolutionHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1timedTickTimeEvolutionHandler.html#a586ee6e46cd5665289b9f9ef64fdbc0a">hypro::timedTickTimeEvolutionHandler&lt; State &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00029">29</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afaea0773d53ea974233e9a8cc54011be"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::setMarkedForDelete </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html#abbdde10dfd1cd0bb128acf88c41292de">hypro::ITimeEvolutionHandler</a>.</p>
+
+<p>Reimplemented in <a class="el" href="classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html#a0365e5badd38ea69147960d7b4a3d22a">hypro::timedElapseAfterTickTimeEvolutionHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedElapseTimeEvolutionHandler.html#a3c8f6494a9f8f5dc89727b7c37d15125">hypro::timedElapseTimeEvolutionHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1timedTickTimeEvolutionHandler.html#af202aab480d3b855d8800e642d525c17">hypro::timedTickTimeEvolutionHandler&lt; State &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00031">31</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="abc2cfa7298c81892980f346a0029727a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::mIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00015">15</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3e1673de84bd39d45f07a55f82fe40d4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">State* <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::mState</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00011">11</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8cf8cd4b2fff5a2b1023f51d9d839e97"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::mTimeStep</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00016">16</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a818b0b752a62483505b9a56201819f7d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt; <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::mTrafo</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00012">12</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab272bfba9dc380cf336b06e4126c7f46"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html">hypro::ltiTimeEvolutionHandler</a>&lt; State &gt;::mTranslation</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiTimeEvolutionHandler_8h_source.html#l00013">13</a> of file <a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/timeEvolutionHandlers/<a class="el" href="ltiTimeEvolutionHandler_8h_source.html">ltiTimeEvolutionHandler.h</a></li>
 </ul>

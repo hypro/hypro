@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,67 +124,58 @@ $(document).ready(function(){initNavTree('classhypro_1_1timedGuardHandler.html',
 <div class="title">hypro::timedGuardHandler&lt; State &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a85bffd6c84f722d720ac809b95ab65c7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a85bffd6c84f722d720ac809b95ab65c7"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>timedGuardHandler</b> (std::shared_ptr&lt; State &gt; state, size_t index, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
+<tr class="memitem:a599d51d11f089f0875b260e1fb451b24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1timedGuardHandler.html#a599d51d11f089f0875b260e1fb451b24">timedGuardHandler</a> ()=delete</td></tr>
+<tr class="separator:a599d51d11f089f0875b260e1fb451b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85bffd6c84f722d720ac809b95ab65c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1timedGuardHandler.html#a85bffd6c84f722d720ac809b95ab65c7">timedGuardHandler</a> (std::shared_ptr&lt; State &gt; state, size_t index, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
 <tr class="separator:a85bffd6c84f722d720ac809b95ab65c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11c7a9c9539435a98783a3026f5496d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11c7a9c9539435a98783a3026f5496d3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()</td></tr>
+<tr class="memitem:a11c7a9c9539435a98783a3026f5496d3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1timedGuardHandler.html#a11c7a9c9539435a98783a3026f5496d3">handle</a> ()</td></tr>
 <tr class="separator:a11c7a9c9539435a98783a3026f5496d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae687e95998ef8986f33eec8da5074616"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae687e95998ef8986f33eec8da5074616"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()</td></tr>
+<tr class="memitem:ae687e95998ef8986f33eec8da5074616"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1timedGuardHandler.html#ae687e95998ef8986f33eec8da5074616">handlerName</a> ()</td></tr>
 <tr class="separator:ae687e95998ef8986f33eec8da5074616"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64d1f6bdfe042f2a2748ea42f68a41cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64d1f6bdfe042f2a2748ea42f68a41cc"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getSortIndex</b> () override</td></tr>
+<tr class="memitem:a64d1f6bdfe042f2a2748ea42f68a41cc"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1timedGuardHandler.html#a64d1f6bdfe042f2a2748ea42f68a41cc">getSortIndex</a> () override</td></tr>
 <tr class="separator:a64d1f6bdfe042f2a2748ea42f68a41cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3db1be50cda61c726ce1016e67b8512"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3db1be50cda61c726ce1016e67b8512"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setSortIndex</b> (double sortIndex) override</td></tr>
+<tr class="memitem:ae3db1be50cda61c726ce1016e67b8512"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1timedGuardHandler.html#ae3db1be50cda61c726ce1016e67b8512">setSortIndex</a> (double sortIndex) override</td></tr>
 <tr class="separator:ae3db1be50cda61c726ce1016e67b8512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1ltiGuardHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1ltiGuardHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1ltiGuardHandler.html">hypro::ltiGuardHandler&lt; State &gt;</a></td></tr>
-<tr class="memitem:ac2a437c767f18ad7391a78abfe3c7b5d inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac2a437c767f18ad7391a78abfe3c7b5d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ltiGuardHandler</b> (std::shared_ptr&lt; State &gt; state, size_t index, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
+<tr class="memitem:a0a6834b065d7463b302973bfe2d5c168 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a0a6834b065d7463b302973bfe2d5c168">ltiGuardHandler</a> ()=delete</td></tr>
+<tr class="separator:a0a6834b065d7463b302973bfe2d5c168 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2a437c767f18ad7391a78abfe3c7b5d inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#ac2a437c767f18ad7391a78abfe3c7b5d">ltiGuardHandler</a> (std::shared_ptr&lt; State &gt; state, size_t index, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
 <tr class="separator:ac2a437c767f18ad7391a78abfe3c7b5d inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab32ac7166a3a5d932e9a0ad5a1c67b39 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab32ac7166a3a5d932e9a0ad5a1c67b39"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesGuard</b> () override</td></tr>
+<tr class="memitem:ab32ac7166a3a5d932e9a0ad5a1c67b39 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#ab32ac7166a3a5d932e9a0ad5a1c67b39">satisfiesGuard</a> () override</td></tr>
 <tr class="separator:ab32ac7166a3a5d932e9a0ad5a1c67b39 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a554f574e8a9cc3db230e0439dcea401f inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a554f574e8a9cc3db230e0439dcea401f"></a>
-virtual std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getState</b> () override</td></tr>
+<tr class="memitem:a554f574e8a9cc3db230e0439dcea401f inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a554f574e8a9cc3db230e0439dcea401f">getState</a> () override</td></tr>
 <tr class="separator:a554f574e8a9cc3db230e0439dcea401f inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18db073e1b70bb7975a42d56e13796c3 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18db073e1b70bb7975a42d56e13796c3"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setState</b> (std::shared_ptr&lt; State &gt; ptr) override</td></tr>
+<tr class="memitem:a18db073e1b70bb7975a42d56e13796c3 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a18db073e1b70bb7975a42d56e13796c3">setState</a> (std::shared_ptr&lt; State &gt; ptr) override</td></tr>
 <tr class="separator:a18db073e1b70bb7975a42d56e13796c3 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afba85a39f5265f6d513dc93e209df2e8 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afba85a39f5265f6d513dc93e209df2e8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reinitialize</b> ()</td></tr>
+<tr class="memitem:afba85a39f5265f6d513dc93e209df2e8 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#afba85a39f5265f6d513dc93e209df2e8">reinitialize</a> ()</td></tr>
 <tr class="separator:afba85a39f5265f6d513dc93e209df2e8 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc312d480a56dd71492426ecbf4cd749 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc312d480a56dd71492426ecbf4cd749"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getMarkedForDelete</b> () override</td></tr>
+<tr class="memitem:afc312d480a56dd71492426ecbf4cd749 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#afc312d480a56dd71492426ecbf4cd749">getMarkedForDelete</a> () override</td></tr>
 <tr class="separator:afc312d480a56dd71492426ecbf4cd749 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adef67b3e06b275c8a1b9cccc91d421b9 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adef67b3e06b275c8a1b9cccc91d421b9"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setMarkedForDelete</b> (bool toDelete) override</td></tr>
+<tr class="memitem:adef67b3e06b275c8a1b9cccc91d421b9 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#adef67b3e06b275c8a1b9cccc91d421b9">setMarkedForDelete</a> (bool toDelete) override</td></tr>
 <tr class="separator:adef67b3e06b275c8a1b9cccc91d421b9 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhypro_1_1IGuardHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1IGuardHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler&lt; State &gt;</a></td></tr>
+<tr class="memitem:adb85670fff45882619afd4175f65cc42 inherit pub_methods_classhypro_1_1IGuardHandler"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#adb85670fff45882619afd4175f65cc42">~IGuardHandler</a> ()</td></tr>
+<tr class="separator:adb85670fff45882619afd4175f65cc42 inherit pub_methods_classhypro_1_1IGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classhypro_1_1ltiGuardHandler"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classhypro_1_1ltiGuardHandler')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classhypro_1_1ltiGuardHandler.html">hypro::ltiGuardHandler&lt; State &gt;</a></td></tr>
-<tr class="memitem:a0a221c52ee100d437132b98c119a907b inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a221c52ee100d437132b98c119a907b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mSatisfies</b> = false</td></tr>
+<tr class="memitem:a0a221c52ee100d437132b98c119a907b inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a0a221c52ee100d437132b98c119a907b">mSatisfies</a> = false</td></tr>
 <tr class="separator:a0a221c52ee100d437132b98c119a907b inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a988d82c5dd5855d6daa4099cd7fdf63d inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a988d82c5dd5855d6daa4099cd7fdf63d"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mMarkedForDelete</b> = false</td></tr>
+<tr class="memitem:a988d82c5dd5855d6daa4099cd7fdf63d inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a988d82c5dd5855d6daa4099cd7fdf63d">mMarkedForDelete</a> = false</td></tr>
 <tr class="separator:a988d82c5dd5855d6daa4099cd7fdf63d inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04c3292935ebe41cd909032db2958883 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04c3292935ebe41cd909032db2958883"></a>
-std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mGuardSatisfyingState</b></td></tr>
+<tr class="memitem:a04c3292935ebe41cd909032db2958883 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a04c3292935ebe41cd909032db2958883">mGuardSatisfyingState</a></td></tr>
 <tr class="separator:a04c3292935ebe41cd909032db2958883 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a135adc1cd9510bc137e4a11014a99cb1 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a135adc1cd9510bc137e4a11014a99cb1"></a>
-<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mTransition</b></td></tr>
+<tr class="memitem:a135adc1cd9510bc137e4a11014a99cb1 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#a135adc1cd9510bc137e4a11014a99cb1">mTransition</a></td></tr>
 <tr class="separator:a135adc1cd9510bc137e4a11014a99cb1 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5ade5b3d0cf19ff762d922d8b5c5cb6 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5ade5b3d0cf19ff762d922d8b5c5cb6"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mIndex</b></td></tr>
+<tr class="memitem:ab5ade5b3d0cf19ff762d922d8b5c5cb6 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#ab5ade5b3d0cf19ff762d922d8b5c5cb6">mIndex</a></td></tr>
 <tr class="separator:ab5ade5b3d0cf19ff762d922d8b5c5cb6 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada058c74a2cf4e0572da62ff4ac80de8 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada058c74a2cf4e0572da62ff4ac80de8"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mSortIndex</b></td></tr>
+<tr class="memitem:ada058c74a2cf4e0572da62ff4ac80de8 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiGuardHandler.html#ada058c74a2cf4e0572da62ff4ac80de8">mSortIndex</a></td></tr>
 <tr class="separator:ada058c74a2cf4e0572da62ff4ac80de8 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -193,7 +184,197 @@ class hypro::timedGuardHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="forwardDeclarations_8h_source.html#l00036">36</a> of file <a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a599d51d11f089f0875b260e1fb451b24"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1timedGuardHandler.html">timedGuardHandler</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a85bffd6c84f722d720ac809b95ab65c7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1timedGuardHandler.html">timedGuardHandler</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; State &gt;&#160;</td>
+          <td class="paramname"><em>state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramname"><em>transition</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="timedGuardHandler_8h_source.html#l00012">12</a> of file <a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a>.</p>
+
+<p>References <a class="el" href="timedGuardHandler_8h_source.html#l00012">hypro::timedGuardHandler&lt; State &gt;::timedGuardHandler()</a>.</p>
+
+<p>Referenced by <a class="el" href="timedGuardHandler_8h_source.html#l00012">hypro::timedGuardHandler&lt; State &gt;::timedGuardHandler()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a64d1f6bdfe042f2a2748ea42f68a41cc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double <a class="el" href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a>&lt; State &gt;::getSortIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classhypro_1_1ltiGuardHandler.html#af3a3f5002241bab8bd83094d76cb6079">hypro::ltiGuardHandler&lt; State &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="timedGuardHandler_8h_source.html#l00025">25</a> of file <a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a11c7a9c9539435a98783a3026f5496d3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a>&lt; State &gt;::handle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classhypro_1_1ltiGuardHandler.html#a532686964a750de56de318f6de02809c">hypro::ltiGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae687e95998ef8986f33eec8da5074616"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* <a class="el" href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a>&lt; State &gt;::handlerName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classhypro_1_1ltiGuardHandler.html#a17b103ec1904f108af4ca98ecaea5b34">hypro::ltiGuardHandler&lt; State &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="timedGuardHandler_8h_source.html#l00023">23</a> of file <a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3db1be50cda61c726ce1016e67b8512"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a>&lt; State &gt;::setSortIndex </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sortIndex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classhypro_1_1ltiGuardHandler.html#a77fd441e0784a66c7069a6171d24431c">hypro::ltiGuardHandler&lt; State &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="timedGuardHandler_8h_source.html#l00026">26</a> of file <a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/<a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a></li>
 </ul>

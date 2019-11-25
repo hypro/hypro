@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,29 +124,97 @@ $(document).ready(function(){initNavTree('structhypro_1_1TreeStatistic.html','')
 <div class="title">hypro::TreeStatistic Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac5e08c1229867a5d3b8bd178853e6f41"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5e08c1229867a5d3b8bd178853e6f41"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>avgBranching</b> = 0.0</td></tr>
+<tr class="memitem:ac5e08c1229867a5d3b8bd178853e6f41"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TreeStatistic.html#ac5e08c1229867a5d3b8bd178853e6f41">avgBranching</a> = 0.0</td></tr>
 <tr class="separator:ac5e08c1229867a5d3b8bd178853e6f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae0a519cd8f56ce7b8931ad20d871b47"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae0a519cd8f56ce7b8931ad20d871b47"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>avgLevel</b> = 0.0</td></tr>
+<tr class="memitem:aae0a519cd8f56ce7b8931ad20d871b47"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TreeStatistic.html#aae0a519cd8f56ce7b8931ad20d871b47">avgLevel</a> = 0.0</td></tr>
 <tr class="separator:aae0a519cd8f56ce7b8931ad20d871b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca25ba14077d4e11455cd32106b31eba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aca25ba14077d4e11455cd32106b31eba"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>nodeCnt</b> = 0</td></tr>
+<tr class="memitem:aca25ba14077d4e11455cd32106b31eba"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TreeStatistic.html#aca25ba14077d4e11455cd32106b31eba">nodeCnt</a> = 0</td></tr>
 <tr class="separator:aca25ba14077d4e11455cd32106b31eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dee5385bc879fbb5b4e23a8e8a7f4f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2dee5385bc879fbb5b4e23a8e8a7f4f0"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>depth</b> = 0</td></tr>
+<tr class="memitem:a2dee5385bc879fbb5b4e23a8e8a7f4f0"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TreeStatistic.html#a2dee5385bc879fbb5b4e23a8e8a7f4f0">depth</a> = 0</td></tr>
 <tr class="separator:a2dee5385bc879fbb5b4e23a8e8a7f4f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a128ead51d2a738ccd82c2d5963486994"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a128ead51d2a738ccd82c2d5963486994"></a>
-std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>levelCnt</b></td></tr>
+<tr class="memitem:a128ead51d2a738ccd82c2d5963486994"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TreeStatistic.html#a128ead51d2a738ccd82c2d5963486994">levelCnt</a></td></tr>
 <tr class="separator:a128ead51d2a738ccd82c2d5963486994"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="TreeStatistic_8h_source.html#l00006">6</a> of file <a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ac5e08c1229867a5d3b8bd178853e6f41"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double hypro::TreeStatistic::avgBranching = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="TreeStatistic_8h_source.html#l00007">7</a> of file <a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aae0a519cd8f56ce7b8931ad20d871b47"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double hypro::TreeStatistic::avgLevel = 0.0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="TreeStatistic_8h_source.html#l00008">8</a> of file <a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2dee5385bc879fbb5b4e23a8e8a7f4f0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t hypro::TreeStatistic::depth = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="TreeStatistic_8h_source.html#l00010">10</a> of file <a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a128ead51d2a738ccd82c2d5963486994"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; hypro::TreeStatistic::levelCnt</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="TreeStatistic_8h_source.html#l00011">11</a> of file <a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aca25ba14077d4e11455cd32106b31eba"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t hypro::TreeStatistic::nodeCnt = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="TreeStatistic_8h_source.html#l00009">9</a> of file <a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/<a class="el" href="TreeStatistic_8h_source.html">TreeStatistic.h</a></li>
 </ul>
 </div><!-- contents -->

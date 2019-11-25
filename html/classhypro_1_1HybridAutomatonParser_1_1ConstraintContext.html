@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,35 +124,188 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridAutomatonParser_1_
 <div class="title">hypro::HybridAutomatonParser::ConstraintContext Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aba2d6ee5146dd063831535cead2ac6e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba2d6ee5146dd063831535cead2ac6e6"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ConstraintContext</b> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
+<tr class="memitem:aba2d6ee5146dd063831535cead2ac6e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#aba2d6ee5146dd063831535cead2ac6e6">ConstraintContext</a> (antlr4::ParserRuleContext *parent, size_t invokingState)</td></tr>
 <tr class="separator:aba2d6ee5146dd063831535cead2ac6e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:accd6d6c1ec4b70589435beb8361a1ba8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accd6d6c1ec4b70589435beb8361a1ba8"></a>
-virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleIndex</b> () const override</td></tr>
+<tr class="memitem:accd6d6c1ec4b70589435beb8361a1ba8"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#accd6d6c1ec4b70589435beb8361a1ba8">getRuleIndex</a> () const override</td></tr>
 <tr class="separator:accd6d6c1ec4b70589435beb8361a1ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6aa49c5a971173e899b1026657a5bbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6aa49c5a971173e899b1026657a5bbc"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">PolynomContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>polynom</b> ()</td></tr>
+<tr class="memitem:ab6aa49c5a971173e899b1026657a5bbc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">PolynomContext</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#ab6aa49c5a971173e899b1026657a5bbc">polynom</a> ()</td></tr>
 <tr class="separator:ab6aa49c5a971173e899b1026657a5bbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae72885e20aceb43058b05141b18e8d1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae72885e20aceb43058b05141b18e8d1e"></a>
-<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">PolynomContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>polynom</b> (size_t i)</td></tr>
+<tr class="memitem:ae72885e20aceb43058b05141b18e8d1e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">PolynomContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#ae72885e20aceb43058b05141b18e8d1e">polynom</a> (size_t i)</td></tr>
 <tr class="separator:ae72885e20aceb43058b05141b18e8d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a380c61d67a188314ef0be27ce3bb7de6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a380c61d67a188314ef0be27ce3bb7de6"></a>
-antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><b>BOOLRELATION</b> ()</td></tr>
+<tr class="memitem:a380c61d67a188314ef0be27ce3bb7de6"><td class="memItemLeft" align="right" valign="top">antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#a380c61d67a188314ef0be27ce3bb7de6">BOOLRELATION</a> ()</td></tr>
 <tr class="separator:a380c61d67a188314ef0be27ce3bb7de6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dcf260a567f54315e29b99fb1646b74"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5dcf260a567f54315e29b99fb1646b74"></a>
-antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><b>EQUALS</b> ()</td></tr>
+<tr class="memitem:a5dcf260a567f54315e29b99fb1646b74"><td class="memItemLeft" align="right" valign="top">antlr4::tree::TerminalNode *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#a5dcf260a567f54315e29b99fb1646b74">EQUALS</a> ()</td></tr>
 <tr class="separator:a5dcf260a567f54315e29b99fb1646b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a331662a51786a3ae09610d92f75e80e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a331662a51786a3ae09610d92f75e80e0"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>accept</b> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
+<tr class="memitem:a331662a51786a3ae09610d92f75e80e0"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html#a331662a51786a3ae09610d92f75e80e0">accept</a> (antlr4::tree::ParseTreeVisitor *visitor) override</td></tr>
 <tr class="separator:a331662a51786a3ae09610d92f75e80e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00339">339</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="aba2d6ee5146dd063831535cead2ac6e6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">HybridAutomatonParser::ConstraintContext::ConstraintContext </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::ParserRuleContext *&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>invokingState</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01317">1317</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01317">ConstraintContext()</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01317">ConstraintContext()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a331662a51786a3ae09610d92f75e80e0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">antlrcpp::Any HybridAutomatonParser::ConstraintContext::accept </td>
+          <td>(</td>
+          <td class="paramtype">antlr4::tree::ParseTreeVisitor *&#160;</td>
+          <td class="paramname"><em>visitor</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01342">1342</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a380c61d67a188314ef0be27ce3bb7de6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tree::TerminalNode * HybridAutomatonParser::ConstraintContext::BOOLRELATION </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01329">1329</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5dcf260a567f54315e29b99fb1646b74"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">tree::TerminalNode * HybridAutomatonParser::ConstraintContext::EQUALS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01333">1333</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="accd6d6c1ec4b70589435beb8361a1ba8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t HybridAutomatonParser::ConstraintContext::getRuleIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01338">1338</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">hypro::HybridAutomatonParser::getRuleNames()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00035">hypro::HybridAutomatonParser::RuleConstraint</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6aa49c5a971173e899b1026657a5bbc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">HybridAutomatonParser::PolynomContext</a> * &gt; HybridAutomatonParser::ConstraintContext::polynom </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01321">1321</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01349">hypro::HybridAutomatonParser::constraint()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae72885e20aceb43058b05141b18e8d1e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">HybridAutomatonParser::PolynomContext</a> * HybridAutomatonParser::ConstraintContext::polynom </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01325">1325</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a></li>
 </ul>

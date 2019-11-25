@@ -24,10 +24,10 @@
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
+    extensions: ["tex2jax.js", "TeX/AMSmath.js", "TeX/AMSsymbols.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
+</script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -124,38 +124,32 @@ $(document).ready(function(){initNavTree('classhypro_1_1IGuardHandler.html','');
 <div class="title">hypro::IGuardHandler&lt; State &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="IHandler_8h_source.html">IHandler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acc7c2d9987aa402faa3286290f59d9c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc7c2d9987aa402faa3286290f59d9c2"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()=0</td></tr>
+<tr class="memitem:adb85670fff45882619afd4175f65cc42"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#adb85670fff45882619afd4175f65cc42">~IGuardHandler</a> ()</td></tr>
+<tr class="separator:adb85670fff45882619afd4175f65cc42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7c2d9987aa402faa3286290f59d9c2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#acc7c2d9987aa402faa3286290f59d9c2">handle</a> ()=0</td></tr>
 <tr class="separator:acc7c2d9987aa402faa3286290f59d9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa81efe5b7828495f55d5962cacdab754"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa81efe5b7828495f55d5962cacdab754"></a>
-virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()=0</td></tr>
+<tr class="memitem:aa81efe5b7828495f55d5962cacdab754"><td class="memItemLeft" align="right" valign="top">virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#aa81efe5b7828495f55d5962cacdab754">handlerName</a> ()=0</td></tr>
 <tr class="separator:aa81efe5b7828495f55d5962cacdab754"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c015e2c48774ecedda8b3fbf7c5491e"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesGuard</b> ()=0</td></tr>
+<tr class="memitem:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a5c015e2c48774ecedda8b3fbf7c5491e">satisfiesGuard</a> ()=0</td></tr>
 <tr class="separator:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"></a>
-virtual std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getState</b> ()=0</td></tr>
+<tr class="memitem:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a7a4f8b3f4ce8f7a7fa0788e056d1b2b6">getState</a> ()=0</td></tr>
 <tr class="separator:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1dc854bf93c6a105d23b4a2e30ff8de6"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setState</b> (std::shared_ptr&lt; State &gt; ptr)=0</td></tr>
+<tr class="memitem:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a1dc854bf93c6a105d23b4a2e30ff8de6">setState</a> (std::shared_ptr&lt; State &gt; ptr)=0</td></tr>
 <tr class="separator:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a9444b5b1e51139a120de974a232bc4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a9444b5b1e51139a120de974a232bc4"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>reinitialize</b> ()=0</td></tr>
+<tr class="memitem:a1a9444b5b1e51139a120de974a232bc4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a1a9444b5b1e51139a120de974a232bc4">reinitialize</a> ()=0</td></tr>
 <tr class="separator:a1a9444b5b1e51139a120de974a232bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af573412d5aaa9a956fe2809de1b14e1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af573412d5aaa9a956fe2809de1b14e1e"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getSortIndex</b> ()=0</td></tr>
+<tr class="memitem:af573412d5aaa9a956fe2809de1b14e1e"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#af573412d5aaa9a956fe2809de1b14e1e">getSortIndex</a> ()=0</td></tr>
 <tr class="separator:af573412d5aaa9a956fe2809de1b14e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7c0b814beec495b2593d1384ac27823"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7c0b814beec495b2593d1384ac27823"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setSortIndex</b> (double sortIndex)=0</td></tr>
+<tr class="memitem:ad7c0b814beec495b2593d1384ac27823"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#ad7c0b814beec495b2593d1384ac27823">setSortIndex</a> (double sortIndex)=0</td></tr>
 <tr class="separator:ad7c0b814beec495b2593d1384ac27823"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd5f8adb14ef6c077149fb77d73966a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd5f8adb14ef6c077149fb77d73966a7"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getMarkedForDelete</b> ()=0</td></tr>
+<tr class="memitem:afd5f8adb14ef6c077149fb77d73966a7"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#afd5f8adb14ef6c077149fb77d73966a7">getMarkedForDelete</a> ()=0</td></tr>
 <tr class="separator:afd5f8adb14ef6c077149fb77d73966a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88786dba19eff832bb615c9bd52c18b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88786dba19eff832bb615c9bd52c18b3"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setMarkedForDelete</b> (bool toDelete)=0</td></tr>
+<tr class="memitem:a88786dba19eff832bb615c9bd52c18b3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a88786dba19eff832bb615c9bd52c18b3">setMarkedForDelete</a> (bool toDelete)=0</td></tr>
 <tr class="separator:a88786dba19eff832bb615c9bd52c18b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -164,7 +158,313 @@ class hypro::IGuardHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="IHandler_8h_source.html#l00046">46</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="adb85670fff45882619afd4175f65cc42"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::~<a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IHandler_8h_source.html#l00048">48</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="afd5f8adb14ef6c077149fb77d73966a7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::getMarkedForDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#afc312d480a56dd71492426ecbf4cd749">hypro::ltiGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a83810352045a3fa76649581088f78aaa">hypro::rectangularGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af573412d5aaa9a956fe2809de1b14e1e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::getSortIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#af3a3f5002241bab8bd83094d76cb6079">hypro::ltiGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a379fe7c760e02e2ee6e8d0b0353331f4">hypro::rectangularGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedGuardHandler.html#a64d1f6bdfe042f2a2748ea42f68a41cc">hypro::timedGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteGuardHandler.html#a49c8e52b352ed59963f54ad50327fdf7">hypro::discreteGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::shared_ptr&lt;State&gt; <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::getState </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#a554f574e8a9cc3db230e0439dcea401f">hypro::ltiGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a361d62f8bca062ad699c8c04a59d20ac">hypro::rectangularGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acc7c2d9987aa402faa3286290f59d9c2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::handle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1IHandler.html#a66e0cc4f490d1e7389b096289df681f8">hypro::IHandler</a>.</p>
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#a532686964a750de56de318f6de02809c">hypro::ltiGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a3e17a0707de9e7b64bcfdc9987b6b1c1">hypro::rectangularGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedGuardHandler.html#a11c7a9c9539435a98783a3026f5496d3">hypro::timedGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteGuardHandler.html#acfd46e4abc65f98c4b66bff084ea585a">hypro::discreteGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa81efe5b7828495f55d5962cacdab754"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual const char* <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::handlerName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classhypro_1_1IHandler.html#a09f4265a24e3f3d825ed7e778b9d9fa5">hypro::IHandler</a>.</p>
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#a17b103ec1904f108af4ca98ecaea5b34">hypro::ltiGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularGuardHandler.html#ae80a3b48efef2bbddbe65d63247d7f61">hypro::rectangularGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedGuardHandler.html#ae687e95998ef8986f33eec8da5074616">hypro::timedGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteGuardHandler.html#a0db521507c7c81d840fc671a76206f8d">hypro::discreteGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a9444b5b1e51139a120de974a232bc4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::reinitialize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#afba85a39f5265f6d513dc93e209df2e8">hypro::ltiGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a9e980142b862938ea226a3a1d411a9fb">hypro::rectangularGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteGuardHandler.html#a6407082d15765ece43c10738dbb8dd75">hypro::discreteGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5c015e2c48774ecedda8b3fbf7c5491e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::satisfiesGuard </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#ab32ac7166a3a5d932e9a0ad5a1c67b39">hypro::ltiGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a7e534844cc5e88146ff7bbc9aa30dc6f">hypro::rectangularGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a88786dba19eff832bb615c9bd52c18b3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::setMarkedForDelete </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>toDelete</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#adef67b3e06b275c8a1b9cccc91d421b9">hypro::ltiGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularGuardHandler.html#ac3869f822191b58761db72c4758288e0">hypro::rectangularGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad7c0b814beec495b2593d1384ac27823"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::setSortIndex </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sortIndex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#a77fd441e0784a66c7069a6171d24431c">hypro::ltiGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a011f0166a2344d8a2b4d7c4d4423e206">hypro::rectangularGuardHandler&lt; State &gt;</a>, <a class="el" href="classhypro_1_1timedGuardHandler.html#ae3db1be50cda61c726ce1016e67b8512">hypro::timedGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1discreteGuardHandler.html#a6bd53759721d17c720cc01a3ad296cc7">hypro::discreteGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1dc854bf93c6a105d23b4a2e30ff8de6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::setState </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; State &gt;&#160;</td>
+          <td class="paramname"><em>ptr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1ltiGuardHandler.html#a18db073e1b70bb7975a42d56e13796c3">hypro::ltiGuardHandler&lt; State &gt;</a>, and <a class="el" href="classhypro_1_1rectangularGuardHandler.html#afa834be99c44082ced03570567cd8109">hypro::rectangularGuardHandler&lt; State &gt;</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="IHandler_8h_source.html">IHandler.h</a></li>
 </ul>
 </div><!-- contents -->
