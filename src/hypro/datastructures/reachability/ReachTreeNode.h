@@ -66,6 +66,8 @@ struct RefinementSetting {
 		, isDummy( false )
 		, isEmpty( false ) {}
 
+	RefinementSetting& operator=(RefinementSetting&& orig) = default;
+
 	RefinementSetting& operator=( const RefinementSetting& orig ) {
 		initialSet = orig.initialSet;
 		mTimings = orig.mTimings;
@@ -148,7 +150,9 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 	//, mTransitionTimings()
 	{
 		assert( !state.getTimestamp().isEmpty() );
-		mRefinements[level] = RefinementSetting<State>( state, state.getLocation() );
+		assert( level <= mRefinements.size() );
+		mRefinements.insert(mRefinements.begin()+level, RefinementSetting<State>( state, state.getLocation() ));
+		//mRefinements[level] = RefinementSetting<State>( state, state.getLocation() );
 		mRefinements[level].entryTimestamp = state.getTimestamp();
 		mRefinements[level].initialSet = state;
 	}

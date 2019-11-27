@@ -45,14 +45,15 @@ class genericMinkowskiSumVisitor {
 template <typename T>
 class genericIntersectVisitor {
   public:
+	template <typename A>
+	inline T operator()( const A& lhs, const A& rhs ) const {
+		return lhs.intersect( rhs );
+	}
+	
 	template <typename A, typename B>
 	inline T operator()( const A& lhs, const B& ) const {
 		assert( false && "INTERSECTION OF DIFFERENT TYPES." );
 		return lhs;
-	}
-
-	inline T operator()( const T& lhs, const T& rhs ) const {
-		return lhs.intersect( rhs );
 	}
 };
 

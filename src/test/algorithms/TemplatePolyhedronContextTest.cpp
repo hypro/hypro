@@ -7,12 +7,15 @@
  * @author Phillip Tse
  * @date 30.9.2019
  */
-
-#include "gtest/gtest.h"
+ 
 #include "../defines.h"
-#include "../../hypro/datastructures/HybridAutomaton.h"
+#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../hypro/algorithms/reachability/contexts/TemplatePolyhedronContext.h"
-#include "../../hypro/algorithms/reachability/handlers/firstSegmentHandlers/TPolyFirstSegmentHandler.h"
+//#include "../../hypro/algorithms/reachability/handlers/firstSegmentHandlers/TPolyFirstSegmentHandler.h"
+#include "gtest/gtest.h"
+
+using namespace hypro;
 
 template<typename Number>
 class TemplatePolyhedronContextTest : public ::testing::Test {
@@ -21,59 +24,103 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 
 	virtual void SetUp(){
 
-		//Create 3D flow matrix for loc1
-		flow = matrix_t<Number>(4,4);
-		flow << 4,3,2,1,		//affine flow, should grow into infinity
-				0,-2,-1,0,		//linear flow, should grow into -infinity
-				0,0,0,-1,		//constant flow, should grow into -infinity
-				0,0,0,0;
+		//Initialize Location
+		flow = matrix_t<Number>::Zero(3,3);
+		flow << 3,2,1,		//affine flow, should grow into infinity
+				0,-2,-1,	//linear flow, should grow into -infinity
+				0,0,0;
+		invMat = -matrix_t<Number>::Identity(2,2);
+		invVec = 10*vector_t<Number>::Ones(2);
+		inv = Condition<Number>(invMat, invVec);
+		loc = Location<Number>(flow);
+		loc.setInvariant(inv);
+		loc.setName("blub");
 
-		//Create locations
-		loc_no_inv = Location<Number>(flow);
-		loc_partial_inv = Location<Number>(flow);
-		loc_full_inv = Location<Number>(flow);
+		//Initialize tpoly
+		mat = matrix_t<Number>::Zero(3,2);
+		mat << -1,2,
+				1,2,
+				0,-1;
+		vec = vector_t<Number>::Zero(3);
+		vec << 0,2,0;
+		tpoly = TemplatePolyhedronT<Number,hypro::Converter<Number>,TemplatePolyhedronDefault>(mat,vec);
 
-		//Create partial invariants and set them for loc_partial_inv
-		partialInvMat = matrix<Number>(1,3);
-		partialInvMat << 1,0,0;
-		partialInvVec = vector_t<Number>(1);
-		partialInvVec << 20;
-		loc_partial_inv.setInvariant(Condition<Number>(partialInvMat,partialInvVec));
-
-		//Create full invariants
-		fullInvMat = matrix<Number>::Identity(3,3);
-		fullInvVec = vector_t<Number>(3);
-		fullInvVec << 40,-30,20;
-		loc_full_inv.setInvariant(Condition<Number>(fullInvMat,fullInvVec));
-
-		//Create Transitions
-		auto no2partial = std::make_unique<Transition<Number>>(&loc_no_inv, &loc_partial_inv);	//No guard and reset
-		auto 
-		
+/*
+		//Needed to initialize task
+		//state = State_t<Number>(tpoly);
+		//state.setLocation(&loc);
+		state = State_t<Number>(&loc);
+		state.setSet(tpoly,0);
+		rnode = ReachTreeNode<State_t<Number>>(state,0);
+		task = std::make_shared<Task<State_t<Number>>>(&rnode);
+*/
+		//Initialize tpcontext
+		strat = Strategy<State_t<Number>>();
+		localQueue = nullptr;
+		localCEXQueue = nullptr;
+		localSegments = Flowpipe<State_t<Number>>();
+		settings = ReachabilitySettings();
+		//tpcontext = TemplatePolyhedronContext<State_t<Number>>(task,strat,localQueue,localCEXQueue,settings);
 	}
 
 	virtual void TearDown(){}
 
-	//Matrices and Vectors for invariants
-	matrix<Number> partialInvMat;
-	vector_t<Number> partialInvVec;
-	matrix<Number> fullInvMat;
-	vector_t<Number> fullInvVec;
-	
-	//Flow
+	//Location members - Needed to create State
 	matrix_t<Number> flow;
+	matrix_t<Number> invMat;
+	vector_t<Number> invVec;
+	Condition<Number> inv;
+	Location<Number> loc;
+	
+	//Template Polyhedron members - Needed to create State
+	matrix_t<Number> mat;
+	vector_t<Number> vec;
+	TemplatePolyhedronT<Number,hypro::Converter<Number>,TemplatePolyhedronDefault> tpoly;
 
-	//Locations
-	Location<Number> loc_no_inv;		//A location with no invariants
-	Location<Number> loc_partial_inv;	//A location with invariants for some variables but not all
-	Location<Number> loc_full_inv;		//A location with invariants for all variables
+	//Needed to create Task
+	//State_t<Number> state;
+	//ReachTreeNode<State_t<Number>> rnode;
+	//std::shared_ptr<Task<State_t<Number>>> task;
 
-	//Transitions
+	//Needed to create tpcontext
+	Strategy<State_t<Number>> strat;
+	WorkQueue<std::shared_ptr<Task<State_t<Number>>>>* localQueue;
+	WorkQueue<std::shared_ptr<Task<State_t<Number>>>>* localCEXQueue;
+	Flowpipe<State_t<Number>> localSegments;
+	ReachabilitySettings settings;
 
-	TemplatePolyhedronContext<State> tpcontext; //TODO
-
+	//The thing we want to test
+	//TemplatePolyhedronContext<State_t<Number>> tpcontext;
 };
 
+TYPED_TEST(TemplatePolyhedronContextTest, GradientOfLinearFunction){
+
+	//Initialize tpcontext
+	State_t<TypeParam> state(&(this->loc));
+	state.setSet(this->tpoly,0);
+	ReachTreeNode<State_t<TypeParam>> rnode(state,(unsigned)0);
+	auto task = std::make_shared<Task<State_t<TypeParam>>>(&rnode);
+	TemplatePolyhedronContext<State_t<TypeParam>> tpcontext(task,this->strat,this->localQueue,this->localCEXQueue,this->localSegments,this->settings);
+
+	//Actual test - Given the vector (0,0,0), so the function f = 0*x + 0*y + 0, the gradient is (df/dx, df/dy, 0) and thus (0,0,0)
+	//NOTE: the last 0 is just an extension needed for the other computations within TemplatePolyhedronContext
+	vector_t<TypeParam> zeroFunction = vector_t<TypeParam>::Zero(3);
+	EXPECT_EQ(tpcontext.gradientOfLinearFct(zeroFunction), zeroFunction);
+	
+	//Constant fct
+	vector_t<TypeParam> testFunction = zeroFunction;
+	testFunction(2) = TypeParam(1000);
+	EXPECT_EQ(tpcontext.gradientOfLinearFct(testFunction), zeroFunction);
+
+	//multivariate linear fct
+	testFunction << 100,200,300;
+	auto res = tpcontext.gradientOfLinearFct(testFunction);
+	EXPECT_EQ(res(0), testFunction(0));
+	EXPECT_EQ(res(1), testFunction(1));
+	EXPECT_EQ(res(2), 0);
+}
+
+/*
 TYPED_TEST(TemplatePolyhedronContextTest, ExecBeforeFirstSegment){
 
 }
@@ -81,3 +128,8 @@ TYPED_TEST(TemplatePolyhedronContextTest, ExecBeforeFirstSegment){
 TYPED_TEST(TemplatePolyhedronContextTest, TPolyFirstSegmentHandler){
 	
 }
+*/
+
+//Unit Tests: Instantiation, Every handler, 
+
+//Integration Tests: One Reachability Analysis, 

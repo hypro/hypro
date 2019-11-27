@@ -144,14 +144,14 @@ ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler( r
 			return new rectangularTimeEvolutionHandler<State>( state, index, std::get<rectangularFlow<Number>>( flow ) );
 		}
 		case representation_name::polytope_t: {
-			auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
+			auto tmp = std::get<affineFlow<typename State::NumberType>>(flow);
 			if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
 				return nullptr;
 			}
 			return new TPolyTimeEvolutionHandler<State>(state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation());
 		}
 		default:
-			auto tmp = boost::get<affineFlow<typename State::NumberType>>(flow);
+			auto tmp = std::get<affineFlow<typename State::NumberType>>(flow);
 			if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().rows())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
 				return nullptr;
 			}

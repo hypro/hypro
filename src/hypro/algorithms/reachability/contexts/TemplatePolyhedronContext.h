@@ -43,7 +43,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
   public:
 
-  	TemplatePolyhedronContext() = default;
+  	TemplatePolyhedronContext() = delete;
   	TemplatePolyhedronContext(
   		const std::shared_ptr<Task<State>>& t,
 	    const Strategy<State>& strat,
@@ -65,8 +65,6 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     
     //Continuous Evolution after Sankaranarayanan
   	void applyContinuousEvolution() override;
-
-  private:
 
     //Computes the gradient of a multivariate but linear function linearFct
     vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);
@@ -91,7 +89,6 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     //Tests whether the given tpoly is a positive invariant and therefore admissible for location invariant strengthening
     bool isPositiveInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);
 };
-
 
 } // namespace hypro
 

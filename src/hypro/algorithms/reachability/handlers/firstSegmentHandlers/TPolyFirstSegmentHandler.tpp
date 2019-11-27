@@ -53,7 +53,7 @@ namespace hypro {
 	void TPolyFirstSegmentHandler<State>::handle(){
 
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
-        auto tpoly = boost::apply_visitor(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
+        auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
         vector_t<Number> newVec(tpoly.vector().rows());
 		
 		//For each template row:
@@ -199,7 +199,7 @@ namespace hypro {
         
         //Set mComputationState vector to the new coeff vec
 		tpoly.setVector(newVec);
-		this->mState->setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
+		this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
         
         //Set flow for further computations
         this->mTrafo = this->mState->getLocation()->getLinearFlow().getFlowMatrix().block(0,0,this->mState->getDimension(),this->mState->getDimension());

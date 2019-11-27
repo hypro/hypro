@@ -866,9 +866,11 @@ void LTIContext<State>::execOnEnd() {
 	TRACE( "hypro.worker.refinement", std::this_thread::get_id() << ": Refinements of node " << mTask->treeNode << " after leaving loop:" );
 
 #ifndef NDEBUG
+#ifdef HYPRO_LOGGING
 	for ( const auto& ref : mTask->treeNode->getRefinements() ) {
 		TRACE( "hypro.worker.refinement", std::this_thread::get_id() << ": Node: " << mTask->treeNode << ": " << ref );
 	}
+#endif
 #endif
 
 	if ( mSettings.useInvariantTimingInformation ||

@@ -180,7 +180,6 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	return res;
 }
 
-/*
 template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::intersect(const State<Number,Representation,Rargs...>& rhs) const {
 	State<Number,Representation,Rargs...> res(*this);
@@ -188,11 +187,10 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::int
 	assert(checkConsistency());
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
 		assert(mTypes.at(i) == rhs.getSetType(i));
-		res.setSetDirect(boost::apply_visitor(genericIntersectVisitor<repVariant>(), mSets.at(i), rhs.getSet(i)), i);
+		res.setSetDirect(std::visit(genericIntersectVisitor<repVariant>(), mSets.at(i), rhs.getSet(i)), i);
 	}
 	return res;
 }
-*/
 
 template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::applyTimeStep( const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {

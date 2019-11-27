@@ -248,6 +248,11 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number, Converter, Se
 	 */
 	ZonotopeT<Number, Converter, Setting> intersect( const Halfspace<Number>& rhs, int method );
 
+	ZonotopeT<Number, Converter, Setting> intersect( const ZonotopeT<Number, Converter, Setting>& /*rhs*/) const {
+		assert(false && "NOT IMPLEMENTED YET");
+		return *this;
+	}
+
 	/**
 	 * Intersects the given stateset with a second one.
 	 * @param result The resulting stateset of the intersection.

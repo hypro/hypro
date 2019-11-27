@@ -180,7 +180,6 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 						pointOnPlane += parameterPair.second;
 						entry.supportValue = pointOnPlane.dot( currentDir );
 					} else {
-						assert( entry.optimumValue != vector_t<Number>::Zero( getDimension() ) );
 						assert( parameterPair.first.cols() == entry.optimumValue.rows() );
 						entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 						// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.

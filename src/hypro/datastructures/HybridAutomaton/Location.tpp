@@ -40,9 +40,9 @@ template <typename Number>
 Location<Number>::Location( const matrix_t<Number>& _mat )
 	: mLinearFlows()
 	, mRectangularFlows()
-	, mId()
 	, mExternalInput()
-	, mTransitions() {
+	, mTransitions() 
+	, mId() {
 	mLinearFlows.push_back( linearFlow<Number>( _mat ) );
 	mRectangularFlows.emplace_back( rectangularFlow<Number>() );
 	mHasExternalInput = false;
@@ -84,8 +84,8 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 	for ( const auto& f : in.getRectangularFlows() ) {
 		mRectangularFlows.emplace_back( f );
 	}
-
 	assert( this->hash() == in.hash() );
+	return *this;
 }
 
 template <typename Number>

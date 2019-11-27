@@ -67,7 +67,7 @@ void ltiFirstSegmentHandler<State>::handle() {
 
 	//This would usually be the first segment. However we need the backprojection from deltaValuation to the initial set to make the first segment smaller.
 	firstSegment.partiallyRemoveRedundancy( mIndex );
-
+/*
 	//Bloat initialState
 	matrix_t<Number> trafoMatrixInverse = trafoMatrix.inverse();
 	assert(trafoMatrix*trafoMatrixInverse == matrix_t<Number>::Identity(trafoMatrix.rows(), trafoMatrix.cols()));
@@ -88,7 +88,7 @@ void ltiFirstSegmentHandler<State>::handle() {
 	firstSegment.partiallyRemoveRedundancy(mIndex);
 	assert(firstSegment.contains(*mState));
 	assert(firstSegment.contains(deltaValuation));
-
+*/
 	mState->setSet( firstSegment.getSet( mIndex ), mIndex );
 }
 

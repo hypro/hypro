@@ -21,7 +21,7 @@ namespace hypro {
 	void TPolyTimeEvolutionHandler<State>::handle() {
 
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
-        auto tpoly = boost::apply_visitor(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
+        auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
         vector_t<Number> newVec  = vector_t<Number>::Zero(tpoly.vector().rows());
 		
 		//For each row:
@@ -66,7 +66,7 @@ namespace hypro {
                 evalR = EvaluationResult<Number>(SOLUTION::INFTY);
             } else {
                 assert(this->mState->getLocation()->getInvariant().getMatrix().rows() == this->mState->getLocation()->getInvariant().getVector().rows());
-                assert(this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
+                assert((unsigned) this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
                 TemplatePolyhedron<Number> invTPoly(this->mState->getLocation()->getInvariant().getMatrix(), this->mState->getLocation()->getInvariant().getVector());
                 evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
             }
@@ -82,7 +82,7 @@ namespace hypro {
         
         //Set mComputationState vector to the new coeff vec
 		tpoly.setVector(newVec);
-		this->mState->setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
+		this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
 	}
 
 } //namespace hypro

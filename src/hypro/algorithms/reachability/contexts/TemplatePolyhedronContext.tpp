@@ -294,10 +294,10 @@ namespace hypro {
         //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState before: \n" << this->mComputationState << std::endl;
         assert(this->mComputationState.getSetType() == representation_name::polytope_t);
         for(std::size_t index = 0; index < this->mComputationState.getNumberSets(); ++index){
-            auto tpoly = boost::apply_visitor(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mComputationState.getSet(index));
+            auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mComputationState.getSet(index));
             if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE != TEMPLATE_CONTENT::OCTAGON){
             	tpoly = createTemplateContent(tpoly);
-                this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mComputationState.getSet(index)),index);     
+                this->mComputationState.setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mComputationState.getSet(index)),index);     
             } else {
                 std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, OCTAGON setting" << std::endl;
                 TemplatePolyhedron<Number> octagon(this->mComputationState.getDimension(), 8);
@@ -308,7 +308,7 @@ namespace hypro {
                     evalRes(i) = evalInOctagonDirs[i].supportValue;
                 }
                 octagon.setVector(evalRes);
-                this->mComputationState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(octagon), this->mComputationState.getSet(index)),index);
+                this->mComputationState.setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(octagon), this->mComputationState.getSet(index)),index);
             }
 
             //Call Location Invariant Strengthening on current invariants
