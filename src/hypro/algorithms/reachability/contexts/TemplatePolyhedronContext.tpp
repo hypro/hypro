@@ -12,7 +12,7 @@ namespace hypro {
 
     template<typename State>
     std::pair<vector_t<typename State::NumberType>,typename State::NumberType> TemplatePolyhedronContext<State>::lieDerivative(const vector_t<Number>& dir){
-        std::cout << "TemplatePolyhedronContext::lieDerivative, dir with " << dir.rows() << "x" << dir.cols() << ": \n" << dir << std::endl;
+        //std::cout << "TemplatePolyhedronContext::lieDerivative, dir with " << dir.rows() << "x" << dir.cols() << ": \n" << dir << std::endl;
         assert(dir.cols() == 1);
         assert(this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() == this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose().cols());
         //Extend dir by one dimension 
@@ -23,9 +23,9 @@ namespace hypro {
         //Compute lie derivative
         derivative = this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose() * gradientOfLinearFct(derivative);
         //Separate vector and dimensionless offset
-        std::cout << "TemplatePolyhedronContext::lieDerivative, derivative with " << derivative.rows() << "x" << derivative.cols() << " is: \n" << derivative << std::endl;
+        //std::cout << "TemplatePolyhedronContext::lieDerivative, derivative with " << derivative.rows() << "x" << derivative.cols() << " is: \n" << derivative << std::endl;
         vector_t<Number> deriv = derivative.block(0,0,derivative.rows()-1,1);
-        std::cout << "TemplatePolyhedronContext::lieDerivative, deriv with " << deriv.rows() << "x" << deriv.cols() << " is: \n" << deriv << std::endl;
+        //std::cout << "TemplatePolyhedronContext::lieDerivative, deriv with " << deriv.rows() << "x" << deriv.cols() << " is: \n" << deriv << std::endl;
         //std::cout << "TemplatePolyhedronContext::lieDerivative, returning vec: \n" << derivative.block(0,0,derivative.rows()-1,1) << " offset: " << derivative(derivative.rows()-1) << std::endl;
         //auto tmp = std::make_pair(derivative.block(0,0,derivative.rows()-1,1).transpose(), derivative(derivative.rows()-1));
         auto tmp = std::make_pair(deriv,derivative(derivative.rows()-1));

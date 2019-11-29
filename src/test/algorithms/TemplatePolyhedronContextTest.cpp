@@ -29,7 +29,7 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 		flow << 3,2,1,		//affine flow, should grow into infinity
 				0,-2,-1,	//linear flow, should grow into -infinity
 				0,0,0;
-		invMat = -matrix_t<Number>::Identity(2,2);
+		invMat = -matrix_t<Number>::Zero(2,2);
 		invVec = 10*vector_t<Number>::Ones(2);
 		inv = Condition<Number>(invMat, invVec);
 		loc = Location<Number>(flow);
@@ -96,13 +96,14 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 TYPED_TEST(TemplatePolyhedronContextTest, GradientOfLinearFunction){
 
 	//Initialize tpcontext
+	//NOTE: This must be copied into every test since ReachTreeNodes cannot be copy assigned and therefore cannot be a member of the test
 	State_t<TypeParam> state(&(this->loc));
 	state.setSet(this->tpoly,0);
 	ReachTreeNode<State_t<TypeParam>> rnode(state,(unsigned)0);
 	auto task = std::make_shared<Task<State_t<TypeParam>>>(&rnode);
 	TemplatePolyhedronContext<State_t<TypeParam>> tpcontext(task,this->strat,this->localQueue,this->localCEXQueue,this->localSegments,this->settings);
 
-	//Actual test - Given the vector (0,0,0), so the function f = 0*x + 0*y + 0, the gradient is (df/dx, df/dy, 0) and thus (0,0,0)
+	//Zero function - Given the vector (0,0,0), so the function f = 0*x + 0*y + 0, the gradient is (df/dx, df/dy, 0) and thus (0,0,0)
 	//NOTE: the last 0 is just an extension needed for the other computations within TemplatePolyhedronContext
 	vector_t<TypeParam> zeroFunction = vector_t<TypeParam>::Zero(3);
 	EXPECT_EQ(tpcontext.gradientOfLinearFct(zeroFunction), zeroFunction);
@@ -120,15 +121,66 @@ TYPED_TEST(TemplatePolyhedronContextTest, GradientOfLinearFunction){
 	EXPECT_EQ(res(2), 0);
 }
 
-/*
-TYPED_TEST(TemplatePolyhedronContextTest, ExecBeforeFirstSegment){
+TYPED_TEST(TemplatePolyhedronContextTest, LieDerivative){
 
+	//Initialize tpcontext
+	//NOTE: This must be copied into every test since ReachTreeNodes cannot be copy assigned and therefore cannot be a member of the test
+	State_t<TypeParam> state(&(this->loc));
+	state.setSet(this->tpoly,0);
+	ReachTreeNode<State_t<TypeParam>> rnode(state,(unsigned)0);
+	auto task = std::make_shared<Task<State_t<TypeParam>>>(&rnode);
+	TemplatePolyhedronContext<State_t<TypeParam>> tpcontext(task,this->strat,this->localQueue,this->localCEXQueue,this->localSegments,this->settings);
+
+	//Zero function
+	vector_t<TypeParam> zeroFunction = vector_t<TypeParam>::Zero(2);
+	EXPECT_EQ(tpcontext.lieDerivative(zeroFunction).first, zeroFunction);
+	EXPECT_EQ(tpcontext.lieDerivative(zeroFunction).second, 0);
+
+	//Constant function - Not possible right now since we extend the given function within the lieDerivative() function
+
+	//Multivariate linear fct
+	vector_t<TypeParam> testFunction = zeroFunction;
+	testFunction << 1,2;
+	auto res = tpcontext.lieDerivative(testFunction);
+	EXPECT_EQ(res.first(0), 3);
+	EXPECT_EQ(res.first(1), -2);
+	EXPECT_EQ(res.second, -1);
 }
 
-TYPED_TEST(TemplatePolyhedronContextTest, TPolyFirstSegmentHandler){
+TYPED_TEST(TemplatePolyhedronContextTest, PositiveInvariant){
 	
+
+
 }
-*/
+
+TYPED_TEST(TemplatePolyhedronContextTest, CreateTemplateContent){
+	SUCCEED();
+}
+
+TYPED_TEST(TemplatePolyhedronContextTest, LocationInvariantStrengthening){
+	SUCCEED();
+}
+
+TYPED_TEST(TemplatePolyhedronContextTest, ExecBeforeFirstSegment){
+	SUCCEED();
+}
+
+TYPED_TEST(TemplatePolyhedronContextTest, FirstSegment){
+	SUCCEED();
+}
+
+TYPED_TEST(TemplatePolyhedronContextTest, ApplyContinuousEvolution){
+	SUCCEED();
+}
+
+TYPED_TEST(TemplatePolyhedronContextTest, Reachability){
+	SUCCEED();
+}
+
+//TYPED_TEST(TemplatePolyhedronContextTest, TPolyFirstSegmentHandler){
+//	
+//}
+
 
 //Unit Tests: Instantiation, Every handler, 
 
