@@ -1943,7 +1943,7 @@ error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clan
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:74: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:22: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20918.bbl: No such file or directory
+error opening bib20800.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
