@@ -784,7 +784,39 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	void TemplatePolyhedronT<Number,Converter,Setting>::reduceRepresentation() {
-		removeRedundancy();
+		
+		//Make a vector of all row indices
+		std::vector<int> importantRows;
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			importantRows.push_back(i);
+		}
+		
+		//Remove all doubled normal vectors
+		for(unsigned rowI = 0; rowI < importantRows.size(); ++rowI){
+			for(unsigned toCheck = 0; toCheck < importantRows.size(); ++toCheck){
+				if(rowI != toCheck && mMatrixPtr->row(rowI) == mMatrixPtr->row(toCheck)){
+					importantRows[toCheck] = importantRows[rowI];
+				}
+			}
+		}
+		std::set<int> importantRowsWithoutDoubles(importantRows.begin(), importantRows.end());
+		importantRows.clear();
+		importantRows = std::vector<int>(importantRowsWithoutDoubles.begin(), importantRowsWithoutDoubles.end());
+
+		//Create reduced matrix from the rest
+		matrix_t<Number> reducedMat = matrix_t<Number>::Zero(importantRows.size(), dimension());
+		for(int i = 0; i < (int)importantRows.size(); ++i){
+			reducedMat.row(i) = mMatrixPtr->row(importantRows[i]);
+		}
+		
+		//Evaluate into only the needed directions
+		auto resPoly = overapproximate(reducedMat);
+		mMatrixPtr = std::make_shared<matrix_t<Number>>(std::move(resPoly.matrix()));
+		mVector = std::move(resPoly.vector());
+		mOptimizer.setMatrix(*mMatrixPtr);
+		mOptimizer.setVector(mVector);
+		mEmpty = TRIBOOL::NSET;
+		mNonRedundant = true;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -799,6 +831,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::overapproximate( const matrix_t<Number>& dirs ) const {
 		if(empty()) return *this;
+		assert(isBounded());
 		assert(dirs.cols() == mMatrixPtr->cols());
 		auto evalRes = multiEvaluate(dirs, true);
 		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
@@ -809,6 +842,12 @@ namespace hypro {
 		return TemplatePolyhedronT<Number,Converter,Setting>(dirs,evalOffsets);
 	}
 
+	//NOTE: This function does not always return the right boundedness property.
+	//Counterexample: a slightly rotated box in 2D with one wall missing covers all the dimensions thrice,
+	//but is not bounded.
+	//But else it is right most of the time
+	//NOTE: Maybe use: unbounded <=> all normals are within one half of the normal sphere
+	// <=> the greatest normal angle is bigger equal than 180 degrees
 	template<typename Number, typename Converter, typename Setting>
 	bool TemplatePolyhedronT<Number,Converter,Setting>::isBounded() const {
 		//The empty set is bounded 

@@ -180,7 +180,9 @@ namespace hypro {
     }
 
     template<typename State>
-    TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
+    template<typename Setting>
+    TemplatePolyhedronT<typename State::NumberType, hypro::Converter<typename State::NumberType>, Setting> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedronT<Number, hypro::Converter<Number>, Setting>& tpoly){
+    //TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
         
         //Start with initial set 
         assert((unsigned)tpoly.matrix().cols() == this->mComputationState.getDimension());
@@ -189,14 +191,14 @@ namespace hypro {
         std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, ONLY_INIT setting" << std::endl;
 
         //Add invariants if wanted and if there exist some
-        if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV && this->mComputationState.getLocation()->getInvariant() != Condition<Number>()){
+        if(Setting::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV && this->mComputationState.getLocation()->getInvariant() != Condition<Number>()){
             std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV setting" << std::endl;
             extendedMatrix.conservativeResize(templateSize + this->mComputationState.getLocation()->getInvariant().getMatrix().rows(), this->mComputationState.getDimension());
             extendedMatrix.block(templateSize,0,this->mComputationState.getLocation()->getInvariant().getMatrix().rows(), this->mComputationState.getDimension()) = this->mComputationState.getLocation()->getInvariant().getMatrix();
             templateSize += this->mComputationState.getLocation()->getInvariant().getMatrix().rows();
         }
         //Add guards if wanted and if there exist some
-        if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV_GUARD){
+        if(Setting::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV_GUARD){
             std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV_GUARD setting" << std::endl;
             for(const auto& transition : this->mComputationState.getLocation()->getTransitions()){
                 if(transition->getGuard() != Condition<Number>()){
@@ -206,8 +208,8 @@ namespace hypro {
                 }
             }
         }
-        //TODO:Add bad states later on
-        if(TemplatePolyhedron<Number>::Settings::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV_GUARD_BAD){
+        //Add bad states later on
+        if(Setting::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV_GUARD_BAD){
             std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV_GUARD_BAD setting" << std::endl;
             for(const auto& gbadstate : SettingsProvider<State>::getInstance().getHybridAutomaton().getGlobalBadStates()){
                 if(gbadstate != Condition<Number>()){
@@ -224,10 +226,11 @@ namespace hypro {
             }
         }
         //Evaluate tpoly in directions written in extendedMatrix. 
-        std::cout << "extendedMatrix: \n" << extendedMatrix << std::endl;
-        TemplatePolyhedron<Number> overapprox = tpoly.overapproximate(extendedMatrix);
-        overapprox.removeRedundancy();
-        std::cout << "overapprox after removeRedundancy: \n" << overapprox << std::endl;
+        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, extendedMatrix: \n" << extendedMatrix << std::endl;
+        //TemplatePolyhedron<Number> overapprox = tpoly.overapproximate(extendedMatrix);
+        TemplatePolyhedronT<Number,hypro::Converter<Number>,Setting> overapprox = tpoly.overapproximate(extendedMatrix);
+        overapprox.reduceRepresentation();
+        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, overapprox after reduceRepresentation: \n" << overapprox << std::endl;
         return overapprox;
     }
 

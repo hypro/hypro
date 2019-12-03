@@ -84,7 +84,9 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     vector_t<Number> locationInvariantStrengthening(const TemplatePolyhedron<Number>& invTPpoly, const vector_t<Number>& initialOffsets);
     
     //Adds invariants, guards and bad states to the template matrix according the the setting
-    TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
+    //TemplatePolyhedron<Number> createTemplateContent(const TemplatePolyhedron<Number>& tpoly);
+	template<typename Setting>
+    TemplatePolyhedronT<typename State::NumberType, hypro::Converter<Number>, Setting> createTemplateContent(const TemplatePolyhedronT<Number, hypro::Converter<Number>, Setting>& tpoly);
 
     //Tests whether the given tpoly is a positive invariant and therefore admissible for location invariant strengthening
     bool isPositiveInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);

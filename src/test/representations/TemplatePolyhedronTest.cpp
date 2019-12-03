@@ -705,6 +705,34 @@ TYPED_TEST(TemplatePolyhedronTest, Boundedness){
 	TemplatePolyhedron<TypeParam> unbounded(m,vector_t<TypeParam>::Zero(1));
 	EXPECT_FALSE(unbounded.isBounded());
 
+}
 
+TYPED_TEST(TemplatePolyhedronTest, ReduceRepresentation){
 
+	//TODO: Test case empty tpoly
+
+	//Test case normal
+	matrix_t<TypeParam> bigMat = matrix_t<TypeParam>::Zero(7,2);
+	bigMat << 	-1,0,
+				1,0,
+				0,-1,
+				0,1,	//Should be removed
+				0,1,	//Should be removed
+				0,1,	//Should not be removed since it has the smallest offset
+				1,1;	//Should not be removed, although redundant for definition of tpoly
+	vector_t<TypeParam> bigVec = vector_t<TypeParam>::Zero(7);
+	bigVec << 2,2,2,2,3,1,10;
+	TemplatePolyhedron<TypeParam> bigPoly(bigMat,bigVec);
+	bigPoly.reduceRepresentation();
+	matrix_t<TypeParam> controlMat = matrix_t<TypeParam>::Zero(5,2);
+	controlMat << 	-1,0,
+					1,0,
+					0,-1,
+					0,1,	
+					1,1;	
+	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(5);
+	controlVec << 2,2,2,1,3;
+	EXPECT_EQ(bigPoly.matrix(), controlMat);
+	EXPECT_EQ(bigPoly.vector(), controlVec);
+ 
 }

@@ -272,7 +272,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	std::size_t dimension() const;
 
 	/**
-	 * @brief      Removes redundancy.
+	 * @brief      Removes redundancy. Removes all constraints that do not help in defining the set of satisfying points.
 	 */
 	void removeRedundancy();
 
@@ -335,7 +335,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	TemplatePolyhedronT<Number,Converter,Setting> unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& TemplatePolyhedrones );
 
 	/**
-	 * @brief      Reduces the representation of the current TemplatePolyhedron.
+	 * @brief      Reduces the representation of the current TemplatePolyhedron. Removes all doubled normal directions, 
 	 */
 	void reduceRepresentation();
 
