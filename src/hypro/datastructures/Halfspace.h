@@ -234,6 +234,13 @@ class Halfspace {
 	bool contains( const std::vector<Point<Number>>& _points ) const;
 
 	/**
+	 * @brief Determines, whether the given point is contained inside the halfspace using exact arithmetic.
+	 * @param[in] point The point.
+	 * @return True iff the point is contained.
+	 */
+	bool exactContains(vector_t<Number> const& point) const;
+
+	/**
 	 * @brief      Determines, whether the point given as a vector saturates the halfspace, i.e. lies on
 	 * its bounding plane.
 	 * @param[in]  _vector  The vector.

@@ -302,6 +302,15 @@ bool Halfspace<Number>::contains( const std::vector<Point<Number>> &_points ) co
 }
 
 template <typename Number>
+bool Halfspace<Number>::exactContains(vector_t<Number> const& point) const {
+	hypro::vector_t<mpq_class> normal = mNormal.template cast<mpq_class>();
+	hypro::vector_t<mpq_class> mpq_vertex = point.template cast<mpq_class>();
+	mpq_class offset = mScalar;
+
+	return normal.dot(mpq_vertex) - offset <= 0;
+}
+
+template <typename Number>
 bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) == mScalar );
 }
