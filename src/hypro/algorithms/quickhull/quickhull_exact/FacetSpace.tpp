@@ -99,7 +99,7 @@ namespace hypro {
         
         Eigen::FullPivLU<matrix_t<Number>> lu(matrix);
 
-        assert(lu.rank() == dimension);
+        assert(static_cast<size_t>(lu.rank()) == dimension);
         TRACE("quickhull", "matrix rank " << lu.rank());
 
         point_t result =  matrix.fullPivLu().kernel().col(0);
