@@ -11,7 +11,7 @@ namespace hypro {
     inline constexpr bool is_exact = std::is_same_v<Number, mpq_class>;
 
     /**
-     * Represents a quickhull computation on a set of input vertices.
+     * Represents an exact quickhull computation on a set of input vertices.
      * @tparam Number The Number type to be used.
      */
     template<typename Number>
