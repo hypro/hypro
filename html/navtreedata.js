@@ -66,14 +66,14 @@ var NAVTREEINDEX =
 "classhypro_1_1OrthogonalPolyhedron.html#a366e4644bbf3321140ce3ece37600b3c",
 "classhypro_1_1PrincipalComponentAnalysis.html#ac07cd587b12838018ca767aad07f6b2a",
 "classhypro_1_1SumOp.html#a8b7c47e0f8ecb97471e5e7d406e71580",
-"classhypro_1_1TrafoParameters.html",
-"classhypro_1_1ZonotopeT.html",
-"classhypro_1_1ltiResetHandler.html#a1839c779fe7d525804cedab36d9c0fd4",
-"dir_68267d1309a1af8e8297ef4c3efbcdba.html",
-"flow_8h.html",
-"qe_8h_source.html",
-"structhypro_1_1ProjectData.html#a7db29b824049ff21bbeabe83196ac928",
-"structhypro_1_1trafoContent.html#a9488650341da5f7093a0f075067c5b6a"
+"classhypro_1_1TrafoOp.html#af8a1e135566aaadd4ce5db9c63fcec3f",
+"classhypro_1_1WorkQueueT.html#aee52999fbf2fd883b9d07f9bd26d699d",
+"classhypro_1_1ltiJumpHandler.html#abd47d1f283e354e09428fd0a7bebf7d4",
+"dir_5b1ead7e91c1179ccb075fffb42ab9bb.html",
+"files.html",
+"plotting.html",
+"structhypro_1_1PolytopeSetting.html",
+"structhypro_1_1trafoContent.html#a52345918b06b2be7a130f1ffe0fc88e6"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

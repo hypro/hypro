@@ -94,6 +94,7 @@ var hierarchy =
     [ "hypro::genericConversionVisitor< T, To >", "classhypro_1_1genericConversionVisitor.html", null ],
     [ "hypro::genericConvertAndGetVisitor< OutType >", "classhypro_1_1genericConvertAndGetVisitor.html", null ],
     [ "hypro::genericDimensionVisitor", "classhypro_1_1genericDimensionVisitor.html", null ],
+    [ "hypro::genericEmptyVisitor", "classhypro_1_1genericEmptyVisitor.html", null ],
     [ "hypro::genericInternalConversionVisitor< T, Ext >", "classhypro_1_1genericInternalConversionVisitor.html", null ],
     [ "hypro::genericIntersectVisitor< T >", "classhypro_1_1genericIntersectVisitor.html", null ],
     [ "hypro::genericIntervalAssignmentVisitor< T, Number >", "classhypro_1_1genericIntervalAssignmentVisitor.html", null ],

@@ -9,6 +9,7 @@ var searchData=
   ['genericconversionvisitor',['genericConversionVisitor',['../classhypro_1_1genericConversionVisitor.html',1,'hypro']]],
   ['genericconvertandgetvisitor',['genericConvertAndGetVisitor',['../classhypro_1_1genericConvertAndGetVisitor.html',1,'hypro']]],
   ['genericdimensionvisitor',['genericDimensionVisitor',['../classhypro_1_1genericDimensionVisitor.html',1,'hypro']]],
+  ['genericemptyvisitor',['genericEmptyVisitor',['../classhypro_1_1genericEmptyVisitor.html',1,'hypro']]],
   ['genericinternalconversionvisitor',['genericInternalConversionVisitor',['../classhypro_1_1genericInternalConversionVisitor.html',1,'hypro']]],
   ['genericintersectvisitor',['genericIntersectVisitor',['../classhypro_1_1genericIntersectVisitor.html',1,'hypro']]],
   ['genericintervalassignmentvisitor',['genericIntervalAssignmentVisitor',['../classhypro_1_1genericIntervalAssignmentVisitor.html',1,'hypro']]],

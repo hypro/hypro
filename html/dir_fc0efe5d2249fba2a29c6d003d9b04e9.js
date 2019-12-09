@@ -44,6 +44,7 @@ var dir_fc0efe5d2249fba2a29c6d003d9b04e9 =
       [ "genericProjectionVisitor", "classhypro_1_1genericProjectionVisitor.html", "classhypro_1_1genericProjectionVisitor" ],
       [ "genericSetContainsVisitor", "classhypro_1_1genericSetContainsVisitor.html", "classhypro_1_1genericSetContainsVisitor" ],
       [ "genericIntervalAssignmentVisitor", "classhypro_1_1genericIntervalAssignmentVisitor.html", "classhypro_1_1genericIntervalAssignmentVisitor" ],
-      [ "genericToStringVisitor", "classhypro_1_1genericToStringVisitor.html", "classhypro_1_1genericToStringVisitor" ]
+      [ "genericToStringVisitor", "classhypro_1_1genericToStringVisitor.html", "classhypro_1_1genericToStringVisitor" ],
+      [ "genericEmptyVisitor", "classhypro_1_1genericEmptyVisitor.html", "classhypro_1_1genericEmptyVisitor" ]
     ] ]
 ];
