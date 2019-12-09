@@ -130,8 +130,10 @@ namespace hypro {
         vector_t<Number> rhs = vector_t<Number>::Zero(dimension + 1);
         rhs(dimension) = 1;
 
-        //last row is 1,0,...,0
-        matrix(dimension, 0) = 1;
+        //last row is 1,...,1,0
+        for(size_t i = 0; i < dimension; ++i) {
+            matrix(dimension, i) = 1;
+        }
 
         //Do first iteration
         //Set the first row

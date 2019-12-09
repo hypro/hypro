@@ -93,6 +93,8 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 	, mEmpty( TRIBOOL::NSET )
 	, mNonRedundant( true ) {
 
+		mDimension = points.front().dimension();
+
 		//Get raw data for quickhull
         std::vector<vector_t<Number>> qhInputs{};
 
