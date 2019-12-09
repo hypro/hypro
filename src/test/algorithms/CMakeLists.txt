@@ -12,6 +12,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       FourierMotzkinQETest.cpp
       VertexEnumerationTest.cpp
       UtilityTest.cpp
+      QuickhullTest.cpp
     )
 
   SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)
