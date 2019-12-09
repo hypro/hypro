@@ -538,7 +538,15 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 
 template <typename Number, typename Representation, typename... Rargs>
 bool State<Number, Representation, Rargs...>::isEmpty() const {
-	// TODO
+	bool res = false;
+	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
+		// TODO: do not ignore cache!
+		bool localEmpty = std::visit( genericEmptyVisitor(), mSets.at( i ) );
+		mIsEmpty[i] = localEmpty == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		if ( localEmpty ) {
+			return true;
+		}
+	}
 }
 
 template <typename Number, typename Representation, typename... Rargs>

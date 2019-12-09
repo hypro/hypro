@@ -294,4 +294,12 @@ class genericToStringVisitor {
 	}
 };
 
+class genericEmptyVisitor {
+  public:
+	template <typename A>
+	inline bool operator()( const A& in ) const {
+		return in.empty();
+	}
+};
+
 }  // namespace hypro
