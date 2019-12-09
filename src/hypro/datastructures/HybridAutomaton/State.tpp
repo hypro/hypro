@@ -28,6 +28,7 @@ void State<Number, Representation, Rargs...>::setSet( const R& s, std::size_t i 
 	while ( i >= mSets.size() ) {
 		mSets.emplace_back( Representation() );		 // some default set.
 		mTypes.push_back( Representation::type() );  // some default set type.
+		mIsEmpty.push_back( TRIBOOL::NSET );
 		TRACE( "hypro.datastructures", "Add empty dummy set of type " << mTypes.back() << " at index " << mSets.size() );
 	}
 	TRACE( "hypro.datastructures", "Set set to:" << s << ", type: " << R::type() );
@@ -46,6 +47,7 @@ void State<Number, Representation, Rargs...>::setSet( const State<Number, Repres
 	while ( i >= mSets.size() ) {
 		mSets.emplace_back( Representation() );		 // some default set.
 		mTypes.push_back( Representation::type() );  // some default set type.
+		mIsEmpty.push_back( TRIBOOL::NSET );
 	}
 	mSets[i] = s;
 	mTypes[i] = std::visit( genericTypeVisitor(), s );
@@ -79,6 +81,9 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
 		TRACE( "hypro.datastructures", "Apply unite vistor for set " << i );
 		res.setSetDirect( std::visit( genericUniteVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
+		if ( in.getEmptyStates()[i] == TRIBOOL::TRUE || this->getEmptyStates()[i] == TRIBOOL::TRUE ) {
+			res.rGetEmptyStates()[i] == TRIBOOL::TRUE;
+		}
 	}
 
 	TRACE( "hypro.datastructures", "Done union." );
@@ -123,10 +128,14 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 		if ( resultPair.first == CONTAINMENT::NO ) {
 			DEBUG( "hypro.datastructures", "State set " << i << "(type " << mTypes.at( i ) << ") failed the condition - return empty." );
 			strictestContainment = resultPair.first;
+			res.rGetEmptyState()[i] == TRIBOOL::TRUE;
 			break;
 		} else if ( resultPair.first == CONTAINMENT::PARTIAL ) {
 			DEBUG( "hypro.datastructures", "State set " << i << "(type " << mTypes.at( i ) << ") succeeded the condition - return partial." );
 			strictestContainment = CONTAINMENT::PARTIAL;
+			res.rGetEmptyState()[i][i] == TRIBOOL::FALSE;
+		} else {
+			res.rGetEmptyState()[i][i] == TRIBOOL::FALSE;
 		}
 	}
 	DEBUG( "hypro.datastructures", "State::satisfies: End of loop" );
@@ -160,6 +169,7 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 	auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( I ), in.getVector( I ) ), mSets.at( I ) );
 	TRACE( "hypro.datastructures", "Done satisfiesHalfspaces visitor, attempt to set result." );
 	res.setSetDirect( resultPair.second, I );
+	res.rGetEmptyStates()[I] = resultPair.first == CONTAINMENT::NO ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 
 	TRACE( "hypro.datastructures", "Result empty: " << resultPair.first );
 
@@ -176,6 +186,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 
 	auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( constraints, constants ), mSets.at( I ) );
 	res.setSetDirect( resultPair.second, I );
+	res.rGetEmptyState()[I] = resultPair.first == CONTAINMENT::NO ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 
 	return res;
 }
@@ -334,6 +345,11 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	TRACE( "hypro.datastructures", "Apply interval assignment for subspace " << I << "." );
 	// Note: We abuse empty intervals to indicate identity assignments -> change to a map later! (TODO)
 	res.setSetDirect( std::visit( genericIntervalAssignmentVisitor<repVariant, Number>( assignments ), mSets.at( I ) ), I );
+	for ( const auto& i : assignments ) {
+		if ( i.empty() ) {
+			res.rGetEmptyState()[I] = TRIBOOL::TRUE;
+		}
+	}
 	return res;
 }
 
@@ -371,6 +387,9 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < rhs.getSets().size(); i++ ) {
 		res.setSetDirect( std::visit( genericMinkowskiSumVisitor<repVariant>(), mSets.at( i ), rhs.getSet( i ) ), i );
+		if ( rhs.getEmptyState()[i] == TRIBOOL::TRUE || this->getEmptyState()[i] == TRIBOOL::TRUE ) {
+			res.rGetEmptyState()[i] = TRIBOOL::TRUE;
+		}
 	}
 	return res;
 }
@@ -387,6 +406,9 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	//For more representations avaiable: use visitor
 	State<Number, Representation, Rargs...> res( *this );
 	res.setSetDirect( std::visit( genericMinkowskiSumVisitor<repVariant>(), mSets.at( I ), rhs.getSet( I ) ), I );
+	if ( rhs.getEmptyState()[I] == TRIBOOL::TRUE || this->getEmptyState()[I] == TRIBOOL::TRUE ) {
+		res.rGetEmptyState()[I] = TRIBOOL::TRUE;
+	}
 	return res;
 }
 
@@ -412,6 +434,9 @@ template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::project( const std::vector<std::size_t>& dimensions, std::size_t I ) const {
 	State res( *this );
 	res.setSetDirect( std::visit( genericProjectionVisitor<repVariant>( dimensions ), mSets.at( I ) ) );
+	if ( dimensions.size() == 0 ) {
+		res.rGetEmptyState()[I] = TRIBOOL::TRUE;
+	}
 	return res;
 }
 
@@ -496,7 +521,7 @@ void State<Number, Representation, Rargs...>::partiallyReduceRepresentation( std
 
 template <typename Number, typename Representation, typename... Rargs>
 bool State<Number, Representation, Rargs...>::checkConsistency() const {
-	if ( mSets.size() != mTypes.size() ) {
+	if ( mSets.size() != mTypes.size() || mSets.size() != mIsEmpty.size() ) {
 		std::cout << "Inconsistent size!" << std::endl;
 		return false;
 	}
@@ -512,6 +537,17 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 }
 
 template <typename Number, typename Representation, typename... Rargs>
+bool State<Number, Representation, Rargs...>::isEmpty() const {
+	// TODO
+}
+
+template <typename Number, typename Representation, typename... Rargs>
+void State<Number, Representation, Rargs...>::setSets( const std::vector<std::variant<Representation, Rargs...>>& sets ) {
+	mSets = sets;
+	mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+}
+
+template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<std::variant<Representation, Rargs...>>& sets ) {
 	assert( checkConsistency() );
 	//std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
@@ -519,6 +555,7 @@ void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<std
 		setSetType( std::visit( genericTypeVisitor(), sets.at( i ) ), i );
 	}
 	mSets = sets;
+	mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
 	assert( checkConsistency() );
 }
 
@@ -593,6 +630,7 @@ void State<Number, Representation, Rargs...>::decompose( const Decomposition& de
 		}
 		i++;
 	}
+	mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
 	DEBUG( "hypro.datastructures", "State after decomposition: " << *this );
 }
 

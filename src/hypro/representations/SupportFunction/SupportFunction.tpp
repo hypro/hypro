@@ -190,6 +190,11 @@ BallSupportFunction<Number>* SupportFunctionT<Number, Converter, Setting>::ball(
 }
 
 template <typename Number, typename Converter, typename Setting>
+BoxSupportFunction<Number, Setting>* SupportFunctionT<Number, Converter, Setting>::box() const {
+	return content->box();
+}
+
+template <typename Number, typename Converter, typename Setting>
 EllipsoidSupportFunction<Number>* SupportFunctionT<Number, Converter, Setting>::ellipsoid() const {
 	return content->ellipsoid();
 }
@@ -472,7 +477,9 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 	}
 
 	if ( limiting ) {
-		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspace( rhs ) );
+		auto tmp = this->intersectHalfspace( rhs );
+		assert( !tmp.empty() );
+		return std::make_pair( CONTAINMENT::PARTIAL, tmp );
 	} else {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
@@ -554,12 +561,16 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 		}
 		assert( limitingPlanes.empty() );
 		//TRACE("hypro.representations.supportFunction", "Intersect with " << planes << ", " << distances);
-		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( planes, distances ) );
+		auto tmp = this->intersectHalfspaces( planes, distances );
+		assert( !tmp.empty() );
+		return std::make_pair( CONTAINMENT::PARTIAL, tmp );
 	} else {
 		//TRACE("hypro.representations.supportFunction", " Object will be fully limited but not empty");
 		assert( limitingPlanes.size() == unsigned( _mat.rows() ) );
 		//TRACE("hypro.representations.supportFunction", "Intersect with " << _mat << ", " << _vec);
-		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( _mat, _vec ) );
+		auto tmp = this->intersectHalfspaces( _mat, _vec );
+		assert( !tmp.empty() );
+		return std::make_pair( CONTAINMENT::PARTIAL, tmp );
 	}
 }
 

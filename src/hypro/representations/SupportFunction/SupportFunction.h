@@ -66,6 +66,7 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	intersectionContent<Number, Setting>* intersectionParameters() const;
 	PolytopeSupportFunction<Number, Setting>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
+	BoxSupportFunction<Number, Setting>* box() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	matrix_t<Number> matrix() const;
