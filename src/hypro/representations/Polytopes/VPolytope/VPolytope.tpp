@@ -629,15 +629,15 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 
 template <typename Number, typename Converter, typename S>
 void VPolytopeT<Number, Converter, S>::updateNeighbors() {
-	std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull( mVertices ).second;
-	mVertices.clear();
-	for ( const auto &pointNeighborsPair : neighbors ) {
-		mVertices.push_back( pointNeighborsPair.first );
-	}
-	// we can only set neighbors after all points have been inserted.
-	for ( const auto &pointNeighborsPair : neighbors ) {
-		this->setNeighbors( pointNeighborsPair.first, pointNeighborsPair.second );
-	}
+	// std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull( mVertices ).second;
+	// mVertices.clear();
+	// for ( const auto &pointNeighborsPair : neighbors ) {
+	// 	mVertices.push_back( pointNeighborsPair.first );
+	// }
+	// // we can only set neighbors after all points have been inserted.
+	// for ( const auto &pointNeighborsPair : neighbors ) {
+	// 	this->setNeighbors( pointNeighborsPair.first, pointNeighborsPair.second );
+	// }
 	mReduced = true;
 }
 
