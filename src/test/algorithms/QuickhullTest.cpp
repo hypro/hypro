@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "algorithms/quickhull/quickhull_exact/Quickhull.h"
+#include "algorithms/quickhull/Quickhull.h"
 
 using namespace hypro;
 using number_t  = mpq_class;
