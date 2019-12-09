@@ -119,33 +119,22 @@ namespace hypro {
     bool ExactQuickhull<Number>::constructInitialFacet() {
         Facet& facet = fSpace.insertNew();
 
-        Eigen::FullPivLU<matrix_t<Number>> lu(dimension + 1, dimension + 1);
-        matrix_t<Number> matrix = matrix_t<Number>::Zero(dimension + 1, dimension + 1);
+        Eigen::FullPivLU<matrix_t<Number>> lu(dimension, dimension + 1);
+        matrix_t<Number> matrix = matrix_t<Number>::Zero(dimension, dimension + 1);
 
-
-        //rhs is 0,...,0,1
-        vector_t<Number> rhs = vector_t<Number>::Zero(dimension + 1);
-        rhs(dimension) = 1;
-
-        //last row is 1,...,1,0
-        for(size_t i = 0; i < dimension; ++i) {
-            matrix(dimension, i) = 1;
-        }
 
         //Do first iteration
-        //Set the first row
         facet.mVertices[0] = 0;
+        //Set the first row
         matrix.block(0, 0, 1, dimension) = inputPoints[0].transpose();
         matrix(0, dimension) = 1;
         
         //Compute normal and offset
         lu.compute(matrix);
-        vector_t<Number> result = lu.solve(rhs);
+        vector_t<Number> result = lu.kernel().col(0);
 
         facet.mNormal = result.head(dimension);
         facet.mOffset = -result[dimension];
-
-        TRACE("quickhull", "normal after assignment " << facet.mNormal)
 
         for(size_t d = 1; d < dimension; ++d) {
             
@@ -154,9 +143,6 @@ namespace hypro {
 
             vector_t<double> r = convert<mpq_class, double>(result);
             TRACE("quickhull", "result" << std::endl << r);
-
-            vector_t<double> v = convert<mpq_class, double>(fSpace.facets.front().mNormal);
-            TRACE("quickhull", "normal pre fFP " << v);
 
             auto [furthestDistance, furthestPoint_i] = findFurthestPoint(facet);
 
@@ -169,17 +155,14 @@ namespace hypro {
                 return true;
             }
 
-            //Set the (d+1)-th row
             facet.mVertices[d] = furthestPoint_i;
+            //Set the (d+1)-th row
             matrix.block(d, 0, 1, dimension) = inputPoints[furthestPoint_i].transpose();
             matrix(d, dimension) = 1;
 
             //Compute normal and offset
             lu.compute(matrix);
-            result = lu.solve(rhs);
-
-            vector_t<double> rh = convert<mpq_class, double>(rhs);
-            TRACE("quickhull", "rhs " << rh);
+            result = lu.kernel().col(0);
 
             facet.mNormal = result.head(dimension);
             facet.mOffset = -result[dimension];
