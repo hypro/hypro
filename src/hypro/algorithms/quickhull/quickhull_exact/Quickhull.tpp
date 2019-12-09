@@ -185,6 +185,12 @@ namespace hypro {
             facet.mOffset = -result[dimension];
         }
 
+        matrix_t<double> m = convert<mpq_class, double>(matrix);
+        TRACE("quickhull", "matrix" <<  std::endl << m);
+
+        vector_t<double> r = convert<mpq_class, double>(result);
+        TRACE("quickhull", "result" << std::endl << r);
+
         std::sort(facet.mVertices.begin(), facet.mVertices.end());
 
         return false;
