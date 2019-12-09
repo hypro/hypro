@@ -82,7 +82,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 		TRACE( "hypro.datastructures", "Apply unite vistor for set " << i );
 		res.setSetDirect( std::visit( genericUniteVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
 		if ( in.getEmptyStates()[i] == TRIBOOL::TRUE || this->getEmptyStates()[i] == TRIBOOL::TRUE ) {
-			res.rGetEmptyStates()[i] == TRIBOOL::TRUE;
+			res.rGetEmptyStates()[i] = TRIBOOL::TRUE;
 		}
 	}
 
@@ -128,14 +128,14 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 		if ( resultPair.first == CONTAINMENT::NO ) {
 			DEBUG( "hypro.datastructures", "State set " << i << "(type " << mTypes.at( i ) << ") failed the condition - return empty." );
 			strictestContainment = resultPair.first;
-			res.rGetEmptyStates()[i] == TRIBOOL::TRUE;
+			res.rGetEmptyStates()[i] = TRIBOOL::TRUE;
 			break;
 		} else if ( resultPair.first == CONTAINMENT::PARTIAL ) {
 			DEBUG( "hypro.datastructures", "State set " << i << "(type " << mTypes.at( i ) << ") succeeded the condition - return partial." );
 			strictestContainment = CONTAINMENT::PARTIAL;
-			res.rGetEmptyStates()[i][i] == TRIBOOL::FALSE;
+			res.rGetEmptyStates()[i] = TRIBOOL::FALSE;
 		} else {
-			res.rGetEmptyStates()[i][i] == TRIBOOL::FALSE;
+			res.rGetEmptyStates()[i] = TRIBOOL::FALSE;
 		}
 	}
 	DEBUG( "hypro.datastructures", "State::satisfies: End of loop" );
@@ -346,7 +346,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	// Note: We abuse empty intervals to indicate identity assignments -> change to a map later! (TODO)
 	res.setSetDirect( std::visit( genericIntervalAssignmentVisitor<repVariant, Number>( assignments ), mSets.at( I ) ), I );
 	for ( const auto& i : assignments ) {
-		if ( i.empty() ) {
+		if ( i.isEmpty() ) {
 			res.rGetEmptyStates()[I] = TRIBOOL::TRUE;
 		}
 	}
@@ -538,7 +538,6 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 
 template <typename Number, typename Representation, typename... Rargs>
 bool State<Number, Representation, Rargs...>::isEmpty() const {
-	bool res = false;
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
 		// TODO: do not ignore cache!
 		bool localEmpty = std::visit( genericEmptyVisitor(), mSets.at( i ) );
@@ -547,6 +546,7 @@ bool State<Number, Representation, Rargs...>::isEmpty() const {
 			return true;
 		}
 	}
+	return false;
 }
 
 template <typename Number, typename Representation, typename... Rargs>

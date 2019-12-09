@@ -37,7 +37,7 @@ class State {
 	std::vector<repVariant> mSets;														/// The state sets wrapped in variant (repVariant).
 	std::vector<representation_name> mTypes;											/// A vector holding the actual types corresponding to the state sets.
 	carl::Interval<tNumber> mTimestamp = carl::Interval<tNumber>::unboundedInterval();  /// A timestamp.
-	std::vector<TRIBOOL> mIsEmpty;														/// A flag for each set which can be set to allow for a quick check for emptiness.
+	mutable std::vector<TRIBOOL> mIsEmpty;												/// A flag for each set which can be set to allow for a quick check for emptiness.
 
   private:
 	/**
