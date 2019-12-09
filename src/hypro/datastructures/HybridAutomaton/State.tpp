@@ -82,7 +82,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 		TRACE( "hypro.datastructures", "Apply unite vistor for set " << i );
 		res.setSetDirect( std::visit( genericUniteVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
 		if ( in.getEmptyStates()[i] == TRIBOOL::TRUE || this->getEmptyStates()[i] == TRIBOOL::TRUE ) {
-			res.rGetEmptyStatess()[i] == TRIBOOL::TRUE;
+			res.rGetEmptyStates()[i] == TRIBOOL::TRUE;
 		}
 	}
 
@@ -169,7 +169,7 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 	auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( I ), in.getVector( I ) ), mSets.at( I ) );
 	TRACE( "hypro.datastructures", "Done satisfiesHalfspaces visitor, attempt to set result." );
 	res.setSetDirect( resultPair.second, I );
-	res.rGetEmptyStatess()[I] = resultPair.first == CONTAINMENT::NO ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+	res.rGetEmptyStates()[I] = resultPair.first == CONTAINMENT::NO ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 
 	TRACE( "hypro.datastructures", "Result empty: " << resultPair.first );
 
