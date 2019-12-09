@@ -6,7 +6,7 @@
 #define HYPRO_FACETSPACE_H
 
 #include "Quickhull.h"
-#include "util/logging/Logger.h"
+#include "../ScopedRoundingMode.h"
 
 namespace hypro {
     template<typename Number>

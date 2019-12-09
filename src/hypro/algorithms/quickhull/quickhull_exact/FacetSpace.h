@@ -5,13 +5,14 @@
 #ifndef HYPRO_FACETSPACE_H
 #define HYPRO_FACETSPACE_H
 
-#include "Quickhull.h"
+#include "../Quickhull.h"
 #include "util/logging/Logger.h"
 #include "util/adaptions_eigen/adaptions_eigen.h"
 
 namespace hypro {
+
     template<typename Number>
-    class Quickhull<Number>::FacetSpace {
+    class ExactQuickhull<Number>::FacetSpace {
         pointVector_t& points;
         dimension_t dimension;
 
@@ -64,7 +65,7 @@ namespace hypro {
 
         //vector operations
         template<typename UnaryPredicate>
-        typename Quickhull<Number>::facet_ind_t findFacet(UnaryPredicate predicate);
+        facet_ind_t findFacet(UnaryPredicate predicate);
 
         void removeCoplanarFacets();
         void compressVector();

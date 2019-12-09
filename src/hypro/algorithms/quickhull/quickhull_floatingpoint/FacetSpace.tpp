@@ -3,13 +3,13 @@
 //
 
 #include "FacetSpace.h"
-#include "ScopedRoundingMode.h"
+#include "../ScopedRoundingMode.h"
 
 namespace hypro {
 
     //facet construction
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::insertNew() {
+    void FloatQuickhull<Number>::FacetSpace::insertNew() {
         facets.emplace_back();
 
         facets.back().mVertices = std::vector<point_ind_t>(dimension);
@@ -19,7 +19,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::insertTrivialFacet(const Number scalar) {
+    void FloatQuickhull<Number>::FacetSpace::insertTrivialFacet(const Number scalar) {
         facets.emplace_back();
         facets.back().mOuterOffset = scalar;
         facets.back().mNormal = point_t(1);
@@ -27,7 +27,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
+    void FloatQuickhull<Number>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
         Facet& facet = facets.emplace_back();
         facet.mOuterOffset = other.mOuterOffset;
         facet.mNormal = qhvector_t(newDimension);
@@ -43,7 +43,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    size_t Quickhull<Number>::FacetSpace::copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt) {
+    size_t FloatQuickhull<Number>::FacetSpace::copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt) {
         //Doing some work here to keep the vertices sorted
         bool inserted = false;
         size_t insertedPosition = dimension - 1;
@@ -72,7 +72,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    size_t Quickhull<Number>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, hypro::vector_t<mpq_class> const& containedPoint) {
+    size_t FloatQuickhull<Number>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, hypro::vector_t<mpq_class> const& containedPoint) {
         insertNew();
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
@@ -82,7 +82,7 @@ namespace hypro {
 
     //facet modification
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::computeNormal(Facet& facet) {
+    void FloatQuickhull<Number>::FacetSpace::computeNormal(Facet& facet) {
         ///TODO Allocate space for matrix once and reuse it
         ///TODO Could also use __restrict__ to get memcpy here (probably).
         matrix_t<Number> matrix(dimension, dimension + 1);
@@ -107,13 +107,13 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::validateFacet(Facet& facet, hypro::vector_t<mpq_class> const& containedPoint) {
+    void FloatQuickhull<Number>::FacetSpace::validateFacet(Facet& facet, hypro::vector_t<mpq_class> const& containedPoint) {
         facet.setOrientation(containedPoint);
         validateVertexContainment(facet);
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::validateVertexContainment(Facet& facet) {
+    void FloatQuickhull<Number>::FacetSpace::validateVertexContainment(Facet& facet) {
         {
             ScopedRoundingMode round{FE_UPWARD};
 
@@ -146,7 +146,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    bool Quickhull<Number>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
+    bool FloatQuickhull<Number>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
         Number distance = facet.distance(points[point_i]);
 
         if(distance > Number(0)) {
@@ -162,7 +162,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) {
+    void FloatQuickhull<Number>::FacetSpace::establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) {
         Facet& facet = facets[facet_i];
         Facet& other = facets[other_i];
 
@@ -202,7 +202,7 @@ namespace hypro {
 
     //facet queries
     template<typename Number>
-    bool Quickhull<Number>::FacetSpace::isParallel(Facet const& facet, Facet const& other) {
+    bool FloatQuickhull<Number>::FacetSpace::isParallel(Facet const& facet, Facet const& other) {
         if(dimension == 1) return false;
 
         std::unique_ptr<std::pair<Number, Number>[]> minMax(new std::pair<Number, Number>[dimension]);
@@ -235,12 +235,12 @@ namespace hypro {
     //vector operations
     template<typename Number>
     template<typename UnaryPredicate>
-    typename Quickhull<Number>::facet_ind_t Quickhull<Number>::FacetSpace::findFacet(UnaryPredicate predicate) {
+    typename FloatQuickhull<Number>::facet_ind_t FloatQuickhull<Number>::FacetSpace::findFacet(UnaryPredicate predicate) {
         return std::distance(facets.begin(), std::find_if(facets.begin(), facets.end(), predicate));
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::compressVector() {
+    void FloatQuickhull<Number>::FacetSpace::compressVector() {
         size_t newSize = facets.size() - deletedPositions.size();
 
         assert(newSize > 0);
@@ -261,19 +261,19 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::endModificationPhase() {
+    void FloatQuickhull<Number>::FacetSpace::endModificationPhase() {
         firstInserted = facets.size();
         firstDeleted = deletedPositions.size();
     }
 
     template<typename Number>
-    void Quickhull<Number>::FacetSpace::deleteFacet(facet_ind_t facet_i) {
+    void FloatQuickhull<Number>::FacetSpace::deleteFacet(facet_ind_t facet_i) {
         deletedPositions.push_back(facet_i);
     }
 
 #ifndef NDEBUG
         template<typename Number>
-        std::string Quickhull<Number>::FacetSpace::printAll() {
+        std::string FloatQuickhull<Number>::FacetSpace::printAll() {
             std::stringstream out;
             for(auto& facet : facets) {
                 out << printFacet(facet);
@@ -282,7 +282,7 @@ namespace hypro {
         }
 
         template<typename Number>
-        std::string Quickhull<Number>::FacetSpace::printFacet(Facet const& facet) {
+        std::string FloatQuickhull<Number>::FacetSpace::printFacet(Facet const& facet) {
             std::stringstream out;
 
             char var = 'y';
@@ -299,13 +299,13 @@ namespace hypro {
         }
 
         template<typename Number>
-        void Quickhull<Number>::FacetSpace::containsVertices(Facet& facet) {
+        void FloatQuickhull<Number>::FacetSpace::containsVertices(Facet& facet) {
             bitset_t visited(facets.size());
             containsVertices(facet, facet, visited);
         }
 
         template<typename Number>
-        void Quickhull<Number>::FacetSpace::containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited) {
+        void FloatQuickhull<Number>::FacetSpace::containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited) {
             for(point_ind_t point_i : currentFacet.mVertices) {
                 if(facet.visible(points[point_i])) {
                     TRACE("quickhull", "NON CONTAINMENT" << std::endl << points[point_i] << std::endl << "Facet:" << std::endl << printFacet(facet));

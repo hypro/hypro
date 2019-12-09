@@ -13,7 +13,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/templateDirections.h"
 #include "HPolytopeSetting.h"
-#include "algorithms/quickhull/quickhull_exact/Quickhull.h"
+#include "algorithms/quickhull/Quickhull.h"
 #include <algorithm>
 #include <cassert>
 #include <optional>

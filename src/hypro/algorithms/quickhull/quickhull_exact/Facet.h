@@ -5,11 +5,9 @@
 #ifndef HYPRO_FACET_H
 #define HYPRO_FACET_H
 
-#include "Quickhull.h"
-
 namespace hypro {
     template<typename Number>
-    struct Quickhull<Number>::Facet {
+    struct ExactQuickhull<Number>::Facet {
         Facet() = default;
 
         //modifiers

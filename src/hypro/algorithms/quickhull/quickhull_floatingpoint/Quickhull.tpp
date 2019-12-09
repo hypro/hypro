@@ -1,13 +1,12 @@
-#include "util/plotting/Plotter.h"
 #include "Quickhull.h"
 
 namespace hypro {
     template<typename Number>
-    Quickhull<Number>::Quickhull(pointVector_t& inputPoints, size_t dim) : inputPoints(inputPoints), dimension(dim), fSpace(inputPoints, dimension) {
+    FloatQuickhull<Number>::Quickhull(pointVector_t& inputPoints, size_t dim) : inputPoints(inputPoints), dimension(dim), fSpace(inputPoints, dimension) {
     }
 
     template<typename Number>
-    void Quickhull<Number>::compute() {
+    void FloatQuickhull<Number>::compute() {
 
 #ifndef NDEBUG
         std::cout << "Inputs" << std::endl;
@@ -45,7 +44,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::removeDuplicateInputs() {
+    void FloatQuickhull<Number>::removeDuplicateInputs() {
 
         for(point_ind_t point_i = 0; point_i < inputPoints.size(); ++point_i) {
             for(point_ind_t point_j = point_i + 1; point_j < inputPoints.size(); ++point_j) {
@@ -57,14 +56,14 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::makeTrivialHull() {
+    void FloatQuickhull<Number>::makeTrivialHull() {
         fSpace.insertTrivialFacet(inputPoints[0][0]);
         fSpace.insertTrivialFacet(inputPoints[0][0]);
         fSpace.facets.back().invert();
     }
 
     template<typename Number>
-    void Quickhull<Number>::buildInitialPolytope() {
+    void FloatQuickhull<Number>::buildInitialPolytope() {
 
         constructInitialFacet();
 
@@ -126,7 +125,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::constructInitialFacet() {
+    void FloatQuickhull<Number>::constructInitialFacet() {
         fSpace.insertNew();
 
         //Initialize the vertices of the initial facet to [1, ... ,dim]
@@ -138,7 +137,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    std::tuple<Number, size_t/*aka point_ind_t*/> Quickhull<Number>::findFurthestFromInitial() {
+    std::tuple<Number, size_t/*aka point_ind_t*/> FloatQuickhull<Number>::findFurthestFromInitial() {
         point_ind_t furthestPoint = 0;
         Number furthestDistance = 0;
 
@@ -155,7 +154,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::processPoints() {
+    void FloatQuickhull<Number>::processPoints() {
 
         size_t facetToProcess = getFacetToProcess();
 
@@ -173,14 +172,14 @@ namespace hypro {
     }
 
     template<typename Number>
-    typename Quickhull<Number>::facet_ind_t Quickhull<Number>::getFacetToProcess() {
+    typename FloatQuickhull<Number>::facet_ind_t FloatQuickhull<Number>::getFacetToProcess() {
         return fSpace.findFacet([](Facet& facet) {
             return !facet.mOutsideSet.empty();
         });
     }
 
     template<typename Number>
-    void Quickhull<Number>::buildCone(facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited) {
+    void FloatQuickhull<Number>::buildCone(facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited) {
         fSpace.deleteFacet(currentFacet_i);
 
         point_t& visiblePoint = inputPoints[visiblePoint_i];
@@ -227,7 +226,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::constructLowerDimensional() {
+    void FloatQuickhull<Number>::constructLowerDimensional() {
         TRACE("quickhull", "dropping from d=" << dimension << " to d=" << dimension - 1);
 
         //Copy first facet
@@ -266,7 +265,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::findConeNeighbors(facet_ind_t facet_i) {
+    void FloatQuickhull<Number>::findConeNeighbors(facet_ind_t facet_i) {
         //We always ignore the last one
         for(facet_ind_t inserted_i = fSpace.firstInserted; inserted_i < fSpace.facets.size() - 1; ++inserted_i) {
             fSpace.establishNeighborhood(facet_i, inserted_i);
@@ -274,7 +273,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::partitionAllVertices() {
+    void FloatQuickhull<Number>::partitionAllVertices() {
 
         for(facet_ind_t deleted_i : fSpace.deletedPositions) {
 
@@ -291,7 +290,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void Quickhull<Number>::initialPartition() {
+    void FloatQuickhull<Number>::initialPartition() {
         for(point_ind_t point_i = 0; point_i < inputPoints.size(); ++point_i) {
             for(Facet& facet : fSpace.facets) {
                 if(fSpace.tryAddToOutsideSet(facet, point_i)) break;
@@ -300,7 +299,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    typename Quickhull<Number>::facetVector_t& Quickhull<Number>::getFacets() {
+    typename FloatQuickhull<Number>::facetVector_t& FloatQuickhull<Number>::getFacets() {
         return fSpace.facets;
     }
 }
