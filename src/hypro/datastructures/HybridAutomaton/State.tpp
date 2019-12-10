@@ -120,7 +120,6 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 		//DEBUG("hypro.datastructures", "Before genericSatisfiesHalfspacesVisitor. mSets.at(" << i << ") is: "<< std::endl << mSets.at(i));
 		auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( i ), in.getVector( i ) ), mSets.at( i ) );
 		//DEBUG("hypro.datastructures", "After genericSatisfiesHalfspacesVisitor.");
-		assert( resultPair.first != CONTAINMENT::YES );  // assert that we have detailed information on the invariant intersection.
 
 		res.setSetDirect( resultPair.second, i );
 		//DEBUG("hypro.datastructures", "i is:" << i << "After setSetDirect.");
@@ -133,6 +132,9 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 		} else if ( resultPair.first == CONTAINMENT::PARTIAL ) {
 			DEBUG( "hypro.datastructures", "State set " << i << "(type " << mTypes.at( i ) << ") succeeded the condition - return partial." );
 			strictestContainment = CONTAINMENT::PARTIAL;
+			res.rGetEmptyStates()[i] = TRIBOOL::FALSE;
+		} else if ( resultPair.first == CONTAINMENT::YES ) {
+			strictestContainment = CONTAINMENT::YES;
 			res.rGetEmptyStates()[i] = TRIBOOL::FALSE;
 		} else {
 			res.rGetEmptyStates()[i] = TRIBOOL::FALSE;
