@@ -1,5 +1,7 @@
 var NAVTREEINDEX25 =
 {
+"structhypro_1_1PlotData.html#aac8564fd747a04a6da1c450491dd58ee":[7,0,1,162,4],
+"structhypro_1_1PlotData.html#ae3c84bb6e57f67248f150822895305c6":[7,0,1,162,0],
 "structhypro_1_1PolytopeSetting.html":[7,0,1,167],
 "structhypro_1_1PolytopeSupportFunctionSetting.html":[7,0,1,169],
 "structhypro_1_1ProjectData.html":[7,0,1,171],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "structhypro_1_1sumContent.html#a14d2fbd8569ba786df30006e23f780cb":[7,0,1,201,0],
 "structhypro_1_1sumContent.html#a16fa94ee404fa7265f905f1f229ff990":[7,0,1,201,1],
 "structhypro_1_1sumContent.html#a56e2210ba020770eaa2a1060e7ed2fec":[7,0,1,201,3],
-"structhypro_1_1sumContent.html#ae889a9f408ba2d59e214d0e69e7962fa":[7,0,1,201,4],
-"structhypro_1_1trafoContent.html":[7,0,1,227],
-"structhypro_1_1trafoContent.html#a07b78ff86f1c003d4426dc1a8e3505ab":[7,0,1,227,1]
+"structhypro_1_1sumContent.html#ae889a9f408ba2d59e214d0e69e7962fa":[7,0,1,201,4]
 };

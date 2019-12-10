@@ -22,5 +22,6 @@ var classhypro_1_1PolytopeSupportFunction =
     [ "supremumPoint", "classhypro_1_1PolytopeSupportFunction.html#ac52844b6e38dc5a4b2b63fd678873ed6", null ],
     [ "type", "classhypro_1_1PolytopeSupportFunction.html#abd5a5b093160822f7d45d29ac5efd6ec", null ],
     [ "vertices", "classhypro_1_1PolytopeSupportFunction.html#acd480ee496b5e3eebc41a2f66c95b985", null ],
-    [ "operator<<", "classhypro_1_1PolytopeSupportFunction.html#a5e3db96e10703489719136e6af5876dd", null ]
+    [ "operator<<", "classhypro_1_1PolytopeSupportFunction.html#a5e3db96e10703489719136e6af5876dd", null ],
+    [ "SupportFunctionT", "classhypro_1_1PolytopeSupportFunction.html#aa3effc03dfa7a7491abbf1e091c1aaa7", null ]
 ];

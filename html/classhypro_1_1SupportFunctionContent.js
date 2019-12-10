@@ -39,6 +39,7 @@ var classhypro_1_1SupportFunctionContent =
     [ "unionParameters", "classhypro_1_1SupportFunctionContent.html#a4ede4ebc0f34fa4a9081466958d285e2", null ],
     [ "unite", "classhypro_1_1SupportFunctionContent.html#a3a13d767980950195763448ac64ac91c", null ],
     [ "operator<<", "classhypro_1_1SupportFunctionContent.html#aa158eb863a2f7948a1affd3a093f7138", null ],
+    [ "SupportFunctionT", "classhypro_1_1SupportFunctionContent.html#aa3effc03dfa7a7491abbf1e091c1aaa7", null ],
     [ "mBall", "classhypro_1_1SupportFunctionContent.html#a1b4bd23b24c8a50352e98c8ac3cbae29", null ],
     [ "mBox", "classhypro_1_1SupportFunctionContent.html#ab4dbba368b0fba65654c3cc24d80735b", null ],
     [ "mEllipsoid", "classhypro_1_1SupportFunctionContent.html#a63a1b0a376c37c34365c829d33ea28e8", null ],

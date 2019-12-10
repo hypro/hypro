@@ -14,6 +14,7 @@ var dir_5cc8785239517cfd59e944398d6252f9 =
       [ "NonLinearOmega0Supportfunction", "classhypro_1_1NonLinearOmega0Supportfunction.html", "classhypro_1_1NonLinearOmega0Supportfunction" ]
     ] ],
     [ "PolytopeSupportFunction.h", "PolytopeSupportFunction_8h.html", [
+      [ "SupportFunctionContent", "classhypro_1_1SupportFunctionContent.html", "classhypro_1_1SupportFunctionContent" ],
       [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html", "classhypro_1_1PolytopeSupportFunction" ]
     ] ],
     [ "SupportFunction.h", "SupportFunction_8h.html", null ],

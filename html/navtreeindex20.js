@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"classhypro_1_1WorkQueueT.html#adf3b335ac5ed585c7db538f891d1956c":[7,0,1,248,2],
+"classhypro_1_1WorkQueueT.html#ae5ac9fcf41936a1f2383c87471848d36":[7,0,1,248,1],
 "classhypro_1_1WorkQueueT.html#aee52999fbf2fd883b9d07f9bd26d699d":[7,0,1,248,5],
 "classhypro_1_1ZonotopeT.html":[5,1,4],
 "classhypro_1_1ZonotopeT.html#a0238a85104445d0b0c67320d7be101ce":[5,1,4,28],
@@ -247,7 +249,5 @@ var NAVTREEINDEX20 =
 "classhypro_1_1ltiJumpHandler.html":[7,0,1,145],
 "classhypro_1_1ltiJumpHandler.html#a0dc20c874a95570b2ee5a623dfac2cae":[7,0,1,145,3],
 "classhypro_1_1ltiJumpHandler.html#a57efa8fa07789a0602ef086c81974ed1":[7,0,1,145,5],
-"classhypro_1_1ltiJumpHandler.html#a8ad1aa8a62ff176fb42b4bb200313e7d":[7,0,1,145,0],
-"classhypro_1_1ltiJumpHandler.html#a987db540911e2d01069e31f37ed6272c":[7,0,1,145,2],
-"classhypro_1_1ltiJumpHandler.html#a9fafb0e00e69be6999a2932fef4fc32d":[7,0,1,145,6]
+"classhypro_1_1ltiJumpHandler.html#a8ad1aa8a62ff176fb42b4bb200313e7d":[7,0,1,145,0]
 };
