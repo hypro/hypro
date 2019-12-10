@@ -164,22 +164,28 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( Number _radius,
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, SF_TYPE _type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, SF_TYPE _type, bool overrideReduction ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			std::tuple<bool, std::vector<carl::Interval<Number>>> intervals;
-			if ( Setting::DETECT_BOX ) {
-				intervals = isBox( _directions, _distances );
-			}
-			if ( std::get<0>( intervals ) ) {
-				//TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
-				mBox = new BoxSupportFunction<Number, Setting>( std::get<1>( intervals ) );
-				mType = SF_TYPE::BOX;
+			if ( !overrideReduction ) {
+				std::tuple<bool, std::vector<carl::Interval<Number>>> intervals;
+				if ( Setting::DETECT_BOX ) {
+					intervals = isBox( _directions, _distances );
+				}
+				if ( std::get<0>( intervals ) ) {
+					//TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
+					mBox = new BoxSupportFunction<Number, Setting>( std::get<1>( intervals ) );
+					mType = SF_TYPE::BOX;
+				} else {
+					//TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
+					mPolytope = new PolytopeSupportFunction<Number, Setting>( _directions, _distances );
+					mType = SF_TYPE::POLY;
+				}
 			} else {
-				//TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
 				mPolytope = new PolytopeSupportFunction<Number, Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
+
 			mDimension = std::size_t( _directions.cols() );
 			mDepth = 0;
 			mOperationCount = 0;
@@ -1607,7 +1613,7 @@ bool SupportFunctionContent<Number, Setting>::empty() const {
 			if ( intersectionParameters()->rhs->empty() || intersectionParameters()->lhs->empty() ) {
 				return true;
 			}
-			// TODO: Current implementation uses template evaluation.
+			// Current implementation uses template evaluation.
 			std::vector<vector_t<Number>> directions = computeTemplate<Number>( this->dimension(), defaultTemplateDirectionCount );
 			for ( const auto& direction : directions ) {
 				auto rhsPosEval = intersectionParameters()->rhs->evaluate( direction, false );
@@ -1757,6 +1763,67 @@ void SupportFunctionContent<Number, Setting>::print() const {
 		default:
 			std::cout << "NONE" << std::endl;
 	}
+}
+
+template <typename Number, typename Setting>
+sumContent<Number, Setting>* SupportFunctionContent<Number, Setting>::rSummands() {
+	assert( mType == SF_TYPE::SUM );
+	return mSummands;
+}
+
+template <typename Number, typename Setting>
+trafoContent<Number, Setting>* SupportFunctionContent<Number, Setting>::rLinearTrafoParameters() {
+	assert( mType == SF_TYPE::LINTRAFO );
+	return mLinearTrafoParameters;
+}
+
+template <typename Number, typename Setting>
+scaleContent<Number, Setting>* SupportFunctionContent<Number, Setting>::rScaleParameters() {
+	assert( mType == SF_TYPE::SCALE );
+	return mScaleParameters;
+}
+
+template <typename Number, typename Setting>
+unionContent<Number, Setting>* SupportFunctionContent<Number, Setting>::rUnionParameters() {
+	assert( mType == SF_TYPE::UNITE );
+	return mUnionParameters;
+}
+
+template <typename Number, typename Setting>
+intersectionContent<Number, Setting>* SupportFunctionContent<Number, Setting>::rIntersectionParameters() {
+	assert( mType == SF_TYPE::INTERSECT );
+	assert( mIntersectionParameters );
+	return mIntersectionParameters;
+}
+
+template <typename Number, typename Setting>
+projectionContent<Number, Setting>* SupportFunctionContent<Number, Setting>::rProjectionParameters() {
+	assert( mType == SF_TYPE::PROJECTION );
+	return mProjectionParameters;
+}
+
+template <typename Number, typename Setting>
+PolytopeSupportFunction<Number, Setting>* SupportFunctionContent<Number, Setting>::rPolytope() {
+	assert( mType == SF_TYPE::POLY );
+	return mPolytope;
+}
+
+template <typename Number, typename Setting>
+BoxSupportFunction<Number, Setting>* SupportFunctionContent<Number, Setting>::rBox() {
+	assert( mType == SF_TYPE::BOX );
+	return mBox;
+}
+
+template <typename Number, typename Setting>
+EllipsoidSupportFunction<Number>* SupportFunctionContent<Number, Setting>::rEllipsoid() {
+	assert( mType == SF_TYPE::ELLIPSOID );
+	return mEllipsoid;
+}
+
+template <typename Number, typename Setting>
+BallSupportFunction<Number>* SupportFunctionContent<Number, Setting>::rBall() {
+	assert( mType == SF_TYPE::INFTY_BALL || mType == SF_TYPE::TWO_BALL );
+	return mBall;
 }
 
 }  // namespace hypro

@@ -38,7 +38,7 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	SupportFunctionT( const SupportFunctionT<Number, Converter, Setting>& _orig );
 	SupportFunctionT( SF_TYPE _type, Number _radius, unsigned dimension );
 	SupportFunctionT( const std::vector<Point<Number>>& _vertices );
-	SupportFunctionT( const matrix_t<Number>& _directions, const vector_t<Number>& _distances );
+	SupportFunctionT( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, bool overrideReduction = false );
 	SupportFunctionT( const std::vector<Halfspace<Number>>& _planes );
 	SupportFunctionT( SupportFunctionT<Number, Converter, Setting>&& other );
 	SupportFunctionT( const matrix_t<Number>& _shapeMatrix );
@@ -137,6 +137,9 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	const SupportFunctionT<Number, Converter, Setting>& evaluateTemplate( std::size_t directionCount = defaultTemplateDirectionCount, bool force = false ) const;
 
   private:
+	std::shared_ptr<SupportFunctionContent<Number, Setting>>& rGetContent() {
+		return content;
+	}
 };
 
 /** @} */
