@@ -1943,7 +1943,7 @@ error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clan
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:74: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:22: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib21008.bbl: No such file or directory
+error opening bib20901.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
@@ -4572,15 +4572,15 @@ Generating docs for compound hypro::detail::gen_seq...
 Generating docs for compound hypro::detail::gen_seq< 0, Is... >...
 Generating docs for compound hypro::detail::ResetVisitor...
 Generating docs for compound hypro::detail::seq...
-Generating docs for namespa/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:100: warning: argument '_loc' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::computeForwardTimeClosure(const State &_state)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:100: warning: argument '_val' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::computeForwardTimeClosure(const State &_state)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:106: warning: The following parameters of hypro::reachability::Reach::computeForwardTimeClosure(const State &_state) are not documented:
+Generating docs for namespa/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:101: warning: argument '_loc' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::computeForwardTimeClosure(const State &_state)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:101: warning: argument '_val' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::computeForwardTimeClosure(const State &_state)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:107: warning: The following parameters of hypro::reachability::Reach::computeForwardTimeClosure(const State &_state) are not documented:
   parameter '_state'
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:127: warning: argument '_val' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::intersectGuard(Transition< Number > *_trans, const State &_segment, State &result) const
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:133: warning: The following parameters of hypro::reachability::Reach::intersectGuard(Transition< Number > *_trans, const State &_segment, State &result) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:128: warning: argument '_val' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::intersectGuard(Transition< Number > *_trans, const State &_segment, State &result) const
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:134: warning: The following parameters of hypro::reachability::Reach::intersectGuard(Transition< Number > *_trans, const State &_segment, State &result) const are not documented:
   parameter '_segment'
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:118: warning: argument '_init' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::processDiscreteBehaviour(const std::vector< std::tuple< Transition< Number > *, State >> &_newInitialSets)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:122: warning: The following parameters of hypro::reachability::Reach::processDiscreteBehaviour(const std::vector< std::tuple< Transition< Number > *, State >> &_newInitialSets) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:119: warning: argument '_init' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::processDiscreteBehaviour(const std::vector< std::tuple< Transition< Number > *, State >> &_newInitialSets)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:123: warning: The following parameters of hypro::reachability::Reach::processDiscreteBehaviour(const std::vector< std::tuple< Transition< Number > *, State >> &_newInitialSets) are not documented:
   parameter '_newInitialSets'
 ce hypro::hpolytope
 Generating docs for namespace hypro::plotting
@@ -5095,5 +5095,5 @@ Patching output file 225/228
 Patching output file 226/228
 Patching output file 227/228
 Patching output file 228/228
-lookup cache used 10279/65536 hits=100719 misses=11395
+lookup cache used 10279/65536 hits=100729 misses=11395
 finished...

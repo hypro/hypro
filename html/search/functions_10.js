@@ -52,7 +52,7 @@ var searchData=
   ['setglobalbadstates',['setGlobalBadStates',['../classhypro_1_1HybridAutomaton.html#a4b0f453ca49d85d8b1ada88af4f3aae3',1,'hypro::HybridAutomaton']]],
   ['setguard',['setGuard',['../classhypro_1_1Transition.html#ac0e300a1192dfe4ac7684deb31af7b58',1,'hypro::Transition']]],
   ['sethybridautomaton',['setHybridAutomaton',['../classhypro_1_1SettingsProvider.html#a8351186104366c46eb6ab2eacd5ff6a5',1,'hypro::SettingsProvider']]],
-  ['setinitialstates',['setInitialStates',['../classhypro_1_1HybridAutomaton.html#a6f0ad0f1b1601118bee37c4bc39f35c8',1,'hypro::HybridAutomaton::setInitialStates()'],['../classhypro_1_1NodeManager.html#aebe2c418cfc8d96d9b8771147688f1d9',1,'hypro::NodeManager::setInitialStates()']]],
+  ['setinitialstates',['setInitialStates',['../classhypro_1_1reachability_1_1Reach.html#ac8acaa6d2e364bb08fa41f7967701e00',1,'hypro::reachability::Reach::setInitialStates()'],['../classhypro_1_1HybridAutomaton.html#a6f0ad0f1b1601118bee37c4bc39f35c8',1,'hypro::HybridAutomaton::setInitialStates()'],['../classhypro_1_1NodeManager.html#aebe2c418cfc8d96d9b8771147688f1d9',1,'hypro::NodeManager::setInitialStates()']]],
   ['setintervals',['setIntervals',['../classhypro_1_1Reset.html#af072cd1d62d3a1cab3b9d0c41ba3cb71',1,'hypro::Reset']]],
   ['setinvariant',['setInvariant',['../classhypro_1_1Location.html#a031f5c93b7979bea0582283618ea8a00',1,'hypro::Location']]],
   ['setinvarianttimings',['setInvariantTimings',['../classhypro_1_1EventTimingContainer.html#ac1c77fa005864eeb9523cc060c04d94b',1,'hypro::EventTimingContainer']]],
