@@ -418,16 +418,16 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 
 	// example from draisine
 	std::vector<carl::Interval<double>> intervals;
-	intervals.emplace_back( carl::Interval<double>( {0, 15} ) );
-	intervals.emplace_back( carl::Interval<double>( {-5, 5} ) );
-	intervals.emplace_back( carl::Interval<double>( {-5, 5} ) );
-	intervals.emplace_back( carl::Interval<double>( {0, 0} ) );
-	intervals.emplace_back( carl::Interval<double>( {-2, 2} ) );
-	intervals.emplace_back( carl::Interval<double>( {0, 1} ) );
-	intervals.emplace_back( carl::Interval<double>( {-2, 2} ) );
-	intervals.emplace_back( carl::Interval<double>( {0, 31} ) );
-	intervals.emplace_back( carl::Interval<double>( {0, 0} ) );
-	intervals.emplace_back( carl::Interval<double>( {-15, 15} ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 15.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -5.0, 5.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -5.0, 5.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 0.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -2.0, 2.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 1.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -2.0, 2.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 31.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 0.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -15.0, 15.0 ) );
 
 	SupportFunction<double> boxsf = SupportFunction<double>( intervals );
 	SupportFunction<double> boxsf2 = SupportFunction<double>( intervals );
