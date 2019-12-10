@@ -651,8 +651,12 @@ void State<Number, Representation, Rargs...>::setAndConvertType( std::size_t I )
 	assert( I < mTypes.size() );
 
 	// convert set to type
-	mSets[I] = std::visit( genericConversionVisitor<repVariant, To>( To::type() ), mSets[I] );
-	mTypes[I] = To::type();
+
+	//this->setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, To>( this->getSet( I ) ), this->getSet( I ) ), I );
+
+	this->setSet( std::visit( genericConversionVisitor<typename State::repVariant, To>(),
+							  this->getSet( I ) ),
+				  I );
 
 	assert( checkConsistency() );
 }
