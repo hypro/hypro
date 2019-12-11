@@ -71,9 +71,9 @@ var NAVTREEINDEX =
 "classhypro_1_1ltiJumpHandler.html#a987db540911e2d01069e31f37ed6272c",
 "dir_55730fee9a0c1f12da77eb14a8325c4c.html",
 "examples.html",
-"pca_8h.html",
-"structhypro_1_1PlotData.html#aac8564fd747a04a6da1c450491dd58ee",
-"structhypro_1_1trafoContent.html"
+"operations_8h.html#aa62c70913f167f6cdb63e2fc56cb2982",
+"structhypro_1_1PlotData.html#a163b67a2d26ae415126e3611b3b1b6c3",
+"structhypro_1_1statistics_1_1OperationCounter.html#af7e2041666813f7c77868fec3d7f8075"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

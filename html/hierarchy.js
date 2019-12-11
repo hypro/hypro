@@ -230,8 +230,8 @@ var hierarchy =
       [ "hypro::affineFlow< Number >", "classhypro_1_1affineFlow.html", null ]
     ] ],
     [ "hypro::linearFlow< N >", "classhypro_1_1linearFlow.html", null ],
-    [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
     [ "hypro::LinTrafoParameters< Number, Setting >", "structhypro_1_1LinTrafoParameters.html", null ],
+    [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::Location< N >", "classhypro_1_1Location.html", null ],
     [ "hypro::LockableBase", "classhypro_1_1LockableBase.html", [
@@ -248,6 +248,8 @@ var hierarchy =
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::nodeUpdater< State >", "structhypro_1_1nodeUpdater.html", null ],
     [ "hypro::NoneAssignment", "structhypro_1_1NoneAssignment.html", null ],
+    [ "hypro::detail::nth_element_impl< I, T, Ts >", "structhypro_1_1detail_1_1nth__element__impl.html", null ],
+    [ "hypro::detail::nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01T_00_01Ts_8_8_8_01_4.html", null ],
     [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::statistics::OperationCounter", "structhypro_1_1statistics_1_1OperationCounter.html", [
       [ "hypro::statistics::AtomicOperationCounter", "structhypro_1_1statistics_1_1AtomicOperationCounter.html", null ]

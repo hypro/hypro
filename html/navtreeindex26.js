@@ -1,5 +1,12 @@
 var NAVTREEINDEX26 =
 {
+"structhypro_1_1statistics_1_1OperationCounter.html#af7e2041666813f7c77868fec3d7f8075":[7,0,1,3,2,0],
+"structhypro_1_1sumContent.html":[7,0,1,201],
+"structhypro_1_1sumContent.html#a127bfafd1eec8697881462f082c124ac":[7,0,1,201,2],
+"structhypro_1_1sumContent.html#a14d2fbd8569ba786df30006e23f780cb":[7,0,1,201,0],
+"structhypro_1_1sumContent.html#a16fa94ee404fa7265f905f1f229ff990":[7,0,1,201,1],
+"structhypro_1_1sumContent.html#a56e2210ba020770eaa2a1060e7ed2fec":[7,0,1,201,3],
+"structhypro_1_1sumContent.html#ae889a9f408ba2d59e214d0e69e7962fa":[7,0,1,201,4],
 "structhypro_1_1trafoContent.html":[7,0,1,227],
 "structhypro_1_1trafoContent.html#a07b78ff86f1c003d4426dc1a8e3505ab":[7,0,1,227,1],
 "structhypro_1_1trafoContent.html#a52345918b06b2be7a130f1ffe0fc88e6":[7,0,1,227,0],

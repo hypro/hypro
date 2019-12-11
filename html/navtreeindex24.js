@@ -1,5 +1,8 @@
 var NAVTREEINDEX24 =
 {
+"operations_8h.html#aa62c70913f167f6cdb63e2fc56cb2982":[8,0,1,0,1,0,1,3,3],
+"operations_8h_source.html":[8,0,1,0,1,0,1,3],
+"pages.html":[],
 "pca_8h.html":[8,0,1,0,4,10],
 "pca_8h_source.html":[8,0,1,0,4,10],
 "plotting.html":[3,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX24 =
 "structhypro_1_1NoneAssignment.html#a6196ab4f458d6851f29e4ea411ccab2c":[7,0,1,153,0],
 "structhypro_1_1NoneAssignment.html#a739e2ce2e053d64c5845958be12ce49a":[7,0,1,153,3],
 "structhypro_1_1NoneAssignment.html#ab901a80e3abf6a04849d85044b02c8fe":[7,0,1,153,2],
-"structhypro_1_1PlotData.html":[7,0,1,162],
-"structhypro_1_1PlotData.html#a163b67a2d26ae415126e3611b3b1b6c3":[7,0,1,162,3],
-"structhypro_1_1PlotData.html#a927ff26b1abd864352bf99a642386a25":[7,0,1,162,2],
-"structhypro_1_1PlotData.html#aa609dc04770af9034d407c8556d971fa":[7,0,1,162,1]
+"structhypro_1_1PlotData.html":[7,0,1,162]
 };
