@@ -140,6 +140,10 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	PolytopeT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	PolytopeT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	PolytopeT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	PolytopeT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	PolytopeT<Number, Converter, Setting> minkowskiSum( const PolytopeT<Number, Converter, Setting>& rhs ) const;
 	// implemented according to Komei Fukuda 2004
 	PolytopeT<Number, Converter, Setting> altMinkowskiSum( PolytopeT<Number, Converter, Setting>& rhs );

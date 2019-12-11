@@ -78,6 +78,10 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
 	SupportFunctionT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	SupportFunctionT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	SupportFunctionT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	SupportFunctionT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	SupportFunctionT<Number, Converter, Setting> minkowskiSum( const SupportFunctionT<Number, Converter, Setting>& _rhs ) const;

@@ -442,6 +442,16 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::project( cons
 }
 
 template <typename Number, typename Converter, class Setting>
+BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const {
+	std::vector<carl::Interval<Number>> newIntervals{mLimits};
+	for ( const auto& dimensionIntervalPair : assignments ) {
+		assert( dimensionIntervalPair.first < newIntervals.size() );
+		newIntervals[dimensionIntervalPair.first] = dimensionIntervalPair.second;
+	}
+	return BoxT<Number, Converter, Settings>{newIntervals};
+}
+
+template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number>& A ) const {
 	if ( this->empty() ) {
 		return *this;

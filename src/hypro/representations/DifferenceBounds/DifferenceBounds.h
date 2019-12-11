@@ -166,6 +166,10 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
 	std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	DifferenceBoundsT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	DifferenceBoundsT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	DifferenceBoundsT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	DifferenceBoundsT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	DifferenceBoundsT<Number, Converter, Setting> minkowskiSum( const DifferenceBoundsT<Number, Converter, Setting>& _rhs ) const;

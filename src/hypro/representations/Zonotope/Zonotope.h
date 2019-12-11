@@ -206,6 +206,10 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number, Converter, Se
 
 	ZonotopeT<Number, Converter, Setting> minkowskiSum( const ZonotopeT<Number, Converter, Setting>& rhs ) const;
 	ZonotopeT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	ZonotopeT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	ZonotopeT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	ZonotopeT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 

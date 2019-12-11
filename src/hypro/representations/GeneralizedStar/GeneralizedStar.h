@@ -189,6 +189,10 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	GeneralizedStarT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	GeneralizedStarT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	GeneralizedStarT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	GeneralizedStarT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	GeneralizedStarT<Number, Converter, Setting> minkowskiSum( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;

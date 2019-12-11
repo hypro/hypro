@@ -225,6 +225,7 @@ class ConstraintSetT {
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>&, const vector_t<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 
 	ConstraintSetT<Number, S> project( const std::vector<std::size_t>& ) const { return *this; }
+	ConstraintSetT<Number, S> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const { return *this; }
 
 	ConstraintSetT<Number, S> linearTransformation( const matrix_t<Number>& ) const { return *this; }
 	ConstraintSetT<Number, S> affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const { return *this; }

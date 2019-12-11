@@ -483,6 +483,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
 
+	BoxT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const;
+
 	/**
 	 * @brief Computes the linear transformation of a box by a matrix A.
 	 * @details We employ interval-arithmetic to compute the result instead of a naive approach in which a conversion to a V-polytope would be used.

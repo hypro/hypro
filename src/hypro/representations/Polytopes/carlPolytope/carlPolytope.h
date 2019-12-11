@@ -62,6 +62,11 @@ class CarlPolytopeT {
 
 	CarlPolytopeT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
 
+	CarlPolytopeT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
+
 	CarlPolytopeT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
 
 	CarlPolytopeT<Number, Converter, Setting> minkowskiSum( const CarlPolytopeT<Number, Converter, Setting>& ) const {
