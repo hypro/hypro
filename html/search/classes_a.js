@@ -7,7 +7,7 @@ var searchData=
   ['line_5ft',['Line_t',['../structZUtility_1_1Line__t.html',1,'ZUtility']]],
   ['linearflow',['linearFlow',['../classhypro_1_1linearFlow.html',1,'hypro']]],
   ['linearflow_3c_20n_20_3e',['linearFlow&lt; N &gt;',['../classhypro_1_1linearFlow.html',1,'hypro']]],
-  ['lintrafoparameters',['LinTrafoParameters',['../structhypro_1_1LinTrafoParameters.html',1,'hypro::LinTrafoParameters&lt; Number, Setting &gt;'],['../structhypro_1_1lintrafoParameters.html',1,'hypro::lintrafoParameters&lt; Number &gt;']]],
+  ['lintrafoparameters',['lintrafoParameters',['../structhypro_1_1lintrafoParameters.html',1,'hypro::lintrafoParameters&lt; Number &gt;'],['../structhypro_1_1LinTrafoParameters.html',1,'hypro::LinTrafoParameters&lt; Number, Setting &gt;']]],
   ['location',['Location',['../classhypro_1_1Location.html',1,'hypro']]],
   ['location_3c_20n_20_3e',['Location&lt; N &gt;',['../classhypro_1_1Location.html',1,'hypro']]],
   ['locationcontext',['LocationContext',['../classhypro_1_1HybridSystemParser_1_1LocationContext.html',1,'hypro::HybridSystemParser']]],

@@ -11,6 +11,7 @@ var classhypro_1_1DifferenceBoundsT =
     [ "DifferenceBoundsT", "classhypro_1_1DifferenceBoundsT.html#a2c87effaeb1cc3be9a383d97ff6160a1", null ],
     [ "DifferenceBoundsT", "classhypro_1_1DifferenceBoundsT.html#a5dc6c550bc1979b6244d730091039c37", null ],
     [ "affineTransformation", "classhypro_1_1DifferenceBoundsT.html#a56e2d0c13663345cb9b77d28b97585df", null ],
+    [ "assignIntervals", "classhypro_1_1DifferenceBoundsT.html#adf901da89c8645faa7d2083ebf688666", null ],
     [ "contains", "classhypro_1_1DifferenceBoundsT.html#a100e2df570177f1b74010e4fd6fdf3da", null ],
     [ "contains", "classhypro_1_1DifferenceBoundsT.html#ae6e04e0c025b398a33eaa54f1916d515", null ],
     [ "copy", "classhypro_1_1DifferenceBoundsT.html#a709086fb271a760df70de8e42c273762", null ],

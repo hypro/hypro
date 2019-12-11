@@ -90,6 +90,7 @@ var hierarchy =
     [ "hypro::detail::gen_seq< N, Is >", "structhypro_1_1detail_1_1gen__seq.html", null ],
     [ "hypro::GeneralizedStarDefault", "structhypro_1_1GeneralizedStarDefault.html", null ],
     [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
+    [ "hypro::genericAssignIntervalsVisitor< T, N >", "classhypro_1_1genericAssignIntervalsVisitor.html", null ],
     [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
     [ "hypro::genericConversionVisitor< T, To >", "classhypro_1_1genericConversionVisitor.html", null ],
     [ "hypro::genericConvertAndGetVisitor< OutType >", "classhypro_1_1genericConvertAndGetVisitor.html", null ],
@@ -230,8 +231,8 @@ var hierarchy =
       [ "hypro::affineFlow< Number >", "classhypro_1_1affineFlow.html", null ]
     ] ],
     [ "hypro::linearFlow< N >", "classhypro_1_1linearFlow.html", null ],
-    [ "hypro::LinTrafoParameters< Number, Setting >", "structhypro_1_1LinTrafoParameters.html", null ],
     [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
+    [ "hypro::LinTrafoParameters< Number, Setting >", "structhypro_1_1LinTrafoParameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::Location< N >", "classhypro_1_1Location.html", null ],
     [ "hypro::LockableBase", "classhypro_1_1LockableBase.html", [

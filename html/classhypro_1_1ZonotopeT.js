@@ -9,6 +9,7 @@ var classhypro_1_1ZonotopeT =
     [ "~ZonotopeT", "classhypro_1_1ZonotopeT.html#a763356f7149b72b641ea2895aeafe0e7", null ],
     [ "addGenerators", "classhypro_1_1ZonotopeT.html#a9f59e04172b514229a25d8c9946f1355", null ],
     [ "affineTransformation", "classhypro_1_1ZonotopeT.html#a5580f24922aeace57a5438c22a9e5084", null ],
+    [ "assignIntervals", "classhypro_1_1ZonotopeT.html#a18df837509403b8cc135566d0527f565", null ],
     [ "center", "classhypro_1_1ZonotopeT.html#aa19d7b906a7e1404487076b09eb7e01d", null ],
     [ "changeDimension", "classhypro_1_1ZonotopeT.html#aedbecf1c0b7608c6f68e729d2dfaa183", null ],
     [ "clear", "classhypro_1_1ZonotopeT.html#af680218b607d2490143379ca327ed34e", null ],

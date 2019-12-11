@@ -10,6 +10,7 @@ var classhypro_1_1CarlPolytopeT =
     [ "addConstraints", "classhypro_1_1CarlPolytopeT.html#a8c3b8844389ac612a55366598dc32bdc", null ],
     [ "addIntervalConstraints", "classhypro_1_1CarlPolytopeT.html#ae5d9f6188cf40b874476c4763c677a6b", null ],
     [ "affineTransformation", "classhypro_1_1CarlPolytopeT.html#a819a86a0e2249771cde5051fd8447832", null ],
+    [ "assignIntervals", "classhypro_1_1CarlPolytopeT.html#a081f4d00d6a768faf802d9b8c24b0b23", null ],
     [ "choseOrder", "classhypro_1_1CarlPolytopeT.html#ae0fdde4044f25569498ff042a57af5b8", null ],
     [ "contains", "classhypro_1_1CarlPolytopeT.html#aaa6cd3f53215e0633cf7a0bcf37689b4", null ],
     [ "contains", "classhypro_1_1CarlPolytopeT.html#a33f465683c6c17bbd1962988d5143691", null ],

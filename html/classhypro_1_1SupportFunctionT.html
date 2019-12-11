@@ -216,6 +216,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a410d21065308ec6cb20fa23aca47bf46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a410d21065308ec6cb20fa23aca47bf46">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:a410d21065308ec6cb20fa23aca47bf46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a410d21065308ec6cb20fa23aca47bf46">More...</a><br /></td></tr>
 <tr class="separator:a410d21065308ec6cb20fa23aca47bf46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fe8cb42cf135da9737fabc251a52a57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a1fe8cb42cf135da9737fabc251a52a57">assignIntervals</a> (const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;) const </td></tr>
+<tr class="memdesc:a1fe8cb42cf135da9737fabc251a52a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added.  <a href="#a1fe8cb42cf135da9737fabc251a52a57">More...</a><br /></td></tr>
+<tr class="separator:a1fe8cb42cf135da9737fabc251a52a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a125d7582565f0f6f3e160465f4e336fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a125d7582565f0f6f3e160465f4e336fc">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a125d7582565f0f6f3e160465f4e336fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a125d7582565f0f6f3e160465f4e336fc">More...</a><br /></td></tr>
 <tr class="separator:a125d7582565f0f6f3e160465f4e336fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -591,6 +594,45 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1fe8cb42cf135da9737fabc251a52a57"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::assignIntervals </td>
+          <td>(</td>
+          <td class="paramtype">const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>assignments</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">assignments</td><td>A map from dimension index to interval. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>DerivedShape </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ab8e7033fc7b4c2e54451ad6bea5b45f8">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00081">81</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
 
 </div>
 </div>
@@ -1849,7 +1891,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00124">124</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
+<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00128">128</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
 
 </div>
 </div>
@@ -1887,7 +1929,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00131">131</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
+<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00135">135</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
 
 </div>
 </div>

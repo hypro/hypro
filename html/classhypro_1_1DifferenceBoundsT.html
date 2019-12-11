@@ -198,6 +198,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a170554e95a35020137721f2c835494f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a170554e95a35020137721f2c835494f5">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:a170554e95a35020137721f2c835494f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a170554e95a35020137721f2c835494f5">More...</a><br /></td></tr>
 <tr class="separator:a170554e95a35020137721f2c835494f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf901da89c8645faa7d2083ebf688666"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#adf901da89c8645faa7d2083ebf688666">assignIntervals</a> (const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;) const </td></tr>
+<tr class="memdesc:adf901da89c8645faa7d2083ebf688666"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added.  <a href="#adf901da89c8645faa7d2083ebf688666">More...</a><br /></td></tr>
+<tr class="separator:adf901da89c8645faa7d2083ebf688666"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a236301da169871f90042b205cbb49b64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a236301da169871f90042b205cbb49b64">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a236301da169871f90042b205cbb49b64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a236301da169871f90042b205cbb49b64">More...</a><br /></td></tr>
 <tr class="separator:a236301da169871f90042b205cbb49b64"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -448,6 +451,45 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adf901da89c8645faa7d2083ebf688666"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::assignIntervals </td>
+          <td>(</td>
+          <td class="paramtype">const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>assignments</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">assignments</td><td>A map from dimension index to interval. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>DerivedShape </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ab8e7033fc7b4c2e54451ad6bea5b45f8">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00169">169</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
 
 </div>
 </div>
@@ -1253,7 +1295,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00177">177</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
+<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00181">181</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
 
 </div>
 </div>
@@ -1689,7 +1731,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00311">311</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
+<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00315">315</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
 
 </div>
 </div>
@@ -1727,7 +1769,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00325">325</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
+<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00329">329</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
 
 </div>
 </div>
@@ -1765,7 +1807,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00343">343</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
+<p>Definition at line <a class="el" href="DifferenceBounds_8h_source.html#l00347">347</a> of file <a class="el" href="DifferenceBounds_8h_source.html">DifferenceBounds.h</a>.</p>
 
 </div>
 </div>
