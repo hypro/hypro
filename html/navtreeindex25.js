@@ -1,5 +1,12 @@
 var NAVTREEINDEX25 =
 {
+"structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e":[7,0,1,133,2],
+"structhypro_1_1LinTrafoParameters.html#a9550b4c0d76c69ce91856d2001e0c154":[7,0,1,133,9],
+"structhypro_1_1LinTrafoParameters.html#abd4ce16e2bc5ff16871cd069d1493539":[7,0,1,133,3],
+"structhypro_1_1LinTrafoParameters.html#addb669805b41f92036cdd72786610874":[7,0,1,133,1],
+"structhypro_1_1LinTrafoParameters.html#af76cf6a4667c2e2d1d7ad327e14cdef9":[7,0,1,133,7],
+"structhypro_1_1LinTrafoParameters.html#aff563771e797370473f5b6afa33c58f4":[7,0,1,133,10],
+"structhypro_1_1NoBoxDetection.html":[7,0,1,150],
 "structhypro_1_1NoBoxReduction.html":[7,0,1,151],
 "structhypro_1_1NoReduction.html":[7,0,1,156],
 "structhypro_1_1NoTrafoReduction.html":[7,0,1,157],
@@ -238,16 +245,9 @@ var NAVTREEINDEX25 =
 "structhypro_1_1projectionContent.html#ae8f7fe2776e7b251f8256eae37f11ea9":[7,0,1,173,1],
 "structhypro_1_1projectionContent.html#ae9b2dd418ca93feba1a4d393fe1ec586":[7,0,1,173,0],
 "structhypro_1_1projectionContent.html#af0d1be0823a3dcf4d1cf3890ea894855":[7,0,1,173,4],
-"structhypro_1_1reachability_1_1ReachQuiet.html":[7,0,1,2,1],
-"structhypro_1_1reachability_1_1ReachSettings.html":[7,0,1,2,2],
+"structhypro_1_1reachability_1_1ReachQuiet.html":[7,0,1,2,2],
+"structhypro_1_1reachability_1_1ReachSettings.html":[7,0,1,2,3],
 "structhypro_1_1scaleContent.html":[7,0,1,191],
 "structhypro_1_1scaleContent.html#a276ea8b741a7979ca707a18998530179":[7,0,1,191,0],
-"structhypro_1_1scaleContent.html#a8bced65d39d8b83c83988735f025dd44":[7,0,1,191,2],
-"structhypro_1_1scaleContent.html#aa7795cfdee1b9c6d9af38853de204a86":[7,0,1,191,4],
-"structhypro_1_1scaleContent.html#ab4385fa894705f380312f4c54807f748":[7,0,1,191,1],
-"structhypro_1_1scaleContent.html#acbf6baaf5edc1c06081409837aeff4ee":[7,0,1,191,3],
-"structhypro_1_1setCreationVisitor.html":[7,0,1,195],
-"structhypro_1_1setCreationVisitor.html#a18838d0f2bedeea0a6860af8dbdb1ecc":[7,0,1,195,4],
-"structhypro_1_1setCreationVisitor.html#a3b0d73434a8e180c0e3228a80c6b4002":[7,0,1,195,1],
-"structhypro_1_1setCreationVisitor.html#a6b76adc221b8d2c0abbd587f4d28e43a":[7,0,1,195,3]
+"structhypro_1_1scaleContent.html#a8bced65d39d8b83c83988735f025dd44":[7,0,1,191,2]
 };

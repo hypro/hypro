@@ -26,6 +26,7 @@ var hierarchy =
     [ "BaseErrorListener", null, [
       [ "hypro::ErrorListener", "classhypro_1_1ErrorListener.html", null ]
     ] ],
+    [ "hypro::reachability::detail::bloatBoxVisitor< VariantType, Number >", "classhypro_1_1reachability_1_1detail_1_1bloatBoxVisitor.html", null ],
     [ "hypro::BoxAllOff", "structhypro_1_1BoxAllOff.html", null ],
     [ "hypro::BoxIntervalArithmeticOff", "structhypro_1_1BoxIntervalArithmeticOff.html", null ],
     [ "hypro::BoxLinearOptimizationOff", "structhypro_1_1BoxLinearOptimizationOff.html", null ],
