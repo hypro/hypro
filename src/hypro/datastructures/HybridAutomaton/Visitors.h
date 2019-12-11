@@ -236,7 +236,7 @@ class genericProjectionVisitor {
 template <typename T, typename N>
 class genericAssignIntervalsVisitor {
   protected:
-	std::map<std::size_t, carl::Interval<N>>& mAssignments;
+	const std::map<std::size_t, carl::Interval<N>>& mAssignments;
 
   public:
 	genericAssignIntervalsVisitor() = delete;
