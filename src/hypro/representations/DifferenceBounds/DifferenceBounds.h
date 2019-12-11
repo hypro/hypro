@@ -165,28 +165,28 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 	std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	DifferenceBoundsT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
-	DifferenceBoundsT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+	DifferenceBoundsT project( const std::vector<std::size_t>& dimensions ) const;
+	DifferenceBoundsT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;
 	}
-	DifferenceBoundsT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
-	DifferenceBoundsT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	DifferenceBoundsT<Number, Converter, Setting> minkowskiSum( const DifferenceBoundsT<Number, Converter, Setting>& _rhs ) const;
-	DifferenceBoundsT<Number, Converter, Setting> intersect( const DifferenceBoundsT<Number, Converter, Setting>& _rhs ) const;
-	DifferenceBoundsT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& hs ) const;
-	DifferenceBoundsT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	DifferenceBoundsT linearTransformation( const matrix_t<Number>& A ) const;
+	DifferenceBoundsT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	DifferenceBoundsT minkowskiSum( const DifferenceBoundsT& _rhs ) const;
+	DifferenceBoundsT intersect( const DifferenceBoundsT& _rhs ) const;
+	DifferenceBoundsT intersectHalfspace( const Halfspace<Number>& hs ) const;
+	DifferenceBoundsT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
-	DifferenceBoundsT<Number, Converter, Setting> unite( const DifferenceBoundsT<Number, Converter, Setting>& _rhs ) const;
+	DifferenceBoundsT unite( const DifferenceBoundsT& _rhs ) const;
 	void reduceRepresentation() { *this = this->removeRedundancy(); }
-	const DifferenceBoundsT<Number, Converter, Setting>& removeRedundancy();
+	const DifferenceBoundsT& removeRedundancy();
 	// difference bounds specific
 
 	/**
      * Elapses time for all clocks, i.e. d_i0 (that is x_i-0<=d_i0) is set to infinity
      * @return a DBM where the smaller(_eq) constraints for each clock is moved to infinity.
      */
-	DifferenceBoundsT<Number, Converter, Setting> elapse() const;
+	DifferenceBoundsT elapse() const;
 
 	/**
      * Computes the set of clock assignments that can reach the current DBMs Zone when time
@@ -195,14 +195,14 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * I.e. d_0i (that is 0-x_i <= d_0i <=> x_i >= -d_01) is set to 0
      * @return a DBM where the greater_(eq) constraints for each clock is moved to 0.
      */
-	DifferenceBoundsT<Number, Converter, Setting> rewind() const;
+	DifferenceBoundsT rewind() const;
 
 	/**
      * Frees a clock x, i.e. removes all bounding constraints for that clock
      * @param x index of the clock
      * @return DBM with clock x freed
      */
-	DifferenceBoundsT<Number, Converter, Setting> free( int x ) const;
+	DifferenceBoundsT free( int x ) const;
 
 	/**
      * Resets clock x to given Number value.
@@ -210,7 +210,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param value reset value of the clock
      * @return DBM with clock x reset to value
      */
-	DifferenceBoundsT<Number, Converter, Setting> reset( int x, Number value ) const;
+	DifferenceBoundsT reset( int x, Number value ) const;
 
 	/**
      * Copies a the value of clock src to clock dest, i.e. resets the value of
@@ -219,7 +219,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param dest index of dest clock
      * @return DBM with clock dest set to clock src
      */
-	DifferenceBoundsT<Number, Converter, Setting> copy( int src, int dest ) const;
+	DifferenceBoundsT copy( int src, int dest ) const;
 
 	/**
      * Shifts the valuation of clock x by the given offset
@@ -227,14 +227,14 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param offset offset to be applied
      * @return DBM with clock x shifted by offset
      */
-	DifferenceBoundsT<Number, Converter, Setting> shift( int x, Number offset ) const;
+	DifferenceBoundsT shift( int x, Number offset ) const;
 
 	/**
      * Shifts the valuation of all clocks by the given offset
      * @param offset offset to be applied
      * @return DBM with clocks shifted by offset
      */
-	DifferenceBoundsT<Number, Converter, Setting> shift( Number offset ) const;
+	DifferenceBoundsT shift( Number offset ) const;
 
 	/**
      * checks whether _rhs is contained in the left hand side
@@ -246,7 +246,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param _rhs
      * @return true is lhs contains rhs
      */
-	bool contains( const DifferenceBoundsT<Number, Converter, Setting>& _rhs ) const;
+	bool contains( const DifferenceBoundsT& _rhs ) const;
 
 	/**
      * intersects the DBM with the bound given by index x, y and bound value bound
@@ -256,7 +256,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param bound
      * @return the intersection of the DBM with constraint x-y bound
      */
-	DifferenceBoundsT<Number, Converter, Setting> intersectConstraint( const int x, const int y, const DBMEntry& bound ) const;
+	DifferenceBoundsT intersectConstraint( const int x, const int y, const DBMEntry& bound ) const;
 
 	/**
      * intersects the DBM with the bound given set of constraints
@@ -274,7 +274,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param MBounds List of DBMEntries describing the maximal Bounds for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY). The Bound for the 0 clock is 0.
      * @return The extrapolated DBM
      */
-	DifferenceBoundsT<Number, Converter, Setting> extraM( const vector_t<DBMEntry>& MBounds ) const;
+	DifferenceBoundsT extraM( const vector_t<DBMEntry>& MBounds ) const;
 
 	/**
      * extrapolates the current DBM by using the ExtraM+ Method. A description
@@ -282,7 +282,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param MBounds List of DBMEntries describing the maximal Bounds for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
      * @return The extrapolated DBM
      */
-	DifferenceBoundsT<Number, Converter, Setting> extraMPlus( const vector_t<DBMEntry>& MBounds ) const;
+	DifferenceBoundsT extraMPlus( const vector_t<DBMEntry>& MBounds ) const;
 
 	/**
      * extrapolates the current DBM by using the ExtraLU Method. A description
@@ -298,7 +298,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param UBounds List of DBMEntries describing the maximal upper Bound for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
      * @return The extrapolated DBM
      */
-	DifferenceBoundsT<Number, Converter, Setting> extraLU( const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds ) const;
+	DifferenceBoundsT extraLU( const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds ) const;
 
 	/**
      * extrapolates the current DBM by using the ExtraLU+ Method. A description
@@ -310,7 +310,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
      * @param UBounds List of DBMEntries describing the maximal upper Bound for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
      * @return The extrapolated DBM
      */
-	DifferenceBoundsT<Number, Converter, Setting> extraLUPlus( const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds ) const;
+	DifferenceBoundsT extraLUPlus( const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds ) const;
 
 	friend std::ostream& operator<<( std::ostream& ostr, const DifferenceBoundsT<Number, Converter, Setting>& db ) {
 		long rows = db.getDBM().rows();

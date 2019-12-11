@@ -76,8 +76,8 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	  * @param dimension Required dimension.
 	  * @return Empty GeneralizedStar.
 	  */
-	static GeneralizedStarT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
-		return GeneralizedStarT<Number, Converter, Setting>();
+	static GeneralizedStarT Empty( std::size_t dimension = 1 ) {
+		return GeneralizedStarT();
 	}
 
 	/**
@@ -184,28 +184,28 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @brief      Function to reduce the number representation (over-approximate).
 	 * @param[in]  limit      The limit
 	 */
-	const GeneralizedStarT<Number, Converter, Setting>& reduceNumberRepresentation();
+	const GeneralizedStarT& reduceNumberRepresentation();
 
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	GeneralizedStarT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
-	GeneralizedStarT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+	GeneralizedStarT project( const std::vector<std::size_t>& dimensions ) const;
+	GeneralizedStarT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;
 	}
-	GeneralizedStarT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
-	GeneralizedStarT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	GeneralizedStarT<Number, Converter, Setting> minkowskiSum( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;
+	GeneralizedStarT linearTransformation( const matrix_t<Number>& A ) const;
+	GeneralizedStarT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	GeneralizedStarT minkowskiSum( const GeneralizedStarT& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two GeneralizedStares.
 	 * @param[in]  rhs   The right hand side GeneralizedStar.
 	 * @return     The resulting GeneralizedStar.
 	 */
-	GeneralizedStarT<Number, Converter, Setting> intersect( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;
+	GeneralizedStarT intersect( const GeneralizedStarT& rhs ) const;
 
-	GeneralizedStarT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
-	GeneralizedStarT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	GeneralizedStarT intersectHalfspace( const Halfspace<Number>& hspace ) const;
+	GeneralizedStarT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -213,21 +213,21 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @param[in]  GeneralizedStar   The GeneralizedStar.
 	 * @return     True, if the given GeneralizedStar is contained in the current GeneralizedStar, false otherwise.
 	 */
-	bool contains( const GeneralizedStarT<Number, Converter, Setting>& GeneralizedStar ) const;
+	bool contains( const GeneralizedStarT& GeneralizedStar ) const;
 
 	/**
 	 * @brief      Computes the union of two GeneralizedStares.
 	 * @param[in]  rhs   The right hand side GeneralizedStar.
 	 * @return     The resulting GeneralizedStar.
 	 */
-	GeneralizedStarT<Number, Converter, Setting> unite( const GeneralizedStarT<Number, Converter, Setting>& rhs ) const;
+	GeneralizedStarT unite( const GeneralizedStarT& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current GeneralizedStar with a set of GeneralizedStares.
 	 * @param[in]  GeneralizedStares  The GeneralizedStares.
 	 * @return     The resulting GeneralizedStar.
 	 */
-	static GeneralizedStarT<Number, Converter, Setting> unite( const std::vector<GeneralizedStarT<Number, Converter, Setting>>& GeneralizedStares );
+	static GeneralizedStarT unite( const std::vector<GeneralizedStarT>& GeneralizedStares );
 
 	/**
 	 * @brief      Reduces the representation of the current GeneralizedStar.

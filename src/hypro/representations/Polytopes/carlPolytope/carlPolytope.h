@@ -56,39 +56,39 @@ class CarlPolytopeT {
 
 	CarlPolytopeT( const std::vector<carl::Interval<Number>>& intervals );
 
-	static CarlPolytopeT<Number, Converter, Setting> Empty();
+	static CarlPolytopeT Empty();
 
-	CarlPolytopeT<Number, Converter, Setting> intersect( const CarlPolytopeT<Number, Converter, Setting>& rhs ) const;
+	CarlPolytopeT intersect( const CarlPolytopeT& rhs ) const;
 
-	CarlPolytopeT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	CarlPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
 
-	CarlPolytopeT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+	CarlPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;
 	}
 
-	CarlPolytopeT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
+	CarlPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 
-	CarlPolytopeT<Number, Converter, Setting> minkowskiSum( const CarlPolytopeT<Number, Converter, Setting>& ) const {
+	CarlPolytopeT minkowskiSum( const CarlPolytopeT& ) const {
 		assert( false && "NOT IMPLEMENTED" );
-		return CarlPolytopeT<Number, Converter, Setting>();
+		return CarlPolytopeT();
 	}
 
-	CarlPolytopeT<Number, Converter, Setting> unite( const CarlPolytopeT<Number, Converter, Setting>& ) const {
+	CarlPolytopeT unite( const CarlPolytopeT& ) const {
 		assert( false && "NOT IMPLEMENTED" );
-		return CarlPolytopeT<Number, Converter, Setting>();
+		return CarlPolytopeT();
 	}
 
-	CarlPolytopeT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const {
+	CarlPolytopeT affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const {
 		assert( false && "NOT IMPLEMENTED" );
-		return CarlPolytopeT<Number, Converter, Setting>();
+		return CarlPolytopeT();
 	}
 
-	std::pair<CONTAINMENT, CarlPolytopeT<Number, Converter, Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<CONTAINMENT, CarlPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
 	bool contains( const Point<Number>& point ) const;
 
-	bool contains( const CarlPolytopeT<Number, Converter, Setting>& ) const {
+	bool contains( const CarlPolytopeT& ) const {
 		assert( false && "NOT IMPLEMENTED" );
 		return false;
 	}
@@ -133,7 +133,7 @@ class CarlPolytopeT {
 	bool empty() const;
 	static representation_name type() { return representation_name::carl_polytope; }
 
-	CarlPolytopeT<Number, Converter, Setting> make_rectangular() const;
+	CarlPolytopeT make_rectangular() const;
 
 	void removeRedundancy();
 	void reduceRepresentation();

@@ -92,19 +92,19 @@ class OrthogonalPolyhedronT {
 	std::vector<Point<Number>> neighborhood( const Point<Number>& _point ) const;
 
 	std::vector<Point<Number>> iSlice( unsigned i, Number pos ) const;
-	OrthogonalPolyhedronT<Number, Converter, Setting, Type> iProjection( unsigned i ) const;
+	OrthogonalPolyhedronT iProjection( unsigned i ) const;
 
 	/***********************************************************************
 	 * Geometric Object functions
 	 ***********************************************************************/
-	OrthogonalPolyhedronT<Number, Converter, Setting, Type> linearTransformation( const matrix_t<Number>& A,
-																				  const vector_t<Number>& b ) const;
-	OrthogonalPolyhedronT<Number, Converter, Setting, Type> minkowskiSum( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
-	OrthogonalPolyhedronT<Number, Converter, Setting, Type> intersect( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
-	OrthogonalPolyhedronT<Number, Converter, Setting, Type> hull() const;
+	OrthogonalPolyhedronT linearTransformation( const matrix_t<Number>& A,
+												const vector_t<Number>& b ) const;
+	OrthogonalPolyhedronT minkowskiSum( const OrthogonalPolyhedronT& rhs ) const;
+	OrthogonalPolyhedronT intersect( const OrthogonalPolyhedronT& rhs ) const;
+	OrthogonalPolyhedronT hull() const;
 	bool contains( const Point<Number>& point ) const;
-	bool contains( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& _other ) const;
-	OrthogonalPolyhedronT<Number, Converter, Setting, Type> unite( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
+	bool contains( const OrthogonalPolyhedronT& _other ) const;
+	OrthogonalPolyhedronT unite( const OrthogonalPolyhedronT& rhs ) const;
 
 	/***********************************************************************
 	 * Auxiliary functions
