@@ -3,6 +3,7 @@
 
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
+#include "../../util/tuple_expansion/nth_element.h"
 #include "Condition.h"
 #include "Visitors.h"
 
@@ -29,6 +30,9 @@ class Location;
 template <typename Number, typename Representation, typename... Rargs>
 class State {
   public:
+	template <std::size_t I>
+	using nth_representation = nth_element<I, Representation, Rargs...>;
+
 	using repVariant = std::variant<Representation, Rargs...>;  /// variant type for all possible state set representations.
 	typedef Number NumberType;
 

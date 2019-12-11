@@ -1,6 +1,7 @@
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
 #include "../../hypro/datastructures/HybridAutomaton/Location.h"
 #include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/util/tuple_expansion/nth_element.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 #include <thread>
@@ -73,6 +74,18 @@ TEST( StateTest, Conversion ) {
 	EXPECT_ANY_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
 	EXPECT_ANY_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
 	EXPECT_EQ( representation_name::polytope_h, s.getSetType() );
+
+	s.setAndConvertType<SupportFunction<double>>();
+	EXPECT_ANY_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
+	EXPECT_ANY_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
+	EXPECT_NO_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
+	EXPECT_EQ( representation_name::support_function, s.getSetType() );
+
+	s.setAndConvertType<State_t<double>::nth_representation<0>>();
+	EXPECT_ANY_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
+	EXPECT_NO_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
+	EXPECT_ANY_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
+	EXPECT_EQ( representation_name::box, s.getSetType() );
 }
 
 TEST( StateTest, letTimePassZeroFlow ) {
