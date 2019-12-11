@@ -41,7 +41,7 @@ class Location {
 	bool mHasExternalInput = false;
 	transitionVector mTransitions;
 	Condition<Number> mInvariant;
-	std::string mName;
+	std::string mName = "";
 	unsigned mId;
 	mutable std::size_t mHash = 0;
 
