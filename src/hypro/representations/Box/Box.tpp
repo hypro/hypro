@@ -425,7 +425,13 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 		limitingPlanes.pop_back();
 	}
 	assert( newPlanes.rows() == newDistances.rows() );
-	return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( newPlanes, newDistances ) );
+	auto tmp = this->intersectHalfspaces( newPlanes, newDistances );
+	bool empty = tmp.empty();
+	if ( empty ) {
+		return std::make_pair( CONTAINMENT::NO, tmp );
+	} else {
+		return std::make_pair( CONTAINMENT::PARTIAL, tmp );
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
