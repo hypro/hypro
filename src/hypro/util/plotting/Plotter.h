@@ -49,7 +49,8 @@ const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
 	 * @brief      A struct holding a basic set of options for the gnuplot plotting.
 	 */
 struct gnuplotSettings {
-	std::string name = "";			   // filename
+	std::string name = "";			   // title
+	std::string filename = "out";	  // filename
 	std::size_t color = colors[blue];  // default blue
 	bool fill = false;				   // do not fill
 	bool axes = true;				   // plot axes
@@ -75,7 +76,6 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	friend carl::Singleton<Plotter<Number>>;
 
   private:
-	std::string mFilename = "out";
 	mutable std::ofstream mOutfile;
 	mutable std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
@@ -84,7 +84,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	mutable std::pair<int, int> mLastDimensions;
 	mutable std::pair<vector_t<Number>, vector_t<Number>> mLimits;
 	std::map<unsigned, std::size_t> mObjectColors;
-	plotting::gnuplotSettings mSettings;
+	plotting::gnuplotSettings mSettings = plotting::gnuplotSettings{};
 	unsigned mId;
 
   protected:
