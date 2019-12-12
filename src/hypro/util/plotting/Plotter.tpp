@@ -31,11 +31,13 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	std::size_t cnt = 0;
 	std::string filename = mSettings.filename + "_pdf.plt";
+	std::string title = mSettings.name;
 	if ( !mSettings.overwriteFiles ) {
 		while ( file_exists( filename ) ) {
 			std::stringstream ss;
-			ss << mSettings.filename << "_" << cnt << "_pdf.plt";
-			filename = ss.str();
+			ss << mSettings.filename << "-" << cnt;
+			title = ss.str();
+			filename = title + "_pdf.plt";
 			++cnt;
 		}
 	}
@@ -46,16 +48,15 @@ void Plotter<Number>::plot2d() const {
 
 		// preamble
 		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << mSettings.name << "\"\n";
+		mOutfile << "set title \"" << title << "\"\n";
 		if ( mSettings.keepAspectRatio ) {
 			mOutfile << "set size square\n";
 		}
 		mOutfile << "set term pdf font ',10'\n";
-		mOutfile << "set output \"" << mSettings.filename << ".pdf\n";
+		mOutfile << "set output \"" << title << ".pdf\n";
 
 		writeGnuplot();
 	}
-	std::cout << "Plotted to " << filename << std::endl;
 	mOutfile.close();
 }
 
@@ -75,8 +76,6 @@ void Plotter<Number>::plotTex() const {
 		writeGnuplot();
 	}
 
-	std::cout << std::endl
-			  << "Plotted to " << mSettings.filename << "_tex.plt" << std::endl;
 	mOutfile.close();
 }
 
@@ -123,8 +122,6 @@ void Plotter<Number>::plotGen() const {
 		}
 	}
 	mOutfile.close();
-	std::cout << std::endl
-			  << "Plotted to " << mSettings.filename << ".gen" << std::endl;
 }
 
 template <typename Number>
