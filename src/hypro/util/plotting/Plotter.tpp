@@ -31,11 +31,15 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	std::size_t cnt = 0;
 	std::string filename = mSettings.filename + "_pdf.plt";
-	while ( !mSettings.overwriteFiles && file_exists( filename ) ) {
-		std::stringstream ss;
-		ss << mSettings.filename << "_" << cnt << "_pdf.plt";
-		filename = ss.str();
+	if ( !mSettings.overwriteFiles ) {
+		while ( file_exists( filename ) ) {
+			std::stringstream ss;
+			ss << mSettings.filename << "_" << cnt << "_pdf.plt";
+			filename = ss.str();
+			++cnt;
+		}
 	}
+
 	mOutfile.open( filename );
 
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
@@ -51,7 +55,7 @@ void Plotter<Number>::plot2d() const {
 
 		writeGnuplot();
 	}
-	std::cout << "Plotted to " << filename << "_pdf.plt" << std::endl;
+	std::cout << "Plotted to " << filename << std::endl;
 	mOutfile.close();
 }
 
