@@ -73,7 +73,7 @@ var NAVTREEINDEX =
 "example__vertexEnumeration_8cpp.html",
 "namespacemembers_v.html",
 "structhypro_1_1LinTrafoParameters.html#a8442ba8a0615d18707a446f8fd04d63a",
-"structhypro_1_1scaleContent.html#a276ea8b741a7979ca707a18998530179"
+"structhypro_1_1scaleContent.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1951,7 +1951,7 @@ error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clan
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
 
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:76: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:77: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:22: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
@@ -2029,7 +2029,7 @@ Adding source references...
 Adding xrefitems...
 Sorting member lists...
 Computing dependencies between directories...
-Generating citationerror opening bib20835.bbl: No such file or directory
+Generating citationerror opening bib20938.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -5146,5 +5146,5 @@ Patching output file 229/232
 Patching output file 230/232
 Patching output file 231/232
 Patching output file 232/232
-lookup cache used 10334/65536 hits=100684 misses=11454
+lookup cache used 10335/65536 hits=100686 misses=11455
 finished...

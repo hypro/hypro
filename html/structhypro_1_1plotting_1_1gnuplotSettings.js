@@ -10,6 +10,7 @@ var structhypro_1_1plotting_1_1gnuplotSettings =
     [ "keepAspectRatio", "structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f", null ],
     [ "linewidth", "structhypro_1_1plotting_1_1gnuplotSettings.html#a0595d1fe82343d0610c78e36dbd3a118", null ],
     [ "name", "structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d", null ],
+    [ "overwriteFiles", "structhypro_1_1plotting_1_1gnuplotSettings.html#af425d9d70edc6de35ff5688827bc0161", null ],
     [ "plain", "structhypro_1_1plotting_1_1gnuplotSettings.html#a3591c6d9451b17e32b233d188e6b70e1", null ],
     [ "pointSize", "structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6", null ]
 ];
