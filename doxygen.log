@@ -1951,7 +1951,7 @@ error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clan
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
 
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:74: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:76: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:22: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
@@ -2029,7 +2029,7 @@ Adding source references...
 Adding xrefitems...
 Sorting member lists...
 Computing dependencies between directories...
-Generating citationerror opening bib20871.bbl: No such file or directory
+Generating citationerror opening bib20835.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -4047,9 +4047,9 @@ Generating docs for/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHul
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:66: warning: argument 'b' of command @param is not found in the argument list of hypro::EllipsoidT< Number, Converter >::linearTransformation(const matrix_t< Number > &_A) const
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:70: warning: The following parameters of hypro::EllipsoidT::linearTransformation(const matrix_t< Number > &_A) const are not documented:
   parameter '_A'
-/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:82: warning: argument 'rhs' of command @param is not found in the argument list of hypro::EllipsoidT< Number, Converter >::minkowskiSum(const EllipsoidT< Number, Converter > &_rhs, bool _approx=true) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:82: warning: argument 'l' of command @param is not found in the argument list of hypro::EllipsoidT< Number, Converter >::minkowskiSum(const EllipsoidT< Number, Converter > &_rhs, bool _approx=true) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:86: warning: The following parameters of hypro::EllipsoidT::minkowskiSum(const EllipsoidT< Number, Converter > &_rhs, bool _approx=true) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:82: warning: argument 'rhs' of command @param is not found in the argument list of hypro::EllipsoidT< Number, Converter >::minkowskiSum(const EllipsoidT &_rhs, bool _approx=true) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:82: warning: argument 'l' of command @param is not found in the argument list of hypro::EllipsoidT< Number, Converter >::minkowskiSum(const EllipsoidT &_rhs, bool _approx=true) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:86: warning: The following parameters of hypro::EllipsoidT::minkowskiSum(const EllipsoidT &_rhs, bool _approx=true) const are not documented:
   parameter '_rhs'
   parameter '_approx'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
@@ -5146,5 +5146,5 @@ Patching output file 229/232
 Patching output file 230/232
 Patching output file 231/232
 Patching output file 232/232
-lookup cache used 10327/65536 hits=100967 misses=11448
+lookup cache used 10334/65536 hits=100684 misses=11454
 finished...

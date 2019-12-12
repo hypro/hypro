@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classhypro_1_1EventTimingNode.html":[7,0,1,43],
 "classhypro_1_1EventTimingNode.html#a18a8f83ff54ce86ba9a8cdcf6d6769a8":[7,0,1,43,22],
 "classhypro_1_1EventTimingNode.html#a1b45ee597ec8e40916f66d2c45779437":[7,0,1,43,20],
 "classhypro_1_1EventTimingNode.html#a34b7d2efb5c8b470463d985d40a9b62f":[7,0,1,43,19],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classhypro_1_1Halfspace.html#aeece7a108153d254a7e92f732cc732fc":[7,0,1,82,35],
 "classhypro_1_1Halfspace.html#af4c7657ba3af29b4f9c9b34aa326a345":[7,0,1,82,0],
 "classhypro_1_1HandlerFactory.html":[7,0,1,83],
-"classhypro_1_1HandlerFactory.html#a0cf2e2316166db7e941bfa1b92aed40a":[7,0,1,83,7],
-"classhypro_1_1HandlerFactory.html#a1ac7247167a2c7559e022a4198d2ad18":[7,0,1,83,0]
+"classhypro_1_1HandlerFactory.html#a0cf2e2316166db7e941bfa1b92aed40a":[7,0,1,83,7]
 };

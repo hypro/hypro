@@ -4,6 +4,7 @@ var structhypro_1_1plotting_1_1gnuplotSettings =
     [ "color", "structhypro_1_1plotting_1_1gnuplotSettings.html#af4c7b4907f1cd59c7de8e76ad30db9ea", null ],
     [ "cummulative", "structhypro_1_1plotting_1_1gnuplotSettings.html#a50a13c98532eef47b41211361ed19303", null ],
     [ "dimensions", "structhypro_1_1plotting_1_1gnuplotSettings.html#ab65196566bbe095d5bdadb43b40e4800", null ],
+    [ "filename", "structhypro_1_1plotting_1_1gnuplotSettings.html#a30beaa07a63dea7d85599d72bcc4871d", null ],
     [ "fill", "structhypro_1_1plotting_1_1gnuplotSettings.html#a2fd3767d34c88518b3287758311b4a3e", null ],
     [ "grid", "structhypro_1_1plotting_1_1gnuplotSettings.html#abd230e8c60e90101c6dd02defb3f9ef7", null ],
     [ "keepAspectRatio", "structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f", null ],

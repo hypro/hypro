@@ -1,5 +1,7 @@
 var NAVTREEINDEX26 =
 {
+"structhypro_1_1scaleContent.html#a276ea8b741a7979ca707a18998530179":[7,0,1,191,0],
+"structhypro_1_1scaleContent.html#a8bced65d39d8b83c83988735f025dd44":[7,0,1,191,2],
 "structhypro_1_1scaleContent.html#aa7795cfdee1b9c6d9af38853de204a86":[7,0,1,191,4],
 "structhypro_1_1scaleContent.html#ab4385fa894705f380312f4c54807f748":[7,0,1,191,1],
 "structhypro_1_1scaleContent.html#acbf6baaf5edc1c06081409837aeff4ee":[7,0,1,191,3],
@@ -183,8 +185,8 @@ var NAVTREEINDEX26 =
 "util_2convenienceOperators_8h_source.html":[8,0,1,0,4,8],
 "util_2linearOptimization_2Strategy_8h.html":[8,0,1,0,4,1,9],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31":[8,0,1,0,4,1,9,0],
-"util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[8,0,1,0,4,1,9,0,0],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[8,0,1,0,4,1,9,0,2],
+"util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[8,0,1,0,4,1,9,0,0],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31aa0cbb49caeb5c27038583028e54bfa60":[8,0,1,0,4,1,9,0,3],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31ab8c6c5ac894a59c2c63a3f1c4989adde":[8,0,1,0,4,1,9,0,1],
 "util_2linearOptimization_2Strategy_8h_source.html":[8,0,1,0,4,1,9],

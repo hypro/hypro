@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"structhypro_1_1LinTrafoParameters.html#a8442ba8a0615d18707a446f8fd04d63a":[7,0,1,133,0],
 "structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e":[7,0,1,133,2],
 "structhypro_1_1LinTrafoParameters.html#a9550b4c0d76c69ce91856d2001e0c154":[7,0,1,133,9],
 "structhypro_1_1LinTrafoParameters.html#abd4ce16e2bc5ff16871cd069d1493539":[7,0,1,133,3],
@@ -220,15 +221,16 @@ var NAVTREEINDEX25 =
 "structhypro_1_1nodeUpdater.html#a3e14b62186f16f0e53280742371ee92e":[7,0,1,153,3],
 "structhypro_1_1nodeUpdater.html#ac0603088d907413778945e8ea884cd75":[7,0,1,153,1],
 "structhypro_1_1plotting_1_1gnuplotSettings.html":[7,0,1,1,0],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#a0595d1fe82343d0610c78e36dbd3a118":[7,0,1,1,0,7],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6":[7,0,1,1,0,10],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#a2fd3767d34c88518b3287758311b4a3e":[7,0,1,1,0,4],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#a3591c6d9451b17e32b233d188e6b70e1":[7,0,1,1,0,9],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f":[7,0,1,1,0,6],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a0595d1fe82343d0610c78e36dbd3a118":[7,0,1,1,0,8],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6":[7,0,1,1,0,11],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a2fd3767d34c88518b3287758311b4a3e":[7,0,1,1,0,5],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a30beaa07a63dea7d85599d72bcc4871d":[7,0,1,1,0,4],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a3591c6d9451b17e32b233d188e6b70e1":[7,0,1,1,0,10],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f":[7,0,1,1,0,7],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#a50a13c98532eef47b41211361ed19303":[7,0,1,1,0,2],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#ab65196566bbe095d5bdadb43b40e4800":[7,0,1,1,0,3],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#abd230e8c60e90101c6dd02defb3f9ef7":[7,0,1,1,0,5],
-"structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d":[7,0,1,1,0,8],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#abd230e8c60e90101c6dd02defb3f9ef7":[7,0,1,1,0,6],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d":[7,0,1,1,0,9],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#ad4c831cb695d8c24d471d1b46f3411d1":[7,0,1,1,0,0],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#af4c7b4907f1cd59c7de8e76ad30db9ea":[7,0,1,1,0,1],
 "structhypro_1_1pointIt.html":[7,0,1,166],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "structhypro_1_1projectionContent.html#af0d1be0823a3dcf4d1cf3890ea894855":[7,0,1,173,4],
 "structhypro_1_1reachability_1_1ReachQuiet.html":[7,0,1,2,2],
 "structhypro_1_1reachability_1_1ReachSettings.html":[7,0,1,2,3],
-"structhypro_1_1scaleContent.html":[7,0,1,191],
-"structhypro_1_1scaleContent.html#a276ea8b741a7979ca707a18998530179":[7,0,1,191,0],
-"structhypro_1_1scaleContent.html#a8bced65d39d8b83c83988735f025dd44":[7,0,1,191,2]
+"structhypro_1_1scaleContent.html":[7,0,1,191]
 };

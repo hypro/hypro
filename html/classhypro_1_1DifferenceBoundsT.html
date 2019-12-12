@@ -195,72 +195,78 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0f2b593b60bcd4d26db858e19867c05"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#aa0f2b593b60bcd4d26db858e19867c05">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
 <tr class="memdesc:aa0f2b593b60bcd4d26db858e19867c05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#aa0f2b593b60bcd4d26db858e19867c05">More...</a><br /></td></tr>
 <tr class="separator:aa0f2b593b60bcd4d26db858e19867c05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a170554e95a35020137721f2c835494f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a170554e95a35020137721f2c835494f5">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:a170554e95a35020137721f2c835494f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a170554e95a35020137721f2c835494f5">More...</a><br /></td></tr>
-<tr class="separator:a170554e95a35020137721f2c835494f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf901da89c8645faa7d2083ebf688666"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#adf901da89c8645faa7d2083ebf688666">assignIntervals</a> (const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;) const </td></tr>
-<tr class="memdesc:adf901da89c8645faa7d2083ebf688666"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added.  <a href="#adf901da89c8645faa7d2083ebf688666">More...</a><br /></td></tr>
-<tr class="separator:adf901da89c8645faa7d2083ebf688666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a236301da169871f90042b205cbb49b64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a236301da169871f90042b205cbb49b64">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
-<tr class="memdesc:a236301da169871f90042b205cbb49b64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a236301da169871f90042b205cbb49b64">More...</a><br /></td></tr>
-<tr class="separator:a236301da169871f90042b205cbb49b64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56e2d0c13663345cb9b77d28b97585df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a56e2d0c13663345cb9b77d28b97585df">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b) const </td></tr>
-<tr class="memdesc:a56e2d0c13663345cb9b77d28b97585df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a56e2d0c13663345cb9b77d28b97585df">More...</a><br /></td></tr>
-<tr class="separator:a56e2d0c13663345cb9b77d28b97585df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad371c877078c034207e8d544654e5832"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad371c877078c034207e8d544654e5832">minkowskiSum</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="memdesc:ad371c877078c034207e8d544654e5832"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#ad371c877078c034207e8d544654e5832">More...</a><br /></td></tr>
-<tr class="separator:ad371c877078c034207e8d544654e5832"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a02e088c39bf15a6f4a61c1892fa62d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a3a02e088c39bf15a6f4a61c1892fa62d">intersect</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="separator:a3a02e088c39bf15a6f4a61c1892fa62d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4e1959da352ff0a68bde977ac6867f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ab4e1959da352ff0a68bde977ac6867f6">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;hs) const </td></tr>
-<tr class="memdesc:ab4e1959da352ff0a68bde977ac6867f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#ab4e1959da352ff0a68bde977ac6867f6">More...</a><br /></td></tr>
-<tr class="separator:ab4e1959da352ff0a68bde977ac6867f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8157c942d2080e2e91e884e459567e22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a8157c942d2080e2e91e884e459567e22">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
-<tr class="memdesc:a8157c942d2080e2e91e884e459567e22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#a8157c942d2080e2e91e884e459567e22">More...</a><br /></td></tr>
-<tr class="separator:a8157c942d2080e2e91e884e459567e22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2fd7fb5cb6703e3933d0f9d0b81fd97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ac2fd7fb5cb6703e3933d0f9d0b81fd97">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:ac2fd7fb5cb6703e3933d0f9d0b81fd97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ac2fd7fb5cb6703e3933d0f9d0b81fd97">More...</a><br /></td></tr>
+<tr class="separator:ac2fd7fb5cb6703e3933d0f9d0b81fd97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a445d4d5f5d3eaa84a0bf4fe659957b09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a445d4d5f5d3eaa84a0bf4fe659957b09">assignIntervals</a> (const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;) const </td></tr>
+<tr class="memdesc:a445d4d5f5d3eaa84a0bf4fe659957b09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added.  <a href="#a445d4d5f5d3eaa84a0bf4fe659957b09">More...</a><br /></td></tr>
+<tr class="separator:a445d4d5f5d3eaa84a0bf4fe659957b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a779a3ee9b80f55e2e3333a1a2e17a781"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a779a3ee9b80f55e2e3333a1a2e17a781">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
+<tr class="memdesc:a779a3ee9b80f55e2e3333a1a2e17a781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a779a3ee9b80f55e2e3333a1a2e17a781">More...</a><br /></td></tr>
+<tr class="separator:a779a3ee9b80f55e2e3333a1a2e17a781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fccd43f33a74b39da57fe9f7b484fa5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a6fccd43f33a74b39da57fe9f7b484fa5">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b) const </td></tr>
+<tr class="memdesc:a6fccd43f33a74b39da57fe9f7b484fa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a6fccd43f33a74b39da57fe9f7b484fa5">More...</a><br /></td></tr>
+<tr class="separator:a6fccd43f33a74b39da57fe9f7b484fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad32f9dcb2c00b43db82f229f58a50de7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad32f9dcb2c00b43db82f229f58a50de7">minkowskiSum</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &amp;_rhs) const </td></tr>
+<tr class="separator:ad32f9dcb2c00b43db82f229f58a50de7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b169963edc3bba8be6117d04c0b1a46"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a6b169963edc3bba8be6117d04c0b1a46">intersect</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &amp;_rhs) const </td></tr>
+<tr class="separator:a6b169963edc3bba8be6117d04c0b1a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70bb9bfc95ae5ec7b4c57230124eb436"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a70bb9bfc95ae5ec7b4c57230124eb436">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;hs) const </td></tr>
+<tr class="memdesc:a70bb9bfc95ae5ec7b4c57230124eb436"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a70bb9bfc95ae5ec7b4c57230124eb436">More...</a><br /></td></tr>
+<tr class="separator:a70bb9bfc95ae5ec7b4c57230124eb436"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad558139a41ad6e552038b228f3ba93c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad558139a41ad6e552038b228f3ba93c5">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:ad558139a41ad6e552038b228f3ba93c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#ad558139a41ad6e552038b228f3ba93c5">More...</a><br /></td></tr>
+<tr class="separator:ad558139a41ad6e552038b228f3ba93c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a100e2df570177f1b74010e4fd6fdf3da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a100e2df570177f1b74010e4fd6fdf3da">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_point) const </td></tr>
 <tr class="memdesc:a100e2df570177f1b74010e4fd6fdf3da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a100e2df570177f1b74010e4fd6fdf3da">More...</a><br /></td></tr>
 <tr class="separator:a100e2df570177f1b74010e4fd6fdf3da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3110104f20dbfbcc921be54adc5a2174"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a3110104f20dbfbcc921be54adc5a2174">unite</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="memdesc:a3110104f20dbfbcc921be54adc5a2174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3110104f20dbfbcc921be54adc5a2174">More...</a><br /></td></tr>
-<tr class="separator:a3110104f20dbfbcc921be54adc5a2174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86f123b0dd33d2fc2dac97637aae4f92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a86f123b0dd33d2fc2dac97637aae4f92">unite</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &amp;_rhs) const </td></tr>
+<tr class="separator:a86f123b0dd33d2fc2dac97637aae4f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05b7844e57dc4e95635b54608ab4f7aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa">reduceRepresentation</a> ()</td></tr>
 <tr class="memdesc:a05b7844e57dc4e95635b54608ab4f7aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function called to reduce the representation - implementation is dependent on the actual representation and might affect number representations as well as reducing the complexity of the set at the cost of precision - the actual implementation should be settings-dependent.  <a href="#a05b7844e57dc4e95635b54608ab4f7aa">More...</a><br /></td></tr>
 <tr class="separator:a05b7844e57dc4e95635b54608ab4f7aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b9a7912d7ffbf786b357d1698865519"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a7b9a7912d7ffbf786b357d1698865519">removeRedundancy</a> ()</td></tr>
-<tr class="separator:a7b9a7912d7ffbf786b357d1698865519"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af82a065965e95d9750909e050759003a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#af82a065965e95d9750909e050759003a">elapse</a> () const </td></tr>
-<tr class="separator:af82a065965e95d9750909e050759003a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cf2b095acbfd013647d0967a61f8274"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a0cf2b095acbfd013647d0967a61f8274">rewind</a> () const </td></tr>
-<tr class="separator:a0cf2b095acbfd013647d0967a61f8274"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b702ce0faa68af89edf776b2e4a5a0e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a3b702ce0faa68af89edf776b2e4a5a0e">free</a> (int x) const </td></tr>
-<tr class="separator:a3b702ce0faa68af89edf776b2e4a5a0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47c8497fe7e552c15f46bcb8818c8678"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a47c8497fe7e552c15f46bcb8818c8678">reset</a> (int x, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> value) const </td></tr>
-<tr class="separator:a47c8497fe7e552c15f46bcb8818c8678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a709086fb271a760df70de8e42c273762"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a709086fb271a760df70de8e42c273762">copy</a> (int src, int dest) const </td></tr>
-<tr class="separator:a709086fb271a760df70de8e42c273762"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4c49229f1435ae92a96653fc95f26fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#af4c49229f1435ae92a96653fc95f26fb">shift</a> (int x, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> offset) const </td></tr>
-<tr class="separator:af4c49229f1435ae92a96653fc95f26fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bf9c64ee53a449a94ad7716d3b2afe3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a4bf9c64ee53a449a94ad7716d3b2afe3">shift</a> (<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> offset) const </td></tr>
-<tr class="separator:a4bf9c64ee53a449a94ad7716d3b2afe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6e04e0c025b398a33eaa54f1916d515"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ae6e04e0c025b398a33eaa54f1916d515">contains</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
-<tr class="separator:ae6e04e0c025b398a33eaa54f1916d515"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6e4a39f0151de209e9afd52aabcfaa0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad6e4a39f0151de209e9afd52aabcfaa0">intersectConstraint</a> (const int x, const int y, const <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &amp;bound) const </td></tr>
-<tr class="separator:ad6e4a39f0151de209e9afd52aabcfaa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2751ca1bf006b732b580ddbd69b72e2d"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a2751ca1bf006b732b580ddbd69b72e2d">removeRedundancy</a> ()</td></tr>
+<tr class="separator:a2751ca1bf006b732b580ddbd69b72e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c31a4b2e18bdd6e2558f1347de14c8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a3c31a4b2e18bdd6e2558f1347de14c8a">elapse</a> () const </td></tr>
+<tr class="separator:a3c31a4b2e18bdd6e2558f1347de14c8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a281259a1f423d671cb0c41e787a384e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a281259a1f423d671cb0c41e787a384e3">rewind</a> () const </td></tr>
+<tr class="separator:a281259a1f423d671cb0c41e787a384e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86601c998a02736200713a51075d9f9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a86601c998a02736200713a51075d9f9d">free</a> (int x) const </td></tr>
+<tr class="separator:a86601c998a02736200713a51075d9f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24babae6e650da66794c4ed362dd09e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad24babae6e650da66794c4ed362dd09e">reset</a> (int x, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> value) const </td></tr>
+<tr class="separator:ad24babae6e650da66794c4ed362dd09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39331d345fd8b33eb17b57c75abb811b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a39331d345fd8b33eb17b57c75abb811b">copy</a> (int src, int dest) const </td></tr>
+<tr class="separator:a39331d345fd8b33eb17b57c75abb811b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fc86bed557ff494c5235a6b481d1d7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a3fc86bed557ff494c5235a6b481d1d7d">shift</a> (int x, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> offset) const </td></tr>
+<tr class="separator:a3fc86bed557ff494c5235a6b481d1d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac73d61494633902cb25b524f955c7e04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ac73d61494633902cb25b524f955c7e04">shift</a> (<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> offset) const </td></tr>
+<tr class="separator:ac73d61494633902cb25b524f955c7e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc274bc2842e24ed7fd49d2a837ef120"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#adc274bc2842e24ed7fd49d2a837ef120">contains</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &amp;_rhs) const </td></tr>
+<tr class="separator:adc274bc2842e24ed7fd49d2a837ef120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a062f3b450323dd13af935f41d55bc7bb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a062f3b450323dd13af935f41d55bc7bb">intersectConstraint</a> (const int x, const int y, const <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &amp;bound) const </td></tr>
+<tr class="separator:a062f3b450323dd13af935f41d55bc7bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc1785282aa9ed96ed2e075db48e8fcc"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#abc1785282aa9ed96ed2e075db48e8fcc">intersectConstraints</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; constants, const <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> defaultOnEmptyConstraints) const </td></tr>
 <tr class="separator:abc1785282aa9ed96ed2e075db48e8fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae968ba990068b48082be8c62837b48eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ae968ba990068b48082be8c62837b48eb">extraM</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;MBounds) const </td></tr>
-<tr class="separator:ae968ba990068b48082be8c62837b48eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a851c67b1e308d607e309df3a0b818d0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a851c67b1e308d607e309df3a0b818d0a">extraMPlus</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;MBounds) const </td></tr>
-<tr class="separator:a851c67b1e308d607e309df3a0b818d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a750d4bc36c8df91942f1ef9ca844bff0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a750d4bc36c8df91942f1ef9ca844bff0">extraLU</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;LBounds, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;UBounds) const </td></tr>
-<tr class="separator:a750d4bc36c8df91942f1ef9ca844bff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58f46e78ce3fd83f5ce2f195fad36e06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a58f46e78ce3fd83f5ce2f195fad36e06">extraLUPlus</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;LBounds, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;UBounds) const </td></tr>
-<tr class="separator:a58f46e78ce3fd83f5ce2f195fad36e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad18678dd0a920e745a0f8c1a0b7797dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad18678dd0a920e745a0f8c1a0b7797dc">extraM</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;MBounds) const </td></tr>
+<tr class="separator:ad18678dd0a920e745a0f8c1a0b7797dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85f20d37edc6e4abdb8f3587e69b8ea5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a85f20d37edc6e4abdb8f3587e69b8ea5">extraMPlus</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;MBounds) const </td></tr>
+<tr class="separator:a85f20d37edc6e4abdb8f3587e69b8ea5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64522501ee5d085045f5a433c55eb21b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a64522501ee5d085045f5a433c55eb21b">extraLU</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;LBounds, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;UBounds) const </td></tr>
+<tr class="separator:a64522501ee5d085045f5a433c55eb21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51dd463ed3eed99fdc134eaddff87625"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a51dd463ed3eed99fdc134eaddff87625">extraLUPlus</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;LBounds, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;UBounds) const </td></tr>
+<tr class="separator:a51dd463ed3eed99fdc134eaddff87625"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a></td></tr>
 <tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
 <tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object.  <a href="#a28cf65685f4fa5e04c3dbf428a9d97b0">More...</a><br /></td></tr>
 <tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">minkowskiSum</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
+<tr class="memdesc:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6d5b4a8d675cbe9da63408a5beab8460">More...</a><br /></td></tr>
+<tr class="separator:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4">contains</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
+<tr class="separator:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
+<tr class="memdesc:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3ed4020101437144b34b62cc01d5bf01">More...</a><br /></td></tr>
+<tr class="separator:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -406,7 +412,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a56e2d0c13663345cb9b77d28b97585df"></a>
+<a class="anchor" id="a6fccd43f33a74b39da57fe9f7b484fa5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -416,7 +422,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
@@ -454,7 +460,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="adf901da89c8645faa7d2083ebf688666"></a>
+<a class="anchor" id="a445d4d5f5d3eaa84a0bf4fe659957b09"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -464,7 +470,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::assignIntervals </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::assignIntervals </td>
           <td>(</td>
           <td class="paramtype">const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>assignments</em></td><td>)</td>
@@ -530,14 +536,11 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ae6e04e0c025b398a33eaa54f1916d515"></a>
+<a class="anchor" id="adc274bc2842e24ed7fd49d2a837ef120"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
@@ -547,11 +550,6 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 <p>checks whether _rhs is contained in the left hand side</p>
 <p>A DBM X contains a DBM Y if the lower bounds of Y are greater or equal than the lower bounds of X and the upper bounds of Y are smaller or equal than the upper bounds of X.</p>
@@ -563,18 +561,16 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true is lhs contains rhs </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
 </div>
 </div>
-<a class="anchor" id="a709086fb271a760df70de8e42c273762"></a>
+<a class="anchor" id="a39331d345fd8b33eb17b57c75abb811b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::copy </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::copy </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>src</em>, </td>
@@ -633,14 +629,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af82a065965e95d9750909e050759003a"></a>
+<a class="anchor" id="a3c31a4b2e18bdd6e2558f1347de14c8a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::elapse </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::elapse </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -709,14 +705,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a750d4bc36c8df91942f1ef9ca844bff0"></a>
+<a class="anchor" id="a64522501ee5d085045f5a433c55eb21b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraLU </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraLU </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>LBounds</em>, </td>
@@ -747,14 +743,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a58f46e78ce3fd83f5ce2f195fad36e06"></a>
+<a class="anchor" id="a51dd463ed3eed99fdc134eaddff87625"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraLUPlus </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraLUPlus </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>LBounds</em>, </td>
@@ -785,14 +781,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ae968ba990068b48082be8c62837b48eb"></a>
+<a class="anchor" id="ad18678dd0a920e745a0f8c1a0b7797dc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraM </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraM </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>MBounds</em></td><td>)</td>
@@ -810,14 +806,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a851c67b1e308d607e309df3a0b818d0a"></a>
+<a class="anchor" id="a85f20d37edc6e4abdb8f3587e69b8ea5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraMPlus </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::extraMPlus </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html">DBMEntry</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>MBounds</em></td><td>)</td>
@@ -835,14 +831,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a3b702ce0faa68af89edf776b2e4a5a0e"></a>
+<a class="anchor" id="a86601c998a02736200713a51075d9f9d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::free </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::free </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
@@ -911,14 +907,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a3a02e088c39bf15a6f4a61c1892fa62d"></a>
+<a class="anchor" id="a6b169963edc3bba8be6117d04c0b1a46"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
           <td class="paramname"><em>_rhs</em></td><td>)</td>
@@ -929,14 +925,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad6e4a39f0151de209e9afd52aabcfaa0"></a>
+<a class="anchor" id="a062f3b450323dd13af935f41d55bc7bb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectConstraint </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectConstraint </td>
           <td>(</td>
           <td class="paramtype">const int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -1015,7 +1011,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab4e1959da352ff0a68bde977ac6867f6"></a>
+<a class="anchor" id="a70bb9bfc95ae5ec7b4c57230124eb436"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1025,7 +1021,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
@@ -1052,7 +1048,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a8157c942d2080e2e91e884e459567e22"></a>
+<a class="anchor" id="ad558139a41ad6e552038b228f3ba93c5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1062,7 +1058,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
@@ -1100,7 +1096,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a236301da169871f90042b205cbb49b64"></a>
+<a class="anchor" id="a779a3ee9b80f55e2e3333a1a2e17a781"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1110,7 +1106,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>A</em></td><td>)</td>
@@ -1166,40 +1162,21 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad371c877078c034207e8d544654e5832"></a>
+<a class="anchor" id="ad32f9dcb2c00b43db82f229f58a50de7"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td class="paramname"><em>_rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-
-<p>Computes Minkowski's sum of the current set and the passed set. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The other passed set. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -1231,7 +1208,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a170554e95a35020137721f2c835494f5"></a>
+<a class="anchor" id="ac2fd7fb5cb6703e3933d0f9d0b81fd97"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1241,7 +1218,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
@@ -1299,14 +1276,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a7b9a7912d7ffbf786b357d1698865519"></a>
+<a class="anchor" id="a2751ca1bf006b732b580ddbd69b72e2d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt;&amp; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::removeRedundancy </td>
+          <td class="memname">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&amp; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::removeRedundancy </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1316,14 +1293,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a47c8497fe7e552c15f46bcb8818c8678"></a>
+<a class="anchor" id="ad24babae6e650da66794c4ed362dd09e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::reset </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::reset </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -1352,14 +1329,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0cf2b095acbfd013647d0967a61f8274"></a>
+<a class="anchor" id="a281259a1f423d671cb0c41e787a384e3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::rewind </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::rewind </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1492,14 +1469,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="af4c49229f1435ae92a96653fc95f26fb"></a>
+<a class="anchor" id="a3fc86bed557ff494c5235a6b481d1d7d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::shift </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::shift </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -1528,14 +1505,14 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a4bf9c64ee53a449a94ad7716d3b2afe3"></a>
+<a class="anchor" id="ac73d61494633902cb25b524f955c7e04"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::shift </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::shift </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td>
           <td class="paramname"><em>offset</em></td><td>)</td>
@@ -1597,40 +1574,21 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a3110104f20dbfbcc921be54adc5a2174"></a>
+<a class="anchor" id="a86f123b0dd33d2fc2dac97637aae4f92"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , class Setting &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
-          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td class="paramname"><em>_rhs</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-
-<p>Computes the convex hull of the union of the set and the passed set. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The passed set. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
 </div>
 </div>

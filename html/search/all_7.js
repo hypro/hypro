@@ -74,7 +74,7 @@ var searchData=
   ['hpolytopesetting_2eh',['HPolytopeSetting.h',['../HPolytopeSetting_8h.html',1,'']]],
   ['hspace',['hspace',['../structhypro_1_1IntersectHalfspaceData.html#af46d2475ec34390bb2f27c5bbd336a3b',1,'hypro::IntersectHalfspaceData']]],
   ['hsvtorgb',['HSVtoRGB',['../namespacehypro.html#a7c855bf4f00830057bbc7793a4e158b1',1,'hypro']]],
-  ['hull',['hull',['../classhypro_1_1OrthogonalPolyhedronT.html#aadffdb944152270913714b6d1be3b15c',1,'hypro::OrthogonalPolyhedronT::hull()'],['../classhypro_1_1OrthogonalPolyhedron.html#a63c7927ef01eb5d52a04a78334d41227',1,'hypro::OrthogonalPolyhedron::hull()']]],
+  ['hull',['hull',['../classhypro_1_1OrthogonalPolyhedronT.html#aed3db867d509ceb85f34c4bb7ace1175',1,'hypro::OrthogonalPolyhedronT::hull()'],['../classhypro_1_1OrthogonalPolyhedron.html#a63c7927ef01eb5d52a04a78334d41227',1,'hypro::OrthogonalPolyhedron::hull()']]],
   ['hull_5fplot',['HULL_PLOT',['../structFlags.html#a86060954cf6340ad27d5c6f1edbe4c4f',1,'Flags']]],
   ['hullconstr',['HULLCONSTR',['../structFlags.html#ae55d592d2815d42effe93db8ca0913c1',1,'Flags']]],
   ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274',1,'hypro::HybridAutomaton::HybridAutomaton()'],['../classhypro_1_1HybridAutomaton.html#a08f7fc3788815d3544a8b541d1c389a5',1,'hypro::HybridAutomaton::HybridAutomaton(const HybridAutomaton&lt; Number &gt; &amp;hybrid)'],['../classhypro_1_1HybridAutomaton.html#a23d96f0b4a088ffc7ded37f06d0a514a',1,'hypro::HybridAutomaton::HybridAutomaton(const locationVector &amp;locs, const locationConditionMap &amp;initialStates)']]],

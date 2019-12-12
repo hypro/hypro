@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"classhypro_1_1IWorker.html":[7,0,1,128],
 "classhypro_1_1IWorker.html#a015232621f753f5c6e8fbf465784d5a8":[7,0,1,128,5],
 "classhypro_1_1IWorker.html#a911c99e8bd5ed58fa99d46a0a5080b97":[7,0,1,128,4],
 "classhypro_1_1IWorker.html#a918ff4c18cb0996bb5008dc4e119c216":[7,0,1,128,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "classhypro_1_1OrthogonalPolyhedron.html#a0d5bf72c129f0ff0047e266d0411fc32":[7,0,1,159,10],
 "classhypro_1_1OrthogonalPolyhedron.html#a0df586f5dc9324ded24613e88f755b69":[7,0,1,159,19],
 "classhypro_1_1OrthogonalPolyhedron.html#a1131c6e7677f5f4bf7af879b866468ac":[7,0,1,159,12],
-"classhypro_1_1OrthogonalPolyhedron.html#a1f5c5b7ba5526b2c840bcbd89497e0ee":[7,0,1,159,18],
-"classhypro_1_1OrthogonalPolyhedron.html#a30341d154512c9d8ee3e9efd149e2245":[7,0,1,159,2]
+"classhypro_1_1OrthogonalPolyhedron.html#a1f5c5b7ba5526b2c840bcbd89497e0ee":[7,0,1,159,18]
 };
