@@ -57,16 +57,16 @@ namespace hypro {
         //Compute pi(j) (certificate of feasibility for a(j+1)) by solving Dj
         //1.1 Construct A = (H, extended with lambda_j >= 0)^T
         //NOTE: Since A is the same in every iteration, we construct A once the loop 
-        //NOTEEEEEEEEE: First transpose A, then add lambda constraints. A overall is (d+m) x m 
-        matrix_t<Number> A = matrix_t<Number>::Zero(invRows+invCols,invRows);
+        //First transpose A, then insert lambda constraints
+        matrix_t<Number> A = matrix_t<Number>::Zero(invCols+invRows,invRows);
         A.block(0,0,invCols,invRows) = invTPoly.matrix().transpose();
         A.block(invCols,0,invRows,invRows) = -1*matrix_t<Number>::Identity(invRows,invRows);
         std::cout << "TemplatePolyhedronContext::LIS, A is: \n" << A << std::endl;
 
-        //1.2. Extend nextStrenthenedInv by the same amount of zeros
-        //vector_t<Number> nextStrengthenedInvExtended = vector_t<Number>::Zero(invRows+invCols);
-        //nextStrengthenedInvExtended.block(0,0,invRows,1) = invTPoly.vector();
-        //nextStrengthenedInvExtended.block(invRows,0,invCols);
+        std::vector<carl::Relation> equalRelations(invCols+invRows,carl::Relation::LEQ);
+        for(unsigned i = 0; i < invCols; ++i){
+            equalRelations.at(i) = carl::Relation::EQ;
+        }
 
         //while a(j) != a(j+1)
         while(lastStrengthenedInv != nextStrengthenedInv){
@@ -79,29 +79,25 @@ namespace hypro {
 
 	        	//2.Construct b = (mü(H_j) + H_j')^T, extended with zeros to make sure that the optimumValue only contains non negative entries.
                 //NOOOOTEEEEEEE: b is d+m x 1, since there are m lambdas
-	        	vector_t<Number> b = vector_t<Number>::Zero(invCols+invRows);
-                //assert(b.rows() == A.rows());
-                //std::cout << "invTPoly.matrix().row(rowI): \n" << invTPoly.matrix().row(rowI).transpose() << " lieDerivative(invTPoly.matrix().row(rowI)).first: \n" << lieDerivative(invTPoly.matrix().row(rowI).transpose()).first << std::endl;
-                //vector_t<Number> invTPolyRow = vector_t<Number>(invTPoly.matrix().row(rowI));
-                //std::cout << "invTPolyRow " << invTPolyRow.rows() << "x" << invTPolyRow.cols() << ": \n" << invTPolyRow << std::endl;
-                //vector_t<Number> lieDeriv = vector_t<Number>(lieDerivative(invTPoly.matrix().row(rowI)).first);
-                //std::cout << "lieDeriv " << lieDeriv.rows() << "x" << lieDeriv.cols() << ": \n" << lieDeriv << std::endl;
-                //vector_t<Number> sum = (scalingFactor * invTPolyRow) + lieDeriv;
-                //b.block(0,0,invCols,1) = sum;
+                vector_t<Number> b = vector_t<Number>::Zero(invRows+invCols);
+                assert(b.rows() == A.rows());
                 b.block(0,0,invCols,1) = (scalingFactor * vector_t<Number>(invTPoly.matrix().row(rowI))) + vector_t<Number>(lieDerivative(invTPoly.matrix().row(rowI)).first);
-                std::cout << "TemplatePolyhedronContext::LIS, for rowI: " << rowI << " b is: " << b << std::endl;
+                std::cout << "TemplatePolyhedronContext::LIS, for rowI: " << rowI << " b is: \n" << b << std::endl;
 
 	        	//3.Set A and b as matrix and vector for mOptimizer
 	        	mOptimizer.setMatrix(A);
-	        	//mOptimizer.setVector(b.transpose());
-                mOptimizer.setVector(b);
+	        	mOptimizer.setVector(b);
 	        	mOptimizer.setMaximize(false);
+                mOptimizer.setRelations(equalRelations);
 
 	        	//4.Minimize into direction nextStrengthenedInv - Solution is the optimumValue of minimizeA, 
                 //but only the first invRows coefficients from that. The rest was only needed to make sure that the optimumValue only contains positive entries.
-	        	auto minimizeA = mOptimizer.evaluate(nextStrengthenedInv,true);
+                vector_t<Number> evalDir = nextStrengthenedInv;
+                evalDir(rowI) -= scalingFactor;
+	        	auto minimizeA = mOptimizer.evaluate(evalDir,true);
+                std::cout << "minimizeA: " << minimizeA << std::endl;
 	        	#ifndef NDEBUG
-	        	assert(minimizeA.errorCode == SOLUTION::FEAS);
+	        	//assert(minimizeA.errorCode == SOLUTION::FEAS);
 	        	assert(minimizeA.optimumValue.rows() == invRows);
 	        	for(int i = 0; i < minimizeA.optimumValue.rows(); ++i){
 	        		//make sure all values are greater equal than 0
@@ -109,12 +105,8 @@ namespace hypro {
 	        	}
 	        	#endif
                 std::cout << "TemplatePolyhedronContext::LIS, minimizeA optimumValue is: " << minimizeA.optimumValue.transpose() << std::endl;
-	        	//if(minimizeA.errorCode == SOLUTION::FEAS){
-	        	//	//usually also add constant part of lie derivative h_j here, but since we only have lie derivatives of linear fcts, there is no constant part
-	        	//	minimizeA.supportValue -= scalingFactor * nextStrengthenedInv(rowI); 
-	        	//}
 
-                //5.Save into certificate for later construction of L
+                //6.Save into certificate for later construction of L
 	        	certificate.row(rowI) = minimizeA.optimumValue.transpose();
                 std::cout << "TemplatePolyhedronContext::LIS, certificate is now: \n" << certificate << std::endl;
 
@@ -140,7 +132,8 @@ namespace hypro {
         	//If row j not frozen, then Delta_j^T*y - mü*y_j + h_j <= 0 
         	assert(nextStrengthenedInv.rows() == invRows);
         	for(unsigned i = 0; i < nextStrengthenedInv.rows(); ++i){
-        		if(nextStrengthenedInv(i) >= invTPoly.vector()(i)){
+        		//if(nextStrengthenedInv(i) >= invTPoly.vector()(i)){
+                if(nextStrengthenedInv.dot(certificate.row(i)) - scalingFactor*nextStrengthenedInv(i) > 0){
         			//frozen row - normally, insert y_j = inv_j, but since y_j <= inv_j is already in L, insert y_j >= inv_j aka -y_j <= -inv_j
                     std::cout << "TemplatePolyhedronContext::LIS, frozen row!" << std::endl;
         			vector_t<Number> rowToInsert = vector_t<Number>::Zero(invRows);
@@ -161,6 +154,7 @@ namespace hypro {
         	mOptimizer.setMatrix(L);
         	mOptimizer.setVector(c);
         	mOptimizer.setMaximize(false);
+            mOptimizer.setRelations(std::vector<carl::Relation>(3*invRows, carl::Relation::LEQ));
         	auto minimizeL = mOptimizer.evaluate(vector_t<Number>::Ones(invRows),true);
         	assert(minimizeL.errorCode == SOLUTION::FEAS);
         	#ifndef NDEBUG
@@ -226,11 +220,8 @@ namespace hypro {
             }
         }
         //Evaluate tpoly in directions written in extendedMatrix. 
-        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, extendedMatrix: \n" << extendedMatrix << std::endl;
-        //TemplatePolyhedron<Number> overapprox = tpoly.overapproximate(extendedMatrix);
         TemplatePolyhedronT<Number,hypro::Converter<Number>,Setting> overapprox = tpoly.overapproximate(extendedMatrix);
         overapprox.reduceRepresentation();
-        //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, overapprox after reduceRepresentation: \n" << overapprox << std::endl;
         return overapprox;
     }
 
@@ -262,11 +253,6 @@ namespace hypro {
                 extendedVector(tpoly.vector().rows()) = -tpoly.vector()(i);
 
                 //Add constraint "lie derivative of row_i > 0"
-                //vector_t<Number> derivative(tpoly.matrix().cols()+1);
-                //derivative.block(0,0,tpoly.matrix().cols(),1) = tpoly.matrix().row(i).transpose();
-                //derivative(derivative.rows()-1) = 0;
-                //derivative = lieDerivative(derivative);
-                //extendedMatrix.row(tpoly.matrix().rows()+1) = -derivative.block(0,0,tpoly.matrix().cols(),1).transpose();
                 extendedMatrix.row(tpoly.matrix().rows()+1) = -lieDerivative(tpoly.matrix().row(i)).first.transpose();
 
                 //If unfeasible, then not a positive invariant

@@ -75,6 +75,7 @@ class HybridAutomaton {
      * @param[in] 	initialStates 	Map of initial states
      */
 	//HybridAutomaton(const locationVector& locs, const transitionVector& trans, const locationConditionMap& initialStates);
+	//TOOOOOODOOOOOOO: This is missing
 	HybridAutomaton( const locationVector& locs, const locationConditionMap& initialStates );
 
 	/**
