@@ -31,7 +31,7 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	std::size_t cnt = 0;
 	std::string filename = mSettings.filename + "_pdf.plt";
-	while ( file_exists( filename ) ) {
+	while ( !mSettings.overwriteFiles && file_exists( filename ) ) {
 		std::stringstream ss;
 		ss << mSettings.filename << "_" << cnt << "_pdf.plt";
 		filename = ss.str();
