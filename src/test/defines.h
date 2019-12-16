@@ -49,7 +49,9 @@ TYPED_TEST_CASE(Benchmark, allTypes);
 
 // Core
 TYPED_TEST_CASE(EigenAdaptionsTest, allTypes);
+*/
 TYPED_TEST_CASE(OptimizerTest, allTypes);
+/*
 TYPED_TEST_CASE(AntlrParserTest, allTypes);
 //TYPED_TEST_CASE(AntlrParserCIFTest, allTypes);
 

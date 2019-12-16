@@ -418,6 +418,12 @@ void Optimizer<Number>::updateConstraints() const {
 	if ( !glpCtx.mConstraintsSet ) {
 		//std::cout << "!mConstraintsSet" << std::endl;
 
+		if ( maximize ) {
+			glp_set_obj_dir( glpCtx.lp, GLP_MAX );
+		} else {
+			glp_set_obj_dir( glpCtx.lp, GLP_MIN );
+		}
+
 		if ( alreadyInitialized ) {  // clean up old setup.
 			//std::cout << "alreadyInitialized - Cleanup" << std::endl;
 			glpCtx.deleteArrays();
@@ -426,13 +432,15 @@ void Optimizer<Number>::updateConstraints() const {
 
 			glpCtx.deleteLPInstance();
 			glpCtx.createLPInstance();
-
+/*
 			if ( maximize ) {
+				std::cout << "set max" << std::endl;
 				glp_set_obj_dir( glpCtx.lp, GLP_MAX );
 			} else {
+				std::cout << "set min" << std::endl;
 				glp_set_obj_dir( glpCtx.lp, GLP_MIN );
 			}
-
+*/
 #ifdef HYPRO_USE_SMTRAT
 #ifndef RECREATE_SOLVER
 			mSmtratSolver.pop();

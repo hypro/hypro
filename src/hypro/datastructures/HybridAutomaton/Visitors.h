@@ -209,6 +209,14 @@ class genericTypeVisitor {
 	}
 };
 
+class genericSettingVisitor {
+  public:
+	template <typename A>
+	inline A::Settings operator()( const A& ) const {
+		return A::Settings();
+	}
+};
+
 template <typename Number>
 class genericVerticesVisitor {
   public:
