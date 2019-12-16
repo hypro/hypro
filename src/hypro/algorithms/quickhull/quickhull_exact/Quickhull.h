@@ -11,8 +11,8 @@ namespace hypro {
      * Represents an exact quickhull computation on a set of input vertices.
      * @tparam Number The Number type to be used.
      */
-    template<typename Number>
-    class Quickhull<Number, EnableIfExact<Number>> {
+    template<typename Number, bool Euclidian>
+    class Quickhull<Number, Euclidian, EnableIfExact<Number>> {
     public:
         // Nested classes
         struct Facet;
@@ -31,7 +31,7 @@ namespace hypro {
 
     private:
         //Inputs
-        pointVector_t& inputPoints;
+        pointVector_t& points;
         dimension_t dimension{};
 
         //Members
@@ -57,7 +57,7 @@ namespace hypro {
          **/
         bool constructInitialFacet();
 
-        std::tuple<Number, point_ind_t> findFurthestPoint(Facet& facet);
+        std::tuple<bool, point_ind_t> findFurthestPoint(Facet& facet);
 
         void findConeNeighbors(facet_ind_t facet_i);
 
@@ -72,6 +72,8 @@ namespace hypro {
         void processPoints();
 
         void constructLowerDimensional();
+
+        dimension_t pointSize();
     };
 }
 

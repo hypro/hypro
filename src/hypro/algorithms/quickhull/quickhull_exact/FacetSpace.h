@@ -1,9 +1,4 @@
-//
-// Created by leander.behr on 11/11/19.
-//
-
-#ifndef HYPRO_FACETSPACE_H
-#define HYPRO_FACETSPACE_H
+#pragma once
 
 #include "../Quickhull.h"
 #include "util/logging/Logger.h"
@@ -11,8 +6,8 @@
 
 namespace hypro {
 
-    template<typename Number>
-    class ExactQuickhull<Number>::FacetSpace {
+    template<typename Number, bool Euclidian>
+    class ExactQuickhull<Number, Euclidian>::FacetSpace {
         pointVector_t& points;
         dimension_t dimension;
 
@@ -90,5 +85,3 @@ namespace hypro {
 
 
 #include "FacetSpace.tpp"
-
-#endif //HYPRO_FACETSPACE_H

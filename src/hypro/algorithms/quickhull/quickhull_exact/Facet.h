@@ -1,13 +1,8 @@
-//
-// Created by leander.behr on 11/11/19.
-//
-
-#ifndef HYPRO_FACET_H
-#define HYPRO_FACET_H
+#pragma once
 
 namespace hypro {
-    template<typename Number>
-    struct ExactQuickhull<Number>::Facet {
+    template<typename Number, bool Euclidian>
+    struct ExactQuickhull<Number, Euclidian>::Facet {
         Facet() = default;
 
         //modifiers
@@ -27,10 +22,8 @@ namespace hypro {
         point_ind_t furthestPoint;
         Number furthestPointDistance = Number(0);
         Number mOffset = Number(1000);
+
     };
 }
 
-
 #include "Facet.tpp"
-
-#endif //HYPRO_FACET_H

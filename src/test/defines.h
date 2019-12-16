@@ -43,6 +43,7 @@ typedef ::testing::Types<
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
 TYPED_TEST_CASE(QuickhullTest, allTypes);
+TYPED_TEST_CASE(QuickhullDualTest, allTypes);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, allTypes);

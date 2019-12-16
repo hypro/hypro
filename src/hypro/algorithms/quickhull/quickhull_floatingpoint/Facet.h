@@ -1,9 +1,4 @@
-//
-// Created by leander.behr on 11/11/19.
-//
-
-#ifndef HYPRO_FACET_H
-#define HYPRO_FACET_H
+#pragma once
 
 #include "Quickhull.h"
 
@@ -38,5 +33,3 @@ namespace hypro {
 
 
 #include "Facet.tpp"
-
-#endif //HYPRO_FACET_H

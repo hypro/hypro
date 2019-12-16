@@ -3,16 +3,16 @@
 #include "number_traits.h"
 
 namespace hypro {
-    template<typename Number, typename Enable = void>
+    template<typename Number, bool Euclidian = true, typename Enable = void>
     class Quickhull;
 
-    template<typename Number>
-    using ExactQuickhull = Quickhull<Number, EnableIfExact<Number>>;
+    template<typename Number, bool Euclidian = true>
+    using ExactQuickhull = Quickhull<Number, Euclidian, EnableIfExact<Number>>;
 
-    template<typename Number>
-    using FloatQuickhull = Quickhull<Number, EnableIfFloatingpoint<Number>>;
+    template<typename Number, bool Euclidian = true>
+    using FloatQuickhull = Quickhull<Number, Euclidian, EnableIfFloatingpoint<Number>>;
 }
 
 
 #include "quickhull_exact/Quickhull.h"
-#include "quickhull_floatingpoint/Quickhull.h"
+// #include "quickhull_floatingpoint/Quickhull.h"

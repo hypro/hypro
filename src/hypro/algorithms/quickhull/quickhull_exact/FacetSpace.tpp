@@ -7,8 +7,8 @@
 namespace hypro {
 
     //facet construction
-    template<typename Number>
-    typename ExactQuickhull<Number>::Facet& ExactQuickhull<Number>::FacetSpace::insertNew() {
+    template<typename Number, bool Euclidian>
+    typename ExactQuickhull<Number, Euclidian>::Facet& ExactQuickhull<Number, Euclidian>::FacetSpace::insertNew() {
         facets.emplace_back();
 
         facets.back().mVertices = std::vector<point_ind_t>(dimension);
@@ -19,16 +19,16 @@ namespace hypro {
         return facets.back();
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::insertTrivialFacet(const Number scalar) {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::insertTrivialFacet(const Number scalar) {
         facets.emplace_back();
         facets.back().mOffset = scalar;
-        facets.back().mNormal = point_t(1);
+        facets.back().mNormal = point_t{1};
         facets.back().mNormal[0] = 1;
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
         Facet& facet = facets.emplace_back();
         facet.mOffset = other.mOffset;
         facet.mNormal = qhvector_t(newDimension);
@@ -43,8 +43,8 @@ namespace hypro {
         }
     }
 
-    template<typename Number>
-    size_t ExactQuickhull<Number>::FacetSpace::copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt) {
+    template<typename Number, bool Euclidian>
+    size_t ExactQuickhull<Number, Euclidian>::FacetSpace::copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt) {
         //Doing some work here to keep the vertices sorted
         bool inserted = false;
         size_t insertedPosition = dimension - 1;
@@ -72,8 +72,8 @@ namespace hypro {
         return insertedPosition;
     }
 
-    template<typename Number>
-    size_t ExactQuickhull<Number>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, point_t const& contained) {
+    template<typename Number, bool Euclidian>
+    size_t ExactQuickhull<Number, Euclidian>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, point_t const& contained) {
         insertNew();
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
@@ -82,8 +82,8 @@ namespace hypro {
     }
 
     //facet modification
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::computeNormal(Facet& facet) {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::computeNormal(Facet& facet) {
         ///TODO Allocate space for matrix once and reuse it
         ///TODO Could also use __restrict__ to get memcpy here (probably).
         matrix_t<Number> matrix(dimension, dimension + 1);
@@ -115,16 +115,16 @@ namespace hypro {
         facet.mOffset = -result[dimension];
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::validateFacet(Facet& facet, point_t const& contained) {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet, point_t const& contained) {
         facet.setOrientation(contained);
 #ifndef NDEBUG
         containsVertices(facet);
 #endif
     }
 
-    template<typename Number>
-    bool ExactQuickhull<Number>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
+    template<typename Number, bool Euclidian>
+    bool ExactQuickhull<Number, Euclidian>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
         Number distance = facet.distance(points[point_i]);
 
         if(distance > Number(0)) {
@@ -139,8 +139,8 @@ namespace hypro {
         return false;
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) {
         Facet& facet = facets[facet_i];
         Facet& other = facets[other_i];
 
@@ -182,14 +182,14 @@ namespace hypro {
     //none yet
 
     //vector operations
-    template<typename Number>
+    template<typename Number, bool Euclidian>
     template<typename UnaryPredicate>
-    typename ExactQuickhull<Number>::facet_ind_t ExactQuickhull<Number>::FacetSpace::findFacet(UnaryPredicate predicate) {
+    typename ExactQuickhull<Number, Euclidian>::facet_ind_t ExactQuickhull<Number, Euclidian>::FacetSpace::findFacet(UnaryPredicate predicate) {
         return std::distance(facets.begin(), std::find_if(facets.begin(), facets.end(), predicate));
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::removeCoplanarFacets() {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::removeCoplanarFacets() {
         for(facet_ind_t facet_i = 0; facet_i < facets.size(); ++facet_i) {
             facets.erase(std::remove_if(facets.begin() + facet_i + 1, facets.end(), [this, facet_i](Facet& facet) {
                 return facet.mNormal == facets[facet_i].mNormal;
@@ -197,8 +197,8 @@ namespace hypro {
         }
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::compressVector() {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::compressVector() {
         size_t newSize = facets.size() - deletedPositions.size();
 
         assert(newSize > 0);
@@ -218,20 +218,20 @@ namespace hypro {
         deletedPositions.clear();
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::endModificationPhase() {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::endModificationPhase() {
         firstInserted = facets.size();
         firstDeleted = deletedPositions.size();
     }
 
-    template<typename Number>
-    void ExactQuickhull<Number>::FacetSpace::deleteFacet(facet_ind_t facet_i) {
+    template<typename Number, bool Euclidian>
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::deleteFacet(facet_ind_t facet_i) {
         deletedPositions.push_back(facet_i);
     }
 
 #ifndef NDEBUG
-        template<typename Number>
-        std::string ExactQuickhull<Number>::FacetSpace::printAll() {
+        template<typename Number, bool Euclidian>
+        std::string ExactQuickhull<Number, Euclidian>::FacetSpace::printAll() {
             std::stringstream out;
             for(auto& facet : facets) {
                 out << printFacet(facet);
@@ -239,8 +239,8 @@ namespace hypro {
             return out.str();
         }
 
-        template<typename Number>
-        std::string ExactQuickhull<Number>::FacetSpace::printFacet(Facet const& facet) {
+        template<typename Number, bool Euclidian>
+        std::string ExactQuickhull<Number, Euclidian>::FacetSpace::printFacet(Facet const& facet) {
             std::stringstream out;
 
             char var = 'y';
@@ -256,14 +256,14 @@ namespace hypro {
             return out.str();
         }
 
-        template<typename Number>
-        void ExactQuickhull<Number>::FacetSpace::containsVertices(Facet& facet) {
+        template<typename Number, bool Euclidian>
+        void ExactQuickhull<Number, Euclidian>::FacetSpace::containsVertices(Facet& facet) {
             bitset_t visited(facets.size());
             containsVertices(facet, facet, visited);
         }
 
-        template<typename Number>
-        void ExactQuickhull<Number>::FacetSpace::containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited) {
+        template<typename Number, bool Euclidian>
+        void ExactQuickhull<Number, Euclidian>::FacetSpace::containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited) {
             for(point_ind_t point_i : currentFacet.mVertices) {
                 if(facet.visible(points[point_i])) {
                     TRACE("quickhull", "NON CONTAINMENT" << std::endl << points[point_i] << std::endl << "Facet:" << std::endl << printFacet(facet));
@@ -280,8 +280,8 @@ namespace hypro {
             }
         }
 
-        template<typename Number>
-        void ExactQuickhull<Number>::FacetSpace::containsAllPoints(Facet& facet, bool inverted) {
+        template<typename Number, bool Euclidian>
+        void ExactQuickhull<Number, Euclidian>::FacetSpace::containsAllPoints(Facet& facet, bool inverted) {
             bitset_t checked(points.size());
 
             for(Facet& facet : facets) {

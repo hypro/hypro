@@ -1,9 +1,4 @@
-//
-// Created by leander.behr on 11/11/19.
-//
-
-#ifndef HYPRO_FACETSPACE_H
-#define HYPRO_FACETSPACE_H
+#pragma once
 
 #include "Quickhull.h"
 #include "../ScopedRoundingMode.h"
@@ -87,5 +82,3 @@ namespace hypro {
 
 
 #include "FacetSpace.tpp"
-
-#endif //HYPRO_FACETSPACE_H
