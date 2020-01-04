@@ -4,8 +4,14 @@
 
 namespace hypro {
 
+    template<typename State>
+    void TPolyFirstSegmentHandler<State>::setInvariant(const vector_t<typename State::NumberType>& inv){
+        assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
+        mRelaxedInvariant = inv;
+    }
+
 	template<typename State>
-    vector_t<typename State::NumberType> TPolyFirstSegmentHandler<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
+    vector_t<typename State::NumberType> TPolyFirstSegmentHandler<State>::gradientOfLinearFct(const vector_t<Number>& linearFct) const {
         assert((unsigned)linearFct.rows() == this->mState->getDimension() + 1);
         vector_t<Number> gradient = linearFct;
         gradient(gradient.rows()-1) = 0;
@@ -13,14 +19,14 @@ namespace hypro {
     }
 
     template<typename State>
-    vector_t<typename State::NumberType> TPolyFirstSegmentHandler<State>::lieDerivative(const vector_t<Number>& dir){
+    vector_t<typename State::NumberType> TPolyFirstSegmentHandler<State>::lieDerivative(const vector_t<Number>& dir) const {
         assert(dir.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
         assert(this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().cols());
         return this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose() * gradientOfLinearFct(dir);
     }
 
     template<typename State>
-    tNumber TPolyFirstSegmentHandler<State>::maxValueAtRoots(const carl::UnivariatePolynomial<tNumber>& polynom, const carl::Interval<tNumber>& interval){
+    tNumber TPolyFirstSegmentHandler<State>::maxValueAtRoots(const carl::UnivariatePolynomial<tNumber>& polynom, const carl::Interval<tNumber>& interval) const {
         //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots" << std::endl;
         tNumber max(-1e10);
         tNumber valueAtRoot = 0;
@@ -52,6 +58,7 @@ namespace hypro {
 	template<typename State>
 	void TPolyFirstSegmentHandler<State>::handle(){
 
+        //TODO: get tpoly but do not convert it to TPoly<Number>
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
         auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
         vector_t<Number> newVec(tpoly.vector().rows());
@@ -97,10 +104,21 @@ namespace hypro {
                     if(this->mState->getLocation()->getInvariant().empty()){
                         evalRes = EvaluationResult<Number>(SOLUTION::INFTY);
                     } else {
-                        assert(this->mState->getLocation()->getInvariant().getMatrix().rows() == this->mState->getLocation()->getInvariant().getVector().rows());
-                        assert((unsigned)this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
-                        TemplatePolyhedron<Number> invTPoly(this->mState->getLocation()->getInvariant().getMatrix(), this->mState->getLocation()->getInvariant().getVector());
-                        evalRes = invTPoly.evaluate(derivVarCoeffs / factorial, true);    
+                        auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
+                        auto invVec = this->mState->getLocation()->getInvariant().getVector();
+                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
+                            //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
+                            //Using mRelaxedInvariant will lead to tighter bounds
+                            assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
+                            assert(derivVarCoeffs.rows() == tpoly.matrix().cols());
+                            TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), mRelaxedInvariant);
+                            evalRes = invTPoly.evaluate(derivVarCoeffs / factorial, true);
+                        } else {
+                            assert(invMat.rows() == invVec.rows());
+                            assert((unsigned)invMat.cols() == this->mState->getDimension());
+                            TemplatePolyhedron<Number> invTPoly(invMat, invVec);
+                            evalRes = invTPoly.evaluate(derivVarCoeffs / factorial, true);    
+                        }   
                     }
                 }
 

@@ -38,7 +38,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
   	//Used for minimization of various functions during location invariant strengthening
   	Optimizer<Number> mOptimizer;
-  	//The result of the location invariant strengthening. Is passed to TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler.
+	//The result of the location invariant strengthening. Is passed to TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler.
   	vector_t<Number> mRelaxedInvariant;
 
   public:

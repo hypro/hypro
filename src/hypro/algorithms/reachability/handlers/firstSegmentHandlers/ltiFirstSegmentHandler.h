@@ -1,6 +1,7 @@
 #pragma once
 #include "../../util.h"
 #include "../IHandler.h"
+#include "utility.h"
 
 namespace hypro {
 template <typename State>

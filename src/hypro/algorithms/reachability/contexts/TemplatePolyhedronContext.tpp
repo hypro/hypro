@@ -289,15 +289,16 @@ namespace hypro {
         assert(this->mComputationState.getSetType() == representation_name::polytope_t);
         for(std::size_t index = 0; index < this->mComputationState.getNumberSets(); ++index){
             //TODO: Somehow get tpoly without overriding settings
-            auto tpolySetting = std::visit(genericSettingVisitor<decltype(this->mComputationState.getSet(index))>(), this->mComputationState.getSet(index));
-            using TPolyType = TemplatePolyhedron<typename State::NumberType, hypro::Converter<Number>, decltype(tpolySetting)>
-            auto tpoly = std::visit(genericConvertAndGetVisitor<TPolyType>(), this->mComputationState.getSet(index));
-            if(tpolySetting::TEMPLATE_SHAPE != TEMPLATE_CONTENT::OCTAGON){
+            //auto tpolySetting = std::visit(genericSettingVisitor<decltype(this->mComputationState.getSet(index))>(), this->mComputationState.getSet(index));
+            //using TPolyType = TemplatePolyhedron<typename State::NumberType, hypro::Converter<Number>, decltype(tpolySetting)>
+            //auto tpoly = std::visit(genericConvertAndGetVisitor<TPolyType>(), this->mComputationState.getSet(index));
+            auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<Number>>(), this->mComputationState.getSet(index));
+            if(tpoly.getSettings().TEMPLATE_SHAPE != TEMPLATE_CONTENT::OCTAGON){
             	tpoly = createTemplateContent(tpoly);
-                this->mComputationState.setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TPolyType>(tpoly), this->mComputationState.getSet(index)),index);     
+                this->mComputationState.setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mComputationState.getSet(index)),index);     
             } else {
                 std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, OCTAGON setting" << std::endl;
-                TPolyType octagon(this->mComputationState.getDimension(), 8);
+                TemplatePolyhedron<Number> octagon(this->mComputationState.getDimension(), 8);
                 auto evalInOctagonDirs = tpoly.multiEvaluate(octagon.matrix());
                 vector_t<Number> evalRes(evalInOctagonDirs.size());
                 for(int i = 0; i < evalRes.rows(); ++i){
@@ -305,33 +306,36 @@ namespace hypro {
                     evalRes(i) = evalInOctagonDirs[i].supportValue;
                 }
                 octagon.setVector(evalRes);
-                this->mComputationState.setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TPolyType>(octagon), this->mComputationState.getSet(index)),index);
+                this->mComputationState.setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(octagon), this->mComputationState.getSet(index)),index);
             }
 
             //Call Location Invariant Strengthening on current invariants
-	        if(tpolySetting::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV){
+	        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING 
+               && tpoly.getSettings().TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV){
                 std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, check for locationInvariantStrengthening" << std::endl;
-	        	TPolyType invTPoly(this->mComputationState.getLocation()->getInvariant().getMatrix(), this->mComputationState.getLocation()->getInvariant().getVector());
+	        	TemplatePolyhedron<Number> invTPoly(this->mComputationState.getLocation()->getInvariant().getMatrix(), this->mComputationState.getLocation()->getInvariant().getVector());
                 std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, invTPoly before overapprox: " << invTPoly << std::endl;
                 if(invTPoly.isBounded() && !invTPoly.empty()){
                     std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, invTPoly was bounded!" << std::endl;
                     invTPoly = invTPoly.overapproximate(tpoly.matrix());
                     std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, overapproximate inv with tpoly dirs: " << invTPoly << std::endl;
-                    auto tmp = isPositiveInvariant(tpoly, invTPoly.vector());
-                    std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, is tpoly positive invariant? " << tmp << std::endl;
-                    //if(isPositiveInvariant(tpoly, invTPoly.vector())){
-                    if(tmp){
+                    //auto tmp = isPositiveInvariant(tpoly, invTPoly.vector());
+                    //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, is tpoly positive invariant? " << tmp << std::endl;
+                    //if(tmp){
+                    if(isPositiveInvariant(tpoly, invTPoly.vector())){
                         std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, use locationInvariantStrengthening" << std::endl;
                         //mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.matrix().rows());
                         mRelaxedInvariant = locationInvariantStrengthening(invTPoly, tpoly.vector());
                         std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, mRelaxedInvariant is: " << mRelaxedInvariant << std::endl;
                         std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, end beforehand" << std::endl;
-                        exit(0);
-                        //TOOOOOOOOODOOOOOOOOO: What to do with that?
-                        //Set result as invariant TPoly to use in TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler
+                    } else {
+                        mRelaxedInvariant = invTPoly.vector();
                     }    
+                } else {
+                    //mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.vector().rows());
+                    //default to dimension size such that FSHandler can compare to that
+                    mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.matrix().cols());
                 }
-                
 	        }
         }        
         //std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;        
@@ -346,7 +350,9 @@ namespace hypro {
         if(TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO){
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
                 std::cout << "TemplatePolyhedronContext::firstSegment, use USE_ALTERNATIVE_REACH_ALGO!" << std::endl;
-                this->mFirstSegmentHandlers.at(i)->handle();
+                //this->mFirstSegmentHandlers.at(i)->handle();
+                static_cast<TPolyFirstSegmentHandler<State>*>(this->mFirstSegmentHandlers.at(i))->setInvariant(mRelaxedInvariant);
+                static_cast<TPolyFirstSegmentHandler<State>*>(this->mFirstSegmentHandlers.at(i))->handle();
             }
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){

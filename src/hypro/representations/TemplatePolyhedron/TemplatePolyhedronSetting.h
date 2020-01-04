@@ -23,6 +23,8 @@ namespace hypro {
 		static constexpr unsigned DERIVATIVE_ORDER = 5;
 		//If the alternative reachability algorithm is used, a monotonicity check is conducted before the expensive root enumeration, if this option is false.
 		static constexpr bool DIRECTLY_COMPUTE_ROOTS = false;
+		//If the alternative reachability algorithm is used, say whether location invariant strengthening should also be used
+		static constexpr bool USE_LOCATION_INVARIANT_STRENGTHENING = true;
 	};
 
 	struct TemplatePolyhedronDifferent {

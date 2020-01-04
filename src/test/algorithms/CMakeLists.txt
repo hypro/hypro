@@ -13,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       #VertexEnumerationTest.cpp
       #UtilityTest.cpp
       TemplatePolyhedronContextTest.cpp
+      FirstSegmentHandlersTest.cpp
     )
 
   SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)

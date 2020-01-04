@@ -2,14 +2,14 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	# reduce compiler optimization for tests
 	set(core_test_sources
-		#EigenAdaptionsTest.cpp
+		EigenAdaptionsTest.cpp
 		#ifdef LOGGING_HYPRO
 		#LoggerTest.cpp
 		#endif
 		OptimizerTest.cpp
-		##ParserTest.cpp
-		#PlotterTest.cpp
-		#UtilityTest.cpp
+		#ParserTest.cpp
+		PlotterTest.cpp
+		UtilityTest.cpp
 	)
 
 	SET_SOURCE_FILES_PROPERTIES(${core_test_sources} PROPERTIES COMPILE_FLAGS -O0)
@@ -39,10 +39,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	# Parser Unit Tests
 	################################
 
-	#add_executable(runParserTests
-	#	AntlrParserTest.cpp
-	#	#AntlrParserCIFTest.cpp
-	#)
+	add_executable(runParserTests
+		AntlrParserTest.cpp
+		#AntlrParserCIFTest.cpp
+	)
 	#add_dependencies(runParserTests resources antlr4cpp)
 	#target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR})
 	#target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${GTEST_LIBRARIES})
