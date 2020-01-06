@@ -2,6 +2,12 @@
 
 namespace hypro {
 
+    template<typename State>
+    void TPolyTimeEvolutionHandler<State>::setInvariant(const vector_t<typename State::NumberType>& inv){
+        assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
+        mRelaxedInvariant = inv;
+    }
+
 	template<typename State>
     vector_t<typename State::NumberType> TPolyTimeEvolutionHandler<State>::gradientOfLinearFct(const vector_t<Number>& linearFct){
         assert((unsigned)linearFct.rows() == this->mState->getDimension() + 1);
@@ -65,10 +71,20 @@ namespace hypro {
             if(this->mState->getLocation()->getInvariant().empty()){
                 evalR = EvaluationResult<Number>(SOLUTION::INFTY);
             } else {
-                assert(this->mState->getLocation()->getInvariant().getMatrix().rows() == this->mState->getLocation()->getInvariant().getVector().rows());
-                assert((unsigned) this->mState->getLocation()->getInvariant().getMatrix().cols() == this->mState->getDimension());
-                TemplatePolyhedron<Number> invTPoly(this->mState->getLocation()->getInvariant().getMatrix(), this->mState->getLocation()->getInvariant().getVector());
-                evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+                auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
+                auto invVec = this->mState->getLocation()->getInvariant().getVector();
+                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
+                    //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
+                    //Using mRelaxedInvariant will lead to tighter bounds
+                    assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
+                    TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), mRelaxedInvariant);
+                    evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+                } else {
+                    assert(invMat.rows() == invVec.rows());
+                    assert((unsigned)invMat.cols() == this->mState->getDimension());
+                    TemplatePolyhedron<Number> invTPoly(invMat, invVec);
+                    evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+                }   
             }
             
             //Set value in coeff vec

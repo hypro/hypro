@@ -20,11 +20,15 @@ namespace hypro {
 
 	  	//Inherits members from ltiTimeEvolutionHandler
 
+		//Invariant gotten from Location Invariant Strengthening
+		vector_t<Number> mRelaxedInvariant;
+
 	  public:
 
 		TPolyTimeEvolutionHandler() = delete;
 		TPolyTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo, vector_t<Number> translation)
 			: ltiTimeEvolutionHandler<State>(state, index, timeStep, trafo, translation)
+			, mRelaxedInvariant(vector_t<Number>::Zero(state->getDimension()))
 		{}
 		~TPolyTimeEvolutionHandler(){}
 
@@ -33,6 +37,8 @@ namespace hypro {
 		const char* handlerName() { return "TPolyTimeEvolutionHandler"; }
 		bool getMarkedForDelete() { return false; };
 		void setMarkedForDelete(bool ) { /*no op*/ };
+		void setInvariant(const vector_t<Number>& inv);
+		vector_t<Number> getRelaxedInvariant() const { return mRelaxedInvariant; }
 
 	  private:
 

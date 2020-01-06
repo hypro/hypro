@@ -60,6 +60,9 @@ namespace hypro {
 
         //TODO: get tpoly but do not convert it to TPoly<Number>
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
+        //auto tpolySetting = std::visit(genericSettingVisitor(), this->mState->getSet(this->mIndex));
+        //using TPolyType = TemplatePolyhedronT<typename State::NumberType, hypro::Converter<Number>, decltype(tpolySetting)>;
+        //auto tpoly = std::visit(genericConvertAndGetVisitor<TPolyType>(), this->mState->getSet(this->mIndex));
         auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
         vector_t<Number> newVec(tpoly.vector().rows());
 		
@@ -79,6 +82,7 @@ namespace hypro {
             EvaluationResult<Number> evalRes;
 			
 			//For first m coefficients in polynom:
+            //for(int coeffI = 1; (unsigned)coeffI < TPolyType::Settings::DERIVATIVE_ORDER; ++coeffI){ 
 			for(int coeffI = 1; (unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
             //for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
 
@@ -90,6 +94,7 @@ namespace hypro {
 				//if index < m+1: Solve LP over tpoly to evaluate into derivative direction
 				//if index == m+1: Solve LP over TPoly(matrix(),invariants) to evaluate into derivative direction (remainder term only bounded by invariants)
                 if((unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER - 1){
+                //if((unsigned)coeffI < TPolyType::Settings::DERIVATIVE_ORDER - 1){
                 //if(coeffI < tpoly.matrix().rows()){
                     if(derivVarCoeffs == vector_t<Number>::Zero(derivVarCoeffs.rows())){
                         evalRes = EvaluationResult<Number>(derivative(derivative.rows()-1), SOLUTION::FEAS);
@@ -124,6 +129,7 @@ namespace hypro {
 
                 //Save resulting value as coeff in polynomCoeffs
                 if(evalRes.errorCode == SOLUTION::FEAS){
+                    //if(TPolyType::Settings::DIRECTLY_COMPUTE_ROOTS){
                     if(TemplatePolyhedron<Number>::Settings::DIRECTLY_COMPUTE_ROOTS){
                         polynomCoeffs.emplace_back(carl::convert<Number,tNumber>(evalRes.supportValue));
                     } else {
@@ -134,6 +140,7 @@ namespace hypro {
             }
             
             //Get maximum value of polynom in time interval [0,delta] save in new coeff vec
+            //if(TPolyType::Settings::DIRECTLY_COMPUTE_ROOTS){
             if(TemplatePolyhedron<Number>::Settings::DIRECTLY_COMPUTE_ROOTS){
                 //Compute derivative of polynom
                 carl::Variable var = carl::freshRealVariable("t");
@@ -217,6 +224,7 @@ namespace hypro {
         
         //Set mComputationState vector to the new coeff vec
 		tpoly.setVector(newVec);
+        //this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TPolyType>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
 		this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
         
         //Set flow for further computations

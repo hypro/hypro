@@ -1,4 +1,4 @@
-#include "TemplatePolyhedronContext.h"  	
+#include "TemplatePolyhedronContext.h"
 
 namespace hypro {
 
@@ -371,7 +371,9 @@ namespace hypro {
         if(TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO){
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
                 //std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use USE_ALTERNATIVE_REACH_ALGO!" << std::endl;
-                this->mContinuousEvolutionHandlers.at(i)->handle();
+                //this->mContinuousEvolutionHandlers.at(i)->handle();
+                static_cast<TPolyTimeEvolutionHandler<State>*>(this->mContinuousEvolutionHandlers.at(i))->setInvariant(mRelaxedInvariant);
+                static_cast<TPolyTimeEvolutionHandler<State>*>(this->mContinuousEvolutionHandlers.at(i))->handle();
             }
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){

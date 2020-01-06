@@ -208,15 +208,53 @@ class genericTypeVisitor {
 		return A::type();
 	}
 };
+
+/*
+template <typename T>
+class genericSettingVisitor {
+  private:
+	T ext;
+  public: 
+	genericSettingVisitor() = delete;
+	genericSettingVisitor( const T& shape ) : ext(shape) {}
+	template <typename A>
+	inline typename decltype(ext.getSettings()) operator()(const A&) const {
+		return ext.getSettings();
+	}
+};
+*/
 /*
 class genericSettingVisitor {
   public:
 	template <typename A>
-	inline typename A::Settings operator()( const A& ) const {
-		return typename A::Settings();
+	inline typename A::Settings operator()( const A& lhs) const {
+		//auto tmp3 = std::visit([](decltype(obj) obj) -> decltype(obj.getSettings()) { return obj.getSettings(); }, bVar3);
+		return lhs.getSettings();
+	}
+	template <typename A, typename B>
+	inline B operator()( const A& lhs ) const {
+		return 
 	}
 };
 */
+
+//class genericGetVisitor {
+//  protected:
+//  public:
+//	template <typename B>
+//	inline B operator()( const B& in ) const {
+//		return in;
+//	}
+//};
+
+//template<typename A>
+//typename auto settingVisitor(const A& variante){
+//	return std::visit([](const A& obj){ return obj.getSettings(); }, variante);
+//}
+
+//template<typename Number, typename Type, typename Setting>
+//typename auto settingVisitor(const std::variant<Type<Number,Converter<Number>,Setting>& v)
+
 template <typename Number>
 class genericVerticesVisitor {
   public:
