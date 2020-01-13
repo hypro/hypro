@@ -25,11 +25,7 @@ bool exactContains(typename qh<Euclidian>::Facet const& facet, typename qh<Eucli
     if constexpr(Euclidian) {
         return normal.dot(point) - offset <= 0;
     } else {
-            if(point[point.rows() - 1] == 0) {
-                return point.head(point.rows() - 1).dot(normal) - offset <= 0;
-            } else {
-                return point.head(point.rows() - 1).dot(normal) / point[point.rows() - 1] - offset <= 0;
-            }
+        return point.head(point.rows() - 1).dot(normal) - point[point.rows() - 1] * offset <= 0;
     }
 }
 
@@ -85,7 +81,7 @@ TEST_F(QuickhullDualTest, Specific) {
 }
 
 TEST_F(QuickhullDualTest, RandomVertices) {
-    size_t const N = 10;
+    size_t const N = 20;
     size_t const D = 6;
 
     srand(42);
@@ -93,11 +89,15 @@ TEST_F(QuickhullDualTest, RandomVertices) {
     Quickhull<number_t, true>::pointVector_t input;
 
     for (size_t i = 0; i < N; ++i) {
-        // input.emplace_back(vector_t<number_t>::Random(D));
-        input.emplace_back(D);
+        input.emplace_back(vector_t<number_t>::Random(D));
         for(size_t d = 0; d < D; ++d) {
-            input.back()[d] = rand() % 200;
+            input.back()[d] = carl::abs(input.back()[d]);
         }
+        // input.emplace_back(D);
+        // for(size_t d = 0; d < D; ++d) {
+        //     input.back()[d] = rand() % 200;
+        // }
+        
     }
 
     std::stringstream str;

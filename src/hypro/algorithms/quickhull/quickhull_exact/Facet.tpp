@@ -33,12 +33,7 @@ namespace hypro {
             return point.dot(mNormal) - mOffset;
         } else {
             Number dotProd = point.head(point.rows() - 1).dot(mNormal) - point[point.rows() - 1] * mOffset;
-            
-            if(point[point.rows() - 1] == 0) {
-                return dotProd;
-            } else {
-                return dotProd / point[point.rows() - 1];
-            }
+            return dotProd;
         }
     }
 
