@@ -150,7 +150,6 @@ namespace hypro {
 
 	//////// GeometricObject Interface ////////
 
-	//Copy from HPoly
 	template<typename Number, typename Converter, typename Setting>
 	bool TemplatePolyhedronT<Number,Converter,Setting>::empty() const {
 		
@@ -176,9 +175,9 @@ namespace hypro {
 		if(allNegative) return true;	
 
 		//If no quick check triggered: Solve LP and cache result
-		std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
+		//std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
 		mEmpty = !mOptimizer.checkConsistency() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
-		std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmpty == TRIBOOL::TRUE) << std::endl;
+		//std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmpty == TRIBOOL::TRUE) << std::endl;
 		TRACE("hypro.representations.TPolytope","Optimizer result: " << mEmpty);
 		return (mEmpty == TRIBOOL::TRUE);
 	}
@@ -221,7 +220,7 @@ namespace hypro {
 				}
 			}
 		}
-		return mOptimizer.evaluate(_direction, true);
+		return mOptimizer.evaluate(_direction, false);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -369,11 +368,11 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
-		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmpty: " << mEmpty << std::endl;
-		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmpty: " << mEmpty << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(this->empty()){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this); 
 		}
 
@@ -395,22 +394,22 @@ namespace hypro {
 
 		assert(!(fullyInside && fullyOutside));
 		if(fullyInside){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyInside" << std::endl;
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		} 
 		if(fullyOutside){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, fullyOutside" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this);
 		} 	
 			
 		//Even more expensive part
-		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
 		auto tmp = this->intersectHalfspaces(_mat,_vec);
 		if(tmp.empty()){
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
 		} else {
-			std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, tmp partial" << std::endl;
 			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
 		}
 	}
@@ -474,7 +473,7 @@ namespace hypro {
 		//std::cout << "TemplatePolyhedron::linearTransformation, dirsRotatedInverse: \n" << dirsRotatedInverse << std::endl;
 		assert(dirsRotatedInverse.rows() == mMatrixPtr->rows());
 		assert(dirsRotatedInverse.cols() == mMatrixPtr->cols());
-		std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
+		std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, false);
 		//std::cout << "TemplatePolyhedron::linearTransformation, evalInInvRotatedDirs: {";
 		//for(auto& e : evalInInvRotatedDirs){
 		//	//std::cout << e << ", ";
@@ -605,7 +604,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		//Emptiness check
 		if(this->empty()) return *this;
@@ -622,7 +621,7 @@ namespace hypro {
 			for(int j = 0; j < mMatrixPtr->rows(); ++j){
 				if(_mat.row(i) == mMatrixPtr->row(j)){
 					//If constraint is already in template, take the smaller offset value
-					std::cout << "TemplatePolyhedron::intersectHalfspaces, _vec(i): " << _vec(i) << " < " << mVector(j) << "? " << (_vec(i) < mVector(j)) << std::endl;
+					//std::cout << "TemplatePolyhedron::intersectHalfspaces, _vec(i): " << _vec(i) << " < " << mVector(j) << "? " << (_vec(i) < mVector(j)) << std::endl;
 					resultVec(j) = _vec(i) < mVector(j) ? _vec(i) : mVector(j);
 					alreadyDone.emplace_back(j);
 					found = true;
@@ -636,31 +635,31 @@ namespace hypro {
 				extendedMatrix.row(extendedMatrix.rows()-1) = _mat.row(i);
 				extendedVector.conservativeResize(extendedVector.rows()+1);
 				extendedVector(extendedVector.rows()-1) = _vec(i);
-				std::cout << "TemplatePolyhedron::intersectHalfspaces, row has not been found, add row! extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
+				//std::cout << "TemplatePolyhedron::intersectHalfspaces, row has not been found, add row! extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
 			}
 		}
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll: " << foundAll << std::endl; //" _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll: " << foundAll << std::endl; //" _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 		if(foundAll && alreadyDone.size() > 0){
 			//If all constraints in _mat were found, we can safely return the result
 			auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
-			std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll was true! returning: " << tmp << std::endl;
+			//std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll was true! returning: " << tmp << std::endl;
 			return tmp;
 		}
 
 		//Else, make a new TPoly and evaluate into all non found directions and put into resultVec
 		auto itDone = alreadyDone.begin();
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, alreadyDone: {";
-		for(auto d : alreadyDone){
-			std::cout << d << ",";
-		}
-		std::cout << "}" << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, alreadyDone: {";
+		//for(auto d : alreadyDone){
+		//	//std::cout << d << ",";
+		//}
+		//std::cout << "}" << std::endl;
 		TemplatePolyhedronT<Number,Converter,Setting> extendedTPoly(extendedMatrix,extendedVector);
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
 		extendedTPoly.removeRedundancy();
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
 		for(int j = 0; j < mMatrixPtr->rows(); ++j){
 			if(itDone == alreadyDone.end() || j != *itDone){
-				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),true);
+				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),false);
 				if(res.errorCode == SOLUTION::FEAS){
 					resultVec(j) = res.supportValue;
 				} else {
@@ -823,9 +822,10 @@ namespace hypro {
 	void TemplatePolyhedronT<Number,Converter,Setting>::clear() {
 		mMatrixPtr = nullptr;
 		mVector = vector_t<Number>::Zero(0);
-		mOptimizer.cleanGLPInstance();
-		//mOptimizer.clear();
+		mOptimizer.setMatrix(matrix_t<Number>::Zero(1,1));
+		mOptimizer.setVector(vector_t<Number>::Zero(1));
 		mEmpty = TRIBOOL::NSET;
+		mNonRedundant = false;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -833,7 +833,7 @@ namespace hypro {
 		if(empty()) return *this;
 		assert(isBounded());
 		assert(dirs.cols() == mMatrixPtr->cols());
-		auto evalRes = multiEvaluate(dirs, true);
+		auto evalRes = multiEvaluate(dirs, false);
 		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
 		for(std::size_t i = 0; i < evalRes.size(); ++i){
 			assert(evalRes[i].errorCode == SOLUTION::FEAS);
@@ -846,23 +846,40 @@ namespace hypro {
 	//Counterexample: a slightly rotated box in 2D with one wall missing covers all the dimensions thrice,
 	//but is not bounded.
 	//But else it is right most of the time
-	//NOTE: Maybe use: unbounded <=> all normals are within one half of the normal sphere
-	// <=> the greatest normal angle is bigger equal than 180 degrees
 	template<typename Number, typename Converter, typename Setting>
 	bool TemplatePolyhedronT<Number,Converter,Setting>::isBounded() const {
 		//The empty set is bounded 
 		if(empty()) return true;
+		//If less than dimension + 1 constraints, then unbounded
+		if((unsigned)mMatrixPtr->rows() < dimension() + 1) return false;
 		//Check if every variable occurs at least dimension-times.
 		std::vector<unsigned> varOccurrences(dimension(), 0);
 		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			//std::cout << "TPoly::isBounded, row: " << vector_t<Number>(mMatrixPtr->row(i).transpose()) << std::endl;
 			for(int j = 0; j < mMatrixPtr->cols(); ++j){
 				if((*mMatrixPtr)(i,j) != 0){
 					varOccurrences[j]++;
 				}
 			}
+			//std::cout << "TPoly::isBounded, varOccurences after row " << i << ": {";
+			//for(const auto occ : varOccurrences){
+			//	//std::cout << occ << ", ";
+			//}
+			//std::cout << "}" << std::endl;
 		}
 		for(unsigned i = 0; i < varOccurrences.size(); ++i){
 			if(varOccurrences.at(i) < dimension()){
+				//std::cout << "TPoly::isBounded, return false since " << varOccurrences.at(i) << " < " << dimension() << std::endl;
+				return false;
+			}
+		}
+		//By now we only have shapes left where all normals are within one halfsphere
+		//Very expensive: Reverse each normal, evaluate in that direction, if INFTY then unbounded
+		//std::cout << "TPoly::isBounded, expensive part" << std::endl;
+		for(int i = 0; i < mMatrixPtr->rows(); ++i){
+			//std::cout << "TPoly::isBounded, row: " << vector_t<Number>(mMatrixPtr->row(i).transpose()) << std::endl;
+			//std::cout << "TPoly::isBounded, eval res: " << evaluate(-mMatrixPtr->row(i),false) << std::endl;
+			if(evaluate(-mMatrixPtr->row(i),false).errorCode == SOLUTION::INFTY){
 				return false;
 			}
 		}

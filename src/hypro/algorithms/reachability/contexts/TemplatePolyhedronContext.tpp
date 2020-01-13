@@ -250,8 +250,10 @@ namespace hypro {
 
         for(int i = 0; i < tpoly.matrix().rows(); ++i){
 
+            std::cout << "TemplatePolyhedronContext::isPositiveInvariant, tpoly.vector(i) = " << tpoly.vector()(i) << " != " << invVector(i) << std::endl;
+
             //Avoid test if value is equal to invariant value
-            if(tpoly.vector()(i) != invVector(i)){
+            if(tpoly.vector()(i) <= invVector(i)){
                 
                 //Add constraint "row i >= vector_i" to get equality "row_i == vector_i" since "row_i <= vector_i" is already in template
                 extendedMatrix.row(tpoly.matrix().rows()) = -tpoly.matrix().row(i);

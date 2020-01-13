@@ -136,6 +136,11 @@ class Optimizer {
 
 	void cleanGLPInstance();
 
+	#ifndef NDEBUG
+	inline SOLUTION getLastConsistencyAnswer() const { return mLastConsistencyAnswer; }
+	inline bool getConsistencyChecked() const { return mConsistencyChecked; }
+	#endif
+
 	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
 		return mGlpkContext;
 	}
@@ -146,7 +151,6 @@ class Optimizer {
 		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mRelationSymbols, rhs.mRelationSymbols );
 		std::swap( lhs.mGlpkContext, rhs.mGlpkContext );
-		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer );
 		std::swap( lhs.maximize, rhs.maximize );
 		assert( lhs.isSane() && rhs.isSane() );
