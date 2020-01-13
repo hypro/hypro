@@ -13,10 +13,15 @@ namespace hypro {
     }
 
     template<typename Number, bool Euclidian>
-    void ExactQuickhull<Number, Euclidian>::Facet::setOrientation(point_t const& containedPoint) {
+    void ExactQuickhull<Number, Euclidian>::Facet::setOrientation(point_t const& containedPoint, Facet const& adjacentFacet) {
         //Set orientation of normal
-        if(visible(containedPoint)) {
+        Number distance = this->distance(containedPoint);
+        
+        if(distance > 0) {
             invert();
+        } else if(distance == 0) {
+            mNormal = adjacentFacet.mNormal;
+            mOffset = adjacentFacet.mOffset;
         }
     }
 
@@ -27,10 +32,12 @@ namespace hypro {
         if constexpr(Euclidian) { 
             return point.dot(mNormal) - mOffset;
         } else {
+            Number dotProd = point.head(point.rows() - 1).dot(mNormal) - point[point.rows() - 1] * mOffset;
+            
             if(point[point.rows() - 1] == 0) {
-                return point.head(point.rows() - 1).dot(mNormal) - mOffset;
+                return dotProd;
             } else {
-                return point.head(point.rows() - 1).dot(mNormal) / point[point.rows() - 1] - mOffset;
+                return dotProd / point[point.rows() - 1];
             }
         }
     }

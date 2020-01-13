@@ -1,4 +1,5 @@
 #include <type_traits>
+#include "carl/numbers/numbers.h"
 
 template<typename Number>
 inline constexpr bool is_exact = std::is_same_v<Number, mpq_class>;

@@ -73,11 +73,11 @@ namespace hypro {
     }
 
     template<typename Number, bool Euclidian>
-    size_t ExactQuickhull<Number, Euclidian>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, point_t const& contained) {
+    size_t ExactQuickhull<Number, Euclidian>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt) {
         insertNew();
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
-        validateFacet(facets.back(), contained);
+        validateFacet(facets.back(), points[facets[other_i].mVertices[replaceAt]], facets[other_i]);
         return insertedAt;
     }
 
@@ -87,11 +87,16 @@ namespace hypro {
         ///TODO Allocate space for matrix once and reuse it
         ///TODO Could also use __restrict__ to get memcpy here (probably).
         matrix_t<Number> matrix(dimension, dimension + 1);
-        for(size_t i = 0; i < dimension; ++i) {
-            for(size_t j = 0; j < dimension; ++j) {
-                matrix.row(i)[j] = (points[facet.mVertices[i]])[j];
+        
+        if constexpr(Euclidian) {
+            for(size_t i = 0; i < dimension; ++i) {
+                matrix.row(i).head(dimension) = points[facet.mVertices[i]].transpose();
+                matrix.row(i)[dimension] = 1;
             }
-            matrix.row(i)[dimension] = 1;
+        } else {
+            for(size_t i = 0; i < dimension; ++i) {
+                matrix.row(i) = points[facet.mVertices[i]].transpose();
+            }
         }
 
         matrix_t<double> m = convert<mpq_class, double>(matrix);
@@ -116,8 +121,8 @@ namespace hypro {
     }
 
     template<typename Number, bool Euclidian>
-    void ExactQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet, point_t const& contained) {
-        facet.setOrientation(contained);
+    void ExactQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet, point_t const& contained, Facet const& adjacentFacet) {
+        facet.setOrientation(contained, adjacentFacet);
 #ifndef NDEBUG
         containsVertices(facet);
 #endif

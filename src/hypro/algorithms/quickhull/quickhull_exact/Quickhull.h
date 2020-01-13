@@ -36,7 +36,7 @@ namespace hypro {
 
         //Members
         FacetSpace fSpace;
-        point_t baryCenter;
+        // point_t baryCenter;
 
     public:
         Quickhull(pointVector_t& inputVertices, size_t dim);
