@@ -7,7 +7,7 @@ namespace hypro {
 
         //modifiers
         void invert();
-        void setOrientation(point_t const& containedPoint);
+        void setOrientation(point_t const& containedPoint, Facet const& adjacentFacet);
 
         //queries
         Number distance(point_t const& point) const;

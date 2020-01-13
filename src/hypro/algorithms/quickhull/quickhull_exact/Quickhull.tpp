@@ -1,13 +1,7 @@
 namespace hypro {
     template<typename Number, bool Euclidian>
-    ExactQuickhull<Number, Euclidian>::Quickhull(pointVector_t& points, size_t dimension) : points(points), dimension(dimension), fSpace(points, dimension) {
-        if constexpr(Euclidian) {
-            
-
-        } else {
-
-        }
-    }
+    ExactQuickhull<Number, Euclidian>::Quickhull(pointVector_t& points, dimension_t dimension) 
+    : points(points), dimension(dimension), fSpace(points, dimension) {}
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::compute() {
@@ -54,7 +48,6 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::removeDuplicateInputs() {
-
         for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
             for(point_ind_t point_j = point_i + 1; point_j < points.size(); ++point_j) {
                 if(points[point_i] == points[point_j]) {
@@ -88,22 +81,24 @@ namespace hypro {
         }
 
         //calculate barycenter of initial polytope, which is the baryCenter vertices of the initial facet and the furthest away point
-        baryCenter = points[furthestPoint_i];
+        // baryCenter = points[furthestPoint_i];
 
-        for(size_t vertexPos = 0; vertexPos < dimension; ++vertexPos) {
-            baryCenter += points[fSpace.facets.back().mVertices[vertexPos]];
-        }
+        // for(size_t vertexPos = 0; vertexPos < dimension; ++vertexPos) {
+        //     baryCenter += points[fSpace.facets.back().mVertices[vertexPos]];
+        // }
 
-        baryCenter /= dimension + 1;
+        // baryCenter /= dimension + 1;
 
         //Set orientation
-        fSpace.facets.front().setOrientation(baryCenter);
+        if(fSpace.facets.front().visible(points[furthestPoint_i])) {
+            fSpace.facets.front().invert();
+        }
         
         fSpace.endModificationPhase();
 
         //Create cone from the new point
         for(size_t i = 0; i < dimension; ++i) {
-            size_t insertedAt = fSpace.insertConePart(0, furthestPoint_i, i, baryCenter);
+            size_t insertedAt = fSpace.insertConePart(0, furthestPoint_i, i);
             Facet& createdFacet = fSpace.facets.back();
 
             fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; //Set i-th neighbor of initial facet to the created facet.
@@ -133,7 +128,7 @@ namespace hypro {
 
         //Set the first row
         if constexpr(Euclidian) {
-            matrix.block(0, 0, 1, dimension) = points[0].transpose();
+            matrix.row(0).head(dimension) = points[0].transpose();
             matrix(0, dimension) = 1;
         } else {
             matrix.row(0) = points[0].transpose();
@@ -157,7 +152,7 @@ namespace hypro {
             facet.mVertices[d] = furthestPoint_i;
             //Set the (d+1)-th row
             if constexpr(Euclidian) {
-                matrix.block(d, 0, 1, dimension) = points[furthestPoint_i].transpose();
+                matrix.row(d).head(dimension) = points[furthestPoint_i].transpose();
                 matrix(d, dimension) = 1;
             } else {
                 matrix.row(d) = points[furthestPoint_i].transpose();
@@ -243,7 +238,7 @@ namespace hypro {
                     //Find the index of the ridge from the facet outside the horizon (neighbor_i) to the facet inside the horizon (currentFacet_i).
                     size_t ridgeIndex_outer_inner = fSpace.facets[neighbor_i].findNeighborIndex(currentFacet_i);
 
-                    size_t differentiatingPosition = fSpace.insertConePart(neighbor_i, visiblePoint_i, ridgeIndex_outer_inner, baryCenter);
+                    size_t differentiatingPosition = fSpace.insertConePart(neighbor_i, visiblePoint_i, ridgeIndex_outer_inner);
                     
 #ifndef NDEBUG
                     fSpace.containsAllPoints(fSpace.facets.back());

@@ -45,11 +45,11 @@ namespace hypro {
          * @param containedPoint A point to use for orientation.
          * @return The index where the visiblePoint was inserted.
          */
-        size_t insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, point_t const& contained);
+        size_t insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt);
 
         //facet modification
         void computeNormal(Facet& facet);
-        void validateFacet(Facet& facet, point_t const& containedPoint);
+        void validateFacet(Facet& facet, point_t const& containedPoint, Facet const& adjacentFacet);
         void validateVertexContainment(Facet& facet);
 
         bool tryAddToOutsideSet(Facet& facet, point_ind_t point_i);

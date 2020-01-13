@@ -8,6 +8,7 @@ build
 *.o
 *.lo
 *.Plo
+*.log
 src/hypro/flags.h
 src/resources/glpk-4.45/
 *.sublime-*
