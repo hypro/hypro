@@ -50,13 +50,15 @@ protected:
 TEST_F(QuickhullDualTest, Specific) {
     Quickhull<number_t, false>::pointVector_t input;
 
-    input.emplace_back(3) << 0,1,-1;
-    input.emplace_back(3) << 1,-1,-1;
-    input.emplace_back(3) << 0,-1,-(1/2.0);
-    input.emplace_back(3) << -1,-1, -1;
+    input.emplace_back(3) << -1, 0, 1;
+    input.emplace_back(3) << 0, -1, 1;
+    input.emplace_back(3) << 0, 1, -2;
+    input.emplace_back(3) << 1, 0, -2;
 
     Quickhull<number_t, false> qh{input, 2};
     qh.compute();
+
+    EXPECT_TRUE(containmentCheck(qh, input));
 
     Quickhull<number_t, false>::pointVector_t output;
     for(Quickhull<number_t, false>::Facet facet : qh.getFacets()) {
@@ -78,10 +80,49 @@ TEST_F(QuickhullDualTest, Specific) {
     input = output;
     Quickhull<number_t, true> qhEuc{input, 2};
     qhEuc.compute();
+
+    EXPECT_TRUE(containmentCheck(qhEuc, input));
+}
+
+TEST_F(QuickhullDualTest, Specific2) {
+    Quickhull<number_t, false>::pointVector_t input;
+
+    input.emplace_back(2) << -1,0;
+    input.emplace_back(2) << 0,-1;
+    input.emplace_back(2) << 0,0.5;
+    input.emplace_back(2) << 0.5,0;
+
+    Quickhull<number_t, true> qh{input, 2};
+    qh.compute();
+
+    EXPECT_TRUE(containmentCheck(qh, input));
+
+    Quickhull<number_t, true>::pointVector_t output;
+    for(Quickhull<number_t, true>::Facet facet : qh.getFacets()) {
+        output.emplace_back(2);
+        output.back() = facet.mNormal;
+        output.back() /= -facet.mOffset;
+    }
+
+    std::stringstream str;
+    str << std::endl;
+    for(auto point : output) {
+        for(size_t d = 0; d < 2; ++d) {
+            str << carl::convert<mpq_class, double>(point[d]) << ", ";
+        }
+        str << std::endl;
+    }
+    TRACE("quickhull", str.str());
+
+    input = output;
+    Quickhull<number_t, true> qhEuc{input, 2};
+    qhEuc.compute();
+
+    EXPECT_TRUE(containmentCheck(qhEuc, input));
 }
 
 TEST_F(QuickhullDualTest, RandomVertices) {
-    size_t const N = 20;
+    size_t const N = 15;
     size_t const D = 6;
 
     srand(42);

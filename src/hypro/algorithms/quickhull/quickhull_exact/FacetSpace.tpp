@@ -197,7 +197,7 @@ namespace hypro {
     void ExactQuickhull<Number, Euclidian>::FacetSpace::removeCoplanarFacets() {
         for(facet_ind_t facet_i = 0; facet_i < facets.size(); ++facet_i) {
             facets.erase(std::remove_if(facets.begin() + facet_i + 1, facets.end(), [this, facet_i](Facet& facet) {
-                return facet.mNormal == facets[facet_i].mNormal;
+                return facet.mNormal == facets[facet_i].mNormal && facet.mOffset == facets[facet_i].mOffset;
             }), facets.end());
         }
     }
