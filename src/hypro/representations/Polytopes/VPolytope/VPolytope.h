@@ -8,6 +8,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../datastructures/Facet.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
+#include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/pca.h"
 #include "../../../util/statistics/statistics.h"
@@ -41,6 +42,8 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 
 	std::vector<std::set<unsigned>> mNeighbors;
 
+	constexpr static bool newHalfspaceIntersect = true;
+
   public:
 	/**
 	 * @brief      Default constructor.
@@ -71,6 +74,8 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	 * @param[in]  _constants    The constants.
 	 */
 	VPolytopeT( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
+
+	void oldHalfspaceIntersect(const matrix_t<Number> &_constraints, const vector_t<Number> _constants);
 
 	/**
 	 * @brief      Copy constructor.

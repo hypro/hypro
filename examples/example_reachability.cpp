@@ -140,8 +140,10 @@ static void computeReachableStates(const std::string &filename, const hypro::rep
 					break;
 				}
 				default:
-					unsigned tmp = plotter.addObject(seg.vertices());
+					unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors) / sizeof(*hypro::plotting::colors))]);
+						plotter.rSettings().dimensions.first = 0;
+					plotter.rSettings().dimensions.second = 1;
 				}
 				++cnt;
 			}
