@@ -31,12 +31,22 @@
 
 namespace hypro {
 
+template <typename N, typename S>
+class SupportFunctionContent;
+
+template <typename N, typename C, typename S>
+class SupportFunctionT;
+
 /*
 * This class defines a support Function object representing a polytope (might not be closed)
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
 */
 template <typename Number, class Setting>
 class PolytopeSupportFunction {
+	friend SupportFunctionContent<Number, Setting>;
+	template <typename N, typename C, typename S>
+	friend class SupportFunctionT;
+
   private:
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
@@ -134,6 +144,8 @@ class PolytopeSupportFunction {
 
   private:
 	void removeRedundancy();
+	matrix_t<Number>& rMatrix() { return mConstraints; }
+	vector_t<Number>& rVector() { return mConstraintConstants; }
 };
 }  // namespace hypro
 #include "PolytopeSupportFunction.tpp"

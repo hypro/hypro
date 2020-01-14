@@ -7,7 +7,7 @@ Plotter<Number>::~Plotter() {}
 
 template <typename Number>
 void Plotter<Number>::setFilename( const std::string& _filename ) {
-	mFilename = _filename;
+	mSettings.filename = _filename;
 	mSettings.name = _filename;
 	std::replace( mSettings.name.begin(), mSettings.name.end(), '_', '-' );
 }
@@ -29,28 +29,40 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 
 template <typename Number>
 void Plotter<Number>::plot2d() const {
-	mOutfile.open( mFilename + "_pdf.plt" );
+	std::size_t cnt = 0;
+	std::string filename = mSettings.filename + "_pdf.plt";
+	std::string title = mSettings.name;
+	if ( !mSettings.overwriteFiles ) {
+		while ( file_exists( filename ) ) {
+			std::stringstream ss;
+			ss << mSettings.filename << "-" << cnt;
+			title = ss.str();
+			filename = title + "_pdf.plt";
+			++cnt;
+		}
+	}
+
+	mOutfile.open( filename );
 
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << mSettings.name << "\"\n";
+		mOutfile << "set title \"" << title << "\"\n";
 		if ( mSettings.keepAspectRatio ) {
 			mOutfile << "set size square\n";
 		}
 		mOutfile << "set term pdf font ',10'\n";
-		mOutfile << "set output \"" << mFilename << ".pdf\n";
+		mOutfile << "set output \"" << title << ".pdf\n";
 
 		writeGnuplot();
 	}
-	std::cout << "Plotted to " << mFilename << "_pdf.plt" << std::endl;
 	mOutfile.close();
 }
 
 template <typename Number>
 void Plotter<Number>::plotTex() const {
-	mOutfile.open( mFilename + "_tex.plt" );
+	mOutfile.open( mSettings.filename + "_tex.plt" );
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
 		// preamble
 		mOutfile << "# settings\n";
@@ -59,13 +71,11 @@ void Plotter<Number>::plotTex() const {
 			mOutfile << "set size square\n";
 		}
 		mOutfile << "set terminal lua tikz latex standalone color header \"\\\\usepackage[T1]{fontenc}\\\n\\\\usepackage{mathptmx}\\\n\\\\usepackage{helvet}\\\n\\\\usepackage{amsmath}\"\n";
-		mOutfile << "set output \"" << mFilename << ".tex\" \n";
+		mOutfile << "set output \"" << mSettings.filename << ".tex\" \n";
 
 		writeGnuplot();
 	}
 
-	std::cout << std::endl
-			  << "Plotted to " << mFilename << "_tex.plt" << std::endl;
 	mOutfile.close();
 }
 
@@ -73,7 +83,7 @@ template <typename Number>
 void Plotter<Number>::plotGen() const {
 	prepareObjects();
 
-	mOutfile.open( mFilename + ".gen" );
+	mOutfile.open( mSettings.filename + ".gen" );
 
 	if ( !mVectors.empty() ) {
 		// TODO: implement gen file plotting for vectors.
@@ -112,13 +122,11 @@ void Plotter<Number>::plotGen() const {
 		}
 	}
 	mOutfile.close();
-	std::cout << std::endl
-			  << "Plotted to " << mFilename << ".gen" << std::endl;
 }
 
 template <typename Number>
 void Plotter<Number>::plotEps() const {
-	mOutfile.open( mFilename + "_eps.plt" );
+	mOutfile.open( mSettings.filename + "_eps.plt" );
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
 		// preamble
 		mOutfile << "# settings\n";
@@ -127,13 +135,13 @@ void Plotter<Number>::plotEps() const {
 			mOutfile << "set size square\n";
 		}
 		mOutfile << "set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2\n";
-		mOutfile << "set output \"" << mFilename << ".eps\" \n";
+		mOutfile << "set output \"" << mSettings.filename << ".eps\" \n";
 
 		writeGnuplot();
 	}
 
 	std::cout << std::endl
-			  << "Plotted to " << mFilename << "_eps.plt" << std::endl;
+			  << "Plotted to " << mSettings.filename << "_eps.plt" << std::endl;
 	mOutfile.close();
 }
 

@@ -228,11 +228,11 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 
 	const HalfspaceVector& constraints() const;
 	bool hasConstraint( const Halfspace<Number>& hplane ) const;
-	const HPolytopeT<Number, Converter, Setting>& removeRedundancy();
+	const HPolytopeT& removeRedundancy();
 
-	HPolytopeT<Number, Converter, Setting> heuristic() const;
-	HPolytopeT<Number, Converter, Setting> reduce( unsigned facet = 1, unsigned facet2 = 0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP ) const;
-	HPolytopeT<Number, Converter, Setting> reduce_directed( std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL ) const;
+	HPolytopeT heuristic() const;
+	HPolytopeT reduce( unsigned facet = 1, unsigned facet2 = 0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP ) const;
+	HPolytopeT reduce_directed( std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL ) const;
 	void reduceAssign( unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP );
 
 	bool isBounded( std::vector<vector_t<Number>> ) const;
@@ -251,6 +251,10 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	HPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	HPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	HPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
@@ -259,7 +263,7 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 	HPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
-	bool contains( const HPolytopeT<Number, Converter, Setting>& rhs ) const;
+	bool contains( const HPolytopeT& rhs ) const;
 	HPolytopeT unite( const HPolytopeT& rhs ) const;
 	static HPolytopeT unite( const std::vector<HPolytopeT>& rhs );
 	void reduceRepresentation() {
@@ -308,7 +312,7 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 		return this->constraints() == rhs.constraints();
 	}
 
-	friend void swap( HPolytopeT<Number, Converter, Setting>& a, HPolytopeT<Number, Converter, Setting>& b ) {
+	friend void swap( HPolytopeT& a, HPolytopeT& b ) {
 		std::size_t tmpDim = a.mDimension;
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDim;

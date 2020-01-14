@@ -82,7 +82,7 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 		collectedSets.removeRedundancy();
 		if ( collectedSets.getSetType( 0 ) == representation_name::support_function ) {
 			// Forced reduction to a box template.
-			applyReduction<Number>( std::get<hypro::SupportFunction<Number>>( collectedSets.rGetSet( 0 ) ) );
+			collectedSets.reduceRepresentation();
 		}
 		//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 #endif

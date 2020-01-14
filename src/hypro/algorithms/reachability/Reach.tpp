@@ -16,7 +16,8 @@ Reach<Number, ReacherSettings, State>::Reach( const HybridAutomaton<Number>& _au
 }
 
 template <typename Number, typename ReacherSettings, typename State>
-void Reach<Number, ReacherSettings, State>::initQueue() {
+void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>&& initialStates ) {
+	/*
 	TRACE( "hypro.reacher.preprocessing", "Have " << mAutomaton.getInitialStates().size() << " initial states." );
 	for ( const auto& locationConstraintPair : mAutomaton.getInitialStates() ) {
 		if ( int( mCurrentLevel ) <= mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
@@ -69,17 +70,23 @@ void Reach<Number, ReacherSettings, State>::initQueue() {
 
 			DEBUG( "hypro.reacher", "Adding initial set of type " << mType << ", current queue size (before) is " << mWorkingQueue.size() );
 			assert( mType == s.getSetType() );
-
-			s.setTimestamp( carl::Interval<tNumber>( 0 ) );
-			mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, s ) ) );
 		}
 	}
+	*/
+
+	for ( auto& s : initialStates ) {
+		s.setTimestamp( carl::Interval<tNumber>( 0 ) );
+		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, s ) ) );
+	}
+	mInitialStatesSet = true;
 }
 
 template <typename Number, typename ReacherSettings, typename State>
 std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::flowpipe_t>> Reach<Number, ReacherSettings, State>::computeForwardReachability() {
-	// set up working queue -> add initial states
-	initQueue();
+	if ( !mInitialStatesSet ) {
+		WARN( "hypro.reachability", "Attention, initial states have not been set yet." );
+	}
+
 	// collect all computed reachable states
 	std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::flowpipe_t>> collectedReachableStates;
 

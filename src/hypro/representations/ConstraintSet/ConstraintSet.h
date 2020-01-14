@@ -219,26 +219,27 @@ class ConstraintSetT {
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	const ConstraintSetT<Number, S>& reduceNumberRepresentation( unsigned ) { return *this; }
+	const ConstraintSetT& reduceNumberRepresentation( unsigned ) { return *this; }
 
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>&, const vector_t<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 
-	ConstraintSetT<Number, S> project( const std::vector<std::size_t>& ) const { return *this; }
+	ConstraintSetT project( const std::vector<std::size_t>& ) const { return *this; }
+	ConstraintSetT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const { return *this; }
 
-	ConstraintSetT<Number, S> linearTransformation( const matrix_t<Number>& ) const { return *this; }
-	ConstraintSetT<Number, S> affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const { return *this; }
-	ConstraintSetT<Number, S> minkowskiSum( const ConstraintSetT<Number, S>& ) const { return *this; }
+	ConstraintSetT linearTransformation( const matrix_t<Number>& ) const { return *this; }
+	ConstraintSetT affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const { return *this; }
+	ConstraintSetT minkowskiSum( const ConstraintSetT& ) const { return *this; }
 
 	/**
 	 * @brief      Computes the intersection of two constraintSets.
 	 * @param[in]  rhs   The right hand side constraintSet.
 	 * @return     The resulting constraintSet.
 	 */
-	ConstraintSetT<Number, S> intersect( const ConstraintSetT<Number, S>& ) const { return *this; }
+	ConstraintSetT intersect( const ConstraintSetT& ) const { return *this; }
 
-	ConstraintSetT<Number, S> intersectHalfspace( const Halfspace<Number>& ) const { return *this; }
-	ConstraintSetT<Number, S> intersectHalfspaces( const matrix_t<Number>&, const vector_t<Number>& ) const { return *this; }
+	ConstraintSetT intersectHalfspace( const Halfspace<Number>& ) const { return *this; }
+	ConstraintSetT intersectHalfspaces( const matrix_t<Number>&, const vector_t<Number>& ) const { return *this; }
 	bool contains( const Point<Number>& ) const { return true; }
 
 	/**
@@ -246,7 +247,7 @@ class ConstraintSetT {
 	 * @param[in]  constraintSet   The constraintSet.
 	 * @return     True, if the given constraintSet is contained in the current constraintSet, false otherwise.
 	 */
-	bool contains( const ConstraintSetT<Number, S>& ) const {
+	bool contains( const ConstraintSetT& ) const {
 		assert( false );
 		return true;
 	}
@@ -256,14 +257,14 @@ class ConstraintSetT {
 	 * @param[in]  rhs   The right hand side constraintSet.
 	 * @return     The resulting constraintSet.
 	 */
-	ConstraintSetT<Number, S> unite( const ConstraintSetT<Number, S>& ) const { return *this; }
+	ConstraintSetT unite( const ConstraintSetT& ) const { return *this; }
 
 	/**
 	 * @brief      Computes the union of the current constraintSet with a set of constraintSets.
 	 * @param[in]  constraintSets  The constraintSets.
 	 * @return     The resulting constraintSet.
 	 */
-	static ConstraintSetT<Number, S> unite( const std::vector<ConstraintSetT<Number, S>>& ) { return ConstraintSetT<Number, S>(); }
+	static ConstraintSetT unite( const std::vector<ConstraintSetT>& ) { return ConstraintSetT(); }
 
 	/**
 	 * @brief      Does nothing as a ConstraintSet is only a container.

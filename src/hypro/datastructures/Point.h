@@ -30,16 +30,8 @@ class Point {
 
   private:
 	vector_t<Number> mCoordinates;
-	mutable std::size_t mHash;
-
-	// Adjacency List of this Point (if applicable
-	// std::vector<Point<Number>> mNeighbors;
-	// Minkowsi Decompositon of this point (if applicable)
-	std::vector<Point<Number>> mComposedOf;
 
   public:
-	static const int POINT_RAND_MAX = 100;
-
 	/**
 	 * @brief      Default constructor.
 	 */
@@ -96,7 +88,6 @@ class Point {
 		for ( unsigned pos = 0; pos < _p.dimension(); ++pos ) {
 			mCoordinates( pos ) = Number( _p.at( pos ) );
 		}
-		mHash = 0;
 	}
 
 	/**
@@ -109,12 +100,7 @@ class Point {
 	 * @return     The hash.
 	 */
 	std::size_t hash() const {
-		//std::cout << "request hash for " << *this << std::endl;
-		if ( mHash == 0 ) {
-			mHash = std::hash<vector_t<Number>>()( mCoordinates );
-			//std::cout << "Computed hash: " << mHash << std::endl;
-		}
-		return mHash;
+		return std::hash<vector_t<Number>>()( mCoordinates );
 	}
 
 	/**
@@ -124,26 +110,7 @@ class Point {
 	void extend( const Number& val ) {
 		mCoordinates.conservativeResize( mCoordinates.rows() + 1 );
 		mCoordinates( mCoordinates.rows() - 1 ) = val;
-		mHash = 0;
 	}
-
-	/**
-	 * @brief      Returns the composing points of this point (required for Fukuda's Minkowski sum algorithm).
-	 * @return     A vector of points.
-	 */
-	std::vector<Point<Number>> composedOf() const;
-
-	/**
-	 * @brief      Sets the composition.
-	 * @param[in]  _elements  The elements which compose this point.
-	 */
-	void setComposition( const std::vector<Point<Number>>& _elements );
-
-	/**
-	 * @brief      Adds a point to the composition.
-	 * @param[in]  _element  The point.
-	 */
-	void addToComposition( const Point<Number>& _element );
 
 	/**
 	 * @brief      Creates the origin point of the given space dimension.
@@ -262,13 +229,6 @@ class Point {
 	 * @return     The empty point.
 	 */
 	Point<Number> newEmpty() const;
-
-	/**
-	 * Method to move the point
-	 * @param p Point with coordinates describing the move.
-	 * @return true, if the result has a negative coordinate.
-	 */
-	//bool move( const Point<Number>& _p );
 
 	/**
 	 * @brief      Projects the point on the given dimensions.
@@ -503,9 +463,6 @@ class Point {
 	template <typename F, carl::DisableIf<std::is_same<F, Number>> = carl::dummy>
 	bool operator==( const Point<F>& _p2 ) const {
 		assert( dimension() == _p2.dimension() );
-		if ( this->hash() != _p2.hash() ) {
-			return false;
-		}
 		for ( unsigned d = 0; d < this->dimension(); ++d ) {
 			if ( this->at( d ) != Number( _p2.at( d ) ) ) {
 				return false;
