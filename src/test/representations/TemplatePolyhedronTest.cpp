@@ -705,6 +705,15 @@ TYPED_TEST(TemplatePolyhedronTest, Boundedness){
 	TemplatePolyhedron<TypeParam> unbounded(m,vector_t<TypeParam>::Zero(1));
 	EXPECT_FALSE(unbounded.isBounded());
 
+	//Unbounded, but all normals are within one halfsphere
+	matrix_t<TypeParam> fiveSidesOfOctagon(5,2);
+	fiveSidesOfOctagon << 	0,1,
+							-1,1,
+							-1,0,
+							-1,-1,
+							0,-1;
+	TemplatePolyhedron<TypeParam> incompleteOctagon(fiveSidesOfOctagon,vector_t<TypeParam>::Ones(5));
+	EXPECT_FALSE(unbounded.isBounded());
 }
 
 TYPED_TEST(TemplatePolyhedronTest, ReduceRepresentation){

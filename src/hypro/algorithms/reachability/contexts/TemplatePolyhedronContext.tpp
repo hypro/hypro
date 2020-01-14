@@ -359,7 +359,8 @@ namespace hypro {
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
                 std::cout << "TemplatePolyhedronContext::firstSegment, use standard reach algo!" << std::endl;
-                static_cast<ltiFirstSegmentHandler<State>*>(this->mFirstSegmentHandlers.at(i))->handle();
+                static_cast<ltiFirstSegmentHandler<State>*>(this->mFirstSegmentHandlers.at(i))->ltiFirstSegmentHandler<State>::handle();
+                //this->mFirstSegmentHandlers.at(i)->ltiFirstSegmentHandler<State>::handle();
             }
         }
         //Do the stuff ltiContext would to 
@@ -380,7 +381,8 @@ namespace hypro {
         } else {
             for(std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++){
                 //std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use standard reach algo!" << std::endl;
-                static_cast<ltiTimeEvolutionHandler<State>*>(this->mContinuousEvolutionHandlers.at(i))->handle();
+                static_cast<ltiTimeEvolutionHandler<State>*>(this->mContinuousEvolutionHandlers.at(i))->ltiTimeEvolutionHandler<State>::handle();
+                //this->mContinuousEvolutionHandlers.at(i)->ltiTimeEvolutionHandler<State>::handle();
             }
         }
         //Do the stuff ltiContext would to 

@@ -853,26 +853,26 @@ namespace hypro {
 		//If less than dimension + 1 constraints, then unbounded
 		if((unsigned)mMatrixPtr->rows() < dimension() + 1) return false;
 		//Check if every variable occurs at least dimension-times.
-		std::vector<unsigned> varOccurrences(dimension(), 0);
-		for(int i = 0; i < mMatrixPtr->rows(); ++i){
-			//std::cout << "TPoly::isBounded, row: " << vector_t<Number>(mMatrixPtr->row(i).transpose()) << std::endl;
-			for(int j = 0; j < mMatrixPtr->cols(); ++j){
-				if((*mMatrixPtr)(i,j) != 0){
-					varOccurrences[j]++;
-				}
-			}
-			//std::cout << "TPoly::isBounded, varOccurences after row " << i << ": {";
-			//for(const auto occ : varOccurrences){
-			//	//std::cout << occ << ", ";
-			//}
-			//std::cout << "}" << std::endl;
-		}
-		for(unsigned i = 0; i < varOccurrences.size(); ++i){
-			if(varOccurrences.at(i) < dimension()){
-				//std::cout << "TPoly::isBounded, return false since " << varOccurrences.at(i) << " < " << dimension() << std::endl;
-				return false;
-			}
-		}
+		//std::vector<unsigned> varOccurrences(dimension(), 0);
+		//for(int i = 0; i < mMatrixPtr->rows(); ++i){
+		//	//std::cout << "TPoly::isBounded, row: " << vector_t<Number>(mMatrixPtr->row(i).transpose()) << std::endl;
+		//	for(int j = 0; j < mMatrixPtr->cols(); ++j){
+		//		if((*mMatrixPtr)(i,j) != 0){
+		//			varOccurrences[j]++;
+		//		}
+		//	}
+		//	//std::cout << "TPoly::isBounded, varOccurences after row " << i << ": {";
+		//	//for(const auto occ : varOccurrences){
+		//	//	//std::cout << occ << ", ";
+		//	//}
+		//	//std::cout << "}" << std::endl;
+		//}
+		//for(unsigned i = 0; i < varOccurrences.size(); ++i){
+		//	if(varOccurrences.at(i) < dimension()){
+		//		//std::cout << "TPoly::isBounded, return false since " << varOccurrences.at(i) << " < " << dimension() << std::endl;
+		//		return false;
+		//	}
+		//}
 		//By now we only have shapes left where all normals are within one halfsphere
 		//Very expensive: Reverse each normal, evaluate in that direction, if INFTY then unbounded
 		//std::cout << "TPoly::isBounded, expensive part" << std::endl;

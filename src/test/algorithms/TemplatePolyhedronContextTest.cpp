@@ -60,7 +60,7 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 		loc.setInvariant(inv);
 		loc.setName("loc");
 
-		//Initialize tpoly - is a triangle with corner points (0,0),(1,2),(2,0)
+		//Initialize tpoly - is a triangle with corner points (0,0,)(2,1)(4,0)//(0,0),(1,2),(2,0)
 		mat = matrix_t<Number>::Zero(3,2);
 		mat << -1,2,
 				1,2,
@@ -82,6 +82,11 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 		trappingLoc = Location<Number>(trappingFlow);
 		trappingLoc.setInvariant(triangleInv);
 		trappingLoc.setName("trappingLoc");
+
+		growingFlow = matrix_t<Number>::Zero(3,3);
+		growingFlow << 	3,2,1,		//affine flow, should grow into infinity
+						3,2,1,	//linear flow, should grow into -infinity
+						0,0,0;
 /*
 		//Needed to initialize task
 		//state = State_t<Number>(tpoly);
@@ -115,6 +120,8 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 	vector_t<Number> triangleInvVec;
 	Condition<Number> triangleInv;
 	Location<Number> trappingLoc;
+
+	matrix_t<Number> growingFlow;	
 
 	//Empty Location
 	Location<Number> emptyLoc;
@@ -198,6 +205,7 @@ TYPED_TEST(TemplatePolyhedronContextTest, PositiveInvariant){
 	
 	//Test with empty loc fails since one cannot extract a non existent invariant
 
+	//Test 1: Test with positive invariant
 	//Initialize tpcontext with positive invariant flow
 	State_t<TypeParam> state(&(this->trappingLoc));
 	state.setSet(this->tpoly,0);
@@ -213,16 +221,18 @@ TYPED_TEST(TemplatePolyhedronContextTest, PositiveInvariant){
 	//Test whether positive invariant with positive invariant
 	EXPECT_TRUE(tpcontextTrapping.isPositiveInvariant(this->tpoly, tpolyTrap.vector()));
 
+	//Test 2: Test with non positive invariant
 	//Initialize tpcontext with not positive invariant flow
+	this->loc.setFlow(this->growingFlow);
+	this->loc.setInvariant(Condition<TypeParam>(this->triangleInvMat, this->triangleInvVec));
 	state.setLocation(&(this->loc));
 	ReachTreeNode<State_t<TypeParam>> rnode(state,(unsigned)0);
 	auto task = std::make_shared<Task<State_t<TypeParam>>>(&rnode);
 	TemplatePolyhedronContext<State_t<TypeParam>> tpcontext(task,this->strat,this->localQueue,this->localCEXQueue,this->localSegments,this->settings);
 /*
-	//Overapproximate positive invariant
-	//TODO: this->loc.getInvariant() is not bounded. Get some other invariant.
-	//TODO: isBounded() is wrong
-	TPoly<TypeParam> tpolyNoTrap(this->loc.getInvariant().getMatrix(),this->loc.getInvariant().getVector());
+	//Overapproximate non positive invariant
+	auto widenedTriangleVec = 5*vector_t<TypeParam>::Ones(3);
+	TPoly<TypeParam> tpolyNoTrap(this->triangleInvMat,widenedTriangleVec);
 	tpolyNoTrap = tpolyNoTrap.overapproximate(this->tpoly.matrix());
 	EXPECT_TRUE(tpolyNoTrap.isBounded());
 	std::cout << "state: " << state << "tpolyNoTrap: " << tpolyNoTrap << "tpoly: " << this->tpoly << std::endl;
@@ -353,7 +363,7 @@ TYPED_TEST(TemplatePolyhedronContextTest, LocationInvariantStrengthening){
 		EXPECT_TRUE((this->tpoly.vector()(i) <= res(i)));
 		EXPECT_TRUE((res(i) <= tpolyTrap.vector()(i)));
 	}
-
+/*
 	//Second Test: Have triangle shaped initial sets and box shaped invariants
 	//Build box invariants
 	std::cout << "SECOND TEST" << std::endl;
@@ -393,7 +403,7 @@ TYPED_TEST(TemplatePolyhedronContextTest, LocationInvariantStrengthening){
 		EXPECT_TRUE((boxTPoly.vector()(i) <= res3(i)));
 		EXPECT_TRUE((res3(i) <= tpolyTrapBoxOverapprox.vector()(i)));
 	}
-
+*/
 }
 
 TYPED_TEST(TemplatePolyhedronContextTest, ExecBeforeFirstSegment){

@@ -263,7 +263,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 
 template <typename Number>
 bool Optimizer<Number>::checkConsistency() const {
-	assert((mConsistencyChecked && mLastConsistencyAnswer != SOLUTION::UNKNOWN) || (!mConsistencyChecked && mLastConsistencyAnswer == SOLUTION::UNKNOWN));
+	//assert((mConsistencyChecked && mLastConsistencyAnswer != SOLUTION::UNKNOWN) || (!mConsistencyChecked && mLastConsistencyAnswer == SOLUTION::UNKNOWN));
 	assert( isSane() );
 	updateConstraints();
 	

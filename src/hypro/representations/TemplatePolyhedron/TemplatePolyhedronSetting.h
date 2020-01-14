@@ -18,7 +18,7 @@ namespace hypro {
 		//Determines which constraints should be added to the template matrix.
 		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::INIT_INV;
 		//Whether the specialized reachability algorithm from Sankaranarayanan 2008 should be used .
-		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = false;
+		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = true;
 		//If the alternative reachability algorithm is used, this determines the order to which a Taylor series approximation is computed.
 		static constexpr unsigned DERIVATIVE_ORDER = 5;
 		//If the alternative reachability algorithm is used, a monotonicity check is conducted before the expensive root enumeration, if this option is false.
