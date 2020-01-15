@@ -118,12 +118,12 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 			for ( Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 				results.emplace_back( opt.evaluate( tpl[rowIndex], false ) );
 				if ( results.back().errorCode == SOLUTION::INFEAS ) {
-					opt.cleanGLPInstance();
+					opt.cleanContexts();
 					*this = BoxT<Number, Converter, Setting>::Empty();
 					return;
 				}
 			}
-			opt.cleanGLPInstance();
+			opt.cleanContexts();
 			assert( Eigen::Index( results.size() ) == Eigen::Index( tpl.size() ) );
 
 			// re-construct box from results.
@@ -772,7 +772,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 		for ( Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex ) {
 			results.emplace_back( opt.evaluate( boxDirections.row( rowIndex ), false ) );
 		}
-		opt.cleanGLPInstance();
+		opt.cleanContexts();
 		assert( Eigen::Index( results.size() ) == boxDirections.rows() );
 
 		// re-construct box from results.
