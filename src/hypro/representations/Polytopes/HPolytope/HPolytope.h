@@ -285,7 +285,7 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 		mNonRedundant = rhs.isNonRedundant();
 		mEmpty = rhs.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		if ( Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value() ) {
-			mOptimizer->cleanGLPInstance();
+			mOptimizer->cleanContexts();
 			setOptimizer( rhs.matrix(), rhs.vector() );
 		}
 		return *this;

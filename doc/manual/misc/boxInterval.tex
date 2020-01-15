@@ -1,0 +1,43 @@
+\documentclass[convert={density=300,size=300x150,outext=.png}]{standalone}
+
+%\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{external}
+%\tikzexternalize
+
+\usepackage{color, colortbl}
+\usepackage{rwthcolors}
+\usepackage[siunitx]{circuitikz}
+\usetikzlibrary{arrows,shadows,petri,automata,patterns}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{calc}
+\usetikzlibrary{intersections}
+
+\tikzset{
+	c/.style={every coordinate/.try}
+}
+
+\begin{document}
+
+	\tikzsetnextfilename{boxInterval}
+	\begin{tikzpicture} [>=latex]
+		\draw[help lines] (-.5,-.5) grid (2.5,2.5);
+		\draw[->] (-.5,0) -- node[below,pos=.9] {$x$} (2.5,0);
+		\draw[->] (0,-.5) -- node[left,pos=.9] {$y$} (0,2.5);
+
+		\draw[fill=blue100, draw=none, opacity=.3] (.5,-.5) rectangle (1.5,2.5);
+		\draw[blue100] (.5,-.5) -- (.5,2.5);
+		\draw[blue100] (1.5,-.5) -- (1.5,2.5);
+		\node[] at(1,-.3) {$I_x$};
+
+		\draw[fill=blue100, draw=none, opacity=.3] (-.5,.5) rectangle (2.5,1.8);
+		\draw[blue100] (-.5,.5) -- (2.5,.5);
+		\draw[blue100] (-.5,1.8) -- (2.5,1.8);
+		\node[] at(-.3,1.15) {$I_y$};
+
+		\draw[blue100, thick] (.5,.5) rectangle (1.5,1.8);
+	\end{tikzpicture}
+\end{document}

@@ -21,12 +21,12 @@ message(STATUS "CoinUtils source dir: ${source_dir}")
 message(STATUS "CoinUtils binary dir: ${binary_dir}")
 
 set( coinUtils_INCLUDE_DIR "${source_dir}/include/coin" )
-set( coinUtils_LIBRARIES "${binary_dir}/lib/libCoinUtils.a" )
 
-add_imported_library(coinUtils STATIC "${coinUtils_LIBRARIES}" "${coinUtils_INCLUDE_DIR}")
+add_imported_library(coinUtils STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}CoinUtils${CMAKE_STATIC_LIBRARY_SUFFIX}" "${coinUtils_INCLUDE_DIR}")
+add_imported_library(coinUtils SHARED "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}CoinUtils${CMAKE_SHARED_LIBRARY_SUFFIX}" "${coinUtils_INCLUDE_DIR}")
 
-add_dependencies(coinUtils_STATIC clp)
-add_dependencies(resources coinUtils_STATIC)
+add_dependencies(coinUtils_STATIC coinUtils_SHARED clp)
+add_dependencies(resources coinUtils_STATIC coinUtils_SHARED)
 
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/resources/src/clp/include/coin/)
 
@@ -53,9 +53,9 @@ message(STATUS "Clp source dir: ${source_dir}")
 message(STATUS "Clp binary dir: ${binary_dir}")
 
 set( clp_INCLUDE_DIR "${source_dir}/include/coin" )
-set( clp_LIBRARIES "${binary_dir}/lib/libClp.a" )
 
-add_imported_library(clp STATIC ${clp_LIBRARIES} ${clp_INCLUDE_DIR})
+add_imported_library(clp STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}Clp${CMAKE_STATIC_LIBRARY_SUFFIX}" ${clp_INCLUDE_DIR})
+add_imported_library(clp SHARED "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}Clp${CMAKE_SHARED_LIBRARY_SUFFIX}" ${clp_INCLUDE_DIR})
 
-add_dependencies(clp_STATIC clp)
-add_dependencies(resources clp_STATIC)
+add_dependencies(clp_STATIC clp_SHARED clp)
+add_dependencies(resources clp_STATIC clp_SHARED)

@@ -1,0 +1,41 @@
+\documentclass[convert={density=300,size=300x150,outext=.png}]{standalone}
+
+%\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{external}
+%\tikzexternalize
+
+\usepackage{color, colortbl}
+\usepackage{rwthcolors}
+\usepackage[siunitx]{circuitikz}
+\usetikzlibrary{arrows,shadows,petri,automata,patterns}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{calc}
+\usetikzlibrary{intersections}
+
+\tikzset{
+	c/.style={every coordinate/.try}
+}
+
+\begin{document}
+\tikzsetnextfilename{zonotope}
+	\begin{tikzpicture} [>=latex]
+		\draw[help lines] (-.5,-.5) grid (2.5,2.5);
+		\draw[->] (-.5,0) -- node[below,pos=.9] {$x$} (2.5,0);
+		\draw[->] (0,-.5) -- node[left,pos=.9] {$y$} (0,2.5);
+
+		\draw[blue100, ->] (0,0)  -- node[black, left,pos=0.9]{$c$} (1,1);
+
+		\draw[blue100, ->] (1,1)  -- node[black, left,pos=0.5]{$g_0$} (1.2,1.8);
+		\draw[blue100, ->] (1,1)  -- node[black, below,pos=0.5]{$g_1$} (2,1.2);
+
+		% for testing
+		\draw[blue100, ->, dotted] (1,1)  -- (0.8,0.2);
+		\draw[blue100, ->, dotted] (1,1)  -- (0,0.8);
+
+		\draw[blue100, fill=blue100, fill opacity=.5, thick] (2.2,2) -- (1.8,0.4) -- (-.2, 0) -- (0.2,1.6) -- cycle;
+	\end{tikzpicture}
+\end{document}
