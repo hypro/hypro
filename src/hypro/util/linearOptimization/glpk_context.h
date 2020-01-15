@@ -1,6 +1,7 @@
 #pragma once
 #include "../logging/Logger.h"
 
+#include <carl/core/Relation.h>
 #include <glpk.h>
 
 namespace hypro {
@@ -118,6 +119,81 @@ struct glpk_context {
 		}
 		TRACE( "hypro.optimizer", "Done."
 										<< " instance @" << this );
+	}
+
+	template <typename Number>
+	void updateConstraints( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, bool maximize ) {
+		if ( !mConstraintsSet ) {
+			if ( mInitialized ) {  // clean up old setup.
+				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
+				deleteArrays();
+
+				deleteLPInstance();
+			}
+			createLPInstance();
+
+			if ( maximize ) {
+				glp_set_obj_dir( lp, GLP_MAX );
+			} else {
+				glp_set_obj_dir( lp, GLP_MIN );
+			}
+
+			int numberOfConstraints = int( constraints.rows() );
+			if ( numberOfConstraints > 0 ) {
+				// convert constraint constants
+				glp_add_rows( lp, numberOfConstraints );
+				for ( int i = 0; i < numberOfConstraints; i++ ) {
+					// Set relation symbols correctly
+					switch ( relations[i] ) {
+						case carl::Relation::LEQ:
+							// set upper bounds, lb-values (here 0.0) are ignored.
+							glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( constants( i ) ) );
+							break;
+						case carl::Relation::GEQ:
+							// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+							glp_set_row_bnds( lp, i + 1, GLP_LO, carl::toDouble( constants( i ) ), 0.0 );
+							break;
+						case carl::Relation::EQ:
+							// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+							glp_set_row_bnds( lp, i + 1, GLP_FX, carl::toDouble( constants( i ) ), 0.0 );
+							break;
+						default:
+							// glpk cannot handle strict inequalities.
+							assert( false );
+							std::cout << "This should not happen." << std::endl;
+					}
+				}
+				// add cols here
+				int cols = int( constraints.cols() );
+				glp_add_cols( lp, cols );
+				createArrays( unsigned( numberOfConstraints * cols ) );
+
+				// convert constraint matrix
+				ia[0] = 0;
+				ja[0] = 0;
+				ar[0] = 0;
+				assert( constraints.size() == numberOfConstraints * cols );
+				for ( int i = 0; i < numberOfConstraints * cols; ++i ) {
+					ia[i + 1] = ( int( i / cols ) ) + 1;
+					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
+					ja[i + 1] = ( int( i % cols ) ) + 1;
+					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
+					ar[i + 1] = carl::toDouble( constraints.row( ia[i + 1] - 1 )( ja[i + 1] - 1 ) );
+					// TODO:: Assuming ColMajor storage alignment.
+					//assert(*(constraints.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  constraints.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
+					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
+					//std::cout << "Came from: " << constraints.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
+				}
+
+				glp_load_matrix( lp, numberOfConstraints * cols, ia, ja, ar );
+				for ( int i = 0; i < cols; ++i ) {
+					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
+					glp_set_obj_coef( lp, i + 1, 1.0 );  // not needed?
+				}
+			}
+
+			mConstraintsSet = true;
+		}
 	}
 
 	~glpk_context() {

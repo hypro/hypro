@@ -66,9 +66,15 @@ class Optimizer {
 	std::string filenamePrefix = "optimizer_error_out_";
 #endif
 #endif
+	mutable std::mutex mContextLock;
+#ifdef HYPRO_USE_GLPK
 	// Glpk as a presolver
-	mutable std::mutex mGlpkLock;
-	mutable std::map<std::thread::id, glpk_context> mGlpkContext;
+	mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
+#endif
+#ifdef HYPRO_USE_CLP
+	// CLP as a solver
+	mutable std::map<std::thread::id, clp_context> mClpContexts;
+#endif
 
   public:
 	/**
@@ -79,9 +85,10 @@ class Optimizer {
 		, mConstraintVector()
 		, mConsistencyChecked( false )
 		, maximize( max )
-		, mRelationSymbols()
-		, mGlpkContext() {
+		, mRelationSymbols() {
+#ifdef HYPRO_USE_GLPK
 		glp_term_out( GLP_OFF );
+#endif
 #ifdef VERIFY_RESULT
 		struct stat buffer;
 		unsigned cnt = 0;
@@ -116,9 +123,10 @@ class Optimizer {
 		, mConstraintVector( constants )
 		, mConsistencyChecked( false )
 		, maximize( max )
-		, mRelationSymbols( std::vector<carl::Relation>( constraints.rows(), carl::Relation::LEQ ) )
-		, mGlpkContext() {
+		, mRelationSymbols( std::vector<carl::Relation>( constraints.rows(), carl::Relation::LEQ ) ) {
+#ifdef HYPRO_USE_GLPK
 		glp_term_out( GLP_OFF );
+#endif
 		assert( constraints.rows() > 0 );
 		assert( constraints.cols() > 0 );
 		assert( constants.rows() > 0 );
@@ -129,22 +137,33 @@ class Optimizer {
 		 * @brief      Destroys the object.
 		 */
 	~Optimizer() {
-		TRACE( "hypro.optimizer", "Have " << mGlpkContext.size() << " instances left." );
-		this->cleanGLPInstance();
+		this->cleanContexts();
 	}
 
-	void cleanGLPInstance();
+	void cleanContexts();
 
+#ifdef HYPRO_USE_GLPK
 	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
-		return mGlpkContext;
+		return mGlpkContexts;
 	}
+#endif
+#ifdef HYPRO_USE_CLP
+	inline const std::map<std::thread::id, clp_context>& getCLPContexts() const {
+		return mClpContexts;
+	}
+#endif
 
 	friend void swap( Optimizer<Number>& lhs, Optimizer<Number>& rhs ) {
 		std::swap( lhs.mConstraintMatrix, rhs.mConstraintMatrix );
 		std::swap( lhs.mConstraintVector, rhs.mConstraintVector );
 		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mRelationSymbols, rhs.mRelationSymbols );
-		std::swap( lhs.mGlpkContext, rhs.mGlpkContext );
+#ifdef HYPRO_USE_GLPK
+		std::swap( lhs.mGlpkContexts, rhs.mGlpkContexts );
+#endif
+#ifdef HYPRO_USE_CLP
+		std::swap( lhs.mClpContexts, rhs.mClpContexts );
+#endif
 		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer );
 		std::swap( lhs.maximize, rhs.maximize );
@@ -251,7 +270,6 @@ class Optimizer {
 	std::vector<std::size_t> redundantConstraints() const;
 
   private:
-	bool hasContext( std::thread::id ) const;
 	bool isSane() const;
 
 	/**

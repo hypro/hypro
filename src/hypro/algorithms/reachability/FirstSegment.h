@@ -206,8 +206,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 
 			assert( fullSegment.second.getLocation() != nullptr );
 
-			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized,
-																									translation, errorBoxVector[1] );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized, translation, errorBoxVector[1] );
 		} else {
 			return std::make_tuple( CONTAINMENT::NO, State{}, matrix_t<Number>{}, vector_t<Number>{}, Box<Number>{} );
 		}
