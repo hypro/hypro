@@ -49,7 +49,6 @@ var searchData=
   ['addtimestep',['addTimeStep',['../classhypro_1_1Path.html#a01ee87d5ef9cb76c5a807aa0cecdddec',1,'hypro::Path']]],
   ['addtimesteptopath',['addTimeStepToPath',['../classhypro_1_1ReachTreeNode.html#a5b7922d3d06e1412b310284efc59de57',1,'hypro::ReachTreeNode']]],
   ['addtochildren',['addToChildren',['../classhypro_1_1RootGrowNode.html#abf4d6e2e56f843eecdfacb30d1ca63dd',1,'hypro::RootGrowNode']]],
-  ['addtocomposition',['addToComposition',['../classhypro_1_1Point.html#a3eaa391acdbd9d785ad0608812d3b71f',1,'hypro::Point']]],
   ['addtransition',['addTransition',['../classhypro_1_1HybridAutomaton.html#a241a13c7d9a0cfb5bf401a0a23b370dd',1,'hypro::HybridAutomaton::addTransition()'],['../classhypro_1_1Location.html#aa7410f1fadba495a97262f8e10087c64',1,'hypro::Location::addTransition()'],['../classhypro_1_1Path.html#a391e302fe17175b1083528a1d1f70cb1',1,'hypro::Path::addTransition()'],['../classhypro_1_1TimingAggregate.html#aeb5fb4327d85b604d90522179cd52979',1,'hypro::TimingAggregate::addTransition()']]],
   ['addtransitiontopath',['addTransitionToPath',['../classhypro_1_1ReachTreeNode.html#a8d448a4333541919064260a40e72fe73',1,'hypro::ReachTreeNode']]],
   ['addvector',['addVector',['../classhypro_1_1Plotter.html#afa6b73d2194f0fa8b40da351f4d356ab',1,'hypro::Plotter']]],

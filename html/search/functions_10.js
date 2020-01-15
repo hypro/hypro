@@ -31,7 +31,6 @@ var searchData=
   ['setbadstatetimings',['setBadStateTimings',['../classhypro_1_1EventTimingContainer.html#a7e010664cfc1481804d243cb3ea9a000',1,'hypro::EventTimingContainer']]],
   ['setcenter',['setCenter',['../classhypro_1_1ZonotopeT.html#a21e81d4b99aff3d8a12265ace16d63ac',1,'hypro::ZonotopeT']]],
   ['setcolor',['setColor',['../classhypro_1_1Vertex.html#a88368ae4cd1985d8ef058e6578d422c1',1,'hypro::Vertex']]],
-  ['setcomposition',['setComposition',['../classhypro_1_1Point.html#afb5565ae2829afc285e257ca46525d99',1,'hypro::Point']]],
   ['setcoordinate',['setCoordinate',['../classhypro_1_1Point.html#af2ba3afb4c0b6ba7bc52a376369e77ee',1,'hypro::Point::setCoordinate(const carl::Variable &amp;_dim, const Number &amp;_value)'],['../classhypro_1_1Point.html#a73d02f1464005bdd842d50e8d0a9b8d1',1,'hypro::Point::setCoordinate(std::size_t dimension, const Number &amp;_value)']]],
   ['setcoordinates',['setCoordinates',['../classhypro_1_1Point.html#ae52e25ed1bb908decebd5634907bb966',1,'hypro::Point']]],
   ['setcreationvisitor',['setCreationVisitor',['../structhypro_1_1setCreationVisitor.html#aba669ba4d3e1646a32a58d3060cc1cbe',1,'hypro::setCreationVisitor::setCreationVisitor()=delete'],['../structhypro_1_1setCreationVisitor.html#a3b0d73434a8e180c0e3228a80c6b4002',1,'hypro::setCreationVisitor::setCreationVisitor(const matrix_t&lt; typename State::NumberType &gt; &amp;constraints, const vector_t&lt; typename State::NumberType &gt; &amp;constants)']]],

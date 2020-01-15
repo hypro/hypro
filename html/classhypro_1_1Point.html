@@ -121,7 +121,6 @@ $(document).ready(function(){initNavTree('classhypro_1_1Point.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Point-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -180,15 +179,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a175184ee4ceb57261feb0a378fa7d42c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a175184ee4ceb57261feb0a378fa7d42c">extend</a> (const <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &amp;val)</td></tr>
 <tr class="memdesc:a175184ee4ceb57261feb0a378fa7d42c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extends the space the point lies in by one dimension and sets its coordinate.  <a href="#a175184ee4ceb57261feb0a378fa7d42c">More...</a><br /></td></tr>
 <tr class="separator:a175184ee4ceb57261feb0a378fa7d42c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72eb033baf9da144122b8189d0ac08dd"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a72eb033baf9da144122b8189d0ac08dd">composedOf</a> () const </td></tr>
-<tr class="memdesc:a72eb033baf9da144122b8189d0ac08dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the composing points of this point (required for Fukuda's Minkowski sum algorithm).  <a href="#a72eb033baf9da144122b8189d0ac08dd">More...</a><br /></td></tr>
-<tr class="separator:a72eb033baf9da144122b8189d0ac08dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb5565ae2829afc285e257ca46525d99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#afb5565ae2829afc285e257ca46525d99">setComposition</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;_elements)</td></tr>
-<tr class="memdesc:afb5565ae2829afc285e257ca46525d99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the composition.  <a href="#afb5565ae2829afc285e257ca46525d99">More...</a><br /></td></tr>
-<tr class="separator:afb5565ae2829afc285e257ca46525d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3eaa391acdbd9d785ad0608812d3b71f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a3eaa391acdbd9d785ad0608812d3b71f">addToComposition</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_element)</td></tr>
-<tr class="memdesc:a3eaa391acdbd9d785ad0608812d3b71f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a point to the composition.  <a href="#a3eaa391acdbd9d785ad0608812d3b71f">More...</a><br /></td></tr>
-<tr class="separator:a3eaa391acdbd9d785ad0608812d3b71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a979a185006629786d429e1ce71ad3f0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a979a185006629786d429e1ce71ad3f0d">origin</a> () const </td></tr>
 <tr class="memdesc:a979a185006629786d429e1ce71ad3f0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the origin of the current space.  <a href="#a979a185006629786d429e1ce71ad3f0d">More...</a><br /></td></tr>
 <tr class="separator:a979a185006629786d429e1ce71ad3f0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -393,11 +383,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5be436a9971bc10b498d8fcee312b2fb"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a5be436a9971bc10b498d8fcee312b2fb">lesserDimensionPattern</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_p1, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_p2)</td></tr>
 <tr class="memdesc:a5be436a9971bc10b498d8fcee312b2fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a bitvector holding a 1 at pos i, if _p1(i) &lt; _p2(i) holds.  <a href="#a5be436a9971bc10b498d8fcee312b2fb">More...</a><br /></td></tr>
 <tr class="separator:a5be436a9971bc10b498d8fcee312b2fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a2e8eb0358d609a15fc0b2c0393b1312f"><td class="memItemLeft" align="right" valign="top">static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a2e8eb0358d609a15fc0b2c0393b1312f">POINT_RAND_MAX</a> = 100</td></tr>
-<tr class="separator:a2e8eb0358d609a15fc0b2c0393b1312f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -738,7 +723,7 @@ template&lt;typename F , carl::DisableIf&lt; std::is_same&lt; F, Number &gt;&gt;
 
 <p>Copy constructor with number type conversion. </p>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00094">94</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00086">86</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -767,37 +752,11 @@ template&lt;class Number&gt; </div>
 
 <p>Destroys the object. </p>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00105">105</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00096">96</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a3eaa391acdbd9d785ad0608812d3b71f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Number&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addToComposition </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_element</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Adds a point to the composition. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_element</td><td>The point. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="a8a31007c74d34ca7c10676894175edc3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -988,7 +947,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00308">308</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00268">268</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1036,27 +995,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00323">323</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a72eb033baf9da144122b8189d0ac08dd"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Number&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::composedOf </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the composing points of this point (required for Fukuda's Minkowski sum algorithm). </p>
-<dl class="section return"><dt>Returns</dt><dd>A vector of points. </dd></dl>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00283">283</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1204,7 +1143,7 @@ template&lt;class Number&gt; </div>
 <p>Returns the space dimension. </p>
 <dl class="section return"><dt>Returns</dt><dd>The dimension. </dd></dl>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00489">hypro::Point&lt; int &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00449">hypro::Point&lt; int &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -1294,7 +1233,7 @@ template&lt;class Number&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00124">124</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00110">110</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1432,7 +1371,7 @@ template&lt;class Number&gt; </div>
 <p>Hash function. </p>
 <dl class="section return"><dt>Returns</dt><dd>The hash. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00111">111</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00102">102</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1601,7 +1540,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The infinity norm. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00337">337</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00297">297</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1751,9 +1690,9 @@ template&lt;class Number&gt; </div>
 
 <p>Conversion operator to the internal vector type. </p>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00579">579</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00536">536</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00715">hypro::convert()</a>, <a class="el" href="Grid_8h_source.html#l00057">hypro::pointIt&lt; Number &gt;::current()</a>, <a class="el" href="Point_8h_source.html#l00124">hypro::Point&lt; int &gt;::extend()</a>, <a class="el" href="Point_8h_source.html#l00111">hypro::Point&lt; int &gt;::hash()</a>, <a class="el" href="example__eigensimple2points_8cpp_source.html#l00015">main()</a>, <a class="el" href="Point_8h_source.html#l00579">hypro::Point&lt; std::size_t &gt;::operator vector_t&lt; std::size_t &gt;()</a>, <a class="el" href="Point_8h_source.html#l00522">hypro::Point&lt; int &gt;::operator!=()</a>, <a class="el" href="Ridge_8h_source.html#l00094">std::hash&lt; hypro::Ridge&lt; Number &gt; &gt;::operator()()</a>, <a class="el" href="Vertex_8h_source.html#l00257">std::hash&lt; hypro::Vertex&lt; Number &gt; &gt;::operator()()</a>, <a class="el" href="Point_8h_source.html#l00504">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="Point_8h_source.html#l00094">hypro::Point&lt; int &gt;::Point()</a>, <a class="el" href="Point_8h_source.html#l00353">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00388">testContainsPoint()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00672">hypro::convert()</a>, <a class="el" href="Grid_8h_source.html#l00057">hypro::pointIt&lt; Number &gt;::current()</a>, <a class="el" href="Point_8h_source.html#l00110">hypro::Point&lt; int &gt;::extend()</a>, <a class="el" href="Point_8h_source.html#l00102">hypro::Point&lt; int &gt;::hash()</a>, <a class="el" href="example__eigensimple2points_8cpp_source.html#l00015">main()</a>, <a class="el" href="Point_8h_source.html#l00536">hypro::Point&lt; std::size_t &gt;::operator vector_t&lt; std::size_t &gt;()</a>, <a class="el" href="Point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>, <a class="el" href="Ridge_8h_source.html#l00094">std::hash&lt; hypro::Ridge&lt; Number &gt; &gt;::operator()()</a>, <a class="el" href="Vertex_8h_source.html#l00257">std::hash&lt; hypro::Vertex&lt; Number &gt; &gt;::operator()()</a>, <a class="el" href="Point_8h_source.html#l00464">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="Point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, <a class="el" href="Point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>, <a class="el" href="example__differenceBounds_8cpp_source.html#l00388">testContainsPoint()</a>, and <a class="el" href="Point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
@@ -1790,7 +1729,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00522">522</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00479">479</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2015,7 +1954,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00461">461</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00421">421</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2052,7 +1991,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00468">468</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00428">428</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2213,7 +2152,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00489">489</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00449">449</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2252,7 +2191,7 @@ template&lt;typename F , carl::DisableIf&lt; std::is_same&lt; F, Number &gt;&gt;
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00504">504</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00464">464</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2289,7 +2228,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00475">475</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00435">435</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2326,7 +2265,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00482">482</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00442">442</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2513,13 +2452,6 @@ template&lt;class Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Projects the point on the given dimensions. </p>
-<p>Method to move the point </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td><a class="el" href="classhypro_1_1Point.html" title="Class for a point. ">Point</a> with coordinates describing the move. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>true, if the result has a negative coordinate. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">dimensions</td><td>The dimensions. </td></tr>
@@ -2637,33 +2569,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point vector that is duplicate-free. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00353">353</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="afb5565ae2829afc285e257ca46525d99"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Number&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::setComposition </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>_elements</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Sets the composition. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_elements</td><td>The elements which compose this point. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00313">313</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2866,7 +2772,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The origin point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00153">153</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00120">120</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2915,32 +2821,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00566">566</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a2e8eb0358d609a15fc0b2c0393b1312f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const int <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::POINT_RAND_MAX = 100</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00041">41</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00523">523</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>

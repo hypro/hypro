@@ -296,7 +296,7 @@ var searchData=
   ['translatehsv',['translateHsv',['../classhypro_1_1ConvexHull.html#ad3a6390cab0ea7170b8f15d88d973368',1,'hypro::ConvexHull']]],
   ['translatetoinduced',['translateToInduced',['../classhypro_1_1Grid.html#a2b6588205d03b08cfef7f87f4c1f6ef0',1,'hypro::Grid']]],
   ['translatetooriginal',['translateToOriginal',['../classhypro_1_1Grid.html#a12235c5b0d9e081d8c40272edef5fd75',1,'hypro::Grid']]],
-  ['treenode',['TreeNode',['../classhypro_1_1TreeNode.html#a8fa66e94c071fb175863a3e510a20404',1,'hypro::TreeNode::TreeNode()'],['../classhypro_1_1TreeNode.html#a34f2f8edb30a74da49751542341180f3',1,'hypro::TreeNode::TreeNode(unsigned _depth, const std::vector&lt; Data * &gt; &amp;_children, Data *_parent)'],['../structhypro_1_1Task.html#a4fa85face7a3d93b4ada24cca2645263',1,'hypro::Task::treeNode()']]],
+  ['treenode',['treeNode',['../structhypro_1_1Task.html#a4fa85face7a3d93b4ada24cca2645263',1,'hypro::Task::treeNode()'],['../classhypro_1_1TreeNode.html#a8fa66e94c071fb175863a3e510a20404',1,'hypro::TreeNode::TreeNode()'],['../classhypro_1_1TreeNode.html#a34f2f8edb30a74da49751542341180f3',1,'hypro::TreeNode::TreeNode(unsigned _depth, const std::vector&lt; Data * &gt; &amp;_children, Data *_parent)']]],
   ['treenode',['TreeNode',['../classhypro_1_1TreeNode.html',1,'hypro']]],
   ['treenode_2eh',['TreeNode.h',['../TreeNode_8h.html',1,'']]],
   ['treenode_3c_20reachtreenode_3c_20state_20_3e_20_3e',['TreeNode&lt; ReachTreeNode&lt; State &gt; &gt;',['../classhypro_1_1TreeNode.html',1,'hypro']]],

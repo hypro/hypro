@@ -1,8 +1,5 @@
 var NAVTREEINDEX25 =
 {
-"structhypro_1_1LinTrafoParameters.html#a8442ba8a0615d18707a446f8fd04d63a":[7,0,1,133,0],
-"structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e":[7,0,1,133,2],
-"structhypro_1_1LinTrafoParameters.html#a9550b4c0d76c69ce91856d2001e0c154":[7,0,1,133,9],
 "structhypro_1_1LinTrafoParameters.html#abd4ce16e2bc5ff16871cd069d1493539":[7,0,1,133,3],
 "structhypro_1_1LinTrafoParameters.html#addb669805b41f92036cdd72786610874":[7,0,1,133,1],
 "structhypro_1_1LinTrafoParameters.html#af76cf6a4667c2e2d1d7ad327e14cdef9":[7,0,1,133,7],
@@ -249,5 +246,8 @@ var NAVTREEINDEX25 =
 "structhypro_1_1projectionContent.html#ae9b2dd418ca93feba1a4d393fe1ec586":[7,0,1,173,0],
 "structhypro_1_1projectionContent.html#af0d1be0823a3dcf4d1cf3890ea894855":[7,0,1,173,4],
 "structhypro_1_1reachability_1_1ReachQuiet.html":[7,0,1,2,2],
-"structhypro_1_1reachability_1_1ReachSettings.html":[7,0,1,2,3]
+"structhypro_1_1reachability_1_1ReachSettings.html":[7,0,1,2,3],
+"structhypro_1_1scaleContent.html":[7,0,1,191],
+"structhypro_1_1scaleContent.html#a276ea8b741a7979ca707a18998530179":[7,0,1,191,0],
+"structhypro_1_1scaleContent.html#a8bced65d39d8b83c83988735f025dd44":[7,0,1,191,2]
 };
