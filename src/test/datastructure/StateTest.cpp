@@ -1,6 +1,8 @@
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
+#include "../../hypro/algorithms/reachability/FirstSegment.h"
 #include "../../hypro/datastructures/HybridAutomaton/Location.h"
 #include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/util/tuple_expansion/nth_element.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 #include <thread>
@@ -73,6 +75,18 @@ TEST( StateTest, Conversion ) {
 	EXPECT_ANY_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
 	EXPECT_ANY_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
 	EXPECT_EQ( representation_name::polytope_h, s.getSetType() );
+
+	s.setAndConvertType<SupportFunction<double>>();
+	EXPECT_ANY_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
+	EXPECT_ANY_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
+	EXPECT_NO_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
+	EXPECT_EQ( representation_name::support_function, s.getSetType() );
+
+	s.setAndConvertType<State_t<double>::nth_representation<0>>();
+	EXPECT_ANY_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
+	EXPECT_NO_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
+	EXPECT_ANY_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
+	EXPECT_EQ( representation_name::box, s.getSetType() );
 }
 
 TEST( StateTest, letTimePassZeroFlow ) {
@@ -117,4 +131,26 @@ TEST( StateTest, letTimePassLinearFlow ) {
 	EXPECT_EQ( resultIntervals.at( 0 ).upper(), N( 6121026514868073 ) / N( 1125899906842624 ) );
 	EXPECT_EQ( resultIntervals.at( 1 ).lower(), N( 0 ) );
 	EXPECT_EQ( resultIntervals.at( 1 ).upper(), N( 6121026514868073 ) / N( 2251799813685248 ) );
+}
+
+TEST( StateTest, bloatBoxVisitor ) {
+	using N = mpq_class;
+	using State = State_t<N>;
+
+	std::vector<carl::Interval<N>> intervals;
+	intervals.emplace_back( carl::Interval<N>{1, 2} );
+	intervals.emplace_back( carl::Interval<N>{0, 1} );
+	Box<N> b{intervals};
+
+	std::vector<carl::Interval<N>> intervals2;
+	intervals2.emplace_back( carl::Interval<N>{1, 2} );
+	intervals2.emplace_back( carl::Interval<N>{0, 1} );
+	Box<N> b2{intervals2};
+
+	State s;
+	s.setSet( b2 );
+	s.setSet( std::visit( hypro::reachability::detail::bloatBoxVisitor<typename State::repVariant, N>( b ),
+						  s.getSet( 0 ) ) );
+
+	EXPECT_EQ( b.minkowskiSum( b2 ), std::get<Box<N>>( s.getSet() ) );
 }

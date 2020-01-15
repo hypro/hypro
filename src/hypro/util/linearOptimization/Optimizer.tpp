@@ -54,14 +54,15 @@ Optimizer<Number>::Optimizer( Optimizer<Number>&& orig )
 
 //Copy ctor via Copy-and-Swap idiom
 template <typename Number>
-Optimizer<Number>::Optimizer( const Optimizer<Number>& orig ) {
+Optimizer<Number>::Optimizer( const Optimizer<Number>& orig )
+	: mConstraintMatrix( orig.matrix() )
+	, mConstraintVector( orig.vector() )
+	, mConsistencyChecked( false )
+	, maximize( orig.maximize )
+	, mRelationSymbols( orig.mRelationSymbols ) {
 	TRACE( "hypro.optimizer", "" );
 	assert( isSane() );
-	mConstraintMatrix = orig.matrix();
-	mConstraintVector = orig.vector();
-	mConsistencyChecked = false;
 	cleanContexts();
-	//mGlpkContexts = std::map<std::thread::id, glpk_context>();
 	assert( isSane() );
 }
 

@@ -137,21 +137,25 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	 * Geometric Object interface
 	 */
 	std::size_t dimension() const;
-	PolytopeT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
-	PolytopeT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	PolytopeT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
-	PolytopeT<Number, Converter, Setting> minkowskiSum( const PolytopeT<Number, Converter, Setting>& rhs ) const;
+	PolytopeT linearTransformation( const matrix_t<Number>& A ) const;
+	PolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	PolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	PolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
+	PolytopeT minkowskiSum( const PolytopeT& rhs ) const;
 	// implemented according to Komei Fukuda 2004
-	PolytopeT<Number, Converter, Setting> altMinkowskiSum( PolytopeT<Number, Converter, Setting>& rhs );
-	PolytopeT<Number, Converter, Setting> intersect( const PolytopeT<Number, Converter, Setting>& rhs ) const;
-	PolytopeT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& rhs ) const;
-	PolytopeT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	std::pair<CONTAINMENT, PolytopeT<Number, Converter, Setting>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-	std::pair<CONTAINMENT, PolytopeT<Number, Converter, Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	PolytopeT<Number, Converter, Setting> hull() const;
+	PolytopeT altMinkowskiSum( PolytopeT& rhs );
+	PolytopeT intersect( const PolytopeT& rhs ) const;
+	PolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	PolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<CONTAINMENT, PolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<CONTAINMENT, PolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	PolytopeT hull() const;
 	bool contains( const Point<Number>& point ) const;
-	bool contains( const PolytopeT<Number, Converter, Setting>& poly ) const;
-	PolytopeT<Number, Converter, Setting> unite( const PolytopeT<Number, Converter, Setting>& rhs ) const;
+	bool contains( const PolytopeT& poly ) const;
+	PolytopeT unite( const PolytopeT& rhs ) const;
 	//static PolytopeT<Number,Converter,Setting> unite(const PolytopeT<Number,Converter,Setting>& polytopes);
 	//  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
@@ -175,7 +179,7 @@ class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Se
 	 */
 	int computeMaxVDegree();
 	Point<Number> computeMaxPoint();
-	Point<Number> computeInitVertex( PolytopeT<Number, Converter, Setting> _secondPoly );
+	Point<Number> computeInitVertex( PolytopeT _secondPoly );
 	Point<Number> localSearch( Point<Number>& _vertex, Point<Number>& _sinkMaximizerTarget );
 };
 

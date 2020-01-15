@@ -5,6 +5,8 @@
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "util.h"
 
+#include <tuple>
+
 namespace hypro {
 namespace reachability {
 
@@ -22,55 +24,32 @@ matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc, Number timeSt
 	return matrixExponential( deltaMatrix );
 }
 
+namespace detail {
+
+template <typename VariantType, typename Number>
+class bloatBoxVisitor {
+  protected:
+	const Box<Number>& box;
+
+  public:
+	bloatBoxVisitor() = delete;
+	bloatBoxVisitor( const Box<Number>& box )
+		: box( box ) {}
+
+	template <typename ConcreteType>
+	inline VariantType operator()( const ConcreteType& set ) {
+		ConcreteType tmp;
+		convert( box, tmp );
+		return set.minkowskiSum( tmp );
+	}
+};
+
+}  // namespace detail
+
 template <typename Number, typename State>
 void bloatBox( State& in, const Box<Number>& bloatBox ) {
-	switch ( in.getSetType( 0 ) ) {
-		case representation_name::box: {
-			in.setSetDirect( std::get<Box<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toBox( bloatBox ) ) );
-			break;
-		}
-		case representation_name::polytope_h: {
-			in.setSetDirect( std::get<HPolytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toHPolytope( bloatBox ) ) );
-			break;
-		}
-		case representation_name::polytope_v: {
-			in.setSetDirect( std::get<VPolytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toVPolytope( bloatBox ) ) );
-			break;
-		}
-		case representation_name::zonotope: {
-			in.setSetDirect( std::get<Zonotope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toZonotope( bloatBox ) ) );
-			break;
-		}
-		case representation_name::support_function: {
-			in.setSetDirect( std::get<SupportFunction<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toSupportFunction( bloatBox ) ) );
-			break;
-		}
-		case representation_name::ppl_polytope: {
-#ifdef HYPRO_USE_PPL
-			in.setSetDirect( std::get<Polytope<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toPolytope( bloatBox ) ) );
-#endif
-			break;
-		}
-		case representation_name::difference_bounds: {
-			in.setSetDirect( std::get<DifferenceBounds<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toDifferenceBounds( bloatBox ) ) );
-			break;
-		}
-		case representation_name::SFN: {
-			in.setSetDirect( std::get<SupportFunctionNew<Number>>( in.getSet( 0 ) ).minkowskiSum( Converter<Number>::toSupportFunctionNew( bloatBox ) ) );
-			break;
-		}
-		case representation_name::constraint_set: {
-			assert( false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>." );
-			break;
-		}
-		case representation_name::taylor_model: {
-			assert( false && "CANNOT CONVERT TO TYPE TAYLOR MODEL." );
-			break;
-		}
-		default:
-			assert( false && "STATE SET TYPE UNDEF." );
-			break;
-	}
+	// bloat per visitor, use setSetDirect, as the type does not change.
+	in.setSetDirect( std::visit( hypro::reachability::detail::bloatBoxVisitor<typename State::repVariant, Number>( bloatBox ), in.getSet( 0 ) ) );
 }
 
 template <typename Number, typename State>
@@ -160,7 +139,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 			TRACE( "hypro.reachability", "first Flowpipe Segment (after minkowski Sum): " << firstSegment );
 #endif
 		} else {
-			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO, firstSegment, trafoMatrixResized, translation, Box<Number>::Empty() );
+			return std::make_tuple( CONTAINMENT::NO, State{}, matrix_t<Number>{}, vector_t<Number>{}, Box<Number>{} );
 		}
 
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
@@ -229,11 +208,11 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 
 			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized, translation, errorBoxVector[1] );
 		} else {
-			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
+			return std::make_tuple( CONTAINMENT::NO, State{}, matrix_t<Number>{}, vector_t<Number>{}, Box<Number>{} );
 		}
 	}  // if set does not satisfy the invariant, return false
 	else {
-		return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
+		return std::make_tuple( CONTAINMENT::NO, State{}, matrix_t<Number>{}, vector_t<Number>{}, Box<Number>{} );
 	}
 }
 

@@ -15,6 +15,7 @@
 
 #include <carl/interval/Interval.h>
 #include <carl/util/Singleton.h>
+#include <fstream>
 #include <stack>
 #include <string>
 #include <vector>
@@ -48,7 +49,8 @@ const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
 	 * @brief      A struct holding a basic set of options for the gnuplot plotting.
 	 */
 struct gnuplotSettings {
-	std::string name = "";			   // filename
+	std::string name = "";			   // title
+	std::string filename = "out";	  // filename
 	std::size_t color = colors[blue];  // default blue
 	bool fill = false;				   // do not fill
 	bool axes = true;				   // plot axes
@@ -61,6 +63,7 @@ struct gnuplotSettings {
 	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );  // dimensions to plot
 	bool cummulative = false;											// if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
 	bool plain = false;
+	bool overwriteFiles = false;  // set to enable file overwriting
 };
 
 }  // namespace plotting
@@ -74,7 +77,6 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	friend carl::Singleton<Plotter<Number>>;
 
   private:
-	std::string mFilename = "out";
 	mutable std::ofstream mOutfile;
 	mutable std::multimap<unsigned, std::vector<Point<Number>>> mObjects;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
@@ -83,7 +85,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	mutable std::pair<int, int> mLastDimensions;
 	mutable std::pair<vector_t<Number>, vector_t<Number>> mLimits;
 	std::map<unsigned, std::size_t> mObjectColors;
-	plotting::gnuplotSettings mSettings;
+	plotting::gnuplotSettings mSettings = plotting::gnuplotSettings{};
 	unsigned mId;
 
   protected:

@@ -415,6 +415,37 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 	std::pair<CONTAINMENT, SupportFunction<TypeParam>> belowSatisfy = sf1.satisfiesHalfspace( belowBox );
 	EXPECT_TRUE( belowSatisfy.first == hypro::CONTAINMENT::NO );
 	EXPECT_TRUE( belowSatisfy.second.empty() );
+
+	// example from draisine
+	std::vector<carl::Interval<double>> intervals;
+	intervals.emplace_back( carl::Interval<double>( 0.0, 15.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -5.0, 5.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -5.0, 5.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 0.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -2.0, 2.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 1.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -2.0, 2.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 31.0 ) );
+	intervals.emplace_back( carl::Interval<double>( 0.0, 0.0 ) );
+	intervals.emplace_back( carl::Interval<double>( -15.0, 15.0 ) );
+
+	SupportFunction<double> boxsf = SupportFunction<double>( intervals );
+	SupportFunction<double> boxsf2 = SupportFunction<double>( intervals );
+
+	matrix_t<double> constraints = matrix_t<double>( 7, 10 );
+	constraints << 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
+		  0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, -0.8, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0.8,
+		  0, 0;
+
+	vector_t<double> constants = vector_t<double>( 7 );
+	constants << -28, 28, 15, 12, 1.46667, 1.53281, -0.919687;
+
+	auto resultPair = boxsf.satisfiesHalfspaces( constraints, constants );
+	EXPECT_TRUE( resultPair.second.empty() );
+	EXPECT_EQ( CONTAINMENT::NO, resultPair.first );
+
+	auto result = boxsf2.intersectHalfspaces( constraints, constants );
+	EXPECT_TRUE( result.empty() );
 }
 
 TYPED_TEST( SupportFunctionTest, intersectHalfspaces ) {

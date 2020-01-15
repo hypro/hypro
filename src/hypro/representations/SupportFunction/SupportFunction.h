@@ -31,16 +31,16 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	mutable vector_t<Number> mVector;
 	mutable bool mTemplateSet = false;
 
-	SupportFunctionT<Number, Converter, Setting>( const std::shared_ptr<SupportFunctionContent<Number, Setting>> _source );
+	SupportFunctionT( const std::shared_ptr<SupportFunctionContent<Number, Setting>> _source );
 
   public:
 	SupportFunctionT();
-	SupportFunctionT( const SupportFunctionT<Number, Converter, Setting>& _orig );
+	SupportFunctionT( const SupportFunctionT& _orig );
 	SupportFunctionT( SF_TYPE _type, Number _radius, unsigned dimension );
 	SupportFunctionT( const std::vector<Point<Number>>& _vertices );
-	SupportFunctionT( const matrix_t<Number>& _directions, const vector_t<Number>& _distances );
+	SupportFunctionT( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, bool overrideReduction = false );
 	SupportFunctionT( const std::vector<Halfspace<Number>>& _planes );
-	SupportFunctionT( SupportFunctionT<Number, Converter, Setting>&& other );
+	SupportFunctionT( SupportFunctionT&& other );
 	SupportFunctionT( const matrix_t<Number>& _shapeMatrix );
 	SupportFunctionT( const std::vector<carl::Interval<Number>>& inBox );
 
@@ -66,6 +66,7 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	intersectionContent<Number, Setting>* intersectionParameters() const;
 	PolytopeSupportFunction<Number, Setting>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
+	BoxSupportFunction<Number, Setting>* box() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
 	matrix_t<Number> matrix() const;
@@ -76,20 +77,24 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
-	SupportFunctionT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
-	SupportFunctionT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
-	SupportFunctionT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	SupportFunctionT<Number, Converter, Setting> minkowskiSum( const SupportFunctionT<Number, Converter, Setting>& _rhs ) const;
-	SupportFunctionT<Number, Converter, Setting> intersect( const SupportFunctionT<Number, Converter, Setting>& _rhs ) const;
-	SupportFunctionT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& hs ) const;
-	SupportFunctionT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	SupportFunctionT project( const std::vector<std::size_t>& dimensions ) const;
+	SupportFunctionT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
+	SupportFunctionT linearTransformation( const matrix_t<Number>& A ) const;
+	SupportFunctionT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	SupportFunctionT minkowskiSum( const SupportFunctionT& _rhs ) const;
+	SupportFunctionT intersect( const SupportFunctionT& _rhs ) const;
+	SupportFunctionT intersectHalfspace( const Halfspace<Number>& hs ) const;
+	SupportFunctionT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
-	bool contains( const SupportFunctionT<Number, Converter, Setting>& rhs ) const;
-	bool contains( const SupportFunctionT<Number, Converter, Setting>& rhs, std::size_t directions ) const;
-	SupportFunctionT<Number, Converter, Setting> unite( const SupportFunctionT<Number, Converter, Setting>& _rhs ) const;
-	static SupportFunctionT<Number, Converter, Setting> unite( const std::vector<SupportFunctionT<Number, Converter, Setting>>& _rhs );
-	SupportFunctionT<Number, Converter, Setting> scale( const Number& _factor = 1 ) const;
+	bool contains( const SupportFunctionT& rhs ) const;
+	bool contains( const SupportFunctionT& rhs, std::size_t directions ) const;
+	SupportFunctionT unite( const SupportFunctionT& _rhs ) const;
+	static SupportFunctionT unite( const std::vector<SupportFunctionT>& _rhs );
+	SupportFunctionT scale( const Number& _factor = 1 ) const;
 	std::pair<CONTAINMENT, SupportFunctionT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, SupportFunctionT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	/**
@@ -98,7 +103,7 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	void reduceRepresentation();
 	bool empty() const;
 	void print() const;
-	void swap( SupportFunctionT<Number, Converter, Setting>& first, SupportFunctionT<Number, Converter, Setting>& second );
+	void swap( SupportFunctionT& first, SupportFunctionT& second );
 
 	/**
      * forces the topmost chain of linear transformations to be reduced to a single lin.trans
@@ -133,9 +138,12 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 
 	std::vector<std::size_t> collectProjections() const;
 
-	const SupportFunctionT<Number, Converter, Setting>& evaluateTemplate( std::size_t directionCount = defaultTemplateDirectionCount, bool force = false ) const;
+	const SupportFunctionT& evaluateTemplate( std::size_t directionCount = defaultTemplateDirectionCount, bool force = false ) const;
 
   private:
+	std::shared_ptr<SupportFunctionContent<Number, Setting>>& rGetContent() {
+		return content;
+	}
 };
 
 /** @} */
