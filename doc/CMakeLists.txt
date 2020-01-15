@@ -7,6 +7,10 @@ endif()
 
 find_package(Doxygen)
 
+# collect carl resources for doxygen
+get_target_property(carl_resources COCOA_SHARED INTERFACE_INCLUDE_DIRECTORIES)
+message(STATUS "${carl_resources}")
+
 # Configure doxygen settings file
 
 set(DOXYGEN_OUTPUT_DIR ${PROJECT_BINARY_DIR}/doxygen )

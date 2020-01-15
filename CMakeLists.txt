@@ -137,10 +137,6 @@ add_subdirectory(src/resources)
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-if(CREATE_DOC)
-	add_subdirectory(doc EXCLUDE_FROM_ALL)
-endif()
-
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 	set(CLANG_TIDY_CHECKS "google,modernize,performance,portability,readability")
@@ -169,6 +165,22 @@ add_subdirectory(src)
 add_subdirectory(src/test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 
+if(DEVELOPER)
+	target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wswitch
+	-Wno-deprecated-declarations
+	-Wempty-body
+	-Wconversion
+	-Wreturn-type
+	-Wparentheses
+	-Wno-format
+	-Wuninitialized
+	-Wunreachable-code
+	-Wunused-function
+	-Wunused-value
+	-Wunused-variable
+	-fsanitize=address)
+endif()
+
 ##############################################################################
 #### EXPORT SETTINGS
 
@@ -177,3 +189,8 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 
 include(export)
+
+
+if(CREATE_DOC)
+	add_subdirectory(doc EXCLUDE_FROM_ALL)
+endif()
