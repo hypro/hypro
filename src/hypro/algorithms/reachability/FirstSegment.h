@@ -160,7 +160,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 			TRACE( "hypro.reachability", "first Flowpipe Segment (after minkowski Sum): " << firstSegment );
 #endif
 		} else {
-			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO, firstSegment, trafoMatrixResized, translation, Box<Number>::Empty() );
 		}
 
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
@@ -227,8 +227,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 
 			assert( fullSegment.second.getLocation() != nullptr );
 
-			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized,
-																									translation, errorBoxVector[1] );
+			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized, translation, errorBoxVector[1] );
 		} else {
 			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( CONTAINMENT::NO );
 		}
