@@ -22,12 +22,12 @@ const matrix_t<Number>& Reset<Number>::getMatrix( std::size_t I ) const {
 
 template <typename Number>
 matrix_t<Number>& Reset<Number>::rGetMatrix( std::size_t I ) {
-	return mAffineResets[I].mTransformation.matrix();
+	return mAffineResets[I].mTransformation.rMatrix();
 }
 
 template <typename Number>
 vector_t<Number>& Reset<Number>::rGetVector( std::size_t I ) {
-	return mAffineResets[I].mTransformation.vector();
+	return mAffineResets[I].mTransformation.rVector();
 }
 
 template <typename Number>

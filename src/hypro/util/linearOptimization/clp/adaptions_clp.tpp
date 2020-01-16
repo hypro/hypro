@@ -1,6 +1,7 @@
 /**
  *
  */
+#ifdef HYPRO_USE_CLP
 #include "adaptions_clp.h"
 
 namespace hypro {
@@ -45,3 +46,4 @@ EvaluationResult<Number> clpGetInternalPoint( clp_context& context ) {
 }
 
 }  // namespace hypro
+#endif
