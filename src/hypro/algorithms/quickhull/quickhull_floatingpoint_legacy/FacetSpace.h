@@ -1,13 +1,11 @@
 #pragma once
 
-#include "../Quickhull.h"
-#include "util/logging/Logger.h"
-#include "util/adaptions_eigen/adaptions_eigen.h"
+#include "Quickhull.h"
+#include "../ScopedRoundingMode.h"
 
 namespace hypro {
-
-    template<typename Number, bool Euclidian>
-    class FloatQuickhull<Number, Euclidian>::FacetSpace {
+    template<typename Number>
+    class Quickhull<Number>::FacetSpace {
         pointVector_t& points;
         dimension_t dimension;
 
@@ -21,7 +19,7 @@ namespace hypro {
         explicit FacetSpace(pointVector_t& points, dimension_t dimension) : points(points), dimension(dimension) {};
 
         //facet construction
-        Facet& insertNew();
+        void insertNew();
 
         /**
          * Inserts a one dimensional facet that represents an interval bound at the given scalar.
@@ -30,7 +28,7 @@ namespace hypro {
         void insertTrivialFacet(Number const scalar);
 
         /**
-         * Inserts a new facet in the given dimension, from a lower dimensional facet, by setting 'reducedDimension' to 0.
+         * Inserts a new facet in the given dimension, from a lower dimensional facet, by setting the normal at 'reducedDimension' to 0.
          * @param other The facet to construct the new one from.
          * @param newDimension The dimension of the new facet.
          * @param reducedDimension The dimension to set to 0 in the new facet.
@@ -45,11 +43,11 @@ namespace hypro {
          * @param containedPoint A point to use for orientation.
          * @return The index where the visiblePoint was inserted.
          */
-        size_t insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt);
+        size_t insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, vector_t<mpq_class> const& containedPoint);
 
         //facet modification
         void computeNormal(Facet& facet);
-        void validateFacet(Facet& facet, point_t const& containedPoint, Facet const& adjacentFacet);
+        void validateFacet(Facet& facet, vector_t<mpq_class> const& containedPoint);
         void validateVertexContainment(Facet& facet);
 
         bool tryAddToOutsideSet(Facet& facet, point_ind_t point_i);
@@ -57,26 +55,25 @@ namespace hypro {
 
 
         //facet queries
+        bool isParallel(Facet const& facet, Facet const& other);
 
         //vector operations
         template<typename UnaryPredicate>
-        facet_ind_t findFacet(UnaryPredicate predicate);
+        typename Quickhull<Number>::facet_ind_t findFacet(UnaryPredicate predicate);
 
-        void removeCoplanarFacets();
         void compressVector();
         void endModificationPhase();
         void deleteFacet(facet_ind_t facet_i);
 
 
         //Debug functions
-
 #ifndef NDEBUG
         std::string printAll();
         std::string printFacet(Facet const& facet);
         void containsVertices(Facet& facet);
         void containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited);
-        void containsAllPoints(Facet& facet, bool inverted = false);
 #endif
+
     private:
         size_t copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt);
     };

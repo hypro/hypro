@@ -1,19 +1,19 @@
 #pragma once
 
 #include <vector>
-#include <algorithm>
 #include <boost/dynamic_bitset.hpp>
 #include "datastructures/Halfspace.h"
 #include "carl/numbers/numbers.h"
+#include "util/plotting/Plotter.h"
 #include "../number_traits.h"
 
 namespace hypro {
     /**
-     * Represents an exact quickhull computation on a set of input vertices.
+     * Represents a quickhull computation on a set of input vertices.
      * @tparam Number The Number type to be used.
      */
-    template<typename Number, bool Euclidian>
-    class Quickhull<Number, Euclidian, EnableIfFloatingpoint<Number>> {
+    template<typename Number>
+    class Quickhull<Number, EnableIfFloatingpoint<Number>> {
     public:
         // Nested classes
         struct Facet;
@@ -32,12 +32,12 @@ namespace hypro {
 
     private:
         //Inputs
-        pointVector_t& points;
+        pointVector_t& inputPoints;
         dimension_t dimension{};
 
         //Members
         FacetSpace fSpace;
-        // point_t baryCenter;
+        vector_t<mpq_class> baryCenter;
 
     public:
         Quickhull(pointVector_t& inputVertices, size_t dim);
@@ -54,11 +54,10 @@ namespace hypro {
 
         /**
          * @short constructs a facet from the first [1, ..., dim] points.
-         * @return True iff a lower dimensional convex hull was constructed.
          **/
-        bool constructInitialFacet();
+        void constructInitialFacet();
 
-        std::tuple<bool, point_ind_t> findFurthestPoint(Facet& facet);
+        std::tuple<Number, point_ind_t> findFurthestFromInitial();
 
         void findConeNeighbors(facet_ind_t facet_i);
 
@@ -73,8 +72,6 @@ namespace hypro {
         void processPoints();
 
         void constructLowerDimensional();
-
-        dimension_t pointSize();
     };
 }
 

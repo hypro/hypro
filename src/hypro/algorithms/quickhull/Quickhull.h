@@ -15,4 +15,4 @@ namespace hypro {
 
 
 #include "quickhull_exact/Quickhull.h"
-// #include "quickhull_floatingpoint/Quickhull.h"
+#include "quickhull_floatingpoint/Quickhull.h"

@@ -1,35 +1,33 @@
 #pragma once
 
-#include "Quickhull.h"
+#include "../ScopedRoundingMode.h"
 
 namespace hypro {
-    template<typename Number>
-    struct Quickhull<Number>::Facet {
+    template<typename Number, bool Euclidian>
+    struct FloatQuickhull<Number, Euclidian>::Facet {
+        Facet() = default;
+
         //modifiers
         void invert();
-        void setOrientation(vector_t<mpq_class> const& containedPoint);
+        void setOrientation(point_t const& containedPoint, Facet const& adjacentFacet);
 
         //queries
-        //aliases to the outer versions, as the outer facet is the 'real' facet for most purposes.
+        template<int RoundingMode = FE_UPWARD>
         Number distance(point_t const& point) const;
-        bool visible(point_t const& point) const;
-      
-        Number distanceOuter(point_t const& point) const;
-        Number distanceInner(point_t const& point) const;
-        bool visibleOuter(point_t const& point) const;
-        bool visibleInner(point_t const& point) const;
+        
+        bool visible(point_t const& vertex) const;
         size_t findNeighborIndex(facet_ind_t facet_i);
 
+        //members
         std::vector<point_ind_t> mVertices;
         std::vector<facet_ind_t> mNeighbors;
         std::vector<point_ind_t> mOutsideSet;
         point_t mNormal;
         point_ind_t furthestPoint;
         Number furthestPointDistance = Number(0);
-        Number mOuterOffset;
-        Number mInnerOffset;
+        Number mOffset = Number(1000);
+
     };
 }
-
 
 #include "Facet.tpp"

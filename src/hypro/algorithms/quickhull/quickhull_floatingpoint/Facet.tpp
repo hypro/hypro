@@ -6,55 +6,46 @@
 
 namespace hypro {
     //modifiers
-    template<typename Number>
-    void FloatQuickhull<Number>::Facet::invert() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::Facet::invert() {
         mNormal *= -1;
-        mOuterOffset *= -1;
+        mOffset *= -1;
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::Facet::setOrientation(vector_t<mpq_class> const& containedPoint) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::Facet::setOrientation(point_t const& containedPoint, Facet const& adjacentFacet) {
         //Set orientation of normal
-        if(containedPoint.dot(mNormal.template cast<mpq_class>()) - mOuterOffset > 0) {
+        Number distance = this->distance(containedPoint);
+        
+        if(distance > 0) {
             invert();
+        } else if(distance == 0) {
+            mNormal = adjacentFacet.mNormal;
+            mOffset = adjacentFacet.mOffset;
         }
     }
 
     //queries
-    template<typename Number>
-    Number FloatQuickhull<Number>::Facet::distance(point_t const& point) const {
-        return distanceOuter(point);
+    template<typename Number, bool Euclidian>
+    template<int RoundingMode>
+    Number FloatQuickhull<Number, Euclidian>::Facet::distance(point_t const& point) const {
+        ScopedRoundingMode rounding{RoundingMode};
+
+        if constexpr(Euclidian) { 
+            return point.dot(mNormal) - mOffset;
+        } else {
+            Number dotProd = point.head(point.rows() - 1).dot(mNormal) + point[point.rows() - 1] * -mOffset;
+            return dotProd;
+        }
     }
 
-    template<typename Number>
-    bool FloatQuickhull<Number>::Facet::visible(point_t const& point) const {
-        return visibleOuter(point);
+    template<typename Number, bool Euclidian>
+    bool FloatQuickhull<Number, Euclidian>::Facet::visible(point_t const& vertex) const {
+        return distance(vertex) > Number(0);
     }
 
-    template<typename Number>
-    Number FloatQuickhull<Number>::Facet::distanceOuter(point_t const& point) const {
-        ScopedRoundingMode round{FE_UPWARD};
-        return point.dot(mNormal) - mOuterOffset;
-    }
-
-    template<typename Number>
-    bool FloatQuickhull<Number>::Facet::visibleOuter(point_t const& point) const {
-        return distanceOuter(point) > Number(0);
-    }
-
-    template<typename Number>
-    Number FloatQuickhull<Number>::Facet::distanceInner(point_t const& point) const {
-        ScopedRoundingMode round{FE_UPWARD};
-        return point.dot(mNormal) - mInnerOffset;
-    }
-
-    template<typename Number>
-    bool FloatQuickhull<Number>::Facet::visibleInner(point_t const& point) const {
-        return distanceInner(point) > Number(0);
-    }
-
-    template<typename Number>
-    size_t FloatQuickhull<Number>::Facet::findNeighborIndex(facet_ind_t facet_i) {
+    template<typename Number, bool Euclidian>
+    size_t FloatQuickhull<Number, Euclidian>::Facet::findNeighborIndex(facet_ind_t facet_i) {
         for(size_t neighbor_pos = 0; neighbor_pos < mNeighbors.size(); ++neighbor_pos) {
             if(mNeighbors[neighbor_pos] == facet_i) return neighbor_pos;
         }

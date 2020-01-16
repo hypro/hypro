@@ -1,41 +1,45 @@
-#include "Quickhull.h"
-
 namespace hypro {
-    template<typename Number>
-    FloatQuickhull<Number>::Quickhull(pointVector_t& inputPoints, size_t dim) : inputPoints(inputPoints), dimension(dim), fSpace(inputPoints, dimension) {
-    }
+    template<typename Number, bool Euclidian>
+    FloatQuickhull<Number, Euclidian>::Quickhull(pointVector_t& points, dimension_t dimension) 
+    : points(points), dimension(dimension), fSpace(points, dimension) {}
 
-    template<typename Number>
-    void FloatQuickhull<Number>::compute() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::compute() {
 
-#ifndef NDEBUG
-        std::cout << "Inputs" << std::endl;
-        std::cout << inputPoints << std::endl;
-#endif
+        TRACE("quickhull", points);
         removeDuplicateInputs();
-        
+
         //There's only a single point, so we fix it from both sides.
-        if(dimension == 1 && inputPoints.size() == 1) {
+        if(dimension == 1 && points.size() == 1) {
             makeTrivialHull();
             return;
         }
 
         buildInitialPolytope();
+        
+        for(Facet& facet : fSpace.facets) {
+            TRACE("quickhull", "furthest " << facet.furthestPoint << std::endl << " distance " << facet.furthestPointDistance);
+        }
+        
         processPoints();
-
+#ifndef NDEBUG        
         TRACE("quickhull", "ALL facets:" << std::endl << fSpace.printAll());
+#endif
 
         fSpace.compressVector();
+        fSpace.removeCoplanarFacets();
 
 #ifndef NDEBUG
         TRACE("quickhull", "ALL facets:" << std::endl << fSpace.printAll());
-        
+
         for(facet_ind_t facet_i = 0; facet_i < fSpace.facets.size(); ++facet_i) {
             Facet& facet = fSpace.facets[facet_i];
-            for(point_t& point : inputPoints) {
-                if(facet.visibleOuter(point)) {
+            for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
+                point_t point = points[point_i];
+                if(facet.visible(point)) {
                     TRACE("quickhull", "NON CONTAINMENT" << std::endl << point << std::endl << "Facet:" << std::endl << fSpace.printFacet(facet));
                     TRACE("quickhull", "facet_i: " << facet_i);
+                    TRACE("quickhull", "distance" << std::endl << facet.distance(point));
                     assert(false);
                 }
             }
@@ -43,78 +47,72 @@ namespace hypro {
 #endif
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::removeDuplicateInputs() {
-
-        for(point_ind_t point_i = 0; point_i < inputPoints.size(); ++point_i) {
-            for(point_ind_t point_j = point_i + 1; point_j < inputPoints.size(); ++point_j) {
-                if(inputPoints[point_i] == inputPoints[point_j]) {
-                    inputPoints.erase(inputPoints.begin() + point_j);
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::removeDuplicateInputs() {
+        for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
+            for(point_ind_t point_j = point_i + 1; point_j < points.size(); ++point_j) {
+                if(points[point_i] == points[point_j]) {
+                    points.erase(points.begin() + point_j);
                 }
             }
         }
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::makeTrivialHull() {
-        fSpace.insertTrivialFacet(inputPoints[0][0]);
-        fSpace.insertTrivialFacet(inputPoints[0][0]);
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::makeTrivialHull() {
+        fSpace.insertTrivialFacet(points[0][0]);
+        fSpace.insertTrivialFacet(points[0][0]);
         fSpace.facets.back().invert();
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::buildInitialPolytope() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::buildInitialPolytope() {
 
-        constructInitialFacet();
+        if(constructInitialFacet()) return;
 
-        if(inputPoints.size() < dimension + 1) {
+        //Find furthest away point
+        auto [onPlane, furthestPoint_i] = findFurthestPoint(fSpace.facets.back());
+
+        TRACE("quickhull", "onPlane " << onPlane << " furthestPoint_i " << furthestPoint_i);
+
+        //Since the number type is exact, check if the furthest away point is on the inital facet.
+        if(onPlane) {
             constructLowerDimensional();
             return;
         }
 
-        //Find furthest away point
-        auto [furthestDistance, furthestPoint_i] = findFurthestFromInitial();
+        //calculate barycenter of initial polytope, which is the baryCenter vertices of the initial facet and the furthest away point
+        // baryCenter = points[furthestPoint_i];
 
-        //If the number type is exact, check if the furthest away point is on the inital facet.
-        if constexpr (is_exact<Number>) {
-            if(furthestDistance == 0) {
-                constructLowerDimensional();
-                return;
-            }
+        // for(size_t vertexPos = 0; vertexPos < dimension; ++vertexPos) {
+        //     baryCenter += points[fSpace.facets.back().mVertices[vertexPos]];
+        // }
+
+        // baryCenter /= dimension + 1;
+
+        //Set orientation
+        if(fSpace.facets.front().visible(points[furthestPoint_i])) {
+            fSpace.facets.front().invert();
         }
-
-        //calculate barycenter of initial polytope, which is the baryCenter of the first [1, ..., dim] points and the furthest away point
-        baryCenter = inputPoints[furthestPoint_i].template cast<mpq_class>();
-
-        for(size_t vertexInd = 0; vertexInd < dimension; ++vertexInd) {
-            baryCenter += inputPoints[vertexInd].template cast<mpq_class>();
-        }
-
-        baryCenter /= dimension + 1;
-
-        //Set orientation using the baryCenter and validate point containment for the initial facet.
-        fSpace.facets.front().setOrientation(baryCenter);
-        fSpace.validateVertexContainment(fSpace.facets.front());
-
-        //
+        
         fSpace.endModificationPhase();
 
         //Create cone from the new point
         for(size_t i = 0; i < dimension; ++i) {
-            size_t insertedAt = fSpace.insertConePart(0, furthestPoint_i, i, baryCenter);
+            size_t insertedAt = fSpace.insertConePart(0, furthestPoint_i, i);
             Facet& createdFacet = fSpace.facets.back();
 
-            if constexpr (!is_exact<Number>) {
-                if(std::any_of(fSpace.facets.begin(), fSpace.facets.end() - 1, [createdFacet, this](Facet const& other){
-                    return fSpace.isParallel(createdFacet, other);
-                })) {
-                    fSpace.facets.resize(1);
-                    constructLowerDimensional();
-                    return;
+            fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; //Set i-th neighbor of initial facet to the created facet.
+            
+            for(facet_ind_t other_i = 0; other_i < fSpace.facets.size() - 1; ++other_i ) {
+                if constexpr(Euclidian) {
+                    assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal);
+                } else {
+                    assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal ||
+                     fSpace.facets[other_i].mOffset != createdFacet.mOffset);
                 }
             }
-
-            fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; //Set i-th neighbor of initial facet to the created facet.
+            
             createdFacet.mNeighbors[insertedAt] = 0;
             findConeNeighbors(fSpace.facets.size() - 1);
         }
@@ -124,72 +122,128 @@ namespace hypro {
         fSpace.endModificationPhase();
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::constructInitialFacet() {
-        fSpace.insertNew();
+    template<typename Number, bool Euclidian>
+    bool FloatQuickhull<Number, Euclidian>::constructInitialFacet() {
+        Facet& facet = fSpace.insertNew();
 
-        //Initialize the vertices of the initial facet to [1, ... ,dim]
-        for(size_t i = 0; i < dimension && i < inputPoints.size(); ++i) {
-            fSpace.facets.front().mVertices[i] = i;
+        Eigen::FullPivLU<matrix_t<Number>> lu(dimension, dimension + 1);
+        matrix_t<Number> matrix = matrix_t<Number>::Zero(dimension, dimension + 1);
+
+        //Do first iteration
+        facet.mVertices[0] = 0;
+
+        //Set the first row
+        if constexpr(Euclidian) {
+            matrix.row(0).head(dimension) = points[0].transpose();
+            matrix(0, dimension) = 1;
+        } else {
+            matrix.row(0) = points[0].transpose();
         }
 
-        fSpace.computeNormal(fSpace.facets.back());
+        //Compute normal and offset
+        lu.compute(matrix);
+        vector_t<Number> result = lu.kernel().col(0);
+
+        facet.mNormal = result.head(dimension);
+        facet.mOffset = -result[dimension];
+
+        for(size_t d = 1; d < dimension; ++d) {
+            auto [onPlane, furthestPoint_i] = findFurthestPoint(facet);
+
+            if(onPlane) {
+                constructLowerDimensional();
+                return true;
+            }
+
+            facet.mVertices[d] = furthestPoint_i;
+            //Set the (d+1)-th row
+            if constexpr(Euclidian) {
+                matrix.row(d).head(dimension) = points[furthestPoint_i].transpose();
+                matrix(d, dimension) = 1;
+            } else {
+                matrix.row(d) = points[furthestPoint_i].transpose();
+            }
+            
+            //Compute normal and offset
+            lu.compute(matrix);
+            result = lu.kernel().col(0);
+
+            facet.mNormal = result.head(dimension);
+            facet.mOffset = -result[dimension];
+        }
+        std::sort(facet.mVertices.begin(), facet.mVertices.end());
+
+        return false;
     }
 
-    template<typename Number>
-    std::tuple<Number, size_t/*aka point_ind_t*/> FloatQuickhull<Number>::findFurthestFromInitial() {
+    template<typename Number, bool Euclidian>
+    std::tuple<bool, size_t> FloatQuickhull<Number, Euclidian>::findFurthestPoint(Facet& facet) {
         point_ind_t furthestPoint = 0;
         Number furthestDistance = 0;
 
-        //Start from dimension to only consider points that the initial facet was not constructed from.
-        for(point_ind_t point_i = dimension; point_i < inputPoints.size(); ++point_i) {
-            Number distance = carl::abs(fSpace.facets.front().distance(inputPoints[point_i]));
+        for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
+            Number minDistance = facet.template distance<FE_DOWNWARD>(points[point_i]);
+            Number maxDistance = facet.template distance<FE_UPWARD>(points[point_i]);
+            Number distance = 0;
+
+            if(minDistance > 0) {
+                distance = minDistance;
+            } else if(maxDistance < 0) {
+                distance = -maxDistance;
+            }
+            
+            if constexpr(!Euclidian) {
+                if(distance > 0 && points[point_i][dimension] == 0) {
+                    return std::make_tuple(false, point_i);
+                }
+            }
+
             if(distance > furthestDistance) {
                 furthestDistance = distance;
                 furthestPoint = point_i;
             }
         }
 
-        return std::make_tuple(furthestDistance, furthestPoint);
+        return std::make_tuple(furthestDistance == 0, furthestPoint);
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::processPoints() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::processPoints() {
 
-        size_t facetToProcess = getFacetToProcess();
+        facet_ind_t facetToProcess_i = getFacetToProcess();
 
-        while(facetToProcess != fSpace.facets.size()) {
+        while(facetToProcess_i != fSpace.facets.size()) {
 
             bitset_t visited{fSpace.facets.size()};
-            visited.set(facetToProcess);
-            buildCone(facetToProcess, fSpace.facets[facetToProcess].furthestPoint, visited);
+            visited.set(facetToProcess_i);
+            buildCone(facetToProcess_i, fSpace.facets[facetToProcess_i].furthestPoint, visited);
 
             partitionAllVertices();
             fSpace.endModificationPhase();
 
-            facetToProcess = getFacetToProcess();
+            facetToProcess_i = getFacetToProcess();
         }
     }
 
-    template<typename Number>
-    typename FloatQuickhull<Number>::facet_ind_t FloatQuickhull<Number>::getFacetToProcess() {
+    template<typename Number, bool Euclidian>
+    typename FloatQuickhull<Number, Euclidian>::facet_ind_t FloatQuickhull<Number, Euclidian>::getFacetToProcess() {
         return fSpace.findFacet([](Facet& facet) {
             return !facet.mOutsideSet.empty();
         });
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::buildCone(facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::buildCone(facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited) {
         fSpace.deleteFacet(currentFacet_i);
 
-        point_t& visiblePoint = inputPoints[visiblePoint_i];
+        point_t& visiblePoint = points[visiblePoint_i];
 
         for(size_t neighbor_pos = 0; neighbor_pos < dimension; ++neighbor_pos) {
             facet_ind_t neighbor_i = fSpace.facets[currentFacet_i].mNeighbors[neighbor_pos];
 
             if(!visited[neighbor_i]) {
                 //neighbor is "inside" horizon
-                if(fSpace.facets[neighbor_i].visibleInner(visiblePoint)) {
+                if(fSpace.facets[neighbor_i].visible(visiblePoint)) {
                     visited.set(neighbor_i);
                     buildCone(neighbor_i, visiblePoint_i, visited);
                 } else {
@@ -198,22 +252,11 @@ namespace hypro {
                     //Find the index of the ridge from the facet outside the horizon (neighbor_i) to the facet inside the horizon (currentFacet_i).
                     size_t ridgeIndex_outer_inner = fSpace.facets[neighbor_i].findNeighborIndex(currentFacet_i);
 
-                    size_t differentiatingPosition = fSpace.insertConePart(neighbor_i, visiblePoint_i, ridgeIndex_outer_inner, baryCenter);
+                    size_t differentiatingPosition = fSpace.insertConePart(neighbor_i, visiblePoint_i, ridgeIndex_outer_inner);
                     
-                    //Check if the new facet is convex to the one it was created from
-                    if(fSpace.facets.back().visibleInner(inputPoints[fSpace.facets[neighbor_i].mVertices[ridgeIndex_outer_inner]]) ) {
-                        //Not convex
-                        fSpace.facets.back().mNormal = fSpace.facets[neighbor_i].mNormal;
-                        fSpace.facets.back().mOuterOffset = fSpace.facets[neighbor_i].mOuterOffset;
-                        fSpace.facets.back().mInnerOffset = fSpace.facets[neighbor_i].mInnerOffset;
-
-                        fSpace.validateVertexContainment(fSpace.facets.back());
-
-                        //idiot test
-                        assert(fSpace.facets.back().visibleInner(inputPoints[fSpace.facets[neighbor_i].mVertices[ridgeIndex_outer_inner]]));
-                        assert(!fSpace.facets.back().visibleInner(visiblePoint));
-                    }
-
+#ifndef NDEBUG
+                    fSpace.containsAllPoints(fSpace.facets.back());
+#endif
                     //Set the outside facet as neighbor of the new facet at the index where the differentiating point was inserted.
                     fSpace.facets.back().mNeighbors[differentiatingPosition] = neighbor_i;
                     //Replace the facet inside the horizon (currentFacet_i) as neighbor of neighbor_i with the newly created facet.
@@ -225,28 +268,35 @@ namespace hypro {
         }
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::constructLowerDimensional() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::constructLowerDimensional() {
+
+        if constexpr(!Euclidian) return;
+
+        //TODO
+        //Needs fixing for inexact arithmetic
+        assert(false);
+
         TRACE("quickhull", "dropping from d=" << dimension << " to d=" << dimension - 1);
 
         //Copy first facet
         fSpace.facets.push_back(fSpace.facets.front());
         fSpace.facets.back().invert();
-
-        fSpace.validateVertexContainment(fSpace.facets.front());
-        fSpace.validateVertexContainment(fSpace.facets.back());
-
+    
         size_t reducableDimension = 0;
         for(; reducableDimension < dimension; ++reducableDimension) {
             if(fSpace.facets.front().mNormal[reducableDimension] != 0) break;
         }
 
+        assert(fSpace.facets.front().mNormal != point_t::Zero(dimension));
+        assert(reducableDimension < dimension);
+
         pointVector_t reducedPoints;
 
-        std::transform(inputPoints.begin(), inputPoints.end(), std::back_inserter<pointVector_t>(reducedPoints), [reducableDimension, this](point_t& point) {
-            point_t reducedPoint{dimension - 1};
+        std::transform(points.begin(), points.end(), std::back_inserter<pointVector_t>(reducedPoints), [reducableDimension, this](point_t& point) {            
+            point_t reducedPoint{pointSize() - 1};
 
-            for(size_t i=0,j=0; i < dimension - 1; ++i,++j) {
+            for(size_t i=0,j=0; i < pointSize() - 1; ++i,++j) {
                 if(j == reducableDimension) j += 1;
                 reducedPoint[i] = point[j];
             }
@@ -255,25 +305,28 @@ namespace hypro {
             return reducedPoint;
         });
 
-
+        //TODO I have no idea how the 'Euclidian' template argument of Quickhull us inferred here.
         Quickhull qh{reducedPoints, dimension - 1};
+        static_assert(std::is_same_v<decltype(qh), FloatQuickhull<Number, Euclidian>>);
+
         qh.compute();
 
         for(Facet const& facet : qh.getFacets()) {
-            fSpace.insertReduced(facet, dimension, reducableDimension);
+            fSpace.insertReduced(facet, pointSize(), reducableDimension);
         }
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::findConeNeighbors(facet_ind_t facet_i) {
+  
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::findConeNeighbors(facet_ind_t facet_i) {
         //We always ignore the last one
         for(facet_ind_t inserted_i = fSpace.firstInserted; inserted_i < fSpace.facets.size() - 1; ++inserted_i) {
             fSpace.establishNeighborhood(facet_i, inserted_i);
         }
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::partitionAllVertices() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::partitionAllVertices() {
 
         for(facet_ind_t deleted_i : fSpace.deletedPositions) {
 
@@ -289,17 +342,26 @@ namespace hypro {
         }
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::initialPartition() {
-        for(point_ind_t point_i = 0; point_i < inputPoints.size(); ++point_i) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::initialPartition() {
+        for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
             for(Facet& facet : fSpace.facets) {
                 if(fSpace.tryAddToOutsideSet(facet, point_i)) break;
             }
         }
     }
 
-    template<typename Number>
-    typename FloatQuickhull<Number>::facetVector_t& FloatQuickhull<Number>::getFacets() {
+    template<typename Number, bool Euclidian>
+    typename FloatQuickhull<Number, Euclidian>::facetVector_t& FloatQuickhull<Number, Euclidian>::getFacets() {
         return fSpace.facets;
+    }
+
+    template<typename Number, bool Euclidian>
+    size_t FloatQuickhull<Number, Euclidian>::pointSize() {
+        if constexpr(Euclidian) {
+            return dimension;
+        } else {
+            return dimension + 1;
+        }
     }
 }

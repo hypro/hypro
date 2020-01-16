@@ -3,33 +3,34 @@
 //
 
 #include "FacetSpace.h"
-#include "../ScopedRoundingMode.h"
 
 namespace hypro {
 
     //facet construction
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::insertNew() {
+    template<typename Number, bool Euclidian>
+    typename FloatQuickhull<Number, Euclidian>::Facet& FloatQuickhull<Number, Euclidian>::FacetSpace::insertNew() {
         facets.emplace_back();
 
         facets.back().mVertices = std::vector<point_ind_t>(dimension);
         facets.back().mNeighbors = std::vector<facet_ind_t>(dimension);
         facets.back().mOutsideSet = std::vector<point_ind_t>();
         facets.back().mNormal = point_t(dimension);
+
+        return facets.back();
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::insertTrivialFacet(const Number scalar) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::insertTrivialFacet(const Number scalar) {
         facets.emplace_back();
-        facets.back().mOuterOffset = scalar;
-        facets.back().mNormal = point_t(1);
+        facets.back().mOffset = scalar;
+        facets.back().mNormal = point_t{1};
         facets.back().mNormal[0] = 1;
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
         Facet& facet = facets.emplace_back();
-        facet.mOuterOffset = other.mOuterOffset;
+        facet.mOffset = other.mOffset;
         facet.mNormal = qhvector_t(newDimension);
 
         for(size_t i = 0, j = 0; i < newDimension; ++i, ++j) {
@@ -42,8 +43,8 @@ namespace hypro {
         }
     }
 
-    template<typename Number>
-    size_t FloatQuickhull<Number>::FacetSpace::copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt) {
+    template<typename Number, bool Euclidian>
+    size_t FloatQuickhull<Number, Euclidian>::FacetSpace::copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt) {
         //Doing some work here to keep the vertices sorted
         bool inserted = false;
         size_t insertedPosition = dimension - 1;
@@ -71,82 +72,62 @@ namespace hypro {
         return insertedPosition;
     }
 
-    template<typename Number>
-    size_t FloatQuickhull<Number>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt, hypro::vector_t<mpq_class> const& containedPoint) {
+    template<typename Number, bool Euclidian>
+    size_t FloatQuickhull<Number, Euclidian>::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt) {
         insertNew();
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
-        validateFacet(facets.back(), containedPoint);
+        validateFacet(facets.back(), points[facets[other_i].mVertices[replaceAt]], facets[other_i]);
         return insertedAt;
     }
 
     //facet modification
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::computeNormal(Facet& facet) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::computeNormal(Facet& facet) {
         ///TODO Allocate space for matrix once and reuse it
         ///TODO Could also use __restrict__ to get memcpy here (probably).
         matrix_t<Number> matrix(dimension, dimension + 1);
-        for(size_t i = 0; i < dimension; ++i) {
-            for(size_t j = 0; j < dimension; ++j) {
-                matrix.row(i)[j] = (points[facet.mVertices[i]])[j];
+        
+        if constexpr(Euclidian) {
+            for(size_t i = 0; i < dimension; ++i) {
+                matrix.row(i).head(dimension) = points[facet.mVertices[i]].transpose();
+                matrix.row(i)[dimension] = 1;
             }
-            matrix.row(i)[dimension] = 1;
+        } else {
+            for(size_t i = 0; i < dimension; ++i) {
+                matrix.row(i) = points[facet.mVertices[i]].transpose();
+            }
         }
 
-        TRACE("quickhull", "matrix" <<  std::endl << matrix);
+        matrix_t<double> m = convert<Number, double>(matrix);
+        TRACE("quickhull", "matrix" <<  std::endl << m);
+        
+        Eigen::FullPivLU<matrix_t<Number>> lu(matrix);
+
+        assert(static_cast<size_t>(lu.rank()) == dimension);
+        TRACE("quickhull", "matrix rank " << lu.rank());
 
         point_t result =  matrix.fullPivLu().kernel().col(0);
         
-        TRACE("quickhull", "result" << std::endl << result);
+        vector_t<double> r = convert<Number, double>(result);
+        TRACE("quickhull", "result" << std::endl << r);
         
         for(size_t i = 0; i < dimension; ++i) {
             facet.mNormal[i] = result[i];
         }
-        facet.mOuterOffset = -result[dimension];
-        facet.mInnerOffset = -result[dimension];
+        facet.mOffset = -result[dimension];
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::validateFacet(Facet& facet, hypro::vector_t<mpq_class> const& containedPoint) {
-        facet.setOrientation(containedPoint);
-        validateVertexContainment(facet);
-    }
-
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::validateVertexContainment(Facet& facet) {
-        {
-            ScopedRoundingMode round{FE_UPWARD};
-
-            for(point_ind_t point_i : facet.mVertices) {
-                Number distance = points[point_i].dot(facet.mNormal);
-
-                if(distance > facet.mOuterOffset) {
-                    facet.mOuterOffset = distance;
-                }
-                assert(distance - facet.mOuterOffset <= 0);
-            }
-        }
-        {
-            ScopedRoundingMode round{FE_DOWNWARD};
-            for(point_ind_t point_i : facet.mVertices) {
-                Number distance = points[point_i].dot(facet.mNormal);
-
-                if(distance < facet.mInnerOffset) {
-                    facet.mInnerOffset = distance;
-                }
-                assert(distance - facet.mInnerOffset >= 0);
-            }
-        }
-
-        TRACE("quickhull", "New Facet is:");
-        TRACE("quickhull", printFacet(facet));
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet, point_t const& contained, Facet const& adjacentFacet) {
+        facet.setOrientation(contained, adjacentFacet);
 #ifndef NDEBUG
-        containsVertices(facet);        
+        containsVertices(facet);
 #endif
     }
 
-    template<typename Number>
-    bool FloatQuickhull<Number>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
+    template<typename Number, bool Euclidian>
+    bool FloatQuickhull<Number, Euclidian>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
         Number distance = facet.distance(points[point_i]);
 
         if(distance > Number(0)) {
@@ -161,8 +142,8 @@ namespace hypro {
         return false;
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) {
         Facet& facet = facets[facet_i];
         Facet& other = facets[other_i];
 
@@ -201,46 +182,26 @@ namespace hypro {
     }
 
     //facet queries
-    template<typename Number>
-    bool FloatQuickhull<Number>::FacetSpace::isParallel(Facet const& facet, Facet const& other) {
-        if(dimension == 1) return false;
-
-        std::unique_ptr<std::pair<Number, Number>[]> minMax(new std::pair<Number, Number>[dimension]);
-
-        {
-            ScopedRoundingMode roundingMode{FE_DOWNWARD};
-            for(size_t i = 0; i < dimension; ++i) {
-                minMax[i].first = facet.mNormal[i]/other.mNormal[i];
-            }
-        }
-
-        {
-            ScopedRoundingMode roundingMode{FE_UPWARD};
-            for(size_t i = 0; i < dimension; ++i) {
-                minMax[i].second = facet.mNormal[i]/other.mNormal[i];
-            }
-        }
-
-        for(size_t i = 0; i < dimension; ++i) {
-            for(size_t j = i + 1; j < dimension; ++j) {
-                if(minMax[i].first > minMax[j].second || minMax[i].second < minMax[j].first){
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
+    //none yet
 
     //vector operations
-    template<typename Number>
+    template<typename Number, bool Euclidian>
     template<typename UnaryPredicate>
-    typename FloatQuickhull<Number>::facet_ind_t FloatQuickhull<Number>::FacetSpace::findFacet(UnaryPredicate predicate) {
+    typename FloatQuickhull<Number, Euclidian>::facet_ind_t FloatQuickhull<Number, Euclidian>::FacetSpace::findFacet(UnaryPredicate predicate) {
         return std::distance(facets.begin(), std::find_if(facets.begin(), facets.end(), predicate));
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::compressVector() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::removeCoplanarFacets() {
+        for(facet_ind_t facet_i = 0; facet_i < facets.size(); ++facet_i) {
+            facets.erase(std::remove_if(facets.begin() + facet_i + 1, facets.end(), [this, facet_i](Facet& facet) {
+                return facet.mNormal == facets[facet_i].mNormal && facet.mOffset == facets[facet_i].mOffset;
+            }), facets.end());
+        }
+    }
+
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::compressVector() {
         size_t newSize = facets.size() - deletedPositions.size();
 
         assert(newSize > 0);
@@ -260,20 +221,20 @@ namespace hypro {
         deletedPositions.clear();
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::endModificationPhase() {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::endModificationPhase() {
         firstInserted = facets.size();
         firstDeleted = deletedPositions.size();
     }
 
-    template<typename Number>
-    void FloatQuickhull<Number>::FacetSpace::deleteFacet(facet_ind_t facet_i) {
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::deleteFacet(facet_ind_t facet_i) {
         deletedPositions.push_back(facet_i);
     }
 
 #ifndef NDEBUG
-        template<typename Number>
-        std::string FloatQuickhull<Number>::FacetSpace::printAll() {
+        template<typename Number, bool Euclidian>
+        std::string FloatQuickhull<Number, Euclidian>::FacetSpace::printAll() {
             std::stringstream out;
             for(auto& facet : facets) {
                 out << printFacet(facet);
@@ -281,36 +242,36 @@ namespace hypro {
             return out.str();
         }
 
-        template<typename Number>
-        std::string FloatQuickhull<Number>::FacetSpace::printFacet(Facet const& facet) {
+        template<typename Number, bool Euclidian>
+        std::string FloatQuickhull<Number, Euclidian>::FacetSpace::printFacet(Facet const& facet) {
             std::stringstream out;
 
             char var = 'y';
 
-            out << "(" << facet.mNormal[0] << ")x";
+            out << "(" << carl::convert<mpq_class, double>(facet.mNormal[0]) << ")x";
             for(size_t i = 1; i < dimension; ++i) {
-                out << " + (" << facet.mNormal[i] << ")" << var;
+                out << " + (" << carl::convert<mpq_class, double>(facet.mNormal[i]) << ")" << var;
                 var += 1;
             }
 
-            out << " = " << facet.mOuterOffset << std::endl;
+            out << " = " << carl::convert<mpq_class, double>(facet.mOffset) << std::endl;
 
             return out.str();
         }
 
-        template<typename Number>
-        void FloatQuickhull<Number>::FacetSpace::containsVertices(Facet& facet) {
+        template<typename Number, bool Euclidian>
+        void FloatQuickhull<Number, Euclidian>::FacetSpace::containsVertices(Facet& facet) {
             bitset_t visited(facets.size());
             containsVertices(facet, facet, visited);
         }
 
-        template<typename Number>
-        void FloatQuickhull<Number>::FacetSpace::containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited) {
+        template<typename Number, bool Euclidian>
+        void FloatQuickhull<Number, Euclidian>::FacetSpace::containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited) {
             for(point_ind_t point_i : currentFacet.mVertices) {
                 if(facet.visible(points[point_i])) {
                     TRACE("quickhull", "NON CONTAINMENT" << std::endl << points[point_i] << std::endl << "Facet:" << std::endl << printFacet(facet));
                     TRACE("quickhull", "point_i " << point_i);
-                    //assert(false);
+                    assert(false);
                 }
             }
 
@@ -321,5 +282,33 @@ namespace hypro {
                 }
             }
         }
+
+        template<typename Number, bool Euclidian>
+        void FloatQuickhull<Number, Euclidian>::FacetSpace::containsAllPoints(Facet& facet, bool inverted) {
+            bitset_t checked(points.size());
+
+            for(Facet& facet : facets) {
+                for(point_ind_t point_i : facet.mOutsideSet) {
+                    checked.set(point_i);
+                }
+            }
+
+            for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
+                if(!checked[point_i] && facet.visible(points[point_i])) {
+                    TRACE("quickhull", "NON CONTAINMENT" << std::endl << points[point_i] << std::endl << "Facet:" << std::endl << printFacet(facet));
+                    TRACE("quickhull", "point_i " << point_i);
+                    TRACE("quickhull", "Checking inverted facet.");
+
+                    if(!inverted) {
+                        facet.invert();
+                        containsAllPoints(facet, true);
+                    }
+
+                    assert(false);
+                }
+            }
+
+        }
 #endif
+
 }
