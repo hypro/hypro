@@ -1,4 +1,5 @@
 #pragma once
+#ifdef HYPRO_USE_CLP
 #include <CoinPackedMatrix.hpp>
 
 namespace hypro {
@@ -36,3 +37,4 @@ CoinPackedMatrix createMatrix( const matrix_t<Number>& in ) {
 }  // namespace detail
 
 }  // namespace hypro
+#endif

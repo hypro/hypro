@@ -1,4 +1,5 @@
 #pragma once
+#ifdef HYPRO_USE_CLP
 #include "../../logging/Logger.h"
 #include "helperFunctions.h"
 
@@ -75,3 +76,4 @@ struct clp_context {
 	}
 };
 }  // namespace hypro
+#endif
