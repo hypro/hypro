@@ -19,9 +19,18 @@ var classhypro_1_1PolytopeSupportFunction =
     [ "multiEvaluate", "classhypro_1_1PolytopeSupportFunction.html#a529e87d4b2a345cba2f99d78c03eabda", null ],
     [ "operator=", "classhypro_1_1PolytopeSupportFunction.html#a1450f953528385ebed8c4f3722ebc96b", null ],
     [ "print", "classhypro_1_1PolytopeSupportFunction.html#aaf0dc0eef9ce0095ec22c5aa88cad20b", null ],
+    [ "removeRedundancy", "classhypro_1_1PolytopeSupportFunction.html#a1b5af8afc05ffb6ede30f54728c8f6a3", null ],
+    [ "rMatrix", "classhypro_1_1PolytopeSupportFunction.html#acc11a344bffba169c4b589b1337d0beb", null ],
+    [ "rVector", "classhypro_1_1PolytopeSupportFunction.html#a873cf88ee38fcea84adbc9bd689284be", null ],
     [ "supremumPoint", "classhypro_1_1PolytopeSupportFunction.html#ac52844b6e38dc5a4b2b63fd678873ed6", null ],
     [ "type", "classhypro_1_1PolytopeSupportFunction.html#abd5a5b093160822f7d45d29ac5efd6ec", null ],
     [ "vertices", "classhypro_1_1PolytopeSupportFunction.html#acd480ee496b5e3eebc41a2f66c95b985", null ],
     [ "operator<<", "classhypro_1_1PolytopeSupportFunction.html#a5e3db96e10703489719136e6af5876dd", null ],
-    [ "SupportFunctionT", "classhypro_1_1PolytopeSupportFunction.html#aa3effc03dfa7a7491abbf1e091c1aaa7", null ]
+    [ "SupportFunctionT", "classhypro_1_1PolytopeSupportFunction.html#aa3effc03dfa7a7491abbf1e091c1aaa7", null ],
+    [ "mCache", "classhypro_1_1PolytopeSupportFunction.html#a7066276f6888706170fa3f4b96d3f11b", null ],
+    [ "mConstraintConstants", "classhypro_1_1PolytopeSupportFunction.html#ae108353651a599d999e318faae02d57b", null ],
+    [ "mConstraints", "classhypro_1_1PolytopeSupportFunction.html#a7e6cac381ba6ff7f3c731d1673b2bada", null ],
+    [ "mDimension", "classhypro_1_1PolytopeSupportFunction.html#abc792f215e1ee54749cbc03a9a6c2be2", null ],
+    [ "mOpt", "classhypro_1_1PolytopeSupportFunction.html#a5f919744c444a8091d6c539c06d0ce61", null ],
+    [ "SupportFunctionContent< Number, Setting >", "classhypro_1_1PolytopeSupportFunction.html#a8405859f4a23d2c11bb9905c1b6de0b4", null ]
 ];

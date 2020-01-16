@@ -1,8 +1,10 @@
 var searchData=
 [
-  ['x0',['x0',['../structInput__equation.html#ab2af9b24f59a1ab0a0d8e8117068be2e',1,'Input_equation']]],
-  ['x0_5f2',['x0_2',['../structInput__equation.html#ad3eef27a85225e2494a501276d46cc3f',1,'Input_equation']]],
-  ['x_5ftr',['x_tr',['../structDependent__part__funct.html#a9cf3265531dda4c7185abbc567ecb3ec',1,'Dependent_part_funct']]],
-  ['xhom',['xhom',['../structDependent__part__funct.html#aa19610f473cc0d46c14a3f3e76a99a18',1,'Dependent_part_funct']]],
-  ['xinhom',['xinhom',['../structIndependent__part__funct.html#a6b176487d50a5c7acc13e8c175b1c645',1,'Independent_part_funct::xinhom()'],['../structhypro_1_1STindependentFunct.html#af2d36438d06319f72d3f0beb6fed60ea',1,'hypro::STindependentFunct::xinhom()']]]
+  ['v',['v',['../structhypro_1_1pointIt.html#a8fecfedda483a085d331b1001ea8da24',1,'hypro::pointIt::v()'],['../structhypro_1_1STflowpipeSegment.html#a8bd972eca4298e8f220d8f7cf365f6e0',1,'hypro::STflowpipeSegment::V()'],['../classhypro_1_1NonLinearOmega0Supportfunction.html#a12d80a0f11dbeb2e4ed5782ced6829f5',1,'hypro::NonLinearOmega0Supportfunction::V()']]],
+  ['val',['val',['../structhypro_1_1statistics_1_1OperationCounter.html#aa696d65842e3a7207c9d6a2c4fb427f4',1,'hypro::statistics::OperationCounter']]],
+  ['vars',['vars',['../classhypro_1_1CIFExprVisitor.html#a9ae8ef2d112e6a77c27424fa954fd605',1,'hypro::CIFExprVisitor::vars()'],['../classhypro_1_1CIFLocVisitor.html#ad779a429712c991c356e0e772021c75f',1,'hypro::CIFLocVisitor::vars()'],['../classhypro_1_1HybridCIFVisitor.html#a2aead51c71255e05025226bee394eb36',1,'hypro::HybridCIFVisitor::vars()'],['../classhypro_1_1HyproBadStatesVisitor.html#a1ccc7acc34fe85cd7c8752c43d9d7986',1,'hypro::HyproBadStatesVisitor::vars()'],['../classhypro_1_1HyproFormulaVisitor.html#aa64356eb34e1bb2acf5f1b793af08f5e',1,'hypro::HyproFormulaVisitor::vars()'],['../classhypro_1_1HyproHAVisitor.html#a1d9a523973332ddc5d9e57ae13493ac8',1,'hypro::HyproHAVisitor::vars()'],['../classhypro_1_1HyproInitialSetVisitor.html#a3b7fab44e1f60c3f9eaab5e6c398a3b0',1,'hypro::HyproInitialSetVisitor::vars()'],['../classhypro_1_1HyproLocationVisitor.html#ad62e1edc7ada043335d1ec8f3e4fed67',1,'hypro::HyproLocationVisitor::vars()'],['../classhypro_1_1HyproSettingVisitor.html#a9c6a9782fef350afea6103f1357f9202',1,'hypro::HyproSettingVisitor::vars()'],['../classhypro_1_1HyproTransitionVisitor.html#a694eb7c43aa5f7d97bac3c022a2717cd',1,'hypro::HyproTransitionVisitor::vars()']]],
+  ['vartoint',['varToInt',['../classhypro_1_1CIFExprVisitor.html#a2fbc8bac337e8cecf7f2bd1b107d478d',1,'hypro::CIFExprVisitor']]],
+  ['vec',['vec',['../classhypro_1_1genericAffineTransformationVisitor.html#a7f4097cad32f84f802344166938706da',1,'hypro::genericAffineTransformationVisitor']]],
+  ['vinv',['Vinv',['../structhypro_1_1STflowpipeSegment.html#a0db3bf6e3b4fd96f7f1a78fdb143cfb9',1,'hypro::STflowpipeSegment']]],
+  ['vres',['Vres',['../classhypro_1_1NonLinearOmega0Supportfunction.html#a2129de6893ababa813ffaffc8bc3a342',1,'hypro::NonLinearOmega0Supportfunction']]]
 ];

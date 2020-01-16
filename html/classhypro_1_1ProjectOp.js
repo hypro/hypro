@@ -1,5 +1,6 @@
 var classhypro_1_1ProjectOp =
 [
+    [ "PointerVec", "classhypro_1_1ProjectOp.html#a596927b46f49c705e72e3424f526271f", null ],
     [ "ProjectOp", "classhypro_1_1ProjectOp.html#af47c6ddc5d34ec50f7409e88da78cb4c", null ],
     [ "ProjectOp", "classhypro_1_1ProjectOp.html#acb7add8d798301dd30ddbe981d76978e", null ],
     [ "ProjectOp", "classhypro_1_1ProjectOp.html#aff28beab7b1f1d882d354b86466482dd", null ],
@@ -17,5 +18,10 @@ var classhypro_1_1ProjectOp =
     [ "reverseOp", "classhypro_1_1ProjectOp.html#af1bf41be30b2c41e3552deb20ab19ea3", null ],
     [ "setDimension", "classhypro_1_1ProjectOp.html#ab14629987bf438e0729d80662f3bceb1", null ],
     [ "supremumPoint", "classhypro_1_1ProjectOp.html#a25f80ecf6ea38767572cae55c318eef2", null ],
-    [ "transform", "classhypro_1_1ProjectOp.html#a215eef8c32875154610507241950ce57", null ]
+    [ "transform", "classhypro_1_1ProjectOp.html#a215eef8c32875154610507241950ce57", null ],
+    [ "dimensions", "classhypro_1_1ProjectOp.html#a6793b339a5ef8a0751c44df9f0af586b", null ],
+    [ "mChildren", "classhypro_1_1ProjectOp.html#a70d3c70d7e8b4409493f56a1b6e801db", null ],
+    [ "mDimension", "classhypro_1_1ProjectOp.html#a2c3ce10ba9d6c51131377d54dcd147a5", null ],
+    [ "originCount", "classhypro_1_1ProjectOp.html#abd6a6051494ea839562e13345f61b066", null ],
+    [ "type", "classhypro_1_1ProjectOp.html#ac8dfc2b6fe6e28af51e4d722132ab28d", null ]
 ];

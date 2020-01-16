@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Vertex.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Vertex-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -184,6 +185,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ae71a6387aaeb37a13ff216431c42d4d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50d63a64bc4ce8ca311e8ce535f2d1f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Vertex.html#a50d63a64bc4ce8ca311e8ce535f2d1f7">at</a> (unsigned _i) const </td></tr>
 <tr class="separator:a50d63a64bc4ce8ca311e8ce535f2d1f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad88e8ea9aa52f5253d11eb88c1554104"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Vertex.html#ad88e8ea9aa52f5253d11eb88c1554104">mPoint</a></td></tr>
+<tr class="separator:ad88e8ea9aa52f5253d11eb88c1554104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ef3455118a13661db823bc4157704e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Vertex.html#a4ef3455118a13661db823bc4157704e7">mColor</a> = false</td></tr>
+<tr class="separator:a4ef3455118a13661db823bc4157704e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -383,8 +391,6 @@ template&lt;class Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00072">72</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Vertex_8h_source.html#l00072">hypro::Vertex&lt; std::size_t &gt;::Vertex()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a09df1f7c19b8f1696c9027b20e06faaa"></a>
@@ -498,6 +504,8 @@ template&lt;class Number&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the color of the vertex. </dd></dl>
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00085">85</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
+
+<p>Referenced by <a class="el" href="VertexContainer_8h_source.html#l00112">hypro::VertexContainer&lt; Number &gt;::find()</a>, and <a class="el" href="Vertex_8h_source.html#l00257">std::hash&lt; hypro::Vertex&lt; Number &gt; &gt;::operator()()</a>.</p>
 
 </div>
 </div>
@@ -825,6 +833,8 @@ template&lt;class Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00097">97</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
 
+<p>Referenced by <a class="el" href="Vertex_8h_source.html#l00257">std::hash&lt; hypro::Vertex&lt; Number &gt; &gt;::operator()()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a70dc2c478ffe00ca431736ec82b15568"></a>
@@ -879,6 +889,8 @@ template&lt;class Number&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>the point of the vertex </dd></dl>
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00103">103</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
+
+<p>Referenced by <a class="el" href="VertexContainer_8h_source.html#l00131">hypro::VertexContainer&lt; Number &gt;::linearTransformation()</a>, and <a class="el" href="VertexContainer_8h_source.html#l00118">hypro::VertexContainer&lt; Number &gt;::move()</a>.</p>
 
 </div>
 </div>
@@ -975,6 +987,8 @@ template&lt;class Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00116">116</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Vertex_8h_source.html#l00165">hypro::Vertex&lt; std::size_t &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -1136,8 +1150,6 @@ template&lt;class Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00247">247</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Vertex_8h_source.html#l00243">hypro::Vertex&lt; std::size_t &gt;::at()</a>, <a class="el" href="Vertex_8h_source.html#l00137">hypro::Vertex&lt; std::size_t &gt;::dimension()</a>, <a class="el" href="Vertex_8h_source.html#l00147">hypro::Vertex&lt; std::size_t &gt;::hasDimension()</a>, <a class="el" href="Vertex_8h_source.html#l00152">hypro::Vertex&lt; std::size_t &gt;::hasDimensions()</a>, <a class="el" href="Vertex_8h_source.html#l00165">hypro::Vertex&lt; std::size_t &gt;::operator=()</a>, <a class="el" href="Vertex_8h_source.html#l00240">hypro::Vertex&lt; std::size_t &gt;::operator[]()</a>, <a class="el" href="Vertex_8h_source.html#l00132">hypro::Vertex&lt; std::size_t &gt;::rawCoordinates()</a>, <a class="el" href="Vertex_8h_source.html#l00142">hypro::Vertex&lt; std::size_t &gt;::variables()</a>, and <a class="el" href="Vertex_8h_source.html#l00060">hypro::Vertex&lt; std::size_t &gt;::Vertex()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a33ef90f2f7a6a4fd9d5b1d089a168f35"></a>
@@ -1229,6 +1241,59 @@ template&lt;class Number&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
 <p>Definition at line <a class="el" href="Vertex_8h_source.html#l00233">233</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a4ef3455118a13661db823bc4157704e7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1Vertex.html">hypro::Vertex</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mColor = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Vertex_8h_source.html#l00040">40</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Vertex_8h_source.html#l00085">hypro::Vertex&lt; std::size_t &gt;::color()</a>, <a class="el" href="Vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, and <a class="el" href="Vertex_8h_source.html#l00116">hypro::Vertex&lt; std::size_t &gt;::swap()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad88e8ea9aa52f5253d11eb88c1554104"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Vertex.html">hypro::Vertex</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mPoint</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Vertex_8h_source.html#l00039">39</a> of file <a class="el" href="Vertex_8h_source.html">Vertex.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Vertex_8h_source.html#l00097">hypro::Vertex&lt; std::size_t &gt;::point()</a>, <a class="el" href="Vertex_8h_source.html#l00103">hypro::Vertex&lt; std::size_t &gt;::rPoint()</a>, and <a class="el" href="Vertex_8h_source.html#l00116">hypro::Vertex&lt; std::size_t &gt;::swap()</a>.</p>
 
 </div>
 </div>

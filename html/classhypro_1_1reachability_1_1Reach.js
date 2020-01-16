@@ -7,7 +7,9 @@ var classhypro_1_1reachability_1_1Reach =
     [ "checkTransitions", "classhypro_1_1reachability_1_1Reach.html#a83257bb824a2bc6b9a02864c48dbf7cf", null ],
     [ "computeForwardReachability", "classhypro_1_1reachability_1_1Reach.html#a10779cf610460de24cf0f30e24f650bf", null ],
     [ "computeForwardTimeClosure", "classhypro_1_1reachability_1_1Reach.html#a2eadfe3bf981539052012a246cf33be6", null ],
+    [ "computeTrafoMatrix", "classhypro_1_1reachability_1_1Reach.html#a2427ed1bb4e7bc1c2c79759922e77cc0", null ],
     [ "getRepresentationType", "classhypro_1_1reachability_1_1Reach.html#a1021193f2a08c496c475c5ea7c3dba29", null ],
+    [ "intersectBadStates", "classhypro_1_1reachability_1_1Reach.html#a14939c2b650af51a7cce21f6964a1fee", null ],
     [ "intersectGuard", "classhypro_1_1reachability_1_1Reach.html#a2f25f35e12b287f6179e4cbef2d06140", null ],
     [ "processDiscreteBehaviour", "classhypro_1_1reachability_1_1Reach.html#a349e5da9bc26bc84f85fd6c69a8d62cb", null ],
     [ "reachedBadStates", "classhypro_1_1reachability_1_1Reach.html#a3d01651acfd13484fbd42d123cd5d591", null ],
@@ -15,5 +17,15 @@ var classhypro_1_1reachability_1_1Reach =
     [ "setInitialStates", "classhypro_1_1reachability_1_1Reach.html#ac8acaa6d2e364bb08fa41f7967701e00", null ],
     [ "setRepresentationType", "classhypro_1_1reachability_1_1Reach.html#a88ef776161ae0a085b155804f48885c4", null ],
     [ "setSettings", "classhypro_1_1reachability_1_1Reach.html#a37b6b2bd43a38a9bdba227f195655ea6", null ],
-    [ "settings", "classhypro_1_1reachability_1_1Reach.html#a40db4dd09cebc5c779e9885ce4219cb3", null ]
+    [ "settings", "classhypro_1_1reachability_1_1Reach.html#a40db4dd09cebc5c779e9885ce4219cb3", null ],
+    [ "mAutomaton", "classhypro_1_1reachability_1_1Reach.html#a3c30b38aa83898b71a4971fee3a18cde", null ],
+    [ "mBloatingFactor", "classhypro_1_1reachability_1_1Reach.html#a85a65a8567f2af46b373cf7c1c39a970", null ],
+    [ "mCurrentLevel", "classhypro_1_1reachability_1_1Reach.html#a6a43c39000da9a08a6c5c4ea176e6e39", null ],
+    [ "mInitialStatesSet", "classhypro_1_1reachability_1_1Reach.html#a74fb1470333d817525928930c538f05a", null ],
+    [ "mIntersectedBadStates", "classhypro_1_1reachability_1_1Reach.html#ab45d2ff06b184f2a708f813413e67aa6", null ],
+    [ "mReachableStates", "classhypro_1_1reachability_1_1Reach.html#a95daf846b360d9a25a6f34e28e1f6b4b", null ],
+    [ "mSettings", "classhypro_1_1reachability_1_1Reach.html#a113844db5e692fcd9a7f94249c45dc95", null ],
+    [ "mType", "classhypro_1_1reachability_1_1Reach.html#ae7adac9b389a1607cdbdde2a893b0f89", null ],
+    [ "mWorkingQueue", "classhypro_1_1reachability_1_1Reach.html#a4a6a40b5bedbb2add2aadf5283ac931f", null ],
+    [ "plotter", "classhypro_1_1reachability_1_1Reach.html#a123431bebf6149ae937c56c9508ea666", null ]
 ];

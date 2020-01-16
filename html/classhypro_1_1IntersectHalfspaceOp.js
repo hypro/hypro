@@ -1,5 +1,6 @@
 var classhypro_1_1IntersectHalfspaceOp =
 [
+    [ "PointerVec", "classhypro_1_1IntersectHalfspaceOp.html#a72ee77ddcbb9bc8e61db25fb70e6ba49", null ],
     [ "IntersectHalfspaceOp", "classhypro_1_1IntersectHalfspaceOp.html#aba3e93ae146d28c72f946a17f9f5afe8", null ],
     [ "IntersectHalfspaceOp", "classhypro_1_1IntersectHalfspaceOp.html#a6c037dcb17dba30a4a67f1357f63cad6", null ],
     [ "IntersectHalfspaceOp", "classhypro_1_1IntersectHalfspaceOp.html#a3a3c462b2bb7f7266b65fc92287f99c4", null ],
@@ -19,5 +20,11 @@ var classhypro_1_1IntersectHalfspaceOp =
     [ "reverseOp", "classhypro_1_1IntersectHalfspaceOp.html#a3fe3eb20d9400d044a2aa54160ae6d5a", null ],
     [ "setDimension", "classhypro_1_1IntersectHalfspaceOp.html#ad4b3a9bdf1424231cc57071004c9fd3a", null ],
     [ "supremumPoint", "classhypro_1_1IntersectHalfspaceOp.html#a734107bb8707aab2482ad942624471c5", null ],
-    [ "transform", "classhypro_1_1IntersectHalfspaceOp.html#afbe995b5e431c2639b433bc5ff6e19ad", null ]
+    [ "transform", "classhypro_1_1IntersectHalfspaceOp.html#afbe995b5e431c2639b433bc5ff6e19ad", null ],
+    [ "hspace", "classhypro_1_1IntersectHalfspaceOp.html#afffdd891735ca283b209febf3903280e", null ],
+    [ "mChildren", "classhypro_1_1IntersectHalfspaceOp.html#a08acb20f7658b6856d24f7e129445407", null ],
+    [ "mDimension", "classhypro_1_1IntersectHalfspaceOp.html#ad4595dacf38fbef1e5102c5d203fb0c0", null ],
+    [ "mEmpty", "classhypro_1_1IntersectHalfspaceOp.html#af737a8f0da5197fc42abed3705beed55", null ],
+    [ "originCount", "classhypro_1_1IntersectHalfspaceOp.html#a3a08729284f949f09abf3ebd9a517513", null ],
+    [ "type", "classhypro_1_1IntersectHalfspaceOp.html#a2b9b9a88c2858e69a7d4fd8ac5761f2a", null ]
 ];

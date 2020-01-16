@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1ltiInvariantHandler.html
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="classhypro_1_1ltiInvariantHandler-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::ltiInvariantHandler&lt; State &gt; Class Template Reference</div>  </div>
@@ -158,6 +159,11 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a98e8bf810596b69b4890f117189c1bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afbf8d2fe517783e9a87e111d35934ba8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiInvariantHandler.html#afbf8d2fe517783e9a87e111d35934ba8">mMarkedForDelete</a> = false</td></tr>
 <tr class="separator:afbf8d2fe517783e9a87e111d35934ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a427180a65abdd04088ad55aceec4e987"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiInvariantHandler.html#a427180a65abdd04088ad55aceec4e987">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:a427180a65abdd04088ad55aceec4e987"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />
@@ -165,7 +171,32 @@ class hypro::ltiInvariantHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="forwardDeclarations_8h_source.html#l00016">16</a> of file <a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a427180a65abdd04088ad55aceec4e987"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1ltiInvariantHandler.html">hypro::ltiInvariantHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiInvariantHandler.html#a427180a65abdd04088ad55aceec4e987">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiInvariantHandler_8h_source.html#l00007">7</a> of file <a class="el" href="ltiInvariantHandler_8h_source.html">ltiInvariantHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a02b0adc0aeaf00e202c59516213633c9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -227,9 +258,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ltiInvariantHandler_8h_source.html#l00017">17</a> of file <a class="el" href="ltiInvariantHandler_8h_source.html">ltiInvariantHandler.h</a>.</p>
 
-<p>References <a class="el" href="ltiInvariantHandler_8h_source.html#l00017">hypro::ltiInvariantHandler&lt; State &gt;::ltiInvariantHandler()</a>.</p>
-
-<p>Referenced by <a class="el" href="ltiInvariantHandler_8h_source.html#l00017">hypro::ltiInvariantHandler&lt; State &gt;::ltiInvariantHandler()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1ltiInvariantHandler.html#a14a929258ad102a8b3be4df7216b19f3">hypro::ltiInvariantHandler&lt; State &gt;::handle()</a>.</p>
 
 </div>
 </div>
@@ -323,6 +352,8 @@ template&lt;typename State &gt; </div>
 
 <p>Reimplemented in <a class="el" href="classhypro_1_1timedInvariantHandler.html#a27aebef521d03fd04973b4483a89a196">hypro::timedInvariantHandler&lt; State &gt;</a>.</p>
 
+<p>Referenced by <a class="el" href="ltiInvariantHandler_8h_source.html#l00017">hypro::ltiInvariantHandler&lt; State &gt;::ltiInvariantHandler()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5e7280e17a61bbef660e3545a1cf3ea5"></a>
@@ -383,8 +414,6 @@ template&lt;typename State &gt; </div>
 <p>Implements <a class="el" href="classhypro_1_1IInvariantHandler.html#a6e922d6a9f62368420a4155933fef223">hypro::IInvariantHandler</a>.</p>
 
 <p>Definition at line <a class="el" href="ltiInvariantHandler_8h_source.html#l00027">27</a> of file <a class="el" href="ltiInvariantHandler_8h_source.html">ltiInvariantHandler.h</a>.</p>
-
-<p>References <a class="el" href="ltiInvariantHandler_8h_source.html#l00013">hypro::ltiInvariantHandler&lt; State &gt;::mMarkedForDelete</a>.</p>
 
 </div>
 </div>
@@ -461,7 +490,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ltiInvariantHandler_8h_source.html#l00013">13</a> of file <a class="el" href="ltiInvariantHandler_8h_source.html">ltiInvariantHandler.h</a>.</p>
 
-<p>Referenced by <a class="el" href="ltiInvariantHandler_8h_source.html#l00026">hypro::ltiInvariantHandler&lt; State &gt;::getMarkedForDelete()</a>, and <a class="el" href="ltiInvariantHandler_8h_source.html#l00027">hypro::ltiInvariantHandler&lt; State &gt;::setMarkedForDelete()</a>.</p>
+<p>Referenced by <a class="el" href="ltiInvariantHandler_8h_source.html#l00026">hypro::ltiInvariantHandler&lt; State &gt;::getMarkedForDelete()</a>.</p>
 
 </div>
 </div>

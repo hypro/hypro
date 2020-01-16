@@ -36,5 +36,14 @@ var classhypro_1_1Transition =
     [ "operator!=", "classhypro_1_1Transition.html#a3f7b3bbf1b50c4d5255108d74f5588a0", null ],
     [ "operator<<", "classhypro_1_1Transition.html#af0adce6170b39f721c3bd59bbe5497f4", null ],
     [ "operator==", "classhypro_1_1Transition.html#ae641838c198b78f02181b60aab6365e4", null ],
-    [ "operator==", "classhypro_1_1Transition.html#a643c80c7ff21cad4f844e02f55ceedf6", null ]
+    [ "operator==", "classhypro_1_1Transition.html#a643c80c7ff21cad4f844e02f55ceedf6", null ],
+    [ "mAggregationSetting", "classhypro_1_1Transition.html#adc352ae2255863471ea3563b72766818", null ],
+    [ "mGuard", "classhypro_1_1Transition.html#a20ac3f5963359c898ed7ce2134ed1161", null ],
+    [ "mHash", "classhypro_1_1Transition.html#a65019c3a84b8f65b6d218ba1a84ea60f", null ],
+    [ "mLabels", "classhypro_1_1Transition.html#a156adb23dc5cfa70436be0aedd52d0d4", null ],
+    [ "mReset", "classhypro_1_1Transition.html#a4db1709d8bc06d849f3195b2b7a02f1a", null ],
+    [ "mSource", "classhypro_1_1Transition.html#a05f420675ccfe4064af40f6edbca3562", null ],
+    [ "mTarget", "classhypro_1_1Transition.html#a6041b7c8e9ebbe9c4816b2c693cb0978", null ],
+    [ "mTriggerTime", "classhypro_1_1Transition.html#adda0c91e2475766258496fc10ddb2898", null ],
+    [ "mUrgent", "classhypro_1_1Transition.html#a9b05a101da8db684a1c2577d6c030006", null ]
 ];

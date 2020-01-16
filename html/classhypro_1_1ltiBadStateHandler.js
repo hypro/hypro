@@ -1,5 +1,6 @@
 var classhypro_1_1ltiBadStateHandler =
 [
+    [ "Number", "classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5", null ],
     [ "ltiBadStateHandler", "classhypro_1_1ltiBadStateHandler.html#a2c4e2fb269165fafe42d723653186f33", null ],
     [ "ltiBadStateHandler", "classhypro_1_1ltiBadStateHandler.html#a3c3b016623cf0c8268ea4a2256399dc8", null ],
     [ "getMarkedForDelete", "classhypro_1_1ltiBadStateHandler.html#a4c23e51b98bd04aa10b7778e5a82cf6c", null ],

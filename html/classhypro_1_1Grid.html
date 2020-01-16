@@ -121,6 +121,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Grid.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Grid-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -244,6 +245,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a558a5acd2e7d8ec930b143bf14dbb974"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Grid.html#a558a5acd2e7d8ec930b143bf14dbb974">combine</a> (const <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;a, const <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b)</td></tr>
 <tr class="separator:a558a5acd2e7d8ec930b143bf14dbb974"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a8c32538db02e030582c7073cbe40bb20"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt; std::size_t &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Grid.html#a8c32538db02e030582c7073cbe40bb20">mVertices</a></td></tr>
+<tr class="separator:a8c32538db02e030582c7073cbe40bb20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af20309b6253004a9c58a9f5aea84a593"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Grid.html#a90da009919f9db2c9194488daa64c3ff">gridMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Grid.html#af20309b6253004a9c58a9f5aea84a593">mGridMap</a></td></tr>
+<tr class="separator:af20309b6253004a9c58a9f5aea84a593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8647095f51953eefb93c6237bfb5886"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Grid.html#af9ebc20ec90777660f904be330b793e5">gridPoints</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Grid.html#ad8647095f51953eefb93c6237bfb5886">mInducedGridPoints</a></td></tr>
+<tr class="separator:ad8647095f51953eefb93c6237bfb5886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a36e803fba26be2abf9d6247397bb83ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Grid.html#a36e803fba26be2abf9d6247397bb83ff">operator==</a> (const <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;op1, const <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;op2)</td></tr>
@@ -271,7 +281,7 @@ class hypro::Grid&lt; Number &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html#a90da009919f9db2c9194488daa64c3ff">gridMap</a> =  std::map&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt;, bool&gt;</td>
@@ -287,7 +297,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html#a2e7d1f059d12f46777ce0c518a845a28">gridMapIterator</a> =  gridMap::iterator</td>
@@ -303,7 +313,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html#af9ebc20ec90777660f904be330b793e5">gridPoints</a> =  std::map&lt;std::size_t, std::vector&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
@@ -319,7 +329,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html#a5015be060c370eff73ed22415494d6d7">gridPointsIterator</a> =  typename gridPoints::iterator</td>
@@ -336,7 +346,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html">Grid</a> </td>
@@ -354,7 +364,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html">Grid</a> </td>
@@ -372,7 +382,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html">Grid</a> </td>
@@ -390,7 +400,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Grid.html">Grid</a> </td>
@@ -409,7 +419,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addCoordinate </td>
@@ -437,7 +447,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::allBlack </td>
@@ -454,7 +464,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt;, bool&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::calculateInduced </td>
@@ -480,7 +490,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::calculateOriginal </td>
@@ -505,7 +515,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::clear </td>
@@ -522,7 +532,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::colorAll </td>
@@ -539,7 +549,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::colorAt </td>
@@ -565,7 +575,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::colorAtInduced </td>
@@ -583,7 +593,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -619,7 +629,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::dimension </td>
@@ -636,7 +646,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::directPredecessor </td>
@@ -654,7 +664,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::directPredecessorInduced </td>
@@ -672,7 +682,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::directSuccessor </td>
@@ -690,7 +700,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::directSuccessorInduced </td>
@@ -708,7 +718,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::empty </td>
@@ -725,7 +735,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">gridMap::const_iterator <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::end </td>
@@ -742,7 +752,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">gridMap::const_iterator <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::find </td>
@@ -760,7 +770,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">gridMap::const_iterator <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::findInduced </td>
@@ -778,7 +788,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::inducedDimensionAt </td>
@@ -796,7 +806,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::induceGrid </td>
@@ -821,7 +831,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iNeighborhood </td>
@@ -849,7 +859,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iNeighborhoodInduced </td>
@@ -877,7 +887,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::insert </td>
@@ -913,7 +923,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::insertInduced </td>
@@ -941,7 +951,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iPredecessor </td>
@@ -969,7 +979,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iPredecessorInduced </td>
@@ -997,7 +1007,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iSlice </td>
@@ -1025,7 +1035,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iSliceInduced </td>
@@ -1043,7 +1053,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::isOnFacet </td>
@@ -1061,7 +1071,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::isOnIFacet </td>
@@ -1089,7 +1099,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::isOutside </td>
@@ -1107,7 +1117,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iSuccessor </td>
@@ -1135,7 +1145,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::iSuccessorInduced </td>
@@ -1163,7 +1173,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::isVertex </td>
@@ -1181,7 +1191,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::neighborhood </td>
@@ -1199,7 +1209,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;std::size_t&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::neighborhoodInduced </td>
@@ -1217,7 +1227,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1243,7 +1253,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1269,7 +1279,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::size </td>
@@ -1288,7 +1298,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacehypro.html#ad57fc7dcc9b0ef023f30483546f9b586">vSet</a>&lt;std::size_t&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::translateToInduced </td>
@@ -1314,7 +1324,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacehypro.html#ad57fc7dcc9b0ef023f30483546f9b586">vSet</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::translateToOriginal </td>
@@ -1340,7 +1350,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;carl::Variable&gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::variables </td>
@@ -1357,7 +1367,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::vertices </td>
@@ -1375,7 +1385,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1413,7 +1423,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1451,7 +1461,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1482,6 +1492,79 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Grid_8h_source.html#l00197">197</a> of file <a class="el" href="Grid_8h_source.html">Grid.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="af20309b6253004a9c58a9f5aea84a593"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Grid.html#a90da009919f9db2c9194488daa64c3ff">gridMap</a> <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mGridMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Grid_8h_source.html#l00081">81</a> of file <a class="el" href="Grid_8h_source.html">Grid.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad8647095f51953eefb93c6237bfb5886"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Grid.html#af9ebc20ec90777660f904be330b793e5">gridPoints</a> <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mInducedGridPoints</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Grid_8h_source.html#l00082">82</a> of file <a class="el" href="Grid_8h_source.html">Grid.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8c32538db02e030582c7073cbe40bb20"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;<a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt;std::size_t&gt; &gt; <a class="el" href="classhypro_1_1Grid.html">hypro::Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mVertices</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Grid_8h_source.html#l00080">80</a> of file <a class="el" href="Grid_8h_source.html">Grid.h</a>.</p>
 
 </div>
 </div>

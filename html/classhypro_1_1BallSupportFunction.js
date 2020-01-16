@@ -12,5 +12,8 @@ var classhypro_1_1BallSupportFunction =
     [ "radius", "classhypro_1_1BallSupportFunction.html#a3bad6a2d15c0425a8792fbbc84cff0b8", null ],
     [ "setDimension", "classhypro_1_1BallSupportFunction.html#a006b5de1fd70fa2761b7390dc92a3471", null ],
     [ "supremumPoint", "classhypro_1_1BallSupportFunction.html#af1c35809d3f2474bc3e33f186e407d51", null ],
-    [ "type", "classhypro_1_1BallSupportFunction.html#a4fb5d3f0f885344d05f42b9f373636a3", null ]
+    [ "type", "classhypro_1_1BallSupportFunction.html#a4fb5d3f0f885344d05f42b9f373636a3", null ],
+    [ "mDimension", "classhypro_1_1BallSupportFunction.html#a93d00162ff200ba985b6fd835502296a", null ],
+    [ "mRadius", "classhypro_1_1BallSupportFunction.html#af21079e0ec41d0002a7de5e642f87e22", null ],
+    [ "mType", "classhypro_1_1BallSupportFunction.html#a19d04db2391d152882de1d3a703b3474", null ]
 ];

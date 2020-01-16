@@ -1,6 +1,7 @@
 var classhypro_1_1SupportFunctionT =
 [
     [ "Settings", "classhypro_1_1SupportFunctionT.html#a928284903ac0ddeab9926c1b93db62e4", null ],
+    [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a6df5eac8b3e9f016c98c039ebe610839", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a4ca1429f3cb53bd13c3585b221deab69", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a62530c99306c118c3c35bf28aa5cb5be", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#adbf53d3975c116f11bb1034b843938fe", null ],
@@ -47,6 +48,7 @@ var classhypro_1_1SupportFunctionT =
     [ "reduceNumberRepresentation", "classhypro_1_1SupportFunctionT.html#a984e8f701a7be81a3831b129e769a468", null ],
     [ "reduceRepresentation", "classhypro_1_1SupportFunctionT.html#a1beee2b99f7a5f440edc300bfec26e02", null ],
     [ "removeRedundancy", "classhypro_1_1SupportFunctionT.html#a955bd8a5c840311013ce82ebff67c105", null ],
+    [ "rGetContent", "classhypro_1_1SupportFunctionT.html#ab685e2ccc87deb3871c03b19f59674fc", null ],
     [ "satisfiesHalfspace", "classhypro_1_1SupportFunctionT.html#a0da4ee1b3d9670de7a1f54d7108d3ac8", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1SupportFunctionT.html#aaed7156b1662b8a92b1943ffc1993164", null ],
     [ "scale", "classhypro_1_1SupportFunctionT.html#a6f8013ca90303eb5b99d81db702e7618", null ],
@@ -62,5 +64,9 @@ var classhypro_1_1SupportFunctionT =
     [ "vertices", "classhypro_1_1SupportFunctionT.html#a22553b6a517d9d2ba99ae0c7e76d0864", null ],
     [ "vertices", "classhypro_1_1SupportFunctionT.html#ad91062814543cd6994fdf452dd6e6304", null ],
     [ "operator<<", "classhypro_1_1SupportFunctionT.html#abccc6b3dff868a71c65dcbf7a4b34093", null ],
-    [ "operator==", "classhypro_1_1SupportFunctionT.html#a8acc0aaf48e7b52246b61bd28d6e0cf7", null ]
+    [ "operator==", "classhypro_1_1SupportFunctionT.html#a8acc0aaf48e7b52246b61bd28d6e0cf7", null ],
+    [ "content", "classhypro_1_1SupportFunctionT.html#afe267869041e58e9d1e7cb1076c43d88", null ],
+    [ "mMatrix", "classhypro_1_1SupportFunctionT.html#a41631a5cd3b2e3b3232927bf6ba6d01c", null ],
+    [ "mTemplateSet", "classhypro_1_1SupportFunctionT.html#adc4a2543a0dc75d76c90693bc3ced530", null ],
+    [ "mVector", "classhypro_1_1SupportFunctionT.html#a58d0b20d8e449c3ff53377f13c71cd1d", null ]
 ];

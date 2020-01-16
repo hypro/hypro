@@ -1,5 +1,6 @@
 var classhypro_1_1ScaleOp =
 [
+    [ "PointerVec", "classhypro_1_1ScaleOp.html#ab74164f81e0efc4ee6dd6d12193f0be1", null ],
     [ "ScaleOp", "classhypro_1_1ScaleOp.html#a468b7ee1141b40c8308a19bcdb464996", null ],
     [ "ScaleOp", "classhypro_1_1ScaleOp.html#aece1d503d43b2c0e33481df6c6aaa52f", null ],
     [ "ScaleOp", "classhypro_1_1ScaleOp.html#a4cbdb3d909099adfbcf8a365cde89fbf", null ],
@@ -16,5 +17,10 @@ var classhypro_1_1ScaleOp =
     [ "reverseOp", "classhypro_1_1ScaleOp.html#aa05decbb056fbc386051b11153d7a339", null ],
     [ "setDimension", "classhypro_1_1ScaleOp.html#a57d9f8250854ef8b9d04e03e42a54944", null ],
     [ "supremumPoint", "classhypro_1_1ScaleOp.html#a519aead4a8ab748db1a508ead0a4ee99", null ],
-    [ "transform", "classhypro_1_1ScaleOp.html#a903f5ac1aac50cc736a624d8decf9c11", null ]
+    [ "transform", "classhypro_1_1ScaleOp.html#a903f5ac1aac50cc736a624d8decf9c11", null ],
+    [ "factor", "classhypro_1_1ScaleOp.html#acf8794a7d7ebfa93e8d0ac51db010ee7", null ],
+    [ "mChildren", "classhypro_1_1ScaleOp.html#a8ddc29922767465ab44bd43ca7327039", null ],
+    [ "mDimension", "classhypro_1_1ScaleOp.html#aca578580c87a4c9171a0013ea6f4cc16", null ],
+    [ "originCount", "classhypro_1_1ScaleOp.html#ad0d01549b6533442228e422229825735", null ],
+    [ "type", "classhypro_1_1ScaleOp.html#af7a778af74da1fd0da232e1ed4bc30fb", null ]
 ];

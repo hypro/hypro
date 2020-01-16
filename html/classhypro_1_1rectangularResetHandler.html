@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1rectangularResetHandler.
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="classhypro_1_1rectangularResetHandler-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::rectangularResetHandler&lt; State &gt; Class Template Reference</div>  </div>
@@ -132,7 +133,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1rectangularResetHandler.
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ace62fdefca52b4513cb2ec483bb6bfb4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#ace62fdefca52b4513cb2ec483bb6bfb4">rectangularResetHandler</a> ()=delete</td></tr>
 <tr class="separator:ace62fdefca52b4513cb2ec483bb6bfb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6ff7bc11b7fdae8942917618ba99670"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#af6ff7bc11b7fdae8942917618ba99670">rectangularResetHandler</a> (State *state, size_t index, const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervalResets)</td></tr>
+<tr class="memitem:af6ff7bc11b7fdae8942917618ba99670"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#af6ff7bc11b7fdae8942917618ba99670">rectangularResetHandler</a> (State *state, size_t index, const std::vector&lt; carl::Interval&lt; <a class="el" href="classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba">Number</a> &gt;&gt; &amp;intervalResets)</td></tr>
 <tr class="separator:af6ff7bc11b7fdae8942917618ba99670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b347eb311fd81334e92ca0ec855ff4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#a4b347eb311fd81334e92ca0ec855ff4a">handle</a> ()</td></tr>
 <tr class="separator:a4b347eb311fd81334e92ca0ec855ff4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,10 +147,15 @@ Public Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:ab1451b73727d5020ec918f48262ce1fa"><td class="memItemLeft" align="right" valign="top">State *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#ab1451b73727d5020ec918f48262ce1fa">mState</a></td></tr>
 <tr class="separator:ab1451b73727d5020ec918f48262ce1fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa59be81ec0e3a920f3c65eeb333ea232"><td class="memItemLeft" align="right" valign="top">std::vector&lt; carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#aa59be81ec0e3a920f3c65eeb333ea232">mIntervalResets</a></td></tr>
+<tr class="memitem:aa59be81ec0e3a920f3c65eeb333ea232"><td class="memItemLeft" align="right" valign="top">std::vector&lt; carl::Interval&lt; <a class="el" href="classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#aa59be81ec0e3a920f3c65eeb333ea232">mIntervalResets</a></td></tr>
 <tr class="separator:aa59be81ec0e3a920f3c65eeb333ea232"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59538f65ef9b556d911301c556234122"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#a59538f65ef9b556d911301c556234122">mIndex</a></td></tr>
 <tr class="separator:a59538f65ef9b556d911301c556234122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:ad02c574dc7386f96063f0bda5c7bc3ba"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:ad02c574dc7386f96063f0bda5c7bc3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />
@@ -157,7 +163,32 @@ class hypro::rectangularResetHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="forwardDeclarations_8h_source.html#l00050">50</a> of file <a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ad02c574dc7386f96063f0bda5c7bc3ba"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1rectangularResetHandler.html">hypro::rectangularResetHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="rectangularResetHandler_8h_source.html#l00007">7</a> of file <a class="el" href="rectangularResetHandler_8h_source.html">rectangularResetHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ace62fdefca52b4513cb2ec483bb6bfb4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +238,7 @@ template&lt;typename State &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; carl::Interval&lt; <a class="el" href="classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba">Number</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>intervalResets</em>&#160;</td>
         </tr>
         <tr>
@@ -225,9 +256,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="rectangularResetHandler_8h_source.html#l00017">17</a> of file <a class="el" href="rectangularResetHandler_8h_source.html">rectangularResetHandler.h</a>.</p>
 
-<p>References <a class="el" href="rectangularResetHandler_8h_source.html#l00017">hypro::rectangularResetHandler&lt; State &gt;::rectangularResetHandler()</a>.</p>
-
-<p>Referenced by <a class="el" href="rectangularResetHandler_8h_source.html#l00017">hypro::rectangularResetHandler&lt; State &gt;::rectangularResetHandler()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1rectangularResetHandler.html#a4b347eb311fd81334e92ca0ec855ff4a">hypro::rectangularResetHandler&lt; State &gt;::handle()</a>.</p>
 
 </div>
 </div>
@@ -256,6 +285,8 @@ template&lt;typename State &gt; </div>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classhypro_1_1IResetHandler.html#abb9c7f3534aa5178d71eacad23f992d8">hypro::IResetHandler</a>.</p>
+
+<p>Referenced by <a class="el" href="rectangularResetHandler_8h_source.html#l00017">hypro::rectangularResetHandler&lt; State &gt;::rectangularResetHandler()</a>.</p>
 
 </div>
 </div>
@@ -323,7 +354,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;carl::Interval&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1rectangularResetHandler.html">hypro::rectangularResetHandler</a>&lt; State &gt;::mIntervalResets</td>
+          <td class="memname">std::vector&lt;carl::Interval&lt;<a class="el" href="classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1rectangularResetHandler.html">hypro::rectangularResetHandler</a>&lt; State &gt;::mIntervalResets</td>
         </tr>
       </table>
   </td>

@@ -12,5 +12,6 @@ var classhypro_1_1Label =
     [ "operator!=", "classhypro_1_1Label.html#af9284b69aaee64cd5bd50fe7e8006d0e", null ],
     [ "operator<", "classhypro_1_1Label.html#a1b64247fb4f31cdd80d08d378044a015", null ],
     [ "operator<<", "classhypro_1_1Label.html#a424ef4ab4ce71f420dd37b1c8c878366", null ],
-    [ "operator==", "classhypro_1_1Label.html#afb9cb6ce365e28c976fbc6b845b3c7a4", null ]
+    [ "operator==", "classhypro_1_1Label.html#afb9cb6ce365e28c976fbc6b845b3c7a4", null ],
+    [ "mName", "classhypro_1_1Label.html#a6d36db576dc4b59ff7c390bdcb178cb8", null ]
 ];

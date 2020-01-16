@@ -1,5 +1,6 @@
 var classhypro_1_1rectangularGuardHandler =
 [
+    [ "Number", "classhypro_1_1rectangularGuardHandler.html#aedd99efa224d5634e719486a8f093d8f", null ],
     [ "rectangularGuardHandler", "classhypro_1_1rectangularGuardHandler.html#a05cf75223b14b1f79334691fe0a3b125", null ],
     [ "rectangularGuardHandler", "classhypro_1_1rectangularGuardHandler.html#ae2334bb4139f0081b53a184b835b9a8c", null ],
     [ "getMarkedForDelete", "classhypro_1_1rectangularGuardHandler.html#a83810352045a3fa76649581088f78aaa", null ],

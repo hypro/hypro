@@ -1,5 +1,6 @@
 var classhypro_1_1LTIContext =
 [
+    [ "Number", "classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81", null ],
     [ "LTIContext", "classhypro_1_1LTIContext.html#aa001b8e643cad962ac6441a3fc397977", null ],
     [ "~LTIContext", "classhypro_1_1LTIContext.html#ae0a3c6d6ece1578168cd85c3ce2b60ac", null ],
     [ "LTIContext", "classhypro_1_1LTIContext.html#ac43d35badbd1c1ef169b7906d4fef555", null ],

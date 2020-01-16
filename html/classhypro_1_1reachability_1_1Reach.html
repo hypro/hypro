@@ -120,6 +120,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1reachability_1_1Reach.ht
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1reachability_1_1Reach-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt; Class Template Reference</div>  </div>
@@ -174,6 +176,36 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1021193f2a08c496c475c5ea7c3dba29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88ef776161ae0a085b155804f48885c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a88ef776161ae0a085b155804f48885c4">setRepresentationType</a> (const <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> &amp;type)</td></tr>
 <tr class="separator:a88ef776161ae0a085b155804f48885c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a2427ed1bb4e7bc1c2c79759922e77cc0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a2427ed1bb4e7bc1c2c79759922e77cc0">computeTrafoMatrix</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *_loc) const </td></tr>
+<tr class="separator:a2427ed1bb4e7bc1c2c79759922e77cc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14939c2b650af51a7cce21f6964a1fee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a14939c2b650af51a7cce21f6964a1fee">intersectBadStates</a> (const State &amp;_state) const </td></tr>
+<tr class="separator:a14939c2b650af51a7cce21f6964a1fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a3c30b38aa83898b71a4971fee3a18cde"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a3c30b38aa83898b71a4971fee3a18cde">mAutomaton</a></td></tr>
+<tr class="separator:a3c30b38aa83898b71a4971fee3a18cde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a113844db5e692fcd9a7f94249c45dc95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a113844db5e692fcd9a7f94249c45dc95">mSettings</a></td></tr>
+<tr class="separator:a113844db5e692fcd9a7f94249c45dc95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a43c39000da9a08a6c5c4ea176e6e39"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a6a43c39000da9a08a6c5c4ea176e6e39">mCurrentLevel</a> = 0</td></tr>
+<tr class="separator:a6a43c39000da9a08a6c5c4ea176e6e39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85a65a8567f2af46b373cf7c1c39a970"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a85a65a8567f2af46b373cf7c1c39a970">mBloatingFactor</a> = 0</td></tr>
+<tr class="separator:a85a65a8567f2af46b373cf7c1c39a970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95daf846b360d9a25a6f34e28e1f6b4b"><td class="memItemLeft" align="right" valign="top">std::map&lt; unsigned, std::vector&lt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a350051fb6d0a993ea534b3bc351a2e23">flowpipe_t</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a95daf846b360d9a25a6f34e28e1f6b4b">mReachableStates</a></td></tr>
+<tr class="separator:a95daf846b360d9a25a6f34e28e1f6b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a6a40b5bedbb2add2aadf5283ac931f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a394bad51ae696ac33a6945974ff3e211">TaskTypePtr</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a4a6a40b5bedbb2add2aadf5283ac931f">mWorkingQueue</a></td></tr>
+<tr class="separator:a4a6a40b5bedbb2add2aadf5283ac931f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a123431bebf6149ae937c56c9508ea666"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Plotter.html">Plotter</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a123431bebf6149ae937c56c9508ea666">plotter</a> = <a class="el" href="classhypro_1_1Plotter.html">Plotter</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;::getInstance()</td></tr>
+<tr class="separator:a123431bebf6149ae937c56c9508ea666"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7adac9b389a1607cdbdde2a893b0f89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ae7adac9b389a1607cdbdde2a893b0f89">mType</a></td></tr>
+<tr class="separator:ae7adac9b389a1607cdbdde2a893b0f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74fb1470333d817525928930c538f05a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a74fb1470333d817525928930c538f05a">mInitialStatesSet</a> = false</td></tr>
+<tr class="separator:a74fb1470333d817525928930c538f05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab45d2ff06b184f2a708f813413e67aa6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ab45d2ff06b184f2a708f813413e67aa6">mIntersectedBadStates</a></td></tr>
+<tr class="separator:ab45d2ff06b184f2a708f813413e67aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename ReacherSettings, typename State&gt;<br />
@@ -187,8 +219,7 @@ class hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a1">example_benchmark.cpp</a>, and <a class="el" href="example_bouncingBall_8cpp-example.html#_a7">example_bouncingBall.cpp</a>.</dd>
-</dl>
+
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00059">59</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="a350051fb6d0a993ea534b3bc351a2e23"></a>
@@ -330,6 +361,8 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 <p>Computes the forward reachability of the given automaton. </p>
 <dl class="section return"><dt>Returns</dt><dd>The flowpipe as a result of this computation. </dd></dl>
 
+<p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a2eadfe3bf981539052012a246cf33be6"></a>
@@ -361,6 +394,32 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a2427ed1bb4e7bc1c2c79759922e77cc0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::computeTrafoMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *&#160;</td>
+          <td class="paramname"><em>_loc</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1021193f2a08c496c475c5ea7c3dba29"></a>
 <div class="memitem">
 <div class="memproto">
@@ -385,6 +444,32 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00141">141</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a14939c2b650af51a7cce21f6964a1fee"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::intersectBadStates </td>
+          <td>(</td>
+          <td class="paramtype">const State &amp;&#160;</td>
+          <td class="paramname"><em>_state</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -563,6 +648,10 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00142">142</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
+<p>References <a class="el" href="FirstSegment_8h_source.html#l00014">hypro::reachability::computeTrafoMatrix()</a>.</p>
+
+<p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a37b6b2bd43a38a9bdba227f195655ea6"></a>
@@ -591,6 +680,8 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00139">139</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
+<p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a40db4dd09cebc5c779e9885ce4219cb3"></a>
@@ -617,6 +708,249 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00138">138</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a3c30b38aa83898b71a4971fee3a18cde"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mAutomaton</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00066">66</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a85a65a8567f2af46b373cf7c1c39a970"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mBloatingFactor = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00069">69</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6a43c39000da9a08a6c5c4ea176e6e39"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mCurrentLevel = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00068">68</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a74fb1470333d817525928930c538f05a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mInitialStatesSet = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00074">74</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab45d2ff06b184f2a708f813413e67aa6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mIntersectedBadStates</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00076">76</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a95daf846b360d9a25a6f34e28e1f6b4b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;unsigned, std::vector&lt;<a class="el" href="classhypro_1_1reachability_1_1Reach.html#a350051fb6d0a993ea534b3bc351a2e23">flowpipe_t</a>&gt; &gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mReachableStates</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00070">70</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a113844db5e692fcd9a7f94249c45dc95"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mSettings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00067">67</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae7adac9b389a1607cdbdde2a893b0f89"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00073">73</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4a6a40b5bedbb2add2aadf5283ac931f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt;<a class="el" href="classhypro_1_1reachability_1_1Reach.html#a394bad51ae696ac33a6945974ff3e211">TaskTypePtr</a>&gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::mWorkingQueue</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00071">71</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a123431bebf6149ae937c56c9508ea666"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Plotter.html">Plotter</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&amp; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::plotter = <a class="el" href="classhypro_1_1Plotter.html">Plotter</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;::getInstance()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00072">72</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

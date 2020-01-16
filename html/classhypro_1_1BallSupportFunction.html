@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1BallSupportFunction.html
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1BallSupportFunction-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::BallSupportFunction&lt; Number &gt; Class Template Reference</div>  </div>
@@ -158,6 +159,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad462175df8adb3c2d15f478cca37ec83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e58ec7d0780edaa6afaf8eb0a70d19b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BallSupportFunction.html#a2e58ec7d0780edaa6afaf8eb0a70d19b">empty</a> () const </td></tr>
 <tr class="separator:a2e58ec7d0780edaa6afaf8eb0a70d19b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a93d00162ff200ba985b6fd835502296a"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BallSupportFunction.html#a93d00162ff200ba985b6fd835502296a">mDimension</a> = 0</td></tr>
+<tr class="separator:a93d00162ff200ba985b6fd835502296a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af21079e0ec41d0002a7de5e642f87e22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BallSupportFunction.html#af21079e0ec41d0002a7de5e642f87e22">mRadius</a></td></tr>
+<tr class="separator:af21079e0ec41d0002a7de5e642f87e22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19d04db2391d152882de1d3a703b3474"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BallSupportFunction.html#a19d04db2391d152882de1d3a703b3474">mType</a></td></tr>
+<tr class="separator:a19d04db2391d152882de1d3a703b3474"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
@@ -170,7 +180,7 @@ class hypro::BallSupportFunction&lt; Number &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1BallSupportFunction.html">BallSupportFunction</a> </td>
@@ -188,7 +198,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1BallSupportFunction.html">BallSupportFunction</a> </td>
@@ -216,7 +226,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::~<a class="el" href="classhypro_1_1BallSupportFunction.html">BallSupportFunction</a> </td>
@@ -234,7 +244,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::contains </td>
@@ -256,13 +266,15 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the point is inside the support function. </dd></dl>
 
+<p>Referenced by <a class="el" href="BallSupportFunction_8h_source.html#l00040">hypro::BallSupportFunction&lt; Number &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad462175df8adb3c2d15f478cca37ec83"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::contains </td>
@@ -290,7 +302,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">unsigned <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::dimension </td>
@@ -308,7 +320,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::empty </td>
@@ -319,13 +331,15 @@ template&lt;typename Number &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="BallSupportFunction_8h_source.html#l00040">hypro::BallSupportFunction&lt; Number &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aec309f85003a283972a77a0fad91443d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::evaluate </td>
@@ -344,13 +358,15 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
+<p>Referenced by <a class="el" href="BallSupportFunction_8h_source.html#l00040">hypro::BallSupportFunction&lt; Number &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a4058036e49850340ef2139aa987ef7de"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::multiEvaluate </td>
@@ -372,13 +388,15 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Vector of support values. </dd></dl>
 
+<p>Referenced by <a class="el" href="BallSupportFunction_8h_source.html#l00040">hypro::BallSupportFunction&lt; Number &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a3bad6a2d15c0425a8792fbbc84cff0b8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::radius </td>
@@ -395,7 +413,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -417,13 +435,15 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="BallSupportFunction_8h_source.html#l00040">40</a> of file <a class="el" href="BallSupportFunction_8h_source.html">BallSupportFunction.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1BallSupportFunction.html#a6fb97c799d811599c1749755be639a03">hypro::BallSupportFunction&lt; Number &gt;::contains()</a>, <a class="el" href="classhypro_1_1BallSupportFunction.html#a2e58ec7d0780edaa6afaf8eb0a70d19b">hypro::BallSupportFunction&lt; Number &gt;::empty()</a>, <a class="el" href="classhypro_1_1BallSupportFunction.html#aec309f85003a283972a77a0fad91443d">hypro::BallSupportFunction&lt; Number &gt;::evaluate()</a>, <a class="el" href="classhypro_1_1BallSupportFunction.html#a4058036e49850340ef2139aa987ef7de">hypro::BallSupportFunction&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="classhypro_1_1BallSupportFunction.html#af1c35809d3f2474bc3e33f186e407d51">hypro::BallSupportFunction&lt; Number &gt;::supremumPoint()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="af1c35809d3f2474bc3e33f186e407d51"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::supremumPoint </td>
@@ -434,13 +454,15 @@ template&lt;typename Number &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="BallSupportFunction_8h_source.html#l00040">hypro::BallSupportFunction&lt; Number &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a4fb5d3f0f885344d05f42b9f373636a3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::type </td>
@@ -450,6 +472,79 @@ template&lt;typename Number &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a93d00162ff200ba985b6fd835502296a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mDimension = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="BallSupportFunction_8h_source.html#l00022">22</a> of file <a class="el" href="BallSupportFunction_8h_source.html">BallSupportFunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af21079e0ec41d0002a7de5e642f87e22"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="BallSupportFunction_8h_source.html#l00023">23</a> of file <a class="el" href="BallSupportFunction_8h_source.html">BallSupportFunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a19d04db2391d152882de1d3a703b3474"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> <a class="el" href="classhypro_1_1BallSupportFunction.html">hypro::BallSupportFunction</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="BallSupportFunction_8h_source.html#l00024">24</a> of file <a class="el" href="BallSupportFunction_8h_source.html">BallSupportFunction.h</a>.</p>
 
 </div>
 </div>

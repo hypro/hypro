@@ -18,5 +18,6 @@ var classhypro_1_1BoxSupportFunction =
     [ "supremumPoint", "classhypro_1_1BoxSupportFunction.html#aaa5a5a19214baed61b31646a82acd202", null ],
     [ "type", "classhypro_1_1BoxSupportFunction.html#a30fbbcde31d2f24f2a624388518bd8f7", null ],
     [ "vertices", "classhypro_1_1BoxSupportFunction.html#a3596fda1b4c4ac35e34c7938be106276", null ],
-    [ "operator<<", "classhypro_1_1BoxSupportFunction.html#a7e750b89a8e5e3e7b84c0e7f632d2df4", null ]
+    [ "operator<<", "classhypro_1_1BoxSupportFunction.html#a7e750b89a8e5e3e7b84c0e7f632d2df4", null ],
+    [ "mBox", "classhypro_1_1BoxSupportFunction.html#a3904e6d7a424c845e1db19e0d336a888", null ]
 ];

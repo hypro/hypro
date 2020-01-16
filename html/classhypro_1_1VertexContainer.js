@@ -36,5 +36,7 @@ var classhypro_1_1VertexContainer =
     [ "vertices", "classhypro_1_1VertexContainer.html#a5d65f5d7985f11cffb357286c21be3bc", null ],
     [ "operator!=", "classhypro_1_1VertexContainer.html#abb839a11446e749b8713fd337432c28d", null ],
     [ "operator<<", "classhypro_1_1VertexContainer.html#ae654ce9944b1b622273244b39378165c", null ],
-    [ "operator==", "classhypro_1_1VertexContainer.html#a3c316be6cd4dcc82aad2377ab1f15bb1", null ]
+    [ "operator==", "classhypro_1_1VertexContainer.html#a3c316be6cd4dcc82aad2377ab1f15bb1", null ],
+    [ "mHash", "classhypro_1_1VertexContainer.html#a9c4d19ff50bbc33af83c31049f033199", null ],
+    [ "mVertices", "classhypro_1_1VertexContainer.html#a4eadc3d8da6a4a0da448ad7962d3b711", null ]
 ];

@@ -9,6 +9,7 @@ var classhypro_1_1WorkQueueT =
     [ "enqueue", "classhypro_1_1WorkQueueT.html#a757dd7247347b85166a8fcddb814ca65", null ],
     [ "exists", "classhypro_1_1WorkQueueT.html#ad82edb6ba46e16c66aa5cd8919eaea4a", null ],
     [ "getMutex", "classhypro_1_1WorkQueueT.html#aad1a9ecc69d567bd01e29721d368e73d", null ],
+    [ "getQueue", "classhypro_1_1WorkQueueT.html#aa3be7205638fc7c0e6f9edb13a3d01e7", null ],
     [ "isEmpty", "classhypro_1_1WorkQueueT.html#a199625e1a119380566df3f1e8fd7946c", null ],
     [ "nonLockingDequeueBack", "classhypro_1_1WorkQueueT.html#ac23dfc87b80e72a7c181a9544229584b", null ],
     [ "nonLockingDequeueFront", "classhypro_1_1WorkQueueT.html#ad26359ed06dde66f00a592719f4a3591", null ],
@@ -19,5 +20,7 @@ var classhypro_1_1WorkQueueT =
     [ "nonLockingSize", "classhypro_1_1WorkQueueT.html#a79743faaa2000e8df7c201d9465df2b6", null ],
     [ "pushFront", "classhypro_1_1WorkQueueT.html#ac675b19ebeaa41ab596d8dd1577ff128", null ],
     [ "size", "classhypro_1_1WorkQueueT.html#a97e6f8d529b21e1754463d146a94389e", null ],
-    [ "operator<<", "classhypro_1_1WorkQueueT.html#a55ba595cdff9ebe391ef6bc90ea4464c", null ]
+    [ "operator<<", "classhypro_1_1WorkQueueT.html#a55ba595cdff9ebe391ef6bc90ea4464c", null ],
+    [ "mQueue", "classhypro_1_1WorkQueueT.html#a827f3eeb7876026f836de3c451ae28dc", null ],
+    [ "mSpinlock", "classhypro_1_1WorkQueueT.html#a724e9ed48d21dc8e84c87bcdf48b4dd3", null ]
 ];

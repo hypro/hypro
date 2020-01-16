@@ -1,5 +1,6 @@
 var classhypro_1_1HierarchicalIntervalVector =
 [
+    [ "Ivec", "classhypro_1_1HierarchicalIntervalVector.html#a8d00e7b00290dce911586b6fccfd9e36", null ],
     [ "HierarchicalIntervalVector", "classhypro_1_1HierarchicalIntervalVector.html#ad5e4fbd47bd6027336b99614cf1c0b5a", null ],
     [ "HierarchicalIntervalVector", "classhypro_1_1HierarchicalIntervalVector.html#aa7152356404ee47022109092e8cfc061", null ],
     [ "HierarchicalIntervalVector", "classhypro_1_1HierarchicalIntervalVector.html#aa4ee4644ebc04af396e4357ffbb08380", null ],
@@ -16,6 +17,7 @@ var classhypro_1_1HierarchicalIntervalVector =
     [ "getIntersectingIntervals", "classhypro_1_1HierarchicalIntervalVector.html#aaaf145d04077b8d6873002d344672ff9", null ],
     [ "getIntersectionIntervals", "classhypro_1_1HierarchicalIntervalVector.html#a3b6e3f6c861d1195d783ad8ae047d657", null ],
     [ "getIntervals", "classhypro_1_1HierarchicalIntervalVector.html#a822d093e21aeca19d54cdbc30330424d", null ],
+    [ "getOrderIndex", "classhypro_1_1HierarchicalIntervalVector.html#ae56687d14185c69c00784d71a050a2d8", null ],
     [ "getTimeHorizon", "classhypro_1_1HierarchicalIntervalVector.html#aadae50a58a508791e4451bc67118af93", null ],
     [ "getTypeOrder", "classhypro_1_1HierarchicalIntervalVector.html#acb988bf9b8db597e8ce1a3a44afbced6", null ],
     [ "hasEntry", "classhypro_1_1HierarchicalIntervalVector.html#a819991fc23d93cad6ef63aad2ced6df0", null ],
@@ -24,6 +26,8 @@ var classhypro_1_1HierarchicalIntervalVector =
     [ "initialize", "classhypro_1_1HierarchicalIntervalVector.html#a9cc1925a0b5f5ab3ebdb56a41f457624", null ],
     [ "insertInterval", "classhypro_1_1HierarchicalIntervalVector.html#ae2a46b1189cef09ccd19c2619c2bc70a", null ],
     [ "intersectsEntry", "classhypro_1_1HierarchicalIntervalVector.html#a25d382da20c395021470807983bcde6e", null ],
+    [ "isLess", "classhypro_1_1HierarchicalIntervalVector.html#aa2a4280b7e230fa5cf5eee1beb21d4d8", null ],
+    [ "isSane", "classhypro_1_1HierarchicalIntervalVector.html#a83a160188d747509467395a5ae366d69", null ],
     [ "merge", "classhypro_1_1HierarchicalIntervalVector.html#a6fe4f6ea6bfee240828bc840e7d6fe1f", null ],
     [ "operator=", "classhypro_1_1HierarchicalIntervalVector.html#a23b8b1e1de1466d9109b270e02127801", null ],
     [ "operator=", "classhypro_1_1HierarchicalIntervalVector.html#a275f879f3f59ec19441238369df49848", null ],
@@ -31,5 +35,7 @@ var classhypro_1_1HierarchicalIntervalVector =
     [ "size", "classhypro_1_1HierarchicalIntervalVector.html#a642ce27cd39467acd2a62d253551ed83", null ],
     [ "operator!=", "classhypro_1_1HierarchicalIntervalVector.html#aaf78edd2e223b3897db0fa98d04d78da", null ],
     [ "operator<<", "classhypro_1_1HierarchicalIntervalVector.html#a962f0fda8a6a4bb61585b3dafd9aad0f", null ],
-    [ "operator==", "classhypro_1_1HierarchicalIntervalVector.html#a30c10743ebd1986e050183d28650af8b", null ]
+    [ "operator==", "classhypro_1_1HierarchicalIntervalVector.html#a30c10743ebd1986e050183d28650af8b", null ],
+    [ "mIntervals", "classhypro_1_1HierarchicalIntervalVector.html#a563ea700df9e8eb694a16fbe5437b68e", null ],
+    [ "mOrder", "classhypro_1_1HierarchicalIntervalVector.html#ac1b65d2efc2af441bb8b88776a12ff67", null ]
 ];

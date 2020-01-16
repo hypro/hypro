@@ -1,5 +1,6 @@
 var classhypro_1_1timedElapseTimeEvolutionHandler =
 [
+    [ "Number", "classhypro_1_1timedElapseTimeEvolutionHandler.html#ae00f3802fcf68913d40161dbc93de8a6", null ],
     [ "timedElapseTimeEvolutionHandler", "classhypro_1_1timedElapseTimeEvolutionHandler.html#a74fd9466724d7f81b36653c8ca83cb2f", null ],
     [ "timedElapseTimeEvolutionHandler", "classhypro_1_1timedElapseTimeEvolutionHandler.html#a86b3d35006219d90bfdc0f13fea6e029", null ],
     [ "getMarkedForDelete", "classhypro_1_1timedElapseTimeEvolutionHandler.html#a9655fb11ffca205e98897a329fe6b1d7", null ],

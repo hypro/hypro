@@ -1,5 +1,6 @@
 var classhypro_1_1HandlerFactory =
 [
+    [ "Number", "classhypro_1_1HandlerFactory.html#aff29c7ba92dc37998be492b5a83bd1c4", null ],
     [ "buildBadStateHandler", "classhypro_1_1HandlerFactory.html#a1ac7247167a2c7559e022a4198d2ad18", null ],
     [ "buildContinuousEvolutionHandler", "classhypro_1_1HandlerFactory.html#a7d839a35fc429c7c22e7fa1aeffe698e", null ],
     [ "buildDiscreteSuccessorHandler", "classhypro_1_1HandlerFactory.html#adceda09fec39791f134bf404e1d886ac", null ],

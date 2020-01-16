@@ -37,5 +37,9 @@ var classhypro_1_1Dictionary =
     [ "toPoint", "classhypro_1_1Dictionary.html#a2ecbd190ac1fe89502c50abc3521d83f", null ],
     [ "operator!=", "classhypro_1_1Dictionary.html#a7fecd6145405f389df9ebac7c7682bfd", null ],
     [ "operator<<", "classhypro_1_1Dictionary.html#a8b5a384ca50979a5dd2be4257a72368a", null ],
-    [ "operator==", "classhypro_1_1Dictionary.html#a3b0e82bbf03a5af6e36f84a48411531f", null ]
+    [ "operator==", "classhypro_1_1Dictionary.html#a3b0e82bbf03a5af6e36f84a48411531f", null ],
+    [ "mB", "classhypro_1_1Dictionary.html#a57d9acf61e634b775167ff7e28ca4270", null ],
+    [ "mConstrains", "classhypro_1_1Dictionary.html#a7d5ab0417a908d07b8a8909ae52f42f7", null ],
+    [ "mDictionary", "classhypro_1_1Dictionary.html#a01370dfac8dcf11ebed561485f2f3c14", null ],
+    [ "mN", "classhypro_1_1Dictionary.html#a5d162f5a8a18d38450c17e9c0217ac03", null ]
 ];

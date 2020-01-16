@@ -153,7 +153,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a52e2aa09e72bba3c3c4385c18f7248aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a52e2aa09e72bba3c3c4385c18f7248aa">timeStep</a></td></tr>
 <tr class="memdesc:a52e2aa09e72bba3c3c4385c18f7248aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximal number of jumps, i.e. the depth of the search tree.  <a href="#a52e2aa09e72bba3c3c4385c18f7248aa">More...</a><br /></td></tr>
 <tr class="separator:a52e2aa09e72bba3c3c4385c18f7248aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7eb05e24204f1bb4761764d067dfff6e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a7eb05e24204f1bb4761764d067dfff6e">fileName</a></td></tr>
+<tr class="memitem:a7eb05e24204f1bb4761764d067dfff6e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a7eb05e24204f1bb4761764d067dfff6e">fileName</a></td></tr>
 <tr class="memdesc:a7eb05e24204f1bb4761764d067dfff6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time step size.  <a href="#a7eb05e24204f1bb4761764d067dfff6e">More...</a><br /></td></tr>
 <tr class="separator:a7eb05e24204f1bb4761764d067dfff6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa17f76655c115df2a6ce1107f6c03341"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#aa17f76655c115df2a6ce1107f6c03341">pplDenomimator</a></td></tr>
@@ -187,8 +187,7 @@ Friends</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Struct for reachability analysis algorithm settings. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a0">example_benchmark.cpp</a>, and <a class="el" href="example_bouncingBall_8cpp-example.html#_a8">example_bouncingBall.cpp</a>.</dd>
-</dl>
+
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00013">13</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="af91b99cf64b956259347ba1595d0ad4d"></a>
@@ -215,6 +214,8 @@ Friends</h2></td></tr>
 <p>Default constructor. </p>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00029">29</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>References <a class="el" href="structhypro_1_1ReachabilitySettings.html#a5820205b3c95b72db229e5f580c32b83">operator=()</a>.</p>
 
 </div>
 </div>
@@ -273,6 +274,8 @@ Friends</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to this object. </dd></dl>
+
+<p>Referenced by <a class="el" href="Settings_8h_source.html#l00029">ReachabilitySettings()</a>.</p>
 
 </div>
 </div>
@@ -384,6 +387,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00021">21</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
+<p>Referenced by <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7eb05e24204f1bb4761764d067dfff6e"></a>
@@ -391,7 +396,7 @@ Friends</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string hypro::ReachabilitySettings::fileName</td>
+          <td class="memname"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> hypro::ReachabilitySettings::fileName</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -399,6 +404,8 @@ Friends</h2></td></tr>
 <p>Time step size. </p>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00017">17</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__parallel__composition_8cpp_source.html#l00709">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="Flowstar_8h_source.html#l00157">hypro::toFlowstarFormat()</a>.</p>
 
 </div>
 </div>
@@ -413,9 +420,10 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The local time horizon. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#a12">example_bouncingBall.cpp</a>.</dd>
-</dl>
+
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00015">15</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>Referenced by <a class="el" href="SettingsProvider_8h_source.html#l00045">hypro::SettingsProvider&lt; State &gt;::getGlobalTimeHorizon()</a>, <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="Flowstar_8h_source.html#l00157">hypro::toFlowstarFormat()</a>.</p>
 
 </div>
 </div>
@@ -433,6 +441,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00019">19</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
+<p>Referenced by <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="Flowstar_8h_source.html#l00157">hypro::toFlowstarFormat()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aa17f76655c115df2a6ce1107f6c03341"></a>
@@ -449,6 +459,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00018">18</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
+<p>Referenced by <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a44a833ef02d4ada2a384afe29cbdeeba"></a>
@@ -460,9 +472,10 @@ Friends</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#a11">example_bouncingBall.cpp</a>.</dd>
-</dl>
+
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00014">14</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>Referenced by <a class="el" href="SettingsProvider_8h_source.html#l00045">hypro::SettingsProvider&lt; State &gt;::getGlobalTimeHorizon()</a>, <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="Flowstar_8h_source.html#l00157">hypro::toFlowstarFormat()</a>.</p>
 
 </div>
 </div>
@@ -477,9 +490,10 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The maximal number of jumps, i.e. the depth of the search tree. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#a10">example_bouncingBall.cpp</a>.</dd>
-</dl>
+
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00016">16</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="Flowstar_8h_source.html#l00157">hypro::toFlowstarFormat()</a>.</p>
 
 </div>
 </div>
@@ -497,6 +511,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00020">20</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
+<p>Referenced by <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9cecce701bd68f407fea7129035c37f4"></a>
@@ -511,6 +527,8 @@ Friends</h2></td></tr>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00024">24</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
+<p>Referenced by <a class="el" href="example__rectangularReachability_8cpp_source.html#l00014">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="SettingsProvider_8h_source.html#l00039">hypro::SettingsProvider&lt; State &gt;::useAnyTimingInformation()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a6fec83f69b27ea8473a100b497482a92"></a>
@@ -524,6 +542,8 @@ Friends</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00023">23</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__rectangularReachability_8cpp_source.html#l00014">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="SettingsProvider_8h_source.html#l00039">hypro::SettingsProvider&lt; State &gt;::useAnyTimingInformation()</a>.</p>
 
 </div>
 </div>
@@ -540,6 +560,8 @@ Friends</h2></td></tr>
 <p>-1 = off, 0 = all (aggregation), i = maximal number of segments to unify </p>
 
 <p>Definition at line <a class="el" href="Settings_8h_source.html#l00022">22</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+
+<p>Referenced by <a class="el" href="example__rectangularReachability_8cpp_source.html#l00014">main()</a>, <a class="el" href="SettingsProvider_8h_source.html#l00053">hypro::SettingsProvider&lt; State &gt;::setReachabilitySettings()</a>, and <a class="el" href="SettingsProvider_8h_source.html#l00039">hypro::SettingsProvider&lt; State &gt;::useAnyTimingInformation()</a>.</p>
 
 </div>
 </div>

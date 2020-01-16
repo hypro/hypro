@@ -37,5 +37,9 @@ var classhypro_1_1EventTimingContainer =
     [ "setTransitionTimings", "classhypro_1_1EventTimingContainer.html#a024ccb073ad7a23b27b0ceacacdc1ead", null ],
     [ "operator!=", "classhypro_1_1EventTimingContainer.html#a8f380646f09ab12ed090b7f0d80e8201", null ],
     [ "operator<<", "classhypro_1_1EventTimingContainer.html#ae4c483e0fd9eb5753d974ed7058df477", null ],
-    [ "operator==", "classhypro_1_1EventTimingContainer.html#a0e5aefac48861e33733f15cba9bd22aa", null ]
+    [ "operator==", "classhypro_1_1EventTimingContainer.html#a0e5aefac48861e33733f15cba9bd22aa", null ],
+    [ "mBadStateEvents", "classhypro_1_1EventTimingContainer.html#af900cedad0b5c82983aa5395e9177637", null ],
+    [ "mInvariantEvents", "classhypro_1_1EventTimingContainer.html#acd32d26eb11e32eae6675176a4730033", null ],
+    [ "mTransitionEvents", "classhypro_1_1EventTimingContainer.html#a3a88df7cf522bf72771aa177982969ca", null ],
+    [ "mutex", "classhypro_1_1EventTimingContainer.html#adfaf70a57d79f36f58921b3d610fc83d", null ]
 ];

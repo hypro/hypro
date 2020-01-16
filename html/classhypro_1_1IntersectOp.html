@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1IntersectOp.html','');})
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1IntersectOp-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::IntersectOp&lt; Number, Converter, Setting &gt; Class Template Reference</div>  </div>
@@ -190,6 +191,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aae3cea666daf995e5bf22e78d04ec018 inherit pub_methods_classhypro_1_1RootGrowNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1409a75be14610dac0f1ec9e8b086a0f inherit pub_methods_classhypro_1_1RootGrowNode"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#a1409a75be14610dac0f1ec9e8b086a0f">contains</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;) const </td></tr>
 <tr class="separator:a1409a75be14610dac0f1ec9e8b086a0f inherit pub_methods_classhypro_1_1RootGrowNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a77a8ca68466312d2085824fcc8fb4fbc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aea6debaf29d409802568b494efa8aeb0">SFNEW_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IntersectOp.html#a77a8ca68466312d2085824fcc8fb4fbc">type</a> = SFNEW_TYPE::INTERSECTOP</td></tr>
+<tr class="separator:a77a8ca68466312d2085824fcc8fb4fbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9d33616497dcf90fa026139dcb0308"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IntersectOp.html#a0c9d33616497dcf90fa026139dcb0308">originCount</a> = 2</td></tr>
+<tr class="separator:a0c9d33616497dcf90fa026139dcb0308"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad576ca35857eb272620d68bab77ddebf"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IntersectOp.html#ad576ca35857eb272620d68bab77ddebf">mDimension</a> = 0</td></tr>
+<tr class="separator:ad576ca35857eb272620d68bab77ddebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a453259991dee1b0589356ba16fdfc598"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classhypro_1_1RootGrowNode.html">RootGrowNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IntersectOp.html#a453259991dee1b0589356ba16fdfc598">mChildren</a></td></tr>
+<tr class="separator:a453259991dee1b0589356ba16fdfc598"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e9b7352ecc405de1b4585db0aca2ba3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IntersectOp.html#a9e9b7352ecc405de1b4585db0aca2ba3">mEmpty</a> = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td></tr>
+<tr class="separator:a9e9b7352ecc405de1b4585db0aca2ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -410,6 +424,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00089">89</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
 
+<p>References <a class="el" href="EvaluationResult_8h_source.html#l00015">hypro::EvaluationResult&lt; Number &gt;::errorCode</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca57e8bcd22ac5b56703b233e135f2a7f2">hypro::FEAS</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca9d0f11bf0a1789410bf9780c8948ebb9">hypro::INFEAS</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3ccac9b5a0979420dfb983a9aa10933ea169">hypro::INFTY</a>, <a class="el" href="EvaluationResult_8h_source.html#l00014">hypro::EvaluationResult&lt; Number &gt;::optimumValue</a>, and <a class="el" href="EvaluationResult_8h_source.html#l00013">hypro::EvaluationResult&lt; Number &gt;::supportValue</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a32e22aa06955afdba661e41de43f088c"></a>
@@ -520,6 +536,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00141">141</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
 
+<p>References <a class="el" href="config_8h_source.html#l00053">defaultTemplateDirectionCount</a>, <a class="el" href="EvaluationResult_8h_source.html#l00015">hypro::EvaluationResult&lt; Number &gt;::errorCode</a>, <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081da946003f97ccc52d5d3b54ac0ec31bbfc">hypro::FALSE</a>, <a class="el" href="RootGrowNode_8h_source.html#l00088">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;::getChildren()</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3ccac9b5a0979420dfb983a9aa10933ea169">hypro::INFTY</a>, <a class="el" href="IntersectOp_8h_source.html#l00032">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::mDimension</a>, <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">hypro::NSET</a>, <a class="el" href="EvaluationResult_8h_source.html#l00013">hypro::EvaluationResult&lt; Number &gt;::supportValue</a>, and <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081dac0d83f0b82a6b30de8811e69e6d95c61">hypro::TRUE</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0785038c54c345722ae0574ba62c0008"></a>
@@ -578,6 +596,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00070">70</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
 
+<p>References <a class="el" href="IntersectOp_8h_source.html#l00032">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::mDimension</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a213d93f35fd36e0f0eb1256aa91c2825"></a>
@@ -607,6 +627,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00069">69</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
 
+<p>References <a class="el" href="IntersectOp_8h_source.html#l00031">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::originCount</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad56e1ef4d2b3df4658da6c5efc779c6b"></a>
@@ -635,6 +657,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <p>Reimplemented from <a class="el" href="classhypro_1_1RootGrowNode.html#ae9218fc6a258fca4b9f14e1eac4f7706">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00068">68</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+<p>References <a class="el" href="IntersectOp_8h_source.html#l00030">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::type</a>.</p>
 
 </div>
 </div>
@@ -694,6 +718,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <p>Reimplemented from <a class="el" href="classhypro_1_1RootGrowNode.html#aec0356a21a6d9043276fc7b3651136f5">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00072">72</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+<p>References <a class="el" href="IntersectOp_8h_source.html#l00034">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::mEmpty</a>.</p>
 
 </div>
 </div>
@@ -755,6 +781,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00191">191</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
 
+<p>References <a class="el" href="Point_8h_source.html#l00297">hypro::Point&lt; Number &gt;::inftyNorm()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9570dfdbd681af77edc1f549421effba"></a>
@@ -784,6 +812,135 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <p>Implements <a class="el" href="classhypro_1_1RootGrowNode.html#ab5b019a9a5ff66ef750d69c616107323">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00078">78</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a453259991dee1b0589356ba16fdfc598"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="classhypro_1_1RootGrowNode.html">RootGrowNode</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; &gt; &gt; <a class="el" href="classhypro_1_1IntersectOp.html">hypro::IntersectOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mChildren</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00033">33</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad576ca35857eb272620d68bab77ddebf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1IntersectOp.html">hypro::IntersectOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mDimension = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00032">32</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="IntersectOp_8h_source.html#l00141">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::empty()</a>, and <a class="el" href="IntersectOp_8h_source.html#l00070">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::getDimension()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9e9b7352ecc405de1b4585db0aca2ba3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a> <a class="el" href="classhypro_1_1IntersectOp.html">hypro::IntersectOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mEmpty = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00034">34</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="IntersectOp_8h_source.html#l00072">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::isEmpty()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0c9d33616497dcf90fa026139dcb0308"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1IntersectOp.html">hypro::IntersectOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::originCount = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00031">31</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="IntersectOp_8h_source.html#l00069">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::getOriginCount()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a77a8ca68466312d2085824fcc8fb4fbc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aea6debaf29d409802568b494efa8aeb0">SFNEW_TYPE</a> <a class="el" href="classhypro_1_1IntersectOp.html">hypro::IntersectOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::type = SFNEW_TYPE::INTERSECTOP</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="IntersectOp_8h_source.html#l00030">30</a> of file <a class="el" href="IntersectOp_8h_source.html">IntersectOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="IntersectOp_8h_source.html#l00068">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::getType()</a>.</p>
 
 </div>
 </div>

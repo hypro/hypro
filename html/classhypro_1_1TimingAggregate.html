@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1TimingAggregate.html',''
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1TimingAggregate-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::TimingAggregate&lt; Number &gt; Class Template Reference</div>  </div>
@@ -151,6 +152,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a733bfcd2471a1199e285fe773df35ebb"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1EventTimingNode.html">EventTimingNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimingAggregate.html#a733bfcd2471a1199e285fe773df35ebb">getSuccessorNodes</a> (const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *t)</td></tr>
 <tr class="memdesc:a733bfcd2471a1199e285fe773df35ebb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Successor Nodes for a specific transition. May be used to merge those nodes.  <a href="#a733bfcd2471a1199e285fe773df35ebb">More...</a><br /></td></tr>
 <tr class="separator:a733bfcd2471a1199e285fe773df35ebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a222d8cb09bea225c045379b749a16cbf"><td class="memItemLeft" align="right" valign="top">std::map&lt; const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *, <a class="el" href="structhypro_1_1ChildTimingInformation.html">ChildTimingInformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimingAggregate.html#a222d8cb09bea225c045379b749a16cbf">mChildTimings</a></td></tr>
+<tr class="separator:a222d8cb09bea225c045379b749a16cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
@@ -386,8 +392,6 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="TimingAggregate_8h_source.html#l00106">106</a> of file <a class="el" href="TimingAggregate_8h_source.html">TimingAggregate.h</a>.</p>
 
-<p>Referenced by <a class="el" href="TimingAggregate_8h_source.html#l00106">hypro::TimingAggregate&lt; N &gt;::getSuccessorNodes()</a>, and <a class="el" href="TimingAggregate_8h_source.html#l00031">hypro::TimingAggregate&lt; N &gt;::TimingAggregate()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a872ccb08006c20df43ccec4eb2e0bc6c"></a>
@@ -434,6 +438,31 @@ template&lt;typename Number&gt; </div>
 </dl>
 
 <p>Definition at line <a class="el" href="TimingAggregate_8h_source.html#l00060">60</a> of file <a class="el" href="TimingAggregate_8h_source.html">TimingAggregate.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a222d8cb09bea225c045379b749a16cbf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, <a class="el" href="structhypro_1_1ChildTimingInformation.html">ChildTimingInformation</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1TimingAggregate.html">hypro::TimingAggregate</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mChildTimings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="TimingAggregate_8h_source.html#l00026">26</a> of file <a class="el" href="TimingAggregate_8h_source.html">TimingAggregate.h</a>.</p>
 
 </div>
 </div>

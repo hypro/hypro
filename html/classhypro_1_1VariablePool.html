@@ -120,6 +120,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1VariablePool.html','');}
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1VariablePool-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::VariablePool Class Reference</div>  </div>
@@ -140,7 +142,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ad07b9b8424e2efecb50e54d1ab5da0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5158d61d6298633ac3f13110f2a155bf"><td class="memItemLeft" align="right" valign="top">const carl::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a5158d61d6298633ac3f13110f2a155bf">carlVarByIndex</a> (std::size_t _index)</td></tr>
 <tr class="separator:a5158d61d6298633ac3f13110f2a155bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed25cd9c39e31076cf947f6638a97667"><td class="memItemLeft" align="right" valign="top">const carl::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#aed25cd9c39e31076cf947f6638a97667">newCarlVariable</a> (std::string _name=&quot;&quot;)</td></tr>
+<tr class="memitem:aed25cd9c39e31076cf947f6638a97667"><td class="memItemLeft" align="right" valign="top">const carl::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#aed25cd9c39e31076cf947f6638a97667">newCarlVariable</a> (<a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> _name=&quot;&quot;)</td></tr>
 <tr class="separator:aed25cd9c39e31076cf947f6638a97667"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae69aee728f5af9f610068696759fab9"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#aae69aee728f5af9f610068696759fab9">addCarlVariable</a> (carl::Variable var)</td></tr>
 <tr class="separator:aae69aee728f5af9f610068696759fab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,11 +171,79 @@ Public Member Functions</h2></td></tr>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:affda36e5777fb530af768a292459634f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#affda36e5777fb530af768a292459634f">VariablePool</a> ()</td></tr>
 <tr class="separator:affda36e5777fb530af768a292459634f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a2dbb163cbd406cc7a148d6c9d2a124d2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a2dbb163cbd406cc7a148d6c9d2a124d2">carlPplMap</a> = std::map&lt; carl::Variable, Parma_Polyhedra_Library::Variable &gt;</td></tr>
+<tr class="separator:a2dbb163cbd406cc7a148d6c9d2a124d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a950937316f5880949ce00f4dede2056b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a950937316f5880949ce00f4dede2056b">pplCarlMap</a> = std::map&lt; Parma_Polyhedra_Library::Variable, carl::Variable, Parma_Polyhedra_Library::Variable::Compare &gt;</td></tr>
+<tr class="separator:a950937316f5880949ce00f4dede2056b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a4f88c663bd8eaf7c738756a2fa7eda6c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; carl::Variable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a4f88c663bd8eaf7c738756a2fa7eda6c">mCarlVariables</a></td></tr>
+<tr class="separator:a4f88c663bd8eaf7c738756a2fa7eda6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca671d7ae03a657e30975dc9293c5a42"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Parma_Polyhedra_Library::Variable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#aca671d7ae03a657e30975dc9293c5a42">mPplVariables</a></td></tr>
+<tr class="separator:aca671d7ae03a657e30975dc9293c5a42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf82463280d8151706d1024400a01f55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VariablePool.html#a2dbb163cbd406cc7a148d6c9d2a124d2">carlPplMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#aaf82463280d8151706d1024400a01f55">mCarlToPpl</a></td></tr>
+<tr class="separator:aaf82463280d8151706d1024400a01f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67a96a63d48fd4b8301926cb06d540a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VariablePool.html#a950937316f5880949ce00f4dede2056b">pplCarlMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a67a96a63d48fd4b8301926cb06d540a9">mPplToCarl</a></td></tr>
+<tr class="separator:a67a96a63d48fd4b8301926cb06d540a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c608b73b215c9623a30af01505e6b4"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a22c608b73b215c9623a30af01505e6b4">mPplId</a></td></tr>
+<tr class="separator:a22c608b73b215c9623a30af01505e6b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b8bca8fd9fe81ef0bc8166abc4886c8"><td class="memItemLeft" align="right" valign="top">carl::VariablePool &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VariablePool.html#a8b8bca8fd9fe81ef0bc8166abc4886c8">mPool</a></td></tr>
+<tr class="separator:a8b8bca8fd9fe81ef0bc8166abc4886c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00028">28</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a2dbb163cbd406cc7a148d6c9d2a124d2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1VariablePool.html#a2dbb163cbd406cc7a148d6c9d2a124d2">hypro::VariablePool::carlPplMap</a> =  std::map&lt;carl::Variable, Parma_Polyhedra_Library::Variable&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Typedefs </p>
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00034">34</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a950937316f5880949ce00f4dede2056b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1VariablePool.html#a950937316f5880949ce00f4dede2056b">hypro::VariablePool::pplCarlMap</a> =  std::map&lt;Parma_Polyhedra_Library::Variable, carl::Variable, Parma_Polyhedra_Library::Variable::Compare&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00035">35</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="affda36e5777fb530af768a292459634f"></a>
 <div class="memitem">
 <div class="memproto">
@@ -197,10 +267,6 @@ Protected Member Functions</h2></td></tr>
 <p>Default constructor and destructor </p>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00054">54</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
-
-<p>References <a class="el" href="VariablePool_8h_source.html#l00054">VariablePool()</a>.</p>
-
-<p>Referenced by <a class="el" href="VariablePool_8h_source.html#l00054">VariablePool()</a>.</p>
 
 </div>
 </div>
@@ -254,6 +320,10 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00149">149</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
+
+<p>Referenced by <a class="el" href="VariablePool_8h_source.html#l00218">id()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5158d61d6298633ac3f13110f2a155bf"></a>
@@ -280,7 +350,9 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00102">102</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VertexContainer_8h_source.html#l00316">std::hash&lt; set&lt; hypro::Vertex&lt; Number &gt; &gt; &gt;::operator()()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
+
+<p>Referenced by <a class="el" href="smtrat_2helper__methods_8h_source.html#l00003">hypro::addPreSolution()</a>.</p>
 
 </div>
 </div>
@@ -307,6 +379,8 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00232">232</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
+<p>References <a class="el" href="VariablePool_8h_source.html#l00041">mCarlVariables</a>, and <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0bd9c5854e9ad40f9f2ee2771dcd39f8"></a>
@@ -331,6 +405,8 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00256">256</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -358,7 +434,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00185">185</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VertexContainer_8h_source.html#l00316">std::hash&lt; set&lt; hypro::Vertex&lt; Number &gt; &gt; &gt;::operator()()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -386,6 +462,8 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00198">198</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5bb609f45308be2f913dcd1f3dbe1821"></a>
@@ -412,7 +490,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00207">207</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -440,7 +518,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00218">218</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VertexContainer_8h_source.html#l00316">std::hash&lt; set&lt; hypro::Vertex&lt; Number &gt; &gt; &gt;::operator()()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00149">addCarlVariable()</a>, and <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -454,7 +532,7 @@ Protected Member Functions</h2></td></tr>
         <tr>
           <td class="memname">const carl::Variable&amp; hypro::VariablePool::newCarlVariable </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&#160;</td>
           <td class="paramname"><em>_name</em> = <code>&quot;&quot;</code></td><td>)</td>
           <td></td>
         </tr>
@@ -467,6 +545,8 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00126">126</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -493,7 +573,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00168">168</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -521,7 +601,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00085">85</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -548,9 +628,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00241">241</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
-
-<p>Referenced by <a class="el" href="VariablePool_8h_source.html#l00207">id()</a>, <a class="el" href="VariablePool_8h_source.html#l00168">newPplVariable()</a>, <a class="el" href="VariablePool_8h_source.html#l00085">pplVarByIndex()</a>, <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>, and <a class="el" href="VariablePool_8h_source.html#l00065">variable()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>, and <a class="el" href="VariablePool_8h_source.html#l00043">mPplVariables</a>.</p>
 
 </div>
 </div>
@@ -577,7 +655,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00267">267</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VertexContainer_8h_source.html#l00316">std::hash&lt; set&lt; hypro::Vertex&lt; Number &gt; &gt; &gt;::operator()()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -603,6 +681,8 @@ Protected Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00248">248</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -630,7 +710,7 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00065">65</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
 
 </div>
 </div>
@@ -658,7 +738,147 @@ Protected Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00075">75</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
 
-<p>References <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
+<p>References <a class="el" href="VariablePool_8h_source.html#l00047">mPplId</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aaf82463280d8151706d1024400a01f55"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VariablePool.html#a2dbb163cbd406cc7a148d6c9d2a124d2">carlPplMap</a> hypro::VariablePool::mCarlToPpl</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00044">44</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4f88c663bd8eaf7c738756a2fa7eda6c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;carl::Variable&gt; hypro::VariablePool::mCarlVariables</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Members </p>
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00041">41</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+<p>Referenced by <a class="el" href="VariablePool_8h_source.html#l00232">carlVariables()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8b8bca8fd9fe81ef0bc8166abc4886c8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">carl::VariablePool&amp; hypro::VariablePool::mPool</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00048">48</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a22c608b73b215c9623a30af01505e6b4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t hypro::VariablePool::mPplId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00047">47</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+<p>Referenced by <a class="el" href="VariablePool_8h_source.html#l00149">addCarlVariable()</a>, <a class="el" href="VariablePool_8h_source.html#l00102">carlVarByIndex()</a>, <a class="el" href="VariablePool_8h_source.html#l00232">carlVariables()</a>, <a class="el" href="VariablePool_8h_source.html#l00256">clear()</a>, <a class="el" href="VariablePool_8h_source.html#l00185">hasDimension()</a>, <a class="el" href="VariablePool_8h_source.html#l00207">id()</a>, <a class="el" href="VariablePool_8h_source.html#l00126">newCarlVariable()</a>, <a class="el" href="VariablePool_8h_source.html#l00168">newPplVariable()</a>, <a class="el" href="VariablePool_8h_source.html#l00085">pplVarByIndex()</a>, <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>, <a class="el" href="VariablePool_8h_source.html#l00267">print()</a>, <a class="el" href="VariablePool_8h_source.html#l00248">size()</a>, and <a class="el" href="VariablePool_8h_source.html#l00065">variable()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a67a96a63d48fd4b8301926cb06d540a9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1VariablePool.html#a950937316f5880949ce00f4dede2056b">pplCarlMap</a> hypro::VariablePool::mPplToCarl</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00045">45</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aca671d7ae03a657e30975dc9293c5a42"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;Parma_Polyhedra_Library::Variable&gt; hypro::VariablePool::mPplVariables</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="VariablePool_8h_source.html#l00043">43</a> of file <a class="el" href="VariablePool_8h_source.html">VariablePool.h</a>.</p>
+
+<p>Referenced by <a class="el" href="VariablePool_8h_source.html#l00241">pplVariables()</a>.</p>
 
 </div>
 </div>

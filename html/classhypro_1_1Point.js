@@ -74,5 +74,6 @@ var classhypro_1_1Point =
     [ "sum", "classhypro_1_1Point.html#aca327db2b849eb03b55564851e94d3f8", null ],
     [ "swap", "classhypro_1_1Point.html#a3b894fe6fcdc61c49d6be9c3a22cecf3", null ],
     [ "variables", "classhypro_1_1Point.html#a6647e86752c9ed0692059880219f3915", null ],
-    [ "operator<<", "classhypro_1_1Point.html#aad789e3df3c327b7c22529c98445f56a", null ]
+    [ "operator<<", "classhypro_1_1Point.html#aad789e3df3c327b7c22529c98445f56a", null ],
+    [ "mCoordinates", "classhypro_1_1Point.html#abc675f6a451d7d04c369b864c26671d0", null ]
 ];

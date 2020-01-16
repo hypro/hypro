@@ -4,6 +4,7 @@ var searchData=
   ['handlerfactory_2eh',['HandlerFactory.h',['../HandlerFactory_8h.html',1,'']]],
   ['helper_5fmethods_2eh',['helper_methods.h',['../smtrat_2helper__methods_8h.html',1,'']]],
   ['helper_5fmethods_2eh',['helper_methods.h',['../z3_2helper__methods_8h.html',1,'']]],
+  ['helperfunctions_2eh',['helperFunctions.h',['../helperFunctions_8h.html',1,'']]],
   ['helpermethods_2eh',['helperMethods.h',['../helperMethods_8h.html',1,'']]],
   ['hierarchicalintervalvector_2eh',['HierarchicalIntervalVector.h',['../HierarchicalIntervalVector_8h.html',1,'']]],
   ['hiv_5futil_2eh',['HIV_util.h',['../HIV__util_8h.html',1,'']]],

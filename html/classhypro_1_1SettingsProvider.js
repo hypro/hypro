@@ -1,5 +1,7 @@
 var classhypro_1_1SettingsProvider =
 [
+    [ "Number", "classhypro_1_1SettingsProvider.html#aefca389aee8068d3676cc8fdd2ea762d", null ],
+    [ "SettingsProvider", "classhypro_1_1SettingsProvider.html#a56f5fd65c105a78bb61746a79cc8828a", null ],
     [ "addStrategyElement", "classhypro_1_1SettingsProvider.html#a89648e73b16bebd30fdbac58b7aa44c7", null ],
     [ "computeLocationSubspaceTypeMapping", "classhypro_1_1SettingsProvider.html#a01484ad5dce3b7b05aea51f201a644b0", null ],
     [ "computeLocationTypeMapping", "classhypro_1_1SettingsProvider.html#af3b59a900cd5c148cf1cce721d00fe36", null ],
@@ -32,5 +34,22 @@ var classhypro_1_1SettingsProvider =
     [ "useDecider", "classhypro_1_1SettingsProvider.html#a6060c80b21c3099376c37ecc39ce5260", null ],
     [ "useFixedPointTest", "classhypro_1_1SettingsProvider.html#a21654646cba7f8e977ebafc25c519514", null ],
     [ "useGlobalQueuesOnly", "classhypro_1_1SettingsProvider.html#a8662b6dcb45d26305ab195fd7ac60b80", null ],
-    [ "useLocalTiming", "classhypro_1_1SettingsProvider.html#a51125d6cd720c5925078c6a515cc9a84", null ]
+    [ "useLocalTiming", "classhypro_1_1SettingsProvider.html#a51125d6cd720c5925078c6a515cc9a84", null ],
+    [ "contextSwitch", "classhypro_1_1SettingsProvider.html#a4598a9754f6c3b60045efd7271873b95", null ],
+    [ "fullTimed", "classhypro_1_1SettingsProvider.html#ac3c6765e50228f825df7df4533b0fbbd", null ],
+    [ "mBalancingRatio", "classhypro_1_1SettingsProvider.html#a250c961648ab081801dfe83a12a5ff84", null ],
+    [ "mDoDecomposition", "classhypro_1_1SettingsProvider.html#afc66ee6cebdadf57f42c7cdb866df85b", null ],
+    [ "mGlobalQueuesOnly", "classhypro_1_1SettingsProvider.html#a5f6b951d7cfefe9f409594fc8ee0e3cd", null ],
+    [ "mHybridAutomaton", "classhypro_1_1SettingsProvider.html#ac0c2d16c9db4002bdc97b20d313a6563", null ],
+    [ "mLocationSubspaceTypeMap", "classhypro_1_1SettingsProvider.html#a513e40f66024310469684af9d6447902", null ],
+    [ "mLocationTypeMap", "classhypro_1_1SettingsProvider.html#ac5c962740656352ddedd94aeb6f2f226", null ],
+    [ "mReachabilitySettings", "classhypro_1_1SettingsProvider.html#a703e3d05b9a1d0198a32cef506e55db6", null ],
+    [ "mSkipPlot", "classhypro_1_1SettingsProvider.html#ae2a754b12bead987ff5e9d5791c327cd", null ],
+    [ "mStrategy", "classhypro_1_1SettingsProvider.html#acbcb5ac682e1f23d8223360e8b8d91e8", null ],
+    [ "mSubspaceDecomposition", "classhypro_1_1SettingsProvider.html#a03b6acc0b87aaf593062c26bcc69fe01", null ],
+    [ "mThreadcount", "classhypro_1_1SettingsProvider.html#a9650317dc954ddaa53420cad7c387615", null ],
+    [ "mUseDecider", "classhypro_1_1SettingsProvider.html#a13c1a89aeb2b8cfaeb0ba7b2f23a8aa5", null ],
+    [ "mUseFixedPointTest", "classhypro_1_1SettingsProvider.html#a75d2a542cf78bb94246e11c8a302a4dd", null ],
+    [ "mUseLocalTiming", "classhypro_1_1SettingsProvider.html#ad892a01f259789d9f892592275f3124e", null ],
+    [ "treeDotFileWriter", "classhypro_1_1SettingsProvider.html#ac98522e3c1061f382c626078805f9337", null ]
 ];

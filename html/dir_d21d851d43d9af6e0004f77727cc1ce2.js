@@ -10,7 +10,8 @@ var dir_d21d851d43d9af6e0004f77727cc1ce2 =
     ] ],
     [ "HybridAutomatonLexer.cpp", "HybridAutomatonLexer_8cpp.html", null ],
     [ "HybridAutomatonLexer.h", "HybridAutomatonLexer_8h.html", [
-      [ "HybridAutomatonLexer", "classhypro_1_1HybridAutomatonLexer.html", "classhypro_1_1HybridAutomatonLexer" ]
+      [ "HybridAutomatonLexer", "classhypro_1_1HybridAutomatonLexer.html", "classhypro_1_1HybridAutomatonLexer" ],
+      [ "Initializer", "structhypro_1_1HybridAutomatonLexer_1_1Initializer.html", "structhypro_1_1HybridAutomatonLexer_1_1Initializer" ]
     ] ],
     [ "HybridAutomatonParser.cpp", "HybridAutomatonParser_8cpp.html", null ],
     [ "HybridAutomatonParser.h", "HybridAutomatonParser_8h.html", [
@@ -56,7 +57,8 @@ var dir_d21d851d43d9af6e0004f77727cc1ce2 =
       [ "IdentityContext", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext.html", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext" ],
       [ "FixedordersContext", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext.html", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext" ],
       [ "CutoffContext", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext.html", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext" ],
-      [ "PrecisionContext", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext" ]
+      [ "PrecisionContext", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext" ],
+      [ "Initializer", "structhypro_1_1HybridAutomatonParser_1_1Initializer.html", "structhypro_1_1HybridAutomatonParser_1_1Initializer" ]
     ] ],
     [ "HybridAutomatonVisitor.cpp", "HybridAutomatonVisitor_8cpp.html", null ],
     [ "HybridAutomatonVisitor.h", "HybridAutomatonVisitor_8h.html", [

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zonotope_5forderlimit',['ZONOTOPE_ORDERLIMIT',['../structhypro_1_1ZonotopeSetting.html#ac46cbf0699c7cb2dee287fe943ed2ba8',1,'hypro::ZonotopeSetting']]]
+  ['warninexact',['warnInexact',['../classhypro_1_1Optimizer.html#a895ac5ec33a2c36b476aa4ca83902138',1,'hypro::Optimizer']]]
 ];

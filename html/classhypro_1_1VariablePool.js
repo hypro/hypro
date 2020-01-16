@@ -1,5 +1,7 @@
 var classhypro_1_1VariablePool =
 [
+    [ "carlPplMap", "classhypro_1_1VariablePool.html#a2dbb163cbd406cc7a148d6c9d2a124d2", null ],
+    [ "pplCarlMap", "classhypro_1_1VariablePool.html#a950937316f5880949ce00f4dede2056b", null ],
     [ "VariablePool", "classhypro_1_1VariablePool.html#affda36e5777fb530af768a292459634f", null ],
     [ "~VariablePool", "classhypro_1_1VariablePool.html#a87767ab9a018da27a87651e9c82d83f0", null ],
     [ "addCarlVariable", "classhypro_1_1VariablePool.html#aae69aee728f5af9f610068696759fab9", null ],
@@ -17,5 +19,11 @@ var classhypro_1_1VariablePool =
     [ "print", "classhypro_1_1VariablePool.html#af056eb5662aab425c63b8776f0bbdd41", null ],
     [ "size", "classhypro_1_1VariablePool.html#aa5b7c94844168c1b9371ed2004b7982e", null ],
     [ "variable", "classhypro_1_1VariablePool.html#a30b975e5a0a6a1116e15bd2393d0e4e2", null ],
-    [ "variable", "classhypro_1_1VariablePool.html#a68470cb3e82879165953a04f5fa65591", null ]
+    [ "variable", "classhypro_1_1VariablePool.html#a68470cb3e82879165953a04f5fa65591", null ],
+    [ "mCarlToPpl", "classhypro_1_1VariablePool.html#aaf82463280d8151706d1024400a01f55", null ],
+    [ "mCarlVariables", "classhypro_1_1VariablePool.html#a4f88c663bd8eaf7c738756a2fa7eda6c", null ],
+    [ "mPool", "classhypro_1_1VariablePool.html#a8b8bca8fd9fe81ef0bc8166abc4886c8", null ],
+    [ "mPplId", "classhypro_1_1VariablePool.html#a22c608b73b215c9623a30af01505e6b4", null ],
+    [ "mPplToCarl", "classhypro_1_1VariablePool.html#a67a96a63d48fd4b8301926cb06d540a9", null ],
+    [ "mPplVariables", "classhypro_1_1VariablePool.html#aca671d7ae03a657e30975dc9293c5a42", null ]
 ];

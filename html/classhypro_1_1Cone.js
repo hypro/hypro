@@ -18,5 +18,6 @@ var classhypro_1_1Cone =
     [ "operator=", "classhypro_1_1Cone.html#ab00eb3e4f78a682e0ca126a85505c1ce", null ],
     [ "planes", "classhypro_1_1Cone.html#af8cc5556535bed6631c399cdcc6d5d4c", null ],
     [ "size", "classhypro_1_1Cone.html#a52b914723e0fd64791f2c229a96f363f", null ],
-    [ "vectors", "classhypro_1_1Cone.html#a31494df4d62d7833a04af9e80958662a", null ]
+    [ "vectors", "classhypro_1_1Cone.html#a31494df4d62d7833a04af9e80958662a", null ],
+    [ "mPlanes", "classhypro_1_1Cone.html#a0363722f3709877d80805a0f00d9d352", null ]
 ];

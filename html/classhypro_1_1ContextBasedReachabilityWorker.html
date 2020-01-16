@@ -119,6 +119,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1ContextBasedReachability
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1ContextBasedReachabilityWorker-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::ContextBasedReachabilityWorker&lt; State &gt; Class Template Reference</div>  </div>
@@ -149,6 +151,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa4c3c995bc6555be3f37273f12097953 inherit pub_methods_classhypro_1_1IWorker"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#aa4c3c995bc6555be3f37273f12097953">detectedUnsafety</a> () const</td></tr>
 <tr class="separator:aa4c3c995bc6555be3f37273f12097953 inherit pub_methods_classhypro_1_1IWorker"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a3ecb8c919becb0d145cb1e212c323325"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html#a3ecb8c919becb0d145cb1e212c323325">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:a3ecb8c919becb0d145cb1e212c323325"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a2f89b88370ed1bd437240ecbe71cc542"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html#a2f89b88370ed1bd437240ecbe71cc542">mWorkerId</a></td></tr>
+<tr class="separator:a2f89b88370ed1bd437240ecbe71cc542"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_types_classhypro_1_1IWorker"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classhypro_1_1IWorker')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classhypro_1_1IWorker.html">hypro::IWorker&lt; std::shared_ptr&lt; Task&lt; State &gt; &gt;, State &gt;</a></td></tr>
@@ -166,12 +178,37 @@ class hypro::ContextBasedReachabilityWorker&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00019">19</a> of file <a class="el" href="ContextBasedReachabilityWorker_8h_source.html">ContextBasedReachabilityWorker.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a3ecb8c919becb0d145cb1e212c323325"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html">hypro::ContextBasedReachabilityWorker</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html#a3ecb8c919becb0d145cb1e212c323325">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00020">20</a> of file <a class="el" href="ContextBasedReachabilityWorker_8h_source.html">ContextBasedReachabilityWorker.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae677ec9648b18d43f93d3a6008488163"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -193,15 +230,13 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00023">23</a> of file <a class="el" href="ContextBasedReachabilityWorker_8h_source.html">ContextBasedReachabilityWorker.h</a>.</p>
 
-<p>References <a class="el" href="namespacehypro.html#af5b30db26d573865968ca4ec57eb5031">hypro::parseFlowstarFile()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="aa3d701dd0dd099e90c25d2a6cb81348d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -222,6 +257,8 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00027">27</a> of file <a class="el" href="ContextBasedReachabilityWorker_8h_source.html">ContextBasedReachabilityWorker.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html#a16e52a97780d20a9531cf3baa32a1f83">hypro::ContextBasedReachabilityWorker&lt; State &gt;::computeForwardReachability()</a>, <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html#ad1ef42d2d1c7b7ee552b255356db0f0b">hypro::ContextBasedReachabilityWorker&lt; State &gt;::isValidTask()</a>, and <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html#a48b50d99c12f0bf95b071665ae7bbdbb">hypro::ContextBasedReachabilityWorker&lt; State &gt;::processTask()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -229,7 +266,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html">hypro::ContextBasedReachabilityWorker</a>&lt; State &gt;::computeForwardReachability </td>
@@ -269,13 +306,15 @@ template&lt;typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00027">hypro::ContextBasedReachabilityWorker&lt; State &gt;::~ContextBasedReachabilityWorker()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad1ef42d2d1c7b7ee552b255356db0f0b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html">hypro::ContextBasedReachabilityWorker</a>&lt; State &gt;::isValidTask </td>
@@ -297,13 +336,15 @@ template&lt;typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00027">hypro::ContextBasedReachabilityWorker&lt; State &gt;::~ContextBasedReachabilityWorker()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a48b50d99c12f0bf95b071665ae7bbdbb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html">hypro::ContextBasedReachabilityWorker</a>&lt; State &gt;::processTask </td>
@@ -342,6 +383,33 @@ template&lt;typename State &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="example__rectangularReachability_8cpp_source.html#l00014">main()</a>, and <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00027">hypro::ContextBasedReachabilityWorker&lt; State &gt;::~ContextBasedReachabilityWorker()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a2f89b88370ed1bd437240ecbe71cc542"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classhypro_1_1ContextBasedReachabilityWorker.html">hypro::ContextBasedReachabilityWorker</a>&lt; State &gt;::mWorkerId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ContextBasedReachabilityWorker_8h_source.html#l00045">45</a> of file <a class="el" href="ContextBasedReachabilityWorker_8h_source.html">ContextBasedReachabilityWorker.h</a>.</p>
 
 </div>
 </div>

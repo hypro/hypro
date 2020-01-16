@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1genericIntervalAssignmen
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1genericIntervalAssignmentVisitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::genericIntervalAssignmentVisitor&lt; T, Number &gt; Class Template Reference</div>  </div>
@@ -139,6 +140,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a97504d1ee53378e1d2f326a1c0722486"><td class="memTemplParams" colspan="2">template&lt;typename B &gt; </td></tr>
 <tr class="memitem:a97504d1ee53378e1d2f326a1c0722486"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericIntervalAssignmentVisitor.html#a97504d1ee53378e1d2f326a1c0722486">operator()</a> (const B &amp;lhs) const </td></tr>
 <tr class="separator:a97504d1ee53378e1d2f326a1c0722486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aec92c07f5a04caa512aaaa57f06e207f"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericIntervalAssignmentVisitor.html#aec92c07f5a04caa512aaaa57f06e207f">mAssignments</a></td></tr>
+<tr class="separator:aec92c07f5a04caa512aaaa57f06e207f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T, typename Number&gt;<br />
@@ -198,10 +204,6 @@ template&lt;typename T , typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Visitors_8h_source.html#l00273">273</a> of file <a class="el" href="Visitors_8h_source.html">Visitors.h</a>.</p>
 
-<p>References <a class="el" href="Visitors_8h_source.html#l00273">hypro::genericIntervalAssignmentVisitor&lt; T, Number &gt;::genericIntervalAssignmentVisitor()</a>.</p>
-
-<p>Referenced by <a class="el" href="Visitors_8h_source.html#l00273">hypro::genericIntervalAssignmentVisitor&lt; T, Number &gt;::genericIntervalAssignmentVisitor()</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -233,7 +235,7 @@ template&lt;typename N , typename C , typename S &gt; </div>
 
 <p>Definition at line <a class="el" href="Visitors_8h_source.html#l00278">278</a> of file <a class="el" href="Visitors_8h_source.html">Visitors.h</a>.</p>
 
-<p>References <a class="el" href="VertexContainer_8h_source.html#l00316">std::hash&lt; set&lt; hypro::Vertex&lt; Number &gt; &gt; &gt;::operator()()</a>.</p>
+<p>References <a class="el" href="carlPolytope_8h_source.html#l00106">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>.</p>
 
 </div>
 </div>
@@ -264,6 +266,31 @@ template&lt;typename B &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Visitors_8h_source.html#l00296">296</a> of file <a class="el" href="Visitors_8h_source.html">Visitors.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aec92c07f5a04caa512aaaa57f06e207f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Number &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::vector&lt;carl::Interval&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt;&amp; <a class="el" href="classhypro_1_1genericIntervalAssignmentVisitor.html">hypro::genericIntervalAssignmentVisitor</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mAssignments</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Visitors_8h_source.html#l00269">269</a> of file <a class="el" href="Visitors_8h_source.html">Visitors.h</a>.</p>
 
 </div>
 </div>

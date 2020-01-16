@@ -9,5 +9,8 @@ var classhypro_1_1Ridge =
     [ "neighbors", "classhypro_1_1Ridge.html#a3c205e9a89b7c9cfe59e4537e9ca385d", null ],
     [ "rNeighbors", "classhypro_1_1Ridge.html#ab180f8e99e430f205d0b533534b55bdb", null ],
     [ "rVertices", "classhypro_1_1Ridge.html#a84490edc4c394c50a2f642450ec1d1a5", null ],
-    [ "vertices", "classhypro_1_1Ridge.html#a08f703ccdd61307081fcb0c1c5622dc3", null ]
+    [ "vertices", "classhypro_1_1Ridge.html#a08f703ccdd61307081fcb0c1c5622dc3", null ],
+    [ "mHalfspace", "classhypro_1_1Ridge.html#aeb3e2e50a14f2daacc3b4f02a25400a5", null ],
+    [ "mNeighbors", "classhypro_1_1Ridge.html#a3b969db9151457b8ea7f05b375c6235d", null ],
+    [ "mVertices", "classhypro_1_1Ridge.html#a0d228958f2e45bb53235d5ef89b6fc07", null ]
 ];

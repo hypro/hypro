@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1LockableObjectWrapper.ht
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1LockableObjectWrapper-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::LockableObjectWrapper&lt; Object &gt; Class Template Reference</div>  </div>
@@ -133,7 +134,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a82b5970306c7647da17bda3004bbdbd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb1759c29d559f70369dba62ce27c551"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#abb1759c29d559f70369dba62ce27c551">~LockableObjectWrapper</a> ()</td></tr>
 <tr class="separator:abb1759c29d559f70369dba62ce27c551"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e8f0a7063b3a6d8237b58ee5ae34ba2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a9e8f0a7063b3a6d8237b58ee5ae34ba2">LockableObjectWrapper</a> (Object instance)</td></tr>
+<tr class="memitem:a9e8f0a7063b3a6d8237b58ee5ae34ba2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a9e8f0a7063b3a6d8237b58ee5ae34ba2">LockableObjectWrapper</a> (Object <a class="el" href="classhypro_1_1LockableObjectWrapper.html#a1c9ea61cbf89fffad38fe0ab5f44eb4a">instance</a>)</td></tr>
 <tr class="separator:a9e8f0a7063b3a6d8237b58ee5ae34ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a331594a6dc72bb979f5f0b0fbfd43fcb"><td class="memItemLeft" align="right" valign="top">Object &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a331594a6dc72bb979f5f0b0fbfd43fcb">getLockedInstance</a> ()</td></tr>
 <tr class="separator:a331594a6dc72bb979f5f0b0fbfd43fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,6 +142,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:afeffe352f13f0c6e45d2d871dbdb0d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01ae945996a2cbad3fbf3683a8754e3a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a01ae945996a2cbad3fbf3683a8754e3a">getNumLocks</a> () const </td></tr>
 <tr class="separator:a01ae945996a2cbad3fbf3683a8754e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a1c9ea61cbf89fffad38fe0ab5f44eb4a"><td class="memItemLeft" align="right" valign="top">Object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a1c9ea61cbf89fffad38fe0ab5f44eb4a">instance</a></td></tr>
+<tr class="separator:a1c9ea61cbf89fffad38fe0ab5f44eb4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0076372d2dd42223b41e70c8513c917e"><td class="memItemLeft" align="right" valign="top">std::recursive_mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a0076372d2dd42223b41e70c8513c917e">mutex</a></td></tr>
+<tr class="separator:a0076372d2dd42223b41e70c8513c917e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a1ca002e3314e4568c414741422a631"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LockableObjectWrapper.html#a1a1ca002e3314e4568c414741422a631">numLocks</a> = 0</td></tr>
+<tr class="separator:a1a1ca002e3314e4568c414741422a631"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Object&gt;<br />
@@ -255,6 +265,8 @@ template&lt;typename Object &gt; </div>
 
 <p>Definition at line <a class="el" href="LockableObjectWrapper_8h_source.html#l00024">24</a> of file <a class="el" href="LockableObjectWrapper_8h_source.html">LockableObjectWrapper.h</a>.</p>
 
+<p>References <a class="el" href="LockableObjectWrapper_8h_source.html#l00008">hypro::LockableObjectWrapper&lt; Object &gt;::instance</a>, and <a class="el" href="LockableObjectWrapper_8h_source.html#l00010">hypro::LockableObjectWrapper&lt; Object &gt;::numLocks</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a01ae945996a2cbad3fbf3683a8754e3a"></a>
@@ -282,6 +294,8 @@ template&lt;typename Object &gt; </div>
 
 <p>Definition at line <a class="el" href="LockableObjectWrapper_8h_source.html#l00035">35</a> of file <a class="el" href="LockableObjectWrapper_8h_source.html">LockableObjectWrapper.h</a>.</p>
 
+<p>References <a class="el" href="LockableObjectWrapper_8h_source.html#l00010">hypro::LockableObjectWrapper&lt; Object &gt;::numLocks</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="afeffe352f13f0c6e45d2d871dbdb0d1e"></a>
@@ -308,6 +322,85 @@ template&lt;typename Object &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="LockableObjectWrapper_8h_source.html#l00030">30</a> of file <a class="el" href="LockableObjectWrapper_8h_source.html">LockableObjectWrapper.h</a>.</p>
+
+<p>References <a class="el" href="LockableObjectWrapper_8h_source.html#l00010">hypro::LockableObjectWrapper&lt; Object &gt;::numLocks</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a1c9ea61cbf89fffad38fe0ab5f44eb4a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Object &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Object <a class="el" href="classhypro_1_1LockableObjectWrapper.html">hypro::LockableObjectWrapper</a>&lt; Object &gt;::instance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LockableObjectWrapper_8h_source.html#l00008">8</a> of file <a class="el" href="LockableObjectWrapper_8h_source.html">LockableObjectWrapper.h</a>.</p>
+
+<p>Referenced by <a class="el" href="LockableObjectWrapper_8h_source.html#l00024">hypro::LockableObjectWrapper&lt; Object &gt;::getLockedInstance()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0076372d2dd42223b41e70c8513c917e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Object &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::recursive_mutex <a class="el" href="classhypro_1_1LockableObjectWrapper.html">hypro::LockableObjectWrapper</a>&lt; Object &gt;::mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LockableObjectWrapper_8h_source.html#l00009">9</a> of file <a class="el" href="LockableObjectWrapper_8h_source.html">LockableObjectWrapper.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a1ca002e3314e4568c414741422a631"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Object &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classhypro_1_1LockableObjectWrapper.html">hypro::LockableObjectWrapper</a>&lt; Object &gt;::numLocks = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LockableObjectWrapper_8h_source.html#l00010">10</a> of file <a class="el" href="LockableObjectWrapper_8h_source.html">LockableObjectWrapper.h</a>.</p>
+
+<p>Referenced by <a class="el" href="LockableObjectWrapper_8h_source.html#l00024">hypro::LockableObjectWrapper&lt; Object &gt;::getLockedInstance()</a>, <a class="el" href="LockableObjectWrapper_8h_source.html#l00035">hypro::LockableObjectWrapper&lt; Object &gt;::getNumLocks()</a>, and <a class="el" href="LockableObjectWrapper_8h_source.html#l00030">hypro::LockableObjectWrapper&lt; Object &gt;::unlockInstance()</a>.</p>
 
 </div>
 </div>

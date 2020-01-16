@@ -40,5 +40,10 @@ var classhypro_1_1HybridAutomaton =
     [ "operator!=", "classhypro_1_1HybridAutomaton.html#a64e456c4b3d684b0a936d504afbcf279", null ],
     [ "operator+", "classhypro_1_1HybridAutomaton.html#ae3f1ae57e5a8e6cdd44e59533783d517", null ],
     [ "operator==", "classhypro_1_1HybridAutomaton.html#a416f686c23f60bc15cd5b234438d4cf9", null ],
-    [ "operator||", "classhypro_1_1HybridAutomaton.html#a9ad636c73a2fa1a32c37d101955beea9", null ]
+    [ "operator||", "classhypro_1_1HybridAutomaton.html#a9ad636c73a2fa1a32c37d101955beea9", null ],
+    [ "mGlobalBadStates", "classhypro_1_1HybridAutomaton.html#acd3c3b32b410bf30e1f0f1e120b7032c", null ],
+    [ "mInitialStates", "classhypro_1_1HybridAutomaton.html#ae66a1b4d518994a69381d3787c1f165a", null ],
+    [ "mLocalBadStates", "classhypro_1_1HybridAutomaton.html#a32c24e0d09d1f88413bff70645ab3477", null ],
+    [ "mLocations", "classhypro_1_1HybridAutomaton.html#ab77b0cd840e0a18d891981421ae3c76a", null ],
+    [ "mVariables", "classhypro_1_1HybridAutomaton.html#a7518a28d0f5379def788834f2e4eedca", null ]
 ];

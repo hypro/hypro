@@ -161,7 +161,7 @@ struct hypro::TrafoData&lt; Number, Setting &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Setting &gt; </div>
+template&lt;typename Number, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -205,7 +205,7 @@ template&lt;typename Number , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Setting &gt; </div>
+template&lt;typename Number, typename Setting&gt; </div>
 <div class="memtemplate">
 template&lt;typename SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, SettingRhs &gt;&gt;  = carl::dummy&gt; </div>
 <table class="mlabels">
@@ -229,6 +229,8 @@ template&lt;typename SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, 
 
 <p>Definition at line <a class="el" href="TrafoOp_8h_source.html#l00038">38</a> of file <a class="el" href="TrafoOp_8h_source.html">TrafoOp.h</a>.</p>
 
+<p>References <a class="el" href="TrafoOp_8h_source.html#l00028">hypro::TrafoData&lt; Number, Setting &gt;::currentExponent</a>, and <a class="el" href="TrafoOp_8h_source.html#l00030">hypro::TrafoData&lt; Number, Setting &gt;::parameters</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -236,7 +238,7 @@ template&lt;typename SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Setting &gt; </div>
+template&lt;typename Number, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">unsigned <a class="el" href="structhypro_1_1TrafoData.html">hypro::TrafoData</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Setting &gt;::currentExponent</td>
@@ -246,13 +248,15 @@ template&lt;typename Number , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="TrafoOp_8h_source.html#l00028">28</a> of file <a class="el" href="TrafoOp_8h_source.html">TrafoOp.h</a>.</p>
 
+<p>Referenced by <a class="el" href="TrafoOp_8h_source.html#l00138">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::getCurrentExponent()</a>, <a class="el" href="TrafoOp_8h_source.html#l00141">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::getData()</a>, <a class="el" href="TrafoOp_8h_source.html#l00038">hypro::TrafoData&lt; Number, Setting &gt;::TrafoData()</a>, and <a class="el" href="TrafoOp_8h_source.html#l00074">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::TrafoOp()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ac3ed9953a8f25b70ca45a3c6857109d5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Setting &gt; </div>
+template&lt;typename Number, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::shared_ptr&lt;const <a class="el" href="structhypro_1_1LinTrafoParameters.html">LinTrafoParameters</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Setting&gt; &gt; <a class="el" href="structhypro_1_1TrafoData.html">hypro::TrafoData</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Setting &gt;::parameters</td>
@@ -262,13 +266,15 @@ template&lt;typename Number , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="TrafoOp_8h_source.html#l00030">30</a> of file <a class="el" href="TrafoOp_8h_source.html">TrafoOp.h</a>.</p>
 
+<p>Referenced by <a class="el" href="TrafoOp_8h_source.html#l00141">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::getData()</a>, <a class="el" href="TrafoOp_8h_source.html#l00140">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::getParameters()</a>, <a class="el" href="TrafoOp_8h_source.html#l00227">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::hasTrafo()</a>, <a class="el" href="TrafoOp_8h_source.html#l00038">hypro::TrafoData&lt; Number, Setting &gt;::TrafoData()</a>, and <a class="el" href="TrafoOp_8h_source.html#l00123">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::TrafoOp()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="afcbef4e6a217dcf61c42cafad1b4939a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Setting &gt; </div>
+template&lt;typename Number, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="structhypro_1_1TrafoData.html">hypro::TrafoData</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Setting &gt;::successiveTransformations</td>
@@ -277,6 +283,8 @@ template&lt;typename Number , typename Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="TrafoOp_8h_source.html#l00029">29</a> of file <a class="el" href="TrafoOp_8h_source.html">TrafoOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="TrafoOp_8h_source.html#l00141">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::getData()</a>, <a class="el" href="TrafoOp_8h_source.html#l00139">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::getSuccessiveTransformations()</a>, and <a class="el" href="TrafoOp_8h_source.html#l00123">hypro::TrafoOp&lt; Number, Converter, Setting &gt;::TrafoOp()</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 var classhypro_1_1rectangularInvariantHandler =
 [
+    [ "Number", "classhypro_1_1rectangularInvariantHandler.html#ae4a76dc56c39ab90954254fbe43ea1db", null ],
     [ "rectangularInvariantHandler", "classhypro_1_1rectangularInvariantHandler.html#a627b4b70f5303adfdb963024359bbca9", null ],
     [ "rectangularInvariantHandler", "classhypro_1_1rectangularInvariantHandler.html#adfd38a3e668819bcdaa1983030ae4199", null ],
     [ "getContainment", "classhypro_1_1rectangularInvariantHandler.html#ab0966c7d987dc9a0c0d275a37dfb0df0", null ],

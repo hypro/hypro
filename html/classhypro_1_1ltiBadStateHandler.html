@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1ltiBadStateHandler.html'
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="classhypro_1_1ltiBadStateHandler-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::ltiBadStateHandler&lt; State &gt; Class Template Reference</div>  </div>
@@ -160,6 +161,11 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a95cabbcaf5d8ecf911540cc3950a4c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5b803eff8661d7c985d6098a55b4a22"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#af5b803eff8661d7c985d6098a55b4a22">mMarkedForDelete</a> = false</td></tr>
 <tr class="separator:af5b803eff8661d7c985d6098a55b4a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:af362f873011f1dc0d742e5b2c12338e5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:af362f873011f1dc0d742e5b2c12338e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />
@@ -167,7 +173,32 @@ class hypro::ltiBadStateHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="ltiBadStateHandler_8h_source.html#l00006">6</a> of file <a class="el" href="ltiBadStateHandler_8h_source.html">ltiBadStateHandler.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="af362f873011f1dc0d742e5b2c12338e5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ltiBadStateHandler_8h_source.html#l00007">7</a> of file <a class="el" href="ltiBadStateHandler_8h_source.html">ltiBadStateHandler.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a2c4e2fb269165fafe42d723653186f33"></a>
 <div class="memitem">
 <div class="memproto">
@@ -229,9 +260,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ltiBadStateHandler_8h_source.html#l00018">18</a> of file <a class="el" href="ltiBadStateHandler_8h_source.html">ltiBadStateHandler.h</a>.</p>
 
-<p>References <a class="el" href="ltiBadStateHandler_8h_source.html#l00018">hypro::ltiBadStateHandler&lt; State &gt;::ltiBadStateHandler()</a>.</p>
-
-<p>Referenced by <a class="el" href="ltiBadStateHandler_8h_source.html#l00018">hypro::ltiBadStateHandler&lt; State &gt;::ltiBadStateHandler()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1ltiBadStateHandler.html#a2f0ad682a1be303578ed57b733b7f7c4">hypro::ltiBadStateHandler&lt; State &gt;::handle()</a>.</p>
 
 </div>
 </div>
@@ -293,6 +322,8 @@ template&lt;typename State &gt; </div>
 <p>Implements <a class="el" href="classhypro_1_1IBadStateHandler.html#a3c80a40a1aea433ff46255298675c6f3">hypro::IBadStateHandler</a>.</p>
 
 <p>Reimplemented in <a class="el" href="classhypro_1_1timedBadStateHandler.html#ae40e26cff9038f6ab7fac820fb75fe73">hypro::timedBadStateHandler&lt; State &gt;</a>.</p>
+
+<p>Referenced by <a class="el" href="ltiBadStateHandler_8h_source.html#l00018">hypro::ltiBadStateHandler&lt; State &gt;::ltiBadStateHandler()</a>.</p>
 
 </div>
 </div>
@@ -386,8 +417,6 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ltiBadStateHandler_8h_source.html#l00029">29</a> of file <a class="el" href="ltiBadStateHandler_8h_source.html">ltiBadStateHandler.h</a>.</p>
 
-<p>References <a class="el" href="ltiBadStateHandler_8h_source.html#l00014">hypro::ltiBadStateHandler&lt; State &gt;::mMarkedForDelete</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -463,7 +492,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ltiBadStateHandler_8h_source.html#l00014">14</a> of file <a class="el" href="ltiBadStateHandler_8h_source.html">ltiBadStateHandler.h</a>.</p>
 
-<p>Referenced by <a class="el" href="ltiBadStateHandler_8h_source.html#l00028">hypro::ltiBadStateHandler&lt; State &gt;::getMarkedForDelete()</a>, and <a class="el" href="ltiBadStateHandler_8h_source.html#l00029">hypro::ltiBadStateHandler&lt; State &gt;::setMarkedForDelete()</a>.</p>
+<p>Referenced by <a class="el" href="ltiBadStateHandler_8h_source.html#l00028">hypro::ltiBadStateHandler&lt; State &gt;::getMarkedForDelete()</a>.</p>
 
 </div>
 </div>

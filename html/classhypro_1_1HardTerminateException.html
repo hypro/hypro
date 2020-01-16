@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1HardTerminateException.h
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1HardTerminateException-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::HardTerminateException Class Reference</div>  </div>
@@ -135,6 +136,11 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a92b9559bb6a2e1af6d60346b6da738d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73d7a3c023f08ad04f8d71f4ee81b2ec"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HardTerminateException.html#a73d7a3c023f08ad04f8d71f4ee81b2ec">what</a> () const   throw ()</td></tr>
 <tr class="separator:a73d7a3c023f08ad04f8d71f4ee81b2ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad092ce79dbddd3926bdf14a79d4ccb4f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HardTerminateException.html#ad092ce79dbddd3926bdf14a79d4ccb4f">m_msg</a></td></tr>
+<tr class="separator:ad092ce79dbddd3926bdf14a79d4ccb4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>These exceptions can be used to terminate Context computation early WARNING: Only use those if you are 100% certain that computation in the other handlers has finished and it is save to terminate the worker </p>
@@ -219,6 +225,33 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Exceptions_8h_source.html#l00022">22</a> of file <a class="el" href="Exceptions_8h_source.html">Exceptions.h</a>.</p>
+
+<p>References <a class="el" href="Exceptions_8h_source.html#l00014">m_msg</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ad092ce79dbddd3926bdf14a79d4ccb4f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* hypro::HardTerminateException::m_msg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Exceptions_8h_source.html#l00014">14</a> of file <a class="el" href="Exceptions_8h_source.html">Exceptions.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Exceptions_8h_source.html#l00022">what()</a>, and <a class="el" href="Exceptions_8h_source.html#l00038">hypro::FinishWithDiscreteProcessingException::what()</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 var classhypro_1_1HybridSystemLexer =
 [
+    [ "Initializer", "structhypro_1_1HybridSystemLexer_1_1Initializer.html", "structhypro_1_1HybridSystemLexer_1_1Initializer" ],
     [ "T__0", "classhypro_1_1HybridSystemLexer.html#aac68a34d2f9a0f1cb515d50d6f8e9571a2f2f9351e8a572da2a6e59966d21dd22", null ],
     [ "T__1", "classhypro_1_1HybridSystemLexer.html#aac68a34d2f9a0f1cb515d50d6f8e9571a5ddbc1900332eef526685fe30dcb6389", null ],
     [ "T__2", "classhypro_1_1HybridSystemLexer.html#aac68a34d2f9a0f1cb515d50d6f8e9571a4eda0fef005135b426a861a616f5b1b4", null ],

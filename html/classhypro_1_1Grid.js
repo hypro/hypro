@@ -52,5 +52,8 @@ var classhypro_1_1Grid =
     [ "vertices", "classhypro_1_1Grid.html#aabe413bdfc6552ca8dd620dc83103469", null ],
     [ "operator!=", "classhypro_1_1Grid.html#aac1f209ccdb3f409789881379ede8ee8", null ],
     [ "operator<<", "classhypro_1_1Grid.html#a2246e7d3e1060ccf2b7617b2e539cfb4", null ],
-    [ "operator==", "classhypro_1_1Grid.html#a36e803fba26be2abf9d6247397bb83ff", null ]
+    [ "operator==", "classhypro_1_1Grid.html#a36e803fba26be2abf9d6247397bb83ff", null ],
+    [ "mGridMap", "classhypro_1_1Grid.html#af20309b6253004a9c58a9f5aea84a593", null ],
+    [ "mInducedGridPoints", "classhypro_1_1Grid.html#ad8647095f51953eefb93c6237bfb5886", null ],
+    [ "mVertices", "classhypro_1_1Grid.html#a8c32538db02e030582c7073cbe40bb20", null ]
 ];

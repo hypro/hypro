@@ -120,6 +120,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1NodeManager.html','');})
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1NodeManager-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::NodeManager&lt; State &gt; Class Template Reference</div>  </div>
@@ -145,6 +148,25 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6a8dc0b8e63be4f7b1cda233c282b908"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NodeManager.html#a6a8dc0b8e63be4f7b1cda233c282b908">printTree</a> (typename <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; State &gt;::Node_t _node)</td></tr>
 <tr class="separator:a6a8dc0b8e63be4f7b1cda233c282b908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a2e43ace512ab54211733fd97141f693d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NodeManager.html#a2e43ace512ab54211733fd97141f693d">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:a2e43ace512ab54211733fd97141f693d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a90f9442f47bed3927d41142d7457fcbc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NodeManager.html#a90f9442f47bed3927d41142d7457fcbc">NodeManager</a> ()</td></tr>
+<tr class="separator:a90f9442f47bed3927d41142d7457fcbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6495c4781999fe5f09d5f5404bcdaba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NodeManager.html#ae6495c4781999fe5f09d5f5404bcdaba">~NodeManager</a> ()</td></tr>
+<tr class="separator:ae6495c4781999fe5f09d5f5404bcdaba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a81c0d0117b8c4d37d55088b60ca51721"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; State &gt;::NodeList_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NodeManager.html#a81c0d0117b8c4d37d55088b60ca51721">mInitialStates</a></td></tr>
+<tr class="separator:a81c0d0117b8c4d37d55088b60ca51721"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a450ad745f798d245274943d3228b4d64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ReachTree.html">ReachTree</a>&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NodeManager.html#a450ad745f798d245274943d3228b4d64">mTree</a></td></tr>
+<tr class="separator:a450ad745f798d245274943d3228b4d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />
@@ -152,7 +174,87 @@ class hypro::NodeManager&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="NodeManager_8h_source.html#l00025">25</a> of file <a class="el" href="NodeManager_8h_source.html">NodeManager.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a2e43ace512ab54211733fd97141f693d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1NodeManager.html">hypro::NodeManager</a>&lt; State &gt;::<a class="el" href="classhypro_1_1NodeManager.html#a2e43ace512ab54211733fd97141f693d">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NodeManager_8h_source.html#l00026">26</a> of file <a class="el" href="NodeManager_8h_source.html">NodeManager.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a90f9442f47bed3927d41142d7457fcbc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1NodeManager.html">hypro::NodeManager</a>&lt; State &gt;::<a class="el" href="classhypro_1_1NodeManager.html">NodeManager</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae6495c4781999fe5f09d5f5404bcdaba"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1NodeManager.html">hypro::NodeManager</a>&lt; State &gt;::~<a class="el" href="classhypro_1_1NodeManager.html">NodeManager</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NodeManager_8h_source.html#l00035">35</a> of file <a class="el" href="NodeManager_8h_source.html">NodeManager.h</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1NodeManager.html#adb15215b72e71947839fdf2742dc1f33">hypro::NodeManager&lt; State &gt;::fixedPointReached()</a>, <a class="el" href="classhypro_1_1NodeManager.html#aaf2f885fd8697046fce189df7e1b54e6">hypro::NodeManager&lt; State &gt;::getNode()</a>, <a class="el" href="classhypro_1_1NodeManager.html#a8f3da05daa6ea022ead77273f85eddda">hypro::NodeManager&lt; State &gt;::printTree()</a>, and <a class="el" href="classhypro_1_1NodeManager.html#aebe2c418cfc8d96d9b8771147688f1d9">hypro::NodeManager&lt; State &gt;::setInitialStates()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="adb15215b72e71947839fdf2742dc1f33"></a>
 <div class="memitem">
 <div class="memproto">
@@ -168,6 +270,8 @@ template&lt;typename State &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="NodeManager_8h_source.html#l00035">hypro::NodeManager&lt; State &gt;::~NodeManager()</a>.</p>
 
 </div>
 </div>
@@ -186,6 +290,8 @@ template&lt;typename State &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="NodeManager_8h_source.html#l00035">hypro::NodeManager&lt; State &gt;::~NodeManager()</a>.</p>
 
 </div>
 </div>
@@ -214,6 +320,8 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="NodeManager_8h_source.html#l00045">45</a> of file <a class="el" href="NodeManager_8h_source.html">NodeManager.h</a>.</p>
 
+<p>References <a class="el" href="NodeManager_8h_source.html#l00031">hypro::NodeManager&lt; State &gt;::mTree</a>, and <a class="el" href="classhypro_1_1NodeManager.html#a8f3da05daa6ea022ead77273f85eddda">hypro::NodeManager&lt; State &gt;::printTree()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8f3da05daa6ea022ead77273f85eddda"></a>
@@ -230,6 +338,8 @@ template&lt;typename State &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="NodeManager_8h_source.html#l00045">hypro::NodeManager&lt; State &gt;::getTree()</a>, and <a class="el" href="NodeManager_8h_source.html#l00035">hypro::NodeManager&lt; State &gt;::~NodeManager()</a>.</p>
 
 </div>
 </div>
@@ -274,6 +384,59 @@ template&lt;typename State &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="NodeManager_8h_source.html#l00035">hypro::NodeManager&lt; State &gt;::~NodeManager()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a81c0d0117b8c4d37d55088b60ca51721"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt;State&gt;::NodeList_t <a class="el" href="classhypro_1_1NodeManager.html">hypro::NodeManager</a>&lt; State &gt;::mInitialStates</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NodeManager_8h_source.html#l00030">30</a> of file <a class="el" href="NodeManager_8h_source.html">NodeManager.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a450ad745f798d245274943d3228b4d64"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1ReachTree.html">ReachTree</a>&lt;State&gt; <a class="el" href="classhypro_1_1NodeManager.html">hypro::NodeManager</a>&lt; State &gt;::mTree</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NodeManager_8h_source.html#l00031">31</a> of file <a class="el" href="NodeManager_8h_source.html">NodeManager.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NodeManager_8h_source.html#l00045">hypro::NodeManager&lt; State &gt;::getTree()</a>.</p>
 
 </div>
 </div>

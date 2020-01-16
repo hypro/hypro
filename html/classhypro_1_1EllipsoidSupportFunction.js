@@ -11,5 +11,8 @@ var classhypro_1_1EllipsoidSupportFunction =
     [ "evaluate", "classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3", null ],
     [ "multiEvaluate", "classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf", null ],
     [ "shapeMatrix", "classhypro_1_1EllipsoidSupportFunction.html#a0d700ba466b23b093bfb1bb0f760a354", null ],
-    [ "type", "classhypro_1_1EllipsoidSupportFunction.html#aba27832ec002e8ebeaffc4de25e103f0", null ]
+    [ "type", "classhypro_1_1EllipsoidSupportFunction.html#aba27832ec002e8ebeaffc4de25e103f0", null ],
+    [ "mDimension", "classhypro_1_1EllipsoidSupportFunction.html#abf530fc71f835dc144c44a2baaf18e77", null ],
+    [ "mShapeMatrix", "classhypro_1_1EllipsoidSupportFunction.html#a89012b5b9073c941bbb4ca20868ca682", null ],
+    [ "mType", "classhypro_1_1EllipsoidSupportFunction.html#aaa2778491140c4d3bd0b5ece759bf47e", null ]
 ];

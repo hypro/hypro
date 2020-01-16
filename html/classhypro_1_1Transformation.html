@@ -120,6 +120,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1Transformation.html','')
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1Transformation-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::Transformation&lt; Number &gt; Class Template Reference</div>  </div>
@@ -170,6 +172,32 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0ef441a46f7a841a0b02c77129fa2547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b16f7e169fc8bc049032897e438a5e0"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1Transformation.html#a9d8a13fe1505275625b95b46009402b9">locationComputationSTMap</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#a2b16f7e169fc8bc049032897e438a5e0">getLocationComputationSTMap</a> ()</td></tr>
 <tr class="separator:a2b16f7e169fc8bc049032897e438a5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ac944c1b5bec728cccbe04e0914ac4699"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#ac944c1b5bec728cccbe04e0914ac4699">declare_structures</a> (<a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mSTallValues, const int n)</td></tr>
+<tr class="separator:ac944c1b5bec728cccbe04e0914ac4699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb7ace98fa9c4b9f6f64583bd993c748"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#adb7ace98fa9c4b9f6f64583bd993c748">countLinearAndRemember</a> (const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A_in, const size_t dimension, <a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mSTallvalues)</td></tr>
+<tr class="separator:adb7ace98fa9c4b9f6f64583bd993c748"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d4e38fd799fe8c0aecc93ebda3c78a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#a0d4e38fd799fe8c0aecc93ebda3c78a2">insertNonLinearAndClassify</a> (const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A_in, const <a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b_in, const size_t dimension, <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A_nonlinear, <a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b_nonlinear, <a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mSTallvalues)</td></tr>
+<tr class="separator:a0d4e38fd799fe8c0aecc93ebda3c78a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ed772a74c4a701fdfa4fe5e0b09a7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#ad4ed772a74c4a701fdfa4fe5e0b09a7e">EigenvalueDecomposition</a> (const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A_nonlinear, const size_t dimensionNonLinear, const size_t CONDITION_LIMIT, <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;V_EVD, <a class="el" href="namespacehypro.html#a3124395c1a4066fd5506cc77b5bc11f0">DiagonalMatrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;D_EVD, <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;Vinv_EVD)</td></tr>
+<tr class="separator:ad4ed772a74c4a701fdfa4fe5e0b09a7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab970fdf61a6c209cecce6384d1af62f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#ab970fdf61a6c209cecce6384d1af62f1">adjustLinearAndEVDcomponents</a> (const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;V_EVD, const <a class="el" href="namespacehypro.html#a3124395c1a4066fd5506cc77b5bc11f0">DiagonalMatrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;D_EVD, const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;Vinv_EVD, const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A_in, const <a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b_nonlinear, const size_t dimension, <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;V, <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;Vinv, <a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b_tr, <a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mSTallvalues)</td></tr>
+<tr class="separator:ab970fdf61a6c209cecce6384d1af62f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30a95c860926c17946cf05e32f6fe8a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#a30a95c860926c17946cf05e32f6fe8a5">analyzeExponentialTerms</a> (const size_t dimension, <a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;mSTallvalues)</td></tr>
+<tr class="separator:a30a95c860926c17946cf05e32f6fe8a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a5782302ab283a318562573605e754b82"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Transformation.html#a7eca6c16f6d889393c1698f293668653">locationPtrMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#a5782302ab283a318562573605e754b82">mLocationPtrsMap</a></td></tr>
+<tr class="separator:a5782302ab283a318562573605e754b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addaca8336614c0942b0d1e02c9431c68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Transformation.html#a9d8a13fe1505275625b95b46009402b9">locationComputationSTMap</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#addaca8336614c0942b0d1e02c9431c68">mLocPtrtoComputationvaluesMap</a></td></tr>
+<tr class="separator:addaca8336614c0942b0d1e02c9431c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35bcb5e8804c2cab825195d736a4d32c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#a35bcb5e8804c2cab825195d736a4d32c">mTransformedHA</a></td></tr>
+<tr class="separator:a35bcb5e8804c2cab825195d736a4d32c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebf562a84d5d204e35d691d927b8a507"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transformation.html#aebf562a84d5d204e35d691d927b8a507">globalBadStatesTransformed</a> = false</td></tr>
+<tr class="separator:aebf562a84d5d204e35d691d927b8a507"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
@@ -189,7 +217,7 @@ class hypro::Transformation&lt; Number &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#a94315e93daa051aeb2cf42b2590edaa5">conditionVector</a> =  std::vector&lt;Condition&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
@@ -205,7 +233,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#a9d8a13fe1505275625b95b46009402b9">locationComputationSTMap</a> =  std::map&lt;<a class="el" href="classhypro_1_1Location.html">Location</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, <a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
@@ -221,7 +249,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#a026ebf234bddc34e58d4c21381efc5eb">locationConditionMap</a> =  std::map&lt;<a class="el" href="classhypro_1_1Location.html">Location</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, Condition&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
@@ -237,7 +265,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#a7eca6c16f6d889393c1698f293668653">locationPtrMap</a> =  std::map&lt;const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, <a class="el" href="classhypro_1_1Location.html">Location</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
@@ -253,7 +281,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#af37071374bda0a51b52d4b8a95869bc1">locationStateMap</a> =  typename <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;::<a class="el" href="classhypro_1_1Transformation.html#af37071374bda0a51b52d4b8a95869bc1">locationStateMap</a></td>
@@ -269,7 +297,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#aa56ab6bb3f2ff009e3f47f9e768e1b73">locationVector</a> =  std::vector&lt;<a class="el" href="classhypro_1_1Location.html">Location</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*&gt;</td>
@@ -285,7 +313,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#a4a7d8bb0ea1c6f2f3a1f32a8fbcfc676">setVector</a> =  std::vector&lt;std::pair&lt;<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;&gt;</td>
@@ -303,7 +331,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html#a247697231ab57bd9f7d5e0fca365ca79">transitionVector</a> =  std::vector&lt;<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*&gt;</td>
@@ -320,7 +348,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -347,7 +375,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html">Transformation</a> </td>
@@ -373,7 +401,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Transformation.html">Transformation</a> </td>
@@ -400,7 +428,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::addGlobalBadStates </td>
@@ -424,11 +452,269 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ab970fdf61a6c209cecce6384d1af62f1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::adjustLinearAndEVDcomponents </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>V_EVD</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a3124395c1a4066fd5506cc77b5bc11f0">DiagonalMatrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>D_EVD</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Vinv_EVD</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b_nonlinear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>V</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Vinv</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b_tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mSTallvalues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a30a95c860926c17946cf05e32f6fe8a5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::analyzeExponentialTerms </td>
+          <td>(</td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mSTallvalues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adb7ace98fa9c4b9f6f64583bd993c748"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::countLinearAndRemember </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mSTallvalues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac944c1b5bec728cccbe04e0914ac4699"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::declare_structures </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mSTallValues</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad4ed772a74c4a701fdfa4fe5e0b09a7e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::EigenvalueDecomposition </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A_nonlinear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimensionNonLinear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>CONDITION_LIMIT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>V_EVD</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a3124395c1a4066fd5506cc77b5bc11f0">DiagonalMatrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>D_EVD</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>Vinv_EVD</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a2b16f7e169fc8bc049032897e438a5e0"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -455,7 +741,7 @@ template&lt;typename Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -478,11 +764,71 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a0d4e38fd799fe8c0aecc93ebda3c78a2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::insertNonLinearAndClassify </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a0ea9df9f7b4e39439ac3ce0a859fe577">Matrix</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A_nonlinear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888">Vector</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b_nonlinear</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structhypro_1_1STallValues.html">STallValues</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>mSTallvalues</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a9f05dce84abeacd34a5f6ba2028ac420"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number &gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::output_HybridAutomaton </td>
@@ -492,6 +838,105 @@ template&lt;typename Number &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="example__eigenSimpleFlow_8cpp_source.html#l00087">main()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aebf562a84d5d204e35d691d927b8a507"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::globalBadStatesTransformed = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Transformation_8h_source.html#l00078">78</a> of file <a class="el" href="Transformation_8h_source.html">Transformation.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5782302ab283a318562573605e754b82"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Transformation.html#a7eca6c16f6d889393c1698f293668653">locationPtrMap</a> <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mLocationPtrsMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Transformation_8h_source.html#l00075">75</a> of file <a class="el" href="Transformation_8h_source.html">Transformation.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="addaca8336614c0942b0d1e02c9431c68"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Transformation.html#a9d8a13fe1505275625b95b46009402b9">locationComputationSTMap</a> <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mLocPtrtoComputationvaluesMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Transformation_8h_source.html#l00076">76</a> of file <a class="el" href="Transformation_8h_source.html">Transformation.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a35bcb5e8804c2cab825195d736a4d32c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Transformation.html">hypro::Transformation</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mTransformedHA</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Transformation_8h_source.html#l00077">77</a> of file <a class="el" href="Transformation_8h_source.html">Transformation.h</a>.</p>
 
 </div>
 </div>

@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1SumOp.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1SumOp-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::SumOp&lt; Number, Converter, Setting &gt; Class Template Reference</div>  </div>
@@ -190,6 +191,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aae3cea666daf995e5bf22e78d04ec018 inherit pub_methods_classhypro_1_1RootGrowNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1409a75be14610dac0f1ec9e8b086a0f inherit pub_methods_classhypro_1_1RootGrowNode"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#a1409a75be14610dac0f1ec9e8b086a0f">contains</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;) const </td></tr>
 <tr class="separator:a1409a75be14610dac0f1ec9e8b086a0f inherit pub_methods_classhypro_1_1RootGrowNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a6af408d0b394e388cc0ced404997f0c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aea6debaf29d409802568b494efa8aeb0">SFNEW_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SumOp.html#a6af408d0b394e388cc0ced404997f0c4">type</a> = SFNEW_TYPE::SUMOP</td></tr>
+<tr class="separator:a6af408d0b394e388cc0ced404997f0c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a263af1c61572008b253c11f962c58adc"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SumOp.html#a263af1c61572008b253c11f962c58adc">originCount</a> = 2</td></tr>
+<tr class="separator:a263af1c61572008b253c11f962c58adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7667fb24bac023b4036cdde9accad5d1"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SumOp.html#a7667fb24bac023b4036cdde9accad5d1">mDimension</a></td></tr>
+<tr class="separator:a7667fb24bac023b4036cdde9accad5d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad39104fabcb9522517ebdf0ec989436f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classhypro_1_1RootGrowNode.html">RootGrowNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SumOp.html#ad39104fabcb9522517ebdf0ec989436f">mChildren</a></td></tr>
+<tr class="separator:ad39104fabcb9522517ebdf0ec989436f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -410,6 +422,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="SumOp_8h_source.html#l00080">80</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
 
+<p>References <a class="el" href="EvaluationResult_8h_source.html#l00015">hypro::EvaluationResult&lt; Number &gt;::errorCode</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca57e8bcd22ac5b56703b233e135f2a7f2">hypro::FEAS</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca9d0f11bf0a1789410bf9780c8948ebb9">hypro::INFEAS</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3ccac9b5a0979420dfb983a9aa10933ea169">hypro::INFTY</a>, <a class="el" href="EvaluationResult_8h_source.html#l00014">hypro::EvaluationResult&lt; Number &gt;::optimumValue</a>, and <a class="el" href="EvaluationResult_8h_source.html#l00013">hypro::EvaluationResult&lt; Number &gt;::supportValue</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8b7c47e0f8ecb97471e5e7d406e71580"></a>
@@ -578,6 +592,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="SumOp_8h_source.html#l00062">62</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
 
+<p>References <a class="el" href="SumOp_8h_source.html#l00028">hypro::SumOp&lt; Number, Converter, Setting &gt;::mDimension</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a295f1bb0f1d69bffc41283728f915a79"></a>
@@ -607,6 +623,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="SumOp_8h_source.html#l00061">61</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
 
+<p>References <a class="el" href="SumOp_8h_source.html#l00027">hypro::SumOp&lt; Number, Converter, Setting &gt;::originCount</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ac26b939db09c0e2a2f6b2b0e5a10a274"></a>
@@ -635,6 +653,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <p>Reimplemented from <a class="el" href="classhypro_1_1RootGrowNode.html#ae9218fc6a258fca4b9f14e1eac4f7706">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="SumOp_8h_source.html#l00060">60</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
+
+<p>References <a class="el" href="SumOp_8h_source.html#l00026">hypro::SumOp&lt; Number, Converter, Setting &gt;::type</a>.</p>
 
 </div>
 </div>
@@ -726,6 +746,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="SumOp_8h_source.html#l00116">116</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
 
+<p>References <a class="el" href="Point_8h_source.html#l00120">hypro::Point&lt; Number &gt;::Zero()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7916bee01d5c470ae72ce9d4f36ff883"></a>
@@ -755,6 +777,109 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <p>Implements <a class="el" href="classhypro_1_1RootGrowNode.html#ab5b019a9a5ff66ef750d69c616107323">hypro::RootGrowNode&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="SumOp_8h_source.html#l00069">69</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ad39104fabcb9522517ebdf0ec989436f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="classhypro_1_1RootGrowNode.html">RootGrowNode</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; &gt; &gt; <a class="el" href="classhypro_1_1SumOp.html">hypro::SumOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mChildren</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SumOp_8h_source.html#l00029">29</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7667fb24bac023b4036cdde9accad5d1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1SumOp.html">hypro::SumOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mDimension</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SumOp_8h_source.html#l00028">28</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="SumOp_8h_source.html#l00062">hypro::SumOp&lt; Number, Converter, Setting &gt;::getDimension()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a263af1c61572008b253c11f962c58adc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned <a class="el" href="classhypro_1_1SumOp.html">hypro::SumOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::originCount = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SumOp_8h_source.html#l00027">27</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="SumOp_8h_source.html#l00061">hypro::SumOp&lt; Number, Converter, Setting &gt;::getOriginCount()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6af408d0b394e388cc0ced404997f0c4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aea6debaf29d409802568b494efa8aeb0">SFNEW_TYPE</a> <a class="el" href="classhypro_1_1SumOp.html">hypro::SumOp</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::type = SFNEW_TYPE::SUMOP</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SumOp_8h_source.html#l00026">26</a> of file <a class="el" href="SumOp_8h_source.html">SumOp.h</a>.</p>
+
+<p>Referenced by <a class="el" href="SumOp_8h_source.html#l00060">hypro::SumOp&lt; Number, Converter, Setting &gt;::getType()</a>.</p>
 
 </div>
 </div>

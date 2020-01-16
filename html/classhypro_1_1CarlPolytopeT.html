@@ -121,6 +121,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1CarlPolytopeT.html','');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1CarlPolytopeT-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -227,6 +229,33 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a8431434039abbbc27593740c7d7024ff"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#a8431434039abbbc27593740c7d7024ff">type</a> ()</td></tr>
 <tr class="separator:a8431434039abbbc27593740c7d7024ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a510b55441b42e4866a9b266eefbc9021"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#a510b55441b42e4866a9b266eefbc9021">clearCache</a> () const </td></tr>
+<tr class="separator:a510b55441b42e4866a9b266eefbc9021"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ef9062d6f4d0775b4c15b08e3f1340d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#a3ef9062d6f4d0775b4c15b08e3f1340d">detectDimension</a> () const </td></tr>
+<tr class="separator:a3ef9062d6f4d0775b4c15b08e3f1340d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaf3917f2041a87de8cf021102a70d3d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#acaf3917f2041a87de8cf021102a70d3d">dimensionWasCorrectlySet</a> () const </td></tr>
+<tr class="memdesc:acaf3917f2041a87de8cf021102a70d3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Should only be used in assertions to detect inconsistency in mDimension.  <a href="#acaf3917f2041a87de8cf021102a70d3d">More...</a><br /></td></tr>
+<tr class="separator:acaf3917f2041a87de8cf021102a70d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad5d73e6564c4079a17f51a4a0e1cdb35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa94952c42c85e3b232c90bd88c60a761">FormulaT</a>&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#ad5d73e6564c4079a17f51a4a0e1cdb35">mFormula</a></td></tr>
+<tr class="separator:ad5d73e6564c4079a17f51a4a0e1cdb35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c8084e92f919fe8642a7e3f287da5ed"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#a9c8084e92f919fe8642a7e3f287da5ed">mHalfspaces</a></td></tr>
+<tr class="memdesc:a9c8084e92f919fe8642a7e3f287da5ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">The description of the polytope as a conjunction of linear constraints.  <a href="#a9c8084e92f919fe8642a7e3f287da5ed">More...</a><br /></td></tr>
+<tr class="separator:a9c8084e92f919fe8642a7e3f287da5ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4933990a6875ac5ba2bd7d1d03912b0f"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#a4933990a6875ac5ba2bd7d1d03912b0f">mDimension</a> = 0</td></tr>
+<tr class="memdesc:a4933990a6875ac5ba2bd7d1d03912b0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches transformed half-spaces.  <a href="#a4933990a6875ac5ba2bd7d1d03912b0f">More...</a><br /></td></tr>
+<tr class="separator:a4933990a6875ac5ba2bd7d1d03912b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5dedf7bb88ba35ca3531057fb86ba16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#ad5dedf7bb88ba35ca3531057fb86ba16">mEmpty</a> = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td></tr>
+<tr class="memdesc:ad5dedf7bb88ba35ca3531057fb86ba16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the state space dimension the polytope resides in.  <a href="#ad5dedf7bb88ba35ca3531057fb86ba16">More...</a><br /></td></tr>
+<tr class="separator:ad5dedf7bb88ba35ca3531057fb86ba16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a673e36fbb29300960cc9baac59643264"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#a673e36fbb29300960cc9baac59643264">mSpaceDimensionSet</a> = false</td></tr>
+<tr class="memdesc:a673e36fbb29300960cc9baac59643264"><td class="mdescLeft">&#160;</td><td class="mdescRight">Caches whether the polytope is empty.  <a href="#a673e36fbb29300960cc9baac59643264">More...</a><br /></td></tr>
+<tr class="separator:a673e36fbb29300960cc9baac59643264"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:abccbf7b4b2c0e0bbd712f2bf55af8605"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html#abccbf7b4b2c0e0bbd712f2bf55af8605">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;in)</td></tr>
@@ -256,7 +285,7 @@ class hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1CarlPolytopeT.html#a0fe991b2aafb7012ee4f53f3bbd34bcf">NumberType</a> =  <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a></td>
@@ -272,7 +301,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1CarlPolytopeT.html#a327b16e7a2c213b1ef111ea88aee1ef0">Settings</a> =  Setting</td>
@@ -289,7 +318,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -312,9 +341,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00040">40</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="carlPolytope_8h_source.html#l00040">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
-
-<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00040">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00082">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::affineTransformation()</a>, <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>, <a class="el" href="carlPolytope_8h_source.html#l00072">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::minkowskiSum()</a>, and <a class="el" href="carlPolytope_8h_source.html#l00077">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::unite()</a>.</p>
 
 </div>
 </div>
@@ -322,7 +349,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -354,7 +381,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00044">44</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="carlPolytope_8h_source.html#l00040">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a3ef9062d6f4d0775b4c15b08e3f1340d">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::detectDimension()</a>, <a class="el" href="carlPolytope_8h_source.html#l00106">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a97a88c448cda63a162bb879440d4e8f8">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::Empty()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#afe63c65336f553cc9f620a76ab691031">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::intersect()</a>, and <a class="el" href="classhypro_1_1CarlPolytopeT.html#afe8f14290d283b5092fe7b5ec5a7f284">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::project()</a>.</p>
 
 </div>
 </div>
@@ -362,7 +389,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a> </td>
@@ -390,7 +417,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a> </td>
@@ -409,7 +436,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::addConstraint </td>
@@ -421,13 +448,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8c3b8844389ac612a55366598dc32bdc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::addConstraints </td>
@@ -439,13 +468,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae5d9f6188cf40b874476c4763c677a6b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::addIntervalConstraints </td>
@@ -467,13 +498,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="acc6f369714c5be3893892e168256b841"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -505,7 +538,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00082">82</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="carlPolytope_8h_source.html#l00040">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#aaa6cd3f53215e0633cf7a0bcf37689b4">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::contains()</a>, and <a class="el" href="classhypro_1_1CarlPolytopeT.html#a8d399c05ac13762638653ec4d35c69c4">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::satisfiesHalfspaces()</a>.</p>
 
 </div>
 </div>
@@ -513,7 +546,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -535,13 +568,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00065">65</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#a45a21851aa474b2d2af149e6fa5e9669">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::linearTransformation()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae0fdde4044f25569498ff042a57af5b8"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -565,11 +600,36 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a510b55441b42e4866a9b266eefbc9021"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::clearCache </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aaa6cd3f53215e0633cf7a0bcf37689b4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
@@ -581,13 +641,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00082">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::affineTransformation()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a72a52357fba653d28ba9248a55257e77"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -611,11 +673,38 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a3ef9062d6f4d0775b4c15b08e3f1340d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::detectDimension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a02cbb589d3081aa1ef88864154a7845a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -636,7 +725,36 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00106">106</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="carlPolytope_8h_source.html#l00036">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::mDimension</a>.</p>
+
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>, and <a class="el" href="Visitors_8h_source.html#l00278">hypro::genericIntervalAssignmentVisitor&lt; T, Number &gt;::operator()()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acaf3917f2041a87de8cf021102a70d3d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::dimensionWasCorrectlySet </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Should only be used in assertions to detect inconsistency in mDimension. </p>
 
 </div>
 </div>
@@ -644,7 +762,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::eliminateVariable </td>
@@ -656,13 +774,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a3854675632903d90b28213cc55e92548"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::eliminateVariables </td>
@@ -674,13 +794,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7b5ce8731fb2ee4ad518539b0223a834"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::eliminateVariables </td>
@@ -698,7 +820,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -717,13 +839,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aefae3b73dd578d6b74a99ce36f1cb76c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::empty </td>
@@ -734,13 +858,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00132">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::size()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8611e454b586996c225f6d6724ebe941"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -762,15 +888,13 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00096">96</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a719647f90bb26be9cbd7a25dd128c735"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -791,7 +915,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00110">110</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#a01358cc86c6d157a0a22c38fed8d1640">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getHalfspaces()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a49dc3ff0bdb8b1e4dc9b4322cda51f51">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getIntervals()</a>, and <a class="el" href="carlPolytope_8h_source.html#l00034">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::mFormula</a>.</p>
 
 </div>
 </div>
@@ -799,7 +923,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const std::vector&lt;<a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt;&amp; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::getHalfspaces </td>
@@ -810,13 +934,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00110">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getFormula()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a49dc3ff0bdb8b1e4dc9b4322cda51f51"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;carl::Interval&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::getIntervals </td>
@@ -827,13 +953,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00110">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getFormula()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad7d289db8e7f085da13e639b18b8e708"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;carl::Variable&gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::getVariables </td>
@@ -844,13 +972,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="afe63c65336f553cc9f620a76ab691031"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a> <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersect </td>
@@ -862,13 +992,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a45a21851aa474b2d2af149e6fa5e9669"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a> <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
@@ -880,13 +1012,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00065">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a57f6afd41f8e121dae611f2a33640ed2"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a> <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::make_rectangular </td>
@@ -897,13 +1031,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00134">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::type()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a2272b7bd987f0826195363658f7883fa"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::matrix </td>
@@ -914,13 +1050,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a93dde36e6acf577cb3edf34025e514bc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -942,7 +1080,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00072">72</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="carlPolytope_8h_source.html#l00040">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -950,7 +1088,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -982,15 +1120,13 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00101">101</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="afe8f14290d283b5092fe7b5ec5a7f284"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a> <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
@@ -1002,13 +1138,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a818c0a9d8428d0c8e7aa70a48d8221f6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::reduceRepresentation </td>
@@ -1019,13 +1157,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00134">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::type()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7c56da11a6c53c3b2242fd0f91c8065a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::removeRedundancy </td>
@@ -1036,13 +1176,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00134">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::type()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8d399c05ac13762638653ec4d35c69c4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspaces </td>
@@ -1064,13 +1206,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00082">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::affineTransformation()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a90071e92b6da32b5acfc4268c3c2dc6a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1092,13 +1236,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00114">114</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#a741d34852e5e4a8b315a52659d37d370">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::addConstraint()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a8c3b8844389ac612a55366598dc32bdc">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::addConstraints()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae5d9f6188cf40b874476c4763c677a6b">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::addIntervalConstraints()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a49f17f135554b16d56748721c33d4df3">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::eliminateVariable()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a3854675632903d90b28213cc55e92548">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::eliminateVariables()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#ad7d289db8e7f085da13e639b18b8e708">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getVariables()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a2272b7bd987f0826195363658f7883fa">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#aedab521ef017f7c5b9d003c2cbd2bc5a">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::substituteVariable()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>, and <a class="el" href="classhypro_1_1CarlPolytopeT.html#a1ba383b931ad000b06d8000e7307e567">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7959ed0ecca1860200e9e0c710b97ae5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1119,13 +1265,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00132">132</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#aefae3b73dd578d6b74a99ce36f1cb76c">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aedab521ef017f7c5b9d003c2cbd2bc5a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::substituteVariable </td>
@@ -1147,13 +1295,15 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8431434039abbbc27593740c7d7024ff"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1174,7 +1324,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00134">134</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="representations_2types_8h_source.html#l00009">hypro::carl_polytope</a>.</p>
+<p>References <a class="el" href="representations_2types_8h_source.html#l00009">hypro::carl_polytope</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a57f6afd41f8e121dae611f2a33640ed2">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::make_rectangular()</a>, <a class="el" href="classhypro_1_1CarlPolytopeT.html#a818c0a9d8428d0c8e7aa70a48d8221f6">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>, and <a class="el" href="classhypro_1_1CarlPolytopeT.html#a7c56da11a6c53c3b2242fd0f91c8065a">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::removeRedundancy()</a>.</p>
 
 </div>
 </div>
@@ -1182,7 +1332,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1204,7 +1354,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00077">77</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1CarlPolytopeT.html#ae146b08c721723196f2dd4003eba1a37">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="carlPolytope_8h_source.html#l00040">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -1212,7 +1362,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vector </td>
@@ -1223,7 +1373,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00082">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::affineTransformation()</a>, <a class="el" href="carlPolytope_8h_source.html#l00044">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::CarlPolytopeT()</a>, <a class="el" href="carlPolytope_8h_source.html#l00106">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="carlPolytope_8h_source.html#l00096">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::evaluate()</a>, <a class="el" href="carlPolytope_8h_source.html#l00110">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getFormula()</a>, <a class="el" href="carlPolytope_8h_source.html#l00072">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::minkowskiSum()</a>, <a class="el" href="carlPolytope_8h_source.html#l00101">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::multiEvaluate()</a>, and <a class="el" href="carlPolytope_8h_source.html#l00077">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::unite()</a>.</p>
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
 
 </div>
 </div>
@@ -1231,7 +1381,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vertices </td>
@@ -1242,6 +1392,8 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00114">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::setDimension()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
@@ -1249,7 +1401,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1287,7 +1439,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1325,7 +1477,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , typename Setting &gt; </div>
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1356,6 +1508,139 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00148">148</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a4933990a6875ac5ba2bd7d1d03912b0f"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mDimension = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Caches transformed half-spaces. </p>
+
+<p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00036">36</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
+
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00106">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad5dedf7bb88ba35ca3531057fb86ba16"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a> <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mEmpty = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores the state space dimension the polytope resides in. </p>
+
+<p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00037">37</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad5d73e6564c4079a17f51a4a0e1cdb35"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aa94952c42c85e3b232c90bd88c60a761">FormulaT</a>&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mFormula</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00034">34</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
+
+<p>Referenced by <a class="el" href="carlPolytope_8h_source.html#l00110">hypro::CarlPolytopeT&lt; Number, Converter, Setting &gt;::getFormula()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9c8084e92f919fe8642a7e3f287da5ed"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mHalfspaces</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The description of the polytope as a conjunction of linear constraints. </p>
+
+<p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00035">35</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a673e36fbb29300960cc9baac59643264"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, typename Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1CarlPolytopeT.html">hypro::CarlPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mSpaceDimensionSet = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Caches whether the polytope is empty. </p>
+
+<p>Definition at line <a class="el" href="carlPolytope_8h_source.html#l00038">38</a> of file <a class="el" href="carlPolytope_8h_source.html">carlPolytope.h</a>.</p>
 
 </div>
 </div>

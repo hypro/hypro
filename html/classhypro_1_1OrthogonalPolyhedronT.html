@@ -119,6 +119,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1OrthogonalPolyhedronT.ht
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1OrthogonalPolyhedronT-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -211,6 +213,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a97336f6e1943ced6a9084d32a6afb625"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a97336f6e1943ced6a9084d32a6afb625">operator=</a> (<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt; &amp;&amp;)=default</td></tr>
 <tr class="separator:a97336f6e1943ced6a9084d32a6afb625"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ae19eade75a0a0055a4eb12b1fcf6e42c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ae19eade75a0a0055a4eb12b1fcf6e42c">updateBoundaryBox</a> () const </td></tr>
+<tr class="separator:ae19eade75a0a0055a4eb12b1fcf6e42c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a8a23f50d5061f71813514ddfc946dd2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a8a23f50d5061f71813514ddfc946dd2d">mGrid</a></td></tr>
+<tr class="separator:a8a23f50d5061f71813514ddfc946dd2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a888e0893829a5eef3442c16839380ed2"><td class="memItemLeft" align="right" valign="top">BoxT&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a888e0893829a5eef3442c16839380ed2">mBoundaryBox</a></td></tr>
+<tr class="separator:a888e0893829a5eef3442c16839380ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedcc19da4c058fa29d967425db446f93"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#aedcc19da4c058fa29d967425db446f93">mBoxUpToDate</a> = false</td></tr>
+<tr class="separator:aedcc19da4c058fa29d967425db446f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a7ce713be378bea0b6f2e80fed98ab692"><td class="memTemplParams" colspan="2">template&lt;typename SettingRhs &gt; </td></tr>
@@ -242,7 +258,7 @@ class hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;</h3
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -259,7 +275,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -277,7 +293,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -295,7 +311,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -313,7 +329,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -331,7 +347,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -349,7 +365,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::<a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> </td>
@@ -367,7 +383,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
 <div class="memtemplate">
 template&lt;class SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, SettingRhs &gt;&gt;  = carl::dummy&gt; </div>
 <table class="mlabels">
@@ -391,7 +407,7 @@ template&lt;class SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, Set
 
 <p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">63</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a644691cd2af92792054b2eb8aeeaae23">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::preparePlot()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ac5dfc513857f6ce7c6b0ee6a6e77dc34">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::addVertex()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a85981dae32d76795f1b7a4ccd0086fe2">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::addVertices()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a14c87bab9bcd04f3262f8601c25e7766">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::boundaryBox()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ad88f76694ce2b339dbc78ed3c87c2753">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::color()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#abf868fe263ab0b40e1ddc217d7583a0c">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::contains()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a735609025e5e27f10967950e91a4424a">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::dimension()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a2d7192359a5d8bd446092a96e12c2fc0">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::empty()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ab7524d8341db4772523e92dacfc19fcd">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::grid()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#aed3db867d509ceb85f34c4bb7ace1175">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::hull()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ad2860f5633a5eb69130e4821e2ee9880">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::iNegNeighborhood()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#af7e790a26975977fe3048355ce6ea1e9">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::iNeighborhood()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#acfcb7a6934206e98137556c31898b098">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::intersect()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ac6d227a1a374105cc895309c08a915da">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::iProjection()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a30529b501329b82dd4bf53fac7b26aef">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::isExternal()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a4c5585286912cf44166539d0787e8c8a">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::isInternal()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a5d8de9c0c03367d26be84f7e93e57e47">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::iSlice()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#abe53afcef6be5cc8fae8c17c1b5da161">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::isOnIEdge()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a0bb7255636a31d14636d6d012b6a6b77">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::isVertex()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a11ac56caf533a860c367970cca98cf4d">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::linearTransformation()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a0895caf2498fd7b5cd43dca7663ebe82">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::minkowskiSum()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ace05bbcc719a02e2415446757d99d4c9">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::neighborhood()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a22a0436f49b182c40bd543c1000f08ac">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::operator=()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a644691cd2af92792054b2eb8aeeaae23">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::preparePlot()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a0df18d848662583c51f6810b6b9417a0">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::size()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#aaa516f4d8cb3fc7a5d3e8f223187cd2f">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::supremum()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#aa88586de144b57932b3a3bb658180056">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::unite()</a>, <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a0be2dd05bb054d0e2f0d65b4ea231d8c">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::variables()</a>, and <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#ab5d36157d19405c7b0fddb7b61085678">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::vertices()</a>.</p>
 
 </div>
 </div>
@@ -400,7 +416,7 @@ template&lt;class SettingRhs , carl::DisableIf&lt; std::is_same&lt; Setting, Set
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::addVertex </td>
@@ -412,13 +428,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a85981dae32d76795f1b7a4ccd0086fe2"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::addVertices </td>
@@ -430,13 +448,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a14c87bab9bcd04f3262f8601c25e7766"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">BoxT&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::boundaryBox </td>
@@ -447,13 +467,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad88f76694ce2b339dbc78ed3c87c2753"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::color </td>
@@ -465,13 +487,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abf868fe263ab0b40e1ddc217d7583a0c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::contains </td>
@@ -483,13 +507,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad2e2e44cbf69d8be80bdb35dfdab0e04"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::contains </td>
@@ -507,7 +533,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::dimension </td>
@@ -518,13 +544,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a2d7192359a5d8bd446092a96e12c2fc0"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::empty </td>
@@ -535,13 +563,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab7524d8341db4772523e92dacfc19fcd"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&amp; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::grid </td>
@@ -552,13 +582,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aed3db867d509ceb85f34c4bb7ace1175"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::hull </td>
@@ -569,13 +601,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad2860f5633a5eb69130e4821e2ee9880"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::iNegNeighborhood </td>
@@ -597,13 +631,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="af7e790a26975977fe3048355ce6ea1e9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::iNeighborhood </td>
@@ -625,13 +661,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="acfcb7a6934206e98137556c31898b098"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::intersect </td>
@@ -643,13 +681,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ac6d227a1a374105cc895309c08a915da"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::iProjection </td>
@@ -661,13 +701,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a30529b501329b82dd4bf53fac7b26aef"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::isExternal </td>
@@ -679,13 +721,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a4c5585286912cf44166539d0787e8c8a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::isInternal </td>
@@ -697,13 +741,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5d8de9c0c03367d26be84f7e93e57e47"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::iSlice </td>
@@ -725,13 +771,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abe53afcef6be5cc8fae8c17c1b5da161"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::isOnIEdge </td>
@@ -753,13 +801,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0bb7255636a31d14636d6d012b6a6b77"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::isVertex </td>
@@ -771,13 +821,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a11ac56caf533a860c367970cca98cf4d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::linearTransformation </td>
@@ -799,13 +851,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0895caf2498fd7b5cd43dca7663ebe82"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::minkowskiSum </td>
@@ -817,13 +871,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ace05bbcc719a02e2415446757d99d4c9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::neighborhood </td>
@@ -835,13 +891,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a22a0436f49b182c40bd543c1000f08ac"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -861,13 +919,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a97336f6e1943ced6a9084d32a6afb625"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -893,7 +953,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; &gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::preparePlot </td>
@@ -923,7 +983,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::size </td>
@@ -934,13 +994,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aaa516f4d8cb3fc7a5d3e8f223187cd2f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::supremum </td>
@@ -951,13 +1013,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aa88586de144b57932b3a3bb658180056"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">OrthogonalPolyhedronT</a> <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::unite </td>
@@ -969,13 +1033,40 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae19eade75a0a0055a4eb12b1fcf6e42c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::updateBoundaryBox </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a class="anchor" id="a0be2dd05bb054d0e2f0d65b4ea231d8c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;carl::Variable&gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::variables </td>
@@ -986,13 +1077,15 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab5d36157d19405c7b0fddb7b61085678"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::vertices </td>
@@ -1003,6 +1096,8 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00063">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;::OrthogonalPolyhedronT()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
@@ -1010,7 +1105,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
 <div class="memtemplate">
 template&lt;typename SettingRhs &gt; </div>
 <table class="mlabels">
@@ -1050,7 +1145,7 @@ template&lt;typename SettingRhs &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1088,7 +1183,7 @@ template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Ty
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename Converter , class Setting , ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
 <div class="memtemplate">
 template&lt;typename SettingRhs &gt; </div>
 <table class="mlabels">
@@ -1121,6 +1216,79 @@ template&lt;typename SettingRhs &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00122">122</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a888e0893829a5eef3442c16839380ed2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">BoxT&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::mBoundaryBox</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00046">46</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aedcc19da4c058fa29d967425db446f93"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::mBoxUpToDate = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00047">47</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8a23f50d5061f71813514ddfc946dd2d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Grid.html">Grid</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html">hypro::OrthogonalPolyhedronT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting, Type &gt;::mGrid</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="OrthogonalPolyhedron_8h_source.html#l00045">45</a> of file <a class="el" href="OrthogonalPolyhedron_8h_source.html">OrthogonalPolyhedron.h</a>.</p>
 
 </div>
 </div>

@@ -18,6 +18,7 @@ var namespacehypro =
     [ "ChildTimingInformation", "structhypro_1_1ChildTimingInformation.html", "structhypro_1_1ChildTimingInformation" ],
     [ "CIFExprVisitor", "classhypro_1_1CIFExprVisitor.html", "classhypro_1_1CIFExprVisitor" ],
     [ "CIFLocVisitor", "classhypro_1_1CIFLocVisitor.html", "classhypro_1_1CIFLocVisitor" ],
+    [ "clp_context", "structhypro_1_1clp__context.html", "structhypro_1_1clp__context" ],
     [ "Cone", "classhypro_1_1Cone.html", "classhypro_1_1Cone" ],
     [ "ConstrainSet", "classhypro_1_1ConstrainSet.html", "classhypro_1_1ConstrainSet" ],
     [ "ContextBasedReachabilityWorker", "classhypro_1_1ContextBasedReachabilityWorker.html", "classhypro_1_1ContextBasedReachabilityWorker" ],

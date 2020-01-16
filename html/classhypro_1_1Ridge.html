@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Ridge.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1Ridge-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::Ridge&lt; Number &gt; Class Template Reference</div>  </div>
@@ -153,6 +154,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3c205e9a89b7c9cfe59e4537e9ca385d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c78e41d001615f4acb54353ab31546e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Ridge.html#a4c78e41d001615f4acb54353ab31546e">halfspace</a> () const </td></tr>
 <tr class="separator:a4c78e41d001615f4acb54353ab31546e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a0d228958f2e45bb53235d5ef89b6fc07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a">vertexSet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Ridge.html#a0d228958f2e45bb53235d5ef89b6fc07">mVertices</a></td></tr>
+<tr class="separator:a0d228958f2e45bb53235d5ef89b6fc07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b969db9151457b8ea7f05b375c6235d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::shared_ptr&lt; <a class="el" href="classhypro_1_1Facet.html">Facet</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Ridge.html#a3b969db9151457b8ea7f05b375c6235d">mNeighbors</a></td></tr>
+<tr class="separator:a3b969db9151457b8ea7f05b375c6235d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb3e2e50a14f2daacc3b4f02a25400a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Ridge.html#aeb3e2e50a14f2daacc3b4f02a25400a5">mHalfspace</a></td></tr>
+<tr class="separator:aeb3e2e50a14f2daacc3b4f02a25400a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class Number&gt;<br />
@@ -165,7 +175,7 @@ class hypro::Ridge&lt; Number &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Ridge.html">hypro::Ridge</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a">vertexSet</a> =  std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
@@ -183,7 +193,7 @@ template&lt;class Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -211,7 +221,7 @@ template&lt;class Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -233,13 +243,15 @@ template&lt;class Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00038">38</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
 
+<p>References <a class="el" href="Ridge_8h_source.html#l00079">hypro::Ridge&lt; Number &gt;::halfspace()</a>, <a class="el" href="Ridge_8h_source.html#l00077">hypro::Ridge&lt; Number &gt;::neighbors()</a>, and <a class="el" href="Ridge_8h_source.html#l00073">hypro::Ridge&lt; Number &gt;::vertices()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a826da5a6a927fa7f2ca49877880723ea"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -271,15 +283,13 @@ template&lt;class Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00044">44</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
 
-<p>References <a class="el" href="Ridge_8h_source.html#l00079">hypro::Ridge&lt; Number &gt;::halfspace()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ae240a1116fbfa9c8665a3dbf3edc0887"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -307,7 +317,7 @@ template&lt;class Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -328,7 +338,9 @@ template&lt;class Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00079">79</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00077">hypro::Ridge&lt; Number &gt;::neighbors()</a>, <a class="el" href="Ridge_8h_source.html#l00044">hypro::Ridge&lt; Number &gt;::Ridge()</a>, and <a class="el" href="Ridge_8h_source.html#l00075">hypro::Ridge&lt; Number &gt;::rNeighbors()</a>.</p>
+<p>References <a class="el" href="Ridge_8h_source.html#l00030">hypro::Ridge&lt; Number &gt;::mHalfspace</a>.</p>
+
+<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00038">hypro::Ridge&lt; Number &gt;::Ridge()</a>.</p>
 
 </div>
 </div>
@@ -336,7 +348,7 @@ template&lt;class Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -357,7 +369,9 @@ template&lt;class Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00077">77</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
 
-<p>References <a class="el" href="Ridge_8h_source.html#l00079">hypro::Ridge&lt; Number &gt;::halfspace()</a>.</p>
+<p>References <a class="el" href="Ridge_8h_source.html#l00029">hypro::Ridge&lt; Number &gt;::mNeighbors</a>.</p>
+
+<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00038">hypro::Ridge&lt; Number &gt;::Ridge()</a>.</p>
 
 </div>
 </div>
@@ -365,7 +379,7 @@ template&lt;class Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -386,7 +400,7 @@ template&lt;class Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00075">75</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
 
-<p>References <a class="el" href="Ridge_8h_source.html#l00079">hypro::Ridge&lt; Number &gt;::halfspace()</a>.</p>
+<p>References <a class="el" href="Ridge_8h_source.html#l00029">hypro::Ridge&lt; Number &gt;::mNeighbors</a>.</p>
 
 </div>
 </div>
@@ -394,7 +408,7 @@ template&lt;class Number &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -416,13 +430,15 @@ template&lt;class Number &gt; </div>
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00071">71</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
 
+<p>References <a class="el" href="Ridge_8h_source.html#l00028">hypro::Ridge&lt; Number &gt;::mVertices</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a08f703ccdd61307081fcb0c1c5622dc3"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Number &gt; </div>
+template&lt;class Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -442,6 +458,90 @@ template&lt;class Number &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Ridge_8h_source.html#l00073">73</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
+
+<p>References <a class="el" href="Ridge_8h_source.html#l00028">hypro::Ridge&lt; Number &gt;::mVertices</a>.</p>
+
+<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00094">std::hash&lt; hypro::Ridge&lt; Number &gt; &gt;::operator()()</a>, and <a class="el" href="Ridge_8h_source.html#l00038">hypro::Ridge&lt; Number &gt;::Ridge()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="aeb3e2e50a14f2daacc3b4f02a25400a5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Ridge.html">hypro::Ridge</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mHalfspace</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Ridge_8h_source.html#l00030">30</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00079">hypro::Ridge&lt; Number &gt;::halfspace()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3b969db9151457b8ea7f05b375c6235d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::shared_ptr&lt;<a class="el" href="classhypro_1_1Facet.html">Facet</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; &gt; <a class="el" href="classhypro_1_1Ridge.html">hypro::Ridge</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mNeighbors</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Ridge_8h_source.html#l00029">29</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00077">hypro::Ridge&lt; Number &gt;::neighbors()</a>, and <a class="el" href="Ridge_8h_source.html#l00075">hypro::Ridge&lt; Number &gt;::rNeighbors()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0d228958f2e45bb53235d5ef89b6fc07"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a">vertexSet</a> <a class="el" href="classhypro_1_1Ridge.html">hypro::Ridge</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mVertices</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Members </p>
+
+<p>Definition at line <a class="el" href="Ridge_8h_source.html#l00028">28</a> of file <a class="el" href="Ridge_8h_source.html">Ridge.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Ridge_8h_source.html#l00071">hypro::Ridge&lt; Number &gt;::rVertices()</a>, and <a class="el" href="Ridge_8h_source.html#l00073">hypro::Ridge&lt; Number &gt;::vertices()</a>.</p>
 
 </div>
 </div>

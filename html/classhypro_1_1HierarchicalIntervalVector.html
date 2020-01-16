@@ -119,6 +119,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1HierarchicalIntervalVect
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1HierarchicalIntervalVector-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -195,6 +198,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a822d093e21aeca19d54cdbc30330424d"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a822d093e21aeca19d54cdbc30330424d">getIntervals</a> () const </td></tr>
 <tr class="separator:a822d093e21aeca19d54cdbc30330424d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a8d00e7b00290dce911586b6fccfd9e36"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a8d00e7b00290dce911586b6fccfd9e36">Ivec</a> = std::vector&lt; <a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;</td></tr>
+<tr class="separator:a8d00e7b00290dce911586b6fccfd9e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa2a4280b7e230fa5cf5eee1beb21d4d8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#aa2a4280b7e230fa5cf5eee1beb21d4d8">isLess</a> (const T &amp;lhs, const T &amp;rhs) const </td></tr>
+<tr class="separator:aa2a4280b7e230fa5cf5eee1beb21d4d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae56687d14185c69c00784d71a050a2d8"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#ae56687d14185c69c00784d71a050a2d8">getOrderIndex</a> (const T &amp;type) const </td></tr>
+<tr class="separator:ae56687d14185c69c00784d71a050a2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83a160188d747509467395a5ae366d69"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a83a160188d747509467395a5ae366d69">isSane</a> () const </td></tr>
+<tr class="separator:a83a160188d747509467395a5ae366d69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ac1b65d2efc2af441bb8b88776a12ff67"><td class="memItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#ac1b65d2efc2af441bb8b88776a12ff67">mOrder</a></td></tr>
+<tr class="separator:ac1b65d2efc2af441bb8b88776a12ff67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a563ea700df9e8eb694a16fbe5437b68e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a563ea700df9e8eb694a16fbe5437b68e">mIntervals</a></td></tr>
+<tr class="separator:a563ea700df9e8eb694a16fbe5437b68e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a962f0fda8a6a4bb61585b3dafd9aad0f"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a962f0fda8a6a4bb61585b3dafd9aad0f">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;in)</td></tr>
@@ -210,7 +234,32 @@ class hypro::HierarchicalIntervalVector&lt; T, Number &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00034">34</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a8d00e7b00290dce911586b6fccfd9e36"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a8d00e7b00290dce911586b6fccfd9e36">Ivec</a> =  std::vector&lt;<a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt;T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00039">39</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ad5e4fbd47bd6027336b99614cf1c0b5a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -364,6 +413,8 @@ template&lt;typename T, typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00064">64</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
 
+<p>Referenced by <a class="el" href="ETC__util_8cpp_source.html#l00005">hypro::getEnabledTimings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a45669f76f0b4052e560a979b63a1f7fe"></a>
@@ -502,6 +553,8 @@ template&lt;typename T, typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00066">66</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
 
+<p>Referenced by <a class="el" href="ETC__util_8cpp_source.html#l00005">hypro::getEnabledTimings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a6e7e0d54a270fdfd1efae8a236acb84d"></a>
@@ -639,6 +692,32 @@ template&lt;typename T, typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00142">142</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae56687d14185c69c00784d71a050a2d8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getOrderIndex </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -804,6 +883,8 @@ template&lt;typename T, typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00029">hypro::EventTimingContainer&lt; N &gt;::EventTimingContainer()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae2a46b1189cef09ccd19c2619c2bc70a"></a>
@@ -869,6 +950,67 @@ template&lt;typename T, typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if there exists a matching entry, False otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa2a4280b7e230fa5cf5eee1beb21d4d8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::isLess </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a83a160188d747509467395a5ae366d69"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::isSane </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1099,6 +1241,55 @@ template&lt;typename T, typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00134">134</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a563ea700df9e8eb694a16fbe5437b68e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structhypro_1_1endPoint.html">endPoint</a>&lt;T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mIntervals</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00037">37</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac1b65d2efc2af441bb8b88776a12ff67"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;T&gt; <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mOrder</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00036">36</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
 
 </div>
 </div>

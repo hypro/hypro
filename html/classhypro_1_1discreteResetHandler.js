@@ -1,5 +1,6 @@
 var classhypro_1_1discreteResetHandler =
 [
+    [ "Number", "classhypro_1_1discreteResetHandler.html#a01e439841319d3732fac361df7bdcce8", null ],
     [ "discreteResetHandler", "classhypro_1_1discreteResetHandler.html#a64b21688d35337269fe17607a7c8427a", null ],
     [ "discreteResetHandler", "classhypro_1_1discreteResetHandler.html#a4a441f0e8c1cbbc56056ade1263f3fec", null ],
     [ "handle", "classhypro_1_1discreteResetHandler.html#a99b997ccae35ca549e4adbb7521d2b1c", null ],

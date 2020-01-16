@@ -30,5 +30,7 @@ var classhypro_1_1Vertex =
     [ "operator<", "classhypro_1_1Vertex.html#afe4f4c99e50bf459ec6c41ea372566a6", null ],
     [ "operator<<", "classhypro_1_1Vertex.html#a0a60f2a99a0abee97fef31ac0e9c9f8e", null ],
     [ "operator==", "classhypro_1_1Vertex.html#a33ef90f2f7a6a4fd9d5b1d089a168f35", null ],
-    [ "operator>", "classhypro_1_1Vertex.html#aea5ef76b2ab9c096adc2043a9ac024cd", null ]
+    [ "operator>", "classhypro_1_1Vertex.html#aea5ef76b2ab9c096adc2043a9ac024cd", null ],
+    [ "mColor", "classhypro_1_1Vertex.html#a4ef3455118a13661db823bc4157704e7", null ],
+    [ "mPoint", "classhypro_1_1Vertex.html#ad88e8ea9aa52f5253d11eb88c1554104", null ]
 ];

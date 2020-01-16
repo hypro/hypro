@@ -11,6 +11,7 @@ var structhypro_1_1glpk__context =
     [ "operator=", "structhypro_1_1glpk__context.html#a29867e915faa5e43836bec67f4bf1c62", null ],
     [ "operator=", "structhypro_1_1glpk__context.html#ae14b115a3a0e7184349a8314c966c068", null ],
     [ "operator==", "structhypro_1_1glpk__context.html#a30335779877264a3202373eb1a70c0e5", null ],
+    [ "updateConstraints", "structhypro_1_1glpk__context.html#a1194713ed27bd15f23670dfedfa0767f", null ],
     [ "ar", "structhypro_1_1glpk__context.html#a22b3016cc69e59a36e5ebe67e87a358e", null ],
     [ "arraysCreated", "structhypro_1_1glpk__context.html#a6731cf145286af345d5a801dcd25e03e", null ],
     [ "ia", "structhypro_1_1glpk__context.html#a7cf930b33f0329e8d89ddc6fab809860", null ],

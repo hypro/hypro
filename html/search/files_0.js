@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['adaptions_5fclp_2ecpp',['adaptions_clp.cpp',['../adaptions__clp_8cpp.html',1,'']]],
   ['adaptions_5fclp_2eh',['adaptions_clp.h',['../adaptions__clp_8h.html',1,'']]],
   ['adaptions_5feigen_2eh',['adaptions_eigen.h',['../adaptions__eigen_8h.html',1,'']]],
   ['adaptions_5feigen_5fdouble_2ecpp',['adaptions_eigen_double.cpp',['../adaptions__eigen__double_8cpp.html',1,'']]],

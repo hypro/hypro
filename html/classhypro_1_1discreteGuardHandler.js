@@ -1,5 +1,6 @@
 var classhypro_1_1discreteGuardHandler =
 [
+    [ "Number", "classhypro_1_1discreteGuardHandler.html#a8dbd973eef8e5ffe689be08ee17edc22", null ],
     [ "discreteGuardHandler", "classhypro_1_1discreteGuardHandler.html#a8e16a6b35631c007964852cbfecba466", null ],
     [ "discreteGuardHandler", "classhypro_1_1discreteGuardHandler.html#ac93a79883a3621bc1e1a7315fde93573", null ],
     [ "getSortIndex", "classhypro_1_1discreteGuardHandler.html#a49c8e52b352ed59963f54ad50327fdf7", null ],

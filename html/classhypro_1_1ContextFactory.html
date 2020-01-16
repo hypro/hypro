@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1ContextFactory.html','')
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="classhypro_1_1ContextFactory-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::ContextFactory&lt; State &gt; Class Template Reference</div>  </div>
@@ -131,6 +132,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1ContextFactory.html','')
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ec7dff23caa8d6ed3bbd41fb442cb3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1IContext.html">IContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ContextFactory.html#a5ec7dff23caa8d6ed3bbd41fb442cb3d">createContext</a> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; &amp;t, const Strategy&lt; State &gt; &amp;strat, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings</a> &amp;settings)</td></tr>
 <tr class="separator:a5ec7dff23caa8d6ed3bbd41fb442cb3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a033f87df76379edc8b00da346739d159"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ContextFactory.html#a033f87df76379edc8b00da346739d159">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:a033f87df76379edc8b00da346739d159"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />
@@ -138,7 +144,32 @@ class hypro::ContextFactory&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="ContextFactory_8h_source.html#l00015">15</a> of file <a class="el" href="ContextFactory_8h_source.html">ContextFactory.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="a033f87df76379edc8b00da346739d159"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1ContextFactory.html">hypro::ContextFactory</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ContextFactory.html#a033f87df76379edc8b00da346739d159">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ContextFactory_8h_source.html#l00016">16</a> of file <a class="el" href="ContextFactory_8h_source.html">ContextFactory.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a5ec7dff23caa8d6ed3bbd41fb442cb3d"></a>
 <div class="memitem">
 <div class="memproto">

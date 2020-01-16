@@ -1,5 +1,6 @@
 var classhypro_1_1TrafoOp =
 [
+    [ "PointerVec", "classhypro_1_1TrafoOp.html#a19948488ab4dcb4d504f049205a016a7", null ],
     [ "TrafoOp", "classhypro_1_1TrafoOp.html#ae6ec9498e7a92e6f96dc140186d587cf", null ],
     [ "TrafoOp", "classhypro_1_1TrafoOp.html#a4bc9750273dcb27e68baed96d19826a0", null ],
     [ "TrafoOp", "classhypro_1_1TrafoOp.html#a90a2c19497f1f5d9968db661a8b8e0e2", null ],
@@ -19,5 +20,12 @@ var classhypro_1_1TrafoOp =
     [ "reverseOp", "classhypro_1_1TrafoOp.html#a1d55de4fd928833525747ac9e72e994a", null ],
     [ "setDimension", "classhypro_1_1TrafoOp.html#a95a24713d85d9f79b33cd7212661621f", null ],
     [ "supremumPoint", "classhypro_1_1TrafoOp.html#af8a1e135566aaadd4ce5db9c63fcec3f", null ],
-    [ "transform", "classhypro_1_1TrafoOp.html#a4b8c1c7c9eb0461f760bb0fc61928879", null ]
+    [ "transform", "classhypro_1_1TrafoOp.html#a4b8c1c7c9eb0461f760bb0fc61928879", null ],
+    [ "currentExponent", "classhypro_1_1TrafoOp.html#af58af675770465d2d14c3ce590ff2809", null ],
+    [ "mChildren", "classhypro_1_1TrafoOp.html#a59506d84c43e41abbef1169cea41b1ed", null ],
+    [ "mDimension", "classhypro_1_1TrafoOp.html#ab7f186007f8307a7f73c82ea1bfb9e09", null ],
+    [ "originCount", "classhypro_1_1TrafoOp.html#a920c0e4358f9894b3596843c06f9fe63", null ],
+    [ "parameters", "classhypro_1_1TrafoOp.html#acb529af2ea041c6d894425d9c2dd9ced", null ],
+    [ "successiveTransformations", "classhypro_1_1TrafoOp.html#a4a2b65cbf4715184ba49478653685652", null ],
+    [ "type", "classhypro_1_1TrafoOp.html#afb4a655cbb765500567cc245c9c71239", null ]
 ];

@@ -1,5 +1,6 @@
 var classhypro_1_1ltiInvariantHandler =
 [
+    [ "Number", "classhypro_1_1ltiInvariantHandler.html#a427180a65abdd04088ad55aceec4e987", null ],
     [ "ltiInvariantHandler", "classhypro_1_1ltiInvariantHandler.html#a02b0adc0aeaf00e202c59516213633c9", null ],
     [ "ltiInvariantHandler", "classhypro_1_1ltiInvariantHandler.html#a80f874629581aebb351e4ac0e409cd5a", null ],
     [ "getContainment", "classhypro_1_1ltiInvariantHandler.html#a8b6567c98fe581814b58325bd54d0499", null ],

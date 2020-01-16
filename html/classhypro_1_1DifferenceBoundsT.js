@@ -53,5 +53,7 @@ var classhypro_1_1DifferenceBoundsT =
     [ "vertices", "classhypro_1_1DifferenceBoundsT.html#ad80390a9e2669637155ee4517ace424b", null ],
     [ "operator<<", "classhypro_1_1DifferenceBoundsT.html#ac47f1ad90e3ed1a13ad3ec87f9b6eb28", null ],
     [ "operator<<", "classhypro_1_1DifferenceBoundsT.html#aa745cf18648dc582c47fcb44c1183e0b", null ],
-    [ "operator==", "classhypro_1_1DifferenceBoundsT.html#a79bc1dd419c63664f10364c9f0c5e1bd", null ]
+    [ "operator==", "classhypro_1_1DifferenceBoundsT.html#a79bc1dd419c63664f10364c9f0c5e1bd", null ],
+    [ "m_dbm", "classhypro_1_1DifferenceBoundsT.html#ac9913a7f19f76f0605a0e89a2ad78b9a", null ],
+    [ "m_timeHorizon", "classhypro_1_1DifferenceBoundsT.html#a061a34edeab6ff04bc341f4b4697ca3e", null ]
 ];

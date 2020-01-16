@@ -1,5 +1,6 @@
 var classhypro_1_1rectangularResetHandler =
 [
+    [ "Number", "classhypro_1_1rectangularResetHandler.html#ad02c574dc7386f96063f0bda5c7bc3ba", null ],
     [ "rectangularResetHandler", "classhypro_1_1rectangularResetHandler.html#ace62fdefca52b4513cb2ec483bb6bfb4", null ],
     [ "rectangularResetHandler", "classhypro_1_1rectangularResetHandler.html#af6ff7bc11b7fdae8942917618ba99670", null ],
     [ "handle", "classhypro_1_1rectangularResetHandler.html#a4b347eb311fd81334e92ca0ec855ff4a", null ],

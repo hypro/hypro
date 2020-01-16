@@ -16,5 +16,9 @@ var classhypro_1_1SumOp =
     [ "intersectDims", "classhypro_1_1SumOp.html#a9acd3ee29792a1ebacf0390e7cf35b2c", null ],
     [ "setDimension", "classhypro_1_1SumOp.html#a5cd63dbacd81d031b9918df96d490f12", null ],
     [ "supremumPoint", "classhypro_1_1SumOp.html#acf331097412fa1e980aa487d46ebb813", null ],
-    [ "transform", "classhypro_1_1SumOp.html#a7916bee01d5c470ae72ce9d4f36ff883", null ]
+    [ "transform", "classhypro_1_1SumOp.html#a7916bee01d5c470ae72ce9d4f36ff883", null ],
+    [ "mChildren", "classhypro_1_1SumOp.html#ad39104fabcb9522517ebdf0ec989436f", null ],
+    [ "mDimension", "classhypro_1_1SumOp.html#a7667fb24bac023b4036cdde9accad5d1", null ],
+    [ "originCount", "classhypro_1_1SumOp.html#a263af1c61572008b253c11f962c58adc", null ],
+    [ "type", "classhypro_1_1SumOp.html#a6af408d0b394e388cc0ced404997f0c4", null ]
 ];

@@ -1,5 +1,6 @@
 var classhypro_1_1Flowpipe =
 [
+    [ "States", "classhypro_1_1Flowpipe.html#a18dbd16e47b23a33f74a65d98ff2bb3c", null ],
     [ "Flowpipe", "classhypro_1_1Flowpipe.html#a3903fd94d934ef7e03627ef642cc0f2b", null ],
     [ "~Flowpipe", "classhypro_1_1Flowpipe.html#a105418339243efc93e9c7ae1053f3ecd", null ],
     [ "Flowpipe", "classhypro_1_1Flowpipe.html#a3903fd94d934ef7e03627ef642cc0f2b", null ],
@@ -28,6 +29,7 @@ var classhypro_1_1Flowpipe =
     [ "setStates", "classhypro_1_1Flowpipe.html#ad4bbbba23ea67df1469d4c66ed880a05", null ],
     [ "size", "classhypro_1_1Flowpipe.html#afe4f31c8232d1cda4a8ac378e80822b0", null ],
     [ "domain", "classhypro_1_1Flowpipe.html#a6673613547b9f66f6d391605d0f1c8ca", null ],
+    [ "mStates", "classhypro_1_1Flowpipe.html#a537463fa0f34bd37de6055b5a0a42638", null ],
     [ "tmv", "classhypro_1_1Flowpipe.html#ad4cd19fa3db555fa9f752b6cad607ff9", null ],
     [ "tmvPre", "classhypro_1_1Flowpipe.html#ac9151d4fca834fb6f3f06c2eccea3816", null ]
 ];

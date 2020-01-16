@@ -18,6 +18,7 @@ var classhypro_1_1HybridAutomatonParser =
     [ "GuardContext", "classhypro_1_1HybridAutomatonParser_1_1GuardContext.html", "classhypro_1_1HybridAutomatonParser_1_1GuardContext" ],
     [ "IdentityContext", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext.html", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext" ],
     [ "InitContext", "classhypro_1_1HybridAutomatonParser_1_1InitContext.html", "classhypro_1_1HybridAutomatonParser_1_1InitContext" ],
+    [ "Initializer", "structhypro_1_1HybridAutomatonParser_1_1Initializer.html", "structhypro_1_1HybridAutomatonParser_1_1Initializer" ],
     [ "InitstateContext", "classhypro_1_1HybridAutomatonParser_1_1InitstateContext.html", "classhypro_1_1HybridAutomatonParser_1_1InitstateContext" ],
     [ "IntervalContext", "classhypro_1_1HybridAutomatonParser_1_1IntervalContext.html", "classhypro_1_1HybridAutomatonParser_1_1IntervalContext" ],
     [ "IntervalexprContext", "classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext.html", "classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext" ],
@@ -183,5 +184,6 @@ var classhypro_1_1HybridAutomatonParser =
     [ "transition", "classhypro_1_1HybridAutomatonParser.html#aa9668464bb248dda2cc8ebb39b8bef68", null ],
     [ "unsafeset", "classhypro_1_1HybridAutomatonParser.html#a870f8513b9cd6045a14c8a6c6882b741", null ],
     [ "urgent", "classhypro_1_1HybridAutomatonParser.html#a0ea5bc8a4ab48d09fed263aad167ca9f", null ],
-    [ "vardeclaration", "classhypro_1_1HybridAutomatonParser.html#a93e88ce51ae919faa92f54cdf0ae2441", null ]
+    [ "vardeclaration", "classhypro_1_1HybridAutomatonParser.html#a93e88ce51ae919faa92f54cdf0ae2441", null ],
+    [ "constants", "classhypro_1_1HybridAutomatonParser.html#ab2989518dca1c668924ac90b58ca406a", null ]
 ];

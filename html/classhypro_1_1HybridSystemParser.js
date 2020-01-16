@@ -54,6 +54,7 @@ var classhypro_1_1HybridSystemParser =
     [ "GroupDeclContext", "classhypro_1_1HybridSystemParser_1_1GroupDeclContext.html", "classhypro_1_1HybridSystemParser_1_1GroupDeclContext" ],
     [ "IdentifierContext", "classhypro_1_1HybridSystemParser_1_1IdentifierContext.html", "classhypro_1_1HybridSystemParser_1_1IdentifierContext" ],
     [ "ImportsContext", "classhypro_1_1HybridSystemParser_1_1ImportsContext.html", "classhypro_1_1HybridSystemParser_1_1ImportsContext" ],
+    [ "Initializer", "structhypro_1_1HybridSystemParser_1_1Initializer.html", "structhypro_1_1HybridSystemParser_1_1Initializer" ],
     [ "InvariantContext", "classhypro_1_1HybridSystemParser_1_1InvariantContext.html", "classhypro_1_1HybridSystemParser_1_1InvariantContext" ],
     [ "InvariantDeclsContext", "classhypro_1_1HybridSystemParser_1_1InvariantDeclsContext.html", "classhypro_1_1HybridSystemParser_1_1InvariantDeclsContext" ],
     [ "InvariantsContext", "classhypro_1_1HybridSystemParser_1_1InvariantsContext.html", "classhypro_1_1HybridSystemParser_1_1InvariantsContext" ],

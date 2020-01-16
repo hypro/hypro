@@ -119,6 +119,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1LRUCache.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1LRUCache-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::LRUCache&lt; Key, Value &gt; Class Template Reference</div>  </div>
@@ -149,6 +151,24 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4649d9e646a2964f3081b833c31de537"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b69a8c560638669a64ed88dd322f065"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a8b69a8c560638669a64ed88dd322f065">size</a> () const </td></tr>
 <tr class="separator:a8b69a8c560638669a64ed88dd322f065"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:aac5866009f8562c1fd76e6fc72e9047d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#aac5866009f8562c1fd76e6fc72e9047d">EntryPair</a> = std::pair&lt; Key, Value &gt;</td></tr>
+<tr class="separator:aac5866009f8562c1fd76e6fc72e9047d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2978e0793e4e779533c6846c0e71cbc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#ac2978e0793e4e779533c6846c0e71cbc">CacheList</a> = std::list&lt; <a class="el" href="classhypro_1_1LRUCache.html#aac5866009f8562c1fd76e6fc72e9047d">EntryPair</a> &gt;</td></tr>
+<tr class="separator:ac2978e0793e4e779533c6846c0e71cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a9a15f1ffdfeb24722fbb6806f255d8da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1LRUCache.html#ac2978e0793e4e779533c6846c0e71cbc">CacheList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a9a15f1ffdfeb24722fbb6806f255d8da">mCacheList</a></td></tr>
+<tr class="separator:a9a15f1ffdfeb24722fbb6806f255d8da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85d0f296b265dadc0c8a30f0cd5feae7"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; Key, typename CacheList::iterator, std::hash&lt; Key &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a85d0f296b265dadc0c8a30f0cd5feae7">mCacheMap</a></td></tr>
+<tr class="separator:a85d0f296b265dadc0c8a30f0cd5feae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7abe21a5b0b59f2ba4edd725433bd37b"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a7abe21a5b0b59f2ba4edd725433bd37b">mEntryCount</a> = 0</td></tr>
+<tr class="separator:a7abe21a5b0b59f2ba4edd725433bd37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7aa2ab1604a094c991e60dd4b31dfff"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#ae7aa2ab1604a094c991e60dd4b31dfff">mMaxSize</a></td></tr>
+<tr class="separator:ae7aa2ab1604a094c991e60dd4b31dfff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Key, typename Value&gt;<br />
@@ -156,7 +176,56 @@ class hypro::LRUCache&lt; Key, Value &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00023">23</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a class="anchor" id="ac2978e0793e4e779533c6846c0e71cbc"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Value&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::<a class="el" href="classhypro_1_1LRUCache.html#ac2978e0793e4e779533c6846c0e71cbc">CacheList</a> =  std::list&lt;<a class="el" href="classhypro_1_1LRUCache.html#aac5866009f8562c1fd76e6fc72e9047d">EntryPair</a>&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00026">26</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aac5866009f8562c1fd76e6fc72e9047d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Value&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::<a class="el" href="classhypro_1_1LRUCache.html#aac5866009f8562c1fd76e6fc72e9047d">EntryPair</a> =  std::pair&lt;Key, Value&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00025">25</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a15e0f1d1e2bd32f2293e1d8c30d28f06"></a>
 <div class="memitem">
 <div class="memproto">
@@ -315,6 +384,8 @@ template&lt;typename Key, typename Value&gt; </div>
 
 <p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00044">44</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
 
+<p>Referenced by <a class="el" href="representations_2SupportFunction_2util_8h_source.html#l00138">hypro::lintrafoParameters&lt; Number &gt;::getTransformedDirection()</a>, and <a class="el" href="representations_2SupportFunction_2util_8h_source.html#l00157">hypro::lintrafoParameters&lt; Number &gt;::getTransformedDirections()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a6c984866194f711f7b6016e83a06f889"></a>
@@ -342,6 +413,8 @@ template&lt;typename Key, typename Value&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00046">46</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+<p>Referenced by <a class="el" href="representations_2SupportFunction_2util_8h_source.html#l00138">hypro::lintrafoParameters&lt; Number &gt;::getTransformedDirection()</a>, and <a class="el" href="representations_2SupportFunction_2util_8h_source.html#l00157">hypro::lintrafoParameters&lt; Number &gt;::getTransformedDirections()</a>.</p>
 
 </div>
 </div>
@@ -409,6 +482,8 @@ template&lt;typename Key, typename Value&gt; </div>
 
 <p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00059">59</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
 
+<p>Referenced by <a class="el" href="representations_2SupportFunction_2util_8h_source.html#l00138">hypro::lintrafoParameters&lt; Number &gt;::getTransformedDirection()</a>, and <a class="el" href="representations_2SupportFunction_2util_8h_source.html#l00157">hypro::lintrafoParameters&lt; Number &gt;::getTransformedDirections()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8b69a8c560638669a64ed88dd322f065"></a>
@@ -435,6 +510,103 @@ template&lt;typename Key, typename Value&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00081">81</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a9a15f1ffdfeb24722fbb6806f255d8da"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Value&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1LRUCache.html#ac2978e0793e4e779533c6846c0e71cbc">CacheList</a> <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::mCacheList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00028">28</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a85d0f296b265dadc0c8a30f0cd5feae7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Value&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unordered_map&lt;Key, typename CacheList::iterator, std::hash&lt;Key&gt; &gt; <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::mCacheMap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00029">29</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7abe21a5b0b59f2ba4edd725433bd37b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Value&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::mEntryCount = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00030">30</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae7aa2ab1604a094c991e60dd4b31dfff"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Value&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::mMaxSize</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="LRUCache_8h_source.html#l00031">31</a> of file <a class="el" href="LRUCache_8h_source.html">LRUCache.h</a>.</p>
 
 </div>
 </div>

@@ -121,6 +121,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Path.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Path-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -214,6 +215,13 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2447b2d6686c0f967bc8244dc56fee4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Path.html#ae2447b2d6686c0f967bc8244dc56fee4">sharePrefix</a> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;lhs, const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs)</td></tr>
 <tr class="separator:ae2447b2d6686c0f967bc8244dc56fee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ae55472b514dd4773a48a7fcc2f35dff2"><td class="memItemLeft" align="right" valign="top">std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Path.html#ae55472b514dd4773a48a7fcc2f35dff2">mPath</a></td></tr>
+<tr class="separator:ae55472b514dd4773a48a7fcc2f35dff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4552b08461f68ab614f50d9027e05318"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Path.html#a4552b08461f68ab614f50d9027e05318">chatteringZeno</a> = false</td></tr>
+<tr class="separator:a4552b08461f68ab614f50d9027e05318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:aeb0efe753dd97d35fdb2dd90143c913c"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Path.html#aeb0efe753dd97d35fdb2dd90143c913c">operator&lt;&lt;</a> (std::ostream &amp;_out, const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;path)</td></tr>
@@ -237,7 +245,7 @@ class hypro::Path&lt; Number, tNumber &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="classhypro_1_1Path.html#a3a1d60720dc47826a48f44551a0cc792">TIterator</a> =  typename std::deque&lt;<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&gt;::iterator</td>
@@ -253,7 +261,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="classhypro_1_1Path.html#ab41a60b45f20c36ddd2b8e24a7cdfab8">TIterator_const</a> =  typename std::deque&lt;<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&gt;::const_iterator</td>
@@ -270,7 +278,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -297,7 +305,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="classhypro_1_1Path.html">Path</a> </td>
@@ -315,7 +323,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -343,7 +351,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::add </td>
@@ -361,7 +369,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::addTimeStep </td>
@@ -373,13 +381,15 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00226">hypro::ReachTreeNode&lt; State &gt;::addTimeStepToPath()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a391e302fe17175b1083528a1d1f70cb1"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::addTransition </td>
@@ -401,13 +411,15 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00225">hypro::ReachTreeNode&lt; State &gt;::addTransitionToPath()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ad3cf136d86de4753e133b4370aa812d1"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::at </td>
@@ -419,13 +431,15 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="Path_8h_source.html#l00173">hypro::Path&lt; Number, tNumber &gt;::operator==()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab273c579858bf5b6eec7bc1a1fcc4cc5"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&amp; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::back </td>
@@ -442,7 +456,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html#a3a1d60720dc47826a48f44551a0cc792">TIterator</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::begin </td>
@@ -459,7 +473,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html#ab41a60b45f20c36ddd2b8e24a7cdfab8">TIterator_const</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::begin </td>
@@ -476,7 +490,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a>&amp; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::clear </td>
@@ -493,7 +507,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a>&amp; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::deleteAfterPos </td>
@@ -511,7 +525,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a>&amp; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::deleteBeforePos </td>
@@ -529,7 +543,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html#a3a1d60720dc47826a48f44551a0cc792">TIterator</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::end </td>
@@ -546,7 +560,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html#ab41a60b45f20c36ddd2b8e24a7cdfab8">TIterator_const</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::end </td>
@@ -557,15 +571,13 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="Path_8h_source.html#l00140">hypro::Path&lt; Number, tNumber &gt;::getTransitionSequence()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a78f459110570e25af6be0fdada3fcf98"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&amp; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::front </td>
@@ -582,7 +594,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::getNumberDiscreteJumps </td>
@@ -599,7 +611,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*&gt; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::getTransitionSequence </td>
@@ -627,7 +639,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -648,7 +660,9 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Path_8h_source.html#l00140">140</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1Path.html#af52324f7e39ae142d55cbce5a21be92a">hypro::Path&lt; Number, tNumber &gt;::end()</a>.</p>
+<p>References <a class="el" href="Path_8h_source.html#l00140">hypro::Path&lt; Number, tNumber &gt;::getTransitionSequence()</a>, and <a class="el" href="EvaluationResult_8h_source.html#l00071">hypro::operator&gt;()</a>.</p>
+
+<p>Referenced by <a class="el" href="Path_8h_source.html#l00140">hypro::Path&lt; Number, tNumber &gt;::getTransitionSequence()</a>.</p>
 
 </div>
 </div>
@@ -656,7 +670,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; &gt; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::getTransitionToJumpDepth </td>
@@ -674,7 +688,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::hasChatteringZeno </td>
@@ -691,7 +705,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -718,7 +732,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::maximalTimeSpan </td>
@@ -746,7 +760,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -774,7 +788,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -796,13 +810,15 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Path_8h_source.html#l00173">173</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1Path.html#ad3cf136d86de4753e133b4370aa812d1">hypro::Path&lt; Number, tNumber &gt;::at()</a>, and <a class="el" href="classhypro_1_1Path.html#aa1b47ff49192164d8bf24107503e0cd7">hypro::Path&lt; Number, tNumber &gt;::size()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9ab9a5c853e1057ead6b157ad08a369c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::operator&gt; </td>
@@ -820,7 +836,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::operator&gt; </td>
@@ -838,7 +854,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::pop_front </td>
@@ -855,7 +871,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::push_front </td>
@@ -873,7 +889,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::removeSharedPrefix </td>
@@ -891,7 +907,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a> <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::sharedPrefix </td>
@@ -909,7 +925,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -945,7 +961,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::sharesPrefix </td>
@@ -963,7 +979,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::size </td>
@@ -974,6 +990,8 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="Path_8h_source.html#l00173">hypro::Path&lt; Number, tNumber &gt;::operator==()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
@@ -981,7 +999,7 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number , typename tNumber  = Number&gt; </div>
+template&lt;typename Number, typename tNumber = Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1012,6 +1030,55 @@ template&lt;typename Number , typename tNumber  = Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Path_8h_source.html#l00163">163</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a4552b08461f68ab614f50d9027e05318"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename tNumber = Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::chatteringZeno = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00111">111</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae55472b514dd4773a48a7fcc2f35dff2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename tNumber = Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::deque&lt;<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; &gt; <a class="el" href="classhypro_1_1Path.html">hypro::Path</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::mPath</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00108">108</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
 </div>
 </div>

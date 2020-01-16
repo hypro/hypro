@@ -12,9 +12,12 @@ var classhypro_1_1CarlPolytopeT =
     [ "affineTransformation", "classhypro_1_1CarlPolytopeT.html#acc6f369714c5be3893892e168256b841", null ],
     [ "assignIntervals", "classhypro_1_1CarlPolytopeT.html#a80038c2dfd2ed2857f61dda9833029a1", null ],
     [ "choseOrder", "classhypro_1_1CarlPolytopeT.html#ae0fdde4044f25569498ff042a57af5b8", null ],
+    [ "clearCache", "classhypro_1_1CarlPolytopeT.html#a510b55441b42e4866a9b266eefbc9021", null ],
     [ "contains", "classhypro_1_1CarlPolytopeT.html#aaa6cd3f53215e0633cf7a0bcf37689b4", null ],
     [ "contains", "classhypro_1_1CarlPolytopeT.html#a72a52357fba653d28ba9248a55257e77", null ],
+    [ "detectDimension", "classhypro_1_1CarlPolytopeT.html#a3ef9062d6f4d0775b4c15b08e3f1340d", null ],
     [ "dimension", "classhypro_1_1CarlPolytopeT.html#a02cbb589d3081aa1ef88864154a7845a", null ],
+    [ "dimensionWasCorrectlySet", "classhypro_1_1CarlPolytopeT.html#acaf3917f2041a87de8cf021102a70d3d", null ],
     [ "eliminateVariable", "classhypro_1_1CarlPolytopeT.html#a49f17f135554b16d56748721c33d4df3", null ],
     [ "eliminateVariables", "classhypro_1_1CarlPolytopeT.html#a3854675632903d90b28213cc55e92548", null ],
     [ "eliminateVariables", "classhypro_1_1CarlPolytopeT.html#a7b5ce8731fb2ee4ad518539b0223a834", null ],
@@ -42,5 +45,10 @@ var classhypro_1_1CarlPolytopeT =
     [ "vertices", "classhypro_1_1CarlPolytopeT.html#a1ba383b931ad000b06d8000e7307e567", null ],
     [ "operator!=", "classhypro_1_1CarlPolytopeT.html#ac557083c2cad13ea08ed9295659b6166", null ],
     [ "operator<<", "classhypro_1_1CarlPolytopeT.html#abccbf7b4b2c0e0bbd712f2bf55af8605", null ],
-    [ "operator==", "classhypro_1_1CarlPolytopeT.html#a1fbe7905d848db534030560bf748009f", null ]
+    [ "operator==", "classhypro_1_1CarlPolytopeT.html#a1fbe7905d848db534030560bf748009f", null ],
+    [ "mDimension", "classhypro_1_1CarlPolytopeT.html#a4933990a6875ac5ba2bd7d1d03912b0f", null ],
+    [ "mEmpty", "classhypro_1_1CarlPolytopeT.html#ad5dedf7bb88ba35ca3531057fb86ba16", null ],
+    [ "mFormula", "classhypro_1_1CarlPolytopeT.html#ad5d73e6564c4079a17f51a4a0e1cdb35", null ],
+    [ "mHalfspaces", "classhypro_1_1CarlPolytopeT.html#a9c8084e92f919fe8642a7e3f287da5ed", null ],
+    [ "mSpaceDimensionSet", "classhypro_1_1CarlPolytopeT.html#a673e36fbb29300960cc9baac59643264", null ]
 ];

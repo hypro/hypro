@@ -40,6 +40,7 @@ var classhypro_1_1ZonotopeT =
     [ "reduceOrder", "classhypro_1_1ZonotopeT.html#a4ca07528e34888d71b21268b5423b245", null ],
     [ "reduceRepresentation", "classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d", null ],
     [ "removeEmptyGenerators", "classhypro_1_1ZonotopeT.html#a2a2f65a547b6e619fb00e1d2a0cd2c2b", null ],
+    [ "removeGenerator", "classhypro_1_1ZonotopeT.html#acf406931ade6cf3cab08d52d5052a02a", null ],
     [ "removeRedundancy", "classhypro_1_1ZonotopeT.html#a648c4dddf715382314f1910e64f17e3a", null ],
     [ "satisfiesHalfspace", "classhypro_1_1ZonotopeT.html#a84f6e442ebad32d72dd2f25ea5a031f2", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1ZonotopeT.html#aae826007908e36c097c8084b94eb67e1", null ],
@@ -50,5 +51,8 @@ var classhypro_1_1ZonotopeT =
     [ "unite", "classhypro_1_1ZonotopeT.html#a0b696ff0a7e14a00bd55740fe2ce149a", null ],
     [ "uniteEqualVectors", "classhypro_1_1ZonotopeT.html#af3881e5d68c5a65631b8b9181b05e308", null ],
     [ "vector", "classhypro_1_1ZonotopeT.html#afae1cef4e049cdc0d3a0ad573ba32fad", null ],
-    [ "vertices", "classhypro_1_1ZonotopeT.html#ae729817e5a9322a5eac75c5fb2889154", null ]
+    [ "vertices", "classhypro_1_1ZonotopeT.html#ae729817e5a9322a5eac75c5fb2889154", null ],
+    [ "mCenter", "classhypro_1_1ZonotopeT.html#a1023e435274ffc8e2c26aabd51327c20", null ],
+    [ "mDimension", "classhypro_1_1ZonotopeT.html#a59d5204415e2ace0427422020c59eea7", null ],
+    [ "mGenerators", "classhypro_1_1ZonotopeT.html#af6a5d00b4ba868f5edd8e5ac7ed7f5eb", null ]
 ];

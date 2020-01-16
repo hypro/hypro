@@ -120,6 +120,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1NonLinearOmega0Supportfu
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1NonLinearOmega0Supportfunction-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt; Class Template Reference</div>  </div>
@@ -132,7 +135,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1NonLinearOmega0Supportfu
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a398a547a9297c7b7cea3c31a326eb767"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a398a547a9297c7b7cea3c31a326eb767">getEpsilonpsi</a> ()</td></tr>
 <tr class="separator:a398a547a9297c7b7cea3c31a326eb767"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6c429fdffde351da27862b4e6a9d512"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#ac6c429fdffde351da27862b4e6a9d512">NonLinearOmega0Supportfunction</a> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; *A, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *V, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *X0, double delta, artificialDirections *aD)</td></tr>
+<tr class="memitem:ac6c429fdffde351da27862b4e6a9d512"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#ac6c429fdffde351da27862b4e6a9d512">NonLinearOmega0Supportfunction</a> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; *<a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a7d2006e941a0bbb87f23e6aa80192a16">A</a>, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *<a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a12d80a0f11dbeb2e4ed5782ced6829f5">V</a>, <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *<a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a16fbc344471821e292c357b8587d69f5">X0</a>, double <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a23de72e8ebdcb06a7d092c929783160c">delta</a>, artificialDirections *aD)</td></tr>
 <tr class="separator:ac6c429fdffde351da27862b4e6a9d512"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3efc36dc79484b0512a003c7aa442a69"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a3efc36dc79484b0512a003c7aa442a69">~NonLinearOmega0Supportfunction</a> ()</td></tr>
 <tr class="separator:a3efc36dc79484b0512a003c7aa442a69"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,13 +214,66 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acc73034a8760980d313fcfa82da3bb36 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a113c1705d7cfaf8df128c0c0dd2a2810 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionContent.html#a113c1705d7cfaf8df128c0c0dd2a2810">checkTreeValidity</a> () const </td></tr>
 <tr class="separator:a113c1705d7cfaf8df128c0c0dd2a2810 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17708172bd4d795abde9169ccf156401 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionContent.html#a17708172bd4d795abde9169ccf156401">getDotRepresentation</a> (std::size_t startIndex, std::string &amp;nodes, std::string &amp;transitions) const </td></tr>
+<tr class="memitem:a17708172bd4d795abde9169ccf156401 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionContent.html#a17708172bd4d795abde9169ccf156401">getDotRepresentation</a> (std::size_t startIndex, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;nodes, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;transitions) const </td></tr>
 <tr class="separator:a17708172bd4d795abde9169ccf156401 inherit pub_methods_classhypro_1_1SupportFunctionContent"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac63286bab3e704b32e3c51cc5a12c7a3"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#ac63286bab3e704b32e3c51cc5a12c7a3">specificEvaluation</a> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; l)</td></tr>
 <tr class="separator:ac63286bab3e704b32e3c51cc5a12c7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a758b2ada690951f7317b30d2b5a42568"><td class="memItemLeft" align="right" valign="top">SymmetricCenteredBoxSupportFunction&lt; BoxSupportFunctionSetting &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a758b2ada690951f7317b30d2b5a42568">boxoperator</a> (<a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *sf)</td></tr>
+<tr class="separator:a758b2ada690951f7317b30d2b5a42568"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03585aece7fec757fd839439f4b5df57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a03585aece7fec757fd839439f4b5df57">calcvalues</a> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; *<a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a7d2006e941a0bbb87f23e6aa80192a16">A</a>, unsigned int i, unsigned int j, unsigned int k, unsigned int l)</td></tr>
+<tr class="separator:a03585aece7fec757fd839439f4b5df57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed3d3f4bad0dae58372f96093b3f85e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#aed3d3f4bad0dae58372f96093b3f85e0">calcepsilon</a> ()</td></tr>
+<tr class="separator:aed3d3f4bad0dae58372f96093b3f85e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a69f97515e38fafef5e1eadeed3e06a3d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a69f97515e38fafef5e1eadeed3e06a3d">myfunc</a> (unsigned n, const double *x, double *grad, void *my_func_data)</td></tr>
+<tr class="separator:a69f97515e38fafef5e1eadeed3e06a3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a81c3f53da9737d1df0e69f2670ae29d0"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a81c3f53da9737d1df0e69f2670ae29d0">dimensions</a></td></tr>
+<tr class="separator:a81c3f53da9737d1df0e69f2670ae29d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d2006e941a0bbb87f23e6aa80192a16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a7d2006e941a0bbb87f23e6aa80192a16">A</a></td></tr>
+<tr class="separator:a7d2006e941a0bbb87f23e6aa80192a16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12d80a0f11dbeb2e4ed5782ced6829f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a12d80a0f11dbeb2e4ed5782ced6829f5">V</a></td></tr>
+<tr class="separator:a12d80a0f11dbeb2e4ed5782ced6829f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16fbc344471821e292c357b8587d69f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a16fbc344471821e292c357b8587d69f5">X0</a></td></tr>
+<tr class="separator:a16fbc344471821e292c357b8587d69f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23de72e8ebdcb06a7d092c929783160c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a23de72e8ebdcb06a7d092c929783160c">delta</a></td></tr>
+<tr class="separator:a23de72e8ebdcb06a7d092c929783160c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95b0a9d46e54dc52f1cd9c2d6d7c3491"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a95b0a9d46e54dc52f1cd9c2d6d7c3491">absA</a></td></tr>
+<tr class="separator:a95b0a9d46e54dc52f1cd9c2d6d7c3491"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acad6188b22ffff0704d98ef2ec541ec2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#acad6188b22ffff0704d98ef2ec541ec2">edA</a></td></tr>
+<tr class="separator:acad6188b22ffff0704d98ef2ec541ec2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2f9e576f8ba1c3f3e9f0e81558827b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#af2f9e576f8ba1c3f3e9f0e81558827b3">phi2</a></td></tr>
+<tr class="separator:af2f9e576f8ba1c3f3e9f0e81558827b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a532ca736cf7765b7f63340c6f67533e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a532ca736cf7765b7f63340c6f67533e9">epsilonpsi</a></td></tr>
+<tr class="separator:a532ca736cf7765b7f63340c6f67533e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade417a906c71a13cf6e59d91d5500fba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#ade417a906c71a13cf6e59d91d5500fba">edX0</a></td></tr>
+<tr class="separator:ade417a906c71a13cf6e59d91d5500fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27dcecb65614a553b8609360673fa59b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a27dcecb65614a553b8609360673fa59b">e_p</a></td></tr>
+<tr class="separator:a27dcecb65614a553b8609360673fa59b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06d013c360b5fece37725754c7a61a3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a06d013c360b5fece37725754c7a61a3e">e_n</a></td></tr>
+<tr class="separator:a06d013c360b5fece37725754c7a61a3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af23ebc2f0a44027035314fa305704b76"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#af23ebc2f0a44027035314fa305704b76">directionsAlongDimensions</a></td></tr>
+<tr class="separator:af23ebc2f0a44027035314fa305704b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3f79f0005e08f0f5b101d22c7fa5733"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#af3f79f0005e08f0f5b101d22c7fa5733">x0res</a></td></tr>
+<tr class="separator:af3f79f0005e08f0f5b101d22c7fa5733"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a629f8c1dd5114a6cd95d1f346da919e5"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a629f8c1dd5114a6cd95d1f346da919e5">edX0res</a></td></tr>
+<tr class="separator:a629f8c1dd5114a6cd95d1f346da919e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2129de6893ababa813ffaffc8bc3a342"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a2129de6893ababa813ffaffc8bc3a342">Vres</a></td></tr>
+<tr class="separator:a2129de6893ababa813ffaffc8bc3a342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d2880e049b59df6cb95c56dd6b89010"><td class="memItemLeft" align="right" valign="top">evaluationResult&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a8d2880e049b59df6cb95c56dd6b89010">epsilonpsires</a></td></tr>
+<tr class="separator:a8d2880e049b59df6cb95c56dd6b89010"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa9a7e185c63d0c5a634ef471dc3174a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#afa9a7e185c63d0c5a634ef471dc3174a">absl</a></td></tr>
+<tr class="separator:afa9a7e185c63d0c5a634ef471dc3174a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -310,9 +366,7 @@ template&lt;class Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">393</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
 
-<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
-
-<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00032">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::A</a>, <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00172">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::calcepsilon()</a>, <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00111">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::calcvalues()</a>, <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00036">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::delta</a>, <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>, <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00033">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::V</a>, and <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00034">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::X0</a>.</p>
 
 </div>
 </div>
@@ -341,9 +395,134 @@ template&lt;class Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00451">451</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
 
+<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00043">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::edX0</a>, and <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00042">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::epsilonpsi</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a758b2ada690951f7317b30d2b5a42568"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::boxoperator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a> *&#160;</td>
+          <td class="paramname"><em>sf</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00053">53</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00029">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::dimensions</a>, <a class="el" href="classhypro_1_1SupportFunctionContent.html#ad080cf6b10d70584a21a90f5fd20450e">hypro::SupportFunctionContent&lt; Number, Setting &gt;::evaluate()</a>, <a class="el" href="classhypro_1_1SupportFunctionContent.html#a78e7b85eed3a8c14e6571c6ebdc3b782">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiEvaluate()</a>, and <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00172">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::calcepsilon()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aed3d3f4bad0dae58372f96093b3f85e0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::calcepsilon </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00172">172</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00053">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::boxoperator()</a>, and <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a03585aece7fec757fd839439f4b5df57"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::calcvalues </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; *&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>j</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>l</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00111">111</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00036">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::delta</a>, <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00029">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::dimensions</a>, and <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a398a547a9297c7b7cea3c31a326eb767"></a>
 <div class="memitem">
 <div class="memproto">
@@ -368,6 +547,60 @@ template&lt;class Setting &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00382">382</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>References <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00042">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::epsilonpsi</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a69f97515e38fafef5e1eadeed3e06a3d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::myfunc </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>grad</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>my_func_data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00265">265</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00305">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::specificEvaluation()</a>.</p>
 
 </div>
 </div>
@@ -397,6 +630,455 @@ template&lt;class Setting &gt; </div>
 <p>This method computes the evaluation result for a specified direction l TODO: optimization object can be declared and initialized outside the evaluate methods to improve performance (see glpk) </p>
 
 <p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00305">305</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1SupportFunctionContent.html#ad080cf6b10d70584a21a90f5fd20450e">hypro::SupportFunctionContent&lt; Number, Setting &gt;::evaluate()</a>, <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00265">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::myfunc()</a>, and <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a7d2006e941a0bbb87f23e6aa80192a16"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt;* <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::A</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00032">32</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a95b0a9d46e54dc52f1cd9c2d6d7c3491"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::absA</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00039">39</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afa9a7e185c63d0c5a634ef471dc3174a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::absl</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00261">261</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a23de72e8ebdcb06a7d092c929783160c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::delta</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00036">36</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00111">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::calcvalues()</a>, and <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a81c3f53da9737d1df0e69f2670ae29d0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::dimensions</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00029">29</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00053">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::boxoperator()</a>, and <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00111">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::calcvalues()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af23ebc2f0a44027035314fa305704b76"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; &gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::directionsAlongDimensions</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00048">48</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a06d013c360b5fece37725754c7a61a3e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::e_n</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00045">45</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a27dcecb65614a553b8609360673fa59b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::e_p</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00044">44</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acad6188b22ffff0704d98ef2ec541ec2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::edA</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00040">40</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ade417a906c71a13cf6e59d91d5500fba"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>* <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::edX0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00043">43</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00451">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::~NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a629f8c1dd5114a6cd95d1f346da919e5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">evaluationResult <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::edX0res</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00258">258</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a532ca736cf7765b7f63340c6f67533e9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>* <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::epsilonpsi</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00042">42</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00382">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::getEpsilonpsi()</a>, and <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00451">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::~NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8d2880e049b59df6cb95c56dd6b89010"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">evaluationResult <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::epsilonpsires</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00260">260</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af2f9e576f8ba1c3f3e9f0e81558827b3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;double&gt; <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::phi2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00041">41</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a12d80a0f11dbeb2e4ed5782ced6829f5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>* <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::V</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00033">33</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2129de6893ababa813ffaffc8bc3a342"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">evaluationResult <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::Vres</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00259">259</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a16fbc344471821e292c357b8587d69f5"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>* <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::X0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00034">34</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00393">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;::NonLinearOmega0Supportfunction()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af3f79f0005e08f0f5b101d22c7fa5733"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Setting &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">evaluationResult <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a>&lt; Setting &gt;::x0res</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html#l00257">257</a> of file <a class="el" href="NonLinearOmega0Supportfunction_8h_source.html">NonLinearOmega0Supportfunction.h</a>.</p>
 
 </div>
 </div>

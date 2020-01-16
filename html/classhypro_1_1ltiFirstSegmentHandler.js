@@ -1,5 +1,6 @@
 var classhypro_1_1ltiFirstSegmentHandler =
 [
+    [ "Number", "classhypro_1_1ltiFirstSegmentHandler.html#aff3fa48e235d3f03e4fa18a81227c542", null ],
     [ "ltiFirstSegmentHandler", "classhypro_1_1ltiFirstSegmentHandler.html#aea32a0f582a29d654f7bf0e08f0a0cc7", null ],
     [ "ltiFirstSegmentHandler", "classhypro_1_1ltiFirstSegmentHandler.html#a8ca9e221aa519210e6c164b9fdda42ed", null ],
     [ "computeTrafoMatrix", "classhypro_1_1ltiFirstSegmentHandler.html#a4b1f5143e27b3689bb9932c77565815e", null ],

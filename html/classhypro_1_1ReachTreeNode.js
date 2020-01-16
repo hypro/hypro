@@ -3,6 +3,7 @@ var classhypro_1_1ReachTreeNode =
     [ "const_Node_t", "classhypro_1_1ReachTreeNode.html#a3cd053db3636f42df89e220a6a146f46", null ],
     [ "Node_t", "classhypro_1_1ReachTreeNode.html#a4eb15ccce956ac472894498f08c70e45", null ],
     [ "NodeList_t", "classhypro_1_1ReachTreeNode.html#a2849dae614374ecf2924e35e776baf1a", null ],
+    [ "Number", "classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019", null ],
     [ "ReachTreeNode", "classhypro_1_1ReachTreeNode.html#a8d26e9a8cb42232461aed92582c953c9", null ],
     [ "~ReachTreeNode", "classhypro_1_1ReachTreeNode.html#a7c4b90ef3699aa26dc3c5fbcffbb22ff", null ],
     [ "ReachTreeNode", "classhypro_1_1ReachTreeNode.html#a18acb6da5ad81c81377b866882f78f3b", null ],

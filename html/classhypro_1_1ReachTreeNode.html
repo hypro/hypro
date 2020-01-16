@@ -121,6 +121,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1ReachTreeNode.html','');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1ReachTreeNode-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -161,7 +162,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a352c3da40b920a27db05a3f7597bf479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2d02be86ce59868b79cd65283fcf220"><td class="memItemLeft" align="right" valign="top">std::mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#ae2d02be86ce59868b79cd65283fcf220">getMutex</a> () const </td></tr>
 <tr class="separator:ae2d02be86ce59868b79cd65283fcf220"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2403bf096819a045949b982326524a52"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a2403bf096819a045949b982326524a52">getPath</a> () const </td></tr>
+<tr class="memitem:a2403bf096819a045949b982326524a52"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a2403bf096819a045949b982326524a52">getPath</a> () const </td></tr>
 <tr class="separator:a2403bf096819a045949b982326524a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21dcd6c8e4efb9f4e3331ad7bb4b7c2b"><td class="memItemLeft" align="right" valign="top">const State::repVariant &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a21dcd6c8e4efb9f4e3331ad7bb4b7c2b">getSetAtLevel</a> (unsigned level) const </td></tr>
 <tr class="separator:a21dcd6c8e4efb9f4e3331ad7bb4b7c2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,7 +181,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a068f50d78f53fa95bbc53c86a6d4ae9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19af804a1080a1a1eda8b7297b51f1aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a19af804a1080a1a1eda8b7297b51f1aa">getLevelCnt</a> (std::vector&lt; std::size_t &gt; &amp;levels) const </td></tr>
 <tr class="separator:a19af804a1080a1a1eda8b7297b51f1aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4fc2151c49b33c494ddb8aaf37f9c96"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; State &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">getChildrenForTransition</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
+<tr class="memitem:ab4fc2151c49b33c494ddb8aaf37f9c96"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; State &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">getChildrenForTransition</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a> &gt; *transition) const </td></tr>
 <tr class="separator:ab4fc2151c49b33c494ddb8aaf37f9c96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dd2ae773848012b865d6c4f38e6e695"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a6dd2ae773848012b865d6c4f38e6e695">isFullyComputedOnSomeLevel</a> () const </td></tr>
 <tr class="separator:a6dd2ae773848012b865d6c4f38e6e695"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,7 +197,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2902ee3838a2e57efded53363c50f75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19b5f05a7f317be716b3bcaf359cca25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a19b5f05a7f317be716b3bcaf359cca25">setTimestamp</a> (unsigned level, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval)</td></tr>
 <tr class="separator:a19b5f05a7f317be716b3bcaf359cca25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d448a4333541919064260a40e72fe73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a8d448a4333541919064260a40e72fe73">addTransitionToPath</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *trans, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;enabledTime)</td></tr>
+<tr class="memitem:a8d448a4333541919064260a40e72fe73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a8d448a4333541919064260a40e72fe73">addTransitionToPath</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a> &gt; *trans, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;enabledTime)</td></tr>
 <tr class="separator:a8d448a4333541919064260a40e72fe73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b7922d3d06e1412b310284efc59de57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a5b7922d3d06e1412b310284efc59de57">addTimeStepToPath</a> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeStep)</td></tr>
 <tr class="separator:a5b7922d3d06e1412b310284efc59de57"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,7 +207,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a980f15b08a9575f8f57821bd278a27e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab47eff1e87290bc5073aedb04e48995"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#aab47eff1e87290bc5073aedb04e48995">setParent</a> (<a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; State &gt; *parent)</td></tr>
 <tr class="separator:aab47eff1e87290bc5073aedb04e48995"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab38261eed8ebaa7b0db24188a1d1a102"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#ab38261eed8ebaa7b0db24188a1d1a102">getDotRepresentation</a> (std::size_t startIndex, std::string &amp;nodes, std::string &amp;transitions, std::vector&lt; unsigned &gt; &amp;levels) const </td></tr>
+<tr class="memitem:ab38261eed8ebaa7b0db24188a1d1a102"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#ab38261eed8ebaa7b0db24188a1d1a102">getDotRepresentation</a> (std::size_t startIndex, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;nodes, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;transitions, std::vector&lt; unsigned &gt; &amp;levels) const </td></tr>
 <tr class="separator:ab38261eed8ebaa7b0db24188a1d1a102"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1TreeNode"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1TreeNode')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1TreeNode.html">hypro::TreeNode&lt; ReachTreeNode&lt; State &gt; &gt;</a></td></tr>
 <tr class="memitem:a8fa66e94c071fb175863a3e510a20404 inherit pub_methods_classhypro_1_1TreeNode"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TreeNode.html#a8fa66e94c071fb175863a3e510a20404">TreeNode</a> ()</td></tr>
@@ -236,7 +237,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a5e8312bd165cf9e7a076bb977f09f785"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a5e8312bd165cf9e7a076bb977f09f785">mPath</a></td></tr>
+<tr class="memitem:a5e8312bd165cf9e7a076bb977f09f785"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Path.html">Path</a>&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a5e8312bd165cf9e7a076bb977f09f785">mPath</a></td></tr>
 <tr class="separator:a5e8312bd165cf9e7a076bb977f09f785"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f70ad4cf1c030acd54a1fb0e364f451"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhypro_1_1RefinementSetting.html">RefinementSetting</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a2f70ad4cf1c030acd54a1fb0e364f451">mRefinements</a></td></tr>
 <tr class="memdesc:a2f70ad4cf1c030acd54a1fb0e364f451"><td class="mdescLeft">&#160;</td><td class="mdescRight">path cache.  <a href="#a2f70ad4cf1c030acd54a1fb0e364f451">More...</a><br /></td></tr>
@@ -253,6 +254,11 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a9d2f003348321ef60086b24bd4945294 inherit pro_attribs_classhypro_1_1TreeNode"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; State &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TreeNode.html#a9d2f003348321ef60086b24bd4945294">mParent</a></td></tr>
 <tr class="memdesc:a9d2f003348321ef60086b24bd4945294 inherit pro_attribs_classhypro_1_1TreeNode"><td class="mdescLeft">&#160;</td><td class="mdescRight">children list  <a href="#a9d2f003348321ef60086b24bd4945294">More...</a><br /></td></tr>
 <tr class="separator:a9d2f003348321ef60086b24bd4945294 inherit pro_attribs_classhypro_1_1TreeNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a13505532dc28ac5e8ae517a022fb6019"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a> = typename State::NumberType</td></tr>
+<tr class="separator:a13505532dc28ac5e8ae517a022fb6019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -277,7 +283,7 @@ class hypro::ReachTreeNode&lt; State &gt;</h3>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a3cd053db3636f42df89e220a6a146f46">const_Node_t</a> =  typename <a class="el" href="classhypro_1_1TreeNode.html">TreeNode</a>&lt;<a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt;State&gt;&gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a3cd053db3636f42df89e220a6a146f46">const_Node_t</a></td>
@@ -293,7 +299,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a4eb15ccce956ac472894498f08c70e45">Node_t</a> =  typename <a class="el" href="classhypro_1_1TreeNode.html">TreeNode</a>&lt;<a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt;State&gt;&gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a4eb15ccce956ac472894498f08c70e45">Node_t</a></td>
@@ -309,7 +315,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">using <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a2849dae614374ecf2924e35e776baf1a">NodeList_t</a> =  typename <a class="el" href="classhypro_1_1TreeNode.html">TreeNode</a>&lt;<a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt;State&gt;&gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a2849dae614374ecf2924e35e776baf1a">NodeList_t</a></td>
@@ -321,12 +327,36 @@ template&lt;typename State &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a13505532dc28ac5e8ae517a022fb6019"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename State&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a> =  typename State::NumberType</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00109">109</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a8d26e9a8cb42232461aed92582c953c9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -348,17 +378,13 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00123">123</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">hypro::ReachTreeNode&lt; State &gt;::getChildrenForTransition()</a>, and <a class="el" href="ReachTreeNode_8h_source.html#l00123">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
-<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00123">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="a7c4b90ef3699aa26dc3c5fbcffbb22ff"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -385,7 +411,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -406,17 +432,13 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00136">136</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">hypro::ReachTreeNode&lt; State &gt;::getChildrenForTransition()</a>, and <a class="el" href="ReachTreeNode_8h_source.html#l00136">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
-<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00136">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="afe61e6c22ba25c9e6a7c703dc800b2d1"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -448,9 +470,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00144">144</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">hypro::ReachTreeNode&lt; State &gt;::getChildrenForTransition()</a>, and <a class="el" href="ReachTreeNode_8h_source.html#l00144">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
-<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00144">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
+<p>References <a class="el" href="ReachTreeNode_8h_source.html#l00036">hypro::RefinementSetting&lt; State &gt;::entryTimestamp</a>, and <a class="el" href="ReachTreeNode_8h_source.html#l00033">hypro::RefinementSetting&lt; State &gt;::initialSet</a>.</p>
 
 </div>
 </div>
@@ -458,7 +478,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -496,10 +516,6 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00156">156</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
-<p>References <a class="el" href="ReachTreeNode_8h_source.html#l00036">hypro::RefinementSetting&lt; State &gt;::entryTimestamp</a>, <a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">hypro::ReachTreeNode&lt; State &gt;::getChildrenForTransition()</a>, and <a class="el" href="ReachTreeNode_8h_source.html#l00156">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
-<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00156">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -507,7 +523,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::addRefinement </td>
@@ -525,7 +541,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -547,13 +563,15 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00226">226</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1Path.html#a01ee87d5ef9cb76c5a807aa0cecdddec">hypro::Path&lt; Number, tNumber &gt;::addTimeStep()</a>, and <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8d448a4333541919064260a40e72fe73"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -561,7 +579,7 @@ template&lt;typename State &gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::addTransitionToPath </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a> &gt; *&#160;</td>
           <td class="paramname"><em>trans</em>, </td>
         </tr>
         <tr>
@@ -585,13 +603,15 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00225">225</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1Path.html#a391e302fe17175b1083528a1d1f70cb1">hypro::Path&lt; Number, tNumber &gt;::addTransition()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ae57abbf70787b92b8517e161e5c8fcfc"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -618,7 +638,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::convertRefinement </td>
@@ -646,19 +666,19 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt;State&gt;*&gt; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getChildrenForTransition </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a> &gt; *&#160;</td>
           <td class="paramname"><em>transition</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="ReachTreeNode_8h_source.html#l00192">hypro::ReachTreeNode&lt; State &gt;::getRefinements()</a>, <a class="el" href="ReachTreeNode_8h_source.html#l00123">hypro::ReachTreeNode&lt; State &gt;::ReachTreeNode()</a>, and <a class="el" href="ReachTreeNode_8h_source.html#l00194">hypro::ReachTreeNode&lt; State &gt;::rGetRefinements()</a>.</p>
+<p>Referenced by <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00008">hypro::isTreeExtension()</a>.</p>
 
 </div>
 </div>
@@ -666,7 +686,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getDotRepresentation </td>
@@ -677,13 +697,13 @@ template&lt;typename State &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;&#160;</td>
           <td class="paramname"><em>nodes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;&#160;</td>
           <td class="paramname"><em>transitions</em>, </td>
         </tr>
         <tr>
@@ -706,7 +726,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">unsigned <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getLatestBTLevel </td>
@@ -723,7 +743,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">unsigned <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getLatestFullyComputedLevel </td>
@@ -740,7 +760,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getLevelCnt </td>
@@ -758,7 +778,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -785,13 +805,13 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt;Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&amp; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getPath </td>
+          <td class="memname">const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt;<a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&amp; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getPath </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -812,7 +832,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -833,7 +853,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00192">192</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">hypro::ReachTreeNode&lt; State &gt;::getChildrenForTransition()</a>.</p>
+<p>Referenced by <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00072">hypro::nodeUpdater&lt; State &gt;::createAndRaiseRefinementTask()</a>, and <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00109">hypro::nodeUpdater&lt; State &gt;::createAndRaiseTask()</a>.</p>
 
 </div>
 </div>
@@ -841,7 +861,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const State::repVariant&amp; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getSetAtLevel </td>
@@ -859,7 +879,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const State&amp; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getStateAtLevel </td>
@@ -877,7 +897,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">const carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&amp; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::getTimestamp </td>
@@ -904,7 +924,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::hasFixedPoint </td>
@@ -932,7 +952,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::isFullyComputedOnSomeLevel </td>
@@ -949,7 +969,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::refineIntervals </td>
@@ -966,7 +986,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -987,7 +1007,7 @@ template&lt;typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00194">194</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1ReachTreeNode.html#ab4fc2151c49b33c494ddb8aaf37f9c96">hypro::ReachTreeNode&lt; State &gt;::getChildrenForTransition()</a>.</p>
+<p>Referenced by <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00072">hypro::nodeUpdater&lt; State &gt;::createAndRaiseRefinementTask()</a>, and <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00109">hypro::nodeUpdater&lt; State &gt;::createAndRaiseTask()</a>.</p>
 
 </div>
 </div>
@@ -995,7 +1015,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::setNewRefinement </td>
@@ -1017,13 +1037,15 @@ template&lt;typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00072">hypro::nodeUpdater&lt; State &gt;::createAndRaiseRefinementTask()</a>, and <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00109">hypro::nodeUpdater&lt; State &gt;::createAndRaiseTask()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aab47eff1e87290bc5073aedb04e48995"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::setParent </td>
@@ -1041,7 +1063,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::setTimestamp </td>
@@ -1063,13 +1085,15 @@ template&lt;typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="example__rectangularReachability_8cpp_source.html#l00014">main()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="acb5b59f230a8b87dad6f7ac395d4db05"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::updateContent </td>
@@ -1081,6 +1105,8 @@ template&lt;typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html#l00072">hypro::nodeUpdater&lt; State &gt;::createAndRaiseRefinementTask()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
@@ -1088,7 +1114,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <div class="memtemplate">
 template&lt;typename S &gt; </div>
 <table class="mlabels">
@@ -1128,7 +1154,7 @@ template&lt;typename S &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <div class="memtemplate">
 template&lt;typename S &gt; </div>
 <table class="mlabels">
@@ -1166,7 +1192,7 @@ template&lt;typename S &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <div class="memtemplate">
 template&lt;typename S &gt; </div>
 <table class="mlabels">
@@ -1207,13 +1233,13 @@ template&lt;typename S &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a>&lt;Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::mPath</td>
+          <td class="memname"><a class="el" href="classhypro_1_1Path.html">Path</a>&lt;<a class="el" href="classhypro_1_1ReachTreeNode.html#a13505532dc28ac5e8ae517a022fb6019">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a>&lt; State &gt;::mPath</td>
         </tr>
       </table>
   </td>
@@ -1231,7 +1257,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -1257,7 +1283,7 @@ template&lt;typename State &gt; </div>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State &gt; </div>
+template&lt;typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">

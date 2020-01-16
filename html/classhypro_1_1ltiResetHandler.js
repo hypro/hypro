@@ -1,5 +1,6 @@
 var classhypro_1_1ltiResetHandler =
 [
+    [ "Number", "classhypro_1_1ltiResetHandler.html#a01a1ecdc0708af3798fade0ca0baf172", null ],
     [ "ltiResetHandler", "classhypro_1_1ltiResetHandler.html#a2a82060214bf9f235a8de5b863d1e2be", null ],
     [ "ltiResetHandler", "classhypro_1_1ltiResetHandler.html#aa79f55335ffe2c3d04f634d094c83dbb", null ],
     [ "handle", "classhypro_1_1ltiResetHandler.html#a1839c779fe7d525804cedab36d9c0fd4", null ],

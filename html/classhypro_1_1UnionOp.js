@@ -16,5 +16,9 @@ var classhypro_1_1UnionOp =
     [ "intersectDims", "classhypro_1_1UnionOp.html#ac7232cedf8b33dec0a127cd0563dad76", null ],
     [ "setDimension", "classhypro_1_1UnionOp.html#aa2999ce4486ad37f8f919e836178c049", null ],
     [ "supremumPoint", "classhypro_1_1UnionOp.html#a01da81f32c063358b445ff2c43891b69", null ],
-    [ "transform", "classhypro_1_1UnionOp.html#aa64dcb55fd70e5788789ce048564c9ca", null ]
+    [ "transform", "classhypro_1_1UnionOp.html#aa64dcb55fd70e5788789ce048564c9ca", null ],
+    [ "mChildren", "classhypro_1_1UnionOp.html#aa105230e04fdf3d7e2c2d5326d926d4d", null ],
+    [ "mDimension", "classhypro_1_1UnionOp.html#ae2f73fd56d3987702784e8bddd31b762", null ],
+    [ "originCount", "classhypro_1_1UnionOp.html#a5fb4957f3e2d2d27fda9c896b217fa23", null ],
+    [ "type", "classhypro_1_1UnionOp.html#a9823d5afd888e21869555317aa535765", null ]
 ];

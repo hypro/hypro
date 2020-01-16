@@ -41,5 +41,11 @@ var classhypro_1_1Facet =
     [ "setPoints", "classhypro_1_1Facet.html#a184356a95fbf82b50de2cf7a3c5561ba", null ],
     [ "vertices", "classhypro_1_1Facet.html#adc0b29894f055fe55757cd941c4698c8", null ],
     [ "operator!=", "classhypro_1_1Facet.html#a479f8f10e9e7cace2926c2f77bb80e5d", null ],
-    [ "operator==", "classhypro_1_1Facet.html#a1da8a8469a0de0c15516da9a39fd20f8", null ]
+    [ "operator==", "classhypro_1_1Facet.html#a1da8a8469a0de0c15516da9a39fd20f8", null ],
+    [ "mHalfspace", "classhypro_1_1Facet.html#ac53a639b49b417d90f68740fa2b2a89e", null ],
+    [ "mNeighbors", "classhypro_1_1Facet.html#a185601e6b273455b7994858dc7e45d1e", null ],
+    [ "mNormal", "classhypro_1_1Facet.html#af5a6668b8edf3a2ecb2e323289776bcb", null ],
+    [ "mOutsideSet", "classhypro_1_1Facet.html#ac2bafbfd669945ef72eb95828bc1d6f0", null ],
+    [ "mScalar", "classhypro_1_1Facet.html#aaba9a0a3881117ddca3d10b9bdbf7b9e", null ],
+    [ "mVertices", "classhypro_1_1Facet.html#a249aab2307d97806591b18d45f6967e0", null ]
 ];

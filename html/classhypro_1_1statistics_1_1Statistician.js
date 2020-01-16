@@ -4,5 +4,6 @@ var classhypro_1_1statistics_1_1Statistician =
     [ "add", "classhypro_1_1statistics_1_1Statistician.html#a634a3a9148799842daf6135227ae6df9", null ],
     [ "get", "classhypro_1_1statistics_1_1Statistician.html#a1860b7383dfbdb74aba9b9af00226e3a", null ],
     [ "reset", "classhypro_1_1statistics_1_1Statistician.html#abbeb403188929576d411f148a806cd13", null ],
-    [ "operator<<", "classhypro_1_1statistics_1_1Statistician.html#a93021d1e370749dff8ca13fc08dd8bea", null ]
+    [ "operator<<", "classhypro_1_1statistics_1_1Statistician.html#a93021d1e370749dff8ca13fc08dd8bea", null ],
+    [ "counters", "classhypro_1_1statistics_1_1Statistician.html#a7b65a082794456ef095755817c74be39", null ]
 ];

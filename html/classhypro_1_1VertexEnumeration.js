@@ -30,5 +30,14 @@ var classhypro_1_1VertexEnumeration =
     [ "printPoints", "classhypro_1_1VertexEnumeration.html#a130311349c35c413cae7ff1284af330d", null ],
     [ "printPositiveCones", "classhypro_1_1VertexEnumeration.html#a6c18b28cf6b2b3f0e60ebcb152ae33e4", null ],
     [ "printPositivePoints", "classhypro_1_1VertexEnumeration.html#aa0e81c5f20be1098f0ac34653d1eaad2", null ],
-    [ "toGeneralCoordinates", "classhypro_1_1VertexEnumeration.html#a64c95b3ddb91524beede68a6b42e1d8d", null ]
+    [ "toGeneralCoordinates", "classhypro_1_1VertexEnumeration.html#a64c95b3ddb91524beede68a6b42e1d8d", null ],
+    [ "mCones", "classhypro_1_1VertexEnumeration.html#a945410a99228f0a493d18526a932212e", null ],
+    [ "mDictionaries", "classhypro_1_1VertexEnumeration.html#af02120c08104bb9a3730d674437ec768", null ],
+    [ "mHsv", "classhypro_1_1VertexEnumeration.html#aa4f1365a2d8eaf010428be93b420e33e", null ],
+    [ "mLinealtySpace", "classhypro_1_1VertexEnumeration.html#a2f1e85ec4593367480360b06e5d486bf", null ],
+    [ "mOffset", "classhypro_1_1VertexEnumeration.html#a7e12aa22132830c84b3886c6522be90a", null ],
+    [ "mPivotingMatrix", "classhypro_1_1VertexEnumeration.html#a6b0df0a9ceca730255c15d30ff39ee6e", null ],
+    [ "mPoints", "classhypro_1_1VertexEnumeration.html#aca54294a9ac719e2014c5628109ab8bc", null ],
+    [ "mPositiveCones", "classhypro_1_1VertexEnumeration.html#a21f4c2dc4d1ccd0e238a132c117982f9", null ],
+    [ "mPositivePoints", "classhypro_1_1VertexEnumeration.html#a46b94c5563bd2568c47c03dbdbaf905f", null ]
 ];

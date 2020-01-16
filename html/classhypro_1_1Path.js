@@ -35,5 +35,7 @@ var classhypro_1_1Path =
     [ "sharedPrefix", "classhypro_1_1Path.html#aedb7b1e110b4a5fbdae6789af7a70932", null ],
     [ "sharesPrefix", "classhypro_1_1Path.html#adc455bc9c3902b36a77df4aae94d50d2", null ],
     [ "size", "classhypro_1_1Path.html#aa1b47ff49192164d8bf24107503e0cd7", null ],
-    [ "operator<<", "classhypro_1_1Path.html#aeb0efe753dd97d35fdb2dd90143c913c", null ]
+    [ "operator<<", "classhypro_1_1Path.html#aeb0efe753dd97d35fdb2dd90143c913c", null ],
+    [ "chatteringZeno", "classhypro_1_1Path.html#a4552b08461f68ab614f50d9027e05318", null ],
+    [ "mPath", "classhypro_1_1Path.html#ae55472b514dd4773a48a7fcc2f35dff2", null ]
 ];

@@ -51,5 +51,7 @@ var classhypro_1_1TaylorModel =
     [ "truncation", "classhypro_1_1TaylorModel.html#a63511fa713d590b9d5cd15ad62a51f91", null ],
     [ "truncation_nr", "classhypro_1_1TaylorModel.html#abfd6cabb7f734f935c479dad23d18986", null ],
     [ "Flowpipe< Number >", "classhypro_1_1TaylorModel.html#ad97c6b0e53bbc5852f09dcdf00875c2f", null ],
-    [ "operator<<", "classhypro_1_1TaylorModel.html#abea673cee44d401bf476e442b98de1bc", null ]
+    [ "operator<<", "classhypro_1_1TaylorModel.html#abea673cee44d401bf476e442b98de1bc", null ],
+    [ "expansion", "classhypro_1_1TaylorModel.html#a0a5053464a038ee91dd6a5a583bcea97", null ],
+    [ "remainder", "classhypro_1_1TaylorModel.html#afe15c7024bbd75ce6d38137a8e36d9f3", null ]
 ];

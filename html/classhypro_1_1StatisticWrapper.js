@@ -14,5 +14,6 @@ var classhypro_1_1StatisticWrapper =
     [ "satisfiesHalfspaces", "classhypro_1_1StatisticWrapper.html#ab9782e8b9f355dd20959cb7745f9f0d2", null ],
     [ "unite", "classhypro_1_1StatisticWrapper.html#aeb83ec47a14432cf669007b093259543", null ],
     [ "vertices", "classhypro_1_1StatisticWrapper.html#a820b9a08215f47bcc69d440584d60751", null ],
-    [ "operator<<", "classhypro_1_1StatisticWrapper.html#ab508a9d104127d4a3248a53b1292fb25", null ]
+    [ "operator<<", "classhypro_1_1StatisticWrapper.html#ab508a9d104127d4a3248a53b1292fb25", null ],
+    [ "mObject", "classhypro_1_1StatisticWrapper.html#adaee6e574beb9750fb3fa21f93e69b8c", null ]
 ];

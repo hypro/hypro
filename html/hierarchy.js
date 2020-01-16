@@ -39,6 +39,7 @@ var hierarchy =
     [ "hypro::CarlPolytopeT< Number, Converter, Setting >", "classhypro_1_1CarlPolytopeT.html", null ],
     [ "hypro::ChildTimingInformation< N >", "structhypro_1_1ChildTimingInformation.html", null ],
     [ "hypro::ChildTimingInformation< Number >", "structhypro_1_1ChildTimingInformation.html", null ],
+    [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
     [ "context", null, [
@@ -213,6 +214,10 @@ var hierarchy =
       ] ]
     ] ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", null ],
+    [ "hypro::HybridSystemLexer::Initializer", "structhypro_1_1HybridSystemLexer_1_1Initializer.html", null ],
+    [ "hypro::HybridSystemParser::Initializer", "structhypro_1_1HybridSystemParser_1_1Initializer.html", null ],
+    [ "hypro::HybridAutomatonLexer::Initializer", "structhypro_1_1HybridAutomatonLexer_1_1Initializer.html", null ],
+    [ "hypro::HybridAutomatonParser::Initializer", "structhypro_1_1HybridAutomatonParser_1_1Initializer.html", null ],
     [ "Input_equation", "structInput__equation.html", null ],
     [ "hypro::intersectionContent< Number, Setting >", "structhypro_1_1intersectionContent.html", null ],
     [ "hypro::IntervalAssignment< Number >", "structhypro_1_1IntervalAssignment.html", null ],

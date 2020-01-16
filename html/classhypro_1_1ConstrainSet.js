@@ -15,5 +15,6 @@ var classhypro_1_1ConstrainSet =
     [ "toPoint", "classhypro_1_1ConstrainSet.html#a1bb721ee60d961d343efe8f46b4907d1", null ],
     [ "operator!=", "classhypro_1_1ConstrainSet.html#af8465173c94a19ea027cc8fb7101ab41", null ],
     [ "operator<<", "classhypro_1_1ConstrainSet.html#ac967d7d904c2d93411d6cb4d15ab2494", null ],
-    [ "operator==", "classhypro_1_1ConstrainSet.html#a9df143924357e33e53c1a5c0ce176f56", null ]
+    [ "operator==", "classhypro_1_1ConstrainSet.html#a9df143924357e33e53c1a5c0ce176f56", null ],
+    [ "constrainSet", "classhypro_1_1ConstrainSet.html#a7764b657323301420db4ce0273f01749", null ]
 ];

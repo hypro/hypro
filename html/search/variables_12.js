@@ -1,25 +1,11 @@
 var searchData=
 [
-  ['test_5f',['TEST_',['../structhypro_1_1SupportFunctionSetting.html#a4a254f3ce7a31a9d69c9b0e2889b08b2',1,'hypro::SupportFunctionSetting::TEST_()'],['../structhypro_1_1NoReduction.html#ade5a602bda9a73b2284248bd396280d0',1,'hypro::NoReduction::TEST_()']]],
-  ['testdbm',['testDBM',['../example__differenceBounds_8cpp.html#abf2a36439832096c247d10c6e58bf00d',1,'example_differenceBounds.cpp']]],
-  ['testdbm2',['testDBM2',['../example__differenceBounds_8cpp.html#ad83ab22c9843b85419f3a88042735104',1,'example_differenceBounds.cpp']]],
-  ['testdbm3',['testDBM3',['../example__differenceBounds_8cpp.html#a71b16177f09bb76cc304421b52157baf',1,'example_differenceBounds.cpp']]],
-  ['testdbmextra',['testDBMExtra',['../example__differenceBounds_8cpp.html#a44b32e746de3c6fbcdc85d3aef8f4d7f',1,'example_differenceBounds.cpp']]],
-  ['testhpolytope',['testHPolytope',['../example__differenceBounds_8cpp.html#a6b7b1e7186aa08f8621731c70c0083f2',1,'example_differenceBounds.cpp']]],
-  ['threadid',['threadId',['../structhypro_1_1PlotData.html#aac8564fd747a04a6da1c450491dd58ee',1,'hypro::PlotData']]],
-  ['timebound',['timeBound',['../structhypro_1_1ReachabilitySettings.html#a44a833ef02d4ada2a384afe29cbdeeba',1,'hypro::ReachabilitySettings']]],
-  ['timeinterval',['timeInterval',['../structhypro_1_1TPathElement.html#a571a283d729e8360a3b7473537759349',1,'hypro::TPathElement']]],
-  ['timepoint',['timePoint',['../structhypro_1_1endPoint.html#a6075e987b10d5af189798f06ee13bd25',1,'hypro::endPoint']]],
-  ['timestep',['timeStep',['../structhypro_1_1ReachabilitySettings.html#a52e2aa09e72bba3c3c4385c18f7248aa',1,'hypro::ReachabilitySettings']]],
-  ['timinginformation',['timingInformation',['../structhypro_1_1ChildTimingInformation.html#a086eb42c041e7d218032e77bcc1384ec',1,'hypro::ChildTimingInformation']]],
-  ['timinglevel',['timingLevel',['../structhypro_1_1TBacktrackingInfo.html#a858ffcca080d75c5fe328476081704b2',1,'hypro::TBacktrackingInfo']]],
-  ['tms',['tms',['../classhypro_1_1TaylorModelVec.html#adc43b668ffdcaa15de65a285b84cde49',1,'hypro::TaylorModelVec']]],
-  ['tmv',['tmv',['../classhypro_1_1Flowpipe.html#ad4cd19fa3db555fa9f752b6cad607ff9',1,'hypro::Flowpipe']]],
-  ['tmvpre',['tmvPre',['../classhypro_1_1Flowpipe.html#ac9151d4fca834fb6f3f06c2eccea3816',1,'hypro::Flowpipe']]],
-  ['trafoinput',['trafoInput',['../structhypro_1_1STflowpipeSegment.html#afb905c91d87fb323dabd36e31b98e626',1,'hypro::STflowpipeSegment']]],
-  ['trajectory_5fplot',['TRAJECTORY_PLOT',['../structFlags.html#a1b78fbc048625cad2017688b209856c3',1,'Flags']]],
-  ['transition',['transition',['../structhypro_1_1TPathElement.html#a5a711210c45c6cf2dccb43297650562c',1,'hypro::TPathElement']]],
-  ['treenode',['treeNode',['../structhypro_1_1Task.html#a4fa85face7a3d93b4ada24cca2645263',1,'hypro::Task']]],
-  ['type',['type',['../structhypro_1_1endPoint.html#a4cccaba4af21780fc3c5d912f7bffcc6',1,'hypro::endPoint']]],
-  ['typeofrep',['typeOfRep',['../structhypro_1_1LeafData.html#a30b7c9b0be29cbc855c44f97640b7dfd',1,'hypro::LeafData']]]
+  ['sets',['sets',['../structhypro_1_1PlotData.html#a163b67a2d26ae415126e3611b3b1b6c3',1,'hypro::PlotData']]],
+  ['sf_5fcache_5fsize',['SF_CACHE_SIZE',['../group__globals.html#ga2ef0021bdfa1b645576c87f8d0dacef4',1,'config.h']]],
+  ['state_5f',['state_',['../classhypro_1_1Spinlock.html#a12eb8dc4b8bb110e92ec8f70dc21cd41',1,'hypro::Spinlock']]],
+  ['stop_5fratio',['STOP_RATIO',['../structhypro_1_1UtilSetting.html#ad3e150ed26408438d91a0276779b1372',1,'hypro::UtilSetting']]],
+  ['successivetransformations',['successiveTransformations',['../structhypro_1_1trafoContent.html#a8bfdfe3a9e4fcce698a08f7c7602f32f',1,'hypro::trafoContent::successiveTransformations()'],['../structhypro_1_1TrafoData.html#afcbef4e6a217dcf61c42cafad1b4939a',1,'hypro::TrafoData::successiveTransformations()'],['../classhypro_1_1TrafoOp.html#a4a2b65cbf4715184ba49478653685652',1,'hypro::TrafoOp::successiveTransformations()']]],
+  ['supportfunction_5fverbose',['SUPPORTFUNCTION_VERBOSE',['../structhypro_1_1SupportFunctionSetting.html#a99c61923c917c923bca327152c38136d',1,'hypro::SupportFunctionSetting::SUPPORTFUNCTION_VERBOSE()'],['../structhypro_1_1NoReduction.html#ac77af7fa894e62f522525690b5e37d8c',1,'hypro::NoReduction::SUPPORTFUNCTION_VERBOSE()']]],
+  ['supportfunctioncontent_3c_20number_2c_20setting_20_3e',['SupportFunctionContent&lt; Number, Setting &gt;',['../classhypro_1_1PolytopeSupportFunction.html#a8405859f4a23d2c11bb9905c1b6de0b4',1,'hypro::PolytopeSupportFunction']]],
+  ['supportvalue',['supportValue',['../structhypro_1_1EvaluationResult.html#a9277925fdcd332e8b9528b9ca603e846',1,'hypro::EvaluationResult']]]
 ];

@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1EventTimingContainer.htm
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1EventTimingContainer-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -198,8 +199,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a51537e0bd0788708c4623d349ec0dbba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1bbabd180e858b1364763fe0cb23729"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#ad1bbabd180e858b1364763fe0cb23729">insertBadState</a> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeInterval, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> type)</td></tr>
 <tr class="separator:ad1bbabd180e858b1364763fe0cb23729"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a8a699af18a2a95909237ac94740bb7"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#a7a8a699af18a2a95909237ac94740bb7">getDotRepresentation</a> (std::size_t startIndex, std::string &amp;nodes, std::string &amp;transitions, std::vector&lt; unsigned &gt; &amp;levels) const </td></tr>
+<tr class="memitem:a7a8a699af18a2a95909237ac94740bb7"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#a7a8a699af18a2a95909237ac94740bb7">getDotRepresentation</a> (std::size_t startIndex, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;nodes, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;transitions, std::vector&lt; unsigned &gt; &amp;levels) const </td></tr>
 <tr class="separator:a7a8a699af18a2a95909237ac94740bb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:acd32d26eb11e32eae6675176a4730033"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#acd32d26eb11e32eae6675176a4730033">mInvariantEvents</a></td></tr>
+<tr class="separator:acd32d26eb11e32eae6675176a4730033"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a88df7cf522bf72771aa177982969ca"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *, <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#a3a88df7cf522bf72771aa177982969ca">mTransitionEvents</a></td></tr>
+<tr class="separator:a3a88df7cf522bf72771aa177982969ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af900cedad0b5c82983aa5395e9177637"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#af900cedad0b5c82983aa5395e9177637">mBadStateEvents</a></td></tr>
+<tr class="separator:af900cedad0b5c82983aa5395e9177637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfaf70a57d79f36f58921b3d610fc83d"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EventTimingContainer.html#adfaf70a57d79f36f58921b3d610fc83d">mutex</a></td></tr>
+<tr class="separator:adfaf70a57d79f36f58921b3d610fc83d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -241,6 +253,8 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00022">22</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00029">hypro::EventTimingContainer&lt; N &gt;::EventTimingContainer()</a>.</p>
 
 </div>
 </div>
@@ -339,6 +353,8 @@ template&lt;typename Number&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00029">hypro::EventTimingContainer&lt; N &gt;::EventTimingContainer()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -357,6 +373,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00060">hypro::EventTimingContainer&lt; N &gt;::rGetInvariantTimings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a7a8a699af18a2a95909237ac94740bb7"></a>
@@ -374,13 +392,13 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;&#160;</td>
           <td class="paramname"><em>nodes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;&#160;</td>
           <td class="paramname"><em>transitions</em>, </td>
         </tr>
         <tr>
@@ -413,6 +431,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00054">hypro::EventTimingContainer&lt; N &gt;::setBadStateTimings()</a>.</p>
 
 </div>
 </div>
@@ -458,6 +478,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00054">hypro::EventTimingContainer&lt; N &gt;::setBadStateTimings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a84daf3fe43e8897aa0fc8b50e2d6ac3e"></a>
@@ -492,6 +514,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
 
 </div>
 </div>
@@ -539,6 +563,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="af790b8d3d09a4ae3ff5e9b62d2db645e"></a>
@@ -585,6 +611,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0e8ae83cb33525c2c79b74bc002ea386"></a>
@@ -630,6 +658,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00060">hypro::EventTimingContainer&lt; N &gt;::rGetInvariantTimings()</a>.</p>
 
 </div>
 </div>
@@ -687,6 +717,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00060">hypro::EventTimingContainer&lt; N &gt;::rGetInvariantTimings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ac78c5032a38c9aa46fa9a29bbfee8686"></a>
@@ -704,6 +736,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00045">hypro::EventTimingContainer&lt; N &gt;::getMutex()</a>.</p>
 
 </div>
 </div>
@@ -733,6 +767,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a51537e0bd0788708c4623d349ec0dbba"></a>
@@ -760,6 +796,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
 
 </div>
 </div>
@@ -795,6 +833,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a964f004fe99a88c744e9c04443529e2c"></a>
@@ -811,6 +851,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00045">hypro::EventTimingContainer&lt; N &gt;::getMutex()</a>.</p>
 
 </div>
 </div>
@@ -830,6 +872,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00045">hypro::EventTimingContainer&lt; N &gt;::getMutex()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a2c061dcf35a04e02f61b2910a6c018c3"></a>
@@ -847,6 +891,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00029">hypro::EventTimingContainer&lt; N &gt;::EventTimingContainer()</a>.</p>
 
 </div>
 </div>
@@ -910,6 +956,8 @@ template&lt;typename Number&gt; </div>
       </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00054">hypro::EventTimingContainer&lt; N &gt;::setBadStateTimings()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a60408d5c4543f07a6d0608afe3d04fbc"></a>
@@ -927,6 +975,8 @@ template&lt;typename Number&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00067">hypro::EventTimingContainer&lt; N &gt;::hasTransition()</a>.</p>
 
 </div>
 </div>
@@ -1164,6 +1214,111 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00091">91</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="af900cedad0b5c82983aa5395e9177637"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1EventTimingContainer.html">hypro::EventTimingContainer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mBadStateEvents</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00017">17</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00022">hypro::EventTimingContainer&lt; N &gt;::EventTimingContainer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acd32d26eb11e32eae6675176a4730033"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1EventTimingContainer.html">hypro::EventTimingContainer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mInvariantEvents</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00015">15</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00060">hypro::EventTimingContainer&lt; N &gt;::rGetInvariantTimings()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3a88df7cf522bf72771aa177982969ca"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;*, <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; &gt; <a class="el" href="classhypro_1_1EventTimingContainer.html">hypro::EventTimingContainer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mTransitionEvents</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00016">16</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00022">hypro::EventTimingContainer&lt; N &gt;::EventTimingContainer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adfaf70a57d79f36f58921b3d610fc83d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex <a class="el" href="classhypro_1_1EventTimingContainer.html">hypro::EventTimingContainer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mutex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="EventTimingContainer_8h_source.html#l00019">19</a> of file <a class="el" href="EventTimingContainer_8h_source.html">EventTimingContainer.h</a>.</p>
+
+<p>Referenced by <a class="el" href="EventTimingContainer_8h_source.html#l00045">hypro::EventTimingContainer&lt; N &gt;::getMutex()</a>.</p>
 
 </div>
 </div>

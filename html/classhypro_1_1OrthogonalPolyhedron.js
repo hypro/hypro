@@ -36,5 +36,6 @@ var classhypro_1_1OrthogonalPolyhedron =
     [ "vertices", "classhypro_1_1OrthogonalPolyhedron.html#ab49118d193b13e0f75dcd5cd040108a0", null ],
     [ "operator!=", "classhypro_1_1OrthogonalPolyhedron.html#a6d850369eca2a8d0fb96281961e5a6e7", null ],
     [ "operator<<", "classhypro_1_1OrthogonalPolyhedron.html#a538c180310ca712d9c517779f5831e4f", null ],
-    [ "operator==", "classhypro_1_1OrthogonalPolyhedron.html#a306eac6c039e311fd51ee757949cfadc", null ]
+    [ "operator==", "classhypro_1_1OrthogonalPolyhedron.html#a306eac6c039e311fd51ee757949cfadc", null ],
+    [ "mGrid", "classhypro_1_1OrthogonalPolyhedron.html#a325617f2319cc4c5564251852713b9ca", null ]
 ];

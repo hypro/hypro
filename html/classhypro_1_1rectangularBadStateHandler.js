@@ -1,5 +1,6 @@
 var classhypro_1_1rectangularBadStateHandler =
 [
+    [ "Number", "classhypro_1_1rectangularBadStateHandler.html#a3088f4c5f0342118f50864d8bf08a918", null ],
     [ "rectangularBadStateHandler", "classhypro_1_1rectangularBadStateHandler.html#a3aafd90bdeddd4c3fd762fab2861d24b", null ],
     [ "rectangularBadStateHandler", "classhypro_1_1rectangularBadStateHandler.html#a0208efc129669ed505f1b15cb4b3f01e", null ],
     [ "getMarkedForDelete", "classhypro_1_1rectangularBadStateHandler.html#ab6bf775c6a6fb210d9d4e75d20024b88", null ],

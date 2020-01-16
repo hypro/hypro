@@ -18,5 +18,12 @@ var classhypro_1_1ConvexHull =
     [ "projectOnLinealty", "classhypro_1_1ConvexHull.html#aec105b132fc95888343d2773a569c10b", null ],
     [ "toDual", "classhypro_1_1ConvexHull.html#ad7cf4ffa337f35a465d84940f8b2f917", null ],
     [ "toPrimal", "classhypro_1_1ConvexHull.html#affce5c30592a0551bd9bf94578f8c515", null ],
-    [ "translateHsv", "classhypro_1_1ConvexHull.html#ad3a6390cab0ea7170b8f15d88d973368", null ]
+    [ "translateHsv", "classhypro_1_1ConvexHull.html#ad3a6390cab0ea7170b8f15d88d973368", null ],
+    [ "mCone", "classhypro_1_1ConvexHull.html#a5e58e50cb2590f5d1f898f6a91c06bea", null ],
+    [ "mConeHsv", "classhypro_1_1ConvexHull.html#a5789f504b9bb2c7c048d2a741a40535c", null ],
+    [ "mDualHsv", "classhypro_1_1ConvexHull.html#a60ad2547258adb9dee191a1d50d70908", null ],
+    [ "mHsv", "classhypro_1_1ConvexHull.html#a63f3a25b5296061d1f4ab8ec5a2483c2", null ],
+    [ "mLinealtySpace", "classhypro_1_1ConvexHull.html#a7b9457192e825659fe06bf1522d320c7", null ],
+    [ "mOffset", "classhypro_1_1ConvexHull.html#aa72a6603824b7eb7b53ed979ecfab399", null ],
+    [ "mPoints", "classhypro_1_1ConvexHull.html#a7218571bf777fda8db625a732e781911", null ]
 ];

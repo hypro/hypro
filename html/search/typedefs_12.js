@@ -1,7 +1,7 @@
 var searchData=
 [
   ['variablevector',['variableVector',['../classhypro_1_1HybridAutomaton.html#a23883e3b21451c02f57a386d40816445',1,'hypro::HybridAutomaton']]],
-  ['vector',['Vector',['../example__sfIntersection_8cpp.html#a04ebfdd7a98f7cbd76d7cd48a0929824',1,'Vector():&#160;example_sfIntersection.cpp'],['../namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888',1,'hypro::Vector()']]],
+  ['vector',['Vector',['../namespacehypro.html#a022a3007876dc9cfea5cde7563e6c888',1,'hypro::Vector()'],['../example__sfIntersection_8cpp.html#a04ebfdd7a98f7cbd76d7cd48a0929824',1,'Vector():&#160;example_sfIntersection.cpp']]],
   ['vector_5ft',['vector_t',['../namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a',1,'hypro']]],
   ['vectorset',['vectorSet',['../namespacehypro.html#a2c54bbae67220c4184f0ad0c075c6c98',1,'hypro']]],
   ['vertexset',['vertexSet',['../classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a',1,'hypro::Ridge']]],

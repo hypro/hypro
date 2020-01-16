@@ -1,5 +1,6 @@
 var classhypro_1_1ltiGuardHandler =
 [
+    [ "Number", "classhypro_1_1ltiGuardHandler.html#acca48944540882092aa3d3ca96cc2064", null ],
     [ "ltiGuardHandler", "classhypro_1_1ltiGuardHandler.html#a0a6834b065d7463b302973bfe2d5c168", null ],
     [ "ltiGuardHandler", "classhypro_1_1ltiGuardHandler.html#ac2a437c767f18ad7391a78abfe3c7b5d", null ],
     [ "getMarkedForDelete", "classhypro_1_1ltiGuardHandler.html#afc312d480a56dd71492426ecbf4cd749", null ],

@@ -14,6 +14,7 @@ var searchData=
   ['newempty',['newEmpty',['../classhypro_1_1Point.html#a830a09d72e95221a56568fa9c524710b',1,'hypro::Point']]],
   ['newpplvariable',['newPplVariable',['../classhypro_1_1VariablePool.html#a6a7be803481968266e3c8579e3079faf',1,'hypro::VariablePool']]],
   ['next_5fpicard',['next_picard',['../classhypro_1_1Flowpipe.html#a9362e9bf266c54352f9bf1bc50d8a6aa',1,'hypro::Flowpipe']]],
+  ['nodemanager',['NodeManager',['../classhypro_1_1NodeManager.html#a90f9442f47bed3927d41142d7457fcbc',1,'hypro::NodeManager']]],
   ['nodeupdater',['nodeUpdater',['../structhypro_1_1nodeUpdater.html#a20a7069c5ff34fcc4939c4c14a1234b4',1,'hypro::nodeUpdater']]],
   ['nonemptysetexpression',['nonEmptySetExpression',['../classhypro_1_1HybridSystemParser_1_1ExprFactContext.html#a209a0c5d961fc38deac704c0fd6a0334',1,'hypro::HybridSystemParser::ExprFactContext::nonEmptySetExpression()'],['../classhypro_1_1HybridSystemParser.html#a6ab52af5ce4b8d164eee886f48e84245',1,'hypro::HybridSystemParser::nonEmptySetExpression()'],['../classhypro_1_1HybridSystemParser_1_1InvNeedsSetContext.html#add1f6ea289031913f15b0adaca0a94b2',1,'hypro::HybridSystemParser::InvNeedsSetContext::nonEmptySetExpression()']]],
   ['nonemptysetexpressioncontext',['NonEmptySetExpressionContext',['../classhypro_1_1HybridSystemParser_1_1NonEmptySetExpressionContext.html#ae236cfbfb8472332012fb7df11f9d358',1,'hypro::HybridSystemParser::NonEmptySetExpressionContext']]],

@@ -15,7 +15,8 @@ var dir_293cf7ffd2d1ce76fb1a113fdef90fd7 =
     ] ],
     [ "HybridSystemLexer.cpp", "HybridSystemLexer_8cpp.html", null ],
     [ "HybridSystemLexer.h", "HybridSystemLexer_8h.html", [
-      [ "HybridSystemLexer", "classhypro_1_1HybridSystemLexer.html", "classhypro_1_1HybridSystemLexer" ]
+      [ "HybridSystemLexer", "classhypro_1_1HybridSystemLexer.html", "classhypro_1_1HybridSystemLexer" ],
+      [ "Initializer", "structhypro_1_1HybridSystemLexer_1_1Initializer.html", "structhypro_1_1HybridSystemLexer_1_1Initializer" ]
     ] ],
     [ "HybridSystemParser.cpp", "HybridSystemParser_8cpp.html", null ],
     [ "HybridSystemParser.h", "HybridSystemParser_8h.html", [
@@ -160,7 +161,8 @@ var dir_293cf7ffd2d1ce76fb1a113fdef90fd7 =
       [ "PrintForsContext", "classhypro_1_1HybridSystemParser_1_1PrintForsContext.html", "classhypro_1_1HybridSystemParser_1_1PrintForsContext" ],
       [ "PrintForContext", "classhypro_1_1HybridSystemParser_1_1PrintForContext.html", "classhypro_1_1HybridSystemParser_1_1PrintForContext" ],
       [ "OptPrintWhenContext", "classhypro_1_1HybridSystemParser_1_1OptPrintWhenContext.html", "classhypro_1_1HybridSystemParser_1_1OptPrintWhenContext" ],
-      [ "OptPrintFileContext", "classhypro_1_1HybridSystemParser_1_1OptPrintFileContext.html", "classhypro_1_1HybridSystemParser_1_1OptPrintFileContext" ]
+      [ "OptPrintFileContext", "classhypro_1_1HybridSystemParser_1_1OptPrintFileContext.html", "classhypro_1_1HybridSystemParser_1_1OptPrintFileContext" ],
+      [ "Initializer", "structhypro_1_1HybridSystemParser_1_1Initializer.html", "structhypro_1_1HybridSystemParser_1_1Initializer" ]
     ] ],
     [ "HybridSystemVisitor.cpp", "HybridSystemVisitor_8cpp.html", null ],
     [ "HybridSystemVisitor.h", "HybridSystemVisitor_8h.html", [

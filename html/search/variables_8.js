@@ -1,14 +1,8 @@
 var searchData=
 [
-  ['ia',['ia',['../structhypro_1_1glpk__context.html#a7cf930b33f0329e8d89ddc6fab809860',1,'hypro::glpk_context']]],
-  ['iav',['iAV',['../structInvariants.html#a459db5416b084039aee153b8ed18315a',1,'Invariants']]],
-  ['ib',['ib',['../structInvariants.html#a363e5a2311432f31fbb473c68baa3271',1,'Invariants']]],
-  ['initialset',['initialSet',['../structhypro_1_1RefinementSetting.html#a4e7926b0e7047f50a04733ccd803dfd8',1,'hypro::RefinementSetting::initialSet()'],['../classhypro_1_1ContinuousSystem.html#a224a534f35518c30da22de7b2ed9e43b',1,'hypro::ContinuousSystem::initialSet()']]],
-  ['isdummy',['isDummy',['../structhypro_1_1RefinementSetting.html#a43f8d881492109bf6feb508955b061ce',1,'hypro::RefinementSetting']]],
-  ['isempty',['isEmpty',['../structhypro_1_1RefinementSetting.html#ab71e70941d2a0e43acb5a2662355e925',1,'hypro::RefinementSetting']]],
-  ['isnotredundant',['isNotRedundant',['../structhypro_1_1LeafData.html#aad783c8d97140ae982b17eefb8729d14',1,'hypro::LeafData']]],
-  ['isunsafe',['isUnsafe',['../classhypro_1_1IWorker.html#a015232621f753f5c6e8fbf465784d5a8',1,'hypro::IWorker']]],
-  ['it',['it',['../structhypro_1_1pointIt.html#a1446787e73c3aea335b7dd6173b67b64',1,'hypro::pointIt']]],
-  ['item',['item',['../structhypro_1_1Cacheable.html#a4962c139c4ad6bb42ebcb5045f9f60b3',1,'hypro::Cacheable']]],
-  ['items',['items',['../structhypro_1_1unionContent.html#a23439e5f2b8c26e9cae04a3227095ecf',1,'hypro::unionContent']]]
+  ['hitbadstates',['hitBadStates',['../structhypro_1_1RefinementSetting.html#a7242295cbc4f8db4cff7540186d9f8f7',1,'hypro::RefinementSetting']]],
+  ['hspace',['hspace',['../structhypro_1_1IntersectHalfspaceData.html#af46d2475ec34390bb2f27c5bbd336a3b',1,'hypro::IntersectHalfspaceData::hspace()'],['../classhypro_1_1IntersectHalfspaceOp.html#afffdd891735ca283b209febf3903280e',1,'hypro::IntersectHalfspaceOp::hspace()']]],
+  ['hull_5fplot',['HULL_PLOT',['../structFlags.html#a86060954cf6340ad27d5c6f1edbe4c4f',1,'Flags']]],
+  ['hullconstr',['HULLCONSTR',['../structFlags.html#ae55d592d2815d42effe93db8ca0913c1',1,'Flags']]],
+  ['hypro_5fbox_5favoid_5flinear_5foptimization',['HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION',['../structhypro_1_1BoxLinearOptimizationOn.html#a23457e882ea0d4e32a6b60c58c240713',1,'hypro::BoxLinearOptimizationOn::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION()'],['../structhypro_1_1BoxLinearOptimizationOff.html#a38bbc496b4624816814a23796fe6b8d1',1,'hypro::BoxLinearOptimizationOff::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION()'],['../structhypro_1_1BoxIntervalArithmeticOff.html#a396d9b6b1993e7d1257dce3c3c6bf203',1,'hypro::BoxIntervalArithmeticOff::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION()'],['../structhypro_1_1BoxAllOff.html#ab2deef3fe39137398f60c1f26f64315e',1,'hypro::BoxAllOff::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION()']]]
 ];

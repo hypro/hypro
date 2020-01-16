@@ -37,5 +37,9 @@ var classhypro_1_1Halfspace =
     [ "sizeOfHalfspace", "classhypro_1_1Halfspace.html#ab5a05ef28c6794db8b176693584beca8", null ],
     [ "vector", "classhypro_1_1Halfspace.html#aeece7a108153d254a7e92f732cc732fc", null ],
     [ "vertices", "classhypro_1_1Halfspace.html#a8fff4736952b821ea77f2aed25038022", null ],
-    [ "swap", "classhypro_1_1Halfspace.html#a94426bbcc8dc06ce969b821e010d30f0", null ]
+    [ "swap", "classhypro_1_1Halfspace.html#a94426bbcc8dc06ce969b821e010d30f0", null ],
+    [ "mHash", "classhypro_1_1Halfspace.html#a3b5c5447644fbb2199c0a75e717150d3", null ],
+    [ "mIsInteger", "classhypro_1_1Halfspace.html#a763876cc4f54c9809aca1013c5c9b291", null ],
+    [ "mNormal", "classhypro_1_1Halfspace.html#afb4f505b30ef617366be230a793ce5b1", null ],
+    [ "mScalar", "classhypro_1_1Halfspace.html#a0769de584e9c19c6c1879f49771d3ee8", null ]
 ];

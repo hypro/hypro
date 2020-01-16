@@ -8,5 +8,6 @@ var classhypro_1_1ReachTree =
     [ "getLevelCnt", "classhypro_1_1ReachTree.html#ae17f9d327791a10869e877f440ddac9d", null ],
     [ "getNumberNodes", "classhypro_1_1ReachTree.html#a10c9e6f9fc5653e7d715ac5b26d7e099", null ],
     [ "getRoot", "classhypro_1_1ReachTree.html#a6ddaf5a29994f4de14ac0884ba59e619", null ],
-    [ "getTreeStats", "classhypro_1_1ReachTree.html#a99a86a04e19af8d247b8ec7bdc3049a9", null ]
+    [ "getTreeStats", "classhypro_1_1ReachTree.html#a99a86a04e19af8d247b8ec7bdc3049a9", null ],
+    [ "mRoot", "classhypro_1_1ReachTree.html#a8b3a297b669088e02bc33067cb293eb0", null ]
 ];

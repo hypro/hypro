@@ -36,9 +36,13 @@ var classhypro_1_1OrthogonalPolyhedronT =
     [ "size", "classhypro_1_1OrthogonalPolyhedronT.html#a0df18d848662583c51f6810b6b9417a0", null ],
     [ "supremum", "classhypro_1_1OrthogonalPolyhedronT.html#aaa516f4d8cb3fc7a5d3e8f223187cd2f", null ],
     [ "unite", "classhypro_1_1OrthogonalPolyhedronT.html#aa88586de144b57932b3a3bb658180056", null ],
+    [ "updateBoundaryBox", "classhypro_1_1OrthogonalPolyhedronT.html#ae19eade75a0a0055a4eb12b1fcf6e42c", null ],
     [ "variables", "classhypro_1_1OrthogonalPolyhedronT.html#a0be2dd05bb054d0e2f0d65b4ea231d8c", null ],
     [ "vertices", "classhypro_1_1OrthogonalPolyhedronT.html#ab5d36157d19405c7b0fddb7b61085678", null ],
     [ "operator!=", "classhypro_1_1OrthogonalPolyhedronT.html#ad2762e496c8cf41f584ee56f80d6ec20", null ],
     [ "operator<<", "classhypro_1_1OrthogonalPolyhedronT.html#ab2c9a0b64806359ce1fea380e9bc4044", null ],
-    [ "operator==", "classhypro_1_1OrthogonalPolyhedronT.html#a7ce713be378bea0b6f2e80fed98ab692", null ]
+    [ "operator==", "classhypro_1_1OrthogonalPolyhedronT.html#a7ce713be378bea0b6f2e80fed98ab692", null ],
+    [ "mBoundaryBox", "classhypro_1_1OrthogonalPolyhedronT.html#a888e0893829a5eef3442c16839380ed2", null ],
+    [ "mBoxUpToDate", "classhypro_1_1OrthogonalPolyhedronT.html#aedcc19da4c058fa29d967425db446f93", null ],
+    [ "mGrid", "classhypro_1_1OrthogonalPolyhedronT.html#a8a23f50d5061f71813514ddfc946dd2d", null ]
 ];

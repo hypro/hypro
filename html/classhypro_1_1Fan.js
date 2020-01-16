@@ -10,5 +10,7 @@ var classhypro_1_1Fan =
     [ "get", "classhypro_1_1Fan.html#acdd6fb04006dc35dcdf1c5864ffd921c", null ],
     [ "get", "classhypro_1_1Fan.html#a78097a508744e3fe56e75a317f564749", null ],
     [ "operator=", "classhypro_1_1Fan.html#ac586ac22f94d448cba0c22277c46a0c7", null ],
-    [ "size", "classhypro_1_1Fan.html#ac8d3c0b3b0a81ca96e1e28893356ebd3", null ]
+    [ "size", "classhypro_1_1Fan.html#ac8d3c0b3b0a81ca96e1e28893356ebd3", null ],
+    [ "mCones", "classhypro_1_1Fan.html#adf22165dcc68f4291c68197efb9b6393", null ],
+    [ "mDimension", "classhypro_1_1Fan.html#ac20d3401c190dfb8aefd6ee651166981", null ]
 ];

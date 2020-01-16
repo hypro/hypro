@@ -1,5 +1,6 @@
 var classhypro_1_1timedFirstSegmentHandler =
 [
+    [ "Number", "classhypro_1_1timedFirstSegmentHandler.html#a7b4f5c9fc691b5f239dd6293f8e16256", null ],
     [ "timedFirstSegmentHandler", "classhypro_1_1timedFirstSegmentHandler.html#a21d86bb2b145642c253f008ae06ebde1", null ],
     [ "timedFirstSegmentHandler", "classhypro_1_1timedFirstSegmentHandler.html#a5c22ce1c241215fc982860069d7ef737", null ],
     [ "handle", "classhypro_1_1timedFirstSegmentHandler.html#a91619c252db155f260697a0d33465ded", null ],

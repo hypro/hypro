@@ -1,11 +1,16 @@
 var searchData=
 [
-  ['b',['b',['../structInput__equation.html#af0b1f48bd7a9b5adf43f155d25d7a581',1,'Input_equation']]],
-  ['begin',['begin',['../classhypro_1_1Range.html#ab2d44cfeea69323ff030480937df08e0',1,'hypro::Range']]],
-  ['box',['box',['../classhypro_1_1reachability_1_1detail_1_1bloatBoxVisitor.html#a11310c356d4fe796a30d04e7bfaadce2',1,'hypro::reachability::detail::bloatBoxVisitor']]],
-  ['boxoperator_5fverbose',['BOXOPERATOR_VERBOSE',['../structhypro_1_1SupportFunctionSetting.html#ac095cec6a64c4ca40645c1c2864ec2b3',1,'hypro::SupportFunctionSetting::BOXOPERATOR_VERBOSE()'],['../structhypro_1_1NoReduction.html#a358f449d7ab7fe52fbca3f75339d98fb',1,'hypro::NoReduction::BOXOPERATOR_VERBOSE()']]],
-  ['boxsupportfunction_5fverbose',['BOXSUPPORTFUNCTION_VERBOSE',['../structhypro_1_1SupportFunctionSetting.html#a0872cf052aad5d56686bf13ddbcd28b4',1,'hypro::SupportFunctionSetting::BOXSUPPORTFUNCTION_VERBOSE()'],['../structhypro_1_1NoReduction.html#abcd537c32d40d466e170ff568463eb30',1,'hypro::NoReduction::BOXSUPPORTFUNCTION_VERBOSE()']]],
-  ['btinfo',['btInfo',['../structhypro_1_1Task.html#ac64e5aac2a70750c6c8f878a51690e64',1,'hypro::Task']]],
-  ['btlevel',['btLevel',['../structhypro_1_1TBacktrackingInfo.html#a383ad28c0cad7e91d23ae992e3bb3b70',1,'hypro::TBacktrackingInfo']]],
-  ['btpath',['btPath',['../structhypro_1_1TBacktrackingInfo.html#a8a5815f0833e025a55a2e9ec03e0f59d',1,'hypro::TBacktrackingInfo']]]
+  ['a',['A',['../classhypro_1_1NonLinearOmega0Supportfunction.html#a7d2006e941a0bbb87f23e6aa80192a16',1,'hypro::NonLinearOmega0Supportfunction::A()'],['../structInput__equation.html#a8732e6f9c9731428b148aaf6bf1dbf2a',1,'Input_equation::A()']]],
+  ['absa',['absA',['../classhypro_1_1NonLinearOmega0Supportfunction.html#a95b0a9d46e54dc52f1cd9c2d6d7c3491',1,'hypro::NonLinearOmega0Supportfunction']]],
+  ['absl',['absl',['../classhypro_1_1NonLinearOmega0Supportfunction.html#afa9a7e185c63d0c5a634ef471dc3174a',1,'hypro::NonLinearOmega0Supportfunction']]],
+  ['actuallocation',['actualLocation',['../classhypro_1_1CIFLocVisitor.html#a53bd333f12a55930ae116675881b8c19',1,'hypro::CIFLocVisitor']]],
+  ['addresstorep',['addressToRep',['../structhypro_1_1LeafData.html#a9c2d4ef8a5b186f6041637bca0a81a6a',1,'hypro::LeafData']]],
+  ['approximate_5fas_5fbox',['APPROXIMATE_AS_BOX',['../structhypro_1_1SupportFunctionNewDefault.html#ae41d97ba79e9a08dafc5ef0f9ed6c8cf',1,'hypro::SupportFunctionNewDefault::APPROXIMATE_AS_BOX()'],['../structhypro_1_1SupportFunctionNewMorePrecision.html#a5b4c190695e1bafc08fb66cc90b6a2a8',1,'hypro::SupportFunctionNewMorePrecision::APPROXIMATE_AS_BOX()'],['../structhypro_1_1SupportFunctionNewNoReduction.html#aeeed4f7a6f0f95cd69abe865ddfc78ce',1,'hypro::SupportFunctionNewNoReduction::APPROXIMATE_AS_BOX()'],['../structhypro_1_1SupportFunctionNewLeGuernic.html#a443be77b127552e4eb76e8bf6c24d498',1,'hypro::SupportFunctionNewLeGuernic::APPROXIMATE_AS_BOX()']]],
+  ['ar',['ar',['../structhypro_1_1glpk__context.html#a22b3016cc69e59a36e5ebe67e87a358e',1,'hypro::glpk_context']]],
+  ['arrayscreated',['arraysCreated',['../structhypro_1_1clp__context.html#a86f4ac3e5da4b77795abc59cf1ca2e11',1,'hypro::clp_context::arraysCreated()'],['../structhypro_1_1glpk__context.html#a6731cf145286af345d5a801dcd25e03e',1,'hypro::glpk_context::arraysCreated()']]],
+  ['assignments',['assignments',['../classhypro_1_1Domain.html#a4177cc98abc40922d1805b1911463e93',1,'hypro::Domain::assignments()'],['../classhypro_1_1PolynomialODE.html#a7abd778d252102d60ce3763b9737fc6f',1,'hypro::PolynomialODE::assignments()'],['../classhypro_1_1Range.html#a85a0dea8065db26dfea7555f792ce13a',1,'hypro::Range::assignments()']]],
+  ['avgbranching',['avgBranching',['../structhypro_1_1TreeStatistic.html#ac5e08c1229867a5d3b8bd178853e6f41',1,'hypro::TreeStatistic']]],
+  ['avglevel',['avgLevel',['../structhypro_1_1TreeStatistic.html#aae0a519cd8f56ce7b8931ad20d871b47',1,'hypro::TreeStatistic']]],
+  ['avoid_5fconversion',['AVOID_CONVERSION',['../structhypro_1_1HPolytopeSetting.html#ad799718fb82e1ff9a1403d6ba4bde39d',1,'hypro::HPolytopeSetting::AVOID_CONVERSION()'],['../structhypro_1_1HPolytopeOptimizerCaching.html#a4e8b3ff18d0c29fd72d74e11aa36840a',1,'hypro::HPolytopeOptimizerCaching::AVOID_CONVERSION()']]],
+  ['axes',['axes',['../structhypro_1_1plotting_1_1gnuplotSettings.html#ad4c831cb695d8c24d471d1b46f3411d1',1,'hypro::plotting::gnuplotSettings']]]
 ];

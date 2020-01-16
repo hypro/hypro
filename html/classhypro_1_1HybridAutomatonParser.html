@@ -121,6 +121,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridAutomatonParser.ht
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classhypro_1_1HybridAutomatonParser-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::HybridAutomatonParser Class Reference</div>  </div>
@@ -166,6 +168,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IdentityContext.html">IdentityContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitContext.html">InitContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1HybridAutomatonParser_1_1Initializer.html">Initializer</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitstateContext.html">InitstateContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -347,17 +351,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac07554a53e0e5a3b00736e5936c39b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9761e11cb185bd4cf46a23ace4998538"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a9761e11cb185bd4cf46a23ace4998538">~HybridAutomatonParser</a> ()</td></tr>
 <tr class="separator:a9761e11cb185bd4cf46a23ace4998538"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28bcf74270fe2fad5d8fa830368c0862"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a28bcf74270fe2fad5d8fa830368c0862">getGrammarFileName</a> () const override</td></tr>
+<tr class="memitem:a28bcf74270fe2fad5d8fa830368c0862"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a28bcf74270fe2fad5d8fa830368c0862">getGrammarFileName</a> () const override</td></tr>
 <tr class="separator:a28bcf74270fe2fad5d8fa830368c0862"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad573796167003b9d24da85d9de21950c"><td class="memItemLeft" align="right" valign="top">virtual const antlr4::atn::ATN &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ad573796167003b9d24da85d9de21950c">getATN</a> () const override</td></tr>
 <tr class="separator:ad573796167003b9d24da85d9de21950c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f41bba9140bcf426e68c314597cec74"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a8f41bba9140bcf426e68c314597cec74">getTokenNames</a> () const override</td></tr>
+<tr class="memitem:a8f41bba9140bcf426e68c314597cec74"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a8f41bba9140bcf426e68c314597cec74">getTokenNames</a> () const override</td></tr>
 <tr class="separator:a8f41bba9140bcf426e68c314597cec74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a743333c4f7884b4d7670f9bb31308422"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a743333c4f7884b4d7670f9bb31308422">getRuleNames</a> () const override</td></tr>
+<tr class="memitem:a743333c4f7884b4d7670f9bb31308422"><td class="memItemLeft" align="right" valign="top">virtual const std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a743333c4f7884b4d7670f9bb31308422">getRuleNames</a> () const override</td></tr>
 <tr class="separator:a743333c4f7884b4d7670f9bb31308422"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacbc03abf4113c73ff0c179b435e00b1"><td class="memItemLeft" align="right" valign="top">virtual antlr4::dfa::Vocabulary &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#aacbc03abf4113c73ff0c179b435e00b1">getVocabulary</a> () const override</td></tr>
 <tr class="separator:aacbc03abf4113c73ff0c179b435e00b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada11a50f0828146083909e95cd194b5a"><td class="memItemLeft" align="right" valign="top">const std::map&lt; std::string, std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ada11a50f0828146083909e95cd194b5a">getConstants</a> () const </td></tr>
+<tr class="memitem:ada11a50f0828146083909e95cd194b5a"><td class="memItemLeft" align="right" valign="top">const std::map&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ada11a50f0828146083909e95cd194b5a">getConstants</a> () const </td></tr>
 <tr class="separator:ada11a50f0828146083909e95cd194b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa214592e39794e2e88b96fdf198cc024"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1StartContext.html">StartContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#aa214592e39794e2e88b96fdf198cc024">start</a> ()</td></tr>
 <tr class="separator:aa214592e39794e2e88b96fdf198cc024"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -443,6 +447,34 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a9bfa9e45317b38664d4238cb742b82ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab289981bcb5e9bada83cb41b14687533"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html">PrecisionContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ab289981bcb5e9bada83cb41b14687533">precision</a> ()</td></tr>
 <tr class="separator:ab289981bcb5e9bada83cb41b14687533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ab2989518dca1c668924ac90b58ca406a"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ab2989518dca1c668924ac90b58ca406a">constants</a></td></tr>
+<tr class="separator:ab2989518dca1c668924ac90b58ca406a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a34634b0aa69ae303a7f7af0a07567ba0"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; antlr4::dfa::DFA &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a34634b0aa69ae303a7f7af0a07567ba0">_decisionToDFA</a></td></tr>
+<tr class="separator:a34634b0aa69ae303a7f7af0a07567ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00686b53b3b8bf20dc6cabc63b0c90a4"><td class="memItemLeft" align="right" valign="top">static antlr4::atn::PredictionContextCache&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a00686b53b3b8bf20dc6cabc63b0c90a4">_sharedContextCache</a></td></tr>
+<tr class="separator:a00686b53b3b8bf20dc6cabc63b0c90a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a973f43ac1b96fb1940a0c0e37ce2b4"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a1a973f43ac1b96fb1940a0c0e37ce2b4">_ruleNames</a></td></tr>
+<tr class="separator:a1a973f43ac1b96fb1940a0c0e37ce2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a500629c69cbaeca2e0060917fb2a0d06"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a500629c69cbaeca2e0060917fb2a0d06">_tokenNames</a></td></tr>
+<tr class="separator:a500629c69cbaeca2e0060917fb2a0d06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec88b9f713a02e52a4f79baac5b7a578"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#aec88b9f713a02e52a4f79baac5b7a578">_literalNames</a></td></tr>
+<tr class="separator:aec88b9f713a02e52a4f79baac5b7a578"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae77b7662882e40f0d9263cea7af62eb8"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ae77b7662882e40f0d9263cea7af62eb8">_symbolicNames</a></td></tr>
+<tr class="separator:ae77b7662882e40f0d9263cea7af62eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ad92f088640fbde47b96d8f10db800"><td class="memItemLeft" align="right" valign="top">static antlr4::dfa::Vocabulary&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ae3ad92f088640fbde47b96d8f10db800">_vocabulary</a></td></tr>
+<tr class="separator:ae3ad92f088640fbde47b96d8f10db800"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4d70b23a5dce2a82cc8d1ed68466282"><td class="memItemLeft" align="right" valign="top">static antlr4::atn::ATN&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#ad4d70b23a5dce2a82cc8d1ed68466282">_atn</a></td></tr>
+<tr class="separator:ad4d70b23a5dce2a82cc8d1ed68466282"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ab07cc37816c8c74129fafdb30d3323"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; uint16_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a8ab07cc37816c8c74129fafdb30d3323">_serializedATN</a></td></tr>
+<tr class="separator:a8ab07cc37816c8c74129fafdb30d3323"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a800fffce701f8c35a8989395129c44d9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structhypro_1_1HybridAutomatonParser_1_1Initializer.html">Initializer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonParser.html#a800fffce701f8c35a8989395129c44d9">_init</a></td></tr>
+<tr class="separator:a800fffce701f8c35a8989395129c44d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
@@ -681,6 +713,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00018">18</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00762">_atn</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00754">_decisionToDFA</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00755">_sharedContextCache</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a9761e11cb185bd4cf46a23ace4998538"></a>
@@ -716,9 +750,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00548">548</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00528">hypro::HybridAutomatonParser::ActivitiesContext::intervalexpr()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00451">location()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00520">hypro::HybridAutomatonParser::ActivitiesContext::equation()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00528">hypro::HybridAutomatonParser::ActivitiesContext::intervalexpr()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">LINEAR</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">ODE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">POLY</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00033">RuleActivities</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -737,6 +769,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02477">2477</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">BOX</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">INTERVALAGG</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">PARALLELOTOPE</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00039">RuleAggregation</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abc4e76112acfffd7e3e9bb1a807720c4"></a>
@@ -753,6 +787,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02319">2319</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">DEFINE</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02303">hypro::HybridAutomatonParser::AllocationContext::interval()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02299">hypro::HybridAutomatonParser::AllocationContext::polynom()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00039">RuleAllocation</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">SBOPEN</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -771,7 +807,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00878">878</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01276">equation()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00034">RuleConnector</a>.</p>
 
 </div>
 </div>
@@ -790,9 +826,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00281">281</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00261">hypro::HybridAutomatonParser::ConstantdeclarationContext::replacedexpr()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">start()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">CONSTANT</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00253">hypro::HybridAutomatonParser::ConstantdeclarationContext::constantexpr()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">PAR</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00261">hypro::HybridAutomatonParser::ConstantdeclarationContext::replacedexpr()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00032">RuleConstantdeclaration</a>.</p>
 
 </div>
 </div>
@@ -811,6 +845,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00807">807</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">CONSTANT</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00766">constants</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00240">hypro::HybridAutomatonParser::ConstantexprContext::constantToken</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">EQUALS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00241">hypro::HybridAutomatonParser::ConstantexprContext::minusToken</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00242">hypro::HybridAutomatonParser::ConstantexprContext::numberToken</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00034">RuleConstantexpr</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abcecb5726dfeb4ea19a67de24c5ff13d"></a>
@@ -828,7 +864,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01349">1349</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01059">polynom()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01321">hypro::HybridAutomatonParser::ConstraintContext::polynom()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">BOOLRELATION</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">EQUALS</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01321">hypro::HybridAutomatonParser::ConstraintContext::polynom()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00035">RuleConstraint</a>.</p>
 
 </div>
 </div>
@@ -847,9 +883,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01483">1483</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01463">hypro::HybridAutomatonParser::ConstrsetContext::intervalexpr()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01890">gbadstate()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02244">guard()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01666">initstate()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00651">invariants()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01827">lbadstate()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01455">hypro::HybridAutomatonParser::ConstrsetContext::constraint()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">FALSE</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01463">hypro::HybridAutomatonParser::ConstrsetContext::intervalexpr()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00036">RuleConstrset</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">TRUE</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -868,6 +902,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03207">3207</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00028">EXPONENTIAL</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00042">RuleCutoff</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__16</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aa0be4676fc907d2beb4b9d4bd7af20ad"></a>
@@ -885,7 +921,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01276">1276</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00878">connector()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01173">interval()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01059">polynom()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01256">hypro::HybridAutomatonParser::EquationContext::connector()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">EQUALS</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01260">hypro::HybridAutomatonParser::EquationContext::interval()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01252">hypro::HybridAutomatonParser::EquationContext::polynom()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00035">RuleEquation</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -904,6 +940,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02937">2937</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00040">RuleFilename</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__10</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a51995416781129e8911cd630085399ad"></a>
@@ -920,6 +958,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03161">3161</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00042">RuleFixedorders</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__15</a>.</p>
 
 </div>
 </div>
@@ -938,6 +978,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02768">2768</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00040">RuleFixedsteps</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__7</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a44a6ceef08cdcb5596c67bf38bee653f"></a>
@@ -955,9 +997,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02140">2140</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02116">hypro::HybridAutomatonParser::FromtoContext::VARIABLE()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02041">transition()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">JUMP</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00038">RuleFromto</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -976,7 +1016,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01890">1890</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01483">constrset()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01874">hypro::HybridAutomatonParser::GbadstateContext::constrset()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00037">RuleGbadstate</a>.</p>
 
 </div>
 </div>
@@ -1003,6 +1043,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00049">49</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00762">_atn</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ada11a50f0828146083909e95cd194b5a"></a>
@@ -1013,7 +1055,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::map&lt;std::string, std::string&gt;&amp; hypro::HybridAutomatonParser::getConstants </td>
+          <td class="memname">const std::map&lt;<a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&gt;&amp; hypro::HybridAutomatonParser::getConstants </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1028,6 +1070,10 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00055">55</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00766">constants</a>.</p>
+
+<p>Referenced by <a class="el" href="ParserWrapper_8cpp_source.html#l00205">hypro::parseFlowstarFile&lt; double &gt;()</a>, and <a class="el" href="ParserWrapper_8cpp_source.html#l00125">hypro::parseFlowstarFile&lt; mpq_class &gt;()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a28bcf74270fe2fad5d8fa830368c0862"></a>
@@ -1038,7 +1084,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string HybridAutomatonParser::getGrammarFileName </td>
+          <td class="memname"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> HybridAutomatonParser::getGrammarFileName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1063,7 +1109,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const std::vector&lt; std::string &gt; &amp; HybridAutomatonParser::getRuleNames </td>
+          <td class="memname">const std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; &amp; HybridAutomatonParser::getRuleNames </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1078,7 +1124,9 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">30</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00086">hypro::HybridAutomatonParser::StartContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00181">hypro::HybridAutomatonParser::VardeclarationContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00270">hypro::HybridAutomatonParser::ConstantdeclarationContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00361">hypro::HybridAutomatonParser::ModesContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00440">hypro::HybridAutomatonParser::LocationContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00537">hypro::HybridAutomatonParser::ActivitiesContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00640">hypro::HybridAutomatonParser::InvariantsContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00719">hypro::HybridAutomatonParser::ReplacedexprContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00796">hypro::HybridAutomatonParser::ConstantexprContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00867">hypro::HybridAutomatonParser::ConnectorContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00949">hypro::HybridAutomatonParser::TermContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01048">hypro::HybridAutomatonParser::PolynomContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01162">hypro::HybridAutomatonParser::IntervalContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01265">hypro::HybridAutomatonParser::EquationContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01338">hypro::HybridAutomatonParser::ConstraintContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01404">hypro::HybridAutomatonParser::IntervalexprContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01472">hypro::HybridAutomatonParser::ConstrsetContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01584">hypro::HybridAutomatonParser::InitContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01655">hypro::HybridAutomatonParser::InitstateContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01725">hypro::HybridAutomatonParser::UnsafesetContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01816">hypro::HybridAutomatonParser::LbadstateContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01879">hypro::HybridAutomatonParser::GbadstateContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01939">hypro::HybridAutomatonParser::JumpsContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02030">hypro::HybridAutomatonParser::TransitionContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02129">hypro::HybridAutomatonParser::FromtoContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02177">hypro::HybridAutomatonParser::UrgentContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02233">hypro::HybridAutomatonParser::GuardContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02308">hypro::HybridAutomatonParser::AllocationContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02391">hypro::HybridAutomatonParser::ResetfctContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02466">hypro::HybridAutomatonParser::AggregationContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02617">hypro::HybridAutomatonParser::SettingContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02757">hypro::HybridAutomatonParser::FixedstepsContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02803">hypro::HybridAutomatonParser::TimeContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02861">hypro::HybridAutomatonParser::PlotsettingContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02926">hypro::HybridAutomatonParser::FilenameContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02972">hypro::HybridAutomatonParser::MaxjumpsContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03018">hypro::HybridAutomatonParser::PrintContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03064">hypro::HybridAutomatonParser::RemainderContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03106">hypro::HybridAutomatonParser::IdentityContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03150">hypro::HybridAutomatonParser::FixedordersContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03196">hypro::HybridAutomatonParser::CutoffContext::getRuleIndex()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03242">hypro::HybridAutomatonParser::PrecisionContext::getRuleIndex()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00050">getTokenNames()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00756">_ruleNames</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8h_source.html#l00050">getTokenNames()</a>.</p>
 
 </div>
 </div>
@@ -1090,7 +1138,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const std::vector&lt;std::string&gt;&amp; hypro::HybridAutomatonParser::getTokenNames </td>
+          <td class="memname">virtual const std::vector&lt;<a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&gt;&amp; hypro::HybridAutomatonParser::getTokenNames </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1105,7 +1153,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00050">50</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">getRuleNames()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00757">_tokenNames</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">getRuleNames()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00034">getVocabulary()</a>.</p>
 
 </div>
 </div>
@@ -1132,6 +1180,10 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00034">34</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00761">_vocabulary</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8h_source.html#l00050">getTokenNames()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab593f2e44b31bd63b972762b4c4af499"></a>
@@ -1149,7 +1201,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02244">2244</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01483">constrset()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02228">hypro::HybridAutomatonParser::GuardContext::constrset()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">FALSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">GUARD</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00038">RuleGuard</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">TRUE</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1168,6 +1220,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03117">3117</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00041">RuleIdentity</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__14</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a20823d1da7f52f50a43ba9c4e2c138a3"></a>
@@ -1185,7 +1239,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01595">1595</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01575">hypro::HybridAutomatonParser::InitContext::initstate()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01575">hypro::HybridAutomatonParser::InitContext::initstate()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00036">RuleInit</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__4</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1204,7 +1258,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01666">1666</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01483">constrset()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01646">hypro::HybridAutomatonParser::InitstateContext::constrset()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00036">RuleInitstate</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1223,9 +1277,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01173">1173</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01153">hypro::HybridAutomatonParser::IntervalContext::MINUS()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01276">equation()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01415">intervalexpr()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">COMMA</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00035">RuleInterval</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">SBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">SBOPEN</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1244,7 +1296,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01415">1415</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01173">interval()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">IN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01399">hypro::HybridAutomatonParser::IntervalexprContext::interval()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00036">RuleIntervalexpr</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1263,7 +1315,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00651">651</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01483">constrset()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00635">hypro::HybridAutomatonParser::InvariantsContext::constrset()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">FALSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00033">RuleInvariants</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__3</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">TRUE</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1282,9 +1334,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01950">1950</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01930">hypro::HybridAutomatonParser::JumpsContext::transition()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">start()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">JUMPS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00037">RuleJumps</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01930">hypro::HybridAutomatonParser::JumpsContext::transition()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1303,7 +1353,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01827">1827</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01483">constrset()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01811">hypro::HybridAutomatonParser::LbadstateContext::constrset()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">FALSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00037">RuleLbadstate</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">TRUE</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1322,7 +1372,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00451">451</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00548">activities()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00431">hypro::HybridAutomatonParser::LocationContext::invariants()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00423">hypro::HybridAutomatonParser::LocationContext::activities()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00431">hypro::HybridAutomatonParser::LocationContext::invariants()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00033">RuleLocation</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__3</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1341,6 +1391,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02983">2983</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00041">RuleMaxjumps</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__11</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a5d8b4d2e8614046fe606ca25f76c6f7c"></a>
@@ -1358,9 +1410,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00372">372</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00352">hypro::HybridAutomatonParser::ModesContext::location()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">start()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00352">hypro::HybridAutomatonParser::ModesContext::location()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00033">RuleModes</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__2</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1379,7 +1429,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02872">2872</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02852">hypro::HybridAutomatonParser::PlotsettingContext::COMMA()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">COMMA</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00040">RulePlotsetting</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__9</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1398,9 +1448,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01059">1059</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01039">hypro::HybridAutomatonParser::PolynomContext::connector()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00960">term()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01349">constraint()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01276">equation()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01039">hypro::HybridAutomatonParser::PolynomContext::connector()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00035">RulePolynom</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01031">hypro::HybridAutomatonParser::PolynomContext::term()</a>.</p>
 
 </div>
 </div>
@@ -1419,6 +1467,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">3253</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00762">_atn</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00754">_decisionToDFA</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00759">_literalNames</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00756">_ruleNames</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00763">_serializedATN</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00755">_sharedContextCache</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00760">_symbolicNames</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00757">_tokenNames</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00761">_vocabulary</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00042">RulePrecision</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__17</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a609f111d7fb63b00c01a200d0631da9c"></a>
@@ -1435,6 +1485,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03029">3029</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
+
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00041">RulePrint</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__12</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1453,6 +1505,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03075">3075</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00028">EXPONENTIAL</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00041">RuleRemainder</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__13</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a2753d3ba030f7dddaac7db527e387898"></a>
@@ -1470,7 +1524,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00730">730</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00710">hypro::HybridAutomatonParser::ReplacedexprContext::MINUS()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">EQUALS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00034">RuleReplacedexpr</a>.</p>
 
 </div>
 </div>
@@ -1489,7 +1543,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02402">2402</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02382">hypro::HybridAutomatonParser::ResetfctContext::allocation()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02382">hypro::HybridAutomatonParser::ResetfctContext::allocation()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">RESET</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00039">RuleResetfct</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1508,9 +1562,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02628">2628</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02608">hypro::HybridAutomatonParser::SettingContext::print()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">start()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02576">hypro::HybridAutomatonParser::SettingContext::cutoff()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02592">hypro::HybridAutomatonParser::SettingContext::filename()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02568">hypro::HybridAutomatonParser::SettingContext::fixedorders()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02528">hypro::HybridAutomatonParser::SettingContext::fixedsteps()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02552">hypro::HybridAutomatonParser::SettingContext::identity()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02600">hypro::HybridAutomatonParser::SettingContext::maxjumps()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02560">hypro::HybridAutomatonParser::SettingContext::plotsetting()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02584">hypro::HybridAutomatonParser::SettingContext::precision()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02608">hypro::HybridAutomatonParser::SettingContext::print()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02544">hypro::HybridAutomatonParser::SettingContext::remainder()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00039">RuleSetting</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__10</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__11</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__12</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__13</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__14</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__15</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__16</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00022">T__17</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__6</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__7</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__8</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__9</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02536">hypro::HybridAutomatonParser::SettingContext::time()</a>.</p>
 
 </div>
 </div>
@@ -1529,7 +1581,9 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">97</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00281">constantdeclaration()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00073">hypro::HybridAutomatonParser::StartContext::init()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01950">jumps()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00372">modes()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02628">setting()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01736">unsafeset()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00192">vardeclaration()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00069">hypro::HybridAutomatonParser::StartContext::constantdeclaration()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00073">hypro::HybridAutomatonParser::StartContext::init()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00061">hypro::HybridAutomatonParser::StartContext::jumps()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00057">hypro::HybridAutomatonParser::StartContext::modes()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">PAR</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00032">RuleStart</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00053">hypro::HybridAutomatonParser::StartContext::setting()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__0</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__4</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__5</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00081">hypro::HybridAutomatonParser::StartContext::unsafeset()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00049">hypro::HybridAutomatonParser::StartContext::vardeclaration()</a>.</p>
+
+<p>Referenced by <a class="el" href="ParserWrapper_8cpp_source.html#l00205">hypro::parseFlowstarFile&lt; double &gt;()</a>, and <a class="el" href="ParserWrapper_8cpp_source.html#l00125">hypro::parseFlowstarFile&lt; mpq_class &gt;()</a>.</p>
 
 </div>
 </div>
@@ -1548,9 +1602,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00960">960</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00940">hypro::HybridAutomatonParser::TermContext::connector()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01059">polynom()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00940">hypro::HybridAutomatonParser::TermContext::connector()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00034">RuleTerm</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">TIMES</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1569,6 +1621,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02814">2814</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00040">RuleTime</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00021">T__8</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aa9668464bb248dda2cc8ebb39b8bef68"></a>
@@ -1586,7 +1640,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02041">2041</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02021">hypro::HybridAutomatonParser::TransitionContext::aggregation()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02140">fromto()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02021">hypro::HybridAutomatonParser::TransitionContext::aggregation()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">BOX</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01993">hypro::HybridAutomatonParser::TransitionContext::fromto()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">GUARD</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02005">hypro::HybridAutomatonParser::TransitionContext::guard()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">INTERVALAGG</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">PARALLELOTOPE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00024">RESET</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02013">hypro::HybridAutomatonParser::TransitionContext::resetfct()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00038">RuleTransition</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">URGENT</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01997">hypro::HybridAutomatonParser::TransitionContext::urgent()</a>.</p>
 
 </div>
 </div>
@@ -1605,9 +1659,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01736">1736</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01716">hypro::HybridAutomatonParser::UnsafesetContext::lbadstate()</a>.</p>
-
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">start()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBCLOSE</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">CBOPEN</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">FALSE</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01708">hypro::HybridAutomatonParser::UnsafesetContext::gbadstate()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l01716">hypro::HybridAutomatonParser::UnsafesetContext::lbadstate()</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">MINUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">NUMBER</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00025">PLUS</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00037">RuleUnsafeset</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__5</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">TRUE</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
 </div>
 </div>
@@ -1626,6 +1678,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l02188">2188</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00038">RuleUrgent</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00023">URGENT</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a93e88ce51ae919faa92f54cdf0ae2441"></a>
@@ -1643,9 +1697,272 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00192">192</a> of file <a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00172">hypro::HybridAutomatonParser::VardeclarationContext::COMMA()</a>.</p>
+<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00026">COMMA</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00032">RuleVardeclaration</a>, <a class="el" href="HybridAutomatonParser_8h_source.html#l00020">T__1</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00027">VARIABLE</a>.</p>
 
-<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">start()</a>.</p>
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ad4d70b23a5dce2a82cc8d1ed68466282"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">atn::ATN HybridAutomatonParser::_atn</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00762">762</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8h_source.html#l00049">getATN()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00018">HybridAutomatonParser()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a34634b0aa69ae303a7f7af0a07567ba0"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; dfa::DFA &gt; HybridAutomatonParser::_decisionToDFA</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00754">754</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00018">HybridAutomatonParser()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a800fffce701f8c35a8989395129c44d9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1HybridAutomatonParser_1_1Initializer.html">HybridAutomatonParser::Initializer</a> HybridAutomatonParser::_init</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00772">772</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aec88b9f713a02e52a4f79baac5b7a578"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; HybridAutomatonParser::_literalNames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div><div class="line">  <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&#39;hybrid reachability&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;state var&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;modes&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;inv&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;init&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;unsafe set&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;setting&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;fixed steps&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;time&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;gnuplot octagon&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;output&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;max jumps&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;print&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;remainder estimation&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;identity precondition&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;fixed orders&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;cutoff&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;precision&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;poly&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;linear&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;ode&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;in&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;true&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;false&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;par&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;jumps&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;urgent&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;guard&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;reset&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;parallelotope aggregation&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;box aggregation&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;-&gt;&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;:=&#39;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&#39;=&#39;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&#39;+&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;-&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;*&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;[&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;]&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;{&#39;&quot;</span>, <span class="stringliteral">&quot;&#39;}&#39;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&#39;,&#39;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&#39;interval aggregation&#39;&quot;</span></div><div class="line">}</div></div><!-- fragment -->
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00759">759</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1a973f43ac1b96fb1940a0c0e37ce2b4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; HybridAutomatonParser::_ruleNames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div><div class="line">  <span class="stringliteral">&quot;start&quot;</span>, <span class="stringliteral">&quot;vardeclaration&quot;</span>, <span class="stringliteral">&quot;constantdeclaration&quot;</span>, <span class="stringliteral">&quot;modes&quot;</span>, <span class="stringliteral">&quot;location&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;activities&quot;</span>, <span class="stringliteral">&quot;invariants&quot;</span>, <span class="stringliteral">&quot;replacedexpr&quot;</span>, <span class="stringliteral">&quot;constantexpr&quot;</span>, <span class="stringliteral">&quot;connector&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;term&quot;</span>, <span class="stringliteral">&quot;polynom&quot;</span>, <span class="stringliteral">&quot;interval&quot;</span>, <span class="stringliteral">&quot;equation&quot;</span>, <span class="stringliteral">&quot;constraint&quot;</span>, <span class="stringliteral">&quot;intervalexpr&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;constrset&quot;</span>, <span class="stringliteral">&quot;init&quot;</span>, <span class="stringliteral">&quot;initstate&quot;</span>, <span class="stringliteral">&quot;unsafeset&quot;</span>, <span class="stringliteral">&quot;lbadstate&quot;</span>, <span class="stringliteral">&quot;gbadstate&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;jumps&quot;</span>, <span class="stringliteral">&quot;transition&quot;</span>, <span class="stringliteral">&quot;fromto&quot;</span>, <span class="stringliteral">&quot;urgent&quot;</span>, <span class="stringliteral">&quot;guard&quot;</span>, <span class="stringliteral">&quot;allocation&quot;</span>, <span class="stringliteral">&quot;resetfct&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;aggregation&quot;</span>, <span class="stringliteral">&quot;setting&quot;</span>, <span class="stringliteral">&quot;fixedsteps&quot;</span>, <span class="stringliteral">&quot;time&quot;</span>, <span class="stringliteral">&quot;plotsetting&quot;</span>, <span class="stringliteral">&quot;filename&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;maxjumps&quot;</span>, <span class="stringliteral">&quot;print&quot;</span>, <span class="stringliteral">&quot;remainder&quot;</span>, <span class="stringliteral">&quot;identity&quot;</span>, <span class="stringliteral">&quot;fixedorders&quot;</span>, <span class="stringliteral">&quot;cutoff&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;precision&quot;</span></div><div class="line">}</div></div><!-- fragment -->
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00756">756</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00030">getRuleNames()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a8ab07cc37816c8c74129fafdb30d3323"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; uint16_t &gt; HybridAutomatonParser::_serializedATN</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00763">763</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a00686b53b3b8bf20dc6cabc63b0c90a4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">atn::PredictionContextCache HybridAutomatonParser::_sharedContextCache</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00755">755</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00018">HybridAutomatonParser()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae77b7662882e40f0d9263cea7af62eb8"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; HybridAutomatonParser::_symbolicNames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div><div class="line">  <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;&quot;</span>, <span class="stringliteral">&quot;POLY&quot;</span>, <span class="stringliteral">&quot;LINEAR&quot;</span>, <span class="stringliteral">&quot;ODE&quot;</span>, <span class="stringliteral">&quot;IN&quot;</span>, <span class="stringliteral">&quot;TRUE&quot;</span>, <span class="stringliteral">&quot;FALSE&quot;</span>, <span class="stringliteral">&quot;PAR&quot;</span>, <span class="stringliteral">&quot;JUMPS&quot;</span>, <span class="stringliteral">&quot;URGENT&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;GUARD&quot;</span>, <span class="stringliteral">&quot;RESET&quot;</span>, <span class="stringliteral">&quot;PARALLELOTOPE&quot;</span>, <span class="stringliteral">&quot;BOX&quot;</span>, <span class="stringliteral">&quot;JUMP&quot;</span>, <span class="stringliteral">&quot;DEFINE&quot;</span>, <span class="stringliteral">&quot;COMMENT&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;EQUALS&quot;</span>, <span class="stringliteral">&quot;BOOLRELATION&quot;</span>, <span class="stringliteral">&quot;PLUS&quot;</span>, <span class="stringliteral">&quot;MINUS&quot;</span>, <span class="stringliteral">&quot;TIMES&quot;</span>, <span class="stringliteral">&quot;SBOPEN&quot;</span>, <span class="stringliteral">&quot;SBCLOSE&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;CBOPEN&quot;</span>, <span class="stringliteral">&quot;CBCLOSE&quot;</span>, <span class="stringliteral">&quot;COMMA&quot;</span>, <span class="stringliteral">&quot;NUMBER&quot;</span>, <span class="stringliteral">&quot;CONSTANT&quot;</span>, <span class="stringliteral">&quot;VARIABLE&quot;</span>, <span class="stringliteral">&quot;WS&quot;</span>, </div><div class="line">  <span class="stringliteral">&quot;INTERVALAGG&quot;</span>, <span class="stringliteral">&quot;EXPONENTIAL&quot;</span></div><div class="line">}</div></div><!-- fragment -->
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00760">760</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a500629c69cbaeca2e0060917fb2a0d06"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; HybridAutomatonParser::_tokenNames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00757">757</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8h_source.html#l00050">getTokenNames()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3ad92f088640fbde47b96d8f10db800"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">dfa::Vocabulary HybridAutomatonParser::_vocabulary</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00761">761</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00034">getVocabulary()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03320">hypro::HybridAutomatonParser::Initializer::Initializer()</a>, and <a class="el" href="HybridAutomatonParser_8cpp_source.html#l03253">precision()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab2989518dca1c668924ac90b58ca406a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&gt; hypro::HybridAutomatonParser::constants</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00766">766</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
+
+<p>Referenced by <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00807">constantexpr()</a>, and <a class="el" href="HybridAutomatonParser_8h_source.html#l00055">getConstants()</a>.</p>
 
 </div>
 </div>

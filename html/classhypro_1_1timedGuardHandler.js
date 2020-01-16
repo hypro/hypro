@@ -1,5 +1,6 @@
 var classhypro_1_1timedGuardHandler =
 [
+    [ "Number", "classhypro_1_1timedGuardHandler.html#ac2716e21d7a8346994a3fb6ca7647224", null ],
     [ "timedGuardHandler", "classhypro_1_1timedGuardHandler.html#a599d51d11f089f0875b260e1fb451b24", null ],
     [ "timedGuardHandler", "classhypro_1_1timedGuardHandler.html#a85bffd6c84f722d720ac809b95ab65c7", null ],
     [ "getSortIndex", "classhypro_1_1timedGuardHandler.html#a64d1f6bdfe042f2a2748ea42f68a41cc", null ],

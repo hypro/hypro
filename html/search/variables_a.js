@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['keepaspectratio',['keepAspectRatio',['../structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f',1,'hypro::plotting::gnuplotSettings']]]
+  ['ja',['ja',['../structhypro_1_1glpk__context.html#a53524e6a5136e0965959c774187673ad',1,'hypro::glpk_context']]],
+  ['jumpdepth',['jumpDepth',['../structhypro_1_1ReachabilitySettings.html#a4047c1ba8fb5430fc87add593f9fee64',1,'hypro::ReachabilitySettings']]]
 ];

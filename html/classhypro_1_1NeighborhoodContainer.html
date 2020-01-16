@@ -120,6 +120,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1NeighborhoodContainer.ht
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classhypro_1_1NeighborhoodContainer-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::NeighborhoodContainer Class Reference</div>  </div>
@@ -156,6 +158,18 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3ccd1c9cc2534f45b4349f844ac75ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb94eae30d81ef3dd8c0ef56b5adabd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1NeighborhoodContainer.html#a144d667913fdb93e024768bff4053b93">neighborhood</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NeighborhoodContainer.html#acb94eae30d81ef3dd8c0ef56b5adabd9">getNeighborhoodForDimension</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; int &gt; &amp;p, const carl::Variable &amp;dimension, bool pointself=false)</td></tr>
 <tr class="separator:acb94eae30d81ef3dd8c0ef56b5adabd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ab78a5d2aadf23544235198fea9210579"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NeighborhoodContainer.html#ab78a5d2aadf23544235198fea9210579">hasNeighborhood</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; int &gt; &amp;p) const </td></tr>
+<tr class="separator:ab78a5d2aadf23544235198fea9210579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73515701a591d6012324ffd2db358f36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NeighborhoodContainer.html#a73515701a591d6012324ffd2db358f36">calculateNeighborhood</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; int &gt; &amp;p)</td></tr>
+<tr class="separator:a73515701a591d6012324ffd2db358f36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a24b9ca573f98275d573be958a627e653"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; int &gt;, <a class="el" href="classhypro_1_1NeighborhoodContainer.html#a144d667913fdb93e024768bff4053b93">neighborhood</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1NeighborhoodContainer.html#a24b9ca573f98275d573be958a627e653">mNeighborhoods</a></td></tr>
+<tr class="separator:a24b9ca573f98275d573be958a627e653"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A neighborhood container which maps points to their set of neighbor points. </p>
@@ -226,6 +240,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="NeighborhoodContainer_8h_source.html#l00028">28</a> of file <a class="el" href="NeighborhoodContainer_8h_source.html">NeighborhoodContainer.h</a>.</p>
 
+<p>References <a class="el" href="NeighborhoodContainer_8h_source.html#l00023">mNeighborhoods</a>, and <a class="el" href="classhypro_1_1NeighborhoodContainer.html#af6bbc5b74dfe627c250057b98a23261a">operator=()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a8a5d5b1f0ead3223063da533af7a7c65"></a>
@@ -254,6 +270,36 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a73515701a591d6012324ffd2db358f36"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::NeighborhoodContainer::calculateNeighborhood </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00051">51</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;::dimension()</a>, <a class="el" href="NeighborhoodContainer_8h_source.html#l00023">mNeighborhoods</a>, and <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
+
+<p>Referenced by <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00013">getNeighborhood()</a>, <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00027">getNeighborhoodForDimension()</a>, and <a class="el" href="NeighborhoodContainer_8h_source.html#l00069">hasNeighborhood()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aada67dba36f838c463655ad4824524b5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -302,6 +348,8 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="NeighborhoodContainer_8h_source.html#l00039">39</a> of file <a class="el" href="NeighborhoodContainer_8h_source.html">NeighborhoodContainer.h</a>.</p>
 
+<p>References <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00013">getNeighborhood()</a>, and <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00027">getNeighborhoodForDimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a3ccd1c9cc2534f45b4349f844ac75ed7"></a>
@@ -339,7 +387,9 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00013">13</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
 
-<p>References <a class="el" href="for__each_8h_source.html#l00048">hypro::for_each_in_tuple()</a>.</p>
+<p>References <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00051">calculateNeighborhood()</a>, <a class="el" href="NeighborhoodContainer_8h_source.html#l00069">hasNeighborhood()</a>, and <a class="el" href="NeighborhoodContainer_8h_source.html#l00023">mNeighborhoods</a>.</p>
+
+<p>Referenced by <a class="el" href="NeighborhoodContainer_8h_source.html#l00039">empty()</a>.</p>
 
 </div>
 </div>
@@ -385,7 +435,46 @@ Public Member Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00027">27</a> of file <a class="el" href="NeighborhoodContainer_8cpp_source.html">NeighborhoodContainer.cpp</a>.</p>
 
-<p>References <a class="el" href="for__each_8h_source.html#l00048">hypro::for_each_in_tuple()</a>.</p>
+<p>References <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00051">calculateNeighborhood()</a>, <a class="el" href="classhypro_1_1Point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53">hypro::Point&lt; Number &gt;::coordinate()</a>, <a class="el" href="NeighborhoodContainer_8h_source.html#l00069">hasNeighborhood()</a>, and <a class="el" href="NeighborhoodContainer_8h_source.html#l00023">mNeighborhoods</a>.</p>
+
+<p>Referenced by <a class="el" href="NeighborhoodContainer_8h_source.html#l00039">empty()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab78a5d2aadf23544235198fea9210579"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::NeighborhoodContainer::hasNeighborhood </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Moves all neighbors.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the point by which the neighbors should be moved </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="NeighborhoodContainer_8h_source.html#l00069">69</a> of file <a class="el" href="NeighborhoodContainer_8h_source.html">NeighborhoodContainer.h</a>.</p>
+
+<p>References <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00051">calculateNeighborhood()</a>.</p>
+
+<p>Referenced by <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00013">getNeighborhood()</a>, and <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00027">getNeighborhoodForDimension()</a>.</p>
 
 </div>
 </div>
@@ -411,6 +500,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="NeighborhoodContainer_8h_source.html#l00028">NeighborhoodContainer()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a84def79347e7647731f58cf0b78e40a4"></a>
@@ -434,6 +525,31 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a24b9ca573f98275d573be958a627e653"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;int&gt;, <a class="el" href="classhypro_1_1NeighborhoodContainer.html#a144d667913fdb93e024768bff4053b93">neighborhood</a>&gt; hypro::NeighborhoodContainer::mNeighborhoods</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="NeighborhoodContainer_8h_source.html#l00023">23</a> of file <a class="el" href="NeighborhoodContainer_8h_source.html">NeighborhoodContainer.h</a>.</p>
+
+<p>Referenced by <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00051">calculateNeighborhood()</a>, <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00013">getNeighborhood()</a>, <a class="el" href="NeighborhoodContainer_8cpp_source.html#l00027">getNeighborhoodForDimension()</a>, and <a class="el" href="NeighborhoodContainer_8h_source.html#l00028">NeighborhoodContainer()</a>.</p>
 
 </div>
 </div>

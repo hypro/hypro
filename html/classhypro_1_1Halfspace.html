@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Halfspace.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Halfspace-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -259,6 +260,17 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a79c4f5b77a363c2265dc048332995cee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the representation type of the halfspace.  Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name as it is usually not used as a representation but still has defined representation name.  <a href="#a79c4f5b77a363c2265dc048332995cee">More...</a><br /></td></tr>
 <tr class="separator:a79c4f5b77a363c2265dc048332995cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:afb4f505b30ef617366be230a793ce5b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#afb4f505b30ef617366be230a793ce5b1">mNormal</a> = <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;::Zero( 0 )</td></tr>
+<tr class="separator:afb4f505b30ef617366be230a793ce5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0769de584e9c19c6c1879f49771d3ee8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a0769de584e9c19c6c1879f49771d3ee8">mScalar</a> = <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>( 0 )</td></tr>
+<tr class="separator:a0769de584e9c19c6c1879f49771d3ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b5c5447644fbb2199c0a75e717150d3"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a3b5c5447644fbb2199c0a75e717150d3">mHash</a> = 0</td></tr>
+<tr class="separator:a3b5c5447644fbb2199c0a75e717150d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a763876cc4f54c9809aca1013c5c9b291"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a763876cc4f54c9809aca1013c5c9b291">mIsInteger</a> = false</td></tr>
+<tr class="separator:a763876cc4f54c9809aca1013c5c9b291"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a94426bbcc8dc06ce969b821e010d30f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a94426bbcc8dc06ce969b821e010d30f0">swap</a> (<a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;a, <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b)</td></tr>
@@ -269,8 +281,7 @@ Friends</h2></td></tr>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
 class hypro::Halfspace&lt; Number &gt;</h3>
 
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_box_8cpp-example.html#_a4">example_box.cpp</a>, <a class="el" href="example_differenceBounds_8cpp-example.html#_a56">example_differenceBounds.cpp</a>, and <a class="el" href="example_plot_8cpp-example.html#_a3">example_plot.cpp</a>.</dd>
-</dl>
+
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00024">24</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="af4c7657ba3af29b4f9c9b34aa326a345"></a>
@@ -299,6 +310,8 @@ template&lt;typename Number&gt; </div>
 <p>Default constructor. </p>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00035">35</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1Halfspace.html#acc71891d16a4412a37355ba896255be4">hypro::Halfspace&lt; Number &gt;::~Halfspace()</a>.</p>
 
 </div>
 </div>
@@ -467,6 +480,8 @@ template&lt;typename Number&gt; </div>
 
 <p>Destroys the object. </p>
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00035">hypro::Halfspace&lt; Number &gt;::Halfspace()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -505,6 +520,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting halfspace. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -615,6 +632,8 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if it is contained, false otherwise. </dd></dl>
 
+<p>Referenced by <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00328">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::contains()</a>, <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>, <a class="el" href="representations_2Polytopes_2VPolytope_2util_8h_source.html#l00008">hypro::numberOfPointsInHalfspace()</a>, and <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00309">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::supremumPoint()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="adf52bdfc5023b2de4396e3b8577f49fb"></a>
@@ -689,6 +708,8 @@ template&lt;typename Number&gt; </div>
 <p>Returns the space dimension. </p>
 <dl class="section return"><dt>Returns</dt><dd>The space dimension. </dd></dl>
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00074">hypro::Halfspace&lt; Number &gt;::sizeOfHalfspace()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a79950604785a9328d1804ffcbd062a5e"></a>
@@ -734,6 +755,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The maximal distance to the limiting plane in the given direction. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>, <a class="el" href="Halfspace_8h_source.html#l00306">hypro::Halfspace&lt; Number &gt;::removeRedundancy()</a>, and <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00113">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::resolveEvaluationResults()</a>.</p>
 
 </div>
 </div>
@@ -798,6 +821,8 @@ template&lt;typename Number&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ab32438fc68ad58ab5932737abeefa884"></a>
@@ -828,6 +853,8 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00248">248</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
 
+<p>References <a class="el" href="Halfspace_8h_source.html#l00028">hypro::Halfspace&lt; Number &gt;::mHash</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="acf3fc13e6e13d5d9d5666446cbdf27ba"></a>
@@ -854,6 +881,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the point lies on the plane, false otherwise. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -892,6 +921,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the vector intersects the plane, false otherwise. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -958,6 +989,8 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The intersection vector. </dd></dl>
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="add63f3e4fa20331e03570eda43654558"></a>
@@ -976,6 +1009,8 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Inverts the halfspace by negating the plane normal and the offset. </p>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>, and <a class="el" href="Halfspace_8h_source.html#l00396">hypro::operator-()</a>.</p>
 
 </div>
 </div>
@@ -1007,6 +1042,8 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00113">113</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1Halfspace.html#a4f716cde9e5a28208a14e53a2e6fcf32">hypro::Halfspace&lt; Number &gt;::affineTransformation()</a>, <a class="el" href="classhypro_1_1Halfspace.html#ac90b79b046c3881aea83113cbe0c1984">hypro::Halfspace&lt; Number &gt;::contains()</a>, <a class="el" href="classhypro_1_1Halfspace.html#a62f270d8f1995e32d0ba12125142ab83">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="classhypro_1_1Halfspace.html#a5e106dcc1e0036e3f01bb94eeee7a52e">hypro::Halfspace&lt; Number &gt;::fastIntersect()</a>, <a class="el" href="classhypro_1_1Halfspace.html#acf3fc13e6e13d5d9d5666446cbdf27ba">hypro::Halfspace&lt; Number &gt;::holds()</a>, <a class="el" href="classhypro_1_1Halfspace.html#a3e8e3ac6a8105361f8d4237a46948f38">hypro::Halfspace&lt; Number &gt;::intersection()</a>, <a class="el" href="classhypro_1_1Halfspace.html#a5ff5825856dbcd3841ced99d12042490">hypro::Halfspace&lt; Number &gt;::intersectionVector()</a>, <a class="el" href="classhypro_1_1Halfspace.html#add63f3e4fa20331e03570eda43654558">hypro::Halfspace&lt; Number &gt;::invert()</a>, <a class="el" href="classhypro_1_1Halfspace.html#aa93bb0bba3e6ae942ed15867a7d19f2a">hypro::Halfspace&lt; Number &gt;::linearTransformation()</a>, <a class="el" href="Halfspace_8h_source.html#l00029">hypro::Halfspace&lt; Number &gt;::mIsInteger</a>, <a class="el" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">hypro::Halfspace&lt; Number &gt;::normal()</a>, <a class="el" href="classhypro_1_1Halfspace.html#acc9193b4c2180fe7a04544d0e8295fa5">hypro::Halfspace&lt; Number &gt;::offset()</a>, <a class="el" href="classhypro_1_1Halfspace.html#aab70d617cb946cda88d97ca12591ffbd">hypro::Halfspace&lt; Number &gt;::project()</a>, <a class="el" href="classhypro_1_1Halfspace.html#a608609251d6e74f69dc60ea69168a2e1">hypro::Halfspace&lt; Number &gt;::projectPointOnPlane()</a>, <a class="el" href="classhypro_1_1Halfspace.html#af1c3fce6d75b02bfc763081c189400dd">hypro::Halfspace&lt; Number &gt;::saveIntersect()</a>, <a class="el" href="classhypro_1_1Halfspace.html#a37412da1ef224814a1bef59a76948d70">hypro::Halfspace&lt; Number &gt;::setNormal()</a>, <a class="el" href="classhypro_1_1Halfspace.html#aa4a6ba034a64df0e75be1821707ae21d">hypro::Halfspace&lt; Number &gt;::setOffset()</a>, and <a class="el" href="classhypro_1_1Halfspace.html#a4ca6f32bb4d9bbce85be694bfbbeca7f">hypro::Halfspace&lt; Number &gt;::signedDistance()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="aa93bb0bba3e6ae942ed15867a7d19f2a"></a>
@@ -1033,6 +1070,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting halfspace. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -1062,6 +1101,8 @@ template&lt;typename N  = Number, carl::DisableIf&lt; std::is_same&lt; N, double
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00085">85</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>References <a class="el" href="Halfspace_8h_source.html#l00026">hypro::Halfspace&lt; Number &gt;::mNormal</a>.</p>
 
 </div>
 </div>
@@ -1149,6 +1190,8 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>For each direction, whether the evaluation is feasible, and if it is, how many steps are needed </dd></dl>
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00306">hypro::Halfspace&lt; Number &gt;::removeRedundancy()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="ada47c49e9dca6befeef4c6fc2fac5a22"></a>
@@ -1169,6 +1212,8 @@ template&lt;typename Number&gt; </div>
 <p>Returns the plane normal. </p>
 <dl class="section return"><dt>Returns</dt><dd>The normal. </dd></dl>
 
+<p>Referenced by <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00096">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::aggregate()</a>, <a class="el" href="Halfspace_8h_source.html#l00345">hypro::convert()</a>, <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00287">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="intervalMethods_8h_source.html#l00022">hypro::icpIntersectHalfspace()</a>, <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>, <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00132">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::leGuernic()</a>, <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00208">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::leGuernicFast()</a>, <a class="el" href="Halfspace_8h_source.html#l00420">std::hash&lt; hypro::Halfspace&lt; Number &gt; &gt;::operator()()</a>, <a class="el" href="Halfspace_8h_source.html#l00370">hypro::operator==()</a>, and <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00309">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::supremumPoint()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="acc9193b4c2180fe7a04544d0e8295fa5"></a>
@@ -1188,6 +1233,8 @@ template&lt;typename Number&gt; </div>
 
 <p>Returns the plane offset. </p>
 <dl class="section return"><dt>Returns</dt><dd>The offset. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00345">hypro::convert()</a>, <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00287">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="intervalMethods_8h_source.html#l00022">hypro::icpIntersectHalfspace()</a>, <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>, <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00132">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::leGuernic()</a>, <a class="el" href="IntersectHalfspaceOp_8h_source.html#l00208">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;::leGuernicFast()</a>, and <a class="el" href="Halfspace_8h_source.html#l00370">hypro::operator==()</a>.</p>
 
 </div>
 </div>
@@ -1216,6 +1263,8 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The projected halfspace. </dd></dl>
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a608609251d6e74f69dc60ea69168a2e1"></a>
@@ -1242,6 +1291,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point lying on the plane which is a projection of the input. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -1271,6 +1322,8 @@ template&lt;typename Number&gt; </div>
 <p>Removes redundancy. </p>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00306">306</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1Halfspace.html#a62f270d8f1995e32d0ba12125142ab83">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, and <a class="el" href="classhypro_1_1Halfspace.html#ae97cc578d5d1fc0c77054eb131aadfff">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>.</p>
 
 </div>
 </div>
@@ -1308,6 +1361,8 @@ template&lt;typename Number&gt; </div>
 </table>
 </div><div class="memdoc">
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a37412da1ef224814a1bef59a76948d70"></a>
@@ -1333,6 +1388,8 @@ template&lt;typename Number&gt; </div>
   </table>
   </dd>
 </dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -1360,6 +1417,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a4ca6f32bb4d9bbce85be694bfbbeca7f"></a>
@@ -1386,6 +1445,8 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The signed distance. </dd></dl>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 
 </div>
 </div>
@@ -1417,6 +1478,8 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00074">74</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1Halfspace.html#a37d91b16922a80a1d02ce2ab9cceac50">hypro::Halfspace&lt; Number &gt;::dimension()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a79c4f5b77a363c2265dc048332995cee"></a>
@@ -1445,6 +1508,8 @@ template&lt;typename Number&gt; </div>
 <p>Returns the representation type of the halfspace.  Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name as it is usually not used as a representation but still has defined representation name. </p>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00334">334</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>References <a class="el" href="representations_2types_8h_source.html#l00010">hypro::constraint_set</a>.</p>
 
 </div>
 </div>
@@ -1494,6 +1559,8 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00327">327</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
 
+<p>Referenced by <a class="el" href="example__differenceBounds_8cpp_source.html#l00567">testIntersectHalfspace()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00508">testSatisfiesHalfspace()</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
@@ -1541,6 +1608,109 @@ template&lt;typename Number&gt; </div>
 </dl>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00260">260</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a3b5c5447644fbb2199c0a75e717150d3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mHash = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00028">28</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00248">hypro::Halfspace&lt; Number &gt;::hash()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a763876cc4f54c9809aca1013c5c9b291"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mIsInteger = false</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00029">29</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afb4f505b30ef617366be230a793ce5b1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mNormal = <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;::Zero( 0 )</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00026">26</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
+
+<p>Referenced by <a class="el" href="Halfspace_8h_source.html#l00085">hypro::Halfspace&lt; Number &gt;::makeInteger()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0769de584e9c19c6c1879f49771d3ee8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mScalar = <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>( 0 )</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00027">27</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
 
 </div>
 </div>
