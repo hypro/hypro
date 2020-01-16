@@ -2,6 +2,8 @@
  *
  */
 #pragma once
+#ifdef HYPRO_USE_CLP
+
 #include "../../../config.h"
 #include "../../../datastructures/Point.h"
 #include "../EvaluationResult.h"
@@ -28,3 +30,5 @@ SOLUTION clpCheckConsistency( clp_context& context );
 }  // namespace hypro
 
 #include "adaptions_clp.tpp"
+
+#endif
