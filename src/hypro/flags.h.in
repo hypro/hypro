@@ -1,13 +1,24 @@
 #pragma once
+
+// clang-format off
+#define SOLVER_GLPK 1
+#define SOLVER_CLP 2
+#define SOLVER_SMTRAT 3
+#define SOLVER_ZTHREE 4
+#define SOLVER_SOPLEX 5
+
 #cmakedefine SUPPORT_MPFR
 #cmakedefine COMPARE_CDD
 #cmakedefine COMPARE_POLYMAKE
 #cmakedefine HYPRO_USE_CLP
+#cmakedefine HYPRO_USE_GLPK
 #cmakedefine HYPRO_USE_PPL
 #cmakedefine HYPRO_USE_OPENMP
 #cmakedefine HYPRO_USE_SMTRAT
 #cmakedefine HYPRO_USE_SOPLEX
 #cmakedefine HYPRO_USE_Z3
+#cmakedefine HYPRO_PRIMARY_SOLVER @HYPRO_PRIMARY_SOLVER@
+#cmakedefine HYPRO_SECONDARY_SOLVER @HYPRO_SECONDARY_SOLVER@
 #cmakedefine USE_CLANG
 #cmakedefine EXTERNALIZE_CLASSES
 #cmakedefine HYPRO_LOGGING
@@ -17,3 +28,5 @@
 #ifdef HYPRO_USE_SOPLEX
 #define SOPLEX_WITH_GMP
 #endif
+
+// clang-format on

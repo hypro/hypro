@@ -27,7 +27,7 @@ class EllipsoidT {
   public:
 	EllipsoidT( Number _radius, std::size_t _dimension );
 	EllipsoidT( matrix_t<Number> _shapeMatrix );
-	EllipsoidT( const EllipsoidT<Number, Converter>& _orig );
+	EllipsoidT( const EllipsoidT& _orig );
 	~EllipsoidT();
 
 	/**
@@ -67,7 +67,7 @@ class EllipsoidT {
          * @param b shiftvector. ignored here and just included to fit the lin. trans of other representations
          * @return ellipsoid obtained by applying the linear transformation
          */
-	EllipsoidT<Number, Converter> linearTransformation( const matrix_t<Number>& _A ) const;
+	EllipsoidT linearTransformation( const matrix_t<Number>& _A ) const;
 
 	/**
          *
@@ -75,7 +75,7 @@ class EllipsoidT {
          * @param b shiftvector. ignored here and just included to fit the lin. trans of other representations
          * @return ellipsoid obtained by applying the linear transformation
          */
-	EllipsoidT<Number, Converter> affineTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
+	EllipsoidT affineTransformation( const matrix_t<Number>& _A, const vector_t<Number>& _b ) const;
 
 	/**
          *
@@ -83,7 +83,7 @@ class EllipsoidT {
          * @param l direction of tight approximation
          * @return ellipsoid overapproximating the mink sum of two ellipsoids
          */
-	EllipsoidT<Number, Converter> minkowskiSum( const EllipsoidT<Number, Converter>& _rhs, bool _approx = true ) const;
+	EllipsoidT minkowskiSum( const EllipsoidT& _rhs, bool _approx = true ) const;
 
 	/**
      *

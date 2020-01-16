@@ -23,6 +23,10 @@
 #include "util.h"
 
 namespace hypro {
+
+template <typename N, typename C, typename S>
+class SupportFunctionT;
+
 template <typename Number, typename Setting>
 class SupportFunctionContent;
 
@@ -177,6 +181,9 @@ struct projectionContent {
  */
 template <typename Number, typename Setting>
 class SupportFunctionContent {
+	// friend declarations
+	template <typename N, typename C, typename S>
+	friend class SupportFunctionT;
 	friend trafoContent<Number, Setting>;
 
   private:
@@ -203,7 +210,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type = SF_TYPE::ELLIPSOID );
 	SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type = SF_TYPE::INFTY_BALL );
 	SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances,
-							SF_TYPE _type = SF_TYPE::POLY );
+							SF_TYPE _type = SF_TYPE::POLY, bool overrideReduction = false );
 	SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type = SF_TYPE::BOX );
@@ -231,9 +238,9 @@ class SupportFunctionContent {
 		return obj;
 	}
 
-	static std::shared_ptr<SupportFunctionContent<Number, Setting>> create( SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances ) {
+	static std::shared_ptr<SupportFunctionContent<Number, Setting>> create( SF_TYPE _type, const matrix_t<Number>& _directions, const vector_t<Number>& _distances, bool overrideReduction = false ) {
 		TRACE( "hypro.representations.supportFunction", "" );
-		auto obj = std::shared_ptr<SupportFunctionContent<Number, Setting>>( new SupportFunctionContent<Number, Setting>( _directions, _distances, _type ) );
+		auto obj = std::shared_ptr<SupportFunctionContent<Number, Setting>>( new SupportFunctionContent<Number, Setting>( _directions, _distances, _type, overrideReduction ) );
 		obj->pThis = obj;
 		assert( obj->checkTreeValidity() );
 		return obj;
@@ -912,6 +919,17 @@ class SupportFunctionContent {
 
 		return level;
 	}
+
+	sumContent<Number, Setting>* rSummands();
+	scaleContent<Number, Setting>* rScaleParameters();
+	trafoContent<Number, Setting>* rLinearTrafoParameters();
+	unionContent<Number, Setting>* rUnionParameters();
+	intersectionContent<Number, Setting>* rIntersectionParameters();
+	projectionContent<Number, Setting>* rProjectionParameters();
+	PolytopeSupportFunction<Number, Setting>* rPolytope();
+	BoxSupportFunction<Number, Setting>* rBox();
+	BallSupportFunction<Number>* rBall();
+	EllipsoidSupportFunction<Number>* rEllipsoid();
 };
 
 }  // namespace hypro

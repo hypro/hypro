@@ -27,6 +27,21 @@ matrix_t<Number> removeRows( const matrix_t<Number>& original, const std::vector
 	return selectRows( original, remainingRows );
 }
 
+template <typename Number>
+matrix_t<Number>& appendRow( matrix_t<Number>& original, const vector_t<Number>& row ) {
+	assert( row.rows() == original.cols() );
+	original.conservativeResize( original.rows() + 1, original.cols() );
+	original.row( original.rows() - 1 ) = row;
+	return original;
+}
+
+template <typename Number>
+vector_t<Number>& appendRow( vector_t<Number>& original, Number entry ) {
+	original.conservativeResize( original.rows() + 1 );
+	original( original.rows() - 1 ) = entry;
+	return original;
+}
+
 template <typename Number, typename IdxType>
 vector_t<Number> selectRows( const vector_t<Number>& original, const std::vector<IdxType>& rowIndices ) {
 	vector_t<Number> res = vector_t<Number>( rowIndices.size() );

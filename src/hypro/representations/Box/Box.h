@@ -183,7 +183,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
-	static BoxT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
+	static BoxT Empty( std::size_t dimension = 1 ) {
 		auto tmp = BoxT<Number, Converter, Setting>( std::make_pair( Point<Number>( vector_t<Number>::Ones( dimension ) ), Point<Number>( vector_t<Number>::Zero( dimension ) ) ) );
 		assert( tmp.empty() );
 		return tmp;
@@ -357,7 +357,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @return True, if they are equal.
 	 */
 	template <class SettingRhs>
-	friend bool operator==( const BoxT<Number, Converter, Setting>& b1, const BoxT<Number, Converter, SettingRhs>& b2 ) {
+	friend bool operator==( const BoxT& b1, const BoxT<Number, Converter, SettingRhs>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
@@ -375,7 +375,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param b2 A box.
 	 * @return False, if both boxes are equal.
 	 */
-	friend bool operator!=( const BoxT<Number, Converter, Setting>& b1, const BoxT<Number, Converter, Setting>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const BoxT& b1, const BoxT& b2 ) { return !( b1 == b2 ); }
 	/*
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
 	friend bool operator!=( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,SettingRhs>& b2 ) { return !( b1 == b2 ); }
@@ -384,20 +384,20 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @brief Assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<Number, Converter, Setting>& operator=( const BoxT<Number, Converter, Setting>& rhs ) = default;
+	BoxT& operator=( const BoxT& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<Number, Converter, Setting>& operator=( BoxT<Number, Converter, Setting>&& rhs ) = default;
+	BoxT& operator=( BoxT&& rhs ) = default;
 
 	/**
 	 * @brief      Scaling operator.
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<Number, Converter, Setting> operator*( const Number& factor ) const {
+	BoxT operator*( const Number& factor ) const {
 		BoxT<Number, Converter, Setting> copy{*this};
 		for ( auto& i : copy.rIntervals() ) {
 			i *= factor;
@@ -461,7 +461,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	const BoxT<Number, Converter, Setting>& reduceNumberRepresentation( unsigned limit = fReach_DENOMINATOR );
+	const BoxT& reduceNumberRepresentation( unsigned limit = fReach_DENOMINATOR );
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.
@@ -469,7 +469,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * are the maximal absolute values of the original boundaries mirrored positive and negative.
 	 * @return     The resulting symmetric box.
 	 */
-	BoxT<Number, Converter, Setting> makeSymmetric() const;
+	BoxT makeSymmetric() const;
 
 	/**
 	 * @brief Meta-function, which allows to compute the intersection of a box with a half-space and return the resulting box as well as the information, whether the resulting box is empty.
@@ -481,7 +481,9 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	BoxT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	BoxT project( const std::vector<std::size_t>& dimensions ) const;
+
+	BoxT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const;
 
 	/**
 	 * @brief Computes the linear transformation of a box by a matrix A.
@@ -490,7 +492,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param A Matrix used for the transformation.
 	 * @return BoxT<Number,Converter,Setting>
 	 */
-	BoxT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
+	BoxT linearTransformation( const matrix_t<Number>& A ) const;
 
 	/**
 	 * @brief Computes the affine transformation of a box by a matrix A and an offset vector b.
@@ -499,8 +501,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param b
 	 * @return BoxT<Number,Converter,Setting>
 	 */
-	BoxT<Number, Converter, Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	BoxT<Number, Converter, Setting> minkowskiSum( const BoxT<Number, Converter, Setting>& rhs ) const;
+	BoxT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	BoxT minkowskiSum( const BoxT& rhs ) const;
 
 	/**
 	 * @brief      Computes the Minkowski decomposition of the current box by the given box.
@@ -508,14 +510,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number, Converter, Setting> minkowskiDecomposition( const BoxT<Number, Converter, Setting>& rhs ) const;
+	BoxT minkowskiDecomposition( const BoxT& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number, Converter, Setting> intersect( const BoxT<Number, Converter, Setting>& rhs ) const;
+	BoxT intersect( const BoxT& rhs ) const;
 
 	/**
 	 * @brief Allows to compute the intersection of a box with a half-space and return the resulting box.
@@ -524,8 +526,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param hspace
 	 * @return BoxT<Number,Converter,Setting>
 	 */
-	BoxT<Number, Converter, Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
-	BoxT<Number, Converter, Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	BoxT intersectHalfspace( const Halfspace<Number>& hspace ) const;
+	BoxT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -533,21 +535,21 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param[in]  box   The box.
 	 * @return     True, if the given box is contained in the current box, false otherwise.
 	 */
-	bool contains( const BoxT<Number, Converter, Setting>& box ) const;
+	bool contains( const BoxT& box ) const;
 
 	/**
 	 * @brief      Computes the union of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number, Converter, Setting> unite( const BoxT<Number, Converter, Setting>& rhs ) const;
+	BoxT unite( const BoxT& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current box with a set of boxes.
 	 * @param[in]  boxes  The boxes.
 	 * @return     The resulting box.
 	 */
-	static BoxT<Number, Converter, Setting> unite( const std::vector<BoxT<Number, Converter, Setting>>& boxes );
+	static BoxT unite( const std::vector<BoxT>& boxes );
 
 	/**
 	 * @brief      Reduces the box - only in case rational types are used, the number representation is optimized.

@@ -118,12 +118,12 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 			for ( Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 				results.emplace_back( opt.evaluate( tpl[rowIndex], false ) );
 				if ( results.back().errorCode == SOLUTION::INFEAS ) {
-					opt.cleanGLPInstance();
+					opt.cleanContexts();
 					*this = BoxT<Number, Converter, Setting>::Empty();
 					return;
 				}
 			}
-			opt.cleanGLPInstance();
+			opt.cleanContexts();
 			assert( Eigen::Index( results.size() ) == Eigen::Index( tpl.size() ) );
 
 			// re-construct box from results.
@@ -425,7 +425,13 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 		limitingPlanes.pop_back();
 	}
 	assert( newPlanes.rows() == newDistances.rows() );
-	return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( newPlanes, newDistances ) );
+	auto tmp = this->intersectHalfspaces( newPlanes, newDistances );
+	bool empty = tmp.empty();
+	if ( empty ) {
+		return std::make_pair( CONTAINMENT::NO, tmp );
+	} else {
+		return std::make_pair( CONTAINMENT::PARTIAL, tmp );
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -439,6 +445,16 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::project( cons
 		newIntervals.push_back( mLimits[d] );
 	}
 	return BoxT<Number, Converter, Setting>( newIntervals );
+}
+
+template <typename Number, typename Converter, class Setting>
+BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const {
+	std::vector<carl::Interval<Number>> newIntervals{mLimits};
+	for ( const auto& dimensionIntervalPair : assignments ) {
+		assert( dimensionIntervalPair.first < newIntervals.size() );
+		newIntervals[dimensionIntervalPair.first] = dimensionIntervalPair.second;
+	}
+	return BoxT<Number, Converter, Settings>{newIntervals};
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -772,7 +788,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 		for ( Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex ) {
 			results.emplace_back( opt.evaluate( boxDirections.row( rowIndex ), false ) );
 		}
-		opt.cleanGLPInstance();
+		opt.cleanContexts();
 		assert( Eigen::Index( results.size() ) == boxDirections.rows() );
 
 		// re-construct box from results.

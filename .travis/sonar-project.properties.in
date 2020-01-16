@@ -17,5 +17,6 @@ sonar.c.file.suffixes=.c
 #sonar.sourceEncoding=UTF-8"
 
 sonar.cfamily.build-wrapper-output=bw-out
-#sonar.cfamily.gcov.reportsPath=.
-#sonar.cfamily.llvm-cov.reportPath=build/coverage.txt
+sonar.cfamily.gcov.reportsPath=coverage.info
+#sonar.cfamily.llvm-cov.reportPath=coverage.info
+
