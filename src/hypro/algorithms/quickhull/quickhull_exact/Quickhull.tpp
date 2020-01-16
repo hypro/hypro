@@ -6,6 +6,7 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::compute() {
 
+        TRACE("quickhull", points);
         removeDuplicateInputs();
 
         //There's only a single point, so we fix it from both sides.
@@ -104,7 +105,12 @@ namespace hypro {
             fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; //Set i-th neighbor of initial facet to the created facet.
             
             for(facet_ind_t other_i = 0; other_i < fSpace.facets.size() - 1; ++other_i ) {
-                assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal);
+                if constexpr(Euclidian) {
+                    assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal);
+                } else {
+                    assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal ||
+                     fSpace.facets[other_i].mOffset != createdFacet.mOffset);
+                }
             }
             
             createdFacet.mNeighbors[insertedAt] = 0;
@@ -256,6 +262,9 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::constructLowerDimensional() {
+
+        if constexpr(!Euclidian) return;
+
         TRACE("quickhull", "dropping from d=" << dimension << " to d=" << dimension - 1);
 
         //Copy first facet
@@ -295,7 +304,7 @@ namespace hypro {
         }
     }
 
-
+  
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::findConeNeighbors(facet_ind_t facet_i) {
         //We always ignore the last one
