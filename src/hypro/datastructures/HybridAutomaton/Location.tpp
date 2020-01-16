@@ -21,8 +21,8 @@ Location<Number>::Location( const Location<Number>& _loc )
 	, mId()
 	, mHash( 0 ) {
 	// update copied transitions
-	for ( auto t : _loc.getTransitions() ) {
-		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *t ) ) );
+	for ( const auto& t : _loc.getTransitions() ) {
+		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
 		mTransitions.back()->setSource( this );
 	}
 
@@ -73,8 +73,8 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 	mExternalInput = in.getExternalInput();
 	mHash = 0;
 	// update copied transitions
-	for ( auto t : in.getTransitions() ) {
-		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *t ) ) );
+	for ( const auto& t : in.getTransitions() ) {
+		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
 		mTransitions.back()->setSource( this );
 	}
 
@@ -86,13 +86,6 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 	}
 
 	assert( this->hash() == in.hash() );
-}
-
-template <typename Number>
-std::vector<Transition<Number>*> Location<Number>::getTransitions() const {
-	std::vector<Transition<Number>*> res;
-	std::for_each( mTransitions.begin(), mTransitions.end(), [&res]( const auto& in ) { res.emplace_back( in.get() ); } );
-	return res;
 }
 
 template <typename Number>
@@ -193,7 +186,7 @@ std::string Location<Number>::getDotRepresentation( const std::vector<std::strin
 	o << "<TABLE>";
 	o << "<TR><TD>" << this->getName() << " (" << this->hash() << ") </TD></TR>";
 	// flow
-	matrix_t<Number>& flow = mLinearFlows.begin()->getFlowMatrix();
+	const matrix_t<Number>& flow = mLinearFlows.begin()->getFlowMatrix();
 	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
 	for ( unsigned i = 0; i < flow.rows() - 1; ++i ) {
 		o << vars[i] << "' = ";
@@ -311,6 +304,25 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 				//std::cout << "Cound not find invariant constraint." << std::endl;
 				return false;
 			}
+		}
+	}
+
+	// check transitions:
+	// try to find a matching transition.
+	for ( const auto& transPtr : this->mTransitions ) {
+		bool foundOne = false;
+
+		for ( const auto& rhsTransPtr : rhs.getTransitions() ) {
+			if ( transPtr.get()->isComposedOf( *( rhsTransPtr.get() ), rhs.getVariables(), this->getVariables() ) ) {
+				if ( foundOne ) {
+					return false;
+				}
+				foundOne = true;
+			}
+		}
+
+		if ( !foundOne ) {
+			return false;
 		}
 	}
 
