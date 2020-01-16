@@ -47,6 +47,7 @@ class Location {
 
   public:
 	Location();
+	Location( const std::string& name );
 	Location( const Location& loc );
 	explicit Location( const matrix_t<Number>& mat );
 	Location( const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv );

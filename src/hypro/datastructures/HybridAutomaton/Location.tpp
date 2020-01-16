@@ -13,6 +13,17 @@ Location<Number>::Location()
 	, mHash( 0 ) {}
 
 template <typename Number>
+Location<Number>::Location( const std::string& name )
+	: mLinearFlows()
+	, mRectangularFlows()
+	, mExternalInput()
+	, mTransitions()
+	, mInvariant()
+	, mName( name )
+	, mId()
+	, mHash( 0 ) {}
+
+template <typename Number>
 Location<Number>::Location( const Location<Number>& _loc )
 	: mExternalInput( _loc.getExternalInput() )
 	, mTransitions()

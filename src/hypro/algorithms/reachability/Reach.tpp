@@ -82,6 +82,12 @@ void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>
 }
 
 template <typename Number, typename ReacherSettings, typename State>
+void Reach<Number, ReacherSettings, State>::addInitialState( State&& initialState ) {
+	initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+	mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, initialState ) ) );
+}
+
+template <typename Number, typename ReacherSettings, typename State>
 std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::flowpipe_t>> Reach<Number, ReacherSettings, State>::computeForwardReachability() {
 	if ( !mInitialStatesSet ) {
 		WARN( "hypro.reachability", "Attention, initial states have not been set yet." );

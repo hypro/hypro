@@ -92,6 +92,7 @@ class Reach {
 	std::vector<std::pair<unsigned, flowpipe_t>> computeForwardReachability();
 
 	void setInitialStates( std::vector<State>&& initialStates );
+	void addInitialState( State&& initialState );
 
 	WorkQueue<TaskTypePtr>& rGetQueue() { return mWorkingQueue; }
 
