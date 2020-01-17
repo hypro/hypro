@@ -5,6 +5,7 @@ var structhypro_1_1AffineTransformation =
     [ "AffineTransformation", "structhypro_1_1AffineTransformation.html#a03efc5c3d917051ffbd258c7c5bb5973", null ],
     [ "~AffineTransformation", "structhypro_1_1AffineTransformation.html#a2bd92a24675bc31b84791264664faa96", null ],
     [ "AffineTransformation", "structhypro_1_1AffineTransformation.html#a24dbb605d25ea1d528155e0b869de0bb", null ],
+    [ "AffineTransformation", "structhypro_1_1AffineTransformation.html#a132582e10baa898d3ceb4694e8946877", null ],
     [ "isIdentity", "structhypro_1_1AffineTransformation.html#a2d1282e0b4b0f84ba5c5ec12465e61c5", null ],
     [ "operator=", "structhypro_1_1AffineTransformation.html#ad9c9d64f67e38c811a49d857aa1f5f3f", null ],
     [ "operator=", "structhypro_1_1AffineTransformation.html#ac8312bc10204f5ef8bf467c351c6f0cd", null ],

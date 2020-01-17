@@ -4,6 +4,7 @@ var classhypro_1_1reachability_1_1Reach =
     [ "TaskType", "classhypro_1_1reachability_1_1Reach.html#a4af1be2b17ffcc6e5fbc04cad1fab2c5", null ],
     [ "TaskTypePtr", "classhypro_1_1reachability_1_1Reach.html#a394bad51ae696ac33a6945974ff3e211", null ],
     [ "Reach", "classhypro_1_1reachability_1_1Reach.html#aa42d7888aac0e1b2d546db2b19044546", null ],
+    [ "addInitialState", "classhypro_1_1reachability_1_1Reach.html#ac44c951c4822049bf3be0d3a767e40b0", null ],
     [ "checkTransitions", "classhypro_1_1reachability_1_1Reach.html#a83257bb824a2bc6b9a02864c48dbf7cf", null ],
     [ "computeForwardReachability", "classhypro_1_1reachability_1_1Reach.html#a10779cf610460de24cf0f30e24f650bf", null ],
     [ "computeForwardTimeClosure", "classhypro_1_1reachability_1_1Reach.html#a2eadfe3bf981539052012a246cf33be6", null ],

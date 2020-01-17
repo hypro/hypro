@@ -302,7 +302,7 @@ var searchData=
   ['transwithtargets',['transWithTargets',['../classhypro_1_1CIFLocVisitor.html#a5172f1b138b870e54e9ef0ab62c340f3',1,'hypro::CIFLocVisitor']]],
   ['treedotfilewriter',['treeDotFileWriter',['../classhypro_1_1SettingsProvider.html#ac98522e3c1061f382c626078805f9337',1,'hypro::SettingsProvider']]],
   ['treenode',['TreeNode',['../classhypro_1_1TreeNode.html',1,'hypro']]],
-  ['treenode',['treeNode',['../structhypro_1_1Task.html#a4fa85face7a3d93b4ada24cca2645263',1,'hypro::Task::treeNode()'],['../classhypro_1_1TreeNode.html#a8fa66e94c071fb175863a3e510a20404',1,'hypro::TreeNode::TreeNode()'],['../classhypro_1_1TreeNode.html#a34f2f8edb30a74da49751542341180f3',1,'hypro::TreeNode::TreeNode(unsigned _depth, const std::vector&lt; Data * &gt; &amp;_children, Data *_parent)']]],
+  ['treenode',['TreeNode',['../classhypro_1_1TreeNode.html#a8fa66e94c071fb175863a3e510a20404',1,'hypro::TreeNode::TreeNode()'],['../classhypro_1_1TreeNode.html#a34f2f8edb30a74da49751542341180f3',1,'hypro::TreeNode::TreeNode(unsigned _depth, const std::vector&lt; Data * &gt; &amp;_children, Data *_parent)'],['../structhypro_1_1Task.html#a4fa85face7a3d93b4ada24cca2645263',1,'hypro::Task::treeNode()']]],
   ['treenode_2eh',['TreeNode.h',['../TreeNode_8h.html',1,'']]],
   ['treenode_3c_20reachtreenode_3c_20state_20_3e_20_3e',['TreeNode&lt; ReachTreeNode&lt; State &gt; &gt;',['../classhypro_1_1TreeNode.html',1,'hypro']]],
   ['treestatistic',['TreeStatistic',['../structhypro_1_1TreeStatistic.html',1,'hypro']]],

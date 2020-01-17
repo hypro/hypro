@@ -64,19 +64,19 @@ var NAVTREEINDEX =
 "classhypro_1_1HybridSystemParser_1_1StdLibFunctionContext.html",
 "classhypro_1_1HybridSystemVisitor.html#abf7e62cbe7f2f09be413febab71354cc",
 "classhypro_1_1LRUCache.html#a2dc2bc88043c755b8dfc354d425c589b",
-"classhypro_1_1Optimizer.html#aa230cee5272894410a7e37893bf5d254",
-"classhypro_1_1Point.html#af2ba3afb4c0b6ba7bc52a376369e77ee",
-"classhypro_1_1ScaleOp.html#a6808a0cf0786eb55c070ba309657d133",
-"classhypro_1_1SupportFunctionT.html#aaed7156b1662b8a92b1943ffc1993164",
-"classhypro_1_1TreeNode.html",
-"classhypro_1_1ZonotopeT.html#aa19d7b906a7e1404487076b09eb7e01d",
-"classhypro_1_1ltiTimeEvolutionHandler.html",
-"conversionHelper_8h.html#aeb815bebd1feb8593cd9d83ad02e2d94",
-"example__parallel__composition_8cpp_source.html",
-"ltiInvariantHandler_8h_source.html",
-"structhypro_1_1ChildTimingInformation.html#a086eb42c041e7d218032e77bcc1384ec",
-"structhypro_1_1glpk__context.html#aa257c8cc75e722278eacf844cef92829",
-"types_8h.html#adf33fb69a3e5bd3c22df3034d24143dba735038369a2a0374d07934a5fc12d26a"
+"classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7",
+"classhypro_1_1Point.html#af1bfad0b9424d2b13d131c5179a2d764",
+"classhypro_1_1ScaleOp.html#a634f84ee44907c98b47c5942ccbb33e3",
+"classhypro_1_1SupportFunctionT.html#aae26e94bedb1f87332c1e698a58c7ae0",
+"classhypro_1_1Transition.html#af734f1ea648d115c53430971a3171202",
+"classhypro_1_1ZonotopeT.html#aa18ec26a73ffdb740c0c55e57c85f577",
+"classhypro_1_1ltiResetHandler.html#affa80e83c36c3850d3ea4e58e27bd14c",
+"conversionHelper_8h.html#ad7d59b3e7072bb71e58ef60494bf0957",
+"example__parallel__composition_8cpp.html#a902d56bddc3b3ee7fa321724b4cd0257",
+"ltiGuardHandler_8h_source.html",
+"structhypro_1_1Cacheable.html#ae11457c584b2cf79113e437dec929947",
+"structhypro_1_1glpk__context.html#a7cf930b33f0329e8d89ddc6fab809860",
+"types_8h.html#ade3e42b7b774f60999db5eb776027882adf13c3de3f933bf9881fbdba6e6ecf74"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

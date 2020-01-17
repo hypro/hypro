@@ -2,6 +2,7 @@ var classhypro_1_1Location =
 [
     [ "transitionVector", "classhypro_1_1Location.html#a5b1c1bd231cc31fcf7bda4bf2752ac75", null ],
     [ "Location", "classhypro_1_1Location.html#a5341ef657623c4188e479cf17c39ef11", null ],
+    [ "Location", "classhypro_1_1Location.html#a9949750959f5a116d427ffe81f2d121c", null ],
     [ "Location", "classhypro_1_1Location.html#a84a35d2b77c229f685c9c304997ff776", null ],
     [ "Location", "classhypro_1_1Location.html#aeffc26c683ac9afcc6850a6c03e85df7", null ],
     [ "Location", "classhypro_1_1Location.html#ae636049e31a377d3268934a3458ad0d7", null ],
@@ -20,7 +21,7 @@ var classhypro_1_1Location =
     [ "getNumberFlow", "classhypro_1_1Location.html#a7d8a180b8b08d3cd7abdd95d0bec5dde", null ],
     [ "getRectangularFlow", "classhypro_1_1Location.html#a90c6d2414f91e16f6bfe76d4a1891eff", null ],
     [ "getRectangularFlows", "classhypro_1_1Location.html#a6b118c4f3458ccbf0dc597260f1b2595", null ],
-    [ "getTransitions", "classhypro_1_1Location.html#afc1f23d7c9f9bd11f3cb21744332a416", null ],
+    [ "getTransitions", "classhypro_1_1Location.html#acc99a0051b166f21ee7cf9b3f7999608", null ],
     [ "hasExternalInput", "classhypro_1_1Location.html#ac0f38bec41d57aba1e82d8b1d7b97668", null ],
     [ "hash", "classhypro_1_1Location.html#a8a5754e841553cb19fd2ecbcecc0d262", null ],
     [ "isComposedOf", "classhypro_1_1Location.html#a280bb96bba67484bc038bf6337d706a8", null ],

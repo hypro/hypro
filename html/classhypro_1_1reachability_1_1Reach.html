@@ -152,6 +152,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a10779cf610460de24cf0f30e24f650bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8acaa6d2e364bb08fa41f7967701e00"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ac8acaa6d2e364bb08fa41f7967701e00">setInitialStates</a> (std::vector&lt; State &gt; &amp;&amp;initialStates)</td></tr>
 <tr class="separator:ac8acaa6d2e364bb08fa41f7967701e00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac44c951c4822049bf3be0d3a767e40b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ac44c951c4822049bf3be0d3a767e40b0">addInitialState</a> (State &amp;&amp;initialState)</td></tr>
+<tr class="separator:ac44c951c4822049bf3be0d3a767e40b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fe5309dbe91b02be7424807f6367860"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a394bad51ae696ac33a6945974ff3e211">TaskTypePtr</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a9fe5309dbe91b02be7424807f6367860">rGetQueue</a> ()</td></tr>
 <tr class="separator:a9fe5309dbe91b02be7424807f6367860"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2eadfe3bf981539052012a246cf33be6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a350051fb6d0a993ea534b3bc351a2e23">flowpipe_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a2eadfe3bf981539052012a246cf33be6">computeForwardTimeClosure</a> (const State &amp;_state)</td></tr>
@@ -309,6 +311,24 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac44c951c4822049bf3be0d3a767e40b0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, ReacherSettings, State &gt;::addInitialState </td>
+          <td>(</td>
+          <td class="paramtype">State &amp;&amp;&#160;</td>
+          <td class="paramname"><em>initialState</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a83257bb824a2bc6b9a02864c48dbf7cf"></a>
 <div class="memitem">
 <div class="memproto">
@@ -443,7 +463,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00141">141</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00142">142</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -573,7 +593,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 <p>Returns whether the bad states were reachable so far. </p>
 <p>[long description] </p><dl class="section return"><dt>Returns</dt><dd>true, if the bad states were reachable. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00114">114</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00115">115</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -600,7 +620,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00096">96</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00097">97</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -646,7 +666,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00142">142</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00143">143</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 <p>References <a class="el" href="FirstSegment_8h_source.html#l00014">hypro::reachability::computeTrafoMatrix()</a>.</p>
 
@@ -678,7 +698,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00139">139</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00140">140</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 <p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>.</p>
 
@@ -707,7 +727,7 @@ template&lt;typename Number, typename ReacherSettings, typename State&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00138">138</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00139">139</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 <p>Referenced by <a class="el" href="example__bouncingBall_8cpp_source.html#l00014">main()</a>.</p>
 

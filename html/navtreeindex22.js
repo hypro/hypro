@@ -1,5 +1,6 @@
 var NAVTREEINDEX22 =
 {
+"classhypro_1_1ZonotopeT.html#aa18ec26a73ffdb740c0c55e57c85f577":[5,1,4,8],
 "classhypro_1_1ZonotopeT.html#aa19d7b906a7e1404487076b09eb7e01d":[5,1,4,10],
 "classhypro_1_1ZonotopeT.html#aa46d97439cd78827946127ab7fda247a":[5,1,4,2],
 "classhypro_1_1ZonotopeT.html#aae826007908e36c097c8084b94eb67e1":[5,1,4,43],
@@ -248,6 +249,5 @@ var NAVTREEINDEX22 =
 "classhypro_1_1ltiResetHandler.html#a62768e7cc869b6cd9a3ee4cc2e3dc2ce":[7,0,1,148,4],
 "classhypro_1_1ltiResetHandler.html#a645ade46cced83a62ca5ffaca535cbf4":[7,0,1,148,5],
 "classhypro_1_1ltiResetHandler.html#aa79f55335ffe2c3d04f634d094c83dbb":[7,0,1,148,2],
-"classhypro_1_1ltiResetHandler.html#ae4e9666808d32b1c1f3325e945acc002":[7,0,1,148,7],
-"classhypro_1_1ltiResetHandler.html#affa80e83c36c3850d3ea4e58e27bd14c":[7,0,1,148,6]
+"classhypro_1_1ltiResetHandler.html#ae4e9666808d32b1c1f3325e945acc002":[7,0,1,148,7]
 };

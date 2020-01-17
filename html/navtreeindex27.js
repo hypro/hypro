@@ -1,5 +1,8 @@
 var NAVTREEINDEX27 =
 {
+"structhypro_1_1Cacheable.html#ae11457c584b2cf79113e437dec929947":[7,0,1,12,3],
+"structhypro_1_1CarlPolytopeSetting.html":[7,0,1,13],
+"structhypro_1_1ChildTimingInformation.html":[7,0,1,15],
 "structhypro_1_1ChildTimingInformation.html#a086eb42c041e7d218032e77bcc1384ec":[7,0,1,15,0],
 "structhypro_1_1Decomposition.html":[7,0,1,28],
 "structhypro_1_1Decomposition.html#a0575611b85fb7111afb5bf491f355f6b":[7,0,1,28,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX27 =
 "structhypro_1_1glpk__context.html#a510166cf79b28ab6e2541778955fcbfe":[7,0,1,80,3],
 "structhypro_1_1glpk__context.html#a53524e6a5136e0965959c774187673ad":[7,0,1,80,15],
 "structhypro_1_1glpk__context.html#a6731cf145286af345d5a801dcd25e03e":[7,0,1,80,13],
-"structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35":[7,0,1,80,5],
-"structhypro_1_1glpk__context.html#a7cf930b33f0329e8d89ddc6fab809860":[7,0,1,80,14],
-"structhypro_1_1glpk__context.html#a84a70b9d3d2c4d8d73791a49f4f54750":[7,0,1,80,19],
-"structhypro_1_1glpk__context.html#a9ea064ea8fa691a62657844e64ae5073":[7,0,1,80,16]
+"structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35":[7,0,1,80,5]
 };

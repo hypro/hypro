@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classhypro_1_1Point.html#af1bfad0b9424d2b13d131c5179a2d764":[7,0,1,166,48],
 "classhypro_1_1Point.html#af2ba3afb4c0b6ba7bc52a376369e77ee":[7,0,1,166,68],
 "classhypro_1_1Point.html#af31b478f15482955cf1db7abb8579446":[7,0,1,166,53],
 "classhypro_1_1Point.html#af3a4db44815daa25768b01afaf88e68a":[7,0,1,166,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classhypro_1_1ScaleOp.html#a468b7ee1141b40c8308a19bcdb464996":[7,0,1,194,1],
 "classhypro_1_1ScaleOp.html#a4cbdb3d909099adfbcf8a365cde89fbf":[7,0,1,194,3],
 "classhypro_1_1ScaleOp.html#a519aead4a8ab748db1a508ead0a4ee99":[7,0,1,194,16],
-"classhypro_1_1ScaleOp.html#a57d9f8250854ef8b9d04e03e42a54944":[7,0,1,194,15],
-"classhypro_1_1ScaleOp.html#a634f84ee44907c98b47c5942ccbb33e3":[7,0,1,194,10]
+"classhypro_1_1ScaleOp.html#a57d9f8250854ef8b9d04e03e42a54944":[7,0,1,194,15]
 };
