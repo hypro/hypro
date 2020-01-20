@@ -9,10 +9,14 @@ namespace hypro {
         TRACE("quickhull", points);
         removeDuplicateInputs();
 
-        //There's only a single point, so we fix it from both sides.
-        if(dimension == 1 && points.size() == 1) {
-            makeTrivialHull();
-            return;
+        //In the case of halfspace intersection, this case does not occur unless the input is invalid,
+        //since a single halfspace always defines an open set.
+        if constexpr(Euclidian) {
+            //There's only a single point, so we fix it from both sides.
+            if(dimension == 1 && points.size() == 1) {
+                makeTrivialHull();
+                return;
+            }
         }
 
         buildInitialPolytope();
@@ -81,15 +85,6 @@ namespace hypro {
             return;
         }
 
-        //calculate barycenter of initial polytope, which is the baryCenter vertices of the initial facet and the furthest away point
-        // baryCenter = points[furthestPoint_i];
-
-        // for(size_t vertexPos = 0; vertexPos < dimension; ++vertexPos) {
-        //     baryCenter += points[fSpace.facets.back().mVertices[vertexPos]];
-        // }
-
-        // baryCenter /= dimension + 1;
-
         //Set orientation
         if(fSpace.facets.front().visible(points[furthestPoint_i])) {
             fSpace.facets.front().invert();
@@ -102,7 +97,8 @@ namespace hypro {
             size_t insertedAt = fSpace.insertConePart(0, furthestPoint_i, i);
             Facet& createdFacet = fSpace.facets.back();
 
-            fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; //Set i-th neighbor of initial facet to the created facet.
+            //Set i-th neighbor of initial facet to the created facet.
+            fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; 
             
             for(facet_ind_t other_i = 0; other_i < fSpace.facets.size() - 1; ++other_i ) {
                 if constexpr(Euclidian) {
@@ -271,7 +267,12 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     void FloatQuickhull<Number, Euclidian>::constructLowerDimensional() {
 
-        if constexpr(!Euclidian) return;
+        if constexpr(!Euclidian) {
+            //This means that a single point lies on all given halfspaces.
+            //For this to be valid (their intersection not to be open), they must be linearly independent.
+            //TODO check for this properly
+            return;
+        }
 
         //TODO
         //Needs fixing for inexact arithmetic
