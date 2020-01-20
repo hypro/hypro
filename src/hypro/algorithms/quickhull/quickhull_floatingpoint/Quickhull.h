@@ -33,11 +33,11 @@ namespace hypro {
     private:
         //Inputs
         pointVector_t& points;
+        std::vector<point_ind_t> currentVertices;
         dimension_t dimension{};
 
         //Members
         FacetSpace fSpace;
-        // point_t baryCenter;
 
     public:
         Quickhull(pointVector_t& inputVertices, size_t dim);

@@ -22,7 +22,8 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     void FloatQuickhull<Number, Euclidian>::FacetSpace::insertTrivialFacet(const Number scalar) {
         facets.emplace_back();
-        facets.back().mOffset = scalar;
+        facets.back().mOuterOffset = scalar;
+        facets.back().mInnerOffset = scalar;
         facets.back().mNormal = point_t{1};
         facets.back().mNormal[0] = 1;
     }
@@ -30,7 +31,8 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     void FloatQuickhull<Number, Euclidian>::FacetSpace::insertReduced(Facet const& other, dimension_t newDimension, dimension_t reducedDimension) {
         Facet& facet = facets.emplace_back();
-        facet.mOffset = other.mOffset;
+        facet.mOuterOffset = other.mOuterOffset;
+        facet.mInnerOffset = other.mInnerOffset;
         facet.mNormal = qhvector_t(newDimension);
 
         for(size_t i = 0, j = 0; i < newDimension; ++i, ++j) {
@@ -77,7 +79,11 @@ namespace hypro {
         insertNew();
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
-        validateFacet(facets.back(), points[facets[other_i].mVertices[replaceAt]], facets[other_i]);
+        if(!validateFacet(facets.back())){
+            facets.back().mNormal = facets[other_i].mNormal;
+            facets.back().mOuterOffset = facets[other_i].mOuterOffset;
+            facets.back().mInnerOffset = facets[other_i].mInnerOffset;
+        }
         return insertedAt;
     }
 
@@ -119,12 +125,63 @@ namespace hypro {
     }
 
     template<typename Number, bool Euclidian>
-    void FloatQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet, point_t const& contained, Facet const& adjacentFacet) {
-        facet.setOrientation(contained, adjacentFacet);
+    bool FloatQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet) {
+        fixOffset(facet):
+
+        bool flipped = false;
+        for(point_ind_t vertex_i : currentVertices) {
+            if(std::find(facet.mVertices.begin(), facet.mVertices.end(), vertex_i) != facet.mVertices.end()) continue;
+
+            if(facet.innerVisible(points[vertex_i])) {
+                if(flipped) return false;
+                facet.invert();
+                flipped = true;
+            }
+        }
+
 #ifndef NDEBUG
         containsVertices(facet);
 #endif
+        return true;
     }
+
+    template<typename Number, bool Euclidian>
+    void FloatQuickhull<Number, Euclidian>::FacetSpace::fixOffset(Facet& facet) {
+        {
+            ScopedRoundingMode rounding{FE_UPWARD};
+            for(point_ind_t point_i : facet.mVertices) {
+                point_t& point = points[point_i];
+                Number distance;
+                if constexpr(Euclidian) { 
+                    distance = point.dot(facet.mNormal);
+                } else {
+                    distance = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
+                }
+
+                if(facet.mOuterOffset < distance) {
+                    facet.mOuterOffset = distance;
+                }
+            }
+        }
+
+        {
+            ScopedRoundingMode rounding{FE_DOWNWARD};
+            for(point_ind_t point_i : facet.mVertices) {
+                point_t& point = points[point_i];
+                Number distance;
+                if constexpr(Euclidian) { 
+                    distance = point.dot(facet.mNormal);
+                } else {
+                    distance = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
+                }
+
+                if(facet.mInnerOffset > distance) {
+                    facet.mInnerOffset = distance;
+                }
+            }
+        }
+    }
+
 
     template<typename Number, bool Euclidian>
     bool FloatQuickhull<Number, Euclidian>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
@@ -195,7 +252,7 @@ namespace hypro {
     void FloatQuickhull<Number, Euclidian>::FacetSpace::removeCoplanarFacets() {
         for(facet_ind_t facet_i = 0; facet_i < facets.size(); ++facet_i) {
             facets.erase(std::remove_if(facets.begin() + facet_i + 1, facets.end(), [this, facet_i](Facet& facet) {
-                return facet.mNormal == facets[facet_i].mNormal && facet.mOffset == facets[facet_i].mOffset;
+                return facet.mNormal == facets[facet_i].mNormal && facet.offset() == facets[facet_i].offset();
             }), facets.end());
         }
     }
@@ -254,7 +311,7 @@ namespace hypro {
                 var += 1;
             }
 
-            out << " = " << carl::convert<mpq_class, double>(facet.mOffset) << std::endl;
+            out << " = " << carl::convert<mpq_class, double>(facet.offset()) << std::endl;
 
             return out.str();
         }

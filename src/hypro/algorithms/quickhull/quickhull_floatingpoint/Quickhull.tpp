@@ -1,7 +1,7 @@
 namespace hypro {
     template<typename Number, bool Euclidian>
     FloatQuickhull<Number, Euclidian>::Quickhull(pointVector_t& points, dimension_t dimension) 
-    : points(points), dimension(dimension), fSpace(points, dimension) {}
+    : points(points), dimension(dimension), fSpace(points, currentVertices, dimension) {}
 
     template<typename Number, bool Euclidian>
     void FloatQuickhull<Number, Euclidian>::compute() {
@@ -105,7 +105,7 @@ namespace hypro {
                     assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal);
                 } else {
                     assert(fSpace.facets[other_i].mNormal != createdFacet.mNormal ||
-                     fSpace.facets[other_i].mOffset != createdFacet.mOffset);
+                     fSpace.facets[other_i].offset() != createdFacet.offset());
                 }
             }
             

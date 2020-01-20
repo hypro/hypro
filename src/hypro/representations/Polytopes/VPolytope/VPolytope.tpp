@@ -139,7 +139,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT(const matrix_t<Number> &_constraint
 		qh.compute();
 
 		for(typename QH::Facet& facet : qh.getFacets()) {
-			facet.mNormal /=-facet.mOffset;
+			facet.normalizeOffset();
 			mVertices.emplace_back(facet.mNormal);
 		}		
 	} else {

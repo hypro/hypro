@@ -9,14 +9,25 @@ namespace hypro {
 
         //modifiers
         void invert();
-        void setOrientation(point_t const& containedPoint, Facet const& adjacentFacet);
+        void normalizeOffset();
 
         //queries
         template<int RoundingMode = FE_UPWARD>
-        Number distance(point_t const& point) const;
+        Number distance(point_t const& point, Number offset) const;
+        template<int RoundingMode = FE_UPWARD>
+        Number innerDistance(point_t const& point) const;
+        template<int RoundingMode = FE_UPWARD>
+        Number outerDistance(point_t const& point) const;
         
-        bool visible(point_t const& vertex) const;
+        bool outerVisible(point_t const& vertex) const;
+        bool innerVisible(point_t const& vertex) const;
         size_t findNeighborIndex(facet_ind_t facet_i);
+
+        //compatibility overloads
+        template<int RoundingMode = FE_UPWARD>
+        Number distance(point_t const& point) const;
+        bool visible(point_t const& vertex) const;
+        Number offset() const;
 
         //members
         std::vector<point_ind_t> mVertices;
@@ -25,8 +36,8 @@ namespace hypro {
         point_t mNormal;
         point_ind_t furthestPoint;
         Number furthestPointDistance = Number(0);
-        Number mOffset = Number(1000);
-
+        Number mInnerOffset = Number(0);
+        Number mOuterOffset = Number(0);
     };
 }
 

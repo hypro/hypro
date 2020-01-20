@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Quickhull.h"
+#include "../ScopedRoundingMode.h"
 #include "util/logging/Logger.h"
 #include "util/adaptions_eigen/adaptions_eigen.h"
 
@@ -9,6 +9,7 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     class FloatQuickhull<Number, Euclidian>::FacetSpace {
         pointVector_t& points;
+        std::vector<point_ind_t>& currentVertices;
         dimension_t dimension;
 
     public:
@@ -18,7 +19,8 @@ namespace hypro {
 
         facetVector_t facets{};
 
-        explicit FacetSpace(pointVector_t& points, dimension_t dimension) : points(points), dimension(dimension) {};
+        explicit FacetSpace(pointVector_t& points, std::vector<point_ind_t>& currentVertices, dimension_t dimension) 
+            : points(points), currentVertices(currentVertices), dimension(dimension) {};
 
         //facet construction
         Facet& insertNew();
@@ -49,7 +51,8 @@ namespace hypro {
 
         //facet modification
         void computeNormal(Facet& facet);
-        void validateFacet(Facet& facet, point_t const& containedPoint, Facet const& adjacentFacet);
+        bool validateFacet(Facet& facet);
+        void fixOffset(Facet& facet);
         void validateVertexContainment(Facet& facet);
 
         bool tryAddToOutsideSet(Facet& facet, point_ind_t point_i);

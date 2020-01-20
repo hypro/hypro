@@ -109,7 +109,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 
         //Convert resulting facets into halfspaces
         for(auto& facet : qh.getFacets()) {
-            mHPlanes.emplace_back(facet.mNormal, facet.mOffset);
+            mHPlanes.emplace_back(facet.mNormal, facet.offset());
         }
 
 		//Assert containment
