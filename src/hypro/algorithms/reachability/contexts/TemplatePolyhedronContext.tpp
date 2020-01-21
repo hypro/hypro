@@ -52,7 +52,7 @@ namespace hypro {
         //Contains the newest relaxed invariant, called a(j+1) in paper
         vector_t<Number> nextStrengthenedInv = invTPoly.vector(); 
         //Fixed scaling factor mü
-        Number scalingFactor = 0.5;	
+        Number scalingFactor = 0.3;	
 
         //Compute pi(j) (certificate of feasibility for a(j+1)) by solving Dj
         //1.1 Construct A = (H, extended with lambda_j >= 0)^T
@@ -85,6 +85,7 @@ namespace hypro {
                 vector_t<Number> b = vector_t<Number>::Zero(invRows+invCols);
                 assert(b.rows() == A.rows());
                 auto deriv = lieDerivative(invTPoly.matrix().row(rowI));
+                std::cout << "TemplatePolyhedronContext::LIS, lie derivative of invTPoly matrix row " << rowI << " is: \n" << deriv.first << "with offset " << deriv.second << std::endl;
                 b.block(0,0,invCols,1) = scalingFactor * vector_t<Number>(invTPoly.matrix().row(rowI)) + deriv.first;
                 derivativeOffsets(rowI) = deriv.second;
                 std::cout << "TemplatePolyhedronContext::LIS, for rowI: " << rowI << " b is: \n" << b << std::endl;
@@ -151,6 +152,7 @@ namespace hypro {
         			vector_t<Number> rowToInsert = certificate.row(i);
         			rowToInsert(i) -= scalingFactor;
         			L.row(2*invRows+i) = std::move(rowToInsert.transpose());
+                    c(2*invRows+i) = -derivativeOffsets(i);
         		}
         	}
             std::cout << "TemplatePolyhedronContext::LIS, added (non-)frozen rows to L and c: L: \n" << L << "c: \n" << c << std::endl;
@@ -336,7 +338,9 @@ namespace hypro {
                 } else {
                     //mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.vector().rows());
                     //default to dimension size such that FSHandler can compare to that
-                    mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.matrix().cols());
+                    //mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.matrix().cols());
+                    //default to tpoly matrix rows size such that FSHandler can compare to that
+                    mRelaxedInvariant = vector_t<Number>::Zero(tpoly.matrix().rows());
                 }
 	        }
         }        

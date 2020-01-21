@@ -6,7 +6,8 @@ namespace hypro {
 
     template<typename State>
     void TPolyFirstSegmentHandler<State>::setInvariant(const vector_t<typename State::NumberType>& inv){
-        assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows());
+        //assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() - 1);
+        //assert(inv.rows() == tpoly.matrix().rows());
         mRelaxedInvariant = inv;
     }
 
@@ -111,7 +112,8 @@ namespace hypro {
                     } else {
                         auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
                         auto invVec = this->mState->getLocation()->getInvariant().getVector();
-                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
+                        //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
+                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING){
                             //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
                             //Using mRelaxedInvariant will lead to tighter bounds
                             assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
