@@ -85,6 +85,8 @@ namespace hypro {
             return;
         }
 
+        currentVertices.push_back(furthestPoint_i);
+
         //Set orientation
         if(fSpace.facets.front().visible(points[furthestPoint_i])) {
             fSpace.facets.front().invert();
@@ -127,6 +129,7 @@ namespace hypro {
 
         //Do first iteration
         facet.mVertices[0] = 0;
+        currentVertices.push_back(0);
 
         //Set the first row
         if constexpr(Euclidian) {
@@ -141,7 +144,7 @@ namespace hypro {
         vector_t<Number> result = lu.kernel().col(0);
 
         facet.mNormal = result.head(dimension);
-        facet.mOffset = -result[dimension];
+        fSpace.fixOffset(facet);
 
         for(size_t d = 1; d < dimension; ++d) {
             auto [onPlane, furthestPoint_i] = findFurthestPoint(facet);
@@ -152,6 +155,7 @@ namespace hypro {
             }
 
             facet.mVertices[d] = furthestPoint_i;
+            currentVertices.push_back(furthestPoint_i);
             //Set the (d+1)-th row
             if constexpr(Euclidian) {
                 matrix.row(d).head(dimension) = points[furthestPoint_i].transpose();
@@ -165,7 +169,7 @@ namespace hypro {
             result = lu.kernel().col(0);
 
             facet.mNormal = result.head(dimension);
-            facet.mOffset = -result[dimension];
+            fSpace.fixOffset(facet);
         }
         std::sort(facet.mVertices.begin(), facet.mVertices.end());
 
@@ -178,15 +182,10 @@ namespace hypro {
         Number furthestDistance = 0;
 
         for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
-            Number minDistance = facet.template distance<FE_DOWNWARD>(points[point_i]);
-            Number maxDistance = facet.template distance<FE_UPWARD>(points[point_i]);
-            Number distance = 0;
+            double distanceLeft = facet.template outerDistance<FE_DOWNWARD>(points[point_i]);
+            double distanceRight = -facet.template innerDistance<FE_DOWNWARD>(points[point_i]);
 
-            if(minDistance > 0) {
-                distance = minDistance;
-            } else if(maxDistance < 0) {
-                distance = -maxDistance;
-            }
+            double distance = std::max<Number>(std::max<Number>(distanceLeft, 0), distanceRight);
             
             if constexpr(!Euclidian) {
                 if(distance > 0 && points[point_i][dimension] == 0) {
@@ -233,6 +232,7 @@ namespace hypro {
         fSpace.deleteFacet(currentFacet_i);
 
         point_t& visiblePoint = points[visiblePoint_i];
+        currentVertices.push_back(furthestPoint_i);
 
         for(size_t neighbor_pos = 0; neighbor_pos < dimension; ++neighbor_pos) {
             facet_ind_t neighbor_i = fSpace.facets[currentFacet_i].mNeighbors[neighbor_pos];

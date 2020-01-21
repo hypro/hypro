@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include "../ScopedRoundingMode.h"
 
 namespace hypro {
@@ -30,14 +31,14 @@ namespace hypro {
         Number offset() const;
 
         //members
-        std::vector<point_ind_t> mVertices;
+        std::vector<point_ind_t> mVertices{};
         std::vector<facet_ind_t> mNeighbors;
         std::vector<point_ind_t> mOutsideSet;
         point_t mNormal;
         point_ind_t furthestPoint;
         Number furthestPointDistance = Number(0);
-        Number mInnerOffset = Number(0);
-        Number mOuterOffset = Number(0);
+        Number mInnerOffset = -std::numeric_limits<Number>.infinity();
+        Number mOuterOffset = -std::numeric_limits<Number>.infinity();
     };
 }
 

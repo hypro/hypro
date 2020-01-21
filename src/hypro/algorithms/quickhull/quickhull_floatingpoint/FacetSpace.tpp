@@ -121,12 +121,11 @@ namespace hypro {
         for(size_t i = 0; i < dimension; ++i) {
             facet.mNormal[i] = result[i];
         }
-        facet.mOffset = -result[dimension];
     }
 
     template<typename Number, bool Euclidian>
     bool FloatQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet) {
-        fixOffset(facet):
+        fixOffset(facet);
 
         bool flipped = false;
         for(point_ind_t vertex_i : currentVertices) {
@@ -151,15 +150,18 @@ namespace hypro {
             ScopedRoundingMode rounding{FE_UPWARD};
             for(point_ind_t point_i : facet.mVertices) {
                 point_t& point = points[point_i];
-                Number distance;
+                
+                if(point[point.rows() - 1] == 0) continue;
+                
+                Number projection;
                 if constexpr(Euclidian) { 
-                    distance = point.dot(facet.mNormal);
+                    projection = point.dot(facet.mNormal);
                 } else {
-                    distance = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
+                    projection = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
                 }
 
-                if(facet.mOuterOffset < distance) {
-                    facet.mOuterOffset = distance;
+                if(facet.mOuterOffset > projection) {
+                    facet.mOuterOffset = -projection;
                 }
             }
         }
@@ -168,15 +170,18 @@ namespace hypro {
             ScopedRoundingMode rounding{FE_DOWNWARD};
             for(point_ind_t point_i : facet.mVertices) {
                 point_t& point = points[point_i];
-                Number distance;
+
+                if(point[point.rows() - 1] == 0) continue;
+                
+                Number projection;
                 if constexpr(Euclidian) { 
-                    distance = point.dot(facet.mNormal);
+                    projection = point.dot(facet.mNormal);
                 } else {
-                    distance = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
+                    projection = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
                 }
 
-                if(facet.mInnerOffset > distance) {
-                    facet.mInnerOffset = distance;
+                if(facet.mInnerOffset < projection) {
+                    facet.mInnerOffset = -projection;
                 }
             }
         }
