@@ -9,7 +9,7 @@ namespace hypro {
         TRACE("quickhull", points);
         removeDuplicateInputs();
 
-        //In the case of halfspace intersection, this case does not occur unless the input is invalid,
+        //In the case of halfspace intersection, this does not occur unless the input is invalid,
         //since a single halfspace always defines an open set.
         if constexpr(Euclidian) {
             //There's only a single point, so we fix it from both sides.
@@ -96,8 +96,14 @@ namespace hypro {
 
         //Create cone from the new point
         for(size_t i = 0; i < dimension; ++i) {
-            size_t insertedAt = fSpace.insertConePart(0, furthestPoint_i, i);
-            Facet& createdFacet = fSpace.facets.back();
+            Facet& createdFacet = fSpace.insertNew();
+            size_t insertedAt = fSpace.copyVertices(createdFacet, fSpace.facets[0], furthestPoint_i, i);
+            fSpace.computeNormal(createdFacet);
+            if(!fSpace.validateFacet(createdFacet)) {
+                fSpace.facets.pop_back();
+                constructLowerDimensional();
+                return;
+            }
 
             //Set i-th neighbor of initial facet to the created facet.
             fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1; 
@@ -183,7 +189,7 @@ namespace hypro {
 
         for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
             double distanceLeft = facet.template outerDistance<FE_DOWNWARD>(points[point_i]);
-            double distanceRight = -facet.template innerDistance<FE_DOWNWARD>(points[point_i]);
+            double distanceRight = -facet.template innerDistance<FE_UPWARD>(points[point_i]);
 
             double distance = std::max<Number>(std::max<Number>(distanceLeft, 0), distanceRight);
             
@@ -209,11 +215,13 @@ namespace hypro {
 
         while(facetToProcess_i != fSpace.facets.size()) {
 
+            currentVertices.push_back(fSpace.facets[facetToProcess_i].furthestPoint);
+            
             bitset_t visited{fSpace.facets.size()};
             visited.set(facetToProcess_i);
             buildCone(facetToProcess_i, fSpace.facets[facetToProcess_i].furthestPoint, visited);
 
-            partitionAllVertices();
+            partitionAllVertices(fSpace.facets[facetToProcess_i].furthestPoint);
             fSpace.endModificationPhase();
 
             facetToProcess_i = getFacetToProcess();
@@ -232,14 +240,13 @@ namespace hypro {
         fSpace.deleteFacet(currentFacet_i);
 
         point_t& visiblePoint = points[visiblePoint_i];
-        currentVertices.push_back(furthestPoint_i);
 
         for(size_t neighbor_pos = 0; neighbor_pos < dimension; ++neighbor_pos) {
             facet_ind_t neighbor_i = fSpace.facets[currentFacet_i].mNeighbors[neighbor_pos];
 
             if(!visited[neighbor_i]) {
                 //neighbor is "inside" horizon
-                if(fSpace.facets[neighbor_i].visible(visiblePoint)) {
+                if(fSpace.facets[neighbor_i].innerVisible(visiblePoint)) {
                     visited.set(neighbor_i);
                     buildCone(neighbor_i, visiblePoint_i, visited);
                 } else {
@@ -283,6 +290,16 @@ namespace hypro {
         //Copy first facet
         fSpace.facets.push_back(fSpace.facets.front());
         fSpace.facets.back().invert();
+
+        fSpace.facets.front().mOuterOffset = 
+            std::accumulate(points.begin(), points.end(), -std::numeric_limits<Number>::infinity(), [this](Number& prev, point_t& point) {
+                return std::max(prev, point.dot(fSpace.facets.front().mNormal));
+            });
+
+        fSpace.facets.back().mOuterOffset = 
+            std::accumulate(points.begin(), points.end(), -std::numeric_limits<Number>::infinity(), [this](Number& prev, point_t& point) {
+                return std::max(prev, point.dot(fSpace.facets.back().mNormal));
+            });
     
         size_t reducableDimension = 0;
         for(; reducableDimension < dimension; ++reducableDimension) {
@@ -306,7 +323,7 @@ namespace hypro {
             return reducedPoint;
         });
 
-        //TODO I have no idea how the 'Euclidian' template argument of Quickhull us inferred here.
+        //TODO I have no idea how the 'Euclidian' template argument of Quickhull is inferred here.
         Quickhull qh{reducedPoints, dimension - 1};
         static_assert(std::is_same_v<decltype(qh), FloatQuickhull<Number, Euclidian>>);
 
@@ -327,16 +344,15 @@ namespace hypro {
     }
 
     template<typename Number, bool Euclidian>
-    void FloatQuickhull<Number, Euclidian>::partitionAllVertices() {
+    void FloatQuickhull<Number, Euclidian>::partitionAllVertices(point_ind_t newVertex_i) {
 
         for(facet_ind_t deleted_i : fSpace.deletedPositions) {
 
             for(point_ind_t outside_i : fSpace.facets[deleted_i].mOutsideSet) {
-
+                if(outside_i == newVertex_i) continue;
                 for(facet_ind_t inserted_i = fSpace.firstInserted; inserted_i < fSpace.facets.size(); ++inserted_i) {
                    if(fSpace.tryAddToOutsideSet(fSpace.facets[inserted_i], outside_i)) break;
                 }
-
             }
 
             fSpace.facets[deleted_i].mOutsideSet.clear();
@@ -346,6 +362,7 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     void FloatQuickhull<Number, Euclidian>::initialPartition() {
         for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
+            if(std::find(currentVertices.begin(), currentVertices.end(), point_i) != currentVertices.end()) continue;
             for(Facet& facet : fSpace.facets) {
                 if(fSpace.tryAddToOutsideSet(facet, point_i)) break;
             }

@@ -49,9 +49,11 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>
 }
 
 template <typename Number, typename Converter, typename S>
-void VPolytopeT<Number, Converter, S>::oldHalfspaceIntersect(const matrix_t<Number> &_constraints, const vector_t<Number> _constants) {
+VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible Halfspace intersections
+	TRACE( "hypro.representations.vpolytope", "Construct from " << _constraints << " <= " << _constants );
 	//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
+	assert( _constraints.rows() == _constants.rows() );
 	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 	vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
@@ -115,36 +117,6 @@ void VPolytopeT<Number, Converter, S>::oldHalfspaceIntersect(const matrix_t<Numb
 	mReduced = false;
 
 	//reduceNumberRepresentation();
-}
-
-template <typename Number, typename Converter, typename S>
-VPolytopeT<Number, Converter, S>::VPolytopeT(const matrix_t<Number> &_constraints, const vector_t<Number> _constants) {
-	using QH = Quickhull<Number, false>;
-	using pointVector_t = typename Quickhull<Number, false>::pointVector_t;
-	
-	TRACE( "hypro.representations.vpolytope", "Construct from " << _constraints << " <= " << _constants );
-	assert(_constraints.rows() == _constants.rows());
-
-	if constexpr(newHalfspaceIntersect) {
-		pointVector_t inputs;
-
-		for(size_t i = 0; i < _constraints.rows(); ++i) {
-			inputs.emplace_back(_constraints.cols() + 1);
-
-			inputs.back().head(_constraints.cols()) = _constraints.row(i);
-			inputs.back()[_constraints.cols()] = -_constants[i];
-		}
-
-		QH qh{inputs, _constraints.cols()};
-		qh.compute();
-
-		for(typename QH::Facet& facet : qh.getFacets()) {
-			facet.normalizeOffset();
-			mVertices.emplace_back(facet.mNormal);
-		}		
-	} else {
-		oldHalfspaceIntersect(_constraints, _constants);
-	}
 }
 
 //template<typename Number, typename Converter, typename S>

@@ -79,7 +79,7 @@ namespace hypro {
         insertNew();
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
-        if(!validateFacet(facets.back())){
+        if(!validateFacet(facets.back())) {
             facets.back().mNormal = facets[other_i].mNormal;
             facets.back().mOuterOffset = facets[other_i].mOuterOffset;
             facets.back().mInnerOffset = facets[other_i].mInnerOffset;
@@ -110,7 +110,7 @@ namespace hypro {
         
         Eigen::FullPivLU<matrix_t<Number>> lu(matrix);
 
-        assert(static_cast<size_t>(lu.rank()) == dimension);
+        // assert(static_cast<size_t>(lu.rank()) == dimension);
         TRACE("quickhull", "matrix rank " << lu.rank());
 
         point_t result =  matrix.fullPivLu().kernel().col(0);
@@ -134,8 +134,8 @@ namespace hypro {
             if(facet.innerVisible(points[vertex_i])) {
                 if(flipped) return false;
                 facet.invert();
-                flipped = true;
             }
+            flipped = true;
         }
 
 #ifndef NDEBUG
@@ -148,49 +148,29 @@ namespace hypro {
     void FloatQuickhull<Number, Euclidian>::FacetSpace::fixOffset(Facet& facet) {
         {
             ScopedRoundingMode rounding{FE_UPWARD};
-            for(point_ind_t point_i : facet.mVertices) {
-                point_t& point = points[point_i];
-                
-                if(point[point.rows() - 1] == 0) continue;
-                
-                Number projection;
-                if constexpr(Euclidian) { 
-                    projection = point.dot(facet.mNormal);
-                } else {
-                    projection = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
-                }
-
-                if(facet.mOuterOffset > projection) {
-                    facet.mOuterOffset = -projection;
-                }
-            }
+            facet.mOuterOffset = 
+                std::accumulate(facet.mVertices.begin(), facet.mVertices.end(), -std::numeric_limits<Number>::infinity(), [this,&facet](Number& prev, point_ind_t& point_i) {
+                        
+                        Number proj = points[point_i].dot(facet.mNormal);
+                        TRACE("quickhull", "prev " << prev << " new " <<  proj);
+                        
+                        return std::max(prev, proj);
+                });
         }
 
         {
             ScopedRoundingMode rounding{FE_DOWNWARD};
-            for(point_ind_t point_i : facet.mVertices) {
-                point_t& point = points[point_i];
-
-                if(point[point.rows() - 1] == 0) continue;
-                
-                Number projection;
-                if constexpr(Euclidian) { 
-                    projection = point.dot(facet.mNormal);
-                } else {
-                    projection = point.head(point.rows() - 1).dot(facet.mNormal) / point[point.rows() - 1];
-                }
-
-                if(facet.mInnerOffset < projection) {
-                    facet.mInnerOffset = -projection;
-                }
-            }
+            facet.mInnerOffset =             
+                std::accumulate(facet.mVertices.begin(), facet.mVertices.end(), std::numeric_limits<Number>::infinity(), [this,&facet](Number& prev, point_ind_t& point_i) {
+                        return std::min(prev, points[point_i].dot(facet.mNormal));
+                });
         }
     }
 
 
     template<typename Number, bool Euclidian>
     bool FloatQuickhull<Number, Euclidian>::FacetSpace::tryAddToOutsideSet(Facet& facet, point_ind_t point_i) {
-        Number distance = facet.distance(points[point_i]);
+        Number distance = facet.innerDistance(points[point_i]);
 
         if(distance > Number(0)) {
             facet.mOutsideSet.push_back(point_i);
@@ -295,6 +275,17 @@ namespace hypro {
     }
 
 #ifndef NDEBUG
+
+        template<typename Number, bool Euclidian>
+        std::string FloatQuickhull<Number, Euclidian>::FacetSpace::printAllDistances() {
+            std::stringstream out;
+            for(int i = 0; i < points.size(); ++i) {
+                out << " point " << i << " distanceInner " << facets.back().distanceInner(points[i]) << "distanceOuter " << facets.back().distanceOuter(points[i]) << std::endl;
+            }
+            return out.str();
+        }
+
+
         template<typename Number, bool Euclidian>
         std::string FloatQuickhull<Number, Euclidian>::FacetSpace::printAll() {
             std::stringstream out;
@@ -359,14 +350,11 @@ namespace hypro {
                 if(!checked[point_i] && facet.visible(points[point_i])) {
                     TRACE("quickhull", "NON CONTAINMENT" << std::endl << points[point_i] << std::endl << "Facet:" << std::endl << printFacet(facet));
                     TRACE("quickhull", "point_i " << point_i);
-                    TRACE("quickhull", "Checking inverted facet.");
 
-                    if(!inverted) {
-                        facet.invert();
-                        containsAllPoints(facet, true);
+                    for(int i = 0; i < facets.size(); ++i) {
+                        bool deleted = std::find(deletedPositions.begin(), deletedPositions.end(), i) != deletedPositions.end();
+                        TRACE("quickhull", "facet_i " << i << " contains " << !facets[i].innerVisible(points[point_i]) << " deleted " << deleted);
                     }
-
-                    assert(false);
                 }
             }
 

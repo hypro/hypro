@@ -53,6 +53,8 @@ namespace hypro {
         void computeNormal(Facet& facet);
         bool validateFacet(Facet& facet);
         void fixOffset(Facet& facet);
+        template<bool Maximize>
+        Number projectionExtreme(std::vector<point_ind_t>& points_i, point_t& normal);
         void validateVertexContainment(Facet& facet);
 
         bool tryAddToOutsideSet(Facet& facet, point_ind_t point_i);
@@ -74,13 +76,14 @@ namespace hypro {
         //Debug functions
 
 #ifndef NDEBUG
+        std::string printAllDistances();
         std::string printAll();
         std::string printFacet(Facet const& facet);
         void containsVertices(Facet& facet);
         void containsVertices(Facet& facet, Facet& currentFacet, bitset_t& visited);
         void containsAllPoints(Facet& facet, bool inverted = false);
 #endif
-    private:
+    
         size_t copyVertices(Facet& facet, Facet const& other, point_ind_t visiblePoint, size_t replaceAt);
     };
 }

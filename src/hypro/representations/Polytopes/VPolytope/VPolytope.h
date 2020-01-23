@@ -42,7 +42,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 
 	std::vector<std::set<unsigned>> mNeighbors;
 
-	constexpr static bool newHalfspaceIntersect = true;
+	constexpr static bool newHalfspaceIntersect = false;
 
   public:
 	/**

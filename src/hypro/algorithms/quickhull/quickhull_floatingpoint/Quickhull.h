@@ -62,7 +62,7 @@ namespace hypro {
 
         void findConeNeighbors(facet_ind_t facet_i);
 
-        void partitionAllVertices();
+        void partitionAllVertices(point_ind_t newVertex_i);
 
         void initialPartition();
 

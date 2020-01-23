@@ -37,8 +37,8 @@ namespace hypro {
         point_t mNormal;
         point_ind_t furthestPoint;
         Number furthestPointDistance = Number(0);
-        Number mInnerOffset = -std::numeric_limits<Number>.infinity();
-        Number mOuterOffset = -std::numeric_limits<Number>.infinity();
+        Number mInnerOffset = std::numeric_limits<Number>::infinity();
+        Number mOuterOffset = -std::numeric_limits<Number>::infinity();
     };
 }
 
