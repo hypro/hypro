@@ -80,10 +80,11 @@ namespace hypro {
         size_t insertedAt = copyVertices(facets.back(), facets[other_i], visiblePoint, replaceAt);
         computeNormal(facets.back());
         if(!validateFacet(facets.back())) {
+            TRACE("quickhull", "facet " << facets.size()-1 << " copyof " << other_i);
             facets.back().mNormal = facets[other_i].mNormal;
-            facets.back().mOuterOffset = facets[other_i].mOuterOffset;
-            facets.back().mInnerOffset = facets[other_i].mInnerOffset;
+            fixOffset(facets.back());
         }
+
         return insertedAt;
     }
 
@@ -127,13 +128,22 @@ namespace hypro {
     bool FloatQuickhull<Number, Euclidian>::FacetSpace::validateFacet(Facet& facet) {
         fixOffset(facet);
 
+        if(facets.size() == 26) {
+            TRACE("quickhull", printAllDistances());
+        }
+
         bool flipped = false;
         for(point_ind_t vertex_i : currentVertices) {
             if(std::find(facet.mVertices.begin(), facet.mVertices.end(), vertex_i) != facet.mVertices.end()) continue;
 
             if(facet.innerVisible(points[vertex_i])) {
-                if(flipped) return false;
+                if(flipped) {
+                    return false;
+                }
                 facet.invert();
+                TRACE("quickhull", "inverted");
+                TRACE("quickhull", printAllDistances());
+                if(facet.innerVisible(points[vertex_i])) return false;
             }
             flipped = true;
         }
@@ -280,7 +290,7 @@ namespace hypro {
         std::string FloatQuickhull<Number, Euclidian>::FacetSpace::printAllDistances() {
             std::stringstream out;
             for(int i = 0; i < points.size(); ++i) {
-                out << " point " << i << " distanceInner " << facets.back().distanceInner(points[i]) << "distanceOuter " << facets.back().distanceOuter(points[i]) << std::endl;
+                out << " point " << i << " distanceInner " << facets.back().innerDistance(points[i]) << " distanceOuter " << facets.back().outerDistance(points[i]) << std::endl;
             }
             return out.str();
         }
@@ -347,7 +357,8 @@ namespace hypro {
             }
 
             for(point_ind_t point_i = 0; point_i < points.size(); ++point_i) {
-                if(!checked[point_i] && facet.visible(points[point_i])) {
+                if(!checked[point_i] && facet.innerVisible(points[point_i]) &&
+                    std::find(facet.mVertices.begin(), facet.mVertices.end(), point_i) == facet.mVertices.end()) {
                     TRACE("quickhull", "NON CONTAINMENT" << std::endl << points[point_i] << std::endl << "Facet:" << std::endl << printFacet(facet));
                     TRACE("quickhull", "point_i " << point_i);
 
@@ -355,6 +366,7 @@ namespace hypro {
                         bool deleted = std::find(deletedPositions.begin(), deletedPositions.end(), i) != deletedPositions.end();
                         TRACE("quickhull", "facet_i " << i << " contains " << !facets[i].innerVisible(points[point_i]) << " deleted " << deleted);
                     }
+                    assert(false);
                 }
             }
 

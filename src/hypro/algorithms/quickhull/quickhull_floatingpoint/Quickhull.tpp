@@ -6,7 +6,11 @@ namespace hypro {
     template<typename Number, bool Euclidian>
     void FloatQuickhull<Number, Euclidian>::compute() {
 
-        TRACE("quickhull", points);
+    
+        for(auto& point : points) {
+            TRACE("quickhull", point * (2 << 12));
+        }
+
         removeDuplicateInputs();
 
         //In the case of halfspace intersection, this does not occur unless the input is invalid,
@@ -216,7 +220,7 @@ namespace hypro {
         while(facetToProcess_i != fSpace.facets.size()) {
 
             currentVertices.push_back(fSpace.facets[facetToProcess_i].furthestPoint);
-            
+
             bitset_t visited{fSpace.facets.size()};
             visited.set(facetToProcess_i);
             buildCone(facetToProcess_i, fSpace.facets[facetToProcess_i].furthestPoint, visited);
@@ -255,8 +259,16 @@ namespace hypro {
                     //Find the index of the ridge from the facet outside the horizon (neighbor_i) to the facet inside the horizon (currentFacet_i).
                     size_t ridgeIndex_outer_inner = fSpace.facets[neighbor_i].findNeighborIndex(currentFacet_i);
 
-                    size_t differentiatingPosition = fSpace.insertConePart(neighbor_i, visiblePoint_i, ridgeIndex_outer_inner);
-                    
+                    Facet& createdFacet = fSpace.insertNew();
+                    size_t differentiatingPosition = fSpace.copyVertices(createdFacet, fSpace.facets[neighbor_i], visiblePoint_i, ridgeIndex_outer_inner);
+                    fSpace.computeNormal(createdFacet);
+                    if(!fSpace.validateFacet(createdFacet)) {
+                        fSpace.facets.resize(1);
+                        constructLowerDimensional();
+                        fSpace.deletedPositions.clear();
+                        return;
+                        static_assert(false);
+                    }
 #ifndef NDEBUG
                     fSpace.containsAllPoints(fSpace.facets.back());
 #endif
