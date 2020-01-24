@@ -71,7 +71,6 @@ class Optimizer {
 	mutable std::map<std::thread::id, glpk_context> mGlpkContext;
 
   public:
-  
 	/**
 	 * @brief      Default constructor.
 	 */
@@ -136,10 +135,10 @@ class Optimizer {
 
 	void cleanGLPInstance();
 
-	#ifndef NDEBUG
+#ifndef NDEBUG
 	inline SOLUTION getLastConsistencyAnswer() const { return mLastConsistencyAnswer; }
 	inline bool getConsistencyChecked() const { return mConsistencyChecked; }
-	#endif
+#endif
 
 	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
 		return mGlpkContext;

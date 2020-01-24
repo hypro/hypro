@@ -48,13 +48,13 @@ Optimizer<Number>::Optimizer( const Optimizer<Number>& orig ) {
 	mConstraintMatrix = orig.matrix();
 	mConstraintVector = orig.vector();
 	mConsistencyChecked = false;
-	//TODO: Instead of cleaning the glp context every time we copy, 
+	//TODO: Instead of cleaning the glp context every time we copy,
 	//clarify how copying the contexts works in glpk and fix that in glpk_context.h
 	//mLastConsistencyAnswer = orig.getLastConsistencyAnswer();
 	cleanGLPInstance();
 	mGlpkContext = std::map<std::thread::id, glpk_context>();
 	assert( isSane() );
-	assert(!mConsistencyChecked);
+	assert( !mConsistencyChecked );
 }
 
 //Copy assignment via Copy-and-Swap idiom
@@ -159,7 +159,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 		if ( this->checkConsistency() ) {
 			return EvaluationResult<Number>( Number( 0 ), vector_t<Number>::Zero( 1 ), SOLUTION::FEAS );  // origin, feasible
 		}
-		return EvaluationResult<Number>();  // defaults to infeasible.
+		return EvaluationResult<Number>();	// defaults to infeasible.
 	}
 
 #if defined( HYPRO_USE_SMTRAT ) || defined( HYPRO_USE_Z3 ) || defined( HYPRO_USE_SOPLEX )
@@ -266,7 +266,7 @@ bool Optimizer<Number>::checkConsistency() const {
 	//assert((mConsistencyChecked && mLastConsistencyAnswer != SOLUTION::UNKNOWN) || (!mConsistencyChecked && mLastConsistencyAnswer == SOLUTION::UNKNOWN));
 	assert( isSane() );
 	updateConstraints();
-	
+
 	if ( mConstraintMatrix.rows() == 0 ) {
 		mLastConsistencyAnswer = SOLUTION::FEAS;
 		return true;
@@ -377,16 +377,16 @@ bool Optimizer<Number>::hasContext( std::thread::id ) const {
 template <typename Number>
 bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
-	
-		TRACE("hypro.optimizer","Have " << mGlpkContext.size() << " instances to check.");
-		for(const auto& glpPair : mGlpkContext) {
-			if(glpPair.second.mConstraintsSet && (!glpPair.second.mInitialized || !glpPair.second.arraysCreated))
-				return false;
-			if(glpPair.second.arraysCreated && (glpPair.second.ia == nullptr || glpPair.second.ja == nullptr || glpPair.second.ar == nullptr))
-				return false;
-			TRACE("hypro.optimizer","Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
-		}
-	
+
+	TRACE( "hypro.optimizer", "Have " << mGlpkContext.size() << " instances to check." );
+	for ( const auto& glpPair : mGlpkContext ) {
+		if ( glpPair.second.mConstraintsSet && ( !glpPair.second.mInitialized || !glpPair.second.arraysCreated ) )
+			return false;
+		if ( glpPair.second.arraysCreated && ( glpPair.second.ia == nullptr || glpPair.second.ja == nullptr || glpPair.second.ar == nullptr ) )
+			return false;
+		TRACE( "hypro.optimizer", "Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane." );
+	}
+
 #endif
 	return true;
 }
@@ -402,7 +402,7 @@ void Optimizer<Number>::initialize() const {
 	}
 	assert( hasContext( std::this_thread::get_id() ) );
 	mGlpkContext[std::this_thread::get_id()].createLPInstance();
-	assert(mGlpkContext[std::this_thread::get_id()].mInitialized == true);
+	assert( mGlpkContext[std::this_thread::get_id()].mInitialized == true );
 	TRACE( "hypro.optimizer", "Done." );
 }
 
@@ -421,29 +421,26 @@ void Optimizer<Number>::updateConstraints() const {
 	glpk_context& glpCtx = mGlpkContext[std::this_thread::get_id()];
 
 	if ( !glpCtx.mConstraintsSet ) {
-		
 		if ( maximize ) {
 			glp_set_obj_dir( glpCtx.lp, GLP_MAX );
 		} else {
 			glp_set_obj_dir( glpCtx.lp, GLP_MIN );
 		}
 
-		if ( alreadyInitialized ) {  // clean up old setup.
+		if ( alreadyInitialized ) {	 // clean up old setup.
 			glpCtx.deleteArrays();
 
 			TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " refreshes its glp instance. (@" << &mGlpkContext[std::this_thread::get_id()] << ")" );
 
 			glpCtx.deleteLPInstance();
 			glpCtx.createLPInstance();
-/*
+
 			if ( maximize ) {
-				std::cout << "set max" << std::endl;
 				glp_set_obj_dir( glpCtx.lp, GLP_MAX );
 			} else {
-				std::cout << "set min" << std::endl;
 				glp_set_obj_dir( glpCtx.lp, GLP_MIN );
 			}
-*/
+
 #ifdef HYPRO_USE_SMTRAT
 #ifndef RECREATE_SOLVER
 			mSmtratSolver.pop();
@@ -465,13 +462,13 @@ void Optimizer<Number>::updateConstraints() const {
 		}
 
 		int numberOfConstraints = int( mConstraintMatrix.rows() );
-		if ( numberOfConstraints > 0) {
+		if ( numberOfConstraints > 0 ) {
 			// convert constraint constants
 			glp_add_rows( glpCtx.lp, numberOfConstraints );
 			//std::cout << __func__ << ": mRelationSymbols empty before fixing it? " << mRelationSymbols.empty() << std::endl;
-			if(mRelationSymbols.empty()){
+			if ( mRelationSymbols.empty() ) {
 				//This is just a hotfix for a problem with TemplatePolyhedra
-				mRelationSymbols = std::vector<carl::Relation>(numberOfConstraints, carl::Relation::LEQ);
+				mRelationSymbols = std::vector<carl::Relation>( numberOfConstraints, carl::Relation::LEQ );
 				//setRelations(std::vector<carl::Relation>(numberOfConstraints, carl::Relation::LEQ));
 			}
 			for ( int i = 0; i < numberOfConstraints; i++ ) {
@@ -520,7 +517,7 @@ void Optimizer<Number>::updateConstraints() const {
 			glp_load_matrix( glpCtx.lp, numberOfConstraints * cols, glpCtx.ia, glpCtx.ja, glpCtx.ar );
 			for ( int i = 0; i < cols; ++i ) {
 				glp_set_col_bnds( glpCtx.lp, i + 1, GLP_FR, 0.0, 0.0 );
-				glp_set_obj_coef( glpCtx.lp, i + 1, 1.0 );  // not needed?
+				glp_set_obj_coef( glpCtx.lp, i + 1, 1.0 );	// not needed?
 			}
 
 #ifdef HYPRO_USE_SMTRAT

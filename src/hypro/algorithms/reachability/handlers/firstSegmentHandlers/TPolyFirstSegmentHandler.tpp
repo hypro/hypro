@@ -113,7 +113,7 @@ namespace hypro {
                         auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
                         auto invVec = this->mState->getLocation()->getInvariant().getVector();
                         //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
-                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING){
+                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant.rows()){// != vector_t<Number>::Zero(this->mState->getDimension())){
                             //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
                             //Using mRelaxedInvariant will lead to tighter bounds
                             assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
