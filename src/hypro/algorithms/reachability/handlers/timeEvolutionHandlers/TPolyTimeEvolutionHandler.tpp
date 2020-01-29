@@ -35,6 +35,7 @@ namespace hypro {
 
 			//Compute Lie derivative to power of m from initial.matrix().row(i)
             Number factorial = 1;
+            Number timestepPower = 1;
             vector_t<Number> derivative(tpoly.matrix().cols()+1);
             derivative.block(0,0,tpoly.matrix().cols(),1) = tpoly.matrix().row(rowI).transpose();
             derivative(derivative.rows()-1) = 0;
@@ -42,45 +43,51 @@ namespace hypro {
 			vector_t<Number> r = vector_t<Number>::Zero(tpoly.matrix().cols() + 1);
 
             //For first m coefficients in polynom:
-			//for(int coeffI = 1; (unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
-            for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
+			for(int coeffI = 1; (unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
+            //for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
 
 				//Special case: first index does not use lie derivative
 				factorial *= coeffI;
+                timestepPower *= carl::convert<tNumber,Number>(this->mTimeStep);
 				derivative = lieDerivative(derivative);	
 				if(derivative == vector_t<Number>::Zero(derivative.rows())) break;
 
 				//if index < m+1: Solve LP over tpoly to evaluate into derivative direction
 				//if index == m+1: Solve LP over TPoly(matrix(),invariants) to evaluate into derivative direction (remainder term only bounded by invariants)
-                //if((unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER - 1){
-                if(coeffI < tpoly.matrix().rows()){
-                    g += (carl::pow(carl::convert<tNumber,Number>(this->mTimeStep),Number(coeffI)) / factorial) * derivative;
+                if((unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER - 1){
+                //if(coeffI < tpoly.matrix().rows()){
+                    g += (timestepPower / factorial) * derivative;
+                    //g += (carl::pow(carl::convert<tNumber,Number>(this->mTimeStep), Number(coeffI)) / factorial) * derivative;
                 } else {
-                    //NOTE: How to treat remainder? Normally, use tpoly.matrix() as matrix, and use giant coeffs where bounds do not exist but evaluating then does not make any sense.
                     //If using the invariant matrix we either get the same or better results.
-                	r = (carl::pow(carl::convert<tNumber,Number>(this->mTimeStep),Number(coeffI)) / factorial) * derivative;
+                	r = (timestepPower / factorial) * derivative;
+                    //r += (carl::pow(carl::convert<tNumber,Number>(this->mTimeStep), Number(coeffI)) / factorial) * derivative;
                 } 
             }
 
             //Evaluate tpoly in direction g without last coeff (since g is dim+1 dimensional)
             //NOTE: maybe one can avoid this evaluation by maximizing it via the last computed segment and its current bounds.
-            EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), true);
+            EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), false);
+            std::cout << "TPolyTimeEvolutionHandler::handle, evalG: " << evalG << std::endl;
+            assert(evalG.errorCode == SOLUTION::FEAS);
 
             //Evaluate invPoly in direction r without last coeff
             EvaluationResult<Number> evalR;
             if(this->mState->getLocation()->getInvariant().empty()){
                 evalR = EvaluationResult<Number>(SOLUTION::INFTY);
             } else {
-                auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
-                auto invVec = this->mState->getLocation()->getInvariant().getVector();
                 //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
-                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING){
+                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING
+                   && mRelaxedInvariant.rows() == tpoly.matrix().rows() 
+                   && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
                     //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
                     //Using mRelaxedInvariant will lead to tighter bounds
                     assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
                     TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), mRelaxedInvariant);
                     evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
                 } else {
+                    auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
+                    auto invVec = this->mState->getLocation()->getInvariant().getVector();
                     assert(invMat.rows() == invVec.rows());
                     assert((unsigned)invMat.cols() == this->mState->getDimension());
                     TemplatePolyhedron<Number> invTPoly(invMat, invVec);
@@ -89,7 +96,6 @@ namespace hypro {
             }
             
             //Set value in coeff vec
-            assert(evalG.errorCode == SOLUTION::FEAS);
             if(evalR.errorCode == SOLUTION::FEAS){
             	newVec(rowI) = evalG.supportValue + g(g.rows()-1) + evalR.supportValue + r(r.rows()-1);
             } else {

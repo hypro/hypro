@@ -332,7 +332,7 @@ namespace hypro {
 					fullyInside = false;
 				} 
 			} else {
-				if(-mVector(i) < offset){
+				if(-mVector(i) <= offset){
 					fullyOutside = false;
 				}
 			}
@@ -369,7 +369,7 @@ namespace hypro {
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
 		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmpty: " << mEmpty << std::endl;
-		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(this->empty()){
 			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;

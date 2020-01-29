@@ -45,6 +45,7 @@ template <typename Number>
 class TemplatePolyhedronContextTest : public ::testing::Test {
   protected:
 	virtual void SetUp() {
+
 		// Initialize Location with unbounded invariants
 		flow = matrix_t<Number>::Zero( 3, 3 );
 		flow << 3, 2, 1,  // affine flow, should grow into infinity
@@ -59,7 +60,9 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 
 		// Initialize tpoly - is a triangle with corner points (0,0,)(2,1)(4,0)//(0,0),(1,2),(2,0)
 		mat = matrix_t<Number>::Zero( 3, 2 );
-		mat << -2, 1, 2, 1, 0, -1;
+		mat << -2, 1, 
+				2, 1, 
+				0, -1;
 		vec = vector_t<Number>::Zero( 3 );
 		vec << 0, 2, 0;
 		tpoly = TPoly<Number>( mat, vec );
@@ -68,8 +71,8 @@ class TemplatePolyhedronContextTest : public ::testing::Test {
 		// NOTE: trappingFlow will eventually direct everything to (0,0)
 		trappingFlow = matrix_t<Number>::Zero( 3, 3 );
 		trappingFlow << 0.5, 0, 0,	// shrinks x every timestep, never reaching 0
-			  0, 0.5, 0,			// shrinks y every timestep, never reaching 0
-			  0, 0, 0;
+			  			0, 0.5, 0,	// shrinks y every timestep, never reaching 0
+			  			0, 0, 0;
 		triangleInvMat = mat;
 		triangleInvVec = vec;
 		triangleInvVec( 1 ) = 4;
@@ -244,6 +247,7 @@ TYPED_TEST( TemplatePolyhedronContextTest, PositiveInvariant ) {
 }
 
 TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
+	
 	// Build new badstate
 	matrix_t<TypeParam> badstateFlow = matrix_t<TypeParam>::Identity( 3, 3 );
 	badstateFlow( 2, 2 ) = TypeParam( 0 );
@@ -292,7 +296,10 @@ TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
 	// Result: 1 of 2 invariants should be added and the one added should be corrected from x >= -10 to x >= 0
 	auto testPoly2 = TemplatePolyhedronT<T, C, InitInv>( this->tpoly );
 	matrix_t<T> controlMat = matrix_t<T>::Zero( 4, 2 );
-	controlMat << -1, 2, 1, 2, 0, -1, -1, 0;
+	controlMat << 	-2, 1, 
+					2, 1, 
+					0, -1, 
+					-1, 0;
 	vector_t<T> controlVec = vector_t<T>::Zero( 4 );
 	controlVec << 0, 2, 0, 0;
 	TemplatePolyhedronT<T, C, InitInv> controlPoly2( controlMat, controlVec );
@@ -301,7 +308,11 @@ TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
 	// Test case - initial, invariants and guards
 	TemplatePolyhedronT<T, C, InitInvGuard> testPoly3( this->tpoly );
 	controlMat = matrix_t<T>::Zero( 5, 2 );
-	controlMat << -1, 2, 1, 2, 0, -1, -1, 0, -1, -1;
+	controlMat << 	-2, 1, 
+					2, 1, 
+					0, -1, 
+					-1, 0, 
+					-1, -1;
 	controlVec = vector_t<T>::Zero( 5 );
 	controlVec << 0, 2, 0, 0, 0;
 	TemplatePolyhedronT<T, C, InitInvGuard> controlPoly3( controlMat, controlVec );
@@ -324,19 +335,28 @@ TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
 	ha.setLocalBadStates( localBadstates );
 	ha.setGlobalBadStates( gBadstate );
 
-	// TODOOO: Test case - initial, invariants, guards and badstates
+	// Test case - initial, invariants, guards and badstates
 	TemplatePolyhedronT<T, C, InitInvGuardBad> testPoly4( this->tpoly );
 	controlMat = matrix_t<T>::Zero( 5, 2 );
-	controlMat << -2, 1, 2, 1, 0, -1, -1, 0, -1, -1;
+	controlMat << 	-2, 1, 
+					2, 1, 
+					0, -1, 
+					-1, 0, 
+					-1, -1;
 	controlVec = vector_t<T>::Zero( 5 );
 	controlVec << 0, 2, 0, 0, 0;
 	TemplatePolyhedronT<T, C, InitInvGuardBad> controlPoly4( controlMat, controlVec );
 	std::cout << "CreateTemplateContentTest, createTContent testPoly4: \n"
 			  << tpcontext.createTemplateContent( testPoly4 ) << std::endl;
 	EXPECT_EQ( tpcontext.createTemplateContent( testPoly4 ), controlPoly4 );
+
+	//TODO: Test case - octagon
 }
 
 TYPED_TEST( TemplatePolyhedronContextTest, LocationInvariantStrengthening ) {
+
+	//TODO: Test case - no invariant
+
 	// First Test: have triangle shaped initial sets and triangle shaped invariants
 	// Initialize tpcontext with positive invariant flow
 	State_t<TypeParam> state( &( this->trappingLoc ) );
@@ -351,56 +371,54 @@ TYPED_TEST( TemplatePolyhedronContextTest, LocationInvariantStrengthening ) {
 	tpolyTrapVector << 2, 4, 1;
 	TPoly<TypeParam> tpolyTrap( this->trappingLoc.getInvariant().getMatrix(), tpolyTrapVector );
 	EXPECT_TRUE( tpolyTrap.isBounded() );
-	// EXPECT_TRUE( tpcontextTrapping.isPositiveInvariant( this->tpoly, tpolyTrapVector ) );
+	EXPECT_TRUE( tpcontextTrapping.isPositiveInvariant( this->tpoly, tpolyTrapVector ) );
 
-	// Test if it just works
+	// Test if it just works - The result should be the same as before
 	auto res = tpcontextTrapping.locationInvariantStrengthening( tpolyTrap, this->tpoly.vector() );
 	for ( int i = 0; i < res.rows(); ++i ) {
 		EXPECT_TRUE( ( this->tpoly.vector()( i ) <= res( i ) ) );
 		EXPECT_TRUE( ( res( i ) <= tpolyTrap.vector()( i ) ) );
 	}
-	/*
-		//Second Test: Have triangle shaped initial sets and box shaped invariants
-		//Build box invariants
-		std::cout << "SECOND TEST" << std::endl;
-		matrix_t<TypeParam> boxInvMat = matrix_t<TypeParam>::Zero(4,2);
-		boxInvMat << 1,0,
-				  -1,0,
-				  0,1,
-				  0,-1;
-		vector_t<TypeParam> boxInvVec = 5*vector_t<TypeParam>::Ones(4);
-		this->trappingLoc.setInvariant(Condition<TypeParam>(boxInvMat,boxInvVec));
-		EXPECT_EQ(state.getLocation()->getInvariant(), Condition<TypeParam>(boxInvMat,boxInvVec));
+	
+	//Second Test: Have triangle shaped initial sets and box shaped invariants
+	//Build box invariants
+	std::cout << "=== SECOND TEST ===" << std::endl;
+	matrix_t<TypeParam> boxInvMat = matrix_t<TypeParam>::Zero(4,2);
+	boxInvMat << 1,0,
+				-1,0,
+				0,1,
+				0,-1;
+	vector_t<TypeParam> boxInvVec = 5*vector_t<TypeParam>::Ones(4);
+	this->trappingLoc.setInvariant(Condition<TypeParam>(boxInvMat,boxInvVec));
+	EXPECT_EQ(state.getLocation()->getInvariant(), Condition<TypeParam>(boxInvMat,boxInvVec));
 
-		//Overapproximate positive box invariant with triangle shape of tpoly
-		TPoly<TypeParam>
-	   tpolyTrapBox(this->trappingLoc.getInvariant().getMatrix(),this->trappingLoc.getInvariant().getVector());
-		EXPECT_TRUE(tpolyTrapBox.isBounded());
-		TPoly<TypeParam> tpolyTrapBoxOverapprox = tpolyTrapBox.overapproximate(this->tpoly.matrix());
+	//Overapproximate positive box invariant with triangle shape of tpoly
+	TPoly<TypeParam> tpolyTrapBox(this->trappingLoc.getInvariant().getMatrix(),this->trappingLoc.getInvariant().getVector());
+	EXPECT_TRUE(tpolyTrapBox.isBounded());
+	TPoly<TypeParam> tpolyTrapBoxOverapprox = tpolyTrapBox.overapproximate(this->tpoly.matrix());
 
-		//Test with box invariants
-		auto res2 = tpcontextTrapping.locationInvariantStrengthening(tpolyTrapBoxOverapprox, this->tpoly.vector());
-		for(int i = 0; i < res2.rows(); ++i){
-			EXPECT_TRUE((this->tpoly.vector()(i) <= res2(i)));
-			EXPECT_TRUE((res2(i) <= tpolyTrapBoxOverapprox.vector()(i)));
-		}
+	//Test with box invariants - The result should be the same as before
+	auto res2 = tpcontextTrapping.locationInvariantStrengthening(tpolyTrapBoxOverapprox, this->tpoly.vector());
+	for(int i = 0; i < res2.rows(); ++i){
+		EXPECT_TRUE((this->tpoly.vector()(i) <= res2(i)));
+		EXPECT_TRUE((res2(i) <= tpolyTrapBoxOverapprox.vector()(i)));
+	}
 
-		//Third test: Have box shaped initial sets and box shaped invariants
-		//Build box shaped tpoly and set it as state
-		std::cout << "THIRD TEST" << std::endl;
-		TPoly<TypeParam> boxTPoly(boxInvMat, vector_t<TypeParam>::Ones(4));
-		state.setSet(boxTPoly);
+	//Third test: Have box shaped initial sets and box shaped invariants
+	//Build box shaped tpoly and set it as state
+	std::cout << "THIRD TEST" << std::endl;
+	TPoly<TypeParam> boxTPoly(boxInvMat, vector_t<TypeParam>::Ones(4));
+	state.setSet(boxTPoly);
 
-		//Overapproximate positive box invariant with triangle shape of tpoly
-		tpolyTrapBoxOverapprox = tpolyTrapBox.overapproximate(boxTPoly.matrix());
+	//Overapproximate positive box invariant with triangle shape of tpoly
+	tpolyTrapBoxOverapprox = tpolyTrapBox.overapproximate(boxTPoly.matrix());
 
-		//Test with box invariants
-		auto res3 = tpcontextTrapping.locationInvariantStrengthening(tpolyTrapBoxOverapprox, boxTPoly.vector());
-		for(int i = 0; i < res3.rows(); ++i){
-			EXPECT_TRUE((boxTPoly.vector()(i) <= res3(i)));
-			EXPECT_TRUE((res3(i) <= tpolyTrapBoxOverapprox.vector()(i)));
-		}
-	*/
+	//Test with box invariants - The result should be the same as before
+	auto res3 = tpcontextTrapping.locationInvariantStrengthening(tpolyTrapBoxOverapprox, boxTPoly.vector());
+	for(int i = 0; i < res3.rows(); ++i){
+		EXPECT_TRUE((boxTPoly.vector()(i) <= res3(i)));
+		EXPECT_TRUE((res3(i) <= tpolyTrapBoxOverapprox.vector()(i)));
+	}
 }
 
 TYPED_TEST( TemplatePolyhedronContextTest, ExecBeforeFirstSegment ) {

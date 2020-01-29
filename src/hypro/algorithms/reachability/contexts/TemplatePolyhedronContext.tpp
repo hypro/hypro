@@ -291,7 +291,7 @@ bool TemplatePolyhedronContext<State>::isPositiveInvariant( const TemplatePolyhe
 		std::cout << "TemplatePolyhedronContext::isPositiveInvariant, tpoly.vector(i) = " << tpoly.vector()( i ) << " != " << invVector( i ) << std::endl;
 
 		//Avoid test if value is equal to invariant value
-		if ( tpoly.vector()( i ) <= invVector( i ) ) {
+		if ( tpoly.vector()( i ) != invVector( i ) ) {
 			//Add constraint "row i >= vector_i" to get equality "row_i == vector_i" since "row_i <= vector_i" is already in template
 			extendedMatrix.row( tpoly.matrix().rows() ) = -tpoly.matrix().row( i );
 			extendedVector( tpoly.vector().rows() ) = -tpoly.vector()( i );
@@ -349,7 +349,9 @@ void TemplatePolyhedronContext<State>::execBeforeFirstSegment() {
 		}
 
 		//Call Location Invariant Strengthening on current invariants
-		if ( tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && tpoly.getSettings().TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV ) {
+		if ( tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING 
+			&& tpoly.getSettings().TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV 
+			&& this->mComputationState.getLocation()->getInvariant().size() >= this->mComputationState.getDimension() + 1) {
 			std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, check for locationInvariantStrengthening" << std::endl;
 			TemplatePolyhedron<Number> invTPoly( this->mComputationState.getLocation()->getInvariant().getMatrix(), this->mComputationState.getLocation()->getInvariant().getVector() );
 			std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, invTPoly before overapprox: " << invTPoly << std::endl;

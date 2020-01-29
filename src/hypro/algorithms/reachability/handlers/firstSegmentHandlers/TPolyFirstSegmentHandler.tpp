@@ -113,7 +113,7 @@ namespace hypro {
                         auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
                         auto invVec = this->mState->getLocation()->getInvariant().getVector();
                         //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
-                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant.rows()){// != vector_t<Number>::Zero(this->mState->getDimension())){
+                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant.rows() == tpoly.matrix().rows() && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){// != vector_t<Number>::Zero(this->mState->getDimension())){
                             //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
                             //Using mRelaxedInvariant will lead to tighter bounds
                             assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
@@ -171,6 +171,7 @@ namespace hypro {
                 std::vector<Number> values;
                 bool increasing = true;
                 bool decreasing = true;
+                assert(this->mTimeStep != tNumber(0));
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / 4)){
                     values.emplace_back(carl::evaluate(polynom,carl::convert<tNumber,Number>(timeStepPart)));
                     //values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
@@ -194,12 +195,13 @@ namespace hypro {
                         }        
                     }
                 }
-                //std::cout << "TPolyFirstSegmentHandler::values are: {";
+                //std::cout << "TPolyFirstSegmentHandler::handle, timestep: " << carl::toDouble(this->mTimeStep) << std::endl;
+                //std::cout << "TPolyFirstSegmentHandler::handle, values are: {";
                 //for(const auto& v : values){
                 //    std::cout << v << ",";
                 //}
                 //std::cout << "}" << std::endl;
-                assert(values.size() == 5);
+                assert(values.size() <= 5);
                 //std::cout << "TPolyFirstSegmentHandler::handle, increasing: " << increasing << " decreasing: " << decreasing << std::endl;
                 if(!increasing && !decreasing){
                     //If not monotonically increasing or decreasing, then there must be a maximum in the interval -> compute expensive root enumeration
