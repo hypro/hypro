@@ -63,7 +63,7 @@ bool DecisionEntity<Number>::isTimedSubspace( const Location<Number> &loc, size_
 		}
 	}
 
-	for ( const auto transition : loc.getTransitions() ) {
+	for ( const auto &transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -123,7 +123,7 @@ bool DecisionEntity<Number>::isRectangularSubspace( const Location<Number> &loc,
 		}
 	}
 
-	for ( const auto transition : loc.getTransitions() ) {
+	for ( const auto &transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -173,7 +173,7 @@ bool DecisionEntity<Number>::isTimedLocation( const Location<Number> &loc ) {
 		return false;
 	}
 
-	for ( const auto transition : loc.getTransitions() ) {
+	for ( const auto &transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most

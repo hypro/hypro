@@ -13,6 +13,10 @@ EventTimingProvider<Number>::EventTimingProvider()
 
 template <typename Number>
 void EventTimingProvider<Number>::initialize( const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon ) {
+	if ( !mRoot->getChildren().empty() ) {
+		this->clear();
+	}
+
 	for ( const auto& state : ha.getInitialStates() ) {
 		EventTimingNode<Number>* child = new EventTimingNode<Number>( EventTimingContainer<Number>( globalTimeHorizon ) );
 		child->addParent( mRoot );
@@ -43,7 +47,10 @@ void EventTimingProvider<Number>::initialize( const HybridAutomaton<Number>& ha,
 
 template <typename Number>
 void EventTimingProvider<Number>::initialize( const Location<Number>* loc, tNumber globalTimeHorizon ) {
-	assert( mRoot->getChildren().empty() );
+	if ( !mRoot->getChildren().empty() ) {
+		this->clear();
+	}
+
 	EventTimingNode<Number>* child = new EventTimingNode<Number>( EventTimingContainer<Number>( globalTimeHorizon ) );
 	child->addParent( mRoot );
 	child->setLocation( loc );

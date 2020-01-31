@@ -50,7 +50,7 @@ namespace hypro {
 			for(const auto& p : ctx->plotsetting()){
 				if(p->VARIABLE().size() >= 1){
 					std::vector<std::size_t> plotDimTupel = visit(p);
-					plotDims.push_back(plotDimTupel);	
+					plotDims.push_back(plotDimTupel);
 				}
 			}
 		}

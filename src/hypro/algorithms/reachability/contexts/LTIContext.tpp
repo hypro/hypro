@@ -84,7 +84,8 @@ void LTIContext<State>::initializeBadStateHandlers() {
 
 template <typename State>
 void LTIContext<State>::initializeGuardHandlers() {
-	for ( Transition<Number>* transition : mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getLocation()->getTransitions() ) {
+	for ( const auto& t : mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getLocation()->getTransitions() ) {
+		auto* transition = t.get();
 		// handlers for this transition
 		std::vector<IGuardHandler<State>*> guardHandlers;
 
@@ -284,7 +285,7 @@ void LTIContext<State>::execBeforeFirstSegment() {
 	if ( mSettings.jumpDepth < 0 || int( mTask->treeNode->getDepth() ) <= mSettings.jumpDepth ) {
 		bool locallyUrgent = false;
 
-		for ( auto transition : mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getLocation()->getTransitions() ) {
+		for ( const auto& transition : mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getLocation()->getTransitions() ) {
 			// Handle only urgent transitions.
 			if ( transition->isUrgent() ) {
 				State guardSatisfyingState( mComputationState );
@@ -293,7 +294,7 @@ void LTIContext<State>::execBeforeFirstSegment() {
 				TRACE( "hypro.worker", "Initializing " << mComputationState.getNumberSets() << " guard handlers for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() );
 				// create a set of fresh guard handlers for this transition
 				for ( std::size_t i = 0; i < mComputationState.getNumberSets(); i++ ) {
-					IGuardHandler<State>* gptr = HandlerFactory<State>::getInstance().buildGuardHandler( guardSatisfyingState.getSetType( i ), ptr, i, transition, false );
+					IGuardHandler<State>* gptr = HandlerFactory<State>::getInstance().buildGuardHandler( guardSatisfyingState.getSetType( i ), ptr, i, transition.get(), false );
 					if ( gptr ) {
 						guardHandlers.push_back( gptr );
 						DEBUG( "hypro.worker", "Built " << gptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() );
@@ -315,7 +316,7 @@ void LTIContext<State>::execBeforeFirstSegment() {
 				if ( guardSatisfied ) {
 					// Only jump, if maximal jump depth is not already reached.
 					if ( int( mTask->treeNode->getDepth() ) != mSettings.jumpDepth ) {
-						mDiscreteSuccessorBuffer.push_back( std::tuple<Transition<Number>*, State>( transition, guardSatisfyingState ) );
+						mDiscreteSuccessorBuffer.push_back( std::tuple<Transition<Number>*, State>( transition.get(), guardSatisfyingState ) );
 					}
 					locallyUrgent = true;
 				}
