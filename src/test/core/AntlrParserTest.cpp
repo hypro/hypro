@@ -7,7 +7,7 @@
 
 #include <unistd.h>  //getcwd()
 
-using namespace antlr4;
+// using namespace antlr4;
 using namespace hypro;
 
 template <typename Number>
