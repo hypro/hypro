@@ -63,6 +63,7 @@ var searchData=
   ['rgbtohsv',['RGBtoHSV',['../namespacehypro.html#a90d272f1fbf1fc4f4565d9ed5ee4045a',1,'hypro']]],
   ['rgetchildren',['rGetChildren',['../classhypro_1_1RootGrowNode.html#acf8810280ac279d6e2692a8349ec8fdb',1,'hypro::RootGrowNode']]],
   ['rgetcontent',['rGetContent',['../classhypro_1_1SupportFunctionT.html#ab685e2ccc87deb3871c03b19f59674fc',1,'hypro::SupportFunctionT']]],
+  ['rgetflowmatrix',['rGetFlowMatrix',['../classhypro_1_1linearFlow.html#ae591aa8193a3cbca114c5d27238c6446',1,'hypro::linearFlow']]],
   ['rgetintervals',['rGetIntervals',['../classhypro_1_1Reset.html#a6cbe6f78cf5d05a62387f5d1cb1dffdd',1,'hypro::Reset']]],
   ['rgetinvarianttimings',['rGetInvariantTimings',['../classhypro_1_1EventTimingContainer.html#a10b3da4a2196abf70d77ee146a496fb9',1,'hypro::EventTimingContainer']]],
   ['rgetlinearflow',['rGetLinearFlow',['../classhypro_1_1Location.html#a2aea8b94a29b2e2b0874118c7414a0ce',1,'hypro::Location']]],

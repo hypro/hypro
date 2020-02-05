@@ -1,5 +1,6 @@
 var classhypro_1_1WorkQueueT =
 [
+    [ "Workable_t", "classhypro_1_1WorkQueueT.html#ab675f5429981d079b1a568662be19631", null ],
     [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#a1e7a3571755a19ce1212d6e155fc8e54", null ],
     [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#ae5ac9fcf41936a1f2383c87471848d36", null ],
     [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#adf3b335ac5ed585c7db538f891d1956c", null ],

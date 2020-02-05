@@ -11,6 +11,7 @@ var classhypro_1_1linearFlow =
     [ "isDiscrete", "classhypro_1_1linearFlow.html#a19a11d8714de518a8ec7a9703b4c4015", null ],
     [ "isIdentity", "classhypro_1_1linearFlow.html#a4a3592226d36afc8ac3c66b4bcc62ff5", null ],
     [ "isTimed", "classhypro_1_1linearFlow.html#adc694f3ac5b8764a642010554ffd99b7", null ],
+    [ "rGetFlowMatrix", "classhypro_1_1linearFlow.html#ae591aa8193a3cbca114c5d27238c6446", null ],
     [ "setFlowMatrix", "classhypro_1_1linearFlow.html#abdf3c1df01ca0bdc84edb01242493eca", null ],
     [ "size", "classhypro_1_1linearFlow.html#a73849edbd308478137295a765e4e5161", null ],
     [ "operator!=", "classhypro_1_1linearFlow.html#a80e6d721a1fcf6a541b6fe76b8e6a7e3", null ],

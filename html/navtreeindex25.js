@@ -1,5 +1,7 @@
 var NAVTREEINDEX25 =
 {
+"example__parallel__composition_8cpp.html#a20ba49c55e0b6ac3b9de8b22f32c090a":[8,0,0,33,1],
+"example__parallel__composition_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627":[8,0,0,33,4],
 "example__parallel__composition_8cpp.html#a902d56bddc3b3ee7fa321724b4cd0257":[8,0,0,33,2],
 "example__parallel__composition_8cpp.html#aed0587a18047f8267f1bba71cd772f66":[8,0,0,33,3],
 "example__parallel__composition_8cpp_source.html":[8,0,0,33],
@@ -198,8 +200,8 @@ var NAVTREEINDEX25 =
 "group__globals.html#ga068598345f7f3f7766e13edcabed62b3":[5,0,5],
 "group__globals.html#ga2ef0021bdfa1b645576c87f8d0dacef4":[8,0,1,0,6,9],
 "group__globals.html#ga2ef0021bdfa1b645576c87f8d0dacef4":[5,0,9],
-"group__globals.html#ga347ac5508aeb4c5e97a6ff1d418230cb":[5,0,7],
 "group__globals.html#ga347ac5508aeb4c5e97a6ff1d418230cb":[8,0,1,0,6,7],
+"group__globals.html#ga347ac5508aeb4c5e97a6ff1d418230cb":[5,0,7],
 "group__globals.html#ga607d8cb76bcf54172542359fda640812":[8,0,1,0,6,2],
 "group__globals.html#ga607d8cb76bcf54172542359fda640812":[5,0,2],
 "group__globals.html#ga6416b4b09ad3984e740a0e19ef391467":[5,0,1],
@@ -210,8 +212,8 @@ var NAVTREEINDEX25 =
 "group__globals.html#ga83fe9e63be87beaef1889f56b039901c":[8,0,1,0,6,8],
 "group__globals.html#gab2f19f742ea698a529102d85c3c0be0e":[8,0,1,0,6,0],
 "group__globals.html#gab2f19f742ea698a529102d85c3c0be0e":[5,0,0],
-"group__globals.html#gae096762791ae2ccfbf4e6ee7740e7f8f":[5,0,4],
 "group__globals.html#gae096762791ae2ccfbf4e6ee7740e7f8f":[8,0,1,0,6,4],
+"group__globals.html#gae096762791ae2ccfbf4e6ee7740e7f8f":[5,0,4],
 "helperFunctions_8h.html":[8,0,1,0,4,1,0,3],
 "helperFunctions_8h.html#ae30c652668e0bac58f1f80cacf2d23f2":[8,0,1,0,4,1,0,3,0],
 "helperFunctions_8h_source.html":[8,0,1,0,4,1,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX25 =
 "linear_8h_source.html":[8,0,1,0,1,0,1,2],
 "ltiBadStateHandler_8h.html":[8,0,1,0,0,3,1,0,2],
 "ltiBadStateHandler_8h_source.html":[8,0,1,0,0,3,1,0,2],
-"ltiFirstSegmentHandler_8h.html":[8,0,1,0,0,3,1,1,1],
-"ltiFirstSegmentHandler_8h_source.html":[8,0,1,0,0,3,1,1,1],
-"ltiGuardHandler_8h.html":[8,0,1,0,0,3,1,2,2]
+"ltiFirstSegmentHandler_8h.html":[8,0,1,0,0,3,1,1,1]
 };

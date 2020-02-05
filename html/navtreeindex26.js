@@ -1,5 +1,7 @@
 var NAVTREEINDEX26 =
 {
+"ltiFirstSegmentHandler_8h_source.html":[8,0,1,0,0,3,1,1,1],
+"ltiGuardHandler_8h.html":[8,0,1,0,0,3,1,2,2],
 "ltiGuardHandler_8h_source.html":[8,0,1,0,0,3,1,2,2],
 "ltiInvariantHandler_8h.html":[8,0,1,0,0,3,1,3,2],
 "ltiInvariantHandler_8h_source.html":[8,0,1,0,0,3,1,3,2],
@@ -13,12 +15,12 @@ var NAVTREEINDEX26 =
 "make__vector_8h.html#a86d6602841b02cf4ba4735daeeb6bd3c":[8,0,1,0,4,7,1,0],
 "make__vector_8h_source.html":[8,0,1,0,4,7,1],
 "modules.html":[5],
-"namespaceEigen.html":[7,0,0],
 "namespaceEigen.html":[6,0,0],
-"namespaceZUtility.html":[6,0,7],
+"namespaceEigen.html":[7,0,0],
 "namespaceZUtility.html":[7,0,4],
-"namespacehypro.html":[7,0,1],
+"namespaceZUtility.html":[6,0,7],
 "namespacehypro.html":[6,0,1],
+"namespacehypro.html":[7,0,1],
 "namespacehypro_1_1detail.html":[7,0,1,0],
 "namespacehypro_1_1detail.html":[6,0,1,0],
 "namespacehypro_1_1hpolytope.html":[6,0,1,1],
@@ -28,8 +30,8 @@ var NAVTREEINDEX26 =
 "namespacehypro_1_1reachability.html":[6,0,1,3],
 "namespacehypro_1_1reachability_1_1detail.html":[6,0,1,3,0],
 "namespacehypro_1_1reachability_1_1detail.html":[7,0,1,2,0],
-"namespacehypro_1_1statistics.html":[7,0,1,3],
 "namespacehypro_1_1statistics.html":[6,0,1,4],
+"namespacehypro_1_1statistics.html":[7,0,1,3],
 "namespacemembers.html":[6,1,0],
 "namespacemembers.html":[6,1,0,0],
 "namespacemembers_b.html":[6,1,0,1],
@@ -62,8 +64,8 @@ var NAVTREEINDEX26 =
 "namespaceplotting.html":[6,0,3],
 "namespacereachability.html":[6,0,4],
 "namespaces.html":[6,0],
-"namespacesmtrat.html":[6,0,5],
 "namespacesmtrat.html":[7,0,2],
+"namespacesmtrat.html":[6,0,5],
 "namespacestatistics.html":[6,0,6],
 "nth__element_8h.html":[8,0,1,0,4,7,2],
 "nth__element_8h.html#acc3efcdce4ee151a51d809844f44a18d":[8,0,1,0,4,7,2,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX26 =
 "structhypro_1_1Cacheable.html":[7,0,1,12],
 "structhypro_1_1Cacheable.html#a0bbb96e48099fb09717a831bdf1f4c1f":[7,0,1,12,0],
 "structhypro_1_1Cacheable.html#a437b774ba7c6b5478b47287f07bfd7ec":[7,0,1,12,2],
-"structhypro_1_1Cacheable.html#a4962c139c4ad6bb42ebcb5045f9f60b3":[7,0,1,12,4],
-"structhypro_1_1Cacheable.html#a85781f9d0400e9da10dae4991066e3fb":[7,0,1,12,5],
-"structhypro_1_1Cacheable.html#aa79928763409a982e75208f4170d5f62":[7,0,1,12,1]
+"structhypro_1_1Cacheable.html#a4962c139c4ad6bb42ebcb5045f9f60b3":[7,0,1,12,4]
 };

@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.01</span>
+   &#160;<span id="projectnumber">20.02</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -119,6 +119,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Plotter.html','');});
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
@@ -189,6 +190,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa4bc6ab251645fee90fca29653d61b26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#aa4bc6ab251645fee90fca29653d61b26">clear</a> ()</td></tr>
 <tr class="separator:aa4bc6ab251645fee90fca29653d61b26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a1b20aaf2fc3f1e084b0d5a4d241cc0be"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a1b20aaf2fc3f1e084b0d5a4d241cc0be">grahamScan</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;_points)</td></tr>
+<tr class="memdesc:a1b20aaf2fc3f1e084b0d5a4d241cc0be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of Graham's scan.  <a href="#a1b20aaf2fc3f1e084b0d5a4d241cc0be">More...</a><br /></td></tr>
+<tr class="separator:a1b20aaf2fc3f1e084b0d5a4d241cc0be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a888edb5563dcdbeb671a341b9e3065d2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a888edb5563dcdbeb671a341b9e3065d2">Plotter</a> ()</td></tr>
@@ -205,8 +212,6 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a1b20aaf2fc3f1e084b0d5a4d241cc0be"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a1b20aaf2fc3f1e084b0d5a4d241cc0be">grahamScan</a> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;_points)</td></tr>
-<tr class="separator:a1b20aaf2fc3f1e084b0d5a4d241cc0be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f6fe8fe543754444730199de05e8cd2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Plotter.html#a5f6fe8fe543754444730199de05e8cd2">isLeftTurn</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;a, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;c)</td></tr>
 <tr class="separator:a5f6fe8fe543754444730199de05e8cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -526,10 +531,19 @@ template&lt;typename Number&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Implementation of Graham's scan. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_points</td><td>A vector of 2-dimensional points. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;Point&lt;Number&gt;&gt; An ordered vector of 2-dimensional points (counterclockwise). </dd></dl>
 
 </div>
 </div>
