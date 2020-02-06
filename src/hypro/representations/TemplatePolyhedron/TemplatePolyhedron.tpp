@@ -418,8 +418,16 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 		
-		if(dimensions.empty()) return Empty();
-		if(empty()) return *this;	
+		std::cout << "TPoly::project, dimensions: " << dimensions[0] << ", " << dimensions[1] << std::endl;
+
+		if(dimensions.empty()){
+			std::cout << "TPoly::project, dimensions empty" << std::endl;
+			return Empty();
+		}
+		if(empty()){
+			std::cout << "TPoly::project, this empty" << *this << std::endl;
+			return *this;	
+		} 	
 		if(dimensions.size() > this->dimension()){
 			throw(std::invalid_argument("TPoly::project, too many dimensions given"));
 		}
@@ -450,7 +458,7 @@ namespace hypro {
 		assert(it == dimsOrdered.end());
 		auto res = TemplatePolyhedronT<Number,Converter,Setting>(projectedMat,projectedVec);
 		//res.removeRedundancy();
-		//std::cout << "res after removeRedundancy is: " << res << std::endl;
+		std::cout << "TPoly::project, resis: " << res << std::endl;
 		return res;
 	}
 

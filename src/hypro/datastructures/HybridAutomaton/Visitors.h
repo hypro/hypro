@@ -180,7 +180,8 @@ class genericOutstreamVisitor {
 
 	template <typename T>
 	inline std::ostream& operator()( const T& shape ) const {
-		return out << shape;
+		out << shape;
+		return out;
 	}
 };
 
