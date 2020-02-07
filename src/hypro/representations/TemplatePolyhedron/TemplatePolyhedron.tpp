@@ -200,8 +200,13 @@ namespace hypro {
 	//The (slow) HPoly way
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<Point<Number>> TemplatePolyhedronT<Number,Converter,Setting>::vertices( const matrix_t<Number>& ) const {
-		if(this->empty()) return std::vector<Point<Number>>();
-		typename Converter::VPolytope tmp(this->matrix(), this->vector());
+		//std::cout << "TPoly:vertices!" << std::endl;
+		if(this->empty()){
+			//std::cout << "TPoly:vertices, this was empty!" << std::endl;
+			return std::vector<Point<Number>>();
+		}
+		typename Converter::HPolytope tmp(this->matrix(), this->vector());
+		//std::cout << "TPoly:vertices, vertices: " << tmp << std::endl;
 		return tmp.vertices();
 	}
 
@@ -369,7 +374,7 @@ namespace hypro {
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
 		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmpty: " << mEmpty << std::endl;
-		std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(this->empty()){
 			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
@@ -418,20 +423,28 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 		
-		std::cout << "TPoly::project, dimensions: " << dimensions[0] << ", " << dimensions[1] << std::endl;
+		//std::cout << "TPoly::project, dimensions: " << dimensions[0] << ", " << dimensions[1] << std::endl;
 
 		if(dimensions.empty()){
-			std::cout << "TPoly::project, dimensions empty" << std::endl;
+			//std::cout << "TPoly::project, dimensions empty" << std::endl;
 			return Empty();
 		}
 		if(empty()){
-			std::cout << "TPoly::project, this empty" << *this << std::endl;
+			//std::cout << "TPoly::project, this empty" << *this << std::endl;
 			return *this;	
 		} 	
 		if(dimensions.size() > this->dimension()){
 			throw(std::invalid_argument("TPoly::project, too many dimensions given"));
 		}
 
+		//NOTE: very costly as we convert to a VPoly, then back to a HPoly
+		typename Converter::VPolytope tmp(this->matrix(), this->vector());
+		tmp = tmp.project(dimensions);
+		auto tmpTPoly = Converter::toTemplatePolyhedron(tmp);
+		//std::cout << "TPoly::project, tmpTPoly is: " << tmpTPoly << std::endl;
+		return tmpTPoly;
+
+/* THIS WAS WRONG ALL ALONG
 		//All coeffs not in a mentioned dimension will be projected to zero.
 		std::set<std::size_t> dimsAsSet(dimensions.begin(), dimensions.end());
 		std::vector<std::size_t> dimsOrdered;//(dimsAsSet.begin(), dimsAsSet.end());
@@ -458,8 +471,10 @@ namespace hypro {
 		assert(it == dimsOrdered.end());
 		auto res = TemplatePolyhedronT<Number,Converter,Setting>(projectedMat,projectedVec);
 		//res.removeRedundancy();
-		std::cout << "TPoly::project, resis: " << res << std::endl;
+
+		std::cout << "TPoly::project, res is: " << res << std::endl;
 		return res;
+*/
 	}
 
 	template<typename Number, typename Converter, typename Setting>

@@ -140,7 +140,6 @@ void Plotter<Number>::plotEps() const {
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points ) {
 	TRACE( "hypro.plotter", "" );
-	std::cout << "Plotter::addObject" << std::endl;
 	// reduce dimensions
 	if ( !_points.empty() ) {
 		assert( _points.begin()->dimension() == 2 );
