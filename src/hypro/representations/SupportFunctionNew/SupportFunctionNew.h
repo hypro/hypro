@@ -426,6 +426,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	SupportFunctionNewT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
 
+	SupportFunctionNewT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
+
 	/**
 	 * @brief	   Computes a affine transformation of the SupportFunction
 	 * @param[in]  A 	The transformation matrix

@@ -71,6 +71,7 @@ class Reach {
 	WorkQueue<TaskTypePtr> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	representation_name mType;
+	bool mInitialStatesSet = false;
 
 	mutable bool mIntersectedBadStates;
 
@@ -90,7 +91,8 @@ class Reach {
 	 */
 	std::vector<std::pair<unsigned, flowpipe_t>> computeForwardReachability();
 
-	void initQueue();
+	void setInitialStates( std::vector<State>&& initialStates );
+	void addInitialState( State&& initialState );
 
 	WorkQueue<TaskTypePtr>& rGetQueue() { return mWorkingQueue; }
 

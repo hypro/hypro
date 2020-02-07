@@ -54,7 +54,7 @@ SupportFunctionT<Number, Converter<Number>, SFSetting> Converter<Number>::toSupp
 template <typename Number>
 template <typename SFSetting, typename inSetting>
 SupportFunctionT<Number, Converter<Number>, SFSetting> Converter<Number>::toSupportFunction( const HPolytopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
-	return SupportFunctionT<Number, Converter, SFSetting>( _source.constraints() );
+	return SupportFunctionT<Number, Converter, SFSetting>( _source.matrix(), _source.vector() );
 }
 
 // conversion from Zonotope to support function (no differentiation between conversion modes - always EXACT)
@@ -97,11 +97,11 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
     return SupportFunctionT<Number,Converter,SFSetting>(_source.matrix(), _source.vector());
 }
 
-template<typename Number>
-template<typename SupportFunctionSetting, typename inSetting>
-SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> Converter<Number>::toSupportFunction( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting>();
-}
+//template<typename Number>
+//template<typename SupportFunctionSetting, typename inSetting>
+//SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> Converter<Number>::toSupportFunction( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting>();
+//}
 
 //Not implemented since SFNew made to replace SF
 template <typename Number>

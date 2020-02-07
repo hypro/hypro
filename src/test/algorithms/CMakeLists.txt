@@ -2,7 +2,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(algorithm_test_sources
-      ##BoxReachabilityTest.cpp
       ##FacetEnumerationTest.cpp
       ##ForwardReachabilityTest.cpp
 			##HyReachTest.cpp
@@ -12,6 +11,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       #FourierMotzkinQETest.cpp
       #VertexEnumerationTest.cpp
       #UtilityTest.cpp
+      #ReachabilityAnalysisTest.cpp
       TemplatePolyhedronContextTest.cpp
       FirstSegmentHandlersTest.cpp
     )

@@ -1,6 +1,6 @@
 
 # Create config.h by adding cmake defines dependend on option switches
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/flags.h )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/flags.h @ONLY)
 
 ########################################################################################
 # Create object library first
@@ -38,6 +38,7 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_program_options_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC GLPK_STATIC)
 	if(HYPRO_USE_CLP)
+		target_link_libraries(${PROJECT_NAME}-static PUBLIC coinUtils_STATIC)
 		target_link_libraries(${PROJECT_NAME}-static PUBLIC clp_STATIC)
 	endif()
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
@@ -68,7 +69,8 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC Boost_program_options_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC GLPK_STATIC)
 	if(HYPRO_USE_CLP)
-	target_link_libraries(${PROJECT_NAME}-shared PUBLIC clp_STATIC)
+		target_link_libraries(${PROJECT_NAME}-shared PUBLIC coinUtils_SHARED)
+		target_link_libraries(${PROJECT_NAME}-shared PUBLIC clp_SHARED)
 	endif()
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC ANTLR4_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)

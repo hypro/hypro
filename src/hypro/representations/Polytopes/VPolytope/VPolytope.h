@@ -104,6 +104,10 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	}
 
 	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	VPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;

@@ -144,10 +144,10 @@ DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Nu
     return toDifferenceBounds(tmp);
 }
 
-template<typename Number>
-template<typename DifferenceBoundsSetting, typename inSetting>
-DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Number>::toDifferenceBounds( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>();
-}
+//template<typename Number>
+//template<typename DifferenceBoundsSetting, typename inSetting>
+//DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Number>::toDifferenceBounds( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>();
+//}
 
 } // namespace hypro

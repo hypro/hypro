@@ -24,6 +24,8 @@ class WorkQueueT {
 	static_assert( std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value || is_unique_ptr<Workable>::value, "WorkQueue requires pointer type." );
 
   public:
+	using Workable_t = Workable;
+
 	WorkQueueT() = default;
 	WorkQueueT( WorkQueueT<Workable, Setting>&& in ) = delete;
 	WorkQueueT( const WorkQueueT<Workable, Setting>& in ) = delete;

@@ -1,3 +1,4 @@
+/*
 #ifndef INCL_FROM_CONVERTERHEADER
 static_assert(false, "This file may only be included indirectly by Converter.h");
 #endif
@@ -79,3 +80,4 @@ OrthoplexT<Number,Converter<Number>,OrthoplexSetting> Converter<Number>::toOrtho
 }
 
 } //namespace hypro
+*/

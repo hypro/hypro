@@ -1,10 +1,7 @@
 #pragma once
-
-#include "ErrorListener.h"
-#include "HybridAutomatonLexer.h"
-#include "HybridAutomatonParser.h"
-#include "HyproHAVisitor.h"
-
+#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../datastructures/reachability/Settings.h"
+#include <utility>
 
 namespace hypro {
 

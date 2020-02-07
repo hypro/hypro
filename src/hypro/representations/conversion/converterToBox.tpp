@@ -383,11 +383,11 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const Templat
 	}
 }
 
-template<typename Number>
-template<typename BoxSetting, typename inSetting>
-BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return BoxT<Number,Converter<Number>,BoxSetting>();
-}
+//template<typename Number>
+//template<typename BoxSetting, typename inSetting>
+//BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return BoxT<Number,Converter<Number>,BoxSetting>();
+//}
 
 template<typename Number>
 template<typename BoxSetting, typename inSetting>

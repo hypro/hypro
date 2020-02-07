@@ -9,101 +9,99 @@
  * @version     2015-12-16
  */
 
-#include "gtest/gtest.h"
 #include "../defines.h"
+#include "algorithms/reachability/FirstSegment.h"
+#include "datastructures/HybridAutomaton/State.h"
 #include "representations/GeometricObject.h"
+#include "gtest/gtest.h"
 
 using namespace hypro;
 using namespace carl;
 
-template<typename Number>
-class ConverterTest : public ::testing::Test
-{
-protected:
-    virtual void SetUp()
-    {
-		//box
+template <typename Number>
+class ConverterTest : public ::testing::Test {
+  protected:
+	virtual void SetUp() {
+		// box
 		std::vector<carl::Interval<Number>> boundaries;
-		boundaries.push_back(carl::Interval<Number>(2,6));
-		boundaries.push_back(carl::Interval<Number>(1,3));
-		box = hypro::Box<Number>(boundaries);
+		boundaries.push_back( carl::Interval<Number>( 2, 6 ) );
+		boundaries.push_back( carl::Interval<Number>( 1, 3 ) );
+		box = hypro::Box<Number>( boundaries );
 
 		// first support function
-		matrix = matrix_t<Number>(3,2);
-		distances = vector_t<Number>(3);
-		matrix << 1,1,
-                -1,1,
-                0,-1;
-		distances << 1,1,0;
+		matrix = matrix_t<Number>( 3, 2 );
+		distances = vector_t<Number>( 3 );
+		matrix << 1, 1, -1, 1, 0, -1;
+		distances << 1, 1, 0;
 
-        support = SupportFunction<Number>(this->matrix, this->distances);
+		support = SupportFunction<Number>( this->matrix, this->distances );
 
-        // second support function (box)
-        matrix2 = matrix_t<Number>(4,2);
-        distances2 = vector_t<Number>(4);
-        matrix2 << 0, 1, 0, -1, 1, 0, -1, 0;
-        distances2 << 2, 2, 1, 1;
+		// second support function (box)
+		matrix2 = matrix_t<Number>( 4, 2 );
+		distances2 = vector_t<Number>( 4 );
+		matrix2 << 0, 1, 0, -1, 1, 0, -1, 0;
+		distances2 << 2, 2, 1, 1;
 
-        support2 = SupportFunction<Number>(this->matrix2, this->distances2);
+		support2 = SupportFunction<Number>( this->matrix2, this->distances2 );
 
-        //first zonotope
-		vector_t<Number> center = vector_t<Number>(2);
+		// first zonotope
+		vector_t<Number> center = vector_t<Number>( 2 );
 		center << 2, 2;
-		matrix_t<Number> generators = matrix_t<Number>(2,2);
+		matrix_t<Number> generators = matrix_t<Number>( 2, 2 );
 		generators << 0, 1, 1, -1;
-		zonotope = Zonotope<Number>(center, generators);
+		zonotope = Zonotope<Number>( center, generators );
 
-        //second zonotope (box)
-        vector_t<Number> center2 = vector_t<Number>(2);
-        center2 << 1, 1;
-        matrix_t<Number> generators2 = matrix_t<Number>(2,2);
-        generators2 << 0, 1, 1, 0;
-        zonotope2 = Zonotope<Number>(center2, generators2);
+		// second zonotope (box)
+		vector_t<Number> center2 = vector_t<Number>( 2 );
+		center2 << 1, 1;
+		matrix_t<Number> generators2 = matrix_t<Number>( 2, 2 );
+		generators2 << 0, 1, 1, 0;
+		zonotope2 = Zonotope<Number>( center2, generators2 );
 
-		//first v-polytope (box)
-		vector_t<Number> p1 = vector_t<Number>(2);
-		p1(0) = 1;
-		p1(1) = 2;
-		vector_t<Number> p2 = vector_t<Number>(2);
-		p2(0) = 3;
-		p2(1) = 2;
-		vector_t<Number> p3 = vector_t<Number>(2);
-		p3(0) = 3;
-		p3(1) = 4;
-		vector_t<Number> p4 = vector_t<Number>(2);
-		p4(0) = 1;
-		p4(1) = 4;
+		// first v-polytope (box)
+		vector_t<Number> p1 = vector_t<Number>( 2 );
+		p1( 0 ) = 1;
+		p1( 1 ) = 2;
+		vector_t<Number> p2 = vector_t<Number>( 2 );
+		p2( 0 ) = 3;
+		p2( 1 ) = 2;
+		vector_t<Number> p3 = vector_t<Number>( 2 );
+		p3( 0 ) = 3;
+		p3( 1 ) = 4;
+		vector_t<Number> p4 = vector_t<Number>( 2 );
+		p4( 0 ) = 1;
+		p4( 1 ) = 4;
 		typename VPolytope<Number>::pointVector points;
-		points.push_back(Point<Number>(p1));
-		points.push_back(Point<Number>(p2));
-		points.push_back(Point<Number>(p3));
-		points.push_back(Point<Number>(p4));
-		vpolytope = VPolytope<Number>(points);
+		points.push_back( Point<Number>( p1 ) );
+		points.push_back( Point<Number>( p2 ) );
+		points.push_back( Point<Number>( p3 ) );
+		points.push_back( Point<Number>( p4 ) );
+		vpolytope = VPolytope<Number>( points );
 
-		//second v-polytope (slightly deformed box)
-		vector_t<Number> p5 = vector_t<Number>(2);
-		p5(0) = 0;
-		p5(1) = 2;
+		// second v-polytope (slightly deformed box)
+		vector_t<Number> p5 = vector_t<Number>( 2 );
+		p5( 0 ) = 0;
+		p5( 1 ) = 2;
 		typename VPolytope<Number>::pointVector points2;
-		points2.push_back(Point<Number>(p5));
-		points2.push_back(Point<Number>(p2));
-		points2.push_back(Point<Number>(p3));
-		points2.push_back(Point<Number>(p4));
-		vpolytope2 = VPolytope<Number>(points2);
+		points2.push_back( Point<Number>( p5 ) );
+		points2.push_back( Point<Number>( p2 ) );
+		points2.push_back( Point<Number>( p3 ) );
+		points2.push_back( Point<Number>( p4 ) );
+		vpolytope2 = VPolytope<Number>( points2 );
 
-		//third v-polytope(tilted stretched box)
-		vector_t<Number> p6 = vector_t<Number>(2);
-		p6(0)= 2;
-		p6(1)= 1;
-		vector_t<Number> p7 = vector_t<Number>(2);
-		p7(0)= 1;
-		p7(1)= 2;
-		vector_t<Number> p8 = vector_t<Number>(2);
-		p8(0)= 5;
-		p8(1)= 4;
-		vector_t<Number> p9 = vector_t<Number>(2);
-		p9(0)= 4;
-		p9(1)= 5;
+		// third v-polytope(tilted stretched box)
+		vector_t<Number> p6 = vector_t<Number>( 2 );
+		p6( 0 ) = 2;
+		p6( 1 ) = 1;
+		vector_t<Number> p7 = vector_t<Number>( 2 );
+		p7( 0 ) = 1;
+		p7( 1 ) = 2;
+		vector_t<Number> p8 = vector_t<Number>( 2 );
+		p8( 0 ) = 5;
+		p8( 1 ) = 4;
+		vector_t<Number> p9 = vector_t<Number>( 2 );
+		p9( 0 ) = 4;
+		p9( 1 ) = 5;
 		typename VPolytope<Number>::pointVector points3;
 		points3.push_back(Point<Number>(p6));
 		points3.push_back(Point<Number>(p7));
@@ -179,8 +177,9 @@ protected:
     HPolytope<Number> hpolytope2;
 
 #ifdef HYPRO_USE_PPL
-    Polytope<Number> pplpolytope;
-    Polytope<Number> pplpolytope2;
+		// A ppl polytope (box)
+		Polytope<Number> pplpolytope;
+		Polytope<Number> pplpolytope2;
 #endif
 
     TemplatePolyhedron<Number> tpoly;
@@ -190,26 +189,25 @@ protected:
     SupportFunctionNew<Number> sfn2;
 };
 
-TYPED_TEST(ConverterTest, toBox)
-{
-	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->box);
-	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->support);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->support2);
-	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->vpolytope);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->vpolytope2);
-	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope2);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope, ALTERNATIVE);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope2, ALTERNATIVE);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2);
-    auto result = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope, ALTERNATIVE);
-    auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2, ALTERNATIVE);
-    auto result3 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope);
-    auto result4 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2);
+TYPED_TEST( ConverterTest, toBox ) {
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->box );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->support );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->support2 );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->vpolytope );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->vpolytope2 );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope2 );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope, ALTERNATIVE );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope2, ALTERNATIVE );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2 );
+	auto result = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope, ALTERNATIVE );
+	auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2, ALTERNATIVE );
+	auto result3 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope );
+	auto result4 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2 );
 #ifdef HYPRO_USE_PPL
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope);
-    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope2);
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->pplpolytope );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->pplpolytope2 );
 #endif
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->tpoly);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->tpoly2);
@@ -218,21 +216,20 @@ TYPED_TEST(ConverterTest, toBox)
     SUCCEED();
 }
 
-TYPED_TEST(ConverterTest, toHPolytope)
-{
-    try {
-        auto result =  Converter<TypeParam>::toHPolytope(this->hpolytope);
-        auto result2 = Converter<TypeParam>::toHPolytope(this->support);
-        auto result3 = Converter<TypeParam>::toHPolytope(this->support2);
-        auto result4 = Converter<TypeParam>::toHPolytope(this->zonotope);
-        auto result5 = Converter<TypeParam>::toHPolytope(this->zonotope2);
-        auto result6 = Converter<TypeParam>::toHPolytope(this->vpolytope, OVER);
-        auto result7 = Converter<TypeParam>::toHPolytope(this->vpolytope2, OVER);
-        auto result8 = Converter<TypeParam>::toHPolytope(this->vpolytope3, OVER);
-        auto result9 = Converter<TypeParam>::toHPolytope(this->box);
+TYPED_TEST( ConverterTest, toHPolytope ) {
+	try {
+		auto result = Converter<TypeParam>::toHPolytope( this->hpolytope );
+		auto result2 = Converter<TypeParam>::toHPolytope( this->support );
+		auto result3 = Converter<TypeParam>::toHPolytope( this->support2 );
+		auto result4 = Converter<TypeParam>::toHPolytope( this->zonotope );
+		auto result5 = Converter<TypeParam>::toHPolytope( this->zonotope2 );
+		auto result6 = Converter<TypeParam>::toHPolytope( this->vpolytope, OVER );
+		auto result7 = Converter<TypeParam>::toHPolytope( this->vpolytope2, OVER );
+		auto result8 = Converter<TypeParam>::toHPolytope( this->vpolytope3, OVER );
+		auto result9 = Converter<TypeParam>::toHPolytope( this->box );
 #ifdef HYPRO_USE_PPL
-        auto result10 = Converter<TypeParam>::toHPolytope(this->pplpolytope);
-        auto result11 = Converter<TypeParam>::toHPolytope(this->pplpolytope2);
+		auto result10 = Converter<TypeParam>::toHPolytope( this->pplpolytope );
+		auto result11 = Converter<TypeParam>::toHPolytope( this->pplpolytope2 );
 #endif
         auto result12 = Converter<TypeParam>::toHPolytope(this->sfn1);
         auto result13 = Converter<TypeParam>::toHPolytope(this->sfn2);
@@ -378,6 +375,15 @@ TYPED_TEST(ConverterTest, settingsConversion)
 	hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff> res = hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff>(this->box);
     EXPECT_EQ(this->box, res);
     SUCCEED();
+}
+
+TYPED_TEST( ConverterTest, conversionHelper ) {
+	// Try conversion helper
+	hypro::HPolytope<TypeParam> convertedBox;
+	convert( this->box, convertedBox );
+	EXPECT_EQ( representation_name::polytope_h, convertedBox.type() );
+}
+
 }
 
 TYPED_TEST(ConverterTest, toTemplatePolyhedron){

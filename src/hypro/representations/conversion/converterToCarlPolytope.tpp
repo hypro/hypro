@@ -281,11 +281,11 @@ CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCar
 	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
 }
 
-template<typename Number>
-template<typename CarlPolySetting, typename inSetting>
-CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>();
-}
+//template<typename Number>
+//template<typename CarlPolySetting, typename inSetting>
+//CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>();
+//}
 
 template<typename Number>
 template<typename CarlPolySetting, typename inSetting>

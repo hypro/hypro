@@ -177,8 +177,8 @@ template <typename Number>
 std::vector<Transition<Number>*> HybridAutomaton<Number>::getTransitions() const {
 	std::vector<Transition<Number>*> res;
 	for ( const auto& loc : mLocations ) {
-		for ( auto tPtr : loc->getTransitions() ) {
-			res.emplace_back( tPtr );
+		for ( const auto& tPtr : loc->getTransitions() ) {
+			res.emplace_back( tPtr.get() );
 		}
 	}
 	return res;
@@ -203,14 +203,14 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addLocation( const Location<Number>& location ) {
-	this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( const Location<Number>& location ) {
+	return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addLocation( std::unique_ptr<Location<Number>>&& location ) {
+const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( std::unique_ptr<Location<Number>>&& location ) {
 	assert( location != nullptr );
-	mLocations.emplace_back( std::move( location ) );
+	return mLocations.emplace_back( std::move( location ) );
 }
 
 template <typename Number>
@@ -256,36 +256,6 @@ bool HybridAutomaton<Number>::isComposedOf( const HybridAutomaton<Number>& rhs )
 			}
 		}
 		if ( !foundOne ) {
-			return false;
-		}
-	}
-
-	// check transitions:
-	// try to find a matching transition. Also take loops (no-op loops) into account for the check.
-	for ( auto& transPtr : this->mTransitions ) {
-		bool foundOne = false;
-		// first try to find no-op transitions (where the control stays in the same mode for that component)
-		bool loop = false;
-		for ( auto& locPtr : rhs.getLocations() ) {
-			if ( transPtr->getSource()->getName().find( locPtr->getName() ) != std::string::npos && transPtr->getTarget()->getName().find( locPtr->getName() ) != std::string::npos ) {
-				if ( loop ) {
-					return false;
-				}
-				loop = true;
-			}
-		}
-		if ( !loop ) {
-			for ( const auto rhsTransPtr : rhs.getTransitions() ) {
-				if ( transPtr->isComposedOf( *rhsTransPtr, rhs.getVariables(), this->getVariables() ) ) {
-					if ( foundOne ) {
-						return false;
-					}
-					foundOne = true;
-				}
-			}
-		}
-
-		if ( !foundOne && !loop ) {
 			return false;
 		}
 	}
@@ -411,9 +381,9 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	//build transisitons
 	std::set<Label> lhsLabels = lhs.getLabels();
 	std::set<Label> rhsLabels = rhs.getLabels();
-	for ( const auto lhsT : lhs.getTransitions() ) {
-		for ( const auto rhsT : rhs.getTransitions() ) {
-			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+	for ( const auto& lhsT : lhs.getTransitions() ) {
+		for ( const auto& rhsT : rhs.getTransitions() ) {
+			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 			if ( t ) {
 				ha.addTransition( std::move( t ) );
 				( t->getSource() )->addTransition( t.get() );
@@ -423,7 +393,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 
 	// non-synchronizing transitions in each component
 	// fix rhs first
-	for ( const auto lhsT : lhs.getTransitions() ) {
+	for ( const auto& lhsT : lhs.getTransitions() ) {
 		if ( lhsT->getLabels().empty() ) {
 			for ( const auto& loc : rhs.getLocations() ) {
 				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
@@ -446,7 +416,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( lhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT.get(), tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
 					ha.addTransition( std::move( t ) );
 					( t->getSource() )->addTransition( t.get() );
@@ -455,7 +425,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 		}
 	}
 	// fix lhs
-	for ( const auto rhsT : rhs.getTransitions() ) {
+	for ( const auto& rhsT : rhs.getTransitions() ) {
 		if ( rhsT->getLabels().empty() ) {
 			for ( const auto& loc : lhs.getLocations() ) {
 				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
@@ -475,7 +445,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( rhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
 					ha.addTransition( std::move( t ) );
 					( t->getSource() )->addTransition( t.get() );

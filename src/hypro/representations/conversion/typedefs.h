@@ -46,7 +46,7 @@ using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
 template<typename Number>
 using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;
 
-template<typename Number>
-using Orthoplex = typename Converter<Number>::Orthoplex;
+//template<typename Number>
+//using Orthoplex = typename Converter<Number>::Orthoplex;
 
 } // namespace hypro

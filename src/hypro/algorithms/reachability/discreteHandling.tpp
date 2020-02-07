@@ -82,7 +82,7 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 		collectedSets.removeRedundancy();
 		if ( collectedSets.getSetType( 0 ) == representation_name::support_function ) {
 			// Forced reduction to a box template.
-			applyReduction<Number>( std::get<hypro::SupportFunction<Number>>( collectedSets.rGetSet( 0 ) ) );
+			collectedSets.reduceRepresentation();
 		}
 		//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 #endif
@@ -141,10 +141,10 @@ bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state
 	State guardSatisfyingState;
 	bool transitionEnabled = false;
 	//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
-	for ( auto transition : state.getLocation()->getTransitions() ) {
-		DEBUG( "hypro.reacher", "Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " (@ " << transition << ")." );
+	for ( auto& transition : state.getLocation()->getTransitions() ) {
+		//DEBUG( "hypro.reacher", "Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		// handle time-triggered transitions
-		if ( intersectGuard( transition, state, guardSatisfyingState ) ) {
+		if ( intersectGuard( transition.get(), state, guardSatisfyingState ) ) {
 			INFO( "hypro.reacher", "hybrid transition enabled" );
 			assert( guardSatisfyingState.getTimestamp() == state.getTimestamp() );
 			// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
@@ -152,7 +152,7 @@ bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state
 #ifdef USE_FORCE_REDUCTION
 			applyReduction( guardSatisfyingState );
 #endif
-			nextInitialSets.emplace_back( transition, guardSatisfyingState );
+			nextInitialSets.emplace_back( transition.get(), guardSatisfyingState );
 			transitionEnabled = true;
 		}
 	}

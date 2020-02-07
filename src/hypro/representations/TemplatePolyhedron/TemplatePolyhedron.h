@@ -344,6 +344,11 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 */
 	void clear();
 
+	TemplatePolyhedronT<Number,Converter,Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& /*assignments*/ ) const {
+		WARN( "hypro", "Not implemented." );
+		return *this;
+	}
+
 	/**
 	 * @brief      Overapproximates the current TemplatePolyhedron with the given directions and returns the resulting TemplatePolyhedron
 	 * @param[in]  dirs The directions in which the current TemplatePolyhedron should be overapproximated.

@@ -311,11 +311,11 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.matrix(), source.vector());
 }
 
-template<typename Number>
-template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return HPolytopeT<Number,Converter<Number>,HPolySetting>();
-}
+//template<typename Number>
+//template<typename HPolySetting, typename inSetting>
+//HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return HPolytopeT<Number,Converter<Number>,HPolySetting>();
+//}
 
 template<typename Number>
 template<typename HPolySetting, typename inSetting>

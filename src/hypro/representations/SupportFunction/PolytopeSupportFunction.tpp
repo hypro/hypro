@@ -104,7 +104,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const Polytop
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number, Setting>::~PolytopeSupportFunction() {
 	TRACE( "hypro.representations.supportFunction", "" );
-	//mOpt.cleanGLPInstance();
+	//mOpt.cleanContexts();
 }
 
 template <typename Number, class Setting>
@@ -112,7 +112,7 @@ PolytopeSupportFunction<Number, Setting> &PolytopeSupportFunction<Number, Settin
 	TRACE( "hypro.representations.supportFunction", "" );
 	this->mConstraints = _orig.mConstraints;
 	this->mConstraintConstants = _orig.mConstraintConstants;
-	this->mOpt.cleanGLPInstance();
+	this->mOpt.cleanContexts();
 	this->mOpt = Optimizer<Number>( mConstraints, mConstraintConstants );
 	this->mDimension = _orig.mDimension;
 }
@@ -346,7 +346,7 @@ bool PolytopeSupportFunction<Number, Setting>::empty() const {
 template <typename Number, class Setting>
 void PolytopeSupportFunction<Number, Setting>::cleanUp() const {
 	TRACE( "hypro.representations.supportFunction", "Thread " << std::this_thread::get_id() << " attempts to clean its glp env." );
-	mOpt.cleanGLPInstance();
+	mOpt.cleanContexts();
 }
 
 template <typename Number, class Setting>
@@ -399,7 +399,7 @@ void PolytopeSupportFunction<Number, Setting>::removeRedundancy() {
 			assert( insertionIndex == -1 );
 			mConstraints = newConstraints;
 			mConstraintConstants = newConstants;
-			mOpt.cleanGLPInstance();
+			mOpt.cleanContexts();
 			mOpt = Optimizer<Number>( mConstraints, mConstraintConstants );
 		}
 		assert( redundant.empty() );

@@ -92,11 +92,11 @@ PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytop
 	return PolytopeT<Number,Converter<Number>,PolytopeSetting>(source.matrix(), source.vector());
 }
 
-template<typename Number>
-template<typename PolytopeSetting, typename inSetting>
-PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return PolytopeT<Number,Converter<Number>,PolytopeSetting>();
-}
+//template<typename Number>
+//template<typename PolytopeSetting, typename inSetting>
+//PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return PolytopeT<Number,Converter<Number>,PolytopeSetting>();
+//}
 
 //Conversion from SFN to ppl poly 
 template<typename Number>

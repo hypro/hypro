@@ -86,6 +86,16 @@ class GeometricObject {
 	virtual DerivedShape project( const std::vector<std::size_t>& dimensions ) const = 0;
 
 	/**
+	 * @brief Function to set a variable to an interval.
+	 * @detail This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. 
+	 * Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added.
+	 *
+	 * @param assignments A map from dimension index to interval.
+	 * @return DerivedShape
+	 */
+	virtual DerivedShape assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const = 0;
+
+	/**
 	 * @brief      Applies a linear transformation with the matrix A to the set.
 	 * @details    The resulting set R is the result of the linear transformation of the set S with A such that \f$ R = \{ x | x \in A\cdot S \} \f$
 	 * @param[in]  A     The matrix.

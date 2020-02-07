@@ -1102,7 +1102,7 @@ void HPolytopeT<Number, Converter, Setting>::clear() {
 	mNonRedundant = true;
 	mUpdated = false;
 	if ( Setting::OPTIMIZER_CACHING ) {
-		mOptimizer->cleanGLPInstance();
+		mOptimizer->cleanContexts();
 	}
 }
 

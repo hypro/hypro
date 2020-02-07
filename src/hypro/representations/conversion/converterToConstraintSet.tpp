@@ -76,11 +76,11 @@ ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( 
 	return ConstraintSetT<Number,ConstraintSetSetting>(source.matrix(), source.vector());
 }
 
-template<typename Number>
-template<typename ConstraintSetSetting, typename inSetting>
-ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return ConstraintSetT<Number,ConstraintSetSetting>();
-}
+//template<typename Number>
+//template<typename ConstraintSetSetting, typename inSetting>
+//ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return ConstraintSetT<Number,ConstraintSetSetting>();
+//}
 
 template<typename Number>
 template<typename CSSetting, typename inSetting>

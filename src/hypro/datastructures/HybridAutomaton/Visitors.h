@@ -281,6 +281,22 @@ class genericProjectionVisitor {
 	}
 };
 
+template <typename T, typename N>
+class genericAssignIntervalsVisitor {
+  protected:
+	const std::map<std::size_t, carl::Interval<N>>& mAssignments;
+
+  public:
+	genericAssignIntervalsVisitor() = delete;
+	genericAssignIntervalsVisitor( const std::map<std::size_t, carl::Interval<N>>& assignments )
+		: mAssignments( assignments ) {}
+
+	template <typename A>
+	inline T operator()( const A& lhs ) const {
+		return lhs.assignIntervals( mAssignments );
+	}
+};
+
 class genericSetContainsVisitor {
   public:
 	template <typename A, typename B>
@@ -338,6 +354,14 @@ class genericToStringVisitor {
 		std::stringstream ss;
 		ss << in;
 		return ss.str();
+	}
+};
+
+class genericEmptyVisitor {
+  public:
+	template <typename A>
+	inline bool operator()( const A& in ) const {
+		return in.empty();
 	}
 };
 

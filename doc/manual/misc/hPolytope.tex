@@ -1,0 +1,46 @@
+\documentclass[convert={density=300,size=300x150,outext=.png}]{standalone}
+
+%\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{external}
+%\tikzexternalize
+
+\usepackage{color, colortbl}
+\usepackage{rwthcolors}
+\usepackage[siunitx]{circuitikz}
+\usetikzlibrary{arrows,shadows,petri,automata,patterns}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{calc}
+\usetikzlibrary{intersections}
+
+\tikzset{
+	c/.style={every coordinate/.try}
+}
+
+\begin{document}
+
+	\tikzsetnextfilename{hPolytope}
+	\begin{tikzpicture} [>=latex]
+		\draw[help lines] (-.5,-.5) grid (2.5,2.5);
+		\draw[->] (-.5,0) -- node[below,pos=.9] {$x$} (2.5,0);
+		\draw[->] (0,-.5) -- node[left,pos=.9] {$y$} (0,2.5);
+
+		\draw[fill=blue100, opacity=.3] (-.5,0) -- (1,2.5) -- (2.5,2.5) -- (2.5,-.5) -- (-.5,-.5) -- cycle;
+		\draw[blue100] (-.5,0) coordinate(a_0) -- (1,2.5) coordinate(a_1);
+
+		\draw[fill=blue100, opacity=.3] (-.5,1.5) -- (2.5,0) -- (2.5,-.5) -- (-.5,-.5) -- cycle;
+		\draw[blue100] (-.5,1.5) coordinate(b_0) -- (2.5,0) coordinate(b_1);
+
+		\draw[fill=blue100, opacity=.3] (-.5,.5) -- (2.5,.5) -- (2.5,2.5) -- (-.5,2.5) -- cycle;
+		\draw[blue100] (-.5,.5) coordinate(c_0) -- (2.5,.5) coordinate(c_1);
+
+		\coordinate (d_0) at (intersection of a_0--a_1 and b_0--b_1);
+		\coordinate (d_1) at (intersection of a_0--a_1 and c_0--c_1);
+		\coordinate (d_2) at (intersection of b_0--b_1 and c_0--c_1);
+
+		\draw[blue100, thick] (d_0) -- (d_1) -- (d_2) -- cycle;
+	\end{tikzpicture}
+\end{document}

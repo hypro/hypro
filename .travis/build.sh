@@ -26,6 +26,9 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON -DCMAKE_CXX_COMPILER=$COMPILER || return 1
 	WRAPPER="build-wrapper-linux-x86-64 --out-dir ../bw-out"
 	$WRAPPER make hypro -j4 || return 1
+	lcov --directory . --capture --no-external --output-file coverage.info # capture coverage info
+	lcov --remove coverage.info 'test/*' '/usr/*' '*/carl/*' '*/parser/*' --output-file coverage.info # filter out system and test code
+	lcov --list coverage.info # debug before upload
 
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 

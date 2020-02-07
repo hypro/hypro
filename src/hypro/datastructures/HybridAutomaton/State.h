@@ -3,6 +3,7 @@
 
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
+#include "../../util/tuple_expansion/nth_element.h"
 #include "Condition.h"
 #include "Visitors.h"
 
@@ -29,6 +30,9 @@ class Location;
 template <typename Number, typename Representation, typename... Rargs>
 class State {
   public:
+	template <std::size_t I>
+	using nth_representation = nth_element<I, Representation, Rargs...>;
+
 	using repVariant = std::variant<Representation, Rargs...>;  /// variant type for all possible state set representations.
 	typedef Number NumberType;
 
@@ -37,7 +41,7 @@ class State {
 	std::vector<repVariant> mSets;														/// The state sets wrapped in variant (repVariant).
 	std::vector<representation_name> mTypes;											/// A vector holding the actual types corresponding to the state sets.
 	carl::Interval<tNumber> mTimestamp = carl::Interval<tNumber>::unboundedInterval();  /// A timestamp.
-	bool mIsEmpty = false;																/// A flag which can be set to allow for a quick check for emptiness.
+	mutable std::vector<TRIBOOL> mIsEmpty;												/// A flag for each set which can be set to allow for a quick check for emptiness.
 
   private:
 	/**
@@ -59,7 +63,8 @@ class State {
 		: mLoc( orig.getLocation() )
 		, mSets( orig.getSets() )
 		, mTypes( orig.getTypes() )
-		, mTimestamp( orig.getTimestamp() ) {
+		, mTimestamp( orig.getTimestamp() )
+		, mIsEmpty( orig.getEmptyStates() ) {
 		assert( checkConsistency() );
 	}
 
@@ -71,7 +76,8 @@ class State {
 		: mLoc( orig.getLocation() )
 		, mSets( orig.getSets() )
 		, mTypes( orig.getTypes() )
-		, mTimestamp( orig.getTimestamp() ) {
+		, mTimestamp( orig.getTimestamp() )
+		, mIsEmpty( orig.getEmptyStates() ) {
 		assert( checkConsistency() );
 	}
 
@@ -89,6 +95,7 @@ class State {
 		assert( mSets.size() == mTypes.size() );
 		assert( mSets.size() == orig.getNumberSets() );
 		mTimestamp = orig.getTimestamp();
+		mIsEmpty = orig.getEmptyStates();
 		TRACE( "hypro.datastructures", "Assignment operator created state with " << mSets.size() << " sets." );
 		assert( checkConsistency() );
 		return *this;
@@ -104,6 +111,7 @@ class State {
 		mSets = orig.getSets();
 		mTypes = orig.getTypes();
 		mTimestamp = orig.getTimestamp();
+		mIsEmpty = orig.getEmptyStates();
 		assert( checkConsistency() );
 		return *this;
 	}
@@ -116,7 +124,8 @@ class State {
 		: mLoc( _loc )
 		, mSets()
 		, mTypes()
-		, mTimestamp( carl::Interval<tNumber>::unboundedInterval() ) {
+		, mTimestamp( carl::Interval<tNumber>::unboundedInterval() )
+		, mIsEmpty() {
 		assert( mLoc != nullptr );
 		assert( checkConsistency() );
 	}
@@ -145,6 +154,7 @@ class State {
 #pragma GCC diagnostic pop
 		(void)dummy;
 		(void)dummy2;
+		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
 		assert( checkConsistency() );
 	}
 
@@ -160,6 +170,7 @@ class State {
 		, mTimestamp( _timestamp ) {
 		mSets.push_back( _rep );
 		mTypes.push_back( Representation::type() );
+		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
 	}
 
 	/**
@@ -180,6 +191,7 @@ class State {
 #pragma GCC diagnostic pop
 		(void)dummy;
 		(void)dummy2;
+		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
 		assert( checkConsistency() );
 	}
 
@@ -251,10 +263,22 @@ class State {
 	const carl::Interval<tNumber>& getTimestamp() const { return mTimestamp; }
 
 	/**
-     * @brief      Determines if empty.
+     * @brief      Returns empty-flag value.
      * @return     True if empty, False otherwise.
      */
-	bool isEmpty() const { return mIsEmpty; }
+	bool isEmpty() const;
+
+	/**
+     * @brief      Returns empty-flag values.
+     * @return     Vector of tribools.
+     */
+	const std::vector<TRIBOOL>& getEmptyStates() const { return mIsEmpty; }
+
+	/**
+     * @brief      Returns empty-flag values.
+     * @return     Vector of tribools.
+     */
+	std::vector<TRIBOOL>& rGetEmptyStates() { return mIsEmpty; }
 
 	/**
      * @brief      Sets the location.
@@ -286,9 +310,11 @@ class State {
 	void setSetType( representation_name type, std::size_t I = 0 ) {
 		TRACE( "hypro.datastructures", "Attempt to set set type at pos " << I << " to type " << type << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size() );
 		assert( mSets.size() == mTypes.size() );
+		// if not enough sets, fill with default values.
 		while ( I >= mSets.size() ) {
 			mSets.emplace_back( Representation() );		 // some default set.
 			mTypes.push_back( Representation::type() );  // some default set type.
+			mIsEmpty.push_back( TRIBOOL::NSET );
 		}
 		TRACE( "hypro.datastructures", "Set set type at pos " << I << " to type " << type );
 		mTypes[I] = type;
@@ -306,7 +332,7 @@ class State {
      * @details     Note that this method directly sets the sets while ignoring the consistency of the previously stored types
      * @param[in]   sets  The sets.
      */
-	void setSets( const std::vector<std::variant<Representation, Rargs...>>& sets ) { mSets = sets; }
+	void setSets( const std::vector<std::variant<Representation, Rargs...>>& sets );
 
 	/**
      * @brief       Sets the sets.
@@ -330,6 +356,7 @@ class State {
 		while ( I >= mSets.size() ) {
 			mSets.emplace_back( Representation() );		 // some default set.
 			mTypes.push_back( Representation::type() );  // some default set type.
+			mIsEmpty.push_back( TRIBOOL::NSET );
 		}
 		assert( checkConsistency() );
 		mSets[I] = in;
@@ -450,6 +477,8 @@ class State {
 	State<Number, Representation, Rargs...> project( const std::vector<std::size_t>& dimensions, std::size_t I = 0 ) const;
 	State<Number, Representation, Rargs...> project( const std::pair<std::size_t, std::size_t>& dimensions, std::size_t I = 0 ) const;
 
+	State<Number, Representation, Rargs...> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>&, std::size_t I = 0 ) const;
+
 	std::size_t getDimension( std::size_t I = 0 ) const;
 	std::size_t getDimensionOffset( std::size_t I ) const;
 
@@ -510,6 +539,15 @@ class State {
 		// quick checks first
 		if ( lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp ) {
 			return false;
+		}
+
+		// light-weight check on mIsEmpty
+		for ( const auto b1 : lhs.getEmptyStates() ) {
+			for ( const auto b2 : rhs.getEmptyStates() ) {
+				if ( ( b1 == TRIBOOL::TRUE && b2 == TRIBOOL::FALSE ) || ( b2 == TRIBOOL::TRUE && b1 == TRIBOOL::FALSE ) ) {
+					return false;
+				}
+			}
 		}
 
 		// location-based checks

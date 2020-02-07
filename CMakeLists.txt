@@ -45,6 +45,7 @@ option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+option(DOC_CREATE_PDF "Create pdf document for documentation." OFF)
 option(DEVELOPER "Compile in developer mode, i.e. more warnings." OFF)
 option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 option(RESET_REFINEMENT "Return to Level 0 after successful backtracking" ON)
@@ -60,29 +61,8 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 
-if(NOT PRIMARY_SOLVER_BACKEND)
-	set(PRIMARY_SOLVER_BACKEND "glpk" CACHE STRING "Primary backend-solver. Options are: glpk, clp")
-endif()
-set_property(CACHE PRIMARY_SOLVER_BACKEND PROPERTY STRINGS "clp" "glpk")
-
-if(NOT SECONDARY_SOLVER_BACKEND)
-	set(SECONDARY_SOLVER_BACKEND "none" CACHE STRING "Secondary backend-solver used after invoking glpk. Options are: none, smtrat, z3, soplex")
-endif()
-set_property(CACHE SECONDARY_SOLVER_BACKEND PROPERTY STRINGS "none" "smtrat" "z3" "soplex")
-
-if(${PRIMARY_SOLVER_BACKEND} STREQUAL "clp")
-	set(HYPRO_USE_CLP "ON")
-elseif(${PRIMARY_SOLVER_BACKEND} STREQUAL "glpk")
-	set(HYPRO_USE_GLPK "ON")
-endif()
-
-if(${SECONDARY_SOLVER_BACKEND} STREQUAL "smtrat")
-	set(HYPRO_USE_SMTRAT "ON")
-elseif(${SECONDARY_SOLVER_BACKEND} STREQUAL "z3")
-	set(HYPRO_USE_Z3 "ON")
-elseif(${SECONDARY_SOLVER_BACKEND} STREQUAL "soplex")
-	set(HYPRO_USE_SOPLEX "ON")
-endif()
+# handling of optimization backends
+include(optimization_backends)
 
 if(HYPRO_BUILD_OFFLINE)
 set_property(DIRECTORY ${hypro_SOURCE_DIR} PROPERTY EP_UPDATE_DISCONNECTED 1)
@@ -139,10 +119,6 @@ add_subdirectory(src/resources)
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-if(CREATE_DOC)
-	add_subdirectory(doc EXCLUDE_FROM_ALL)
-endif()
-
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 	set(CLANG_TIDY_CHECKS "google,modernize,performance,portability,readability")
@@ -171,6 +147,22 @@ add_subdirectory(src)
 add_subdirectory(src/test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 
+if(DEVELOPER)
+	target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wswitch
+	-Wno-deprecated-declarations
+	-Wempty-body
+	-Wconversion
+	-Wreturn-type
+	-Wparentheses
+	-Wno-format
+	-Wuninitialized
+	-Wunreachable-code
+	-Wunused-function
+	-Wunused-value
+	-Wunused-variable
+	-fsanitize=address)
+endif()
+
 ##############################################################################
 #### EXPORT SETTINGS
 
@@ -179,3 +171,8 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 
 include(export)
+
+
+if(CREATE_DOC)
+	add_subdirectory(doc EXCLUDE_FROM_ALL)
+endif()

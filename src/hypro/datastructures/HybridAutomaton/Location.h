@@ -41,12 +41,13 @@ class Location {
 	bool mHasExternalInput = false;
 	transitionVector mTransitions;
 	Condition<Number> mInvariant;
-	std::string mName;
+	std::string mName = "";
 	unsigned mId;
 	mutable std::size_t mHash = 0;
 
   public:
 	Location();
+	Location( const std::string& name );
 	Location( const Location& loc );
 	explicit Location( const matrix_t<Number>& mat );
 	Location( const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv );
@@ -64,7 +65,7 @@ class Location {
 	const std::vector<rectangularFlow<Number>>& getRectangularFlows() const { return mRectangularFlows; }
 
 	const Condition<Number>& getInvariant() const { return mInvariant; }
-	std::vector<Transition<Number>*> getTransitions() const;
+	const transitionVector& getTransitions() const { return mTransitions; }
 	transitionVector& rGetTransitions() { return mTransitions; }
 	const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
 	bool hasExternalInput() const { return mHasExternalInput; }
@@ -197,8 +198,8 @@ class Location {
 		//ostr << l.getInvariant().getDiscreteCondition() << std::endl;
 		//ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 		ostr << "Transitions: " << std::endl;
-		for ( auto transitionPtr : l.getTransitions() ) {
-			ostr << *transitionPtr << std::endl;
+		for ( const auto& transitionPtr : l.getTransitions() ) {
+			ostr << *( transitionPtr.get() ) << std::endl;
 		}
 		ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 		ostr << std::endl

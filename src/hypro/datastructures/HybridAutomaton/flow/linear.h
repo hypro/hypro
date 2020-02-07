@@ -43,6 +43,7 @@ class linearFlow {
 	}
 
 	const matrix_t<Number>& getFlowMatrix() const { return mFlowMatrix; }
+	matrix_t<Number>& rGetFlowMatrix() { return mFlowMatrix; }
 
 	bool isIdentity() const {
 		if ( mIsIdentity == TRIBOOL::NSET ) {
