@@ -164,7 +164,6 @@ class Optimizer {
 #ifdef HYPRO_USE_CLP
 		std::swap( lhs.mClpContexts, rhs.mClpContexts );
 #endif
-		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer );
 		std::swap( lhs.maximize, rhs.maximize );
 		assert( lhs.isSane() && rhs.isSane() );
