@@ -886,7 +886,7 @@ unsigned SupportFunctionContent<Number, Setting>::operationCount() const {
 template <typename Number, typename Setting>
 unsigned SupportFunctionContent<Number, Setting>::multiplicationsPerEvaluation() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number, Setting>>;
-	using Res = unsigned;
+	using Res = long int;
 	std::vector<Node> callStack;
 	std::vector<std::pair<std::size_t, std::vector<Res>>> resultStack;  // The first value is an iterator to the calling frame
 
@@ -903,7 +903,7 @@ unsigned SupportFunctionContent<Number, Setting>::multiplicationsPerEvaluation()
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
-			if ( currentResult.first == -1 ) {
+			if ( currentResult.first == 1 ) {
 				// we reached the top
 				assert( currentResult.second.size() == 1 );
 				return currentResult.second.front();
