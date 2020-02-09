@@ -179,12 +179,8 @@ class ConstraintSetT {
 	 * @param ostr Outstream.
 	 * @param b A constraintSet.
 	 */
-#ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number, S>& b ) {
 		ostr << "Matrix: " << b.matrix() << ", Vector: " << b.vector();
-#else
-	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number, S>& ) {
-#endif
 		return ostr;
 	}
 

@@ -410,16 +410,12 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 * @param ostr Outstream.
 	 * @param b A box.
 	 */
-#ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number, Converter, Setting>& b ) {
 		ostr << "{ ";
 		if ( !b.empty() ) {
 			ostr << b.min() << "; " << b.max() << std::endl;
 		}
 		ostr << " }";
-#else
-	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number, Converter, Setting>& ) {
-#endif
 		return ostr;
 	}
 

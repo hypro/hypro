@@ -148,12 +148,8 @@ class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number,
 	 * @param ostr Outstream.
 	 * @param b A GeneralizedStar.
 	 */
-#ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const GeneralizedStarT<Number, Converter, Setting>& b ) {
 		// Put outstream operations here.
-#else
-	friend std::ostream& operator<<( std::ostream& ostr, const GeneralizedStarT<Number, Converter, Setting>& ) {
-#endif
 		return ostr;
 	}
 
