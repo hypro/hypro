@@ -23,8 +23,9 @@
 #else
 
 // clang-format off
-#include <carl-logging/logging.h>
-#include <carl-logging/logging-internals.h>
+#include <carl/core/carlLogging.h>
+#include <carl/core/carlLoggingHelper.h>
+//#include <carl-logging/logging-internals.h>
 // clang-format on
 
 namespace hypro {

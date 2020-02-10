@@ -106,10 +106,9 @@ include(compiler-settings)
 # 3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
 
-
 load_library(${PROJECT_NAME} GTest 0)
 
-load_library(${PROJECT_NAME} carl 0)
+load_library(${PROJECT_NAME} carl 19.06)
 
 add_subdirectory(src/resources)
 
