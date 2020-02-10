@@ -46,6 +46,7 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_sfHpolyComparison.cpp", "example__sfHpolyComparison_8cpp.html", "example__sfHpolyComparison_8cpp" ],
     [ "example_sfIntersection.cpp", "example__sfIntersection_8cpp.html", "example__sfIntersection_8cpp" ],
     [ "example_sfLintrafoReduction.cpp", "example__sfLintrafoReduction_8cpp.html", "example__sfLintrafoReduction_8cpp" ],
+    [ "example_simulation.cpp", "example__simulation_8cpp.html", "example__simulation_8cpp" ],
     [ "example_supportFunction.cpp", "example__supportFunction_8cpp.html", "example__supportFunction_8cpp" ],
     [ "example_vertexEnumeration.cpp", "example__vertexEnumeration_8cpp.html", "example__vertexEnumeration_8cpp" ],
     [ "example_worker.cpp", "example__worker_8cpp.html", "example__worker_8cpp" ],

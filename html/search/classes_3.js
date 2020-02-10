@@ -18,5 +18,6 @@ var searchData=
   ['discreteinvarianthandler',['discreteInvariantHandler',['../classhypro_1_1discreteInvariantHandler.html',1,'hypro']]],
   ['discreteresethandler',['discreteResetHandler',['../classhypro_1_1discreteResetHandler.html',1,'hypro']]],
   ['discretetimeevolutionhandler',['discreteTimeEvolutionHandler',['../classhypro_1_1discreteTimeEvolutionHandler.html',1,'hypro']]],
-  ['domain',['Domain',['../classhypro_1_1Domain.html',1,'hypro']]]
+  ['domain',['Domain',['../classhypro_1_1Domain.html',1,'hypro']]],
+  ['dummy',['Dummy',['../structhypro_1_1Dummy.html',1,'hypro']]]
 ];

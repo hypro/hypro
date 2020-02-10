@@ -42,6 +42,10 @@ var hierarchy =
     [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
+    [ "hypro::ConstraintSetSettings", "structhypro_1_1ConstraintSetSettings.html", null ],
+    [ "hypro::ConstraintSetT< Number, S >", "classhypro_1_1ConstraintSetT.html", null ],
+    [ "hypro::ConstraintSetT< N >", "classhypro_1_1ConstraintSetT.html", null ],
+    [ "hypro::ConstraintSetT< Number >", "classhypro_1_1ConstraintSetT.html", null ],
     [ "context", null, [
       [ "hypro::z3Context", "classhypro_1_1z3Context.html", null ]
     ] ],
@@ -60,6 +64,7 @@ var hierarchy =
     [ "hypro::Dictionary< Number >", "classhypro_1_1Dictionary.html", null ],
     [ "hypro::DifferenceBoundsSetting", "structhypro_1_1DifferenceBoundsSetting.html", null ],
     [ "hypro::Domain< Number >", "classhypro_1_1Domain.html", null ],
+    [ "hypro::Dummy", "structhypro_1_1Dummy.html", null ],
     [ "hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1EllipsoidSupportFunction.html", null ],
     [ "hypro::EllipsoidT< Number, Converter >", "classhypro_1_1EllipsoidT.html", null ],
     [ "hypro::endPoint< T, Number >", "structhypro_1_1endPoint.html", null ],
@@ -117,11 +122,29 @@ var hierarchy =
     [ "hypro::genericUniteVisitor< T >", "classhypro_1_1genericUniteVisitor.html", null ],
     [ "hypro::genericVerticesVisitor< Number >", "classhypro_1_1genericVerticesVisitor.html", null ],
     [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],
+    [ "hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1BoxT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ]
+    ] ],
     [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
     ] ],
+    [ "hypro::GeometricObject< Number, GeneralizedStarT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::GeneralizedStarT< Number, Converter, Setting >", "classhypro_1_1GeneralizedStarT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, HPolytopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::HPolytopeT< Number, Converter, Setting >", "classhypro_1_1HPolytopeT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, SupportFunctionNewT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::SupportFunctionNewT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html", null ]
+    ] ],
     [ "hypro::GeometricObject< Number, SupportFunctionT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::SupportFunctionT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter, S > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::VPolytopeT< Number, Converter, S >", "classhypro_1_1VPolytopeT.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ZonotopeT< Number, Converter, Setting >", "classhypro_1_1ZonotopeT.html", null ]
@@ -267,6 +290,7 @@ var hierarchy =
     [ "pair", null, [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >::DBMEntry", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html", null ]
     ] ],
+    [ "hypro::Parameters< Rargs >", "structhypro_1_1Parameters.html", null ],
     [ "Parser", null, [
       [ "hypro::HybridAutomatonParser", "classhypro_1_1HybridAutomatonParser.html", null ],
       [ "hypro::HybridSystemParser", "classhypro_1_1HybridSystemParser.html", null ]
@@ -537,7 +561,6 @@ var hierarchy =
     [ "hypro::SupportFunctionNewLeGuernic", "structhypro_1_1SupportFunctionNewLeGuernic.html", null ],
     [ "hypro::SupportFunctionNewMorePrecision", "structhypro_1_1SupportFunctionNewMorePrecision.html", null ],
     [ "hypro::SupportFunctionNewNoReduction", "structhypro_1_1SupportFunctionNewNoReduction.html", null ],
-    [ "hypro::SupportFunctionNewT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html", null ],
     [ "hypro::SupportFunctionSetting", "structhypro_1_1SupportFunctionSetting.html", [
       [ "hypro::NoBoxDetection", "structhypro_1_1NoBoxDetection.html", null ],
       [ "hypro::NoBoxReduction", "structhypro_1_1NoBoxReduction.html", null ],

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['x0',['X0',['../classhypro_1_1NonLinearOmega0Supportfunction.html#a16fbc344471821e292c357b8587d69f5',1,'hypro::NonLinearOmega0Supportfunction::X0()'],['../structInput__equation.html#ab2af9b24f59a1ab0a0d8e8117068be2e',1,'Input_equation::x0()']]],
+  ['x0',['x0',['../structInput__equation.html#ab2af9b24f59a1ab0a0d8e8117068be2e',1,'Input_equation::x0()'],['../classhypro_1_1NonLinearOmega0Supportfunction.html#a16fbc344471821e292c357b8587d69f5',1,'hypro::NonLinearOmega0Supportfunction::X0()']]],
   ['x0_5f2',['x0_2',['../structInput__equation.html#ad3eef27a85225e2494a501276d46cc3f',1,'Input_equation']]],
   ['x0res',['x0res',['../classhypro_1_1NonLinearOmega0Supportfunction.html#af3f79f0005e08f0f5b101d22c7fa5733',1,'hypro::NonLinearOmega0Supportfunction']]],
   ['x_5ftr',['x_tr',['../structDependent__part__funct.html#a9cf3265531dda4c7185abbc567ecb3ec',1,'Dependent_part_funct']]],

@@ -15,7 +15,7 @@ var classhypro_1_1EllipsoidT =
     [ "operator=", "classhypro_1_1EllipsoidT.html#a09b6077985bd6d52a5b0e97b656624cc", null ],
     [ "print", "classhypro_1_1EllipsoidT.html#a05ccd03d5a990b71070594d62b06c4d1", null ],
     [ "operator!=", "classhypro_1_1EllipsoidT.html#a10725508aa0433b35fb218ddd78d732e", null ],
-    [ "operator<<", "classhypro_1_1EllipsoidT.html#afae5819d8e2e000e0df28d446a4b2684", null ],
+    [ "operator<<", "classhypro_1_1EllipsoidT.html#a5a712c69012a281366bebd43e6768d33", null ],
     [ "operator==", "classhypro_1_1EllipsoidT.html#a54c6b79519b05cccd718ddbf58de0f56", null ],
     [ "mDimension", "classhypro_1_1EllipsoidT.html#a85f4ae93138b06839ec286afcaf38c67", null ],
     [ "mIsEmpty", "classhypro_1_1EllipsoidT.html#a692b1a30618bbf65b42f662ff0d16887", null ],

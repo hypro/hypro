@@ -17,7 +17,7 @@ var searchData=
   ['neighborhoodcontainer_2ecpp',['NeighborhoodContainer.cpp',['../NeighborhoodContainer_8cpp.html',1,'']]],
   ['neighborhoodcontainer_2eh',['NeighborhoodContainer.h',['../NeighborhoodContainer_8h.html',1,'']]],
   ['neighborhoodinduced',['neighborhoodInduced',['../classhypro_1_1Grid.html#a1b8222f58f10327384dc4d7771d54084',1,'hypro::Grid']]],
-  ['neighbors',['neighbors',['../classhypro_1_1Facet.html#a3322f1b405ef40494c0ac1c8b19a9620',1,'hypro::Facet::neighbors()'],['../classhypro_1_1Ridge.html#a3c205e9a89b7c9cfe59e4537e9ca385d',1,'hypro::Ridge::neighbors()']]],
+  ['neighbors',['neighbors',['../classhypro_1_1Facet.html#a3322f1b405ef40494c0ac1c8b19a9620',1,'hypro::Facet::neighbors()'],['../classhypro_1_1Ridge.html#a3c205e9a89b7c9cfe59e4537e9ca385d',1,'hypro::Ridge::neighbors()'],['../classhypro_1_1VPolytopeT.html#a5f95df9fe3c259d5c5e3b5a8b8805b06',1,'hypro::VPolytopeT::neighbors()']]],
   ['neighborsset',['neighborsSet',['../classhypro_1_1Facet.html#a359905ac46847646f5a9b28c9ef0a3f9',1,'hypro::Facet']]],
   ['nested',['Nested',['../structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html#a08fa72941959ac2331da7ba0ce4ff4cb',1,'Eigen::NumTraits&lt; carl::FLOAT_T&lt; Number &gt; &gt;::Nested()'],['../structEigen_1_1NumTraits_3_01mpq__class_01_4.html#a28fee76b54f84818ec53d195ad71bee7',1,'Eigen::NumTraits&lt; mpq_class &gt;::Nested()']]],
   ['newcarlvariable',['newCarlVariable',['../classhypro_1_1VariablePool.html#aed25cd9c39e31076cf947f6638a97667',1,'hypro::VariablePool']]],
@@ -68,7 +68,7 @@ var searchData=
   ['numberoflocationswithoutaname',['numberOfLocationsWithoutAName',['../classhypro_1_1HybridCIFVisitor.html#aff7f5abe16b55189abfa44ec864418b2',1,'hypro::HybridCIFVisitor']]],
   ['numberofpointsinhalfspace',['numberOfPointsInHalfspace',['../namespacehypro.html#a8a362522e64815653528fedc5728d2b3',1,'hypro']]],
   ['numbertoken',['numberToken',['../classhypro_1_1HybridAutomatonParser_1_1ConstantexprContext.html#a5924fe9576279553fcb558fb35d0f3b8',1,'hypro::HybridAutomatonParser::ConstantexprContext']]],
-  ['numbertype',['NumberType',['../classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd',1,'hypro::GeometricObject::NumberType()'],['../classhypro_1_1CarlPolytopeT.html#a0fe991b2aafb7012ee4f53f3bbd34bcf',1,'hypro::CarlPolytopeT::NumberType()']]],
+  ['numbertype',['NumberType',['../classhypro_1_1ConstraintSetT.html#a6109c99518e82d49bde33684bec56778',1,'hypro::ConstraintSetT::NumberType()'],['../classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd',1,'hypro::GeometricObject::NumberType()'],['../classhypro_1_1CarlPolytopeT.html#a0fe991b2aafb7012ee4f53f3bbd34bcf',1,'hypro::CarlPolytopeT::NumberType()']]],
   ['numlocks',['numLocks',['../classhypro_1_1LockableObjectWrapper.html#a1a1ca002e3314e4568c414741422a631',1,'hypro::LockableObjectWrapper']]],
   ['numtraits_3c_20carl_3a_3afloat_5ft_3c_20number_20_3e_20_3e',['NumTraits&lt; carl::FLOAT_T&lt; Number &gt; &gt;',['../structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html',1,'Eigen']]],
   ['numtraits_3c_20mpq_5fclass_20_3e',['NumTraits&lt; mpq_class &gt;',['../structEigen_1_1NumTraits_3_01mpq__class_01_4.html',1,'Eigen']]]

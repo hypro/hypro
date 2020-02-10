@@ -1,4 +1,5 @@
 /home/travis/build/hypro/hypro/examples/example_box.cpp:3: warning: Example example_box.cpp was already documented. Ignoring documentation found here.
+/home/travis/build/hypro/hypro/examples/example_simulation.cpp:2: warning: Example example_plot.cpp was already documented. Ignoring documentation found here.
 /home/travis/build/hypro/hypro/examples/example_eigensimple2points.cpp:9: warning: found documented #define but ignoring it because ENABLE_PREPROCESSING is NO.
 
 /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/for_each.h:14: warning: Detected potential recursive class relation between class hypro::detail::gen_seq and base class hypro::detail::gen_seq< N-1, N-1, Is... >!
@@ -27,12 +28,17 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/examples/example_bouncingBall.cpp:5: warning: included file example_bouncingBall.cpp is not found. Check your EXAMPLE_PATH
 <example_box.cpp>:3: warning: included file example_box.cpp is not found. Check your EXAMPLE_PATH
 /home/travis/build/hypro/hypro/examples/example_converter.cpp:6: warning: included file example_converter.cpp is not found. Check your EXAMPLE_PATH
-/home/travis/build/hypro/hypro/examples/example_differenceBounds.cpp:4: warning: included file example_differenceBounds.cpp is not found. Check your EXAMPLE_PATH
-/home/travis/build/hypro/hypro/examples/example_HPolytope.cpp:3: warning: included file example_HPolytope.cpp is not found. Check your EXAMPLE_PATH
+/home/travis/build/hypro/hypro/examples/example_differenceBounds.cpp:5: warning: included file example_differenceBounds.cpp is not found. Check your EXAMPLE_PATH
+/home/travis/build/hypro/hypro/examples/example_HPolytope.cpp:4: warning: included file example_HPolytope.cpp is not found. Check your EXAMPLE_PATH
 /home/travis/build/hypro/hypro/examples/example_plot.cpp:4: warning: included file example_plot.cpp is not found. Check your EXAMPLE_PATH
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:325: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:331: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:299: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
@@ -66,6 +72,19 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportFunction.h:65: warning: The following parameters of hypro::BoxSupportFunction::multiEvaluate(const matrix_t< Number > &_A, bool useExact, bool setTemplate=false) const are not documented:
   parameter 'useExact'
   parameter 'setTemplate'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:265: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter, Setting >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:268: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
+  parameter '_index'
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:351: warning: The following parameters of hypro::BoxT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact=true) const are not documented:
+  parameter 'useExact'
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:79: warning: argument '_constants' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::ConstraintSetT(const matrix_t< Number > &_constraints)
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:242: warning: argument 'constraintSet' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::contains(const ConstraintSetT &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:231: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::intersect(const ConstraintSetT &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:214: warning: argument 'limit' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::reduceNumberRepresentation(unsigned)
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:252: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::unite(const ConstraintSetT &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:259: warning: argument 'constraintSets' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::unite(const std::vector< ConstraintSetT > &)
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:101: warning: argument 'available' of command @param is not found in the argument list of hypro::Dictionary< Number >::selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector< Eigen::Index > availableIndices)
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:103: warning: The following parameters of hypro::Dictionary::selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector< Eigen::Index > availableIndices) are not documented:
   parameter 'i'
@@ -102,6 +121,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
   parameter '_approx'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:113: warning: The following parameters of hypro::GeneralizedStarT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact=true) const are not documented:
+  parameter 'useExact'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:180: warning: argument 'limit' of command @param is not found in the argument list of hypro::GeneralizedStarT< Number, Converter, Setting >::reduceNumberRepresentation()
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:163: warning: argument 'obj' of command @param is not found in the argument list of hypro::GeometricObject< Number, DerivedShape >::operator<<(std::ostream &out, const GeometricObject< Number, DerivedShape > &in)
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:168: warning: The following parameters of hypro::GeometricObject::operator<<(std::ostream &out, const GeometricObject< Number, DerivedShape > &in) are not documented:
   parameter 'in'
@@ -115,14 +139,21 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:160: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number >) const
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:331: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:325: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:219: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:219: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:223: warning: The following parameters of hypro::HPolytopeT::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end) are not documented:
+  parameter 'begin'
+  parameter 'end'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:71: warning: argument 'hybrid' of command @param is not found in the argument list of hypro::HybridAutomaton< Number >::HybridAutomaton(const locationVector &locs, const locationConditionMap &initialStates)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:71: warning: argument 'trans' of command @param is not found in the argument list of hypro::HybridAutomaton< Number >::HybridAutomaton(const locationVector &locs, const locationConditionMap &initialStates)
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/LinTrafoParameters.h:10: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:121: warning: The following parameters of hypro::Optimizer::Optimizer(const matrix_t< Number > &constraints, const vector_t< Number > &constants, bool max=true) are not documented:
   parameter 'max'
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:224: warning: The following parameters of hypro::Optimizer::addConstraint(const vector_t< Number > &constraint, Number constantPart, carl::Relation rel) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:223: warning: The following parameters of hypro::Optimizer::addConstraint(const vector_t< Number > &constraint, Number constantPart, carl::Relation rel) are not documented:
   parameter 'rel'
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:231: warning: The following parameters of hypro::Optimizer::setRelation(carl::Relation rel, std::size_t pos) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:230: warning: The following parameters of hypro::Optimizer::setRelation(carl::Relation rel, std::size_t pos) are not documented:
   parameter 'rel'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:502: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::at(std::size_t _index)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:512: warning: The following parameters of hypro::Point::at(std::size_t _index) are not documented:
@@ -184,6 +215,24 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/StatisticWrapper.h:151: warning: The following parameters of hypro::StatisticWrapper::operator<<(std::ostream &out, const GeometricObject< Number, StatisticWrapper< Representation >> &in) are not documented:
   parameter 'in'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:211: warning: argument 'rhs' of command @param is not found in the argument list of hypro::SupportFunctionNewT< Number, Converter, Setting >::addOperation(RootGrowNode< Number, Converter, Setting > *newRoot) const
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:479: warning: argument 'SupportFunctionNew' of command @param is not found in the argument list of hypro::SupportFunctionNewT< Number, Converter, Setting >::contains(const SupportFunctionNewT< Number, Converter, Setting > &rhs) const
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:483: warning: The following parameters of hypro::SupportFunctionNewT::contains(const SupportFunctionNewT< Number, Converter, Setting > &rhs) const are not documented:
+  parameter 'rhs'
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:301: warning: The following parameters of hypro::SupportFunctionNewT::evaluate(const vector_t< Number > &_direction, bool useExact=true) const are not documented:
+  parameter 'useExact'
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:431: warning: argument 'b' of command @param is not found in the argument list of hypro::SupportFunctionNewT< Number, Converter, Setting >::linearTransformation(const matrix_t< Number > &A) const
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:308: warning: The following parameters of hypro::SupportFunctionNewT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact=true) const are not documented:
+  parameter 'useExact'
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:405: warning: argument 'limit' of command @param is not found in the argument list of hypro::SupportFunctionNewT< Number, Converter, Setting >::reduceNumberRepresentation()
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:448: warning: argument 'factor' of command @param is not found in the argument list of hypro::SupportFunctionNewT< Number, Converter, Setting >::scale(const Number &_factor=1) const
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:452: warning: The following parameters of hypro::SupportFunctionNewT::scale(const Number &_factor=1) const are not documented:
+  parameter '_factor'
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:494: warning: argument 'SupportFunctionNewes' of command @param is not found in the argument list of hypro::SupportFunctionNewT< Number, Converter, Setting >::unite(const std::vector< SupportFunctionNewT< Number, Converter, Setting >> &rhs) const
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:498: warning: The following parameters of hypro::SupportFunctionNewT::unite(const std::vector< SupportFunctionNewT< Number, Converter, Setting >> &rhs) const are not documented:
+  parameter 'rhs'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/TimedContext.h:59: warning: argument 'state' of command @param is not found in the argument list of hypro::TimedContext< State >::handshakeTimestamps(State &preOp, State &postOp)
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/TimedContext.h:59: warning: argument 'state' of command @param is not found in the argument list of hypro::TimedContext< State >::handshakeTimestamps(State &preOp, State &postOp)
@@ -217,6 +266,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:233: warning: The following parameters of hypro::Vertex::operator>(const Vertex< Number > &_v1, const Vertex< Number > &_v2) are not documented:
   parameter '_v1'
   parameter '_v2'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:82: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::VPolytopeT< Number, Converter, S >::VPolytopeT(VPolytopeT &&_orig)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:85: warning: The following parameters of hypro::VPolytopeT::VPolytopeT(VPolytopeT &&_orig) are not documented:
+  parameter '_orig'
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:239: warning: argument 'result' of command @param is not found in the argument list of hypro::ZonotopeT< Number, Converter, Setting >::intersect(const Parma_Polyhedra_Library::Constraint &halfspace) const

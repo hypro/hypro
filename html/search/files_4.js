@@ -57,9 +57,11 @@ var searchData=
   ['example_5fsfhpolycomparison_2ecpp',['example_sfHpolyComparison.cpp',['../example__sfHpolyComparison_8cpp.html',1,'']]],
   ['example_5fsfintersection_2ecpp',['example_sfIntersection.cpp',['../example__sfIntersection_8cpp.html',1,'']]],
   ['example_5fsflintraforeduction_2ecpp',['example_sfLintrafoReduction.cpp',['../example__sfLintrafoReduction_8cpp.html',1,'']]],
+  ['example_5fsimulation_2ecpp',['example_simulation.cpp',['../example__simulation_8cpp.html',1,'']]],
   ['example_5fsupportfunction_2ecpp',['example_supportFunction.cpp',['../example__supportFunction_8cpp.html',1,'']]],
   ['example_5fvertexenumeration_2ecpp',['example_vertexEnumeration.cpp',['../example__vertexEnumeration_8cpp.html',1,'']]],
   ['example_5fworker_2ecpp',['example_worker.cpp',['../example__worker_8cpp.html',1,'']]],
   ['example_5fzonotope_2ecpp',['example_zonotope.cpp',['../example__zonotope_8cpp.html',1,'']]],
+  ['examples_2emd',['examples.md',['../examples_8md.html',1,'']]],
   ['exceptions_2eh',['Exceptions.h',['../Exceptions_8h.html',1,'']]]
 ];
