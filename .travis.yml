@@ -100,7 +100,6 @@ matrix:
         homebrew:
           packages:
           - llvm
-          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -110,7 +109,6 @@ matrix:
         homebrew:
           packages:
           - llvm
-          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -120,7 +118,6 @@ matrix:
         homebrew:
           packages:
           - llvm
-          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -130,7 +127,6 @@ matrix:
         homebrew:
           packages:
           - llvm
-          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -140,7 +136,6 @@ matrix:
         homebrew:
           packages:
           - llvm
-          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -150,7 +145,6 @@ matrix:
         homebrew:
           packages:
           - llvm
-          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++

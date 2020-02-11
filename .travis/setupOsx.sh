@@ -14,3 +14,7 @@ elif [[ ${COMPILER} == "g++-5" ]]; then
 	brew install gcc@5
 	brew link --overwrite gcc@5
 fi
+
+# boost 1.60 is currently required until we can use a newer version of CArL which supports osx.
+brew install boost@1.60
+brew link boost@1.60
