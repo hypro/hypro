@@ -5,13 +5,19 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/c
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core/MultivariatePolynomialAdaptors
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core/polynomialfunctions
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core/rootfinder
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/bitvector
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/helpers
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/evaluation
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/mvroot
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/ran
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/ran/z3
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/sqrtex
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/substitutions
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/uninterpreted
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/parser
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/symmetry
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/uninterpreted
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/groebner
@@ -38,14 +44,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/c
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-cad
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-covering
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-covering/heuristics
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-extpolys
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-io
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-logging
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/evaluation
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/sqrtex
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/substitutions
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/uninterpreted
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-settings
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/examples
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/examples/tutorial
@@ -55,9 +53,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/t
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/benchmarks/framework
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-cad
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-covering
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-extpolys
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-io
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-model
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-settings
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/core
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/debug
@@ -86,13 +81,19 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/c
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core/MultivariatePolynomialAdaptors
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core/polynomialfunctions
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/core/rootfinder
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/bitvector
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/helpers
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/evaluation
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/mvroot
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/ran
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/ran/z3
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/sqrtex
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/substitutions
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/model/uninterpreted
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/parser
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/symmetry
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/formula/uninterpreted
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl/groebner
@@ -119,14 +120,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/c
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-cad
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-covering
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-covering/heuristics
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-extpolys
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-io
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-logging
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/evaluation
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/sqrtex
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/substitutions
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-model/uninterpreted
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/carl-settings
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/examples
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/examples/tutorial
@@ -136,9 +129,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/t
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/benchmarks/framework
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-cad
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-covering
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-extpolys
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-io
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-model
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/carl-settings
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/core
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/src/tests/debug
@@ -183,6 +173,8 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/detail/impl
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/experimental
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/experimental/impl
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/generic
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/generic/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/asio/generic/detail/impl
@@ -207,21 +199,22 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/atomic/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/atomic/detail/type_traits
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental/http
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental/http/impl
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental/test
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental/test/impl
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental/unit_test
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/_experimental/unit_test/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/core
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/core/detail
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/core/detail/impl
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/core/impl
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/core
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/core/detail
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/core/detail/impl
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/core/impl
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/http
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/http/impl
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/test
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/test/detail
+Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/experimental/test/impl
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/http
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/http/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/http/impl
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/ssl
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/websocket
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/websocket/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/beast/websocket/impl
@@ -577,8 +570,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/geometry/views/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/geometry/views/detail/boundary_view
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/gil
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/gil/concepts
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/gil/concepts/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/gil/extension
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/gil/extension/dynamic_image
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/gil/extension/io
@@ -632,11 +623,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/hana/fwd/core
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/heap
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/heap/detail
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/histogram
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/histogram/accumulators
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/histogram/algorithm
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/histogram/axis
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/histogram/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/hof
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/hof/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/icl
@@ -724,7 +710,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/concepts
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/constants
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/cstdfloat
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/differentiation
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/distributions
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/distributions/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/math/interpolators
@@ -860,18 +845,10 @@ Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas/detail
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas/experimental
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas/opencl
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas/operation
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas/tensor
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/numeric/ublas/traits
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/optional
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/optional/detail
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/outcome
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/outcome/detail
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/outcome/experimental
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/outcome/experimental/status-code
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/outcome/experimental/status-code/detail
-Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/outcome/policy
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/parameter
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/parameter/aux_
 Searching for files in directory /home/travis/build/hypro/hypro/build/carl/build/resources/include/boost/parameter/aux_/preprocessor
@@ -2105,9 +2082,7 @@ Parsing file /home/travis/build/hypro/hypro/examples/example_sfIntersection.cpp.
 Reading /home/travis/build/hypro/hypro/examples/example_sfLintrafoReduction.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/example_sfLintrafoReduction.cpp...
 Reading /home/travis/build/hypro/hypro/examples/example_simulation.cpp...
-Perror opening bib20345.bbl: No such file or directory
-bibtex command failed: No such file or directory
-arsing file /home/travis/build/hypro/hypro/examples/example_simulation.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_simulation.cpp...
 Reading /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
 Reading /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
@@ -2156,7 +2131,9 @@ Determining which enums are documented
 Computing member relations...
 Building full member lists recursively...
 Adding members to member groups.
-Distributing member group documentation.
+Distributing member group documentationerror opening bib18957.bbl: No such file or directory
+bibtex command failed: No such file or directory
+.
 Computing member references...
 Inheriting documentation...
 Generating disk names...
@@ -3887,5 +3864,5 @@ Patching output file 245/248
 Patching output file 246/248
 Patching output file 247/248
 Patching output file 248/248
-lookup cache used 18705/65536 hits=247257 misses=19866
+lookup cache used 18705/65536 hits=247249 misses=19866
 finished...
