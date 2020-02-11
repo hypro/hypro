@@ -15,6 +15,10 @@ elif [[ ${COMPILER} == "g++-5" ]]; then
 	brew link --overwrite gcc@5
 fi
 
-# boost 1.60 is currently required until we can use a newer version of CArL which supports osx.
-brew install boost@1.60
-brew link --force --overwrite boost@1.60
+# boost <= 1.70 is currently required until we can use a newer version of CArL which supports osx.
+wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz
+tar -xzf boost_1_65_1.tar.gz
+cd boost_1_65_1
+./bootstrap.sh
+./b2
+./b2 install
