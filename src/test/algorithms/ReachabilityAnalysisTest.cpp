@@ -74,7 +74,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 		settings.useInvariantTimingInformation = false;
 	}
 
-	void TearDown() {}
+	void TearDown() override {}
 
 	hypro::HybridAutomaton<Number> bball_ha;
 	hypro::ReachabilitySettings settings;
