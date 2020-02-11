@@ -27,14 +27,8 @@ notifications:
     rooms:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
-sudo: required
+#sudo: required
 
-#cache:
-#  apt: true
-#  directories:
-#    - $HOME/usr/
-#    - $HOME/.sonar/cache
-#    - build/resources
 
 addons:
   apt:
@@ -106,6 +100,7 @@ matrix:
         homebrew:
           packages:
           - llvm
+          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -115,6 +110,7 @@ matrix:
         homebrew:
           packages:
           - llvm
+          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -124,6 +120,7 @@ matrix:
         homebrew:
           packages:
           - llvm
+          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -133,6 +130,7 @@ matrix:
         homebrew:
           packages:
           - llvm
+          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -142,6 +140,7 @@ matrix:
         homebrew:
           packages:
           - llvm
+          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -151,6 +150,7 @@ matrix:
         homebrew:
           packages:
           - llvm
+          - boost@1.60
           update: true
       compiler: clang
       env: COMPILER=clang++
