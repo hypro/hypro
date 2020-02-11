@@ -17,4 +17,4 @@ fi
 
 # boost 1.60 is currently required until we can use a newer version of CArL which supports osx.
 brew install boost@1.60
-brew link boost@1.60
+brew link --force --overwrite boost@1.60
