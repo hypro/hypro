@@ -17,7 +17,7 @@ fi
 
 # boost <= 1.70 is currently required until we can use a newer version of CArL which supports osx.
 # first remove version 1.71.0 which is currently installed (apparently)
-brew remove boost
+brew uninstall --ignore-dependencies boost
 wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz
 tar -xzf boost_1_65_1.tar.gz
 cd boost_1_65_1
