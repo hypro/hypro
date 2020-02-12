@@ -19,7 +19,8 @@ fi
 wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz
 tar -xzf boost_1_65_1.tar.gz
 cd boost_1_65_1
-./bootstrap.sh --with-libraries=chrono,system,program_options,test,timer
+mkdir build
+./bootstrap.sh --with-libraries=chrono,system,program_options,test,timer --prefix=build
 keep_waiting &
 		./b2 -d0 || return 1
 kill $!
