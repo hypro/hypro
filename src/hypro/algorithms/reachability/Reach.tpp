@@ -12,68 +12,10 @@ Reach<Number, ReacherSettings, State>::Reach( const HybridAutomaton<Number>& _au
 	, mSettings( _settings )
 	, mCurrentLevel( 0 )
 	, mIntersectedBadStates( false ) {
-	//mAutomaton.addArtificialDimension();
 }
 
 template <typename Number, typename ReacherSettings, typename State>
 void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>&& initialStates ) {
-	/*
-	TRACE( "hypro.reacher.preprocessing", "Have " << mAutomaton.getInitialStates().size() << " initial states." );
-	for ( const auto& locationConstraintPair : mAutomaton.getInitialStates() ) {
-		if ( int( mCurrentLevel ) <= mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
-			// Convert representation in state from matrix and vector to used representation type.
-			State s;
-			s.setLocation( locationConstraintPair.first );
-			switch ( mType ) {
-				case representation_name::box: {
-					s.setSetDirect( Box<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::polytope_h: {
-					s.setSetDirect( HPolytope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::polytope_v: {
-					s.setSetDirect( VPolytope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::support_function: {
-					s.setSetDirect( SupportFunction<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::zonotope: {
-					s.setSetDirect( Zonotope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::constraint_set: {
-					s.setSetDirect( ConstraintSet<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-#ifdef HYPRO_USE_PPL
-				case representation_name::ppl_polytope: {
-					s.setSetDirect( Polytope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-#endif
-				case representation_name::SFN: {
-					s.setSetDirect( SupportFunctionNew<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				default: {
-					assert( false );
-				}
-			}
-			TRACE( "hypro.reacher.preprocessing", "convert." );
-			//s.setSetDirect(std::visit(genericConversionVisitor<typename State::repVariant, Number>(mType), s.getSet()));
-			s.setSetType( mType );
-			TRACE( "hypro.reacher.preprocessing", "Type after conversion is " << s.getSetType( 0 ) );
-
-			DEBUG( "hypro.reacher", "Adding initial set of type " << mType << ", current queue size (before) is " << mWorkingQueue.size() );
-			assert( mType == s.getSetType() );
-		}
-	}
-	*/
-
 	for ( auto& s : initialStates ) {
 		s.setTimestamp( carl::Interval<tNumber>( 0 ) );
 		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, s ) ) );
@@ -198,8 +140,10 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 #endif
 		// the first segment covers one time step already
 		tNumber currentLocalTime = mSettings.timeStep;
+		bool forward = mSettings.timeStep > 0;
+		INFO( "hypro.reacher", "Compute forwards time closure: " << forward );
 		// intersection of bad states and violation of invariant is handled inside the loop
-		while ( !noFlow && currentLocalTime <= mSettings.timeBound ) {
+		while ( !noFlow && ( ( forward && currentLocalTime <= mSettings.timeBound ) || ( !forward && currentLocalTime >= mSettings.timeBound ) ) ) {
 			INFO( "hypro.reacher", "Time: " << std::setprecision( 4 ) << std::setw( 8 ) << fixed << carl::toDouble( currentLocalTime ) );
 			// Verify transitions on the current set.
 			if ( int( mCurrentLevel ) < mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
