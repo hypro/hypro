@@ -108,7 +108,7 @@ include(compiler-settings)
 
 load_library(${PROJECT_NAME} GTest 0)
 
-load_library(${PROJECT_NAME} carl 19.04)
+load_library(${PROJECT_NAME} carl 19.06)
 
 add_subdirectory(src/resources)
 
