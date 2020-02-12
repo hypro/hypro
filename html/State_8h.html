@@ -115,12 +115,63 @@ $(document).ready(function(){initNavTree('State_8h.html','');});
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">State.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &quot;<a class="el" href="GeometricObject_8h_source.html">../../representations/GeometricObject.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="representations_2types_8h_source.html">../../representations/types.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="nth__element_8h_source.html">../../util/tuple_expansion/nth_element.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Condition_8h_source.html">Condition.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Visitors_8h_source.html">Visitors.h</a>&quot;</code><br />
+<code>#include &lt;carl/interval/Interval.h&gt;</code><br />
+<code>#include &lt;carl/util/tuple_util.h&gt;</code><br />
+<code>#include &lt;variant&gt;</code><br />
+<code>#include &quot;State.tpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="StateUtil_8h_source.html">StateUtil.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for State.h:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="State_8h__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="State_8h__dep__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
+</div>
 <p><a href="State_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton&lt; Number &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for linear hybrid automata.  <a href="classhypro_1_1HybridAutomaton.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html">hypro::Location&lt; Number &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for location.  <a href="classhypro_1_1Location.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html">hypro::State&lt; Number, Representation, Rargs &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for state.  <a href="classhypro_1_1State.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacehypro"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html">hypro</a></td></tr>
+<tr class="memdesc:namespacehypro"><td class="mdescLeft">&#160;</td><td class="mdescRight">General context interface to set up a reachability worker. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a444c02dbb2a293d1bc6893f03709bcd2"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a444c02dbb2a293d1bc6893f03709bcd2"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a444c02dbb2a293d1bc6893f03709bcd2">hypro::State_t</a> = State&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Box&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, CarlPolytope&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, ConstraintSet&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, SupportFunction&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, Zonotope&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, HPolytope&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, VPolytope&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, DifferenceBounds&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, SupportFunctionNew&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;</td></tr>
+<tr class="separator:a444c02dbb2a293d1bc6893f03709bcd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

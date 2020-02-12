@@ -12,8 +12,6 @@ var structhypro_1_1lintrafoParameters =
     [ "operator==", "structhypro_1_1lintrafoParameters.html#a7c17cc5d07c5e49003fc1872b507ae5f", null ],
     [ "vector", "structhypro_1_1lintrafoParameters.html#a9de2c48b046f8e48db8c56858d79ea24", null ],
     [ "mHash", "structhypro_1_1lintrafoParameters.html#a5b814d0a6720ad91c48c976cb25278ef", null ],
-    [ "mMatrixCache", "structhypro_1_1lintrafoParameters.html#a838633fe66ec21f7884f22edbc68c3fb", null ],
-    [ "mVectorCache", "structhypro_1_1lintrafoParameters.html#a5dafd7763f8b900434c3065094e3de5f", null ],
     [ "parameters", "structhypro_1_1lintrafoParameters.html#a1f68dd0c9928e0634eb30411b9e19333", null ],
     [ "power", "structhypro_1_1lintrafoParameters.html#a938071d6572062c5141cfcba7136f32b", null ]
 ];

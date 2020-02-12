@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="hypro::GeometricObject\l\&lt; StatisticWrapper\&lt; Representation \&gt; \&gt;" alt="" coords="5,5,288,47"/>
-<area shape="rect" id="node2" href="$classhypro_1_1StatisticWrapper.html" title="Wrapper class which allows to create traces of operations on state set representations. " alt="" coords="336,5,507,47"/>
+<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="hypro::GeometricObject\l\&lt; Number, SupportFunctionNew\lT\&lt; Number, Converter, Setting \&gt; \&gt;" alt="" coords="5,5,256,61"/>
+<area shape="rect" id="node2" href="$classhypro_1_1SupportFunctionNewT.html" title="The class which represents a SupportFunctionNew. " alt="" coords="304,13,540,54"/>
 </map>

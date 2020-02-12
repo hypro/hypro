@@ -117,7 +117,6 @@ $(document).ready(function(){initNavTree('namespacehypro_1_1reachability.html','
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::reachability Namespace Reference</div>  </div>
@@ -129,26 +128,16 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacehypro_1_1reachability_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability_1_1detail.html">detail</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html">Reach</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class implementing a basic reachbility analysis algorithm for linear hybrid automata.  <a href="classhypro_1_1reachability_1_1Reach.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1reachability_1_1ReachQuiet.html">ReachQuiet</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1reachability_1_1ReachSettings.html">ReachSettings</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#acda04bdd7355b6fb2fc3a5882ebd34cf">computeTrafoMatrix</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *_loc, <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> timeStep)</td></tr>
 <tr class="separator:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename State &gt; </td></tr>
-<tr class="memitem:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a9127e144bf32d2976e6a0c4e60ee6c1a">bloatBox</a> (State &amp;in, const <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;bloatBox)</td></tr>
+<tr class="memitem:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a9127e144bf32d2976e6a0c4e60ee6c1a">bloatBox</a> (<a class="el" href="classhypro_1_1State.html">State</a> &amp;in, const <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;bloatBox)</td></tr>
 <tr class="separator:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename State &gt; </td></tr>
-<tr class="memitem:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, State, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a0292cc1cc006e7f7c859ea48ceda58c7">computeFirstSegment</a> (const State &amp;_state, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep)</td></tr>
+<tr class="memitem:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1State.html">State</a>, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a0292cc1cc006e7f7c859ea48ceda58c7">computeFirstSegment</a> (const <a class="el" href="classhypro_1_1State.html">State</a> &amp;_state, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep)</td></tr>
 <tr class="separator:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -161,7 +150,7 @@ template&lt;typename Number , typename State &gt; </div>
         <tr>
           <td class="memname">void hypro::reachability::bloatBox </td>
           <td>(</td>
-          <td class="paramtype">State &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1State.html">State</a> &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
@@ -180,6 +169,8 @@ template&lt;typename Number , typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="FirstSegment_8h_source.html#l00050">50</a> of file <a class="el" href="FirstSegment_8h_source.html">FirstSegment.h</a>.</p>
 
+<p>References <a class="el" href="classhypro_1_1State.html#a4e4d9c774035a068274ac784700217b6">hypro::State&lt; Number, Representation, Rargs &gt;::getSet()</a>, and <a class="el" href="State_8h_source.html#l00353">hypro::State&lt; Number, Representation, Rargs &gt;::setSetDirect()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a0292cc1cc006e7f7c859ea48ceda58c7"></a>
@@ -189,9 +180,9 @@ template&lt;typename Number , typename State &gt; </div>
 template&lt;typename Number , typename State &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, State, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; hypro::reachability::computeFirstSegment </td>
+          <td class="memname">std::tuple&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1State.html">State</a>, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; hypro::reachability::computeFirstSegment </td>
           <td>(</td>
-          <td class="paramtype">const State &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1State.html">State</a> &amp;&#160;</td>
           <td class="paramname"><em>_state</em>, </td>
         </tr>
         <tr>
@@ -210,7 +201,7 @@ template&lt;typename Number , typename State &gt; </div>
 
 <p>Definition at line <a class="el" href="FirstSegment_8h_source.html#l00056">56</a> of file <a class="el" href="FirstSegment_8h_source.html">FirstSegment.h</a>.</p>
 
-<p>References <a class="el" href="FirstSegment_8h_source.html#l00014">computeTrafoMatrix()</a>, <a class="el" href="algorithms_2reachability_2util_8h_source.html#l00075">hypro::errorBoxes()</a>, and <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dac2f3f489a00553e7a01d369c103c7251">hypro::NO</a>.</p>
+<p>References <a class="el" href="FirstSegment_8h_source.html#l00014">computeTrafoMatrix()</a>, <a class="el" href="Reach_8h.html#a5208f53e6a576a4fe3dbf158ecc1e6b5">DEBUG</a>, <a class="el" href="algorithms_2reachability_2util_8h_source.html#l00075">hypro::errorBoxes()</a>, <a class="el" href="classhypro_1_1State.html#a5b0b0333931fe266381eb033f82b4477">hypro::State&lt; Number, Representation, Rargs &gt;::getDimension()</a>, <a class="el" href="State_8h_source.html#l00203">hypro::State&lt; Number, Representation, Rargs &gt;::getLocation()</a>, <a class="el" href="State_8h_source.html#l00264">hypro::State&lt; Number, Representation, Rargs &gt;::getTimestamp()</a>, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dac2f3f489a00553e7a01d369c103c7251">hypro::NO</a>, <a class="el" href="classhypro_1_1State.html#adeeaeb302251a0286667406238fe91c7">hypro::State&lt; Number, Representation, Rargs &gt;::partiallyApplyTimeStep()</a>, <a class="el" href="classhypro_1_1State.html#a053646b7555cb1592d0e4579728fd672">hypro::State&lt; Number, Representation, Rargs &gt;::satisfies()</a>, <a class="el" href="Reach_8h.html#a1f1758b503bd47f58ac2f9ad1b694d9c">TRACE</a>, and <a class="el" href="classhypro_1_1State.html#a1943e8afd2f0c9d9d3c16fc084c6e125">hypro::State&lt; Number, Representation, Rargs &gt;::unite()</a>.</p>
 
 </div>
 </div>
@@ -242,9 +233,9 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="FirstSegment_8h_source.html#l00014">14</a> of file <a class="el" href="FirstSegment_8h_source.html">FirstSegment.h</a>.</p>
 
-<p>References <a class="el" href="Location_8h_source.html#l00059">hypro::Location&lt; Number &gt;::getLinearFlow()</a>, and <a class="el" href="adaptions__eigen_8h_source.html#l00372">hypro::matrixExponential()</a>.</p>
+<p>References <a class="el" href="Location_8h_source.html#l00059">hypro::Location&lt; Number &gt;::getLinearFlow()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00372">hypro::matrixExponential()</a>, and <a class="el" href="Reach_8h.html#a1f1758b503bd47f58ac2f9ad1b694d9c">TRACE</a>.</p>
 
-<p>Referenced by <a class="el" href="FirstSegment_8h_source.html#l00056">computeFirstSegment()</a>, and <a class="el" href="Reach_8h_source.html#l00143">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;::setRepresentationType()</a>.</p>
+<p>Referenced by <a class="el" href="FirstSegment_8h_source.html#l00056">computeFirstSegment()</a>.</p>
 
 </div>
 </div>

@@ -3,7 +3,7 @@ var dir_fc0efe5d2249fba2a29c6d003d9b04e9 =
     [ "decomposition", "dir_1f675ff36096041079ce357a072edb84.html", "dir_1f675ff36096041079ce357a072edb84" ],
     [ "flow", "dir_9089fdb40e74f746acd9799dde4f03e8.html", "dir_9089fdb40e74f746acd9799dde4f03e8" ],
     [ "output", "dir_f8eeed5867fcfb10b0a82b230e717047.html", "dir_f8eeed5867fcfb10b0a82b230e717047" ],
-    [ "Condition.h", "Condition_8h.html", null ],
+    [ "Condition.h", "Condition_8h.html", "Condition_8h" ],
     [ "HybridAutomaton.h", "HybridAutomaton_8h.html", [
       [ "HybridAutomaton", "classhypro_1_1HybridAutomaton.html", "classhypro_1_1HybridAutomaton" ]
     ] ],
@@ -21,7 +21,7 @@ var dir_fc0efe5d2249fba2a29c6d003d9b04e9 =
     ] ],
     [ "Reset.h", "Reset_8h.html", "Reset_8h" ],
     [ "ResetTypes.h", "ResetTypes_8h.html", "ResetTypes_8h" ],
-    [ "State.h", "State_8h.html", null ],
+    [ "State.h", "State_8h.html", "State_8h" ],
     [ "StateUtil.h", "StateUtil_8h.html", "StateUtil_8h" ],
     [ "Transition.h", "Transition_8h.html", "Transition_8h" ],
     [ "Visitors.h", "Visitors_8h.html", [

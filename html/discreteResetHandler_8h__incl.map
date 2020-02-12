@@ -1,0 +1,29 @@
+<map id="/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/discreteResetHandler.h" name="/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/discreteResetHandler.h">
+<area shape="rect" id="node2" href="$IHandler_8h.html" title="../IHandler.h" alt="" coords="368,213,467,240"/>
+<area shape="rect" id="node49" href="$ltiResetHandler_8h.html" title="ltiResetHandler.h" alt="" coords="455,139,585,165"/>
+<area shape="rect" id="node3" href="$State_8h.html" title="../../../datastructures\l/HybridAutomaton/State.h" alt="" coords="735,288,926,329"/>
+<area shape="rect" id="node8" href="$types_8h.html" title="../types.h" alt="" coords="769,959,850,985"/>
+<area shape="rect" id="node4" href="$GeometricObject_8h.html" title="../../representations\l/GeometricObject.h" alt="" coords="1171,467,1317,508"/>
+<area shape="rect" id="node28" href="$representations_2types_8h.html" title="types.h" alt="" coords="872,720,941,747"/>
+<area shape="rect" id="node39" href="$nth__element_8h.html" title="../../util/tuple_expansion\l/nth_element.h" alt="" coords="896,377,1069,419"/>
+<area shape="rect" id="node40" href="$Condition_8h.html" title="Condition.h" alt="" coords="286,556,381,583"/>
+<area shape="rect" id="node44" href="$Visitors_8h.html" title="Visitors.h" alt="" coords="790,385,871,411"/>
+<area shape="rect" id="node47" href="$StateUtil_8h.html" title="StateUtil.h" alt="" coords="707,474,797,501"/>
+<area shape="rect" id="node5" href="$config_8h.html" title="../config.h" alt="" coords="1363,802,1447,829"/>
+<area shape="rect" id="node6" href="$flags_8h.html" title="flags.h" alt="" coords="1393,959,1457,985"/>
+<area shape="rect" id="node15" href="$adaptions__eigen_8h.html" title="util/adaptions_eigen\l/adaptions_eigen.h" alt="" coords="1139,1033,1290,1075"/>
+<area shape="rect" id="node21" href="$Logger_8h.html" title="util/logging/Logger.h" alt="" coords="2077,884,2227,911"/>
+<area shape="rect" id="node29" href="$Converter_8h.html" title="conversion/Converter.h" alt="" coords="1625,556,1794,583"/>
+<area shape="rect" id="node7" href="$util_2convenienceOperators_8h.html" title="util/convenienceOperators.h" alt="" coords="873,884,1074,911"/>
+<area shape="rect" id="node16" href="$transformation_8h.html" title="transformation.h" alt="" coords="1409,1137,1538,1164"/>
+<area shape="rect" id="node30" href="$pca_8h.html" title="../../util/pca.h" alt="" coords="1392,638,1496,665"/>
+<area shape="rect" id="node32" href="$templateDirections_8h.html" title="../../util/templateDirections.h" alt="" coords="1801,720,2004,747"/>
+<area shape="rect" id="node33" href="$Box_8h.html" title="../Box/Box.h" alt="" coords="1931,638,2029,665"/>
+<area shape="rect" id="node35" href="$ConstraintSet_8h.html" title="../ConstraintSet/Constraint\lSet.h" alt="" coords="973,631,1165,672"/>
+<area shape="rect" id="node36" href="$DifferenceBounds_8h.html" title="../DifferenceBounds\l/DifferenceBounds.h" alt="" coords="1521,631,1671,672"/>
+<area shape="rect" id="node37" href="$Ellipsoid_8h.html" title="../Ellipsoids/Ellipsoid.h" alt="" coords="1747,638,1906,665"/>
+<area shape="rect" id="node38" href="$GeneralizedStar_8h.html" title="../GeneralizedStar\l/GeneralizedStar.h" alt="" coords="2087,795,2227,836"/>
+<area shape="rect" id="node31" href="$Point_8h.html" title="Point.h" alt="" coords="1391,720,1457,747"/>
+<area shape="rect" id="node41" href="$Decomposition_8h.html" title="decomposition/Decomposition.h" alt="" coords="417,638,645,665"/>
+<area shape="rect" id="node48" href="$Reset_8h.html" title="Reset.h" alt="" coords="771,556,840,583"/>
+</map>

@@ -1,0 +1,30 @@
+<map id="/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h" name="/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h">
+<area shape="rect" id="node2" href="$types_8h.html" title="../../types.h" alt="" coords="839,631,932,657"/>
+<area shape="rect" id="node9" href="$adaptions__eigen_8h.html" title="util/adaptions_eigen\l/adaptions_eigen.h" alt="" coords="1357,705,1507,747"/>
+<area shape="rect" id="node21" href="$Condition_8h.html" title="Condition.h" alt="" coords="978,281,1073,307"/>
+<area shape="rect" id="node29" href="$Decomposition_8h.html" title="decomposition/Decomposition.h" alt="" coords="1762,370,1990,397"/>
+<area shape="rect" id="node32" href="$HybridAutomatonComp_8h.html" title="HybridAutomatonComp.h" alt="" coords="797,124,982,151"/>
+<area shape="rect" id="node34" href="$Label_8h.html" title="Label.h" alt="" coords="275,199,343,225"/>
+<area shape="rect" id="node36" href="$Location_8h.html" title="Location.h" alt="" coords="567,199,655,225"/>
+<area shape="rect" id="node44" href="$Reset_8h.html" title="Reset.h" alt="" coords="1444,281,1513,307"/>
+<area shape="rect" id="node47" href="$Transition_8h.html" title="Transition.h" alt="" coords="1058,124,1153,151"/>
+<area shape="rect" id="node49" href="$decomposeConstraintSet_8h.html" title="decomposition/decomposeConstraint\lSet.h" alt="" coords="1159,273,1420,315"/>
+<area shape="rect" id="node10" href="$config_8h.html" title="../../config.h" alt="" coords="1889,809,1985,836"/>
+<area shape="rect" id="node16" href="$transformation_8h.html" title="transformation.h" alt="" coords="1186,809,1315,836"/>
+<area shape="rect" id="node11" href="$flags_8h.html" title="flags.h" alt="" coords="2028,973,2092,1000"/>
+<area shape="rect" id="node12" href="$util_2convenienceOperators_8h.html" title="util/convenienceOperators.h" alt="" coords="571,899,773,925"/>
+<area shape="rect" id="node15" href="$Logger_8h.html" title="util/logging/Logger.h" alt="" coords="1985,899,2135,925"/>
+<area shape="rect" id="node22" href="$ConstraintSet_8h.html" title="../../representations\l/ConstraintSet/ConstraintSet.h" alt="" coords="1361,363,1580,404"/>
+<area shape="rect" id="node24" href="$representations_2types_8h.html" title="../representations\l/types.h" alt="" coords="1486,541,1621,583"/>
+<area shape="rect" id="node23" href="$Halfspace_8h.html" title="../../datastructures\l/Halfspace.h" alt="" coords="1591,452,1731,493"/>
+<area shape="rect" id="node25" href="$Point_8h.html" title="Point.h" alt="" coords="1819,549,1885,575"/>
+<area shape="rect" id="node26" href="$Optimizer_8h.html" title="../../util/linearOptimization\l/Optimizer.h" alt="" coords="1858,452,2043,493"/>
+<area shape="rect" id="node27" href="$isBox_8h.html" title="../helperMethods/isBox.h" alt="" coords="1159,459,1337,486"/>
+<area shape="rect" id="node37" href="$operations_8h.html" title="flow/operations.h" alt="" coords="313,281,444,307"/>
+<area shape="rect" id="node41" href="$datastructures_2HybridAutomaton_2flow_2typetraits_8h.html" title="typetraits.h" alt="" coords="189,370,283,397"/>
+<area shape="rect" id="node42" href="$visitors_8h.html" title="visitors.h" alt="" coords="570,370,649,397"/>
+<area shape="rect" id="node38" href="$affine_8h.html" title="affine.h" alt="" coords="325,459,395,486"/>
+<area shape="rect" id="node39" href="$linear_8h.html" title="linear.h" alt="" coords="225,549,293,575"/>
+<area shape="rect" id="node40" href="$rectangular_8h.html" title="rectangular.h" alt="" coords="93,459,200,486"/>
+<area shape="rect" id="node45" href="$ResetTypes_8h.html" title="ResetTypes.h" alt="" coords="1361,459,1465,486"/>
+</map>

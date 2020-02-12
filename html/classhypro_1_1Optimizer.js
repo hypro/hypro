@@ -12,7 +12,6 @@ var classhypro_1_1Optimizer =
     [ "clear", "classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa", null ],
     [ "clearCache", "classhypro_1_1Optimizer.html#a5cf2152f0739c8a4dff11988a263be0e", null ],
     [ "evaluate", "classhypro_1_1Optimizer.html#ad6092f75a76c246fedc19806bd2baa7d", null ],
-    [ "getCLPContexts", "classhypro_1_1Optimizer.html#a39c4674e7bbb053f3c324955867e874f", null ],
     [ "getGLPContexts", "classhypro_1_1Optimizer.html#ab9552429ff7bfb36b5bdb641c93f7ca1", null ],
     [ "getInternalPoint", "classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7", null ],
     [ "initialize", "classhypro_1_1Optimizer.html#a6154ad1d9ab095484a0d5914f4240f0a", null ],
@@ -28,18 +27,12 @@ var classhypro_1_1Optimizer =
     [ "updateConstraints", "classhypro_1_1Optimizer.html#accd042c50de8a434581ea45e84c9d5ce", null ],
     [ "vector", "classhypro_1_1Optimizer.html#af794665f4c5ec520cdfed3a9aeb7bfb2", null ],
     [ "swap", "classhypro_1_1Optimizer.html#a08b723189972c939fe46f3e33ebc9775", null ],
-    [ "fileCounter", "classhypro_1_1Optimizer.html#a5141500a70117b1b295923361efc164c", null ],
-    [ "filenamePrefix", "classhypro_1_1Optimizer.html#a1e2d7402d1cf31520f3edbc0d735c96b", null ],
     [ "maximize", "classhypro_1_1Optimizer.html#aca8c4ac930eb7c70e066e253d0403493", null ],
-    [ "mClpContexts", "classhypro_1_1Optimizer.html#aa43dce1abf42e4d429f01eefd426fc68", null ],
     [ "mConsistencyChecked", "classhypro_1_1Optimizer.html#a39b4162e6ac7aaaab0baf55b9c964cc9", null ],
     [ "mConstraintMatrix", "classhypro_1_1Optimizer.html#a2429889c58584461d08c8c5bdff37ab1", null ],
     [ "mConstraintVector", "classhypro_1_1Optimizer.html#a6f39111e49e4a030b6e59895d425c99b", null ],
     [ "mContextLock", "classhypro_1_1Optimizer.html#ad7bc7bafc9e9f2843f85ef33433627b1", null ],
-    [ "mCurrentFormula", "classhypro_1_1Optimizer.html#a11b9c96aa80c5ab64d2deb770c639091", null ],
-    [ "mFormulaMapping", "classhypro_1_1Optimizer.html#a6946503f51b6e7ef0eeab7f89bade7f3", null ],
     [ "mGlpkContexts", "classhypro_1_1Optimizer.html#aa230cee5272894410a7e37893bf5d254", null ],
     [ "mLastConsistencyAnswer", "classhypro_1_1Optimizer.html#aef0f1184104e861ae0d3b7b501f12765", null ],
-    [ "mRelationSymbols", "classhypro_1_1Optimizer.html#a1b0a430a2f67678ac93ef3ea802be34d", null ],
-    [ "mSmtratSolver", "classhypro_1_1Optimizer.html#aa7684b93d00ed1d7daab9f4d8bfef580", null ]
+    [ "mRelationSymbols", "classhypro_1_1Optimizer.html#a1b0a430a2f67678ac93ef3ea802be34d", null ]
 ];

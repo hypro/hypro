@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1Location.html" title="Class for location. " alt="" coords="5,5,208,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1linearFlow.html" title="hypro::linearFlow\&lt;\l Number \&gt;" alt="" coords="5,5,144,47"/>
+<area shape="rect" id="node2" href="$classhypro_1_1affineFlow.html" title="hypro::affineFlow\&lt;\l Number \&gt;" alt="" coords="192,5,331,47"/>
 </map>

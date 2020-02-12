@@ -118,12 +118,53 @@ $(document).ready(function(){initNavTree('Converter_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
 <a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">Converter.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &quot;<a class="el" href="flags_8h_source.html">../../flags.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="pca_8h_source.html">../../util/pca.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="templateDirections_8h_source.html">../../util/templateDirections.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Box_8h_source.html">../Box/Box.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ConstraintSet_8h_source.html">../ConstraintSet/ConstraintSet.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="DifferenceBounds_8h_source.html">../DifferenceBounds/DifferenceBounds.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Ellipsoid_8h_source.html">../Ellipsoids/Ellipsoid.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="GeneralizedStar_8h_source.html">../GeneralizedStar/GeneralizedStar.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="OrthogonalPolyhedron_8h_source.html">../OrthogonalPolyhedron/OrthogonalPolyhedron.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Polytope_8h_source.html">../Polytope/Polytope.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="HPolytope_8h_source.html">../Polytopes/HPolytope/HPolytope.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="VPolytope_8h_source.html">../Polytopes/VPolytope/VPolytope.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="carlPolytope_8h_source.html">../Polytopes/carlPolytope/carlPolytope.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="SupportFunction_8h_source.html">../SupportFunction/SupportFunction.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="SupportFunctionNew_8h_source.html">../SupportFunctionNew/SupportFunctionNew.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="Zonotope_8h_source.html">../Zonotope/Zonotope.h</a>&quot;</code><br />
+<code>#include &quot;converterToBox.tpp&quot;</code><br />
+<code>#include &quot;converterToCarlPolytope.tpp&quot;</code><br />
+<code>#include &quot;converterToConstraintSet.tpp&quot;</code><br />
+<code>#include &quot;converterToGeneralizedStar.tpp&quot;</code><br />
+<code>#include &quot;converterToHPolytope.tpp&quot;</code><br />
+<code>#include &quot;converterToSupportFunction.tpp&quot;</code><br />
+<code>#include &quot;converterToVPolytope.tpp&quot;</code><br />
+<code>#include &quot;converterToZonotope.tpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="typedefs_8h_source.html">typedefs.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="conversionHelper_8h_source.html">conversionHelper.h</a>&quot;</code><br />
+<code>#include &quot;converterToDifferenceBounds.tpp&quot;</code><br />
+<code>#include &quot;converterToSupportFunctionNew.tpp&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for Converter.h:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="Converter_8h__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="Converter_8h__dep__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
+</div>
 <p><a href="Converter_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -137,6 +178,13 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespacehypro"><td class="mdescLeft">&#160;</td><td class="mdescRight">General context interface to set up a reachability worker. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a4f1fd2d56e39af658170946e6e7c77da"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Reach_8h.html#a4f1fd2d56e39af658170946e6e7c77da">INCL_FROM_CONVERTERHEADER</a>&#160;&#160;&#160;true</td></tr>
+<tr class="separator:a4f1fd2d56e39af658170946e6e7c77da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f1fd2d56e39af658170946e6e7c77da"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Converter_8h.html#a4f1fd2d56e39af658170946e6e7c77da">INCL_FROM_CONVERTERHEADER</a>&#160;&#160;&#160;true</td></tr>
+<tr class="separator:a4f1fd2d56e39af658170946e6e7c77da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ac9529cbda09f61cc0cdcc5a8940300cd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">hypro::CONV_MODE</a> { <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cda2d166cf5e7a0e25f41b4e93cb235dfb8">hypro::EXACT</a>, 
@@ -147,6 +195,33 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr class="separator:ac9529cbda09f61cc0cdcc5a8940300cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a4f1fd2d56e39af658170946e6e7c77da"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INCL_FROM_CONVERTERHEADER&#160;&#160;&#160;true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4f1fd2d56e39af658170946e6e7c77da"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INCL_FROM_CONVERTERHEADER&#160;&#160;&#160;true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00006">6</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

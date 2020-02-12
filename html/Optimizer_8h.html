@@ -117,12 +117,41 @@ $(document).ready(function(){initNavTree('Optimizer_8h.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">Optimizer.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<div class="textblock"><code>#include &quot;<a class="el" href="Point_8h_source.html">../../datastructures/Point.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="flags_8h_source.html">../../flags.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="EvaluationResult_8h_source.html">EvaluationResult.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="util_2linearOptimization_2Strategy_8h_source.html">Strategy.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="adaptions__glpk_8h_source.html">glpk/adaptions_glpk.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="glpk__context_8h_source.html">glpk_context.h</a>&quot;</code><br />
+<code>#include &lt;carl/core/Relation.h&gt;</code><br />
+<code>#include &lt;carl/util/Singleton.h&gt;</code><br />
+<code>#include &lt;glpk.h&gt;</code><br />
+<code>#include &lt;mutex&gt;</code><br />
+<code>#include &lt;thread&gt;</code><br />
+<code>#include &quot;<a class="el" href="Logger_8h_source.html">../logging/Logger.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="statistics_8h_source.html">../statistics/statistics.h</a>&quot;</code><br />
+<code>#include &lt;gmp.h&gt;</code><br />
+<code>#include &lt;gmpxx.h&gt;</code><br />
+<code>#include &quot;Optimizer.tpp&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for Optimizer.h:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="Optimizer_8h__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="Optimizer_8h__dep__incl.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+</div>
+</div>
+</div>
 <p><a href="Optimizer_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
@@ -136,7 +165,71 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacehypro"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html">hypro</a></td></tr>
 <tr class="memdesc:namespacehypro"><td class="mdescLeft">&#160;</td><td class="mdescRight">General context interface to set up a reachability worker. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a73123ebaa4baeacd43aad9845b69d370"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Reach_8h.html#a73123ebaa4baeacd43aad9845b69d370">USE_PRESOLUTION</a></td></tr>
+<tr class="separator:a73123ebaa4baeacd43aad9845b69d370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a356d58849d7bb8adac1574f22ed48358"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Reach_8h.html#a356d58849d7bb8adac1574f22ed48358">RECREATE_SOLVER</a></td></tr>
+<tr class="separator:a356d58849d7bb8adac1574f22ed48358"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73123ebaa4baeacd43aad9845b69d370"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Optimizer_8h.html#a73123ebaa4baeacd43aad9845b69d370">USE_PRESOLUTION</a></td></tr>
+<tr class="separator:a73123ebaa4baeacd43aad9845b69d370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a356d58849d7bb8adac1574f22ed48358"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Optimizer_8h.html#a356d58849d7bb8adac1574f22ed48358">RECREATE_SOLVER</a></td></tr>
+<tr class="separator:a356d58849d7bb8adac1574f22ed48358"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a356d58849d7bb8adac1574f22ed48358"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RECREATE_SOLVER</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a356d58849d7bb8adac1574f22ed48358"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define RECREATE_SOLVER</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00004">4</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a73123ebaa4baeacd43aad9845b69d370"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define USE_PRESOLUTION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00003">3</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a73123ebaa4baeacd43aad9845b69d370"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define USE_PRESOLUTION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

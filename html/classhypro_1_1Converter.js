@@ -8,7 +8,6 @@ var classhypro_1_1Converter =
     [ "GeneralizedStar", "classhypro_1_1Converter.html#aba29bf7c9436d0c2d16d68b6819ea6bd", null ],
     [ "HPolytope", "classhypro_1_1Converter.html#aa1999e9cf15f4551aa0a82863d1b4020", null ],
     [ "OrthogonalPolyhedron", "classhypro_1_1Converter.html#acff18587b5e24ef2778b7cc26a4a9a4b", null ],
-    [ "Polytope", "classhypro_1_1Converter.html#a8771cf87f9806fbf2f66795a9bed2382", null ],
     [ "SupportFunction", "classhypro_1_1Converter.html#a91d1c202ea2ae292e4db75e6fb6d3e14", null ],
     [ "SupportFunctionNew", "classhypro_1_1Converter.html#a444ce63a03bb0da92a09d2b32f853f4b", null ],
     [ "VPolytope", "classhypro_1_1Converter.html#a6b0c6940bcc70f09d6a668d7b84e8ee0", null ],

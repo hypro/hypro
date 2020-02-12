@@ -135,7 +135,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac533d333fd83fefde1812b0010868827"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2cb03149f32b48ebf28073f4d7b9eab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#ab2cb03149f32b48ebf28073f4d7b9eab">~TimedContext</a> ()</td></tr>
 <tr class="separator:ab2cb03149f32b48ebf28073f4d7b9eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2259409daee775fc469416be4520bb0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#ad2259409daee775fc469416be4520bb0">TimedContext</a> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; &amp;t, const Strategy&lt; State &gt; &amp;strat, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
+<tr class="memitem:ad2259409daee775fc469416be4520bb0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#ad2259409daee775fc469416be4520bb0">TimedContext</a> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt; &amp;t, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;strat, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *localQueue, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
 <tr class="separator:ad2259409daee775fc469416be4520bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41750e5d01527bde9e50ab46da289b47"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a41750e5d01527bde9e50ab46da289b47">execOnLoopItExit</a> () override</td></tr>
 <tr class="separator:a41750e5d01527bde9e50ab46da289b47"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,10 +147,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af01192b2bae62dd610abb9548d1cbd7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a926a3d16637fb622d8e706b3937bdd1b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a926a3d16637fb622d8e706b3937bdd1b">checkTransition</a> () override</td></tr>
 <tr class="separator:a926a3d16637fb622d8e706b3937bdd1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95ee5fc123e6b696c95ce508af4b8583"><td class="memItemLeft" align="right" valign="top">carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a95ee5fc123e6b696c95ce508af4b8583">computeShortestElapsedTimeIntervalForSubspace</a> (State &amp;in, size_t index)</td></tr>
+<tr class="memitem:a95ee5fc123e6b696c95ce508af4b8583"><td class="memItemLeft" align="right" valign="top">carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a95ee5fc123e6b696c95ce508af4b8583">computeShortestElapsedTimeIntervalForSubspace</a> (<a class="el" href="classhypro_1_1State.html">State</a> &amp;in, size_t index)</td></tr>
 <tr class="memdesc:a95ee5fc123e6b696c95ce508af4b8583"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the minimum elapsed time interval in a subspace.  <a href="#a95ee5fc123e6b696c95ce508af4b8583">More...</a><br /></td></tr>
 <tr class="separator:a95ee5fc123e6b696c95ce508af4b8583"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a546e11a9ecbb3bc19295c3f5121183"><td class="memItemLeft" align="right" valign="top">carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a3a546e11a9ecbb3bc19295c3f5121183">handshakeTimestamps</a> (State &amp;preOp, State &amp;postOp)</td></tr>
+<tr class="memitem:a3a546e11a9ecbb3bc19295c3f5121183"><td class="memItemLeft" align="right" valign="top">carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a3a546e11a9ecbb3bc19295c3f5121183">handshakeTimestamps</a> (<a class="el" href="classhypro_1_1State.html">State</a> &amp;preOp, <a class="el" href="classhypro_1_1State.html">State</a> &amp;postOp)</td></tr>
 <tr class="memdesc:a3a546e11a9ecbb3bc19295c3f5121183"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs a handshake over all timed subspaces. This is especially important checking for guard/invariant/badstate intersection. This check ensures that the satisfaction conditions occur on an intersecting timestamp over all subspaces.  <a href="#a3a546e11a9ecbb3bc19295c3f5121183">More...</a><br /></td></tr>
 <tr class="separator:a3a546e11a9ecbb3bc19295c3f5121183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1LTIContext"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1LTIContext')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1LTIContext.html">hypro::LTIContext&lt; State &gt;</a></td></tr>
@@ -158,7 +158,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa001b8e643cad962ac6441a3fc397977 inherit pub_methods_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0a3c6d6ece1578168cd85c3ce2b60ac inherit pub_methods_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#ae0a3c6d6ece1578168cd85c3ce2b60ac">~LTIContext</a> ()</td></tr>
 <tr class="separator:ae0a3c6d6ece1578168cd85c3ce2b60ac inherit pub_methods_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac43d35badbd1c1ef169b7906d4fef555 inherit pub_methods_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#ac43d35badbd1c1ef169b7906d4fef555">LTIContext</a> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; &amp;t, const Strategy&lt; State &gt; &amp;strat, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
+<tr class="memitem:ac43d35badbd1c1ef169b7906d4fef555 inherit pub_methods_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#ac43d35badbd1c1ef169b7906d4fef555">LTIContext</a> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt; &amp;t, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;strat, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *localQueue, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
 <tr class="separator:ac43d35badbd1c1ef169b7906d4fef555 inherit pub_methods_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d6a75161db0409ec835607f596feee0 inherit pub_methods_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a6d6a75161db0409ec835607f596feee0">execOnStart</a> () override</td></tr>
 <tr class="separator:a6d6a75161db0409ec835607f596feee0 inherit pub_methods_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,28 +220,28 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:a3bd6d0237f93a1321102ec79ce5b6401"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a3bd6d0237f93a1321102ec79ce5b6401">Number</a> = typename State::NumberType</td></tr>
+<tr class="memitem:a3bd6d0237f93a1321102ec79ce5b6401"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#a3bd6d0237f93a1321102ec79ce5b6401">Number</a> = typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a></td></tr>
 <tr class="separator:a3bd6d0237f93a1321102ec79ce5b6401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ae63f7d42c1d803d6a26f1ca6caf71ebc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#ae63f7d42c1d803d6a26f1ca6caf71ebc">mElapsed</a></td></tr>
 <tr class="separator:ae63f7d42c1d803d6a26f1ca6caf71ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3e2e70f6654b4cdcf7b5747fb5ca0ae"><td class="memItemLeft" align="right" valign="top">State&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#ad3e2e70f6654b4cdcf7b5747fb5ca0ae">mPreOpState</a></td></tr>
+<tr class="memitem:ad3e2e70f6654b4cdcf7b5747fb5ca0ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1State.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TimedContext.html#ad3e2e70f6654b4cdcf7b5747fb5ca0ae">mPreOpState</a></td></tr>
 <tr class="separator:ad3e2e70f6654b4cdcf7b5747fb5ca0ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classhypro_1_1LTIContext"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classhypro_1_1LTIContext')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classhypro_1_1LTIContext.html">hypro::LTIContext&lt; State &gt;</a></td></tr>
-<tr class="memitem:aaa7012bba9d4d47faff3ea07cfcb5f20 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#aaa7012bba9d4d47faff3ea07cfcb5f20">mTask</a></td></tr>
+<tr class="memitem:aaa7012bba9d4d47faff3ea07cfcb5f20 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#aaa7012bba9d4d47faff3ea07cfcb5f20">mTask</a></td></tr>
 <tr class="separator:aaa7012bba9d4d47faff3ea07cfcb5f20 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d0f5d9bac1817452324c4466bb98f3e inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">Strategy&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a6d0f5d9bac1817452324c4466bb98f3e">mStrategy</a></td></tr>
+<tr class="memitem:a6d0f5d9bac1817452324c4466bb98f3e inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a6d0f5d9bac1817452324c4466bb98f3e">mStrategy</a></td></tr>
 <tr class="separator:a6d0f5d9bac1817452324c4466bb98f3e inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17800032856ae6619cf673250846cadd inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a17800032856ae6619cf673250846cadd">mLocalQueue</a></td></tr>
+<tr class="memitem:a17800032856ae6619cf673250846cadd inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a17800032856ae6619cf673250846cadd">mLocalQueue</a></td></tr>
 <tr class="separator:a17800032856ae6619cf673250846cadd inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a32e45252c0c1febf1abb52d852069b inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a0a32e45252c0c1febf1abb52d852069b">mLocalCEXQueue</a></td></tr>
+<tr class="memitem:a0a32e45252c0c1febf1abb52d852069b inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a0a32e45252c0c1febf1abb52d852069b">mLocalCEXQueue</a></td></tr>
 <tr class="separator:a0a32e45252c0c1febf1abb52d852069b inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb866a354cdbc794c14f740412644bbc inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#aeb866a354cdbc794c14f740412644bbc">mLocalSegments</a></td></tr>
+<tr class="memitem:aeb866a354cdbc794c14f740412644bbc inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#aeb866a354cdbc794c14f740412644bbc">mLocalSegments</a></td></tr>
 <tr class="separator:aeb866a354cdbc794c14f740412644bbc inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ef6c86a76ff9bff892013952451ebaf inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a1ef6c86a76ff9bff892013952451ebaf">mSettings</a></td></tr>
 <tr class="separator:a1ef6c86a76ff9bff892013952451ebaf inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -249,9 +249,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:ad2ae8a98bd68c156bdd5b2f9f58ffdd4 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71a3c21bdd669c5db1b7f61626aac0a1 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a71a3c21bdd669c5db1b7f61626aac0a1">mTransitionTimings</a></td></tr>
 <tr class="separator:a71a3c21bdd669c5db1b7f61626aac0a1 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d4d9fc9fa94f090f8705e8462e673fb inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; *, State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a8d4d9fc9fa94f090f8705e8462e673fb">mDiscreteSuccessorBuffer</a></td></tr>
+<tr class="memitem:a8d4d9fc9fa94f090f8705e8462e673fb inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; *, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a8d4d9fc9fa94f090f8705e8462e673fb">mDiscreteSuccessorBuffer</a></td></tr>
 <tr class="separator:a8d4d9fc9fa94f090f8705e8462e673fb inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9acaf69633925209b41fd97dec78cfbe inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; *, State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a9acaf69633925209b41fd97dec78cfbe">mPotentialZenoTransitions</a></td></tr>
+<tr class="memitem:a9acaf69633925209b41fd97dec78cfbe inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; *, <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a9acaf69633925209b41fd97dec78cfbe">mPotentialZenoTransitions</a></td></tr>
 <tr class="separator:a9acaf69633925209b41fd97dec78cfbe inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af027dc0b231ffa60df8a6354bff215c0 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#af027dc0b231ffa60df8a6354bff215c0">mDisabledTransitions</a></td></tr>
 <tr class="separator:af027dc0b231ffa60df8a6354bff215c0 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -261,9 +261,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a0dfde87fc6a342a482542204aebb68b0 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a673f649fe587be7963c6ddfa58ae2e19 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a673f649fe587be7963c6ddfa58ae2e19">mCurrentTimeInterval</a></td></tr>
 <tr class="separator:a673f649fe587be7963c6ddfa58ae2e19 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75acba52c7ed401babce7fd60be375ab inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">State&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a75acba52c7ed401babce7fd60be375ab">mComputationState</a></td></tr>
+<tr class="memitem:a75acba52c7ed401babce7fd60be375ab inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1State.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a75acba52c7ed401babce7fd60be375ab">mComputationState</a></td></tr>
 <tr class="separator:a75acba52c7ed401babce7fd60be375ab inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafdad9c4b1cf85d29e86d94a9757a280 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">IFirstSegmentHandler</a>&lt; State &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#aafdad9c4b1cf85d29e86d94a9757a280">mFirstSegmentHandlers</a></td></tr>
+<tr class="memitem:aafdad9c4b1cf85d29e86d94a9757a280 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">IFirstSegmentHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#aafdad9c4b1cf85d29e86d94a9757a280">mFirstSegmentHandlers</a></td></tr>
 <tr class="separator:aafdad9c4b1cf85d29e86d94a9757a280 inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c65448b8146115629e23281d4b5625f inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1IInvariantHandler.html">IInvariantHandler</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a8c65448b8146115629e23281d4b5625f">mInvariantHandlers</a></td></tr>
 <tr class="separator:a8c65448b8146115629e23281d4b5625f inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,7 +271,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a0b37f75dea77af1e29964261b62ec12b inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8937f86a087e0048b5cad38e18ca3d5f inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html">ITimeEvolutionHandler</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#a8937f86a087e0048b5cad38e18ca3d5f">mContinuousEvolutionHandlers</a></td></tr>
 <tr class="separator:a8937f86a087e0048b5cad38e18ca3d5f inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0c9b8d304c94ce29f8a2190bb4f1c0a inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; *, std::vector&lt; <a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a>&lt; State &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#ac0c9b8d304c94ce29f8a2190bb4f1c0a">mTransitionHandlerMap</a></td></tr>
+<tr class="memitem:ac0c9b8d304c94ce29f8a2190bb4f1c0a inherit pro_attribs_classhypro_1_1LTIContext"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; <a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> &gt; *, std::vector&lt; <a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LTIContext.html#ac0c9b8d304c94ce29f8a2190bb4f1c0a">mTransitionHandlerMap</a></td></tr>
 <tr class="separator:ac0c9b8d304c94ce29f8a2190bb4f1c0a inherit pro_attribs_classhypro_1_1LTIContext"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -291,7 +291,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::<a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> =  typename State::NumberType</td>
+          <td class="memname">using <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81">Number</a> =  typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a></td>
         </tr>
       </table>
   </td>
@@ -316,7 +316,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::<a class="el" href="classhypro_1_1TimedContext.html">TimedContext</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1TimedContext.html">TimedContext</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -341,7 +341,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::~<a class="el" href="classhypro_1_1TimedContext.html">TimedContext</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::~<a class="el" href="classhypro_1_1TimedContext.html">TimedContext</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -368,33 +368,33 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::<a class="el" href="classhypro_1_1TimedContext.html">TimedContext</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1TimedContext.html">TimedContext</a> </td>
           <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>t</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const Strategy&lt; State &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>strat</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *&#160;</td>
           <td class="paramname"><em>localQueue</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; State &gt;&gt;&gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *&#160;</td>
           <td class="paramname"><em>localCEXQueue</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>localSegments</em>, </td>
         </tr>
         <tr>
@@ -433,7 +433,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::applyContinuousEvolution </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::applyContinuousEvolution </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -462,7 +462,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::checkInvariant </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::checkInvariant </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -491,7 +491,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::checkTransition </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::checkTransition </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -517,9 +517,9 @@ template&lt;typename State &gt; </div>
 template&lt;typename State &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::computeShortestElapsedTimeIntervalForSubspace </td>
+          <td class="memname">carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::computeShortestElapsedTimeIntervalForSubspace </td>
           <td>(</td>
-          <td class="paramtype">State &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1State.html">State</a> &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
         </tr>
         <tr>
@@ -560,7 +560,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::doneCondition </td>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::doneCondition </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -589,7 +589,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::execOnLoopItExit </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::execOnLoopItExit </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -615,15 +615,15 @@ template&lt;typename State &gt; </div>
 template&lt;typename State &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::handshakeTimestamps </td>
+          <td class="memname">carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::handshakeTimestamps </td>
           <td>(</td>
-          <td class="paramtype">State &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1State.html">State</a> &amp;&#160;</td>
           <td class="paramname"><em>preOp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">State &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1State.html">State</a> &amp;&#160;</td>
           <td class="paramname"><em>postOp</em>&#160;</td>
         </tr>
         <tr>
@@ -661,7 +661,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::mElapsed</td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mElapsed</td>
         </tr>
       </table>
   </td>
@@ -685,7 +685,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">State <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; State &gt;::mPreOpState</td>
+          <td class="memname"><a class="el" href="classhypro_1_1State.html">State</a> <a class="el" href="classhypro_1_1TimedContext.html">hypro::TimedContext</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mPreOpState</td>
         </tr>
       </table>
   </td>

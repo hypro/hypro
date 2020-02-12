@@ -13,10 +13,7 @@ var dir_5cc8785239517cfd59e944398d6252f9 =
     [ "NonLinearOmega0Supportfunction.h", "NonLinearOmega0Supportfunction_8h.html", [
       [ "NonLinearOmega0Supportfunction", "classhypro_1_1NonLinearOmega0Supportfunction.html", "classhypro_1_1NonLinearOmega0Supportfunction" ]
     ] ],
-    [ "PolytopeSupportFunction.h", "PolytopeSupportFunction_8h.html", [
-      [ "SupportFunctionContent", "classhypro_1_1SupportFunctionContent.html", "classhypro_1_1SupportFunctionContent" ],
-      [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html", "classhypro_1_1PolytopeSupportFunction" ]
-    ] ],
+    [ "PolytopeSupportFunction.h", "PolytopeSupportFunction_8h.html", "PolytopeSupportFunction_8h" ],
     [ "SupportFunction.h", "SupportFunction_8h.html", null ],
     [ "SupportFunctionContent.h", "SupportFunctionContent_8h.html", [
       [ "SupportFunctionContent", "classhypro_1_1SupportFunctionContent.html", "classhypro_1_1SupportFunctionContent" ],

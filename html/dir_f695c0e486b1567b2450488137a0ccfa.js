@@ -19,8 +19,13 @@ var dir_f695c0e486b1567b2450488137a0ccfa =
     [ "SettingsProvider.h", "SettingsProvider_8h.html", [
       [ "SettingsProvider", "classhypro_1_1SettingsProvider.html", "classhypro_1_1SettingsProvider" ]
     ] ],
-    [ "Strategy.h", "datastructures_2reachability_2Strategy_8h.html", null ],
-    [ "StrategyNode.h", "StrategyNode_8h.html", null ],
+    [ "Strategy.h", "datastructures_2reachability_2Strategy_8h.html", "datastructures_2reachability_2Strategy_8h" ],
+    [ "StrategyNode.h", "StrategyNode_8h.html", [
+      [ "StrategyParameters", "structhypro_1_1StrategyParameters.html", "structhypro_1_1StrategyParameters" ],
+      [ "strategyConversionVisitor", "structhypro_1_1detail_1_1strategyConversionVisitor.html", "structhypro_1_1detail_1_1strategyConversionVisitor" ],
+      [ "getParametersVisitor", "structhypro_1_1detail_1_1getParametersVisitor.html", "structhypro_1_1detail_1_1getParametersVisitor" ],
+      [ "StrategyNode", "structhypro_1_1StrategyNode.html", "structhypro_1_1StrategyNode" ]
+    ] ],
     [ "StrategyVisitors.h", "StrategyVisitors_8h.html", [
       [ "setCreationVisitor", "structhypro_1_1setCreationVisitor.html", "structhypro_1_1setCreationVisitor" ]
     ] ],

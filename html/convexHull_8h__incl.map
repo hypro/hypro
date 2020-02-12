@@ -1,0 +1,16 @@
+<map id="/home/travis/build/hypro/hypro/src/hypro/util/convexHull.h" name="/home/travis/build/hypro/hypro/src/hypro/util/convexHull.h">
+<area shape="rect" id="node2" href="$Facet_8h.html" title="../datastructures/Facet.h" alt="" coords="1055,184,1233,211"/>
+<area shape="rect" id="node29" href="$Halfspace_8h.html" title="Halfspace.h" alt="" coords="1229,259,1326,285"/>
+<area shape="rect" id="node38" href="$Point_8h.html" title="Point.h" alt="" coords="1087,341,1153,367"/>
+<area shape="rect" id="node42" href="$Ridge_8h.html" title="../datastructures/Ridge.h" alt="" coords="875,109,1053,136"/>
+<area shape="rect" id="node3" href="$types_8h.html" title="../types.h" alt="" coords="2287,423,2369,449"/>
+<area shape="rect" id="node10" href="$adaptions__eigen_8h.html" title="util/adaptions_eigen\l/adaptions_eigen.h" alt="" coords="2126,497,2277,539"/>
+<area shape="rect" id="node11" href="$config_8h.html" title="../../config.h" alt="" coords="847,601,943,628"/>
+<area shape="rect" id="node24" href="$transformation_8h.html" title="transformation.h" alt="" coords="1793,601,1922,628"/>
+<area shape="rect" id="node12" href="$flags_8h.html" title="flags.h" alt="" coords="948,765,1012,792"/>
+<area shape="rect" id="node13" href="$util_2convenienceOperators_8h.html" title="util/convenienceOperators.h" alt="" coords="1226,691,1427,717"/>
+<area shape="rect" id="node17" href="$Logger_8h.html" title="util/logging/Logger.h" alt="" coords="463,691,614,717"/>
+<area shape="rect" id="node30" href="$representations_2types_8h.html" title="../representations\l/types.h" alt="" coords="1262,333,1397,375"/>
+<area shape="rect" id="node31" href="$VariablePool_8h.html" title="../util/VariablePool.h" alt="" coords="1151,423,1297,449"/>
+<area shape="rect" id="node37" href="$EvaluationResult_8h.html" title="../util/linearOptimization\l/EvaluationResult.h" alt="" coords="2117,333,2291,375"/>
+</map>

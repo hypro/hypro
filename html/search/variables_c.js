@@ -8,5 +8,5 @@ var searchData=
   ['linewidth',['linewidth',['../structhypro_1_1plotting_1_1gnuplotSettings.html#a0595d1fe82343d0610c78e36dbd3a118',1,'hypro::plotting::gnuplotSettings']]],
   ['locset',['locSet',['../classhypro_1_1HybridCIFVisitor.html#ab5db2d5923e823b98143837cd65328f9',1,'hypro::HybridCIFVisitor::locSet()'],['../classhypro_1_1HyproBadStatesVisitor.html#a72daa64ae9d164e4d5e12feec7db6812',1,'hypro::HyproBadStatesVisitor::locSet()'],['../classhypro_1_1HyproInitialSetVisitor.html#a6c4e8cef11e87ef82c74ee7a70b23250',1,'hypro::HyproInitialSetVisitor::locSet()'],['../classhypro_1_1HyproTransitionVisitor.html#a25e2a1889525a7396dc65da0c0bafe70',1,'hypro::HyproTransitionVisitor::locSet()']]],
   ['lower',['lower',['../structFlowpipe__segment.html#a1690224df9ada04882a7e15b8f85983b',1,'Flowpipe_segment']]],
-  ['lp',['lp',['../structhypro_1_1clp__context.html#a8ecb89da162504f73c91af7dc1906539',1,'hypro::clp_context::lp()'],['../structhypro_1_1glpk__context.html#a9ea064ea8fa691a62657844e64ae5073',1,'hypro::glpk_context::lp()']]]
+  ['lp',['lp',['../structhypro_1_1glpk__context.html#a9ea064ea8fa691a62657844e64ae5073',1,'hypro::glpk_context']]]
 ];

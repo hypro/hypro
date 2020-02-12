@@ -33,8 +33,6 @@ var searchData=
   ['lockedfilewriter',['LockedFileWriter',['../classhypro_1_1LockedFileWriter.html',1,'hypro']]],
   ['locptrcomp',['locPtrComp',['../structhypro_1_1locPtrComp.html',1,'hypro']]],
   ['lrucache',['LRUCache',['../classhypro_1_1LRUCache.html',1,'hypro']]],
-  ['lrucache_3c_20hypro_3a_3acacheable_3c_20matrix_5ft_3c_20number_20_3e_20_3e_2c_20matrix_5ft_3c_20number_20_3e_20_3e',['LRUCache&lt; hypro::Cacheable&lt; matrix_t&lt; Number &gt; &gt;, matrix_t&lt; Number &gt; &gt;',['../classhypro_1_1LRUCache.html',1,'hypro']]],
-  ['lrucache_3c_20hypro_3a_3acacheable_3c_20vector_5ft_3c_20number_20_3e_20_3e_2c_20vector_5ft_3c_20number_20_3e_20_3e',['LRUCache&lt; hypro::Cacheable&lt; vector_t&lt; Number &gt; &gt;, vector_t&lt; Number &gt; &gt;',['../classhypro_1_1LRUCache.html',1,'hypro']]],
   ['ltibadstatehandler',['ltiBadStateHandler',['../classhypro_1_1ltiBadStateHandler.html',1,'hypro']]],
   ['lticontext',['LTIContext',['../classhypro_1_1LTIContext.html',1,'hypro']]],
   ['ltifirstsegmenthandler',['ltiFirstSegmentHandler',['../classhypro_1_1ltiFirstSegmentHandler.html',1,'hypro']]],

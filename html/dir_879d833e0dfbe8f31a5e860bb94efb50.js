@@ -17,7 +17,7 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
       [ "Permutator", "classhypro_1_1Permutator.html", "classhypro_1_1Permutator" ]
     ] ],
     [ "Range.h", "Range_8h.html", "Range_8h" ],
-    [ "templateDirections.h", "templateDirections_8h.html", null ],
+    [ "templateDirections.h", "templateDirections_8h.html", "templateDirections_8h" ],
     [ "typetraits.h", "util_2typetraits_8h.html", [
       [ "is_shared_ptr", "structhypro_1_1is__shared__ptr.html", null ],
       [ "is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ],

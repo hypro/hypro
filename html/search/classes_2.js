@@ -1,16 +1,15 @@
 var searchData=
 [
   ['cacheable',['Cacheable',['../structhypro_1_1Cacheable.html',1,'hypro']]],
-  ['cacheable_3c_20matrix_5ft_3c_20number_20_3e_20_3e',['Cacheable&lt; matrix_t&lt; Number &gt; &gt;',['../structhypro_1_1Cacheable.html',1,'hypro']]],
-  ['cacheable_3c_20vector_5ft_3c_20number_20_3e_20_3e',['Cacheable&lt; vector_t&lt; Number &gt; &gt;',['../structhypro_1_1Cacheable.html',1,'hypro']]],
   ['carlpolytopesetting',['CarlPolytopeSetting',['../structhypro_1_1CarlPolytopeSetting.html',1,'hypro']]],
   ['carlpolytopet',['CarlPolytopeT',['../classhypro_1_1CarlPolytopeT.html',1,'hypro']]],
   ['childtiminginformation',['ChildTimingInformation',['../structhypro_1_1ChildTimingInformation.html',1,'hypro']]],
   ['childtiminginformation_3c_20number_20_3e',['ChildTimingInformation&lt; Number &gt;',['../structhypro_1_1ChildTimingInformation.html',1,'hypro']]],
   ['cifexprvisitor',['CIFExprVisitor',['../classhypro_1_1CIFExprVisitor.html',1,'hypro']]],
   ['ciflocvisitor',['CIFLocVisitor',['../classhypro_1_1CIFLocVisitor.html',1,'hypro']]],
-  ['clp_5fcontext',['clp_context',['../structhypro_1_1clp__context.html',1,'hypro']]],
   ['compareexpressioncontext',['CompareExpressionContext',['../classhypro_1_1HybridSystemParser_1_1CompareExpressionContext.html',1,'hypro::HybridSystemParser']]],
+  ['condition',['Condition',['../classhypro_1_1Condition.html',1,'hypro']]],
+  ['condition_3c_20n_20_3e',['Condition&lt; N &gt;',['../classhypro_1_1Condition.html',1,'hypro']]],
   ['cone',['Cone',['../classhypro_1_1Cone.html',1,'hypro']]],
   ['connectorcontext',['ConnectorContext',['../classhypro_1_1HybridAutomatonParser_1_1ConnectorContext.html',1,'hypro::HybridAutomatonParser']]],
   ['constantdeclarationcontext',['ConstantdeclarationContext',['../classhypro_1_1HybridAutomatonParser_1_1ConstantdeclarationContext.html',1,'hypro::HybridAutomatonParser']]],

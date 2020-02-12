@@ -137,9 +137,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa81efe5b7828495f55d5962cacdab754"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a5c015e2c48774ecedda8b3fbf7c5491e">satisfiesGuard</a> ()=0</td></tr>
 <tr class="separator:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a7a4f8b3f4ce8f7a7fa0788e056d1b2b6">getState</a> ()=0</td></tr>
+<tr class="memitem:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a7a4f8b3f4ce8f7a7fa0788e056d1b2b6">getState</a> ()=0</td></tr>
 <tr class="separator:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a1dc854bf93c6a105d23b4a2e30ff8de6">setState</a> (std::shared_ptr&lt; State &gt; ptr)=0</td></tr>
+<tr class="memitem:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a1dc854bf93c6a105d23b4a2e30ff8de6">setState</a> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; ptr)=0</td></tr>
 <tr class="separator:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a9444b5b1e51139a120de974a232bc4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IGuardHandler.html#a1a9444b5b1e51139a120de974a232bc4">reinitialize</a> ()=0</td></tr>
 <tr class="separator:a1a9444b5b1e51139a120de974a232bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,7 +169,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::~<a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a> </td>
+          <td class="memname">virtual <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::~<a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -184,8 +184,6 @@ template&lt;typename State&gt; </div>
 
 <p>Definition at line <a class="el" href="IHandler_8h_source.html#l00048">48</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1IHandler.html#a66e0cc4f490d1e7389b096289df681f8">hypro::IHandler::handle()</a>, and <a class="el" href="classhypro_1_1IHandler.html#a09f4265a24e3f3d825ed7e778b9d9fa5">hypro::IHandler::handlerName()</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -199,7 +197,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::getMarkedForDelete </td>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::getMarkedForDelete </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -226,7 +224,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual double <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::getSortIndex </td>
+          <td class="memname">virtual double <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::getSortIndex </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -255,7 +253,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::shared_ptr&lt;State&gt; <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::getState </td>
+          <td class="memname">virtual std::shared_ptr&lt;<a class="el" href="classhypro_1_1State.html">State</a>&gt; <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::getState </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -282,7 +280,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::handle </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::handle </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -311,7 +309,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const char* <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::handlerName </td>
+          <td class="memname">virtual const char* <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::handlerName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -340,7 +338,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::reinitialize </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::reinitialize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -367,7 +365,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::satisfiesGuard </td>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::satisfiesGuard </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -394,7 +392,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::setMarkedForDelete </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::setMarkedForDelete </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>toDelete</em></td><td>)</td>
@@ -422,7 +420,7 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::setSortIndex </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::setSortIndex </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>sortIndex</em></td><td>)</td>
@@ -450,9 +448,9 @@ template&lt;typename State&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; State &gt;::setState </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::setState </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; State &gt;&#160;</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td>
           <td class="paramname"><em>ptr</em></td><td>)</td>
           <td></td>
         </tr>

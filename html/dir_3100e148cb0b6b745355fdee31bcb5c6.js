@@ -10,8 +10,6 @@ var dir_3100e148cb0b6b745355fdee31bcb5c6 =
       [ "glpk_context", "structhypro_1_1glpk__context.html", "structhypro_1_1glpk__context" ]
     ] ],
     [ "Optimizer.cpp", "Optimizer_8cpp.html", null ],
-    [ "Optimizer.h", "Optimizer_8h.html", [
-      [ "Optimizer", "classhypro_1_1Optimizer.html", "classhypro_1_1Optimizer" ]
-    ] ],
+    [ "Optimizer.h", "Optimizer_8h.html", "Optimizer_8h" ],
     [ "Strategy.h", "util_2linearOptimization_2Strategy_8h.html", "util_2linearOptimization_2Strategy_8h" ]
 ];

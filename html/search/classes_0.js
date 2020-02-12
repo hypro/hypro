@@ -15,7 +15,6 @@ var searchData=
   ['algvarsdefscontext',['AlgVarsDefsContext',['../classhypro_1_1HybridSystemParser_1_1AlgVarsDefsContext.html',1,'hypro::HybridSystemParser']]],
   ['allocationcontext',['AllocationContext',['../classhypro_1_1HybridAutomatonParser_1_1AllocationContext.html',1,'hypro::HybridAutomatonParser']]],
   ['andexpressioncontext',['AndExpressionContext',['../classhypro_1_1HybridSystemParser_1_1AndExpressionContext.html',1,'hypro::HybridSystemParser']]],
-  ['atomicoperationcounter',['AtomicOperationCounter',['../structhypro_1_1statistics_1_1AtomicOperationCounter.html',1,'hypro::statistics']]],
   ['autdeclcontext',['AutDeclContext',['../classhypro_1_1HybridSystemParser_1_1AutDeclContext.html',1,'hypro::HybridSystemParser']]],
   ['automatonbodycontext',['AutomatonBodyContext',['../classhypro_1_1HybridSystemParser_1_1AutomatonBodyContext.html',1,'hypro::HybridSystemParser']]]
 ];

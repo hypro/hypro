@@ -1,0 +1,18 @@
+<map id="/home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h" name="/home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h">
+<area shape="rect" id="node2" href="$Optimizer_8h.html" title="../../util/linearOptimization\l/Optimizer.h" alt="" coords="1074,124,1259,165"/>
+<area shape="rect" id="node23" href="$Logger_8h.html" title="util/logging/Logger.h" alt="" coords="601,452,751,479"/>
+<area shape="rect" id="node49" href="$GeneralizedStarSetting_8h.html" title="GeneralizedStarSetting.h" alt="" coords="1667,131,1850,158"/>
+<area shape="rect" id="node3" href="$Point_8h.html" title="../../datastructures\l/Point.h" alt="" coords="1306,288,1446,329"/>
+<area shape="rect" id="node5" href="$flags_8h.html" title="flags.h" alt="" coords="2064,527,2128,553"/>
+<area shape="rect" id="node37" href="$EvaluationResult_8h.html" title="EvaluationResult.h" alt="" coords="1089,295,1228,322"/>
+<area shape="rect" id="node38" href="$util_2linearOptimization_2Strategy_8h.html" title="Strategy.h" alt="" coords="607,213,694,240"/>
+<area shape="rect" id="node39" href="$adaptions__glpk_8h.html" title="glpk/adaptions_glpk.h" alt="" coords="769,213,929,240"/>
+<area shape="rect" id="node40" href="$glpk__context_8h.html" title="../glpk_context.h" alt="" coords="567,295,694,322"/>
+<area shape="rect" id="node45" href="$statistics_8h.html" title="../statistics/statistics.h" alt="" coords="2014,452,2178,479"/>
+<area shape="rect" id="node4" href="$config_8h.html" title="../config.h" alt="" coords="1086,377,1170,404"/>
+<area shape="rect" id="node7" href="$types_8h.html" title="../types.h" alt="" coords="1001,527,1082,553"/>
+<area shape="rect" id="node30" href="$VariablePool_8h.html" title="../util/VariablePool.h" alt="" coords="1489,452,1636,479"/>
+<area shape="rect" id="node6" href="$util_2convenienceOperators_8h.html" title="util/convenienceOperators.h" alt="" coords="1137,452,1338,479"/>
+<area shape="rect" id="node14" href="$adaptions__eigen_8h.html" title="util/adaptions_eigen\l/adaptions_eigen.h" alt="" coords="558,601,709,643"/>
+<area shape="rect" id="node15" href="$transformation_8h.html" title="transformation.h" alt="" coords="297,705,426,732"/>
+</map>

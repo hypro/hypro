@@ -11,7 +11,7 @@ var searchData=
   ['timebound',['timeBound',['../structhypro_1_1ReachabilitySettings.html#a44a833ef02d4ada2a384afe29cbdeeba',1,'hypro::ReachabilitySettings']]],
   ['timeinterval',['timeInterval',['../structhypro_1_1TPathElement.html#a571a283d729e8360a3b7473537759349',1,'hypro::TPathElement']]],
   ['timepoint',['timePoint',['../structhypro_1_1endPoint.html#a6075e987b10d5af189798f06ee13bd25',1,'hypro::endPoint']]],
-  ['timestep',['timeStep',['../structhypro_1_1ReachabilitySettings.html#a52e2aa09e72bba3c3c4385c18f7248aa',1,'hypro::ReachabilitySettings']]],
+  ['timestep',['timeStep',['../structhypro_1_1ReachabilitySettings.html#a52e2aa09e72bba3c3c4385c18f7248aa',1,'hypro::ReachabilitySettings::timeStep()'],['../structhypro_1_1StrategyParameters.html#a0f37097a231f44f3dfe34dcb9f103650',1,'hypro::StrategyParameters::timeStep()']]],
   ['timinginformation',['timingInformation',['../structhypro_1_1ChildTimingInformation.html#a086eb42c041e7d218032e77bcc1384ec',1,'hypro::ChildTimingInformation']]],
   ['timinglevel',['timingLevel',['../structhypro_1_1TBacktrackingInfo.html#a858ffcca080d75c5fe328476081704b2',1,'hypro::TBacktrackingInfo']]],
   ['tms',['tms',['../classhypro_1_1TaylorModelVec.html#adc43b668ffdcaa15de65a285b84cde49',1,'hypro::TaylorModelVec']]],

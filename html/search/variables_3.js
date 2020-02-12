@@ -4,7 +4,7 @@ var searchData=
   ['calcvalues_5fverbose',['CALCVALUES_VERBOSE',['../structhypro_1_1SupportFunctionSetting.html#ae9484fac0fe8060a316e5f69903d104c',1,'hypro::SupportFunctionSetting::CALCVALUES_VERBOSE()'],['../structhypro_1_1NoReduction.html#aa43def14e4945231a11f2d69d3ecb257',1,'hypro::NoReduction::CALCVALUES_VERBOSE()']]],
   ['chatteringzeno',['chatteringZeno',['../classhypro_1_1Path.html#a4552b08461f68ab614f50d9027e05318',1,'hypro::Path']]],
   ['checkverticesbeforeconversion',['checkVerticesBeforeConversion',['../structhypro_1_1VPolytopeSetting.html#aebd33b1d3ea1fef9efdf2772c3918319',1,'hypro::VPolytopeSetting']]],
-  ['clustering',['clustering',['../structhypro_1_1ReachabilitySettings.html#aec7ef31f8312516dd54b2b338903e6fd',1,'hypro::ReachabilitySettings']]],
+  ['clustering',['clustering',['../structhypro_1_1ReachabilitySettings.html#aec7ef31f8312516dd54b2b338903e6fd',1,'hypro::ReachabilitySettings::clustering()'],['../structhypro_1_1StrategyParameters.html#a1563885b80f36573550f64400553737e',1,'hypro::StrategyParameters::clustering()']]],
   ['color',['color',['../structhypro_1_1plotting_1_1gnuplotSettings.html#af4c7b4907f1cd59c7de8e76ad30db9ea',1,'hypro::plotting::gnuplotSettings']]],
   ['colors',['colors',['../namespacehypro_1_1plotting.html#a31216c28dc0381f9cc35fc0cb5d29719',1,'hypro::plotting']]],
   ['constants',['constants',['../classhypro_1_1genericSatisfiesHalfspacesVisitor.html#ac86da29fcbc58729a0fe8415f43faa0e',1,'hypro::genericSatisfiesHalfspacesVisitor::constants()'],['../classhypro_1_1HybridAutomatonParser.html#ab2989518dca1c668924ac90b58ca406a',1,'hypro::HybridAutomatonParser::constants()']]],
@@ -14,7 +14,6 @@ var searchData=
   ['content',['content',['../classhypro_1_1SupportFunctionT.html#afe267869041e58e9d1e7cb1076c43d88',1,'hypro::SupportFunctionT']]],
   ['contextswitch',['contextSwitch',['../classhypro_1_1SettingsProvider.html#a4598a9754f6c3b60045efd7271873b95',1,'hypro::SettingsProvider']]],
   ['countermap',['counterMap',['../classhypro_1_1statistics_1_1CounterRepository.html#aecaf6d1bcf7814a39268d32514e1e010',1,'hypro::statistics::CounterRepository']]],
-  ['counters',['counters',['../classhypro_1_1statistics_1_1Statistician.html#a7b65a082794456ef095755817c74be39',1,'hypro::statistics::Statistician']]],
   ['cummulative',['cummulative',['../structhypro_1_1plotting_1_1gnuplotSettings.html#a50a13c98532eef47b41211361ed19303',1,'hypro::plotting::gnuplotSettings']]],
   ['currentbtposition',['currentBTPosition',['../structhypro_1_1TBacktrackingInfo.html#a113aa00925adc4303c6cdc62dad52991',1,'hypro::TBacktrackingInfo']]],
   ['currentexponent',['currentExponent',['../structhypro_1_1trafoContent.html#a6bd08ad999f18d446b1e9b14882416fc',1,'hypro::trafoContent::currentExponent()'],['../structhypro_1_1TrafoData.html#aca4ad4f868cec5bce52540d4e1e383dd',1,'hypro::TrafoData::currentExponent()'],['../classhypro_1_1TrafoOp.html#af58af675770465d2d14c3ce590ff2809',1,'hypro::TrafoOp::currentExponent()']]]

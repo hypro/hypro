@@ -153,8 +153,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3456e4a7cdcc43434cece80a4262f8af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9552429ff7bfb36b5bdb641c93f7ca1"><td class="memItemLeft" align="right" valign="top">const std::map&lt; std::thread::id, <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#ab9552429ff7bfb36b5bdb641c93f7ca1">getGLPContexts</a> () const </td></tr>
 <tr class="separator:ab9552429ff7bfb36b5bdb641c93f7ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39c4674e7bbb053f3c324955867e874f"><td class="memItemLeft" align="right" valign="top">const std::map&lt; std::thread::id, <a class="el" href="structhypro_1_1clp__context.html">clp_context</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a39c4674e7bbb053f3c324955867e874f">getCLPContexts</a> () const </td></tr>
-<tr class="separator:a39c4674e7bbb053f3c324955867e874f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58cf754a2a364133b52f7dfae4d24e7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Optimizer.html">Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a58cf754a2a364133b52f7dfae4d24e7d">operator=</a> (const <a class="el" href="classhypro_1_1Optimizer.html">Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;orig)</td></tr>
 <tr class="memdesc:a58cf754a2a364133b52f7dfae4d24e7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator.  <a href="#a58cf754a2a364133b52f7dfae4d24e7d">More...</a><br /></td></tr>
 <tr class="separator:a58cf754a2a364133b52f7dfae4d24e7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -229,22 +227,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aca8c4ac930eb7c70e066e253d0403493"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b0a430a2f67678ac93ef3ea802be34d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; carl::Relation &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a1b0a430a2f67678ac93ef3ea802be34d">mRelationSymbols</a></td></tr>
 <tr class="separator:a1b0a430a2f67678ac93ef3ea802be34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7684b93d00ed1d7daab9f4d8bfef580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classsmtrat_1_1SimplexSolver.html">smtrat::SimplexSolver</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#aa7684b93d00ed1d7daab9f4d8bfef580">mSmtratSolver</a></td></tr>
-<tr class="separator:aa7684b93d00ed1d7daab9f4d8bfef580"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11b9c96aa80c5ab64d2deb770c639091"><td class="memItemLeft" align="right" valign="top">smtrat::FormulaT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a11b9c96aa80c5ab64d2deb770c639091">mCurrentFormula</a></td></tr>
-<tr class="separator:a11b9c96aa80c5ab64d2deb770c639091"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6946503f51b6e7ef0eeab7f89bade7f3"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; smtrat::FormulaT, std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a6946503f51b6e7ef0eeab7f89bade7f3">mFormulaMapping</a></td></tr>
-<tr class="separator:a6946503f51b6e7ef0eeab7f89bade7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5141500a70117b1b295923361efc164c"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a5141500a70117b1b295923361efc164c">fileCounter</a></td></tr>
-<tr class="separator:a5141500a70117b1b295923361efc164c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e2d7402d1cf31520f3edbc0d735c96b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a1e2d7402d1cf31520f3edbc0d735c96b">filenamePrefix</a> = &quot;optimizer_error_out_&quot;</td></tr>
-<tr class="separator:a1e2d7402d1cf31520f3edbc0d735c96b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7bc7bafc9e9f2843f85ef33433627b1"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#ad7bc7bafc9e9f2843f85ef33433627b1">mContextLock</a></td></tr>
 <tr class="separator:ad7bc7bafc9e9f2843f85ef33433627b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa230cee5272894410a7e37893bf5d254"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::thread::id, <a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#aa230cee5272894410a7e37893bf5d254">mGlpkContexts</a></td></tr>
 <tr class="separator:aa230cee5272894410a7e37893bf5d254"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa43dce1abf42e4d429f01eefd426fc68"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::thread::id, <a class="el" href="structhypro_1_1clp__context.html">clp_context</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#aa43dce1abf42e4d429f01eefd426fc68">mClpContexts</a></td></tr>
-<tr class="separator:aa43dce1abf42e4d429f01eefd426fc68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -298,7 +284,7 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00083">83</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
 
-<p>References <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>.</p>
+<p>References <a class="el" href="Reach_8h.html">GLP_OFF</a>, <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>, and <a class="el" href="Reach_8h.html#a44130cfe6dd57c9a62c4e02572a2cefe">WARN</a>.</p>
 
 </div>
 </div>
@@ -388,6 +374,8 @@ template&lt;typename Number&gt; </div>
 </dl>
 
 <p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00121">121</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
+
+<p>References <a class="el" href="Reach_8h.html">GLP_OFF</a>.</p>
 
 </div>
 </div>
@@ -613,35 +601,6 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A struct holding the linear optimization result. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a39c4674e7bbb053f3c324955867e874f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::map&lt;std::thread::id, <a class="el" href="structhypro_1_1clp__context.html">clp_context</a>&gt;&amp; <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getCLPContexts </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00151">151</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-<p>References <a class="el" href="Optimizer_8h_source.html#l00076">hypro::Optimizer&lt; Number &gt;::mClpContexts</a>.</p>
 
 </div>
 </div>
@@ -1046,54 +1005,6 @@ template&lt;typename Number&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a5141500a70117b1b295923361efc164c"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::fileCounter</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00065">65</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1e2d7402d1cf31520f3edbc0d735c96b"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::filenamePrefix = &quot;optimizer_error_out_&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00066">66</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="aca8c4ac930eb7c70e066e253d0403493"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1115,32 +1026,6 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00056">56</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa43dce1abf42e4d429f01eefd426fc68"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt;std::thread::id, <a class="el" href="structhypro_1_1clp__context.html">clp_context</a>&gt; <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mClpContexts</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00076">76</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-<p>Referenced by <a class="el" href="Optimizer_8h_source.html#l00151">hypro::Optimizer&lt; Number &gt;::getCLPContexts()</a>.</p>
 
 </div>
 </div>
@@ -1240,54 +1125,6 @@ template&lt;typename Number&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a11b9c96aa80c5ab64d2deb770c639091"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">smtrat::FormulaT <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mCurrentFormula</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00062">62</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6946503f51b6e7ef0eeab7f89bade7f3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::unordered_map&lt;smtrat::FormulaT, std::size_t&gt; <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mFormulaMapping</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00063">63</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="aa230cee5272894410a7e37893bf5d254"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1359,30 +1196,6 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00057">57</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aa7684b93d00ed1d7daab9f4d8bfef580"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classsmtrat_1_1SimplexSolver.html">smtrat::SimplexSolver</a> <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::mSmtratSolver</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00061">61</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
 
 </div>
 </div>

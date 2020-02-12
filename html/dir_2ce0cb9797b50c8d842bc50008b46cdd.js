@@ -7,6 +7,6 @@ var dir_2ce0cb9797b50c8d842bc50008b46cdd =
     [ "util", "dir_879d833e0dfbe8f31a5e860bb94efb50.html", "dir_879d833e0dfbe8f31a5e860bb94efb50" ],
     [ "carlTypes.h", "carlTypes_8h.html", "carlTypes_8h" ],
     [ "config.h", "config_8h.html", "config_8h" ],
-    [ "flags.h", "flags_8h.html", null ],
+    [ "flags.h", "flags_8h.html", "flags_8h" ],
     [ "types.h", "types_8h.html", "types_8h" ]
 ];

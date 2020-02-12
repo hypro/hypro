@@ -2,11 +2,11 @@ var annotated_dup =
 [
     [ "Eigen", "namespaceEigen.html", "namespaceEigen" ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
-    [ "smtrat", "namespacesmtrat.html", "namespacesmtrat" ],
     [ "std", null, [
       [ "hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4" ],
       [ "hash< hypro::AffineTransformation< Number > >", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Cacheable< Content > >", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4" ],
+      [ "hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4" ],
       [ "hash< hypro::IntervalAssignment< Number > >", "structstd_1_1hash_3_01hypro_1_1IntervalAssignment_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1IntervalAssignment_3_01Number_01_4_01_4" ],
       [ "hash< hypro::linearFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4" ],

@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['operationcounter',['OperationCounter',['../structhypro_1_1statistics_1_1OperationCounter.html',1,'hypro::statistics']]],
   ['optautdeclscontext',['OptAutDeclsContext',['../classhypro_1_1HybridSystemParser_1_1OptAutDeclsContext.html',1,'hypro::HybridSystemParser']]],
   ['optcontrollabilitycontext',['OptControllabilityContext',['../classhypro_1_1HybridSystemParser_1_1OptControllabilityContext.html',1,'hypro::HybridSystemParser']]],
   ['optderivatecontext',['OptDerivateContext',['../classhypro_1_1HybridSystemParser_1_1OptDerivateContext.html',1,'hypro::HybridSystemParser']]],
