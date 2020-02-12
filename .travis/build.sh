@@ -10,7 +10,7 @@ function keep_waiting() {
   done
 }
 
-git clone --branch 19.06 --depth 1 https://github.com/smtrat/carl.git
+git clone --branch 19.04 --depth 1 https://github.com/smtrat/carl.git
 #git clone --depth 1 https://github.com/smtrat/carl.git
 pushd carl
 	mkdir build
