@@ -121,10 +121,10 @@ bool EventTimingContainer<Number>::hasPositiveBadStateEvent( const carl::Interva
 
 template <typename Number>
 void EventTimingContainer<Number>::insertTransition( Transition<Number>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
-#ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( timeInterval );
-	TRACE( "hypro.datastructures.etc", "In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() << " in time " << tmp );
-#endif
+	//#ifdef HYPRO_LOGGING
+	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
+	//	TRACE( "hypro.datastructures.etc", "In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash//() << " in time " << tmp );
+	//#endif
 	if ( mTransitionEvents.find( transition ) == mTransitionEvents.end() ) {
 		assert( !mInvariantEvents.empty() );
 		// initialize with same time horizon as invariants and bad states.
@@ -158,20 +158,20 @@ const HierarchicalIntervalVector<CONTAINMENT, tNumber>& EventTimingContainer<Num
 template <typename Number>
 void EventTimingContainer<Number>::insertInvariant( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
 	assert( !mInvariantEvents.empty() );
-#ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( timeInterval );
-	TRACE( "hypro.datastructures.etc", "Invariant type " << type << " in time " << tmp );
-#endif
+	//#ifdef HYPRO_LOGGING
+	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
+	//	TRACE( "hypro.datastructures.etc", "Invariant type " << type << " in time " << tmp );
+	//#endif
 	return mInvariantEvents.insertInterval( type, timeInterval );
 }
 
 template <typename Number>
 void EventTimingContainer<Number>::insertBadState( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
 	assert( !mBadStateEvents.empty() );
-#ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( timeInterval );
-	TRACE( "hypro.datastructures.etc", "BadState type " << type << " in time " << tmp );
-#endif
+	//#ifdef HYPRO_LOGGING
+	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
+	//	TRACE( "hypro.datastructures.etc", "BadState type " << type << " in time " << tmp );
+	//#endif
 	mBadStateEvents.insertInterval( type, timeInterval );
 }
 

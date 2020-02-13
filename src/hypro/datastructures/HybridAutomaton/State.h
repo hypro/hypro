@@ -509,7 +509,7 @@ class State {
 		} else {
 			out << "location: NULL";
 		}
-		out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
+		//out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
 
 		//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
 		//out << "Set: " << std::visit(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
