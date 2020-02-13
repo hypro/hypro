@@ -15,6 +15,7 @@
 #include "config.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
+#include "datastructures/reachability/ReachTree.h"
 #include "datastructures/reachability/Settings.h"
 #include "datastructures/reachability/workQueue/WorkQueue.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
@@ -72,6 +73,7 @@ class Reach {
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	representation_name mType;
 	bool mInitialStatesSet = false;
+	ReachTree<State> mReachabilityTree;
 
 	mutable bool mIntersectedBadStates;
 
@@ -141,6 +143,8 @@ class Reach {
 
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType( const representation_name& type ) { mType = type; }
+
+	const ReachTree<State>& getReachabilityTree() const;
 
   private:
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;

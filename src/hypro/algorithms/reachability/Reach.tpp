@@ -11,71 +11,17 @@ Reach<Number, ReacherSettings, State>::Reach( const HybridAutomaton<Number>& _au
 	: mAutomaton( _automaton )
 	, mSettings( _settings )
 	, mCurrentLevel( 0 )
-	, mIntersectedBadStates( false ) {
+	, mIntersectedBadStates( false )
+	, mReachabilityTree( new ReachTreeNode<State>() ) {
 	//mAutomaton.addArtificialDimension();
 }
 
 template <typename Number, typename ReacherSettings, typename State>
 void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>&& initialStates ) {
-	/*
-	TRACE( "hypro.reacher.preprocessing", "Have " << mAutomaton.getInitialStates().size() << " initial states." );
-	for ( const auto& locationConstraintPair : mAutomaton.getInitialStates() ) {
-		if ( int( mCurrentLevel ) <= mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
-			// Convert representation in state from matrix and vector to used representation type.
-			State s;
-			s.setLocation( locationConstraintPair.first );
-			switch ( mType ) {
-				case representation_name::box: {
-					s.setSetDirect( Box<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::polytope_h: {
-					s.setSetDirect( HPolytope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::polytope_v: {
-					s.setSetDirect( VPolytope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::support_function: {
-					s.setSetDirect( SupportFunction<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::zonotope: {
-					s.setSetDirect( Zonotope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				case representation_name::constraint_set: {
-					s.setSetDirect( ConstraintSet<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-#ifdef HYPRO_USE_PPL
-				case representation_name::ppl_polytope: {
-					s.setSetDirect( Polytope<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-#endif
-				case representation_name::SFN: {
-					s.setSetDirect( SupportFunctionNew<Number>( locationConstraintPair.second.getMatrix(), locationConstraintPair.second.getVector() ) );
-					break;
-				}
-				default: {
-					assert( false );
-				}
-			}
-			TRACE( "hypro.reacher.preprocessing", "convert." );
-			//s.setSetDirect(std::visit(genericConversionVisitor<typename State::repVariant, Number>(mType), s.getSet()));
-			s.setSetType( mType );
-			TRACE( "hypro.reacher.preprocessing", "Type after conversion is " << s.getSetType( 0 ) );
-
-			DEBUG( "hypro.reacher", "Adding initial set of type " << mType << ", current queue size (before) is " << mWorkingQueue.size() );
-			assert( mType == s.getSetType() );
-		}
-	}
-	*/
-
 	for ( auto& s : initialStates ) {
 		s.setTimestamp( carl::Interval<tNumber>( 0 ) );
+		//ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( s );
+		//mReachabilityTree.getRoot()->addChild( treeNode );
 		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, s ) ) );
 	}
 	mInitialStatesSet = true;
@@ -84,6 +30,8 @@ void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>
 template <typename Number, typename ReacherSettings, typename State>
 void Reach<Number, ReacherSettings, State>::addInitialState( State&& initialState ) {
 	initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+	//ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( initialState );
+	//mReachabilityTree.getRoot()->addChild( treeNode );
 	mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, initialState ) ) );
 }
 
@@ -132,9 +80,6 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 	INFO( "hypro.reacher", "Location: " << _state.getLocation()->hash() );
 	INFO( "hypro.reacher", "Location printed : " << *( _state.getLocation() ) );
 	INFO( "hypro.reacher", "Time step size: " << mSettings.timeStep );
-	//INFO("hypro.reacher", "Initial valuation: " << _state);
-	//std::cout << std::get<State>(_state) << std::endl;
-	//std::cout << _state << std::endl;
 #endif
 	// new empty Flowpipe
 	typename Reach<Number, ReacherSettings, State>::flowpipe_t flowpipe;
@@ -205,7 +150,6 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 			if ( int( mCurrentLevel ) < mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
 				//State currentState = _state;
 				State currentState = currentSegment;
-				//std::cout << "-- Checking Transitions!" << std::endl;
 				INFO( "hypro.reacher", "--- Checking Transitions!" );
 				checkTransitions( currentState, currentState.getTimestamp(), nextInitialSets );
 			}
@@ -237,7 +181,6 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 			std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant() );
 
 #ifdef REACH_DEBUG
-			//INFO("hypro.reacher", "Next Flowpipe Segment: " << newSegment.second);
 			INFO( "hypro.reacher", "still within Invariant?: " << newSegment.first );
 #endif
 			if ( newSegment.first != CONTAINMENT::NO ) {
