@@ -38,7 +38,7 @@ int main() {
 
   // setup flow matrix (3x3, we add an artificial dimension to cope with
   // constants).
-  flowMatrix(0, 1) = Number(-1);
+  flowMatrix(0, 1) = Number(1);
   flowMatrix(1, 2) = Number(carl::rationalize<Number>(-9.81));
 
   loc1->setFlow(hypro::linearFlow<Number>(flowMatrix));
@@ -62,13 +62,14 @@ int main() {
   Matrix linearReset = Matrix::Zero(2, 2);
 
   linearReset(0, 0) = Number(1);
-  linearReset(1, 1) = Number(carl::rationalize<Number>(-0.9));
+  linearReset(1, 1) = Number(carl::rationalize<Number>(-0.75));
 
   reset.setVector(constantReset);
   reset.setMatrix(linearReset);
 
   // setup transition
-  trans->setAggregation(hypro::Aggregation::parallelotopeAgg);
+  trans->setAggregation(hypro::Aggregation::clustering);
+  trans->setClusterBound(2);
   trans->setGuard(guard);
   trans->setSource(loc1);
   trans->setTarget(loc1);
@@ -102,8 +103,8 @@ int main() {
   hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, State>
       reacher(bBallAutomaton);
   hypro::ReachabilitySettings settings = reacher.settings();
-  settings.timeStep = carl::convert<double, Number>(-0.01);
-  settings.timeBound = Number(-3);
+  settings.timeStep = carl::convert<double, Number>(0.01);
+  settings.timeBound = Number(3);
   settings.jumpDepth = 3;
   reacher.setSettings(settings);
   reacher.setRepresentationType(Representation::type());

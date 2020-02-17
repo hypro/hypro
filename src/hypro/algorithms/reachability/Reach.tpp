@@ -215,7 +215,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 		// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 		assert( nextInitialSets.empty() || ( int( mCurrentLevel ) < mSettings.jumpDepth || mSettings.jumpDepth < 0 ) );
 		if ( int( mCurrentLevel ) < mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
-			processDiscreteBehaviour( nextInitialSets );
+			processDiscreteBehaviour( nextInitialSets, currentTreeNode );
 		}
 		return flowpipe;
 	} else {

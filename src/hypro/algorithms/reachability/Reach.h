@@ -59,7 +59,8 @@ struct ReachQuiet : public ReachSettings {
 template <typename Number, typename ReacherSettings, typename State>
 class Reach {
   public:
-	using TaskType = std::pair<unsigned, ReachTreeNode<State>*>;
+	using NodePtr = ReachTreeNode<State>*;
+	using TaskType = std::pair<unsigned, NodePtr>;
 	using TaskTypePtr = std::unique_ptr<TaskType>;
 	using flowpipe_t = std::vector<State>;
 
@@ -120,7 +121,7 @@ class Reach {
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	void processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets );
+	void processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets, NodePtr currentNode );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
