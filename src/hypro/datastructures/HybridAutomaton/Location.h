@@ -78,6 +78,9 @@ class Location {
 		mHash = 0;
 	}
 	void setFlow( const matrix_t<Number>& f, std::size_t I = 0 ) { this->setLinearFlow( linearFlow<Number>( f ), I ); }
+	void setFlow( const linearFlow<Number>& f, std::size_t I = 0 ) { this->setLinearFlow( f, I ); }
+	void setFlow( const affineFlow<Number>& f, std::size_t I = 0 ) { this->setAffineFlow( f, I ); }
+	void setFlow( const rectangularFlow<Number>& f, std::size_t I = 0 ) { this->setRectangularFlow( f, I ); }
 	void setLinearFlow( const linearFlow<Number>& f, std::size_t I = 0 );
 	void setRectangularFlow( const rectangularFlow<Number>& f, std::size_t I = 0 );
 	void setLinearFlow( const std::vector<linearFlow<Number>>& flows ) {
