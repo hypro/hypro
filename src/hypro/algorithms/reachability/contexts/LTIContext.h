@@ -8,6 +8,7 @@
 #include "../../../datastructures/reachability/timing/EventTimingContainer.h"
 #include "../../../datastructures/reachability/timing/EventTimingProvider.h"
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
+#include "../../../util/conversion.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
 #include "../handlers/HandlerFactory.h"

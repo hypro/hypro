@@ -737,7 +737,7 @@ void LTIContext<State>::applyContinuousEvolution() {
 		}
 	}
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 
 	DEBUG( "hypro.worker", "State after timestep: " << mComputationState << " time interval: " << tmp );
@@ -774,7 +774,7 @@ bool LTIContext<State>::omitTransition( Transition<Number>* transition ) {
 
 	// temporary for dbg-output
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 
 	// if the transition is irrelevant for the backtracking, we still want to find potential successors to avoid re-computation.
@@ -823,7 +823,7 @@ bool LTIContext<State>::omitInvariant() {
 	}
 	// temporary for dbg-output
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 	if ( fullCover( mLocalTimings.getInvariantTimings(), mComputationState.getTimestamp(), CONTAINMENT::FULL ) ) {
 		DEBUG( "hypro.worker.discrete", "Omit invariant for time interval " << tmp << " as we know it was inside the invariant." );
@@ -844,7 +844,7 @@ bool LTIContext<State>::omitBadStateCheck() {
 	}
 	// temporary for dbg-output
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 	if ( fullCover( mLocalTimings.getBadStateTimings(), mComputationState.getTimestamp(), CONTAINMENT::NO ) ) {
 		DEBUG( "hypro.worker.discrete", "Omit bad state check for time interval " << tmp << "." );
