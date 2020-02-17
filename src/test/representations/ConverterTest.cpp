@@ -384,8 +384,6 @@ TYPED_TEST( ConverterTest, conversionHelper ) {
 	EXPECT_EQ( representation_name::polytope_h, convertedBox.type() );
 }
 
-}
-
 TYPED_TEST(ConverterTest, toTemplatePolyhedron){
     try {
         auto result1 = Converter<TypeParam>::toTemplatePolyhedron(this->box);

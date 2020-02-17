@@ -70,7 +70,7 @@ namespace hypro {
             //Evaluate tpoly in direction g without last coeff (since g is dim+1 dimensional)
             //NOTE: maybe one can avoid this evaluation by maximizing it via the last computed segment and its current bounds.
             EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), true);
-            std::cout << "TPolyTimeEvolutionHandler::handle, evalG: " << evalG << std::endl;
+            //std::cout << "TPolyTimeEvolutionHandler::handle, evalG: " << evalG << std::endl;
             //TODO: How to handle case INFEAS? What should we return?
             assert(evalG.errorCode == SOLUTION::FEAS);
 

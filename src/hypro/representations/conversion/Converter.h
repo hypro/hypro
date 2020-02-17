@@ -48,7 +48,7 @@ class Converter {
 		using ConstraintSet = ConstraintSetT<Number,ConstraintSetSettings>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
 		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
-		//using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter,BoxLinearOptimizationOn>;
+		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter,BoxLinearOptimizationOn>;
 		using VPolytope = VPolytopeT<Number,Converter,VPolytopeSetting>;
 		using DifferenceBounds = DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>;
 		#ifdef HYPRO_USE_PPL
