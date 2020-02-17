@@ -22,7 +22,7 @@ class Condition {
 		, mConditionIsBox( {TRIBOOL::NSET} )
 		, mHash( 0 ) {}
 	explicit Condition( const ConstraintSetT<Number>& constraints )
-		: mConstraints( constraints )
+		: mConstraints( {constraints} )
 		, mConditionIsBox( {TRIBOOL::NSET} )
 		, mHash( 0 ) {}
 	explicit Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets );
