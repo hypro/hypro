@@ -9,10 +9,14 @@
 
 namespace hypro {
 
+/**
+ * @brief Class for an n-ary tree.
+ * @tparam Data Data type stored in the tree nodes.
+ */
 template <typename Data>
 class TreeNode {
   protected:
-	unsigned mDepth;			   /// depth cache
+	int mDepth;					   /// depth cache
 	std::vector<Data*> mChildren;  /// children list
 	Data* mParent;				   /// pointer to parent node, nullptr if root.
 
@@ -51,12 +55,12 @@ class TreeNode {
 		}
 	}
 
-	unsigned getDepth() const {
+	int getDepth() const {
 		if ( this->getParent() == nullptr ) {
-			return 0;
+			return -1;
 		}
 #ifndef NDEBUG
-		unsigned tmpDepth = 1;
+		int tmpDepth = 0;
 		Data* parent = this->getParent();
 		while ( parent->getParent() != nullptr ) {
 			++tmpDepth;
@@ -112,13 +116,13 @@ class TreeNode {
 		return mParent;
 	}
 
-	void setDepth( unsigned _depth ) {
+	void setDepth( int _depth ) {
 		mDepth = _depth;
 #ifndef NDEBUG
-		if ( mDepth == 0 ) {
+		if ( mDepth == -1 ) {
 			assert( mParent == nullptr );
 		} else {
-			unsigned tmpDepth = 1;
+			int tmpDepth = 0;
 			Data* parent = this->getParent();
 			while ( parent->getParent() != nullptr ) {
 				++tmpDepth;
@@ -131,12 +135,14 @@ class TreeNode {
 
 	void addChild( Data* child ) {
 		assert( *child->getParent() == *this );
+		// set / update depth
+		child->setDepth( this->getDepth() + 1 );
 		mChildren.push_back( child );
 	}
 
 	void setParent( Data* parent ) {
 		mParent = parent;
-		// update depth
+		// set / update depth
 		mDepth = mParent->getDepth() + 1;
 	}
 

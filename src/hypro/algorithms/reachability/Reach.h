@@ -59,7 +59,7 @@ struct ReachQuiet : public ReachSettings {
 template <typename Number, typename ReacherSettings, typename State>
 class Reach {
   public:
-	using TaskType = std::pair<unsigned, State>;
+	using TaskType = std::pair<unsigned, ReachTreeNode<State>*>;
 	using TaskTypePtr = std::unique_ptr<TaskType>;
 	using flowpipe_t = std::vector<State>;
 
@@ -73,7 +73,7 @@ class Reach {
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	representation_name mType;
 	bool mInitialStatesSet = false;
-	ReachTree<State> mReachabilityTree;
+	std::unique_ptr<ReachTree<State>> mReachabilityTree;
 
 	mutable bool mIntersectedBadStates;
 
@@ -99,15 +99,12 @@ class Reach {
 	WorkQueue<TaskTypePtr>& rGetQueue() { return mWorkingQueue; }
 
 	/**
-	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
-	 * @details [long description]
+	 * @brief Computes forward time closure in the passed tree node.
 	 *
-	 * @param _loc The location in which the FTC is to be computed.
-	 * @param _val The valuation which is initial in the respective location.
-	 *
-	 * @return The id of the computed flowpipe.
+	 * @param currentTreeNode
+	 * @return flowpipe_t
 	 */
-	flowpipe_t computeForwardTimeClosure( const State& _state );
+	flowpipe_t computeForwardTimeClosure( ReachTreeNode<State>* currentTreeNode );
 
 	/**
 	 * @brief Returns whether the bad states were reachable so far.
@@ -144,7 +141,7 @@ class Reach {
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType( const representation_name& type ) { mType = type; }
 
-	const ReachTree<State>& getReachabilityTree() const;
+	ReachTree<State>* getReachabilityTree() const { return mReachabilityTree.get(); }
 
   private:
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;

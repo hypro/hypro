@@ -121,6 +121,12 @@ int main() {
   // perform reachability analysis.
   auto flowpipeIndices = reacher.computeForwardReachability();
 
+  // Test if we can get the tree and check its contents
+  // auto reachtree = reacher.getReachabilityTree();
+  std::cout << "Reach tree depth: " << reacher.getReachabilityTree()->getDepth()
+            << " and number nodes: "
+            << reacher.getReachabilityTree()->getNumberNodes() << std::endl;
+
   // plot flowpipes.
   hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
   plotter.setFilename("bouncingBall");

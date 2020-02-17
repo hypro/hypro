@@ -44,7 +44,8 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 			std::pair<CONTAINMENT, State> invariantPair = s.satisfies( std::get<0>( tuple )->getTarget()->getInvariant() );
 			if ( invariantPair.first != CONTAINMENT::NO ) {
 				TRACE( "hypro.reacher", "Enqueue " << invariantPair.second << " for level " << mCurrentLevel + 1 << ", current queue size (before) is " << mWorkingQueue.size() );
-				mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel + 1, invariantPair.second ) ) );
+				ReachTreeNode<State>* newChild = new ReachTreeNode<State>( invariantPair.second );
+				mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel + 1, newChild ) ) );
 			}
 		} else {  // aggregate all
 			// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -87,50 +88,26 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 		//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 #endif
 
-		//TODO: Maybe use smth else or use setSetsSave in all functions
-		//s.setSetsSave(collectedSets.getSets());
-
-		//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
-		//Plotter<Number>::getInstance().setObjectColor(colSetIndex, plotting::colors[plotting::red]);
-
+		// set entry timestamp.
 		s.setTimestamp( aggregatedTimestamp );
-		//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
-		//std::cout << "Aggregated representation: " << collectedSets << std::endl;
-		//std::cout << "Aggregated timestamp: " << aggregatedTimestamp << std::endl;
 
 		// Perform resets.
 		INFO( "hypro.reacher", "Apply reset." );
 		State tmp = applyReset( collectedSets, aggregationPair.first->getReset() );
 		INFO( "hypro.reacher", "Vertices size after reset: " << tmp.vertices().size() );
-#ifdef HYPRO_LOGGING
-		for ( const auto& vertex : tmp.vertices() ) {
-			//std::cout << convert<Number,double>(vertex) << std::endl;
-			INFO( "hypro.reacher", vertex << ", " );
-		}
-#endif
 
 		std::pair<CONTAINMENT, State> invariantSatisfyingSet = tmp.satisfies( aggregationPair.first->getTarget()->getInvariant() );
 		INFO( "hypro.reacher", "does resetted satisfy invariant? " << invariantSatisfyingSet.first << " size of vertices: " << invariantSatisfyingSet.second.vertices().size() << " and resulting vertices: " );
-#ifdef HYPRO_LOGGING
-		for ( const auto& vertex : invariantSatisfyingSet.second.vertices() ) {
-			//std::cout << convert<Number,double>(vertex) << std::endl;
-			INFO( "hypro.reacher", vertex << ", " );
-		}
-#endif
 
 		if ( invariantSatisfyingSet.first != CONTAINMENT::NO ) {
-			//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
-			//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
-			//s.setSets(invariantSatisfyingSet.second.getSets());
 			s.setSetsSave( invariantSatisfyingSet.second.getSets() );
-			//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 		} else {
 			continue;
 		}
 
-		//TRACE("hypro.reacher", "Enqueue " <<  s<< " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
 		TRACE( "hypro.reacher", "Enqueue state for level " << mCurrentLevel + 1 << ", current queue size (before) is " << mWorkingQueue.size() );
-		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel + 1, s ) ) );
+		ReachTreeNode<State>* newChild = new ReachTreeNode<State>( s );
+		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel + 1, newChild ) ) );
 	}
 
 	INFO( "hypro.reacher", "--- After aggregation loop" );
@@ -142,7 +119,6 @@ bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state
 	bool transitionEnabled = false;
 	//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 	for ( auto& transition : state.getLocation()->getTransitions() ) {
-		//DEBUG( "hypro.reacher", "Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		// handle time-triggered transitions
 		if ( intersectGuard( transition.get(), state, guardSatisfyingState ) ) {
 			INFO( "hypro.reacher", "hybrid transition enabled" );

@@ -11,18 +11,18 @@ Reach<Number, ReacherSettings, State>::Reach( const HybridAutomaton<Number>& _au
 	: mAutomaton( _automaton )
 	, mSettings( _settings )
 	, mCurrentLevel( 0 )
-	, mIntersectedBadStates( false )
-	, mReachabilityTree( new ReachTreeNode<State>() ) {
-	//mAutomaton.addArtificialDimension();
+	, mReachabilityTree( std::make_unique<ReachTree<State>>( new ReachTreeNode<State>() ) )
+	, mIntersectedBadStates( false ) {
 }
 
 template <typename Number, typename ReacherSettings, typename State>
 void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>&& initialStates ) {
 	for ( auto& s : initialStates ) {
 		s.setTimestamp( carl::Interval<tNumber>( 0 ) );
-		//ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( s );
-		//mReachabilityTree.getRoot()->addChild( treeNode );
-		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, s ) ) );
+		ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( s );
+		treeNode->setParent( mReachabilityTree->getRoot() );
+		mReachabilityTree->getRoot()->addChild( treeNode );
+		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, treeNode ) ) );
 	}
 	mInitialStatesSet = true;
 }
@@ -30,9 +30,10 @@ void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>
 template <typename Number, typename ReacherSettings, typename State>
 void Reach<Number, ReacherSettings, State>::addInitialState( State&& initialState ) {
 	initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
-	//ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( initialState );
-	//mReachabilityTree.getRoot()->addChild( treeNode );
-	mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, initialState ) ) );
+	ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( initialState );
+	treeNode->setParent( mReachabilityTree->getRoot() );
+	mReachabilityTree->getRoot()->addChild( treeNode );
+	mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, treeNode ) ) );
 }
 
 template <typename Number, typename ReacherSettings, typename State>
@@ -62,30 +63,30 @@ std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::
 		}
 
 		mCurrentLevel = nextInitialSet->first;
-		INFO( "hypro.reacher", "Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second.getLocation()->getName() );
+		INFO( "hypro.reacher", "Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second->getState().getLocation()->getName() );
 		assert( int( mCurrentLevel ) <= mSettings.jumpDepth );
-		TRACE( "hypro.reacher", "Obtained set of type " << nextInitialSet->second.getSetType() << ", requested type is " << mType );
+		TRACE( "hypro.reacher", "Obtained set of type " << nextInitialSet->second->getState().getSetType() << ", requested type is " << mType );
 		flowpipe_t newFlowpipe = computeForwardTimeClosure( nextInitialSet->second );
 
-		collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second.getLocation()->hash(), newFlowpipe ) );
+		collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second->getState().getLocation()->hash(), newFlowpipe ) );
 	}
 
 	return collectedReachableStates;
 }
 
 template <typename Number, typename ReacherSettings, typename State>
-typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, ReacherSettings, State>::computeForwardTimeClosure( const State& _state ) {
-	assert( !_state.getTimestamp().isUnbounded() );
+typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, ReacherSettings, State>::computeForwardTimeClosure( ReachTreeNode<State>* currentTreeNode ) {
+	assert( !currentTreeNode->getState().getTimestamp().isUnbounded() );
 #ifdef REACH_DEBUG
-	INFO( "hypro.reacher", "Location: " << _state.getLocation()->hash() );
-	INFO( "hypro.reacher", "Location printed : " << *( _state.getLocation() ) );
+	INFO( "hypro.reacher", "Location: " << currentTreeNode->getState().getLocation()->hash() );
+	INFO( "hypro.reacher", "Location printed : " << *( currentTreeNode->getState().getLocation() ) );
 	INFO( "hypro.reacher", "Time step size: " << mSettings.timeStep );
 #endif
 	// new empty Flowpipe
 	typename Reach<Number, ReacherSettings, State>::flowpipe_t flowpipe;
 	std::vector<std::tuple<Transition<Number>*, State>> nextInitialSets;
 
-	std::tuple<hypro::CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number, State>( _state, mSettings.timeStep );
+	std::tuple<hypro::CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number, State>( currentTreeNode->getState(), mSettings.timeStep );
 #ifdef REACH_DEBUG
 	INFO( "hypro.reacher", "Valuation fulfills Invariant?: " << std::get<0>( initialSetup ) );
 #endif
@@ -100,14 +101,14 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 			// Collect potential new initial states from discrete behaviour.
 			if ( int( mCurrentLevel ) <= mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
 				INFO( "hypro.reacher", "-- Checking Transitions from initial!" );
-				checkTransitions( _state, carl::Interval<tNumber>( tNumber( 0 ), mSettings.timeBound ), nextInitialSets );
+				checkTransitions( currentTreeNode->getState(), carl::Interval<tNumber>( tNumber( 0 ), mSettings.timeBound ), nextInitialSets );
 			}
 		}
 
 		// insert first Segment into the empty flowpipe
 		State currentSegment;
 		if ( noFlow ) {
-			currentSegment = _state;
+			currentSegment = currentTreeNode->getState();
 		} else {
 			currentSegment = std::get<1>( initialSetup );
 		}
@@ -180,7 +181,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 			nextSegment = currentSegment.partiallyApplyTimeStep( ConstraintSet<Number>( std::get<2>( initialSetup ), std::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
 #endif
 			// extend flowpipe (only if still within Invariant of location)
-			std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant() );
+			std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( currentTreeNode->getState().getLocation()->getInvariant() );
 
 #ifdef REACH_DEBUG
 			INFO( "hypro.reacher", "still within Invariant?: " << newSegment.first );
