@@ -22,7 +22,7 @@ int main() {
   hypro::HybridAutomaton<Number> bBallAutomaton =
       hypro::HybridAutomaton<Number>();
 
-  // matrix defining the flow (note: 3rd dimension for constant parts).
+  // matrix defining the flow (note: 3rd variable for constant parts)
   Matrix flowMatrix = Matrix::Zero(3, 3);
 
   // location parameter setting.
@@ -41,7 +41,7 @@ int main() {
   flowMatrix(0, 1) = Number(-1);
   flowMatrix(1, 2) = Number(carl::rationalize<Number>(-9.81));
 
-  loc1->setFlow(flowMatrix);
+  loc1->setFlow(hypro::linearFlow<Number>(flowMatrix));
 
   // setup of the transition.
   // guard
