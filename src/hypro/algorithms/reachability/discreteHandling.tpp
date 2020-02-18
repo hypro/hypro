@@ -96,7 +96,8 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 			}  // end loop over segments for a single cluster
 
 #ifdef HYPRO_LOGGING
-			INFO( "hypro.reacher", "Unified " << currentClusterCount << " sets for aggregation." );
+			auto convertedInterval = convert<tNumber, double>( aggregatedTimestamp );
+			INFO( "hypro.reacher", "Unified " << currentClusterCount << " sets for aggregation. Aggregated timestamp: " << convertedInterval );
 #endif
 
 			State s;

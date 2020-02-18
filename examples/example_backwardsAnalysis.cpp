@@ -4,6 +4,7 @@
 #include "datastructures/Point.h"
 #include "representations/GeometricObject.h"
 #include "util/plotting/Plotter.h"
+#include <iostream>
 
 int main() {
 
@@ -123,10 +124,14 @@ int main() {
   auto flowpipeIndices = reacher.computeForwardReachability();
 
   // Test if we can get the tree and check its contents
-  // auto reachtree = reacher.getReachabilityTree();
   std::cout << "Reach tree depth: " << reacher.getReachabilityTree()->getDepth()
             << " and number nodes: "
             << reacher.getReachabilityTree()->getNumberNodes() << std::endl;
+  // write tree in dot-format to file.
+  std::string dotString = reacher.getReachabilityTree()->getDotRepresentation();
+  std::fstream outfile = std::fstream("reachTree.gv", std::ios_base::out);
+  outfile << dotString;
+  outfile.close();
 
   // plot flowpipes.
   hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
