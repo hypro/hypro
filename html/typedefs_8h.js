@@ -8,6 +8,7 @@ var typedefs_8h =
     [ "GeneralizedStar", "typedefs_8h.html#a627daeff98eff7fbb68841cc5db54809", null ],
     [ "HPolytope", "typedefs_8h.html#afd0bc8dcc54953e4b477a5aaf7065439", null ],
     [ "OrthogonalPolyhedron", "typedefs_8h.html#a95ed7951d49d878cbf6e43e17c260503", null ],
+    [ "Polytope", "typedefs_8h.html#aa6af5ae15627e25d854eaacb1f4f96bf", null ],
     [ "SupportFunction", "typedefs_8h.html#a47344b22ce93940da4599cf2f2987321", null ],
     [ "SupportFunctionNew", "typedefs_8h.html#a2f3f899ec0476c08f9d3697544c41d70", null ],
     [ "VPolytope", "typedefs_8h.html#a39e49ed88fa9599f8b04b6758a3103a2", null ],

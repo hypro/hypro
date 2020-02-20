@@ -7,7 +7,7 @@ var structhypro_1_1RefinementSetting =
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a1976676ce5f63d1bc5c1fab1a848d910", null ],
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#abbd9ae816a0c61ff34f271b64605619a", null ],
     [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a411d83cb14cda4b7ef3c2293e19c1f9f", null ],
-    [ "operator=", "structhypro_1_1RefinementSetting.html#a2fe0bdf82691817eae8cf98758171f4c", null ],
+    [ "operator=", "structhypro_1_1RefinementSetting.html#aa41db5f06dfec2471c33bf92b0e50e65", null ],
     [ "operator!=", "structhypro_1_1RefinementSetting.html#a300b6bb9d42520797cdc8010ca031f53", null ],
     [ "operator<<", "structhypro_1_1RefinementSetting.html#a618ebea3d493894d21939fc0788e3e58", null ],
     [ "operator==", "structhypro_1_1RefinementSetting.html#a2deac931944e63c6a522635706a7f322", null ],

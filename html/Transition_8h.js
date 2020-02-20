@@ -7,6 +7,7 @@ var Transition_8h =
       [ "none", "Transition_8h.html#a03ed815dbbaab8a64776d7b39035977fa9cd796412c5671e6878bfba2c2852919", null ],
       [ "none", "Transition_8h.html#a03ed815dbbaab8a64776d7b39035977fa334c4a4c42fdb79d7ebc3e73b517e6f8", null ],
       [ "boxAgg", "Transition_8h.html#a03ed815dbbaab8a64776d7b39035977fa7a0a4371a1b3debeb0a4517d1291f52e", null ],
+      [ "clustering", "Transition_8h.html#a03ed815dbbaab8a64776d7b39035977fab577b636e2494c0e245706725a40f83b", null ],
       [ "parallelotopeAgg", "Transition_8h.html#a03ed815dbbaab8a64776d7b39035977fa2e7a85623b4c97232a33e2ce22716000", null ]
     ] ]
 ];

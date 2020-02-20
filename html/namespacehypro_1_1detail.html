@@ -129,8 +129,6 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html">gen_seq&lt; 0, Is... &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1getParametersVisitor.html">getParametersVisitor</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1nth__element__impl.html">nth_element_impl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1nth__element__impl_3_010_00_01T_00_01Ts_8_8_8_01_4.html">nth_element_impl&lt; 0, T, Ts... &gt;</a></td></tr>
@@ -138,12 +136,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1ResetVisitor.html">ResetVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1seq.html">seq</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">strategyConversionVisitor</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1StrategyVariant.html">StrategyVariant</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1detail_1_1StrategyVariant_3_01std_1_1variant_3_01Ts_8_8_8_01_4_01_4.html">StrategyVariant&lt; std::variant&lt; Ts... &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -154,6 +146,10 @@ Functions</h2></td></tr>
 <tr class="memitem:a4030493a231417d6e31af261f1d196fd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a4030493a231417d6e31af261f1d196fd"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1detail.html#a4030493a231417d6e31af261f1d196fd">getType</a> (const T &amp;)</td></tr>
 <tr class="separator:a4030493a231417d6e31af261f1d196fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae30c652668e0bac58f1f80cacf2d23f2"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:ae30c652668e0bac58f1f80cacf2d23f2"><td class="memTemplItemLeft" align="right" valign="top">CoinPackedMatrix&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1detail.html#ae30c652668e0bac58f1f80cacf2d23f2">createMatrix</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;in)</td></tr>
+<tr class="memdesc:ae30c652668e0bac58f1f80cacf2d23f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a CoinPackedMatrix from a matrix_t-type.  CoinPacketMatrices are implemented as sparse matrices, however we utilize dense matrices here.  <a href="#ae30c652668e0bac58f1f80cacf2d23f2">More...</a><br /></td></tr>
+<tr class="separator:ae30c652668e0bac58f1f80cacf2d23f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70fa308cd95d8305dff628dad52bbb76"><td class="memTemplParams" colspan="2">template&lt;typename T , typename F , int... Is&gt; </td></tr>
 <tr class="memitem:a70fa308cd95d8305dff628dad52bbb76"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1detail.html#a70fa308cd95d8305dff628dad52bbb76">for_each</a> (T &amp;&amp;t, F f, <a class="el" href="structhypro_1_1detail_1_1seq.html">seq</a>&lt; Is... &gt;)</td></tr>
 <tr class="separator:a70fa308cd95d8305dff628dad52bbb76"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +161,43 @@ Functions</h2></td></tr>
 <tr class="separator:a1ea621e84987f39a5e67470ddd1f8e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ae30c652668e0bac58f1f80cacf2d23f2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">CoinPackedMatrix hypro::detail::createMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a CoinPackedMatrix from a matrix_t-type.  CoinPacketMatrices are implemented as sparse matrices, however we utilize dense matrices here. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">in</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>CoinPackedMatrix </dd></dl>
+
+<p>Definition at line <a class="el" href="helperFunctions_8h_source.html#l00017">17</a> of file <a class="el" href="helperFunctions_8h_source.html">helperFunctions.h</a>.</p>
+
+<p>Referenced by <a class="el" href="clp__context_8h_source.html#l00041">hypro::clp_context::setMatrix()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a70fa308cd95d8305dff628dad52bbb76"></a>
 <div class="memitem">
 <div class="memproto">

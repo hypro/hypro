@@ -23,6 +23,7 @@ var classhypro_1_1ReachTreeNode =
     [ "getPath", "classhypro_1_1ReachTreeNode.html#a2403bf096819a045949b982326524a52", null ],
     [ "getRefinements", "classhypro_1_1ReachTreeNode.html#a287e6cd22ebd62c5c270a5473029a927", null ],
     [ "getSetAtLevel", "classhypro_1_1ReachTreeNode.html#a21dcd6c8e4efb9f4e3331ad7bb4b7c2b", null ],
+    [ "getState", "classhypro_1_1ReachTreeNode.html#a96174bc52effd9b569189cf271c3590b", null ],
     [ "getStateAtLevel", "classhypro_1_1ReachTreeNode.html#a68a22cc15fe5ac6293da8c24aa65ebf5", null ],
     [ "getTimestamp", "classhypro_1_1ReachTreeNode.html#a2a90e36bd25f3c6f1a1e79913592f3a9", null ],
     [ "hasFixedPoint", "classhypro_1_1ReachTreeNode.html#a980f15b08a9575f8f57821bd278a27e4", null ],

@@ -34,6 +34,8 @@ var classhypro_1_1Location =
     [ "rGetTransitions", "classhypro_1_1Location.html#a71ed6bfd985e5c9410b58a99b645212a", null ],
     [ "setExtInput", "classhypro_1_1Location.html#a8284f6bdb0295e1e654bd10869a82ff4", null ],
     [ "setFlow", "classhypro_1_1Location.html#a917a540ea631f94e1d9920904a50e44b", null ],
+    [ "setFlow", "classhypro_1_1Location.html#ac438cd9f97d4e4e0ea2f8d46c07bd7c6", null ],
+    [ "setFlow", "classhypro_1_1Location.html#a111332f0fefb66afac8981bfc760644c", null ],
     [ "setInvariant", "classhypro_1_1Location.html#a031f5c93b7979bea0582283618ea8a00", null ],
     [ "setLinearFlow", "classhypro_1_1Location.html#a28a124f21961be493e3c7f01e9b838f1", null ],
     [ "setLinearFlow", "classhypro_1_1Location.html#a588c962b39fa8f92c14be75ccad9d6ab", null ],

@@ -11,19 +11,19 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-46 395,-46 395,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="classhypro_1_1GeometricObject.html" target="_top" xlink:title="hypro::GeometricObject\l\&lt; Number, DifferenceBoundsT\l\&lt; Number, Converter, Setting \&gt; \&gt;">
+<g id="a_node1"><a xlink:href="classhypro_1_1GeometricObject.html" target="_top" xlink:title="hypro::GeometricObject\l\&lt; Number, SupportFunctionT\l\&lt; Number, Converter, Setting \&gt; \&gt;">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-41.5 183,-41.5 183,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::GeometricObject</text>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number, DifferenceBoundsT</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number, SupportFunctionT</text>
 <text text-anchor="middle" x="91.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number, Converter, Setting &gt; &gt;</text>
 </a>
 </g>
 </g>
 <!-- Node2 -->
 <g id="node2" class="node"><title>Node2</title>
-<g id="a_node2"><a xlink:href="classhypro_1_1DifferenceBoundsT.html" target="_top" xlink:title="Class wrapping the difference bounds content. ">
+<g id="a_node2"><a xlink:href="classhypro_1_1SupportFunctionT.html" target="_top" xlink:title="Class wrapping the support function content. ">
 <polygon fill="white" stroke="black" points="219,-6 219,-36 391,-36 391,-6 219,-6"/>
-<text text-anchor="start" x="227" y="-24" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::DifferenceBoundsT</text>
+<text text-anchor="start" x="227" y="-24" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::SupportFunctionT</text>
 <text text-anchor="middle" x="305" y="-13" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number, Converter, Setting &gt;</text>
 </a>
 </g>

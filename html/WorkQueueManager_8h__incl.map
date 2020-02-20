@@ -1,8 +1,0 @@
-<map id="/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h" name="/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h">
-<area shape="rect" id="node2" href="$util_2typetraits_8h.html" title="../../../util/typetraits.h" alt="" coords="267,206,422,233"/>
-<area shape="rect" id="node5" href="$WorkQueue_8h.html" title="WorkQueue.h" alt="" coords="1251,124,1358,151"/>
-<area shape="rect" id="node6" href="$Logger_8h.html" title="../../../util/logging\l/Logger.h" alt="" coords="640,199,767,240"/>
-<area shape="rect" id="node14" href="$Spinlock_8h.html" title="../../../util/multithreading\l/Spinlock.h" alt="" coords="791,199,965,240"/>
-<area shape="rect" id="node17" href="$WorkQueueSettings_8h.html" title="WorkQueueSettings.h" alt="" coords="989,206,1148,233"/>
-<area shape="rect" id="node7" href="$flags_8h.html" title="../../flags.h" alt="" coords="221,288,309,315"/>
-</map>

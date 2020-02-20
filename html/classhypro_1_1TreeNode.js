@@ -9,14 +9,14 @@ var classhypro_1_1TreeNode =
     [ "addChild", "classhypro_1_1TreeNode.html#a23a7592615c21b6ea14f1454b5ec5150", null ],
     [ "getAvgSubtreeBranching", "classhypro_1_1TreeNode.html#af6c48962970ad636ad5344d98efa86a7", null ],
     [ "getChildren", "classhypro_1_1TreeNode.html#acde9bf5d363b99723cb7de1b4b686383", null ],
-    [ "getDepth", "classhypro_1_1TreeNode.html#a30fcbf35594cabd211f1dde8000f6f7a", null ],
+    [ "getDepth", "classhypro_1_1TreeNode.html#a22a4a6f07d38cc4a76faea5e06371ac0", null ],
     [ "getParent", "classhypro_1_1TreeNode.html#ac0e8e7b461c351086aa349bd4554bd93", null ],
     [ "getSubtreeDepth", "classhypro_1_1TreeNode.html#a1ead1ef0a3be00a57fa0acdea4da6da8", null ],
     [ "getSubtreeSize", "classhypro_1_1TreeNode.html#a28ce02959783c660f0cbdb1de5b1a310", null ],
-    [ "setDepth", "classhypro_1_1TreeNode.html#a441878c6175815b32648b6f8b3554941", null ],
+    [ "setDepth", "classhypro_1_1TreeNode.html#aa0d1268a3713f5a2c3afab7da1778a1a", null ],
     [ "setParent", "classhypro_1_1TreeNode.html#a5ce7bf15a66083ee7802397a93324f83", null ],
     [ "operator==", "classhypro_1_1TreeNode.html#a196f8666132cba2c18ddf6d3473d87d3", null ],
     [ "mChildren", "classhypro_1_1TreeNode.html#ac6348eca77561a64495ece3c8b248598", null ],
-    [ "mDepth", "classhypro_1_1TreeNode.html#af25261c7862daea43989f4095f40e797", null ],
+    [ "mDepth", "classhypro_1_1TreeNode.html#a0f5412f89fda4535ac9c9088aae52757", null ],
     [ "mParent", "classhypro_1_1TreeNode.html#a9d2f003348321ef60086b24bd4945294", null ]
 ];

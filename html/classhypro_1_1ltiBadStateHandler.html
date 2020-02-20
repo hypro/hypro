@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1ltiBadStateHandler.html'
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2c4e2fb269165fafe42d723653186f33"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a2c4e2fb269165fafe42d723653186f33">ltiBadStateHandler</a> ()=delete</td></tr>
 <tr class="separator:a2c4e2fb269165fafe42d723653186f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c3b016623cf0c8268ea4a2256399dc8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a3c3b016623cf0c8268ea4a2256399dc8">ltiBadStateHandler</a> (<a class="el" href="classhypro_1_1State.html">State</a> *state, size_t index)</td></tr>
+<tr class="memitem:a3c3b016623cf0c8268ea4a2256399dc8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a3c3b016623cf0c8268ea4a2256399dc8">ltiBadStateHandler</a> (State *state, size_t index)</td></tr>
 <tr class="separator:a3c3b016623cf0c8268ea4a2256399dc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f0ad682a1be303578ed57b733b7f7c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a2f0ad682a1be303578ed57b733b7f7c4">handle</a> ()</td></tr>
 <tr class="separator:a2f0ad682a1be303578ed57b733b7f7c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,7 +153,7 @@ Public Member Functions</h2></td></tr>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a460790d6e9eb13eec42fc28c08c7fb5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a460790d6e9eb13eec42fc28c08c7fb5e">mIntersects</a> = false</td></tr>
 <tr class="separator:a460790d6e9eb13eec42fc28c08c7fb5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cb50fccf646924f9833c335ffe70cba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1State.html">State</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a7cb50fccf646924f9833c335ffe70cba">mState</a></td></tr>
+<tr class="memitem:a7cb50fccf646924f9833c335ffe70cba"><td class="memItemLeft" align="right" valign="top">State *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#a7cb50fccf646924f9833c335ffe70cba">mState</a></td></tr>
 <tr class="separator:a7cb50fccf646924f9833c335ffe70cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af332a595a8be0758dd766ad506fc53c7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#af332a595a8be0758dd766ad506fc53c7">mNoBadStates</a> = false</td></tr>
 <tr class="separator:af332a595a8be0758dd766ad506fc53c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,7 +164,7 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
-<tr class="memitem:af362f873011f1dc0d742e5b2c12338e5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5">Number</a> = typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a></td></tr>
+<tr class="memitem:af362f873011f1dc0d742e5b2c12338e5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5">Number</a> = typename State::NumberType</td></tr>
 <tr class="separator:af362f873011f1dc0d742e5b2c12338e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -184,7 +184,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5">Number</a> =  typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a></td>
+          <td class="memname">using <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html#af362f873011f1dc0d742e5b2c12338e5">Number</a> =  typename State::NumberType</td>
         </tr>
       </table>
   </td>
@@ -209,7 +209,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -234,9 +234,9 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1State.html">State</a> *&#160;</td>
+          <td class="paramtype">State *&#160;</td>
           <td class="paramname"><em>state</em>, </td>
         </tr>
         <tr>
@@ -275,7 +275,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::getMarkedForDelete </td>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::getMarkedForDelete </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -306,7 +306,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::handle </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::handle </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -337,7 +337,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const char* <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::handlerName </td>
+          <td class="memname">const char* <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::handlerName </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -368,7 +368,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::intersectsBadState </td>
+          <td class="memname">virtual bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::intersectsBadState </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -399,7 +399,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::setMarkedForDelete </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::setMarkedForDelete </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>toDelete</em></td><td>)</td>
@@ -430,7 +430,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">size_t <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mIndex</td>
+          <td class="memname">size_t <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::mIndex</td>
         </tr>
       </table>
   </td>
@@ -454,7 +454,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mIntersects = false</td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::mIntersects = false</td>
         </tr>
       </table>
   </td>
@@ -480,7 +480,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mMarkedForDelete = false</td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::mMarkedForDelete = false</td>
         </tr>
       </table>
   </td>
@@ -506,7 +506,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mNoBadStates = false</td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::mNoBadStates = false</td>
         </tr>
       </table>
   </td>
@@ -530,7 +530,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1State.html">State</a>* <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::mState</td>
+          <td class="memname">State* <a class="el" href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a>&lt; State &gt;::mState</td>
         </tr>
       </table>
   </td>

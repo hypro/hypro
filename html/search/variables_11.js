@@ -6,6 +6,5 @@ var searchData=
   ['refinementlevel',['refinementLevel',['../structhypro_1_1PlotData.html#a927ff26b1abd864352bf99a642386a25',1,'hypro::PlotData']]],
   ['remainder',['remainder',['../classhypro_1_1TaylorModel.html#afe15c7024bbd75ce6d38137a8e36d9f3',1,'hypro::TaylorModel']]],
   ['rep',['rep',['../classhypro_1_1Leaf.html#aed0b0f40ded9e25c2f7aa2e0f02154da',1,'hypro::Leaf']]],
-  ['representation_5ftype',['representation_type',['../structhypro_1_1StrategyParameters.html#aed8af3e2b71e4e147fe421c2fe9b6d9a',1,'hypro::StrategyParameters']]],
   ['rhs',['rhs',['../structhypro_1_1sumContent.html#ae889a9f408ba2d59e214d0e69e7962fa',1,'hypro::sumContent::rhs()'],['../structhypro_1_1intersectionContent.html#a35980da972181d29b5951eb95222e8dd',1,'hypro::intersectionContent::rhs()']]]
 ];

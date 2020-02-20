@@ -33,18 +33,22 @@ var hierarchy =
     [ "hypro::BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "hypro::BoxSupportFunction< Number, Setting >", "classhypro_1_1BoxSupportFunction.html", null ],
     [ "hypro::Cacheable< Content >", "structhypro_1_1Cacheable.html", null ],
+    [ "hypro::Cacheable< matrix_t< Number > >", "structhypro_1_1Cacheable.html", null ],
+    [ "hypro::Cacheable< vector_t< Number > >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::CarlPolytopeSetting", "structhypro_1_1CarlPolytopeSetting.html", null ],
     [ "hypro::CarlPolytopeT< Number, Converter, Setting >", "classhypro_1_1CarlPolytopeT.html", null ],
     [ "hypro::ChildTimingInformation< N >", "structhypro_1_1ChildTimingInformation.html", null ],
     [ "hypro::ChildTimingInformation< Number >", "structhypro_1_1ChildTimingInformation.html", null ],
-    [ "hypro::Condition< Number >", "classhypro_1_1Condition.html", null ],
-    [ "hypro::Condition< N >", "classhypro_1_1Condition.html", null ],
+    [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
     [ "hypro::ConstraintSetSettings", "structhypro_1_1ConstraintSetSettings.html", null ],
     [ "hypro::ConstraintSetT< Number, S >", "classhypro_1_1ConstraintSetT.html", null ],
     [ "hypro::ConstraintSetT< N >", "classhypro_1_1ConstraintSetT.html", null ],
     [ "hypro::ConstraintSetT< Number >", "classhypro_1_1ConstraintSetT.html", null ],
+    [ "context", null, [
+      [ "hypro::z3Context", "classhypro_1_1z3Context.html", null ]
+    ] ],
     [ "hypro::ContinuousSystem< Number >", "classhypro_1_1ContinuousSystem.html", null ],
     [ "hypro::Converter< Number >", "classhypro_1_1Converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1ConvexHull.html", null ],
@@ -86,7 +90,6 @@ var hierarchy =
     [ "hypro::flowIsDiscreteVisitor", "structhypro_1_1flowIsDiscreteVisitor.html", null ],
     [ "hypro::flowIsTimedVisitor", "structhypro_1_1flowIsTimedVisitor.html", null ],
     [ "hypro::Flowpipe< State >", "classhypro_1_1Flowpipe.html", null ],
-    [ "hypro::Flowpipe< hypro::State >", "classhypro_1_1Flowpipe.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1Flowpipe.html", null ],
     [ "Flowpipe_segment", "structFlowpipe__segment.html", null ],
     [ "hypro::flowTypeVisitor", "structhypro_1_1flowTypeVisitor.html", null ],
@@ -149,7 +152,6 @@ var hierarchy =
     [ "hypro::GeometricObject< StatisticWrapper< Representation > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::StatisticWrapper< Representation >", "classhypro_1_1StatisticWrapper.html", null ]
     ] ],
-    [ "hypro::detail::getParametersVisitor", "structhypro_1_1detail_1_1getParametersVisitor.html", null ],
     [ "hypro::glpk_context", "structhypro_1_1glpk__context.html", null ],
     [ "hypro::plotting::gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", null ],
     [ "hypro::Grid< Number >", "classhypro_1_1Grid.html", null ],
@@ -158,7 +160,6 @@ var hierarchy =
     [ "std::hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::AffineTransformation< Number > >", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Cacheable< Content > >", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", null ],
-    [ "std::hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::IntervalAssignment< Number > >", "structstd_1_1hash_3_01hypro_1_1IntervalAssignment_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::linearFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4.html", null ],
@@ -233,9 +234,7 @@ var hierarchy =
           [ "hypro::timedTickTimeEvolutionHandler< State >", "classhypro_1_1timedTickTimeEvolutionHandler.html", null ]
         ] ],
         [ "hypro::rectangularTimeEvolutionHandler< State >", "classhypro_1_1rectangularTimeEvolutionHandler.html", null ]
-      ] ],
-      [ "hypro::IFirstSegmentHandler< hypro::State >", "classhypro_1_1IFirstSegmentHandler.html", null ],
-      [ "hypro::IGuardHandler< hypro::State >", "classhypro_1_1IGuardHandler.html", null ]
+      ] ]
     ] ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", null ],
     [ "hypro::HybridSystemLexer::Initializer", "structhypro_1_1HybridSystemLexer_1_1Initializer.html", null ],
@@ -271,12 +270,20 @@ var hierarchy =
     [ "hypro::LockableObjectWrapper< Object >", "classhypro_1_1LockableObjectWrapper.html", null ],
     [ "hypro::locPtrComp< Number >", "structhypro_1_1locPtrComp.html", null ],
     [ "hypro::LRUCache< Key, Value >", "classhypro_1_1LRUCache.html", null ],
+    [ "hypro::LRUCache< hypro::Cacheable< matrix_t< Number > >, matrix_t< Number > >", "classhypro_1_1LRUCache.html", null ],
+    [ "hypro::LRUCache< hypro::Cacheable< vector_t< Number > >, vector_t< Number > >", "classhypro_1_1LRUCache.html", null ],
+    [ "Manager", null, [
+      [ "smtrat::SimplexSolver", "classsmtrat_1_1SimplexSolver.html", null ]
+    ] ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::nodeUpdater< State >", "structhypro_1_1nodeUpdater.html", null ],
     [ "hypro::NoneAssignment", "structhypro_1_1NoneAssignment.html", null ],
     [ "hypro::detail::nth_element_impl< I, T, Ts >", "structhypro_1_1detail_1_1nth__element__impl.html", null ],
     [ "hypro::detail::nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01T_00_01Ts_8_8_8_01_4.html", null ],
     [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::statistics::OperationCounter", "structhypro_1_1statistics_1_1OperationCounter.html", [
+      [ "hypro::statistics::AtomicOperationCounter", "structhypro_1_1statistics_1_1AtomicOperationCounter.html", null ]
+    ] ],
     [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
     [ "hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
@@ -494,14 +501,15 @@ var hierarchy =
     [ "hypro::PrincipalComponentAnalysis< Number >", "classhypro_1_1PrincipalComponentAnalysis.html", null ],
     [ "hypro::projectionContent< Number, Setting >", "structhypro_1_1projectionContent.html", null ],
     [ "hypro::Range< Number >", "classhypro_1_1Range.html", null ],
+    [ "hypro::reachability::Reach< Number, ReacherSettings, State >", "classhypro_1_1reachability_1_1Reach.html", null ],
     [ "hypro::ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", null ],
+    [ "hypro::reachability::ReachSettings", "structhypro_1_1reachability_1_1ReachSettings.html", [
+      [ "hypro::reachability::ReachQuiet", "structhypro_1_1reachability_1_1ReachQuiet.html", null ]
+    ] ],
     [ "hypro::ReachTree< State >", "classhypro_1_1ReachTree.html", null ],
-    [ "hypro::ReachTree< hypro::State >", "classhypro_1_1ReachTree.html", null ],
     [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangularFlow.html", null ],
     [ "hypro::rectangularFlow< N >", "classhypro_1_1rectangularFlow.html", null ],
     [ "hypro::RefinementSetting< State >", "structhypro_1_1RefinementSetting.html", null ],
-    [ "hypro::RefinementSetting< hypro::hypro::State >", "structhypro_1_1RefinementSetting.html", null ],
-    [ "hypro::RefinementSetting< hypro::State >", "structhypro_1_1RefinementSetting.html", null ],
     [ "hypro::Reset< Number >", "classhypro_1_1Reset.html", null ],
     [ "hypro::Reset< N >", "classhypro_1_1Reset.html", null ],
     [ "hypro::detail::ResetVisitor< ReturnType, Function >", "structhypro_1_1detail_1_1ResetVisitor.html", null ],
@@ -538,20 +546,13 @@ var hierarchy =
       [ "hypro::NodeManager< State >", "classhypro_1_1NodeManager.html", null ],
       [ "hypro::Plotter< Number >", "classhypro_1_1Plotter.html", null ],
       [ "hypro::SettingsProvider< State >", "classhypro_1_1SettingsProvider.html", null ],
+      [ "hypro::statistics::Statistician", "classhypro_1_1statistics_1_1Statistician.html", null ],
       [ "hypro::VariablePool", "classhypro_1_1VariablePool.html", null ]
     ] ],
     [ "hypro::Spinlock", "classhypro_1_1Spinlock.html", null ],
     [ "hypro::STallValues< Number >", "structhypro_1_1STallValues.html", null ],
-    [ "hypro::State< Number, Representation, Rargs >", "classhypro_1_1State.html", null ],
     [ "hypro::STflowpipeSegment< Number >", "structhypro_1_1STflowpipeSegment.html", null ],
     [ "hypro::STindependentFunct< Number >", "structhypro_1_1STindependentFunct.html", null ],
-    [ "hypro::Strategy< StateType >", "classhypro_1_1Strategy.html", null ],
-    [ "hypro::Strategy< hypro::State >", "classhypro_1_1Strategy.html", null ],
-    [ "hypro::detail::strategyConversionVisitor< State >", "structhypro_1_1detail_1_1strategyConversionVisitor.html", null ],
-    [ "hypro::StrategyNode< Representation >", "structhypro_1_1StrategyNode.html", null ],
-    [ "hypro::StrategyParameters", "structhypro_1_1StrategyParameters.html", null ],
-    [ "hypro::detail::StrategyVariant< T >", "structhypro_1_1detail_1_1StrategyVariant.html", null ],
-    [ "hypro::detail::StrategyVariant< std::variant< Ts... > >", "structhypro_1_1detail_1_1StrategyVariant_3_01std_1_1variant_3_01Ts_8_8_8_01_4_01_4.html", null ],
     [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1SupportFunctionContent.html", [
       [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ]
@@ -580,12 +581,6 @@ var hierarchy =
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
     [ "hypro::Transition< N >", "classhypro_1_1Transition.html", null ],
     [ "hypro::TreeNode< Data >", "classhypro_1_1TreeNode.html", null ],
-    [ "hypro::TreeNode< ReachTreeNode< hypro::hypro::State > >", "classhypro_1_1TreeNode.html", [
-      [ "hypro::ReachTreeNode< hypro::hypro::State >", "classhypro_1_1ReachTreeNode.html", null ]
-    ] ],
-    [ "hypro::TreeNode< ReachTreeNode< hypro::State > >", "classhypro_1_1TreeNode.html", [
-      [ "hypro::ReachTreeNode< hypro::State >", "classhypro_1_1ReachTreeNode.html", null ]
-    ] ],
     [ "hypro::TreeNode< ReachTreeNode< State > >", "classhypro_1_1TreeNode.html", [
       [ "hypro::ReachTreeNode< State >", "classhypro_1_1ReachTreeNode.html", null ]
     ] ],
@@ -610,7 +605,8 @@ var hierarchy =
     [ "hypro::WorkQueueDefaultSetting", "structhypro_1_1WorkQueueDefaultSetting.html", null ],
     [ "hypro::WorkQueueManager< Workable >", "classhypro_1_1WorkQueueManager.html", null ],
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1WorkQueueT.html", null ],
-    [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< hypro::State > > >", "classhypro_1_1WorkQueueT.html", null ],
+    [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< State > > >", "classhypro_1_1WorkQueueT.html", null ],
+    [ "hypro::WorkQueueT< TaskTypePtr >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< Workable >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ]
 ];

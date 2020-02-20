@@ -14,7 +14,6 @@ var searchData=
   ['flowisdiscretevisitor',['flowIsDiscreteVisitor',['../structhypro_1_1flowIsDiscreteVisitor.html',1,'hypro']]],
   ['flowistimedvisitor',['flowIsTimedVisitor',['../structhypro_1_1flowIsTimedVisitor.html',1,'hypro']]],
   ['flowpipe',['Flowpipe',['../classhypro_1_1Flowpipe.html',1,'hypro']]],
-  ['flowpipe_3c_20hypro_3a_3astate_20_3e',['Flowpipe&lt; hypro::State &gt;',['../classhypro_1_1Flowpipe.html',1,'hypro']]],
   ['flowpipe_3c_20number_20_3e',['Flowpipe&lt; Number &gt;',['../classhypro_1_1Flowpipe.html',1,'hypro']]],
   ['flowpipe_5fsegment',['Flowpipe_segment',['../structFlowpipe__segment.html',1,'']]],
   ['flowtypevisitor',['flowTypeVisitor',['../structhypro_1_1flowTypeVisitor.html',1,'hypro']]],

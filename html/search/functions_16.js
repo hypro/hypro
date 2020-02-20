@@ -7,7 +7,7 @@ var searchData=
   ['_7eboxt',['~BoxT',['../classhypro_1_1BoxT.html#a0ed7dccdf853858f4b2b544372f8169f',1,'hypro::BoxT']]],
   ['_7ecifexprvisitor',['~CIFExprVisitor',['../classhypro_1_1CIFExprVisitor.html#a878539d7738ae5a527cb22db2f713083',1,'hypro::CIFExprVisitor']]],
   ['_7eciflocvisitor',['~CIFLocVisitor',['../classhypro_1_1CIFLocVisitor.html#a71cb18f50bc60000db3c5fd0f887dc15',1,'hypro::CIFLocVisitor']]],
-  ['_7econdition',['~Condition',['../classhypro_1_1Condition.html#a5d865330f46ae7b557433a3d7e5bc7d3',1,'hypro::Condition']]],
+  ['_7eclp_5fcontext',['~clp_context',['../structhypro_1_1clp__context.html#a34a3b3919e971425010d89904409dcfc',1,'hypro::clp_context']]],
   ['_7econe',['~Cone',['../classhypro_1_1Cone.html#aae93c03e8e717776304111df09e0c2ff',1,'hypro::Cone']]],
   ['_7econstraintsett',['~ConstraintSetT',['../classhypro_1_1ConstraintSetT.html#ae6b2b297223de43278e6e8a98caa7c8c',1,'hypro::ConstraintSetT']]],
   ['_7econtextbasedreachabilityworker',['~ContextBasedReachabilityWorker',['../classhypro_1_1ContextBasedReachabilityWorker.html#aa3d701dd0dd099e90c25d2a6cb81348d',1,'hypro::ContextBasedReachabilityWorker']]],
@@ -57,7 +57,7 @@ var searchData=
   ['_7elabel',['~Label',['../classhypro_1_1Label.html#a7b2e35f347efdf58a9f8347f4c59b88e',1,'hypro::Label']]],
   ['_7eleaf',['~Leaf',['../classhypro_1_1Leaf.html#af5116af0eb0a02ee966052b3c330a94a',1,'hypro::Leaf']]],
   ['_7elinearflow',['~linearFlow',['../classhypro_1_1linearFlow.html#adb81dcf1eb42418fc3a62ef6c0ff0f50',1,'hypro::linearFlow']]],
-  ['_7elintrafoparameters',['~lintrafoParameters',['../structhypro_1_1lintrafoParameters.html#a9bb556aaf89b8f05b548047c90a227f2',1,'hypro::lintrafoParameters::~lintrafoParameters()'],['../structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e',1,'hypro::LinTrafoParameters::~LinTrafoParameters()']]],
+  ['_7elintrafoparameters',['~LinTrafoParameters',['../structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e',1,'hypro::LinTrafoParameters::~LinTrafoParameters()'],['../structhypro_1_1lintrafoParameters.html#a9bb556aaf89b8f05b548047c90a227f2',1,'hypro::lintrafoParameters::~lintrafoParameters()']]],
   ['_7elocation',['~Location',['../classhypro_1_1Location.html#ac6bc63470680fc9f68e250e74557d8d0',1,'hypro::Location']]],
   ['_7elockableobjectwrapper',['~LockableObjectWrapper',['../classhypro_1_1LockableObjectWrapper.html#abb1759c29d559f70369dba62ce27c551',1,'hypro::LockableObjectWrapper']]],
   ['_7elticontext',['~LTIContext',['../classhypro_1_1LTIContext.html#ae0a3c6d6ece1578168cd85c3ce2b60ac',1,'hypro::LTIContext']]],
@@ -81,6 +81,7 @@ var searchData=
   ['_7erootgrownode',['~RootGrowNode',['../classhypro_1_1RootGrowNode.html#a914b13b2b55f2905389e5c510a1cde1a',1,'hypro::RootGrowNode']]],
   ['_7escaleop',['~ScaleOp',['../classhypro_1_1ScaleOp.html#a88d4914a84914b02a21ce2d313f28c80',1,'hypro::ScaleOp']]],
   ['_7escopedlock',['~ScopedLock',['../classhypro_1_1ScopedLock.html#a525a82077412d462c5db837a9d3de8ae',1,'hypro::ScopedLock']]],
+  ['_7estatistician',['~Statistician',['../classhypro_1_1statistics_1_1Statistician.html#a08984d2b7fd321674d2e165dffc0c6cd',1,'hypro::statistics::Statistician']]],
   ['_7esumop',['~SumOp',['../classhypro_1_1SumOp.html#a38526448e7e1721b7533bc01b0a38585',1,'hypro::SumOp']]],
   ['_7esupportfunctioncontent',['~SupportFunctionContent',['../classhypro_1_1SupportFunctionContent.html#a995fd3443a8f019484cbd3bb182cc85d',1,'hypro::SupportFunctionContent']]],
   ['_7esupportfunctionnewt',['~SupportFunctionNewT',['../classhypro_1_1SupportFunctionNewT.html#a408d0430af3d4ceef395c8fc0c67e53f',1,'hypro::SupportFunctionNewT']]],
@@ -98,5 +99,6 @@ var searchData=
   ['_7evertexenumeration',['~VertexEnumeration',['../classhypro_1_1VertexEnumeration.html#a87669add9f44f547881dacb87676f0dd',1,'hypro::VertexEnumeration']]],
   ['_7evpolytopet',['~VPolytopeT',['../classhypro_1_1VPolytopeT.html#a2c0ebca0e6512fd06572b8c4d16822cf',1,'hypro::VPolytopeT']]],
   ['_7eworkqueuet',['~WorkQueueT',['../classhypro_1_1WorkQueueT.html#a57ee87bd75ed2aa560fc67a9c979f245',1,'hypro::WorkQueueT']]],
+  ['_7ez3context',['~z3Context',['../classhypro_1_1z3Context.html#aa3400e632d65e8b2581a88881d05c4b7',1,'hypro::z3Context']]],
   ['_7ezonotopet',['~ZonotopeT',['../classhypro_1_1ZonotopeT.html#a763356f7149b72b641ea2895aeafe0e7',1,'hypro::ZonotopeT']]]
 ];
