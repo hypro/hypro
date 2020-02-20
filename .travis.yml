@@ -29,6 +29,11 @@ notifications:
 
 sudo: required
 
+# caching
+cache:
+  directories:
+    - carl
+
 
 addons:
   apt:
