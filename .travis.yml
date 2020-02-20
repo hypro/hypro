@@ -56,7 +56,7 @@ matrix:
           packages: [*packages_base, g++-8, lcov]
       env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-8 CXX=g++-8
     - os: linux
-      compiler: g++-8
+      compiler: g++-9
       addons:
         apt:
           sources: [*sources_base]
@@ -94,6 +94,20 @@ matrix:
           sources: [*sources_base, llvm-toolchain-xenial-8]
           packages: [*packages_base, clang-8 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-8
+    - os: linux
+      compiler: clang++-9
+      addons:
+        apt:
+          sources: [*sources_base, llvm-toolchain-xenial-9]
+          packages: [*packages_base, clang-9 libc++abi-dev libstdc++-9-dev]
+      env: COMPILER=clang++-9
+    - os: linux
+      compiler: clang++-10
+      addons:
+        apt:
+          sources: [*sources_base, llvm-toolchain-xenial-10]
+          packages: [*packages_base, clang-10 libc++abi-dev libstdc++-10-dev]
+      env: COMPILER=clang++-10
     - os: osx
       osx_image: xcode10.1
       addons:
