@@ -90,7 +90,7 @@ template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>> &points )
 	: mHPlanes()
 	, mDimension( 0 )
-	, mEmpty( TRIBOOL::NSET )
+	, mEmpty( points.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE )
 	, mNonRedundant( true ) {
 	TRACE( "hypro.representations.HPolytope", "Construct from vertices: " );
 #ifdef HYPRO_LOGGING
@@ -143,21 +143,14 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		int effectiveDim = effectiveDimension( coordinates );
 		assert( effectiveDim >= 0 );
 
-		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned( effectiveDim ) < mDimension ) {
 			TRACE( "hypro.representations.HPolytope", "Points size: " << points.size() );
 			TRACE( "hypro.representations.HPolytope", "Affine dimension: " << effectiveDim );
 			// get common plane
-			std::vector<vector_t<Number>> vectorsInPlane;
-			//std::cout << "first point: " << *points.begin() << std::endl;
-			for ( unsigned i = 1; i < points.size(); ++i ) {
-				vectorsInPlane.emplace_back( points[i].rawCoordinates() - points[0].rawCoordinates() );
-			}
-			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal( vectorsInPlane );
-			Number planeOffset = Halfspace<Number>::computePlaneOffset( planeNormal, points[0] );
+			Halfspace<Number> commonPlane{points};
 
-			TRACE( "hypro.representations.HPolytope", "Shared plane normal: " << planeNormal << ", plane offset: " << planeOffset );
+			TRACE( "hypro.representations.HPolytope", "Common plane: " << commonPlane << "." );
 
 			// project on lower dimension.
 			// Use dimensions with largest coordinate range for improved stability.
@@ -223,10 +216,13 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 
 			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
 			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
-			projectedPoly.insert( Halfspace<Number>( planeNormal, planeOffset ) );
-			projectedPoly.insert( Halfspace<Number>( -planeNormal, -planeOffset ) );
+			projectedPoly.insert( commonPlane );
+			projectedPoly.insert( commonPlane.invert() );
 
 			TRACE( "hypro.representations.HPolytope", "After adding constraints " << projectedPoly );
+
+			// We know the poly is not empty - avoid costly calls
+			projectedPoly.mEmpty = TRIBOOL::FALSE;
 
 			*this = projectedPoly;
 
