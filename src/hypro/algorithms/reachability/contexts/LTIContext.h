@@ -24,12 +24,13 @@ namespace hypro {
 template <typename State>
 class LTIContext : public IContext {
 	using Number = typename State::NumberType;
+	using TaskType = std::shared_ptr<Task<State>>;
 
   protected:
 	std::shared_ptr<Task<State>> mTask;
 	Strategy<State> mStrategy;
-	WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
-	WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
+	WorkQueue<TaskType>* mLocalQueue;
+	WorkQueue<TaskType>* mLocalCEXQueue;
 	Flowpipe<State>& mLocalSegments;
 	ReachabilitySettings mSettings;
 
@@ -60,10 +61,10 @@ class LTIContext : public IContext {
   public:
 	LTIContext() = delete;
 	~LTIContext() {}
-	LTIContext( const std::shared_ptr<Task<State>>& t,
+	LTIContext( const TaskType& t,
 				const Strategy<State>& strat,
-				WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-				WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+				WorkQueue<TaskType>* localQueue,
+				WorkQueue<TaskType>* localCEXQueue,
 				Flowpipe<State>& localSegments,
 				ReachabilitySettings& settings );
 

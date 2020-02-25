@@ -18,6 +18,7 @@ namespace hypro {
 template <typename State>
 class ContextBasedReachabilityWorker : public IWorker<std::shared_ptr<Task<State>>, State> {
 	using Number = typename State::NumberType;
+	using TaskType = std::shared_ptr<Task<State>>;
 
   public:
 	ContextBasedReachabilityWorker( const ReachabilitySettings& settings )
@@ -27,19 +28,19 @@ class ContextBasedReachabilityWorker : public IWorker<std::shared_ptr<Task<State
 	~ContextBasedReachabilityWorker() {
 	}
 
-	void processTask( const std::shared_ptr<Task<State>>& t,
+	void processTask( const TaskType& t,
 					  const Strategy<State>& strat,
-					  WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-					  WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+					  WorkQueue<TaskType>* localQueue,
+					  WorkQueue<TaskType>* localCEXQueue,
 					  Flowpipe<State>& localSegments );
 
-	void computeForwardReachability( const std::shared_ptr<Task<State>>& task,
+	void computeForwardReachability( const TaskType& task,
 									 const Strategy<State>& strat,
-									 WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-									 WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+									 WorkQueue<TaskType>* localQueue,
+									 WorkQueue<TaskType>* localCEXQueue,
 									 Flowpipe<State>& localSegments );
 
-	bool isValidTask( const std::shared_ptr<Task<State>>& task, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue );
+	bool isValidTask( const TaskType& task, WorkQueue<TaskType>* localCEXQueue );
 
   private:
 	int mWorkerId;
