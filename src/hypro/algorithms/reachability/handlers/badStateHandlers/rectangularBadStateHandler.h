@@ -7,7 +7,7 @@ class rectangularBadStateHandler : public IBadStateHandler {
 	using Number = typename State::NumberType;
 
   protected:
-	State* mState;
+	State& mState;
 	size_t mIndex;
 	CONTAINMENT mContainment = CONTAINMENT::NO;
 	bool mNoBadStates = false;
@@ -15,7 +15,7 @@ class rectangularBadStateHandler : public IBadStateHandler {
 
   public:
 	rectangularBadStateHandler() = delete;
-	rectangularBadStateHandler( State* state, size_t index )
+	rectangularBadStateHandler( State& state, size_t index )
 		: mState( state )
 		, mIndex( index ) {}
 
