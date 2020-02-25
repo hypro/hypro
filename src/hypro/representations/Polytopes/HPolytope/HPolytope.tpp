@@ -104,12 +104,30 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
         }
 
         //Initialize and run quickhull
-        Quickhull<Number> qh(qhInputs, mDimension);
+        Quickhull<mpq_class> qh(qhInputs, mDimension);
         qh.compute();
 
         //Convert resulting facets into halfspaces
         for(auto& facet : qh.getFacets()) {
-            mHPlanes.emplace_back(facet.mNormal.template cast<Number>(), carl::convert<mpq_class, Number>(facet.mOffset));
+
+			if constexpr(!is_exact<Number>) {
+				vector_t<Number> normal{mDimension};
+				Number offset = 0;
+
+				for(size_t i = 0; i < mDimension; ++i) {
+					normal[i] = carl::convert<mpq_class, Number>(facet.mNormal[i]);
+				}
+				
+				ScopedRoundingMode mode(FE_UPWARD);
+				for(auto const& point : points) {
+					Number dotProd = point.rawCoordinates().dot(normal);
+					offset = std::max(offset, dotProd);
+				}
+
+				mHPlanes.emplace_back(normal, offset);
+			} else {
+				mHPlanes.emplace_back(facet.mNormal, facet.mOffset);
+			}
         }
 
 		//Assert containment
