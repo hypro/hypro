@@ -50,73 +50,93 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>
 
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
-	// calculate all possible Halfspace intersections
-	TRACE( "hypro.representations.vpolytope", "Construct from " << _constraints << " <= " << _constants );
-	//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
-	assert( _constraints.rows() == _constants.rows() );
-	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
-	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
-	vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
-	std::set<vector_t<Number>> possibleVertices;
-	std::vector<std::size_t> permutation;
-	while ( !permutator.end() ) {
-		permutation = permutator();
-		unsigned rowCount = 0;
-		// std::cout << "Intersect :" << std::endl;
-		for ( const auto &rowIndex : permutation ) {
-			// std::cout << _constraints.row(rowIndex) << " <= " <<
-			// _constants(rowIndex) << std::endl;
-			assert( rowCount < _constraints.cols() );
-			intersection.row( rowCount ) = _constraints.row( rowIndex );
-			intersectionConstants( rowCount ) = _constants( rowIndex );
-			++rowCount;
+	
+	if constexpr (is_exact<Number>) {
+		auto dimension = _constraints.cols();
+		typename QuickIntersection<Number>::pointVector_t inputHalfspaces;
+
+		for(int i = 0; i < _constraints.rows(); ++i) {
+			inputHalfspaces.emplace_back(dimension + 1);
+			inputHalfspaces.back().head(dimension) = _constraints.row(i);
+			inputHalfspaces.back()[dimension] = -_constants[i];
 		}
-		// check if rank is full
-		if ( intersection.fullPivLu().rank() == intersection.cols() ) {
-			vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
-			assert( vertex.rows() == _constraints.cols() );
-			//assert(insidePlanes(vertex, intersection, intersectionConstants));
-			// avoid duplicate entries
-			if ( std::find( possibleVertices.begin(), possibleVertices.end(), vertex ) == possibleVertices.end() ) {
-				possibleVertices.emplace( std::move( vertex ) );
+
+		QuickIntersection<Number> qInt{inputHalfspaces, dimension};
+		qInt.compute();
+
+		for(auto& facet : qInt.getFacets()) {
+			facet.mNormal /= -facet.mOffset;
+			mVertices.emplace_back(Point(std::move(facet.mNormal)));
+		}
+	} else {
+		// calculate all possible Halfspace intersections
+		TRACE( "hypro.representations.vpolytope", "Construct from " << _constraints << " <= " << _constants );
+		//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
+		assert( _constraints.rows() == _constants.rows() );
+		Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
+		matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
+		vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
+		std::set<vector_t<Number>> possibleVertices;
+		std::vector<std::size_t> permutation;
+		while ( !permutator.end() ) {
+			permutation = permutator();
+			unsigned rowCount = 0;
+			// std::cout << "Intersect :" << std::endl;
+			for ( const auto &rowIndex : permutation ) {
+				// std::cout << _constraints.row(rowIndex) << " <= " <<
+				// _constants(rowIndex) << std::endl;
+				assert( rowCount < _constraints.cols() );
+				intersection.row( rowCount ) = _constraints.row( rowIndex );
+				intersectionConstants( rowCount ) = _constants( rowIndex );
+				++rowCount;
+			}
+			// check if rank is full
+			if ( intersection.fullPivLu().rank() == intersection.cols() ) {
+				vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
+				assert( vertex.rows() == _constraints.cols() );
+				//assert(insidePlanes(vertex, intersection, intersectionConstants));
+				// avoid duplicate entries
+				if ( std::find( possibleVertices.begin(), possibleVertices.end(), vertex ) == possibleVertices.end() ) {
+					possibleVertices.emplace( std::move( vertex ) );
+				}
 			}
 		}
-	}
-	TRACE( "hypro.representations.vpolytope", ": Computed " << possibleVertices.size() << " possible vertices." );
+		TRACE( "hypro.representations.vpolytope", ": Computed " << possibleVertices.size() << " possible vertices." );
 
-	// check if vertices are true vertices (i.e. they fulfill all constraints)
-	for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
-		// std::cout<<__func__ << " : " <<__LINE__ << " current position : " << i <<
-		// std::endl;
-		// std::cout<<__func__ << " : " <<__LINE__ << "number of vertices : " <<
-		// possibleVertices.size() << std::endl;
-		bool deleted = false;
-		for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
-			Number res = vertex->dot( _constraints.row( rowIndex ) );
-			if ( !carl::AlmostEqual2sComplement( res, _constants( rowIndex ), default_double_comparison_ulps ) && res > _constants( rowIndex ) ) {
-				vertex = possibleVertices.erase( vertex );
-				deleted = true;
-				break;
+		// check if vertices are true vertices (i.e. they fulfill all constraints)
+		for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
+			// std::cout<<__func__ << " : " <<__LINE__ << " current position : " << i <<
+			// std::endl;
+			// std::cout<<__func__ << " : " <<__LINE__ << "number of vertices : " <<
+			// possibleVertices.size() << std::endl;
+			bool deleted = false;
+			for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
+				Number res = vertex->dot( _constraints.row( rowIndex ) );
+				if ( !carl::AlmostEqual2sComplement( res, _constants( rowIndex ), default_double_comparison_ulps ) && res > _constants( rowIndex ) ) {
+					vertex = possibleVertices.erase( vertex );
+					deleted = true;
+					break;
+				}
+			}
+			if ( !deleted ) {
+				++vertex;
 			}
 		}
-		if ( !deleted ) {
-			++vertex;
+
+		TRACE( "hypro.representations.vpolytope", "Deleted vertices. Remaining " << possibleVertices.size() << " vertices." );
+
+		// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+		// finish initialization
+		for ( const auto &point : possibleVertices ) {
+			mVertices.emplace_back( point );
+			mNeighbors.push_back( std::set<unsigned>() );
+			// std::cout << "Real vertex " << point.transpose() << std::endl;
 		}
+		// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+		mReduced = false;
+
+		//reduceNumberRepresentation();
 	}
-
-	TRACE( "hypro.representations.vpolytope", "Deleted vertices. Remaining " << possibleVertices.size() << " vertices." );
-
-	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	// finish initialization
-	for ( const auto &point : possibleVertices ) {
-		mVertices.emplace_back( point );
-		mNeighbors.push_back( std::set<unsigned>() );
-		// std::cout << "Real vertex " << point.transpose() << std::endl;
-	}
-	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-	mReduced = false;
-
-	//reduceNumberRepresentation();
 }
 
 //template<typename Number, typename Converter, typename S>

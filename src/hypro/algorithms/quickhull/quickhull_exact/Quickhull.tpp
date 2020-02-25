@@ -1,7 +1,15 @@
 namespace hypro {
     template<typename Number, bool Euclidian>
-    ExactQuickhull<Number, Euclidian>::Quickhull(pointVector_t& points, dimension_t dimension) 
-    : points(points), dimension(dimension), fSpace(points, dimension) {}
+    ExactQuickhull<Number, Euclidian>::QuickhullAlgorithm(pointVector_t& points, dimension_t dimension) 
+    : points(points), dimension(dimension), fSpace(points, dimension) {
+        assert(!points.empty());
+        if constexpr(Euclidian) {
+            assert(points[0].rows() == dimension);
+        } else {
+            assert(points[0].rows() == dimension + 1);
+        }
+
+    }
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::compute() {
@@ -294,8 +302,7 @@ namespace hypro {
         });
 
         //TODO I have no idea how the 'Euclidian' template argument of Quickhull us inferred here.
-        Quickhull qh{reducedPoints, dimension - 1};
-        static_assert(std::is_same_v<decltype(qh), ExactQuickhull<Number, Euclidian>>);
+        QuickhullAlgorithm<Number, Euclidian> qh{reducedPoints, dimension - 1};
 
         qh.compute();
 

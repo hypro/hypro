@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output rod_reactor
-  max jumps 1
+  max jumps 5
   print on
  }
 

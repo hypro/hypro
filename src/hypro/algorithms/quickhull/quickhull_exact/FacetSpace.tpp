@@ -206,19 +206,16 @@ namespace hypro {
     void ExactQuickhull<Number, Euclidian>::FacetSpace::compressVector() {
         size_t newSize = facets.size() - deletedPositions.size();
 
-        assert(newSize > 0);
+        assert(newSize > 0 || !Euclidian);
 
-        size_t freePosInd = deletedPositions.size() - 1;
+        facetVector_t newVec;
 
-        while(facets.size() > newSize) {
-            size_t freePos = deletedPositions[freePosInd];
-
-            if(freePos == facets.size() - 1) continue;
-            facets[freePos] = std::move(facets.back());
-            facets.pop_back();
-
-            freePosInd -= 1;
+        for(size_t i = 0; i < facets.size(); ++i) {
+            if(std::find(deletedPositions.begin(), deletedPositions.end(), i) != deletedPositions.end()) continue;
+            newVec.emplace_back(std::move(facets[i]));
         }
+
+        facets = std::move(newVec);
 
         deletedPositions.clear();
     }

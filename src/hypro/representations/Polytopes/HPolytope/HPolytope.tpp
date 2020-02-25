@@ -96,11 +96,11 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		mDimension = points.front().dimension();
 
 		//Get raw data for quickhull
-        std::vector<vector_t<Number>> qhInputs{};
+        std::vector<vector_t<mpq_class>> qhInputs{};
 
         for(Point<Number> const& point : points) {
             vector_t<Number> v = point.rawCoordinates();
-            qhInputs.push_back(v);
+            qhInputs.push_back(v.template cast<mpq_class>());
         }
 
         //Initialize and run quickhull
@@ -109,7 +109,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 
         //Convert resulting facets into halfspaces
         for(auto& facet : qh.getFacets()) {
-            mHPlanes.emplace_back(facet.mNormal, facet.offset());
+            mHPlanes.emplace_back(facet.mNormal.template cast<Number>(), carl::convert<mpq_class, Number>(facet.mOffset));
         }
 
 		//Assert containment

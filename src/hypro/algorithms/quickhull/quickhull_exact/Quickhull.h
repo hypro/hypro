@@ -7,12 +7,16 @@
 #include "../number_traits.h"
 
 namespace hypro {
+
+    template<typename Number, bool Euclidian>
+    using ExactQuickhull = QuickhullAlgorithm<Number, Euclidian, EnableIfExact<Number>>;
+
     /**
      * Represents an exact quickhull computation on a set of input vertices.
      * @tparam Number The Number type to be used.
      */
     template<typename Number, bool Euclidian>
-    class Quickhull<Number, Euclidian, EnableIfExact<Number>> {
+    class QuickhullAlgorithm<Number, Euclidian, EnableIfExact<Number>> {
     public:
         // Nested classes
         struct Facet;
@@ -39,7 +43,7 @@ namespace hypro {
         // point_t baryCenter;
 
     public:
-        Quickhull(pointVector_t& inputVertices, size_t dim);
+        QuickhullAlgorithm(pointVector_t& inputVertices, dimension_t dim);
         void compute();
 
         facetVector_t& getFacets();

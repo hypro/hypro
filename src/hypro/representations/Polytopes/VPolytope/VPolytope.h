@@ -15,6 +15,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../Cone.h"
 #include "VPolytopeSetting.h"
 #include "util.h"
+#include "algorithms/quickhull/number_traits.h"
 
 #include <cassert>
 #include <set>
@@ -41,8 +42,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	bool mReduced;
 
 	std::vector<std::set<unsigned>> mNeighbors;
-
-	constexpr static bool newHalfspaceIntersect = false;
 
   public:
 	/**
@@ -74,8 +73,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, 
 	 * @param[in]  _constants    The constants.
 	 */
 	VPolytopeT( const matrix_t<Number>& _constraints, const vector_t<Number> _constants );
-
-	void oldHalfspaceIntersect(const matrix_t<Number> &_constraints, const vector_t<Number> _constants);
 
 	/**
 	 * @brief      Copy constructor.
