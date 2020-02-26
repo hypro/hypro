@@ -142,7 +142,7 @@ bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state
 	bool transitionEnabled = false;
 	//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 	for ( auto& transition : state.getLocation()->getTransitions() ) {
-		//DEBUG( "hypro.reacher", "Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " (@ " << transition << ")." );
+		//DEBUG( "hypro.reacher", "Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		// handle time-triggered transitions
 		if ( intersectGuard( transition.get(), state, guardSatisfyingState ) ) {
 			INFO( "hypro.reacher", "hybrid transition enabled" );

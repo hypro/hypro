@@ -23,6 +23,8 @@ struct AffineTransformation {
 
 	AffineTransformation( const ConstraintSetT<Number>& r )
 		: mTransformation( r ) {}
+	AffineTransformation( const matrix_t<Number>& linearTransformation, const vector_t<Number>& translation )
+		: mTransformation( ConstraintSetT<Number>( linearTransformation, translation ) ) {}
 
 	static ResetType type() { return ResetType::affine; }
 
