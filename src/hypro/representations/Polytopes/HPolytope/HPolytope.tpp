@@ -90,7 +90,7 @@ template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>> &points )
 	: mHPlanes()
 	, mDimension( 0 )
-	, mEmpty( TRIBOOL::NSET )
+	, mEmpty( points.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE )
 	, mNonRedundant( true ) {
 
 		if constexpr(is_exact<Number>) {

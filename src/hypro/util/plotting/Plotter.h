@@ -210,11 +210,18 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
 	void clear();
 
+	/**
+	 * @brief Implementation of Graham's scan.
+	 *
+	 * @param _points A vector of 2-dimensional points.
+	 * @return std::vector<Point<Number>> An ordered vector of 2-dimensional points (counterclockwise).
+	 */
+	static std::vector<Point<Number>> grahamScan( const std::vector<Point<Number>>& _points );
+
   private:
 	// auxiliary functions
 	void init( const std::string& _filename );
 	void writeGnuplot() const;
-	static std::vector<Point<Number>> grahamScan( const std::vector<Point<Number>>& _points );
 	static bool isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c );
 	void prepareObjects() const;
 };

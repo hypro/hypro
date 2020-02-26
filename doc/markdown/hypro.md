@@ -11,6 +11,8 @@ Additional features implemented in HyPro are presented in the section [Features]
 
 Information about the provided [utility functions](@ref utilFunc) can be found in the corresponding section.
 
+Section [examples](@ref examples) gives a short description about the available examples shipped with HyPro and their intention.
+
 ### Contact
 
 Please note that this documentation is under construction - if you have requests or further questions, please do not hesitate to contact us on github:

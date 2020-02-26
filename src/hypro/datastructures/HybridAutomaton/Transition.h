@@ -20,6 +20,7 @@
 namespace hypro {
 enum Aggregation { none = 0,
 				   boxAgg,
+				   clustering,
 				   parallelotopeAgg };
 
 template <typename Number>
@@ -37,6 +38,7 @@ class Transition {
 	Condition<Number> mGuard;							  /// Guard condition enabling the transition if satisfied.
 	Reset<Number> mReset;								  /// Reset function.
 	Aggregation mAggregationSetting = Aggregation::none;  /// Aggregation settings.
+	std::size_t mClustering = 0;						  /// Clustering: maximal number of discrete successors.
 	bool mUrgent = false;								  /// Flag if transition is urgent.
 	Number mTriggerTime = Number( -1 );					  /// Trigger-time: if positive acts as an additional guard.
 	std::vector<Label> mLabels = std::vector<Label>();
@@ -120,6 +122,7 @@ class Transition {
 	const Condition<Number>& getGuard() const { return mGuard; }
 	const Reset<Number>& getReset() const { return mReset; }
 	Aggregation getAggregation() const { return mAggregationSetting; }
+	std::size_t getClusterBound() const { return mClustering; }
 	Number getTriggerTime() const { return mTriggerTime; }
 	bool isUrgent() const { return mUrgent; }
 	bool isTimeTriggered() const { return mTriggerTime >= 0; }
@@ -153,6 +156,13 @@ class Transition {
 	}
 	void setAggregation( Aggregation agg ) {
 		mAggregationSetting = agg;
+		if ( agg == Aggregation::boxAgg || agg == Aggregation::parallelotopeAgg ) {
+			mClustering = 1;
+		}
+		mHash = 0;
+	}
+	void setClusterBound( std::size_t cluster ) {
+		mClustering = cluster;
 		mHash = 0;
 	}
 	void setUrgent( bool urgent = true ) {

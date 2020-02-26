@@ -3,22 +3,21 @@
 namespace hypro {
 
 template <typename State>
-void ContextBasedReachabilityWorker<State>::processTask( const std::shared_ptr<Task<State>>& t,
+void ContextBasedReachabilityWorker<State>::processTask( const TaskType& t,
 														 const Strategy<State>& strat,
-														 WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-														 WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+														 WorkQueue<TaskType>* localQueue,
+														 WorkQueue<TaskType>* localCEXQueue,
 														 Flowpipe<State>& localSegments ) {
-	//INFO("hydra.worker",  std::this_thread::get_id() << ": Current btLevel: " << t->btInfo.btLevel << " and refinements size: " << t->treeNode->getRefinements().size());
 	if ( isValidTask( t, localCEXQueue ) ) {
 		computeForwardReachability( t, strat, localQueue, localCEXQueue, localSegments );
 	}
 }
 
 template <typename State>
-void ContextBasedReachabilityWorker<State>::computeForwardReachability( const std::shared_ptr<Task<State>>& task,
+void ContextBasedReachabilityWorker<State>::computeForwardReachability( const TaskType& task,
 																		const Strategy<State>& strat,
-																		WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-																		WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+																		WorkQueue<TaskType>* localQueue,
+																		WorkQueue<TaskType>* localCEXQueue,
 																		Flowpipe<State>& localSegments ) {
 	IContext* context = ContextFactory<State>::getInstance().createContext( task, strat, localQueue, localCEXQueue, localSegments, this->mSettings );
 
@@ -28,101 +27,72 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability( const st
 
 		//START_BENCHMARK_OPERATION(FIRST_SEGMENT);
 		// compute first segment
-		//std::cout << "context->execBeforeFirstSegment()" << std::endl;
 		context->execBeforeFirstSegment();
-		//std::cout << "context->firstSegment()" << std::endl;
 		context->firstSegment();
-		//std::cout << "context->execAfterFirstSegment()" << std::endl;
 		context->execAfterFirstSegment();
 		//EVALUATE_BENCHMARK_RESULT(FIRST_SEGMENT);
 
 		//START_BENCHMARK_OPERATION(CHECK_INVARIANT);
 		// intersect with invariant
-		//std::cout << "context->execBeforeCheckInvariant()" << std::endl;
 		context->execBeforeCheckInvariant();
-		//std::cout << "context->checkInvariant()" << std::endl;
 		context->checkInvariant();
-		//std::cout << "context->execAfterCheckInvariant()" << std::endl;
 		context->execAfterCheckInvariant();
 		//EVALUATE_BENCHMARK_RESULT(CHECK_INVARIANT);
 
 		//START_BENCHMARK_OPERATION(INTERSECT_BAD_STATES);
 		// intersect with bad states
-		//std::cout << "context->execBeforeIntersectBadStates()" << std::endl;
 		context->execBeforeIntersectBadStates();
-		//std::cout << "context->intersectBadStates()" << std::endl;
 		context->intersectBadStates();
-		//std::cout << "context->execAfterIntersectBadStates()" << std::endl;
 		context->execAfterIntersectBadStates();
 		//EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
 
-		//std::cout << "context->execBeforeLoop()" << std::endl;
 		context->execBeforeLoop();
 
 		// while not done
-		//std::cout << "while(!context->doneCondition())" << std::endl;
 		while ( !context->doneCondition() ) {
 			//START_BENCHMARK_OPERATION(COMPUTE_TIMESTEP);
-			//std::cout << "context->execOnLoopItEnter()" << std::endl;
 			context->execOnLoopItEnter();
 
 			//START_BENCHMARK_OPERATION(CHECK_TRANSITION);
 			// intersect with transition guards
-			//std::cout << "context->execBeforeCheckTransition()" << std::endl;
 			context->execBeforeCheckTransition();
-			//std::cout << "context->checkTransition()" << std::endl;
 			context->checkTransition();
-			//std::cout << "context->execAfterCheckTransition()" << std::endl;
 			context->execAfterCheckTransition();
 			//EVALUATE_BENCHMARK_RESULT(CHECK_TRANSITION);
 
 			//START_BENCHMARK_OPERATION(CONTINUOUS_EVOLUTION);
 			// apply continuous time step
-			//std::cout << "context->execBeforeContinuousEvolution()" << std::endl;
 			context->execBeforeContinuousEvolution();
-			//std::cout << "context->applyContinuousEvolution()" << std::endl;
 			context->applyContinuousEvolution();
-			//std::cout << "context->execAfterContinuousEvolution()" << std::endl;
 			context->execAfterContinuousEvolution();
 			//EVALUATE_BENCHMARK_RESULT(CONTINUOUS_EVOLUTION);
 
 			//START_BENCHMARK_OPERATION(CHECK_INVARIANT);
 			// intersect with invariant
-			//std::cout << "context->execBeforeCheckInvariant()" << std::endl;
 			context->execBeforeCheckInvariant();
-			//std::cout << "context->checkInvariant()" << std::endl;
 			context->checkInvariant();
-			//std::cout << "context->execAfterCheckInvariant()" << std::endl;
 			context->execAfterCheckInvariant();
 			//EVALUATE_BENCHMARK_RESULT(CHECK_INVARIANT);
 
 			//START_BENCHMARK_OPERATION(INTERSECT_BAD_STATES);
 			// intersect with bad states
-			//std::cout << "context->execBeforeIntersectBadStates()" << std::endl;
 			context->execBeforeIntersectBadStates();
-			//std::cout << "context->intersectBadStates()" << std::endl;
 			context->intersectBadStates();
-			//std::cout << "context->execAfterIntersectBadStates()" << std::endl;
 			context->execAfterIntersectBadStates();
 			//EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
 
-			//std::cout << "context->execOnLoopItExit()" << std::endl;
 			context->execOnLoopItExit();
 			//EVALUATE_BENCHMARK_RESULT(COMPUTE_TIMESTEP);
 		}
 
-		//std::cout << "context->execAfterLoop()" << std::endl;
 		context->execAfterLoop();
 
 		//START_BENCHMARK_OPERATION(DISCRETE_SUCCESSORS);
 		// create discrete successor states
-		//std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
 		context->execBeforeProcessDiscreteBehavior();
-		//std::cout << "context->processDiscreteBehavior()" << std::endl;
 		context->processDiscreteBehavior();
 		//context->execBeforeProcessDiscreteBehavior();
 		//EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
-		//std::cout << "context->execOnEnd()" << std::endl;
 		context->execOnEnd();
 	} catch ( HardTerminateException& e1 ) {
 		DEBUG( "hydra.worker", "" << e1.what() );
@@ -131,19 +101,15 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability( const st
 		DEBUG( "hydra.worker", "" << e2.what() );
 		//START_BENCHMARK_OPERATION(DISCRETE_SUCCESSORS);
 		// finish creating discrete successor states
-		//std::cout << "FinishWithDiscreteProcessingException" << std::endl;
-		//std::cout << "context->execBeforeProcessDiscreteBehavior()" << std::endl;
 		context->execBeforeProcessDiscreteBehavior();
-		//std::cout << "context->processDiscreteBehavior()" << std::endl;
 		context->processDiscreteBehavior();
 		//EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
-		//std::cout << "context->execOnEnd()" << std::endl;
 		context->execOnEnd();
 	}
 }
 
 template <typename State>
-bool ContextBasedReachabilityWorker<State>::isValidTask( const std::shared_ptr<Task<State>>& t, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue ) {
+bool ContextBasedReachabilityWorker<State>::isValidTask( const TaskType& t, WorkQueue<TaskType>* localCEXQueue ) {
 	if ( t->treeNode->getRefinements().at( t->btInfo.btLevel ).fullyComputed ) {
 		// This node has already been computed for the required level. This can only happen during concurrent BT-runs.
 		DEBUG( "hydra.worker", std::this_thread::get_id() << ": Got node which is already on the desired level." );
@@ -168,7 +134,7 @@ bool ContextBasedReachabilityWorker<State>::isValidTask( const std::shared_ptr<T
 			DEBUG( "hydra.worker", std::this_thread::get_id() << ": Consider child " << child );
 			if ( child->getLatestBTLevel() >= t->btInfo.btLevel && carl::set_have_intersection( child->getTimestamp( t->btInfo.btLevel ), transitionTimingPair.second ) ) {
 				DEBUG( "hydra.worker", std::this_thread::get_id() << ": Timestamp matches, create follow-up task." );
-				std::shared_ptr<Task<State>> newTask( new Task<State>( child ) );
+				TaskType newTask( new Task<State>( child ) );
 				newTask->btInfo = t->btInfo;
 				newTask->btInfo.currentBTPosition += 2;
 				DEBUG( "hydra.worker", "Enqueue follow up child with tree node " << child << " to local CEX queue." );

@@ -8,13 +8,13 @@ class rectangularInvariantHandler : public IInvariantHandler {
 
   protected:
 	CONTAINMENT mContainment = CONTAINMENT::NO;
-	State* mState;
+	State& mState;
 	size_t mIndex;
 	bool mMarkedForDelete = false;
 
   public:
 	rectangularInvariantHandler() = delete;
-	rectangularInvariantHandler( State* state, size_t index )
+	rectangularInvariantHandler( State& state, size_t index )
 		: mState( state )
 		, mIndex( index ) {}
 

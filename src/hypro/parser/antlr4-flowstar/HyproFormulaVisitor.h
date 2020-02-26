@@ -10,13 +10,14 @@
 
 #pragma once
 
-#include <string>
-#include <memory>
+#include "../../types.h"
+#include "HybridAutomatonBaseVisitor.h"
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
-#include "HybridAutomatonBaseVisitor.h"
+#include "boost/lexical_cast.hpp"
 #include <carl/interval/Interval.h>
-#include "../../types.h"
+#include <memory>
+#include <string>
 
 using namespace antlr4;
 
@@ -66,7 +67,7 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *ctx) override;
 		antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *ctx) override;
 		antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override;
-		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;		
+		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;
 };
 
 } //namespace hypro

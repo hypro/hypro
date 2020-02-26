@@ -12,6 +12,7 @@ template <class Workable, typename State>
 class IWorker {
   public:
 	using Number = typename State::NumberType;
+	using TaskType = std::shared_ptr<Task<State>>;
 	/**
      * Constructor responsible for setting the respective EventHandler
      * and WorkQueue.
@@ -28,8 +29,8 @@ class IWorker {
      */
 	virtual void processTask( const Workable& w,
 							  const Strategy<State>& strategy,
-							  WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-							  WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+							  WorkQueue<TaskType>* localQueue,
+							  WorkQueue<TaskType>* localCEXQueue,
 							  Flowpipe<State>& localSegments ) = 0;
 
 	bool detectedUnsafety() const { return isUnsafe; }

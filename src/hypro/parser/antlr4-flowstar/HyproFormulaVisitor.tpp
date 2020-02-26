@@ -16,7 +16,9 @@ namespace hypro {
 
 	template<typename Number>
 	Number HyproFormulaVisitor<Number>::stringToNumber(const std::string& string) const {
-		double numInFloat = std::stod(string);
+		double numInFloat = boost::lexical_cast<double>(string);
+		//double numInFloat = std::stod(string);
+		std::cerr << "String: " << string << " converted with lexical_cast(string) to double numInFloat: " << numInFloat << std::endl;
 		Number numInNumber = Number(numInFloat);
 		return numInNumber;
 	}

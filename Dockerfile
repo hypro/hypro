@@ -1,12 +1,12 @@
-FROM smtrat/carl:latest
+FROM smtrat/carl:19.06
 RUN apt-get update \
-&& apt-get install -y \
-openjdk-8-jre \
-uuid-dev \
-pkg-config \
-libboost-dev
+    && apt-get install -y \
+    openjdk-8-jre \
+    uuid-dev \
+    pkg-config \
+    libboost-dev
 COPY / /root/hypro/
 RUN cd /root/hypro \
-&& mkdir build && cd build && cmake .. \
-&& make resources \
-&& make
+    && mkdir build && cd build && cmake .. \
+    && make resources \
+    && make

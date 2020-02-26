@@ -88,9 +88,12 @@ class State {
      */
 	State<Number, Representation, Rargs...>& operator=( const State<Number, Representation, Rargs...>& orig ) {
 		TRACE( "hypro.datastructures", "Assignment operator for state with " << orig.getNumberSets() << " sets." );
-		TRACE( "hypro.datastructures", "Self: mSets.size(): " << mSets.size() << " and types: " << mTypes.size() );
-		mLoc = orig.getLocation();
+		// prevent self-assignment
+		if ( &orig == this ) {
+			return *this;
+		}
 
+		mLoc = orig.getLocation();
 		mSets = orig.getSets();
 		mTypes = orig.getTypes();
 		assert( mSets.size() == mTypes.size() );
@@ -509,7 +512,7 @@ class State {
 		} else {
 			out << "location: NULL";
 		}
-		out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
+		//out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
 
 		//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
 		//out << "Set: " << std::visit(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;

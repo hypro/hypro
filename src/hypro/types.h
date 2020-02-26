@@ -220,3 +220,4 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::CONTAINMENT& _
 }  // namespace std
 
 #include "util/adaptions_eigen/adaptions_eigen.h"
+#include "util/conversion.h"

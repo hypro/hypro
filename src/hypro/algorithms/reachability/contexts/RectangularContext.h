@@ -22,7 +22,7 @@
 
 namespace hypro {
 template <typename State>
-class LTIContext : public IContext {
+class RectangularContext : public IContext {
 	using Number = typename State::NumberType;
 	using TaskType = std::shared_ptr<Task<State>>;
 
@@ -47,7 +47,7 @@ class LTIContext : public IContext {
 	carl::Interval<tNumber> mCurrentTimeInterval;
 
 	// a copy of the state to perform the computation in, the state in the task is untouched
-	State mComputationState;
+	State mCurrentSegment;
 
 	// the handlers to process each operation in the specific subset
 	// this is a 1:1 relation, for each subset at index I, there is a corresponding handler at index I
@@ -59,14 +59,14 @@ class LTIContext : public IContext {
 	std::map<Transition<Number>*, std::vector<IGuardHandler<State>*>> mTransitionHandlerMap;
 
   public:
-	LTIContext() = delete;
-	~LTIContext() {}
-	LTIContext( const TaskType& t,
-				const Strategy<State>& strat,
-				WorkQueue<TaskType>* localQueue,
-				WorkQueue<TaskType>* localCEXQueue,
-				Flowpipe<State>& localSegments,
-				ReachabilitySettings& settings );
+	RectangularContext() = delete;
+	~RectangularContext() {}
+	RectangularContext( const TaskType& t,
+						const Strategy<State>& strat,
+						WorkQueue<TaskType>* localQueue,
+						WorkQueue<TaskType>* localCEXQueue,
+						Flowpipe<State>& localSegments,
+						ReachabilitySettings& settings );
 
 	virtual void execOnStart() override;
 
@@ -107,4 +107,4 @@ class LTIContext : public IContext {
 };
 }  // namespace hypro
 
-#include "LTIContext.tpp"
+#include "RectangularContext.tpp"

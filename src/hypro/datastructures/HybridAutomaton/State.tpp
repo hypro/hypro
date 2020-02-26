@@ -408,7 +408,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	//For more representations avaiable: use visitor
 	State<Number, Representation, Rargs...> res( *this );
 	res.setSetDirect( std::visit( genericMinkowskiSumVisitor<repVariant>(), mSets.at( I ), rhs.getSet( I ) ), I );
-	if ( rhs.getEmptyState()[I] == TRIBOOL::TRUE || this->getEmptyState()[I] == TRIBOOL::TRUE ) {
+	if ( rhs.getEmptyStates()[I] == TRIBOOL::TRUE || this->getEmptyStates()[I] == TRIBOOL::TRUE ) {
 		res.rGetEmptyStates()[I] = TRIBOOL::TRUE;
 	}
 	return res;

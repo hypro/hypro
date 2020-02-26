@@ -291,7 +291,6 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 		return *this;
 	}
 
-#ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter, Setting>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {
 			lhs << "[ ";
@@ -300,9 +299,6 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 			}
 			lhs << convert<Number, double>( rhs.constraints()[rhs.constraints().size() - 1] ) << " ]";
 		}
-#else
-	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter, Setting>& ) {
-#endif
 		return lhs;
 	}
 

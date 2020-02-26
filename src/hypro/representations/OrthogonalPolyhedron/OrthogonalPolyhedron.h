@@ -82,23 +82,22 @@ class OrthogonalPolyhedronT {
 	std::size_t dimension() const;
 	Number supremum() const;
 	bool isVertex( const Point<Number>& _point ) const;
-	bool isOnIEdge( const Point<Number>& _point, unsigned i ) const;
+	bool isOnIEdge( const Point<Number>& _point, std::size_t i ) const;
 	bool isInternal( const Point<Number>& _point ) const;
 	bool isExternal( const Point<Number>& _point ) const;
 	bool color( const Point<Number>& _point ) const;
 
-	std::vector<Point<Number>> iNeighborhood( const Point<Number>& _point, unsigned i ) const;
-	std::vector<Point<Number>> iNegNeighborhood( const Point<Number>& _point, unsigned i ) const;
+	std::vector<Point<Number>> iNeighborhood( const Point<Number>& _point, std::size_t i ) const;
+	std::vector<Point<Number>> iNegNeighborhood( const Point<Number>& _point, std::size_t i ) const;
 	std::vector<Point<Number>> neighborhood( const Point<Number>& _point ) const;
 
-	std::vector<Point<Number>> iSlice( unsigned i, Number pos ) const;
-	OrthogonalPolyhedronT iProjection( unsigned i ) const;
+	std::vector<Point<Number>> iSlice( std::size_t i, Number pos ) const;
+	OrthogonalPolyhedronT iProjection( std::size_t i ) const;
 
 	/***********************************************************************
 	 * Geometric Object functions
 	 ***********************************************************************/
-	OrthogonalPolyhedronT linearTransformation( const matrix_t<Number>& A,
-												const vector_t<Number>& b ) const;
+	OrthogonalPolyhedronT linearTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	OrthogonalPolyhedronT minkowskiSum( const OrthogonalPolyhedronT& rhs ) const;
 	OrthogonalPolyhedronT intersect( const OrthogonalPolyhedronT& rhs ) const;
 	OrthogonalPolyhedronT hull() const;
@@ -109,7 +108,7 @@ class OrthogonalPolyhedronT {
 	/***********************************************************************
 	 * Auxiliary functions
 	 ***********************************************************************/
-	std::vector<std::vector<Point<Number>>> preparePlot( unsigned _xDim = 0, unsigned _yDim = 1 ) const;
+	std::vector<std::vector<Point<Number>>> preparePlot( std::size_t _xDim = 0, std::size_t _yDim = 1 ) const;
 
 	/***********************************************************************
 	 * Operators
@@ -119,15 +118,13 @@ class OrthogonalPolyhedronT {
 	OrthogonalPolyhedronT<Number, Converter, Setting, Type>& operator=( OrthogonalPolyhedronT<Number, Converter, Setting, Type>&& ) = default;
 
 	template <typename SettingRhs>
-	friend bool operator==( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1,
-							const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& op2 ) {
+	friend bool operator==( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1, const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& op2 ) {
 		//return op1.mGrid == op2.mGrid;
 		return op1.grid() == op2.grid();
 	}
 
 	template <typename SettingRhs>
-	friend bool operator!=( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1,
-							const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op2 ) {
+	friend bool operator!=( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1, const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op2 ) {
 		//return op1.mGrid != op2.mGrid;
 		return op1.grid() != op2.grid();
 	}

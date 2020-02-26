@@ -1,5 +1,10 @@
 #include "ParserWrapper.h"
 
+#include "ErrorListener.h"
+#include "HybridAutomatonLexer.h"
+#include "HybridAutomatonParser.h"
+#include "HyproHAVisitor.h"
+
 
 namespace hypro {
 /*

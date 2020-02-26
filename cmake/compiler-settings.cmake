@@ -77,19 +77,3 @@ else()
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.dylib")
 	set(BUILD_SHARED_LIBRARIES ON)
 endif()
-
-if(DEVELOPER)
-	target_compile_options(${PROJECT_NAME} PRIVATE -Wswitch
-	-Wno-deprecated-declarations
-	-Wempty-body
-	-Wconversion
-	-Wreturn-type
-	-Wparentheses
-	-Wno-format
-	-Wuninitialized
-	-Wunreachable-code
-	-Wunused-function
-	-Wunused-value
-	-Wunused-variable
-	-fsanitize=address)
-endif()

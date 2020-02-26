@@ -15,11 +15,13 @@ template <typename T, typename Number>
 void HierarchicalIntervalVector<T, Number>::insertInterval( const T& type, const carl::Interval<Number>& timespan ) {
 	assert( this->isSane() );
 	carl::Interval<Number> copy = timespan;
+#ifdef HYPRO_LOGGING
 	carl::Interval<double> tmp = carl::Interval<double>( carl::convert<Number, double>( copy.lower() ), carl::convert<Number, double>( copy.upper() ) );
 	DEBUG( "hypro.datastructures.hiv", "Insert interval " << tmp << " of type " << type << " into: " << *this );
+#endif
 
 	for ( auto it = mIntervals.begin(); it != mIntervals.end(); ++it ) {
-#ifdef HYPRO_USE_LOGGING
+#ifdef HYPRO_LOGGING
 		double tmptp = carl::convert<Number, double>( it->timePoint );
 		TRACE( "hypro.datastructures.hiv", "Consider " << tmptp << ", " << it->type );
 #endif
