@@ -118,12 +118,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					assert(halfspace.contains(point));
 				}
 			}
-
-			for(size_t i = 0; i < mHPlanes.size(); ++i) {
-				for(size_t j = 0; j < points.size(); ++j) {
-					assert(mHPlanes[i].contains(points[j]));
-				}
-			}
 		} else {
 			TRACE( "hypro.representations.HPolytope", "Construct from vertices: " );
 		#ifdef HYPRO_LOGGING
