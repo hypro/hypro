@@ -515,20 +515,18 @@ EvaluationResult<Number> VPolytopeT<Number, Converter, S>::evaluate( const vecto
 	if ( direction == vector_t<Number>::Zero( direction.rows() ) )
 		return EvaluationResult<Number>();
 	Number maxDist = Number( -1e20 );
+	std::size_t vIndex = 0;
 	EvaluationResult<Number> res;
-	for ( const auto &vertex : mVertices ) {
+	for ( std::size_t i = 0; i < mVertices.size(); ++i ) {
 		//Point with the furthest distance to the direction vector is the optimal point and is always a corner
-		Number dist = direction.dot( vertex.rawCoordinates() );
+		Number dist = direction.dot( mVertices[i].rawCoordinates() );
 		if ( dist > maxDist ) {
 			maxDist = dist;
-			res.optimumValue = vertex.rawCoordinates();
+			vIndex = i;
 		}
 	}
-	Number sumOfSquares = Number( 0 );
-	for ( Eigen::Index i = 0; i < direction.rows(); ++i ) {
-		sumOfSquares += carl::pow( direction( i ), 2 );
-	}
-	res.supportValue = Number( maxDist / sumOfSquares );
+	res.optimumValue = mVertices[vIndex].rawCoordinates();
+	res.supportValue = Number( maxDist );
 	res.errorCode = SOLUTION::FEAS;
 	return res;
 }
