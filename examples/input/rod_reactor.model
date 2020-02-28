@@ -4,7 +4,7 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.01
+  fixed steps 0.1
   time 17
   remainder estimation 1e-5
   identity precondition
@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output rod_reactor
-  max jumps 2
+  max jumps 5
   print on
  }
 

@@ -9,13 +9,13 @@
 static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
 #endif
 
-#include "../../../algorithms/convexHull/ConvexHull.h"
 #include "../../../util/Permutator.h"
-#include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/templateDirections.h"
 #include "HPolytopeSetting.h"
-
+#include "algorithms/quickhull/Quickhull.h"
+#include "algorithms/quickhull/number_traits.h"
+#include "../../../util/convexHull.h"
 #include <algorithm>
 #include <cassert>
 #include <optional>

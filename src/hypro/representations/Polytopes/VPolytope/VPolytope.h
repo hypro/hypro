@@ -8,12 +8,14 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../datastructures/Facet.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
+#include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/pca.h"
 #include "../../../util/statistics/statistics.h"
 #include "../Cone.h"
 #include "VPolytopeSetting.h"
 #include "util.h"
+#include "algorithms/quickhull/number_traits.h"
 
 #include <cassert>
 #include <set>
