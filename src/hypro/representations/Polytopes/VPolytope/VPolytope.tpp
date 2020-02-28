@@ -50,23 +50,22 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>
 
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
-	
-	if constexpr (is_exact<Number>) {
+	if constexpr ( is_exact<Number> ) {
 		auto dimension = _constraints.cols();
 		typename QuickIntersection<Number>::pointVector_t inputHalfspaces;
 
-		for(int i = 0; i < _constraints.rows(); ++i) {
-			inputHalfspaces.emplace_back(dimension + 1);
-			inputHalfspaces.back().head(dimension) = _constraints.row(i);
+		for ( int i = 0; i < _constraints.rows(); ++i ) {
+			inputHalfspaces.emplace_back( dimension + 1 );
+			inputHalfspaces.back().head( dimension ) = _constraints.row( i );
 			inputHalfspaces.back()[dimension] = -_constants[i];
 		}
 
-		QuickIntersection<Number> qInt{inputHalfspaces, dimension};
+		QuickIntersection<Number> qInt{inputHalfspaces, (size_t)dimension};
 		qInt.compute();
 
-		for(auto& facet : qInt.getFacets()) {
+		for ( auto &facet : qInt.getFacets() ) {
 			facet.mNormal /= -facet.mOffset;
-			mVertices.emplace_back(Point(std::move(facet.mNormal)));
+			mVertices.emplace_back( Point( std::move( facet.mNormal ) ) );
 		}
 	} else {
 		// calculate all possible Halfspace intersections

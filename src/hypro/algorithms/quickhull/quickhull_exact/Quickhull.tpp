@@ -4,9 +4,9 @@ namespace hypro {
     : points(points), dimension(dimension), fSpace(points, dimension) {
         assert(!points.empty());
         if constexpr(Euclidian) {
-            assert(points[0].rows() == dimension);
+            assert(points[0].rows() == (int)dimension);
         } else {
-            assert(points[0].rows() == dimension + 1);
+            assert(points[0].rows() == (int)dimension + 1);
         }
 
     }
