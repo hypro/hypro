@@ -205,7 +205,7 @@ class State {
      * @brief      Gets the location.
      * @return     The location.
      */
-	Location<Number>* rGetLocation() { return mLoc; }
+	Location<Number>* rGetLocation() { return const_cast<Location<Number>*>(mLoc); }
 
 	/**
      * @brief      Gets the number of contained sets.

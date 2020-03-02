@@ -38,8 +38,19 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
   	//Used for minimization of various functions during location invariant strengthening
   	Optimizer<Number> mOptimizer;
+
+	//Saves which location has which relaxed invariant.
 	//The result of the location invariant strengthening. Is passed to TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler.
-  	vector_t<Number> mRelaxedInvariant;
+	//TODO: If we could save info between flowpipes, we could save us a lot more LPs.
+	//- If we could save the relaxed invariant for a location, then we could refine it if we get to the same location again.
+	//- We could directly build the overapproximated form, since we saved the fitting invariant to the matrix
+	//- If we cache whether the invariant was a positive invariant or not, we do not have to compute that again.
+	std::optional<vector_t<Number>> mRelaxedInvariant;
+
+	//Offset vector of invariants after overapproximation by template
+	std::optional<vector_t<Number>> mOverapproxInvariant;
+
+	const Number scaling = 2;
 
   public:
 
@@ -52,7 +63,8 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	    Flowpipe<State>& localSegments,
 	    ReachabilitySettings &settings) 
   		: LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings),
-  		  mOptimizer(Optimizer<Number>())
+  		  mOptimizer(Optimizer<Number>()),
+		  mRelaxedInvariant(std::nullopt)
   	{}
         
 	~TemplatePolyhedronContext(){}
@@ -66,6 +78,9 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     //Continuous Evolution after Sankaranarayanan
   	void applyContinuousEvolution() override;
 
+	//Set back invariant to overapproximated form, since LIS fits invariants to flowpipe
+	void execBeforeProcessDiscreteBehavior() override;
+
     //Computes the gradient of a multivariate but linear function linearFct
     vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);
 
@@ -75,7 +90,9 @@ class TemplatePolyhedronContext : public LTIContext<State> {
     //DETAIL: The input vector dir is interpreted as a function, for example if dir = (3 2 -1) then dir is interpreted as 3x + 2y - z, 
     //since no constants are allowed.
     //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
-    std::pair<vector_t<typename State::NumberType>,typename State::NumberType> lieDerivative(const vector_t<Number>& dir);
+    std::pair<vector_t<typename State::NumberType>, typename State::NumberType> lieDerivative(const vector_t<Number>& dir);
+
+	std::pair<vector_t<typename State::NumberType>, typename State::NumberType> lieDerivativeExtended( const vector_t<Number>& dir );
 
     //Conducts the location invariant strengthening method from Sankranarayanan 2008.
     //Only works for closed invariants where the normals point into the inside. 
@@ -90,6 +107,8 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 
     //Tests whether the given tpoly is a positive invariant and therefore admissible for location invariant strengthening
     bool isPositiveInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);
+
+	bool isRelaxedInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);
 };
 
 } // namespace hypro

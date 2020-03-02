@@ -222,7 +222,7 @@ TYPED_TEST( TemplatePolyhedronContextTest, PositiveInvariant ) {
 	tpolyTrap = tpolyTrap.overapproximate( this->tpoly.matrix() );
 
 	// Test whether positive invariant with positive invariant
-	EXPECT_TRUE( tpcontextTrapping.isPositiveInvariant( this->tpoly, tpolyTrap.vector() ) );
+	EXPECT_TRUE( tpcontextTrapping.isRelaxedInvariant( this->tpoly, tpolyTrap.vector() ) );
 
 	// Test 2: Test with non positive invariant
 	// Initialize tpcontext with not positive invariant flow

@@ -5,7 +5,8 @@ namespace hypro {
     template<typename State>
     void TPolyTimeEvolutionHandler<State>::setInvariant(const vector_t<typename State::NumberType>& inv){
         //assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() - 1);
-        mRelaxedInvariant = inv;
+        //mRelaxedInvariant = inv;
+        mRelaxedInvariant = std::optional<vector_t<Number>>(inv);
     }
 
 	template<typename State>
@@ -80,13 +81,13 @@ namespace hypro {
                 evalR = EvaluationResult<Number>(SOLUTION::INFTY);
             } else {
                 //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
-                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING
-                   && mRelaxedInvariant.rows() == tpoly.matrix().rows() 
-                   && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
+                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant){
+                   //&& mRelaxedInvariant.rows() == tpoly.matrix().rows() 
+                   //&& mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
                     //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
                     //Using mRelaxedInvariant will lead to tighter bounds
-                    assert(tpoly.matrix().rows() == mRelaxedInvariant.rows());
-                    TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), mRelaxedInvariant);
+                    assert(tpoly.matrix().rows() == mRelaxedInvariant->rows());
+                    TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mRelaxedInvariant);
                     evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
                 } else {
                     auto invMat = this->mState->getLocation()->getInvariant().getMatrix();

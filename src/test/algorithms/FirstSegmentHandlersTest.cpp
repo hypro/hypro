@@ -153,7 +153,8 @@ TYPED_TEST(FirstSegmentHandlersTest, TemplatePoly){
     handler.handle();
     auto res1 = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<TypeParam>>(), this->state.getSet(0));
     EXPECT_TRUE(this->state.getLocation() == &this->outgoingLoc);
-    EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    EXPECT_EQ(handler.getRelaxedInvariant(), std::nullopt); 
+    //EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
     EXPECT_EQ(res1.matrix(), this->tpoly.matrix());
     EXPECT_EQ(res1.rGetMatrixPtr(), this->tpoly.rGetMatrixPtr());
     for(int i = 0; i < res1.matrix().rows(); ++i){
@@ -172,7 +173,8 @@ TYPED_TEST(FirstSegmentHandlersTest, TemplatePoly){
     handler.handle();
     auto res2 = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<TypeParam>>(), this->state.getSet(0));
     EXPECT_TRUE(this->state.getLocation() == &this->outgoingLoc);
-    EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    //EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    EXPECT_EQ(handler.getRelaxedInvariant(), std::nullopt); 
     EXPECT_EQ(res2.matrix(), this->tpoly.matrix());
     for(int i = 0; i < res2.matrix().rows(); ++i){
         EXPECT_TRUE(res2.vector()(i) > this->tpoly.vector()(i));
@@ -189,7 +191,8 @@ TYPED_TEST(FirstSegmentHandlersTest, TemplatePoly){
     handler.handle();
     auto res3 = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<TypeParam>>(), this->state.getSet(0));
     EXPECT_TRUE(this->state.getLocation() == &this->outgoingLoc);
-    EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    //EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    EXPECT_EQ(handler.getRelaxedInvariant(), std::nullopt); 
     EXPECT_EQ(res3.matrix(), this->tpoly.matrix());
     for(int i = 0; i < res3.matrix().rows(); ++i){
         EXPECT_TRUE(res3.vector()(i) > this->tpoly.vector()(i));
@@ -207,7 +210,8 @@ TYPED_TEST(FirstSegmentHandlersTest, TemplatePoly){
     handler.handle();
     auto res4 = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<TypeParam>>(), this->state.getSet(0));
     EXPECT_TRUE(this->state.getLocation() == &this->trappingLoc);
-    EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    //EXPECT_EQ(handler.getRelaxedInvariant(), vector_t<TypeParam>::Zero(2));
+    EXPECT_EQ(handler.getRelaxedInvariant(), std::nullopt); 
     EXPECT_EQ(res4.matrix(), this->tpoly.matrix());
     for(int i = 0; i < res4.matrix().rows(); ++i){
         EXPECT_TRUE(res4.vector()(i) > this->tpoly.vector()(i));

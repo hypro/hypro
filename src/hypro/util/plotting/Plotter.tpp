@@ -30,19 +30,20 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 template <typename Number>
 void Plotter<Number>::plot2d() const {
 	std::size_t cnt = 0;
-	std::string filename = mSettings.filename + "_pdf.plt";
+	std::string filename = mSettings.filename;
 	std::string title = mSettings.name;
 	if ( !mSettings.overwriteFiles ) {
-		while ( file_exists( filename ) ) {
+		while ( file_exists( filename + "_pdf.plt" ) ) {
 			std::stringstream ss;
 			ss << mSettings.filename << "-" << cnt;
-			title = ss.str();
-			filename = title + "_pdf.plt";
+			//title = ss.str();
+			//filename = title + "_pdf.plt";
+			filename = ss.str();
 			++cnt;
 		}
 	}
 
-	mOutfile.open( filename );
+	mOutfile.open( filename + "_pdf.plt" );
 
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
@@ -53,7 +54,7 @@ void Plotter<Number>::plot2d() const {
 			mOutfile << "set size square\n";
 		}
 		mOutfile << "set term pdf font ',10'\n";
-		mOutfile << "set output \"" << title << ".pdf\n";
+		mOutfile << "set output \"" << filename << ".pdf\n";
 
 		writeGnuplot();
 	}
