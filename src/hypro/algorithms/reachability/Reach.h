@@ -12,15 +12,19 @@
 
 #pragma once
 #include "FirstSegment.h"
-#include "config.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/State.h"
-#include "datastructures/reachability/ReachTree.h"
-#include "datastructures/reachability/Settings.h"
-#include "datastructures/reachability/workQueue/WorkQueue.h"
-#include "representations/Ellipsoids/Ellipsoid.h"
-#include "representations/GeometricObject.h"
-#include "util/plotting/Plotter.h"
+#include "../../datastructures/reachability/Settings.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../datastructures/HybridAutomaton/State.h"
+#include "../../datastructures/reachability/workQueue/WorkQueue.h"
+#include "../../config.h"
+#include "../../util/plotting/Plotter.h"
+#include "../../representations/Ellipsoids/Ellipsoid.h"
+#include "../../representations/GeometricObject.h"
+#include "boost/tuple/tuple.hpp"
+
+CLANG_WARNING_DISABLE("-Wdeprecated-register")
+#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
+CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
 #define REACH_DEBUG

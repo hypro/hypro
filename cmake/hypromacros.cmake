@@ -93,10 +93,15 @@ macro(load_library group name version)
             set(LIBNAME ${name})
         endif()
 
-        message(STATUS "Load library ${group} ${name} ${version}")
+        #if ("${${LIBNAME}_INCLUDE_DIR}" STREQUAL "" AND NOT "${${LIBNAME}_INCLUDE_DIRS}" STREQUAL "")
+        #    set(${LIBNAME}_INCLUDE_DIR ${${LIBNAME}_INCLUDE_DIRS})
+        #endif()
+
+        #message(STATUS "Load library ${group} ${name} ${version}")
         #message(STATUS "Found Library ${name}.")
         #message(STATUS "Libraries: ${${LIBNAME}_LIBRARIES}")
         #message(STATUS "Includes file: ${${LIBNAME}_INCLUDE_DIR}")
+        #message(STATUS "Includes file: ${${LIBNAME}_INCLUDE_DIRS}")
         #message(STATUS "libname is: ${LIBNAME}")
         #message(STATUS "Library_dirs: ${${LIBNAME}_LIBRARY_DIRS}")
 
