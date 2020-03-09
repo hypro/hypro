@@ -357,12 +357,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param ostr Outstream.
 	 * @param b A SupportFunctionNew.
 	 */
-#ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number, Converter, Setting>& b ) {
 		ostr << *( b.getRoot() ) << std::endl;
-#else
-	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number, Converter, Setting>& ) {
-#endif
 		return ostr;
 	}
 

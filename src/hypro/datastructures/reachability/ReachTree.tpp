@@ -4,6 +4,7 @@ namespace hypro {
 template <typename State>
 ReachTree<State>::ReachTree( ReachTreeNode<State>* _root )
 	: mRoot( _root ) {
+	mRoot->setDepth( -1 );
 }
 
 template <typename State>

@@ -44,6 +44,8 @@ TYPED_TEST_CASE(FirstSegmentHandlersTest, floatTypes);
 /*
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
+TYPED_TEST_CASE(QuickhullTest, allTypes);
+TYPED_TEST_CASE(QuickIntersectionTest, allTypes);
 
 // Benchmark
 TYPED_TEST_CASE(Benchmark, allTypes);

@@ -2,10 +2,10 @@
 
 namespace hypro {
 template <typename State>
-LTIContext<State>::LTIContext( const std::shared_ptr<Task<State>>& t,
+LTIContext<State>::LTIContext( const TaskType& t,
 							   const Strategy<State>& strat,
-							   WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-							   WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+							   WorkQueue<TaskType>* localQueue,
+							   WorkQueue<TaskType>* localCEXQueue,
 							   Flowpipe<State>& localSegments,
 							   ReachabilitySettings& settings )
 	: mTask( t )
@@ -139,7 +139,6 @@ void LTIContext<State>::applyBacktracking() {
 	// Either this is the root node or a node on the path to the current node with a higher bt-level.
 	unsigned targetLevel = mTask->btInfo.btLevel + 1;
 	Path<Number, tNumber> btPath = mTask->treeNode->getPath();
-	;
 	ReachTreeNode<State>* btNode = mTask->treeNode;
 
 	DEBUG( "hypro.worker.refinement", "Target btLevel: " << targetLevel );
@@ -194,7 +193,7 @@ void LTIContext<State>::applyBacktracking() {
 	}
 
 	// now create a task and add it to the queue.
-	std::shared_ptr<Task<State>> taskPtr = std::shared_ptr<Task<State>>( new Task<State>( btNode ) );
+	TaskType taskPtr = TaskType( new Task<State>( btNode ) );
 	// set the pos to a time-transition in the node which is the entry point -> During analysis the btPos has to be even, while discrete
 	// transitions are the un-even positions in the bt-path.
 	taskPtr->btInfo.currentBTPosition = ( btNode->getDepth() - 1 ) * 2;
@@ -737,7 +736,7 @@ void LTIContext<State>::applyContinuousEvolution() {
 		}
 	}
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 
 	DEBUG( "hypro.worker", "State after timestep: " << mComputationState << " time interval: " << tmp );
@@ -774,7 +773,7 @@ bool LTIContext<State>::omitTransition( Transition<Number>* transition ) {
 
 	// temporary for dbg-output
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 
 	// if the transition is irrelevant for the backtracking, we still want to find potential successors to avoid re-computation.
@@ -823,7 +822,7 @@ bool LTIContext<State>::omitInvariant() {
 	}
 	// temporary for dbg-output
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 	if ( fullCover( mLocalTimings.getInvariantTimings(), mComputationState.getTimestamp(), CONTAINMENT::FULL ) ) {
 		DEBUG( "hypro.worker.discrete", "Omit invariant for time interval " << tmp << " as we know it was inside the invariant." );
@@ -844,7 +843,7 @@ bool LTIContext<State>::omitBadStateCheck() {
 	}
 	// temporary for dbg-output
 #ifdef HYPRO_LOGGING
-	auto tmp = carl::convert<tNumber, double>( mComputationState.getTimestamp() );
+	auto tmp = convert<tNumber, double>( mComputationState.getTimestamp() );
 #endif
 	if ( fullCover( mLocalTimings.getBadStateTimings(), mComputationState.getTimestamp(), CONTAINMENT::NO ) ) {
 		DEBUG( "hypro.worker.discrete", "Omit bad state check for time interval " << tmp << "." );

@@ -58,7 +58,7 @@ class EllipsoidT {
 	friend bool operator==( const EllipsoidT<Number, Converter>& b1, const EllipsoidT<Number, Converter>& b2 ) { return ( b1.mShapeMatrix == b2.mShapeMatrix ? true : false ); }
 	friend bool operator!=( const EllipsoidT<Number, Converter>& b1, const EllipsoidT<Number, Converter>& b2 ) { return !( b1 == b2 ); }
 
-	friend std::ostream& operator<<( std::ostream& ostr, const EllipsoidT<Number, Converter>& b ) { return ostr; }
+	friend std::ostream& operator<<( std::ostream& ostr, const EllipsoidT<Number, Converter>& ) { return ostr; }
 	void print() const;
 
 	/**

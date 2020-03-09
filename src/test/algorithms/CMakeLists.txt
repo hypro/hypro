@@ -2,16 +2,18 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(algorithm_test_sources
-      ##FacetEnumerationTest.cpp
-      ##ForwardReachabilityTest.cpp
-			##HyReachTest.cpp
-      ##MinkowskiSumTest.cpp
-      ##SumPerformanceTest.cpp
-      ## rahsTwoTankTest.cpp
-      #FourierMotzkinQETest.cpp
-      #VertexEnumerationTest.cpp
-      #UtilityTest.cpp
-      #ReachabilityAnalysisTest.cpp
+      #FacetEnumerationTest.cpp
+      #ForwardReachabilityTest.cpp
+			#HyReachTest.cpp
+      #MinkowskiSumTest.cpp
+      #SumPerformanceTest.cpp
+      # rahsTwoTankTest.cpp
+      ReachabilityAnalysisTest.cpp
+      FourierMotzkinQETest.cpp
+      VertexEnumerationTest.cpp
+      UtilityTest.cpp
+      #QuickhullTest.cpp #TODO:comment in again 
+      #QuickIntersectionTest.cpp #TODO:comment in again 
       TemplatePolyhedronContextTest.cpp
       FirstSegmentHandlersTest.cpp
     )

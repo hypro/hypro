@@ -126,14 +126,14 @@ Number OrthogonalPolyhedronT<Number, Converter, Setting, Type>::supremum() const
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
 bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isVertex( const Point<Number> &_point ) const {
-	for ( unsigned dimension : this->dimension() ) {
+	for ( std::size_t dimension : this->dimension() ) {
 		if ( !isOnIEdge( _point, dimension ) ) return false;
 	}
 	return true;
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isOnIEdge( const Point<Number> &_point, unsigned i ) const {
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isOnIEdge( const Point<Number> &_point, std::size_t i ) const {
 	std::vector<Point<Number>> iNeighbors = mGrid.iNeighborhood( _point, i );
 	for ( const auto &neighbor : iNeighbors ) {
 		if ( mGrid.colorAt( neighbor ) != mGrid.colorAt( mGrid.iPredecessor( neighbor, i ) ) ) return true;
@@ -157,14 +157,12 @@ bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::color( const Point
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNeighborhood( const Point<Number> &_point,
-																								   unsigned i ) const {
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNeighborhood( const Point<Number> &_point, std::size_t i ) const {
 	return mGrid.iNeighborhood( _point, i );
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNegNeighborhood( const Point<Number> &_point,
-																									  unsigned i ) const {
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNegNeighborhood( const Point<Number> &_point, std::size_t i ) const {
 	return mGrid.iNeighborhood( mGrid.iPredecessor( _point, i ), i );
 }
 
@@ -174,13 +172,13 @@ std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Typ
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iSlice( unsigned i, Number pos ) const {
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iSlice( std::size_t i, Number pos ) const {
 	// TODO: ATTENTION, this is the induced version, transform!
 	return std::move( mGrid.iSlice( i, pos ) );
 }
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iProjection( unsigned i ) const {
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iProjection( std::size_t i ) const {
 	// TODO: Required for dimension reduction and more sophisticated containment
 	// methods.
 }
@@ -257,7 +255,7 @@ OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Nu
 		// here!
 		assert( neighborsA.size() == neighborsB.size() );
 		std::vector<Vertex<Number>> vertices;
-		for ( unsigned id = 0; id < neighborsA.size(); ++id ) {
+		for ( std::size_t id = 0; id < neighborsA.size(); ++id ) {
 			// white dominates
 			if ( aCombination.colorAt( neighborsA[id] ) == true && bCombination.colorAt( neighborsB[id] ) == true ) {
 				vertices.emplace_back( neighborsA[id], true );
@@ -377,7 +375,7 @@ OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Nu
 		// here!
 		assert( neighborsA.size() == neighborsB.size() );
 		std::vector<Vertex<Number>> vertices;
-		for ( unsigned id = 0; id < neighborsA.size(); ++id ) {
+		for ( std::size_t id = 0; id < neighborsA.size(); ++id ) {
 			// black dominates
 			if ( aCombination.colorAt( neighborsA[id] ) == false && bCombination.colorAt( neighborsB[id] ) == false ) {
 				vertices.emplace_back( neighborsA[id], false );
@@ -408,21 +406,20 @@ OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Nu
  **********************************/
 
 template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
-std::vector<std::vector<Point<Number>>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::preparePlot( unsigned _xDim,
-																											  unsigned _yDim ) const {
+std::vector<std::vector<Point<Number>>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::preparePlot( std::size_t _xDim, std::size_t _yDim ) const {
 	std::vector<std::vector<Point<Number>>> result;
 
 	std::vector<Point<Number>> points = mGrid.allBlack();
 
 	// add points
 	for ( auto point : points ) {
-		point.reduceToDimensions( std::vector<unsigned>( {_xDim, _yDim} ) );
+		point.reduceToDimensions( std::vector<std::size_t>( {_xDim, _yDim} ) );
 		Point<Number> lowerRight = mGrid.iSuccessor( point, 0 );
-		lowerRight.reduceToDimensions( std::vector<unsigned>( {_xDim, _yDim} ) );
+		lowerRight.reduceToDimensions( std::vector<std::size_t>( {_xDim, _yDim} ) );
 		Point<Number> upperRight = mGrid.directSuccessor( point );
-		upperRight.reduceToDimensions( std::vector<unsigned>( {_xDim, _yDim} ) );
+		upperRight.reduceToDimensions( std::vector<std::size_t>( {_xDim, _yDim} ) );
 		Point<Number> upperLeft = mGrid.iSuccessor( point, 1 );
-		upperLeft.reduceToDimensions( std::vector<unsigned>( {_xDim, _yDim} ) );
+		upperLeft.reduceToDimensions( std::vector<std::size_t>( {_xDim, _yDim} ) );
 
 		// std::cout << "point " << point << " corresponds to box " << point << " ,
 		// " << lowerRight << " , " <<

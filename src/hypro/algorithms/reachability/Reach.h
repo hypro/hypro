@@ -15,6 +15,7 @@
 #include "config.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
+#include "datastructures/reachability/ReachTree.h"
 #include "datastructures/reachability/Settings.h"
 #include "datastructures/reachability/workQueue/WorkQueue.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
@@ -58,7 +59,8 @@ struct ReachQuiet : public ReachSettings {
 template <typename Number, typename ReacherSettings, typename State>
 class Reach {
   public:
-	using TaskType = std::pair<unsigned, State>;
+	using NodePtr = ReachTreeNode<State>*;
+	using TaskType = std::pair<unsigned, NodePtr>;
 	using TaskTypePtr = std::unique_ptr<TaskType>;
 	using flowpipe_t = std::vector<State>;
 
@@ -72,6 +74,7 @@ class Reach {
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	representation_name mType;
 	bool mInitialStatesSet = false;
+	std::unique_ptr<ReachTree<State>> mReachabilityTree;
 
 	mutable bool mIntersectedBadStates;
 
@@ -97,15 +100,12 @@ class Reach {
 	WorkQueue<TaskTypePtr>& rGetQueue() { return mWorkingQueue; }
 
 	/**
-	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
-	 * @details [long description]
+	 * @brief Computes forward time closure in the passed tree node.
 	 *
-	 * @param _loc The location in which the FTC is to be computed.
-	 * @param _val The valuation which is initial in the respective location.
-	 *
-	 * @return The id of the computed flowpipe.
+	 * @param currentTreeNode
+	 * @return flowpipe_t
 	 */
-	flowpipe_t computeForwardTimeClosure( const State& _state );
+	flowpipe_t computeForwardTimeClosure( ReachTreeNode<State>* currentTreeNode );
 
 	/**
 	 * @brief Returns whether the bad states were reachable so far.
@@ -121,7 +121,7 @@ class Reach {
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	void processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets );
+	void processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets, NodePtr currentNode );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -141,6 +141,8 @@ class Reach {
 
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType( const representation_name& type ) { mType = type; }
+
+	ReachTree<State>* getReachabilityTree() const { return mReachabilityTree.get(); }
 
   private:
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;

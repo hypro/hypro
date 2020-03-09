@@ -469,6 +469,8 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		}
 	}
 
+	TRACE("hypro", "points: " << _points);
+
 	// std::cout << "Minimum: " << min.rawCoordinates().transpose() <<
 	// std::endl;
 

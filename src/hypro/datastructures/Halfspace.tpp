@@ -52,6 +52,23 @@ Halfspace<Number>::Halfspace( const vector_t<Number> &_vec, const std::vector<ve
 }
 
 template <typename Number>
+Halfspace<Number>::Halfspace( const std::vector<Point<Number>> &points ) {
+	assert( !points.empty() );
+	std::vector<vector_t<Number>> rawCoordinates;
+	std::transform( points.begin(), points.end(), std::back_inserter( rawCoordinates ), []( const Point<Number> &refpoint ) { return refpoint.rawCoordinates(); } );
+	mNormal = Halfspace<Number>::computePlaneNormal( rawCoordinates );
+	mScalar = Halfspace<Number>::computePlaneOffset( mNormal, points[0] );
+	TRACE( "hypro.datastructures", "Constructed hsp from " << mNormal << " and " << mScalar );
+}
+
+template <typename Number>
+Halfspace<Number>::Halfspace( const std::vector<vector_t<Number>> &points ) {
+	assert( !points.empty() );
+	mNormal = Halfspace<Number>::computePlaneNormal( points );
+	mScalar = Halfspace<Number>::computePlaneOffset( mNormal, Point( points[0] ) );
+}
+
+template <typename Number>
 Halfspace<Number>::~Halfspace() {
 }
 
@@ -302,64 +319,77 @@ bool Halfspace<Number>::contains( const std::vector<Point<Number>> &_points ) co
 }
 
 template <typename Number>
+bool Halfspace<Number>::exactContains(vector_t<Number> const& point) const {
+	hypro::vector_t<mpq_class> normal = mNormal.template cast<mpq_class>();
+	hypro::vector_t<mpq_class> mpq_vertex = point.template cast<mpq_class>();
+	mpq_class offset = mScalar;
+
+	return normal.dot(mpq_vertex) - offset <= 0;
+}
+
+template <typename Number>
 bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
 	return ( _vector.dot( mNormal ) == mScalar );
 }
 
-/**
- * @author: Chris K
- * Method to compute the normal of a plane based on two direction vectors
- * simply computing the cross product does not work since the dimension is not
- * necessarily 3
- */
 template <typename Number>
-vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) {
-	assert( _edgeSet.size() > 0 );
-	if ( _edgeSet.size() == unsigned( _edgeSet.begin()->rows() ) - 1 ) {
+vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &pointSet ) {
+	assert( !pointSet.empty() );
+	// case: dimension-many vertices in the plane
+	if ( pointSet.size() <= unsigned( pointSet.begin()->rows() ) ) {
 		// method avoiding glpk and using Eigen instead (higher precision)
-		matrix_t<Number> constraints( _edgeSet.size(), _edgeSet.begin()->rows() );
-		for ( unsigned pos = 0; pos < _edgeSet.size(); ++pos ) {
-			constraints.row( pos ) = _edgeSet.at( pos ).transpose();
+		Eigen::Index dim = pointSet.begin()->rows();
+		matrix_t<Number> constraints( pointSet.size(), dim + 1 );
+		for ( unsigned pos = 0; pos < pointSet.size(); ++pos ) {
+			constraints.row( pos ).head( dim ) = pointSet.at( pos ).transpose();
+			constraints.row( pos )( dim ) = Number( 1 );
 		}
 
 		TRACE( "hypro.datastructures", "computing kernel of " << constraints );
 		TRACE( "hypro.datastructures", "rows: " << constraints.rows() << ", cols: " << constraints.cols() );
 
-		vector_t<Number> normal = constraints.fullPivLu().kernel();
+		matrix_t<Number> kernel = constraints.fullPivLu().kernel();
+
+		vector_t<Number> normal = kernel.col( 0 ).head( dim );
+
+		TRACE( "hypro.datastructures", "Computed kernel: " << kernel );
 
 		return normal;
 	} else {
 		/*
 		 * Setup LP with GLPK
 		 */
+
+		// TODO: Re-think this: apparently this only works, if all points lie exactly on the plane, in which case you could have selected only the dim-first ones.
+
 		glp_prob *normal;
 		normal = glp_create_prob();
 		glp_set_obj_dir( normal, GLP_MAX );
 
 		// we have one row for each edge in our set
-		glp_add_rows( normal, int( _edgeSet.size() ) );
+		glp_add_rows( normal, int( pointSet.size() ) );
 
 		// constraints of auxiliary variables (bounds for rows)
-		for ( int i = 1; i <= int( _edgeSet.size() ); ++i ) {
+		for ( int i = 1; i <= int( pointSet.size() ); ++i ) {
 			glp_set_row_bnds( normal, i, GLP_FX, 0.0, 0.0 );
 		}
 
 		// each column corresponds to one dimension of a vector in our edgeSet
 		// TODO consider p1 & p2 of different dimensions? (-> two edge sets)
-		glp_add_cols( normal, int( _edgeSet.at( 0 ).rows() ) );
+		glp_add_cols( normal, int( pointSet.at( 0 ).rows() ) );
 
 		// coefficients of objective function:
-		for ( int i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+		for ( int i = 1; i <= pointSet.at( 0 ).rows(); ++i ) {
 			glp_set_obj_coef( normal, i, 1.0 );
 		}
 
 		// constraints for structural variables
-		for ( int i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+		for ( int i = 1; i <= pointSet.at( 0 ).rows(); ++i ) {
 			glp_set_col_bnds( normal, i, GLP_DB, -1.0, 1.0 );
 		}
 
 		// setup matrix coefficients
-		std::size_t elements = ( _edgeSet.size() ) * ( std::size_t( _edgeSet.at( 0 ).rows() ) );
+		std::size_t elements = ( pointSet.size() ) * ( std::size_t( pointSet.at( 0 ).rows() ) );
 		int *ia = new int[elements + 1];
 		int *ja = new int[elements + 1];
 		double *ar = new double[elements + 1];
@@ -370,11 +400,11 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		ja[0] = 0;
 		ar[0] = 0;
 
-		for ( int i = 1; i <= int( _edgeSet.size() ); ++i ) {
-			for ( int j = 1; j <= _edgeSet.at( 0 ).rows(); ++j ) {
+		for ( int i = 1; i <= int( pointSet.size() ); ++i ) {
+			for ( int j = 1; j <= pointSet.at( 0 ).rows(); ++j ) {
 				ia[pos] = i;
 				ja[pos] = j;
-				vector_t<Number> tmpVec = _edgeSet.at( i - 1 );
+				vector_t<Number> tmpVec = pointSet.at( i - 1 );
 				ar[pos] = carl::toDouble( tmpVec( j - 1 ) );
 				++pos;
 			}
@@ -385,10 +415,10 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		glp_simplex( normal, NULL );
 		glp_exact( normal, NULL );
 
-		vector_t<Number> result = vector_t<Number>( _edgeSet.at( 0 ).rows(), 1 );
+		vector_t<Number> result = vector_t<Number>( pointSet.at( 0 ).rows(), 1 );
 
 		// fill the result vector based on the optimal solution returned by the LP
-		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+		for ( unsigned i = 1; i <= pointSet.at( 0 ).rows(); ++i ) {
 			result( i - 1 ) = carl::rationalize<Number>( glp_get_col_prim( normal, i ) );
 		}
 

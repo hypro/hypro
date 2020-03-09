@@ -66,8 +66,7 @@ struct RefinementSetting {
 		, isDummy( false )
 		, isEmpty( false ) {}
 
-	RefinementSetting& operator=(RefinementSetting&& orig) = default;
-
+	/*
 	RefinementSetting& operator=( const RefinementSetting& orig ) {
 		initialSet = orig.initialSet;
 		mTimings = orig.mTimings;
@@ -78,6 +77,8 @@ struct RefinementSetting {
 		hitBadStates = orig.hitBadStates;
 		return *this;
 	}
+	*/
+	RefinementSetting& operator=( const RefinementSetting& original ) = default;
 
 	friend std::ostream& operator<<( std::ostream& out, const RefinementSetting& in ) {
 		if ( in.isDummy ) {
@@ -125,9 +126,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 	ReachTreeNode( const ReachTreeNode<State>& orig )
 		: TreeNode<ReachTreeNode<State>>( orig )
 		, mPath( orig.getPath() )
-		, mRefinements( orig.getRefinements() )
-	//, mTransitionTimings(orig.getTransitionTimings())
-	{}
+		, mRefinements( orig.getRefinements() ) {}
 
 	//ReachTreeNode(ReachTreeNode&& orig) = delete;
 	//ReachTreeNode& operator=(const ReachTreeNode& orig) = delete;
@@ -151,8 +150,15 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 	{
 		assert( !state.getTimestamp().isEmpty() );
 		assert( level <= mRefinements.size() );
-		mRefinements.insert(mRefinements.begin()+level, RefinementSetting<State>( state, state.getLocation() ));
+		//mRefinements.insert(mRefinements.begin()+level, RefinementSetting<State>( state, state.getLocation() ));
 		//mRefinements[level] = RefinementSetting<State>( state, state.getLocation() );
+		// append or update
+		if ( level == mRefinements.size() ) {
+			mRefinements.push_back( RefinementSetting<State>( state, state.getLocation() ) );
+		} else {
+			mRefinements[level] = RefinementSetting<State>( state, state.getLocation() );
+		}
+
 		mRefinements[level].entryTimestamp = state.getTimestamp();
 		mRefinements[level].initialSet = state;
 	}
@@ -183,6 +189,8 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 	const typename State::repVariant& getSetAtLevel( unsigned level ) const;
 
 	const State& getStateAtLevel( unsigned level ) const;
+
+	const State& getState() const { return getStateAtLevel( 0 ); };
 
 	/**
      * @brief      Gets the timestamp of entry (i.e. global timestamp) for a certain level.

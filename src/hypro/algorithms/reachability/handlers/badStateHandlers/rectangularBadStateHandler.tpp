@@ -7,7 +7,7 @@ void rectangularBadStateHandler<State>::handle() {
 	auto& automaton = SettingsProvider<State>::getInstance().getHybridAutomaton();
 
 	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getLocalBadStates().size() << " local bad states." );
-	auto localBadState = automaton.getLocalBadStates().find( mState->getLocation() );
+	auto localBadState = automaton.getLocalBadStates().find( mState.getLocation() );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking local bad state: " << localBadState->second );
 
@@ -16,14 +16,14 @@ void rectangularBadStateHandler<State>::handle() {
 		CarlPolytope<typename State::NumberType> badStateConstraints{localBadState->second.getMatrix( mIndex ), localBadState->second.getVector( mIndex )};
 		// substitute variables in the formulas by the correct ones in the subspace of the state
 		// 1. Determine offset
-		std::size_t dimensionOffset = mState->getDimensionOffset( mIndex );
+		std::size_t dimensionOffset = mState.getDimensionOffset( mIndex );
 		// 2. substitute
-		for ( std::size_t i = 0; i < mState->getDimension( mIndex ); ++i ) {
+		for ( std::size_t i = 0; i < mState.getDimension( mIndex ); ++i ) {
 			badStateConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
 		}
 
 		// intersect
-		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( badStateConstraints );
+		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ).intersect( badStateConstraints );
 
 		// reduction
 		resultingSet.removeRedundancy();
@@ -52,14 +52,14 @@ void rectangularBadStateHandler<State>::handle() {
 			CarlPolytope<typename State::NumberType> badStateConstraints{badState.getMatrix( mIndex ), badState.getVector( mIndex )};
 			// substitute variables in the formulas by the correct ones in the subspace of the state
 			// 1. Determine offset
-			std::size_t dimensionOffset = mState->getDimensionOffset( mIndex );
+			std::size_t dimensionOffset = mState.getDimensionOffset( mIndex );
 			// 2. substitute
-			for ( std::size_t i = 0; i < mState->getDimension( mIndex ); ++i ) {
+			for ( std::size_t i = 0; i < mState.getDimension( mIndex ); ++i ) {
 				badStateConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
 			}
 
 			// intersect
-			auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( badStateConstraints );
+			auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ).intersect( badStateConstraints );
 
 			// reduction
 			resultingSet.removeRedundancy();

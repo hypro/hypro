@@ -90,175 +90,203 @@ template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>> &points )
 	: mHPlanes()
 	, mDimension( 0 )
-	, mEmpty( TRIBOOL::NSET )
+	, mEmpty( points.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE )
 	, mNonRedundant( true ) {
-	TRACE( "hypro.representations.HPolytope", "Construct from vertices: " );
-#ifdef HYPRO_LOGGING
-	for ( auto vertex : points ) {
-		Point<double> tmp = convert<Number, double>( vertex );
-		TRACE( "hypro.representations.HPolytope", tmp );
-	}
-#endif
-	/*
-	if ( !points.empty() ) {
-		mDimension = points.begin()->dimension();
-		ConvexHull<Number> ch(points);
-		ch.convexHullVertices();
-		mHPlanes = ch.getHsv();
-		//std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
-		assert(ch.getCone().empty());
-		assert(ch.getLinealtySpace().empty());
 
-		//std::cout << "Object constructed from vertices: " << *this << std::endl;
-		//std::cout << "Vertices: " << std::endl;
-		//for(const auto& vertex : points) {
-		//	std::cout << vertex << std::endl;
-		//}
-	}
-	*/
+		if constexpr(is_exact<Number>) {
+			mDimension = points.front().dimension();
 
-	// special case: 1 point - we can directly use box constraints.
-	if ( points.size() == 1 ) {
-		assert( ( *points.begin() ).dimension() > 0 );
-		mDimension = points.begin()->dimension();
-		for ( unsigned d = 0; d < points.begin()->dimension(); ++d ) {
-			vector_t<Number> normal = vector_t<Number>::Zero( points.begin()->dimension() );
-			normal( d ) = 1;
-			mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( normal, points.begin()->at( d ) ) );
-			mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( -normal, -( points.begin()->at( d ) ) ) );
-		}
-		if ( Setting::OPTIMIZER_CACHING ) {
-			setOptimizer( this->matrix(), this->vector() );
-		}
-		return;
-	}
+			//Get raw data for quickhull
+			std::vector<vector_t<Number>> inputPoints;
 
-	if ( !points.empty() ) {
-		mDimension = points.begin()->dimension();
-		// check affine independence - verify object dimension.
-		std::vector<vector_t<Number>> coordinates;
-		for ( const auto &vertex : points ) {
-			coordinates.push_back( vertex.rawCoordinates() );
-		}
-		int effectiveDim = effectiveDimension( coordinates );
-		assert( effectiveDim >= 0 );
-
-		mEmpty = TRIBOOL::FALSE;
-		//if ( points.size() <= mDimension ) {
-		if ( unsigned( effectiveDim ) < mDimension ) {
-			TRACE( "hypro.representations.HPolytope", "Points size: " << points.size() );
-			TRACE( "hypro.representations.HPolytope", "Affine dimension: " << effectiveDim );
-			// get common plane
-			std::vector<vector_t<Number>> vectorsInPlane;
-			//std::cout << "first point: " << *points.begin() << std::endl;
-			for ( unsigned i = 1; i < points.size(); ++i ) {
-				vectorsInPlane.emplace_back( points[i].rawCoordinates() - points[0].rawCoordinates() );
+			for(auto const& point : points) {
+				inputPoints.push_back(point.rawCoordinates());
 			}
-			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal( vectorsInPlane );
-			Number planeOffset = Halfspace<Number>::computePlaneOffset( planeNormal, points[0] );
 
-			TRACE( "hypro.representations.HPolytope", "Shared plane normal: " << planeNormal << ", plane offset: " << planeOffset );
+			//Initialize and run quickhull
+			Quickhull<Number> qh{inputPoints, mDimension};
+			qh.compute();
 
-			// project on lower dimension.
-			// Use dimensions with largest coordinate range for improved stability.
-			// So to say: Drop dimensions with minimal coordinate range
-			Point<Number> maxP = points[0];
-			Point<Number> minP = points[0];
-			for ( const auto &point : points ) {
-				maxP = Point<Number>::coeffWiseMax( maxP, point );
-				minP = Point<Number>::coeffWiseMin( minP, point );
+			//Convert resulting facets into halfspaces
+			for(auto const& facet : qh.getFacets()) {
+				mHPlanes.emplace_back(facet.mNormal, facet.mOffset);
 			}
-			//Make all range values positive
-			Point<Number> dimRange = maxP - minP;
-			for ( unsigned i = 0; i < dimRange.dimension(); i++ ) {
-				dimRange[i] = dimRange.at( i ) < 0 ? Number( -1 ) * dimRange.at( i ) : dimRange.at( i );
-			}
-			//Get dimension with smallest range
-			std::size_t smallest = 0;
-			for ( std::size_t d = 0; d < dimRange.dimension(); d++ ) {
-				if ( dimRange.at( d ) < dimRange.at( smallest ) ) {
-					smallest = d;
+
+			//Assert containment
+			for(auto const& halfspace : mHPlanes) {
+				for(auto const& point : points) {
+					assert(halfspace.contains(point));
 				}
 			}
-			//projDimensions are those who are bigger than smallest.
-			std::vector<std::size_t> projectionDimensions;
-			std::vector<std::size_t> droppedDimensions;
-			TRACE( "hypro.representations.HPolytope", "Project on dimensions: " );
-			for ( std::size_t d = 0; d < dimRange.dimension(); d++ ) {
-				if ( d != smallest ) {
-					TRACE( "hypro.representations.HPolytope", d );
-					projectionDimensions.push_back( d );
-				} else {
-					droppedDimensions.push_back( d );
-				}
-			}
-
-			/*
-			std::vector<std::size_t> projectionDimensions;
-			std::vector<std::size_t> droppedDimensions;
-			for(std::size_t d = 0; d < mDimension; ++d){
-				if(d < unsigned(effectiveDim)){
-					projectionDimensions.push_back(d);
-				} else {
-					droppedDimensions.push_back(d);
-				}
-			}
-			*/
-			std::vector<Point<Number>> projectedPoints;
-			for ( const auto &point : points ) {
-				TRACE( "hypro.representations.HPolytope", "Projected point " << point.project( projectionDimensions ) );
-				projectedPoints.emplace_back( point.project( projectionDimensions ) );
-			}
-			/*
-			std::cout << "Projected points are:\n";
-			for(auto& point : projectedPoints){
-				std::cout << point << std::endl;
-			}
-			*/
-			HPolytopeT<Number, Converter, Setting> projectedPoly( projectedPoints );
-			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
-			projectedPoly.insertEmptyDimensions( projectionDimensions, droppedDimensions );
-
-			TRACE( "hypro.representations.HPolytope", "After lifting " << projectedPoly );
-
-			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
-			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
-			projectedPoly.insert( Halfspace<Number>( planeNormal, planeOffset ) );
-			projectedPoly.insert( Halfspace<Number>( -planeNormal, -planeOffset ) );
-
-			TRACE( "hypro.representations.HPolytope", "After adding constraints " << projectedPoly );
-
-			*this = projectedPoly;
-
-			if ( Setting::OPTIMIZER_CACHING ) {
-				setOptimizer( this->matrix(), this->vector() );
-			}
-
-			// Alternative version
-			// We need a copy of the set of points since auxiliary points will be added
-			//std::vector<Point<Number>> auxiliaryPoints(points);
-			//mHPlanes = computeConstraintsForDegeneratedPolytope(auxiliaryPoints, mDimension - effectiveDim);
-
 		} else {
+			TRACE( "hypro.representations.HPolytope", "Construct from vertices: " );
+		#ifdef HYPRO_LOGGING
+			for ( auto vertex : points ) {
+				Point<double> tmp = convert<Number, double>( vertex );
+				TRACE( "hypro.representations.HPolytope", tmp );
+			}
+		#endif
 			/*
-			ConvexHull<Number> ch(points);
-			ch.convexHullVertices();
-			mHPlanes = ch.getHsv();
+			if ( !points.empty() ) {
+				mDimension = points.begin()->dimension();
+				ConvexHull<Number> ch(points);
+				ch.convexHullVertices();
+				mHPlanes = ch.getHsv();
+				//std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
+				assert(ch.getCone().empty());
+				assert(ch.getLinealtySpace().empty());
+
+				//std::cout << "Object constructed from vertices: " << *this << std::endl;
+				//std::cout << "Vertices: " << std::endl;
+				//for(const auto& vertex : points) {
+				//	std::cout << vertex << std::endl;
+				//}
+			}
 			*/
 
-			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-			for ( auto &facet : facets ) {
-				assert( facet->halfspace().contains( points ) );
-				mHPlanes.push_back( facet->halfspace() );
+			// special case: 1 point - we can directly use box constraints.
+			if ( points.size() == 1 ) {
+				assert( ( *points.begin() ).dimension() > 0 );
+				mDimension = points.begin()->dimension();
+				for ( unsigned d = 0; d < points.begin()->dimension(); ++d ) {
+					vector_t<Number> normal = vector_t<Number>::Zero( points.begin()->dimension() );
+					normal( d ) = 1;
+					mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( normal, points.begin()->at( d ) ) );
+					mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( -normal, -( points.begin()->at( d ) ) ) );
+				}
+				if ( Setting::OPTIMIZER_CACHING ) {
+					setOptimizer( this->matrix(), this->vector() );
+				}
+				return;
 			}
-			facets.clear();
 
-			if ( Setting::OPTIMIZER_CACHING ) {
-				setOptimizer( this->matrix(), this->vector() );
+			if ( !points.empty() ) {
+				mDimension = points.begin()->dimension();
+				// check affine independence - verify object dimension.
+				std::vector<vector_t<Number>> coordinates;
+				for ( const auto &vertex : points ) {
+					coordinates.push_back( vertex.rawCoordinates() );
+				}
+				int effectiveDim = effectiveDimension( coordinates );
+				assert( effectiveDim >= 0 );
+
+				mEmpty = TRIBOOL::FALSE;
+				//if ( points.size() <= mDimension ) {
+				if ( unsigned( effectiveDim ) < mDimension ) {
+					TRACE( "hypro.representations.HPolytope", "Points size: " << points.size() );
+					TRACE( "hypro.representations.HPolytope", "Affine dimension: " << effectiveDim );
+					// get common plane
+					std::vector<vector_t<Number>> vectorsInPlane;
+					//std::cout << "first point: " << *points.begin() << std::endl;
+					for ( unsigned i = 1; i < points.size(); ++i ) {
+						vectorsInPlane.emplace_back( points[i].rawCoordinates() - points[0].rawCoordinates() );
+					}
+					vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal( vectorsInPlane );
+					Number planeOffset = Halfspace<Number>::computePlaneOffset( planeNormal, points[0] );
+
+					TRACE( "hypro.representations.HPolytope", "Shared plane normal: " << planeNormal << ", plane offset: " << planeOffset );
+
+					// project on lower dimension.
+					// Use dimensions with largest coordinate range for improved stability.
+					// So to say: Drop dimensions with minimal coordinate range
+					Point<Number> maxP = points[0];
+					Point<Number> minP = points[0];
+					for ( const auto &point : points ) {
+						maxP = Point<Number>::coeffWiseMax( maxP, point );
+						minP = Point<Number>::coeffWiseMin( minP, point );
+					}
+					//Make all range values positive
+					Point<Number> dimRange = maxP - minP;
+					for ( unsigned i = 0; i < dimRange.dimension(); i++ ) {
+						dimRange[i] = dimRange.at( i ) < 0 ? Number( -1 ) * dimRange.at( i ) : dimRange.at( i );
+					}
+					//Get dimension with smallest range
+					std::size_t smallest = 0;
+					for ( std::size_t d = 0; d < dimRange.dimension(); d++ ) {
+						if ( dimRange.at( d ) < dimRange.at( smallest ) ) {
+							smallest = d;
+						}
+					}
+					//projDimensions are those who are bigger than smallest.
+					std::vector<std::size_t> projectionDimensions;
+					std::vector<std::size_t> droppedDimensions;
+					TRACE( "hypro.representations.HPolytope", "Project on dimensions: " );
+					for ( std::size_t d = 0; d < dimRange.dimension(); d++ ) {
+						if ( d != smallest ) {
+							TRACE( "hypro.representations.HPolytope", d );
+							projectionDimensions.push_back( d );
+						} else {
+							droppedDimensions.push_back( d );
+						}
+					}
+
+					/*
+					std::vector<std::size_t> projectionDimensions;
+					std::vector<std::size_t> droppedDimensions;
+					for(std::size_t d = 0; d < mDimension; ++d){
+						if(d < unsigned(effectiveDim)){
+							projectionDimensions.push_back(d);
+						} else {
+							droppedDimensions.push_back(d);
+						}
+					}
+					*/
+					std::vector<Point<Number>> projectedPoints;
+					for ( const auto &point : points ) {
+						TRACE( "hypro.representations.HPolytope", "Projected point " << point.project( projectionDimensions ) );
+						projectedPoints.emplace_back( point.project( projectionDimensions ) );
+					}
+					/*
+					std::cout << "Projected points are:\n";
+					for(auto& point : projectedPoints){
+						std::cout << point << std::endl;
+					}
+					*/
+					HPolytopeT<Number, Converter, Setting> projectedPoly( projectedPoints );
+					//std::cout << "Projected polytope: " << projectedPoly << std::endl;
+					projectedPoly.insertEmptyDimensions( projectionDimensions, droppedDimensions );
+
+					TRACE( "hypro.representations.HPolytope", "After lifting " << projectedPoly );
+
+					//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
+					//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
+					projectedPoly.insert( Halfspace<Number>( planeNormal, planeOffset ) );
+					projectedPoly.insert( Halfspace<Number>( -planeNormal, -planeOffset ) );
+
+					TRACE( "hypro.representations.HPolytope", "After adding constraints " << projectedPoly );
+
+					*this = projectedPoly;
+
+					if ( Setting::OPTIMIZER_CACHING ) {
+						setOptimizer( this->matrix(), this->vector() );
+					}
+
+					// Alternative version
+					// We need a copy of the set of points since auxiliary points will be added
+					//std::vector<Point<Number>> auxiliaryPoints(points);
+					//mHPlanes = computeConstraintsForDegeneratedPolytope(auxiliaryPoints, mDimension - effectiveDim);
+
+				} else {
+					/*
+					ConvexHull<Number> ch(points);
+					ch.convexHullVertices();
+					mHPlanes = ch.getHsv();
+					*/
+
+					std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
+					for ( auto &facet : facets ) {
+						assert( facet->halfspace().contains( points ) );
+						mHPlanes.push_back( facet->halfspace() );
+					}
+					facets.clear();
+
+					if ( Setting::OPTIMIZER_CACHING ) {
+						setOptimizer( this->matrix(), this->vector() );
+					}
+				}
 			}
 		}
 	}
-}
 
 //conversion ctor - just like copy ctor
 template <typename Number, typename Converter, class Setting>

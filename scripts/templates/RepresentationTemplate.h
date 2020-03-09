@@ -2,15 +2,15 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+static_assert(false,
+              "This file may only be included indirectly by GeometricObject.h");
 #endif
 
-#include "REPRESENTATIONSetting.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "REPRESENTATIONSetting.h"
 
 namespace hypro {
-
 
 /**
  * @brief      The class which represents a REPRESENTATION.
@@ -242,7 +242,6 @@ class REPRESENTATIONT : public GeometricObject<Number, REPRESENTATIONT<Number,Co
 
 };
 /** @} */
-
 
 } // namespace hypro
 

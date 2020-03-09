@@ -56,11 +56,23 @@ class Halfspace {
 	Halfspace( const vector_t<Number>& _vector, const Number& _off );
 
 	/**
-	 * @brief      Constructor from an offset vector and a set of vectors lying in the plane.
+	 * @brief      Constructor from an offset vector and a set of points lying in the plane.
 	 * @param[in]  _vec        The offset vector.
-	 * @param[in]  _vectorSet  The vector set defining the plane.
+	 * @param[in]  _vectorSet  The point-set defining the plane.
 	 */
 	Halfspace( const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet );
+
+	/**
+	 * @brief Construct a new Halfspace object from a set of points.
+	 * @param points
+	 */
+	Halfspace( const std::vector<Point<Number>>& points );
+
+	/**
+	 * @brief Construct a new Halfspace object from a set of points given as vector_t.
+	 * @param points
+	 */
+	Halfspace( const std::vector<vector_t<Number>>& points );
 
 	/**
 	 * @brief      Destroys the object.
@@ -234,6 +246,13 @@ class Halfspace {
 	bool contains( const std::vector<Point<Number>>& _points ) const;
 
 	/**
+	 * @brief Determines, whether the given point is contained inside the halfspace using exact arithmetic.
+	 * @param[in] point The point.
+	 * @return True iff the point is contained.
+	 */
+	bool exactContains(vector_t<Number> const& point) const;
+
+	/**
 	 * @brief      Determines, whether the point given as a vector saturates the halfspace, i.e. lies on
 	 * its bounding plane.
 	 * @param[in]  _vector  The vector.
@@ -269,7 +288,7 @@ class Halfspace {
 	 * @param[in] The set of vectors.
 	 * @return 		A vector representing the resulting plane normal.
 	 */
-	static vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet );
+	static vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& pointSet );
 
 	/**
 	 * @brief      Calculates the plane offset of a given normal vector for that plane and a point lying on the plane.
