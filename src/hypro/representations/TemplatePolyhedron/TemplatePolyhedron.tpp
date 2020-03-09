@@ -220,7 +220,7 @@ namespace hypro {
 			for(int i = 0; i < mMatrixPtr->rows(); ++i){
 				//TODO: linear dependent better
 				//if(vector_t<Number>(mMatrixPtr->row(i)) == _direction){
-				if(mMatrixPtr->row(i).isApprox(_direction)){
+				if(mMatrixPtr->row(i).transpose().isApprox(_direction)){
 					COUNT("Single Evaluation avoided");
 					return EvaluationResult<Number>(mVector(i), SOLUTION::FEAS);
 				}
@@ -238,7 +238,6 @@ namespace hypro {
 			for(int i = 0; i < _directions.rows(); ++i){
 				//Quick check: If direction is a part of the template, then just return offset
 				bool found = false;
-				COUNT("Evaluate calls");
 				for(int j = 0; j < mMatrixPtr->rows(); ++j){
 					//TODO: linear dependent better
 					//if(!found && mMatrixPtr->row(j) == _directions.row(i)){
@@ -250,6 +249,7 @@ namespace hypro {
 					}
 				}
 				if(!found){
+					COUNT("Evaluate calls");
 					res.emplace_back(mOptimizer.evaluate(_directions.row(i), useExact));
 				}	
 			}
@@ -446,6 +446,13 @@ namespace hypro {
 		//std::cout << "TPoly::project, tmpTPoly is: " << tmpTPoly << std::endl;
 		return tmpTPoly;
 
+		//typename Converter::HPolytope tmp(*mMatrixPtr, mVector);
+		//tmp = tmp.project(dimensions);
+		//auto tmpTPoly = Converter::toTemplatePolyhedron(tmp);
+		////std::cout << "TPoly::project, tmpTPoly is: " << tmpTPoly << std::endl;
+		//return tmpTPoly;
+
+
 /* THIS WAS WRONG ALL ALONG
 		//All coeffs not in a mentioned dimension will be projected to zero.
 		std::set<std::size_t> dimsAsSet(dimensions.begin(), dimensions.end());
@@ -619,8 +626,7 @@ namespace hypro {
 		
 		//If partially inside halfspace - costly
 		assert(hspace.normal().rows() == mMatrixPtr->cols());
-		matrix_t<Number> mat = matrix_t<Number>::Zero(1,hspace.normal().rows());
-		mat.row(0) = hspace.normal().transpose();
+		matrix_t<Number> mat = hspace.normal().transpose();
 		vector_t<Number> vec = vector_t<Number>::Zero(1);
 		vec(0) = hspace.offset();
 		return intersectHalfspaces(mat,vec);
@@ -629,7 +635,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		//Emptiness check
 		if(this->empty()) return *this;
@@ -678,10 +684,12 @@ namespace hypro {
 		//	//std::cout << d << ",";
 		//}
 		//std::cout << "}" << std::endl;
+		assert(extendedMatrix.cols() == mMatrixPtr->cols());
+		assert(extendedMatrix.rows() == extendedVector.rows());
 		TemplatePolyhedronT<Number,Converter,Setting> extendedTPoly(extendedMatrix,extendedVector);
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
 		extendedTPoly.removeRedundancy();
-		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
+		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
 		for(int j = 0; j < mMatrixPtr->rows(); ++j){
 			if(itDone == alreadyDone.end() || j != *itDone){
 				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),false);

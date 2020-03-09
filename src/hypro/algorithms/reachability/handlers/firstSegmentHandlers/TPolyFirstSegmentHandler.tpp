@@ -32,7 +32,9 @@ namespace hypro {
         //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots" << std::endl;
         tNumber max(-1e10);
         tNumber valueAtRoot = 0;
-        std::vector<carl::RealAlgebraicNumber<tNumber>> roots = carl::rootfinder::RealRootIsolation<tNumber>(polynom, interval).get_roots();
+        //NOTE: RealRootIsolation is not supported in carl 19.01
+        //std::vector<carl::RealAlgebraicNumber<tNumber>> roots = carl::rootfinder::RealRootIsolation<tNumber>(polynom, interval).get_roots();
+        std::vector<carl::RealAlgebraicNumber<tNumber>> roots = carl::rootfinder::realRoots(polynom, interval);
         //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots, roots are: {";
         //for(const auto& r : roots){
         //    //std::cout << r << ",";
@@ -48,8 +50,8 @@ namespace hypro {
                 throw std::runtime_error("TPolyFirstSegmentHandler::handle, unknown time number type.");
                 exit(1);
             }
-            //valueAtRoot = polynom.evaluate(rootNumber);
-            valueAtRoot = carl::evaluate(polynom,rootNumber);
+            valueAtRoot = polynom.evaluate(rootNumber);
+            //valueAtRoot = carl::evaluate(polynom,rootNumber);
             if(valueAtRoot > max){
                 max = valueAtRoot;
             }
@@ -153,13 +155,13 @@ namespace hypro {
                 //Compute roots that lie in interval and check for maximal value there
                 tNumber max = maxValueAtRoots(polynomDeriv, carl::Interval<tNumber>(tNumber(0),this->mTimeStep));    
                 //Get value for 0 and for this->mTimeStep and then somehow compute firstSegment
-                //tNumber valueAtRoot = polynom.evaluate(tNumber(0));
-                tNumber valueAtRoot = carl::evaluate(polynom, tNumber(0));
+                tNumber valueAtRoot = polynom.evaluate(tNumber(0));
+                //tNumber valueAtRoot = carl::evaluate(polynom, tNumber(0));
                 if(valueAtRoot > max){
                     max = valueAtRoot;
                 }
-                //valueAtRoot = polynom.evaluate(this->mTimeStep);
-                valueAtRoot = carl::evaluate(polynom, this->mTimeStep);
+                valueAtRoot = polynom.evaluate(this->mTimeStep);
+                //valueAtRoot = carl::evaluate(polynom, this->mTimeStep);
                 if(valueAtRoot > max){
                     max = valueAtRoot;
                 }  
@@ -175,8 +177,8 @@ namespace hypro {
                 bool decreasing = true;
                 assert(this->mTimeStep != tNumber(0));
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / 4)){
-                    values.emplace_back(carl::evaluate(polynom,carl::convert<tNumber,Number>(timeStepPart)));
-                    //values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
+                    //values.emplace_back(carl::evaluate(polynom,carl::convert<tNumber,Number>(timeStepPart)));
+                    values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
                     //std::cout << "TPolyFirstSegmentHandler::handle, timeStepPart: " << timeStepPart << " values: {";
                     //for(const auto& v : values){
                     //    //std::cout << v << ",";
