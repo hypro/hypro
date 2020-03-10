@@ -77,7 +77,9 @@ var hierarchy =
       [ "hypro::FinishWithDiscreteProcessingException", "classhypro_1_1FinishWithDiscreteProcessingException.html", null ],
       [ "hypro::HardTerminateException", "classhypro_1_1HardTerminateException.html", null ]
     ] ],
+    [ "hypro::ExactQuickhull::Facet< Number, Euclidian >", "structhypro_1_1ExactQuickhull_1_1Facet.html", null ],
     [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
+    [ "hypro::ExactQuickhull::FacetSpace< Number, Euclidian >", "classhypro_1_1ExactQuickhull_1_1FacetSpace.html", null ],
     [ "false_type", null, [
       [ "hypro::is_flow< T >", "structhypro_1_1is__flow.html", null ],
       [ "hypro::is_shared_ptr< T >", "structhypro_1_1is__shared__ptr.html", null ],
@@ -185,7 +187,8 @@ var hierarchy =
     [ "hypro::IContext", "classhypro_1_1IContext.html", [
       [ "hypro::LTIContext< State >", "classhypro_1_1LTIContext.html", [
         [ "hypro::TimedContext< State >", "classhypro_1_1TimedContext.html", null ]
-      ] ]
+      ] ],
+      [ "hypro::RectangularContext< State >", "classhypro_1_1RectangularContext.html", null ]
     ] ],
     [ "hypro::IHandler", "classhypro_1_1IHandler.html", [
       [ "hypro::IBadStateHandler", "classhypro_1_1IBadStateHandler.html", [
@@ -500,6 +503,8 @@ var hierarchy =
     [ "hypro::PolytopeSupportFunction< Number, Setting >", "classhypro_1_1PolytopeSupportFunction.html", null ],
     [ "hypro::PrincipalComponentAnalysis< Number >", "classhypro_1_1PrincipalComponentAnalysis.html", null ],
     [ "hypro::projectionContent< Number, Setting >", "structhypro_1_1projectionContent.html", null ],
+    [ "hypro::QuickhullAlgorithm< Number, Euclidian, typename >", "classhypro_1_1QuickhullAlgorithm.html", null ],
+    [ "hypro::QuickhullAlgorithm< Number, Euclidian, EnableIfExact< Number > >", "classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Range< Number >", "classhypro_1_1Range.html", null ],
     [ "hypro::reachability::Reach< Number, ReacherSettings, State >", "classhypro_1_1reachability_1_1Reach.html", null ],
     [ "hypro::ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", null ],
@@ -533,6 +538,7 @@ var hierarchy =
     ] ],
     [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scaleContent.html", null ],
     [ "hypro::ScopedLock< Lockable >", "classhypro_1_1ScopedLock.html", null ],
+    [ "ScopedRoundingMode", "classScopedRoundingMode.html", null ],
     [ "hypro::detail::seq< Is >", "structhypro_1_1detail_1_1seq.html", null ],
     [ "hypro::detail::seq< Is... >", "structhypro_1_1detail_1_1seq.html", [
       [ "hypro::detail::gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html", null ]
@@ -606,6 +612,7 @@ var hierarchy =
     [ "hypro::WorkQueueManager< Workable >", "classhypro_1_1WorkQueueManager.html", null ],
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< State > > >", "classhypro_1_1WorkQueueT.html", null ],
+    [ "hypro::WorkQueueT< TaskType >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< TaskTypePtr >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< Workable >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ]

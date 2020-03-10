@@ -13,6 +13,9 @@ var dir_1d177bd438e269a304e1f07d1a6d36f2 =
     [ "LTIContext.h", "LTIContext_8h.html", [
       [ "LTIContext", "classhypro_1_1LTIContext.html", "classhypro_1_1LTIContext" ]
     ] ],
+    [ "RectangularContext.h", "RectangularContext_8h.html", [
+      [ "RectangularContext", "classhypro_1_1RectangularContext.html", "classhypro_1_1RectangularContext" ]
+    ] ],
     [ "TimedContext.h", "TimedContext_8h.html", [
       [ "TimedContext", "classhypro_1_1TimedContext.html", "classhypro_1_1TimedContext" ]
     ] ]

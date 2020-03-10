@@ -1,6 +1,8 @@
 var searchData=
 [
+  ['facet',['Facet',['../structhypro_1_1ExactQuickhull_1_1Facet.html',1,'hypro::ExactQuickhull']]],
   ['facet',['Facet',['../classhypro_1_1Facet.html',1,'hypro']]],
+  ['facetspace',['FacetSpace',['../classhypro_1_1ExactQuickhull_1_1FacetSpace.html',1,'hypro::ExactQuickhull']]],
   ['fan',['Fan',['../classhypro_1_1Fan.html',1,'hypro']]],
   ['fieldcontext',['FieldContext',['../classhypro_1_1HybridSystemParser_1_1FieldContext.html',1,'hypro::HybridSystemParser']]],
   ['fieldscontext',['FieldsContext',['../classhypro_1_1HybridSystemParser_1_1FieldsContext.html',1,'hypro::HybridSystemParser']]],

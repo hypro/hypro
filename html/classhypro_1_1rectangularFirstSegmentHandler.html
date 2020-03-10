@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.02</span>
+   &#160;<span id="projectnumber">20.03</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -131,8 +131,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1rectangularFirstSegmentH
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0a9dc18e8428807f2b11591f7e696a00"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#a0a9dc18e8428807f2b11591f7e696a00">rectangularFirstSegmentHandler</a> (State *state, std::size_t index)</td></tr>
-<tr class="separator:a0a9dc18e8428807f2b11591f7e696a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affba822753825d9e46e8ba583ec50daf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#affba822753825d9e46e8ba583ec50daf">rectangularFirstSegmentHandler</a> (State &amp;state, std::size_t index)</td></tr>
+<tr class="separator:affba822753825d9e46e8ba583ec50daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad14637653d69ad9770a97ed3517b7941"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ad14637653d69ad9770a97ed3517b7941">handle</a> ()</td></tr>
 <tr class="separator:ad14637653d69ad9770a97ed3517b7941"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0a7a2bb1c27f6aec022ab4689858966"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#af0a7a2bb1c27f6aec022ab4689858966">handlerName</a> ()</td></tr>
@@ -150,8 +150,8 @@ Private Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ab71a743187acfdcd2de9bb6558e6dec9"><td class="memItemLeft" align="right" valign="top">State *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ab71a743187acfdcd2de9bb6558e6dec9">mState</a></td></tr>
-<tr class="separator:ab71a743187acfdcd2de9bb6558e6dec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8201be3dae0d8f631961a7ca177672e6"><td class="memItemLeft" align="right" valign="top">State &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#a8201be3dae0d8f631961a7ca177672e6">mState</a></td></tr>
+<tr class="separator:a8201be3dae0d8f631961a7ca177672e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5129fe050250911b471b09c649293e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a7e902fc6c718791cc884dd557485c63b">flowVariant</a>&lt; <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#a8572da8f9f9fb117f6ca47c228e11b42">Number</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ad5129fe050250911b471b09c649293e0">mFlow</a></td></tr>
 <tr class="separator:ad5129fe050250911b471b09c649293e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3286dffeb2fb7cedf68c983a1f8d28a"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ae3286dffeb2fb7cedf68c983a1f8d28a">mIndex</a></td></tr>
@@ -189,7 +189,7 @@ template&lt;typename State &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a0a9dc18e8428807f2b11591f7e696a00"></a>
+<a class="anchor" id="affba822753825d9e46e8ba583ec50daf"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -201,7 +201,7 @@ template&lt;typename State &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html">hypro::rectangularFirstSegmentHandler</a>&lt; State &gt;::<a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html">rectangularFirstSegmentHandler</a> </td>
           <td>(</td>
-          <td class="paramtype">State *&#160;</td>
+          <td class="paramtype">State &amp;&#160;</td>
           <td class="paramname"><em>state</em>, </td>
         </tr>
         <tr>
@@ -370,7 +370,7 @@ template&lt;typename State &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab71a743187acfdcd2de9bb6558e6dec9"></a>
+<a class="anchor" id="a8201be3dae0d8f631961a7ca177672e6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -380,7 +380,7 @@ template&lt;typename State &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">State* <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html">hypro::rectangularFirstSegmentHandler</a>&lt; State &gt;::mState</td>
+          <td class="memname">State&amp; <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html">hypro::rectangularFirstSegmentHandler</a>&lt; State &gt;::mState</td>
         </tr>
       </table>
   </td>

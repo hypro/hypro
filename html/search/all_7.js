@@ -94,6 +94,8 @@ var searchData=
   ['getentrytransition',['getEntryTransition',['../classhypro_1_1EventTimingNode.html#ac8f5dc04f6aafddc3a519a87c72a8900',1,'hypro::EventTimingNode']]],
   ['getepsilonpsi',['getEpsilonpsi',['../classhypro_1_1NonLinearOmega0Supportfunction.html#a398a547a9297c7b7cea3c31a326eb767',1,'hypro::NonLinearOmega0Supportfunction']]],
   ['getexternalinput',['getExternalInput',['../classhypro_1_1Location.html#a385adc86c40a3c7c44017bd22ea06370',1,'hypro::Location']]],
+  ['getfacets',['getFacets',['../classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#a9c6237e52694ff8a9e3a12eb8c239362',1,'hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;']]],
+  ['getfacettoprocess',['getFacetToProcess',['../classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#abce09b85f4ada8b41ae81b0ae0041b8b',1,'hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;']]],
   ['getfactor',['getFactor',['../classhypro_1_1ScaleOp.html#aeecb5e35ef37d211244d9d7877e083a7',1,'hypro::ScaleOp']]],
   ['getflowdimension',['getFlowDimension',['../namespacehypro.html#a74ba5f19fb9695f8ba99124f240e83ba',1,'hypro']]],
   ['getflowintervalfordimension',['getFlowIntervalForDimension',['../classhypro_1_1rectangularFlow.html#a905d518a4f11e02e05171efe7d7b2b1f',1,'hypro::rectangularFlow']]],

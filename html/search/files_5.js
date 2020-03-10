@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['facet_2eh',['Facet.h',['../Facet_8h.html',1,'']]],
+  ['facet_2eh',['Facet.h',['../algorithms_2quickhull_2quickhull__exact_2Facet_8h.html',1,'']]],
+  ['facet_2eh',['Facet.h',['../datastructures_2Facet_8h.html',1,'']]],
+  ['facetspace_2eh',['FacetSpace.h',['../FacetSpace_8h.html',1,'']]],
   ['fan_2eh',['Fan.h',['../Fan_8h.html',1,'']]],
   ['features_2emd',['features.md',['../features_8md.html',1,'']]],
   ['filewriter_2eh',['Filewriter.h',['../Filewriter_8h.html',1,'']]],

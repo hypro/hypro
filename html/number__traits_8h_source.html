@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h File Reference</title>
+<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/number_traits.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.02</span>
+   &#160;<span id="projectnumber">20.03</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -97,7 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('Facet_8h.html','');});
+$(document).ready(function(){initNavTree('number__traits_8h_source.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -115,42 +115,20 @@ $(document).ready(function(){initNavTree('Facet_8h.html','');});
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">Facet.h File Reference</div>  </div>
+<div class="title">number_traits.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p><a href="Facet_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Facet.html">hypro::Facet&lt; Number &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for a facet of a polytope.  <a href="classhypro_1_1Facet.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacehypro"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html">hypro</a></td></tr>
-<tr class="memdesc:namespacehypro"><td class="mdescLeft">&#160;</td><td class="mdescRight">General context interface to set up a reachability worker. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:afd53e65bd9b40647f75d1b9d610f902a"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:afd53e65bd9b40647f75d1b9d610f902a"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#afd53e65bd9b40647f75d1b9d610f902a">hypro::operator&lt;&lt;</a> (std::ostream &amp;_ostr, const Facet&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_f)</td></tr>
-<tr class="separator:afd53e65bd9b40647f75d1b9d610f902a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+<a href="number__traits_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#include &quot;carl/numbers/numbers.h&quot;</span></div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;type_traits&gt;</span></div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div><div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="number__traits_8h.html#a8af2d9e930f36b3d2a7a0637573e2629">    7</a></span>&#160;<span class="keyword">inline</span> constexpr <span class="keywordtype">bool</span> <a class="code" href="number__traits_8h.html#a8af2d9e930f36b3d2a7a0637573e2629">is_exact</a> = std::is_same_v&lt;Number, mpq_class&gt;;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div><div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="number__traits_8h.html#abe0e83ac9ecaf54991a8dfd64e444f15">   10</a></span>&#160;<span class="keyword">using</span> <a class="code" href="number__traits_8h.html#abe0e83ac9ecaf54991a8dfd64e444f15">EnableIfExact</a> = std::enable_if_t&lt;is_exact&lt;Number&gt;&gt;;</div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div><div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="number__traits_8h.html#affe8fa9ecd3276f4279d83ba225ea2b9">   13</a></span>&#160;<span class="keyword">using</span> <a class="code" href="number__traits_8h.html#affe8fa9ecd3276f4279d83ba225ea2b9">EnableIfFloatingpoint</a> = std::enable_if_t&lt;std::is_floating_point_v&lt;Number&gt;&gt;;</div><div class="ttc" id="number__traits_8h_html_affe8fa9ecd3276f4279d83ba225ea2b9"><div class="ttname"><a href="number__traits_8h.html#affe8fa9ecd3276f4279d83ba225ea2b9">EnableIfFloatingpoint</a></div><div class="ttdeci">std::enable_if_t&lt; std::is_floating_point_v&lt; Number &gt;&gt; EnableIfFloatingpoint</div><div class="ttdef"><b>Definition:</b> <a href="number__traits_8h_source.html#l00013">number_traits.h:13</a></div></div>
+<div class="ttc" id="number__traits_8h_html_a8af2d9e930f36b3d2a7a0637573e2629"><div class="ttname"><a href="number__traits_8h.html#a8af2d9e930f36b3d2a7a0637573e2629">is_exact</a></div><div class="ttdeci">constexpr bool is_exact</div><div class="ttdef"><b>Definition:</b> <a href="number__traits_8h_source.html#l00007">number_traits.h:7</a></div></div>
+<div class="ttc" id="number__traits_8h_html_abe0e83ac9ecaf54991a8dfd64e444f15"><div class="ttname"><a href="number__traits_8h.html#abe0e83ac9ecaf54991a8dfd64e444f15">EnableIfExact</a></div><div class="ttdeci">std::enable_if_t&lt; is_exact&lt; Number &gt;&gt; EnableIfExact</div><div class="ttdef"><b>Definition:</b> <a href="number__traits_8h_source.html#l00010">number_traits.h:10</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_bce2075adec303dcb2f0c4fbfcbc8493.html">datastructures</a></li><li class="navelem"><a class="el" href="Facet_8h.html">Facet.h</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_55730fee9a0c1f12da77eb14a8325c4c.html">algorithms</a></li><li class="navelem"><a class="el" href="dir_fd4700aaeaadb223111da03ce650c1b7.html">quickhull</a></li><li class="navelem"><a class="el" href="number__traits_8h.html">number_traits.h</a></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>

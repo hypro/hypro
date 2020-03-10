@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.02</span>
+   &#160;<span id="projectnumber">20.03</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -117,6 +117,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li class="current"><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -235,6 +236,9 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 </li>
 <li>ScopedLock()
 : <a class="el" href="classhypro_1_1ScopedLock.html#a0b024616f0e7f168bbd5423898ed5c84">hypro::ScopedLock&lt; Lockable &gt;</a>
+</li>
+<li>ScopedRoundingMode()
+: <a class="el" href="classScopedRoundingMode.html#a89e9a6188fc712ee854a5772d6b95186">ScopedRoundingMode</a>
 </li>
 <li>selectBlandPivot()
 : <a class="el" href="classhypro_1_1Dictionary.html#a7b7af3f5b87421c2d43bfb84604dd122">hypro::Dictionary&lt; Number &gt;</a>
@@ -431,6 +435,9 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 <li>setOptimizer()
 : <a class="el" href="classhypro_1_1HPolytopeT.html#ac74db217e739aae4090b7eec40fb4a33">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
+<li>setOrientation()
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#ade0192e24cebd6f519868031bb7012f8">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+</li>
 <li>setParent()
 : <a class="el" href="classhypro_1_1ReachTreeNode.html#aab47eff1e87290bc5073aedb04e48995">hypro::ReachTreeNode&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1TreeNode.html#a5ce7bf15a66083ee7802397a93324f83">hypro::TreeNode&lt; Data &gt;</a>
@@ -596,7 +603,7 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 : <a class="el" href="classhypro_1_1Path.html#adc455bc9c3902b36a77df4aae94d50d2">hypro::Path&lt; Number, tNumber &gt;</a>
 </li>
 <li>shift()
-: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ac73d61494633902cb25b524f955c7e04">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1DifferenceBoundsT.html#a3fc86bed557ff494c5235a6b481d1d7d">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>signedDistance()
 : <a class="el" href="classhypro_1_1Halfspace.html#a4ca6f32bb4d9bbce85be694bfbbeca7f">hypro::Halfspace&lt; Number &gt;</a>
@@ -711,7 +718,7 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 , <a class="el" href="classhypro_1_1HyproFormulaVisitor.html#a2c97360c5066916c1a9ca2f269369f54">hypro::HyproFormulaVisitor&lt; Number &gt;</a>
 </li>
 <li>substitute()
-: <a class="el" href="classhypro_1_1TaylorModel.html#a2647cbc9e0eb5b5cc5d2f93ba1f9206a">hypro::TaylorModel&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1TaylorModel.html#a3d62160aefd4ccc5b5a0eaf71645623d">hypro::TaylorModel&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1TaylorModelVec.html#ab5479584fb65eb243dc539ea63499005">hypro::TaylorModelVec&lt; Number &gt;</a>
 </li>
 <li>substituteEquations()
@@ -758,7 +765,7 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 , <a class="el" href="structhypro_1_1SupportFunctionSetting.html#a99c61923c917c923bca327152c38136d">hypro::SupportFunctionSetting</a>
 </li>
 <li>SupportFunctionContent()
-: <a class="el" href="classhypro_1_1SupportFunctionContent.html#adbf248537c8036588941cfd4059e7a0f">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1SupportFunctionContent.html#a04eb9c1de85e1814e106f119942a4dda">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
 </li>
 <li>SupportFunctionContent&lt; Number, Setting &gt;
 : <a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a8405859f4a23d2c11bb9905c1b6de0b4">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;</a>
@@ -767,12 +774,12 @@ $(document).ready(function(){initNavTree('functions_s.html','');});
 : <a class="el" href="classhypro_1_1Converter.html#a444ce63a03bb0da92a09d2b32f853f4b">hypro::Converter&lt; Number &gt;</a>
 </li>
 <li>SupportFunctionNewT()
-: <a class="el" href="classhypro_1_1SupportFunctionNewT.html#ada63aa39bf2c368667d40a22cb2c2b7f">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;</a>
+: <a class="el" href="classhypro_1_1SupportFunctionNewT.html#ae909dd7628a082de8803dd5914614121">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>SupportFunctionT
 : <a class="el" href="classhypro_1_1PolytopeSupportFunction.html#aa3effc03dfa7a7491abbf1e091c1aaa7">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1SupportFunctionContent.html#aa3effc03dfa7a7491abbf1e091c1aaa7">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
-, <a class="el" href="classhypro_1_1SupportFunctionT.html#ae122732e5a5bb93339c0468354ea45cd">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1SupportFunctionT.html#a08d2ea47d6929b9b3ede9b4a400f97b6">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>supportValue
 : <a class="el" href="structhypro_1_1EvaluationResult.html#a9277925fdcd332e8b9528b9ca603e846">hypro::EvaluationResult&lt; Number &gt;</a>

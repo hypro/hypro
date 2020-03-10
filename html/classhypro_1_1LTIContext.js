@@ -1,9 +1,10 @@
 var classhypro_1_1LTIContext =
 [
     [ "Number", "classhypro_1_1LTIContext.html#a4a5ec35157ab6d422939d8abad69be81", null ],
+    [ "TaskType", "classhypro_1_1LTIContext.html#a95a15ca29d9ad7cb7b6f545f745e9f50", null ],
     [ "LTIContext", "classhypro_1_1LTIContext.html#aa001b8e643cad962ac6441a3fc397977", null ],
     [ "~LTIContext", "classhypro_1_1LTIContext.html#ae0a3c6d6ece1578168cd85c3ce2b60ac", null ],
-    [ "LTIContext", "classhypro_1_1LTIContext.html#ac43d35badbd1c1ef169b7906d4fef555", null ],
+    [ "LTIContext", "classhypro_1_1LTIContext.html#a8c22f2d2e18e43c0067f82c3b3882513", null ],
     [ "applyBacktracking", "classhypro_1_1LTIContext.html#a4cfb1a189bc39f3d3e02ba5dee01641e", null ],
     [ "applyContinuousEvolution", "classhypro_1_1LTIContext.html#a8353d808ec45042f3b408ac9dc0ac6a4", null ],
     [ "checkInvariant", "classhypro_1_1LTIContext.html#a20afc8a56fcaf3992b9456f604253819", null ],
@@ -35,8 +36,8 @@ var classhypro_1_1LTIContext =
     [ "mDiscreteSuccessorBuffer", "classhypro_1_1LTIContext.html#a8d4d9fc9fa94f090f8705e8462e673fb", null ],
     [ "mFirstSegmentHandlers", "classhypro_1_1LTIContext.html#aafdad9c4b1cf85d29e86d94a9757a280", null ],
     [ "mInvariantHandlers", "classhypro_1_1LTIContext.html#a8c65448b8146115629e23281d4b5625f", null ],
-    [ "mLocalCEXQueue", "classhypro_1_1LTIContext.html#a0a32e45252c0c1febf1abb52d852069b", null ],
-    [ "mLocalQueue", "classhypro_1_1LTIContext.html#a17800032856ae6619cf673250846cadd", null ],
+    [ "mLocalCEXQueue", "classhypro_1_1LTIContext.html#a37715683ffc19ca0806b53e17df5bc74", null ],
+    [ "mLocalQueue", "classhypro_1_1LTIContext.html#ace4e6d2edb1f693219f0e28ed73b7a8b", null ],
     [ "mLocalSegments", "classhypro_1_1LTIContext.html#aeb866a354cdbc794c14f740412644bbc", null ],
     [ "mLocalTimings", "classhypro_1_1LTIContext.html#ad2ae8a98bd68c156bdd5b2f9f58ffdd4", null ],
     [ "mPotentialZenoTransitions", "classhypro_1_1LTIContext.html#a9acaf69633925209b41fd97dec78cfbe", null ],

@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.02</span>
+   &#160;<span id="projectnumber">20.03</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -115,6 +115,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_func_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_func_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_func_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_func_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_func_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_func_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_func_t.html#index_t"><span>t</span></a></li>
@@ -159,7 +160,11 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 
 <h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
 <li>Facet()
-: <a class="el" href="classhypro_1_1Facet.html#a406371e4775bdda2b38b3419bbac2497">hypro::Facet&lt; Number &gt;</a>
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#aa6a0b465bc8b33ee71df1949ba65d898">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+, <a class="el" href="classhypro_1_1Facet.html#a406371e4775bdda2b38b3419bbac2497">hypro::Facet&lt; Number &gt;</a>
+</li>
+<li>FacetSpace()
+: <a class="el" href="classhypro_1_1ExactQuickhull_1_1FacetSpace.html#aed35ab06c883173781ac42605b7d1264">hypro::ExactQuickhull::FacetSpace&lt; Number, Euclidian &gt;</a>
 </li>
 <li>FALSE()
 : <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html#a9c951aaee3126390ca7e8ce3cb3ca13c">hypro::HybridAutomatonParser::ConstrsetContext</a>
@@ -172,7 +177,7 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 </li>
 <li>field()
 : <a class="el" href="classhypro_1_1HybridSystemParser.html#ab8fb94ef980d9b739ee3dbf4eec695b3">hypro::HybridSystemParser</a>
-, <a class="el" href="classhypro_1_1HybridSystemParser_1_1FieldsContext.html#a33fcc06516f8bd23a6189800f198ead1">hypro::HybridSystemParser::FieldsContext</a>
+, <a class="el" href="classhypro_1_1HybridSystemParser_1_1FieldsContext.html#a9208d2c0321a564ded8b0f3302782832">hypro::HybridSystemParser::FieldsContext</a>
 </li>
 <li>FieldContext()
 : <a class="el" href="classhypro_1_1HybridSystemParser_1_1FieldContext.html#a149ce04469a6077a3b427fc58440506e">hypro::HybridSystemParser::FieldContext</a>
@@ -207,11 +212,20 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 <li>findBounds()
 : <a class="el" href="classhypro_1_1FourierMotzkinQE.html#a5aa6ee94dc83892744bb944de42bcff4">hypro::FourierMotzkinQE&lt; Number &gt;</a>
 </li>
+<li>findConeNeighbors()
+: <a class="el" href="classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#ae96a725d97e7c32aebe00a1f2d50e428">hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;</a>
+</li>
 <li>findCones()
 : <a class="el" href="classhypro_1_1Dictionary.html#a7142b23cb796dd2a8a0424a60e2a5fa8">hypro::Dictionary&lt; Number &gt;</a>
 </li>
+<li>findFacet()
+: <a class="el" href="classhypro_1_1ExactQuickhull_1_1FacetSpace.html#aa9fce9c39eb427bf2ffc13e0b007c892">hypro::ExactQuickhull::FacetSpace&lt; Number, Euclidian &gt;</a>
+</li>
 <li>findFirstVertex()
 : <a class="el" href="classhypro_1_1VertexEnumeration.html#a70e2fd3988ed01724dfcea0e10bf86c3">hypro::VertexEnumeration&lt; Number &gt;</a>
+</li>
+<li>findFurthestPoint()
+: <a class="el" href="classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#a70834d787ed69f7b90da953cefd9c2cb">hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;</a>
 </li>
 <li>findIndepHs()
 : <a class="el" href="classhypro_1_1VertexEnumeration.html#ad11dcea8cb4b190dbb6a9d9f1af92567">hypro::VertexEnumeration&lt; Number &gt;</a>
@@ -224,6 +238,9 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 </li>
 <li>findLinealtySpace()
 : <a class="el" href="classhypro_1_1VertexEnumeration.html#aa9d3087ecb2d46a8e14d0959c7a0ad74">hypro::VertexEnumeration&lt; Number &gt;</a>
+</li>
+<li>findNeighborIndex()
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a2b5bfd8069e811003656f909ab4198f1">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
 </li>
 <li>findNode()
 : <a class="el" href="classhypro_1_1EventTimingProvider.html#a28612f43424d387b7ab8e380441e4a7e">hypro::EventTimingProvider&lt; Number &gt;</a>
@@ -246,6 +263,7 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 <li>firstSegment()
 : <a class="el" href="classhypro_1_1IContext.html#a5c347b4101cf7408b9acf4e705ae6db4">hypro::IContext</a>
 , <a class="el" href="classhypro_1_1LTIContext.html#a1718c88030aaf329a5a956e88da57dcc">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a2f13f00b43ab35f122c82e685f0969d1">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>fixedorders()
 : <a class="el" href="classhypro_1_1HybridAutomatonParser.html#a51995416781129e8911cd630085399ad">hypro::HybridAutomatonParser</a>
@@ -259,7 +277,7 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 </li>
 <li>fixedsteps()
 : <a class="el" href="classhypro_1_1HybridAutomatonParser.html#a20a6286c501e38ae046d9a8820dac3a5">hypro::HybridAutomatonParser</a>
-, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#aef56cadc24b72f7b4152d96d9921a86f">hypro::HybridAutomatonParser::SettingContext</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#ac8f7c9fe05017f01a17b0ad8112ae948">hypro::HybridAutomatonParser::SettingContext</a>
 </li>
 <li>FixedstepsContext()
 : <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FixedstepsContext.html#a69f8fbb35781e90b4073eb6d2de2778e">hypro::HybridAutomatonParser::FixedstepsContext</a>
@@ -276,7 +294,7 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 </li>
 <li>formalDeclaration()
 : <a class="el" href="classhypro_1_1HybridSystemParser.html#a6a0c807b4b45bea582bdc596fd437d43">hypro::HybridSystemParser</a>
-, <a class="el" href="classhypro_1_1HybridSystemParser_1_1FormalDeclsContext.html#ac0da9b8057322b2daf831f88b2fdeefe">hypro::HybridSystemParser::FormalDeclsContext</a>
+, <a class="el" href="classhypro_1_1HybridSystemParser_1_1FormalDeclsContext.html#ac78663ff89147488727b080f20b35331">hypro::HybridSystemParser::FormalDeclsContext</a>
 </li>
 <li>FormalDeclarationContext()
 : <a class="el" href="classhypro_1_1HybridSystemParser_1_1FormalDeclarationContext.html#acaca57b33cae1703288387b80ae33605">hypro::HybridSystemParser::FormalDeclarationContext</a>
@@ -350,7 +368,7 @@ $(document).ready(function(){initNavTree('functions_func_f.html','');});
 : <a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncBodyContext.html#a092f91c29557b1fe5458e5181524f6d1">hypro::HybridSystemParser::FuncBodyContext</a>
 , <a class="el" href="classhypro_1_1HybridSystemParser_1_1FuncStatementContext.html#ae8034a6b05b5de11f09175e7791b6142">hypro::HybridSystemParser::FuncStatementContext</a>
 , <a class="el" href="classhypro_1_1HybridSystemParser.html#a587c50e7a2df4f84a9d342288904eab0">hypro::HybridSystemParser</a>
-, <a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#af98af4225d7dbb34da312879b5f6bb1b">hypro::HybridSystemParser::OptElifFuncStatsContext</a>
+, <a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElifFuncStatsContext.html#a4d64579c244b90bb827cc7c1032c9007">hypro::HybridSystemParser::OptElifFuncStatsContext</a>
 , <a class="el" href="classhypro_1_1HybridSystemParser_1_1OptElseFuncStatContext.html#a73642af4ffb39d7717dc6b9b3a4b1576">hypro::HybridSystemParser::OptElseFuncStatContext</a>
 </li>
 <li>FuncStatementsContext()

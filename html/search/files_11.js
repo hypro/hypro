@@ -3,6 +3,7 @@ var searchData=
   ['sampling_2eh',['sampling.h',['../sampling_8h.html',1,'']]],
   ['scaleop_2eh',['ScaleOp.h',['../ScaleOp_8h.html',1,'']]],
   ['scopedlock_2eh',['ScopedLock.h',['../ScopedLock_8h.html',1,'']]],
+  ['scopedroundingmode_2eh',['ScopedRoundingMode.h',['../ScopedRoundingMode_8h.html',1,'']]],
   ['settings_2eh',['Settings.h',['../Settings_8h.html',1,'']]],
   ['settingsprovider_2eh',['SettingsProvider.h',['../SettingsProvider_8h.html',1,'']]],
   ['simplex_2eh',['simplex.h',['../simplex_8h.html',1,'']]],

@@ -31,5 +31,6 @@ var annotated_dup =
     [ "Flowpipe_segment", "structFlowpipe__segment.html", "structFlowpipe__segment" ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", "structIndependent__part__funct" ],
     [ "Input_equation", "structInput__equation.html", "structInput__equation" ],
-    [ "Invariants", "structInvariants.html", "structInvariants" ]
+    [ "Invariants", "structInvariants.html", "structInvariants" ],
+    [ "ScopedRoundingMode", "classScopedRoundingMode.html", "classScopedRoundingMode" ]
 ];

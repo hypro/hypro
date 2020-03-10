@@ -51,6 +51,7 @@ var searchData=
   ['example_5fplotdiss_2ecpp',['example_plotDiss.cpp',['../example__plotDiss_8cpp.html',1,'']]],
   ['example_5fpolytope_2ecpp',['example_polytope.cpp',['../example__polytope_8cpp.html',1,'']]],
   ['example_5fppl_5fnncpolyhedra_2ecpp',['example_ppl_nncPolyhedra.cpp',['../example__ppl__nncPolyhedra_8cpp.html',1,'']]],
+  ['example_5fquickhull_2ecpp',['example_quickhull.cpp',['../example__quickhull_8cpp.html',1,'']]],
   ['example_5freachability_2ecpp',['example_reachability.cpp',['../example__reachability_8cpp.html',1,'']]],
   ['example_5frectangularreachability_2ecpp',['example_rectangularReachability.cpp',['../example__rectangularReachability_8cpp.html',1,'']]],
   ['example_5freduction_2ecpp',['example_reduction.cpp',['../example__reduction_8cpp.html',1,'']]],

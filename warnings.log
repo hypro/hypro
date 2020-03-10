@@ -1,4 +1,10 @@
 warning: source carl_resources-NOTFOUND is not a readable file or directory... skipping.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:2: warning: the name `Facet.h' supplied as the second argument in the \file statement matches the following input files:
+   /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h
+   /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h
+Please use a more specific name by including a (larger) part of the path!
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:5: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::Facet not found!
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:10: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::FacetSpace not found!
 /home/travis/build/hypro/hypro/examples/example_box.cpp:3: warning: Example example_box.cpp was already documented. Ignoring documentation found here.
 /home/travis/build/hypro/hypro/examples/example_simulation.cpp:2: warning: Example example_plot.cpp was already documented. Ignoring documentation found here.
 /home/travis/build/hypro/hypro/examples/example_eigensimple2points.cpp:9: warning: found documented #define but ignoring it because ENABLE_PREPROCESSING is NO.
@@ -32,9 +38,9 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/examples/example_differenceBounds.cpp:5: warning: included file example_differenceBounds.cpp is not found. Check your EXAMPLE_PATH
 /home/travis/build/hypro/hypro/examples/example_HPolytope.cpp:4: warning: included file example_HPolytope.cpp is not found. Check your EXAMPLE_PATH
 /home/travis/build/hypro/hypro/examples/example_plot.cpp:4: warning: included file example_plot.cpp is not found. Check your EXAMPLE_PATH
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:325: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:331: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:299: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:338: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:345: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
@@ -130,16 +136,21 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:163: warning: argument 'obj' of command @param is not found in the argument list of hypro::GeometricObject< Number, DerivedShape >::operator<<(std::ostream &out, const GeometricObject< Number, DerivedShape > &in)
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:168: warning: The following parameters of hypro::GeometricObject::operator<<(std::ostream &out, const GeometricObject< Number, DerivedShape > &in) are not documented:
   parameter 'in'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:299: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:325: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:331: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:266: warning: argument 'The' of command @param is not found in the argument list of hypro::Halfspace< Number >::computePlaneNormal(const std::vector< vector_t< Number >> &_edgeSet)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:272: warning: The following parameters of hypro::Halfspace::computePlaneNormal(const std::vector< vector_t< Number >> &_edgeSet) are not documented:
-  parameter '_edgeSet'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:299: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:160: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number >) const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:331: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:325: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:338: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:345: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:47: warning: argument '_vector' of command @param is not found in the argument list of hypro::Halfspace< Number >::Halfspace(Normal &&normal, Offset &&offset)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:47: warning: argument '_off' of command @param is not found in the argument list of hypro::Halfspace< Number >::Halfspace(Normal &&normal, Offset &&offset)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:53: warning: The following parameters of hypro::Halfspace::Halfspace(Normal &&normal, Offset &&offset) are not documented:
+  parameter 'normal'
+  parameter 'offset'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:279: warning: argument 'The' of command @param is not found in the argument list of hypro::Halfspace< Number >::computePlaneNormal(const std::vector< vector_t< Number >> &pointSet)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:285: warning: The following parameters of hypro::Halfspace::computePlaneNormal(const std::vector< vector_t< Number >> &pointSet) are not documented:
+  parameter 'pointSet'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:177: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number >) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:345: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:338: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:219: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
@@ -268,8 +279,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
   parameter '_v1'
   parameter '_v2'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:82: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::VPolytopeT< Number, Converter, S >::VPolytopeT(VPolytopeT &&_orig)
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:85: warning: The following parameters of hypro::VPolytopeT::VPolytopeT(VPolytopeT &&_orig) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:84: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::VPolytopeT< Number, Converter, S >::VPolytopeT(VPolytopeT &&_orig)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:87: warning: The following parameters of hypro::VPolytopeT::VPolytopeT(VPolytopeT &&_orig) are not documented:
   parameter '_orig'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObject.h:90: warning: Found unknown command `\detail'
@@ -294,6 +305,12 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
   parameter 'generators_'
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/clp/helperFunctions.h:10: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/clp/helperFunctions.h:10: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:41: warning: argument 'other' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:41: warning: argument 'insertAt' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:41: warning: argument 'containedPoint' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:48: warning: The following parameters of hypro::ExactQuickhull::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt) are not documented:
+  parameter 'other_i'
+  parameter 'replaceAt'
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:129: warning: argument '_val' of command @param is not found in the argument list of hypro::reachability::Reach< Number, ReacherSettings, State >::intersectGuard(Transition< Number > *_trans, const State &_segment, State &result) const
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:135: warning: The following parameters of hypro::reachability::Reach::intersectGuard(Transition< Number > *_trans, const State &_segment, State &result) const are not documented:
   parameter '_segment'

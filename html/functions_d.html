@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.02</span>
+   &#160;<span id="projectnumber">20.03</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -117,6 +117,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="functions_n.html#index_n"><span>n</span></a></li>
       <li><a href="functions_o.html#index_o"><span>o</span></a></li>
       <li><a href="functions_p.html#index_p"><span>p</span></a></li>
+      <li><a href="functions_q.html#index_q"><span>q</span></a></li>
       <li><a href="functions_r.html#index_r"><span>r</span></a></li>
       <li><a href="functions_s.html#index_s"><span>s</span></a></li>
       <li><a href="functions_t.html#index_t"><span>t</span></a></li>
@@ -210,6 +211,12 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 <li>deleteBeforePos()
 : <a class="el" href="classhypro_1_1Path.html#a435b815119748a744675f4ebf2559072">hypro::Path&lt; Number, tNumber &gt;</a>
 </li>
+<li>deletedPositions
+: <a class="el" href="classhypro_1_1ExactQuickhull_1_1FacetSpace.html#a783abef02ca9f5789244db5e69b40cf8">hypro::ExactQuickhull::FacetSpace&lt; Number, Euclidian &gt;</a>
+</li>
+<li>deleteFacet()
+: <a class="el" href="classhypro_1_1ExactQuickhull_1_1FacetSpace.html#a5f2d62b7c5ddf3f8988e09999c229927">hypro::ExactQuickhull::FacetSpace&lt; Number, Euclidian &gt;</a>
+</li>
 <li>deleteLPInstance()
 : <a class="el" href="structhypro_1_1clp__context.html#aa34b36bf8bc861670bd07cd0fe76f125">hypro::clp_context</a>
 , <a class="el" href="structhypro_1_1glpk__context.html#aa257c8cc75e722278eacf844cef92829">hypro::glpk_context</a>
@@ -298,6 +305,7 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 , <a class="el" href="classhypro_1_1DifferenceBoundsT.html#ab3ac4f10cf8a4953fb37f20cc62656b7">hypro::DifferenceBoundsT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1EllipsoidSupportFunction.html#a75b07358df92f14d7070bdf6d7afb23b">hypro::EllipsoidSupportFunction&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1EllipsoidT.html#af87ef5b5ad142d9098523e97348d1f62">hypro::EllipsoidT&lt; Number, Converter &gt;</a>
+, <a class="el" href="classhypro_1_1ExactQuickhull_1_1FacetSpace.html#a5f89937599d66c839b61675c41c20403">hypro::ExactQuickhull::FacetSpace&lt; Number, Euclidian &gt;</a>
 , <a class="el" href="classhypro_1_1Fan.html#a5bbb226f4f7f16f12d4c9eea37916168">hypro::Fan&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1GeneralizedStarT.html#a1036435cea1d506bdcc8d616de652906">hypro::GeneralizedStarT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>
@@ -311,6 +319,7 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 , <a class="el" href="classhypro_1_1OrthogonalPolyhedronT.html#a735609025e5e27f10967950e91a4424a">hypro::OrthogonalPolyhedronT&lt; Number, Converter, Setting, Type &gt;</a>
 , <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a96918cf8bde9fa524417440225059575">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;</a>
+, <a class="el" href="classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#a1f3a5b09fdd83e9592f9dad6c5fd49f6">hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;</a>
 , <a class="el" href="classhypro_1_1rectangularFlow.html#abb4d1b21090b2766d08b141a156bd7e9">hypro::rectangularFlow&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1StatisticWrapper.html#a61020c457d7c541354662b8edcd6a350">hypro::StatisticWrapper&lt; Representation &gt;</a>
 , <a class="el" href="classhypro_1_1SupportFunctionContent.html#a5d612e7ef43d40791903a84ea80050e8">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
@@ -320,6 +329,9 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 , <a class="el" href="classhypro_1_1VertexContainer.html#ada2d7787a56f0640be1f671bfc009aa7">hypro::VertexContainer&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1VPolytopeT.html#a5adacdd7fc494616017833ff1949c574">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#ac569fd79a879cc0c07a768aefcfcb5ab">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+</li>
+<li>dimension_t
+: <a class="el" href="classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#a06ee064c3087afb6add17a72cfcc0ac2">hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;</a>
 </li>
 <li>dimensions
 : <a class="el" href="classhypro_1_1NonLinearOmega0Supportfunction.html#a81c3f53da9737d1df0e69f2670ae29d0">hypro::NonLinearOmega0Supportfunction&lt; Setting &gt;</a>
@@ -363,7 +375,7 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 </li>
 <li>discDecl()
 : <a class="el" href="classhypro_1_1HybridSystemParser.html#a20d13707c474539b01772ebc42060782">hypro::HybridSystemParser</a>
-, <a class="el" href="classhypro_1_1HybridSystemParser_1_1DiscDeclsContext.html#abbd8d591dbe59906427f91ff9df45849">hypro::HybridSystemParser::DiscDeclsContext</a>
+, <a class="el" href="classhypro_1_1HybridSystemParser_1_1DiscDeclsContext.html#a000fc4171b02af0e78ab329b361e528a">hypro::HybridSystemParser::DiscDeclsContext</a>
 </li>
 <li>DiscDeclContext()
 : <a class="el" href="classhypro_1_1HybridSystemParser_1_1DiscDeclContext.html#a60c2b8acecaebb9b4b3cb55c0d0adafc">hypro::HybridSystemParser::DiscDeclContext</a>
@@ -391,7 +403,8 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 : <a class="el" href="classhypro_1_1discreteTimeEvolutionHandler.html#a2886dea16e77e5eaa52574eb794209de">hypro::discreteTimeEvolutionHandler</a>
 </li>
 <li>distance()
-: <a class="el" href="classhypro_1_1Point.html#a3f87fd5562d144a031be521708a99c6b">hypro::Point&lt; Number &gt;</a>
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a43c2f00503e91bc4c741fbc30e1a7500">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+, <a class="el" href="classhypro_1_1Point.html#a3f87fd5562d144a031be521708a99c6b">hypro::Point&lt; Number &gt;</a>
 </li>
 <li>div()
 : <a class="el" href="classhypro_1_1TaylorModel.html#a0e92d179bee2ba32c30a79cf247e8106">hypro::TaylorModel&lt; Number &gt;</a>
@@ -400,7 +413,7 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 : <a class="el" href="classhypro_1_1TaylorModel.html#ab4550b1bf28e4ab15ee3eda8883d0b8e">hypro::TaylorModel&lt; Number &gt;</a>
 </li>
 <li>Domain()
-: <a class="el" href="classhypro_1_1Domain.html#abf88a3a9e50d19eeceeb552fa166f890">hypro::Domain&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Domain.html#ad65038ddda28412888767dd59577e829">hypro::Domain&lt; Number &gt;</a>
 </li>
 <li>domain
 : <a class="el" href="classhypro_1_1Flowpipe.html#a6673613547b9f66f6d391605d0f1c8ca">hypro::Flowpipe&lt; State &gt;</a>
@@ -408,6 +421,7 @@ $(document).ready(function(){initNavTree('functions_d.html','');});
 <li>doneCondition()
 : <a class="el" href="classhypro_1_1IContext.html#a2be1abc762166b3719702e9c25c08119">hypro::IContext</a>
 , <a class="el" href="classhypro_1_1LTIContext.html#a5df39bcf8fac1bd6b9e823b43438bb2a">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a859d591610dbdafe402c6eb7bb52f844">hypro::RectangularContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1TimedContext.html#a7efa647a5bf616ff469b0f93fcacbff7">hypro::TimedContext&lt; State &gt;</a>
 </li>
 <li>DROP

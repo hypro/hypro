@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.02</span>
+   &#160;<span id="projectnumber">20.03</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -212,6 +212,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mBadStateHandlers
 : <a class="el" href="classhypro_1_1LTIContext.html#a0b37f75dea77af1e29964261b62ec12b">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a5f7af99f3d4beeb95b36840544420f9e">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mBalancingRatio
 : <a class="el" href="classhypro_1_1SettingsProvider.html#a250c961648ab081801dfe83a12a5ff84">hypro::SettingsProvider&lt; State &gt;</a>
@@ -344,6 +345,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mContinuousEvolutionHandlers
 : <a class="el" href="classhypro_1_1LTIContext.html#a8937f86a087e0048b5cad38e18ca3d5f">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a882907baba9d7044799ead890102e84a">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mCoordinates
 : <a class="el" href="classhypro_1_1Point.html#abc675f6a451d7d04c369b864c26671d0">hypro::Point&lt; Number &gt;</a>
@@ -356,15 +358,21 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mCurrentGlobalTimeInterval
 : <a class="el" href="classhypro_1_1LTIContext.html#a0dfde87fc6a342a482542204aebb68b0">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a4613d15df8744f06f78e404ccf2d6866">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mCurrentLevel
 : <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a6a43c39000da9a08a6c5c4ea176e6e39">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
 </li>
 <li>mCurrentLocalTime
 : <a class="el" href="classhypro_1_1LTIContext.html#a33f1c41c1ae4e12594706c2f8751d55f">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a8a010dccf1b08b7d1b29e1ccb7f2c118">hypro::RectangularContext&lt; State &gt;</a>
+</li>
+<li>mCurrentSegment
+: <a class="el" href="classhypro_1_1RectangularContext.html#a22c89ee706a576853547a67fc597b01b">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mCurrentTimeInterval
 : <a class="el" href="classhypro_1_1LTIContext.html#a673f649fe587be7963c6ddfa58ae2e19">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#aafd7374da965e54ef6aab533a43a9c1e">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mDecomposed
 : <a class="el" href="classhypro_1_1Reset.html#a68f87d914e73256d3938c4c96542ebd7">hypro::Reset&lt; Number &gt;</a>
@@ -408,9 +416,11 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mDisabledTransitions
 : <a class="el" href="classhypro_1_1LTIContext.html#af027dc0b231ffa60df8a6354bff215c0">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a59a8575c159a63342d19470fd21e6806">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mDiscreteSuccessorBuffer
 : <a class="el" href="classhypro_1_1LTIContext.html#a8d4d9fc9fa94f090f8705e8462e673fb">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a43f18e68f5f52e5e124493bc710b7a79">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mDoDecomposition
 : <a class="el" href="classhypro_1_1SettingsProvider.html#afc66ee6cebdadf57f42c7cdb866df85b">hypro::SettingsProvider&lt; State &gt;</a>
@@ -454,6 +464,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mFirstSegmentHandlers
 : <a class="el" href="classhypro_1_1LTIContext.html#aafdad9c4b1cf85d29e86d94a9757a280">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#ab83899c0895e796e928d42144aef7ba2">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mFlow
 : <a class="el" href="classhypro_1_1ltiFirstSegmentHandler.html#a78a300ea3b77e206aaebd14c7981adf7">hypro::ltiFirstSegmentHandler&lt; State &gt;</a>
@@ -510,7 +521,6 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mHash
 : <a class="el" href="structhypro_1_1Cacheable.html#a85781f9d0400e9da10dae4991066e3fb">hypro::Cacheable&lt; Content &gt;</a>
-, <a class="el" href="classhypro_1_1Halfspace.html#a3b5c5447644fbb2199c0a75e717150d3">hypro::Halfspace&lt; Number &gt;</a>
 , <a class="el" href="structhypro_1_1lintrafoParameters.html#a5b814d0a6720ad91c48c976cb25278ef">hypro::lintrafoParameters&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Location.html#a0c443495599cc878c59f4ccdc35aa541">hypro::Location&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Reset.html#abf00200401608ee423920253fcc3538e">hypro::Reset&lt; Number &gt;</a>
@@ -587,6 +597,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mInvariantHandlers
 : <a class="el" href="classhypro_1_1LTIContext.html#a8c65448b8146115629e23281d4b5625f">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a665d855080ad681c8b7ed6dcec639390">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mIsBox
 : <a class="el" href="classhypro_1_1ConstraintSetT.html#a4445cd55b72fbbe8ca70b6a7dc356ce7">hypro::ConstraintSetT&lt; Number, S &gt;</a>
@@ -596,9 +607,6 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mIsIdentity
 : <a class="el" href="classhypro_1_1linearFlow.html#ad60b5888340b1808a5ec339d1f6e16fe">hypro::linearFlow&lt; Number &gt;</a>
-</li>
-<li>mIsInteger
-: <a class="el" href="classhypro_1_1Halfspace.html#a763876cc4f54c9809aca1013c5c9b291">hypro::Halfspace&lt; Number &gt;</a>
 </li>
 <li>mIsNoTranslation
 : <a class="el" href="classhypro_1_1affineFlow.html#a9f38ac508c0b8066d1d63b5d71b8db81">hypro::affineFlow&lt; Number &gt;</a>
@@ -636,20 +644,24 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 : <a class="el" href="classhypro_1_1HybridAutomaton.html#a32c24e0d09d1f88413bff70645ab3477">hypro::HybridAutomaton&lt; Number &gt;</a>
 </li>
 <li>mLocalCEXQueue
-: <a class="el" href="classhypro_1_1LTIContext.html#a0a32e45252c0c1febf1abb52d852069b">hypro::LTIContext&lt; State &gt;</a>
+: <a class="el" href="classhypro_1_1LTIContext.html#a37715683ffc19ca0806b53e17df5bc74">hypro::LTIContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1ltiJumpHandler.html#a536fe98df4f65ce37cf042ef009ec81b">hypro::ltiJumpHandler&lt; State &gt;</a>
 , <a class="el" href="structhypro_1_1nodeUpdater.html#a7e3f53f83a486e74b66299dd8c09ef30">hypro::nodeUpdater&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a12af7344c928662dc5fd5bd00095005c">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mLocalQueue
-: <a class="el" href="classhypro_1_1LTIContext.html#a17800032856ae6619cf673250846cadd">hypro::LTIContext&lt; State &gt;</a>
+: <a class="el" href="classhypro_1_1LTIContext.html#ace4e6d2edb1f693219f0e28ed73b7a8b">hypro::LTIContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1ltiJumpHandler.html#ac7dc739fbbfcf841b6aea6511de259fe">hypro::ltiJumpHandler&lt; State &gt;</a>
 , <a class="el" href="structhypro_1_1nodeUpdater.html#a35d085f865fee1b63885d89062f437fd">hypro::nodeUpdater&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a3a40ff976858435391f8712df9044852">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mLocalSegments
 : <a class="el" href="classhypro_1_1LTIContext.html#aeb866a354cdbc794c14f740412644bbc">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#ad118029e9aaef6c64c2dc8e8d6773c70">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mLocalTimings
 : <a class="el" href="classhypro_1_1LTIContext.html#ad2ae8a98bd68c156bdd5b2f9f58ffdd4">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#aa72b97d166c909993bf6c79556ad4d0e">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mLocation
 : <a class="el" href="classhypro_1_1EventTimingNode.html#a7442ca75dc61db313c8a0d19f7dbaf11">hypro::EventTimingNode&lt; Number &gt;</a>
@@ -714,7 +726,8 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 : <a class="el" href="classhypro_1_1NeighborhoodContainer.html#a24b9ca573f98275d573be958a627e653">hypro::NeighborhoodContainer</a>
 </li>
 <li>mNeighbors
-: <a class="el" href="classhypro_1_1Facet.html#a185601e6b273455b7994858dc7e45d1e">hypro::Facet&lt; Number &gt;</a>
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a55fd769dca0ca49a60a9b3663f25ce15">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+, <a class="el" href="classhypro_1_1Facet.html#a185601e6b273455b7994858dc7e45d1e">hypro::Facet&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Ridge.html#a3b969db9151457b8ea7f05b375c6235d">hypro::Ridge&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1VPolytopeT.html#a1773517bef4c868eeb20c7e32aa6638d">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 </li>
@@ -729,7 +742,8 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 : <a class="el" href="classhypro_1_1HPolytopeT.html#a4e54bfb3fd40ac95a55acab298757f86">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;</a>
 </li>
 <li>mNormal
-: <a class="el" href="classhypro_1_1Facet.html#af5a6668b8edf3a2ecb2e323289776bcb">hypro::Facet&lt; Number &gt;</a>
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a56385e1705a05a8eee45de2057ece6be">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+, <a class="el" href="classhypro_1_1Facet.html#af5a6668b8edf3a2ecb2e323289776bcb">hypro::Facet&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Halfspace.html#afb4f505b30ef617366be230a793ce5b1">hypro::Halfspace&lt; Number &gt;</a>
 </li>
 <li>mObject
@@ -746,6 +760,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mOffset
 : <a class="el" href="classhypro_1_1ConvexHull.html#aa72a6603824b7eb7b53ed979ecfab399">hypro::ConvexHull&lt; Number &gt;</a>
+, <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a7a7ca1c89832c40989d900ada01c48c1">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
 , <a class="el" href="classhypro_1_1VertexEnumeration.html#a7e12aa22132830c84b3886c6522be90a">hypro::VertexEnumeration&lt; Number &gt;</a>
 </li>
 <li>mOperationCount
@@ -764,7 +779,8 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 : <a class="el" href="classhypro_1_1Plotter.html#af43a76200ccce951b2b42a8722c118bc">hypro::Plotter&lt; Number &gt;</a>
 </li>
 <li>mOutsideSet
-: <a class="el" href="classhypro_1_1Facet.html#ac2bafbfd669945ef72eb95828bc1d6f0">hypro::Facet&lt; Number &gt;</a>
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a0fa9c043e6dcf7566a56cc424bee8b97">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+, <a class="el" href="classhypro_1_1Facet.html#ac2bafbfd669945ef72eb95828bc1d6f0">hypro::Facet&lt; Number &gt;</a>
 </li>
 <li>mParent
 : <a class="el" href="classhypro_1_1TreeNode.html#a9d2f003348321ef60086b24bd4945294">hypro::TreeNode&lt; Data &gt;</a>
@@ -805,6 +821,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mPotentialZenoTransitions
 : <a class="el" href="classhypro_1_1LTIContext.html#a9acaf69633925209b41fd97dec78cfbe">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a67122db642efd1a73918621fe34be07a">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mPplId
 : <a class="el" href="classhypro_1_1VariablePool.html#a22c608b73b215c9623a30af01505e6b4">hypro::VariablePool</a>
@@ -880,6 +897,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 , <a class="el" href="classhypro_1_1LTIContext.html#a1ef6c86a76ff9bff892013952451ebaf">hypro::LTIContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1Plotter.html#a6e6cb5aaaae41d3f236e598de780ccd7">hypro::Plotter&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a113844db5e692fcd9a7f94249c45dc95">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a0f67c9d77af038c4bf3ab44b0f5d9c3e">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mShapeMatrix
 : <a class="el" href="classhypro_1_1EllipsoidSupportFunction.html#a89012b5b9073c941bbb4ca20868ca682">hypro::EllipsoidSupportFunction&lt; Number &gt;</a>
@@ -910,10 +928,10 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 , <a class="el" href="classhypro_1_1ltiInvariantHandler.html#aff2d177ca95a45b9469e78a6300f9617">hypro::ltiInvariantHandler&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1ltiResetHandler.html#affa80e83c36c3850d3ea4e58e27bd14c">hypro::ltiResetHandler&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1ltiTimeEvolutionHandler.html#a3e1673de84bd39d45f07a55f82fe40d4">hypro::ltiTimeEvolutionHandler&lt; State &gt;</a>
-, <a class="el" href="classhypro_1_1rectangularBadStateHandler.html#af75f17b22db411aab75bd913cae45750">hypro::rectangularBadStateHandler&lt; State &gt;</a>
-, <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#ab71a743187acfdcd2de9bb6558e6dec9">hypro::rectangularFirstSegmentHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1rectangularBadStateHandler.html#adad88b69d7daa8dbe1932a61e6cd8b56">hypro::rectangularBadStateHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1rectangularFirstSegmentHandler.html#a8201be3dae0d8f631961a7ca177672e6">hypro::rectangularFirstSegmentHandler&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1rectangularGuardHandler.html#a82af53769d2f930666973bf2217b1642">hypro::rectangularGuardHandler&lt; State &gt;</a>
-, <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#a324020241bbe25ed9f6ff275c371b4d0">hypro::rectangularInvariantHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1rectangularInvariantHandler.html#a9236374347e8d4fde116ef7efe01d2fb">hypro::rectangularInvariantHandler&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1rectangularResetHandler.html#ab1451b73727d5020ec918f48262ce1fa">hypro::rectangularResetHandler&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1rectangularTimeEvolutionHandler.html#ac1149671b7d2ccb75a87e0e07e09677f">hypro::rectangularTimeEvolutionHandler&lt; State &gt;</a>
 </li>
@@ -929,6 +947,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 <li>mStrategy
 : <a class="el" href="classhypro_1_1LTIContext.html#a6d0f5d9bac1817452324c4466bb98f3e">hypro::LTIContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1ltiJumpHandler.html#a80b13b3e40d00ac2393f6918fbdc6ac1">hypro::ltiJumpHandler&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#ad59a929cab770e82dcc489c01ea8888c">hypro::RectangularContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1SettingsProvider.html#acbcb5ac682e1f23d8223360e8b8d91e8">hypro::SettingsProvider&lt; State &gt;</a>
 </li>
 <li>mSubspaceDecomposition
@@ -950,6 +969,7 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 : <a class="el" href="classhypro_1_1LTIContext.html#aaa7012bba9d4d47faff3ea07cfcb5f20">hypro::LTIContext&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1ltiJumpHandler.html#a6e3b3fb47c170534e29af8e49ce8ff56">hypro::ltiJumpHandler&lt; State &gt;</a>
 , <a class="el" href="structhypro_1_1nodeUpdater.html#ac2c7e288224bd6370b00691d424ba421">hypro::nodeUpdater&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a6589f8bac177ea0c971629f50e1211bb">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mTemplateSet
 : <a class="el" href="classhypro_1_1SupportFunctionNewT.html#a099225fda85e860b8a82d12987ebb115">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;</a>
@@ -994,12 +1014,14 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 </li>
 <li>mTransitionHandlerMap
 : <a class="el" href="classhypro_1_1LTIContext.html#ac0c9b8d304c94ce29f8a2190bb4f1c0a">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#a3d7891135bbd1171d2f1497c1fd86161">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mTransitions
 : <a class="el" href="classhypro_1_1Location.html#a511d4c64951bf63e9f3c78cd27c3bfeb">hypro::Location&lt; Number &gt;</a>
 </li>
 <li>mTransitionTimings
 : <a class="el" href="classhypro_1_1LTIContext.html#a71a3c21bdd669c5db1b7f61626aac0a1">hypro::LTIContext&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1RectangularContext.html#aef409f9353565ecbb811d23df486d773">hypro::RectangularContext&lt; State &gt;</a>
 </li>
 <li>mTranslation
 : <a class="el" href="classhypro_1_1affineFlow.html#a64f63c4e4b5c18f8d2665a5834b41b6a">hypro::affineFlow&lt; Number &gt;</a>
@@ -1066,7 +1088,8 @@ $(document).ready(function(){initNavTree('functions_vars_m.html','');});
 : <a class="el" href="classhypro_1_1Plotter.html#ac6ddbfdba89c6e7ee21f4493e97c7569">hypro::Plotter&lt; Number &gt;</a>
 </li>
 <li>mVertices
-: <a class="el" href="classhypro_1_1Facet.html#a249aab2307d97806591b18d45f6967e0">hypro::Facet&lt; Number &gt;</a>
+: <a class="el" href="structhypro_1_1ExactQuickhull_1_1Facet.html#a380abd2251f4a27aa8b250ce7f89e8e1">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</a>
+, <a class="el" href="classhypro_1_1Facet.html#a249aab2307d97806591b18d45f6967e0">hypro::Facet&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Grid.html#a8c32538db02e030582c7073cbe40bb20">hypro::Grid&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1Ridge.html#a0d228958f2e45bb53235d5ef89b6fc07">hypro::Ridge&lt; Number &gt;</a>
 , <a class="el" href="classhypro_1_1VertexContainer.html#a4eadc3d8da6a4a0da448ad7962d3b711">hypro::VertexContainer&lt; Number &gt;</a>

@@ -1,28 +1,5 @@
 var searchData=
 [
-  ['range',['Range',['../classhypro_1_1Range.html',1,'hypro']]],
-  ['reach',['Reach',['../classhypro_1_1reachability_1_1Reach.html',1,'hypro::reachability']]],
-  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html',1,'hypro']]],
-  ['reachquiet',['ReachQuiet',['../structhypro_1_1reachability_1_1ReachQuiet.html',1,'hypro::reachability']]],
-  ['reachsettings',['ReachSettings',['../structhypro_1_1reachability_1_1ReachSettings.html',1,'hypro::reachability']]],
-  ['reachtree',['ReachTree',['../classhypro_1_1ReachTree.html',1,'hypro']]],
-  ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html',1,'hypro']]],
-  ['rectangularbadstatehandler',['rectangularBadStateHandler',['../classhypro_1_1rectangularBadStateHandler.html',1,'hypro']]],
-  ['rectangularfirstsegmenthandler',['rectangularFirstSegmentHandler',['../classhypro_1_1rectangularFirstSegmentHandler.html',1,'hypro']]],
-  ['rectangularflow',['rectangularFlow',['../classhypro_1_1rectangularFlow.html',1,'hypro']]],
-  ['rectangularflow_3c_20n_20_3e',['rectangularFlow&lt; N &gt;',['../classhypro_1_1rectangularFlow.html',1,'hypro']]],
-  ['rectangularguardhandler',['rectangularGuardHandler',['../classhypro_1_1rectangularGuardHandler.html',1,'hypro']]],
-  ['rectangularinvarianthandler',['rectangularInvariantHandler',['../classhypro_1_1rectangularInvariantHandler.html',1,'hypro']]],
-  ['rectangularresethandler',['rectangularResetHandler',['../classhypro_1_1rectangularResetHandler.html',1,'hypro']]],
-  ['rectangulartimeevolutionhandler',['rectangularTimeEvolutionHandler',['../classhypro_1_1rectangularTimeEvolutionHandler.html',1,'hypro']]],
-  ['refinementsetting',['RefinementSetting',['../structhypro_1_1RefinementSetting.html',1,'hypro']]],
-  ['remaindercontext',['RemainderContext',['../classhypro_1_1HybridAutomatonParser_1_1RemainderContext.html',1,'hypro::HybridAutomatonParser']]],
-  ['replacedexprcontext',['ReplacedexprContext',['../classhypro_1_1HybridAutomatonParser_1_1ReplacedexprContext.html',1,'hypro::HybridAutomatonParser']]],
-  ['reset',['Reset',['../classhypro_1_1Reset.html',1,'hypro']]],
-  ['reset_3c_20n_20_3e',['Reset&lt; N &gt;',['../classhypro_1_1Reset.html',1,'hypro']]],
-  ['resetfctcontext',['ResetfctContext',['../classhypro_1_1HybridAutomatonParser_1_1ResetfctContext.html',1,'hypro::HybridAutomatonParser']]],
-  ['resetvisitor',['ResetVisitor',['../structhypro_1_1detail_1_1ResetVisitor.html',1,'hypro::detail']]],
-  ['rgndata',['RGNData',['../structhypro_1_1RGNData.html',1,'hypro']]],
-  ['ridge',['Ridge',['../classhypro_1_1Ridge.html',1,'hypro']]],
-  ['rootgrownode',['RootGrowNode',['../classhypro_1_1RootGrowNode.html',1,'hypro']]]
+  ['quickhullalgorithm',['QuickhullAlgorithm',['../classhypro_1_1QuickhullAlgorithm.html',1,'hypro']]],
+  ['quickhullalgorithm_3c_20number_2c_20euclidian_2c_20enableifexact_3c_20number_20_3e_20_3e',['QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;',['../classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html',1,'hypro']]]
 ];
