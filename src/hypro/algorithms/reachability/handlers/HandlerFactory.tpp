@@ -14,7 +14,7 @@ IFirstSegmentHandler<State>* HandlerFactory<State>::buildFirstSegmentHandler( re
 			return new timedFirstSegmentHandler<State>( state, index, timeStep );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularFirstSegmentHandler<State>( state, index );
+			//return new rectangularFirstSegmentHandler<State>( state, index );
 		}
 		default:
 			return new ltiFirstSegmentHandler<State>( state, index, timeStep );
@@ -38,7 +38,7 @@ IInvariantHandler* HandlerFactory<State>::buildInvariantHandler( representation_
 			return new timedInvariantHandler<State>( state, index );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularInvariantHandler<State>( state, index );
+			//return new rectangularInvariantHandler<State>( state, index );
 		}
 		default:
 			return new ltiInvariantHandler<State>( state, index );
@@ -75,7 +75,7 @@ IBadStateHandler* HandlerFactory<State>::buildBadStateHandler( representation_na
 			return new timedBadStateHandler<State>( state, index );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularBadStateHandler<State>( state, index );
+			//return new rectangularBadStateHandler<State>( state, index );
 		}
 		default:
 			if ( noFlow ) {
@@ -103,7 +103,7 @@ IGuardHandler<State>* HandlerFactory<State>::buildGuardHandler( representation_n
 			return new timedGuardHandler<State>( state, index, transition );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularGuardHandler<State>( state, index, transition );
+			//return new rectangularGuardHandler<State>( state, index, transition );
 		}
 		default:
 			return new ltiGuardHandler<State>( state, index, transition );
@@ -138,7 +138,7 @@ ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler( r
 		}
 		case representation_name::carl_polytope: {
 			// TODO!!
-			return new rectangularTimeEvolutionHandler<State>( state, index, std::get<rectangularFlow<Number>>( flow ) );
+			//return new rectangularTimeEvolutionHandler<State>( state, index, std::get<rectangularFlow<Number>>( flow ) );
 		}
 		default:
 			auto tmp = std::get<affineFlow<typename State::NumberType>>( flow );
@@ -181,7 +181,7 @@ IResetHandler* HandlerFactory<State>::buildResetHandler( representation_name nam
 
 	switch ( name ) {
 		case representation_name::carl_polytope: {
-			return new rectangularResetHandler<State>( state, index, assignments );
+			//return new rectangularResetHandler<State>( state, index, assignments );
 		}
 		default:
 			assert( false );
