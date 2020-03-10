@@ -14,7 +14,7 @@ IFirstSegmentHandler<State>* HandlerFactory<State>::buildFirstSegmentHandler( re
 			return new timedFirstSegmentHandler<State>( state, index, timeStep );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularFirstSegmentHandler<State>( state, index );
+			return new rectangularFirstSegmentHandler<State>( *state, index );
 		}
 		case representation_name::polytope_t: {
 			return new TPolyFirstSegmentHandler<State>( state, index, timeStep );
@@ -41,7 +41,7 @@ IInvariantHandler* HandlerFactory<State>::buildInvariantHandler( representation_
 			return new timedInvariantHandler<State>( state, index );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularInvariantHandler<State>( state, index );
+			return new rectangularInvariantHandler<State>( *state, index );
 		}
 		default:
 			return new ltiInvariantHandler<State>( state, index );
@@ -78,7 +78,7 @@ IBadStateHandler* HandlerFactory<State>::buildBadStateHandler( representation_na
 			return new timedBadStateHandler<State>( state, index );
 		}
 		case representation_name::carl_polytope: {
-			return new rectangularBadStateHandler<State>( state, index );
+			return new rectangularBadStateHandler<State>( *state, index );
 		}
 		default:
 			if ( noFlow ) {

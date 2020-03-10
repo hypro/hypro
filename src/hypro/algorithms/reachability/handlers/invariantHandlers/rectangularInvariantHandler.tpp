@@ -3,29 +3,29 @@
 namespace hypro {
 template <typename State>
 void rectangularInvariantHandler<State>::handle() {
-	assert( !mState->getTimestamp().isEmpty() );
+	assert( !mState.getTimestamp().isEmpty() );
 	// check if initial Valuation fulfills Invariant
-	assert( mState->getLocation() != nullptr );
+	assert( mState.getLocation() != nullptr );
 	auto& vpool = hypro::VariablePool::getInstance();
 
-	TRACE( "hydra.worker", "Check invariant: " << mState->getLocation()->getInvariant() << " for set " << mState );
+	TRACE( "hydra.worker", "Check invariant: " << mState.getLocation()->getInvariant() << " for set " << mState );
 
 	// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 	// create carlPolytope, as intersection is defined for those
-	CarlPolytope<typename State::NumberType> invariantConstraints{mState->getLocation()->getInvariant().getMatrix( mIndex ), mState->getLocation()->getInvariant().getVector( mIndex )};
+	CarlPolytope<typename State::NumberType> invariantConstraints{mState.getLocation()->getInvariant().getMatrix( mIndex ), mState.getLocation()->getInvariant().getVector( mIndex )};
 	// substitute variables in the formulas by the correct ones in the subspace of the state
 	// 1. Determine offset
-	std::size_t dimensionOffset = mState->getDimensionOffset( mIndex );
+	std::size_t dimensionOffset = mState.getDimensionOffset( mIndex );
 	// 2. substitute
-	for ( std::size_t i = 0; i < mState->getDimension( mIndex ); ++i ) {
+	for ( std::size_t i = 0; i < mState.getDimension( mIndex ); ++i ) {
 		invariantConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
 	}
 
 	// intersect
-	auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ).intersect( invariantConstraints );
+	auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ).intersect( invariantConstraints );
 
 	// determine full vs. partial containment
-	if ( resultingSet == std::get<CarlPolytope<typename State::NumberType>>( mState->getSet( mIndex ) ) ) {
+	if ( resultingSet == std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ) ) {
 		mContainment = CONTAINMENT::FULL;
 	}
 
@@ -39,6 +39,6 @@ void rectangularInvariantHandler<State>::handle() {
 		mContainment = CONTAINMENT::PARTIAL;
 	}
 
-	mState->setSet( resultingSet, mIndex );
+	mState.setSet( resultingSet, mIndex );
 }
 }  // namespace hypro

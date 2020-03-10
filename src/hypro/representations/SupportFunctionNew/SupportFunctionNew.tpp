@@ -94,11 +94,12 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( GeometricO
 		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( tmp.dimension() ) ) );
 	} else {
 		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( tmp.matrix(), tmp.vector() );
-		if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
+		if ( Setting::DETECT_BOX && std::get<0>( areArgsBox ) ) {
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		} else {
-			using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( tmp.matrix(), tmp.vector() ) );
+			//using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
+			//mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( tmp.matrix(), tmp.vector() ) );
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, Representation>>( std::make_shared<Representation>(tmp) );
 		}
 	}
 	assert( mRoot != nullptr );
@@ -111,7 +112,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 										 << mat << " and vec: \n"
 										 << vec );
 	std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( mat, vec );
-	if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
+	if ( Setting::DETECT_BOX && std::get<0>( areArgsBox ) ) {
 		if ( std::get<1>( areArgsBox ).size() == 0 ) {
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( mat.cols() ) ) );
 			assert( false );
@@ -120,9 +121,11 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		}
 	} else {
-		INFO( "hypro.representations", "SFN mat-vec-constr: constraints were hpoly!" )
-		using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
-		mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( mat, vec ) );
+		INFO( "hypro.representations", "SFN mat-vec-constr: constraints were tpoly!" )
+		//using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
+		//mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( mat, vec ) );
+		using TPoly = TemplatePolyhedronT<Number, Converter, TemplatePolyhedronDefault>;
+		mRoot = std::make_shared<Leaf<Number, Converter, Setting, TPoly>>( std::make_shared<TPoly>(mat, vec) );
 	}
 	assert( mRoot != nullptr );
 	INFO( "hypro.representations", "SFN mat-vec-constr: leaf is:\n"
@@ -133,8 +136,9 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 }
 
 //Halfspace vector constructor
+/*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) { /*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
+SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) { 
 	using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 	mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( hspaces ) );
 }

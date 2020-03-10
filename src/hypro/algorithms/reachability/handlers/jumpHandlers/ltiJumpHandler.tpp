@@ -284,7 +284,8 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 							Box<Number> tmpBox( std::get<1>( isHPolyBox ) );
 							tmpSFN = SupportFunctionNew<Number>( tmpBox );
 						} else {
-							HPolytopeT<Number, hypro::Converter<Number>, HPolytopeOptimizerCaching> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );
+							//HPolytopeT<Number, hypro::Converter<Number>, HPolytopeOptimizerCaching> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );
+							TemplatePolyhedronT<Number, hypro::Converter<Number>, TemplatePolyhedronDefault> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );
 							tmpSFN = SupportFunctionNew<Number>( tmpHPoly );
 						}
 						newState.setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>( tmpSFN ), newState.getSet( i ) ), i );
