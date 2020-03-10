@@ -13,26 +13,21 @@
 #include "../util/VariablePool.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
 #include "../util/linearOptimization/EvaluationResult.h"
+#include "../util/typetraits.h"
 #include "Point.h"
 
 #include <cassert>
 #include <glpk.h>
 
 namespace hypro {
-
 template <typename Number>
 class Halfspace {
   private:
 	vector_t<Number> mNormal = vector_t<Number>::Zero( 0 );
 	Number mScalar = Number( 0 );
-	size_t mHash = 0;
-	bool mIsInteger = false;
 
   public:
-	/**
-	 * @brief Default constructor
-	 */
-	Halfspace() {}
+	Halfspace() = default;
 
 	/**
 	 * @brief      Constructor from a normal vector given as a point and an offset.
@@ -49,11 +44,13 @@ class Halfspace {
 	Halfspace( std::initializer_list<Number> _coordinates, const Number& _off );
 
 	/**
-	 * @brief      Constructor from a normal vector and an offset.
+	 * @brief      Constructor from a normal vector and an offset with perfect forwarding.
 	 * @param[in]  _vector  The vector.
 	 * @param[in]  _off     The offset.
 	 */
-	Halfspace( const vector_t<Number>& _vector, const Number& _off );
+	template <
+		  typename Normal, typename Offset, enable_if<convertible<Normal, vector_t<Number>> && convertible<Offset, Number>> = 0>
+	Halfspace( Normal&& normal, Offset&& offset );      
 
 	/**
 	 * @brief      Constructor from an offset vector and a set of points lying in the plane.
@@ -75,17 +72,10 @@ class Halfspace {
 	Halfspace( const std::vector<vector_t<Number>>& points );
 
 	/**
-	 * @brief      Destroys the object.
-	 */
-	~Halfspace();
-
-	/**
 	 * @brief      Size function returning the estimated storage usage of this plane.
 	 * @return     An estimated storage usage.
 	 */
-	double sizeOfHalfspace() {
-		return sizeof( *this ) + this->mNormal.size() * sizeof( Number );
-	}
+	double sizeOfHalfspace() { return sizeof( *this ) + this->mNormal.size() * sizeof( Number ); }
 
 	/**
 	 * @brief      Returns the space dimension.
@@ -95,7 +85,7 @@ class Halfspace {
 
 	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
 	void makeInteger() {
-		if ( !mIsInteger ) {
+		if ( !isInteger() ) {
 			Number scaling = Number( carl::getDenom( mScalar ) );
 			for ( unsigned i = 0; i < mNormal.rows(); ++i ) {
 				scaling = scaling * Number( carl::getDenom( mNormal( i ) ) );
@@ -108,13 +98,11 @@ class Halfspace {
 				mNormal( i ) = mNormal( i ) * scaling;
 				assert( carl::isInteger( mNormal( i ) ) );
 			}
-			mIsInteger = true;
 		}
 	}
 
 	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
 	void makeInteger() {
-		mIsInteger = true;
 		// TODO: As this function is currently only used for number reduction, do nothing for doubles -> fix!
 	}
 
@@ -122,13 +110,24 @@ class Halfspace {
 	 * @brief      Determines if the plane coefficients are integers.
 	 * @return     True if integer, False otherwise.
 	 */
-	bool isInteger() const { return mIsInteger; }
+	bool isInteger() const {
+		for ( int row = 0; row < mNormal.rows(); ++row ) {
+			if ( !carl::isInteger( mNormal[row] ) ) return false;
+		}
+		return true;
+	}
 
 	/**
 	 * @brief      Returns the plane normal.
 	 * @return     The normal.
 	 */
-	const vector_t<Number>& normal() const;
+	const vector_t<Number>& normal() const&;
+
+	/**
+	 * @brief      Returns the plane normal as an rvalue if this is an rvalue.
+	 * @return     The normal.
+	 */
+	vector_t<Number>&& normal() &&;
 
 	/**
 	 * @brief      Sets the normal.
@@ -145,7 +144,13 @@ class Halfspace {
 	 * @brief      Returns the plane offset.
 	 * @return     The offset.
 	 */
-	Number offset() const;
+	Number offset() const&;
+
+	/**
+	 * @brief      Returns the plane offset as an rvalue if this is an rvalue.
+	 * @return     The offset.
+	 */
+	Number&& offset() &&;
 
 	/**
 	 * @brief      Sets the offset.
@@ -250,7 +255,7 @@ class Halfspace {
 	 * @param[in] point The point.
 	 * @return True iff the point is contained.
 	 */
-	bool exactContains(vector_t<Number> const& point) const;
+	bool exactContains( vector_t<Number> const& point ) const;
 
 	/**
 	 * @brief      Determines, whether the point given as a vector saturates the halfspace, i.e. lies on
@@ -261,21 +266,10 @@ class Halfspace {
 	bool holds( const vector_t<Number> _vector ) const;
 
 	/**
-	 * @brief      Computes and stores a hash value representing the plane for fast comparison.
-	 * @return     The hash value.
+	 * @brief      The swap operator.
+	 * @param      a     The left-hand-side.
+	 * @param      b     The right-hand-side.
 	 */
-	size_t hash() {
-		if ( this->mHash == 0 ) {
-			this->mHash = std::hash<Halfspace<Number>>()( *this );
-		}
-		return mHash;
-	}
-
-	/**
-     * @brief      The swap operator.
-     * @param      a     The left-hand-side.
-     * @param      b     The right-hand-side.
-     */
 	friend void swap( Halfspace<Number>& a, Halfspace<Number>& b ) {
 		swap( a.mNormal, b.mNormal );
 		swap( a.mScalar, b.mScalar );
@@ -341,14 +335,16 @@ class Halfspace {
 
 	/**
 	 * @brief Returns a point representation of the halfspace. which does not exist.
-	 * @detail Although this function is nonsensical, it is needed in order to use the Halfspace class as a leaf in the SupportFunctionNew.
+	 * @detail Although this function is nonsensical, it is needed in order to use the Halfspace class as a leaf in the
+	 * SupportFunctionNew.
 	 */
 	std::vector<Point<Number>> vertices() const { return std::vector<Point<Number>>(); }
 
 	/**
 	 * @brief Returns the representation type of the halfspace.
-	 * @detail Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name
-	 * as it is usually not used as a representation but still has defined representation name.
+	 * @detail Since adding an own representation name for halfspaces would greatly affect the code, it just returns
+	 * constraint_set as the representation name as it is usually not used as a representation but still has defined
+	 * representation name.
 	 */
 	static representation_name type() { return representation_name::constraint_set; }
 };
@@ -431,9 +427,9 @@ extern template class Halfspace<carl::FLOAT_T<double>>;
 
 namespace std {
 /**
-	 * @brief      Hash operator for halfspaces.
-	 * @tparam     Number  The number type.
-	 */
+ * @brief      Hash operator for halfspaces.
+ * @tparam     Number  The number type.
+ */
 template <class Number>
 struct hash<hypro::Halfspace<Number>> {
 	std::size_t operator()( hypro::Halfspace<Number> const& Halfspace ) const {
@@ -447,6 +443,6 @@ struct hash<hypro::Halfspace<Number>> {
 		return seed;
 	}
 };
-}  //namespace std
+}  // namespace std
 
 #include "Halfspace.tpp"

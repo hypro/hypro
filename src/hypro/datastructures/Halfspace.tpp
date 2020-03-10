@@ -15,9 +15,7 @@ namespace hypro {
 template <typename Number>
 Halfspace<Number>::Halfspace( const Point<Number> &_vector, const Number &_off )
 	: mNormal( _vector.rawCoordinates() )
-	, mScalar( _off )
-	, mIsInteger( false ) {
-}
+	, mScalar( _off ) {}
 
 template <typename Number>
 Halfspace<Number>::Halfspace( std::initializer_list<Number> _coordinates, const Number &_off ) {
@@ -28,16 +26,15 @@ Halfspace<Number>::Halfspace( std::initializer_list<Number> _coordinates, const 
 		++pos;
 	}
 	mScalar = _off;
-	mIsInteger = false;
 }
 
 template <typename Number>
-Halfspace<Number>::Halfspace( const vector_t<Number> &_vector, const Number &_off )
-	: mNormal( _vector )
-	, mScalar( _off )
-	, mIsInteger( false ) {
-}
-
+template <typename Normal, typename Offset,
+		   enable_if<convertible<Normal, vector_t<Number>> && convertible<Offset, Number>>> 
+Halfspace<Number>::Halfspace( Normal &&normal, Offset &&offset )
+	: mNormal( std::forward<Normal>( normal ) )
+	, mScalar( std::forward<Offset>( offset ) ) {}
+ 
 template <typename Number>
 Halfspace<Number>::Halfspace( const vector_t<Number> &_vec, const std::vector<vector_t<Number>> &_vectorSet ) {
 	// here: Halfspace given in parameterform is converted to normalform
@@ -48,14 +45,14 @@ Halfspace<Number>::Halfspace( const vector_t<Number> &_vec, const std::vector<ve
 	// the scalar is just the scalar product of the normal vector & a point in the
 	// Halfspace
 	mScalar = mNormal.dot( _vec );
-	mIsInteger = false;
 }
 
 template <typename Number>
 Halfspace<Number>::Halfspace( const std::vector<Point<Number>> &points ) {
 	assert( !points.empty() );
 	std::vector<vector_t<Number>> rawCoordinates;
-	std::transform( points.begin(), points.end(), std::back_inserter( rawCoordinates ), []( const Point<Number> &refpoint ) { return refpoint.rawCoordinates(); } );
+	std::transform( points.begin(), points.end(), std::back_inserter( rawCoordinates ),
+					[]( const Point<Number> &refpoint ) { return refpoint.rawCoordinates(); } );
 	mNormal = Halfspace<Number>::computePlaneNormal( rawCoordinates );
 	mScalar = Halfspace<Number>::computePlaneOffset( mNormal, points[0] );
 	TRACE( "hypro.datastructures", "Constructed hsp from " << mNormal << " and " << mScalar );
@@ -69,24 +66,23 @@ Halfspace<Number>::Halfspace( const std::vector<vector_t<Number>> &points ) {
 }
 
 template <typename Number>
-Halfspace<Number>::~Halfspace() {
-}
-
-template <typename Number>
 unsigned Halfspace<Number>::dimension() const {
 	return unsigned( mNormal.nonZeros() );
 }
 
 template <typename Number>
-const vector_t<Number> &Halfspace<Number>::normal() const {
+const vector_t<Number> &Halfspace<Number>::normal() const & {
 	return mNormal;
+}
+
+template <typename Number>
+vector_t<Number> &&Halfspace<Number>::normal() && {
+	return std::move( mNormal );
 }
 
 template <typename Number>
 void Halfspace<Number>::setNormal( const vector_t<Number> &_normal ) {
 	mNormal = _normal;
-	this->mHash = 0;
-	mIsInteger = false;
 }
 
 template <typename Number>
@@ -97,15 +93,18 @@ Halfspace<Number> &Halfspace<Number>::invert() {
 }
 
 template <typename Number>
-Number Halfspace<Number>::offset() const {
+Number Halfspace<Number>::offset() const & {
 	return mScalar;
+}
+
+template <typename Number>
+Number &&Halfspace<Number>::offset() && {
+	return std::move( mScalar );
 }
 
 template <typename Number>
 void Halfspace<Number>::setOffset( Number _offset ) {
 	mScalar = _offset;
-	this->mHash = 0;
-	mIsInteger = mIsInteger && carl::isInteger( _offset );
 }
 
 template <typename Number>
@@ -120,7 +119,8 @@ Number Halfspace<Number>::evaluate( const vector_t<Number> &_direction ) const {
 
 template <typename Number>
 Point<Number> Halfspace<Number>::projectPointOnPlane( const Point<Number> point ) const {
-	return Point<Number>( point.rawCoordinates() + ( ( mScalar - point.rawCoordinates().dot( mNormal ) ) / mNormal.dot( mNormal ) ) * mNormal );
+	return Point<Number>( point.rawCoordinates() +
+						  ( ( mScalar - point.rawCoordinates().dot( mNormal ) ) / mNormal.dot( mNormal ) ) * mNormal );
 }
 
 template <typename Number>
@@ -162,7 +162,7 @@ Halfspace<Number> Halfspace<Number>::linearTransformation( const matrix_t<Number
 	} else {
 		// we cannot invert A - chose points on the plane surface and create new plane
 		assert( false );
-		//TODO
+		// TODO
 		return Halfspace<Number>();
 	}
 }
@@ -178,7 +178,7 @@ Halfspace<Number> Halfspace<Number>::affineTransformation( const matrix_t<Number
 	} else {
 		// we cannot invert A - chose points on the plane surface and create new plane
 		assert( false );
-		//TODO
+		// TODO
 		return Halfspace<Number>();
 	}
 }
@@ -194,14 +194,15 @@ vector_t<Number> Halfspace<Number>::intersectionVector( const Halfspace<Number> 
 	b << mScalar, _rhs.offset(), Number( 1 );
 
 	vector_t<Number> result = A.fullPivLu().solve( b );
-	//vector_t<Number> result = gauss( A, b );
+	// vector_t<Number> result = gauss( A, b );
 
 	return result;
 }
 
 template <typename Number>
 vector_t<Number> Halfspace<Number>::fastIntersect( const std::vector<Halfspace<Number>> &_planes ) {
-	assert( _planes.size() == _planes.begin()->dimension() );  // TODO: Make function more general to cope with arbitrary input.
+	assert( _planes.size() ==
+			_planes.begin()->dimension() );  // TODO: Make function more general to cope with arbitrary input.
 
 	matrix_t<Number> A( _planes.size(), _planes.begin()->dimension() );
 	vector_t<Number> b( _planes.size() );
@@ -235,7 +236,8 @@ vector_t<Number> Halfspace<Number>::fastIntersect( const std::vector<Halfspace<N
 
 template <typename Number>
 vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<Number>> &_planes, Number threshold ) {
-	assert( _planes.size() == _planes.begin()->dimension() );  // TODO: Make function more general to cope with arbitrary input.
+	assert( _planes.size() ==
+			_planes.begin()->dimension() );  // TODO: Make function more general to cope with arbitrary input.
 
 	matrix_t<Number> A( _planes.size(), _planes.begin()->dimension() );
 	vector_t<Number> b( _planes.size() );
@@ -272,8 +274,8 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 
 		for ( std::size_t index = 0; index < _planes.size(); ++index ) {
 			A.row( index ) = _planes.at( index ).normal().transpose();
-			//if(belowIndices.front() == index) {
-			//std::cout << "Shift plane  + " << eps << ", dist: ";
+			// if(belowIndices.front() == index) {
+			// std::cout << "Shift plane  + " << eps << ", dist: ";
 			b( index ) = _planes.at( index ).offset() + eps;
 			//	belowIndices.erase(belowIndices.begin());
 			//} else {
@@ -319,12 +321,12 @@ bool Halfspace<Number>::contains( const std::vector<Point<Number>> &_points ) co
 }
 
 template <typename Number>
-bool Halfspace<Number>::exactContains(vector_t<Number> const& point) const {
+bool Halfspace<Number>::exactContains( vector_t<Number> const &point ) const {
 	hypro::vector_t<mpq_class> normal = mNormal.template cast<mpq_class>();
 	hypro::vector_t<mpq_class> mpq_vertex = point.template cast<mpq_class>();
 	mpq_class offset = mScalar;
 
-	return normal.dot(mpq_vertex) - offset <= 0;
+	return normal.dot( mpq_vertex ) - offset <= 0;
 }
 
 template <typename Number>
@@ -360,7 +362,8 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		 * Setup LP with GLPK
 		 */
 
-		// TODO: Re-think this: apparently this only works, if all points lie exactly on the plane, in which case you could have selected only the dim-first ones.
+		// TODO: Re-think this: apparently this only works, if all points lie exactly on the plane, in which case you
+		// could have selected only the dim-first ones.
 
 		glp_prob *normal;
 		normal = glp_create_prob();
@@ -436,7 +439,7 @@ Number Halfspace<Number>::computePlaneOffset( const vector_t<Number> &normal, co
 	return normal.dot( pointOnPlane.rawCoordinates() );
 }
 
-//Return mNormal as a matrix
+// Return mNormal as a matrix
 template <typename Number>
 matrix_t<Number> Halfspace<Number>::matrix() const {
 	matrix_t<Number> mat = matrix_t<Number>::Zero( 1, mNormal.rows() );
@@ -444,7 +447,7 @@ matrix_t<Number> Halfspace<Number>::matrix() const {
 	return mat;
 }
 
-//Return mScalar as a vector
+// Return mScalar as a vector
 template <typename Number>
 vector_t<Number> Halfspace<Number>::vector() const {
 	vector_t<Number> vec = vector_t<Number>::Zero( 1 );
@@ -452,7 +455,7 @@ vector_t<Number> Halfspace<Number>::vector() const {
 	return vec;
 }
 
-//A halfspace itself cannot be empty, except its normal is the zero vector and the scalar is smaller than 0
+// A halfspace itself cannot be empty, except its normal is the zero vector and the scalar is smaller than 0
 template <typename Number>
 bool Halfspace<Number>::empty() const {
 	if ( mNormal != vector_t<Number>::Zero( mNormal.rows() ) && mScalar < 0 ) return true;
@@ -466,7 +469,8 @@ EvaluationResult<Number> Halfspace<Number>::evaluate( const vector_t<Number> &di
 	if ( dependent.first ) {
 		if ( dependent.second > 0 ) {
 			// The vectors are dependent -> to find point on plane and to avoid squareroot computations, return vector
-			// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored distance.
+			// which contains zeroes except of the position with the first non-zero coeff, which is set to the stored
+			// distance.
 			vector_t<Number> pointOnPlane = vector_t<Number>::Zero( direction.rows() );
 			unsigned i = 0;
 			while ( i < direction.rows() && direction( i ) == 0 ) {
@@ -482,7 +486,8 @@ EvaluationResult<Number> Halfspace<Number>::evaluate( const vector_t<Number> &di
 }
 
 template <typename Number>
-std::vector<EvaluationResult<Number>> Halfspace<Number>::multiEvaluate( const matrix_t<Number> &_directions, bool /*useExact*/ ) const {
+std::vector<EvaluationResult<Number>> Halfspace<Number>::multiEvaluate( const matrix_t<Number> &_directions,
+																		bool /*useExact*/ ) const {
 	assert( _directions.cols() == this->dimension() );
 	std::vector<EvaluationResult<Number>> res;
 	vector_t<Number> pointOnPlane = vector_t<Number>::Zero( dimension() );
@@ -493,7 +498,8 @@ std::vector<EvaluationResult<Number>> Halfspace<Number>::multiEvaluate( const ma
 	}
 	pointOnPlane( nonZeroPos ) = mScalar;
 	for ( unsigned index = 0; index < _directions.rows(); ++index ) {
-		std::pair<bool, Number> dependent = linearDependent( vector_t<Number>( mNormal ), vector_t<Number>( _directions.row( index ) ) );
+		std::pair<bool, Number> dependent =
+			  linearDependent( vector_t<Number>( mNormal ), vector_t<Number>( _directions.row( index ) ) );
 		if ( dependent.first ) {
 			if ( dependent.second > 0 ) {
 				res.emplace_back( mScalar * dependent.second, pointOnPlane, SOLUTION::FEAS );
