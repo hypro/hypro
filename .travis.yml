@@ -171,6 +171,12 @@ matrix:
     - os: osx
       env: COMPILER=clang++
       compiler: clang
+    - os: linux
+      env: COMPILER=clang++-9
+    - os: linux
+      env: COMPILER=clang++-10
+    - os: linux
+      env: COMPILER=clang++-6
 
 
 before_install:
