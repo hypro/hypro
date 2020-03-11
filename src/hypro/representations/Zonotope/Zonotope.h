@@ -39,7 +39,7 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class ZonotopeT : private GeometricObjectBase<Number> {
+class ZonotopeT : private GeometricObjectBase {
   public:
 	typedef Setting Settings;
 	typedef Number NumberType;

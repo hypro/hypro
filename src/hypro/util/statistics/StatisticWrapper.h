@@ -7,7 +7,7 @@ namespace hypro {
  * @tparam     Representation  { The underlying state set representation. }
  */
 template <typename Representation>
-class StatisticWrapper : private GeometricObjectBase<Number> {
+class StatisticWrapper : private GeometricObjectBase {
   private:
 	Representation mObject;
 

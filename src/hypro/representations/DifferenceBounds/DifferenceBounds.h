@@ -18,7 +18,7 @@ class Point;
  * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
-class DifferenceBoundsT : private GeometricObjectBase<Number> {
+class DifferenceBoundsT : private GeometricObjectBase {
   public:
 	enum BOUND_TYPE {
 		SMALLER,

@@ -52,7 +52,7 @@ class Location;
  * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
-class BoxT : private GeometricObjectBase<Number> {
+class BoxT : private GeometricObjectBase {
   private:
   public:
 	/***************************************************************************

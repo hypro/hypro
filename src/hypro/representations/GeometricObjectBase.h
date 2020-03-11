@@ -13,7 +13,6 @@
 #include "../flags.h"
 #include "types.h"
 
-
 namespace hypro {
 
 template <typename Number>
@@ -29,7 +28,7 @@ class Location;
  * @brief      Purely virtual class defining a common interface for geometric objects.
  * \ingroup geoState @{
  */
-template <typename Number>
+
 class GeometricObjectBase {
   protected:
 	/**
@@ -50,4 +49,3 @@ class GeometricObjectBase {
 }  // namespace hypro
 
 #include "conversion/Converter.h"
-

@@ -78,7 +78,7 @@ struct Parameters {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class SupportFunctionNewT : private GeometricObjectBase<Number> {
+class SupportFunctionNewT : private GeometricObjectBase {
 	/***************************************************************************
 	 * Friends, Usings, typedefs
 	 **************************************************************************/

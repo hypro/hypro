@@ -19,7 +19,7 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class GeneralizedStarT : private GeometricObjectBase<Number> {
+class GeneralizedStarT : private GeometricObjectBase {
   private:
 	vector_t<Number> mCenter;
 	matrix_t<Number> mBasis;

@@ -31,7 +31,7 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename S>
-class VPolytopeT : private GeometricObjectBase<Number> {
+class VPolytopeT : private GeometricObjectBase {
   public:
 	using pointVector = std::vector<Point<Number>>;
 	typedef S Settings;

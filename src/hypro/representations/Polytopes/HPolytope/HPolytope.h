@@ -33,7 +33,7 @@ class Location;
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class HPolytopeT : private GeometricObjectBase<Number> {
+class HPolytopeT : private GeometricObjectBase {
   public:
 	enum REDUCTION_STRATEGY {
 		DROP = 0,

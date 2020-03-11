@@ -20,7 +20,7 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class SupportFunctionT : private GeometricObjectBase<Number> {
+class SupportFunctionT : private GeometricObjectBase {
   public:
 	typedef Setting Settings;
 	typedef Number NumberType;
