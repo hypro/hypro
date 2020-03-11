@@ -176,7 +176,7 @@ matrix:
     - os: linux
       env: COMPILER=clang++-10
     - os: linux
-      env: COMPILER=clang++-6
+      env: COMPILER=clang++-6.0
 
 
 before_install:
