@@ -1,6 +1,6 @@
 #include "../../hypro/datastructures/reachability/Strategy.h"
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 

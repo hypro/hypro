@@ -16,7 +16,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../util/linearOptimization/Optimizer.h"
@@ -78,7 +78,7 @@ struct Parameters {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number, Converter, Setting>> {
+class SupportFunctionNewT : private GeometricObjectBase<Number> {
 	/***************************************************************************
 	 * Friends, Usings, typedefs
 	 **************************************************************************/
@@ -94,6 +94,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   public:
 	//Needed for Converter.h
 	typedef Setting Settings;
+	typedef Number NumberType;
 
 	/***************************************************************************
 	 * Members
@@ -154,7 +155,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template <typename Representation>
-	SupportFunctionNewT( GeometricObject<Number, Representation>& r );
+	SupportFunctionNewT( const Representation& r );
 
 	/**
 	 * @brief      Matrix vector constructor

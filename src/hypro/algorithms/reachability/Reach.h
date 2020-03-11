@@ -19,7 +19,7 @@
 #include "datastructures/reachability/Settings.h"
 #include "datastructures/reachability/workQueue/WorkQueue.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 
 // Debug Flag, TODO: Add more debug levels.

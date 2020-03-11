@@ -6,7 +6,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../datastructures/Halfspace.h"
@@ -52,7 +52,7 @@ class Location;
  * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
-class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
+class BoxT : private GeometricObjectBase<Number> {
   private:
   public:
 	/***************************************************************************
@@ -60,6 +60,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number, Converter, Setting>> {
 	 **************************************************************************/
 
 	typedef Setting Settings;
+	typedef Number NumberType;
 
   protected:
 	std::vector<carl::Interval<Number>> mLimits; /*!< Box as a vector of intervals. */

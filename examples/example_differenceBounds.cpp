@@ -5,7 +5,7 @@
 
 #include "datastructures/Halfspace.h"
 #include "datastructures/Point.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 
 typedef double Number;

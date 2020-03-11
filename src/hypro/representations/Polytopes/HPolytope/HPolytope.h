@@ -6,16 +6,17 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../../util/Permutator.h"
+#include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/templateDirections.h"
 #include "HPolytopeSetting.h"
 #include "algorithms/quickhull/Quickhull.h"
 #include "algorithms/quickhull/number_traits.h"
-#include "../../../util/convexHull.h"
+
 #include <algorithm>
 #include <cassert>
 #include <optional>
@@ -32,7 +33,7 @@ class Location;
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, Setting>> {
+class HPolytopeT : private GeometricObjectBase<Number> {
   public:
 	enum REDUCTION_STRATEGY {
 		DROP = 0,
@@ -49,6 +50,7 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 	using HalfspaceVector = std::vector<Halfspace<Number>>;
 
 	typedef Setting Settings;
+	typedef Number NumberType;
 
   private:
 	mutable HalfspaceVector mHPlanes;

@@ -6,7 +6,7 @@
 #include "../defines.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "gtest/gtest.h"
 
 using namespace hypro;

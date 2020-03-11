@@ -1,6 +1,6 @@
 #pragma once
 #include "../../datastructures/Point.h"
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "../../representations/types.h"
 #include "../../types.h"
 

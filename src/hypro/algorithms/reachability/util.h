@@ -1,7 +1,7 @@
 #pragma once
 #include "../../datastructures/HybridAutomaton/State.h"
 #include "../../datastructures/HybridAutomaton/flow/flow.h"
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "TrafoParameters.h"
 
 #include <carl/util/SFINAE.h>

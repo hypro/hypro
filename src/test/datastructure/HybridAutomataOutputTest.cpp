@@ -8,7 +8,7 @@
 #include "datastructures/HybridAutomaton/State.h"
 #include "datastructures/HybridAutomaton/output/Flowstar.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/multithreading/Filewriter.h"
 #include "gtest/gtest.h"
 

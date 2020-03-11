@@ -86,19 +86,18 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Half
 //Generic Leaf constructor
 template <typename Number, typename Converter, typename Setting>
 template <typename Representation>
-SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( GeometricObject<Number, Representation>& r ) {
-	Representation tmp = dynamic_cast<Representation&>( r );
+SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Representation& r ) {
 	DEBUG( "hypro.representations", "SFN generic leaf constr, got r:\n"
-										  << tmp );
-	if ( tmp.empty() ) {
-		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( tmp.dimension() ) ) );
+										  << r );
+	if ( r.empty() ) {
+		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( r.dimension() ) ) );
 	} else {
-		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( tmp.matrix(), tmp.vector() );
+		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( r.matrix(), r.vector() );
 		if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		} else {
 			using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( tmp.matrix(), tmp.vector() ) );
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( r.matrix(), r.vector() ) );
 		}
 	}
 	assert( mRoot != nullptr );

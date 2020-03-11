@@ -5,7 +5,7 @@
 #include "algorithms/reachability/Reach.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/statistics/statistics.h"
 #ifdef HYPRO_USE_LACE
 #include <lace.h>
@@ -160,7 +160,8 @@ static void computeReachableStates(const std::string &filename,
           break;
         }
         default:
-          unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
+          unsigned tmp =
+              plotter.addObject(seg.project(plottingDimensions).vertices());
           plotter.setObjectColor(
               tmp, hypro::plotting::colors[flowpipePair.first %
                                            (sizeof(hypro::plotting::colors) /
@@ -199,8 +200,8 @@ int main(int argc, char **argv) {
 #ifdef USE_CLN_NUMBERS
   using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
-	// using Number = double;
+  using Number = mpq_class;
+  // using Number = double;
 #endif
 
   switch (rep) {

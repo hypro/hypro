@@ -9,57 +9,52 @@
  * @version 2014-03-17
  */
 
-#include "gtest/gtest.h"
 #include "../defines.h"
-#include "types.h"
-#include "util/VariablePool.h"
 #include "datastructures/Point.h"
 #include "datastructures/Vertex.h"
 #include "datastructures/VertexContainer.h"
-#include "representations/GeometricObject.h"
-#include "representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
+#include "representations/GeometricObjectBase.h"
 #include "representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
+#include "types.h"
+#include "util/VariablePool.h"
+#include "gtest/gtest.h"
 
-#include <map>
-#include <carl/core/VariablePool.h>
 #include <carl/core/Variable.h>
+#include <carl/core/VariablePool.h>
 #include <carl/interval/Interval.h>
+#include <map>
 
 using namespace hypro;
 using namespace carl;
 
-template<typename Number>
-class OrthogonalPolyhedronTest : public ::testing::Test
-{
-protected:
-	virtual void SetUp()
-	{
-		container1.insert(Point<Number>({3,3}), true);
-		container1.insert(Point<Number>({3,6}), false);
-		container1.insert(Point<Number>({5,3}), false);
-		container1.insert(Point<Number>({5,5}), true);
-		container1.insert(Point<Number>({7,5}), false);
-		container1.insert(Point<Number>({7,6}), false);
+template <typename Number>
+class OrthogonalPolyhedronTest : public ::testing::Test {
+  protected:
+	virtual void SetUp() {
+		container1.insert( Point<Number>( {3, 3} ), true );
+		container1.insert( Point<Number>( {3, 6} ), false );
+		container1.insert( Point<Number>( {5, 3} ), false );
+		container1.insert( Point<Number>( {5, 5} ), true );
+		container1.insert( Point<Number>( {7, 5} ), false );
+		container1.insert( Point<Number>( {7, 6} ), false );
 
-		p1 = OrthogonalPolyhedron<Number>(container1);
+		p1 = OrthogonalPolyhedron<Number>( container1 );
 
-		container2.insert(Point<Number>({1,2}), true);
-		container2.insert(Point<Number>({1,4}), false);
-		container2.insert(Point<Number>({2,4}), true);
-		container2.insert(Point<Number>({2,5}), false);
-		container2.insert(Point<Number>({4,5}), false);
-		container2.insert(Point<Number>({4,2}), false);
+		container2.insert( Point<Number>( {1, 2} ), true );
+		container2.insert( Point<Number>( {1, 4} ), false );
+		container2.insert( Point<Number>( {2, 4} ), true );
+		container2.insert( Point<Number>( {2, 5} ), false );
+		container2.insert( Point<Number>( {4, 5} ), false );
+		container2.insert( Point<Number>( {4, 2} ), false );
 
-		p2 = OrthogonalPolyhedron<Number>(container2);
+		p2 = OrthogonalPolyhedron<Number>( container2 );
 	}
 
-	virtual void TearDown()
-	{
-	}
+	virtual void TearDown() {}
 
 	hypro::VariablePool& pool = hypro::VariablePool::getInstance();
-	carl::Variable x = pool.carlVarByIndex(0);
-	carl::Variable y = pool.carlVarByIndex(1);
+	carl::Variable x = pool.carlVarByIndex( 0 );
+	carl::Variable y = pool.carlVarByIndex( 1 );
 
 	VertexContainer<Number> container1;
 	VertexContainer<Number> container2;
@@ -68,47 +63,44 @@ protected:
 	OrthogonalPolyhedron<Number> p2;
 };
 
-TYPED_TEST(OrthogonalPolyhedronTest, Constructor)
-{
+TYPED_TEST( OrthogonalPolyhedronTest, Constructor ) {
 	// empty constructor
 	OrthogonalPolyhedron<TypeParam> p1;
 
 	// constructor from vertex
-	Vertex<TypeParam> v1(Point<TypeParam>({1,2}), false);
-	OrthogonalPolyhedron<TypeParam> p2(v1);
+	Vertex<TypeParam> v1( Point<TypeParam>( {1, 2} ), false );
+	OrthogonalPolyhedron<TypeParam> p2( v1 );
 
 	// constructor from vertexContainer
-	OrthogonalPolyhedron<TypeParam> p3(this->container1);
+	OrthogonalPolyhedron<TypeParam> p3( this->container1 );
 
 	// constructor from set of vertices
-	OrthogonalPolyhedron<TypeParam> p4(this->container1.vertices());
+	OrthogonalPolyhedron<TypeParam> p4( this->container1.vertices() );
 
 	// copy constructor
-	OrthogonalPolyhedron<TypeParam> copy(p4);
+	OrthogonalPolyhedron<TypeParam> copy( p4 );
 	SUCCEED();
 }
 
-TYPED_TEST(OrthogonalPolyhedronTest, Properties)
-{
-	EXPECT_FALSE(this->p1.empty());
+TYPED_TEST( OrthogonalPolyhedronTest, Properties ) {
+	EXPECT_FALSE( this->p1.empty() );
 	OrthogonalPolyhedron<TypeParam> empty;
-	EXPECT_TRUE(empty.empty());
+	EXPECT_TRUE( empty.empty() );
 
-	EXPECT_EQ((unsigned)2, this->p1.dimension());
+	EXPECT_EQ( (unsigned)2, this->p1.dimension() );
 
 	std::vector<carl::Variable> variables;
-	variables.push_back(this->x);
-	variables.push_back(this->y);
-	EXPECT_EQ(variables, this->p1.variables());
+	variables.push_back( this->x );
+	variables.push_back( this->y );
+	EXPECT_EQ( variables, this->p1.variables() );
 }
 
-TYPED_TEST(OrthogonalPolyhedronTest, BoundaryBox)
-{
+TYPED_TEST( OrthogonalPolyhedronTest, BoundaryBox ) {
 	hypro::Box<TypeParam> boundaryBox;
-	boundaryBox.insert(carl::Interval<TypeParam>(3, 7));
-	boundaryBox.insert(carl::Interval<TypeParam>(3, 6));
+	boundaryBox.insert( carl::Interval<TypeParam>( 3, 7 ) );
+	boundaryBox.insert( carl::Interval<TypeParam>( 3, 6 ) );
 
-	EXPECT_EQ(boundaryBox, this->p1.boundaryBox());
+	EXPECT_EQ( boundaryBox, this->p1.boundaryBox() );
 }
 
 /*
@@ -185,39 +177,37 @@ TYPED_TEST(OrthogonalPolyhedronTest, LinearTransformation)
 
 */
 
-TYPED_TEST(OrthogonalPolyhedronTest, Intersect)
-{
+TYPED_TEST( OrthogonalPolyhedronTest, Intersect ) {
 	OrthogonalPolyhedron<TypeParam> result;
 
 	VertexContainer<TypeParam> container;
 
-	container.insert(Point<TypeParam>({3,3}), true);
-	container.insert(Point<TypeParam>({4,3}), false);
-	container.insert(Point<TypeParam>({3,5}), false);
-	container.insert(Point<TypeParam>({4,5}), false);
-	OrthogonalPolyhedron<TypeParam> p3(container);
+	container.insert( Point<TypeParam>( {3, 3} ), true );
+	container.insert( Point<TypeParam>( {4, 3} ), false );
+	container.insert( Point<TypeParam>( {3, 5} ), false );
+	container.insert( Point<TypeParam>( {4, 5} ), false );
+	OrthogonalPolyhedron<TypeParam> p3( container );
 
-	OrthogonalPolyhedron<TypeParam> expected(container);
+	OrthogonalPolyhedron<TypeParam> expected( container );
 
-	result = this->p2.intersect(this->p1);
+	result = this->p2.intersect( this->p1 );
 
-	EXPECT_EQ(expected, result);
+	EXPECT_EQ( expected, result );
 }
 
-TYPED_TEST(OrthogonalPolyhedronTest, Hull)
-{
+TYPED_TEST( OrthogonalPolyhedronTest, Hull ) {
 	VertexContainer<TypeParam> container;
 
-	container.insert(Point<TypeParam>({3,3}), true);
-	container.insert(Point<TypeParam>({3,6}), false);
-	container.insert(Point<TypeParam>({7,3}), false);
-	container.insert(Point<TypeParam>({7,6}), false);
+	container.insert( Point<TypeParam>( {3, 3} ), true );
+	container.insert( Point<TypeParam>( {3, 6} ), false );
+	container.insert( Point<TypeParam>( {7, 3} ), false );
+	container.insert( Point<TypeParam>( {7, 6} ), false );
 
-	OrthogonalPolyhedron<TypeParam> hull(container);
+	OrthogonalPolyhedron<TypeParam> hull( container );
 	OrthogonalPolyhedron<TypeParam> result;
 
 	result = this->p1.hull();
-	EXPECT_EQ(hull, result);
+	EXPECT_EQ( hull, result );
 }
 
 /*
@@ -289,36 +279,35 @@ TYPED_TEST(OrthogonalPolyhedronTest, Contains)
 }
 */
 
-TYPED_TEST(OrthogonalPolyhedronTest, Unite) {
+TYPED_TEST( OrthogonalPolyhedronTest, Unite ) {
 	OrthogonalPolyhedron<TypeParam> result;
 
 	VertexContainer<TypeParam> container;
 
-	container.insert(Point<TypeParam>({1,3}), true);
-	container.insert(Point<TypeParam>({1,4}), false);
-	container.insert(Point<TypeParam>({2,2}), true);
-	container.insert(Point<TypeParam>({2,3}), true);
-	container.insert(Point<TypeParam>({2,4}), true);
-	container.insert(Point<TypeParam>({2,5}), false);
-	container.insert(Point<TypeParam>({3,5}), true);
-	container.insert(Point<TypeParam>({3,6}), false);
-	container.insert(Point<TypeParam>({4,2}), false);
-	container.insert(Point<TypeParam>({4,3}), true);
-	container.insert(Point<TypeParam>({5,3}), false);
-	container.insert(Point<TypeParam>({5,5}), true);
-	container.insert(Point<TypeParam>({7,5}), false);
-	container.insert(Point<TypeParam>({7,6}), false);
+	container.insert( Point<TypeParam>( {1, 3} ), true );
+	container.insert( Point<TypeParam>( {1, 4} ), false );
+	container.insert( Point<TypeParam>( {2, 2} ), true );
+	container.insert( Point<TypeParam>( {2, 3} ), true );
+	container.insert( Point<TypeParam>( {2, 4} ), true );
+	container.insert( Point<TypeParam>( {2, 5} ), false );
+	container.insert( Point<TypeParam>( {3, 5} ), true );
+	container.insert( Point<TypeParam>( {3, 6} ), false );
+	container.insert( Point<TypeParam>( {4, 2} ), false );
+	container.insert( Point<TypeParam>( {4, 3} ), true );
+	container.insert( Point<TypeParam>( {5, 3} ), false );
+	container.insert( Point<TypeParam>( {5, 5} ), true );
+	container.insert( Point<TypeParam>( {7, 5} ), false );
+	container.insert( Point<TypeParam>( {7, 6} ), false );
 
-	OrthogonalPolyhedron<TypeParam> expected(container);
+	OrthogonalPolyhedron<TypeParam> expected( container );
 
-	result = this->p1.unite(this->p2);
+	result = this->p1.unite( this->p2 );
 
-	EXPECT_EQ(expected, result);
+	EXPECT_EQ( expected, result );
 }
 
-TYPED_TEST(OrthogonalPolyhedronTest, SettingsConversion){
-
-	hypro::OrthogonalPolyhedronT<TypeParam, hypro::Converter<TypeParam>, hypro::BoxLinearOptimizationOff> newOP(this->p1);
-	EXPECT_EQ(newOP, this->p1);
-
+TYPED_TEST( OrthogonalPolyhedronTest, SettingsConversion ) {
+	hypro::OrthogonalPolyhedronT<TypeParam, hypro::Converter<TypeParam>, hypro::BoxLinearOptimizationOff> newOP(
+		  this->p1 );
+	EXPECT_EQ( newOP, this->p1 );
 }

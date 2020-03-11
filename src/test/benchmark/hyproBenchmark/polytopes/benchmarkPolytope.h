@@ -12,22 +12,21 @@
 #include "../Settings.h"
 #include "../types.h"
 #include <flags.h>
-#include <representations/GeometricObject.h>
 #include <iostream>
 #include <random>
+#include <representations/GeometricObjectBase.h>
 #ifdef HYPRO_USE_PPL
 #include "../box/pplStructs.h"
 #include <ppl.hh>
 #endif
 
 namespace benchmark {
-namespace polytope
-{
-    Results<std::size_t> intersectHalfspace(const Settings& settings);
-    Results<std::size_t> affineTransformation(const Settings& settings);
-    Results<std::size_t> unite(const Settings& settings);
-    Results<std::size_t> intersect(const Settings& settings);
-    Results<std::size_t> run(const Settings& settings);
+namespace polytope {
+Results<std::size_t> intersectHalfspace( const Settings& settings );
+Results<std::size_t> affineTransformation( const Settings& settings );
+Results<std::size_t> unite( const Settings& settings );
+Results<std::size_t> intersect( const Settings& settings );
+Results<std::size_t> run( const Settings& settings );
 
-} // polytope
-} // namespace benchmark
+}  // namespace polytope
+}  // namespace benchmark

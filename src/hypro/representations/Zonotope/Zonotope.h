@@ -12,7 +12,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../datastructures/Halfspace.h"
@@ -39,9 +39,10 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number, Converter, Setting>> {
+class ZonotopeT : private GeometricObjectBase<Number> {
   public:
 	typedef Setting Settings;
+	typedef Number NumberType;
 
   private:
 	std::size_t mDimension;

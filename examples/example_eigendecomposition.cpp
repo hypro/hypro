@@ -2,7 +2,7 @@
  * Examples for constructing Eigendecomposition of Matrices
  */
 
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 #include <eigen3/Eigen/Eigenvalues>
 

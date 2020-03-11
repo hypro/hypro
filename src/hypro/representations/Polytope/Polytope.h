@@ -6,7 +6,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../flags.h"
@@ -18,7 +18,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../datastructures/Ridge.h"
 #include "../../util/VariablePool.h"
 #include "../../util/convexHull.h"
-#include "../GeometricObject.h"
+#include "../GeometricObjectBase.h"
 #include "../Polytopes/Cone.h"
 #include "../Polytopes/Fan.h"
 #include "PolytopeSetting.h"
@@ -45,9 +45,10 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class PolytopeT : public GeometricObject<Number, PolytopeT<Number, Converter, Setting>> {
+class PolytopeT : private GeometricObjectBase<Number> {
   public:
 	typedef Setting Settings;
+	typedef Number NumberType;
 
   private:
 	Parma_Polyhedra_Library::C_Polyhedron mPolyhedron;

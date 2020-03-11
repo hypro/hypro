@@ -2,7 +2,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../util/linearOptimization/Optimizer.h"
@@ -19,12 +19,15 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class GeneralizedStarT : public GeometricObject<Number, GeneralizedStarT<Number, Converter, Setting>> {
+class GeneralizedStarT : private GeometricObjectBase<Number> {
   private:
 	vector_t<Number> mCenter;
 	matrix_t<Number> mBasis;
 
   public:
+	typedef Number NumberType;
+	typedef Setting Settings;
+
   protected:
 	/***************************************************************************
 	 * Members

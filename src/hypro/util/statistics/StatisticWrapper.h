@@ -1,4 +1,4 @@
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 
 namespace hypro {
 
@@ -7,7 +7,7 @@ namespace hypro {
  * @tparam     Representation  { The underlying state set representation. }
  */
 template <typename Representation>
-class StatisticWrapper : public GeometricObject<StatisticWrapper<Representation>> {
+class StatisticWrapper : private GeometricObjectBase<Number> {
   private:
 	Representation mObject;
 
@@ -15,7 +15,7 @@ class StatisticWrapper : public GeometricObject<StatisticWrapper<Representation>
 	/**
  * @brief      Destroys the object.
  */
-	virtual ~GeometricObject() {}
+	virtual ~GeometricObjectBase() {}
 
 	/**
  * @brief      Returns the space dimension of the object.
@@ -148,7 +148,7 @@ class StatisticWrapper : public GeometricObject<StatisticWrapper<Representation>
  * @param[in]  obj   The object.
  * @return     Reference to the passed outstream.
  */
-	friend std::ostream& operator<<( std::ostream& out, const GeometricObject<Number, StatisticWrapper<Representation>>& in ) {
+	friend std::ostream& operator<<( std::ostream& out, const GeometricObjectBase<Number, StatisticWrapper<Representation>>& in ) {
 		return out << mObject;
 	}
 };

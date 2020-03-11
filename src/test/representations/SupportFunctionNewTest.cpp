@@ -4,7 +4,7 @@
  * @author Phillip Tse
  */
 
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 #include <cmath>
