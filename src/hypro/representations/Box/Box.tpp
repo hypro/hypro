@@ -18,7 +18,7 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 
 	assert( _constraints.rows() == _constants.rows() );
 	if ( _constraints.rows() == 0 ) {
-		mEmpty = true;
+		mEmptyState = SETSTATE::EMPTY;
 		assert( this->empty() );
 		assert( this->dimension() == 0 );
 		return;
@@ -157,7 +157,7 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 						TRACE( "hypro.representations", "Result: " << mLimits[colIndex] );
 					}
 				}
-				mEmpty = false;
+				mEmptyState = SETSTATE::NONEMPTY;
 				boxDefined = true;
 			}
 		}
@@ -183,9 +183,9 @@ BoxT<Number, Converter, Setting>::BoxT( const std::set<Point<Number>>& _points )
 			}
 			mLimits.emplace_back( min, max );
 		}
-		mEmpty = false;
+		mEmptyState = SETSTATE::NONEMPTY;
 	} else {
-		mEmpty = true;
+		mEmptyState = SETSTATE::EMPTY;
 	}
 	reduceNumberRepresentation();
 }
@@ -206,9 +206,9 @@ BoxT<Number, Converter, Setting>::BoxT( const std::vector<Point<Number>>& _point
 			}
 			mLimits.emplace_back( min, max );
 		}
-		mEmpty = false;
+		mEmptyState = SETSTATE::NONEMPTY;
 	} else {
-		mEmpty = true;
+		mEmptyState = SETSTATE::EMPTY;
 	}
 	reduceNumberRepresentation();
 }

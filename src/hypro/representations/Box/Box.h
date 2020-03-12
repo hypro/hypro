@@ -64,7 +64,6 @@ class BoxT : private GeometricObjectBase {
 
   protected:
 	std::vector<carl::Interval<Number>> mLimits; /*!< Box as a vector of intervals. */
-	bool mEmpty;								 /*!< Cache for emptiness. */
 
   public:
 	/***************************************************************************
@@ -76,8 +75,8 @@ class BoxT : private GeometricObjectBase {
 	 * @details   The empty box is represented by a zero-dimensional point pair.
 	 */
 	BoxT()
-		: mLimits()
-		, mEmpty( true ) {
+		: GeometricObjectBase( SETSTATE::EMPTY )
+		, mLimits() {
 		assert( this->dimension() == 0 );
 		assert( this->empty() );
 	}
@@ -94,8 +93,8 @@ class BoxT : private GeometricObjectBase {
 	 */
 	template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
 	BoxT( const BoxT<Number, Converter, SettingRhs>& orig )
-		: mLimits( orig.intervals() )
-		, mEmpty( orig.empty() ) {}
+		: GeometricObjectBase()
+		, mLimits( orig.intervals() ) {}
 
 	/**
 	 * @brief      Move constructor.
@@ -109,7 +108,12 @@ class BoxT : private GeometricObjectBase {
 	  */
 	explicit BoxT( const carl::Interval<Number>& val ) {
 		mLimits.push_back( val );
-		mEmpty = val.isEmpty();
+		if ( val.isEmpty() )
+			mEmptyState = SETSTATE::EMPTY;
+		else if ( val.isUnbounded() )
+			mEmptyState = SETSTATE::UNIVERSAL;
+		else
+			mEmptyState = SETSTATE::NONEMPTY;
 	}
 
 	/**
@@ -120,10 +124,10 @@ class BoxT : private GeometricObjectBase {
 	 */
 	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits ) {
 		assert( limits.first.dimension() == limits.second.dimension() );
-		mEmpty = limits.first.dimension() > 0 ? false : true;
+		mEmptyState = limits.first.dimension() > 0 ? SETSTATE::NONEMPTY : SETSTATE::EMPTY;
 		for ( std::size_t i = 0; i < limits.first.dimension(); ++i ) {
 			mLimits.emplace_back( carl::Interval<Number>( limits.first[i], limits.second[i] ) );
-			mEmpty = mEmpty || mLimits.back().isEmpty();
+			mEmptyState = mLimits.back().isEmpty() ? SETSTATE::EMPTY : mEmptyState;
 		}
 	}
 
@@ -133,12 +137,15 @@ class BoxT : private GeometricObjectBase {
 	 * @param _intervals A vector of intervals.
 	 */
 	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals )
-		: mLimits( _intervals )
-		, mEmpty( false ) {
+		: GeometricObjectBase( _intervals.size() > 0 ? SETSTATE::NONEMPTY : SETSTATE::EMPTY )
+		, mLimits( _intervals ) {
 		for ( const auto& i : mLimits ) {
 			TRACE( "hypro.representations", "Add interval: " << i );
+			if ( i.isUnbounded() ) {
+				mEmptyState = SETSTATE::EMPTY;
+			}
 			if ( i.isEmpty() ) {
-				mEmpty = true;
+				mEmptyState = SETSTATE::EMPTY;
 				break;
 			}
 		}
@@ -185,7 +192,7 @@ class BoxT : private GeometricObjectBase {
 	  * @return Empty box.
 	  */
 	static BoxT Empty( std::size_t dimension = 1 ) {
-		auto tmp = BoxT<Number, Converter, Setting>( std::make_pair( Point<Number>( vector_t<Number>::Ones( dimension ) ), Point<Number>( vector_t<Number>::Zero( dimension ) ) ) );
+		auto tmp = BoxT();
 		assert( tmp.empty() );
 		return tmp;
 	}
@@ -207,7 +214,7 @@ class BoxT : private GeometricObjectBase {
 	 * @return A pair of points.
 	 */
 	std::pair<Point<Number>, Point<Number>> limits() const {
-		if ( mEmpty ) {
+		if ( mEmptyState == SETSTATE::EMPTY ) {
 			return std::pair<Point<Number>, Point<Number>>{Point<Number>( vector_t<Number>::Ones( this->dimension() ) ), Point<Number>( vector_t<Number>::Zero( this->dimension() ) )};
 		}
 		std::pair<Point<Number>, Point<Number>> res{Point<Number>( vector_t<Number>( this->dimension() ) ), Point<Number>( vector_t<Number>( this->dimension() ) )};
@@ -238,10 +245,13 @@ class BoxT : private GeometricObjectBase {
 	void insert( const carl::Interval<Number>& val ) {
 		mLimits.push_back( val );
 		if ( mLimits.back().isEmpty() ) {
-			mEmpty = true;
+			mEmptyState = SETSTATE::EMPTY;
 		} else if ( mLimits.size() == 1 ) {  // the new interval was the first and it is not empty.
-			mEmpty = false;
-		}  // otherise do not modify mEmpty - if it was true before it stays true, otherwise nothing happens.
+			mEmptyState = mLimits.front().isUnbounded() ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
+		} else if ( val.isUnbounded() ) {
+			mEmptyState = SETSTATE::UNIVERSAL;
+		}
+		// otherise do not modify mEmptyState - if it was true before it stays true, otherwise nothing happens.
 	}
 
 	/**
@@ -276,7 +286,7 @@ class BoxT : private GeometricObjectBase {
 	 * @return True, if one interval is empty. False if the dimension is 0 or no interval is empty.
 	 */
 	bool empty() const {
-		return mEmpty;
+		return mEmptyState == SETSTATE::EMPTY;
 	}
 
 	/**
@@ -286,7 +296,7 @@ class BoxT : private GeometricObjectBase {
 	 * @return     True if symmetric, False otherwise.
 	 */
 	bool isSymmetric() const {
-		if ( mEmpty ) {
+		if ( mEmptyState == SETSTATE::EMPTY ) {
 			return true;
 		}
 		for ( std::size_t d = 0; d < mLimits.size(); ++d ) {
