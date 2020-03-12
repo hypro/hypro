@@ -57,7 +57,6 @@ class HPolytopeT : private GeometricObjectBase {
 	std::size_t mDimension;
 
 	// State flags
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 	mutable bool mNonRedundant;
 
 	// A hpoly will only have an own Optimizer if the setting CACHE_OPTIMIZER = true
@@ -285,11 +284,13 @@ class HPolytopeT : private GeometricObjectBase {
 		mHPlanes = rhs.constraints();
 		mDimension = rhs.dimension();
 		mNonRedundant = rhs.isNonRedundant();
-		mEmpty = rhs.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+
 		if ( Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value() ) {
 			mOptimizer->cleanContexts();
 			setOptimizer( rhs.matrix(), rhs.vector() );
 		}
+		// TODO: I am not sure, whether the copy constructor of the base class is called here or not.
+		assert( mEmptyState == rhs.getEmptyState() );
 		return *this;
 	}
 
