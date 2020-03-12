@@ -38,6 +38,14 @@ enum class TRIBOOL { TRUE,
 					 NSET };
 
 /**
+ * @brief Enum to represent set states such as empty and universal.
+ */
+enum class SETSTATE { UNKNOWN,
+					  NONEMPTY,
+					  EMPTY,
+					  UNIVERSAL };
+
+/**
  * @brief      Enum of possible solution types for linear optimization.
  */
 enum class SOLUTION { FEAS = 0,

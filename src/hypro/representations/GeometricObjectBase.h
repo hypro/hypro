@@ -31,17 +31,23 @@ class Location;
 
 class GeometricObjectBase {
   protected:
-	/**
-	 * @brief
-	 *
-	 */
-	~GeometricObjectBase() {}
+	SETSTATE mEmptyState = SETSTATE::UNKNOWN;
+
+	GeometricObjectBase() = default;
+	GeometricObjectBase( const GeometricObjectBase& in ) = default;
+	GeometricObjectBase( GeometricObjectBase&& in ) = default;
+
+	GeometricObjectBase& operator=( const GeometricObjectBase& in ) = default;
+	GeometricObjectBase& operator=( GeometricObjectBase&& in ) = default;
+
+	GeometricObjectBase( SETSTATE state )
+		: mEmptyState( state ) {}
 
 	/**
 	 * @brief      Determines, whether the set is empty.
 	 * @return     True, if the set is empty, false otherwise.
 	 */
-	bool empty() const;
+	SETSTATE getEmptyState() const { return mEmptyState; }
 };
 
 /** @} */
