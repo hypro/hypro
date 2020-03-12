@@ -13,6 +13,7 @@
 #include "../flags.h"
 #include "types.h"
 
+
 namespace hypro {
 
 template <typename Number>
@@ -31,7 +32,7 @@ class Location;
 
 class GeometricObjectBase {
   protected:
-	SETSTATE mEmptyState = SETSTATE::UNKNOWN;
+	mutable SETSTATE mEmptyState = SETSTATE::UNKNOWN;
 
 	GeometricObjectBase() = default;
 	GeometricObjectBase( const GeometricObjectBase& in ) = default;
@@ -48,6 +49,12 @@ class GeometricObjectBase {
 	 * @return     True, if the set is empty, false otherwise.
 	 */
 	SETSTATE getEmptyState() const { return mEmptyState; }
+
+	/**
+	 * @brief Set the Empty State member - only to be used if you know what you are doing.
+	 * @param state The state the member is set to.
+	 */
+	void setEmptyState( SETSTATE state ) { mEmptyState = state; }
 };
 
 /** @} */
@@ -55,3 +62,4 @@ class GeometricObjectBase {
 }  // namespace hypro
 
 #include "conversion/Converter.h"
+
