@@ -194,6 +194,9 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::affineTransfo
 
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::minkowskiSum( const VPolytopeT<Number, Converter, S> &rhs ) const {
+	if ( this->empty() || rhs.empty() ) {
+		return Empty();
+	}
 	VPolytopeT<Number, Converter, S> result;
 	// add each rhs-vertex to each vertex of this polytope.
 	for ( auto lhsVertex : mVertices ) {
