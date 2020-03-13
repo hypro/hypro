@@ -204,9 +204,7 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::FacetSpace::compressVector() {
-        size_t newSize = facets.size() - deletedPositions.size();
-
-        assert(newSize > 0 || !Euclidian);
+        assert(facets.size() - deletedPositions.size() > 0 || !Euclidian);
 
         facetVector_t newVec;
 

@@ -113,11 +113,11 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			}
 
 			//Assert containment
-			for(auto const& halfspace : mHPlanes) {
-				for(auto const& point : points) {
-					assert(halfspace.contains(point));
-				}
-			}
+			assert(std::all_of(mHPlanes.begin(), mHPlanes.end(), [&](auto const& hplane) {
+				return std::all_of(points.begin(), points.end(), [&](auto const& point) {
+					return hplane.contains(point);
+				});
+			}));
 		} else {
 			TRACE( "hypro.representations.HPolytope", "Construct from vertices: " );
 		#ifdef HYPRO_LOGGING
