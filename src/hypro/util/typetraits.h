@@ -23,4 +23,14 @@ using enable_if = std::enable_if_t<B, int>;
 template <typename T, typename U>
 constexpr bool convertible = std::is_convertible_v<T, U>;
 
+// number traits
+template <typename Number>
+inline constexpr bool is_exact = std::is_same_v<Number, mpq_class>;
+
+template <typename Number>
+using EnableIfExact = std::enable_if_t<is_exact<Number>>;
+
+template <typename Number>
+using EnableIfFloatingpoint = std::enable_if_t<std::is_floating_point_v<Number>>;
+
 }  // namespace hypro
