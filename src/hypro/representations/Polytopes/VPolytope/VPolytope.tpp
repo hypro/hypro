@@ -11,20 +11,23 @@
 namespace hypro {
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S>::VPolytopeT()
-	: mVertices()
+	: GeometricObjectBase( SETSTATE::EMPTY )
+	, mVertices()
 	, mReduced( true )
 	, mNeighbors() {
 }
 
 template <typename Number, typename Converter, typename S>
-VPolytopeT<Number, Converter, S>::VPolytopeT( const Point<Number> &point ) {
+VPolytopeT<Number, Converter, S>::VPolytopeT( const Point<Number> &point )
+	: GeometricObjectBase( SETSTATE::NONEMPTY ) {
 	mVertices.push_back( point );
 	mReduced = true;
 	mNeighbors.push_back( std::set<unsigned>() );
 }
 
 template <typename Number, typename Converter, typename S>
-VPolytopeT<Number, Converter, S>::VPolytopeT( const pointVector &points ) {
+VPolytopeT<Number, Converter, S>::VPolytopeT( const pointVector &points )
+	: GeometricObjectBase( SETSTATE::NONEMPTY ) {
 	for ( const auto point : points ) {
 		if ( std::find( mVertices.begin(), mVertices.end(), point ) == mVertices.end() ) {
 			mVertices.push_back( point );
@@ -36,7 +39,8 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const pointVector &points ) {
 }
 
 template <typename Number, typename Converter, typename S>
-VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>> &rawPoints ) {
+VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>> &rawPoints )
+	: GeometricObjectBase( SETSTATE::NONEMPTY ) {
 	for ( const auto point : rawPoints ) {
 		Point<Number> tmpPoint( point );
 		if ( std::find( mVertices.begin(), mVertices.end(), tmpPoint ) == mVertices.end() ) {
@@ -331,6 +335,9 @@ bool VPolytopeT<Number, Converter, S>::contains( const Point<Number> &point ) co
 
 template <typename Number, typename Converter, typename S>
 bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number> &vec ) const {
+	if ( this->empty() ) {
+		return false;
+	}
 	if ( S::useLpForPointContainment ) {
 		// create LP  Ax = b to solve whether vec can be represented as a convex combination of the vertices.
 		// 1 create matrix from vertices.
@@ -530,6 +537,7 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::unite( const 
 template <typename Number, typename Converter, typename S>
 void VPolytopeT<Number, Converter, S>::clear() {
 	mVertices.clear();
+	mEmptyState = SETSTATE::EMPTY;
 }
 
 template <typename Number, typename Converter, typename S>
