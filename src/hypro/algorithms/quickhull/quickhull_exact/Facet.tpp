@@ -48,6 +48,7 @@ namespace hypro {
             if(mNeighbors[neighbor_pos] == facet_i) return neighbor_pos;
         }
         assert(false);
+        //This function is marked as noreturn and thus signals the compiler that the end of the function is not supposed to be reached.
+        unreachable();
     }
-
 }
