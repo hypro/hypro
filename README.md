@@ -1,3 +1,5 @@
+![](doc/hypro_Logo.png)
+
 # HyPro - A C++ library for the representation of state sets for the reachability analysis of hybrid systems
 
 The C++ library HyPro, which is a result of the project [HyPro](https://ths.rwth-aachen.de/research/projects/hypro/) funded by the german research council, provides easy to use implementations of state set representations for the reachability analysis of hybrid systems via flowpipe-construction.
