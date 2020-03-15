@@ -1,3 +1,3 @@
 # Boxes {#boxDetails}
 
-Some detail about boxes, which are implemented in the file Box.h.
+Some detail about boxes, which are implemented in the class [BoxT](@ref hypro::BoxT) .
