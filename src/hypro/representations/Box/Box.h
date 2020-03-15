@@ -45,7 +45,7 @@ class Location;
 
 /**
  * @brief      The class which represents a box.
- * @details    A box is represented by an ordered sequence of intervals.
+ * @details    A box is represented by an ordered sequence of intervals. Details can be found [here](#boxDetails).
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
  *
