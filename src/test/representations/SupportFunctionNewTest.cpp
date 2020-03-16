@@ -815,7 +815,7 @@ TYPED_TEST( SupportFunctionNewTest, EvaluateMixedLeaves ) {
 
 TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 	// Empty sf
-	Box<TypeParam> box1 = Box<TypeParam>::Empty( 2 );
+	Box<TypeParam> box1 = Box<TypeParam>::Empty();
 	SupportFunctionNew<TypeParam> sf1( box1 );
 	EXPECT_TRUE( sf1.empty() );
 	// HPolytope<TypeParam> hpoly1 = HPolytope<TypeParam>::Empty();

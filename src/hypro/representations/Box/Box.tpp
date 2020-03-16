@@ -586,7 +586,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 			std::vector<carl::Interval<Number>> intervals = this->intervals();
 			bool empty = icpIntersectHalfspace( intervals, hspace );
 			if ( empty ) {
-				return Empty( this->dimension() );
+				return Empty();
 			}
 			return BoxT<Number, Converter, Setting>( intervals );
 		} else {  // Do not use interval arithmetic.
@@ -605,7 +605,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 				// from previous checks we know that either the lowest or the highest point is not contained. If both are not
 				// contained and the normal is axis-aligned, the set is empty.
 				if ( !holdsMin && !holdsMax ) {
-					return Empty( this->dimension() );
+					return Empty();
 				}
 
 				// find the one, non-zero component
@@ -727,7 +727,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 			}
 		}
 	}
-	return Empty( this->dimension() );
+	return Empty();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -738,7 +738,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 		return *this;
 	}
 	if ( this->empty() ) {
-		return Empty( this->dimension() );
+		return Empty();
 	}
 
 	if ( Setting::USE_INTERVAL_ARITHMETIC ) {
@@ -747,7 +747,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 		for ( unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex ) {
 			bool empty = icpIntersectHalfspace( intervals, Halfspace<Number>( _mat.row( planeIndex ), _vec( planeIndex ) ) );
 			if ( empty ) {
-				return Empty( this->dimension() );
+				return Empty();
 			}
 		}
 		return BoxT<Number, Converter, Setting>( intervals );
@@ -766,7 +766,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 			}
 			return result;
 		}
-		return Empty( this->dimension() );
+		return Empty();
 	} else {
 		// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
 		std::vector<vector_t<Number>> tpl = computeTemplate<Number>( this->dimension(), 4 );
@@ -862,7 +862,7 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::unite( const 
 
 template <typename Number, typename Converter, class Setting>
 void BoxT<Number, Converter, Setting>::clear() {
-	*this = BoxT<Number, Converter, Setting>::Empty( 0 );
+	*this = BoxT<Number, Converter, Setting>::Empty();
 }
 
 template <typename Number, typename Converter, class Setting>

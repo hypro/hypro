@@ -14,7 +14,8 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT() {}
 //copy constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number, Converter, Setting>& orig )
-	: mRoot( orig.getRoot() ) {
+	: GeometricObjectBase( orig )
+	, mRoot( orig.getRoot() ) {
 	if ( orig.isTemplateSet() ) {
 		mMatrix = orig.matrix();
 		mVector = orig.vector();
@@ -90,7 +91,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Repr
 	DEBUG( "hypro.representations", "SFN generic leaf constr, got r:\n"
 										  << r );
 	if ( r.empty() ) {
-		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( r.dimension() ) ) );
+		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty() ) );
 	} else {
 		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( r.matrix(), r.vector() );
 		if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
@@ -112,7 +113,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 	std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( mat, vec );
 	if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
 		if ( std::get<1>( areArgsBox ).size() == 0 ) {
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( mat.cols() ) ) );
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty() ) );
 			assert( false );
 		} else {
 			INFO( "hypro.representations", "SFN mat-vec-constr: constraints were box!" )

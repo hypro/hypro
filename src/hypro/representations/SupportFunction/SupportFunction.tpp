@@ -28,7 +28,8 @@ SupportFunctionT<Number, Converter, Setting>::SupportFunctionT() {
 //copy constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionT<Number, Converter, Setting>::SupportFunctionT( const SupportFunctionT<Number, Converter, Setting>& _orig )
-	: content( _orig.content ) {
+	: GeometricObjectBase( _orig )
+	, content( _orig.content ) {
 	//handled by initializer list
 }
 

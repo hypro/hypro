@@ -191,7 +191,7 @@ class BoxT : private GeometricObjectBase {
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
-	static BoxT Empty( std::size_t dimension = 1 ) {
+	static BoxT Empty() {
 		auto tmp = BoxT();
 		assert( tmp.empty() );
 		return tmp;
