@@ -3,7 +3,7 @@ warning: source carl_resources-NOTFOUND is not a readable file or directory... s
    /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h
    /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h
 Please use a more specific name by including a (larger) part of the path!
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:5: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::Facet not found!
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:7: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::Facet not found!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:10: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::FacetSpace not found!
 /home/travis/build/hypro/hypro/examples/example_box.cpp:3: warning: Example example_box.cpp was already documented. Ignoring documentation found here.
 /home/travis/build/hypro/hypro/examples/example_simulation.cpp:2: warning: Example example_plot.cpp was already documented. Ignoring documentation found here.
@@ -56,15 +56,15 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'isat' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'BagnaraHZ08SCP' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'polymake' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:45: warning: \cite command to 'BagnaraHZ08SCP' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:45: warning: \cite command to 'polymake' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:61: warning: Found unknown command `\cora'
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:68: warning: expected whitespace after { command
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:76: warning: Found unknown command `\spaceex'
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:76: warning: \cite command to 'LeGuernicG10' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:76: warning: \cite command to 'FrehseLGDRLRGDM11' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:76: warning: \cite command to 'stc' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:76: warning: \cite command to 'Frehse2015' does not have an associated number
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:47: warning: \cite command to 'BagnaraHZ08SCP' does not have an associated number
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:47: warning: \cite command to 'polymake' does not have an associated number
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:63: warning: Found unknown command `\cora'
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:70: warning: expected whitespace after { command
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: Found unknown command `\spaceex'
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'LeGuernicG10' does not have an associated number
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'FrehseLGDRLRGDM11' does not have an associated number
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'stc' does not have an associated number
+/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'Frehse2015' does not have an associated number
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:552: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:603: warning: The following parameters of hypro::operator*(const Point< Number > &_lhs, const Number &_factor) are not documented:
   parameter '_factor'

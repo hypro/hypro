@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"classhypro_1_1HybridAutomatonParser.html#aa8cf89dcefc78b662b41a96de6adf1e7":[8,0,1,100,176],
 "classhypro_1_1HybridAutomatonParser.html#aa9668464bb248dda2cc8ebb39b8bef68":[8,0,1,100,181],
 "classhypro_1_1HybridAutomatonParser.html#aacbc03abf4113c73ff0c179b435e00b1":[8,0,1,100,157],
 "classhypro_1_1HybridAutomatonParser.html#ab289981bcb5e9bada83cb41b14687533":[8,0,1,100,172],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html#ad632fb274c59ddb5a375339d237bf52c":[8,0,1,100,29,1],
 "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html":[8,0,1,100,30],
 "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html#a0dba8ca7471acc80b67c88b697bd8190":[8,0,1,100,30,1],
-"classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html#a36289145d934167e3cc913c4f3d9472c":[8,0,1,100,30,2],
-"classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html#a98cf1d8327e0b8fcb31074c228446060":[8,0,1,100,30,0]
+"classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html#a36289145d934167e3cc913c4f3d9472c":[8,0,1,100,30,2]
 };

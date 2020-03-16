@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"classhypro_1_1VPolytopeT.html#a1186c70a8a94f9bf7db0218ffa67f5d8":[6,1,7,39],
 "classhypro_1_1VPolytopeT.html#a15b927bed8a25abcd9845d1494db86b3":[6,1,7,26],
 "classhypro_1_1VPolytopeT.html#a15e0deae42beab7bc06167a93863bdfb":[6,1,7,27],
 "classhypro_1_1VPolytopeT.html#a1773517bef4c868eeb20c7e32aa6638d":[6,1,7,59],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "classhypro_1_1ZonotopeT.html#a2d2195cc78e65c1ed42c51dd50e63650":[6,1,10,36],
 "classhypro_1_1ZonotopeT.html#a301933ded6ba1e8d87d52bb366659b92":[6,1,10,27],
 "classhypro_1_1ZonotopeT.html#a3946046fffd0957de2ebd9ca149ab408":[6,1,10,17],
-"classhypro_1_1ZonotopeT.html#a3c6b22a3c39e125d5d9d990cf100b054":[6,1,10,5],
-"classhypro_1_1ZonotopeT.html#a46a4061d6c5f325bb608d6eb1aaae672":[6,1,10,30]
+"classhypro_1_1ZonotopeT.html#a3c6b22a3c39e125d5d9d990cf100b054":[6,1,10,5]
 };

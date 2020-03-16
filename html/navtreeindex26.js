@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"classsmtrat_1_1SimplexSolver.html":[8,0,2,0],
 "classsmtrat_1_1SimplexSolver.html#ab03581b41667c0504a0e2e0ad8aeada1":[8,0,2,0,0],
 "clp__context_8h.html":[9,0,1,0,4,1,0,2],
 "clp__context_8h_source.html":[9,0,1,0,4,1,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "example__hpng_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[9,0,0,23,0],
 "example__hpng_8cpp_source.html":[9,0,0,23],
 "example__hybridAutomaton_8cpp.html":[9,0,0,25],
-"example__hybridAutomaton_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[9,0,0,25,0],
-"example__hybridAutomaton_8cpp_source.html":[9,0,0,25]
+"example__hybridAutomaton_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[9,0,0,25,0]
 };

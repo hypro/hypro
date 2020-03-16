@@ -200,7 +200,7 @@ var searchData=
   ['timebound',['timeBound',['../structhypro_1_1ReachabilitySettings.html#a44a833ef02d4ada2a384afe29cbdeeba',1,'hypro::ReachabilitySettings']]],
   ['timecontext',['TimeContext',['../classhypro_1_1HybridAutomatonParser_1_1TimeContext.html',1,'hypro::HybridAutomatonParser']]],
   ['timecontext',['TimeContext',['../classhypro_1_1HybridAutomatonParser_1_1TimeContext.html#aa8ee345c29d32213a1fb2466bf4fe1f3',1,'hypro::HybridAutomatonParser::TimeContext']]],
-  ['timed',['timed',['../namespacehypro.html#ade3e42b7b774f60999db5eb776027882a6c86eb53ee544db77a473265058cffbe',1,'hypro::timed()'],['../namespacehypro.html#a5d59d869af3af7cb1b28fcd29d6daeb9aefd62eaf8aeeb073a4eead8fd9478dfc',1,'hypro::TIMED()']]],
+  ['timed',['TIMED',['../namespacehypro.html#a5d59d869af3af7cb1b28fcd29d6daeb9aefd62eaf8aeeb073a4eead8fd9478dfc',1,'hypro::TIMED()'],['../namespacehypro.html#ade3e42b7b774f60999db5eb776027882a6c86eb53ee544db77a473265058cffbe',1,'hypro::timed()']]],
   ['timedbadstatehandler',['timedBadStateHandler',['../classhypro_1_1timedBadStateHandler.html#a0dd20620afeb64a9c561e05c86116e0b',1,'hypro::timedBadStateHandler::timedBadStateHandler()=delete'],['../classhypro_1_1timedBadStateHandler.html#a9ef51626e1667eb9018e52b49cf10148',1,'hypro::timedBadStateHandler::timedBadStateHandler(State *state, size_t index)']]],
   ['timedbadstatehandler',['timedBadStateHandler',['../classhypro_1_1timedBadStateHandler.html',1,'hypro']]],
   ['timedbadstatehandler_2eh',['timedBadStateHandler.h',['../timedBadStateHandler_8h.html',1,'']]],

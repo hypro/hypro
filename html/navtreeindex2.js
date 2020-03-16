@@ -100,6 +100,7 @@ var NAVTREEINDEX2 =
 "algorithms_2reachability_2util_8h.html#aa44ba36e46740014f4127e4c8f02c015":[9,0,1,0,0,4,6,3],
 "algorithms_2reachability_2util_8h_source.html":[9,0,1,0,0,4,6],
 "annotated.html":[8,0],
+"boxDetails.html":[3,0,0],
 "carlPolytopeSetting_8h.html":[9,0,1,0,3,9,0,1],
 "carlPolytopeSetting_8h_source.html":[9,0,1,0,3,9,0,1],
 "carlPolytope_8h.html":[9,0,1,0,3,9,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classhypro_1_1CIFExprVisitor.html#ad70778c824b020398cc4d711d1c2f90c":[8,0,1,18,13],
 "classhypro_1_1CIFExprVisitor.html#ad82656a09adebd39b4d612aff0e1ec51":[8,0,1,18,6],
 "classhypro_1_1CIFExprVisitor.html#ad9c44741bfca3c210deba99e52d48c8d":[8,0,1,18,10],
-"classhypro_1_1CIFExprVisitor.html#aef1d34cb650210b0c11c6011ecf248ec":[8,0,1,18,18],
-"classhypro_1_1CIFExprVisitor.html#af3a7e5ece44ab4ff22e4071a938ce6aa":[8,0,1,18,8]
+"classhypro_1_1CIFExprVisitor.html#aef1d34cb650210b0c11c6011ecf248ec":[8,0,1,18,18]
 };

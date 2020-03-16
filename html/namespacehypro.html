@@ -741,7 +741,7 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a24a9c8470f366cf0755746c728576df0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a24a9c8470f366cf0755746c728576df0">QuickIntersection</a> = <a class="el" href="classhypro_1_1QuickhullAlgorithm.html">QuickhullAlgorithm</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, false, void &gt;</td></tr>
 <tr class="separator:a24a9c8470f366cf0755746c728576df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c70d4cbf404a79e19a5a3b29f4e2c44"><td class="memTemplParams" colspan="2">template&lt;typename Number , bool Euclidian&gt; </td></tr>
-<tr class="memitem:a2c70d4cbf404a79e19a5a3b29f4e2c44"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a2c70d4cbf404a79e19a5a3b29f4e2c44">ExactQuickhull</a> = <a class="el" href="classhypro_1_1QuickhullAlgorithm.html">QuickhullAlgorithm</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Euclidian, <a class="el" href="number__traits_8h.html#abe0e83ac9ecaf54991a8dfd64e444f15">EnableIfExact</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;</td></tr>
+<tr class="memitem:a2c70d4cbf404a79e19a5a3b29f4e2c44"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a2c70d4cbf404a79e19a5a3b29f4e2c44">ExactQuickhull</a> = <a class="el" href="classhypro_1_1QuickhullAlgorithm.html">QuickhullAlgorithm</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Euclidian, <a class="el" href="namespacehypro.html#abe16eeb9548211d80334a984d958be58">EnableIfExact</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;</td></tr>
 <tr class="separator:a2c70d4cbf404a79e19a5a3b29f4e2c44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d83c8b5f3242a9cd21807082625cfff"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a8d83c8b5f3242a9cd21807082625cfff"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a8d83c8b5f3242a9cd21807082625cfff">PolyT</a> = carl::MultivariatePolynomial&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;</td></tr>
@@ -847,6 +847,12 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ad6738fafec718bbae54ac01aa448a55b"><td class="memTemplParams" colspan="2">template&lt;bool B&gt; </td></tr>
 <tr class="memitem:ad6738fafec718bbae54ac01aa448a55b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ad6738fafec718bbae54ac01aa448a55b">enable_if</a> = std::enable_if_t&lt; B, int &gt;</td></tr>
 <tr class="separator:ad6738fafec718bbae54ac01aa448a55b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe16eeb9548211d80334a984d958be58"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:abe16eeb9548211d80334a984d958be58"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#abe16eeb9548211d80334a984d958be58">EnableIfExact</a> = std::enable_if_t&lt; <a class="el" href="namespacehypro.html#a50d437a5b11b4512075d47a59d3e7316">is_exact</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;</td></tr>
+<tr class="separator:abe16eeb9548211d80334a984d958be58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a728211bcb9a33544295795a90e211466"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a728211bcb9a33544295795a90e211466"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a728211bcb9a33544295795a90e211466">EnableIfFloatingpoint</a> = std::enable_if_t&lt; std::is_floating_point_v&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;</td></tr>
+<tr class="separator:a728211bcb9a33544295795a90e211466"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -1525,6 +1531,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a86d6602841b02cf4ba4735daeeb6bd3c"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
 <tr class="memitem:a86d6602841b02cf4ba4735daeeb6bd3c"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a86d6602841b02cf4ba4735daeeb6bd3c">make_vector</a> (T &amp;&amp;...args)</td></tr>
 <tr class="separator:a86d6602841b02cf4ba4735daeeb6bd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53aed4df0d1a6b62bdb61413a1b5cc45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a53aed4df0d1a6b62bdb61413a1b5cc45">unreachable</a> ()</td></tr>
+<tr class="separator:a53aed4df0d1a6b62bdb61413a1b5cc45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:acc1eea2fce570af6eb060b6fc5730bc0"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:acc1eea2fce570af6eb060b6fc5730bc0"><td class="memTemplItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#acc1eea2fce570af6eb060b6fc5730bc0">operator+</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_lhs, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_rhs)</td></tr>
@@ -1560,6 +1568,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a7e6712e1aaf7f51d443adfad12410b3d"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U &gt; </td></tr>
 <tr class="memitem:a7e6712e1aaf7f51d443adfad12410b3d"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a7e6712e1aaf7f51d443adfad12410b3d">convertible</a> = std::is_convertible_v&lt;T, U&gt;</td></tr>
 <tr class="separator:a7e6712e1aaf7f51d443adfad12410b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50d437a5b11b4512075d47a59d3e7316"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a50d437a5b11b4512075d47a59d3e7316"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a50d437a5b11b4512075d47a59d3e7316">is_exact</a> = std::is_same_v&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, mpq_class&gt;</td></tr>
+<tr class="separator:a50d437a5b11b4512075d47a59d3e7316"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>General context interface to set up a reachability worker. </p>
@@ -1743,6 +1754,38 @@ template&lt;bool B&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="abe16eeb9548211d80334a984d958be58"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacehypro.html#abe16eeb9548211d80334a984d958be58">hypro::EnableIfExact</a> = typedef std::enable_if_t&lt;<a class="el" href="namespacehypro.html#a50d437a5b11b4512075d47a59d3e7316">is_exact</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="util_2typetraits_8h_source.html#l00031">31</a> of file <a class="el" href="util_2typetraits_8h_source.html">typetraits.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a728211bcb9a33544295795a90e211466"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacehypro.html#a728211bcb9a33544295795a90e211466">hypro::EnableIfFloatingpoint</a> = typedef std::enable_if_t&lt;std::is_floating_point_v&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="util_2typetraits_8h_source.html#l00034">34</a> of file <a class="el" href="util_2typetraits_8h_source.html">typetraits.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a2c70d4cbf404a79e19a5a3b29f4e2c44"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1750,7 +1793,7 @@ template&lt;bool B&gt; </div>
 template&lt;typename Number , bool Euclidian&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacehypro.html#a2c70d4cbf404a79e19a5a3b29f4e2c44">hypro::ExactQuickhull</a> = typedef <a class="el" href="classhypro_1_1QuickhullAlgorithm.html">QuickhullAlgorithm</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Euclidian, <a class="el" href="number__traits_8h.html#abe0e83ac9ecaf54991a8dfd64e444f15">EnableIfExact</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
+          <td class="memname">using <a class="el" href="namespacehypro.html#a2c70d4cbf404a79e19a5a3b29f4e2c44">hypro::ExactQuickhull</a> = typedef <a class="el" href="classhypro_1_1QuickhullAlgorithm.html">QuickhullAlgorithm</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Euclidian, <a class="el" href="namespacehypro.html#abe16eeb9548211d80334a984d958be58">EnableIfExact</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -8334,6 +8377,31 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a53aed4df0d1a6b62bdb61413a1b5cc45"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void hypro::unreachable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="unreachable_8h_source.html#l00006">6</a> of file <a class="el" href="unreachable_8h_source.html">unreachable.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ab1b7ec5a2396aa88d790d2886460c533"></a>
 <div class="memitem">
 <div class="memproto">
@@ -8616,6 +8684,30 @@ template&lt;typename T , typename U &gt; </div>
 </div><div class="memdoc">
 
 <p>Definition at line <a class="el" href="util_2typetraits_8h_source.html#l00024">24</a> of file <a class="el" href="util_2typetraits_8h_source.html">typetraits.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a50d437a5b11b4512075d47a59d3e7316"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool hypro::is_exact = std::is_same_v&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, mpq_class&gt;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="util_2typetraits_8h_source.html#l00028">28</a> of file <a class="el" href="util_2typetraits_8h_source.html">typetraits.h</a>.</p>
 
 </div>
 </div>

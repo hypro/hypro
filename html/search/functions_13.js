@@ -13,6 +13,7 @@ var searchData=
   ['uniteequalvectors',['uniteEqualVectors',['../classhypro_1_1ZonotopeT.html#af3881e5d68c5a65631b8b9181b05e308',1,'hypro::ZonotopeT']]],
   ['unlock',['unlock',['../classhypro_1_1Spinlock.html#afeb9a41a5adfb6d22679b2e263014464',1,'hypro::Spinlock']]],
   ['unlockinstance',['unlockInstance',['../classhypro_1_1LockableObjectWrapper.html#afeffe352f13f0c6e45d2d871dbdb0d1e',1,'hypro::LockableObjectWrapper']]],
+  ['unreachable',['unreachable',['../namespacehypro.html#a53aed4df0d1a6b62bdb61413a1b5cc45',1,'hypro']]],
   ['unreduce',['unreduce',['../classhypro_1_1HPolytopeT.html#ad9e39624eccf0d080d5a6e04ff5f6e5c',1,'hypro::HPolytopeT']]],
   ['unsafeset',['unsafeset',['../classhypro_1_1HybridAutomatonParser_1_1StartContext.html#a46d93b260cea4b98abae7304e18bd5b9',1,'hypro::HybridAutomatonParser::StartContext::unsafeset()'],['../classhypro_1_1HybridAutomatonParser.html#a870f8513b9cd6045a14c8a6c6882b741',1,'hypro::HybridAutomatonParser::unsafeset()']]],
   ['unsafesetcontext',['UnsafesetContext',['../classhypro_1_1HybridAutomatonParser_1_1UnsafesetContext.html#a30173852f429e9ea57b191f0c86d41f1',1,'hypro::HybridAutomatonParser::UnsafesetContext']]],

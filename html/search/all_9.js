@@ -159,7 +159,7 @@ var searchData=
   ['ipredecessorinduced',['iPredecessorInduced',['../classhypro_1_1Grid.html#aa62dfddd5045934098bc97557a1b71ad',1,'hypro::Grid']]],
   ['iprojection',['iProjection',['../classhypro_1_1OrthogonalPolyhedronT.html#a827f8a4fb80f23136b961379d130cced',1,'hypro::OrthogonalPolyhedronT::iProjection()'],['../classhypro_1_1OrthogonalPolyhedron.html#a1f5c5b7ba5526b2c840bcbd89497e0ee',1,'hypro::OrthogonalPolyhedron::iProjection()']]],
   ['iresethandler',['IResetHandler',['../classhypro_1_1IResetHandler.html',1,'hypro']]],
-  ['is_5fexact',['is_exact',['../number__traits_8h.html#a8af2d9e930f36b3d2a7a0637573e2629',1,'number_traits.h']]],
+  ['is_5fexact',['is_exact',['../number__traits_8h.html#a8af2d9e930f36b3d2a7a0637573e2629',1,'is_exact():&#160;number_traits.h'],['../namespacehypro.html#a50d437a5b11b4512075d47a59d3e7316',1,'hypro::is_exact()']]],
   ['is_5fflow',['is_flow',['../structhypro_1_1is__flow.html',1,'hypro']]],
   ['is_5fflow_3c_20affineflow_3c_20n_20_3e_20_3e',['is_flow&lt; affineFlow&lt; N &gt; &gt;',['../structhypro_1_1is__flow_3_01affineFlow_3_01N_01_4_01_4.html',1,'hypro']]],
   ['is_5fflow_3c_20linearflow_3c_20n_20_3e_20_3e',['is_flow&lt; linearFlow&lt; N &gt; &gt;',['../structhypro_1_1is__flow_3_01linearFlow_3_01N_01_4_01_4.html',1,'hypro']]],

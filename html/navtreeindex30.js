@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"structhypro_1_1TrafoData.html":[8,0,1,241],
 "structhypro_1_1TrafoData.html#a967b814075975c5cb27b03bcd2c1438c":[8,0,1,241,1],
 "structhypro_1_1TrafoData.html#a9d2719056b65d00430d8eba9e0150548":[8,0,1,241,0],
 "structhypro_1_1TrafoData.html#ac3ed9953a8f25b70ca45a3c6857109d5":[8,0,1,241,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "timedBadStateHandler_8h_source.html":[9,0,1,0,0,4,1,0,4],
 "timedElapseAfterTickTimeEvolutionHandler_8h.html":[9,0,1,0,0,4,1,6,3],
 "timedElapseAfterTickTimeEvolutionHandler_8h_source.html":[9,0,1,0,0,4,1,6,3],
-"timedElapseFirstSegmentHandler_8h.html":[9,0,1,0,0,4,1,1,3],
-"timedElapseFirstSegmentHandler_8h_source.html":[9,0,1,0,0,4,1,1,3]
+"timedElapseFirstSegmentHandler_8h.html":[9,0,1,0,0,4,1,1,3]
 };

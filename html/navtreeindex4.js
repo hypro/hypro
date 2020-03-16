@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classhypro_1_1DecisionEntity.html#a5389c4ccfa1667d644708d21f84589c1":[8,0,1,31,5],
 "classhypro_1_1DecisionEntity.html#a5b897fed611dc4b59cd1f7a3c947cd88":[8,0,1,31,16],
 "classhypro_1_1DecisionEntity.html#a5d0b014fe9881d5e29fa224640d3f347":[8,0,1,31,14],
 "classhypro_1_1DecisionEntity.html#a6a213ee72409384d3b813e6ce4d093d3":[8,0,1,31,15],
@@ -146,8 +147,8 @@ var NAVTREEINDEX4 =
 "classhypro_1_1EllipsoidSupportFunction.html#a75b07358df92f14d7070bdf6d7afb23b":[8,0,1,43,5],
 "classhypro_1_1EllipsoidSupportFunction.html#a89012b5b9073c941bbb4ca20868ca682":[8,0,1,43,13],
 "classhypro_1_1EllipsoidSupportFunction.html#aaa2778491140c4d3bd0b5ece759bf47e":[8,0,1,43,14],
-"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[8,0,1,43,8],
 "classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[8,0,1,43,7],
+"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[8,0,1,43,8],
 "classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf":[8,0,1,43,9],
 "classhypro_1_1EllipsoidSupportFunction.html#aba27832ec002e8ebeaffc4de25e103f0":[8,0,1,43,11],
 "classhypro_1_1EllipsoidSupportFunction.html#abf530fc71f835dc144c44a2baaf18e77":[8,0,1,43,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classhypro_1_1EventTimingNode.html#ae28ec8f7e641df91c51961e288164d60":[8,0,1,49,1],
 "classhypro_1_1EventTimingNode.html#aece08daac191e99eacfc5c648fcbaa32":[8,0,1,49,18],
 "classhypro_1_1EventTimingProvider.html":[8,0,1,50],
-"classhypro_1_1EventTimingProvider.html#a18b113f04a32c3b395ffee151d2d253b":[8,0,1,50,14],
-"classhypro_1_1EventTimingProvider.html#a1a0eaa11ade2273039ef3e9782eb40b3":[8,0,1,50,9]
+"classhypro_1_1EventTimingProvider.html#a18b113f04a32c3b395ffee151d2d253b":[8,0,1,50,14]
 };

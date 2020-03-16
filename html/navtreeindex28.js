@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"group__globals.html#gae096762791ae2ccfbf4e6ee7740e7f8f":[6,0,4],
 "helperFunctions_8h.html":[9,0,1,0,4,1,0,3],
 "helperFunctions_8h.html#ae30c652668e0bac58f1f80cacf2d23f2":[9,0,1,0,4,1,0,3,0],
 "helperFunctions_8h_source.html":[9,0,1,0,4,1,0,3],
@@ -55,23 +56,23 @@ var NAVTREEINDEX28 =
 "namespaceEigen.html":[7,0,0],
 "namespaceZUtility.html":[7,0,7],
 "namespaceZUtility.html":[8,0,4],
-"namespacehypro.html":[8,0,1],
 "namespacehypro.html":[7,0,1],
-"namespacehypro_1_1ExactQuickhull.html":[8,0,1,1],
+"namespacehypro.html":[8,0,1],
 "namespacehypro_1_1ExactQuickhull.html":[7,0,1,1],
+"namespacehypro_1_1ExactQuickhull.html":[8,0,1,1],
 "namespacehypro_1_1detail.html":[7,0,1,0],
 "namespacehypro_1_1detail.html":[8,0,1,0],
 "namespacehypro_1_1hpolytope.html":[7,0,1,2],
-"namespacehypro_1_1plotting.html":[8,0,1,2],
 "namespacehypro_1_1plotting.html":[7,0,1,3],
-"namespacehypro_1_1reachability.html":[8,0,1,3],
+"namespacehypro_1_1plotting.html":[8,0,1,2],
 "namespacehypro_1_1reachability.html":[7,0,1,4],
+"namespacehypro_1_1reachability.html":[8,0,1,3],
 "namespacehypro_1_1reachability_1_1detail.html":[7,0,1,4,0],
 "namespacehypro_1_1reachability_1_1detail.html":[8,0,1,3,0],
 "namespacehypro_1_1statistics.html":[8,0,1,4],
 "namespacehypro_1_1statistics.html":[7,0,1,5],
-"namespacemembers.html":[7,1,0],
 "namespacemembers.html":[7,1,0,0],
+"namespacemembers.html":[7,1,0],
 "namespacemembers_b.html":[7,1,0,1],
 "namespacemembers_c.html":[7,1,0,2],
 "namespacemembers_d.html":[7,1,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "structEval__functions.html#ae2fe281bf841a4e9e3f467bc087b7ee0":[8,0,6,0],
 "structFlags.html":[8,0,7],
 "structFlags.html#a1b78fbc048625cad2017688b209856c3":[8,0,7,5],
-"structFlags.html#a47d59eb0bd2a0e7ca8c2e7ce70d929a1":[8,0,7,4],
-"structFlags.html#a86060954cf6340ad27d5c6f1edbe4c4f":[8,0,7,2]
+"structFlags.html#a47d59eb0bd2a0e7ca8c2e7ce70d929a1":[8,0,7,4]
 };
