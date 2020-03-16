@@ -79,7 +79,7 @@ class GeneralizedStarT : private GeometricObjectBase {
 	  * @param dimension Required dimension.
 	  * @return Empty GeneralizedStar.
 	  */
-	static GeneralizedStarT Empty( std::size_t dimension = 1 ) {
+	static GeneralizedStarT Empty() {
 		return GeneralizedStarT();
 	}
 

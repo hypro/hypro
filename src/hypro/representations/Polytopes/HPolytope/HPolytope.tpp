@@ -341,22 +341,10 @@ bool HPolytopeT<Number, Converter, Setting>::empty() const {
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty( std::size_t dimension ) {
-	// Here an explicitly empty h-polytope is constructed. I think since we use the mEmptyState member, which is essentially a cache, we could avoid this. TODO: discuss!
-	vector_t<Number> normal = vector_t<Number>::Zero( dimension );
-	normal( 0 ) = Number( 1 );
-	Halfspace<Number> a( normal, Number( -1 ) );
-	normal( 0 ) = Number( -1 );
-	Halfspace<Number> b( normal, Number( -1 ) );
-	HalfspaceVector v;
-	v.emplace_back( a );
-	v.emplace_back( b );
-	HPolytopeT<Number, Converter, Setting> res( v );
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty() {
+	HPolytopeT res{};
 	res.setEmptyState( SETSTATE::EMPTY );
 	res.mNonRedundant = true;
-	if ( Setting::OPTIMIZER_CACHING ) {
-		res.setOptimizer( res.matrix(), res.vector() );
-	}
 	return res;
 }
 
