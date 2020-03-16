@@ -616,7 +616,11 @@ void SupportFunctionT<Number, Converter, Setting>::reduceRepresentation() {
 
 template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionT<Number, Converter, Setting>::empty() const {
-	return content->empty();
+	if ( mEmptyState == SETSTATE::UNKNOWN ) {
+		mEmptyState = content->empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+	}
+	assert( mEmptyState != SETSTATE::UNIVERSAL );
+	return mEmptyState == SETSTATE::EMPTY;
 }
 
 template <typename Number, typename Converter, typename Setting>
