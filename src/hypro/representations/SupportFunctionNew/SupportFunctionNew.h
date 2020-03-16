@@ -111,9 +111,6 @@ class SupportFunctionNewT : private GeometricObjectBase {
 	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
 	mutable bool mTemplateSet = false;
 
-	//Cache whether the support function has been empty
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
-
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/

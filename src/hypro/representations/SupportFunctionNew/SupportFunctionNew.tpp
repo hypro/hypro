@@ -321,7 +321,7 @@ template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionNewT<Number, Converter, Setting>::empty() const {
 	if ( mRoot == nullptr ) return true;
 
-	if ( mEmpty != TRIBOOL::NSET ) return ( mEmpty == TRIBOOL::TRUE );
+	if ( mEmptyState != SETSTATE::UNKNOWN ) return ( mEmptyState == SETSTATE::EMPTY );
 
 	//first function - parameters are not transformed
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
@@ -338,9 +338,9 @@ bool SupportFunctionNewT<Number, Converter, Setting>::empty() const {
 		return n->empty( childrenEmpty );
 	};
 
-	mEmpty = traverse( std::move( doNothing ), std::move( leafEmpty ), std::move( childrenEmpty ) ) ? TRIBOOL::TRUE : TRIBOOL::FALSE;
-	assert( mEmpty != TRIBOOL::NSET );
-	return ( mEmpty == TRIBOOL::TRUE );
+	mEmptyState = traverse( std::move( doNothing ), std::move( leafEmpty ), std::move( childrenEmpty ) ) ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+	assert( mEmptyState != SETSTATE::UNKNOWN );
+	return ( mEmptyState == SETSTATE::EMPTY );
 }
 
 template <typename Number, typename Converter, typename Setting>
