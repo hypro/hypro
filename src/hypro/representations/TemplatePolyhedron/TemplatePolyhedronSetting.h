@@ -16,7 +16,7 @@ namespace hypro {
 	//This is the default setting
 	struct TemplatePolyhedronDefault {
 		//Determines which constraints should be added to the template matrix.
-		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::INIT_INV;
+		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::ONLY_INIT;
 		//Whether the specialized reachability algorithm from Sankaranarayanan 2008 should be used .
 		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = true;
 		//If the alternative reachability algorithm is used, this determines the order to which a Taylor series approximation is computed.

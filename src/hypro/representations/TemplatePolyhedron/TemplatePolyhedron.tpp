@@ -635,7 +635,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 		
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, this: " << *this << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		//Emptiness check
 		if(this->empty()) return *this;
@@ -687,9 +687,9 @@ namespace hypro {
 		assert(extendedMatrix.cols() == mMatrixPtr->cols());
 		assert(extendedMatrix.rows() == extendedVector.rows());
 		TemplatePolyhedronT<Number,Converter,Setting> extendedTPoly(extendedMatrix,extendedVector);
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly before: " << extendedTPoly << std::endl;
 		extendedTPoly.removeRedundancy();
-		std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
+		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
 		for(int j = 0; j < mMatrixPtr->rows(); ++j){
 			if(itDone == alreadyDone.end() || j != *itDone){
 				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),false);
