@@ -81,8 +81,7 @@ public:
    * @param dimension Required dimension.
    * @return Empty REPRESENTATION.
    */
-  static REPRESENTATIONT<Number, Converter, Setting>
-  Empty(std::size_t dimension = 1) {
+  static REPRESENTATIONT<Number, Converter, Setting> Empty() {
     return REPRESENTATIONT<Number, Converter, Setting>();
   }
 
