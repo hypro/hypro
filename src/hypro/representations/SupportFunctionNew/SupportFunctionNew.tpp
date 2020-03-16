@@ -527,6 +527,9 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 	if ( mRoot == nullptr ) {
 		return std::make_pair( CONTAINMENT::BOT, *this );
 	}
+	if ( this->empty() ) {
+		return std::make_pair( CONTAINMENT::NO, *this );
+	}
 	//Check for emptiness not needed here since satisfiesHalfspace() is only called via satisfiedHalfspaces(), which already checks emptiness
 	bool limiting = false;
 	EvaluationResult<Number> planeEvalRes = this->evaluate( rhs.normal(), false );
@@ -559,14 +562,17 @@ template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportFunctionNewT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	DEBUG( "hypro.representations.supportFunctionNew", "Matrix: " << _mat << std::endl
 																  << " <= " << _vec );
-	if ( mRoot == nullptr ) {
+	if ( mRoot == nullptr ) {  // TODO: What is this case referring to?
 		return std::make_pair( CONTAINMENT::BOT, *this );
+	}
+	if ( this->empty() ) {
+		return std::make_pair( CONTAINMENT::NO, *this );
 	}
 	if ( _mat.rows() == 0 ) {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
 	assert( _mat.rows() == _vec.rows() );
-	assert( _mat.cols() == Eigen::Index( dimension() ) );
+	assert( _mat.cols() == Eigen::Index( dimension() ) || this->empty() );
 	if ( _mat.rows() == 1 && _vec.rows() == 1 ) {
 		return satisfiesHalfspace( Halfspace<Number>( vector_t<Number>( _mat.row( 0 ) ), _vec( 0 ) ) );
 	}

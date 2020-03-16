@@ -295,7 +295,7 @@ template <typename Number, typename Converter, class Setting>
 EvaluationResult<Number> BoxT<Number, Converter, Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
 	DEBUG( "hypro.representations.box", "In evaluate. direction: " << std::endl
 																   << _direction );
-	assert( _direction.rows() == Eigen::Index( this->dimension() ) );
+	assert( _direction.rows() == Eigen::Index( this->dimension() ) || this->empty() );
 	if ( this->empty() ) {
 		return EvaluationResult<Number>();  // defaults to infeasible, i.e. empty.
 	}
