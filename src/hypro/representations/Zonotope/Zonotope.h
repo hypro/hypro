@@ -117,7 +117,9 @@ class ZonotopeT : private GeometricObjectBase {
 	bool empty() const;
 
 	static ZonotopeT Empty( std::size_t dimension = 1 ) {
-		return ZonotopeT( vector_t<Number>::Zero( dimension ), matrix_t<Number>( dimension, 0 ) );
+		auto res = ZonotopeT( vector_t<Number>::Zero( dimension ), matrix_t<Number>( dimension, 0 ) );
+		res.setEmptyState( SETSTATE::EMPTY );
+		return res;
 	}
 
 	static representation_name type() { return representation_name::zonotope; }
