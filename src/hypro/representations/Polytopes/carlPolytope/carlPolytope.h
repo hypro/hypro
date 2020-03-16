@@ -24,7 +24,7 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class CarlPolytopeT {
+class CarlPolytopeT : private GeometricObjectBase {
   public:
 	// typedefs
 	using Settings = Setting;
@@ -34,7 +34,6 @@ class CarlPolytopeT {
 	FormulaT<tNumber> mFormula;							 /// The description of the polytope as a conjunction of linear constraints.
 	mutable std::vector<Halfspace<Number>> mHalfspaces;  /// Caches transformed half-spaces.
 	mutable std::size_t mDimension = 0;					 /// Stores the state space dimension the polytope resides in.
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;				 /// Caches whether the polytope is empty.
 	mutable bool mSpaceDimensionSet = false;			 /// used to indicate that the space dimension has been set externally, which overrides anything else.
   public:
 	CarlPolytopeT()

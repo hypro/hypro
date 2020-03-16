@@ -13,7 +13,6 @@
 #include "../flags.h"
 #include "types.h"
 
-
 namespace hypro {
 
 template <typename Number>
@@ -62,4 +61,3 @@ class GeometricObjectBase {
 }  // namespace hypro
 
 #include "conversion/Converter.h"
-
