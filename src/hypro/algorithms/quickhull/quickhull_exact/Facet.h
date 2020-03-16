@@ -1,5 +1,7 @@
 #pragma once
 
+#include "util/unreachable.h"
+
 namespace hypro {
     template<typename Number, bool Euclidian>
     struct ExactQuickhull<Number, Euclidian>::Facet {
