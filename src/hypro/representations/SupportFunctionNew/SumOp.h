@@ -84,7 +84,7 @@ class SumOp : public RootGrowNode<Number, Converter, Setting> {
 		std::vector<EvaluationResult<Number>> accumulatedResult;
 		for ( unsigned index = 0; index < resultStackBack.front().size(); ++index ) {
 			EvaluationResult<Number> r;
-			r.optimumValue = vector_t<Number>::Zero( resultStackBack.front().front().optimumValue.rows() );
+			//r.optimumValue = vector_t<Number>::Zero( resultStackBack.front().front().optimumValue.rows() );
 			for ( const auto& res : resultStackBack ) {
 				if ( res[index].errorCode == SOLUTION::INFEAS ) return res;
 				if ( res[index].errorCode == SOLUTION::INFTY ) {
@@ -94,12 +94,13 @@ class SumOp : public RootGrowNode<Number, Converter, Setting> {
 				} else {
 					r.errorCode = SOLUTION::FEAS;
 					r.supportValue += res[index].supportValue;
-					r.optimumValue += res[index].optimumValue;
+					//if(res[index].optimumValue != vector_t<Number>::Zero(0)){
+					//	r.optimumValue += res[index].optimumValue;
+					//}
 				}
 			}
 			accumulatedResult.emplace_back( r );
 		}
-
 		return accumulatedResult;
 	}
 

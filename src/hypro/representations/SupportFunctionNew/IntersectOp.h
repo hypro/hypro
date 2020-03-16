@@ -101,11 +101,11 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 					if ( r.errorCode == SOLUTION::INFTY ) {
 						r.errorCode = SOLUTION::FEAS;
 						r.supportValue = res[i].supportValue;
-						r.optimumValue = res[i].optimumValue;
+						//r.optimumValue = res[i].optimumValue;
 					} else {
 						r.errorCode = SOLUTION::FEAS;
 						r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue;
-						r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue;
+						//r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue;
 					}
 				}
 			}

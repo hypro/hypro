@@ -168,23 +168,33 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 					entry.supportValue = 1;
 				} else {
 					assert( entry.errorCode != SOLUTION::INFEAS );
-					if ( Setting::LE_GUERNIC_HSPACE_INTERSECTION ) {
+
+					entry.supportValue = entry.supportValue + currentDir.dot(parameterPair.second);
+
+					//if ( parameterPair.first.cols() != entry.optimumValue.rows() || Setting::LE_GUERNIC_HSPACE_INTERSECTION ) {
 						//Generate a point that will be on the same plane as the optimal value,
 						//Since le guernic hspace intersection does not return an optimal value
-						vector_t<Number> pointOnPlane = vector_t<Number>::Zero( currentDir.rows() );
-						unsigned i = 0;
-						while ( i < currentDir.rows() && currentDir( i ) == 0 ) {
-							++i;
-						}
-						pointOnPlane( i ) = entry.supportValue;
-						pointOnPlane += parameterPair.second;
-						entry.supportValue = pointOnPlane.dot( currentDir );
-					} else {
-						assert( parameterPair.first.cols() == entry.optimumValue.rows() );
-						entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
-						// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
-						entry.supportValue = entry.optimumValue.dot( currentDir );
-					}
+						//vector_t<Number> pointOnPlane = vector_t<Number>::Zero( currentDir.rows() );
+						//unsigned i = 0;
+						//while ( i < currentDir.rows() && currentDir( i ) == 0 ) {
+						//	++i;
+						//}
+						//std::cout << "TrafoOp::aggregate, pointOnPlane before adding support: " << pointOnPlane.transpose() << std::endl;
+						//pointOnPlane( i ) = entry.supportValue;
+						//std::cout << "TrafoOp::aggregate, pointOnPlane after adding support: " << pointOnPlane.transpose() << std::endl;
+						////pointOnPlane += parameterPair.second;
+						//std::cout << "TrafoOp::aggregate, parameter pair: \n" << parameterPair.first << "\n" << parameterPair.second << std::endl;
+						//pointOnPlane = parameterPair.first * pointOnPlane + parameterPair.second;
+						//std::cout << "TrafoOp::aggregate, pointOnPlane after adding parameter vec: " << pointOnPlane.transpose() << std::endl;
+						//entry.supportValue = pointOnPlane.dot( currentDir );
+						//std::cout << "TrafoOp::aggregate, currentDir: " << currentDir.transpose() << " entry.supportValue: " << entry.supportValue << std::endl;
+					//} else {
+					//	std::cout << "TrafoOp::aggregate, parameter: " << parameterPair.first << " entry optimum: " << entry.optimumValue << std::endl;
+					//	assert( parameterPair.first.cols() == entry.optimumValue.rows() );
+					//	entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
+					//	// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
+					//	entry.supportValue = entry.optimumValue.dot( currentDir );
+					//}
 				}
 				//TRACE("hypro.representations.supportFunction", "Direction: " << t << ", Entry value: " << entry.supportValue);
 				++directionCnt;

@@ -101,7 +101,7 @@ class ScaleOp : public RootGrowNode<Number, Converter, Setting> {
 				assert( singleRes.errorCode != SOLUTION::INFEAS );
 				if ( singleRes.errorCode == SOLUTION::FEAS ) {
 					singleRes.supportValue *= factor;
-					singleRes.optimumValue *= factor;
+					//singleRes.optimumValue *= factor;
 				}
 			}
 		}

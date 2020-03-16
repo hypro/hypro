@@ -258,7 +258,6 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 					}
 				}
 			}
-
 			if ( allSubsetsSatisfyTargetInvariant == false ) {
 				newState.setLocation( transitionPtr->getSource() );
 				TRACE( "hydra.worker.discrete", "Transition disabled as the new initial set does not satisfy the invariant of the target location." )
@@ -294,7 +293,7 @@ std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHan
 				}
 			}
 
-			DEBUG( "hydra.worker.discrete", "State after reduction: " << newState );
+			//DEBUG( "hydra.worker.discrete", "State after reduction: " << newState );
 
 			// Note: Here we misuse the state's timestamp to carry the transition timing to the next stage -> just don't reset
 			// the timestamp in case no aggregation happens.

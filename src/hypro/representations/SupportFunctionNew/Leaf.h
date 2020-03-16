@@ -134,7 +134,7 @@ class Leaf : public RootGrowNode<Number, Converter, Setting> {
 		if ( mEmpty == TRIBOOL::NSET ) {
 			mEmpty = rep->empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 		}
-		return ( mEmpty == TRIBOOL::TRUE ) ? true : false;
+		return ( mEmpty == TRIBOOL::TRUE );
 	}
 
 	//Compute the point that is the supremum of the representation
