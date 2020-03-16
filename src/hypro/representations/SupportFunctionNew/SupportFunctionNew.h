@@ -196,7 +196,7 @@ class SupportFunctionNewT : private GeometricObjectBase {
 	  * @param dimension Required dimension.
 	  * @return Empty SupportFunctionNew.
 	  */
-	static SupportFunctionNewT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
+	static SupportFunctionNewT<Number, Converter, Setting> Empty() {
 		return SupportFunctionNewT<Number, Converter, Setting>();
 	}
 
