@@ -281,6 +281,7 @@ class HPolytopeT : private GeometricObjectBase {
 	 * Operators
 	 */
 	HPolytopeT& operator=( const HPolytopeT<Number, Converter, Setting>& rhs ) {
+		GeometricObjectBase::operator=( rhs );
 		mHPlanes = rhs.constraints();
 		mDimension = rhs.dimension();
 		mNonRedundant = rhs.isNonRedundant();
@@ -290,6 +291,7 @@ class HPolytopeT : private GeometricObjectBase {
 			setOptimizer( rhs.matrix(), rhs.vector() );
 		}
 		// TODO: I am not sure, whether the copy constructor of the base class is called here or not.
+		// Observation: Apparently it is not.
 		assert( mEmptyState == rhs.getEmptyState() );
 		return *this;
 	}
