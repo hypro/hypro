@@ -1,21 +1,21 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../../algorithms/convexHull/ConvexHull.h"
 #include "../../../datastructures/Facet.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
-#include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/pca.h"
 #include "../../../util/statistics/statistics.h"
 #include "../Cone.h"
+#include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "VPolytopeSetting.h"
+#include "algorithms/quickhull/number_traits.h"
 #include "util.h"
-#include "util/typetraits.h"
 
 #include <cassert>
 #include <set>
@@ -31,10 +31,11 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename S>
-class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number, Converter, S>> {
+class VPolytopeT : private GeometricObjectBase {
   public:
 	using pointVector = std::vector<Point<Number>>;
 	typedef S Settings;
+	typedef Number NumberType;
 
   private:
 	mutable pointVector mVertices;

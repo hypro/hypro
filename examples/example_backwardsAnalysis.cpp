@@ -2,7 +2,7 @@
 #include "config.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/Point.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 #include <iostream>
 

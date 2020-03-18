@@ -28,7 +28,8 @@ SupportFunctionT<Number, Converter, Setting>::SupportFunctionT() {
 //copy constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionT<Number, Converter, Setting>::SupportFunctionT( const SupportFunctionT<Number, Converter, Setting>& _orig )
-	: content( _orig.content ) {
+	: GeometricObjectBase( _orig )
+	, content( _orig.content ) {
 	//handled by initializer list
 }
 
@@ -616,7 +617,11 @@ void SupportFunctionT<Number, Converter, Setting>::reduceRepresentation() {
 
 template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionT<Number, Converter, Setting>::empty() const {
-	return content->empty();
+	if ( mEmptyState == SETSTATE::UNKNOWN ) {
+		mEmptyState = content->empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+	}
+	assert( mEmptyState != SETSTATE::UNIVERSAL );
+	return mEmptyState == SETSTATE::EMPTY;
 }
 
 template <typename Number, typename Converter, typename Setting>

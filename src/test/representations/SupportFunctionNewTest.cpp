@@ -4,7 +4,7 @@
  * @author Phillip Tse
  */
 
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 #include <cmath>
@@ -815,7 +815,7 @@ TYPED_TEST( SupportFunctionNewTest, EvaluateMixedLeaves ) {
 
 TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 	// Empty sf
-	Box<TypeParam> box1 = Box<TypeParam>::Empty( 2 );
+	Box<TypeParam> box1 = Box<TypeParam>::Empty();
 	SupportFunctionNew<TypeParam> sf1( box1 );
 	EXPECT_TRUE( sf1.empty() );
 	// HPolytope<TypeParam> hpoly1 = HPolytope<TypeParam>::Empty();
@@ -1258,7 +1258,7 @@ TYPED_TEST( SupportFunctionNewTest, CollectProjections ) {
 	// Make a 5-dim box
 	Point<TypeParam> p1{TypeParam( 0 ), TypeParam( 1 ), TypeParam( 2 ), TypeParam( 3 ), TypeParam( 4 )};
 	Point<TypeParam> p2{TypeParam( -2 ), TypeParam( -1 ), TypeParam( 0 ), TypeParam( 1 ), TypeParam( 2 )};
-	Box<TypeParam> box( std::make_pair( p1, p2 ) );
+	Box<TypeParam> box( std::vector<Point<TypeParam>>( {p1, p2} ) );
 	SupportFunctionNew<TypeParam> sf( box );
 
 	// Proj1 - projects away dimension 5
@@ -1288,12 +1288,12 @@ TYPED_TEST( SupportFunctionNewTest, CollectProjections ) {
 	// Proj3 - projects away dimension 1
 	std::vector<std::size_t> proj3Dims( {1, 2, 3, 4} );
 	SupportFunctionNew<TypeParam> proj3 = sf.project( proj3Dims );
-	EXPECT_EQ( proj3.collectProjections(), proj3Dims );
+	EXPECT_EQ( proj3Dims, proj3.collectProjections() );
 
 	// Proj4 - projects away dimension 4
 	std::vector<std::size_t> proj4Dims( {0, 1, 2, 4} );
 	SupportFunctionNew<TypeParam> proj4 = sf.project( proj4Dims );
-	EXPECT_EQ( proj4.collectProjections(), proj4Dims );
+	EXPECT_EQ( proj4Dims, proj4.collectProjections() );
 
 	// Intersect - no dimension should be left
 	std::vector<SupportFunctionNew<TypeParam>> children( {proj3, sum} );

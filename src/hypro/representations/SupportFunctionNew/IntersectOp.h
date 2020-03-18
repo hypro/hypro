@@ -43,8 +43,12 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 	//Single sibling constructor
 	IntersectOp( const SupportFunctionNewT<Number, Converter, Setting>& lhs, const SupportFunctionNewT<Number, Converter, Setting>& rhs )
 		: mDimension( lhs.dimension() ) {
-		assert( lhs.dimension() == rhs.dimension() );
+		assert( lhs.dimension() == rhs.dimension() || lhs.empty() || rhs.empty() );
 		lhs.addOperation( this, std::vector<SupportFunctionNewT<Number, Converter, Setting>>{rhs} );
+		// update and set empty-cache
+		if ( lhs.empty() || rhs.empty() ) {
+			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+		}
 	}
 
 	//Multiple siblings constructor
@@ -52,10 +56,14 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 		: mDimension( lhs.dimension() ) {
 #ifndef NDEBUG
 		for ( const auto& sf : rhs ) {
-			assert( lhs.dimension() == sf.dimension() );
+			assert( lhs.dimension() == sf.dimension() || lhs.empty() || sf.empty() );
 		}
 #endif
 		lhs.addOperation( this, rhs );
+		// check for rhs is too expensive at the moment -> update usage of cache everywhere, then this is fine.
+		if ( lhs.empty() ) {
+			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+		}
 	}
 
 	//Data constructor

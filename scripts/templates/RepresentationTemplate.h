@@ -2,8 +2,9 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert(false,
-              "This file may only be included indirectly by GeometricObject.h");
+static_assert(
+    false,
+    "This file may only be included indirectly by GeometricObjectBase.h");
 #endif
 
 #include "../../util/linearOptimization/Optimizer.h"
@@ -25,6 +26,9 @@ class REPRESENTATIONT
                              REPRESENTATIONT<Number, Converter, Setting>> {
 private:
 public:
+  typedef Number NumberType;
+  typedef Setting Settings;
+
 protected:
   /***************************************************************************
    * Members
@@ -77,8 +81,7 @@ public:
    * @param dimension Required dimension.
    * @return Empty REPRESENTATION.
    */
-  static REPRESENTATIONT<Number, Converter, Setting>
-  Empty(std::size_t dimension = 1) {
+  static REPRESENTATIONT<Number, Converter, Setting> Empty() {
     return REPRESENTATIONT<Number, Converter, Setting>();
   }
 

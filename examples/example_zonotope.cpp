@@ -6,7 +6,7 @@
  */
 
 #include "../src/hypro/config.h"
-#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/representations/GeometricObjectBase.h"
 #include "../src/hypro/util/plotting/Plotter.h"
 #include <sys/time.h>
 

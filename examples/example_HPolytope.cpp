@@ -3,7 +3,7 @@
  * H-representation.
  */
 
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 
 typedef double Number;

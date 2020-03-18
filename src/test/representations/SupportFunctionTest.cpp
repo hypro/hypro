@@ -6,7 +6,7 @@
  * @version		2015-02-25
  */
 
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../../hypro/util/plotting/Plotter.h"
 #include "../defines.h"
 #include "gtest/gtest.h"

@@ -1,6 +1,6 @@
 
 #include "../src/hypro/representations/Ellipsoids/Ellipsoid.h"
-#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/representations/GeometricObjectBase.h"
 #include "../src/hypro/util/plotting/Plotter.h"
 #include <carl/numbers/numbers.h>
 using namespace hypro;
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
   // HPolytope<Number> tmp;
   // for(int i = 0; i < resolution; ++i) {
   //	tmp.insert(Halfspace<Number>(evaldirections.row(i),
-  //multiEvaledVerify[i].supportValue));
+  // multiEvaledVerify[i].supportValue));
   //}
   // unsigned sf = plotter.addObject(tmp.vertices());
   // plotter.setObjectColor(sf, plotting::colors[plotting::lila]);

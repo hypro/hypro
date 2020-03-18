@@ -2,7 +2,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../config.h"
@@ -20,9 +20,10 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number, Converter, Setting>> {
+class SupportFunctionT : private GeometricObjectBase {
   public:
 	typedef Setting Settings;
+	typedef Number NumberType;
 
   private:
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> content;

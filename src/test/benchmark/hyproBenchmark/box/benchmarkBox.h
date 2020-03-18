@@ -15,7 +15,7 @@
 #include <future>
 #include <iosfwd>
 #include <random>
-#include <representations/GeometricObject.h>
+#include <representations/GeometricObjectBase.h>
 #ifdef HYPRO_USE_PPL
 #include "pplStructs.h"
 #include <ppl.hh>
