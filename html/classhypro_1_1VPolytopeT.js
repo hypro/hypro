@@ -1,5 +1,6 @@
 var classhypro_1_1VPolytopeT =
 [
+    [ "NumberType", "classhypro_1_1VPolytopeT.html#a978d562dd6e33834924025ab22b39ad3", null ],
     [ "pointVector", "classhypro_1_1VPolytopeT.html#af7eaddfaa395b22218720b263ae27611", null ],
     [ "Settings", "classhypro_1_1VPolytopeT.html#a494fc319c9d42111438241757e202ae2", null ],
     [ "VPolytopeT", "classhypro_1_1VPolytopeT.html#aed898680aeba332b98a85eadd20037a6", null ],

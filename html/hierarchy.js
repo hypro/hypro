@@ -36,7 +36,7 @@ var hierarchy =
     [ "hypro::Cacheable< matrix_t< Number > >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::Cacheable< vector_t< Number > >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::CarlPolytopeSetting", "structhypro_1_1CarlPolytopeSetting.html", null ],
-    [ "hypro::CarlPolytopeT< Number, Converter, Setting >", "classhypro_1_1CarlPolytopeT.html", null ],
+    [ "hypro::qe::CellTreeNode< Data >", "structhypro_1_1qe_1_1CellTreeNode.html", null ],
     [ "hypro::ChildTimingInformation< N >", "structhypro_1_1ChildTimingInformation.html", null ],
     [ "hypro::ChildTimingInformation< Number >", "structhypro_1_1ChildTimingInformation.html", null ],
     [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
@@ -123,36 +123,18 @@ var hierarchy =
     [ "hypro::genericTypeVisitor", "classhypro_1_1genericTypeVisitor.html", null ],
     [ "hypro::genericUniteVisitor< T >", "classhypro_1_1genericUniteVisitor.html", null ],
     [ "hypro::genericVerticesVisitor< Number >", "classhypro_1_1genericVerticesVisitor.html", null ],
-    [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],
-    [ "hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1BoxT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, GeneralizedStarT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::GeneralizedStarT< Number, Converter, Setting >", "classhypro_1_1GeneralizedStarT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, HPolytopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::HPolytopeT< Number, Converter, Setting >", "classhypro_1_1HPolytopeT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, SupportFunctionNewT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::SupportFunctionNewT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, SupportFunctionT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::SupportFunctionT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter, S > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::VPolytopeT< Number, Converter, S >", "classhypro_1_1VPolytopeT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+    [ "hypro::GeometricObjectBase", "classhypro_1_1GeometricObjectBase.html", [
+      [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ],
+      [ "hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1BoxT.html", null ],
+      [ "hypro::CarlPolytopeT< Number, Converter, Setting >", "classhypro_1_1CarlPolytopeT.html", null ],
+      [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ],
+      [ "hypro::GeneralizedStarT< Number, Converter, Setting >", "classhypro_1_1GeneralizedStarT.html", null ],
+      [ "hypro::HPolytopeT< Number, Converter, Setting >", "classhypro_1_1HPolytopeT.html", null ],
+      [ "hypro::StatisticWrapper< Representation >", "classhypro_1_1StatisticWrapper.html", null ],
+      [ "hypro::SupportFunctionNewT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html", null ],
+      [ "hypro::SupportFunctionT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionT.html", null ],
+      [ "hypro::VPolytopeT< Number, Converter, S >", "classhypro_1_1VPolytopeT.html", null ],
       [ "hypro::ZonotopeT< Number, Converter, Setting >", "classhypro_1_1ZonotopeT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< StatisticWrapper< Representation > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::StatisticWrapper< Representation >", "classhypro_1_1StatisticWrapper.html", null ]
     ] ],
     [ "hypro::glpk_context", "structhypro_1_1glpk__context.html", null ],
     [ "hypro::plotting::gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", null ],

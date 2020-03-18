@@ -9,6 +9,7 @@ var searchData=
   ['unite_5fcut',['UNITE_CUT',['../classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a4ea976ef9898fd77ca78a54cefd53437',1,'hypro::HPolytopeT']]],
   ['unite_5fnorm',['UNITE_NORM',['../classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a58924f24105681253ad3e2ec088809a4',1,'hypro::HPolytopeT']]],
   ['unite_5fsmooth',['UNITE_SMOOTH',['../classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a91f96dd6181f621f31001ae7b9b3690b',1,'hypro::HPolytopeT']]],
-  ['unknown',['UNKNOWN',['../namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca696b031073e74bf2cb98e5ef201d4aa3',1,'hypro']]],
+  ['universal',['UNIVERSAL',['../namespacehypro.html#ad9468253f740d3ba4388c00408ddb841aad17c1bd5b196a0923cde6beda1161a3',1,'hypro']]],
+  ['unknown',['UNKNOWN',['../namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3',1,'hypro::UNKNOWN()'],['../namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca696b031073e74bf2cb98e5ef201d4aa3',1,'hypro::UNKNOWN()']]],
   ['urgent',['URGENT',['../classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4af69c15580f3f9d26aced5b23b9a4425e',1,'hypro::HybridAutomatonLexer::URGENT()'],['../classhypro_1_1HybridAutomatonParser.html#a6a14f59a09f6a16a62f43c4dbd6f8257a7464d3fb03158343d8a5d7bb0b58bcf5',1,'hypro::HybridAutomatonParser::URGENT()']]]
 ];

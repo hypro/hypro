@@ -1,5 +1,6 @@
 var classhypro_1_1BoxT =
 [
+    [ "NumberType", "classhypro_1_1BoxT.html#a8c0b6053ef58f9074be3c05871e83429", null ],
     [ "Settings", "classhypro_1_1BoxT.html#adbbf70c4896237b785a7cf0ccac0db61", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#aa4384ed948ff04ee4cfe33e4ee53fb48", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#a68d80ad7accafdf8d9ed452fd968956c", null ],
@@ -61,6 +62,5 @@ var classhypro_1_1BoxT =
     [ "operator!=", "classhypro_1_1BoxT.html#a48807861a053c50022242c6ff7df9b23", null ],
     [ "operator<<", "classhypro_1_1BoxT.html#a5809f2678374bf5ab4a6d335569a4556", null ],
     [ "operator==", "classhypro_1_1BoxT.html#af8e69db0f5c03b2540a5c6794a3d473d", null ],
-    [ "mEmpty", "classhypro_1_1BoxT.html#ac9b4545b581dc54565810540cdc96623", null ],
     [ "mLimits", "classhypro_1_1BoxT.html#a5b0f6eb0f2b1b742f453bbe0984eae8b", null ]
 ];

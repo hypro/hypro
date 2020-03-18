@@ -156,9 +156,8 @@ Public Types</h2></td></tr>
 <tr class="separator:aa86730f4acc4f6b85e3e63ac3d454e24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa507246cde1836acb6f7883be3e348f1"><td class="memItemLeft" align="right" valign="top">typedef Setting&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#aa507246cde1836acb6f7883be3e348f1">Settings</a></td></tr>
 <tr class="separator:aa507246cde1836acb6f7883be3e348f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a></td></tr>
-<tr class="memitem:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd">NumberType</a></td></tr>
-<tr class="separator:a90226c553b38c46eb616d3674f7926dd inherit pub_types_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb9f01daa2033783732a412e19d0b9d6"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#acb9f01daa2033783732a412e19d0b9d6">NumberType</a></td></tr>
+<tr class="separator:acb9f01daa2033783732a412e19d0b9d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -258,35 +257,26 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4112bb779d7593a3d35d9379454f09b6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a4112bb779d7593a3d35d9379454f09b6">vertexEnumeration</a> () const </td></tr>
 <tr class="separator:a4112bb779d7593a3d35d9379454f09b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d58be71c27b53807645267e27191e8d"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a9d58be71c27b53807645267e27191e8d">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs) const </td></tr>
-<tr class="memdesc:a9d58be71c27b53807645267e27191e8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a9d58be71c27b53807645267e27191e8d">More...</a><br /></td></tr>
 <tr class="separator:a9d58be71c27b53807645267e27191e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27a78d8b046d94aacb5271c00eeeafb7"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
-<tr class="memdesc:a27a78d8b046d94aacb5271c00eeeafb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#a27a78d8b046d94aacb5271c00eeeafb7">More...</a><br /></td></tr>
 <tr class="separator:a27a78d8b046d94aacb5271c00eeeafb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3557a3615af2a29a6a3f4a795c83217"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ae3557a3615af2a29a6a3f4a795c83217">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:ae3557a3615af2a29a6a3f4a795c83217"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ae3557a3615af2a29a6a3f4a795c83217">More...</a><br /></td></tr>
 <tr class="separator:ae3557a3615af2a29a6a3f4a795c83217"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad153b8e0529586530e5661badcd85fe3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ad153b8e0529586530e5661badcd85fe3">assignIntervals</a> (const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;) const </td></tr>
-<tr class="memdesc:ad153b8e0529586530e5661badcd85fe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added.  <a href="#ad153b8e0529586530e5661badcd85fe3">More...</a><br /></td></tr>
 <tr class="separator:ad153b8e0529586530e5661badcd85fe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f735d35cdb9ebda948ef1b754931212"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a9f735d35cdb9ebda948ef1b754931212">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A) const </td></tr>
-<tr class="memdesc:a9f735d35cdb9ebda948ef1b754931212"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a9f735d35cdb9ebda948ef1b754931212">More...</a><br /></td></tr>
 <tr class="separator:a9f735d35cdb9ebda948ef1b754931212"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09362df9f62d7ffbdde1f32467268f85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a09362df9f62d7ffbdde1f32467268f85">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;b) const </td></tr>
-<tr class="memdesc:a09362df9f62d7ffbdde1f32467268f85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a09362df9f62d7ffbdde1f32467268f85">More...</a><br /></td></tr>
 <tr class="separator:a09362df9f62d7ffbdde1f32467268f85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dd8fa027162de65280b62842e7755cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a0dd8fa027162de65280b62842e7755cd">minkowskiSum</a> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &amp;rhs) const </td></tr>
 <tr class="separator:a0dd8fa027162de65280b62842e7755cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada6c845ea3b5ca70e8a18926316b3994"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ada6c845ea3b5ca70e8a18926316b3994">intersect</a> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &amp;rhs) const </td></tr>
 <tr class="separator:ada6c845ea3b5ca70e8a18926316b3994"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7efc1a4b7f3604834aca8a4592b954c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a7efc1a4b7f3604834aca8a4592b954c1">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;rhs) const </td></tr>
-<tr class="memdesc:a7efc1a4b7f3604834aca8a4592b954c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a7efc1a4b7f3604834aca8a4592b954c1">More...</a><br /></td></tr>
 <tr class="separator:a7efc1a4b7f3604834aca8a4592b954c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8548059687ce0a028d5d223a384df051"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a8548059687ce0a028d5d223a384df051">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_vec) const </td></tr>
-<tr class="memdesc:a8548059687ce0a028d5d223a384df051"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#a8548059687ce0a028d5d223a384df051">More...</a><br /></td></tr>
 <tr class="separator:a8548059687ce0a028d5d223a384df051"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e9e3f93a46002fac2906c421284aebf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a5e9e3f93a46002fac2906c421284aebf">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;point) const </td></tr>
-<tr class="memdesc:a5e9e3f93a46002fac2906c421284aebf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a5e9e3f93a46002fac2906c421284aebf">More...</a><br /></td></tr>
 <tr class="separator:a5e9e3f93a46002fac2906c421284aebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad076cc59b6ecca8cc46bddce10961e25"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ad076cc59b6ecca8cc46bddce10961e25">contains</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;vec) const </td></tr>
 <tr class="separator:ad076cc59b6ecca8cc46bddce10961e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -295,7 +285,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa92e9e78f50f8b068ca94d62ed3197a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#aa92e9e78f50f8b068ca94d62ed3197a4">unite</a> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &amp;rhs) const </td></tr>
 <tr class="separator:aa92e9e78f50f8b068ca94d62ed3197a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeef914a9d3a93dce001141eb8b1a76f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#aeef914a9d3a93dce001141eb8b1a76f2">reduceRepresentation</a> ()</td></tr>
-<tr class="memdesc:aeef914a9d3a93dce001141eb8b1a76f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function called to reduce the representation - implementation is dependent on the actual representation and might affect number representations as well as reducing the complexity of the set at the cost of precision - the actual implementation should be settings-dependent.  <a href="#aeef914a9d3a93dce001141eb8b1a76f2">More...</a><br /></td></tr>
 <tr class="separator:aeef914a9d3a93dce001141eb8b1a76f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4df51874a0077e2233a11d16b1f08d3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a4df51874a0077e2233a11d16b1f08d3c">clear</a> ()</td></tr>
 <tr class="separator:a4df51874a0077e2233a11d16b1f08d3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -319,24 +308,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa1b4bc6d9841781e8e481405ddf2dbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3de4618a643c94a7a011e64f3033eab4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a3de4618a643c94a7a011e64f3033eab4">getUpdated</a> () const </td></tr>
 <tr class="separator:a3de4618a643c94a7a011e64f3033eab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a></td></tr>
-<tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
-<tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object.  <a href="#a28cf65685f4fa5e04c3dbf428a9d97b0">More...</a><br /></td></tr>
-<tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">minkowskiSum</a> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6d5b4a8d675cbe9da63408a5beab8460">More...</a><br /></td></tr>
-<tr class="separator:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4">contains</a> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
-<tr class="separator:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3ed4020101437144b34b62cc01d5bf01">More...</a><br /></td></tr>
-<tr class="separator:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a01fb8043c2db7af11a300d1d1ade1e96"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a01fb8043c2db7af11a300d1d1ade1e96">Empty</a> (std::size_t <a class="el" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">dimension</a>=1)</td></tr>
-<tr class="memdesc:a01fb8043c2db7af11a300d1d1ade1e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static method for construction of an empty H-polytope.  <a href="#a01fb8043c2db7af11a300d1d1ade1e96">More...</a><br /></td></tr>
-<tr class="separator:a01fb8043c2db7af11a300d1d1ade1e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaffc738e4129f24fc2606a7f69abfca"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#aeaffc738e4129f24fc2606a7f69abfca">Empty</a> ()</td></tr>
+<tr class="memdesc:aeaffc738e4129f24fc2606a7f69abfca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Static method for construction of an empty H-polytope.  <a href="#aeaffc738e4129f24fc2606a7f69abfca">More...</a><br /></td></tr>
+<tr class="separator:aeaffc738e4129f24fc2606a7f69abfca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8019a55a1c73a17b31bb89b601532baf"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a8019a55a1c73a17b31bb89b601532baf">type</a> ()</td></tr>
 <tr class="separator:a8019a55a1c73a17b31bb89b601532baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12888e24498439d2eb487a0feec1accb"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a12888e24498439d2eb487a0feec1accb">unite</a> (const std::vector&lt; <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt; &amp;rhs)</td></tr>
@@ -365,6 +342,25 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ab589645d72b9aedc9e7db71ce52e44ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ab589645d72b9aedc9e7db71ce52e44ea">insertEmptyDimensions</a> (const std::vector&lt; std::size_t &gt; &amp;existingDimensions, const std::vector&lt; std::size_t &gt; &amp;newDimensions)</td></tr>
 <tr class="memdesc:ab589645d72b9aedc9e7db71ce52e44ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extends the constraint to a higher dimension. This effectively unbounds the polytope in that direction. The passed set of existing dimensions is used to allow adding dimensions in between. Note that both vectors have to be ordered ascending.  <a href="#ab589645d72b9aedc9e7db71ce52e44ea">More...</a><br /></td></tr>
 <tr class="separator:ab589645d72b9aedc9e7db71ce52e44ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhypro_1_1GeometricObjectBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObjectBase')"><img src="closed.png" alt="-"/>&#160;Private Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObjectBase.html">hypro::GeometricObjectBase</a></td></tr>
+<tr class="memitem:ac67b889a214bd4cab8e6611f47fecabe inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#ac67b889a214bd4cab8e6611f47fecabe">GeometricObjectBase</a> ()=default</td></tr>
+<tr class="separator:ac67b889a214bd4cab8e6611f47fecabe inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01af9bd9173f528f3f7eabb1c468051f inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#a01af9bd9173f528f3f7eabb1c468051f">GeometricObjectBase</a> (const <a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a> &amp;in)=default</td></tr>
+<tr class="separator:a01af9bd9173f528f3f7eabb1c468051f inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac521d99d8d3be2432270e12ac52aef2 inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#aac521d99d8d3be2432270e12ac52aef2">GeometricObjectBase</a> (<a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a> &amp;&amp;in)=default</td></tr>
+<tr class="separator:aac521d99d8d3be2432270e12ac52aef2 inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcbe8ee53618db9c7a12aae311906ba9 inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#afcbe8ee53618db9c7a12aae311906ba9">operator=</a> (const <a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a> &amp;in)=default</td></tr>
+<tr class="separator:afcbe8ee53618db9c7a12aae311906ba9 inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87fae4d876cb9b76e6703516aeb1c63c inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#a87fae4d876cb9b76e6703516aeb1c63c">operator=</a> (<a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a> &amp;&amp;in)=default</td></tr>
+<tr class="separator:a87fae4d876cb9b76e6703516aeb1c63c inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47d63aefb8bc4c23935df15825503b14 inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#a47d63aefb8bc4c23935df15825503b14">GeometricObjectBase</a> (<a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a> state)</td></tr>
+<tr class="separator:a47d63aefb8bc4c23935df15825503b14 inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f2b92f3b89ccb3f8656ce1803a794d inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#ad7f2b92f3b89ccb3f8656ce1803a794d">getEmptyState</a> () const </td></tr>
+<tr class="memdesc:ad7f2b92f3b89ccb3f8656ce1803a794d inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, whether the set is empty.  <a href="#ad7f2b92f3b89ccb3f8656ce1803a794d">More...</a><br /></td></tr>
+<tr class="separator:ad7f2b92f3b89ccb3f8656ce1803a794d inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e45be4e37ace5712ba7ac68b9b834ae inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#a2e45be4e37ace5712ba7ac68b9b834ae">setEmptyState</a> (<a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a> state)</td></tr>
+<tr class="memdesc:a2e45be4e37ace5712ba7ac68b9b834ae inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Empty State member - only to be used if you know what you are doing.  <a href="#a2e45be4e37ace5712ba7ac68b9b834ae">More...</a><br /></td></tr>
+<tr class="separator:a2e45be4e37ace5712ba7ac68b9b834ae inherit pub_methods_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -372,14 +368,15 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a477fb9351c72c3eb218d8554d56c4749"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a3d8d0e5274f3debec9690af52decca"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a9a3d8d0e5274f3debec9690af52decca">mDimension</a></td></tr>
 <tr class="separator:a9a3d8d0e5274f3debec9690af52decca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a044bdf52a099492bcd83e1e561af976a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a044bdf52a099492bcd83e1e561af976a">mEmpty</a> = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td></tr>
-<tr class="separator:a044bdf52a099492bcd83e1e561af976a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e54bfb3fd40ac95a55acab298757f86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a4e54bfb3fd40ac95a55acab298757f86">mNonRedundant</a></td></tr>
 <tr class="separator:a4e54bfb3fd40ac95a55acab298757f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad596db309f0787b30a25ca255bcf56fb"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="classhypro_1_1Optimizer.html">Optimizer</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ad596db309f0787b30a25ca255bcf56fb">mOptimizer</a> = std::nullopt</td></tr>
 <tr class="separator:ad596db309f0787b30a25ca255bcf56fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fba847d46313cfae933a91ea6d280d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a5fba847d46313cfae933a91ea6d280d6">mUpdated</a> = false</td></tr>
 <tr class="separator:a5fba847d46313cfae933a91ea6d280d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classhypro_1_1GeometricObjectBase"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classhypro_1_1GeometricObjectBase')"><img src="closed.png" alt="-"/>&#160;Private Attributes inherited from <a class="el" href="classhypro_1_1GeometricObjectBase.html">hypro::GeometricObjectBase</a></td></tr>
+<tr class="memitem:ab7260a3610813379eac240a4ef29a3d6 inherit pub_attribs_classhypro_1_1GeometricObjectBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html#ab7260a3610813379eac240a4ef29a3d6">mEmptyState</a> = <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3">SETSTATE::UNKNOWN</a></td></tr>
+<tr class="separator:ab7260a3610813379eac240a4ef29a3d6 inherit pub_attribs_classhypro_1_1GeometricObjectBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -401,7 +398,7 @@ class hypro::HPolytopeT&lt; Number, Converter, Setting &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00035">35</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00036">36</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="aa86730f4acc4f6b85e3e63ac3d454e24"></a>
 <div class="memitem">
@@ -415,7 +412,23 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00049">49</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00050">50</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acb9f01daa2033783732a412e19d0b9d6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::<a class="el" href="classhypro_1_1HPolytopeT.html#acb9f01daa2033783732a412e19d0b9d6">NumberType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00053">53</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -431,7 +444,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00051">51</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00052">52</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -468,7 +481,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00037">37</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00038">38</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -678,9 +691,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::affineTransformation </td>
@@ -700,26 +710,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td></td><td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Applies an affine transformation with the matrix A and the translation vector b to the set. </p>
-<p>The resulting set R is the result of the affine transformation of the set S with A and b such that \( R = \{ x | x \in A\cdot S + b \} \) </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00786">testAffineTransformation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00786">testAffineTransformation()</a>.</p>
 
 </div>
 </div>
@@ -736,29 +729,18 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td class="memname"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::assignIntervals </td>
           <td>(</td>
           <td class="paramtype">const std::map&lt; std::size_t, carl::Interval&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>assignments</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function to set a variable to an interval.  This is a meta-function which consists of projecting out the respective dimension, resulting in a lower-dimensional state set. Afterwards the state set is lifted to the original state space, i.e., unconstrained dimensions are added and finally, the interval constraints as given are added. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">assignments</td><td>A map from dimension index to interval. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>DerivedShape </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ab8e7033fc7b4c2e54451ad6bea5b45f8">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00256">256</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00257">257</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a09362df9f62d7ffbdde1f32467268f85">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::affineTransformation()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a5e9e3f93a46002fac2906c421284aebf">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::contains()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ada6c845ea3b5ca70e8a18926316b3994">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::intersect()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a7efc1a4b7f3604834aca8a4592b954c1">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a8548059687ce0a028d5d223a384df051">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::intersectHalfspaces()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a9f735d35cdb9ebda948ef1b754931212">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::linearTransformation()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a0dd8fa027162de65280b62842e7755cd">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::minkowskiSum()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#aa92e9e78f50f8b068ca94d62ed3197a4">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::unite()</a>.</p>
 
@@ -779,7 +761,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00271">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00272">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -817,7 +799,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -855,7 +837,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -874,7 +856,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>, and <a class="el" href="HPolytope_8h_source.html#l00305">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>, and <a class="el" href="HPolytope_8h_source.html#l00310">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -883,9 +865,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
@@ -895,25 +874,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Checks, whether the set contains the passed point. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the set, false otherwise. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="HPolytope_8h_source.html#l00323">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="HPolytope_8h_source.html#l00328">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -958,9 +921,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::size_t <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::dimension </td>
@@ -969,19 +929,12 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Getter for the dimension of the polytope. </p>
 <p>Note that this only returns the space dimension and not the effective dimension of the polytope. </p><dl class="section return"><dt>Returns</dt><dd>The space dimension. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>, <a class="el" href="HPolytope_8h_source.html#l00305">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator==()</a>, and <a class="el" href="HPolytope_8h_source.html#l00129">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>, <a class="el" href="HPolytope_8h_source.html#l00310">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator==()</a>, and <a class="el" href="HPolytope_8h_source.html#l00130">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -990,9 +943,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::empty </td>
@@ -1001,23 +951,16 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Determines, if the polytope is empty. </p>
 <p>Checks for satisfiability of the given constraints. </p><dl class="section return"><dt>Returns</dt><dd>True if the polytope is empty, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>, <a class="el" href="HPolytope_8h_source.html#l00323">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>, and <a class="el" href="HPolytope_8h_source.html#l00129">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00328">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>, and <a class="el" href="HPolytope_8h_source.html#l00130">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a01fb8043c2db7af11a300d1d1ade1e96"></a>
+<a class="anchor" id="aeaffc738e4129f24fc2606a7f69abfca"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1029,8 +972,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
         <tr>
           <td class="memname">static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting&gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::Empty </td>
           <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>dimension</em> = <code>1</code></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1044,7 +986,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Static method for construction of an empty H-polytope. </p>
 <p>An empty H-polytope is constructed by creating two hyperplanes which falsify each other. </p><dl class="section return"><dt>Returns</dt><dd>An empty polytope. </dd></dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00129">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00130">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -1072,7 +1014,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1092,7 +1034,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1120,7 +1062,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1158,7 +1100,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1185,11 +1127,11 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00436">436</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00441">441</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="HPolytope_8h_source.html#l00062">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mOptimizer</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#ac74db217e739aae4090b7eec40fb4a33">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::setOptimizer()</a>.</p>
+<p>References <a class="el" href="HPolytope_8h_source.html#l00063">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mOptimizer</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#ac74db217e739aae4090b7eec40fb4a33">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::setOptimizer()</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -1216,9 +1158,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00439">439</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00444">444</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="HPolytope_8h_source.html#l00065">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mUpdated</a>.</p>
+<p>References <a class="el" href="HPolytope_8h_source.html#l00066">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mUpdated</a>.</p>
 
 </div>
 </div>
@@ -1256,7 +1198,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1306,7 +1248,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1356,7 +1298,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1400,7 +1342,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1444,7 +1386,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1464,7 +1406,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1483,7 +1425,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1505,7 +1447,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the full description of the polytope as a pair of a matrix and a vector. </p>
 <dl class="section return"><dt>Returns</dt><dd>A pair of a matrix and a vector. </dd></dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1533,7 +1475,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1617,7 +1559,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00398">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00403">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -1637,7 +1579,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
 
 </div>
 </div>
@@ -1646,9 +1588,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
@@ -1658,25 +1597,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Computes the intersection of the set with the given halfspace. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
 
 </div>
 </div>
@@ -1685,9 +1608,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspaces </td>
@@ -1707,26 +1627,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td></td><td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Computes the intersection of the set with a set of halfspaces. </p>
-<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = \( \{ x | x \in S \land A\cdot x \leq b \} \). </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
 
 </div>
 </div>
@@ -1746,7 +1649,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1766,7 +1669,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1814,11 +1717,11 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Returns, whether the current polytope contains redundant constraints. </p>
 <p>Only reads the stored flag without. </p><dl class="section return"><dt>Returns</dt><dd>True, if there are no redundant constraints, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00179">179</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00180">180</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a083c455f78597f2788660f999288370a">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::constraints()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#afb823a0a944c27ecb92cbe491e3f758d">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ac367eaa37f849be213b3214ae66219e5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::evaluate()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4ec504613f96d2fa84412d132daf6961">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::hasConstraint()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a3f0df7bba0e4f07b6539c43932290f60">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::heuristic()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a60ad6f7ac31d11816b0951e4d0fe9967">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#abdb27912b10e4ce3c704840a8a8d8abe">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#abb68938c08af87da8e2cf19adf1d1ea3">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isBounded()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a3fa705c7a6f34f3c79774cf6b2731f6c">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isExtremePoint()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a792108927c587c5e43c98b456c158d22">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="HPolytope_8h_source.html#l00059">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mNonRedundant</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ad238f49c40efa2a2b7f5fb119a92d6f3">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::multiEvaluate()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ae3557a3615af2a29a6a3f4a795c83217">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::project()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#abb837e9d9f73cdcecc24973c666d4501">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduce()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ae1125bc43f6f9a49f8ee92f192445653">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduce_directed()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ab2da5808b682e2c1d484771d93f0db42">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceAssign()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a9c078e9dce0c13885cc061cf6cfbe342">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::removeRedundancy()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a9d58be71c27b53807645267e27191e8d">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::satisfiesHalfspace()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::satisfiesHalfspaces()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a598d2f76a12ca4aba8bb9cff3dbb83eb">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4112bb779d7593a3d35d9379454f09b6">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertexEnumeration()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a083c455f78597f2788660f999288370a">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::constraints()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#afb823a0a944c27ecb92cbe491e3f758d">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ac367eaa37f849be213b3214ae66219e5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::evaluate()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4ec504613f96d2fa84412d132daf6961">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::hasConstraint()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a3f0df7bba0e4f07b6539c43932290f60">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::heuristic()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a60ad6f7ac31d11816b0951e4d0fe9967">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#abdb27912b10e4ce3c704840a8a8d8abe">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#abb68938c08af87da8e2cf19adf1d1ea3">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isBounded()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a3fa705c7a6f34f3c79774cf6b2731f6c">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isExtremePoint()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a792108927c587c5e43c98b456c158d22">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="HPolytope_8h_source.html#l00060">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mNonRedundant</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ad238f49c40efa2a2b7f5fb119a92d6f3">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::multiEvaluate()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ae3557a3615af2a29a6a3f4a795c83217">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::project()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#abb837e9d9f73cdcecc24973c666d4501">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduce()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ae1125bc43f6f9a49f8ee92f192445653">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduce_directed()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ab2da5808b682e2c1d484771d93f0db42">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceAssign()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a9c078e9dce0c13885cc061cf6cfbe342">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::removeRedundancy()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a9d58be71c27b53807645267e27191e8d">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::satisfiesHalfspace()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::satisfiesHalfspaces()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a598d2f76a12ca4aba8bb9cff3dbb83eb">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4112bb779d7593a3d35d9379454f09b6">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertexEnumeration()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -1827,9 +1730,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::linearTransformation </td>
@@ -1839,25 +1739,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Applies a linear transformation with the matrix A to the set. </p>
-<p>The resulting set R is the result of the linear transformation of the set S with A such that \( R = \{ x | x \in A\cdot S \} \) </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00750">testLinearTransformation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00750">testLinearTransformation()</a>.</p>
 
 </div>
 </div>
@@ -1879,7 +1763,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the matrix representation of the constraints. </p>
 <dl class="section return"><dt>Returns</dt><dd>A matrix. </dd></dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00444">hypro::convert()</a>, <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00449">hypro::convert()</a>, <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -1899,7 +1783,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00826">testMinkowskiSum()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00826">testMinkowskiSum()</a>.</p>
 
 </div>
 </div>
@@ -1929,7 +1813,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1957,9 +1841,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00282">282</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00283">283</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a083c455f78597f2788660f999288370a">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::constraints()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081da946003f97ccc52d5d3b54ac0ec31bbfc">hypro::FALSE</a>, <a class="el" href="HPolytope_8h_source.html#l00436">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getOptimizer()</a>, <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a792108927c587c5e43c98b456c158d22">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ac74db217e739aae4090b7eec40fb4a33">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::setOptimizer()</a>, <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081dac0d83f0b82a6b30de8811e69e6d95c61">hypro::TRUE</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a083c455f78597f2788660f999288370a">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::constraints()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="GeometricObjectBase_8h_source.html#l00050">hypro::GeometricObjectBase::getEmptyState()</a>, <a class="el" href="HPolytope_8h_source.html#l00441">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getOptimizer()</a>, <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a792108927c587c5e43c98b456c158d22">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="GeometricObjectBase_8h_source.html#l00034">hypro::GeometricObjectBase::mEmptyState</a>, <a class="el" href="classhypro_1_1GeometricObjectBase.html#afcbe8ee53618db9c7a12aae311906ba9">hypro::GeometricObjectBase::operator=()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ac74db217e739aae4090b7eec40fb4a33">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::setOptimizer()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
 
 </div>
 </div>
@@ -1987,7 +1871,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00305">305</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00310">310</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a083c455f78597f2788660f999288370a">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::constraints()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>.</p>
 
@@ -2008,7 +1892,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00271">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00272">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -2017,9 +1901,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::project </td>
@@ -2029,25 +1910,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Projects the set on the ordered set of given dimensions. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">dimensions</td><td>The dimensions. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2083,7 +1948,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2113,7 +1978,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2143,7 +2008,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2183,11 +2048,11 @@ template&lt;typename N  = Number, carl::DisableIf&lt; std::is_same&lt; N, double
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00323">323</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00328">328</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a5e9e3f93a46002fac2906c421284aebf">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::contains()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="HPolytope_8h_source.html#l00055">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mDimension</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a5e9e3f93a46002fac2906c421284aebf">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::contains()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="HPolytope_8h_source.html#l00057">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::mDimension</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00271">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00272">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -2227,7 +2092,7 @@ template&lt;typename N  = Number, carl::EnableIf&lt; std::is_same&lt; N, double 
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00398">398</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00403">403</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a3129e12bffc56b4d695072f89eb2c6e5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::computeConstraintsForDegeneratedPolytope()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a0b6bfd64abe212e33b7f0d15fb9d8faa">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::computeNormal()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a88c53a9d57d7481f627b2ae30000d5a6">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getMembersOfVertices()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a97d00697a01b32c8d03a0a09663fc1d9">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getNeighborsOfIndex()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a285e047d8368dce43e1faf455ec174d6">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getVertexForVector()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ab8f8eed743a471ea64f58ed192c7b770">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getVerticesOf2Indices()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4e9227c342dcb5185acea913c4154bb6">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getVerticesOf2IndicesAround()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ad1222d87aa81dcabfe7d58f967094566">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getVerticesOfIndex()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#af6766d0692ed35d0a534d4f4b939e296">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getVerticesPermutationForFacet()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#ab589645d72b9aedc9e7db71ce52e44ea">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insertEmptyDimensions()</a>.</p>
 
@@ -2251,18 +2116,14 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function called to reduce the representation - implementation is dependent on the actual representation and might affect number representations as well as reducing the complexity of the set at the cost of precision - the actual implementation should be settings-dependent. </p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00272">272</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00271">271</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
-
-<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a4df51874a0077e2233a11d16b1f08d3c">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::clear()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ab2b1abb67560519687754f9a8560202f">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::print()</a>, <a class="el" href="HPolytope_8h_source.html#l00323">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a9c078e9dce0c13885cc061cf6cfbe342">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::removeRedundancy()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a4df51874a0077e2233a11d16b1f08d3c">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::clear()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ab2b1abb67560519687754f9a8560202f">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::print()</a>, <a class="el" href="HPolytope_8h_source.html#l00328">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a9c078e9dce0c13885cc061cf6cfbe342">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::removeRedundancy()</a>.</p>
 
 </div>
 </div>
@@ -2281,7 +2142,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00271">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00272">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -2290,9 +2151,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspace </td>
@@ -2302,25 +2160,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2329,9 +2171,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspaces </td>
@@ -2351,26 +2190,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td></td><td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set. </p>
-<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = \( \{ x | x \in S \land A\cdot x \leq b \} \). Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
-
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#acdbbcb6aff4f47be2bc8ce67f0c8fc60">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2400,7 +2222,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00436">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getOptimizer()</a>, and <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00441">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getOptimizer()</a>, and <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -2430,7 +2252,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Manually sets the polytope to behave as if it did not contain redundant constraints. </p>
 <p>This function can avoid an expensive redundancy removal call in case the user already knows that this property holds. </p>
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00172">172</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00173">173</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -2458,7 +2280,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00438">438</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00443">443</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -2480,7 +2302,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the number of constraints. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of constraints. </dd></dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00129">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00130">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -2510,9 +2332,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Approximates the storage usage of the current polytope. </p>
 <p>[long description] </p><dl class="section return"><dt>Returns</dt><dd>The size. </dd></dl>
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00129">129</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00130">130</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a01fb8043c2db7af11a300d1d1ade1e96">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::Empty()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#ad15b3cae0d5adbde47a4e09afaf57109">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::size()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#aeaffc738e4129f24fc2606a7f69abfca">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::Empty()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#ad15b3cae0d5adbde47a4e09afaf57109">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::size()</a>.</p>
 
 </div>
 </div>
@@ -2534,7 +2356,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for a number representing the supremum according to the infinity norm of the polytope. </p>
 <dl class="section return"><dt>Returns</dt><dd>A number. </dd></dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2561,7 +2383,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00160">160</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00161">161</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 <p>References <a class="el" href="representations_2types_8h_source.html#l00011">hypro::polytope_h</a>.</p>
 
@@ -2583,7 +2405,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00256">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00257">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>.</p>
 
 </div>
 </div>
@@ -2639,7 +2461,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Resets the information if the current polytope contains redundant constraints. </p>
 <p>This function may be used to allow a manual call to the redundancy removal method. </p>
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00166">166</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00167">167</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -2661,7 +2483,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the vector of offsets of the bounding hyperplanes. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector. </dd></dl>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00444">hypro::convert()</a>, <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00282">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00449">hypro::convert()</a>, <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00283">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -2680,7 +2502,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2689,9 +2511,6 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;<a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::vertices </td>
@@ -2701,19 +2520,12 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Getter for the vertices of the current polytope. </p>
 <p>Solves the vertex enumeration problem, i.e. converts the hyperplanar description into a vertex description. </p><dl class="section return"><dt>Returns</dt><dd>A vector of points. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00323">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="HPolytope_8h_source.html#l00328">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -2752,7 +2564,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00294">294</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00299">299</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -2790,7 +2602,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00313">313</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00318">318</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -2815,33 +2627,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00055">55</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00057">57</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00323">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a044bdf52a099492bcd83e1e561af976a"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename Converter, class Setting&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a> <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mEmpty = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00058">58</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00328">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>
@@ -2865,7 +2653,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00054">54</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00056">56</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -2889,9 +2677,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00059">59</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00060">60</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00179">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00180">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -2915,9 +2703,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00062">62</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00063">63</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00436">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getOptimizer()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00441">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getOptimizer()</a>.</p>
 
 </div>
 </div>
@@ -2941,9 +2729,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00065">65</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00066">66</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00439">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getUpdated()</a>.</p>
+<p>Referenced by <a class="el" href="HPolytope_8h_source.html#l00444">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::getUpdated()</a>.</p>
 
 </div>
 </div>

@@ -29,6 +29,12 @@ var types_8h =
       [ "TIMEDLOC", "types_8h.html#a591ce576c89c11741bb7ee90db71c677a6a69247abc4b097fa949c7105cdf0fd4", null ],
       [ "RECTANGULARLOC", "types_8h.html#a591ce576c89c11741bb7ee90db71c677a16af997c92e8e2eb3613d3f187aa7be3", null ]
     ] ],
+    [ "SETSTATE", "types_8h.html#ad9468253f740d3ba4388c00408ddb841", [
+      [ "UNKNOWN", "types_8h.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3", null ],
+      [ "NONEMPTY", "types_8h.html#ad9468253f740d3ba4388c00408ddb841a8409775fd1592ee7eb20b33dba52ad04", null ],
+      [ "EMPTY", "types_8h.html#ad9468253f740d3ba4388c00408ddb841aba2b45bdc11e2a4a6e86aab2ac693cbb", null ],
+      [ "UNIVERSAL", "types_8h.html#ad9468253f740d3ba4388c00408ddb841aad17c1bd5b196a0923cde6beda1161a3", null ]
+    ] ],
     [ "SOLUTION", "types_8h.html#a402d1e5727bcf52f5ee140924452c3cc", [
       [ "FEAS", "types_8h.html#a402d1e5727bcf52f5ee140924452c3cca57e8bcd22ac5b56703b233e135f2a7f2", null ],
       [ "INFEAS", "types_8h.html#a402d1e5727bcf52f5ee140924452c3cca9d0f11bf0a1789410bf9780c8948ebb9", null ],

@@ -1,6 +1,7 @@
 var classhypro_1_1HPolytopeT =
 [
     [ "HalfspaceVector", "classhypro_1_1HPolytopeT.html#aa86730f4acc4f6b85e3e63ac3d454e24", null ],
+    [ "NumberType", "classhypro_1_1HPolytopeT.html#acb9f01daa2033783732a412e19d0b9d6", null ],
     [ "Settings", "classhypro_1_1HPolytopeT.html#aa507246cde1836acb6f7883be3e348f1", null ],
     [ "REDUCTION_STRATEGY", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563", [
       [ "DROP", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563acd0a97c335fd44855bc584636c988718", null ],
@@ -87,7 +88,6 @@ var classhypro_1_1HPolytopeT =
     [ "operator<<", "classhypro_1_1HPolytopeT.html#ad547ffca050ca1fd6b89616f0a330f34", null ],
     [ "swap", "classhypro_1_1HPolytopeT.html#a3adec517fdc2b170eacbc9829220b1f8", null ],
     [ "mDimension", "classhypro_1_1HPolytopeT.html#a9a3d8d0e5274f3debec9690af52decca", null ],
-    [ "mEmpty", "classhypro_1_1HPolytopeT.html#a044bdf52a099492bcd83e1e561af976a", null ],
     [ "mHPlanes", "classhypro_1_1HPolytopeT.html#a477fb9351c72c3eb218d8554d56c4749", null ],
     [ "mNonRedundant", "classhypro_1_1HPolytopeT.html#a4e54bfb3fd40ac95a55acab298757f86", null ],
     [ "mOptimizer", "classhypro_1_1HPolytopeT.html#ad596db309f0787b30a25ca255bcf56fb", null ],

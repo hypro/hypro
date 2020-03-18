@@ -1,5 +1,6 @@
 var classhypro_1_1SupportFunctionNewT =
 [
+    [ "NumberType", "classhypro_1_1SupportFunctionNewT.html#a88c07465b7f10714f233a791284a58d1", null ],
     [ "Settings", "classhypro_1_1SupportFunctionNewT.html#ac3241955161891138f18dcde17a09d09", null ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#af09e36411f3881de557370a5a72c4535", null ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a95b2743338eae0f25cd34b57c525c5d9", null ],
@@ -7,7 +8,7 @@ var classhypro_1_1SupportFunctionNewT =
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a982e6911ad65aeee610d25c7a652c873", null ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a4b7e66fa15b019c94d7b038bb621ca1b", null ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#ae909dd7628a082de8803dd5914614121", null ],
-    [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#ada63aa39bf2c368667d40a22cb2c2b7f", null ],
+    [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#aadb24c33bce6ffd39d1b95dc95d9713c", null ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a78d1330ba3a55e5896e02ed1b37352c1", null ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a94d9b2d35c6426fbdd1fe714a0c4c56f", null ],
     [ "~SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a408d0430af3d4ceef395c8fc0c67e53f", null ],
@@ -67,7 +68,6 @@ var classhypro_1_1SupportFunctionNewT =
     [ "SumOp< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html#a625328e9abaf74c95c44004aed723d3f", null ],
     [ "TrafoOp< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html#ab461d7c2b33a4211ec5332abc92624c2", null ],
     [ "UnionOp< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html#a7a9bdc6141999a4cdfd141136d760f33", null ],
-    [ "mEmpty", "classhypro_1_1SupportFunctionNewT.html#ad8895c7ec363714c04364e1c2191c31d", null ],
     [ "mMatrix", "classhypro_1_1SupportFunctionNewT.html#a2f7deee5bb8bb18b4a06bc22e6bfaf6c", null ],
     [ "mRoot", "classhypro_1_1SupportFunctionNewT.html#af1b5ddff8396788e3a3588e25278fc2d", null ],
     [ "mTemplateSet", "classhypro_1_1SupportFunctionNewT.html#a099225fda85e860b8a82d12987ebb115", null ],

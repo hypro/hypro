@@ -2,6 +2,7 @@ var group__geoState =
 [
     [ "BoxT", "classhypro_1_1BoxT.html", [
       [ "Options ", "installation.html#options", null ],
+      [ "NumberType", "classhypro_1_1BoxT.html#a8c0b6053ef58f9074be3c05871e83429", null ],
       [ "Settings", "classhypro_1_1BoxT.html#adbbf70c4896237b785a7cf0ccac0db61", null ],
       [ "BoxT", "classhypro_1_1BoxT.html#aa4384ed948ff04ee4cfe33e4ee53fb48", null ],
       [ "BoxT", "classhypro_1_1BoxT.html#a68d80ad7accafdf8d9ed452fd968956c", null ],
@@ -63,7 +64,6 @@ var group__geoState =
       [ "operator!=", "classhypro_1_1BoxT.html#a48807861a053c50022242c6ff7df9b23", null ],
       [ "operator<<", "classhypro_1_1BoxT.html#a5809f2678374bf5ab4a6d335569a4556", null ],
       [ "operator==", "classhypro_1_1BoxT.html#af8e69db0f5c03b2540a5c6794a3d473d", null ],
-      [ "mEmpty", "classhypro_1_1BoxT.html#ac9b4545b581dc54565810540cdc96623", null ],
       [ "mLimits", "classhypro_1_1BoxT.html#a5b0f6eb0f2b1b742f453bbe0984eae8b", null ]
     ] ],
     [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html", [
@@ -127,6 +127,7 @@ var group__geoState =
         [ "operator==", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html#ad493824d4e946ad9f9fc42eb88c06154", null ],
         [ "operator<<", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html#aba63897704159ea31a72d7439430c98c", null ]
       ] ],
+      [ "NumberType", "classhypro_1_1DifferenceBoundsT.html#ac0066091bba214f62b023a38c7140cf8", null ],
       [ "Settings", "classhypro_1_1DifferenceBoundsT.html#a39641596db114377dc5dd91e63bd6cea", null ],
       [ "BOUND_TYPE", "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50", [
         [ "SMALLER", "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50ab4ea6bff7b7882e96403d7e01052c2c3", null ],
@@ -184,6 +185,8 @@ var group__geoState =
       [ "m_timeHorizon", "classhypro_1_1DifferenceBoundsT.html#a061a34edeab6ff04bc341f4b4697ca3e", null ]
     ] ],
     [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html", [
+      [ "NumberType", "classhypro_1_1GeneralizedStarT.html#abd071f8fb136ca1c17c6157e5a9429d6", null ],
+      [ "Settings", "classhypro_1_1GeneralizedStarT.html#ad127c7f025435e1f70dc4132ec7549e6", null ],
       [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html#a6a74f84ca0363fb23117f37e55a5191f", null ],
       [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html#a896a4a38af49fbe8767eb5ffadb637ac", null ],
       [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html#a4d5c7ce41a43eb869a2ca3d6ae4a9046", null ],
@@ -222,26 +225,16 @@ var group__geoState =
       [ "mBasis", "classhypro_1_1GeneralizedStarT.html#aa5c619210fe7dda4376d25c39ca6d42a", null ],
       [ "mCenter", "classhypro_1_1GeneralizedStarT.html#a7b41dff393cf7784033e7dd2b83c70fd", null ]
     ] ],
-    [ "GeometricObject", "classhypro_1_1GeometricObject.html", [
-      [ "NumberType", "classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd", null ],
-      [ "~GeometricObject", "classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0", null ],
-      [ "affineTransformation", "classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a", null ],
-      [ "assignIntervals", "classhypro_1_1GeometricObject.html#ab8e7033fc7b4c2e54451ad6bea5b45f8", null ],
-      [ "contains", "classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638", null ],
-      [ "contains", "classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4", null ],
-      [ "dimension", "classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c", null ],
-      [ "empty", "classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927", null ],
-      [ "intersectHalfspace", "classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858", null ],
-      [ "intersectHalfspaces", "classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd", null ],
-      [ "linearTransformation", "classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55", null ],
-      [ "minkowskiSum", "classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460", null ],
-      [ "project", "classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388", null ],
-      [ "reduceRepresentation", "classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a", null ],
-      [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12", null ],
-      [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acdbbcb6aff4f47be2bc8ce67f0c8fc60", null ],
-      [ "unite", "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01", null ],
-      [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ],
-      [ "operator<<", "classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69", null ]
+    [ "GeometricObjectBase", "classhypro_1_1GeometricObjectBase.html", [
+      [ "GeometricObjectBase", "classhypro_1_1GeometricObjectBase.html#ac67b889a214bd4cab8e6611f47fecabe", null ],
+      [ "GeometricObjectBase", "classhypro_1_1GeometricObjectBase.html#a01af9bd9173f528f3f7eabb1c468051f", null ],
+      [ "GeometricObjectBase", "classhypro_1_1GeometricObjectBase.html#aac521d99d8d3be2432270e12ac52aef2", null ],
+      [ "GeometricObjectBase", "classhypro_1_1GeometricObjectBase.html#a47d63aefb8bc4c23935df15825503b14", null ],
+      [ "getEmptyState", "classhypro_1_1GeometricObjectBase.html#ad7f2b92f3b89ccb3f8656ce1803a794d", null ],
+      [ "operator=", "classhypro_1_1GeometricObjectBase.html#afcbe8ee53618db9c7a12aae311906ba9", null ],
+      [ "operator=", "classhypro_1_1GeometricObjectBase.html#a87fae4d876cb9b76e6703516aeb1c63c", null ],
+      [ "setEmptyState", "classhypro_1_1GeometricObjectBase.html#a2e45be4e37ace5712ba7ac68b9b834ae", null ],
+      [ "mEmptyState", "classhypro_1_1GeometricObjectBase.html#ab7260a3610813379eac240a4ef29a3d6", null ]
     ] ],
     [ "CarlPolytopeT", "classhypro_1_1CarlPolytopeT.html", [
       [ "NumberType", "classhypro_1_1CarlPolytopeT.html#a0fe991b2aafb7012ee4f53f3bbd34bcf", null ],
@@ -291,13 +284,13 @@ var group__geoState =
       [ "operator<<", "classhypro_1_1CarlPolytopeT.html#abccbf7b4b2c0e0bbd712f2bf55af8605", null ],
       [ "operator==", "classhypro_1_1CarlPolytopeT.html#a1fbe7905d848db534030560bf748009f", null ],
       [ "mDimension", "classhypro_1_1CarlPolytopeT.html#a4933990a6875ac5ba2bd7d1d03912b0f", null ],
-      [ "mEmpty", "classhypro_1_1CarlPolytopeT.html#ad5dedf7bb88ba35ca3531057fb86ba16", null ],
       [ "mFormula", "classhypro_1_1CarlPolytopeT.html#ad5d73e6564c4079a17f51a4a0e1cdb35", null ],
       [ "mHalfspaces", "classhypro_1_1CarlPolytopeT.html#a9c8084e92f919fe8642a7e3f287da5ed", null ],
       [ "mSpaceDimensionSet", "classhypro_1_1CarlPolytopeT.html#a673e36fbb29300960cc9baac59643264", null ]
     ] ],
     [ "HPolytopeT", "classhypro_1_1HPolytopeT.html", [
       [ "HalfspaceVector", "classhypro_1_1HPolytopeT.html#aa86730f4acc4f6b85e3e63ac3d454e24", null ],
+      [ "NumberType", "classhypro_1_1HPolytopeT.html#acb9f01daa2033783732a412e19d0b9d6", null ],
       [ "Settings", "classhypro_1_1HPolytopeT.html#aa507246cde1836acb6f7883be3e348f1", null ],
       [ "REDUCTION_STRATEGY", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563", [
         [ "DROP", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563acd0a97c335fd44855bc584636c988718", null ],
@@ -384,13 +377,13 @@ var group__geoState =
       [ "operator<<", "classhypro_1_1HPolytopeT.html#ad547ffca050ca1fd6b89616f0a330f34", null ],
       [ "swap", "classhypro_1_1HPolytopeT.html#a3adec517fdc2b170eacbc9829220b1f8", null ],
       [ "mDimension", "classhypro_1_1HPolytopeT.html#a9a3d8d0e5274f3debec9690af52decca", null ],
-      [ "mEmpty", "classhypro_1_1HPolytopeT.html#a044bdf52a099492bcd83e1e561af976a", null ],
       [ "mHPlanes", "classhypro_1_1HPolytopeT.html#a477fb9351c72c3eb218d8554d56c4749", null ],
       [ "mNonRedundant", "classhypro_1_1HPolytopeT.html#a4e54bfb3fd40ac95a55acab298757f86", null ],
       [ "mOptimizer", "classhypro_1_1HPolytopeT.html#ad596db309f0787b30a25ca255bcf56fb", null ],
       [ "mUpdated", "classhypro_1_1HPolytopeT.html#a5fba847d46313cfae933a91ea6d280d6", null ]
     ] ],
     [ "VPolytopeT", "classhypro_1_1VPolytopeT.html", [
+      [ "NumberType", "classhypro_1_1VPolytopeT.html#a978d562dd6e33834924025ab22b39ad3", null ],
       [ "pointVector", "classhypro_1_1VPolytopeT.html#af7eaddfaa395b22218720b263ae27611", null ],
       [ "Settings", "classhypro_1_1VPolytopeT.html#a494fc319c9d42111438241757e202ae2", null ],
       [ "VPolytopeT", "classhypro_1_1VPolytopeT.html#aed898680aeba332b98a85eadd20037a6", null ],
@@ -455,6 +448,7 @@ var group__geoState =
       [ "mVertices", "classhypro_1_1VPolytopeT.html#a6dbcc86c27f36de1a86921aaaf8b481f", null ]
     ] ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html", [
+      [ "NumberType", "classhypro_1_1SupportFunctionT.html#adb81a02884c72738fbf93387b08e02f5", null ],
       [ "Settings", "classhypro_1_1SupportFunctionT.html#a928284903ac0ddeab9926c1b93db62e4", null ],
       [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a6df5eac8b3e9f016c98c039ebe610839", null ],
       [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a4ca1429f3cb53bd13c3585b221deab69", null ],
@@ -526,6 +520,7 @@ var group__geoState =
       [ "mVector", "classhypro_1_1SupportFunctionT.html#a58d0b20d8e449c3ff53377f13c71cd1d", null ]
     ] ],
     [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html", [
+      [ "NumberType", "classhypro_1_1SupportFunctionNewT.html#a88c07465b7f10714f233a791284a58d1", null ],
       [ "Settings", "classhypro_1_1SupportFunctionNewT.html#ac3241955161891138f18dcde17a09d09", null ],
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#af09e36411f3881de557370a5a72c4535", null ],
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a95b2743338eae0f25cd34b57c525c5d9", null ],
@@ -533,7 +528,7 @@ var group__geoState =
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a982e6911ad65aeee610d25c7a652c873", null ],
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a4b7e66fa15b019c94d7b038bb621ca1b", null ],
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#ae909dd7628a082de8803dd5914614121", null ],
-      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#ada63aa39bf2c368667d40a22cb2c2b7f", null ],
+      [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#aadb24c33bce6ffd39d1b95dc95d9713c", null ],
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a78d1330ba3a55e5896e02ed1b37352c1", null ],
       [ "SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a94d9b2d35c6426fbdd1fe714a0c4c56f", null ],
       [ "~SupportFunctionNewT", "classhypro_1_1SupportFunctionNewT.html#a408d0430af3d4ceef395c8fc0c67e53f", null ],
@@ -593,13 +588,13 @@ var group__geoState =
       [ "SumOp< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html#a625328e9abaf74c95c44004aed723d3f", null ],
       [ "TrafoOp< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html#ab461d7c2b33a4211ec5332abc92624c2", null ],
       [ "UnionOp< Number, Converter, Setting >", "classhypro_1_1SupportFunctionNewT.html#a7a9bdc6141999a4cdfd141136d760f33", null ],
-      [ "mEmpty", "classhypro_1_1SupportFunctionNewT.html#ad8895c7ec363714c04364e1c2191c31d", null ],
       [ "mMatrix", "classhypro_1_1SupportFunctionNewT.html#a2f7deee5bb8bb18b4a06bc22e6bfaf6c", null ],
       [ "mRoot", "classhypro_1_1SupportFunctionNewT.html#af1b5ddff8396788e3a3588e25278fc2d", null ],
       [ "mTemplateSet", "classhypro_1_1SupportFunctionNewT.html#a099225fda85e860b8a82d12987ebb115", null ],
       [ "mVector", "classhypro_1_1SupportFunctionNewT.html#a2fdbe1f1e026b1b71a78c3e614fb0e03", null ]
     ] ],
     [ "ZonotopeT", "classhypro_1_1ZonotopeT.html", [
+      [ "NumberType", "classhypro_1_1ZonotopeT.html#ae19229bf277530b5d5e6f70d74559bba", null ],
       [ "Settings", "classhypro_1_1ZonotopeT.html#af9155d15961fae5e76c53b92d944d3e6", null ],
       [ "ZonotopeT", "classhypro_1_1ZonotopeT.html#a1a2ee2c092b4d450823b6c9cee2d3d03", null ],
       [ "ZonotopeT", "classhypro_1_1ZonotopeT.html#aa46d97439cd78827946127ab7fda247a", null ],

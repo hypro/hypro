@@ -138,7 +138,11 @@ Namespaces</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehypro_1_1hpolytope"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hpolytope.html">hpolytope</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacehypro_1_1parser"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html">parser</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehypro_1_1plotting"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1plotting.html">plotting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacehypro_1_1qe"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1qe.html">qe</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacehypro_1_1reachability"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html">reachability</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -320,8 +324,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericVerticesVisitor.html">genericVerticesVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Purely virtual class defining a common interface for geometric objects.  <a href="classhypro_1_1GeometricObject.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObjectBase.html">GeometricObjectBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Purely virtual class defining a common interface for geometric objects. @{.  <a href="classhypro_1_1GeometricObjectBase.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -961,6 +965,13 @@ Enumerations</h2></td></tr>
  }<tr class="memdesc:aadba9c45e18a68d4ad85d2032811081d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum implementing a tribool.  <a href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">More...</a><br /></td></tr>
 </td></tr>
 <tr class="separator:aadba9c45e18a68d4ad85d2032811081d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9468253f740d3ba4388c00408ddb841"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a> { <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3">SETSTATE::UNKNOWN</a>, 
+<a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a8409775fd1592ee7eb20b33dba52ad04">SETSTATE::NONEMPTY</a>, 
+<a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841aba2b45bdc11e2a4a6e86aab2ac693cbb">SETSTATE::EMPTY</a>, 
+<a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841aad17c1bd5b196a0923cde6beda1161a3">SETSTATE::UNIVERSAL</a>
+ }<tr class="memdesc:ad9468253f740d3ba4388c00408ddb841"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum to represent set states such as empty and universal.  <a href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:ad9468253f740d3ba4388c00408ddb841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a402d1e5727bcf52f5ee140924452c3cc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cc">SOLUTION</a> { <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca57e8bcd22ac5b56703b233e135f2a7f2">SOLUTION::FEAS</a> = 0, 
 <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca9d0f11bf0a1789410bf9780c8948ebb9">SOLUTION::INFEAS</a>, 
 <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3ccac9b5a0979420dfb983a9aa10933ea169">SOLUTION::INFTY</a>, 
@@ -2341,7 +2352,7 @@ template&lt;typename Number &gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00082">82</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00090">90</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -2403,7 +2414,7 @@ template&lt;typename Number &gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00052">52</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00060">60</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -2465,7 +2476,7 @@ template&lt;typename Number &gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00076">76</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00084">84</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -2525,7 +2536,7 @@ template&lt;typename Number &gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00069">69</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00077">77</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -2723,6 +2734,40 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ad9468253f740d3ba4388c00408ddb841"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">hypro::SETSTATE</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enum to represent set states such as empty and universal. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3"></a>UNKNOWN&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad9468253f740d3ba4388c00408ddb841a8409775fd1592ee7eb20b33dba52ad04"></a>NONEMPTY&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad9468253f740d3ba4388c00408ddb841aba2b45bdc11e2a4a6e86aab2ac693cbb"></a>EMPTY&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ad9468253f740d3ba4388c00408ddb841aad17c1bd5b196a0923cde6beda1161a3"></a>UNIVERSAL&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+<p>Definition at line <a class="el" href="types_8h_source.html#l00043">43</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a862b0cdf77254036feeb8ad6fb6da2b7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2830,7 +2875,7 @@ template&lt;typename Number &gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00043">43</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00051">51</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -2864,7 +2909,7 @@ template&lt;typename Number &gt; </div>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00061">61</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00069">69</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -3713,7 +3758,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="helperMethods_8h_source.html#l00019">19</a> of file <a class="el" href="helperMethods_8h_source.html">helperMethods.h</a>.</p>
 
-<p>Referenced by <a class="el" href="SupportFunctionNew_8h_source.html#l00425">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, <a class="el" href="Polytope_8h_source.html#l00032">CLANG_WARNING_DISABLE()</a>, <a class="el" href="helperMethods_8h_source.html#l00098">computeDirectionMapping()</a>, <a class="el" href="helperMethods_8h_source.html#l00090">contains()</a>, <a class="el" href="SupportFunctionContent_8h_source.html#l00327">hypro::SupportFunctionContent&lt; Number, Setting &gt;::getThis()</a>, <a class="el" href="INCOMPLETE__example__benchmarks_8cpp_source.html#l00005">main()</a>, <a class="el" href="example__differenceBounds_8cpp_source.html#l00440">testContains()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00468">testContainsPoint()</a>.</p>
+<p>Referenced by <a class="el" href="SupportFunctionNew_8h_source.html#l00423">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::assignIntervals()</a>, <a class="el" href="Polytope_8h_source.html#l00032">CLANG_WARNING_DISABLE()</a>, <a class="el" href="helperMethods_8h_source.html#l00098">computeDirectionMapping()</a>, <a class="el" href="helperMethods_8h_source.html#l00090">contains()</a>, <a class="el" href="SupportFunctionContent_8h_source.html#l00327">hypro::SupportFunctionContent&lt; Number, Setting &gt;::getThis()</a>, <a class="el" href="INCOMPLETE__example__benchmarks_8cpp_source.html#l00005">main()</a>, <a class="el" href="example__differenceBounds_8cpp_source.html#l00440">testContains()</a>, and <a class="el" href="example__differenceBounds_8cpp_source.html#l00468">testContainsPoint()</a>.</p>
 
 </div>
 </div>
@@ -4237,9 +4282,9 @@ template&lt;typename From , typename To , typename Converter , typename S &gt; <
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00396">396</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00397">397</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
-<p>References <a class="el" href="VPolytope_8h_source.html#l00283">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vertices()</a>.</p>
+<p>References <a class="el" href="VPolytope_8h_source.html#l00284">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vertices()</a>.</p>
 
 </div>
 </div>
@@ -4259,7 +4304,7 @@ template&lt;typename From , typename To , typename Converter , class Setting &gt
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00444">444</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="HPolytope_8h_source.html#l00449">449</a> of file <a class="el" href="HPolytope_8h_source.html">HPolytope.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1HPolytopeT.html#a792108927c587c5e43c98b456c158d22">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, and <a class="el" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
 
@@ -4298,9 +4343,9 @@ template&lt;typename From , typename To , typename Converter , class Setting &gt
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00596">596</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00607">607</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00208">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00216">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
 
 </div>
 </div>
@@ -5999,9 +6044,9 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00580">580</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00591">591</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00277">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00288">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
 
 </div>
 </div>
@@ -6722,7 +6767,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00313">313</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
+<p>Definition at line <a class="el" href="Zonotope_8h_source.html#l00316">316</a> of file <a class="el" href="Zonotope_8h_source.html">Zonotope.h</a>.</p>
 
 </div>
 </div>
@@ -6798,9 +6843,9 @@ template&lt;typename Number , typename Converter , typename S &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00386">386</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00387">387</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
-<p>References <a class="el" href="VPolytope_8h_source.html#l00099">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vector()</a>.</p>
+<p>References <a class="el" href="VPolytope_8h_source.html#l00100">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vector()</a>.</p>
 
 </div>
 </div>
@@ -7214,7 +7259,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00254">254</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Polytope_8h_source.html#l00032">CLANG_WARNING_DISABLE()</a>, <a class="el" href="RootGrowNode_8h_source.html#l00191">convertSettings()</a>, <a class="el" href="SupportFunctionContent_8h_source.html#l00327">hypro::SupportFunctionContent&lt; Number, Setting &gt;::getThis()</a>, and <a class="el" href="SupportFunctionNew_8h_source.html#l00408">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="Polytope_8h_source.html#l00032">CLANG_WARNING_DISABLE()</a>, <a class="el" href="RootGrowNode_8h_source.html#l00191">convertSettings()</a>, <a class="el" href="SupportFunctionContent_8h_source.html#l00327">hypro::SupportFunctionContent&lt; Number, Setting &gt;::getThis()</a>, and <a class="el" href="SupportFunctionNew_8h_source.html#l00406">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>

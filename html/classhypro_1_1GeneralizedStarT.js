@@ -1,5 +1,7 @@
 var classhypro_1_1GeneralizedStarT =
 [
+    [ "NumberType", "classhypro_1_1GeneralizedStarT.html#abd071f8fb136ca1c17c6157e5a9429d6", null ],
+    [ "Settings", "classhypro_1_1GeneralizedStarT.html#ad127c7f025435e1f70dc4132ec7549e6", null ],
     [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html#a6a74f84ca0363fb23117f37e55a5191f", null ],
     [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html#a896a4a38af49fbe8767eb5ffadb637ac", null ],
     [ "GeneralizedStarT", "classhypro_1_1GeneralizedStarT.html#a4d5c7ce41a43eb869a2ca3d6ae4a9046", null ],

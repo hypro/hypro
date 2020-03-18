@@ -47,7 +47,6 @@ var classhypro_1_1CarlPolytopeT =
     [ "operator<<", "classhypro_1_1CarlPolytopeT.html#abccbf7b4b2c0e0bbd712f2bf55af8605", null ],
     [ "operator==", "classhypro_1_1CarlPolytopeT.html#a1fbe7905d848db534030560bf748009f", null ],
     [ "mDimension", "classhypro_1_1CarlPolytopeT.html#a4933990a6875ac5ba2bd7d1d03912b0f", null ],
-    [ "mEmpty", "classhypro_1_1CarlPolytopeT.html#ad5dedf7bb88ba35ca3531057fb86ba16", null ],
     [ "mFormula", "classhypro_1_1CarlPolytopeT.html#ad5d73e6564c4079a17f51a4a0e1cdb35", null ],
     [ "mHalfspaces", "classhypro_1_1CarlPolytopeT.html#a9c8084e92f919fe8642a7e3f287da5ed", null ],
     [ "mSpaceDimensionSet", "classhypro_1_1CarlPolytopeT.html#a673e36fbb29300960cc9baac59643264", null ]

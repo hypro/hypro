@@ -1,5 +1,6 @@
 var classhypro_1_1SupportFunctionT =
 [
+    [ "NumberType", "classhypro_1_1SupportFunctionT.html#adb81a02884c72738fbf93387b08e02f5", null ],
     [ "Settings", "classhypro_1_1SupportFunctionT.html#a928284903ac0ddeab9926c1b93db62e4", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a6df5eac8b3e9f016c98c039ebe610839", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a4ca1429f3cb53bd13c3585b221deab69", null ],

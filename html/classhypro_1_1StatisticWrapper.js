@@ -1,6 +1,6 @@
 var classhypro_1_1StatisticWrapper =
 [
-    [ "~GeometricObject", "classhypro_1_1StatisticWrapper.html#ad4f5950c248ebb3f23c410cdac78fc60", null ],
+    [ "~GeometricObjectBase", "classhypro_1_1StatisticWrapper.html#af19c908d742b49943cbe255c0e3cfa8a", null ],
     [ "affineTransformation", "classhypro_1_1StatisticWrapper.html#a83534c60329e0480ccd9249f4c5c409f", null ],
     [ "contains", "classhypro_1_1StatisticWrapper.html#ad766d6db3f116ed6769d92103292edce", null ],
     [ "dimension", "classhypro_1_1StatisticWrapper.html#a61020c457d7c541354662b8edcd6a350", null ],
@@ -14,6 +14,6 @@ var classhypro_1_1StatisticWrapper =
     [ "satisfiesHalfspaces", "classhypro_1_1StatisticWrapper.html#ab9782e8b9f355dd20959cb7745f9f0d2", null ],
     [ "unite", "classhypro_1_1StatisticWrapper.html#aeb83ec47a14432cf669007b093259543", null ],
     [ "vertices", "classhypro_1_1StatisticWrapper.html#a820b9a08215f47bcc69d440584d60751", null ],
-    [ "operator<<", "classhypro_1_1StatisticWrapper.html#ab508a9d104127d4a3248a53b1292fb25", null ],
+    [ "operator<<", "classhypro_1_1StatisticWrapper.html#a38ca77b9e88084e52b785ae1bb36fa72", null ],
     [ "mObject", "classhypro_1_1StatisticWrapper.html#adaee6e574beb9750fb3fa21f93e69b8c", null ]
 ];

@@ -24,7 +24,7 @@ var searchData=
   ['_7efan',['~Fan',['../classhypro_1_1Fan.html#a7cc84bd7a23c4a7efa62eddb6adce614',1,'hypro::Fan']]],
   ['_7eflowpipe',['~Flowpipe',['../classhypro_1_1Flowpipe.html#a105418339243efc93e9c7ae1053f3ecd',1,'hypro::Flowpipe::~Flowpipe()'],['../classhypro_1_1Flowpipe.html#a105418339243efc93e9c7ae1053f3ecd',1,'hypro::Flowpipe::~Flowpipe()']]],
   ['_7egeneralizedstart',['~GeneralizedStarT',['../classhypro_1_1GeneralizedStarT.html#ab2c122fc08122650098464a8caeb079c',1,'hypro::GeneralizedStarT']]],
-  ['_7egeometricobject',['~GeometricObject',['../classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0',1,'hypro::GeometricObject::~GeometricObject()'],['../classhypro_1_1StatisticWrapper.html#ad4f5950c248ebb3f23c410cdac78fc60',1,'hypro::StatisticWrapper::~GeometricObject()']]],
+  ['_7egeometricobjectbase',['~GeometricObjectBase',['../classhypro_1_1StatisticWrapper.html#af19c908d742b49943cbe255c0e3cfa8a',1,'hypro::StatisticWrapper']]],
   ['_7eglpk_5fcontext',['~glpk_context',['../structhypro_1_1glpk__context.html#a510166cf79b28ab6e2541778955fcbfe',1,'hypro::glpk_context']]],
   ['_7ehierarchicalintervalvector',['~HierarchicalIntervalVector',['../classhypro_1_1HierarchicalIntervalVector.html#af595d8c5356eb4a3c30caf6c9f6a9304',1,'hypro::HierarchicalIntervalVector']]],
   ['_7ehpolytopet',['~HPolytopeT',['../classhypro_1_1HPolytopeT.html#a7644f352a7f3ebe0e0d9dcf3f2ca35c3',1,'hypro::HPolytopeT']]],
