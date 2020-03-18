@@ -391,8 +391,14 @@ TYPED_TEST( BoxTest, Intersection ) {
 	hypro::Box<TypeParam> empt1 = this->box1.intersect( hypro::Box<TypeParam>::Empty() );
 	EXPECT_TRUE( empt1.empty() );
 
-	hypro::Box<TypeParam> empt2 = this->box1.intersect( hypro::Box<TypeParam>::Empty() );
+	auto empt2 = hypro::Box<TypeParam>::Empty();
 	EXPECT_TRUE( empt2.empty() );
+
+	auto empt3 = hypro::Box<TypeParam>::Empty().intersect( this->box1 );
+	EXPECT_TRUE( empt3.empty() );
+
+	auto empt4 = hypro::Box<TypeParam>::Empty().intersect( hypro::Box<TypeParam>::Empty() );
+	EXPECT_TRUE( empt4.empty() );
 
 	hypro::Box<TypeParam> reduced = this->box1.intersect( hypro::Box<TypeParam>( carl::Interval<TypeParam>( 3, 4 ) ) );
 	std::vector<carl::Interval<TypeParam>> its;

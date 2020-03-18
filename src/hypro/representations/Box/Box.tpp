@@ -558,6 +558,9 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::minkowskiDeco
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersect( const BoxT<Number, Converter, Setting>& rhs ) const {
+	if ( this->empty() || rhs.empty() ) {
+		return Empty();
+	}
 	std::vector<carl::Interval<Number>> newIntervals;
 	std::size_t dim = this->dimension();
 	std::size_t rdim = rhs.dimension();
