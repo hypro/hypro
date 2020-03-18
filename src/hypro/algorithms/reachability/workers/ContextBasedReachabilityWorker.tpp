@@ -59,7 +59,7 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability( const Ta
 		context->execBeforeLoop();
 
 		// while not done
-		//std::cout << "->doneCondition() ()" << std::endl;
+		//std::cout << "context->doneCondition() ()" << std::endl;
 		while ( !context->doneCondition() ) {
 			//START_BENCHMARK_OPERATION(COMPUTE_TIMESTEP);
 			//std::cout << "context->execOnLoopItEnter()" << std::endl;

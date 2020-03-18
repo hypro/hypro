@@ -43,10 +43,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		AntlrParserTest.cpp
 		#AntlrParserCIFTest.cpp
 	)
-	#add_dependencies(runParserTests resources antlr4cpp)
-	#target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR})
-	#target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${GTEST_LIBRARIES})
-	##message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
-	#add_test( NAME parser COMMAND runParserTests )
+	add_dependencies(runParserTests resources antlr4cpp)
+	target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR})
+	target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${GTEST_LIBRARIES})
+	#message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
+	add_test( NAME parser COMMAND runParserTests )
 
 endif()

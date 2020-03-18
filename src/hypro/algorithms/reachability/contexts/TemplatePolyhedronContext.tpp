@@ -73,8 +73,6 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 	vector_t<Number> lastStrengthenedInv = vector_t<Number>::Zero( invTPoly.vector().rows() );
 	//Contains the newest relaxed invariant, called a(j+1) in paper
 	vector_t<Number> nextStrengthenedInv = invTPoly.vector();
-	//Fixed scaling factor mü
-	const Number scalingFactor = 2;
 
 	//1. Compute pi(j) (certificate of feasibility for a(j+1)) by solving Dj
 	//1.1 Construct A as: first transpose inv matrix, then insert lambda >= 0 constraints
@@ -112,7 +110,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			assert( b.rows() == A.rows() );
 			auto deriv = lieDerivative( invTPoly.matrix().row( rowI ) );
 			//std::cout << "TemplatePolyhedronContext::LIS, lie derivative of invTPoly matrix row " << rowI << " is: \n" << deriv.first << "with offset " << deriv.second << std::endl;
-			b.block( 0, 0, invCols, 1 ) = scalingFactor * vector_t<Number>( invTPoly.matrix().row( rowI ) ) + deriv.first;
+			b.block( 0, 0, invCols, 1 ) = mScaling * vector_t<Number>( invTPoly.matrix().row( rowI ) ) + deriv.first;
 			b( invRows + invCols ) = Number( 1 );
 			derivativeOffsets( rowI ) = deriv.second;
 			//std::cout << "TemplatePolyhedronContext::LIS, for rowI: " << rowI << " b is: \n" << b << std::endl;
@@ -128,7 +126,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			//vector_t<Number> evalDir = nextStrengthenedInv;
 			vector_t<Number> evalDir = vector_t<Number>::Zero( invRows + 1 );
 			evalDir.block( 0, 0, invRows, 1 ) = nextStrengthenedInv;
-			evalDir( invRows ) = -scalingFactor * evalDir( rowI ) + deriv.second;
+			evalDir( invRows ) = -mScaling * evalDir( rowI ) + deriv.second;
 			//std::cout << "evaldir: " << evalDir << std::endl;
 			auto minimizeA = mOptimizer.evaluate( evalDir, true );
 			//std::cout << "minimizeA: " << minimizeA << std::endl;
@@ -143,7 +141,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			//std::cout << "TemplatePolyhedronContext::LIS, minimizeA optimumValue is: " << minimizeA.optimumValue.transpose() << std::endl;
 
 			//6.Save into certificate, if condition positive for later construction of L
-			//NOTE: -scalingFactor * evalDir(rowI) + deriv.second is already a part of evalDir
+			//NOTE: -mScaling * evalDir(rowI) + deriv.second is already a part of evalDir
 			//std::cout << "TemplatePolyhedronContext::LIS, minimizeA dot evaldir is: " << minimizeA.supportValue << std::endl;
 			if ( minimizeA.supportValue <= 0 ) {
 			//if ( evalDir.dot( minimizeA.optimumValue ) <= 0 ) {
@@ -159,7 +157,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			if(certificate.row(rowI) == vector_t<Number>::Zero(certificate.cols()).transpose()){
 				assert(nextStrengthenedInv(rowI) == invTPoly.vector()(rowI));
 			} else {
-				assert(nextStrengthenedInv.dot(certificate.row(rowI)) - scalingFactor*nextStrengthenedInv(rowI) + deriv.second <= 0);
+				assert(nextStrengthenedInv.dot(certificate.row(rowI)) - mScaling*nextStrengthenedInv(rowI) + deriv.second <= 0);
 			}
 			#endif 
 		}
@@ -185,7 +183,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 		assert( nextStrengthenedInv.rows() == invRows );
 		for ( unsigned i = 0; i < nextStrengthenedInv.rows(); ++i ) {
 			//if(nextStrengthenedInv(i) >= invTPoly.vector()(i)){
-			//if(nextStrengthenedInv.dot(certificate.row(i)) - scalingFactor*nextStrengthenedInv(i) + derivativeOffsets(i) > 0){
+			//if(nextStrengthenedInv.dot(certificate.row(i)) - mScaling*nextStrengthenedInv(i) + derivativeOffsets(i) > 0){
 			if ( certificate.row( i ) == vector_t<Number>::Zero( invRows ).transpose() ) {
 				//frozen row - normally, insert y_j = inv_j, but since y_j <= inv_j is already in L, insert y_j >= inv_j aka -y_j <= -inv_j
 				//std::cout << "TemplatePolyhedronContext::LIS, frozen row!" << std::endl;
@@ -197,7 +195,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 				//non frozen row
 				//std::cout << "TemplatePolyhedronContext::LIS, non frozen row!" << std::endl;
 				vector_t<Number> rowToInsert = certificate.row( i );
-				rowToInsert( i ) -= scalingFactor;
+				rowToInsert( i ) -= mScaling;
 				L.row( 2 * invRows + i ) = std::move( rowToInsert.transpose() );
 				c( 2 * invRows + i ) = - derivativeOffsets( i );
 			}
@@ -341,7 +339,7 @@ bool TemplatePolyhedronContext<State>::isRelaxedInvariant(const TemplatePolyhedr
 	extendedVector.block( 0, 0, tpoly.vector().rows(), 1 ) = tpoly.vector();
 
 	for ( int i = 0; i < tpoly.matrix().rows(); ++i ) {
-		std::cout << "TemplatePolyhedronContext::isRelaxedInvariant, tpoly.vector(i) = " << tpoly.vector()( i ) << " != " << invVector( i ) << std::endl;
+		//std::cout << "TemplatePolyhedronContext::isRelaxedInvariant, tpoly.vector(i) = " << tpoly.vector()( i ) << " != " << invVector( i ) << std::endl;
 
 		//Avoid test if value is equal to invariant value
 		if ( tpoly.vector()( i ) < invVector( i ) ) {
@@ -352,14 +350,14 @@ bool TemplatePolyhedronContext<State>::isRelaxedInvariant(const TemplatePolyhedr
 			tmp(tpoly.matrix().cols()) = -tpoly.vector()(i);
 			auto deriv = lieDerivativeExtended(tmp);
 
-			extendedMatrix.row( tpoly.matrix().rows() ) = deriv.first + scaling * tpoly.matrix().row(i).transpose();
-			extendedVector( tpoly.vector().rows() ) = -deriv.second + scaling * tpoly.vector()(i);
+			extendedMatrix.row( tpoly.matrix().rows() ) = deriv.first + mScaling * tpoly.matrix().row(i).transpose();
+			extendedVector( tpoly.vector().rows() ) = -deriv.second + mScaling * tpoly.vector()(i);
 
 			//If unfeasible, then not a positive invariant
 			mOptimizer.setMatrix( extendedMatrix );
 			mOptimizer.setVector( extendedVector );
 			mOptimizer.setMaximize( true );
-			std::cout << "TemplatePolyhedronContext::isRelaxedInvariant, extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
+			//std::cout << "TemplatePolyhedronContext::isRelaxedInvariant, extendedMatrix: \n" << extendedMatrix << " extendedVector: \n" << extendedVector << std::endl;
 			if ( !mOptimizer.checkConsistency() ) {
 				return false;
 			}
@@ -419,7 +417,7 @@ void TemplatePolyhedronContext<State>::execBeforeFirstSegment() {
 				//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, is tpoly positive invariant? " << tmp << std::endl;
 				mOverapproxInvariant = invTPoly.vector();
 				if ( isPositiveInvariant( tpoly, invTPoly.vector() ) ) {
-					std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, use locationInvariantStrengthening" << std::endl;
+					//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, use locationInvariantStrengthening" << std::endl;
 					//mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.matrix().rows());
 					mRelaxedInvariant = locationInvariantStrengthening( invTPoly, tpoly.vector() );
 					//this->mComputationState.rGetLocation()->setInvariant(Condition<Number>(invTPoly.matrix(), *mRelaxedInvariant));

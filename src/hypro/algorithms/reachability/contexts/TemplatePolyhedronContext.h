@@ -50,7 +50,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	//Offset vector of invariants after overapproximation by template
 	std::optional<vector_t<Number>> mOverapproxInvariant;
 
-	const Number scaling = 2;
+	const Number mScaling = 2;
 
   public:
 

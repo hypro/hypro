@@ -212,7 +212,6 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> TemplatePolyhedronT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
-		COUNT("Evaluate calls");
 		if(this->empty()) return EvaluationResult<Number>( Number(0), SOLUTION::INFEAS );
 		assert(_direction.rows() == mMatrixPtr->cols());
 		//Quick check: If direction is a part of the template, then just return offset
@@ -226,6 +225,7 @@ namespace hypro {
 				}
 			}
 		}
+		COUNT("Evaluate calls");
 		return mOptimizer.evaluate(_direction, false);
 	}
 
@@ -554,7 +554,8 @@ namespace hypro {
 			auto rhsHPoly = typename Converter::HPolytope(rhs.matrix(), rhs.vector());
 			auto thisHPoly = typename Converter::HPolytope(this->matrix(), this->vector());
 			auto summed = thisHPoly.minkowskiSum(rhsHPoly);
-			auto evalInDirs = summed.multiEvaluate(combineRows(computeTemplate<Number>(dimension(), 8)));
+			//auto evalInDirs = summed.multiEvaluate(combineRows(computeTemplate<Number>(dimension(), 8)));
+			auto evalInDirs = summed.multiEvaluate(*mMatrixPtr);
 			vector_t<Number> newVector = vector_t<Number>::Zero(evalInDirs.size());
 			for(std::size_t i = 0; i < evalInDirs.size(); ++i){
 				if(evalInDirs.at(i).errorCode == SOLUTION::FEAS){

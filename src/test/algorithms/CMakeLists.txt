@@ -12,8 +12,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       FourierMotzkinQETest.cpp
       VertexEnumerationTest.cpp
       UtilityTest.cpp
-      #QuickhullTest.cpp #TODO:comment in again 
-      #QuickIntersectionTest.cpp #TODO:comment in again 
+      QuickhullTest.cpp
+      QuickIntersectionTest.cpp
       TemplatePolyhedronContextTest.cpp
       FirstSegmentHandlersTest.cpp
     )
