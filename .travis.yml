@@ -59,7 +59,7 @@ matrix:
         apt:
           sources: [*sources_base]
           packages: [*packages_base, g++-8, lcov]
-      env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-8 CXX=g++-8
+      env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE CC=gcc-8 CXX=g++-8
     - os: linux
       compiler: g++-9
       addons:
