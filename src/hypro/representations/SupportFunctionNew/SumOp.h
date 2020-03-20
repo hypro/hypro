@@ -41,7 +41,7 @@ class SumOp : public RootGrowNode<Number, Converter, Setting> {
 		lhs.addOperation( this, std::vector<SupportFunctionNewT<Number, Converter, Setting>>{rhs} );
 		// update and set empty-cache
 		if ( lhs.empty() || rhs.empty() ) {
-			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 		}
 	}
 
@@ -55,7 +55,7 @@ class SumOp : public RootGrowNode<Number, Converter, Setting> {
 		lhs.addOperation( this, rhs );
 		// check for rhs is too expensive at the moment -> update usage of cache everywhere, then this is fine.
 		if ( lhs.empty() ) {
-			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 		}
 	}
 

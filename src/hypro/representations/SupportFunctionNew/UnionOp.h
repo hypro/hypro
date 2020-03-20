@@ -44,7 +44,7 @@ class UnionOp : public RootGrowNode<Number, Converter, Setting> {
 		lhs.addOperation( this, std::vector<SupportFunctionNewT<Number, Converter, Setting>>{rhs} );
 		// update and set empty-cache
 		if ( lhs.empty() && rhs.empty() ) {
-			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 		}
 	}
 
