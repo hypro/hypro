@@ -1,10 +1,5 @@
 var NAVTREEINDEX29 =
 {
-"simplex_8h_source.html":[9,0,1,0,3,9,1,2],
-"smtrat_2helper__methods_8h.html":[9,0,1,0,4,1,2,2],
-"smtrat_2helper__methods_8h.html#a9f1cf1a01ef5e61e4a95e7876cce91b8":[9,0,1,0,4,1,2,2,0],
-"smtrat_2helper__methods_8h.html#aa12101a88d20e48792c4c4bc9685e41d":[9,0,1,0,4,1,2,2,1],
-"smtrat_2helper__methods_8h_source.html":[9,0,1,0,4,1,2,2],
 "stateSets.html":[3],
 "statistics_8h.html":[9,0,1,0,4,6,2],
 "statistics_8h_source.html":[9,0,1,0,4,6,2],
@@ -249,5 +244,10 @@ var NAVTREEINDEX29 =
 "structhypro_1_1STflowpipeSegment.html#a0db3bf6e3b4fd96f7f1a78fdb143cfb9":[8,0,1,213,2],
 "structhypro_1_1STflowpipeSegment.html#a8bd972eca4298e8f220d8f7cf365f6e0":[8,0,1,213,1],
 "structhypro_1_1STflowpipeSegment.html#afb905c91d87fb323dabd36e31b98e626":[8,0,1,213,0],
-"structhypro_1_1STindependentFunct.html":[8,0,1,214]
+"structhypro_1_1STindependentFunct.html":[8,0,1,214],
+"structhypro_1_1STindependentFunct.html#a417c83a5c598d25988989b36828d8a84":[8,0,1,214,1],
+"structhypro_1_1STindependentFunct.html#ab6585fd1aef43ba50ff3d25dc43a9d50":[8,0,1,214,0],
+"structhypro_1_1STindependentFunct.html#af2d36438d06319f72d3f0beb6fed60ea":[8,0,1,214,2],
+"structhypro_1_1ScaleData.html":[8,0,1,205],
+"structhypro_1_1ScaleData.html#a27153aa7474df1f8a33417c447cd0e9b":[8,0,1,205,1]
 };

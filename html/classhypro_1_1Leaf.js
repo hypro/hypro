@@ -15,7 +15,6 @@ var classhypro_1_1Leaf =
     [ "getOriginCount", "classhypro_1_1Leaf.html#a899d75be753b9402aba318dfea03190d", null ],
     [ "getRepresentation", "classhypro_1_1Leaf.html#a227235be505f3397d3f1de5faf40b5ab", null ],
     [ "getType", "classhypro_1_1Leaf.html#ac9a8554cde9c36a09444eeedec27f0f6", null ],
-    [ "isEmpty", "classhypro_1_1Leaf.html#a4315b28e4083e946e8d24d92400ce88b", null ],
     [ "isRedundant", "classhypro_1_1Leaf.html#af6f15e280824825d5496ef226f712372", null ],
     [ "print", "classhypro_1_1Leaf.html#a18c32cf60f7fcd1b0596da56ad7d3d07", null ],
     [ "setDimension", "classhypro_1_1Leaf.html#abb81a92227b28422a00dcbb9540429c7", null ],
@@ -23,7 +22,6 @@ var classhypro_1_1Leaf =
     [ "transform", "classhypro_1_1Leaf.html#a4de5dd5cf98e514af7dccdbd72cc4bae", null ],
     [ "isNotRedundant", "classhypro_1_1Leaf.html#a3c567d93bd8165fa9688c416846f86ab", null ],
     [ "mDimension", "classhypro_1_1Leaf.html#a664fcd710ac541e8bb00405845ecd2e6", null ],
-    [ "mEmpty", "classhypro_1_1Leaf.html#afdbef0ad2fbc40a021617e2156fcac5e", null ],
     [ "originCount", "classhypro_1_1Leaf.html#aac5cc2c3668adf40ebabed5dfc0dddc1", null ],
     [ "rep", "classhypro_1_1Leaf.html#aed0b0f40ded9e25c2f7aa2e0f02154da", null ],
     [ "type", "classhypro_1_1Leaf.html#af6cfe9f6970a98972e9d7460ae91967a", null ]

@@ -24,7 +24,6 @@ var classhypro_1_1IntersectHalfspaceOp =
     [ "hspace", "classhypro_1_1IntersectHalfspaceOp.html#afffdd891735ca283b209febf3903280e", null ],
     [ "mChildren", "classhypro_1_1IntersectHalfspaceOp.html#a08acb20f7658b6856d24f7e129445407", null ],
     [ "mDimension", "classhypro_1_1IntersectHalfspaceOp.html#ad4595dacf38fbef1e5102c5d203fb0c0", null ],
-    [ "mEmpty", "classhypro_1_1IntersectHalfspaceOp.html#af737a8f0da5197fc42abed3705beed55", null ],
     [ "originCount", "classhypro_1_1IntersectHalfspaceOp.html#a3a08729284f949f09abf3ebd9a517513", null ],
     [ "type", "classhypro_1_1IntersectHalfspaceOp.html#a2b9b9a88c2858e69a7d4fd8ac5761f2a", null ]
 ];

@@ -151,8 +151,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acf8810280ac279d6e2692a8349ec8fdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4639e1d171c702c6dcd7e65dc7a79503"><td class="memItemLeft" align="right" valign="top">virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#a4639e1d171c702c6dcd7e65dc7a79503">getDimension</a> () const </td></tr>
 <tr class="separator:a4639e1d171c702c6dcd7e65dc7a79503"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec0356a21a6d9043276fc7b3651136f5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#aec0356a21a6d9043276fc7b3651136f5">isEmpty</a> () const </td></tr>
-<tr class="separator:aec0356a21a6d9043276fc7b3651136f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ca8534b34495e5ed4596ccf6b12b080"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#a7ca8534b34495e5ed4596ccf6b12b080">isEmpty</a> () const </td></tr>
+<tr class="separator:a7ca8534b34495e5ed4596ccf6b12b080"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0efd384aa3b2a04325e1f5768b09e48b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structhypro_1_1RGNData.html">RGNData</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#a0efd384aa3b2a04325e1f5768b09e48b">getData</a> () const =0</td></tr>
 <tr class="separator:a0efd384aa3b2a04325e1f5768b09e48b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3fb27582659c544b054522b88f43a2b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structhypro_1_1LeafData.html">LeafData</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#ae3fb27582659c544b054522b88f43a2b">getLeafData</a> () const </td></tr>
@@ -198,8 +198,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a3a70834dc05c99748903411e7e69c6f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7e3df9d9d5e5099997f4c8e860d6a9d"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#ac7e3df9d9d5e5099997f4c8e860d6a9d">mDimension</a> = 0</td></tr>
 <tr class="separator:ac7e3df9d9d5e5099997f4c8e860d6a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61163916769db10746dc376e98cb319f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#a61163916769db10746dc376e98cb319f">mEmpty</a> = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td></tr>
-<tr class="separator:a61163916769db10746dc376e98cb319f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9bda0a2336ca8479a8d2b74def9ad0a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1RootGrowNode.html#ac9bda0a2336ca8479a8d2b74def9ad0a">mEmptyState</a> = <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3">SETSTATE::UNKNOWN</a></td></tr>
+<tr class="separator:ac9bda0a2336ca8479a8d2b74def9ad0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -347,7 +347,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classhypro_1_1TrafoOp.html#a8927d247d6336642cc22b5e05d60dae1">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#a0c7250c876903ba1076e27e1f449986f">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#ae7ece57d2f1b38823085b3f5222d768e">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#aa23689e80044ebd51d61942f3b1c6d0f">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#a5fea428e5dba7811d9bcd02aab802446">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a45e727ee6f63aee84a38cdbda19dc260">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1UnionOp.html#a5d0535f7035a30ceb8f3397e47da3082">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1SumOp.html#afc23b1f90226881cea94b77253f99d15">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1TrafoOp.html#a8927d247d6336642cc22b5e05d60dae1">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#a0c7250c876903ba1076e27e1f449986f">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#ae7ece57d2f1b38823085b3f5222d768e">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#a5fea428e5dba7811d9bcd02aab802446">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#aa23689e80044ebd51d61942f3b1c6d0f">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a45e727ee6f63aee84a38cdbda19dc260">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1UnionOp.html#a5d0535f7035a30ceb8f3397e47da3082">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1SumOp.html#afc23b1f90226881cea94b77253f99d15">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>.</p>
 
 </div>
 </div>
@@ -412,7 +412,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classhypro_1_1TrafoOp.html#ac517bd9ec5220c0e2fbc7a21aba55167">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#a5e3bb24e02c35ab287f322ab54ebdf34">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#a65291158d6a7e130791f3950ee99c6f9">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#a32e22aa06955afdba661e41de43f088c">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#a1950bad55749debc307bc226dfbf3b50">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a1b8df3aad26a3f7e78ae1dcc0751a46b">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1SumOp.html#a8b7c47e0f8ecb97471e5e7d406e71580">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1UnionOp.html#ad1199b384a07255a3412a066d1010374">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1TrafoOp.html#ac517bd9ec5220c0e2fbc7a21aba55167">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#a5e3bb24e02c35ab287f322ab54ebdf34">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#a65291158d6a7e130791f3950ee99c6f9">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#a1950bad55749debc307bc226dfbf3b50">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#a32e22aa06955afdba661e41de43f088c">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a1b8df3aad26a3f7e78ae1dcc0751a46b">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1SumOp.html#a8b7c47e0f8ecb97471e5e7d406e71580">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1UnionOp.html#ad1199b384a07255a3412a066d1010374">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>.</p>
 
 </div>
 </div>
@@ -513,6 +513,8 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 
 <p>Definition at line <a class="el" href="RootGrowNode_8h_source.html#l00157">157</a> of file <a class="el" href="RootGrowNode_8h_source.html">RootGrowNode.h</a>.</p>
 
+<p>Referenced by <a class="el" href="Leaf_8h_source.html#l00131">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;::empty()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a6193b0f955689d63855fd8d10a09b838"></a>
@@ -570,7 +572,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 
 <p>Definition at line <a class="el" href="RootGrowNode_8h_source.html#l00088">88</a> of file <a class="el" href="RootGrowNode_8h_source.html">RootGrowNode.h</a>.</p>
 
-<p>Referenced by <a class="el" href="IntersectOp_8h_source.html#l00149">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
+<p>Referenced by <a class="el" href="IntersectOp_8h_source.html#l00147">hypro::IntersectOp&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
 
 </div>
 </div>
@@ -753,7 +755,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aec0356a21a6d9043276fc7b3651136f5"></a>
+<a class="anchor" id="a7ca8534b34495e5ed4596ccf6b12b080"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -763,7 +765,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a> <a class="el" href="classhypro_1_1RootGrowNode.html">hypro::RootGrowNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::isEmpty </td>
+          <td class="memname">virtual <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a> <a class="el" href="classhypro_1_1RootGrowNode.html">hypro::RootGrowNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::isEmpty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -775,8 +777,6 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classhypro_1_1Leaf.html#a4315b28e4083e946e8d24d92400ce88b">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, and <a class="el" href="classhypro_1_1IntersectOp.html#a5eb9be3013dc4fa1c6c5ecd6d81df5b5">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="RootGrowNode_8h_source.html#l00091">91</a> of file <a class="el" href="RootGrowNode_8h_source.html">RootGrowNode.h</a>.</p>
 
@@ -895,7 +895,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="classhypro_1_1TrafoOp.html#a95a24713d85d9f79b33cd7212661621f">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#abb81a92227b28422a00dcbb9540429c7">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#a01e2f6eb17780cbf83d4c8362abcfd5f">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#ad4b3a9bdf1424231cc57071004c9fd3a">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a57d9f8250854ef8b9d04e03e42a54944">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#ab14629987bf438e0729d80662f3bceb1">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1SumOp.html#a5cd63dbacd81d031b9918df96d490f12">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1UnionOp.html#aa2999ce4486ad37f8f919e836178c049">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="classhypro_1_1TrafoOp.html#a95a24713d85d9f79b33cd7212661621f">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#abb81a92227b28422a00dcbb9540429c7">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#ad4b3a9bdf1424231cc57071004c9fd3a">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#a01e2f6eb17780cbf83d4c8362abcfd5f">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a57d9f8250854ef8b9d04e03e42a54944">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#ab14629987bf438e0729d80662f3bceb1">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1SumOp.html#a5cd63dbacd81d031b9918df96d490f12">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1UnionOp.html#aa2999ce4486ad37f8f919e836178c049">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="RootGrowNode_8h_source.html#l00102">102</a> of file <a class="el" href="RootGrowNode_8h_source.html">RootGrowNode.h</a>.</p>
 
@@ -984,7 +984,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classhypro_1_1TrafoOp.html#a4b8c1c7c9eb0461f760bb0fc61928879">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#a4de5dd5cf98e514af7dccdbd72cc4bae">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#a9570dfdbd681af77edc1f549421effba">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#afbe995b5e431c2639b433bc5ff6e19ad">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a903f5ac1aac50cc736a624d8decf9c11">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#a215eef8c32875154610507241950ce57">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1SumOp.html#a7916bee01d5c470ae72ce9d4f36ff883">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1UnionOp.html#aa64dcb55fd70e5788789ce048564c9ca">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1TrafoOp.html#a4b8c1c7c9eb0461f760bb0fc61928879">hypro::TrafoOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1Leaf.html#a4de5dd5cf98e514af7dccdbd72cc4bae">hypro::Leaf&lt; Number, Converter, Setting, Representation &gt;</a>, <a class="el" href="classhypro_1_1IntersectHalfspaceOp.html#afbe995b5e431c2639b433bc5ff6e19ad">hypro::IntersectHalfspaceOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1IntersectOp.html#a9570dfdbd681af77edc1f549421effba">hypro::IntersectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ScaleOp.html#a903f5ac1aac50cc736a624d8decf9c11">hypro::ScaleOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1ProjectOp.html#a215eef8c32875154610507241950ce57">hypro::ProjectOp&lt; Number, Converter, Setting &gt;</a>, <a class="el" href="classhypro_1_1SumOp.html#a7916bee01d5c470ae72ce9d4f36ff883">hypro::SumOp&lt; Number, Converter, Setting &gt;</a>, and <a class="el" href="classhypro_1_1UnionOp.html#aa64dcb55fd70e5788789ce048564c9ca">hypro::UnionOp&lt; Number, Converter, Setting &gt;</a>.</p>
 
 </div>
 </div>
@@ -1076,7 +1076,7 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a61163916769db10746dc376e98cb319f"></a>
+<a class="anchor" id="ac9bda0a2336ca8479a8d2b74def9ad0a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1086,12 +1086,12 @@ template&lt;typename Number, typename Converter, typename Setting&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a> <a class="el" href="classhypro_1_1RootGrowNode.html">hypro::RootGrowNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mEmpty = <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169">TRIBOOL::NSET</a></td>
+          <td class="memname"><a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">SETSTATE</a> <a class="el" href="classhypro_1_1RootGrowNode.html">hypro::RootGrowNode</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::mEmptyState = <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3">SETSTATE::UNKNOWN</a></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

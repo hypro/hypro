@@ -1,10 +1,5 @@
 var NAVTREEINDEX30 =
 {
-"structhypro_1_1STindependentFunct.html#a417c83a5c598d25988989b36828d8a84":[8,0,1,214,1],
-"structhypro_1_1STindependentFunct.html#ab6585fd1aef43ba50ff3d25dc43a9d50":[8,0,1,214,0],
-"structhypro_1_1STindependentFunct.html#af2d36438d06319f72d3f0beb6fed60ea":[8,0,1,214,2],
-"structhypro_1_1ScaleData.html":[8,0,1,205],
-"structhypro_1_1ScaleData.html#a27153aa7474df1f8a33417c447cd0e9b":[8,0,1,205,1],
 "structhypro_1_1ScaleData.html#ab5be97a44307bd48ebe379400b3bc6e1":[8,0,1,205,0],
 "structhypro_1_1SupportFunctionNewDefault.html":[8,0,1,218],
 "structhypro_1_1SupportFunctionNewLeGuernic.html":[8,0,1,219],
@@ -249,5 +244,10 @@ var NAVTREEINDEX30 =
 "structhypro_1_1unionContent.html#ad48b5fae7a700e5547378efd7d6953b0":[8,0,1,252,1],
 "structhypro_1_1unionContent.html#af183ecb5d7d08eb79c69a6aee3340460":[8,0,1,252,3],
 "structhypro_1_1unionContent.html#af5d954e81797d117cc275b0973150be3":[8,0,1,252,2],
-"structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html":[8,0,3,1]
+"structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html":[8,0,3,1],
+"structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html#a0d46fdadc294acafd0f9117b0d02264a":[8,0,3,1,0],
+"structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html":[8,0,3,2],
+"structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html#aaf6c63de47b22a17271744011600ad81":[8,0,3,2,0],
+"structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html":[8,0,3,3],
+"structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html#a714c0f5d7c5072b37a1c02ce13c7753d":[8,0,3,3,0]
 };

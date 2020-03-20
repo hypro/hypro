@@ -14,13 +14,11 @@ var classhypro_1_1IntersectOp =
     [ "getOriginCount", "classhypro_1_1IntersectOp.html#a213d93f35fd36e0f0eb1256aa91c2825", null ],
     [ "getType", "classhypro_1_1IntersectOp.html#ad56e1ef4d2b3df4658da6c5efc779c6b", null ],
     [ "intersectDims", "classhypro_1_1IntersectOp.html#a29ec3c8e83b11fb26e5cc8b1c46d4e09", null ],
-    [ "isEmpty", "classhypro_1_1IntersectOp.html#a5eb9be3013dc4fa1c6c5ecd6d81df5b5", null ],
     [ "setDimension", "classhypro_1_1IntersectOp.html#a01e2f6eb17780cbf83d4c8362abcfd5f", null ],
     [ "supremumPoint", "classhypro_1_1IntersectOp.html#aa3b3141c596b9540a497e4f69fa9a594", null ],
     [ "transform", "classhypro_1_1IntersectOp.html#a9570dfdbd681af77edc1f549421effba", null ],
     [ "mChildren", "classhypro_1_1IntersectOp.html#a453259991dee1b0589356ba16fdfc598", null ],
     [ "mDimension", "classhypro_1_1IntersectOp.html#ad576ca35857eb272620d68bab77ddebf", null ],
-    [ "mEmpty", "classhypro_1_1IntersectOp.html#a9e9b7352ecc405de1b4585db0aca2ba3", null ],
     [ "originCount", "classhypro_1_1IntersectOp.html#a0c9d33616497dcf90fa026139dcb0308", null ],
     [ "type", "classhypro_1_1IntersectOp.html#a77a8ca68466312d2085824fcc8fb4fbc", null ]
 ];

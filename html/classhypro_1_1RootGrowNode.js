@@ -18,7 +18,7 @@ var classhypro_1_1RootGrowNode =
     [ "getOriginCount", "classhypro_1_1RootGrowNode.html#aa1d57c35ca94b75dab2a918d84de6f8b", null ],
     [ "getType", "classhypro_1_1RootGrowNode.html#ae9218fc6a258fca4b9f14e1eac4f7706", null ],
     [ "intersectDims", "classhypro_1_1RootGrowNode.html#a37d783bf13bddcbfc8adeaa4a62f515f", null ],
-    [ "isEmpty", "classhypro_1_1RootGrowNode.html#aec0356a21a6d9043276fc7b3651136f5", null ],
+    [ "isEmpty", "classhypro_1_1RootGrowNode.html#a7ca8534b34495e5ed4596ccf6b12b080", null ],
     [ "print", "classhypro_1_1RootGrowNode.html#ad0f42061e500309a020cc4fd834c37ff", null ],
     [ "reverseOp", "classhypro_1_1RootGrowNode.html#aae3cea666daf995e5bf22e78d04ec018", null ],
     [ "rGetChildren", "classhypro_1_1RootGrowNode.html#acf8810280ac279d6e2692a8349ec8fdb", null ],
@@ -29,7 +29,7 @@ var classhypro_1_1RootGrowNode =
     [ "operator<<", "classhypro_1_1RootGrowNode.html#af5577122675628c9adbb8f4dce4cd490", null ],
     [ "mChildren", "classhypro_1_1RootGrowNode.html#a3a70834dc05c99748903411e7e69c6f0", null ],
     [ "mDimension", "classhypro_1_1RootGrowNode.html#ac7e3df9d9d5e5099997f4c8e860d6a9d", null ],
-    [ "mEmpty", "classhypro_1_1RootGrowNode.html#a61163916769db10746dc376e98cb319f", null ],
+    [ "mEmptyState", "classhypro_1_1RootGrowNode.html#ac9bda0a2336ca8479a8d2b74def9ad0a", null ],
     [ "mType", "classhypro_1_1RootGrowNode.html#ac3f1dd792a64c26195e0e34413037be3", null ],
     [ "originCount", "classhypro_1_1RootGrowNode.html#a2babe0025831127d2fe4d4392ac0eb07", null ]
 ];

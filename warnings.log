@@ -1,4 +1,3 @@
-warning: source carl_resources-NOTFOUND is not a readable file or directory... skipping.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:2: warning: the name `Facet.h' supplied as the second argument in the \file statement matches the following input files:
    /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h
    /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h
