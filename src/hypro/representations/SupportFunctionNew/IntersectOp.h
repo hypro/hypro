@@ -31,7 +31,6 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 	unsigned originCount = 2;
 	std::size_t mDimension = 0;
 	std::vector<std::shared_ptr<RootGrowNode<Number, Converter, Setting>>> mChildren;
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	////// Special members of this class
 
@@ -47,7 +46,7 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 		lhs.addOperation( this, std::vector<SupportFunctionNewT<Number, Converter, Setting>>{rhs} );
 		// update and set empty-cache
 		if ( lhs.empty() || rhs.empty() ) {
-			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 		}
 	}
 
@@ -62,7 +61,7 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 		lhs.addOperation( this, rhs );
 		// check for rhs is too expensive at the moment -> update usage of cache everywhere, then this is fine.
 		if ( lhs.empty() ) {
-			RootGrowNode<Number, Converter, Setting>::mEmpty = TRIBOOL::TRUE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 		}
 	}
 
@@ -77,7 +76,6 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 	unsigned getOriginCount() const override { return originCount; }
 	std::size_t getDimension() const override { return mDimension; }
 	RGNData* getData() const override { return new RGNData(); }
-	TRIBOOL isEmpty() const override { return mEmpty; }
 	void setDimension( const std::size_t d ) override { mDimension = d; }
 
 	////// RootGrowNode Interface
@@ -150,12 +148,12 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 		//Current implementation uses Solution 1: template evaluation.
 
 		//Quick check: If emptiness already computed, just return computation result
-		if ( mEmpty != TRIBOOL::NSET ) return ( mEmpty == TRIBOOL::TRUE );
+		if ( RootGrowNode<Number, Converter, Setting>::mEmptyState != SETSTATE::UNKNOWN ) return ( RootGrowNode<Number, Converter, Setting>::mEmptyState == SETSTATE::EMPTY );
 
 		//Quick check: If not already computed, check if at least one child is empty
 		for ( const auto& child : childrenEmpty ) {
 			if ( child ) {
-				mEmpty = TRIBOOL::TRUE;
+				RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 				return true;
 			}
 		}
@@ -181,17 +179,17 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 			for ( const auto& child : sfChildren ) {
 				EvaluationResult<Number> childPosEval = child.evaluate( direction, false );
 				if ( childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY ) {
-					mEmpty = TRIBOOL::TRUE;
+					RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 					return true;
 				}
 				EvaluationResult<Number> childNegEval = child.evaluate( -direction, false );
 				if ( -childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY ) {
-					mEmpty = TRIBOOL::TRUE;
+					RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 					return true;
 				}
 			}
 		}
-		mEmpty = TRIBOOL::FALSE;
+		RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::NONEMPTY;
 		return false;
 	}
 
