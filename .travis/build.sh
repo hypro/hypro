@@ -28,8 +28,8 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 	$WRAPPER make hypro -j4 || return 1
 	$WRAPPER make hypro_coverage -j4 || return 1
 	lcov --directory . --capture --no-external --output-file coverage.info # capture coverage info
-	lcov --remove coverage.info 'test/*' '/usr/*' '*/carl/*' '*/parser/*' --output-file coverage.info # filter out system and test code
-	lcov --list coverage.info # debug before upload
+	lcov --remove hypro_coverage.info 'test/*' '/usr/*' '*/carl/*' '*/parser/*' --output-file hypro_coverage.info # filter out system and test code
+	lcov --list hypro_coverage.info # debug before upload
 
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 

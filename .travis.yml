@@ -1,10 +1,10 @@
 dist: xenial
 env:
   global:
-    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
     - GH_REPO_NAME: hypro
     - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
     - GH_REPO_REF: github.com/hypro/hypro.git
+    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
 
 language: cpp
 branches:
@@ -70,7 +70,7 @@ jobs:
           sources: [*sources_base, llvm-toolchain-xenial-5.0]
           packages:
             [*packages_base, clang-5.0 lcov libstdc++-8-dev libc++abi-dev]
-      env: COMPILER=clang++-5.0 FLAGS=-DHYPRO_COVERAGE=ON
+      env: COMPILER=clang++-5.0
     - os: linux
       compiler: clang++-6.0
       addons:

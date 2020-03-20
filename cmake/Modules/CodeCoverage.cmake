@@ -117,7 +117,8 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif() # NOT CMAKE_BUILD_TYPE STREQUAL "Debug"
 
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    link_libraries(gcov)
+load_library(${PROJECT_NAME} gcov 0)
+#link_libraries(gcov)
 else()
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
 endif()
