@@ -2,9 +2,9 @@ dist: xenial
 env:
   global:
    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
-
-before_install:
-  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+   - GH_REPO_NAME: hypro
+   - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
+   - GH_REPO_REF: github.com/hypro/hypro.git
 
 language: cpp
 branches:
@@ -12,12 +12,6 @@ branches:
   - master
   - alpha
 
-# Environment variables
-env:
-  global:
-    - GH_REPO_NAME: hypro
-    - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
-    - GH_REPO_REF: github.com/hypro/hypro.git
 
 notifications:
   email:
@@ -43,7 +37,7 @@ addons:
       - uuid-dev
       - openjdk-9-jre
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - os: linux
