@@ -179,17 +179,8 @@ script:
   - cd ${TRAVIS_BUILD_DIR}
   - .travis/build.sh
 
-# add stage for the analysis
-stages:
-  - name: "analyze"
-    if: env(TASK) = "sonarcloud"
-    script: sonar-scanner
-
 # Generate and deploy documentation
 after_success:
   - cd ${TRAVIS_BUILD_DIR}
   - chmod +x .travis/buildDoc.sh
   - ./.travis/buildDoc.sh
-  # coveralls
-  - chmod +x processCoverage.sh
-  - ./processCoverage.sh
