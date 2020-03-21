@@ -13,23 +13,33 @@ elif [[ ${COMPILER} == "clang-5.0" ]]; then
 	defCXX clang-5.0 clang++-5.0
 fi
 
-if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
+if [[ ${TASK} == "sonarcloud" ]]; then
   cd ${TRAVIS_BUILD_DIR}
-  wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
-  tar xf lcov_1.11.orig.tar.gz
-  sudo make -C lcov-1.11/ install
-  gem install coveralls-lcov
-  cd ${TRAVIS_BUILD_DIR}
-  lcov --directory . --zerocounters
+  #wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.1.0.1829-linux.zip
+  #unzip sonar-scanner-cli-4.1.0.1829-linux.zip
+  #export PATH="${TRAVIS_BUILD_DIR}/sonar-scanner-cli-4.1.0.1829-linux/bin/:$PATH"
+  wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+  unzip build-wrapper-linux-x86.zip
+  export PATH="${TRAVIS_BUILD_DIR}/build-wrapper-linux-x86/:$PATH"
 fi
 
-mkdir -p ~/usr
-PREFIX=`cd ~/usr; pwd`
+#if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
+#  cd ${TRAVIS_BUILD_DIR}
+#  wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
+#  tar xf lcov_1.11.orig.tar.gz
+#  sudo make -C lcov-1.11/ install
+#  gem install coveralls-lcov
+#  cd ${TRAVIS_BUILD_DIR}
+#  lcov --directory . --zerocounters
+#fi
 
-if [ ! -f $PREFIX/bin/cmake ]; then
-	wget -nv https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh
-	chmod +x cmake-3.7.2-Linux-x86_64.sh
-	./cmake-3.7.2-Linux-x86_64.sh --prefix=$PREFIX --exclude-subdir --skip-license
-fi
+#mkdir -p ~/usr
+#PREFIX=`cd ~/usr; pwd`
 
-export PATH="$PREFIX/bin:$PATH"
+#if [ ! -f $PREFIX/bin/cmake ]; then#
+#	wget -nv https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh
+#	chmod +x cmake-3.7.2-Linux-x86_64.sh
+#	./cmake-3.7.2-Linux-x86_64.sh --prefix=$PREFIX --exclude-subdir --skip-license
+#fi
+
+#export PATH="$PREFIX/bin:$PATH"

@@ -16,7 +16,7 @@ sonar.c.file.suffixes=.c
 # Encoding of the source code. Default is default system encoding
 #sonar.sourceEncoding=UTF-8"
 
-sonar.cfamily.build-wrapper-output=bw-out
+sonar.cfamily.build-wrapper-output=bw-outputs
 sonar.cfamily.gcov.reportsPath=hypro_coverage.info
 #sonar.cfamily.llvm-cov.reportPath=hypro_coverage.info
 

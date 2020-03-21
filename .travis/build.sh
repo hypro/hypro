@@ -13,7 +13,7 @@ function keep_waiting() {
 git clone --branch 19.01 --depth 1 https://github.com/smtrat/carl.git
 #git clone --depth 1 https://github.com/smtrat/carl.git
 pushd carl
-	mkdir build
+	mkdir -p build
 	pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
 		keep_waiting &
 		make resources || return 1
@@ -24,12 +24,12 @@ popd
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON -DCMAKE_CXX_COMPILER=$COMPILER || return 1
-	WRAPPER="build-wrapper-linux-x86-64 --out-dir ../bw-out"
+	WRAPPER="build-wrapper-linux-x86-64 --out-dir bw-outputs"
 	$WRAPPER make hypro -j4 || return 1
-	$WRAPPER make hypro_coverage -j4 || return 1
-	lcov --directory . --capture --no-external --output-file coverage.info # capture coverage info
-	lcov --remove hypro_coverage.info 'test/*' '/usr/*' '*/carl/*' '*/parser/*' --output-file hypro_coverage.info # filter out system and test code
-	lcov --list hypro_coverage.info # debug before upload
+	#$WRAPPER make hypro_coverage -j4 || return 1
+	#lcov --directory . --capture --no-external --output-file coverage.info # capture coverage info
+	#lcov --remove hypro_coverage.info 'test/*' '/usr/*' '*/carl/*' '*/parser/*' --output-file hypro_coverage.info # filter out system and test code
+	#lcov --list hypro_coverage.info # debug before upload
 
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 
