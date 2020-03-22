@@ -148,6 +148,10 @@ function(SETUP_TARGET_FOR_COVERAGE)
         message(FATAL_ERROR "genhtml not found! Aborting...")
     endif() # NOT GENHTML_PATH
 
+    message(STATUS "Coverage executable: ${Coverage_EXECUTABLE}")
+    message(STATUS "Coverage Name: ${Coverage_NAME}")
+    message(STATUS "Coverage Dependencies: ${Coverage_DEPENDENCIES}")
+
     # Setup target
     set(Coverage_NAME hypro_coverage)
     add_custom_target(${Coverage_NAME}
@@ -158,7 +162,7 @@ function(SETUP_TARGET_FOR_COVERAGE)
         COMMAND ${LCOV_PATH} -c -i -d . -o ${Coverage_NAME}.base
 
         # Run tests
-        COMMAND ${Coverage_EXECUTABLE}
+        COMMAND ${CMAKE_MAKE_PROGRAM} ${Coverage_EXECUTABLE}
 
         # Capturing lcov counters and generating report
         COMMAND ${LCOV_PATH} --directory . --capture --output-file ${Coverage_NAME}.info

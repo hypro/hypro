@@ -38,4 +38,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_test( NAME algorithms COMMAND runAlgorithmTests )
 
+    add_dependencies(allTests runAlgorithmTests)
+
 endif()
