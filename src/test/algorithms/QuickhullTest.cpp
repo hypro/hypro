@@ -24,7 +24,7 @@ protected:
 
 TEST_F(QuickhullTest, RandomVertices) {
     size_t const N = 50;
-    size_t const D = 6;
+    size_t const D = 4;
 
     srand(42);
 
