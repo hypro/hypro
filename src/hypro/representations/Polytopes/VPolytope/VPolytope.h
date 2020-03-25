@@ -14,7 +14,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../Cone.h"
 #include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "VPolytopeSetting.h"
-#include "algorithms/quickhull/number_traits.h"
+#include "util/typetraits.h"
 #include "util.h"
 
 #include <cassert>
