@@ -101,6 +101,7 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const TemplatePolyhedronT<Number,Converter,Setting>& orig ) 
 		: mMatrixPtr(orig.rGetMatrixPtr())
 		, mVector(orig.vector())
+		, mEmpty(orig.getEmptyFlag())
 	{
 		if(orig.rGetMatrixPtr() == nullptr){
 			mOptimizer = Optimizer<Number>();
@@ -117,6 +118,7 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( TemplatePolyhedronT<Number,Converter,Setting>&& orig ) 
 		: mMatrixPtr(std::move(orig.rGetMatrixPtr()))
 		, mVector(std::move(orig.vector()))	
+		, mEmpty(orig.getEmptyFlag())
 	{
 		if(orig.rGetMatrixPtr() == nullptr){
 			mOptimizer = Optimizer<Number>();
@@ -136,6 +138,7 @@ namespace hypro {
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT(const TemplatePolyhedronT<Number,Converter,SettingRhs>& orig)
 		: mMatrixPtr(orig.rGetMatrixPtr())
 		, mVector(orig.vector())
+		, mEmpty(orig.getEmptyFlag())
 	{
 		if(orig.rGetMatrixPtr() == nullptr){
 			mOptimizer = Optimizer<Number>();
@@ -211,7 +214,7 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	EvaluationResult<Number> TemplatePolyhedronT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
+	EvaluationResult<Number> TemplatePolyhedronT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact ) const {
 		if(this->empty()) return EvaluationResult<Number>( Number(0), SOLUTION::INFEAS );
 		assert(_direction.rows() == mMatrixPtr->cols());
 		//Quick check: If direction is a part of the template, then just return offset
@@ -226,7 +229,7 @@ namespace hypro {
 			}
 		}
 		COUNT("Evaluate calls");
-		return mOptimizer.evaluate(_direction, false);
+		return mOptimizer.evaluate(_direction, useExact);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -382,6 +385,10 @@ namespace hypro {
 			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, empty" << std::endl;
 			return std::make_pair(CONTAINMENT::NO, *this); 
 		}
+		if(_mat.rows() == 0){
+			//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, no mat" << std::endl;
+			return std::make_pair(CONTAINMENT::FULL, *this);
+		}
 
 		//Not so quick check:
 		bool fullyInside = true;
@@ -389,9 +396,11 @@ namespace hypro {
 		for(int i = 0; i < _mat.rows(); ++i){
 			auto fullInfullOut = checkFullInsideFullOutside(_mat.row(i), _vec(i));
 			if(!fullInfullOut.first){
+				//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, row " << i << " not full in" << std::endl;
 				fullyInside = false; 
 			} 	
 			if(!fullInfullOut.second){
+				//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, row " << i << " not full out" << std::endl;
 				fullyOutside = false; 
 			} 
 			if(!fullyInside && !fullyOutside){
@@ -410,6 +419,7 @@ namespace hypro {
 		} 	
 			
 		//Even more expensive part
+		//return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(_mat,_vec));
 		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, intersectHalfspaces" << std::endl;
 		auto tmp = this->intersectHalfspaces(_mat,_vec);
 		if(tmp.empty()){
@@ -451,39 +461,6 @@ namespace hypro {
 		//auto tmpTPoly = Converter::toTemplatePolyhedron(tmp);
 		////std::cout << "TPoly::project, tmpTPoly is: " << tmpTPoly << std::endl;
 		//return tmpTPoly;
-
-
-/* THIS WAS WRONG ALL ALONG
-		//All coeffs not in a mentioned dimension will be projected to zero.
-		std::set<std::size_t> dimsAsSet(dimensions.begin(), dimensions.end());
-		std::vector<std::size_t> dimsOrdered;//(dimsAsSet.begin(), dimsAsSet.end());
-		for(const auto& d : dimsAsSet){
-			dimsOrdered.emplace_back(d);
-		}
-		auto it = dimsOrdered.begin();
-		matrix_t<Number> projectedMat = matrix_t<Number>::Zero(mMatrixPtr->rows(), mMatrixPtr->cols());		
-		vector_t<Number> projectedVec = mVector;
-		for(unsigned j = 0; j < mMatrixPtr->cols(); ++j){
-			if(it != dimsOrdered.end() && j == *it){
-				//assert(it != dimsOrdered.end());
-				projectedMat.col(j) = mMatrixPtr->col(j);
-				++it;
-			} else {
-				//Collect all row indices where we would set the coeffs to 0
-				for(int i = 0; i < mMatrixPtr->rows(); ++i){
-					if((*mMatrixPtr)(i,j) != 0){
-						projectedVec(i) = 0;
-					}
-				}
-			}
-		}
-		assert(it == dimsOrdered.end());
-		auto res = TemplatePolyhedronT<Number,Converter,Setting>(projectedMat,projectedVec);
-		//res.removeRedundancy();
-
-		std::cout << "TPoly::project, res is: " << res << std::endl;
-		return res;
-*/
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -499,13 +476,16 @@ namespace hypro {
 		assert(A.cols() == (int)dimension());
 		assert(A.cols() == mMatrixPtr->cols());
 		assert(A.rows() == mMatrixPtr->cols());
+		if(A.isApprox(matrix_t<Number>::Identity(dimension(),dimension()))){
+			return *this;
+		}
 
 		//Evaluate in the transformed directions
 		matrix_t<Number> dirsRotatedInverse = (*mMatrixPtr)*A;
 		//std::cout << "TemplatePolyhedron::linearTransformation, dirsRotatedInverse: \n" << dirsRotatedInverse << std::endl;
 		assert(dirsRotatedInverse.rows() == mMatrixPtr->rows());
 		assert(dirsRotatedInverse.cols() == mMatrixPtr->cols());
-		std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, false);
+		std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
 		//std::cout << "TemplatePolyhedron::linearTransformation, evalInInvRotatedDirs: {";
 		//for(auto& e : evalInInvRotatedDirs){
 		//	//std::cout << e << ", ";
@@ -548,14 +528,19 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting> TemplatePolyhedronT<Number,Converter,Setting>::minkowskiSum( const TemplatePolyhedronT<Number,Converter,Setting>& rhs ) const {
 		
+		//Emptiness check is very costly and usually does not happen during reachability computation
+		if(empty()) return rhs;
+		if(rhs.empty()) return *this;
+		
 		//In case rhs has a different matrix than this, overapproximate the minkowskisum of both via template directions
 		//Costly, but shouldn't happen too often
-		if(!this->matrix().isApprox(rhs.matrix())){
+		assert(mMatrixPtr->cols() == rhs.matrix().cols());
+		if(mMatrixPtr->rows() != rhs.matrix().rows() || !mMatrixPtr->isApprox(rhs.matrix())){
 			auto rhsHPoly = typename Converter::HPolytope(rhs.matrix(), rhs.vector());
 			auto thisHPoly = typename Converter::HPolytope(this->matrix(), this->vector());
 			auto summed = thisHPoly.minkowskiSum(rhsHPoly);
 			//auto evalInDirs = summed.multiEvaluate(combineRows(computeTemplate<Number>(dimension(), 8)));
-			auto evalInDirs = summed.multiEvaluate(*mMatrixPtr);
+			auto evalInDirs = summed.multiEvaluate(*mMatrixPtr, true);
 			vector_t<Number> newVector = vector_t<Number>::Zero(evalInDirs.size());
 			for(std::size_t i = 0; i < evalInDirs.size(); ++i){
 				if(evalInDirs.at(i).errorCode == SOLUTION::FEAS){
@@ -673,9 +658,10 @@ namespace hypro {
 		//std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll: " << foundAll << std::endl; //" _mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 		if(foundAll && alreadyDone.size() > 0){
 			//If all constraints in _mat were found, we can safely return the result
-			auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
+			return TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
+			//auto tmp = TemplatePolyhedronT<Number,Converter,Setting>(mMatrixPtr,resultVec);
 			//std::cout << "TemplatePolyhedron::intersectHalfspaces, foundAll was true! returning: " << tmp << std::endl;
-			return tmp;
+			//return tmp;
 		}
 
 		//Else, make a new TPoly and evaluate into all non found directions and put into resultVec
@@ -693,7 +679,7 @@ namespace hypro {
 		//std::cout << "TemplatePolyhedron::intersectHalfspaces, extendedTPoly after: " << extendedTPoly << std::endl;
 		for(int j = 0; j < mMatrixPtr->rows(); ++j){
 			if(itDone == alreadyDone.end() || j != *itDone){
-				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),false);
+				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),true);
 				if(res.errorCode == SOLUTION::FEAS){
 					resultVec(j) = res.supportValue;
 				} else {
@@ -868,7 +854,7 @@ namespace hypro {
 		assert(isBounded());
 		assert(dirs.cols() == mMatrixPtr->cols());
 		if(dirs.rows() == mMatrixPtr->rows() && mMatrixPtr->isApprox(dirs)) return *this;
-		auto evalRes = multiEvaluate(dirs, false);
+		auto evalRes = multiEvaluate(dirs, true);
 		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
 		for(std::size_t i = 0; i < evalRes.size(); ++i){
 			assert(evalRes[i].errorCode == SOLUTION::FEAS);

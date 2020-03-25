@@ -26,6 +26,7 @@
 #include "../../../datastructures/HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
+#include "../../../util/statistics/statistics.h"
 
 namespace hypro {
 
@@ -48,9 +49,9 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	std::optional<vector_t<Number>> mRelaxedInvariant;
 
 	//Offset vector of invariants after overapproximation by template
-	std::optional<vector_t<Number>> mOverapproxInvariant;
+	//std::optional<vector_t<Number>> mOverapproxedInvariant;
 
-	const Number mScaling = 2;
+	const Number mScaling = 3;
 
   public:
 
@@ -79,7 +80,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
   	void applyContinuousEvolution() override;
 
 	//Set back invariant to overapproximated form, since LIS fits invariants to flowpipe
-	void execBeforeProcessDiscreteBehavior() override;
+	//void execBeforeProcessDiscreteBehavior() override;
 
     //Computes the gradient of a multivariate but linear function linearFct
     vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);

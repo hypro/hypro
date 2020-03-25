@@ -70,7 +70,7 @@ protected:
 
     matrix_t<Number> triangleMat;
     vector_t<Number> triangleVec;
-    TemplatePolyhedron<Number> triangle;
+    TemplatePolyhedron<Number> triangle;	//Triangle with points (0,0),(1,0.5)(2,0)
 };
 
 TYPED_TEST(TemplatePolyhedronTest, Constructor){
@@ -432,6 +432,27 @@ TYPED_TEST(TemplatePolyhedronTest, AffineTransformation){
 
 TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
 
+	#ifndef NDEBUG
+	//Both matrices not defined
+	auto resEmpty = this->empty.minkowskiSum(this->empty);
+	EXPECT_EQ(resEmpty, this->empty);
+
+	//Both matrices empty but defined - return second argument
+	auto resInfeas = this->infeas.minkowskiSum(this->infeas);
+	EXPECT_EQ(resInfeas, this->infeas);
+	EXPECT_TRUE(resInfeas.empty());
+
+	//First argument empty - return second argument
+	auto resFirstEmpty = this->infeas.minkowskiSum(this->upright);
+	EXPECT_EQ(resFirstEmpty, this->upright);
+	EXPECT_FALSE(resFirstEmpty.empty());
+
+	//Second argument empty - return first argument
+	auto resSecondEmpty = this->upright.minkowskiSum(this->infeas);
+	EXPECT_EQ(resSecondEmpty, this->upright);
+	EXPECT_FALSE(resSecondEmpty.empty());
+	#endif
+
 	//When matrices are the same
 	auto res1 = this->middle.minkowskiSum(this->upright);
 	vector_t<TypeParam> controlVec = vector_t<TypeParam>::Zero(4);
@@ -446,7 +467,11 @@ TYPED_TEST(TemplatePolyhedronTest, MinkowskiSum){
 	EXPECT_EQ(res1.rGetMatrixPtr(), this->middle.rGetMatrixPtr());
 
 	//When matrices differ - Happens after projections 
-	//auto res2 = this->middle.minkowskiSum(this->triangle);
+	auto res2 = this->upleft.minkowskiSum(this->triangle);
+	EXPECT_FALSE(res2.empty());
+	EXPECT_EQ(res2.matrix().rows(), 4);
+	auto res2Vertices = res2.vertices();
+	EXPECT_EQ(res1Vertices.size(), std::size_t(4));
 }
 
 TYPED_TEST(TemplatePolyhedronTest, Intersect){

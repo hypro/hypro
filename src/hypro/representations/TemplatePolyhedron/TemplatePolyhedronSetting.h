@@ -16,15 +16,19 @@ namespace hypro {
 	//This is the default setting
 	struct TemplatePolyhedronDefault {
 		//Determines which constraints should be added to the template matrix.
-		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::INIT_INV_GUARD;
+		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::OCTAGON;
 		//Whether the specialized reachability algorithm from Sankaranarayanan 2008 should be used .
-		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = false;
+		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = true;
 		//If the alternative reachability algorithm is used, this determines the order to which a Taylor series approximation is computed.
-		static constexpr unsigned DERIVATIVE_ORDER = 5;
+		static constexpr unsigned DERIVATIVE_ORDER = 6;
+		static_assert(DERIVATIVE_ORDER >= 2, "Template Polyhedron DERIVATIVE_ORDER must be greater equal 2.");
 		//If the alternative reachability algorithm is used, a monotonicity check is conducted before the expensive root enumeration, if this option is false.
 		static constexpr bool DIRECTLY_COMPUTE_ROOTS = false;
+		//If the alternative reachability algorithm is used and roots are not directly computed, then the granularity defines the precision of the monotonicity check
+		static constexpr unsigned int MONOTONICITY_GRANULARITY = 4;
+		static_assert(MONOTONICITY_GRANULARITY >= 1, "Template Polyhedron MONOTONICITY_GRANULARITY must be greater equal 1.");
 		//If the alternative reachability algorithm is used, say whether location invariant strengthening should also be used
-		static constexpr bool USE_LOCATION_INVARIANT_STRENGTHENING = false;
+		static constexpr bool USE_LOCATION_INVARIANT_STRENGTHENING = true;
 	};
 
 	struct TemplatePolyhedronDifferent {

@@ -141,6 +141,8 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	inline matrix_t<Number> matrix() const { return *mMatrixPtr; }
 	
 	std::shared_ptr<const matrix_t<Number>> rGetMatrixPtr() const { return mMatrixPtr; }
+
+	TRIBOOL getEmptyFlag() const { return mEmpty; }
 	
 	Optimizer<Number>& getOptimizer() { return mOptimizer; }
 

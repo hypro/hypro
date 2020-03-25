@@ -287,9 +287,9 @@ TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
 	// Test case: only initial constraints
 	// Result: nothing should change
 	TemplatePolyhedronT<T, C, OnlyInit> testPoly( this->tpoly );
-	std::cout << "CreateTemplateContentTest, testPoly: \n"
-			  << testPoly << "createTContent: \n"
-			  << tpcontext.createTemplateContent( testPoly ) << std::endl;
+	//std::cout << "CreateTemplateContentTest, testPoly: \n"
+	//		  << testPoly << "createTContent: \n"
+	//		  << tpcontext.createTemplateContent( testPoly ) << std::endl;
 	EXPECT_EQ( tpcontext.createTemplateContent( testPoly ), testPoly );
 
 	// Test case: initial constraints and invariants,
@@ -316,8 +316,8 @@ TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
 	controlVec = vector_t<T>::Zero( 5 );
 	controlVec << 0, 2, 0, 0, 0;
 	TemplatePolyhedronT<T, C, InitInvGuard> controlPoly3( controlMat, controlVec );
-	std::cout << "CreateTemplateContentTest, createTContent testPoly3: \n"
-			  << tpcontext.createTemplateContent( testPoly3 ) << std::endl;
+	//std::cout << "CreateTemplateContentTest, createTContent testPoly3: \n"
+	//		  << tpcontext.createTemplateContent( testPoly3 ) << std::endl;
 	EXPECT_EQ( tpcontext.createTemplateContent( testPoly3 ), controlPoly3 );
 
 	// Build HybridAutomaton and add badstates
@@ -346,11 +346,27 @@ TYPED_TEST( TemplatePolyhedronContextTest, CreateTemplateContent ) {
 	controlVec = vector_t<T>::Zero( 5 );
 	controlVec << 0, 2, 0, 0, 0;
 	TemplatePolyhedronT<T, C, InitInvGuardBad> controlPoly4( controlMat, controlVec );
-	std::cout << "CreateTemplateContentTest, createTContent testPoly4: \n"
-			  << tpcontext.createTemplateContent( testPoly4 ) << std::endl;
+	//std::cout << "CreateTemplateContentTest, createTContent testPoly4: \n"
+	//		  << tpcontext.createTemplateContent( testPoly4 ) << std::endl;
 	EXPECT_EQ( tpcontext.createTemplateContent( testPoly4 ), controlPoly4 );
 
 	//TODO: Test case - octagon
+	TemplatePolyhedronT<T, C, Octagon> testPoly5( this->tpoly );
+	controlMat = matrix_t<T>::Zero( 8, 2 );
+	controlMat << 	1, 0, 
+					-1, 0, 
+					0, 1, 
+					0, -1, 
+					1, 1,
+					-1, -1,
+					1, -1,
+					-1, 1;
+	controlVec = vector_t<T>::Zero( 8 );
+	controlVec << 1, 0, 1, 0, 1.5, 0, 1, 0.5;
+	TemplatePolyhedronT<T, C, Octagon> controlPoly5( controlMat, controlVec );
+	std::cout << "CreateTemplateContentTest, createTContent testPoly4: \n"
+			  << tpcontext.createTemplateContent( testPoly5 ) << std::endl;
+	EXPECT_EQ( tpcontext.createTemplateContent( testPoly5 ), controlPoly5 );
 }
 
 TYPED_TEST( TemplatePolyhedronContextTest, LocationInvariantStrengthening ) {

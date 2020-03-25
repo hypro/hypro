@@ -29,7 +29,10 @@ namespace hypro {
 
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
         auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
-        vector_t<Number> newVec  = vector_t<Number>::Zero(tpoly.vector().rows());
+        //If we received an empty tpoly, then return it since we cannot evaluate over the empty set
+        //if(tpoly.empty()){ return; }
+        assert(!tpoly.empty());
+        vector_t<Number> newVec = vector_t<Number>::Zero(tpoly.vector().rows());
 		
 		//For each row:
 		for(int rowI = 0; rowI < tpoly.matrix().rows(); ++rowI){
@@ -70,9 +73,10 @@ namespace hypro {
 
             //Evaluate tpoly in direction g without last coeff (since g is dim+1 dimensional)
             //NOTE: maybe one can avoid this evaluation by maximizing it via the last computed segment and its current bounds.
-            EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), true);
+            EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), std::is_same_v<Number, mpq_class>);
             //std::cout << "TPolyTimeEvolutionHandler::handle, evalG: " << evalG << std::endl;
-            //TODO: How to handle case INFEAS? What should we return?
+            //If solution is infeasible, we already received an empty tpoly in the beginning
+            //if(evalG.errorCode == SOLUTION::INFEAS){ return; }
             assert(evalG.errorCode == SOLUTION::FEAS);
 
             //Evaluate invPoly in direction r without last coeff
@@ -80,6 +84,7 @@ namespace hypro {
             if(this->mState->getLocation()->getInvariant().empty()){
                 evalR = EvaluationResult<Number>(SOLUTION::INFTY);
             } else {
+            //if(!this->mState->getLocation()->getInvariant().empty()){
                 //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
                 if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant){
                    //&& mRelaxedInvariant.rows() == tpoly.matrix().rows() 
@@ -88,14 +93,14 @@ namespace hypro {
                     //Using mRelaxedInvariant will lead to tighter bounds
                     assert(tpoly.matrix().rows() == mRelaxedInvariant->rows());
                     TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mRelaxedInvariant);
-                    evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+                    evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), std::is_same_v<Number, mpq_class>);
                 } else {
                     auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
                     auto invVec = this->mState->getLocation()->getInvariant().getVector();
                     assert(invMat.rows() == invVec.rows());
                     assert((unsigned)invMat.cols() == this->mState->getDimension());
                     TemplatePolyhedron<Number> invTPoly(invMat, invVec);
-                    evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), true);
+                    evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), std::is_same_v<Number, mpq_class>);
                 }   
             }
             

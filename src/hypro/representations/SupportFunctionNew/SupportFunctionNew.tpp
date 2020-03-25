@@ -575,11 +575,17 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 	if ( _mat.rows() == 0 ) {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
+
 	assert( _mat.rows() == _vec.rows() );
 	assert( _mat.cols() == Eigen::Index( dimension() ) );
 	if ( _mat.rows() == 1 && _vec.rows() == 1 ) {
 		return satisfiesHalfspace( Halfspace<Number>( vector_t<Number>( _mat.row( 0 ) ), _vec( 0 ) ) );
 	}
+
+	//auto res = this->intersectHalfspaces( _mat, _vec );
+	//CONTAINMENT empty = res.empty() ? CONTAINMENT::NO : CONTAINMENT::YES;
+	//return std::make_pair( empty, res );
+
 	std::vector<unsigned> limitingPlanes;
 	for ( unsigned rowI = 0; rowI < _mat.rows(); ++rowI ) {
 		DEBUG( "hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
@@ -595,30 +601,33 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 			//std::cout << "SFN::satisfiesHalfspaces, limited" << std::endl;
 			// the actual object will be limited by the new plane
 			limitingPlanes.push_back( rowI );
-			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), false ).supportValue;
+			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), true ).supportValue;
 			//TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
 			//TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
-			if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal >= _vec( rowI ) ) {
-				// exact verification in case the values are close to each other
-				if ( carl::AlmostEqual2sComplement( Number( -invDirVal ), planeEvalRes.supportValue, 16 ) ) {
-					EvaluationResult<Number> secndPosEval = this->evaluate( _mat.row( rowI ), true );
-					if ( secndPosEval.supportValue > _vec( rowI ) ) {
-						EvaluationResult<Number> secndNegEval = this->evaluate( -( _mat.row( rowI ) ), true );
-						if ( secndNegEval.supportValue < -( _vec( rowI ) ) ) {
-							TRACE( "hypro.representations.supportFunctionNew", "fullyOutside" );
-							// the object lies fully outside one of the planes -> return false
-							//std::cout << "SFN::satisfiesHalfspaces, fullyOutside" << std::endl;
-							return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
-						}
-					}
-				} else {
-					// the values are far enough away from each other to make this result a false negative.
-					TRACE( "hypro.representations.supportFunctionNew", "fullyOutside, as " << invDirVal << " >= " << -( _vec( rowI ) ) );
-					// the object lies fully outside one of the planes -> return false
-					//std::cout << "SFN::satisfiesHalfspaces, fullyOutside 2" << std::endl;
-					return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
-				}
+			if(-invDirVal > _vec( rowI )){
+				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 			}
+			//if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal > _vec( rowI ) ) {
+			//	// exact verification in case the values are close to each other
+			//	if ( carl::AlmostEqual2sComplement( Number( -invDirVal ), planeEvalRes.supportValue, 16 ) ) {
+			//		EvaluationResult<Number> secndPosEval = this->evaluate( _mat.row( rowI ), true );
+			//		if ( secndPosEval.supportValue > _vec( rowI ) ) {
+			//			EvaluationResult<Number> secndNegEval = this->evaluate( -( _mat.row( rowI ) ), true );
+			//			if ( secndNegEval.supportValue < -( _vec( rowI ) ) ) {
+			//				TRACE( "hypro.representations.supportFunctionNew", "fullyOutside" );
+			//				// the object lies fully outside one of the planes -> return false
+			//				//std::cout << "SFN::satisfiesHalfspaces, exact fullyOutside" << std::endl;
+			//				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
+			//			}
+			//		}
+			//	} else {
+			//		// the values are far enough away from each other to make this result a false negative.
+			//		TRACE( "hypro.representations.supportFunctionNew", "fullyOutside, as " << invDirVal << " >= " << -( _vec( rowI ) ) );
+			//		// the object lies fully outside one of the planes -> return false
+			//		//std::cout << "SFN::satisfiesHalfspaces, non exact fullyOutside" << std::endl;
+			//		return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
+			//	}
+			//}
 		}
 	}
 	if ( limitingPlanes.size() < unsigned( _mat.rows() ) ) {
@@ -640,14 +649,29 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		assert( limitingPlanes.empty() );
 		TRACE( "hypro.representations.supportFunctionNew", "Intersect with " << planes << ", " << distances );
 		//std::cout << "SFN::satisfiesHalfspaces(), partial 1, limiting planes: \n " << planes << "distances:\n" << distances << std::endl;
+		//auto tmp = this->intersectHalfspaces( planes, distances );
+		//if(tmp.empty()){
+		//	//std::cout << "I KNEW IT" << std::endl;
+		//	return std::make_pair( CONTAINMENT::NO, std::move(tmp));
+		//} else {
+		//	return std::make_pair( CONTAINMENT::PARTIAL, std::move(tmp));
+		//}
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( planes, distances ) );
 	} else {
 		TRACE( "hypro.representations.supportFunctionNew", " Object will be fully limited but not empty" );
 		assert( limitingPlanes.size() == unsigned( _mat.rows() ) );
 		TRACE( "hypro.representations.supportFunctionNew", "Intersect with " << _mat << ", " << _vec );
 		//std::cout << "SFN::satisfiesHalfspaces(), partial 2, Intersect with " << _mat << ", " << _vec << std::endl;
+		//auto tmp = this->intersectHalfspaces( _mat, _vec );
+		//if(tmp.empty()){
+		//	std::cout << "I KNEW IT 2" << std::endl;
+		//	return std::make_pair( CONTAINMENT::NO, std::move(tmp));
+		//} else {
+		//	return std::make_pair( CONTAINMENT::PARTIAL, std::move(tmp));
+		//}
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( _mat, _vec ) );
 	}
+
 }
 
 template <typename Number, typename Converter, typename Setting>
