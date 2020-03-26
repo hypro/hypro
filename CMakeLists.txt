@@ -157,7 +157,9 @@ if(DEVELOPER)
 	-Wunused-function
 	-Wunused-value
 	-Wunused-variable
-	-fsanitize=address)
+	-fsanitize=undefined,address
+	-g
+	)
 endif()
 
 ##############################################################################
