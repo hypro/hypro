@@ -103,8 +103,8 @@ matrix:
       addons:
         apt:
           sources: [*sources_base, llvm-toolchain-xenial-9]
-          packages: [*packages_base, clang-9 libc++abi-dev libstdc++-9-dev]
-      env: COMPILER=clang++-9
+          packages: [*packages_base, clang-9 libc++abi-dev libstdc++-9-dev llvm-symbolizer]
+      env: COMPILER=clang++-9 TASK=clang-sanitizer
     - os: linux
       compiler: clang++-10
       addons:

@@ -33,6 +33,13 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 
+elif [[ ${TASK} == "clang-sanitizer" ]]; then
+	cmake ../ -DDEVELOPER=ON -DCMAKE_CXX_COMPILER=$COMPILER || return 1
+	make resources -j2 || return 1
+	keep_waiting &
+	make -j2 VERBOSE=1 || return 1
+	kill $!
+	make test
 else
 	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
