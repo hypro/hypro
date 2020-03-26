@@ -15,7 +15,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../util/templateDirections.h"
 #include "HPolytopeSetting.h"
 #include "algorithms/quickhull/Quickhull.h"
-#include "algorithms/quickhull/number_traits.h"
+#include "util/typetraits.h"
 
 #include <algorithm>
 #include <cassert>
