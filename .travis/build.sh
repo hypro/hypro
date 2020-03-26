@@ -29,5 +29,6 @@ else
 	make -j2 VERBOSE=1 || return 1
 	kill $!
 	make test
+fi
 
 popd
