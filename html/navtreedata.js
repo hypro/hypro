@@ -77,9 +77,9 @@ var NAVTREEINDEX =
 "classhypro_1_1z3Context.html",
 "example__heuristic_8cpp.html",
 "group__globals.html#ga607d8cb76bcf54172542359fda640812",
-"stateSets.html",
-"structhypro_1_1ScaleData.html#ab5be97a44307bd48ebe379400b3bc6e1",
-"structstd_1_1hash_3_01hypro_1_1IntervalAssignment_3_01Number_01_4_01_4.html"
+"structDependent__part__funct.html#aa19610f473cc0d46c14a3f3e76a99a18",
+"structhypro_1_1SupportFunctionSetting.html",
+"structstd_1_1hash_3_01hypro_1_1NoneAssignment_01_4.html#a616e0f5227f3c91159f0c11c074bf3a0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
