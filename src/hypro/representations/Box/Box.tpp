@@ -841,6 +841,12 @@ bool BoxT<Number, Converter, Setting>::contains( const BoxT<Number, Converter, S
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::unite( const BoxT<Number, Converter, Setting>& rhs ) const {
+	if ( this->empty() ) {
+		return rhs;
+	}
+	if ( rhs.empty() ) {
+		return *this;
+	}
 	assert( dimension() == rhs.dimension() );
 
 	std::vector<carl::Interval<Number>> newIntervals;
