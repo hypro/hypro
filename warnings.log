@@ -70,11 +70,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportFunction.h:65: warning: The following parameters of hypro::BoxSupportFunction::multiEvaluate(const matrix_t< Number > &_A, bool useExact, bool setTemplate=false) const are not documented:
   parameter 'useExact'
   parameter 'setTemplate'
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:276: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter, Setting >::at(std::size_t _index) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:279: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:275: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter, Setting >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:278: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
   parameter '_index'
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:190: warning: argument 'dimension' of command @param is not found in the argument list of hypro::BoxT< Number, Converter, Setting >::Empty()
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:362: warning: The following parameters of hypro::BoxT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact=true) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:361: warning: The following parameters of hypro::BoxT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact=true) const are not documented:
   parameter 'useExact'
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:79: warning: argument '_constants' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::ConstraintSetT(const matrix_t< Number > &_constraints)
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:242: warning: argument 'constraintSet' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::contains(const ConstraintSetT &) const
