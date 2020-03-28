@@ -83,19 +83,21 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 # flags related to development
 if(DEVELOPER)
-	set(DEV_FLAGS "-Wswitch\
- -Wno-deprecated-declarations\
- -Wempty-body\
- -Wconversion\
- -Wreturn-type\
- -Wparentheses\
- -Wno-format\
- -Wuninitialized\
- -Wunreachable-code\
- -Wunused-function\
- -Wunused-value\
- -Wunused-variable\
- -fsanitize=undefined,address\
+#	set(DEV_FLAGS "-Wswitch\
+# -Wno-deprecated-declarations\
+# -Wempty-body\
+# -Wconversion\
+# -Wreturn-type\
+# -Wparentheses\
+# -Wno-format\
+# -Wuninitialized\
+# -Wunreachable-code\
+# -Wunused-function\
+# -Wunused-value\
+# -Wunused-variable\
+# -fsanitize=undefined,address\
+# -g" CACHE INTERNAL "")
+ set(DEV_FLAGS " -fsanitize=undefined,address\
  -g" CACHE INTERNAL "")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEV_FLAGS}")
 endif()
