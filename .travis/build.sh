@@ -22,7 +22,7 @@ elif [[ ${TASK} == "clang-sanitizer" ]]; then
 	make -j2 VERBOSE=1 || return 1
 	kill $!
 	make test
-	./../.travis/runSanitizedTests
+	./../.travis/runSanitizedTests.sh
 else
 	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
