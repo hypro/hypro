@@ -27,6 +27,7 @@ var searchData=
   ['example_5fdouble_5fprecision_2ecpp',['example_double_precision.cpp',['../example__double__precision_8cpp.html',1,'']]],
   ['example_5fdraisine_2ecpp',['example_draisine.cpp',['../example__draisine_8cpp.html',1,'']]],
   ['example_5fdynamicstrategies_2ecpp',['example_dynamicStrategies.cpp',['../example__dynamicStrategies_8cpp.html',1,'']]],
+  ['example_5feigen_5fmatrix_2ecpp',['example_eigen_matrix.cpp',['../example__eigen__matrix_8cpp.html',1,'']]],
   ['example_5feigendecomposition_2ecpp',['example_eigendecomposition.cpp',['../example__eigendecomposition_8cpp.html',1,'']]],
   ['example_5feigensimple2points_2ecpp',['example_eigensimple2points.cpp',['../example__eigensimple2points_8cpp.html',1,'']]],
   ['example_5feigensimpleflow_2ecpp',['example_eigenSimpleFlow.cpp',['../example__eigenSimpleFlow_8cpp.html',1,'']]],

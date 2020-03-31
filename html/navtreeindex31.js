@@ -1,5 +1,8 @@
 var NAVTREEINDEX31 =
 {
+"structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html":[8,0,3,6],
+"structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html#a69dd34fe1ef0a89d808941dc75a8f4ab":[8,0,3,6,0],
+"structstd_1_1hash_3_01hypro_1_1NoneAssignment_01_4.html":[8,0,3,8],
 "structstd_1_1hash_3_01hypro_1_1NoneAssignment_01_4.html#a616e0f5227f3c91159f0c11c074bf3a0":[8,0,3,8,0],
 "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html":[8,0,3,9],
 "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html#a6b7d24a1757259fb4bdad132dfcf3d5c":[8,0,3,9,0],
@@ -135,8 +138,8 @@ var NAVTREEINDEX31 =
 "util_2convenienceOperators_8h_source.html":[9,0,1,0,4,8],
 "util_2linearOptimization_2Strategy_8h.html":[9,0,1,0,4,1,9],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31":[9,0,1,0,4,1,9,0],
-"util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[9,0,1,0,4,1,9,0,0],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[9,0,1,0,4,1,9,0,2],
+"util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[9,0,1,0,4,1,9,0,0],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31aa0cbb49caeb5c27038583028e54bfa60":[9,0,1,0,4,1,9,0,3],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31ab8c6c5ac894a59c2c63a3f1c4989adde":[9,0,1,0,4,1,9,0,1],
 "util_2linearOptimization_2Strategy_8h_source.html":[9,0,1,0,4,1,9],

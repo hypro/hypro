@@ -16,6 +16,7 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_double_precision.cpp", "example__double__precision_8cpp.html", "example__double__precision_8cpp" ],
     [ "example_draisine.cpp", "example__draisine_8cpp.html", null ],
     [ "example_dynamicStrategies.cpp", "example__dynamicStrategies_8cpp.html", "example__dynamicStrategies_8cpp" ],
+    [ "example_eigen_matrix.cpp", "example__eigen__matrix_8cpp.html", "example__eigen__matrix_8cpp" ],
     [ "example_eigendecomposition.cpp", "example__eigendecomposition_8cpp.html", "example__eigendecomposition_8cpp" ],
     [ "example_eigensimple2points.cpp", "example__eigensimple2points_8cpp.html", "example__eigensimple2points_8cpp" ],
     [ "example_eigenSimpleFlow.cpp", "example__eigenSimpleFlow_8cpp.html", "example__eigenSimpleFlow_8cpp" ],

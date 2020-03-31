@@ -1,5 +1,8 @@
 var NAVTREEINDEX29 =
 {
+"statistics_8h_source.html":[9,0,1,0,4,6,2],
+"structDependent__part__funct.html":[8,0,5],
+"structDependent__part__funct.html#a9cf3265531dda4c7185abbc567ecb3ec":[8,0,5,0],
 "structDependent__part__funct.html#aa19610f473cc0d46c14a3f3e76a99a18":[8,0,5,1],
 "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html":[8,0,0,0],
 "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html#a08fa72941959ac2331da7ba0ce4ff4cb":[8,0,0,0,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX29 =
 "structhypro_1_1ScaleData.html":[8,0,1,205],
 "structhypro_1_1ScaleData.html#a27153aa7474df1f8a33417c447cd0e9b":[8,0,1,205,1],
 "structhypro_1_1ScaleData.html#ab5be97a44307bd48ebe379400b3bc6e1":[8,0,1,205,0],
-"structhypro_1_1SupportFunctionNewDefault.html":[8,0,1,218],
-"structhypro_1_1SupportFunctionNewLeGuernic.html":[8,0,1,219],
-"structhypro_1_1SupportFunctionNewMorePrecision.html":[8,0,1,220],
-"structhypro_1_1SupportFunctionNewNoReduction.html":[8,0,1,221]
+"structhypro_1_1SupportFunctionNewDefault.html":[8,0,1,218]
 };
