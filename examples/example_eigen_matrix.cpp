@@ -11,17 +11,21 @@ int main() {
   values[1] = 2.0;
   values[2] = 3.0;
 
-  maptype testMap = maptype(values, 3);
+  std::size_t dim = 3;
 
-  for (int i = 0; i < 3; ++i) {
+  maptype testMap = maptype(values, dim);
+
+  for (std::size_t i = 0; i < dim; ++i) {
     std::cout << testMap(i) << std::endl;
   }
 
   vector_t<double> testVec{testMap};
 
-  for (int i = 0; i < 3; ++i) {
+  for (std::size_t i = 0; i < dim; ++i) {
     std::cout << testVec(i) << std::endl;
   }
+
+  delete values;
 
   return 0;
 }
