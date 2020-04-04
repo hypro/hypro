@@ -121,7 +121,7 @@ var searchData=
   ['isliceinduced',['iSliceInduced',['../classhypro_1_1Grid.html#a41a0bbaf7315be4d6ed68facd2c27f70',1,'hypro::Grid']]],
   ['islinear',['isLinear',['../classhypro_1_1TaylorModel.html#adf2cf5a216f296851b1b7d0a9d80b1c1',1,'hypro::TaylorModel']]],
   ['islinearlowerbound',['isLinearLowerBound',['../classhypro_1_1FourierMotzkinQE.html#a96a16a3ae8eb6ba3f99ce49a86f8c7d3',1,'hypro::FourierMotzkinQE']]],
-  ['isneighbor',['isNeighbor',['../classhypro_1_1Facet.html#a4662086df0c60ffb70438f40b853a015',1,'hypro::Facet']]],
+  ['isneighbor',['isNeighbor',['../classhypro_1_1Facet.html#abcb0972f70ed0bc042c56629f4b72b4a',1,'hypro::Facet']]],
   ['isnonredundant',['isNonRedundant',['../classhypro_1_1HPolytopeT.html#aa4d9c2107c8e12bd43f287b2aae90251',1,'hypro::HPolytopeT']]],
   ['isonfacet',['isOnFacet',['../classhypro_1_1Grid.html#aa35bdf121b6343b408c4d686fd5aad15',1,'hypro::Grid']]],
   ['isoniedge',['isOnIEdge',['../classhypro_1_1OrthogonalPolyhedronT.html#a9466a11c9ff280cfb373584fc12b78dd',1,'hypro::OrthogonalPolyhedronT::isOnIEdge()'],['../classhypro_1_1OrthogonalPolyhedron.html#afb4bef4572296905f6e25c1fa7e08317',1,'hypro::OrthogonalPolyhedron::isOnIEdge()']]],
