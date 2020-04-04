@@ -14,8 +14,8 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../Cone.h"
 #include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "VPolytopeSetting.h"
-#include "util/typetraits.h"
 #include "util.h"
+#include "util/typetraits.h"
 
 #include <cassert>
 #include <set>
@@ -40,7 +40,7 @@ class VPolytopeT : private GeometricObjectBase {
   private:
 	mutable pointVector mVertices;
 	Cone<Number> mCone;
-	bool mReduced;
+	bool mReduced = false;
 
 	std::vector<std::set<unsigned>> mNeighbors;
 
