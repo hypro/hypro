@@ -96,6 +96,7 @@ if(DEVELOPER)
 # -Wunused-value\
 # -Wunused-variable\
 # -fsanitize=undefined,address\
+# -fstack-protector-strong\
 # -g" CACHE INTERNAL "")
  set(DEV_FLAGS " -fsanitize=undefined,address\
  -g" CACHE INTERNAL "")
