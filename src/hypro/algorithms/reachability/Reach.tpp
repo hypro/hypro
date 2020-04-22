@@ -62,13 +62,32 @@ std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::
 			std::cout << "\rQueue size: " << mWorkingQueue.size() << std::flush;
 		}
 
-		mCurrentLevel = nextInitialSet->first;
-		INFO( "hypro.reacher", "Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second->getState().getLocation()->getName() );
-		assert( int( mCurrentLevel ) <= mSettings.jumpDepth );
-		TRACE( "hypro.reacher", "Obtained set of type " << nextInitialSet->second->getState().getSetType() << ", requested type is " << mType );
-		flowpipe_t newFlowpipe = computeForwardTimeClosure( nextInitialSet->second );
+		//If state type is tpoly: do fix point check and terminate early if fixpoint is detected
+		//bool skipComputation = false;
+		//if( nextInitialSet->second->getState().getSetType(0) == representation_name::polytope_t){
+		//	auto nextInitialState = nextInitialSet->second->getState();
+		//	for(const auto& flowpipe : collectedReachableStates){
+		//		for(const auto& segment : flowpipe.second){
+		//			assert(segment.getSetType(0) == representation_name::polytope_t);
+		//			if(segment.contains(nextInitialState)){
+		//				//skip the computation of this flowpipe
+		//				std::cout << "FIXPOINT DETECTED" << std::endl;
+		//				skipComputation = true;
+		//				break;
+		//			}
+		//		}
+		//	}
+		//}
 
-		collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second->getState().getLocation()->hash(), newFlowpipe ) );
+		//if(!skipComputation){
+			mCurrentLevel = nextInitialSet->first;
+			INFO( "hypro.reacher", "Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second->getState().getLocation()->getName() );
+			assert( int( mCurrentLevel ) <= mSettings.jumpDepth );
+			TRACE( "hypro.reacher", "Obtained set of type " << nextInitialSet->second->getState().getSetType() << ", requested type is " << mType );
+			flowpipe_t newFlowpipe = computeForwardTimeClosure( nextInitialSet->second );
+
+			collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second->getState().getLocation()->hash(), newFlowpipe ) );
+		//}
 	}
 
 	return collectedReachableStates;

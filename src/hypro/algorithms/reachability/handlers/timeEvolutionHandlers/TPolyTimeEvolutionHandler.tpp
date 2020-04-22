@@ -47,7 +47,7 @@ namespace hypro {
 			vector_t<Number> r = vector_t<Number>::Zero(tpoly.matrix().cols() + 1);
 
             //For first m coefficients in polynom:
-			for(int coeffI = 1; (unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
+			for(int coeffI = 1; (unsigned)(coeffI-1) < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
             //for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
 
 				//Special case: first index does not use lie derivative
@@ -94,6 +94,7 @@ namespace hypro {
                     assert(tpoly.matrix().rows() == mRelaxedInvariant->rows());
                     TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mRelaxedInvariant);
                     evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), std::is_same_v<Number, mpq_class>);
+                    //std::cout << "TPolyTimeEvolutionHandler::handle, evalR: " << evalR << std::endl;
                 } else {
                     auto invMat = this->mState->getLocation()->getInvariant().getMatrix();
                     auto invVec = this->mState->getLocation()->getInvariant().getVector();
@@ -101,6 +102,7 @@ namespace hypro {
                     assert((unsigned)invMat.cols() == this->mState->getDimension());
                     TemplatePolyhedron<Number> invTPoly(invMat, invVec);
                     evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), std::is_same_v<Number, mpq_class>);
+                    //std::cout << "TPolyTimeEvolutionHandler::handle, evalR: " << evalR << std::endl;
                 }   
             }
             
@@ -113,6 +115,7 @@ namespace hypro {
         }
         
         //Set mComputationState vector to the new coeff vec
+        //std::cout << "newVec: \n" << newVec << std::endl;
 		tpoly.setVector(newVec);
 		this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
 	}

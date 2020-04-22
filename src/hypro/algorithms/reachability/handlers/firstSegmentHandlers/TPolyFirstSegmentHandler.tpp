@@ -91,7 +91,7 @@ namespace hypro {
 
             //For first m coefficients in polynom:
             //for(int coeffI = 1; (unsigned)coeffI < TPolyType::Settings::DERIVATIVE_ORDER; ++coeffI){ 
-			for(int coeffI = 1; (unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
+			for(int coeffI = 1; (unsigned)(coeffI-1) < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
             //for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
 
 				factorial *= coeffI;
@@ -179,18 +179,18 @@ namespace hypro {
                 //Check approximately whether interval is monotonically in-/decreasing
                 //Check some values in [0,mTimeStep] and whether they in-/decrease throughoutly.
                 carl::Variable var = carl::freshRealVariable("t");
-                //carl::UnivariatePolynomial<Number> polynom(var, polynomCoeffsAsNumber);
-                carl::UnivariatePolynomial<tNumber> polynomExact(var, polynomCoeffs);
+                carl::UnivariatePolynomial<Number> polynom(var, polynomCoeffsAsNumber);
+                //carl::UnivariatePolynomial<tNumber> polynomExact(var, polynomCoeffs);
                 //std::cout << "TPolyFirstSegmentHandler::handle, polynom: " << polynom << std::endl;
-                //std::vector<Number> values;
-                std::vector<tNumber> values;
+                std::vector<Number> values;
+                //std::vector<tNumber> values;
                 bool increasing = true;
                 bool decreasing = true;
                 assert(this->mTimeStep != tNumber(0));
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / tNumber(tpoly.getSettings().MONOTONICITY_GRANULARITY))){
                     //values.emplace_back(carl::evaluate(polynom,carl::convert<tNumber,Number>(timeStepPart)));
-                    //values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
-                    values.emplace_back(polynomExact.evaluate(timeStepPart));
+                    values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
+                    //values.emplace_back(polynomExact.evaluate(timeStepPart));
                     //std::cout << "TPolyFirstSegmentHandler::handle, timeStepPart: " << timeStepPart << " values: {";
                     //for(const auto& v : values){
                     //    std::cout << v << ",";
@@ -222,17 +222,17 @@ namespace hypro {
                 //std::cout << "TPolyFirstSegmentHandler::handle, increasing: " << increasing << " decreasing: " << decreasing << std::endl;
                 if(!increasing && !decreasing){
                     //If not monotonically increasing or decreasing, then there must be a maximum in the interval -> compute expensive root enumeration
-                    //carl::UnivariatePolynomial<tNumber> polynomAsTNumber(var, polynomCoeffs);
-                    //newVec(rowI) = carl::convert<tNumber,Number>(maxValueAtRoots(polynomAsTNumber, carl::Interval<tNumber>(tNumber(0),this->mTimeStep)));
-                    newVec(rowI) = carl::convert<tNumber,Number>(maxValueAtRoots(polynomExact, carl::Interval<tNumber>(tNumber(0),this->mTimeStep)));
+                    carl::UnivariatePolynomial<tNumber> polynomAsTNumber(var, polynomCoeffs);
+                    newVec(rowI) = carl::convert<tNumber,Number>(maxValueAtRoots(polynomAsTNumber, carl::Interval<tNumber>(tNumber(0),this->mTimeStep)));
+                    //newVec(rowI) = carl::convert<tNumber,Number>(maxValueAtRoots(polynomExact, carl::Interval<tNumber>(tNumber(0),this->mTimeStep)));
                 } else if(!increasing && decreasing){
                     //If monotonically decreasing, then first value at t = 0 was the biggest one
-                    //newVec(rowI) = values.front();
-                    newVec(rowI) = carl::convert<tNumber,Number>(values.front());
+                    newVec(rowI) = values.front();
+                    //newVec(rowI) = carl::convert<tNumber,Number>(values.front());
                 } else if(increasing && !decreasing){
                     //If monotonically increasing, then last value at t = mTimeStep was the biggest one
-                    //newVec(rowI) = values.back();
-                    newVec(rowI) = carl::convert<tNumber,Number>(values.back());
+                    newVec(rowI) = values.back();
+                    //newVec(rowI) = carl::convert<tNumber,Number>(values.back());
                 } else {
                     //Should not be possible
                     throw std::runtime_error("TPolyFirstSegmentHandler::handle, polynom was both monotonically increasing as well as decreasing.");

@@ -49,9 +49,18 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	std::optional<vector_t<Number>> mRelaxedInvariant;
 
 	//Offset vector of invariants after overapproximation by template
-	//std::optional<vector_t<Number>> mOverapproxedInvariant;
+	//Used to restore invariant offsets after time evolution computation for this location
+	std::optional<vector_t<Number>> mOverapproxedInvariant;
 
+	//Constant scaling factor needed for all major algorithms in this context.
 	const Number mScaling = 3;
+
+	//Whether numeric corrections should be active or not. Using inexact arithmetic can cause numerical inconsistencies.
+	//Some of them can be corrected if this flag is activated.
+	//const bool mActivateNumericalCorrections = true;
+
+	//If numerical corrections are activated, then for values between 0 and mNumericCorrectionThreshold, they are corrected to 0.
+	//const Number mNumericCorrectionThreshold = 1e-15;
 
   public:
 
@@ -80,7 +89,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
   	void applyContinuousEvolution() override;
 
 	//Set back invariant to overapproximated form, since LIS fits invariants to flowpipe
-	//void execBeforeProcessDiscreteBehavior() override;
+	void execBeforeProcessDiscreteBehavior() override;
 
     //Computes the gradient of a multivariate but linear function linearFct
     vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);
