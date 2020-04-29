@@ -111,27 +111,33 @@ int main() {
   reacher.setRepresentationType(Representation::type());
 
   // set initial states
-  std::vector<State> initialStates;
+  std::vector<State> initialStatesForward;
   for (const auto &locationConditionPair : bBallAutomaton.getInitialStates()) {
     State tmp{locationConditionPair.first};
     tmp.setSet(Representation(locationConditionPair.second.getMatrix(),
                               locationConditionPair.second.getVector()));
-    initialStates.emplace_back(tmp);
+    initialStatesForward.emplace_back(tmp);
   }
-  reacher.setInitialStates(std::move(initialStates));
+  reacher.setInitialStates(std::move(initialStatesForward));
 
   // perform reachability analysis.
   auto flowpipeIndices = reacher.computeForwardReachability();
 
-  // Test if we can get the tree and check its contents
-  std::cout << "Reach tree depth: " << reacher.getReachabilityTree()->getDepth()
-            << " and number nodes: "
-            << reacher.getReachabilityTree()->getNumberNodes() << std::endl;
-  // write tree in dot-format to file.
-  std::string dotString = reacher.getReachabilityTree()->getDotRepresentation();
-  std::fstream outfile = std::fstream("reachTree.gv", std::ios_base::out);
-  outfile << dotString;
-  outfile.close();
+  // run forwards from the last segment
+  auto lastSegment = flowpipeIndices.back().second.back();
+  // set initial states again
+  std::vector<State> initialStates;
+  State tmp{lastSegment.getLocation()};
+  tmp.setSet(lastSegment.getSet());
+  initialStates.emplace_back(tmp);
+  reacher.setInitialStates(std::move(initialStates));
+
+  settings = reacher.settings();
+  settings.timeStep = -settings.timeStep;
+  reacher.setSettings(settings);
+
+  // perform reachability analysis.
+  auto flowpipeIndicesForward = reacher.computeForwardReachability();
 
   // plot flowpipes.
   hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
@@ -145,7 +151,26 @@ int main() {
         for (auto &point : points) {
           point.reduceDimension(2);
         }
-        plotter.addObject(points);
+        auto id = plotter.addObject(points);
+        plotter.setObjectColor(id,
+                               hypro::plotting::colors[hypro::plotting::red]);
+        points.clear();
+      }
+    }
+  }
+
+  for (auto &indexPair : flowpipeIndicesForward) {
+    std::vector<State> flowpipe = indexPair.second;
+    // Plot single flowpipe
+    for (auto &set : flowpipe) {
+      std::vector<hypro::Point<Number>> points = set.vertices();
+      if (!points.empty() && points.size() > 2) {
+        for (auto &point : points) {
+          point.reduceDimension(2);
+        }
+        auto id = plotter.addObject(points);
+        plotter.setObjectColor(id,
+                               hypro::plotting::colors[hypro::plotting::green]);
         points.clear();
       }
     }
@@ -153,6 +178,7 @@ int main() {
 
   // write output.
   plotter.plot2d();
+  plotter.plotGen();
 
   return 0;
 }

@@ -13,6 +13,7 @@ Reach<Number, ReacherSettings, State>::Reach( const HybridAutomaton<Number>& _au
 	, mCurrentLevel( 0 )
 	, mReachabilityTree( std::make_unique<ReachTree<State>>( new ReachTreeNode<State>() ) )
 	, mIntersectedBadStates( false ) {
+	assert( mSettings.timeBound >= 0 );
 }
 
 template <typename Number, typename ReacherSettings, typename State>
@@ -90,7 +91,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 #ifdef REACH_DEBUG
 	INFO( "hypro.reacher", "Valuation fulfills Invariant?: " << std::get<0>( initialSetup ) );
 #endif
-	if ( std::get<0>( initialSetup ) != CONTAINMENT::NO ) {  // see convenienceOperators for details
+	if ( std::get<0>( initialSetup ) != CONTAINMENT::NO ) {	 // see convenienceOperators for details
 		assert( !std::get<1>( initialSetup ).getTimestamp().isUnbounded() );
 		bool noFlow = false;
 
@@ -147,7 +148,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 		bool forward = mSettings.timeStep > 0;
 		INFO( "hypro.reacher", "Compute forwards time closure: " << forward );
 		// intersection of bad states and violation of invariant is handled inside the loop
-		while ( !noFlow && ( ( forward && currentLocalTime <= mSettings.timeBound ) || ( !forward && currentLocalTime >= mSettings.timeBound ) ) ) {
+		while ( !noFlow && ( ( forward && currentLocalTime <= mSettings.timeBound ) || ( !forward && currentLocalTime >= -mSettings.timeBound ) ) ) {
 			INFO( "hypro.reacher", "Time: " << std::setprecision( 4 ) << std::setw( 8 ) << fixed << carl::toDouble( currentLocalTime ) );
 			// Verify transitions on the current set.
 			if ( int( mCurrentLevel ) < mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {

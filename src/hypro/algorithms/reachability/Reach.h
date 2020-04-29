@@ -137,7 +137,10 @@ class Reach {
 	bool checkTransitions( const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<std::tuple<Transition<Number>*, State>>& nextInitialSets ) const;
 
 	const ReachabilitySettings& settings() const { return mSettings; }
-	void setSettings( const ReachabilitySettings& settings ) { mSettings = settings; }
+	void setSettings( const ReachabilitySettings& settings ) {
+		mSettings = settings;
+		assert( mSettings.timeBound >= 0 );
+	}
 
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType( const representation_name& type ) { mType = type; }
