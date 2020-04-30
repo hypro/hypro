@@ -1,4 +1,4 @@
-FROM smtrat/carl:19.01
+FROM fefrei/carl:19.01 
 RUN apt-get update \
     && apt-get install -y \
     openjdk-8-jre \
