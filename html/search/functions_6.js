@@ -71,6 +71,7 @@ var searchData=
   ['gethybridautomaton',['getHybridAutomaton',['../classhypro_1_1SettingsProvider.html#a8740961a8ffac294fe33709eb0862fe9',1,'hypro::SettingsProvider']]],
   ['getid',['getId',['../classhypro_1_1Location.html#a00d1e50edc314d7228eb8673f975cc85',1,'hypro::Location']]],
   ['getinitialstates',['getInitialStates',['../classhypro_1_1HybridAutomaton.html#add2a3c35a2df09a11a668a5583695680',1,'hypro::HybridAutomaton']]],
+  ['getinitialstateset',['getInitialStateSet',['../structhypro_1_1Task.html#ae58b90923333474732afb82e100fe9ac',1,'hypro::Task']]],
   ['getinternalpoint',['getInternalPoint',['../classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7',1,'hypro::Optimizer']]],
   ['getintersectingintervals',['getIntersectingIntervals',['../classhypro_1_1HierarchicalIntervalVector.html#aaaf145d04077b8d6873002d344672ff9',1,'hypro::HierarchicalIntervalVector']]],
   ['getintersectionintervals',['getIntersectionIntervals',['../classhypro_1_1HierarchicalIntervalVector.html#a3b6e3f6c861d1195d783ad8ae047d657',1,'hypro::HierarchicalIntervalVector']]],
