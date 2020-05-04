@@ -69,7 +69,9 @@ std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::
 		TRACE( "hypro.reacher", "Obtained set of type " << nextInitialSet->second->getState().getSetType() << ", requested type is " << mType );
 		flowpipe_t newFlowpipe = computeForwardTimeClosure( nextInitialSet->second );
 
-		collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second->getState().getLocation()->hash(), newFlowpipe ) );
+		if ( !newFlowpipe.empty() ) {
+			collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second->getState().getLocation()->hash(), newFlowpipe ) );
+		}
 	}
 
 	return collectedReachableStates;
