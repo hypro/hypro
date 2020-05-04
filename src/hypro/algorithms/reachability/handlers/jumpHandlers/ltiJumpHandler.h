@@ -12,40 +12,22 @@
 namespace hypro {
 
 template <typename State>
-class ltiJumpHandler : public IJumpHandler {
+class ltiJumpHandler {
 	using Number = typename State::NumberType;
-
-	std::vector<std::tuple<Transition<Number>*, State>>* mSuccessorBuffer;
-	std::shared_ptr<Task<State>> mTask;
-	Transition<Number>* mTransition;
-	StrategyParameters mStrategy;
-	WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
-	WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
-	EventTimingContainer<Number> mObtainedTimings;
+	using TransitionStateMap = typename std::map<Transition<State>*, std::vector<State>>;
 
   public:
-	ltiJumpHandler() = delete;
-	ltiJumpHandler( std::vector<std::tuple<Transition<Number>*, State>>* successorBuffer,
-					std::shared_ptr<Task<State>> task,
-					Transition<Number>* transition,
-					StrategyParameters strategy,
-					WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-					WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-					const EventTimingContainer<typename State::NumberType>& timings )
-		: mSuccessorBuffer( successorBuffer )
-		, mTask( task )
-		, mTransition( transition )
-		, mStrategy( strategy )
-		, mLocalQueue( localQueue )
-		, mLocalCEXQueue( localCEXQueue )
-		, mObtainedTimings( timings ) {}
+	TransitionStateMap applyJump( const std::vector<std::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy );
 
-	void handle();
-	const char* handlerName() { return "ltiJumpHandler"; }
-	std::map<Transition<Number>*, std::vector<State>> applyJump( const std::vector<std::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy );
-	void aggregate( std::map<Transition<Number>*, std::vector<State>>& processedStates, const std::map<Transition<Number>*, std::vector<State>>& toAggregate, const StrategyParameters& strategy ) const;
-	typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
+	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const StrategyParameters& strategy );
+
+	void applyReset( State& state, Transition<Number>* transitionPtr );
+
+	void applyReduction( State& state );
+
+	//typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
 };
+
 }  // namespace hypro
 
 #include "ltiJumpHandler.tpp"

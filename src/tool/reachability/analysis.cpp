@@ -3,7 +3,9 @@
 namespace hydra {
 namespace reachability {
 void analyze() {
-  // do interesting stuff.
+  // create appropriate Context
+  LTIAnalyzer analyzer();
+  analyzer.run();
 }
 } // namespace reachability
 } // namespace hydra
