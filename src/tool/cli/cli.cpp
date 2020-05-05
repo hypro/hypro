@@ -1,9 +1,11 @@
 #include "cli.h"
 
-namespace hydra {
+namespace hydra
+{
 
 boost::program_options::variables_map handleCMDArguments(int argc,
-                                                         const char **argv) {
+                                                         const char **argv)
+{
   namespace po = boost::program_options;
   po::variables_map vm;
   // clang-format off
@@ -14,7 +16,7 @@ boost::program_options::variables_map handleCMDArguments(int argc,
 		( "plotoutputformat,pof", po::value<std::string>(), "Plotoutput format - allowed are 'tex' and 'gnuplot'." )
 		( "threads,t", po::value<unsigned>()->default_value( 1 ), "<number> of threads to be used as worker threads. Default is 1." )
 		( "model,m", po::value<std::string>()->required(), "<path> to model file." )
-		("representation,r", po::value<hypro::representation_name>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
+		("representation,r", po::value<std::string>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
 		( "skipplot", po::bool_switch(), "skips plotting step" )
 		( "noTimingInformation", po::bool_switch(), "do not collect any timing information during refinement" )
 		( "noBadStateTimingInformation", po::bool_switch(), "do not collect bad state timing information during refinement" )
@@ -31,26 +33,33 @@ boost::program_options::variables_map handleCMDArguments(int argc,
 		( "snode,sn", po::value<std::vector<std::string>>()->multitoken(), "Adds a custom strategy node." );
 
   // clang-format on
-  try {
+  try
+  {
     // A list of all snodes options, which all have a vector of parameters. Is
     // only used with the --snode option
     std::vector<std::vector<std::string>> snodes;
 
-    if (argc == 2) {
+    if (argc == 2)
+    {
       COUT("Trying to read options from file " << argv[1] << "..."
                                                << std::endl);
       std::ifstream file(argv[1]);
-      if (!file.is_open()) {
+      if (!file.is_open())
+      {
         CERR("File does not exist.\n");
         exit(1);
       }
       po::store(po::parse_config_file(file, options), vm);
-    } else {
+    }
+    else
+    {
       // Parse, then scan for all snode entries, then store
       po::parsed_options parsedOptions =
           po::command_line_parser(argc, argv).options(options).run();
-      for (const po::option &o : parsedOptions.options) {
-        if (o.string_key == "snode") {
+      for (const po::option &o : parsedOptions.options)
+      {
+        if (o.string_key == "snode")
+        {
           snodes.push_back(o.value);
         }
       }
@@ -61,33 +70,42 @@ boost::program_options::variables_map handleCMDArguments(int argc,
     hypro::SettingsProvider<State> &sProvider =
         hypro::SettingsProvider<State>::getInstance();
 
-    if (vm.count("help") || argc == 1) {
+    if (vm.count("help") || argc == 1)
+    {
       COUT(options << std::endl);
       exit(0);
     }
 
-    if (vm.count("threads")) {
-      if (vm["threads"].as<unsigned>() == 0) {
+    if (vm.count("threads"))
+    {
+      if (vm["threads"].as<unsigned>() == 0)
+      {
         CERR("You can not use 0 worker threads!\n");
         exit(0);
-      } else {
+      }
+      else
+      {
         sProvider.setWorkerThreadCount(vm["threads"].as<unsigned>());
       }
     }
 
     if (vm["queueBalangingRatio"].as<double>() < 0.0 ||
-        vm["queueBalangingRatio"].as<double>() > 1.0) {
+        vm["queueBalangingRatio"].as<double>() > 1.0)
+    {
       CERR("Please chose a value between 0 and 1.\n");
       exit(1);
     }
 
-    if (vm["decompose"].as<bool>()) {
+    if (vm["decompose"].as<bool>())
+    {
       sProvider.setDecomposeAutomaton(true);
     }
-    if (vm["decider"].as<bool>()) {
+    if (vm["decider"].as<bool>())
+    {
       sProvider.setUseDecider(true);
     }
-    if (vm["skipplot"].as<bool>()) {
+    if (vm["skipplot"].as<bool>())
+    {
       sProvider.setSkipPlot(true);
     }
 
@@ -110,11 +128,15 @@ boost::program_options::variables_map handleCMDArguments(int argc,
     }
     */
 
-    if (vm.count("strategy") >= 1) {
-      if (vm.count("strategy") == 1) {
+    if (vm.count("strategy") >= 1)
+    {
+      if (vm.count("strategy") == 1)
+      {
         hypro::SettingsProvider<State>::getInstance().setStrategy(
             hydra::getStrategyFromName(vm["strategy"].as<std::string>()));
-      } else {
+      }
+      else
+      {
         CERR("You can not have more than one strategy!\n");
         exit(1);
       }
@@ -127,8 +149,9 @@ boost::program_options::variables_map handleCMDArguments(int argc,
               d.getStrategy());
     }
     */
-
-  } catch (std::exception &e) {
+  }
+  catch (std::exception &e)
+  {
     CERR(e.what());
     COUT(options << std::endl);
     exit(1);
