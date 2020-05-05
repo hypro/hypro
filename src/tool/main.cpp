@@ -15,28 +15,29 @@ int main(int argc, char const *argv[])
 
     // parse model file
     COUT("Passed model file: " << options["model"].as<std::string>());
-    auto automatonSettingsPair = hypro::parseFlowstarFile<hydra::Number>(
+    auto [automaton, reachSettings] = hypro::parseFlowstarFile<hydra::Number>(
         options["model"].as<std::string>());
 
     // perform preprocessing
-    hydra::preprocessing::preprocess(automatonSettingsPair.first,
-                                     automatonSettingsPair.second);
+    hydra::preprocessing::preprocess(automaton,
+                                     reachSettings);
 
     mpq_class timeStep = options.count("delta")
                              ? options["delta"].as<mpq_class>()
-                             : automatonSettingsPair.second.timeStep;
+                             : reachSettings.timeStep;
 
     hypro::representation_name representation =
         hypro::stringToRepresentation.at(options["representation"].as<std::string>());
 
     // create strategy
-    hypro::DynamicStrategy strategy{
-        {timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
-         stringToSetting(representation,
-                         options["rep_setting"].as<std::string>())}};
+    hypro::Setting setting{{{timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
+                             stringToSetting(representation,
+                                             options["setting"].as<std::string>())}},
+                           reachSettings.jumpDepth,
+                           reachSettings.timeBound};
 
     // run reachability analysis
-    hydra::reachability::analyze(strategy);
+    hydra::reachability::analyze(automaton, setting);
 
     return 0;
 }
