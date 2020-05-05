@@ -12,23 +12,24 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 		initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
 
 		// create node from state
-		auto* treeNode = new ReachTreeNode<State>{initialState};
+		auto* initialNode = new ReachTreeNode<State>{initialState};
 		// add to reachTree
-		treeNode->setParent( mReachTree.getRoot() );
-		mReachTree.getRoot()->addChild( treeNode );
+		initialNode->setParent( mReachTree.getRoot() );
+		mReachTree.getRoot()->addChild( initialNode );
 
 		// add to queue
-		mWorkQueue.nonLockingEnqueue( std::move( std::make_unique<Task<State>>( treeNode ) ) );
+		mWorkQueue.push( initialNode );
 	}
 
-	while ( !mWorkQueue.nonLockingIsEmpty() ) {
+	while ( !mWorkQueue.empty() ) {
 		LTIWorker<State> worker;
-		TaskPtr currentTask{mWorkQueue.nonLockingDequeueFront()};
+		ReachTreeNode<State>* currentNode = mWorkQueue.front();
+		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
-		if ( currentTask->treeNode->getDepth() <= mAnalysisSettings.jumpDepth ) {
-			safetyResult = worker.computeForwardReachability( currentTask );
+		if ( currentNode->getDepth() <= mAnalysisSettings.jumpDepth ) {
+			safetyResult = worker.computeForwardReachability( *currentNode );
 		} else {
-			safetyResult = worker.computeTimeSuccessors( currentTask );
+			safetyResult = worker.computeTimeSuccessors( *currentNode );
 		}
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
@@ -42,16 +43,16 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 		for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
 			for ( const auto jmpSucc : transitionStatesPair.second ) {
 				// update reachTree
-				auto* treeNode = new ReachTreeNode<State>{jmpSucc};
-				treeNode->setParent( currentTask->treeNode );
-				currentTask->treeNode->addChild( treeNode );
+				auto* childNode = new ReachTreeNode<State>{jmpSucc};
+				childNode->setParent( currentNode );
+				currentNode->addChild( childNode );
 
 				// update path (global time)
-				currentTask->treeNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().front().getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
-				treeNode->addTransitionToPath( transitionStatesPair.first, jmpSucc.getTimestamp() );
+				childNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().begin()->getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
+				childNode->addTransitionToPath( transitionStatesPair.first, jmpSucc.getTimestamp() );
 
 				// create Task
-				mWorkQueue.nonLockingEnqueue( std::move( std::make_unique<Task<State>>( treeNode ) ) );
+				mWorkQueue.push( childNode );
 			}
 		}
 	}
