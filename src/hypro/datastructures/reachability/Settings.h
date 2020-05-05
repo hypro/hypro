@@ -24,7 +24,7 @@ using DynamicStrategy = std::vector<AnalysisParameters>;
 
 struct Setting {
 	std::vector<AnalysisParameters> strategy{1};
-	std::size_t jumpDepth{std::numeric_limits<int>::max()};
+	int jumpDepth{std::numeric_limits<int>::max()};
 	tNumber globalTimeHorizon{tNumber( 0 )};
 	std::vector<std::vector<std::size_t>> plotDimensions{{0, 1}};
 	std::vector<std::string> plotFileNames{"out"};
