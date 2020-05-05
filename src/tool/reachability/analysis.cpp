@@ -8,8 +8,7 @@ namespace reachability
 using namespace hypro;
 
 template <typename State>
-void concrete_analyze(HybridAutomaton<Number> &automaton, Setting setting)
-{
+void concrete_analyze(HybridAutomaton<Number> &automaton, Setting setting) {
   LTIAnalyzer<State> analyzer{automaton, setting};
   auto result = analyzer.run();
 
@@ -26,8 +25,7 @@ void concrete_analyze(HybridAutomaton<Number> &automaton, Setting setting)
   // call to plotting.
 }
 
-struct Dispatcher
-{
+struct Dispatcher {
   template <typename Rep>
   void operator()(HybridAutomaton<Number> &automaton, Setting setting)
   {
@@ -36,8 +34,7 @@ struct Dispatcher
   }
 };
 
-void analyze(HybridAutomaton<Number> &automaton, Setting setting)
-{
+void analyze(HybridAutomaton<Number> &automaton, Setting setting) {
   dispatch<hydra::Number, Converter<hydra::Number>>(setting.strategy.front().representation_type,
                                                     setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting);
 }

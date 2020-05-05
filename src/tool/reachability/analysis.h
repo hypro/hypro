@@ -10,7 +10,7 @@ namespace hydra
 {
 namespace reachability
 {
-void analyze(hypro::DynamicStrategy strategy);
+void analyze(hypro::HybridAutomaton<Number> &automaton, hypro::Setting setting);
 
 } // namespace reachability
 } // namespace hydra
