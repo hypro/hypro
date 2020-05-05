@@ -2,7 +2,10 @@
 
 namespace hypro {
 template <typename State>
-std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet, size_t index ) {
+std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet ) {
+	//TODO @Stefan Not sure if this is right.
+	size_t index = 0;
+
 	TRACE( "hydra.worker.continuous", "Having a total of " << SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().size() << " local bad states." );
 	auto localBadState = SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().find( stateSet.getLocation() );
 	if ( localBadState != SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().end() ) {
@@ -27,6 +30,6 @@ std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet, size
 		}
 	}
 
-	return std::make_pair<CONTAINMENT, State>( CONTAINMENT::NO, stateSet );
+	return std::make_pair( CONTAINMENT::NO, stateSet );
 }
 }  // namespace hypro
