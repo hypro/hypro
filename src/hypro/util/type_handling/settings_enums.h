@@ -1,5 +1,7 @@
 #pragma once
 
+#include "representation_enums.h"
+
 #include <map>
 #include <string>
 
@@ -22,11 +24,6 @@ inline std::map<std::string, boxSetting_name> const stringToBoxSetting{
 	   boxSetting_name::BoxIntervalArithmeticOff},
 	  {"BoxAllOff", boxSetting_name::BoxAllOff}};
 
-int stringToSetting( representation_name Rep, const std::string& name ) {
-	switch ( Rep ) {
-		case representation_name::box:
-			return static_cast<int>( stringToBoxSetting.at( name ) );
-	}
-}
+int stringToSetting( representation_name Rep, const std::string& name );
 
 }  // namespace hypro
