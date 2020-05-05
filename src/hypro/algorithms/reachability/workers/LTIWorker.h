@@ -19,13 +19,12 @@ template <typename State>
 class LTIWorker {
   private:
 	using Number = typename State::NumberType;
-	using TaskType = std::shared_ptr<Task<State>>;
 	using JumpSuccessors = typename ltiGuardHandler<State>::TransitionStatesMap;
 
   public:
-	REACHABILITY_RESULT computeForwardReachability( const TaskType& task );
+	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<State>& task );
 
-	REACHABILITY_RESULT computeTimeSuccessors( const TaskType& task );
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<State>& task );
 	void computeJumpSuccessors();
 
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
