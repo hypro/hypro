@@ -1,4 +1,6 @@
 #pragma once
+#include "../../representations/Box/BoxSetting.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "representation_enums.h"
 #include "settings_enums.h"
 
@@ -24,12 +26,11 @@ auto dispatch( representation_name representation, int setting, Callable func, A
 		case representation_name::box:
 			switch ( static_cast<boxSetting_name>( setting ) ) {
 				case boxSetting_name::BoxLinearOptimizationOn:
-					return func<BoxT<Number, Converter, BoxLinearOptimizationOn>>( args );
+					return func.template operator()<BoxT<Number, Converter, BoxLinearOptimizationOn>>( args... );
 					break;
 			}
 		case representation_name::support_function:
 			break;
 	}
-	assert( false );
 }
 }  // namespace hypro

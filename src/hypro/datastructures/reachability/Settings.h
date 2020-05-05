@@ -20,6 +20,8 @@ struct AnalysisParameters {
 	bool uniformBloating = false;
 };
 
+using DynamicStrategy = std::vector<AnalysisParameters>;
+
 struct Setting {
 	std::vector<AnalysisParameters> strategy{1};
 	std::size_t jumpDepth{std::numeric_limits<int>::max()};

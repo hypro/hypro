@@ -2,6 +2,7 @@
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../workers/LTIWorker.h"
+#include "../../../types.h"
 
 namespace hypro {
 
@@ -14,7 +15,8 @@ class LTIAnalyzer {
 	LTIAnalyzer() = delete;
 	LTIAnalyzer( const HybridAutomaton<Number>& ha, const Setting& setting )
 		: mHybridAutomaton( ha )
-		, mAnalysisSettings( setting ) {
+		, mAnalysisSettings( setting )
+		, mReachTree (new ReachTreeNode<State>) {
 	}
 
 	REACHABILITY_RESULT run();

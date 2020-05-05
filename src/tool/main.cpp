@@ -5,36 +5,38 @@
 #include "cli/cli.h"
 #include "preprocessing/preprocessing.h"
 #include "reachability/analysis.h"
+#include "../hypro/datastructures/reachability/Settings.h"
 #include "typedefs.h"
 
-int main(int argc, char const *argv[]) {
-  // parse command line arguments
-  auto options = hydra::handleCMDArguments(argc, argv);
+int main(int argc, char const *argv[])
+{
+    // parse command line arguments
+    auto options = hydra::handleCMDArguments(argc, argv);
 
-  // parse model file
-  COUT("Passed model file: " << options["model"].as<std::string>());
-  auto automatonSettingsPair = hypro::parseFlowstarFile<hydra::Number>(
-      options["model"].as<std::string>());
+    // parse model file
+    COUT("Passed model file: " << options["model"].as<std::string>());
+    auto automatonSettingsPair = hypro::parseFlowstarFile<hydra::Number>(
+        options["model"].as<std::string>());
 
-  // perform preprocessing
-  hydra::preprocessing::preprocess(automatonSettingsPair.first,
-                                   automatonSettingsPair.second);
+    // perform preprocessing
+    hydra::preprocessing::preprocess(automatonSettingsPair.first,
+                                     automatonSettingsPair.second);
 
-  mpq_class timeStep = options.count("delta")
-                           ? options["delta"].as<mpq_class>()
-                           : automatonSettingsPair.second.timeStep;
+    mpq_class timeStep = options.count("delta")
+                             ? options["delta"].as<mpq_class>()
+                             : automatonSettingsPair.second.timeStep;
 
-  representation_name representation =
-      stringToRepresentation(options["representation"].as<std::string>());
+    hypro::representation_name representation =
+        hypro::stringToRepresentation.at(options["representation"].as<std::string>());
 
-  // create strategy
-  DynamicStrategy strategy{
-      {timeStep, AGG_SETTING::MODEL, -1, representation,
-       stringToSetting(representation,
-                       options["rep_setting"].as<std::string>())}};
+    // create strategy
+    hypro::DynamicStrategy strategy{
+        {timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
+         stringToSetting(representation,
+                         options["rep_setting"].as<std::string>())}};
 
-  // run reachability analysis
-  hydra::reachability::analyze(strategy);
+    // run reachability analysis
+    hydra::reachability::analyze(strategy);
 
-  return 0;
+    return 0;
 }

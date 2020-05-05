@@ -2,7 +2,7 @@
 
 namespace hypro {
 template <typename State>
-bool ltiGuardHandler<State> operator()( const State& stateSet ) {
+bool ltiGuardHandler<State>::operator()( const State& stateSet ) {
 	bool haveSatisfiedGuard = false;
 	assert( !stateSet.getTimestamp().isEmpty() );
 

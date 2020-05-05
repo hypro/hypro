@@ -20,12 +20,12 @@ class LTIWorker {
   private:
 	using Number = typename State::NumberType;
 	using TaskType = std::shared_ptr<Task<State>>;
-	using JumpSuccessors = typename ltiGuardHandler::TransitionStatesMap;
+	using JumpSuccessors = typename ltiGuardHandler<State>::TransitionStatesMap;
 
   public:
 	REACHABILITY_RESULT computeForwardReachability( const TaskType& task );
 
-	REACHABILITY_RESULT computeTimeSuccessors();
+	REACHABILITY_RESULT computeTimeSuccessors( const TaskType& task );
 	void computeJumpSuccessors();
 
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
@@ -34,7 +34,7 @@ class LTIWorker {
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
 
-	bool requireTimeSuccessorComputation( std::size_t segmentCount ) const { return segmentCount <= SettingsProvider::getInstance().getLocalTimeHorizon() / SettingsProvider::getInstance().getTimeStepSize(); }
+	bool requireTimeSuccessorComputation( std::size_t segmentCount ) const { return segmentCount <= SettingsProvider<State>::getInstance().getLocalTimeHorizon() / SettingsProvider<State>::getInstance().getTimeStepSize(); }
 
   protected:
 	JumpSuccessors mJumpSuccessorSets;

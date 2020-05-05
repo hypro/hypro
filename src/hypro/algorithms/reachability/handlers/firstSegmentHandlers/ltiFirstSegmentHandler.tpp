@@ -56,8 +56,8 @@ State ltiFirstSegmentHandler<State>::operator()( const State& initialStateSet, t
 
 	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
 
-	TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension );
-	TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << dimension );
+	TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << initialStateSet.getDimension( index ) );
+	TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << initialStateSet.getDimension( index ) );
 
 	firstSegment = bloatBox( firstSegment, Number( Number( 1 ) / Number( 4 ) ) * errorBoxVector[2], 0 );
 

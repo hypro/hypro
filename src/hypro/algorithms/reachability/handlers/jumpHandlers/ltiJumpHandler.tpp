@@ -178,7 +178,7 @@ void ltiJumpHandler<State>::handle() {
 */
 
 template <typename State>
-TransitionStateMap ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transition<Number>* transition, const StrategyParameters& strategy ) {
+auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transition<Number>* transition, const StrategyParameters& strategy ) -> TransitionStateMap {
 	// holds a mapping of transitions to states which need to be aggregated
 	TransitionStateMap toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -190,16 +190,16 @@ TransitionStateMap ltiJumpHandler<State>::applyJump( const TransitionStateMap& s
 		if ( transition == nullptr || transitionStatesPair.first == transition ) {
 			// check aggregation settings
 			if ( ( strategy.aggregation == AGG_SETTING::NO_AGG && strategy.clustering == -1 ) ||
-				 ( strategy.aggregation == AGG_SETTING::MODEL && std::get<0>( tuple )->getAggregation() == Aggregation::none ) ) {
+				 ( strategy.aggregation == AGG_SETTING::MODEL && transitionStatesPair.first->getAggregation() == Aggregation::none ) ) {
 				// just copy the states to the toProcess map.
 				if ( toProcess.find( transitionStatesPair.first ) == toProcess.end() ) {
 					toProcess[transitionStatesPair.first] = std::vector<State>();
 				}
 				toProcess[transitionStatesPair.first].insert( transitionStatesPair.second.begin(), transitionStatesPair.second.end() );
 			} else {  // store for aggregation
-				if ( toAggregate.find( transitionStatesPair.first ) ) == toAggregate.end() ) {
-						toAggregate[transitionStatesPair.first] = std::vector<State>();
-					}
+				if ( toAggregate.find( transitionStatesPair.first ) == toAggregate.end() ) {
+					toAggregate[transitionStatesPair.first] = std::vector<State>();
+				}
 				toAggregate[transitionStatesPair.first].insert( transitionStatesPair.second.begin(), transitionStatesPair.second.end() );
 			}
 		}
@@ -253,7 +253,7 @@ void ltiJumpHandler<State>::applyReset( State& state, Transition<Number>* transi
 	for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
 		if ( state.getSetType( i ) == representation_name::carl_polytope ) {
 			IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( i );
-			state.partialIntervalAssignment( intervalReset.mIntervals, i )
+			state.partialIntervalAssignment( intervalReset.mIntervals, i );
 		} else {
 			AffineTransformation<Number> reset = transitionPtr->getReset().getAffineReset( i );
 			state.partiallyApplyTransformation( reset.mTransformation, i );
@@ -379,77 +379,77 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 	}
 }
 
-template <typename State>
-typename ReachTreeNode<State>::NodeList_t ltiJumpHandler<State>::createNodesFromStates(
-	  Transition<Number>* transition,
-	  const std::vector<State>& states,
-	  std::size_t currentTargetLevel,
-	  carl::Interval<tNumber>& coveredTimeInterval,
-	  typename ReachTreeNode<State>::Node_t parent ) {
-	typename ReachTreeNode<State>::NodeList_t children;
-	for ( const auto& state : states ) {
-		TRACE( "hydra.worker.discrete", "Consider " << states.size() << " states." );
-		assert( state.getLocation() != nullptr );
+// template <typename State>
+// typename ReachTreeNode<State>::NodeList_t ltiJumpHandler<State>::createNodesFromStates(
+// 	  Transition<Number>* transition,
+// 	  const std::vector<State>& states,
+// 	  std::size_t currentTargetLevel,
+// 	  carl::Interval<tNumber>& coveredTimeInterval,
+// 	  typename ReachTreeNode<State>::Node_t parent ) {
+// 	typename ReachTreeNode<State>::NodeList_t children;
+// 	for ( const auto& state : states ) {
+// 		TRACE( "hydra.worker.discrete", "Consider " << states.size() << " states." );
+// 		assert( state.getLocation() != nullptr );
 
-		// TODO: This fixed-point test should only consider the current refinement level.
-		//fix point test does not seem to work in full timed context
-		/*
-			if(!SettingsProvider<State>::getInstance().isFullTimed() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(transition->getSource())->second != LOCATIONTYPE::TIMEDLOC){
-				bool reachedFixedPoint = false;
-				if(SettingsProvider<State>::getInstance().useFixedPointTest()) {
-					for(const auto n : NodeManager<State>::getInstance().getTree().getRoot()->getChildren()) {
-						reachedFixedPoint = n->hasFixedPoint(state,parent);
-						if(reachedFixedPoint){
-							std::cout << "Detected fixed point." << std::endl;
-							TRACE("hydra.worker.discrete", "Do not create successor nodes as fixed-point has been detected.");
-							break;
-						}
-					}
-				}
+// 		// TODO: This fixed-point test should only consider the current refinement level.
+// 		//fix point test does not seem to work in full timed context
+// 		/*
+// 			if(!SettingsProvider<State>::getInstance().isFullTimed() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(transition->getSource())->second != LOCATIONTYPE::TIMEDLOC){
+// 				bool reachedFixedPoint = false;
+// 				if(SettingsProvider<State>::getInstance().useFixedPointTest()) {
+// 					for(const auto n : NodeManager<State>::getInstance().getTree().getRoot()->getChildren()) {
+// 						reachedFixedPoint = n->hasFixedPoint(state,parent);
+// 						if(reachedFixedPoint){
+// 							std::cout << "Detected fixed point." << std::endl;
+// 							TRACE("hydra.worker.discrete", "Do not create successor nodes as fixed-point has been detected.");
+// 							break;
+// 						}
+// 					}
+// 				}
 
-				if(reachedFixedPoint) {
-					continue;
-				}
-			}
-			*/
+// 				if(reachedFixedPoint) {
+// 					continue;
+// 				}
+// 			}
+// 			*/
 
-		typename ReachTreeNode<State>::Node_t newNode = new ReachTreeNode<State>( state, currentTargetLevel, parent );
+// 		typename ReachTreeNode<State>::Node_t newNode = new ReachTreeNode<State>( state, currentTargetLevel, parent );
 
-		// collect covered time interval
-		coveredTimeInterval = coveredTimeInterval.convexHull( state.getTimestamp() );
+// 		// collect covered time interval
+// 		coveredTimeInterval = coveredTimeInterval.convexHull( state.getTimestamp() );
 
-		// invariant timings
-		auto invariantTimings = getEnabledTimings( mObtainedTimings.getInvariantTimings() );
-		if ( invariantTimings.size() == 1 ) {
-			newNode->addTimeStepToPath( invariantTimings[0] );
-		} else {
-			// Attention, this is a dummy setting.
-			newNode->addTimeStepToPath( coveredTimeInterval );
-		}
+// 		// invariant timings
+// 		auto invariantTimings = getEnabledTimings( mObtainedTimings.getInvariantTimings() );
+// 		if ( invariantTimings.size() == 1 ) {
+// 			newNode->addTimeStepToPath( invariantTimings[0] );
+// 		} else {
+// 			// Attention, this is a dummy setting.
+// 			newNode->addTimeStepToPath( coveredTimeInterval );
+// 		}
 
-		// set up node properties
+// 		// set up node properties
 
-		newNode->addTransitionToPath( transition, state.getTimestamp() );
-		newNode->setDepth( parent->getDepth() + 1 );
-		newNode->setTimestamp( currentTargetLevel, state.getTimestamp() );
+// 		newNode->addTransitionToPath( transition, state.getTimestamp() );
+// 		newNode->setDepth( parent->getDepth() + 1 );
+// 		newNode->setTimestamp( currentTargetLevel, state.getTimestamp() );
 
-		// If no global timing is used, reset time intervals to zero
-		RefinementSetting<State> tmpRefinement = newNode->getRefinements().at( currentTargetLevel );
-		assert( tmpRefinement.initialSet.getLocation() != nullptr );
-		if ( SettingsProvider<State>::getInstance().useLocalTiming() ) {
-			tmpRefinement.initialSet.setTimestamp( carl::Interval<tNumber>( 0 ) );
-		}
+// 		// If no global timing is used, reset time intervals to zero
+// 		RefinementSetting<State> tmpRefinement = newNode->getRefinements().at( currentTargetLevel );
+// 		assert( tmpRefinement.initialSet.getLocation() != nullptr );
+// 		if ( SettingsProvider<State>::getInstance().useLocalTiming() ) {
+// 			tmpRefinement.initialSet.setTimestamp( carl::Interval<tNumber>( 0 ) );
+// 		}
 
-		tmpRefinement.isDummy = false;
-		newNode->setNewRefinement( currentTargetLevel, tmpRefinement );
-		assert( !newNode->getTimestamp( currentTargetLevel ).isEmpty() );
+// 		tmpRefinement.isDummy = false;
+// 		newNode->setNewRefinement( currentTargetLevel, tmpRefinement );
+// 		assert( !newNode->getTimestamp( currentTargetLevel ).isEmpty() );
 
-		DEBUG( "hydra.worker.discrete", "New node path: " << newNode->getPath() );
-		DEBUG( "hydra.worker.discrete", "new jump depth: " << newNode->getDepth() );
-		DEBUG( "hydra.worker.discrete", "new refinements size: " << newNode->getRefinements().size() );
-		children.emplace_back( newNode );
-	}
-	return children;
-}
+// 		DEBUG( "hydra.worker.discrete", "New node path: " << newNode->getPath() );
+// 		DEBUG( "hydra.worker.discrete", "new jump depth: " << newNode->getDepth() );
+// 		DEBUG( "hydra.worker.discrete", "new refinements size: " << newNode->getRefinements().size() );
+// 		children.emplace_back( newNode );
+// 	}
+// 	return children;
+// }
 
 }  // namespace hypro

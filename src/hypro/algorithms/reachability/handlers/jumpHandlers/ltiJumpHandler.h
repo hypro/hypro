@@ -17,15 +17,15 @@ class ltiJumpHandler {
 	using TransitionStateMap = typename std::map<Transition<State>*, std::vector<State>>;
 
   public:
-	TransitionStateMap applyJump( const std::vector<std::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy );
+	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const StrategyParameters& strategy );
 
-	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const StrategyParameters& strategy );
+	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const StrategyParameters& strategy ) const;
 
-	void applyReset( State& state, Transition<Number>* transitionPtr );
+	void applyReset( State& state, Transition<Number>* transitionPtr ) const;
 
-	void applyReduction( State& state );
+	void applyReduction( State& state ) const;
 
-	//typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
+	// typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
 };
 
 }  // namespace hypro
