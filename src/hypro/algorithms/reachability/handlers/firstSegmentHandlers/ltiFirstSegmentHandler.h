@@ -14,9 +14,7 @@ class ltiFirstSegmentHandler {
 	tNumber mTimeStep;
 
   public:
-	ltiFirstSegmentHandler();
-
-	State operator()( const State& initialStateSet, tNumber timeStep );
+	State operator()( State initialStateSet, tNumber timeStep );
 	matrix_t<typename State::NumberType> computeTrafoMatrix( const Location<typename State::NumberType>* _loc ) const;
 
 	const matrix_t<typename State::NumberType>& getTrafo() const { return mTrafo; }

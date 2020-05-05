@@ -2,7 +2,7 @@
 
 namespace hypro {
 template <typename State>
-State ltiFirstSegmentHandler<State>::operator()( const State& initialStateSet, tNumber timeStep ) {
+State ltiFirstSegmentHandler<State>::operator()( State initialStateSet, tNumber timeStep ) {
 	assert( !initialStateSet.getTimestamp().isEmpty() );
 	// check if initial Valuation fulfills Invariant
 	assert( initialStateSet.getLocation() != nullptr );
@@ -16,7 +16,7 @@ State ltiFirstSegmentHandler<State>::operator()( const State& initialStateSet, t
 		// TRACE("Avoid further computation as the flow is zero." << std::endl);
 		mTrafo = matrix_t<Number>::Identity( dim - 1, dim - 1 );
 		mTranslation = vector_t<Number>::Zero( dim - 1 );
-		return;
+		return initialStateSet;
 	}
 
 	// approximate R_[0,delta](X0)
@@ -52,12 +52,12 @@ State ltiFirstSegmentHandler<State>::operator()( const State& initialStateSet, t
 	std::vector<Box<Number>> errorBoxVector =
 		  errorBoxes( carl::convert<tNumber, Number>( mTimeStep ), initialStateSet.getLocation()->getLinearFlow( 0 ), initialStateSet, trafoMatrix, externalInput );
 
-	firstSegment = deltaValuation.unite( *( initialStateSet ) );
+	firstSegment = deltaValuation.unite( initialStateSet );
 
 	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
 
-	TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << initialStateSet.getDimension( index ) );
-	TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << initialStateSet.getDimension( index ) );
+	TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
+	TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
 
 	firstSegment = bloatBox( firstSegment, Number( Number( 1 ) / Number( 4 ) ) * errorBoxVector[2], 0 );
 
@@ -67,6 +67,8 @@ State ltiFirstSegmentHandler<State>::operator()( const State& initialStateSet, t
 
 	firstSegment.partiallyRemoveRedundancy( 0 );
 	initialStateSet.setSet( firstSegment.getSet( 0 ), 0 );
+
+	return initialStateSet;
 }
 
 template <typename State>
