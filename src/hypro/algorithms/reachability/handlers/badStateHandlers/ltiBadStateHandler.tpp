@@ -2,12 +2,12 @@
 
 namespace hypro {
 template <typename State>
-std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet ) {
+std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet, size_t index ) {
 	TRACE( "hydra.worker.continuous", "Having a total of " << SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().size() << " local bad states." );
 	auto localBadState = SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().find( stateSet.getLocation() );
 	if ( localBadState != SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking local bad state: " << localBadState->second );
-		std::pair<CONTAINMENT, State> badStatePair = stateSet.partiallySatisfies( localBadState->second, mIndex );
+		std::pair<CONTAINMENT, State> badStatePair = stateSet.partiallySatisfies( localBadState->second, index );
 		if ( badStatePair.first != hypro::CONTAINMENT::NO ) {
 			DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << badStatePair.first << ")" );
 			return badStatePair;
@@ -17,9 +17,9 @@ std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet ) {
 
 	// check global bad states
 	for ( const auto& badState : SettingsProvider<State>::getInstance().getHybridAutomaton().getGlobalBadStates() ) {
-		if ( badState.getMatrix( mIndex ).rows() != 0 ) {
+		if ( badState.getMatrix( index ).rows() != 0 ) {
 			// at least one global bad state in this subspace
-			std::pair<CONTAINMENT, State> badStatePair = stateSet.partiallySatisfies( badState, mIndex );
+			std::pair<CONTAINMENT, State> badStatePair = stateSet.partiallySatisfies( badState, index );
 			if ( badStatePair.first != CONTAINMENT::NO ) {
 				DEBUG( "hydra.worker", "Intersection with global bad states" );
 				return badStatePair;
