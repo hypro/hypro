@@ -3,7 +3,7 @@
 
 namespace hydra {
 namespace reachability {
-void analyze();
+void analyze(DynamicStrategy strategy);
 
 } // namespace reachability
 } // namespace hydra

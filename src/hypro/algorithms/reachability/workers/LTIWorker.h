@@ -23,9 +23,10 @@ class LTIWorker {
 	using JumpSuccessors = typename ltiGuardHandler::TransitionStatesMap;
 
   public:
-	void processTask( const TaskType& t );
+	REACHABILITY_RESULT computeForwardReachability( const TaskType& task );
 
-	void computeForwardReachability( const TaskType& task );
+	REACHABILITY_RESULT computeTimeSuccessors();
+	void computeJumpSuccessors();
 
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }

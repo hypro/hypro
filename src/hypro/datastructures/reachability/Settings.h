@@ -1,11 +1,35 @@
 #pragma once
 #include "../../types.h"
+#include "../../util/type_handling/representation_enums.h"
+#include "../../util/type_handling/settings_enums.h"
 
 #include <carl/numbers/numbers.h>
 #include <iosfwd>
 #include <string>
 
 namespace hypro {
+
+struct AnalysisParameters {
+	mpq_class timeStep = 0;	 /// the used time step size
+	AGG_SETTING aggregation =
+		  AGG_SETTING::NO_AGG;	/// the forced aggregation settings
+	int clustering = -1;		/// if clustering is used: number of clusters
+	representation_name representation_type =
+		  representation_name::UNDEF;  /// type of representation
+	int representation_setting = 0;	   /// used settings for the representation
+	bool uniformBloating = false;
+};
+
+struct Setting {
+	std::vector<AnalysisParameters> strategy( 1 );
+	std::size_t jumpDepth{std::numeric_limits<int>::max()};
+	tNumber globalTimeHorizon{tNumber( 0 )};
+	std::vector<std::vector<std::size_t>> plotDimensions{{0, 1}};
+	std::vector<std::string> plotFileNames{"out"};
+#if HYPRO_USE_PPL
+	unsigned long pplDenominator{defaultPPLDenominator};
+#endif
+};
 
 /**
  * @brief      Struct for reachability analysis algorithm settings.

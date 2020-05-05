@@ -14,7 +14,7 @@ boost::program_options::variables_map handleCMDArguments(int argc,
 		( "plotoutputformat,pof", po::value<std::string>(), "Plotoutput format - allowed are 'tex' and 'gnuplot'." )
 		( "threads,t", po::value<unsigned>()->default_value( 1 ), "<number> of threads to be used as worker threads. Default is 1." )
 		( "model,m", po::value<std::string>()->required(), "<path> to model file." )
-		//("representation,r", po::value<hypro::representation_name>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
+		("representation,r", po::value<hypro::representation_name>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
 		( "skipplot", po::bool_switch(), "skips plotting step" )
 		( "noTimingInformation", po::bool_switch(), "do not collect any timing information during refinement" )
 		( "noBadStateTimingInformation", po::bool_switch(), "do not collect bad state timing information during refinement" )
@@ -27,8 +27,9 @@ boost::program_options::variables_map handleCMDArguments(int argc,
 		( "strategy,s", po::value<std::string>(), "choose reachability strategy. Valid options are tacas18_1, tacas18_2, tacas18_3." )
 		( "delta,d", po::value<mpq_class>(), "choose time step size. Overrides settings in the input file." )
 		( "clustering,c", po::value<int>(), "Select clustering option, -1=off, 0=all, i=max. number of clustered segments. Overrides settings in the input file." )
-		( "customStrategy", po::bool_switch(), "Enters strategy building mode. Choose a representation, and customize its settings and different reachability settings." )
+		// ( "customStrategy", po::bool_switch(), "Enters strategy building mode. Choose a representation, and customize its settings and different reachability settings." )
 		( "snode,sn", po::value<std::vector<std::string>>()->multitoken(), "Adds a custom strategy node." );
+
   // clang-format on
   try {
     // A list of all snodes options, which all have a vector of parameters. Is
@@ -92,13 +93,13 @@ boost::program_options::variables_map handleCMDArguments(int argc,
 
     // If we have at least two of the three strategy options "strategy",
     // "customstrategy" or "snode", then throw error
-    if ((vm["customStrategy"].as<bool>() &&
-         (vm.count("strategy") >= 1 || vm.count("snode") >= 1)) ||
-        (vm.count("strategy") >= 1 && vm.count("snode") >= 1)) {
-      CERR("You can only choose one of the three options --customstrategy, "
-           "--strategy or --snode.\n");
-      exit(1);
-    }
+    // if ((vm["customStrategy"].as<bool>() &&
+    //      (vm.count("strategy") >= 1 || vm.count("snode") >= 1)) ||
+    //     (vm.count("strategy") >= 1 && vm.count("snode") >= 1)) {
+    //   CERR("You can only choose one of the three options --customstrategy, "
+    //        "--strategy or --snode.\n");
+    //   exit(1);
+    // }
 
     /*
     if (vm["customStrategy"].as<bool>()) {

@@ -1,5 +1,6 @@
 #pragma once
 #include "../hypro/datastructures/HybridAutomaton/State.h"
+#include "../hypro/types.h"
 
 namespace hydra {
 

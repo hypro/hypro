@@ -307,10 +307,8 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 		// determines whether there are still sets to be clustered together.
 		bool leftovers = true;
 
-		auto subspaceTypesIt = SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().find( aggregatedState.getLocation() );
 		TRACE( "hydra.worker.discrete", "Find subspace mapping for loc " << aggregatedState.getLocation()->getName() << " (" << aggregatedState.getLocation() << ")" );
-		assert( subspaceTypesIt != SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().end() );
-		std::vector<SUBSPACETYPE> types = *( subspaceTypesIt->second );
+
 		// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 		std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
 		// contains the aggregated timestamp, initialized with the first timestamp
@@ -320,16 +318,9 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 			TRACE( "hydra.worker.discrete", "Agg. aggState and set " << setCnt );
 			// actual aggregation.
 			for ( std::size_t i = 0; i < aggregatedState.getNumberSets(); i++ ) {
-				if ( types.at( i ) == SUBSPACETYPE::DISCRETE || types.at( i ) == SUBSPACETYPE::RECTANGULAR ) {
-					// in discrete subspaces, the set does not change, rectangular states do only have 1 set (currently multiple times).
-					// Todo: Check that all sets are equal
-					// TODO2: Make sure sets get only computed once.
-					continue;
-				} else {
-					//START_BENCHMARK_OPERATION(UNION);
-					currentSets[i] = std::visit( genericUniteVisitor<typename State::repVariant>(), currentSets[i], stateIt->getSet( i ) );
-					//EVALUATE_BENCHMARK_RESULT(UNION);
-				}
+				//START_BENCHMARK_OPERATION(UNION);
+				currentSets[i] = std::visit( genericUniteVisitor<typename State::repVariant>(), currentSets[i], stateIt->getSet( i ) );
+				//EVALUATE_BENCHMARK_RESULT(UNION);
 			}
 
 			// timestamp handling

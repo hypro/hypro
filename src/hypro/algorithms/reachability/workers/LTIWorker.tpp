@@ -3,113 +3,54 @@
 namespace hypro {
 
 template <typename State>
-void LTIWorker<State>::processTask( const TaskType& t ) {
-	computeForwardReachability( t );
+REACHABILITY_RESULT LTIWorker<State>::computeForwardReachability( const TaskType& task ) {
+	if ( computeTimeSuccessors() == REACHABILITY_RESULT::UNKNOWN ) {
+		return REACHABILITY_RESULT::UNKNOWN;
+	}
+	computeJumpSuccessors();
 }
 
-template <typename State>
-void LTIWorker<State>::computeForwardReachability( const TaskType& task ) {
-	//std::cout << "context.execOnStart()" << std::endl;
-
-	//START_BENCHMARK_OPERATION(FIRST_SEGMENT);
-	// compute first segment
-	// context.execBeforeFirstSegment();
-	// context.firstSegment();
-	// context.execAfterFirstSegment();
+REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors() {
 	ltiFirstSegmentHandler firstSegmentHandler;
 	State firstSegment = firstSegmentHandler( task->getInitialStateSet(), SettingsProvider::getInstance().getStrategy().getParameters().timeStep );
-	//EVALUATE_BENCHMARK_RESULT(FIRST_SEGMENT);
 
-	//START_BENCHMARK_OPERATION(CHECK_INVARIANT);
-	// intersect with invariant
-	// context.execBeforeCheckInvariant();
-	// context.checkInvariant();
-	// context.execAfterCheckInvariant();
 	auto containmentStateSetPair = ltiIntersectInvariant( firstSegment );
 	if ( containmentStateSetPair.first == CONTAINMENT::NO ) {
-		return;
+		return REACHABILITY_RESULT::SAFE;
 	}
-	//EVALUATE_BENCHMARK_RESULT(CHECK_INVARIANT);
 
-	//START_BENCHMARK_OPERATION(INTERSECT_BAD_STATES);
-	// intersect with bad states
-	// context.execBeforeIntersectBadStates();
-	// context.intersectBadStates();
-	// context.execAfterIntersectBadStates();
 	containmentStateSetPair = ltiIntersectBadStates( containmentStateSetPair.second );
 	if ( containmentStateSetPair.first != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
-		return;
+		return REACHABILITY_RESULT::UNKNOWN;
 	}
-	//EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
-
-	//context.execBeforeLoop();
-
-	// set up guard handler
-	ltiGuardHandler guardHander;
 
 	// while not done
 	std::size_t segmentCounter = 1;
 	while ( requireTimeSuccessorComputation( segmentCounter ) ) {
-		//START_BENCHMARK_OPERATION(COMPUTE_TIMESTEP);
-		//context.execOnLoopItEnter();
-
-		//START_BENCHMARK_OPERATION(CHECK_TRANSITION);
-		// intersect with transition guards
-		// context.execBeforeCheckTransition();
-		// context.checkTransition();
-		// context.execAfterCheckTransition();
-		guardHandler( containmentStateSetPair.second );
-		//EVALUATE_BENCHMARK_RESULT(CHECK_TRANSITION);
-
-		//START_BENCHMARK_OPERATION(CONTINUOUS_EVOLUTION);
-		// apply continuous time step
-		// context.execBeforeContinuousEvolution();
-		// context.applyContinuousEvolution();
-		// context.execAfterContinuousEvolution();
 		State currentSegment = ltiApplyTimeEvolution( containmentStateSetPair.second, firstSegmentHandler.getTransformation(), firstSegmentHandler.getTranslation(), SettingsProvider::getInstance().getTimeStepSize() );
-		//EVALUATE_BENCHMARK_RESULT(CONTINUOUS_EVOLUTION);
-
-		//START_BENCHMARK_OPERATION(CHECK_INVARIANT);
-		// intersect with invariant
-		// context.execBeforeCheckInvariant();
-		// context.checkInvariant();
-		// context.execAfterCheckInvariant();
 		auto containmentStateSetPair = ltiIntersectInvariant( currentSegment );
 		if ( containmentStateSetPair.first == CONTAINMENT::NO ) {
-			return;
+			return REACHABILITY_RESULT::SAFE;
 		}
-		//EVALUATE_BENCHMARK_RESULT(CHECK_INVARIANT);
 
 		++segmentCounter;
 
-		//START_BENCHMARK_OPERATION(INTERSECT_BAD_STATES);
-		// intersect with bad states
-		// context.execBeforeIntersectBadStates();
-		// context.intersectBadStates();
-		// context.execAfterIntersectBadStates();
 		containmentStateSetPair = ltiIntersectBadStates( containmentStateSetPair.second );
 		if ( containmentStateSetPair.first != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
-			return;
+			return REACHABILITY_RESULT::UNKNOWN;
 		}
-		//EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
+	}
+}
 
-		// context.execOnLoopItExit();
-		//EVALUATE_BENCHMARK_RESULT(COMPUTE_TIMESTEP);
+void LTIWorker<State>::computeJumpSuccessors() {
+	ltiGuardHandler guardHander;
+	for ( auto& state : mFlowpipe ) {
+		guardHandler( state );
 	}
 
-	// context.execAfterLoop();
-
-	//START_BENCHMARK_OPERATION(DISCRETE_SUCCESSORS);
-	// create discrete successor states
-	// context.execBeforeProcessDiscreteBehavior();
-	// context.processDiscreteBehavior();
-	//context.execBeforeProcessDiscreteBehavior();
-
-	void postProcessJumpSuccessors( guardHandler.getGuardSatisfyingStateSets() );
-
-	//EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
+	postProcessJumpSuccessors( guardHandler.getGuardSatisfyingStateSets() );
 }
 
 void LTIWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {

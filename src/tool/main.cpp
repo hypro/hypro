@@ -20,8 +20,21 @@ int main(int argc, char const *argv[]) {
   hydra::preprocessing::preprocess(automatonSettingsPair.first,
                                    automatonSettingsPair.second);
 
+  mpq_class timeStep = options.count("delta")
+                           ? options["delta"].as<mpq_class>()
+                           : automatonSettingsPair.second.timeStep;
+
+  representation_name representation =
+      stringToRepresentation(options["representation"].as<std::string>());
+
+  // create strategy
+  DynamicStrategy strategy{
+      {timeStep, AGG_SETTING::MODEL, -1, representation,
+       stringToSetting(representation,
+                       options["rep_setting"].as<std::string>())}};
+
   // run reachability analysis
-  hydra::reachability::analyze();
+  hydra::reachability::analyze(strategy);
 
   return 0;
 }
