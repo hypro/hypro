@@ -6,14 +6,11 @@ bool ltiGuardHandler<State>::operator()( const State& stateSet ) {
 	bool haveSatisfiedGuard = false;
 	assert( !stateSet.getTimestamp().isEmpty() );
 
-	for ( auto transitionPtr : stateSet.getLocation()->getTransitions() ) {
-		std::pair<CONTAINMENT, State> statePair = stateSet.partiallySatisfies( transitionPtr->getGuard(), 0 );
-		assert( statePair.first != CONTAINMENT::BOT );
-		if ( statePair.first != CONTAINMENT::NO ) {
-			if ( std::find( transitionPtr, mGuardSatisfyingStates.begin(), mGuardSatisfyingStates.end() ) == mGuardSatisfyingStates.end() ) {
-				mGuardSatisfyingStates[transitionPtr] = std::vector<State>();
-			}
-			mGuardSatisfyingStates[transitionPtr].emplace_back( std::move( statePair.second ) );
+	for ( auto const& transitionPtr : stateSet.getLocation()->getTransitions() ) {
+		auto [contained, state] = stateSet.partiallySatisfies( transitionPtr->getGuard(), 0 );
+		assert( contained != CONTAINMENT::BOT );
+		if ( contained != CONTAINMENT::NO ) {
+			mGuardSatisfyingStates[transitionPtr.get()].emplace_back( std::move( state ) );
 			haveSatisfiedGuard = true;
 		}
 	}
