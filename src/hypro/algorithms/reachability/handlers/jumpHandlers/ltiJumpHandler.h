@@ -14,7 +14,7 @@ namespace hypro {
 template <typename State>
 class ltiJumpHandler {
 	using Number = typename State::NumberType;
-	using TransitionStateMap = typename std::map<Transition<State>*, std::vector<State>>;
+	using TransitionStateMap = typename std::map<Transition<Number>*, std::vector<State>>;
 
   public:
 	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const StrategyParameters& strategy );

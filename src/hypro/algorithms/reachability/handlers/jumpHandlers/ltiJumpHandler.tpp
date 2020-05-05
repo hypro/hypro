@@ -185,22 +185,20 @@ auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transit
 	TransitionStateMap toProcess;
 	// holds a mapping of transitions to already processed (i.e. aggregated, resetted and reduced) states
 	TransitionStateMap processedStates;
-	for ( const auto& transitionStatesPair : states ) {
+	for ( const auto& [transitionPtr, statesVec] : states ) {
 		// only handle sets related to the passed transition, in case any is passed.
-		if ( transition == nullptr || transitionStatesPair.first == transition ) {
+		if ( transition == nullptr || transitionPtr == transition ) {
 			// check aggregation settings
+
 			if ( ( strategy.aggregation == AGG_SETTING::NO_AGG && strategy.clustering == -1 ) ||
-				 ( strategy.aggregation == AGG_SETTING::MODEL && transitionStatesPair.first->getAggregation() == Aggregation::none ) ) {
+				 ( strategy.aggregation == AGG_SETTING::MODEL && transitionPtr->getAggregation() == Aggregation::none ) ) {
 				// just copy the states to the toProcess map.
-				if ( toProcess.find( transitionStatesPair.first ) == toProcess.end() ) {
-					toProcess[transitionStatesPair.first] = std::vector<State>();
-				}
-				toProcess[transitionStatesPair.first].insert( transitionStatesPair.second.begin(), transitionStatesPair.second.end() );
+
+				auto& targetVec = toProcess[transitionPtr];
+				targetVec.insert( targetVec.end(), statesVec.begin(), statesVec.end() );
 			} else {  // store for aggregation
-				if ( toAggregate.find( transitionStatesPair.first ) == toAggregate.end() ) {
-					toAggregate[transitionStatesPair.first] = std::vector<State>();
-				}
-				toAggregate[transitionStatesPair.first].insert( transitionStatesPair.second.begin(), transitionStatesPair.second.end() );
+				auto& targetVec = toAggregate[transitionPtr];
+				targetVec.insert( targetVec.end(), statesVec.begin(), statesVec.end() );
 			}
 		}
 	}
@@ -210,10 +208,9 @@ auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transit
 
 	DEBUG( "hydra.worker", "Apply jump on " << toProcess.size() << " transitions." );
 
-	for ( const auto& transitionStatesPair : toProcess ) {
-		auto transitionPtr = transitionStatesPair.first;
-		DEBUG( "hydra.worker", "Apply jump on " << transitionStatesPair.second.size() << " states." );
-		for ( const auto& state : transitionStatesPair.second ) {
+	for ( const auto& [transitionPtr, statesVec] : toProcess ) {
+		DEBUG( "hydra.worker", "Apply jump on " << statesVec.size() << " states." );
+		for ( const auto& state : statesVec ) {
 			// copy state - as there is no aggregation, the containing set and timestamp is already valid
 			// TODO: Why copy?
 			assert( !state.getTimestamp().isEmpty() );
