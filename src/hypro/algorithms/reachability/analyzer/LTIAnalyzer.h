@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../datastructures/HybridAutomaton.h"
+#include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../workers/LTIWorker.h"
 
