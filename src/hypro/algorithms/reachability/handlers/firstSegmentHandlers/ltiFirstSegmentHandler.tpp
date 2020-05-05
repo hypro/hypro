@@ -52,7 +52,7 @@ State ltiFirstSegmentHandler<State>::operator()( const State& initialStateSet, t
 	std::vector<Box<Number>> errorBoxVector =
 		  errorBoxes( carl::convert<tNumber, Number>( mTimeStep ), initialStateSet.getLocation()->getLinearFlow( 0 ), initialStateSet, trafoMatrix, externalInput );
 
-	firstSegment = deltaValuation.unite( *( mState ) );
+	firstSegment = deltaValuation.unite( *( initialStateSet ) );
 
 	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
 
