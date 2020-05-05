@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 namespace hypro {
 /**
  * @brief      Enum encapsulating all provided state set representations to be able to determine a type.
@@ -18,7 +21,7 @@ enum class representation_name { box,
 								 UNDEF,
 								 genStar };
 
-std::map<std::string, representation_name> stringToRepresentation{
+inline std::map<std::string, representation_name> const stringToRepresentation{
 	  {"box", representation_name::box},
 	  {"carl_polytope", representation_name::carl_polytope},
 	  {"support_function", representation_name::support_function}};

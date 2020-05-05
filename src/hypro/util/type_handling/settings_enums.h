@@ -1,5 +1,8 @@
 #pragma once
 
+#include <map>
+#include <string>
+
 namespace hypro {
 
 // box settings
@@ -10,7 +13,7 @@ enum class boxSetting_name {
 	BoxAllOff
 };
 
-std::map<std::string, boxSetting_name> stringToBoxSetting{
+inline std::map<std::string, boxSetting_name> const stringToBoxSetting{
 	  {"BoxLinearOptimizationOn",
 	   boxSetting_name::BoxLinearOptimizationOn},
 	  {"BoxLinearOptimizationOff",
@@ -22,7 +25,7 @@ std::map<std::string, boxSetting_name> stringToBoxSetting{
 int stringToSetting( representation_name Rep, const std::string& name ) {
 	switch ( Rep ) {
 		case representation_name::box:
-			return stringToBoxSetting[name];
+			return static_cast<int>( stringToBoxSetting.at( name ) );
 	}
 }
 
