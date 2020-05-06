@@ -4,6 +4,8 @@
 #include "representation_enums.h"
 #include "settings_enums.h"
 
+#include <assert.h>
+
 namespace hypro {
 
 /**
@@ -27,10 +29,10 @@ auto dispatch( representation_name representation, int setting, Callable func, A
 			switch ( static_cast<boxSetting_name>( setting ) ) {
 				case boxSetting_name::BoxLinearOptimizationOn:
 					return func.template operator()<BoxT<Number, Converter, BoxLinearOptimizationOn>>( args... );
-					break;
+				case boxSetting_name::BoxAllOff:
+					return func.template operator()<BoxT<Number, Converter, BoxLinearOptimizationOn>>( args... );
 			}
-		case representation_name::support_function:
-			break;
 	}
+	assert( false );
 }
 }  // namespace hypro
