@@ -17,6 +17,7 @@ boost::program_options::variables_map handleCMDArguments(int argc,
 		( "threads,t", po::value<unsigned>()->default_value( 1 ), "<number> of threads to be used as worker threads. Default is 1." )
 		( "model,m", po::value<std::string>()->required(), "<path> to model file." )
 		("representation,r", po::value<std::string>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
+    ( "setting", po::value<std::string>(), "the setting to use for the representation")
 		( "skipplot", po::bool_switch(), "skips plotting step" )
 		( "noTimingInformation", po::bool_switch(), "do not collect any timing information during refinement" )
 		( "noBadStateTimingInformation", po::bool_switch(), "do not collect bad state timing information during refinement" )

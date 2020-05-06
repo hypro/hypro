@@ -10,13 +10,11 @@
 namespace hypro {
 
 struct AnalysisParameters {
-	mpq_class timeStep = 0;	 /// the used time step size
-	AGG_SETTING aggregation =
-		  AGG_SETTING::NO_AGG;	/// the forced aggregation settings
-	int clustering = -1;		/// if clustering is used: number of clusters
-	representation_name representation_type =
-		  representation_name::UNDEF;  /// type of representation
-	int representation_setting = 0;	   /// used settings for the representation
+	mpq_class timeStep = 0;												   /// the used time step size
+	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   /// the forced aggregation settings
+	int clustering = -1;												   /// if clustering is used: number of clusters
+	representation_name representation_type = representation_name::UNDEF;  /// type of representation
+	int representation_setting = 0;										   /// used settings for the representation
 	bool uniformBloating = false;
 };
 
