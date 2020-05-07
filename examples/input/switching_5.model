@@ -4,7 +4,7 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.01
+  fixed steps 0.0001
   time 0.2
   remainder estimation 1e-5
   identity precondition
@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 512
   output switching_5
-  max jumps 1
+  max jumps 4
   print on
  }
 
@@ -135,4 +135,12 @@ hybrid reachability
    x5 in [0,0]
   }
  }
+}
+
+unsafe set
+{
+  l5
+  {
+  	x1 <= -1.2
+  }
 }
