@@ -22,22 +22,22 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 	}
 
 	while ( !mWorkQueue.empty() ) {
-		LTIWorker<State> worker;
+		LTIWorker<State> worker{mHybridAutomaton, mAnalysisSettings};
 		ReachTreeNode<State>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
-		if ( currentNode->getDepth() <= mAnalysisSettings.jumpDepth ) {
+		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
 			safetyResult = worker.computeForwardReachability( *currentNode );
 		} else {
 			safetyResult = worker.computeTimeSuccessors( *currentNode );
 		}
 
+		// only for plotting
+		mFlowpipes.emplace_back( worker.getFlowpipe() );
+
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
 			return safetyResult;
 		}
-
-		// only for plotting
-		mFlowpipes.emplace_back( worker.getFlowpipe() );
 
 		// create jump successor tasks
 		for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
@@ -56,6 +56,13 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 			}
 		}
 	}
+
+	std::cout << "Flowpipe sizes:" << std::endl;
+
+	for ( auto& flowpipe : mFlowpipes ) {
+		std::cout << flowpipe.size() << std::endl;
+	}
+
 	return REACHABILITY_RESULT::SAFE;
 }
 

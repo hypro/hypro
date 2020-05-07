@@ -17,9 +17,9 @@ class ltiJumpHandler {
 	using TransitionStateMap = typename std::map<Transition<Number>*, std::vector<State>>;
 
   public:
-	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const StrategyParameters& strategy );
+	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy );
 
-	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const StrategyParameters& strategy ) const;
+	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const;
 
 	void applyReset( State& state, Transition<Number>* transitionPtr ) const;
 

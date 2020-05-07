@@ -13,7 +13,7 @@ class LTIAnalyzer {
 
   public:
 	LTIAnalyzer() = delete;
-	LTIAnalyzer( const HybridAutomaton<Number>& ha, const Setting& setting )
+	LTIAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
 		, mReachTree( new ReachTreeNode<State> ) {
@@ -21,11 +21,13 @@ class LTIAnalyzer {
 
 	REACHABILITY_RESULT run();
 
+	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
+
   protected:
 	std::queue<ReachTreeNode<State>*> mWorkQueue;
 	std::vector<Flowpipe<State>> mFlowpipes;
 	HybridAutomaton<Number> mHybridAutomaton;
-	Setting mAnalysisSettings;
+	Settings mAnalysisSettings;
 	ReachTree<State> mReachTree;
 };
 

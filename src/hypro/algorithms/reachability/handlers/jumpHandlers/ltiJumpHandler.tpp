@@ -178,7 +178,7 @@ void ltiJumpHandler<State>::handle() {
 */
 
 template <typename State>
-auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transition<Number>* transition, const StrategyParameters& strategy ) -> TransitionStateMap {
+auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy ) -> TransitionStateMap {
 	// holds a mapping of transitions to states which need to be aggregated
 	TransitionStateMap toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -247,13 +247,15 @@ auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transit
 
 template <typename State>
 void ltiJumpHandler<State>::applyReset( State& state, Transition<Number>* transitionPtr ) const {
-	for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
-		if ( state.getSetType( i ) == representation_name::carl_polytope ) {
-			IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( i );
-			state.partialIntervalAssignment( intervalReset.mIntervals, i );
-		} else {
-			AffineTransformation<Number> reset = transitionPtr->getReset().getAffineReset( i );
-			state.partiallyApplyTransformation( reset.mTransformation, i );
+	if ( !transitionPtr->getReset().empty() ) {
+		for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
+			if ( state.getSetType( i ) == representation_name::carl_polytope ) {
+				IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( i );
+				state = state.partialIntervalAssignment( intervalReset.mIntervals, i );
+			} else {
+				AffineTransformation<Number> reset = transitionPtr->getReset().getAffineReset( i );
+				state = state.partiallyApplyTransformation( reset.mTransformation, i );
+			}
 		}
 	}
 }
@@ -288,7 +290,7 @@ void ltiJumpHandler<State>::applyReduction( State& state ) const {
 }
 
 template <typename State>
-void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const StrategyParameters& strategy ) const {
+void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const {
 	// Aggregation
 	DEBUG( "hydra.worker.discrete", "Number of transitions to aggregate: " << toAggregate.size() << std::endl );
 	for ( const auto& transitionStatePair : toAggregate ) {
