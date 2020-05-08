@@ -30,7 +30,7 @@ auto dispatch( representation_name representation, int setting, Callable func, A
 				case boxSetting_name::BoxLinearOptimizationOn:
 					return func.template operator()<BoxT<Number, Converter, BoxLinearOptimizationOn>>( args... );
 				case boxSetting_name::BoxAllOff:
-					return func.template operator()<BoxT<Number, Converter, BoxLinearOptimizationOn>>( args... );
+					return func.template operator()<BoxT<Number, Converter, BoxAllOff>>( args... );
 			}
 	}
 	assert( false );
