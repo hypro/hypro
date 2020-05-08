@@ -17,21 +17,31 @@ using DefaultRepresentations =
 
 //Mapping of types to enum values. May also be done in the classes themselves.
 template <class... T>
-constexpr auto TypeEnum<BoxT<T...>> = representation_name::box;
+static constexpr auto TypeEnum<BoxT<T...>> = representation_name::box;
 template <class... T>
-constexpr auto TypeEnum<SupportFunctionT<T...>> = representation_name::support_function;
+static constexpr auto TypeEnum<SupportFunctionT<T...>> = representation_name::support_function;
 
 template <>
-constexpr int TypeEnum<BoxLinearOptimizationOn> = boxSetting_name::BoxLinearOptimizationOn;
+static constexpr int TypeEnum<BoxLinearOptimizationOn> = boxSetting_name::BoxLinearOptimizationOn;
 template <>
-constexpr int TypeEnum<BoxLinearOptimizationOff> = boxSetting_name::BoxLinearOptimizationOff;
+static constexpr int TypeEnum<BoxLinearOptimizationOff> = boxSetting_name::BoxLinearOptimizationOff;
 template <>
-constexpr int TypeEnum<BoxIntervalArithmeticOff> = boxSetting_name::BoxIntervalArithmeticOff;
+static constexpr int TypeEnum<BoxIntervalArithmeticOff> = boxSetting_name::BoxIntervalArithmeticOff;
 template <>
-constexpr int TypeEnum<BoxAllOff> = boxSetting_name::BoxAllOff;
+static constexpr int TypeEnum<BoxAllOff> = boxSetting_name::BoxAllOff;
 
 template <>
-constexpr int TypeEnum<SupportFunctionSetting> = supportFunctionSetting_name::SupportFunctionSetting;
+static constexpr int TypeEnum<SupportFunctionSetting> = supportFunctionSetting_name::SupportFunctionSetting;
+template <>
+static constexpr int TypeEnum<NoBoxReduction> = supportFunctionSetting_name::NoBoxReduction;
+template <>
+static constexpr int TypeEnum<NoBoxDetection> = supportFunctionSetting_name::NoBoxDetection;
+template <>
+static constexpr int TypeEnum<NoTrafoReduction> = supportFunctionSetting_name::NoTrafoReduction;
+template <>
+static constexpr int TypeEnum<NoReduction> = supportFunctionSetting_name::NoReduction;
+template <>
+static constexpr int TypeEnum<PolytopeSupportFunctionSetting> = supportFunctionSetting_name::PolytopeSupportFunctionSetting;
 
 template <class Number, class Converter>
 using DefaultDispatcher = Dispatcher<Number, Converter, DefaultRepresentations>;

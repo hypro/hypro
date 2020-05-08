@@ -11,7 +11,7 @@ namespace hypro {
 
 //Maps an enum (or really any value) to each type. By default a static ::type_enum member is used so that a class can declare it itself. This may also be specialized elsewhere (simiar to std::hash) to provide the mapping.
 template <class T>
-constexpr auto TypeEnum = T::type_enum;
+static constexpr auto TypeEnum = T::type_enum;
 
 //Takes a representation, unpacks its template arguments and allows matching against the TypeEnum values of those.
 template <class Representation>
