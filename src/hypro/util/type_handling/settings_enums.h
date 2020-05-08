@@ -1,29 +1,26 @@
 #pragma once
 
-#include "representation_enums.h"
+#include "better_enums/enum.h"
 
-#include <map>
 #include <string>
 
 namespace hypro {
 
 // box settings
-enum class boxSetting_name {
-	BoxLinearOptimizationOn,
-	BoxLinearOptimizationOff,
-	BoxIntervalArithmeticOff,
-	BoxAllOff
-};
+BETTER_ENUM( boxSetting_name, int,
+			 BoxLinearOptimizationOn,
+			 BoxLinearOptimizationOff,
+			 BoxIntervalArithmeticOff,
+			 BoxAllOff );
 
-inline std::map<std::string, boxSetting_name> const stringToBoxSetting{
-	  {"BoxLinearOptimizationOn",
-	   boxSetting_name::BoxLinearOptimizationOn},
-	  {"BoxLinearOptimizationOff",
-	   boxSetting_name::BoxLinearOptimizationOff},
-	  {"BoxIntervalArithmeticOff",
-	   boxSetting_name::BoxIntervalArithmeticOff},
-	  {"BoxAllOff", boxSetting_name::BoxAllOff}};
+BETTER_ENUM( supportFunctionSetting_name, int,
+			 SupportFunctionSetting,
+			 NoBoxReduction,
+			 NoBoxDetection,
+			 NoTrafoReduction,
+			 NoReduction,
+			 PolytopeSupportFunctionSetting );
 
-int stringToSetting( representation_name Rep, const std::string& name );
+int stringToSetting( const std::string& name );
 
 }  // namespace hypro

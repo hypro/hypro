@@ -23,11 +23,11 @@ struct Functor {
 
 int main( int argc, char **argv ) {
 	assert( argc == 3 );
-	std::string representationStr{argv[1]};
-	std::string settingStr{argv[2]};
+	std::string representationStr{ argv[1] };
+	std::string settingStr{ argv[2] };
 
-	representation_name representation = stringToRepresentation.at( representationStr );
-	int setting = stringToSetting( representation, settingStr );
+	representation_name representation = representation_name::_from_string( representationStr.c_str() );
+	int setting = stringToSetting( settingStr );
 
 	dispatch<double, Converter<double>>( representation, setting, Functor{},
 										 representation );

@@ -153,12 +153,12 @@ class State {
 // parameter pack expansion
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-		int dummy[sizeof...( Rargs )] = {( mSets.push_back( sets ), 0 )...};
-		int dummy2[sizeof...( Rargs )] = {( mTypes.push_back( sets.type() ), 0 )...};
+		int dummy[sizeof...( Rargs )] = { ( mSets.push_back( sets ), 0 )... };
+		int dummy2[sizeof...( Rargs )] = { ( mTypes.push_back( sets.type() ), 0 )... };
 #pragma GCC diagnostic pop
 		(void)dummy;
 		(void)dummy2;
-		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 		assert( checkConsistency() );
 	}
 
@@ -174,7 +174,7 @@ class State {
 		, mTimestamp( _timestamp ) {
 		mSets.push_back( _rep );
 		mTypes.push_back( Representation::type() );
-		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 	}
 
 	/**
@@ -190,12 +190,12 @@ class State {
 // parameter pack expansion
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-		int dummy[sizeof...( Rargs )] = {( mSets.push_back( sets ), 0 )...};
-		int dummy2[sizeof...( Rargs )] = {( mTypes.push_back( sets.type() ), 0 )...};
+		int dummy[sizeof...( Rargs )] = { ( mSets.push_back( sets ), 0 )... };
+		int dummy2[sizeof...( Rargs )] = { ( mTypes.push_back( sets.type() ), 0 )... };
 #pragma GCC diagnostic pop
 		(void)dummy;
 		(void)dummy2;
-		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 		assert( checkConsistency() );
 	}
 
@@ -378,7 +378,7 @@ class State {
 
 	template <typename Callable, typename... Args>
 	auto visit( std::size_t setIndex, Callable c, Args&&... args ) {
-		return std::visit( [&]( auto r ) { return c( r, std::forward<Args...>( args... ) ); }, mSets[setIndex] );
+		return std::visit( [&]( auto r ) { return c( r, std::forward<Args>( args )... ); }, mSets[setIndex] );
 	}
 
 	/**

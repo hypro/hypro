@@ -21,7 +21,7 @@ class RootGrowNode;
 //The infos are the address to the representation as an actual number and the type of the representation.
 struct LeafData : public RGNData {
 	uintptr_t addressToRep;
-	representation_name typeOfRep;
+	representation_name typeOfRep = representation_name::UNDEF;
 	bool isNotRedundant;
 	LeafData(){};
 	LeafData( const uintptr_t addr, const representation_name rep, const bool redundancy )
