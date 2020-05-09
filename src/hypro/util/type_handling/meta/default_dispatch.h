@@ -22,26 +22,26 @@ template <class... T>
 static constexpr auto TypeEnum<SupportFunctionT<T...>> = representation_name::support_function;
 
 template <>
-static constexpr int TypeEnum<BoxLinearOptimizationOn> = boxSetting_name::BoxLinearOptimizationOn;
+inline constexpr int TypeEnum<BoxLinearOptimizationOn> = boxSetting_name::BoxLinearOptimizationOn;
 template <>
-static constexpr int TypeEnum<BoxLinearOptimizationOff> = boxSetting_name::BoxLinearOptimizationOff;
+inline constexpr int TypeEnum<BoxLinearOptimizationOff> = boxSetting_name::BoxLinearOptimizationOff;
 template <>
-static constexpr int TypeEnum<BoxIntervalArithmeticOff> = boxSetting_name::BoxIntervalArithmeticOff;
+inline constexpr int TypeEnum<BoxIntervalArithmeticOff> = boxSetting_name::BoxIntervalArithmeticOff;
 template <>
-static constexpr int TypeEnum<BoxAllOff> = boxSetting_name::BoxAllOff;
+inline constexpr int TypeEnum<BoxAllOff> = boxSetting_name::BoxAllOff;
 
 template <>
-static constexpr int TypeEnum<SupportFunctionSetting> = supportFunctionSetting_name::SupportFunctionSetting;
+inline constexpr int TypeEnum<SupportFunctionSetting> = supportFunctionSetting_name::SupportFunctionSetting;
 template <>
-static constexpr int TypeEnum<NoBoxReduction> = supportFunctionSetting_name::NoBoxReduction;
+inline constexpr int TypeEnum<NoBoxReduction> = supportFunctionSetting_name::NoBoxReduction;
 template <>
-static constexpr int TypeEnum<NoBoxDetection> = supportFunctionSetting_name::NoBoxDetection;
+inline constexpr int TypeEnum<NoBoxDetection> = supportFunctionSetting_name::NoBoxDetection;
 template <>
-static constexpr int TypeEnum<NoTrafoReduction> = supportFunctionSetting_name::NoTrafoReduction;
+inline constexpr int TypeEnum<NoTrafoReduction> = supportFunctionSetting_name::NoTrafoReduction;
 template <>
-static constexpr int TypeEnum<NoReduction> = supportFunctionSetting_name::NoReduction;
+inline constexpr int TypeEnum<NoReduction> = supportFunctionSetting_name::NoReduction;
 template <>
-static constexpr int TypeEnum<PolytopeSupportFunctionSetting> = supportFunctionSetting_name::PolytopeSupportFunctionSetting;
+inline constexpr int TypeEnum<PolytopeSupportFunctionSetting> = supportFunctionSetting_name::PolytopeSupportFunctionSetting;
 
 template <class Number, class Converter>
 using DefaultDispatcher = Dispatcher<Number, Converter, DefaultRepresentations>;
