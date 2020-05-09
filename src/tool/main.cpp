@@ -29,10 +29,12 @@ int main( int argc, char const *argv[] ) {
 		  hypro::representation_name::_from_string( options["representation"].as<std::string>().c_str() );
 
 	// create strategy
-	hypro::Settings settings{ { { timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
-								  hypro::stringToSetting( options["setting"].as<std::string>() ) } },
-							  reachSettings.jumpDepth,
-							  reachSettings.timeBound };
+	hypro::Settings settings{{{timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
+							   hypro::stringToSetting( options["setting"].as<std::string>() )}},
+							 reachSettings.jumpDepth,
+							 reachSettings.timeBound,
+							 {reachSettings.plotDimensions},
+							 {std::vector<std::string>( {reachSettings.plotDimensions.size(), reachSettings.fileName} )}};
 
 	// run reachability analysis
 	hydra::reachability::analyze( automaton, settings );

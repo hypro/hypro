@@ -7,7 +7,7 @@ using namespace hypro;
 
 template <typename State>
 void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	LTIAnalyzer<State> analyzer{ automaton, setting };
+	LTIAnalyzer<State> analyzer{automaton, setting};
 	auto result = analyzer.run();
 
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -19,11 +19,12 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 
 	// call to plotting.
 	auto& plt = Plotter<typename State::NumberType>::getInstance();
-	plt.setFilename( "outtest" );
-	for ( const auto pltDimensions : setting.plotDimensions ) {
+	for ( std::size_t pic = 0; pic < setting.plotDimensions.size(); ++pic ) {
+		plt.setFilename( setting.plotFileNames[pic] );
+		std::cout << "Set filename to " << setting.plotFileNames[pic] << std::endl;
 		for ( const auto& fp : analyzer.getFlowpipes() ) {
 			for ( const auto& segment : fp ) {
-				plt.addObject( segment.project( pltDimensions ).vertices() );
+				plt.addObject( segment.project( setting.plotDimensions[pic] ).vertices() );
 			}
 		}
 		plt.plot2d();  // writes to .plt file for pdf creation
