@@ -50,15 +50,17 @@ constexpr unsigned long default_double_comparison_ulps = 128;  //!< @brief The d
 // constexpr unsigned long default_double_comparison_ulps = 4096; //!< @brief The default threshold value for double
 // ULP-comparison.
 
-constexpr unsigned long defaultTemplateDirectionCount = 8;  //!< @brief The default number of template directions used in templated evaluation.
+constexpr unsigned long defaultTemplateDirectionCount = 8;	//!< @brief The default number of template directions used in templated evaluation.
 
-constexpr unsigned long MAX_DIMENSION_LIMIT = 100;  //!< @brief
+constexpr unsigned long defaultPPLDenominator = 1000000;
+
+constexpr unsigned long MAX_DIMENSION_LIMIT = 100;	//!< @brief
 
 constexpr double EPSILON = 0.000001;  //!< @brief A limit required for Fukudas Minkowski-Sum algorithm.
 
-constexpr long POS_CONSTANT = 100;  //!< @brief Some required positive constant for Fukudas Minkowski-Sum algorithm.
+constexpr long POS_CONSTANT = 100;	//!< @brief Some required positive constant for Fukudas Minkowski-Sum algorithm.
 
-constexpr unsigned SF_CACHE_SIZE = 200;  //!< @brief
+constexpr unsigned SF_CACHE_SIZE = 200;	 //!< @brief
 
 /** Enables debug output for Fukudas Minkowski-Sum algorithm. */
 //#define fukuda_DEBUG
