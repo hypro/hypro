@@ -13,6 +13,7 @@ int main( int argc, char const *argv[] ) {
 	auto options = hydra::handleCMDArguments( argc, argv );
 
 	// parse model file
+	START_BENCHMARK_OPERATION( Verification );
 	COUT( "Passed model file: " << options["model"].as<std::string>() );
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<hydra::Number>(
 		  options["model"].as<std::string>() );
@@ -39,5 +40,6 @@ int main( int argc, char const *argv[] ) {
 	// run reachability analysis
 	hydra::reachability::analyze( automaton, settings );
 
+	EVALUATE_BENCHMARK_RESULT( Verification );
 	return 0;
 }
