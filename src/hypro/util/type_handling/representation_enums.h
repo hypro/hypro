@@ -18,5 +18,5 @@ BETTER_ENUM( representation_name, int,
 			 difference_bounds,
 			 SFN,
 			 UNDEF,
-			 genStar );
+			 genStar )
 }  // namespace hypro

@@ -16,16 +16,16 @@ REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode
 	ltiFirstSegmentHandler<State> firstSegmentHandler;
 	State firstSegment = firstSegmentHandler( task.getState(), mSettings.strategy.front().timeStep );
 
-	auto containmentStateSetPair = ltiIntersectInvariant( firstSegment );
-	if ( containmentStateSetPair.first == CONTAINMENT::NO ) {
+	auto [containment, segment] = ltiIntersectInvariant( firstSegment );
+	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
 
 	// add state to flowpipe
-	mFlowpipe.addState( containmentStateSetPair.second );
+	mFlowpipe.addState( segment );
 
-	containmentStateSetPair = ltiIntersectBadStates( containmentStateSetPair.second, mHybridAutomaton );
-	if ( containmentStateSetPair.first != CONTAINMENT::NO ) {
+	auto [containment, segment] = ltiIntersectBadStates( segment, mHybridAutomaton );
+	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -33,18 +33,18 @@ REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode
 	// while not done
 	std::size_t segmentCounter = 1;
 	while ( requireTimeSuccessorComputation( segmentCounter ) ) {
-		State currentSegment = ltiApplyTimeEvolution( containmentStateSetPair.second, firstSegmentHandler.getTrafo(), firstSegmentHandler.getTranslation(), mSettings.strategy.front().timeStep );
-		containmentStateSetPair = ltiIntersectInvariant( currentSegment );
-		if ( containmentStateSetPair.first == CONTAINMENT::NO ) {
+		State currentSegment = ltiApplyTimeEvolution( segment, firstSegmentHandler.getTrafo(), firstSegmentHandler.getTranslation(), mSettings.strategy.front().timeStep );
+		[ containment, segment ] = ltiIntersectInvariant( currentSegment );
+		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
 		}
 
 		// add state to flowpipe
-		mFlowpipe.addState( containmentStateSetPair.second );
+		mFlowpipe.addState( segment );
 		++segmentCounter;
 
-		containmentStateSetPair = ltiIntersectBadStates( containmentStateSetPair.second, mHybridAutomaton );
-		if ( containmentStateSetPair.first != CONTAINMENT::NO ) {
+		[ containment, segment ] = ltiIntersectBadStates( segment, mHybridAutomaton );
+		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;
 		}

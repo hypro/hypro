@@ -21,7 +21,6 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	auto& plt = Plotter<typename State::NumberType>::getInstance();
 	for ( std::size_t pic = 0; pic < setting.plotDimensions.size(); ++pic ) {
 		plt.setFilename( setting.plotFileNames[pic] );
-		std::cout << "Set filename to " << setting.plotFileNames[pic] << std::endl;
 		for ( const auto& fp : analyzer.getFlowpipes() ) {
 			for ( const auto& segment : fp ) {
 				plt.addObject( segment.project( setting.plotDimensions[pic] ).vertices() );

@@ -11,7 +11,7 @@ BETTER_ENUM( boxSetting_name, int,
 			 BoxLinearOptimizationOn,
 			 BoxLinearOptimizationOff,
 			 BoxIntervalArithmeticOff,
-			 BoxAllOff );
+			 BoxAllOff )
 
 BETTER_ENUM( supportFunctionSetting_name, int,
 			 SupportFunctionSetting,
@@ -19,7 +19,7 @@ BETTER_ENUM( supportFunctionSetting_name, int,
 			 NoBoxDetection,
 			 NoTrafoReduction,
 			 NoReduction,
-			 PolytopeSupportFunctionSetting );
+			 PolytopeSupportFunctionSetting )
 
 int stringToSetting( const std::string& name );
 
