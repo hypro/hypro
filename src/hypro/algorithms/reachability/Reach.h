@@ -72,7 +72,7 @@ class Reach {
 	std::map<unsigned, std::vector<flowpipe_t>> mReachableStates;
 	WorkQueue<TaskTypePtr> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
-	representation_name mType;
+	representation_name mType = representation_name::UNDEF;
 	bool mInitialStatesSet = false;
 	std::unique_ptr<ReachTree<State>> mReachabilityTree;
 
