@@ -7,6 +7,7 @@ using namespace hypro;
 
 template <typename State>
 void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	START_BENCHMARK_OPERATION( Verification );
 	LTIAnalyzer<State> analyzer{automaton, setting};
 	auto result = analyzer.run();
 
@@ -16,8 +17,10 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	} else {
 		std::cout << "The model is safe." << std::endl;
 	}
+	EVALUATE_BENCHMARK_RESULT( Verification );
 
 	// call to plotting.
+	START_BENCHMARK_OPERATION( Plotting );
 	auto& plt = Plotter<typename State::NumberType>::getInstance();
 	for ( std::size_t pic = 0; pic < setting.plotDimensions.size(); ++pic ) {
 		plt.setFilename( setting.plotFileNames[pic] );
@@ -28,6 +31,7 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 		}
 		plt.plot2d();  // writes to .plt file for pdf creation
 	}
+	EVALUATE_BENCHMARK_RESULT( Plotting );
 }
 
 struct Dispatcher {

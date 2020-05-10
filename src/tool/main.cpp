@@ -10,11 +10,11 @@
 
 int main( int argc, char const *argv[] ) {
 	// parse command line arguments
+	START_BENCHMARK_OPERATION( Parsing );
 	auto options = hydra::handleCMDArguments( argc, argv );
 
 	// parse model file
-	START_BENCHMARK_OPERATION( Verification );
-	COUT( "Passed model file: " << options["model"].as<std::string>() );
+	COUT( "Passed model file: " << options["model"].as<std::string>() << std::endl );
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<hydra::Number>(
 		  options["model"].as<std::string>() );
 
@@ -37,9 +37,10 @@ int main( int argc, char const *argv[] ) {
 							 {reachSettings.plotDimensions},
 							 {std::vector<std::string>( {reachSettings.plotDimensions.size(), reachSettings.fileName} )}};
 
+	EVALUATE_BENCHMARK_RESULT( Parsing );
+
 	// run reachability analysis
 	hydra::reachability::analyze( automaton, settings );
 
-	EVALUATE_BENCHMARK_RESULT( Verification );
 	return 0;
 }
