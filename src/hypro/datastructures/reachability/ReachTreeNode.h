@@ -33,12 +33,12 @@ struct RefinementSetting {
 	State initialSet;
 
 	EventTimingContainer<Number> mTimings;
-	carl::Interval<tNumber> entryTimestamp = carl::Interval<tNumber>::emptyInterval();  // The (local) timestamp of entry. TODO: Isn't the semantics like "time spent"?
+	carl::Interval<tNumber> entryTimestamp = carl::Interval<tNumber>::emptyInterval();	// The (local) timestamp of entry. TODO: Isn't the semantics like "time spent"?
 	bool fullyComputed = false;
 	bool isDummy = true;  // Used in case we skip a certain strategy setting to fill the gaps. This means that the initial
 						  // set is not yet set. TODO: Do we actually need this? Only in case we can overstep certain settings, right?
 	bool isEmpty = false;
-	bool hitBadStates = false;  /// denotes that this setup lead to an intersection with the bad states. Currently only used for tree
+	bool hitBadStates = false;	/// denotes that this setup lead to an intersection with the bad states. Currently only used for tree
 								/// plotting.
 
 	RefinementSetting() = default;
@@ -113,7 +113,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 
   protected:
 	Path<Number, tNumber> mPath;						 /// path cache.
-	std::vector<RefinementSetting<State>> mRefinements;  /// ordered list of applied refinements.
+	std::vector<RefinementSetting<State>> mRefinements;	 /// ordered list of applied refinements.
 
 	mutable std::mutex mutex;
 
@@ -247,34 +247,10 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 	friend std::ostream& operator<<( std::ostream& out, const ReachTreeNode<S>& reachTreeNode );
 
 	template <typename S>
-	friend bool operator<( const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs ) {
-		return ( lhs.getDepth() < rhs.getDepth() );
-	}
+	friend bool operator<( const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs );
 
 	template <typename S>
-	friend bool operator==( const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs ) {
-		// properties of tree node
-		if ( lhs.mDepth != rhs.mDepth ||
-			 lhs.mParent != rhs.mParent ||
-			 lhs.mChildren.size() != rhs.mChildren.size() ) {
-			return false;
-		}
-
-		if ( lhs.mPath != rhs.mPath ) {
-			return false;
-		}
-
-		if ( lhs.mRefinements.size() != rhs.mRefinements.size() ) {
-			return false;
-		}
-
-		for ( std::size_t i = 0; i < lhs.mRefinements.size(); ++i ) {
-			if ( lhs.mRefinements[i] != rhs.mRefinements[i] ) {
-				return false;
-			}
-		}
-		return true;
-	}
+	friend bool operator==( const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs );
 };
 
 }  // namespace hypro

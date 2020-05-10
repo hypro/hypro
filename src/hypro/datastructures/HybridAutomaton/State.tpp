@@ -27,7 +27,7 @@ void State<Number, Representation, Rargs...>::setSet( const R& s, std::size_t i 
 	assert( checkConsistency() );
 	while ( i >= mSets.size() ) {
 		mSets.emplace_back( Representation() );		 // some default set.
-		mTypes.push_back( Representation::type() );  // some default set type.
+		mTypes.push_back( Representation::type() );	 // some default set type.
 		mIsEmpty.push_back( TRIBOOL::NSET );
 		TRACE( "hypro.datastructures", "Add empty dummy set of type " << mTypes.back() << " at index " << mSets.size() );
 	}
@@ -46,7 +46,7 @@ void State<Number, Representation, Rargs...>::setSet( const State<Number, Repres
 	assert( checkConsistency() );
 	while ( i >= mSets.size() ) {
 		mSets.emplace_back( Representation() );		 // some default set.
-		mTypes.push_back( Representation::type() );  // some default set type.
+		mTypes.push_back( Representation::type() );	 // some default set type.
 		mIsEmpty.push_back( TRIBOOL::NSET );
 	}
 	mSets[i] = s;
@@ -79,7 +79,7 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( mSets.size() == in.getSets().size() );
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
-		TRACE( "hypro.datastructures", "Apply unite vistor for set " << i );
+		TRACE( "hypro.datastructures", "Apply unite visitor for set " << i );
 		res.setSetDirect( std::visit( genericUniteVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
 		if ( in.getEmptyStates()[i] == TRIBOOL::TRUE || this->getEmptyStates()[i] == TRIBOOL::TRUE ) {
 			res.rGetEmptyStates()[i] = TRIBOOL::TRUE;
@@ -89,6 +89,29 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	TRACE( "hypro.datastructures", "Done union." );
 
 	res.setTimestamp( mTimestamp.convexHull( in.getTimestamp() ) );
+	return res;
+}
+
+template <typename Number, typename Representation, typename... Rargs>
+State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::intersect( const State<Number, Representation, Rargs...>& in ) const {
+	State<Number, Representation, Rargs...> res( *this );
+
+	// intersection.
+	assert( mSets.size() == in.getSets().size() );
+	assert( checkConsistency() );
+	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
+		TRACE( "hypro.datastructures", "Apply unite vistor for set " << i );
+		if ( in.getEmptyStates()[i] == TRIBOOL::TRUE || this->getEmptyStates()[i] == TRIBOOL::TRUE ) {
+			res.rGetEmptyStates()[i] = TRIBOOL::TRUE;
+		} else {
+			res.setSetDirect( std::visit( genericIntersectVisitor<repVariant>(), mSets.at( i ), in.getSet( i ) ), i );
+			res.rGetEmptyStates()[i] = TRIBOOL::NSET;
+		}
+	}
+
+	TRACE( "hypro.datastructures", "Done intersection." );
+
+	res.setTimestamp( carl::set_intersection( mTimestamp, in.getTimestamp() ) );
 	return res;
 }
 

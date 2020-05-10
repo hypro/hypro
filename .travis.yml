@@ -91,14 +91,18 @@ jobs:
         apt:
           sources: [*sources_base, llvm-toolchain-xenial-8]
           packages: [*packages_base, clang-8 libc++abi-dev libstdc++-8-dev]
-      env: COMPILER=clang++-8
+      env: COMPILER=clang++-8 TASK=clang-sanitizer
     - os: linux
       compiler: clang++-9
       addons:
         apt:
           sources: [*sources_base, llvm-toolchain-xenial-9]
-          packages: [*packages_base, clang-9 libc++abi-dev libstdc++-9-dev llvm-symbolizer]
-      env: COMPILER=clang++-9 TASK=clang-sanitizer
+          packages:
+            [
+              *packages_base,
+              clang-9 libc++abi-dev libstdc++-9-dev llvm-symbolizer,
+            ]
+      env: COMPILER=clang++-9
     - os: linux
       compiler: clang++-10
       addons:
@@ -168,8 +172,6 @@ jobs:
       env: COMPILER=clang++-9
     - os: linux
       env: COMPILER=clang++-10
-    - os: linux
-      env: COMPILER=clang++-6.0
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../

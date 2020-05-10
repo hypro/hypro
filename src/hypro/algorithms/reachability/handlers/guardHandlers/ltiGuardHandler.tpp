@@ -2,24 +2,19 @@
 
 namespace hypro {
 template <typename State>
-void ltiGuardHandler<State>::handle() {
-	assert( !mGuardSatisfyingState->getTimestamp().isEmpty() );
-	TRACE( "hydra.worker.discrete", "Applying handler " << this->handlerName() );
-	std::pair<CONTAINMENT, State> statePair = mGuardSatisfyingState->partiallySatisfies( mTransition->getGuard(), mIndex );
-	if ( statePair.first == CONTAINMENT::NO ) {
-		mSatisfies = false;
-		return;
+bool ltiGuardHandler<State>::operator()( const State& stateSet ) {
+	bool haveSatisfiedGuard = false;
+	assert( !stateSet.getTimestamp().isEmpty() );
+
+	for ( auto const& transitionPtr : stateSet.getLocation()->getTransitions() ) {
+		auto [contained, state] = stateSet.partiallySatisfies( transitionPtr->getGuard(), 0 );
+		assert( contained != CONTAINMENT::BOT );
+		if ( contained != CONTAINMENT::NO ) {
+			mGuardSatisfyingStates[transitionPtr.get()].emplace_back( std::move( state ) );
+			haveSatisfiedGuard = true;
+		}
 	}
-	mGuardSatisfyingState->setSetDirect( statePair.second.getSet( mIndex ), mIndex );
-	mGuardSatisfyingState->setSetType( statePair.second.getSetType( mIndex ), mIndex );
-	mSatisfies = true;
+	return haveSatisfiedGuard;
 }
 
-template <typename State>
-void ltiGuardHandler<State>::reinitialize() {
-	TRACE( "hydra.worker.discrete", "Reinitializing handler " << this->handlerName() );
-	mSatisfies = false;
-	//mGuardSatisfyingState->setSetDirect(currentState.getSet(mIndex),mIndex);
-	//mGuardSatisfyingState->setSetType(currentState.getSetType(mIndex),mIndex);
-}
 }  // namespace hypro

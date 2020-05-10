@@ -37,6 +37,11 @@ enum class TRIBOOL { TRUE,
 					 FALSE,
 					 NSET };
 
+enum class REACHABILITY_RESULT {
+	SAFE,
+	UNKNOWN
+};
+
 /**
  * @brief Enum to represent set states such as empty and universal.
  */

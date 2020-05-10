@@ -297,7 +297,7 @@ EvaluationResult<Number> BoxT<Number, Converter, Setting>::evaluate( const vecto
 																   << _direction );
 	assert( _direction.rows() == Eigen::Index( this->dimension() ) || this->empty() );
 	if ( this->empty() ) {
-		return EvaluationResult<Number>();  // defaults to infeasible, i.e. empty.
+		return EvaluationResult<Number>();	// defaults to infeasible, i.e. empty.
 	}
 	// find the point, which represents the maximum towards the direction - compare signs.
 	vector_t<Number> furthestPoint = vector_t<Number>::Zero( this->dimension() );
@@ -494,21 +494,25 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 	assert( res.contains( Point<Number>( A * this->min().rawCoordinates() ) ) );
 	assert( res.contains( Point<Number>( A * this->max().rawCoordinates() ) ) );
 #ifndef NDEBUG
-	std::vector<Point<Number>> vertices = this->vertices();
-	Point<Number> manualMin = Point<Number>( A * ( vertices.begin()->rawCoordinates() ) );
-	Point<Number> manualMax = Point<Number>( A * ( vertices.begin()->rawCoordinates() ) );
-	for ( const auto& v : vertices ) {
-		Point<Number> t = Point<Number>( A * v.rawCoordinates() );
-		assert( res.contains( t ) );
-		for ( std::size_t d = 0; d < this->dimension(); ++d ) {
-			if ( manualMin.at( d ) > t.at( d ) ) {
-				manualMin[d] = t[d];
-			}
-			if ( manualMax.at( d ) < t.at( d ) ) {
-				manualMax[d] = t[d];
+	// only validate, if the dimension is small enough - computing all vertices in higher dimensions is not possible.
+	if ( this->dimension() < 10 ) {
+		std::vector<Point<Number>> vertices = this->vertices();
+		Point<Number> manualMin = Point<Number>( A * ( vertices.begin()->rawCoordinates() ) );
+		Point<Number> manualMax = Point<Number>( A * ( vertices.begin()->rawCoordinates() ) );
+		for ( const auto& v : vertices ) {
+			Point<Number> t = Point<Number>( A * v.rawCoordinates() );
+			assert( res.contains( t ) );
+			for ( std::size_t d = 0; d < this->dimension(); ++d ) {
+				if ( manualMin.at( d ) > t.at( d ) ) {
+					manualMin[d] = t[d];
+				}
+				if ( manualMax.at( d ) < t.at( d ) ) {
+					manualMax[d] = t[d];
+				}
 			}
 		}
 	}
+
 	//assert(manualMin == res.min());
 	//assert(manualMax == res.max());
 #endif
@@ -841,6 +845,12 @@ bool BoxT<Number, Converter, Setting>::contains( const BoxT<Number, Converter, S
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::unite( const BoxT<Number, Converter, Setting>& rhs ) const {
+	if ( this->empty() ) {
+		return rhs;
+	}
+	if ( rhs.empty() ) {
+		return *this;
+	}
 	assert( dimension() == rhs.dimension() );
 
 	std::vector<carl::Interval<Number>> newIntervals;

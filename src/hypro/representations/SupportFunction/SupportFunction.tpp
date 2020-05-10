@@ -495,12 +495,6 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 	}
 	assert( _mat.rows() == _vec.rows() );
 
-	auto res = this->intersectHalfspaces( _mat, _vec );
-	CONTAINMENT empty = res.empty() ? CONTAINMENT::NO : CONTAINMENT::YES;
-
-	return std::make_pair( empty, res );
-
-	/*
 	// maintain potential result
 	std::optional<SupportFunctionT<Number, Converter, Setting>> res;
 	for ( unsigned rowI = 0; rowI < _mat.rows(); ++rowI ) {
@@ -539,7 +533,7 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 
 			TRACE( "hypro.representations.supportFunction", "Potentially fully empty, as " << invDirVal << " < " << -( _vec( rowI ) ) );
 
-			// case where the result is empty
+			// case where the result is empty, i.e., when the supporting hyperplane in the opposite direction lies outside the current half-space.
 			if ( invDirVal < -( _vec( rowI ) ) ) {
 				// exact verification in case the values are close to each other
 				if ( carl::AlmostEqual2sComplement( Number( -invDirVal ), planeEvalRes.supportValue, 16 ) ) {
@@ -599,7 +593,6 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 		//assert( !res.value().empty() );
 		return std::make_pair( CONTAINMENT::PARTIAL, res.value() );
 	}
-	*/
 }
 
 template <typename Number, typename Converter, typename Setting>

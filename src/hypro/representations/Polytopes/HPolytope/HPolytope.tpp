@@ -932,7 +932,9 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
+#ifdef HYPRO_LOGGING
 	TRACE( "hypro.representations.HPolytope", "with " << rhs << std::endl );
+#endif
 	HPolytopeT<Number, Converter, Setting> res( *this );
 	// only insert the new Halfspace, if it is not already redundant.
 	if ( res.evaluate( rhs.normal() ).supportValue > rhs.offset() )
@@ -958,18 +960,17 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number> &point ) const {
+#ifdef HYPRO_LOGGING
 	TRACE( "hypro.representations.HPolytope", point );
+#endif
 	return this->contains( point.rawCoordinates() );
 }
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &vec ) const {
-	//std::cout << __func__ << ": point: " << vec << std::endl;
 	for ( const auto &plane : mHPlanes ) {
-		// The 2's complement check for equality is required to ensure double compatibility.
-		//std::cout << "Test plane " << plane << ": dot product: " << plane.normal().dot( vec ) << std::endl;
+		// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) && plane.normal().dot( vec ) > plane.offset() ) {
-			//std::cout << "falsified." << std::endl;
 			return false;
 		}
 	}

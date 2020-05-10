@@ -188,7 +188,6 @@ class BoxT : private GeometricObjectBase {
 
 	/**
 	  * @brief Static method for the construction of an empty box of required dimension.
-	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
 	static BoxT Empty() {
