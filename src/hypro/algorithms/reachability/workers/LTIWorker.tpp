@@ -24,7 +24,7 @@ REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode
 	// add state to flowpipe
 	mFlowpipe.addState( segment );
 
-	auto [containment, segment] = ltiIntersectBadStates( segment, mHybridAutomaton );
+	std::tie( containment, segment ) = ltiIntersectBadStates( segment, mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -34,7 +34,7 @@ REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode
 	std::size_t segmentCounter = 1;
 	while ( requireTimeSuccessorComputation( segmentCounter ) ) {
 		State currentSegment = ltiApplyTimeEvolution( segment, firstSegmentHandler.getTrafo(), firstSegmentHandler.getTranslation(), mSettings.strategy.front().timeStep );
-		[ containment, segment ] = ltiIntersectInvariant( currentSegment );
+		std::tie( containment, segment ) = ltiIntersectInvariant( currentSegment );
 		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
 		}
@@ -43,7 +43,7 @@ REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode
 		mFlowpipe.addState( segment );
 		++segmentCounter;
 
-		[ containment, segment ] = ltiIntersectBadStates( segment, mHybridAutomaton );
+		std::tie( containment, segment ) = ltiIntersectBadStates( segment, mHybridAutomaton );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;
