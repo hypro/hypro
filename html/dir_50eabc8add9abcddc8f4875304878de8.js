@@ -4,9 +4,7 @@ var dir_50eabc8add9abcddc8f4875304878de8 =
       [ "discreteInvariantHandler", "classhypro_1_1discreteInvariantHandler.html", "classhypro_1_1discreteInvariantHandler" ]
     ] ],
     [ "InvariantHandlers.h", "InvariantHandlers_8h.html", null ],
-    [ "ltiInvariantHandler.h", "ltiInvariantHandler_8h.html", [
-      [ "ltiInvariantHandler", "classhypro_1_1ltiInvariantHandler.html", "classhypro_1_1ltiInvariantHandler" ]
-    ] ],
+    [ "ltiInvariantHandler.h", "ltiInvariantHandler_8h.html", "ltiInvariantHandler_8h" ],
     [ "rectangularInvariantHandler.h", "rectangularInvariantHandler_8h.html", [
       [ "rectangularInvariantHandler", "classhypro_1_1rectangularInvariantHandler.html", "classhypro_1_1rectangularInvariantHandler" ]
     ] ],

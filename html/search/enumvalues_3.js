@@ -2,7 +2,6 @@ var searchData=
 [
   ['define',['DEFINE',['../classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4ac43d880df3b76257b9759d5ff7926e50',1,'hypro::HybridAutomatonLexer::DEFINE()'],['../classhypro_1_1HybridAutomatonParser.html#a6a14f59a09f6a16a62f43c4dbd6f8257a9efb4d053faa22c50e5e532995c92cae',1,'hypro::HybridAutomatonParser::DEFINE()']]],
   ['dichotomic2d',['DICHOTOMIC2D',['../namespaceZUtility.html#a7821d775e05fdc28a0e8dfdcb5c1072dae6a46dd4956c9d98cdd948973ed8962a',1,'ZUtility']]],
-  ['difference_5fbounds',['difference_bounds',['../namespacehypro.html#aada824f660cac25bb643be870cdc0a86a3e6673ff37a85f05454aa10d55c0e1f6',1,'hypro']]],
   ['directed_5fbig',['DIRECTED_BIG',['../classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563ac7806a1bd4379ce9307075e12754b111',1,'hypro::HPolytopeT']]],
   ['directed_5fsmall',['DIRECTED_SMALL',['../classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563ab0997eaa9c1fbaf24799eb1f5baad912',1,'hypro::HPolytopeT']]],
   ['directed_5ftemplate',['DIRECTED_TEMPLATE',['../classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a47f3a32095c7c48a98ff53651e3e7779',1,'hypro::HPolytopeT']]],

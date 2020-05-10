@@ -12,6 +12,7 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_convexHull.cpp", "example__convexHull_8cpp.html", "example__convexHull_8cpp" ],
     [ "example_deepSFTree.cpp", "example__deepSFTree_8cpp.html", "example__deepSFTree_8cpp" ],
     [ "example_differenceBounds.cpp", "example__differenceBounds_8cpp.html", "example__differenceBounds_8cpp" ],
+    [ "example_dispatch.cpp", "example__dispatch_8cpp.html", "example__dispatch_8cpp" ],
     [ "example_diss.cpp", "example__diss_8cpp.html", "example__diss_8cpp" ],
     [ "example_double_precision.cpp", "example__double__precision_8cpp.html", "example__double__precision_8cpp" ],
     [ "example_draisine.cpp", "example__draisine_8cpp.html", null ],

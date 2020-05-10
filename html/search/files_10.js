@@ -13,6 +13,8 @@ var searchData=
   ['rectangularoperations_2eh',['rectangularOperations.h',['../rectangularOperations_8h.html',1,'']]],
   ['rectangularresethandler_2eh',['rectangularResetHandler.h',['../rectangularResetHandler_8h.html',1,'']]],
   ['rectangulartimeevolutionhandler_2eh',['rectangularTimeEvolutionHandler.h',['../rectangularTimeEvolutionHandler_8h.html',1,'']]],
+  ['representation_5fenums_2eh',['representation_enums.h',['../representation__enums_8h.html',1,'']]],
+  ['representationcombinations_2eh',['RepresentationCombinations.h',['../RepresentationCombinations_8h.html',1,'']]],
   ['reset_2eh',['Reset.h',['../Reset_8h.html',1,'']]],
   ['resethandlers_2eh',['ResetHandlers.h',['../ResetHandlers_8h.html',1,'']]],
   ['resettypes_2eh',['ResetTypes.h',['../ResetTypes_8h.html',1,'']]],

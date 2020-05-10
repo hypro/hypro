@@ -8,6 +8,7 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     [ "sampling", "dir_d93f25bb6eeed2fcb95055e30f52c726.html", "dir_d93f25bb6eeed2fcb95055e30f52c726" ],
     [ "statistics", "dir_57790bb148fd18efc2431dd25a248521.html", "dir_57790bb148fd18efc2431dd25a248521" ],
     [ "tuple_expansion", "dir_3a35ee46332157846b55808bff5bb8c8.html", "dir_3a35ee46332157846b55808bff5bb8c8" ],
+    [ "type_handling", "dir_46df0c505137c4ea9ebf8f65132b3ec3.html", "dir_46df0c505137c4ea9ebf8f65132b3ec3" ],
     [ "convenienceOperators.h", "util_2convenienceOperators_8h.html", "util_2convenienceOperators_8h" ],
     [ "conversion.h", "conversion_8h.html", "conversion_8h" ],
     [ "convexHull.h", "convexHull_8h.html", null ],

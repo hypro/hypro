@@ -13,9 +13,7 @@ var dir_f695c0e486b1567b2450488137a0ccfa =
       [ "ReachTree", "classhypro_1_1ReachTree.html", "classhypro_1_1ReachTree" ]
     ] ],
     [ "ReachTreeNode.h", "ReachTreeNode_8h.html", "ReachTreeNode_8h" ],
-    [ "Settings.h", "Settings_8h.html", [
-      [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", "structhypro_1_1ReachabilitySettings" ]
-    ] ],
+    [ "Settings.h", "Settings_8h.html", "Settings_8h" ],
     [ "SettingsProvider.h", "SettingsProvider_8h.html", [
       [ "SettingsProvider", "classhypro_1_1SettingsProvider.html", "classhypro_1_1SettingsProvider" ]
     ] ],

@@ -265,7 +265,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ac0b4738ef579ec38a95b54c80842351c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#ac0b4738ef579ec38a95b54c80842351c">computePlaneOffset</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;<a class="el" href="classhypro_1_1Halfspace.html#a79ea6f910b5d0558c2e5e77ddfb9c63c">normal</a>, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;pointOnPlane)</td></tr>
 <tr class="memdesc:ac0b4738ef579ec38a95b54c80842351c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the plane offset of a given normal vector for that plane and a point lying on the plane. This corresponds to the dot product of the normal vector and the negated point coordinates.  <a href="#ac0b4738ef579ec38a95b54c80842351c">More...</a><br /></td></tr>
 <tr class="separator:ac0b4738ef579ec38a95b54c80842351c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79c4f5b77a363c2265dc048332995cee"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a79c4f5b77a363c2265dc048332995cee">type</a> ()</td></tr>
+<tr class="memitem:a79c4f5b77a363c2265dc048332995cee"><td class="memItemLeft" align="right" valign="top">static representation_name&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Halfspace.html#a79c4f5b77a363c2265dc048332995cee">type</a> ()</td></tr>
 <tr class="memdesc:a79c4f5b77a363c2265dc048332995cee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the representation type of the halfspace.  Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name as it is usually not used as a representation but still has defined representation name.  <a href="#a79c4f5b77a363c2265dc048332995cee">More...</a><br /></td></tr>
 <tr class="separator:a79c4f5b77a363c2265dc048332995cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -1563,7 +1563,7 @@ template&lt;typename Number&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::type </td>
+          <td class="memname">static representation_name <a class="el" href="classhypro_1_1Halfspace.html">hypro::Halfspace</a>&lt; <a class="el" href="example__differenceBounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::type </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1579,8 +1579,6 @@ template&lt;typename Number&gt; </div>
 <p>Returns the representation type of the halfspace.  Since adding an own representation name for halfspaces would greatly affect the code, it just returns constraint_set as the representation name as it is usually not used as a representation but still has defined representation name. </p>
 
 <p>Definition at line <a class="el" href="Halfspace_8h_source.html#l00349">349</a> of file <a class="el" href="Halfspace_8h_source.html">Halfspace.h</a>.</p>
-
-<p>References <a class="el" href="representations_2types_8h_source.html#l00010">hypro::constraint_set</a>.</p>
 
 </div>
 </div>

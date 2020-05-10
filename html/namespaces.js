@@ -1,5 +1,6 @@
 var namespaces =
 [
+    [ "better_enums", "namespacebetter__enums.html", null ],
     [ "Eigen", "namespaceEigen.html", null ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
     [ "parser", "namespaceparser.html", null ],

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['eigen',['Eigen',['../namespaceEigen.html',1,'']]]
+  ['better_5fenums',['better_enums',['../namespacebetter__enums.html',1,'']]]
 ];

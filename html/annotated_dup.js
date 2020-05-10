@@ -1,5 +1,6 @@
 var annotated_dup =
 [
+    [ "better_enums", "namespacebetter__enums.html", "namespacebetter__enums" ],
     [ "Eigen", "namespaceEigen.html", "namespaceEigen" ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
     [ "smtrat", "namespacesmtrat.html", "namespacesmtrat" ],
@@ -29,6 +30,7 @@ var annotated_dup =
     [ "Eval_functions", "structEval__functions.html", "structEval__functions" ],
     [ "Flags", "structFlags.html", "structFlags" ],
     [ "Flowpipe_segment", "structFlowpipe__segment.html", "structFlowpipe__segment" ],
+    [ "Functor", "structFunctor.html", "structFunctor" ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", "structIndependent__part__funct" ],
     [ "Input_equation", "structInput__equation.html", "structInput__equation" ],
     [ "Invariants", "structInvariants.html", "structInvariants" ],

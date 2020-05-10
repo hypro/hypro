@@ -120,8 +120,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1WorkQueueT.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1WorkQueueT-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -177,17 +177,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aad1a9ecc69d567bd01e29721d368e73d"><td class="memItemLeft" align="right" valign="top">std::mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#aad1a9ecc69d567bd01e29721d368e73d">getMutex</a> ()</td></tr>
 <tr class="separator:aad1a9ecc69d567bd01e29721d368e73d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:aa3be7205638fc7c0e6f9edb13a3d01e7"><td class="memItemLeft" align="right" valign="top">const std::deque&lt; Workable &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#aa3be7205638fc7c0e6f9edb13a3d01e7">getQueue</a> () const </td></tr>
-<tr class="separator:aa3be7205638fc7c0e6f9edb13a3d01e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
 <tr class="memitem:a827f3eeb7876026f836de3c451ae28dc"><td class="memItemLeft" align="right" valign="top">std::deque&lt; Workable &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#a827f3eeb7876026f836de3c451ae28dc">mQueue</a></td></tr>
 <tr class="separator:a827f3eeb7876026f836de3c451ae28dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a724e9ed48d21dc8e84c87bcdf48b4dd3"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#a724e9ed48d21dc8e84c87bcdf48b4dd3">mSpinlock</a></td></tr>
 <tr class="separator:a724e9ed48d21dc8e84c87bcdf48b4dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aa3be7205638fc7c0e6f9edb13a3d01e7"><td class="memItemLeft" align="right" valign="top">const std::deque&lt; Workable &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#aa3be7205638fc7c0e6f9edb13a3d01e7">getQueue</a> () const </td></tr>
+<tr class="separator:aa3be7205638fc7c0e6f9edb13a3d01e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -214,7 +214,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00027">27</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00031">31</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -320,7 +320,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </div><div class="memdoc">
 <p>Destructor </p>
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00036">36</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00040">40</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -340,7 +340,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -361,7 +361,7 @@ template&lt;class Workable, class Setting&gt; </div>
 <p>dequeues an item by removing it from the queue and returning it</p>
 <dl class="section return"><dt>Returns</dt><dd>the Workable </dd></dl>
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -387,7 +387,7 @@ template&lt;class Workable, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -407,7 +407,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -434,7 +434,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00078">78</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00082">82</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -461,7 +461,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00088">88</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00092">92</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -482,7 +482,7 @@ template&lt;class Workable, class Setting&gt; </div>
 <p>checks whether the queue is empty</p>
 <dl class="section return"><dt>Returns</dt><dd>true iff no Workable is left. </dd></dl>
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -501,7 +501,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -520,7 +520,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -540,7 +540,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -560,7 +560,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -579,7 +579,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -599,7 +599,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -618,7 +618,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -645,7 +645,7 @@ template&lt;class Workable, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -664,7 +664,7 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00036">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00040">hypro::WorkQueueT&lt; TaskType &gt;::~WorkQueueT()</a>.</p>
 
 </div>
 </div>
@@ -703,7 +703,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00080">80</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00084">84</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -723,14 +723,14 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00107">107</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00024">24</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00088">hypro::WorkQueueT&lt; TaskType &gt;::getQueue()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00092">hypro::WorkQueueT&lt; TaskType &gt;::getQueue()</a>.</p>
 
 </div>
 </div>
@@ -749,14 +749,14 @@ template&lt;class Workable, class Setting&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00109">109</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00028">28</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
-<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00078">hypro::WorkQueueT&lt; TaskType &gt;::getMutex()</a>.</p>
+<p>Referenced by <a class="el" href="WorkQueue_8h_source.html#l00082">hypro::WorkQueueT&lt; TaskType &gt;::getMutex()</a>.</p>
 
 </div>
 </div>

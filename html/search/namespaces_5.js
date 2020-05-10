@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['zutility',['ZUtility',['../namespaceZUtility.html',1,'']]]
+  ['smtrat',['smtrat',['../namespacesmtrat.html',1,'']]],
+  ['statistics',['statistics',['../namespacestatistics.html',1,'']]]
 ];

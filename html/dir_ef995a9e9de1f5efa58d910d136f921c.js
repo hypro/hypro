@@ -3,9 +3,7 @@ var dir_ef995a9e9de1f5efa58d910d136f921c =
     [ "discreteTimeEvolutionHandler.h", "discreteTimeEvolutionHandler_8h.html", [
       [ "discreteTimeEvolutionHandler", "classhypro_1_1discreteTimeEvolutionHandler.html", "classhypro_1_1discreteTimeEvolutionHandler" ]
     ] ],
-    [ "ltiTimeEvolutionHandler.h", "ltiTimeEvolutionHandler_8h.html", [
-      [ "ltiTimeEvolutionHandler", "classhypro_1_1ltiTimeEvolutionHandler.html", "classhypro_1_1ltiTimeEvolutionHandler" ]
-    ] ],
+    [ "ltiTimeEvolutionHandler.h", "ltiTimeEvolutionHandler_8h.html", "ltiTimeEvolutionHandler_8h" ],
     [ "rectangularTimeEvolutionHandler.h", "rectangularTimeEvolutionHandler_8h.html", [
       [ "rectangularTimeEvolutionHandler", "classhypro_1_1rectangularTimeEvolutionHandler.html", "classhypro_1_1rectangularTimeEvolutionHandler" ]
     ] ],

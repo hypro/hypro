@@ -19,6 +19,6 @@ var dir_7fa927d8fbf9dfbeef69af27f63bc81b =
       [ "Halfspace", "classhypro_1_1Halfspace.html", "classhypro_1_1Halfspace" ],
       [ "Location", "classhypro_1_1Location.html", "classhypro_1_1Location" ]
     ] ],
-    [ "types.h", "representations_2types_8h.html", "representations_2types_8h" ],
+    [ "types.h", "representations_2types_8h.html", null ],
     [ "volumeApproximation.h", "volumeApproximation_8h.html", null ]
 ];

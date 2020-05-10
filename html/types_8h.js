@@ -29,6 +29,10 @@ var types_8h =
       [ "TIMEDLOC", "types_8h.html#a591ce576c89c11741bb7ee90db71c677a6a69247abc4b097fa949c7105cdf0fd4", null ],
       [ "RECTANGULARLOC", "types_8h.html#a591ce576c89c11741bb7ee90db71c677a16af997c92e8e2eb3613d3f187aa7be3", null ]
     ] ],
+    [ "REACHABILITY_RESULT", "types_8h.html#a25980153cbf1c156dc5c47e3b1f2e05e", [
+      [ "SAFE", "types_8h.html#a25980153cbf1c156dc5c47e3b1f2e05eab18288babd4636cff34b15e0d1340fc2", null ],
+      [ "UNKNOWN", "types_8h.html#a25980153cbf1c156dc5c47e3b1f2e05ea696b031073e74bf2cb98e5ef201d4aa3", null ]
+    ] ],
     [ "SETSTATE", "types_8h.html#ad9468253f740d3ba4388c00408ddb841", [
       [ "UNKNOWN", "types_8h.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3", null ],
       [ "NONEMPTY", "types_8h.html#ad9468253f740d3ba4388c00408ddb841a8409775fd1592ee7eb20b33dba52ad04", null ],

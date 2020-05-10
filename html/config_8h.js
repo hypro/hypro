@@ -1,6 +1,7 @@
 var config_8h =
 [
     [ "default_double_comparison_ulps", "group__globals.html#gab2f19f742ea698a529102d85c3c0be0e", null ],
+    [ "defaultPPLDenominator", "group__globals.html#ga4508383d9f9b10c10f08f180d5086337", null ],
     [ "defaultTemplateDirectionCount", "group__globals.html#ga6416b4b09ad3984e740a0e19ef391467", null ],
     [ "DYNAMICHEURISTIC", "group__globals.html#ga607d8cb76bcf54172542359fda640812", null ],
     [ "EPSILON", "group__globals.html#ga75f355966e0a97665eaf5a4c79baa7af", null ],

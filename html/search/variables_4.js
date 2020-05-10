@@ -2,6 +2,7 @@ var searchData=
 [
   ['d',['D',['../structhypro_1_1STindependentFunct.html#ab6585fd1aef43ba50ff3d25dc43a9d50',1,'hypro::STindependentFunct::D()'],['../structIndependent__part__funct.html#a4dc83a628be0e306a506fe37887d6b9b',1,'Independent_part_funct::D()']]],
   ['default_5fdouble_5fcomparison_5fulps',['default_double_comparison_ulps',['../group__globals.html#gab2f19f742ea698a529102d85c3c0be0e',1,'config.h']]],
+  ['defaultppldenominator',['defaultPPLDenominator',['../group__globals.html#ga4508383d9f9b10c10f08f180d5086337',1,'config.h']]],
   ['defaulttemplatedirectioncount',['defaultTemplateDirectionCount',['../group__globals.html#ga6416b4b09ad3984e740a0e19ef391467',1,'config.h']]],
   ['deletedpositions',['deletedPositions',['../classhypro_1_1ExactQuickhull_1_1FacetSpace.html#a783abef02ca9f5789244db5e69b40cf8',1,'hypro::ExactQuickhull::FacetSpace']]],
   ['delta',['delta',['../classhypro_1_1NonLinearOmega0Supportfunction.html#a23de72e8ebdcb06a7d092c929783160c',1,'hypro::NonLinearOmega0Supportfunction::delta()'],['../structIndependent__part__funct.html#a595627a005174b014f9f23d7212b700b',1,'Independent_part_funct::delta()']]],

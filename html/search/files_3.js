@@ -4,6 +4,7 @@ var searchData=
   ['decisionentity_2eh',['DecisionEntity.h',['../DecisionEntity_8h.html',1,'']]],
   ['decomposeconstraintset_2eh',['decomposeConstraintSet.h',['../decomposeConstraintSet_8h.html',1,'']]],
   ['decomposition_2eh',['Decomposition.h',['../Decomposition_8h.html',1,'']]],
+  ['default_5fdispatch_2eh',['default_dispatch.h',['../default__dispatch_8h.html',1,'']]],
   ['dependencies_2emd',['dependencies.md',['../dependencies_8md.html',1,'']]],
   ['dictionary_2eh',['Dictionary.h',['../Dictionary_8h.html',1,'']]],
   ['differencebounds_2eh',['DifferenceBounds.h',['../DifferenceBounds_8h.html',1,'']]],
@@ -12,5 +13,8 @@ var searchData=
   ['discreteguardhandler_2eh',['discreteGuardHandler.h',['../discreteGuardHandler_8h.html',1,'']]],
   ['discreteinvarianthandler_2eh',['discreteInvariantHandler.h',['../discreteInvariantHandler_8h.html',1,'']]],
   ['discreteresethandler_2eh',['discreteResetHandler.h',['../discreteResetHandler_8h.html',1,'']]],
-  ['discretetimeevolutionhandler_2eh',['discreteTimeEvolutionHandler.h',['../discreteTimeEvolutionHandler_8h.html',1,'']]]
+  ['discretetimeevolutionhandler_2eh',['discreteTimeEvolutionHandler.h',['../discreteTimeEvolutionHandler_8h.html',1,'']]],
+  ['dispatch_2eh',['dispatch.h',['../dispatch_8h.html',1,'']]],
+  ['dispatch_5fmanual_2eh',['dispatch_manual.h',['../dispatch__manual_8h.html',1,'']]],
+  ['dispatch_5fmeta_2eh',['dispatch_meta.h',['../dispatch__meta_8h.html',1,'']]]
 ];

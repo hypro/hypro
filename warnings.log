@@ -42,6 +42,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/clp/helperFunctions.h:10: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/clp/helperFunctions.h:10: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/dispatch_manual.h:12: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/doc/markdown/gettingStarted/installation.md:18: warning: found subsection command outside of section context!
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'isat' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'BagnaraHZ08SCP' does not have an associated number
@@ -56,6 +57,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'stc' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'Frehse2015' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md:3: warning: unable to resolve reference to `hypro::GeometricObject<Number,DerivedShape>' for \ref command
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/dispatch_manual.h:12: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/dispatch_manual.h:12: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:552: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:603: warning: The following parameters of hypro::operator*(const Point< Number > &_lhs, const Number &_factor) are not documented:
   parameter '_factor'

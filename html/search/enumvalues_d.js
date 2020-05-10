@@ -7,9 +7,6 @@ var searchData=
   ['petrol',['petrol',['../namespacehypro_1_1plotting.html#ab13f85a10232140e0565d5d892631328aa1bf792e9d0acb1d6e4cf2db83f4304e',1,'hypro::plotting']]],
   ['plus',['PLUS',['../classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a598f5bf1ed29a5e34088a9d2166336f8',1,'hypro::HybridAutomatonLexer::PLUS()'],['../classhypro_1_1HybridAutomatonParser.html#a6a14f59a09f6a16a62f43c4dbd6f8257a7abadaabe7c87d782f891ac9965772e4',1,'hypro::HybridAutomatonParser::PLUS()']]],
   ['poly',['POLY',['../classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a3162b4898051d6825237905ca5846263',1,'hypro::HybridAutomatonLexer::POLY()'],['../classhypro_1_1HybridAutomatonParser.html#a6a14f59a09f6a16a62f43c4dbd6f8257a1b97d2b5067c2a23b5db0cba8688a3e4',1,'hypro::HybridAutomatonParser::POLY()'],['../namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7aa88e0794a2e734614842249299419f7b',1,'hypro::POLY()']]],
-  ['polytope_5fh',['polytope_h',['../namespacehypro.html#aada824f660cac25bb643be870cdc0a86a3e66d121105f51762441745aba5cb8cb',1,'hypro']]],
-  ['polytope_5fv',['polytope_v',['../namespacehypro.html#aada824f660cac25bb643be870cdc0a86a8d4e581e1b8947c0624b54ae32243791',1,'hypro']]],
-  ['ppl_5fpolytope',['ppl_polytope',['../namespacehypro.html#aada824f660cac25bb643be870cdc0a86a6f182e7d8180df0f847a82eb39613d71',1,'hypro']]],
   ['projection',['PROJECTION',['../namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7a6ed412e7fde2f558e4a44e4e76ba7bcf',1,'hypro']]],
   ['projectop',['PROJECTOP',['../namespacehypro.html#aea6debaf29d409802568b494efa8aeb0a9a687aaeb99f43593c593b09f9ef364d',1,'hypro']]]
 ];

@@ -2,6 +2,7 @@ var searchData=
 [
   ['ellipsoid_2eh',['Ellipsoid.h',['../Ellipsoid_8h.html',1,'']]],
   ['ellipsoidsupportfunction_2eh',['EllipsoidSupportFunction.h',['../EllipsoidSupportFunction_8h.html',1,'']]],
+  ['enum_2eh',['enum.h',['../enum_8h.html',1,'']]],
   ['errorlistener_2ecpp',['ErrorListener.cpp',['../ErrorListener_8cpp.html',1,'']]],
   ['errorlistener_2eh',['ErrorListener.h',['../ErrorListener_8h.html',1,'']]],
   ['etc_5futil_2ecpp',['ETC_util.cpp',['../ETC__util_8cpp.html',1,'']]],
@@ -23,6 +24,7 @@ var searchData=
   ['example_5fconvexhull_2ecpp',['example_convexHull.cpp',['../example__convexHull_8cpp.html',1,'']]],
   ['example_5fdeepsftree_2ecpp',['example_deepSFTree.cpp',['../example__deepSFTree_8cpp.html',1,'']]],
   ['example_5fdifferencebounds_2ecpp',['example_differenceBounds.cpp',['../example__differenceBounds_8cpp.html',1,'']]],
+  ['example_5fdispatch_2ecpp',['example_dispatch.cpp',['../example__dispatch_8cpp.html',1,'']]],
   ['example_5fdiss_2ecpp',['example_diss.cpp',['../example__diss_8cpp.html',1,'']]],
   ['example_5fdouble_5fprecision_2ecpp',['example_double_precision.cpp',['../example__double__precision_8cpp.html',1,'']]],
   ['example_5fdraisine_2ecpp',['example_draisine.cpp',['../example__draisine_8cpp.html',1,'']]],

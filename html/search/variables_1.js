@@ -5,6 +5,7 @@ var searchData=
   ['absl',['absl',['../classhypro_1_1NonLinearOmega0Supportfunction.html#afa9a7e185c63d0c5a634ef471dc3174a',1,'hypro::NonLinearOmega0Supportfunction']]],
   ['actuallocation',['actualLocation',['../classhypro_1_1CIFLocVisitor.html#a53bd333f12a55930ae116675881b8c19',1,'hypro::CIFLocVisitor']]],
   ['addresstorep',['addressToRep',['../structhypro_1_1LeafData.html#a9c2d4ef8a5b186f6041637bca0a81a6a',1,'hypro::LeafData']]],
+  ['aggregation',['aggregation',['../structhypro_1_1AnalysisParameters.html#ac33855372ca216ed99309c3177fca4f0',1,'hypro::AnalysisParameters']]],
   ['approximate_5fas_5fbox',['APPROXIMATE_AS_BOX',['../structhypro_1_1SupportFunctionNewDefault.html#ae41d97ba79e9a08dafc5ef0f9ed6c8cf',1,'hypro::SupportFunctionNewDefault::APPROXIMATE_AS_BOX()'],['../structhypro_1_1SupportFunctionNewMorePrecision.html#a5b4c190695e1bafc08fb66cc90b6a2a8',1,'hypro::SupportFunctionNewMorePrecision::APPROXIMATE_AS_BOX()'],['../structhypro_1_1SupportFunctionNewNoReduction.html#aeeed4f7a6f0f95cd69abe865ddfc78ce',1,'hypro::SupportFunctionNewNoReduction::APPROXIMATE_AS_BOX()'],['../structhypro_1_1SupportFunctionNewLeGuernic.html#a443be77b127552e4eb76e8bf6c24d498',1,'hypro::SupportFunctionNewLeGuernic::APPROXIMATE_AS_BOX()']]],
   ['ar',['ar',['../structhypro_1_1glpk__context.html#a22b3016cc69e59a36e5ebe67e87a358e',1,'hypro::glpk_context']]],
   ['args',['args',['../structhypro_1_1Parameters.html#a3635b79952d344de55ae7b251bab3375',1,'hypro::Parameters']]],
