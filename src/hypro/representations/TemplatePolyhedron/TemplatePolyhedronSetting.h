@@ -16,27 +16,31 @@ namespace hypro {
 	//This is the default setting
 	struct TemplatePolyhedronDefault {
 		//Determines which constraints should be added to the template matrix.
-		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::ONLY_INIT;
+		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::INIT_INV_GUARD_BAD;
 		//Whether the specialized reachability algorithm from Sankaranarayanan 2008 should be used .
-		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = false;
+		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = true;
 		//If the alternative reachability algorithm is used, this determines the order to which a Taylor series approximation is computed.
 		static constexpr unsigned DERIVATIVE_ORDER = 6;
 		static_assert(DERIVATIVE_ORDER >= 1, "Template Polyhedron DERIVATIVE_ORDER must be greater equal 1.");
 		//If the alternative reachability algorithm is used, a monotonicity check is conducted before the expensive root enumeration, if this option is false.
-		static constexpr bool DIRECTLY_COMPUTE_ROOTS = false;
+		static constexpr bool DIRECTLY_COMPUTE_ROOTS = true;
+		//NOTE: DON'T USE MONOTONICITY CHECKS ITS NOT SOUND
 		//If the alternative reachability algorithm is used and roots are not directly computed, then the granularity defines the precision of the monotonicity check
-		static constexpr unsigned int MONOTONICITY_GRANULARITY = 4;
+		static constexpr unsigned int MONOTONICITY_GRANULARITY = 1;
 		static_assert(MONOTONICITY_GRANULARITY >= 1, "Template Polyhedron MONOTONICITY_GRANULARITY must be greater equal 1.");
 		//If the alternative reachability algorithm is used, say whether location invariant strengthening should also be used
-		static constexpr bool USE_LOCATION_INVARIANT_STRENGTHENING = false;
-
+		static constexpr bool USE_LOCATION_INVARIANT_STRENGTHENING = true;
+		//Activate numerical corrections during location invariant strengthening
 		static constexpr bool USE_NUMERICAL_CORRECTIONS = false;
-
-		static constexpr double NUMERICAL_CORRECTION_THRESHOLD = 1e-15;
+		//Threshold to which values get corrected to zero during location invariant strengthening
+		//static constexpr double NUMERICAL_CORRECTION_THRESHOLD = 1e-15;
+		//Value that is used to bound unbounded invariants initially (are shrinked through location invariant strengthening)
+		static constexpr double BOUNDING_VALUE = 10000;
 	};
 
 	struct TemplatePolyhedronDifferent {
 		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::ONLY_INIT;
 		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = false;
 	};
+
 }

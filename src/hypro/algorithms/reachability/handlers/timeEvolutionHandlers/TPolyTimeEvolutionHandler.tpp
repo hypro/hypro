@@ -72,7 +72,7 @@ namespace hypro {
             }
 
             //Evaluate tpoly in direction g without last coeff (since g is dim+1 dimensional)
-            //NOTE: maybe one can avoid this evaluation by maximizing it via the last computed segment and its current bounds.
+            //The last coefficient is added to the support value
             EvaluationResult<Number> evalG = tpoly.evaluate(vector_t<Number>(g.block(0,0,g.rows()-1,1)), std::is_same_v<Number, mpq_class>);
             //std::cout << "TPolyTimeEvolutionHandler::handle, evalG: " << evalG << std::endl;
             //If solution is infeasible, we already received an empty tpoly in the beginning

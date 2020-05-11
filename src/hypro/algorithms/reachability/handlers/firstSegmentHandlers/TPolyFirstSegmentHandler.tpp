@@ -211,6 +211,7 @@ namespace hypro {
                         }        
                     }
                 }
+                //std::cout << "TPolyFSH::handle, values size: " << values.size() << std::endl;
                 //std::cout << "TPolyFirstSegmentHandler::handle, timestep: " << carl::toDouble(this->mTimeStep) << std::endl;
                 //std::cout << "TPolyFirstSegmentHandler::handle, increasing? " << increasing << " decreasig? " << decreasing << std::endl;
                 //std::cout << "TPolyFirstSegmentHandler::handle, values are: {";

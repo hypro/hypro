@@ -93,7 +93,7 @@ namespace hypro {
 	{
 		//TODO: get redundancy status somehow else
 		reduceRepresentation();
-		assert(this->rGetMatrixPtr() == matPtr);
+		//assert(this->rGetMatrixPtr() == matPtr);
 		assert(mOptimizer.matrix() == *matPtr);
 		assert(mOptimizer.vector() == vec);
 		assert(vec.rows() == mMatrixPtr->rows());
@@ -502,7 +502,8 @@ namespace hypro {
 		for(int i = 0; i < dirsRotatedInverse.rows(); i++){
 			COUNT("Affine Transformation Evaluate");
 		}
-		std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
+		std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, false);
+		//std::vector<EvaluationResult<Number>> evalInInvRotatedDirs = multiEvaluate(dirsRotatedInverse, true);
 		//std::cout << "TemplatePolyhedron::linearTransformation, evalInInvRotatedDirs: {";
 		//for(auto& e : evalInInvRotatedDirs){
 		//	//std::cout << e << ", ";
@@ -560,7 +561,7 @@ namespace hypro {
 			for(int i = 0; i < mMatrixPtr->rows(); i++){
 				COUNT("Minkowski Sum Evaluate");
 			}
-			auto evalInDirs = summed.multiEvaluate(*mMatrixPtr, true);
+			auto evalInDirs = summed.multiEvaluate(*mMatrixPtr, false);
 			vector_t<Number> newVector = vector_t<Number>::Zero(evalInDirs.size());
 			for(std::size_t i = 0; i < evalInDirs.size(); ++i){
 				if(evalInDirs.at(i).errorCode == SOLUTION::FEAS){
@@ -703,7 +704,7 @@ namespace hypro {
 		for(int j = 0; j < mMatrixPtr->rows(); ++j){
 			if(itDone == alreadyDone.end() || j != *itDone){
 				COUNT("Intersect Halfspaces Evaluate");
-				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),true);
+				auto res = extendedTPoly.evaluate(mMatrixPtr->row(j),false);
 				if(res.errorCode == SOLUTION::FEAS){
 					resultVec(j) = res.supportValue;
 				} else {
@@ -939,7 +940,7 @@ namespace hypro {
 		for(int i = 0; i < dirs.rows(); i++){
 			COUNT("Overapprox Evaluate");
 		}
-		auto evalRes = multiEvaluate(dirs, true);
+		auto evalRes = multiEvaluate(dirs, false);
 		vector_t<Number> evalOffsets = vector_t<Number>::Zero(dirs.rows());
 		for(std::size_t i = 0; i < evalRes.size(); ++i){
 			//assert(evalRes[i].errorCode == SOLUTION::FEAS);
@@ -947,7 +948,7 @@ namespace hypro {
 			if(evalRes[i].errorCode == SOLUTION::FEAS){
 				evalOffsets(i) = evalRes[i].supportValue;
 			} else if(evalRes[i].errorCode == SOLUTION::INFTY){
-				evalOffsets(i) = 1e10;
+				evalOffsets(i) = Setting::BOUNDING_VALUE;
 			} else {
 				std::cerr << "TPoly::overapproximate, evalRes was INFEAS" << std::endl;
 				exit(1);
@@ -966,29 +967,6 @@ namespace hypro {
 		if(empty()) return true;
 		//If less than dimension + 1 constraints, then unbounded
 		if((unsigned)mMatrixPtr->rows() < dimension() + 1) return false;
-		//Check if every variable occurs at least dimension-times.
-		//std::vector<unsigned> varOccurrences(dimension(), 0);
-		//for(int i = 0; i < mMatrixPtr->rows(); ++i){
-		//	//std::cout << "TPoly::isBounded, row: " << vector_t<Number>(mMatrixPtr->row(i).transpose()) << std::endl;
-		//	for(int j = 0; j < mMatrixPtr->cols(); ++j){
-		//		if((*mMatrixPtr)(i,j) != 0){
-		//			varOccurrences[j]++;
-		//		}
-		//	}
-		//	//std::cout << "TPoly::isBounded, varOccurences after row " << i << ": {";
-		//	//for(const auto occ : varOccurrences){
-		//	//	//std::cout << occ << ", ";
-		//	//}
-		//	//std::cout << "}" << std::endl;
-		//}
-		//for(unsigned i = 0; i < varOccurrences.size(); ++i){
-		//	if(varOccurrences.at(i) < dimension()){
-		//		//std::cout << "TPoly::isBounded, return false since " << varOccurrences.at(i) << " < " << dimension() << std::endl;
-		//		return false;
-		//	}
-		//}
-		//By now we only have shapes left where all normals are within one halfsphere
-		//Very expensive: Reverse each normal, evaluate in that direction, if INFTY then unbounded
 		//std::cout << "TPoly::isBounded, expensive part" << std::endl;
 		auto templateDirs = computeTemplate<Number>(mMatrixPtr->cols(), 4);
 		for(std::size_t i = 0; i < templateDirs.size(); ++i){
@@ -997,13 +975,6 @@ namespace hypro {
 				return false;
 			}
 		}
-		//for(int i = 0; i < mMatrixPtr->rows(); ++i){
-		//	//std::cout << "TPoly::isBounded, row: " << vector_t<Number>(mMatrixPtr->row(i).transpose()) << std::endl;
-		//	//std::cout << "TPoly::isBounded, eval res: " << evaluate(-mMatrixPtr->row(i),false) << std::endl;
-		//	if(evaluate(-mMatrixPtr->row(i),false).errorCode == SOLUTION::INFTY){
-		//		return false;
-		//	}
-		//}
 		return true;
 	}
 

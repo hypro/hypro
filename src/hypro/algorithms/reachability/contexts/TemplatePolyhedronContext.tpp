@@ -79,6 +79,10 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 	vector_t<Number> lastStrengthenedInv = vector_t<Number>::Zero( invTPoly.vector().rows() );
 	//Contains the newest relaxed invariant, called a(j+1) in paper
 	vector_t<Number> nextStrengthenedInv = invTPoly.vector();
+	//Contains the relaxed invariant with the smallest sum of coefficients
+	vector_t<Number> smallestInv = invTPoly.vector();
+	//Contains all strengthened invariant computed, needed for cycle detection
+	std::vector<vector_t<Number>> allInvs;
 
 	//1. Compute pi(j) (certificate of feasibility for a(j+1)) by solving Dj
 	//1.1 Construct A as: first transpose inv matrix, then insert lambda >= 0 constraints
@@ -166,20 +170,24 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 				if(certificate.row(rowI) == vector_t<Number>::Zero(certificate.cols()).transpose()){
 					//Usually when the condition above holds, it also holds nextStrengthenedInv(rowI) == invTPoly.vector()(rowI), 
 					//but because of numerical issues it can be unequal. In that case correct to the upper case.
-					if(nextStrengthenedInv(rowI) != invTPoly.vector()(rowI)){
+					if(nextStrengthenedInv(rowI) < invTPoly.vector()(rowI)){
 						//numeric error correction
 						COUNT("Correction Insert Certificate Row");
+						//std::cout << "Correction Insert Certificate Row, nextStrengthenedInv(rowI) = " << nextStrengthenedInv(rowI) << " and invTPoly.vector()(rowI) = " << invTPoly.vector()(rowI) << std::endl;
 						vector_t<Number> correction = minimizeA.optimumValue.block( 0, 0, invRows, 1 );
+						//std::cout << "Correction Insert Certificate Row, correction for certificate: " << correction.transpose() << std::endl;
 						certificate.row( rowI ) = correction.transpose();
 					}
 				} else {
-					auto tmp = nextStrengthenedInv.dot(certificate.row(rowI)) - mScaling*nextStrengthenedInv(rowI) + deriv.second;
-					if(0 < tmp && tmp <= TemplatePolyhedron<Number>::Settings::NUMERICAL_CORRECTION_THRESHOLD ){
+					//if(0 < tmp && tmp <= TemplatePolyhedron<Number>::Settings::NUMERICAL_CORRECTION_THRESHOLD ){
+					if(nextStrengthenedInv.dot(certificate.row(rowI)) - mScaling*nextStrengthenedInv(rowI) + deriv.second > 0){
 						//numeric error correction - as the value is actually zero or less, we need to set back to row to a zero row.
-						COUNT("Correction Remove ertificate Row");
+						//std::cout << "Correction Remove Certificate Row: tmp = " << tmp << std::endl;
+						COUNT("Correction Remove Certificate Row");
 						vector_t<Number> correction = vector_t<Number>::Zero(invRows);
 						certificate.row(rowI) = correction.transpose();
-					}
+						//correctedRows[rowI] = true;
+					} 
 				}
 			}
 
@@ -231,6 +239,24 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 				rowToInsert( i ) -= mScaling;
 				L.row( 2 * invRows + i ) = std::move( rowToInsert.transpose() );
 				c( 2 * invRows + i ) = - derivativeOffsets( i );
+				//if(TemplatePolyhedron<Number>::Settings::USE_NUMERICAL_CORRECTIONS){
+					//COUNT("L correction");
+					//std::cout << "L corrected"<< std::endl;
+					//c( 2 * invRows + i ) = 0;
+					//auto tmp = nextStrengthenedInv.dot(certificate.row(i)) - mScaling*nextStrengthenedInv(i) + derivativeOffsets(i);
+					//if(tmp > 0){
+					//	//If we corrected the certificate before, then we need to correct the value here too
+					//	COUNT("L correction");
+					//	std::cout << "L corrected: tmp: " << tmp << std::endl;
+					//	c( 2 * invRows + i ) = 0;
+					//} else {
+					//	std::cout << "L not corrected: tmp: " << tmp << std::endl;
+					//	c( 2 * invRows + i ) = - derivativeOffsets( i );
+					//}
+				//} else {
+				//	std::cout << "correctedRows at i:" << correctedRows.at(i) << std::endl;
+				//	c( 2 * invRows + i ) = - derivativeOffsets( i );
+				//}
 			}
 		}
 		//std::cout << "TemplatePolyhedronContext::LIS, added (non-)frozen rows to L and c: L: \n" << L << "c: \n" << c << std::endl;
@@ -246,6 +272,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			//In cases before, minimizeL was infeasible because Ax <= b has been solved with numerical instabilities.
 			//Against this, the numerical correction option has been implemented, such that these cases should not occur anymore.
 			COUNT("Infeas return");
+			//std::cout << "TemplatePolyhedronContext::LIS, added (non-)frozen rows to L and c: L: \n" << L << "c: \n" << c << std::endl;
 			return nextStrengthenedInv;
 		}
 		assert( minimizeL.errorCode == SOLUTION::FEAS );
@@ -261,20 +288,53 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 
 		//std::cout << "TemplatePolyhedronContext::LIS, minimizeL optimumValue is: \n" << minimizeL.optimumValue << std::endl;
 
+
 		//10.Set as next strenghtened inv
 		lastStrengthenedInv = nextStrengthenedInv;
 		nextStrengthenedInv = minimizeL.optimumValue;
 
+		//std::cout << "TemplatePolyhedronContext::LIS, nextStrengthenedInv sum: " << nextStrengthenedInv.sum() << "smallest sum " << smallestInv.sum() << std::endl;		
+
+		//Fixpoint escape: save inv with smallest coefficient
+		if(nextStrengthenedInv.sum() < smallestInv.sum()){
+			smallestInv = nextStrengthenedInv;
+		}
+
 		//std::cout << "TemplatePolyhedronContext::LIS, lastStrengthenedInv is now: \n" << lastStrengthenedInv << "nextStrengthenedInv is now: \n" << nextStrengthenedInv << std::endl;
+		//std::cout << "TemplatePolyhedronContext::LIS, nextStrengthenedInv: \n" << nextStrengthenedInv << std::endl;
 		//std::cout << "TemplatePolyhedronContext::LIS, counter: " << counter << std::endl;
 
-		//If we encountered a cycle return currently saved solution
+		//Cycle Detection
+		bool cycleDetected = false;
+		for(const auto& inv : allInvs){
+			if(nextStrengthenedInv.isApprox(inv)){
+				COUNT("Cycle Detection Return");
+				//std::cout << "TemplatePolyhedronContext::LIS, cycle detected!" << std::endl;
+				//return the smallest one found
+				cycleDetected = true;
+				break;
+			}
+		}
+		if(cycleDetected){
+			break;
+		} else {
+			allInvs.push_back(nextStrengthenedInv);
+		}
+
+		//Stop after 10 iterations to stop cycles of size greater 10
 		if(counter >= 10){
 			COUNT("Counter max return");
 			break;
 		} 
 	}
-	return nextStrengthenedInv;
+	if(nextStrengthenedInv.sum() < smallestInv.sum()){
+		//std::cout << "TemplatePolyhedronContext::LIS, returned next" << std::endl;
+		return nextStrengthenedInv;	
+	} else {
+		//std::cout << "TemplatePolyhedronContext::LIS, returned smallest which was:" << smallestInv << std::endl;
+		return smallestInv;
+	}
+	//return nextStrengthenedInv;
 }
 
 template <typename State>
@@ -450,6 +510,7 @@ void TemplatePolyhedronContext<State>::execBeforeFirstSegment() {
 	//5.Octagons
 
 	//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState before: \n" << this->mComputationState << std::endl;
+	//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, loc: " << this->mComputationState.getLocation()->getName() << std::endl;
 	assert( this->mComputationState.getSetType() == representation_name::polytope_t );
 	for ( std::size_t index = 0; index < this->mComputationState.getNumberSets(); ++index ) {
 		//TODO: Somehow get tpoly without overriding settings
