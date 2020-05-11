@@ -90,11 +90,14 @@ class SumOp : public RootGrowNode<Number, Converter, Setting> {
 				if ( res[index].errorCode == SOLUTION::INFTY ) {
 					r.errorCode = SOLUTION::INFTY;
 					r.supportValue = 1;
+					//std::cout << "SumOp::aggregate, entry was infty" << std::endl;					
 					break;
 				} else {
 					r.errorCode = SOLUTION::FEAS;
 					r.supportValue += res[index].supportValue;
+					//std::cout << "SumOp::aggregate, r after adding is:" << r.supportValue << std::endl;	
 					//if(res[index].optimumValue != vector_t<Number>::Zero(0)){
+					//if(res[index].errorCode != SOLUTION::INFTY){
 					//	r.optimumValue += res[index].optimumValue;
 					//}
 				}

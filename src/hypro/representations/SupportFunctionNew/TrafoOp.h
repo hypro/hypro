@@ -160,17 +160,21 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 		assert( resultStackBack.size() == 1 );
 		assert( Eigen::Index( resultStackBack.front().size() ) == currentParam.rows() );
 		const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = parameters->getParameterSet( currentExponent );
+		//std::cout << "TrafoOp::aggregate, currentParam: \n" << currentParam << std::endl;
+		//std::cout << "TrafoOp::aggregate, parameterPair.first: \n" << parameterPair.first << std::endl;
 		if ( resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS ) {
 			unsigned directionCnt = 0;
 			for ( auto& entry : resultStackBack.front() ) {
 				vector_t<Number> currentDir( currentParam.row( directionCnt ) );
 				if ( entry.errorCode == SOLUTION::INFTY ) {
+					//std::cout << "TrafoOp::aggregate, entry was infty" << std::endl;
 					entry.supportValue = 1;
 				} else {
 					assert( entry.errorCode != SOLUTION::INFEAS );
-
+					//std::cout << "TrafoOp::aggregate, entry before: " << entry.supportValue << std::endl;
 					entry.supportValue = entry.supportValue + currentDir.dot(parameterPair.second);
-
+					//std::cout << "TrafoOp::aggregate, entry after: " << entry.supportValue << std::endl;
+					
 					//if ( parameterPair.first.cols() != entry.optimumValue.rows() || Setting::LE_GUERNIC_HSPACE_INTERSECTION ) {
 						//Generate a point that will be on the same plane as the optimal value,
 						//Since le guernic hspace intersection does not return an optimal value
