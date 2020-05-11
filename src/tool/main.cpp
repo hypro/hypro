@@ -26,6 +26,10 @@ int main( int argc, char const *argv[] ) {
 							   ? options["delta"].as<mpq_class>()
 							   : reachSettings.timeStep;
 
+	mpq_class timehorizon = options.count( "timehorizon" )
+								  ? options["timehorizon"].as<mpq_class>()
+								  : reachSettings.timeBound;
+
 	hypro::representation_name representation =
 		  hypro::representation_name::_from_string( options["representation"].as<std::string>().c_str() );
 
@@ -33,7 +37,7 @@ int main( int argc, char const *argv[] ) {
 	hypro::Settings settings{{{timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
 							   hypro::stringToSetting( options["setting"].as<std::string>() )}},
 							 reachSettings.jumpDepth,
-							 reachSettings.timeBound,
+							 timehorizon,
 							 {reachSettings.plotDimensions},
 							 {std::vector<std::string>( {reachSettings.plotDimensions.size(), reachSettings.fileName} )}};
 
