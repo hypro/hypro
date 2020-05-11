@@ -15,6 +15,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/templateDirections.h"
+#include "../../util/type_handling/better_enums/enum.h"
 #include "../helperMethods/isBox.h"
 #include "BoxSetting.h"
 #include "intervalMethods.h"
@@ -42,6 +43,12 @@ class Vertex;
  */
 template <typename Number>
 class Location;
+
+BETTER_ENUM( boxSetting_name, int,
+			 BoxLinearOptimizationOn,
+			 BoxLinearOptimizationOff,
+			 BoxIntervalArithmeticOff,
+			 BoxAllOff )
 
 /**
  * @brief      The class which represents a box.
@@ -245,7 +252,7 @@ class BoxT : private GeometricObjectBase {
 		mLimits.push_back( val );
 		if ( mLimits.back().isEmpty() ) {
 			mEmptyState = SETSTATE::EMPTY;
-		} else if ( mLimits.size() == 1 ) {  // the new interval was the first and it is not empty.
+		} else if ( mLimits.size() == 1 ) {	 // the new interval was the first and it is not empty.
 			mEmptyState = mLimits.front().isUnbounded() ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
 		} else if ( val.isUnbounded() ) {
 			mEmptyState = SETSTATE::UNIVERSAL;

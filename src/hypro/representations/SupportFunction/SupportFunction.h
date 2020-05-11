@@ -7,11 +7,20 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../config.h"
 #include "../../util/templateDirections.h"
+#include "../../util/type_handling/better_enums/enum.h"
 #include "SupportFunctionContent.h"
 #include "SupportFunctionSetting.h"
 #include "util.h"
 
 namespace hypro {
+
+BETTER_ENUM( supportFunctionSetting_name, int,
+			 SupportFunctionSetting,
+			 NoBoxReduction,
+			 NoBoxDetection,
+			 NoTrafoReduction,
+			 NoReduction,
+			 PolytopeSupportFunctionSetting )
 
 /**
  * @brief      Class wrapping the support function content.
@@ -53,7 +62,7 @@ class SupportFunctionT : private GeometricObjectBase {
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
 
 	std::size_t dimension() const;
-	std::size_t size() const { return 0; }  // TODO: Better implementation?
+	std::size_t size() const { return 0; }	// TODO: Better implementation?
 	static representation_name type() { return representation_name::support_function; }
 	SF_TYPE sfType() const;
 	unsigned depth() const;
