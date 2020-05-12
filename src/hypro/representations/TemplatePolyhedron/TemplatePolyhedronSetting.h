@@ -32,13 +32,11 @@ namespace hypro {
 		static constexpr bool USE_LOCATION_INVARIANT_STRENGTHENING = true;
 		//Activate numerical corrections during location invariant strengthening
 		static constexpr bool USE_NUMERICAL_CORRECTIONS = false;
-		//Threshold to which values get corrected to zero during location invariant strengthening
-		//static constexpr double NUMERICAL_CORRECTION_THRESHOLD = 1e-15;
 		//Value that is used to bound unbounded invariants initially (are shrinked through location invariant strengthening)
 		static constexpr double BOUNDING_VALUE = 10000;
 	};
 
-	struct TemplatePolyhedronDifferent {
+	struct TemplatePolyhedronDifferent : TemplatePolyhedronDefault {
 		static constexpr TEMPLATE_CONTENT TEMPLATE_SHAPE = TEMPLATE_CONTENT::ONLY_INIT;
 		static constexpr bool USE_ALTERNATIVE_REACH_ALGO = false;
 	};

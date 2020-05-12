@@ -22,15 +22,14 @@ namespace hypro {
 	  	//Inherits the members from ltiFirstSegmentHandler
 
 		//Invariant gotten from Location Invariant Strengthening if used
-		std::optional<vector_t<Number>> mRelaxedInvariant;
+		std::optional<vector_t<Number>> mStrengthenedInvariant;
 
 	  public:
 
 	  	TPolyFirstSegmentHandler() = delete;
 		TPolyFirstSegmentHandler(State* state, size_t index, tNumber timeStep)
 			: ltiFirstSegmentHandler<State>(state, index, timeStep)
-			//, mRelaxedInvariant(vector_t<Number>::Zero(state->getDimension()))
-			, mRelaxedInvariant(std::nullopt)
+			, mStrengthenedInvariant(std::nullopt)
 			{}
 		~TPolyFirstSegmentHandler(){}
 
@@ -41,7 +40,7 @@ namespace hypro {
 
 		void setInvariant(const vector_t<Number>& inv);
 
-		std::optional<vector_t<Number>> getRelaxedInvariant() const { return mRelaxedInvariant; }
+		std::optional<vector_t<Number>> getRelaxedInvariant() const { return mStrengthenedInvariant; }
 		
 	  private:
 

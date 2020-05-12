@@ -6,10 +6,7 @@ namespace hypro {
 
     template<typename State>
     void TPolyFirstSegmentHandler<State>::setInvariant(const vector_t<typename State::NumberType>& inv){
-        //assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() - 1);
-        //assert(inv.rows() == tpoly.matrix().rows());
-        //mRelaxedInvariant = inv;
-        mRelaxedInvariant = std::optional<vector_t<Number>>(inv);
+        mStrengthenedInvariant = std::optional<vector_t<Number>>(inv);
     }
 
 	template<typename State>
@@ -33,15 +30,10 @@ namespace hypro {
         tNumber max(-1e10);
         tNumber valueAtRoot = 0;
         //Determine roots of derivative to get point where maximum is at
-        carl::UnivariatePolynomial<tNumber> derivative = carl::derivative(polynom);
         //NOTE: RealRootIsolation is not supported in carl 19.01
+        carl::UnivariatePolynomial<tNumber> derivative = carl::derivative(polynom);
         //std::vector<carl::RealAlgebraicNumber<tNumber>> roots = carl::rootfinder::RealRootIsolation<tNumber>(polynom, interval).get_roots();
         std::vector<carl::RealAlgebraicNumber<tNumber>> roots = carl::rootfinder::realRoots(derivative, interval);
-        //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots, roots are: {";
-        //for(const auto& r : roots){
-        //    std::cout << r << ",";
-        //}
-        //std::cout << "}" << std::endl;
         for(const carl::RealAlgebraicNumber<tNumber>& root : roots){
             tNumber rootNumber(0);
             if(root.isNumeric()){
@@ -53,8 +45,6 @@ namespace hypro {
                 exit(1);
             }
             valueAtRoot = polynom.evaluate(rootNumber);
-            //std::cout << "TPolyFirstSegmentHandler::maxValueAtRoots, value at root is:" << valueAtRoot << std::endl;
-            //valueAtRoot = carl::evaluate(polynom,rootNumber);
             if(valueAtRoot > max){
                 max = valueAtRoot;
             }
@@ -90,10 +80,8 @@ namespace hypro {
             EvaluationResult<Number> evalRes;
 
             //For first m coefficients in polynom:
-            //for(int coeffI = 1; (unsigned)coeffI < TPolyType::Settings::DERIVATIVE_ORDER; ++coeffI){ 
-			for(int coeffI = 1; (unsigned)(coeffI-1) < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
-            //for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
-
+            for(int coeffI = 1; (unsigned)(coeffI-1) < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
+            
 				factorial *= coeffI;
 				derivative = lieDerivative(derivative);	
                 vector_t<Number> derivVarCoeffs(derivative.rows()-1);
@@ -102,30 +90,22 @@ namespace hypro {
             	//if index < m+1: Solve LP over tpoly to evaluate into derivative direction
 				//if index == m+1: Solve LP over TPoly(matrix(),invariants) to evaluate into derivative direction (remainder term only bounded by invariants)
                 if((unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER - 1){
-                //if((unsigned)coeffI < TPolyType::Settings::DERIVATIVE_ORDER - 1){
-                //if(coeffI < tpoly.matrix().rows()){
                     if(derivVarCoeffs == vector_t<Number>::Zero(derivVarCoeffs.rows())){
                         evalRes = EvaluationResult<Number>(derivative(derivative.rows()-1), SOLUTION::FEAS);
                     } else {
-                        //std::cout << "TPolyFirstSegmentHandler::handle, tpoly is: " << tpoly << " derivative is: \n" << derivative << std::endl;
                         evalRes = tpoly.evaluate(derivVarCoeffs / factorial, std::is_same_v<Number, mpq_class>);
                     }
                 } else {
-                    //NOTE: How to treat remainder? Normally, use tpoly.matrix() as matrix, and use giant coeffs where bounds do not exist but evaluating then does not make any sense.
-                    //If using the invariant matrix we either get the same or better results.
-                    //NOTE: IDEA IS one overapproximates the set with the template directions i guess
                     if(this->mState->getLocation()->getInvariant().empty()){
                         evalRes = EvaluationResult<Number>(SOLUTION::INFTY);
                     } else {
-                        //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
-                        //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant.rows() == tpoly.matrix().rows() && mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){// != vector_t<Number>::Zero(this->mState->getDimension())){
-                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant){
-                            //std::cout << "TPolyFirstSegmentHandler::handle, use LIS, mRelaxedInvariant: " << mRelaxedInvariant->transpose() << std::endl;
-                            //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
-                            //Using mRelaxedInvariant will lead to tighter bounds
-                            assert(tpoly.matrix().rows() == mRelaxedInvariant->rows());
+                        if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mStrengthenedInvariant){
+                            //std::cout << "TPolyFirstSegmentHandler::handle, use LIS, mStrengthenedInvariant: " << mStrengthenedInvariant->transpose() << std::endl;
+                            //mStrengthenedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
+                            //Using mStrengthenedInvariant will lead to tighter bounds
+                            assert(tpoly.matrix().rows() == mStrengthenedInvariant->rows());
                             assert(derivVarCoeffs.rows() == tpoly.matrix().cols());
-                            TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mRelaxedInvariant);
+                            TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mStrengthenedInvariant);
                             evalRes = invTPoly.evaluate(derivVarCoeffs / factorial, std::is_same_v<Number, mpq_class>);
                             //std::cout << "TPolyFirstSegmentHandler::handle, evalRes: " << evalRes << std::endl;
                         } else {
@@ -143,7 +123,6 @@ namespace hypro {
 
                 //Save resulting value as coeff in polynomCoeffs
                 if(evalRes.errorCode == SOLUTION::FEAS){
-                    //if(TPolyType::Settings::DIRECTLY_COMPUTE_ROOTS){
                     if(TemplatePolyhedron<Number>::Settings::DIRECTLY_COMPUTE_ROOTS){
                         polynomCoeffs.emplace_back(carl::convert<Number,tNumber>(evalRes.supportValue));
                     } else {
@@ -159,17 +138,14 @@ namespace hypro {
                 //Compute derivative of polynom
                 carl::Variable var = carl::freshRealVariable("t");
                 carl::UnivariatePolynomial<tNumber> polynom(var, polynomCoeffs);
-                //carl::UnivariatePolynomial<tNumber> polynomDeriv = carl::derivative(polynom);
                 //Compute roots that lie in interval and check for maximal value there
                 tNumber max = maxValueAtRoots(polynom, carl::Interval<tNumber>(tNumber(0),this->mTimeStep));    
                 //Get value for 0 and for this->mTimeStep and then somehow compute firstSegment
                 tNumber valueAtRoot = polynom.evaluate(tNumber(0));
-                //tNumber valueAtRoot = carl::evaluate(polynom, tNumber(0));
                 if(valueAtRoot > max){
                     max = valueAtRoot;
                 }
                 valueAtRoot = polynom.evaluate(this->mTimeStep);
-                //valueAtRoot = carl::evaluate(polynom, this->mTimeStep);
                 if(valueAtRoot > max){
                     max = valueAtRoot;
                 }  
@@ -180,22 +156,12 @@ namespace hypro {
                 //Check some values in [0,mTimeStep] and whether they in-/decrease throughoutly.
                 carl::Variable var = carl::freshRealVariable("t");
                 carl::UnivariatePolynomial<Number> polynom(var, polynomCoeffsAsNumber);
-                //carl::UnivariatePolynomial<tNumber> polynomExact(var, polynomCoeffs);
-                //std::cout << "TPolyFirstSegmentHandler::handle, polynom: " << polynom << std::endl;
                 std::vector<Number> values;
-                //std::vector<tNumber> values;
                 bool increasing = true;
                 bool decreasing = true;
                 assert(this->mTimeStep != tNumber(0));
                 for(tNumber timeStepPart = 0; timeStepPart <= this->mTimeStep; timeStepPart += (this->mTimeStep / tNumber(tpoly.getSettings().MONOTONICITY_GRANULARITY))){
-                    //values.emplace_back(carl::evaluate(polynom,carl::convert<tNumber,Number>(timeStepPart)));
                     values.emplace_back(polynom.evaluate(carl::convert<tNumber,Number>(timeStepPart)));
-                    //values.emplace_back(polynomExact.evaluate(timeStepPart));
-                    //std::cout << "TPolyFirstSegmentHandler::handle, timeStepPart: " << timeStepPart << " values: {";
-                    //for(const auto& v : values){
-                    //    std::cout << v << ",";
-                    //}
-                    //std::cout << "}" << std::endl;
                     if(values.size() >= 2){
                         if(increasing && values.at(values.size()-2) > values.at(values.size()-1)){
                             //std::cout << "TPolyFirstSegmentHandler::handle, not increasing anymore!" << std::endl;
@@ -211,43 +177,30 @@ namespace hypro {
                         }        
                     }
                 }
-                //std::cout << "TPolyFSH::handle, values size: " << values.size() << std::endl;
                 //std::cout << "TPolyFirstSegmentHandler::handle, timestep: " << carl::toDouble(this->mTimeStep) << std::endl;
                 //std::cout << "TPolyFirstSegmentHandler::handle, increasing? " << increasing << " decreasig? " << decreasing << std::endl;
-                //std::cout << "TPolyFirstSegmentHandler::handle, values are: {";
-                //for(const auto& v : values){
-                //    std::cout << v << ",";
-                //}
-                //std::cout << "}" << std::endl;
                 assert(values.size() <= tpoly.getSettings().MONOTONICITY_GRANULARITY + 1);
-                //std::cout << "TPolyFirstSegmentHandler::handle, increasing: " << increasing << " decreasing: " << decreasing << std::endl;
                 if(!increasing && !decreasing){
                     //If not monotonically increasing or decreasing, then there must be a maximum in the interval -> compute expensive root enumeration
                     carl::UnivariatePolynomial<tNumber> polynomAsTNumber(var, polynomCoeffs);
                     newVec(rowI) = carl::convert<tNumber,Number>(maxValueAtRoots(polynomAsTNumber, carl::Interval<tNumber>(tNumber(0),this->mTimeStep)));
-                    //newVec(rowI) = carl::convert<tNumber,Number>(maxValueAtRoots(polynomExact, carl::Interval<tNumber>(tNumber(0),this->mTimeStep)));
                 } else if(!increasing && decreasing){
                     //If monotonically decreasing, then first value at t = 0 was the biggest one
                     newVec(rowI) = values.front();
-                    //newVec(rowI) = carl::convert<tNumber,Number>(values.front());
                 } else if(increasing && !decreasing){
                     //If monotonically increasing, then last value at t = mTimeStep was the biggest one
                     newVec(rowI) = values.back();
-                    //newVec(rowI) = carl::convert<tNumber,Number>(values.back());
                 } else {
                     //Should not be possible
                     throw std::runtime_error("TPolyFirstSegmentHandler::handle, polynom was both monotonically increasing as well as decreasing.");
                     exit(1);
                 }
-                //std::cout << "TPolyFirstSegmentHandler::handle, newVec(rowI):" << newVec(rowI) << std::endl;
             }
 		}
         
         //Set mComputationState vector to the new coeff vec
-		tpoly.setVector(newVec);
-            
-        //this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TPolyType>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
-		this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
+		tpoly.setVector(newVec);    
+        this->mState->setSet(std::visit(genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>(tpoly), this->mState->getSet(this->mIndex)),this->mIndex);
         
         //Set flow for further computations
         this->mTrafo = this->mState->getLocation()->getLinearFlow().getFlowMatrix().block(0,0,this->mState->getDimension(),this->mState->getDimension());

@@ -74,7 +74,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param[in]  vec  	The vector
 	 * @details    Constructs a copy of the shared ptr to the matrix, so all TemplatePolyhedra can share the same matrix
 	 */ 	
-  	TemplatePolyhedronT( const std::shared_ptr<const matrix_t<Number>>& matPtr, const vector_t<Number>& vec );
+  	TemplatePolyhedronT( const std::shared_ptr<const matrix_t<Number>>& matPtr, const vector_t<Number>& vec, const bool isNonRedundant );
 
   public:
 
@@ -233,7 +233,9 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	 * @param b2 A TemplatePolyhedron.
 	 * @return False, if both TemplatePolyhedrones are equal.
 	 */
-	friend bool operator!=( const TemplatePolyhedronT<Number,Converter,Setting>& b1, const TemplatePolyhedronT<Number,Converter,Setting>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const TemplatePolyhedronT<Number,Converter,Setting>& b1, const TemplatePolyhedronT<Number,Converter,Setting>& b2 ) { 
+		return !( b1 == b2 ); 
+	}
 
 	/**
 	 * @brief Assignment operator.
@@ -369,6 +371,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 
   	/**
 	 * @brief	   Checks if the current TemplatePolyhedron lies fully within a given halfspace or fully outside
+	 * @detail     IMPORTANT: Only sound on bounded TemplatePolyhedra. 
 	 * @param[in]  The normal and the offset of the halfspace to check with
 	 * @return 	   The first bool whether the this is fully inside and the second bool whether this is fully outside the halfspace.
 	 */

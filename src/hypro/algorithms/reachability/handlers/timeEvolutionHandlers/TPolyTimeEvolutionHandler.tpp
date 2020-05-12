@@ -4,9 +4,7 @@ namespace hypro {
 
     template<typename State>
     void TPolyTimeEvolutionHandler<State>::setInvariant(const vector_t<typename State::NumberType>& inv){
-        //assert(inv.rows() == this->mState->getLocation()->getLinearFlow().getFlowMatrix().transpose().rows() - 1);
-        //mRelaxedInvariant = inv;
-        mRelaxedInvariant = std::optional<vector_t<Number>>(inv);
+        mStrengthenedInvariant = std::optional<vector_t<Number>>(inv);
     }
 
 	template<typename State>
@@ -29,8 +27,6 @@ namespace hypro {
 
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
         auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
-        //If we received an empty tpoly, then return it since we cannot evaluate over the empty set
-        //if(tpoly.empty()){ return; }
         assert(!tpoly.empty());
         vector_t<Number> newVec = vector_t<Number>::Zero(tpoly.vector().rows());
 		
@@ -48,8 +44,7 @@ namespace hypro {
 
             //For first m coefficients in polynom:
 			for(int coeffI = 1; (unsigned)(coeffI-1) < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER; ++coeffI){ 
-            //for(int coeffI = 1; coeffI < tpoly.matrix().rows() + 1; ++coeffI){
-
+            
 				//Special case: first index does not use lie derivative
 				factorial *= coeffI;
                 timestepPower *= carl::convert<tNumber,Number>(this->mTimeStep);
@@ -61,13 +56,10 @@ namespace hypro {
 				//if index < m+1: Solve LP over tpoly to evaluate into derivative direction
 				//if index == m+1: Solve LP over TPoly(matrix(),invariants) to evaluate into derivative direction (remainder term only bounded by invariants)
                 if((unsigned)coeffI < TemplatePolyhedron<Number>::Settings::DERIVATIVE_ORDER - 1){
-                //if(coeffI < tpoly.matrix().rows()){
                     g += (timestepPower / factorial) * derivative;
-                    //g += (carl::pow(carl::convert<tNumber,Number>(this->mTimeStep), Number(coeffI)) / factorial) * derivative;
                 } else {
                     //If using the invariant matrix we either get the same or better results.
                 	r = (timestepPower / factorial) * derivative;
-                    //r += (carl::pow(carl::convert<tNumber,Number>(this->mTimeStep), Number(coeffI)) / factorial) * derivative;
                 } 
             }
 
@@ -84,15 +76,11 @@ namespace hypro {
             if(this->mState->getLocation()->getInvariant().empty()){
                 evalR = EvaluationResult<Number>(SOLUTION::INFTY);
             } else {
-            //if(!this->mState->getLocation()->getInvariant().empty()){
-                //if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant != vector_t<Number>::Zero(invMat.cols())){
-                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mRelaxedInvariant){
-                   //&& mRelaxedInvariant.rows() == tpoly.matrix().rows() 
-                   //&& mRelaxedInvariant != vector_t<Number>::Zero(tpoly.matrix().rows())){
-                    //mRelaxedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
-                    //Using mRelaxedInvariant will lead to tighter bounds
-                    assert(tpoly.matrix().rows() == mRelaxedInvariant->rows());
-                    TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mRelaxedInvariant);
+                if(tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING && mStrengthenedInvariant){
+                    //mStrengthenedInvariant is strenghtened offset vector of overapproximation of invariant - use this to create invTPoly.
+                    //Using mStrengthenedInvariant will lead to tighter bounds
+                    assert(tpoly.matrix().rows() == mStrengthenedInvariant->rows());
+                    TemplatePolyhedron<Number> invTPoly(tpoly.matrix(), *mStrengthenedInvariant);
                     evalR = invTPoly.evaluate(vector_t<Number>(r.block(0,0,r.rows()-1,1)), std::is_same_v<Number, mpq_class>);
                     //std::cout << "TPolyTimeEvolutionHandler::handle, evalR: " << evalR << std::endl;
                 } else {

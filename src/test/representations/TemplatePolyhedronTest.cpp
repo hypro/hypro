@@ -719,12 +719,12 @@ TYPED_TEST(TemplatePolyhedronTest, Boundedness){
 	EXPECT_TRUE(this->infeas.isBounded());
 	//Bounded - normal
 	EXPECT_TRUE(this->middle.isBounded());
+	
 	//Unbounded
 	matrix_t<TypeParam> m(1,2);
 	m << -1,0;
 	TemplatePolyhedron<TypeParam> unbounded(m,vector_t<TypeParam>::Zero(1));
 	EXPECT_FALSE(unbounded.isBounded());
-
 	//Unbounded, but all normals are within one halfsphere
 	matrix_t<TypeParam> fiveSidesOfOctagon(5,2);
 	fiveSidesOfOctagon << 	0,1,

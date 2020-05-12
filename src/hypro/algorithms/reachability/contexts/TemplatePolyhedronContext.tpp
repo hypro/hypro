@@ -23,13 +23,8 @@ std::pair<vector_t<typename State::NumberType>, typename State::NumberType> Temp
 	//Compute lie derivative
 	derivative = this->mComputationState.getLocation()->getLinearFlow().getFlowMatrix().transpose() * gradientOfLinearFct( derivative );
 	//Separate vector and dimensionless offset
-	//std::cout << "TemplatePolyhedronContext::lieDerivative, derivative with " << derivative.rows() << "x" << derivative.cols() << " is: \n" << derivative << std::endl;
 	vector_t<Number> deriv = derivative.block( 0, 0, derivative.rows() - 1, 1 );
-	//std::cout << "TemplatePolyhedronContext::lieDerivative, deriv with " << deriv.rows() << "x" << deriv.cols() << " is: \n" << deriv << std::endl;
-	//std::cout << "TemplatePolyhedronContext::lieDerivative, returning vec: \n" << derivative.block( 0, 0, derivative.rows() - 1, 1 ) << " offset: " << derivative( derivative.rows() - 1 ) << std::endl;
-	//auto tmp = std::make_pair(derivative.block(0,0,derivative.rows()-1,1).transpose(), derivative(derivative.rows()-1));
 	auto tmp = std::make_pair( deriv, derivative( derivative.rows() - 1 ) );
-	//return std::make_pair(derivative.block(0,0,derivative.rows()-1,1).transpose(), derivative(derivative.rows()-1));
 	assert( tmp.first.rows() == dir.rows() );
 	assert( tmp.first.rows() + 1 == derivative.rows() );
 	assert( tmp.first.cols() == 1 );
@@ -83,9 +78,13 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 	vector_t<Number> smallestInv = invTPoly.vector();
 	//Contains all strengthened invariant computed, needed for cycle detection
 	std::vector<vector_t<Number>> allInvs;
+	//Counts the number of iterations to stop when we reached 10 iterations
+	int counter = 0;
 
-	//1. Compute pi(j) (certificate of feasibility for a(j+1)) by solving Dj
-	//1.1 Construct A as: first transpose inv matrix, then insert lambda >= 0 constraints
+	//////// POLICY EVALUATION
+
+	//1. Compute pi(j) (certificate of relaxed invariance for a(j+1)) by solving Dj : max evalDir*x subject to Ax <= b && lambda >= 0
+	//Construct A as: first transpose inv matrix, then insert lambda >= 0 constraints
 	//NOTE: Since A is the same in every iteration, we construct A once the loop
 	//NOTE: We add one row and col for the lie derivate offset later, where we force lambda_{m+1} = 1
 	//NOTE: Thus A is of size d+m+1 x m+1
@@ -93,6 +92,7 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 	A.block( 0, 0, invCols, invRows ) = invTPoly.matrix().transpose();
 	A.block( invCols, 0, invRows, invRows ) = -1 * matrix_t<Number>::Identity( invRows, invRows );
 	A( invCols + invRows, invRows ) = Number( 1 );
+
 	//std::cout << "TemplatePolyhedronContext::LIS, A is: \n" << A << std::endl;
 
 	//Set equality relations for the first d equations
@@ -102,8 +102,6 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 	}
 	//The last for lamdba_{m+1} = 1
 	equalRelations[invCols + invRows] = carl::Relation::EQ;
-
-	int counter = 0;
 
 	//while a(j) != a(j+1)
 	while ( lastStrengthenedInv != nextStrengthenedInv ) {
@@ -118,15 +116,17 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 
 		//For each (important) row solve Dj
 		for ( unsigned rowI = 0; rowI < invRows; ++rowI ) {
-			//2.Construct b = (mü(H_j) + H_j')^T, extended with zeros to make sure that the optimumValue only contains non negative entries.
-			//NOTE: b is d+m+1 x 1, since there are m lambdas and one row for the being able to calculate with the lie derivate offset
+			
+			//2.Construct b = (mScaling * current template row + lie derivative of current row)^T = (mü(H_j) + H_j')^T, 
+			//extended with zeros to make sure that the optimumValue only contains non negative entries.
+			//NOTE: b is of dimension d+m+1, since there are m lambdas and one extra row for being able to calculate with the lie derivate offset
 			vector_t<Number> b = vector_t<Number>::Zero( invRows + invCols + 1 );
 			assert( b.rows() == A.rows() );
 			auto deriv = lieDerivative( invTPoly.matrix().row( rowI ) );
-			//std::cout << "TemplatePolyhedronContext::LIS, lie derivative of invTPoly matrix row " << rowI << " is: \n" << deriv.first << "with offset " << deriv.second << std::endl;
 			b.block( 0, 0, invCols, 1 ) = mScaling * vector_t<Number>( invTPoly.matrix().row( rowI ) ) + deriv.first;
 			b( invRows + invCols ) = Number( 1 );
 			derivativeOffsets( rowI ) = deriv.second;
+			
 			//std::cout << "TemplatePolyhedronContext::LIS, for rowI: " << rowI << " b is: \n" << b << std::endl;
 
 			//3.Set A and b as matrix and vector for mOptimizer
@@ -135,16 +135,13 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			mOptimizer.setMaximize( false );
 			mOptimizer.setRelations( equalRelations );
 
-			//4.Minimize into direction nextStrengthenedInv - Solution is the optimumValue of minimizeA,
-			//but only the first invRows coefficients from that. The rest was only needed to make sure that the optimumValue only contains positive entries.
-			//vector_t<Number> evalDir = nextStrengthenedInv;
+			//4.Minimize into direction nextStrengthenedInv - Solution is the optimumValue of minimizeA, but only the first invRows coefficients from that.
+			//The rest was only needed to make sure that the optimumValue only contains positive entries.
 			vector_t<Number> evalDir = vector_t<Number>::Zero( invRows + 1 );
 			evalDir.block( 0, 0, invRows, 1 ) = nextStrengthenedInv;
-			//std::cout << "evaldir after adding nextStrengthenedInv: " << evalDir << std::endl;
 			evalDir( invRows ) = -mScaling * evalDir( rowI ) + deriv.second;
-			//std::cout << "evaldir: " << evalDir << std::endl;
 			auto minimizeA = mOptimizer.evaluate( evalDir, std::is_same_v<Number, mpq_class> );
-			//std::cout << "minimizeA: " << minimizeA << std::endl;
+			
 #ifndef NDEBUG
 			assert(minimizeA.errorCode == SOLUTION::FEAS);
 			assert( minimizeA.optimumValue.rows() == invRows + 1 );
@@ -153,19 +150,18 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 				assert( minimizeA.optimumValue( i ) >= 0 );
 			}
 #endif
-			//std::cout << "TemplatePolyhedronContext::LIS, minimizeA optimumValue is: " << minimizeA.optimumValue.transpose() << std::endl;
+			
+			//std::cout << "TemplatePolyhedronContext::LIS, evaldir: " << evalDir << std::endl;
+			//std::cout << "TemplatePolyhedronContext::LIS, minimizeA: " << minimizeA << std::endl;
 
-			//6.Save into certificate, if condition positive for later construction of L
+			//6.Save into certificate, if support value <= 0, since then row is non-frozen and invariant therefore changeable
 			//NOTE: -mScaling * evalDir(rowI) + deriv.second is already a part of evalDir
-			//std::cout << "TemplatePolyhedronContext::LIS, minimizeA dot evaldir is: " << minimizeA.supportValue << std::endl;
 			if ( minimizeA.supportValue <= 0 ) {
-			//if ( evalDir.dot( minimizeA.optimumValue ) <= 0 ) {
-			//if(evalDir(rowI) >= invTPoly.vector()(rowI)){
 				vector_t<Number> res = minimizeA.optimumValue.block( 0, 0, invRows, 1 );
 				certificate.row( rowI ) = res.transpose();
-				//certificate.row(rowI) = minimizeA.optimumValue.transpose();
 			}
 
+			//Numerical corrections
 			if( TemplatePolyhedron<Number>::Settings::USE_NUMERICAL_CORRECTIONS ){
 				if(certificate.row(rowI) == vector_t<Number>::Zero(certificate.cols()).transpose()){
 					//Usually when the condition above holds, it also holds nextStrengthenedInv(rowI) == invTPoly.vector()(rowI), 
@@ -173,20 +169,15 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 					if(nextStrengthenedInv(rowI) < invTPoly.vector()(rowI)){
 						//numeric error correction
 						COUNT("Correction Insert Certificate Row");
-						//std::cout << "Correction Insert Certificate Row, nextStrengthenedInv(rowI) = " << nextStrengthenedInv(rowI) << " and invTPoly.vector()(rowI) = " << invTPoly.vector()(rowI) << std::endl;
 						vector_t<Number> correction = minimizeA.optimumValue.block( 0, 0, invRows, 1 );
-						//std::cout << "Correction Insert Certificate Row, correction for certificate: " << correction.transpose() << std::endl;
 						certificate.row( rowI ) = correction.transpose();
 					}
 				} else {
-					//if(0 < tmp && tmp <= TemplatePolyhedron<Number>::Settings::NUMERICAL_CORRECTION_THRESHOLD ){
 					if(nextStrengthenedInv.dot(certificate.row(rowI)) - mScaling*nextStrengthenedInv(rowI) + deriv.second > 0){
 						//numeric error correction - as the value is actually zero or less, we need to set back to row to a zero row.
-						//std::cout << "Correction Remove Certificate Row: tmp = " << tmp << std::endl;
 						COUNT("Correction Remove Certificate Row");
 						vector_t<Number> correction = vector_t<Number>::Zero(invRows);
 						certificate.row(rowI) = correction.transpose();
-						//correctedRows[rowI] = true;
 					} 
 				}
 			}
@@ -203,7 +194,9 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 
 		//std::cout << "TemplatePolyhedronContext::LIS, certificate is now: \n" << certificate << std::endl;
 
-		//Build the system L*y = c
+		//////// POLICY IMPROVEMENT
+
+		//Build the system L*y = c with which we get better invariant bounds
 		assert( initialOffsets.rows() == invTPoly.vector().rows() );
 		matrix_t<Number> L = matrix_t<Number>::Zero( 3 * invRows, invRows );
 		vector_t<Number> c = vector_t<Number>::Zero( 3 * invRows );
@@ -223,40 +216,18 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 		//If row j not frozen, then Delta_j^T*y - mü*y_j + h_j <= 0
 		assert( nextStrengthenedInv.rows() == invRows );
 		for ( unsigned i = 0; i < nextStrengthenedInv.rows(); ++i ) {
-			//if(nextStrengthenedInv(i) >= invTPoly.vector()(i)){
-			//if(nextStrengthenedInv.dot(certificate.row(i)) - mScaling*nextStrengthenedInv(i) + derivativeOffsets(i) > 0){
 			if ( certificate.row( i ) == vector_t<Number>::Zero( invRows ).transpose() ) {
 				//frozen row - normally, insert y_j = inv_j, but since y_j <= inv_j is already in L, insert y_j >= inv_j aka -y_j <= -inv_j
-				//std::cout << "TemplatePolyhedronContext::LIS, frozen row!" << std::endl;
 				vector_t<Number> rowToInsert = vector_t<Number>::Zero( invRows );
 				rowToInsert( i ) = -1;
 				L.row( 2 * invRows + i ) = std::move( rowToInsert.transpose() );
 				c( 2 * invRows + i ) = -invTPoly.vector()( i );
 			} else {
 				//non frozen row
-				//std::cout << "TemplatePolyhedronContext::LIS, non frozen row!" << std::endl;
 				vector_t<Number> rowToInsert = certificate.row( i );
 				rowToInsert( i ) -= mScaling;
 				L.row( 2 * invRows + i ) = std::move( rowToInsert.transpose() );
 				c( 2 * invRows + i ) = - derivativeOffsets( i );
-				//if(TemplatePolyhedron<Number>::Settings::USE_NUMERICAL_CORRECTIONS){
-					//COUNT("L correction");
-					//std::cout << "L corrected"<< std::endl;
-					//c( 2 * invRows + i ) = 0;
-					//auto tmp = nextStrengthenedInv.dot(certificate.row(i)) - mScaling*nextStrengthenedInv(i) + derivativeOffsets(i);
-					//if(tmp > 0){
-					//	//If we corrected the certificate before, then we need to correct the value here too
-					//	COUNT("L correction");
-					//	std::cout << "L corrected: tmp: " << tmp << std::endl;
-					//	c( 2 * invRows + i ) = 0;
-					//} else {
-					//	std::cout << "L not corrected: tmp: " << tmp << std::endl;
-					//	c( 2 * invRows + i ) = - derivativeOffsets( i );
-					//}
-				//} else {
-				//	std::cout << "correctedRows at i:" << correctedRows.at(i) << std::endl;
-				//	c( 2 * invRows + i ) = - derivativeOffsets( i );
-				//}
 			}
 		}
 		//std::cout << "TemplatePolyhedronContext::LIS, added (non-)frozen rows to L and c: L: \n" << L << "c: \n" << c << std::endl;
@@ -269,10 +240,8 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 		auto minimizeL = mOptimizer.evaluate( vector_t<Number>::Ones( invRows ), std::is_same_v<Number, mpq_class> );
 		if(minimizeL.errorCode == SOLUTION::INFEAS){
 			//If next solution infeasible, return currently saved solution
-			//In cases before, minimizeL was infeasible because Ax <= b has been solved with numerical instabilities.
-			//Against this, the numerical correction option has been implemented, such that these cases should not occur anymore.
+			//TODO: find out why infeas return even occurs
 			COUNT("Infeas return");
-			//std::cout << "TemplatePolyhedronContext::LIS, added (non-)frozen rows to L and c: L: \n" << L << "c: \n" << c << std::endl;
 			return nextStrengthenedInv;
 		}
 		assert( minimizeL.errorCode == SOLUTION::FEAS );
@@ -288,14 +257,11 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 
 		//std::cout << "TemplatePolyhedronContext::LIS, minimizeL optimumValue is: \n" << minimizeL.optimumValue << std::endl;
 
-
 		//10.Set as next strenghtened inv
 		lastStrengthenedInv = nextStrengthenedInv;
 		nextStrengthenedInv = minimizeL.optimumValue;
 
-		//std::cout << "TemplatePolyhedronContext::LIS, nextStrengthenedInv sum: " << nextStrengthenedInv.sum() << "smallest sum " << smallestInv.sum() << std::endl;		
-
-		//Fixpoint escape: save inv with smallest coefficient
+		//Wrong fixed point escape: save inv with smallest coefficient
 		if(nextStrengthenedInv.sum() < smallestInv.sum()){
 			smallestInv = nextStrengthenedInv;
 		}
@@ -309,8 +275,6 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 		for(const auto& inv : allInvs){
 			if(nextStrengthenedInv.isApprox(inv)){
 				COUNT("Cycle Detection Return");
-				//std::cout << "TemplatePolyhedronContext::LIS, cycle detected!" << std::endl;
-				//return the smallest one found
 				cycleDetected = true;
 				break;
 			}
@@ -327,32 +291,29 @@ vector_t<typename State::NumberType> TemplatePolyhedronContext<State>::locationI
 			break;
 		} 
 	}
+
+	//Return strengthened invariant with smallest sum
 	if(nextStrengthenedInv.sum() < smallestInv.sum()){
-		//std::cout << "TemplatePolyhedronContext::LIS, returned next" << std::endl;
 		return nextStrengthenedInv;	
 	} else {
-		//std::cout << "TemplatePolyhedronContext::LIS, returned smallest which was:" << smallestInv << std::endl;
 		return smallestInv;
 	}
-	//return nextStrengthenedInv;
 }
 
 template <typename State>
 template <typename Setting>
 TemplatePolyhedronT<typename State::NumberType, hypro::Converter<typename State::NumberType>, Setting> TemplatePolyhedronContext<State>::createTemplateContent( const TemplatePolyhedronT<Number, hypro::Converter<Number>, Setting>& tpoly ) {
-	//TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
+//TemplatePolyhedron<typename State::NumberType> TemplatePolyhedronContext<State>::createTemplateContent(const TemplatePolyhedron<Number>& tpoly){
 
 	assert( (unsigned)tpoly.matrix().cols() == this->mComputationState.getDimension() );
 	
 	if( Setting::TEMPLATE_SHAPE == TEMPLATE_CONTENT::OCTAGON ){
 		//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, OCTAGON setting" << std::endl;
-		//auto tmp = tpoly.overapproximate(combineRows(computeTemplate<Number>(this->mComputationState.getDimension(), 8)));
-		//std::cout << "TPC::createTemplateContent, OCT rows: \n" << tmp.matrix().rows() << std::endl;
-		//return tmp;
 		return tpoly.overapproximate(combineRows(computeTemplate<Number>(this->mComputationState.getDimension(), 8)));
 	}
 
-	if( Setting::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::ONLY_INIT){
+	if( Setting::TEMPLATE_SHAPE == TEMPLATE_CONTENT::ONLY_INIT){
+		//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, ONLY_INIT setting" << std::endl;
 		return tpoly;
 	}
 	
@@ -360,8 +321,7 @@ TemplatePolyhedronT<typename State::NumberType, hypro::Converter<typename State:
 	assert(Setting::TEMPLATE_SHAPE != TEMPLATE_CONTENT::OCTAGON);
 	std::size_t templateSize = tpoly.matrix().rows();
 	matrix_t<Number> extendedMatrix = tpoly.matrix();
-	//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, ONLY_INIT setting" << std::endl;
-
+	
 	//Add invariants if wanted and if there exist some
 	if ( Setting::TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV && this->mComputationState.getLocation()->getInvariant() != Condition<Number>() ) {
 		//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, INIT_INV setting" << std::endl;
@@ -398,11 +358,10 @@ TemplatePolyhedronT<typename State::NumberType, hypro::Converter<typename State:
 		}
 	}
 	//Evaluate tpoly in directions written in extendedMatrix.
-	//std::cout << "TPC::createTemplateContent, before overapprox!!!!" << std::endl;
 	TemplatePolyhedronT<Number, hypro::Converter<Number>, Setting> overapprox = tpoly.overapproximate( extendedMatrix );
-	//std::cout << "TPC::createTemplateContent, after overapprox: \n" << overapprox.matrix() << " and: \n" << overapprox.vector() << std::endl;
+	std::cout << "TPC::createTemplateContent, after overapprox: \n" << overapprox.matrix() << " and: \n" << overapprox.vector() << std::endl;
 	overapprox.reduceRepresentation();
-	//std::cout << "TPC::createTemplateContent, after reduc: \n" << overapprox.matrix() << " and: \n" << overapprox.vector() << std::endl;
+	std::cout << "TPC::createTemplateContent, after reduc: \n" << overapprox.matrix() << " and: \n" << overapprox.vector() << std::endl;
 	return overapprox;
 }
 
@@ -502,13 +461,6 @@ bool TemplatePolyhedronContext<State>::isRelaxedInvariant(const TemplatePolyhedr
 
 template <typename State>
 void TemplatePolyhedronContext<State>::execBeforeFirstSegment() {
-	//Modify this->mComputationState depending on TPolySettings to either only use
-	//1.Initial constraints (are often boxes)
-	//2.Initial constraints + location invariants
-	//3.Initial constraints + location invariants + flow constraints
-	//4.Initial constraints + location invariants + flow constraints + all relevant bad states constraints
-	//5.Octagons
-
 	//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState before: \n" << this->mComputationState << std::endl;
 	//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, loc: " << this->mComputationState.getLocation()->getName() << std::endl;
 	assert( this->mComputationState.getSetType() == representation_name::polytope_t );
@@ -521,44 +473,16 @@ void TemplatePolyhedronContext<State>::execBeforeFirstSegment() {
 		tpoly = createTemplateContent( tpoly );
 		this->mComputationState.setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, TemplatePolyhedron<Number>>( tpoly ), this->mComputationState.getSet( index ) ), index );
 		this->mTask->treeNode->rGetRefinements().at(this->mTask->btInfo.btLevel).initialSet = this->mComputationState;
-		//std::cout << "TPC: computation state: " << this->mComputationState << std::endl;
-		//std::cout << "TPC: initset of treenode: " << this->mTask->treeNode->rGetRefinements().at(this->mTask->btInfo.btLevel).initialSet << std::endl;
-
+		
 		//Call Location Invariant Strengthening on current invariants
-		if ( tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING 
-			//&& tpoly.getSettings().TEMPLATE_SHAPE >= TEMPLATE_CONTENT::INIT_INV 
-			&& !this->mComputationState.getLocation()->getInvariant().empty()) {
-			//&& (unsigned) this->mComputationState.getLocation()->getInvariant().getMatrix(index).rows() >= this->mComputationState.getDimension() + 1) {
-			//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, check for locationInvariantStrengthening" << std::endl;
-
+		if ( tpoly.getSettings().USE_LOCATION_INVARIANT_STRENGTHENING  && !this->mComputationState.getLocation()->getInvariant().empty()) {
+			//Overapproximate invariant with tpoly directions and save them
 			TemplatePolyhedron<Number> invTPoly( this->mComputationState.getLocation()->getInvariant().getMatrix(), this->mComputationState.getLocation()->getInvariant().getVector() );
-			//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, invTPoly before overapprox: " << invTPoly << std::endl;
-			//if ( invTPoly.isBounded() && !invTPoly.empty() ) {
-				//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, invTPoly was bounded!" << std::endl;
-				invTPoly = invTPoly.overapproximate( tpoly.matrix() );
-				//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, overapproximate inv with tpoly dirs: " << invTPoly << std::endl;
-				//auto tmp = isPositiveInvariant(tpoly, invTPoly.vector());
-				//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, is tpoly positive invariant? " << tmp << std::endl;
-				mOverapproxedInvariant = invTPoly.vector();
-				//if ( isPositiveInvariant( tpoly, invTPoly.vector() ) ) {
-				//if ( isRelaxedInvariant( tpoly, invTPoly.vector() ) ) {
-					//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, use locationInvariantStrengthening" << std::endl;
-					//std::cout << "invTPoly: " << invTPoly << std::endl;
-					//std::cout << "invTPoly.vector().rows(): " << invTPoly.vector().rows() << std::endl;
-					//mRelaxedInvariant = vector_t<Number>::Zero(invTPoly.matrix().rows());
-					mRelaxedInvariant = locationInvariantStrengthening( invTPoly, tpoly.vector() );
-					//this->mComputationState.rGetLocation()->setInvariant(Condition<Number>(invTPoly.matrix(), *mRelaxedInvariant));
-					//mRelaxedInvariants.insert_or_assign(this->mComputationState.getLocation(), locationInvariantStrengthening(invTPoly,tpoly.vector()));
-					//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, mRelaxedInvariant is: " << *mRelaxedInvariant << std::endl;
-					//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, end beforehand" << std::endl;
-				//} else {
-				//	mRelaxedInvariant = invTPoly.vector();
-				//	//mRelaxedInvariants.insert_or_assign(this->mComputationState.getLocation(), invTPoly.vector());
-				//}
-				this->mComputationState.rGetLocation()->setInvariant(Condition<Number>(invTPoly.matrix(), *mRelaxedInvariant));
-			//} else {
-				//invTPoly = invTPoly.overapproximate
-			//}
+			invTPoly = invTPoly.overapproximate( tpoly.matrix() );
+			mOverapproxedInvariant = invTPoly.vector();
+			//Get strengthened invariant
+			mStrengthenedInvariant = locationInvariantStrengthening( invTPoly, tpoly.vector() );
+			this->mComputationState.rGetLocation()->setInvariant(Condition<Number>(invTPoly.matrix(), *mStrengthenedInvariant));
 		}
 	}
 	//std::cout << "TemplatePolyhedronContext::execBeforeFirstSegment, this->mComputationState after: \n" << this->mComputationState << std::endl;
@@ -573,8 +497,8 @@ void TemplatePolyhedronContext<State>::firstSegment() {
 	if ( TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO ) {
 		for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
 			//std::cout << "TemplatePolyhedronContext::firstSegment, use USE_ALTERNATIVE_REACH_ALGO!" << std::endl;
-			if(mRelaxedInvariant){
-				static_cast<TPolyFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->setInvariant( *mRelaxedInvariant );
+			if(mStrengthenedInvariant){
+				static_cast<TPolyFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->setInvariant( *mStrengthenedInvariant );
 			}
 			static_cast<TPolyFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->handle();
 		}
@@ -582,7 +506,6 @@ void TemplatePolyhedronContext<State>::firstSegment() {
 		for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
 			//std::cout << "TemplatePolyhedronContext::firstSegment, use standard reach algo!" << std::endl;
 			static_cast<ltiFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->ltiFirstSegmentHandler<State>::handle();
-			//this->mFirstSegmentHandlers.at(i)->ltiFirstSegmentHandler<State>::handle();
 		}
 	}
 	//Do the stuff ltiContext would do
@@ -596,8 +519,8 @@ void TemplatePolyhedronContext<State>::applyContinuousEvolution() {
 	if ( TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO ) {
 		for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
 			//std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use USE_ALTERNATIVE_REACH_ALGO!" << std::endl;
-			if(mRelaxedInvariant){
-				static_cast<TPolyTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->setInvariant( *mRelaxedInvariant );
+			if(mStrengthenedInvariant){
+				static_cast<TPolyTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->setInvariant( *mStrengthenedInvariant );
 			}
 			static_cast<TPolyTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->handle();
 		}
@@ -605,7 +528,6 @@ void TemplatePolyhedronContext<State>::applyContinuousEvolution() {
 		for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
 			//std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use standard reach algo!" << std::endl;
 			static_cast<ltiTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->ltiTimeEvolutionHandler<State>::handle();
-			//this->mContinuousEvolutionHandlers.at(i)->ltiTimeEvolutionHandler<State>::handle();
 		}
 	}
 	//Do the stuff ltiContext would do

@@ -1,8 +1,8 @@
 /*
  *	TemplatePolyhedronContext.h
  *
- *	The overall reachability algorithm for template polyhedra according to the paper
- *	Sankaranarayanan 2008. 
+ *	The overall reachability algorithm for template polyhedra according to the paper from
+ *	Sankaranarayanan 2008.
  *	NOTE: The state template here is guaranteed to have the TemplatePolyhedron class
  *	as underlying set representation.
  *
@@ -40,27 +40,19 @@ class TemplatePolyhedronContext : public LTIContext<State> {
   	//Used for minimization of various functions during location invariant strengthening
   	Optimizer<Number> mOptimizer;
 
-	//Saves which location has which relaxed invariant.
+	//If location invariant strenghtening is used, then the strengthened invariant is saved.
 	//The result of the location invariant strengthening. Is passed to TPolyFirstSegmentHandler and TPolyTimeEvolutionHandler.
 	//TODO: If we could save info between flowpipes, we could save us a lot more LPs.
 	//- If we could save the relaxed invariant for a location, then we could refine it if we get to the same location again.
 	//- We could directly build the overapproximated form, since we saved the fitting invariant to the matrix
-	//- If we cache whether the invariant was a positive invariant or not, we do not have to compute that again.
-	std::optional<vector_t<Number>> mRelaxedInvariant;
+	std::optional<vector_t<Number>> mStrengthenedInvariant;
 
 	//Offset vector of invariants after overapproximation by template
-	//Used to restore invariant offsets after time evolution computation for this location
+	//Used to restore invariant offsets after completed flowpipe computation for this location
 	std::optional<vector_t<Number>> mOverapproxedInvariant;
 
 	//Constant scaling factor needed for all major algorithms in this context.
 	const Number mScaling = 3;
-
-	//Whether numeric corrections should be active or not. Using inexact arithmetic can cause numerical inconsistencies.
-	//Some of them can be corrected if this flag is activated.
-	//const bool mActivateNumericalCorrections = true;
-
-	//If numerical corrections are activated, then for values between 0 and mNumericCorrectionThreshold, they are corrected to 0.
-	//const Number mNumericCorrectionThreshold = 1e-15;
 
   public:
 
@@ -74,7 +66,7 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	    ReachabilitySettings &settings) 
   		: LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings),
   		  mOptimizer(Optimizer<Number>()),
-		  mRelaxedInvariant(std::nullopt)
+		  mStrengthenedInvariant(std::nullopt)
   	{}
         
 	~TemplatePolyhedronContext(){}
@@ -91,17 +83,20 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	//Set back invariant to overapproximated form, since LIS fits invariants to flowpipe
 	void execBeforeProcessDiscreteBehavior() override;
 
-    //Computes the gradient of a multivariate but linear function linearFct
+    //Computes the gradient of a multivariate linear function linearFct
+	//DETAIL: Vector (3 2 -1 4) represents 3x+2y-z+4 and its gradient is (3 2 -1 0)
     vector_t<Number> gradientOfLinearFct(const vector_t<Number>& linearFct);
 
-    //Computes the lie derivative given a direction and an affine vector field (aka the flow)
-    //NOTE: Usually the lie derivative also works with non linear fcts, but since we cannot parse nonlinear functions yet,
+    //Computes the lie derivative given by a linear function and an affine vector field (aka the flow).
+    //NOTE: Usually the lie derivative also works with nonlinear functions, but since we cannot parse nonlinear functions yet,
     //we will only use a simple selfwritten derivation function for linear multivariate functions
-    //DETAIL: The input vector dir is interpreted as a function, for example if dir = (3 2 -1) then dir is interpreted as 3x + 2y - z, 
-    //since no constants are allowed.
-    //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
+	//Here The input vector dir is interpreted as a function without a dimensionless coefficient. 
+	//For example if dir = (3 2 -1) then dir is interpreted as 3x + 2y - z, 
     std::pair<vector_t<typename State::NumberType>, typename State::NumberType> lieDerivative(const vector_t<Number>& dir);
 
+	//Also computes the lie derivative given by a linear function and an affine vector field (aka the flow).
+	//DETAIL: The input vector dir is interpreted as a function with dimensionless coefficient. 
+	//For example if dir = (3 2 -1) then dir is interpreted as 3x + 2y - 1, 
 	std::pair<vector_t<typename State::NumberType>, typename State::NumberType> lieDerivativeExtended( const vector_t<Number>& dir );
 
     //Conducts the location invariant strengthening method from Sankranarayanan 2008.
@@ -115,9 +110,10 @@ class TemplatePolyhedronContext : public LTIContext<State> {
 	template<typename Setting>
     TemplatePolyhedronT<typename State::NumberType, hypro::Converter<Number>, Setting> createTemplateContent(const TemplatePolyhedronT<Number, hypro::Converter<Number>, Setting>& tpoly);
 
-    //Tests whether the given tpoly is a positive invariant and therefore admissible for location invariant strengthening
+    //Tests whether the given tpoly is a positive invariant wrt to invVector
     bool isPositiveInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);
 
+	//Tests whether the given tpoly is a relaxed invariant wrt to invVector
 	bool isRelaxedInvariant(const TemplatePolyhedron<Number>& tpoly, const vector_t<Number>& invVector);
 };
 
