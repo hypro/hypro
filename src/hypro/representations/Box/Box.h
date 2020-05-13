@@ -15,7 +15,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/templateDirections.h"
-#include "../../util/type_handling/better_enums/enum.h"
 #include "../helperMethods/isBox.h"
 #include "BoxSetting.h"
 #include "intervalMethods.h"
@@ -44,12 +43,6 @@ class Vertex;
 template <typename Number>
 class Location;
 
-BETTER_ENUM( boxSetting_name, int,
-			 BoxLinearOptimizationOn,
-			 BoxLinearOptimizationOff,
-			 BoxIntervalArithmeticOff,
-			 BoxAllOff )
-
 /**
  * @brief      The class which represents a box.
  * @details    A box is represented by an ordered sequence of intervals. Details can be found [here](@ref boxDetails).
@@ -68,6 +61,7 @@ class BoxT : private GeometricObjectBase {
 
 	typedef Setting Settings;
 	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::box;
 
   protected:
 	std::vector<carl::Interval<Number>> mLimits; /*!< Box as a vector of intervals. */

@@ -7,20 +7,11 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../config.h"
 #include "../../util/templateDirections.h"
-#include "../../util/type_handling/better_enums/enum.h"
 #include "SupportFunctionContent.h"
 #include "SupportFunctionSetting.h"
 #include "util.h"
 
 namespace hypro {
-
-BETTER_ENUM( supportFunctionSetting_name, int,
-			 SupportFunctionSetting,
-			 NoBoxReduction,
-			 NoBoxDetection,
-			 NoTrafoReduction,
-			 NoReduction,
-			 PolytopeSupportFunctionSetting )
 
 /**
  * @brief      Class wrapping the support function content.
@@ -33,6 +24,7 @@ class SupportFunctionT : private GeometricObjectBase {
   public:
 	typedef Setting Settings;
 	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::support_function;
 
   private:
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> content;

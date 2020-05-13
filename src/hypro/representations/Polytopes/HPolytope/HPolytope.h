@@ -51,6 +51,7 @@ class HPolytopeT : private GeometricObjectBase {
 
 	typedef Setting Settings;
 	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::polytope_h;
 
   private:
 	mutable HalfspaceVector mHPlanes;
