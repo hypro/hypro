@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1detail_1_1bloatBoxVisitor.html" title="hypro::reachability\l::detail::bloatBoxVisitor\l\&lt; VariantType, Number \&gt;" alt="" coords="5,5,191,61"/>
+<area shape="rect" id="node1" href="$structhypro_1_1reachability_1_1ReachSettings.html" title="hypro::reachability\l::ReachSettings" alt="" coords="5,5,144,47"/>
+<area shape="rect" id="node2" href="$structhypro_1_1reachability_1_1ReachQuiet.html" title="hypro::reachability\l::ReachQuiet" alt="" coords="192,5,331,47"/>
 </map>

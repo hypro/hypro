@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['calcepsilon_5fverbose',['CALCEPSILON_VERBOSE',['../structhypro_1_1SupportFunctionSetting.html#ab558cec1b51912880846f1d7f5035500',1,'hypro::SupportFunctionSetting::CALCEPSILON_VERBOSE()'],['../structhypro_1_1NoReduction.html#aaae7428ad284dc4e85bdea7726e98bea',1,'hypro::NoReduction::CALCEPSILON_VERBOSE()']]],
-  ['calcvalues_5fverbose',['CALCVALUES_VERBOSE',['../structhypro_1_1SupportFunctionSetting.html#ae9484fac0fe8060a316e5f69903d104c',1,'hypro::SupportFunctionSetting::CALCVALUES_VERBOSE()'],['../structhypro_1_1NoReduction.html#aa43def14e4945231a11f2d69d3ecb257',1,'hypro::NoReduction::CALCVALUES_VERBOSE()']]],
+  ['calcepsilon_5fverbose',['CALCEPSILON_VERBOSE',['../structhypro_1_1NoReduction.html#aaae7428ad284dc4e85bdea7726e98bea',1,'hypro::NoReduction']]],
+  ['calcvalues_5fverbose',['CALCVALUES_VERBOSE',['../structhypro_1_1NoReduction.html#aa43def14e4945231a11f2d69d3ecb257',1,'hypro::NoReduction']]],
   ['chatteringzeno',['chatteringZeno',['../classhypro_1_1Path.html#a4552b08461f68ab614f50d9027e05318',1,'hypro::Path']]],
   ['checkverticesbeforeconversion',['checkVerticesBeforeConversion',['../structhypro_1_1VPolytopeSetting.html#aebd33b1d3ea1fef9efdf2772c3918319',1,'hypro::VPolytopeSetting']]],
   ['clustering',['clustering',['../structhypro_1_1AnalysisParameters.html#aec764955210067c3eab3a538cd9ba71e',1,'hypro::AnalysisParameters::clustering()'],['../structhypro_1_1ReachabilitySettings.html#aec7ef31f8312516dd54b2b338903e6fd',1,'hypro::ReachabilitySettings::clustering()']]],

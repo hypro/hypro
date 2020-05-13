@@ -83,7 +83,7 @@ var searchData=
   ['optimizer',['Optimizer',['../classhypro_1_1Optimizer.html',1,'hypro']]],
   ['optimizer_2ecpp',['Optimizer.cpp',['../Optimizer_8cpp.html',1,'']]],
   ['optimizer_2eh',['Optimizer.h',['../Optimizer_8h.html',1,'']]],
-  ['optimizer_5fcaching',['OPTIMIZER_CACHING',['../structhypro_1_1HPolytopeSetting.html#a2320813db856092f265c73963401c07d',1,'hypro::HPolytopeSetting::OPTIMIZER_CACHING()'],['../structhypro_1_1HPolytopeOptimizerCaching.html#a8ea5c0ac96de53d5b99df82294725350',1,'hypro::HPolytopeOptimizerCaching::OPTIMIZER_CACHING()']]],
+  ['optimizer_5fcaching',['OPTIMIZER_CACHING',['../structhypro_1_1HPolytopeOptimizerCaching.html#a8ea5c0ac96de53d5b99df82294725350',1,'hypro::HPolytopeOptimizerCaching']]],
   ['optimizerstrategy',['OptimizerStrategy',['../namespacehypro.html#a6598e45e920a0a6146db1120a3617a31',1,'hypro']]],
   ['optimumvalue',['optimumValue',['../structhypro_1_1EvaluationResult.html#ad04c4d370454e1b426f487819bc99361',1,'hypro::EvaluationResult']]],
   ['optiodecls',['optIoDecls',['../classhypro_1_1HybridSystemParser_1_1AutomatonBodyContext.html#a33d4ca3a26396849119dd700a41f2e8f',1,'hypro::HybridSystemParser::AutomatonBodyContext::optIoDecls()'],['../classhypro_1_1HybridSystemParser.html#ac2156d229711537f337db1b25b857f7c',1,'hypro::HybridSystemParser::optIoDecls()']]],

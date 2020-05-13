@@ -36,12 +36,10 @@ var hierarchy =
     [ "hypro::BoxAllOff", "structhypro_1_1BoxAllOff.html", null ],
     [ "hypro::BoxIntervalArithmeticOff", "structhypro_1_1BoxIntervalArithmeticOff.html", null ],
     [ "hypro::BoxLinearOptimizationOff", "structhypro_1_1BoxLinearOptimizationOff.html", null ],
-    [ "hypro::BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "hypro::BoxSupportFunction< Number, Setting >", "classhypro_1_1BoxSupportFunction.html", null ],
     [ "hypro::Cacheable< Content >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::Cacheable< matrix_t< Number > >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::Cacheable< vector_t< Number > >", "structhypro_1_1Cacheable.html", null ],
-    [ "hypro::CarlPolytopeSetting", "structhypro_1_1CarlPolytopeSetting.html", null ],
     [ "hypro::qe::CellTreeNode< Data >", "structhypro_1_1qe_1_1CellTreeNode.html", null ],
     [ "hypro::ChildTimingInformation< N >", "structhypro_1_1ChildTimingInformation.html", null ],
     [ "hypro::ChildTimingInformation< Number >", "structhypro_1_1ChildTimingInformation.html", null ],
@@ -176,7 +174,6 @@ var hierarchy =
     [ "hypro::HierarchicalIntervalVector< T, Number >", "classhypro_1_1HierarchicalIntervalVector.html", null ],
     [ "hypro::HierarchicalIntervalVector< CONTAINMENT, tNumber >", "classhypro_1_1HierarchicalIntervalVector.html", null ],
     [ "hypro::HPolytopeOptimizerCaching", "structhypro_1_1HPolytopeOptimizerCaching.html", null ],
-    [ "hypro::HPolytopeSetting", "structhypro_1_1HPolytopeSetting.html", null ],
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::HybridAutomatonComp< Number >", "classhypro_1_1HybridAutomatonComp.html", null ],
     [ "hypro::IContext", "classhypro_1_1IContext.html", [
@@ -572,7 +569,7 @@ var hierarchy =
     [ "hypro::SupportFunctionNewLeGuernic", "structhypro_1_1SupportFunctionNewLeGuernic.html", null ],
     [ "hypro::SupportFunctionNewMorePrecision", "structhypro_1_1SupportFunctionNewMorePrecision.html", null ],
     [ "hypro::SupportFunctionNewNoReduction", "structhypro_1_1SupportFunctionNewNoReduction.html", null ],
-    [ "hypro::SupportFunctionSetting", "structhypro_1_1SupportFunctionSetting.html", [
+    [ "SupportFunctionSetting", null, [
       [ "hypro::NoBoxDetection", "structhypro_1_1NoBoxDetection.html", null ],
       [ "hypro::NoBoxReduction", "structhypro_1_1NoBoxReduction.html", null ],
       [ "hypro::NoReduction", "structhypro_1_1NoReduction.html", null ],

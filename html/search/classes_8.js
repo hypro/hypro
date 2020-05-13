@@ -25,7 +25,6 @@ var searchData=
   ['hierarchicalintervalvector',['HierarchicalIntervalVector',['../classhypro_1_1HierarchicalIntervalVector.html',1,'hypro']]],
   ['hierarchicalintervalvector_3c_20containment_2c_20tnumber_20_3e',['HierarchicalIntervalVector&lt; CONTAINMENT, tNumber &gt;',['../classhypro_1_1HierarchicalIntervalVector.html',1,'hypro']]],
   ['hpolytopeoptimizercaching',['HPolytopeOptimizerCaching',['../structhypro_1_1HPolytopeOptimizerCaching.html',1,'hypro']]],
-  ['hpolytopesetting',['HPolytopeSetting',['../structhypro_1_1HPolytopeSetting.html',1,'hypro']]],
   ['hpolytopet',['HPolytopeT',['../classhypro_1_1HPolytopeT.html',1,'hypro']]],
   ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1HybridAutomaton.html',1,'hypro']]],
   ['hybridautomatonbasevisitor',['HybridAutomatonBaseVisitor',['../classhypro_1_1HybridAutomatonBaseVisitor.html',1,'hypro']]],

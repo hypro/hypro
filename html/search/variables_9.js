@@ -5,7 +5,6 @@ var searchData=
   ['ib',['ib',['../structInvariants.html#a363e5a2311432f31fbb473c68baa3271',1,'Invariants']]],
   ['initialset',['initialSet',['../structhypro_1_1RefinementSetting.html#a4e7926b0e7047f50a04733ccd803dfd8',1,'hypro::RefinementSetting::initialSet()'],['../classhypro_1_1ContinuousSystem.html#a224a534f35518c30da22de7b2ed9e43b',1,'hypro::ContinuousSystem::initialSet()']]],
   ['instance',['instance',['../classhypro_1_1LockableObjectWrapper.html#a1c9ea61cbf89fffad38fe0ab5f44eb4a',1,'hypro::LockableObjectWrapper']]],
-  ['int',['int',['../namespacehypro.html#ad12cff0476b9504828ab86527e36ee33',1,'hypro']]],
   ['is_5fexact',['is_exact',['../namespacehypro.html#a50d437a5b11b4512075d47a59d3e7316',1,'hypro']]],
   ['isdummy',['isDummy',['../structhypro_1_1RefinementSetting.html#a43f8d881492109bf6feb508955b061ce',1,'hypro::RefinementSetting']]],
   ['isempty',['isEmpty',['../structhypro_1_1RefinementSetting.html#ab71e70941d2a0e43acb5a2662355e925',1,'hypro::RefinementSetting']]],

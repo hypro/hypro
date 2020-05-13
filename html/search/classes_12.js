@@ -33,7 +33,6 @@ var searchData=
   ['supportfunctionnewmoreprecision',['SupportFunctionNewMorePrecision',['../structhypro_1_1SupportFunctionNewMorePrecision.html',1,'hypro']]],
   ['supportfunctionnewnoreduction',['SupportFunctionNewNoReduction',['../structhypro_1_1SupportFunctionNewNoReduction.html',1,'hypro']]],
   ['supportfunctionnewt',['SupportFunctionNewT',['../classhypro_1_1SupportFunctionNewT.html',1,'hypro']]],
-  ['supportfunctionsetting',['SupportFunctionSetting',['../structhypro_1_1SupportFunctionSetting.html',1,'hypro']]],
   ['supportfunctiont',['SupportFunctionT',['../classhypro_1_1SupportFunctionT.html',1,'hypro']]],
   ['svgattrcontext',['SvgAttrContext',['../classhypro_1_1HybridSystemParser_1_1SvgAttrContext.html',1,'hypro::HybridSystemParser']]],
   ['svgcopycontext',['SvgCopyContext',['../classhypro_1_1HybridSystemParser_1_1SvgCopyContext.html',1,'hypro::HybridSystemParser']]],

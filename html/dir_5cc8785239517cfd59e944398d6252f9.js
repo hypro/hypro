@@ -28,13 +28,6 @@ var dir_5cc8785239517cfd59e944398d6252f9 =
       [ "projectionContent", "structhypro_1_1projectionContent.html", "structhypro_1_1projectionContent" ],
       [ "SupportFunctionContent", "classhypro_1_1SupportFunctionContent.html", "classhypro_1_1SupportFunctionContent" ]
     ] ],
-    [ "SupportFunctionSetting.h", "SupportFunctionSetting_8h.html", [
-      [ "SupportFunctionSetting", "structhypro_1_1SupportFunctionSetting.html", null ],
-      [ "NoBoxReduction", "structhypro_1_1NoBoxReduction.html", null ],
-      [ "NoBoxDetection", "structhypro_1_1NoBoxDetection.html", null ],
-      [ "NoTrafoReduction", "structhypro_1_1NoTrafoReduction.html", null ],
-      [ "NoReduction", "structhypro_1_1NoReduction.html", null ],
-      [ "PolytopeSupportFunctionSetting", "structhypro_1_1PolytopeSupportFunctionSetting.html", null ]
-    ] ],
+    [ "SupportFunctionSetting.h", "SupportFunctionSetting_8h.html", "SupportFunctionSetting_8h" ],
     [ "util.h", "representations_2SupportFunction_2util_8h.html", "representations_2SupportFunction_2util_8h" ]
 ];

@@ -148,6 +148,6 @@ var searchData=
   ['automatonbodycontext',['AutomatonBodyContext',['../classhypro_1_1HybridSystemParser_1_1AutomatonBodyContext.html',1,'hypro::HybridSystemParser']]],
   ['avgbranching',['avgBranching',['../structhypro_1_1TreeStatistic.html#ac5e08c1229867a5d3b8bd178853e6f41',1,'hypro::TreeStatistic']]],
   ['avglevel',['avgLevel',['../structhypro_1_1TreeStatistic.html#aae0a519cd8f56ce7b8931ad20d871b47',1,'hypro::TreeStatistic']]],
-  ['avoid_5fconversion',['AVOID_CONVERSION',['../structhypro_1_1HPolytopeSetting.html#ad799718fb82e1ff9a1403d6ba4bde39d',1,'hypro::HPolytopeSetting::AVOID_CONVERSION()'],['../structhypro_1_1HPolytopeOptimizerCaching.html#a4e8b3ff18d0c29fd72d74e11aa36840a',1,'hypro::HPolytopeOptimizerCaching::AVOID_CONVERSION()']]],
+  ['avoid_5fconversion',['AVOID_CONVERSION',['../structhypro_1_1HPolytopeOptimizerCaching.html#a4e8b3ff18d0c29fd72d74e11aa36840a',1,'hypro::HPolytopeOptimizerCaching']]],
   ['axes',['axes',['../structhypro_1_1plotting_1_1gnuplotSettings.html#ad4c831cb695d8c24d471d1b46f3411d1',1,'hypro::plotting::gnuplotSettings']]]
 ];

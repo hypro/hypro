@@ -1,6 +1,6 @@
 var structbetter__enums_1_1map =
 [
-    [ "function", "structbetter__enums_1_1map.html#a225f81223779091e6761c74c766d7db1", null ],
+    [ "function", "structbetter__enums_1_1map.html#a37c934292640a25d13340f3f82ec9925", null ],
     [ "map", "structbetter__enums_1_1map.html#a5010e83ee9aa33e273832f344a7ffe10", null ],
     [ "from_enum", "structbetter__enums_1_1map.html#a77bb718004cc62200b7542b97055cc57", null ],
     [ "operator[]", "structbetter__enums_1_1map.html#a7599091b435d422819ab739809ee4f08", null ],

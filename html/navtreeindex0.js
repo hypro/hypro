@@ -6,6 +6,7 @@ var NAVTREEINDEX0 =
 "BallSupportFunction_8h.html":[9,0,1,0,3,10,0],
 "BallSupportFunction_8h_source.html":[9,0,1,0,3,10,0],
 "BoxSetting_8h.html":[9,0,1,0,3,0,1],
+"BoxSetting_8h.html#a1e6f8042b58d29a99f896fe8de257aa4":[9,0,1,0,3,0,1,3],
 "BoxSetting_8h_source.html":[9,0,1,0,3,0,1],
 "BoxSupportFunction_8h.html":[9,0,1,0,3,10,1],
 "BoxSupportFunction_8h_source.html":[9,0,1,0,3,10,1],
@@ -140,6 +141,7 @@ var NAVTREEINDEX0 =
 "HIV__util_8h.html":[9,0,1,0,1,1,0,7],
 "HIV__util_8h_source.html":[9,0,1,0,1,1,0,7],
 "HPolytopeSetting_8h.html":[9,0,1,0,3,9,1,1],
+"HPolytopeSetting_8h.html#ace8b1f441d9a0cb2570e44a123745617":[9,0,1,0,3,9,1,1,1],
 "HPolytopeSetting_8h_source.html":[9,0,1,0,3,9,1,1],
 "HPolytope_8h.html":[9,0,1,0,3,9,1,0],
 "HPolytope_8h.html#a215f3e334a7bed07a3bde7a5092206e3":[9,0,1,0,3,9,1,0,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX0 =
 "Location_8h.html":[9,0,1,0,1,0,7],
 "Location_8h.html#a7e902fc6c718791cc884dd557485c63b":[9,0,1,0,1,0,7,4],
 "Location_8h_source.html":[9,0,1,0,1,0,7],
-"LockableBase_8h.html":[9,0,1,0,4,3,0],
-"LockableBase_8h_source.html":[9,0,1,0,4,3,0],
-"LockableObjectWrapper_8h.html":[9,0,1,0,4,3,1]
+"LockableBase_8h.html":[9,0,1,0,4,3,0]
 };
