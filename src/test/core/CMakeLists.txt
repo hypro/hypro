@@ -7,7 +7,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#LoggerTest.cpp
 		#endif
 		OptimizerTest.cpp
-		ParserTest.cpp
 		PlotterTest.cpp
 		UtilityTest.cpp
 	)
@@ -42,6 +41,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runParserTests
 		AntlrParserTest.cpp
+		ParserTest.cpp
 		#AntlrParserCIFTest.cpp
 	)
 	add_dependencies(runParserTests resources antlr4cpp)
