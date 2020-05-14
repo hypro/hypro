@@ -13,7 +13,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
+	static_assert(false, "This file may only be included indirectly by GeometricObjectBase.h");
 #endif
 
 #include "TemplatePolyhedronSetting.h"
@@ -34,12 +34,14 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<Number,Converter,Setting>> {
+class TemplatePolyhedronT : private GeometricObjectBase {
   private:
   public:
 
   	//Needed for Converter
   	typedef Setting Settings;
+	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::polytope_t;
 
   protected:
 
@@ -60,7 +62,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
   	bool mNonRedundant = false;
 
   	//Flag whether emptiness has been tested and if it was empty or not
-  	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
+  	//mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	/***************************************************************************
 	 * Constructors
@@ -142,7 +144,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	
 	std::shared_ptr<const matrix_t<Number>> rGetMatrixPtr() const { return mMatrixPtr; }
 
-	TRIBOOL getEmptyFlag() const { return mEmpty; }
+	SETSTATE getEmptyFlag() const { return mEmptyState; }
 
 	bool getNonRedundant() const { return mNonRedundant; }
 	
@@ -157,7 +159,7 @@ class TemplatePolyhedronT : public GeometricObject<Number, TemplatePolyhedronT<N
 	void setVector(const vector_t<Number>& vec) { 
 		assert(((vec.rows() == mMatrixPtr->rows()) && mMatrixPtr != nullptr) || mMatrixPtr == nullptr);
 		mNonRedundant = false;
-		mEmpty = TRIBOOL::NSET;
+		mEmptyState = SETSTATE::UNKNOWN;
 		mVector = vec; 
 		mOptimizer.setVector(vec);
 	}

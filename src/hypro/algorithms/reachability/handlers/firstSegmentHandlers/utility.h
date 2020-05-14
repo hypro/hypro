@@ -1,6 +1,6 @@
 #pragma once
 #include "../../../../datastructures/HybridAutomaton/State.h"
-#include "../../../../representations/GeometricObject.h"
+#include "../../../../representations/GeometricObjectBase.h"
 
 namespace hypro {
 template <typename State>

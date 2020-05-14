@@ -1,14 +1,9 @@
 #include "ltiTimeEvolutionHandler.h"
 
 namespace hypro {
-template <typename State>
-void ltiTimeEvolutionHandler<State>::handle() {
-	TRACE( "hydra.worker", "Applying timestep to " << mState );
-	TRACE( "hydra.worker", "Flow trafo: \n"
-								 << mTrafo << "\n Flow translation: \n"
-								 << mTranslation );
-	State res = mState->partiallyApplyTimeStep( hypro::ConstraintSet<Number>( mTrafo, mTranslation ), mTimeStep, mIndex );
-	mState->setSetDirect( res.getSet( mIndex ), mIndex );
-	mState->setSetType( res.getSetType( mIndex ), mIndex );
+template <typename State, typename Number>
+State ltiApplyTimeEvolution( const State& currentSegment, const matrix_t<Number>& transformation, const vector_t<Number>& translation, tNumber timeStepSize ) {
+	return currentSegment.partiallyApplyTimeStep( hypro::ConstraintSet<Number>( transformation, translation ), timeStepSize, 0 );
 }
+
 }  // namespace hypro

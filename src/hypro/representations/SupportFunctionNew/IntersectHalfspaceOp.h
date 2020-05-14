@@ -43,7 +43,6 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 	unsigned originCount;
 	PointerVec mChildren;
 	std::size_t mDimension;
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	////// Members for this class
 
@@ -286,21 +285,21 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 	//Checks emptiness
 	bool empty( const std::vector<bool>& childrenEmpty ) const {
 		assert( childrenEmpty.size() == 1 );
-		if ( mEmpty != TRIBOOL::NSET ) {
-			return ( mEmpty == TRIBOOL::TRUE );
+		if ( RootGrowNode<Number, Converter, Setting>::mEmptyState != SETSTATE::UNKNOWN ) {
+			return ( RootGrowNode<Number, Converter, Setting>::mEmptyState == SETSTATE::EMPTY );
 		}
 		if ( childrenEmpty.front() ) {
-			mEmpty = TRIBOOL::TRUE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 			return true;
 		}
 		SupportFunctionNewT<Number, Converter, Setting> child( this->getChildren().at( 0 ) );
 		auto posNormalEval = child.evaluate( hspace.normal(), true );
 		auto negNormalEval = child.evaluate( -hspace.normal(), true );
 		if ( -negNormalEval.supportValue <= hspace.offset() && hspace.offset() <= posNormalEval.supportValue ) {
-			mEmpty = TRIBOOL::FALSE;
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::NONEMPTY;
 			return false;
 		}
-		mEmpty = TRIBOOL::TRUE;
+		RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 		return true;
 	}
 

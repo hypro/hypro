@@ -6,16 +6,17 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../../util/Permutator.h"
+#include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/templateDirections.h"
 #include "HPolytopeSetting.h"
 #include "algorithms/quickhull/Quickhull.h"
-#include "algorithms/quickhull/number_traits.h"
-#include "../../../util/convexHull.h"
+#include "util/typetraits.h"
+
 #include <algorithm>
 #include <cassert>
 #include <optional>
@@ -32,7 +33,7 @@ class Location;
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, Setting>> {
+class HPolytopeT : private GeometricObjectBase {
   public:
 	enum REDUCTION_STRATEGY {
 		DROP = 0,
@@ -49,13 +50,14 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 	using HalfspaceVector = std::vector<Halfspace<Number>>;
 
 	typedef Setting Settings;
+	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::polytope_h;
 
   private:
 	mutable HalfspaceVector mHPlanes;
 	std::size_t mDimension;
 
 	// State flags
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 	mutable bool mNonRedundant;
 
 	// A hpoly will only have an own Optimizer if the setting CACHE_OPTIMIZER = true
@@ -142,7 +144,7 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 	 * @details An empty H-polytope is constructed by creating two hyperplanes which falsify each other.
 	 * @return An empty polytope.
 	 */
-	static HPolytopeT<Number, Converter, Setting> Empty( std::size_t dimension = 1 );
+	static HPolytopeT<Number, Converter, Setting> Empty();
 
 	/**
 	 * @brief Getter for the dimension of the polytope.
@@ -281,14 +283,18 @@ class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number, Converter, 
 	 * Operators
 	 */
 	HPolytopeT& operator=( const HPolytopeT<Number, Converter, Setting>& rhs ) {
+		GeometricObjectBase::operator=( rhs );
 		mHPlanes = rhs.constraints();
 		mDimension = rhs.dimension();
 		mNonRedundant = rhs.isNonRedundant();
-		mEmpty = rhs.empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+
 		if ( Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value() ) {
 			mOptimizer->cleanContexts();
 			setOptimizer( rhs.matrix(), rhs.vector() );
 		}
+		// TODO: I am not sure, whether the copy constructor of the base class is called here or not.
+		// Observation: Apparently it is not.
+		assert( mEmptyState == rhs.getEmptyState() );
 		return *this;
 	}
 

@@ -2,7 +2,7 @@
  * Overapproximation tryout with 2 points.
  */
 
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 #include <eigen3/Eigen/Eigenvalues>
 #define FLOATING_FIX 10e-12

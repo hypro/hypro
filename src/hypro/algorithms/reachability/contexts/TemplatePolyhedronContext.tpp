@@ -503,10 +503,11 @@ void TemplatePolyhedronContext<State>::firstSegment() {
 			static_cast<TPolyFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->handle();
 		}
 	} else {
-		for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
-			//std::cout << "TemplatePolyhedronContext::firstSegment, use standard reach algo!" << std::endl;
-			static_cast<ltiFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->ltiFirstSegmentHandler<State>::handle();
-		}
+		this->mComputationState = ltiFirstSegmentHandler<State>()(this->mComputationState, SettingsProvider<State>::getInstance().getTimeStepSize());
+		//for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
+		//	//std::cout << "TemplatePolyhedronContext::firstSegment, use standard reach algo!" << std::endl;
+		//	//static_cast<ltiFirstSegmentHandler<State>*>( this->mFirstSegmentHandlers.at( i ) )->ltiFirstSegmentHandler<State>::handle();
+		//}
 	}
 	//Do the stuff ltiContext would do
 	this->initializeInvariantHandlers();
@@ -527,7 +528,8 @@ void TemplatePolyhedronContext<State>::applyContinuousEvolution() {
 	} else {
 		for ( std::size_t i = 0; i < this->mComputationState.getNumberSets(); i++ ) {
 			//std::cout << "TemplatePolyhedronContext::applyContinuousEvolution, use standard reach algo!" << std::endl;
-			static_cast<ltiTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->ltiTimeEvolutionHandler<State>::handle();
+			static_cast<TPolyTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->handle();
+			//static_cast<ltiTimeEvolutionHandler<State>*>( this->mContinuousEvolutionHandlers.at( i ) )->ltiTimeEvolutionHandler<State>::handle();
 		}
 	}
 	//Do the stuff ltiContext would do

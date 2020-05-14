@@ -1,5 +1,5 @@
 #include "../../hypro/datastructures/HybridAutomaton/Visitors.h"
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 #include <carl/interval/Interval.h>

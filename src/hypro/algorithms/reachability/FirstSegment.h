@@ -1,7 +1,7 @@
 #pragma once
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/State.h"
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "util.h"
 
@@ -119,6 +119,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 		}
 
 		firstSegment = deltaValuation.unite( initialPair.second );
+		assert( firstSegment.satisfies( _state.getLocation()->getInvariant() ).first != CONTAINMENT::NO );
 
 		if ( !errorBoxVector.empty() ) {
 #ifdef HYPRO_LOGGING
@@ -154,7 +155,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 		unsigned segment_count = 0;
 		std::vector<Point<Number>> points_convexHull;
 
-		for ( auto vertex : firstSegment.vertices() ) {  // cover firstSegment in clustering
+		for ( auto vertex : firstSegment.vertices() ) {	 // cover firstSegment in clustering
 			if ( std::find( points_convexHull.begin(), points_convexHull.end(), vertex ) == points_convexHull.end() ) {
 				points_convexHull.push_back( vertex );
 			}
@@ -190,7 +191,9 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 			//}
 		}
 #endif
+		assert( firstSegment.satisfies( _state.getLocation()->getInvariant() ).first != CONTAINMENT::NO );
 		firstSegment.removeRedundancy();
+		assert( firstSegment.satisfies( _state.getLocation()->getInvariant() ).first != CONTAINMENT::NO );
 
 		// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
 		TRACE( "hypro.reachability", "Check invariant." );
@@ -208,10 +211,14 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 
 			return std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>( fullSegment.first, fullSegment.second, trafoMatrixResized, translation, errorBoxVector[1] );
 		} else {
+			TRACE( "hypro.reachability", "First segment does not satisfy the invariant." );
+			std::cout << "HyPro: First Segment does not satisfy the invariant." << std::endl;
 			return std::make_tuple( CONTAINMENT::NO, State{}, matrix_t<Number>{}, vector_t<Number>{}, Box<Number>{} );
 		}
 	}  // if set does not satisfy the invariant, return false
 	else {
+		TRACE( "hypro.reachability", "Initial set does not satisfy the invariant." );
+		std::cout << "Initial set " << _state << " does not satisfy the invariant." << std::endl;
 		return std::make_tuple( CONTAINMENT::NO, State{}, matrix_t<Number>{}, vector_t<Number>{}, Box<Number>{} );
 	}
 }

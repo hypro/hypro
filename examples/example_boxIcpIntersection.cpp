@@ -1,5 +1,5 @@
 #include "datastructures/Halfspace.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include <carl/interval/Interval.h>
 
 int main() {

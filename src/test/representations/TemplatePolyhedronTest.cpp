@@ -8,7 +8,7 @@
  */
 
 #include "../defines.h"
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "gtest/gtest.h"
 
 using namespace hypro;

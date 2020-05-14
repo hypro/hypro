@@ -43,4 +43,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	cotire(runRepresentationTests)
 
 	add_test( NAME representations COMMAND runRepresentationTests )
+
+	add_dependencies(allTests runRepresentationTests)
 endif()

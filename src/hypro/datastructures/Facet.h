@@ -58,39 +58,27 @@ class Facet {
 
 	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number>& insidePoint ) {
 		r.push_back( p );
-		setPoints( r, insidePoint );
+		setPoints( std::move( r ), insidePoint );
 		mHalfspace = Halfspace<Number>( mNormal, mScalar );
-		// mHalfspace = Halfspace<Number>(mVertices);
-		mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
-		mOutsideSet = std::vector<Point<Number>>();
 	}
 
 	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const std::vector<Point<Number>>& outsidePoints,
 		   const std::vector<Point<Number>>& currentOutside, const Point<Number>& insidePoint ) {
 		r.push_back( p );
-		setPoints( r, outsidePoints, currentOutside, insidePoint );
+		setPoints( std::move( r ), outsidePoints, currentOutside, insidePoint );
 		mHalfspace = Halfspace<Number>( mNormal, mScalar );
-		// mHalfspace = Halfspace<Number>(mVertices);
-		mNeighbors = std::vector<Facet<Number>>();
-		mOutsideSet = std::vector<Point<Number>>();
 	}
 
 	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const std::vector<Point<Number>>& insidePoints ) {
 		r.push_back( p );
-		setPoints( r, insidePoints );
+		setPoints( std::move( r ), insidePoints );
 		mHalfspace = Halfspace<Number>( mNormal, mScalar );
-		// mHalfspace = Halfspace<Number>(mVertices);
-		mNeighbors = std::vector<Facet<Number>>();
-		mOutsideSet = std::vector<Point<Number>>();
 	}
 
-	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number> insidePoint1, const Point<Number> insidePoint2 ) {
+	Facet( std::vector<Point<Number>> r, const Point<Number>& p, const Point<Number>& insidePoint1, const Point<Number>& insidePoint2 ) {
 		r.push_back( p );
-		setPoints( r, insidePoint1, insidePoint2 );
+		setPoints( std::move( r ), insidePoint1, insidePoint2 );
 		mHalfspace = Halfspace<Number>( mNormal, mScalar );
-		// mHalfspace = Halfspace<Number>(mVertices);
-		mNeighbors = std::vector<std::shared_ptr<Facet<Number>>>();
-		mOutsideSet = std::vector<Point<Number>>();
 	}
 
 	Facet( const std::set<vector_t<Number>>& _vertices )
@@ -150,7 +138,7 @@ class Facet {
 	/*
 	 * removes a given facet from the neighborset if it is inside the list
 	 */
-	bool removeNeighbor( std::shared_ptr<Facet<Number>> facet ) {
+	bool removeNeighbor( const std::shared_ptr<Facet<Number>>& facet ) {
 		for ( unsigned i = 0; i < mNeighbors.size(); i++ ) {
 			if ( *facet == *mNeighbors[i] ) {
 				mNeighbors.erase( mNeighbors.begin() + i );
@@ -160,26 +148,13 @@ class Facet {
 		return false;
 	}
 
-	void setPoints( std::vector<Point<Number>> points, Point<Number> _insidePoint ) {
+	void setPoints( std::vector<Point<Number>>&& points, const Point<Number>& _insidePoint ) {
 		if ( mVertices.empty() ) {
-			for ( unsigned i = 0; i < points.size(); i++ ) {
-				mVertices.push_back( points[i] );
-			}
-
-			// for(unsigned i = 0; i<mVertices.size(); i++){
-			//	for(unsigned j = 0; j<mVertices.size(); j++){
-			//		if(mVertices[i]!=mVertices[j]){
-			//			mVertices[i].addNeighbor(mVertices[j]);
-			//		}
-			//	}
-			//}
+			std::move( points.begin(), points.end(), std::back_inserter( mVertices ) );
 
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
 
-			// std::cout << __func__ << " : " << __LINE__ << std::endl;
-			// std::cout << mNormal << std::endl;
-			// std::cout << _insidePoint << "  " << mScalar << std::endl;
 			if ( mNormal.dot( _insidePoint.rawCoordinates() ) > mScalar ) {
 				mNormal *= -1;
 				mScalar *= (Number)-1;
@@ -188,11 +163,9 @@ class Facet {
 		}
 	}
 
-	void setPoints( std::vector<Point<Number>> points, Point<Number> insidePoint1, Point<Number> insidePoint2 ) {
+	void setPoints( std::vector<Point<Number>>&& points, Point<Number> insidePoint1, Point<Number> insidePoint2 ) {
 		if ( mVertices.empty() ) {
-			for ( unsigned i = 0; i < points.size(); i++ ) {
-				mVertices.push_back( points[i] );
-			}
+			std::move( points.begin(), points.end(), std::back_inserter( mVertices ) );
 
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
@@ -213,11 +186,9 @@ class Facet {
 		}
 	}
 
-	void setPoints( std::vector<Point<Number>> points, const std::vector<Point<Number>>& insidePoints ) {
+	void setPoints( std::vector<Point<Number>>&& points, const std::vector<Point<Number>>& insidePoints ) {
 		if ( mVertices.empty() ) {
-			for ( unsigned i = 0; i < points.size(); i++ ) {
-				mVertices.push_back( points[i] );
-			}
+			std::move( points.begin(), points.end(), std::back_inserter( mVertices ) );
 
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
@@ -240,12 +211,10 @@ class Facet {
 		}
 	}
 
-	void setPoints( std::vector<Point<Number>> points, const std::vector<Point<Number>>& outsidePoints,
+	void setPoints( std::vector<Point<Number>>&& points, const std::vector<Point<Number>>& outsidePoints,
 					const std::vector<Point<Number>>& currentOutside, Point<Number> _insidePoint ) {
 		if ( mVertices.empty() ) {
-			for ( unsigned i = 0; i < points.size(); i++ ) {
-				mVertices.push_back( points[i] );
-			}
+			std::move( points.begin(), points.end(), std::back_inserter( mVertices ) );
 
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
@@ -397,7 +366,7 @@ class Facet {
 	}
 
 	void addPointToOutsideSet( const Point<Number>& point ) {
-		mOutsideSet.push_back( point );  // check double entries?
+		mOutsideSet.emplace_back( point );  // check double entries?
 	}
 
 	std::vector<Point<Number>> getOutsideSet() const {
@@ -436,7 +405,7 @@ class Facet {
 		}
 	}
 
-	bool isNeighbor( std::shared_ptr<Facet<Number>> facet ) const {
+	bool isNeighbor( const std::shared_ptr<Facet<Number>>& facet ) const {
 		for ( unsigned i = 0; i < mNeighbors.size(); i++ ) {
 			// std::cout << "Compare " << *mNeighbors[i] << " and " << *facet << ": " << (*mNeighbors[i] == *facet) <<
 			// std::endl;

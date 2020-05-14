@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../../algorithms/quantifierElimination/qe.h"
@@ -24,17 +24,17 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class CarlPolytopeT {
+class CarlPolytopeT : private GeometricObjectBase {
   public:
 	// typedefs
 	using Settings = Setting;
 	using NumberType = Number;
+	static constexpr auto type_enum = representation_name::carl_polytope;
 
   private:
 	FormulaT<tNumber> mFormula;							 /// The description of the polytope as a conjunction of linear constraints.
-	mutable std::vector<Halfspace<Number>> mHalfspaces;  /// Caches transformed half-spaces.
+	mutable std::vector<Halfspace<Number>> mHalfspaces;	 /// Caches transformed half-spaces.
 	mutable std::size_t mDimension = 0;					 /// Stores the state space dimension the polytope resides in.
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;				 /// Caches whether the polytope is empty.
 	mutable bool mSpaceDimensionSet = false;			 /// used to indicate that the space dimension has been set externally, which overrides anything else.
   public:
 	CarlPolytopeT()

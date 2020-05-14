@@ -41,4 +41,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	cotire(runDatastructureTests)
 
 	add_test( NAME datastructures COMMAND runDatastructureTests )
+
+	add_dependencies(allTests runDatastructureTests)
 endif()

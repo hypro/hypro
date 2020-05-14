@@ -98,7 +98,11 @@ public:
 
     virtual antlrcpp::Any visitIdentity(HybridAutomatonParser::IdentityContext *context) = 0;
 
+    virtual antlrcpp::Any visitQrprecond(HybridAutomatonParser::QrprecondContext *context) = 0;
+
     virtual antlrcpp::Any visitFixedorders(HybridAutomatonParser::FixedordersContext *context) = 0;
+
+    virtual antlrcpp::Any visitAdaptiveorders(HybridAutomatonParser::AdaptiveordersContext *context) = 0;
 
     virtual antlrcpp::Any visitCutoff(HybridAutomatonParser::CutoffContext *context) = 0;
 

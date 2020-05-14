@@ -43,7 +43,7 @@ struct strategyConversionVisitor {
 		//auto tmp = std::visit(::hypro::genericConvertAndGetVisitor<typename Node::representationType>(), mState.getSet(mSubsetIndex));
 		//TRACE("hypro.utility","Conversion result: " << tmp);
 		//mState.setSet(tmp);
-		mState.setSet( std::visit(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet( mSubsetIndex ) ), mSubsetIndex );
+		mState.setSet( std::visit( ::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet( mSubsetIndex ) ), mSubsetIndex );
 		//mState.setSetType(Node::representationType::type(),mSubsetIndex);
 
 		TRACE( "hypro.utility", "Should be of type " << Node::representationType::type() );

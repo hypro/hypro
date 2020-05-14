@@ -2,7 +2,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../config.h"
@@ -20,9 +20,11 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, typename Setting>
-class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number, Converter, Setting>> {
+class SupportFunctionT : private GeometricObjectBase {
   public:
 	typedef Setting Settings;
+	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::support_function;
 
   private:
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> content;
@@ -52,7 +54,7 @@ class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
 
 	std::size_t dimension() const;
-	std::size_t size() const { return 0; }  // TODO: Better implementation?
+	std::size_t size() const { return 0; }	// TODO: Better implementation?
 	static representation_name type() { return representation_name::support_function; }
 	SF_TYPE sfType() const;
 	unsigned depth() const;

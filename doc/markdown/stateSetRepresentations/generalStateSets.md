@@ -19,6 +19,8 @@ Alternatively, we can represent a box by its minimal and
 its maximal point. Boxes are well-suited for fast computations in flowpipe construction, however, they often lead to large over-approximations.
 Boxes are widely used also in other fields such as in interval constraint propagation (ICP), which itself is used for SMT-solving-based reachability analysis of hybrid systems \cite isat . Implementations of boxes are also contained in most polytope libraries, e.g. \cite BagnaraHZ08SCP \cite polymake.
 
+Further details on boxes and their implementation can be found @subpage boxDetails "here".
+
 ## Polytopes ##
 
 ![A polytope in its H-representation](hPolytope.png)

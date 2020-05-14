@@ -91,6 +91,7 @@ target_include_directories(${PROJECT_NAME}-objects
 	add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
 	add_dependencies(${PROJECT_NAME} resources)
 
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
 	set_target_properties(${PROJECT_NAME}-static PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")

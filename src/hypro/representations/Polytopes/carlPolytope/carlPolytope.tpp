@@ -29,7 +29,7 @@ CarlPolytopeT<Number, Converter, Setting>::CarlPolytopeT( const std::vector<carl
 template <typename Number, typename Converter, typename Setting>
 CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setting>::Empty() {
 	auto res = CarlPolytopeT();
-	res.mEmpty = TRIBOOL::TRUE;
+	res.setEmptyState( SETSTATE::EMPTY );
 	return res;
 }
 
@@ -172,8 +172,8 @@ void CarlPolytopeT<Number, Converter, Setting>::addConstraint( const ConstraintT
 	// reset Half-space cache
 	mHalfspaces.clear();
 	// if not empty, reset cache
-	if ( mEmpty != TRIBOOL::TRUE ) {
-		mEmpty = TRIBOOL::NSET;
+	if ( mEmptyState != SETSTATE::EMPTY ) {
+		mEmptyState = SETSTATE::UNKNOWN;
 	} else {
 		return;
 	}
@@ -192,8 +192,8 @@ void CarlPolytopeT<Number, Converter, Setting>::addConstraints( const std::vecto
 	// reset Half-space cache
 	mHalfspaces.clear();
 	// if not empty, reset cache
-	if ( mEmpty != TRIBOOL::TRUE ) {
-		mEmpty = TRIBOOL::NSET;
+	if ( mEmptyState != SETSTATE::EMPTY ) {
+		mEmptyState = SETSTATE::UNKNOWN;
 	} else {
 		return;
 	}
@@ -341,19 +341,20 @@ vector_t<Number> CarlPolytopeT<Number, Converter, Setting>::vector() const {
 
 template <typename Number, typename Converter, typename Setting>
 bool CarlPolytopeT<Number, Converter, Setting>::empty() const {
-	if ( mEmpty == TRIBOOL::NSET ) {
+	if ( mEmptyState == SETSTATE::UNKNOWN ) {
 		if ( mFormula.isFalse() ) {
-			mEmpty = TRIBOOL::TRUE;
+			mEmptyState = SETSTATE::EMPTY;
 			return true;
 		}
 		// Attention, we assume the formula is only one constraint.
 		if ( mFormula.size() <= 1 ) {
+			mEmptyState = mFormula.size() == 0 ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
 			return false;
 		}
 		Optimizer<Number> opt = Optimizer<Number>( this->matrix(), this->vector() );
-		mEmpty = opt.checkConsistency() ? TRIBOOL::FALSE : TRIBOOL::TRUE;
+		mEmptyState = opt.checkConsistency() ? SETSTATE::NONEMPTY : SETSTATE::EMPTY;
 	}
-	return mEmpty == TRIBOOL::TRUE;
+	return mEmptyState == SETSTATE::EMPTY;
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -407,7 +408,7 @@ void CarlPolytopeT<Number, Converter, Setting>::reduceRepresentation() {
 		assert( evalRes.errorCode != SOLUTION::UNKNOWN );
 		// if the polytope is empty, directly return empty polytope.
 		if ( evalRes.errorCode == SOLUTION::INFEAS ) {
-			mEmpty = TRIBOOL::TRUE;
+			mEmptyState = SETSTATE::EMPTY;
 			return;
 		}
 		// if the polytope is unbounded, remove constraint.
@@ -430,7 +431,7 @@ void CarlPolytopeT<Number, Converter, Setting>::clearCache() const {
 	// reset half-space cache
 	mHalfspaces.clear();
 	// reset empty-cache
-	mEmpty = TRIBOOL::NSET;
+	mEmptyState = SETSTATE::UNKNOWN;
 }
 
 template <typename Number, typename Converter, typename Setting>

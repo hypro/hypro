@@ -103,10 +103,10 @@ namespace hypro {
 	//Copy constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( const TemplatePolyhedronT<Number,Converter,Setting>& orig ) 
-		: mMatrixPtr(orig.rGetMatrixPtr())
+		: GeometricObjectBase(orig.getEmptyFlag())
+		, mMatrixPtr(orig.rGetMatrixPtr())
 		, mVector(orig.vector())
 		, mNonRedundant(orig.getNonRedundant())
-		, mEmpty(orig.getEmptyFlag())
 	{
 		if(orig.rGetMatrixPtr() == nullptr){
 			mOptimizer = Optimizer<Number>();
@@ -121,10 +121,10 @@ namespace hypro {
 	//Move constructor
 	template<typename Number, typename Converter, typename Setting>
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT( TemplatePolyhedronT<Number,Converter,Setting>&& orig ) 
-		: mMatrixPtr(std::move(orig.rGetMatrixPtr()))
+		: GeometricObjectBase(orig.getEmptyFlag())
+		, mMatrixPtr(std::move(orig.rGetMatrixPtr()))
 		, mVector(std::move(orig.vector()))	
 		, mNonRedundant(std::move(orig.getNonRedundant()))
-		, mEmpty(orig.getEmptyFlag())
 	{
 		if(orig.rGetMatrixPtr() == nullptr){
 			mOptimizer = Optimizer<Number>();
@@ -142,10 +142,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > >
 	TemplatePolyhedronT<Number,Converter,Setting>::TemplatePolyhedronT(const TemplatePolyhedronT<Number,Converter,SettingRhs>& orig)
-		: mMatrixPtr(orig.rGetMatrixPtr())
+		: GeometricObjectBase(orig.getEmptyFlag())
+		, mMatrixPtr(orig.rGetMatrixPtr())
 		, mVector(orig.vector())
 		, mNonRedundant(orig.getNonRedundant())
-		, mEmpty(orig.getEmptyFlag())
 	{
 		if(orig.rGetMatrixPtr() == nullptr){
 			mOptimizer = Optimizer<Number>();
@@ -167,7 +167,7 @@ namespace hypro {
 		if(mMatrixPtr == nullptr) return true;
 	
 		//Check emptiness cache
-		if(mEmpty != TRIBOOL::NSET) return (mEmpty == TRIBOOL::TRUE);
+		if(mEmptyState != SETSTATE::UNKNOWN) return (mEmptyState == SETSTATE::EMPTY);
 
 		//Linear time quick checks: 
 		//If all coeffs negative -> all directions point towards origin -> unbounded polyhedron infeasible therefore empty
@@ -186,10 +186,10 @@ namespace hypro {
 
 		//If no quick check triggered: Solve LP and cache result
 		//std::cout << "TemplatePolyhedron::empty, mOptimizer mat: \n" << mOptimizer.matrix() << "mOptimizer vec: \n" << mOptimizer.vector() << std::endl;
-		mEmpty = !mOptimizer.checkConsistency() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
-		//std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmpty == TRIBOOL::TRUE) << std::endl;
-		TRACE("hypro.representations.TPolytope","Optimizer result: " << mEmpty);
-		return (mEmpty == TRIBOOL::TRUE);
+		mEmptyState = !mOptimizer.checkConsistency() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+		//std::cout << "TemplatePolyhedron::empty, is empty? " << (mEmptyState == SETSTATE::EMPTY) << std::endl;
+		TRACE("hypro.representations.TPolytope","Optimizer result: " << mEmptyState);
+		return (mEmptyState == SETSTATE::EMPTY);
 	}
 
 	//Copy from HPoly - is also obsolete 
@@ -391,7 +391,7 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, TemplatePolyhedronT<Number,Converter,Setting>> TemplatePolyhedronT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 
-		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmpty: " << mEmpty << std::endl;
+		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, mEmptyState: " << mEmptyState << std::endl;
 		//std::cout << "TemplatePolyhedron::satisfiesHalfspaces, this: \n" << *mMatrixPtr << "this vec: \n" << mVector << "_mat: \n" << _mat << "_vec: \n" << _vec << std::endl;
 
 		if(this->empty()){
@@ -829,7 +829,7 @@ namespace hypro {
 		mVector = std::move(resPoly.vector());
 		mOptimizer.setMatrix(*mMatrixPtr);
 		mOptimizer.setVector(mVector);
-		//mEmpty = TRIBOOL::NSET;
+		//mEmptyState = SETSTATE::UNKNOWN;
 		mNonRedundant = true;
 	}
 
@@ -839,7 +839,7 @@ namespace hypro {
 		mVector = vector_t<Number>::Zero(0);
 		mOptimizer.setMatrix(matrix_t<Number>::Zero(1,1));
 		mOptimizer.setVector(vector_t<Number>::Zero(1));
-		mEmpty = TRIBOOL::NSET;
+		mEmptyState = SETSTATE::UNKNOWN;
 		mNonRedundant = false;
 	}
 

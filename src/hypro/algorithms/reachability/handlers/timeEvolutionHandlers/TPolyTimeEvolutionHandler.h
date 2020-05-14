@@ -12,13 +12,17 @@
 namespace hypro {
 
 	template<typename State>
-	class TPolyTimeEvolutionHandler : public ltiTimeEvolutionHandler<State> {
+	class TPolyTimeEvolutionHandler : public ITimeEvolutionHandler {
 
 		using Number = typename State::NumberType;
 
 	  protected:
 
-	  	//Inherits members from ltiTimeEvolutionHandler
+		State* mState;
+		size_t mIndex;
+		tNumber mTimeStep;
+		matrix_t<Number> mTrafo;
+		vector_t<Number> mTranslation;
 
 		//Invariant gotten from Location Invariant Strengthening
 		std::optional<vector_t<Number>> mStrengthenedInvariant;
@@ -27,7 +31,11 @@ namespace hypro {
 
 		TPolyTimeEvolutionHandler() = delete;
 		TPolyTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo, vector_t<Number> translation)
-			: ltiTimeEvolutionHandler<State>(state, index, timeStep, trafo, translation)
+			: mState(state)
+			, mIndex(index)
+			, mTimeStep(timeStep)
+			, mTrafo(trafo)
+			, mTranslation(translation)
 			, mStrengthenedInvariant(std::nullopt)
 		{}
 		~TPolyTimeEvolutionHandler(){}
@@ -39,6 +47,8 @@ namespace hypro {
 		void setMarkedForDelete(bool ) { /*no op*/ };
 		void setInvariant(const vector_t<Number>& inv);
 		std::optional<vector_t<Number>> getRelaxedInvariant() const { return mStrengthenedInvariant; }
+		const matrix_t<typename State::NumberType>& getTrafo() const { return mTrafo; }
+		const vector_t<typename State::NumberType>& getTranslation() const { return mTranslation; }
 
 	  private:
 
@@ -52,7 +62,6 @@ namespace hypro {
 	    //since no constants are allowed.
 	    //The gradient of 3x + 2y - z is therefore the vector (3 2 -1), which is the result that will be returned.
 	    vector_t<Number> lieDerivative(const vector_t<Number>& dir);
-
 
 	};
 

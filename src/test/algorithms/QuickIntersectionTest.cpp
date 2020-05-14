@@ -105,7 +105,7 @@ TEST_F(QuickIntersectionTest, Specific2) {
 
 TEST_F(QuickIntersectionTest, RandomVertices) {
     size_t const N = 15;
-    size_t const D = 6;
+    size_t const D = 4;
 
     srand(42);
 
@@ -156,7 +156,7 @@ TEST_F(QuickIntersectionTest, RandomVertices) {
 
 TEST_F(QuickIntersectionTest, RandomHalfspaces) {
     constexpr int N = 50;
-    constexpr int D = 6;
+    constexpr int D = 4;
 
     qIntersection::pointVector_t inputHalfspaces;
 

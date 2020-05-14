@@ -13,14 +13,20 @@
 namespace hypro {
 
 	template<typename State>
-	class TPolyFirstSegmentHandler : public ltiFirstSegmentHandler<State> {
+	class TPolyFirstSegmentHandler : public IFirstSegmentHandler<State> {
 	
 		using Number = typename State::NumberType;
 
 	  private:
 
 	  	//Inherits the members from ltiFirstSegmentHandler
-
+		State* mState;
+		size_t mIndex;
+		tNumber mTimeStep;
+		flowVariant<Number> mFlow;
+		matrix_t<typename State::NumberType> mTrafo;
+		vector_t<typename State::NumberType> mTranslation;
+		
 		//Invariant gotten from Location Invariant Strengthening if used
 		std::optional<vector_t<Number>> mStrengthenedInvariant;
 
@@ -28,7 +34,10 @@ namespace hypro {
 
 	  	TPolyFirstSegmentHandler() = delete;
 		TPolyFirstSegmentHandler(State* state, size_t index, tNumber timeStep)
-			: ltiFirstSegmentHandler<State>(state, index, timeStep)
+			//: ltiFirstSegmentHandler<State>(state, index, timeStep)
+			: mState(state)
+			, mIndex(index)
+			, mTimeStep(timeStep)
 			, mStrengthenedInvariant(std::nullopt)
 			{}
 		~TPolyFirstSegmentHandler(){}
@@ -39,7 +48,11 @@ namespace hypro {
 		const char* handlerName() {return "TPolyFirstSegmentHandler";}
 
 		void setInvariant(const vector_t<Number>& inv);
-
+		
+		const matrix_t<typename State::NumberType>& getTrafo() const { return mTrafo; }
+		const vector_t<typename State::NumberType>& getTranslation() const { return mTranslation; }
+		const flowVariant<typename State::NumberType>& getTransformation() const { return mFlow; }
+		
 		std::optional<vector_t<Number>> getRelaxedInvariant() const { return mStrengthenedInvariant; }
 		
 	  private:

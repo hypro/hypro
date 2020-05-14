@@ -1,6 +1,6 @@
 #pragma once
 
-#include "number_traits.h"
+#include "util/typetraits.h"
 
 namespace hypro {
     template<typename Number, bool Euclidian = true, typename = void>

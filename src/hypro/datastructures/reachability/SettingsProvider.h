@@ -71,6 +71,9 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>> {
 	void setStrategy( const Strategy<State>& strat ) { mStrategy = strat; }
 	const Strategy<State>& getStrategy() const { return mStrategy; }
 
+	tNumber getLocalTimeHorizon() const { return mReachabilitySettings.timeBound; }
+	tNumber getTimeStepSize( std::size_t i = 0 ) const { return mStrategy.getParameters( i ).timeStep; }
+
 	const LockedFileWriter& getDotFileWriter() const { return treeDotFileWriter; }
 
 	bool isFullTimed() { return fullTimed; }

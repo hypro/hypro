@@ -21,7 +21,7 @@ class RootGrowNode;
 //The infos are the address to the representation as an actual number and the type of the representation.
 struct LeafData : public RGNData {
 	uintptr_t addressToRep;
-	representation_name typeOfRep;
+	representation_name typeOfRep = representation_name::UNDEF;
 	bool isNotRedundant;
 	LeafData(){};
 	LeafData( const uintptr_t addr, const representation_name rep, const bool redundancy )
@@ -39,7 +39,6 @@ class Leaf : public RootGrowNode<Number, Converter, Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::LEAF;
 	unsigned originCount = 0;  //A leaf cannot have children
 	std::size_t mDimension = 0;
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	////// Members for this class
 
@@ -80,7 +79,6 @@ class Leaf : public RootGrowNode<Number, Converter, Setting> {
 	unsigned getOriginCount() const override { return originCount; }
 	std::size_t getDimension() const override { return mDimension; }
 	Representation* getRepresentation() const { return rep.get(); }
-	TRIBOOL isEmpty() const override { return mEmpty; }
 	bool isRedundant() const { return !isNotRedundant; }
 	RGNData* getData() const override { return nullptr; }
 	LeafData getLeafData() const override {
@@ -131,10 +129,10 @@ class Leaf : public RootGrowNode<Number, Converter, Setting> {
 
 	//Leaves call empty function of the representation
 	bool empty() const override {
-		if ( mEmpty == TRIBOOL::NSET ) {
-			mEmpty = rep->empty() ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		if ( RootGrowNode<Number, Converter, Setting>::mEmptyState == SETSTATE::UNKNOWN ) {
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = rep->empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
 		}
-		return ( mEmpty == TRIBOOL::TRUE );
+		return ( RootGrowNode<Number, Converter, Setting>::mEmptyState == SETSTATE::EMPTY );
 	}
 
 	//Compute the point that is the supremum of the representation

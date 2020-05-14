@@ -5,7 +5,7 @@
 #include "../src/hypro/algorithms/reachability/Reach.h"
 #include "../src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../src/hypro/parser/antlr4-flowstar/ParserWrapper.h"
-#include "../src/hypro/representations/GeometricObject.h"
+#include "../src/hypro/representations/GeometricObjectBase.h"
 #include "../src/hypro/util/plotting/Plotter.h"
 #include <string>
 

@@ -8,7 +8,7 @@
  */
 
 #include "../defines.h"
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../../hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../hypro/algorithms/reachability/handlers/firstSegmentHandlers/TPolyFirstSegmentHandler.h"
 #include "gtest/gtest.h"

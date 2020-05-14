@@ -144,7 +144,11 @@ Number ZonotopeT<Number, Converter, Setting>::supremum() const {
 
 template <typename Number, typename Converter, typename Setting>
 bool ZonotopeT<Number, Converter, Setting>::empty() const {
-	return ( mGenerators.cols() == 0 );
+	if ( mEmptyState == SETSTATE::UNKNOWN ) {
+		mEmptyState = mGenerators.cols() == 0 ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+	}
+	assert( mEmptyState != SETSTATE::UNIVERSAL );
+	return mEmptyState == SETSTATE::EMPTY;
 }
 
 template <typename Number, typename Converter, typename Setting>

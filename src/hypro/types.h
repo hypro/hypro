@@ -37,6 +37,19 @@ enum class TRIBOOL { TRUE,
 					 FALSE,
 					 NSET };
 
+enum class REACHABILITY_RESULT {
+	SAFE,
+	UNKNOWN
+};
+
+/**
+ * @brief Enum to represent set states such as empty and universal.
+ */
+enum class SETSTATE { UNKNOWN,
+					  NONEMPTY,
+					  EMPTY,
+					  UNIVERSAL };
+
 /**
  * @brief      Enum of possible solution types for linear optimization.
  */

@@ -28,6 +28,12 @@ namespace hypro {
 		assert(this->mState->getSetType(this->mIndex) == representation_name::polytope_t);
         auto tpoly = std::visit(genericConvertAndGetVisitor<TemplatePolyhedron<typename State::NumberType>>(), this->mState->getSet(this->mIndex));
         assert(!tpoly.empty());
+
+        if(!TemplatePolyhedron<Number>::Settings::USE_ALTERNATIVE_REACH_ALGO){
+            this->mState->setSet(ltiApplyTimeEvolution<State,Number>(*this->mState, this->mTrafo, this->mTranslation, this->mTimeStep), this->mIndex);
+            return;
+        }
+
         vector_t<Number> newVec = vector_t<Number>::Zero(tpoly.vector().rows());
 		
 		//For each row:

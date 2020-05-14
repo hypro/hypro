@@ -6,7 +6,7 @@
  */
 
 #pragma once
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "../../util/logging/Logger.h"
 #include "../HybridAutomaton/Location.h"
 #include "../HybridAutomaton/State.h"

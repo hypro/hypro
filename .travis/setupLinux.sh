@@ -13,23 +13,23 @@ elif [[ ${COMPILER} == "clang-5.0" ]]; then
 	defCXX clang-5.0 clang++-5.0
 fi
 
-if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
-  cd ${TRAVIS_BUILD_DIR}
-  wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
-  tar xf lcov_1.11.orig.tar.gz
-  sudo make -C lcov-1.11/ install
-  gem install coveralls-lcov
-  cd ${TRAVIS_BUILD_DIR}
-  lcov --directory . --zerocounters
-fi
+#if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
+#  cd ${TRAVIS_BUILD_DIR}
+#  wget http://ftp.de.debian.org/debian/pool/main/l/lcov/lcov_1.11.orig.tar.gz
+#  tar xf lcov_1.11.orig.tar.gz
+#  sudo make -C lcov-1.11/ install
+#  gem install coveralls-lcov
+#  cd ${TRAVIS_BUILD_DIR}
+#  lcov --directory . --zerocounters
+#fi
 
-mkdir -p ~/usr
-PREFIX=`cd ~/usr; pwd`
+#mkdir -p ~/usr
+#PREFIX=`cd ~/usr; pwd`
 
-if [ ! -f $PREFIX/bin/cmake ]; then
-	wget -nv https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh
-	chmod +x cmake-3.7.2-Linux-x86_64.sh
-	./cmake-3.7.2-Linux-x86_64.sh --prefix=$PREFIX --exclude-subdir --skip-license
-fi
+#if [ ! -f $PREFIX/bin/cmake ]; then#
+#	wget -nv https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh
+#	chmod +x cmake-3.7.2-Linux-x86_64.sh
+#	./cmake-3.7.2-Linux-x86_64.sh --prefix=$PREFIX --exclude-subdir --skip-license
+#fi
 
-export PATH="$PREFIX/bin:$PATH"
+#export PATH="$PREFIX/bin:$PATH"

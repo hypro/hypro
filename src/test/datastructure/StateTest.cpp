@@ -1,7 +1,7 @@
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
 #include "../../hypro/algorithms/reachability/FirstSegment.h"
 #include "../../hypro/datastructures/HybridAutomaton/Location.h"
-#include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/representations/GeometricObjectBase.h"
 #include "../../hypro/util/tuple_expansion/nth_element.h"
 #include "../defines.h"
 #include "gtest/gtest.h"

@@ -1,13 +1,11 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 #define INCL_FROM_CONVERTERHEADER true
 
 #include "../../flags.h"
-//#include "../Orthoplex/Orthoplex.h"
-#include "../TemplatePolyhedron/TemplatePolyhedron.h"
 #include "../../util/pca.h"
 #include "../../util/templateDirections.h"
 #include "../Box/Box.h"
@@ -22,6 +20,9 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../SupportFunction/SupportFunction.h"
 #include "../SupportFunctionNew/SupportFunctionNew.h"
 #include "../Zonotope/Zonotope.h"
+#include "../TemplatePolyhedron/TemplatePolyhedron.h"
+//#include "../Orthoplex/Orthoplex.h"
+
 
 namespace hypro {
 
