@@ -436,24 +436,17 @@ TYPED_TEST( TemplatePolyhedronContextTest, LocationInvariantStrengthening ) {
 	}
 }
 
-TYPED_TEST( TemplatePolyhedronContextTest, ExecBeforeFirstSegment ) {
-	SUCCEED();
-}
-
-TYPED_TEST( TemplatePolyhedronContextTest, FirstSegment ) {
-	SUCCEED();
-}
-
-TYPED_TEST( TemplatePolyhedronContextTest, ApplyContinuousEvolution ) {
-	SUCCEED();
-}
-
-TYPED_TEST( TemplatePolyhedronContextTest, Reachability ) {
-	SUCCEED();
-}
-
-// TYPED_TEST(TemplatePolyhedronContextTest, TPolyFirstSegmentHandler){
-//
+//TYPED_TEST( TemplatePolyhedronContextTest, ExecBeforeFirstSegment ) {
+//	SUCCEED();
+//}
+//TYPED_TEST( TemplatePolyhedronContextTest, FirstSegment ) {
+//	SUCCEED();
+//}
+//TYPED_TEST( TemplatePolyhedronContextTest, ApplyContinuousEvolution ) {
+//	SUCCEED();
+//}
+//TYPED_TEST( TemplatePolyhedronContextTest, Reachability ) {
+//	SUCCEED();
 //}
 
 // Unit Tests: Instantiation, Every handler,
