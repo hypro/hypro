@@ -298,6 +298,7 @@ var hierarchy =
     ] ],
     [ "ParserRuleContext", null, [
       [ "hypro::HybridAutomatonParser::ActivitiesContext", "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html", null ],
+      [ "hypro::HybridAutomatonParser::AdaptiveordersContext", "classhypro_1_1HybridAutomatonParser_1_1AdaptiveordersContext.html", null ],
       [ "hypro::HybridAutomatonParser::AggregationContext", "classhypro_1_1HybridAutomatonParser_1_1AggregationContext.html", null ],
       [ "hypro::HybridAutomatonParser::AllocationContext", "classhypro_1_1HybridAutomatonParser_1_1AllocationContext.html", null ],
       [ "hypro::HybridAutomatonParser::ConnectorContext", "classhypro_1_1HybridAutomatonParser_1_1ConnectorContext.html", null ],
@@ -328,6 +329,7 @@ var hierarchy =
       [ "hypro::HybridAutomatonParser::PolynomContext", "classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html", null ],
       [ "hypro::HybridAutomatonParser::PrecisionContext", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html", null ],
       [ "hypro::HybridAutomatonParser::PrintContext", "classhypro_1_1HybridAutomatonParser_1_1PrintContext.html", null ],
+      [ "hypro::HybridAutomatonParser::QrprecondContext", "classhypro_1_1HybridAutomatonParser_1_1QrprecondContext.html", null ],
       [ "hypro::HybridAutomatonParser::RemainderContext", "classhypro_1_1HybridAutomatonParser_1_1RemainderContext.html", null ],
       [ "hypro::HybridAutomatonParser::ReplacedexprContext", "classhypro_1_1HybridAutomatonParser_1_1ReplacedexprContext.html", null ],
       [ "hypro::HybridAutomatonParser::ResetfctContext", "classhypro_1_1HybridAutomatonParser_1_1ResetfctContext.html", null ],

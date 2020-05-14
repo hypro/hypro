@@ -2,6 +2,8 @@ var classhypro_1_1HybridAutomatonParser_1_1SettingContext =
 [
     [ "SettingContext", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#ae433d7d651f6d3bb012591d36a6071e1", null ],
     [ "accept", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a49d13e798b1dfecffdbfd54d79dbc618", null ],
+    [ "adaptiveorders", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a77c15be64feff67e0eb1a1fc89a97ec3", null ],
+    [ "adaptiveorders", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a356f93cf859eae2b6c67d87a328599b6", null ],
     [ "CBCLOSE", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a56495b6d4de0dec99f91767e68db4ffb", null ],
     [ "CBOPEN", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a490bda3a67296c37fc3d3bc7f674ffce", null ],
     [ "cutoff", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a8ad45cff3780558bbb715cc0643a8e25", null ],
@@ -23,6 +25,8 @@ var classhypro_1_1HybridAutomatonParser_1_1SettingContext =
     [ "precision", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a66c15d4bbda3489d8d2069489ba9880a", null ],
     [ "print", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a25258860bc628e7585c8d13ddb4848fb", null ],
     [ "print", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a244bb7955cc76299526dd9796cbef006", null ],
+    [ "qrprecond", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#ab3bb41b91dc8cfa0f4f9dcdb1393a01c", null ],
+    [ "qrprecond", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a2c760ef886105e3c8958030dd4402ab7", null ],
     [ "remainder", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a85c2ed8e7bdd375f8e658573bd9f6f38", null ],
     [ "remainder", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#ac85530957fbe96683cf807e29a254389", null ],
     [ "time", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a6f68a41664c6102fed97551030a0f45b", null ],

@@ -1,6 +1,7 @@
 var classhypro_1_1HybridAutomatonVisitor =
 [
     [ "visitActivities", "classhypro_1_1HybridAutomatonVisitor.html#aae5a46f419bd9bb033651d683231088b", null ],
+    [ "visitAdaptiveorders", "classhypro_1_1HybridAutomatonVisitor.html#a2147f5c9e720b1588f1b4f11d20140d4", null ],
     [ "visitAggregation", "classhypro_1_1HybridAutomatonVisitor.html#a84afaf070bfae4bcfedc9dca67ebba86", null ],
     [ "visitAllocation", "classhypro_1_1HybridAutomatonVisitor.html#aa63954012fa293f0b9677deca8699538", null ],
     [ "visitConnector", "classhypro_1_1HybridAutomatonVisitor.html#a045bcb7aed06a1cf94aed3d54a3638f0", null ],
@@ -31,6 +32,7 @@ var classhypro_1_1HybridAutomatonVisitor =
     [ "visitPolynom", "classhypro_1_1HybridAutomatonVisitor.html#a0fc06ebfabd60d996ba747c9fcdee9a5", null ],
     [ "visitPrecision", "classhypro_1_1HybridAutomatonVisitor.html#ab096c7af143d3d6a11988bd3e2ab1544", null ],
     [ "visitPrint", "classhypro_1_1HybridAutomatonVisitor.html#a4c5d5b5d14ea2ab64829382d35dd815c", null ],
+    [ "visitQrprecond", "classhypro_1_1HybridAutomatonVisitor.html#a033d3d66eb594fd22cc91424db4b158f", null ],
     [ "visitRemainder", "classhypro_1_1HybridAutomatonVisitor.html#a9e195e97730277483a5a3cc6d48a4702", null ],
     [ "visitReplacedexpr", "classhypro_1_1HybridAutomatonVisitor.html#a064b5e3415fd475fdc39247f96804f54", null ],
     [ "visitResetfct", "classhypro_1_1HybridAutomatonVisitor.html#a65afd59bb9273142e4789cd88722759a", null ],

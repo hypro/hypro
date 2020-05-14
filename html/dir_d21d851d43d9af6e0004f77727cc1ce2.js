@@ -57,7 +57,9 @@ var dir_d21d851d43d9af6e0004f77727cc1ce2 =
       [ "PrintContext", "classhypro_1_1HybridAutomatonParser_1_1PrintContext.html", "classhypro_1_1HybridAutomatonParser_1_1PrintContext" ],
       [ "RemainderContext", "classhypro_1_1HybridAutomatonParser_1_1RemainderContext.html", "classhypro_1_1HybridAutomatonParser_1_1RemainderContext" ],
       [ "IdentityContext", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext.html", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext" ],
+      [ "QrprecondContext", "classhypro_1_1HybridAutomatonParser_1_1QrprecondContext.html", "classhypro_1_1HybridAutomatonParser_1_1QrprecondContext" ],
       [ "FixedordersContext", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext.html", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext" ],
+      [ "AdaptiveordersContext", "classhypro_1_1HybridAutomatonParser_1_1AdaptiveordersContext.html", "classhypro_1_1HybridAutomatonParser_1_1AdaptiveordersContext" ],
       [ "CutoffContext", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext.html", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext" ],
       [ "PrecisionContext", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext" ],
       [ "Initializer", "structhypro_1_1HybridAutomatonParser_1_1Initializer.html", "structhypro_1_1HybridAutomatonParser_1_1Initializer" ]
