@@ -140,7 +140,7 @@ TYPED_TEST(TemplatePolyhedronTest, Constructor){
 	EXPECT_EQ(copy.getOptimizer().vector(), matVecTPoly.vector());
 
 	//Settings constructor
-	TemplatePolyhedronT<TypeParam,Converter<TypeParam>,TemplatePolyhedronDifferent> setting(matVecTPoly);
+	TemplatePolyhedronT<TypeParam,Converter<TypeParam>,OctagonShape> setting(matVecTPoly);
 	EXPECT_EQ(setting.matrix(), matVecTPoly.matrix());
 	EXPECT_EQ(setting.vector(), matVecTPoly.vector());
 	EXPECT_EQ(setting.rGetMatrixPtr(), matVecTPoly.rGetMatrixPtr());
