@@ -14,8 +14,8 @@ State ltiFirstSegmentHandler<State>::operator()( State initialStateSet, tNumber 
 	// if the location has no flow, stop computation and exit.
 	if ( initialStateSet.getLocation()->getLinearFlow( 0 ).isDiscrete() ) {
 		// TRACE("Avoid further computation as the flow is zero." << std::endl);
-		mTrafo = matrix_t<Number>::Identity( dim - 1, dim - 1 );
-		mTranslation = vector_t<Number>::Zero( dim - 1 );
+		mTrafo = matrix_t<Number>::Identity( dim, dim );
+		mTranslation = vector_t<Number>::Zero( dim );
 		return initialStateSet;
 	}
 
