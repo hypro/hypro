@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../datastructures/Point.h"
@@ -18,7 +18,7 @@ class Point;
  * \ingroup geoState@{
  */
 template <typename Number, typename Converter, class Setting>
-class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Number, Converter, Setting>> {
+class DifferenceBoundsT : private GeometricObjectBase {
   public:
 	enum BOUND_TYPE {
 		SMALLER,
@@ -27,6 +27,7 @@ class DifferenceBoundsT : public GeometricObject<Number, DifferenceBoundsT<Numbe
 	};
 
 	typedef Setting Settings;
+	typedef Number NumberType;
 
 	class DBMEntry : public std::pair<Number, BOUND_TYPE> {
 	  public:

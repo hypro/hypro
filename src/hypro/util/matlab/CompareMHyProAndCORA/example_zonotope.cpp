@@ -1,6 +1,6 @@
-#include "../src/hypro/config.h"
+#include "../../../config.h"
 //#include "../src/hypro/util/Plotter.h"
-#include "../src/hypro/representations/GeometricObject.h"
+#include "../../../representations/GeometricObjectBase.h"
 #include <sys/time.h>
 #include <carl/interval/Interval.h>
 
@@ -33,8 +33,8 @@ int main()
     10,14,903;
 
 
-   hypro::vector_t<Number> d = hypro::vector_t<Number>(100);
-   d << 484,-499,915,-726,-766,299,593,393,-579,227,971,602,-138,215,300,-357,
+   hypro::vector_t<Number> dist = hypro::vector_t<Number>(100);
+   dist << 484,-499,915,-726,-766,299,593,393,-579,227,971,602,-138,215,300,-357,
    614,-462,-556,142,645,-994,-657,971,-958,845,79,-118,-307,829,-320,663,
   -152,-16,265,158,-732,-963,983,343,-1,-557,-429,96,774,138,-900,-973,-362,
    503,-787,-207,-628,-659,448,-55,-398,-606,214,223,412,-458,-419,-442,875,
@@ -538,7 +538,7 @@ hypro::matrix_t<Number> cC = hypro::matrix_t<Number>(100,10);
 	gettimeofday(&t1, NULL);
 	
 	
-	std::pair<hypro::CONTAINMENT, hypro::Zonotope<Number>> p = z3.satisfiesHalfspaces(cC,d);
+	std::pair<hypro::CONTAINMENT, hypro::Zonotope<Number>> p = z3.satisfiesHalfspaces(cC,dist);
 	
 	// stop timer
 	gettimeofday(&t2, NULL);

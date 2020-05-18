@@ -55,6 +55,11 @@ struct Task {
 		: treeNode( node )
 		, btInfo( btI ) {}
 
+	const State& getInitialStateSet() {
+		assert( treeNode != nullptr );
+		return treeNode->getState();
+	}
+
 	friend std::ostream& operator<<( std::ostream& out, const Task<State>& task ) {
 		//out << *task.treeNode;
 		out << task.treeNode;
@@ -71,7 +76,7 @@ struct Task {
 
 	friend bool operator<( const Task<State>& lhs, const Task<State>& rhs ) {
 		DEBUG( "hypro.workQueue", "Compare " << lhs << " and " << rhs << ": " );
-		if ( lhs == rhs ) {  // strict weak ordering requires this, thus rhs is inserted before lhs.
+		if ( lhs == rhs ) {	 // strict weak ordering requires this, thus rhs is inserted before lhs.
 			// however, this should never happen(?)
 			assert( false );
 			DEBUG( "hypro.workQueue", "Should not happen." );
@@ -91,7 +96,7 @@ struct Task {
 
 		if ( lhs.btInfo.btLevel == rhs.btInfo.btLevel && lhs.btInfo.btLevel != 0 ) {
 			DEBUG( "hypro.workQueue", ( lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size() ) );
-			return lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size();  // insert longer path first
+			return lhs.btInfo.btPath.size() > rhs.btInfo.btPath.size();	 // insert longer path first
 		}
 
 		DEBUG( "hypro.workQueue", ( lhs.btInfo.btLevel > rhs.btInfo.btLevel ) );
@@ -100,7 +105,7 @@ struct Task {
 			return lhs.treeNode->getDepth() < rhs.treeNode->getDepth();
 		}
 
-		return lhs.btInfo.btLevel > rhs.btInfo.btLevel;  // insert higher btLevel first
+		return lhs.btInfo.btLevel > rhs.btInfo.btLevel;	 // insert higher btLevel first
 	}
 };
 

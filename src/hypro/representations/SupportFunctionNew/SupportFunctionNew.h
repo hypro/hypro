@@ -16,7 +16,7 @@
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
-static_assert( false, "This file may only be included indirectly by GeometricObject.h" );
+static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
 #include "../../util/linearOptimization/Optimizer.h"
@@ -78,7 +78,7 @@ struct Parameters {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number, Converter, Setting>> {
+class SupportFunctionNewT : private GeometricObjectBase {
 	/***************************************************************************
 	 * Friends, Usings, typedefs
 	 **************************************************************************/
@@ -94,6 +94,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   public:
 	//Needed for Converter.h
 	typedef Setting Settings;
+	typedef Number NumberType;
 
 	/***************************************************************************
 	 * Members
@@ -109,9 +110,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
 	mutable bool mTemplateSet = false;
-
-	//Cache whether the support function has been empty
-	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	/***************************************************************************
 	 * Constructors
@@ -154,7 +152,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template <typename Representation>
-	SupportFunctionNewT( GeometricObject<Number, Representation>& r );
+	SupportFunctionNewT( const Representation& r );
 
 	/**
 	 * @brief      Matrix vector constructor
@@ -198,7 +196,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	  * @param dimension Required dimension.
 	  * @return Empty SupportFunctionNew.
 	  */
-	static SupportFunctionNewT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
+	static SupportFunctionNewT<Number, Converter, Setting> Empty() {
 		return SupportFunctionNewT<Number, Converter, Setting>();
 	}
 

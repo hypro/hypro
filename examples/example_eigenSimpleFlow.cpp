@@ -4,7 +4,7 @@
 #include "algorithms/eigendecomposition/Transformation.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/plotting/Plotter.h"
 using namespace hypro;
 using Number = double;

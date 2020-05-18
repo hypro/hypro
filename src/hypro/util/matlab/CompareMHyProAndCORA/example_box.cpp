@@ -4,7 +4,7 @@
  * of the created box as well as the intersection with a half space and an included test for emptiness of the resulting set.
  */
 
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "datastructures/Halfspace.h"
 #include "util/plotting/Plotter.h"
 #include <sys/time.h>

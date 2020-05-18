@@ -80,7 +80,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 
 		// inti facets
 		for ( unsigned i = 0; i < dimension + 1; i++ ) {
-			facets.push_back( std::shared_ptr<Facet<Number>>( new Facet<Number>() ) );
+			facets.emplace_back( std::make_shared<Facet<Number>>( Facet<Number>() ) );
 		}
 		for ( unsigned i = 0; i < dimension + 1; ++i ) {
 			std::vector<Point<Number>> points_for_facet;
@@ -89,7 +89,7 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 					points_for_facet.push_back( initialPoints.at( j ) );
 				}
 			}
-			facets.at( i )->setPoints( points_for_facet, initialPoints.at( i ) );
+			facets.at( i )->setPoints( std::move( points_for_facet ), initialPoints.at( i ) );
 		}
 
 		// Add neighbors
@@ -602,12 +602,12 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 							// ridge, create new facet
 							Point<Number> insidePoint = findInsidePoint( ridge, facet );
 
-							std::shared_ptr<Facet<Number>> newFacet = std::shared_ptr<Facet<Number>>( new Facet<Number>( ridge.vertices(), currentPoint, insidePoint ) );
+							std::shared_ptr<Facet<Number>> newFacet = std::make_shared<Facet<Number>>( ridge.vertices(), currentPoint, insidePoint );
 
 							newFacet->addNeighbor( neighbor );
 							neighbor->addNeighbor( newFacet );
 
-							newFacets.push_back( newFacet );
+							newFacets.emplace_back( std::move( newFacet ) );
 						}
 					}
 				}
@@ -659,9 +659,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			std::queue<std::shared_ptr<Facet<Number>>> notOutsideNewFacets;
 			std::vector<std::shared_ptr<Facet<Number>>> newNeighOpt = newFacets;
 			removeBorderFacets( newFacets, notOutsideNewFacets );
-			for ( const auto& facet : newFacets ) {
-				facets.push_back( facet );  // update facets with new "final" border facets
-			}
+			std::move( newFacets.begin(), newFacets.end(), std::back_inserter( facets ) );
 
 			// update working set with relevant new facets
 			while ( !notOutsideNewFacets.empty() ) {

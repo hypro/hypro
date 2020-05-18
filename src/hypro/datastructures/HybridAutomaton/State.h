@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "../../representations/types.h"
 #include "../../util/tuple_expansion/nth_element.h"
 #include "Condition.h"
@@ -33,14 +33,14 @@ class State {
 	template <std::size_t I>
 	using nth_representation = nth_element<I, Representation, Rargs...>;
 
-	using repVariant = std::variant<Representation, Rargs...>;  /// variant type for all possible state set representations.
+	using repVariant = std::variant<Representation, Rargs...>;	/// variant type for all possible state set representations.
 	typedef Number NumberType;
 
   protected:
 	const Location<Number>* mLoc = nullptr;												/// Location of the state.
 	std::vector<repVariant> mSets;														/// The state sets wrapped in variant (repVariant).
 	std::vector<representation_name> mTypes;											/// A vector holding the actual types corresponding to the state sets.
-	carl::Interval<tNumber> mTimestamp = carl::Interval<tNumber>::unboundedInterval();  /// A timestamp.
+	carl::Interval<tNumber> mTimestamp = carl::Interval<tNumber>::unboundedInterval();	/// A timestamp.
 	mutable std::vector<TRIBOOL> mIsEmpty;												/// A flag for each set which can be set to allow for a quick check for emptiness.
 
   private:
@@ -153,12 +153,12 @@ class State {
 // parameter pack expansion
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-		int dummy[sizeof...( Rargs )] = {( mSets.push_back( sets ), 0 )...};
-		int dummy2[sizeof...( Rargs )] = {( mTypes.push_back( sets.type() ), 0 )...};
+		int dummy[sizeof...( Rargs )] = { ( mSets.push_back( sets ), 0 )... };
+		int dummy2[sizeof...( Rargs )] = { ( mTypes.push_back( sets.type() ), 0 )... };
 #pragma GCC diagnostic pop
 		(void)dummy;
 		(void)dummy2;
-		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 		assert( checkConsistency() );
 	}
 
@@ -174,7 +174,7 @@ class State {
 		, mTimestamp( _timestamp ) {
 		mSets.push_back( _rep );
 		mTypes.push_back( Representation::type() );
-		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 	}
 
 	/**
@@ -190,12 +190,12 @@ class State {
 // parameter pack expansion
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-		int dummy[sizeof...( Rargs )] = {( mSets.push_back( sets ), 0 )...};
-		int dummy2[sizeof...( Rargs )] = {( mTypes.push_back( sets.type() ), 0 )...};
+		int dummy[sizeof...( Rargs )] = { ( mSets.push_back( sets ), 0 )... };
+		int dummy2[sizeof...( Rargs )] = { ( mTypes.push_back( sets.type() ), 0 )... };
 #pragma GCC diagnostic pop
 		(void)dummy;
 		(void)dummy2;
-		mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 		assert( checkConsistency() );
 	}
 
@@ -317,7 +317,7 @@ class State {
 		// if not enough sets, fill with default values.
 		while ( I >= mSets.size() ) {
 			mSets.emplace_back( Representation() );		 // some default set.
-			mTypes.push_back( Representation::type() );  // some default set type.
+			mTypes.push_back( Representation::type() );	 // some default set type.
 			mIsEmpty.push_back( TRIBOOL::NSET );
 		}
 		TRACE( "hypro.datastructures", "Set set type at pos " << I << " to type " << type );
@@ -359,7 +359,7 @@ class State {
 		assert( checkConsistency() );
 		while ( I >= mSets.size() ) {
 			mSets.emplace_back( Representation() );		 // some default set.
-			mTypes.push_back( Representation::type() );  // some default set type.
+			mTypes.push_back( Representation::type() );	 // some default set type.
 			mIsEmpty.push_back( TRIBOOL::NSET );
 		}
 		assert( checkConsistency() );
@@ -376,6 +376,11 @@ class State {
 	 */
 	void addTimeToClocks( tNumber t );
 
+	template <typename Callable, typename... Args>
+	auto visit( std::size_t setIndex, Callable c, Args&&... args ) {
+		return std::visit( [&]( auto r ) { return c( r, std::forward<Args>( args )... ); }, mSets[setIndex] );
+	}
+
 	/**
      * @brief      Meta-function to aggregate two states.
      * @details    Each contained set is aggregated with its corresponding set in the passed state.
@@ -383,6 +388,13 @@ class State {
      * @return     A state which represents the closure of the union of both states.
      */
 	State<Number, Representation, Rargs...> unite( const State<Number, Representation, Rargs...>& in ) const;
+
+	/**
+	 * @brief Meta function to compute the intersection of two state sets.
+	 * @param in
+	 * @return State<Number, Representation, Rargs...>
+	 */
+	State<Number, Representation, Rargs...> intersect( const State<Number, Representation, Rargs...>& in ) const;
 
 	/**
      * @brief      Meta-function to verify a state against a condition.

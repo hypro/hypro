@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-#include <unistd.h>  //getcwd()
+#include <unistd.h>	 //getcwd()
 
 // using namespace antlr4;
 using namespace hypro;
@@ -71,6 +71,19 @@ TYPED_TEST( AntlrParserTest, JustTesting ) {
 	// std::string path("../src/test/core/examples/test_bouncing_ball.txt");
 	// std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
 	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
+
+	this->cwd();
+	try {
+		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
+		SUCCEED();
+	} catch ( const std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+
+TYPED_TEST( AntlrParserTest, Settings ) {
+	std::string path( "../../../../src/test/core/examples/test_settings.txt" );
 
 	this->cwd();
 	try {

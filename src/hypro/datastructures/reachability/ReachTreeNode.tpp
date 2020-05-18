@@ -375,5 +375,34 @@ std::ostream& operator<<( std::ostream& out, const ReachTreeNode<State>& reachTr
 		out << ref << std::endl;
 	return out;
 }
+template <typename S>
+bool operator<( const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs ) {
+	return ( lhs.getDepth() < rhs.getDepth() );
+}
+
+template <typename S>
+bool operator==( const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs ) {
+	// properties of tree node
+	if ( lhs.mDepth != rhs.mDepth ||
+		 lhs.mParent != rhs.mParent ||
+		 lhs.mChildren.size() != rhs.mChildren.size() ) {
+		return false;
+	}
+
+	if ( lhs.mPath != rhs.mPath ) {
+		return false;
+	}
+
+	if ( lhs.mRefinements.size() != rhs.mRefinements.size() ) {
+		return false;
+	}
+
+	for ( std::size_t i = 0; i < lhs.mRefinements.size(); ++i ) {
+		if ( lhs.mRefinements[i] != rhs.mRefinements[i] ) {
+			return false;
+		}
+	}
+	return true;
+}
 
 }  // namespace hypro

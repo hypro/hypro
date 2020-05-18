@@ -9,7 +9,7 @@
 #include <iostream>
 #include <queue>
 #include <random>
-#include <representations/GeometricObject.h>
+#include <representations/GeometricObjectBase.h>
 
 namespace benchmark {
 namespace sf {

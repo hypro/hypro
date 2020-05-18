@@ -1,7 +1,7 @@
 #pragma once
 #include "../../datastructures/HybridAutomaton/State.h"
 #include "../../datastructures/HybridAutomaton/flow/flow.h"
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
 #include "TrafoParameters.h"
 
 #include <carl/util/SFINAE.h>
@@ -104,7 +104,11 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const linearFlow<Numbe
 	State transformedInitialSet =
 		  initialSet.affineTransformation( matrix_t<Number>( tmpMatrix.block( 0, 0, dim - 1, dim - 1 ) ), vector_t<Number>( tmpMatrix.block( 0, dim - 1, dim - 1, 1 ) ) );
 
-	auto b1 = std::get<Box<Number>>( std::visit( genericConversionVisitor<typename State::repVariant, Box<Number>>(), transformedInitialSet.getSet( 0 ) ) );
+	auto b1 = std::visit( []( auto representation ) {
+		return Converter<Number>::template toBox<BoxLinearOptimizationOn>( representation );
+	},
+						  transformedInitialSet.getSet( 0 ) );
+
 	if ( b1.empty() ) {
 		return std::vector<Box<Number>>{};
 	}
@@ -129,7 +133,10 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const linearFlow<Numbe
 	// std::cout << "TmpTrafo Matrix: " << std::endl << tmpTrafo << std::endl;
 	State tmp = initialSet.affineTransformation( tmpTrafo, tmpTrans );
 	// Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
-	auto b2 = std::get<Box<Number>>( std::visit( genericConversionVisitor<typename State::repVariant, Box<Number>>(), tmp.getSet( 0 ) ) );
+	auto b2 = std::visit( []( auto representation ) {
+		return Converter<Number>::template toBox<BoxLinearOptimizationOn>( representation );
+	},
+						  tmp.getSet( 0 ) );
 	augmentedUpperLimit.block( 0, 0, dim - 1, 1 ) = b2.max().rawCoordinates();
 	augmentedLowerLimit.block( 0, 0, dim - 1, 1 ) = b2.min().rawCoordinates();
 	b2 = Box<Number>( std::make_pair( Point<Number>( augmentedLowerLimit ), Point<Number>( augmentedUpperLimit ) ) );

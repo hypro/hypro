@@ -14,7 +14,8 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT() {}
 //copy constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number, Converter, Setting>& orig )
-	: mRoot( orig.getRoot() ) {
+	: GeometricObjectBase( orig )
+	, mRoot( orig.getRoot() ) {
 	if ( orig.isTemplateSet() ) {
 		mMatrix = orig.matrix();
 		mVector = orig.vector();
@@ -86,19 +87,18 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Half
 //Generic Leaf constructor
 template <typename Number, typename Converter, typename Setting>
 template <typename Representation>
-SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( GeometricObject<Number, Representation>& r ) {
-	Representation tmp = dynamic_cast<Representation&>( r );
+SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Representation& r ) {
 	DEBUG( "hypro.representations", "SFN generic leaf constr, got r:\n"
-										  << tmp );
-	if ( tmp.empty() ) {
-		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( tmp.dimension() ) ) );
+										  << r );
+	if ( r.empty() ) {
+		mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty() ) );
 	} else {
-		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( tmp.matrix(), tmp.vector() );
+		std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( r.matrix(), r.vector() );
 		if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		} else {
 			using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( tmp.matrix(), tmp.vector() ) );
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( r.matrix(), r.vector() ) );
 		}
 	}
 	assert( mRoot != nullptr );
@@ -113,7 +113,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 	std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( mat, vec );
 	if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
 		if ( std::get<1>( areArgsBox ).size() == 0 ) {
-			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty( mat.cols() ) ) );
+			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty() ) );
 			assert( false );
 		} else {
 			INFO( "hypro.representations", "SFN mat-vec-constr: constraints were box!" )
@@ -322,7 +322,7 @@ template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionNewT<Number, Converter, Setting>::empty() const {
 	if ( mRoot == nullptr ) return true;
 
-	if ( mEmpty != TRIBOOL::NSET ) return ( mEmpty == TRIBOOL::TRUE );
+	if ( mEmptyState != SETSTATE::UNKNOWN ) return ( mEmptyState == SETSTATE::EMPTY );
 
 	//first function - parameters are not transformed
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
@@ -339,9 +339,9 @@ bool SupportFunctionNewT<Number, Converter, Setting>::empty() const {
 		return n->empty( childrenEmpty );
 	};
 
-	mEmpty = traverse( std::move( doNothing ), std::move( leafEmpty ), std::move( childrenEmpty ) ) ? TRIBOOL::TRUE : TRIBOOL::FALSE;
-	assert( mEmpty != TRIBOOL::NSET );
-	return ( mEmpty == TRIBOOL::TRUE );
+	mEmptyState = traverse( std::move( doNothing ), std::move( leafEmpty ), std::move( childrenEmpty ) ) ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+	assert( mEmptyState != SETSTATE::UNKNOWN );
+	return ( mEmptyState == SETSTATE::EMPTY );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -527,6 +527,9 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 	if ( mRoot == nullptr ) {
 		return std::make_pair( CONTAINMENT::BOT, *this );
 	}
+	if ( this->empty() ) {
+		return std::make_pair( CONTAINMENT::NO, *this );
+	}
 	//Check for emptiness not needed here since satisfiesHalfspace() is only called via satisfiedHalfspaces(), which already checks emptiness
 	bool limiting = false;
 	EvaluationResult<Number> planeEvalRes = this->evaluate( rhs.normal(), false );
@@ -559,14 +562,17 @@ template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportFunctionNewT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	DEBUG( "hypro.representations.supportFunctionNew", "Matrix: " << _mat << std::endl
 																  << " <= " << _vec );
-	if ( mRoot == nullptr ) {
+	if ( mRoot == nullptr ) {  // TODO: What is this case referring to?
 		return std::make_pair( CONTAINMENT::BOT, *this );
+	}
+	if ( this->empty() ) {
+		return std::make_pair( CONTAINMENT::NO, *this );
 	}
 	if ( _mat.rows() == 0 ) {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
 	assert( _mat.rows() == _vec.rows() );
-	assert( _mat.cols() == Eigen::Index( dimension() ) );
+	assert( _mat.cols() == Eigen::Index( dimension() ) || this->empty() );
 	if ( _mat.rows() == 1 && _vec.rows() == 1 ) {
 		return satisfiesHalfspace( Halfspace<Number>( vector_t<Number>( _mat.row( 0 ) ), _vec( 0 ) ) );
 	}

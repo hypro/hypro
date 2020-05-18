@@ -5,7 +5,7 @@
 #include "algorithms/reachability/Reach.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "representations/GeometricObject.h"
+#include "representations/GeometricObjectBase.h"
 #include "util/statistics/statistics.h"
 #ifdef HYPRO_USE_LACE
 #include <lace.h>

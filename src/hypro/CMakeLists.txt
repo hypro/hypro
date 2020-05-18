@@ -7,7 +7,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 # filter out matlab-bindings
 message(STATUS "sources before filtering: ${sources}")
-list(FILTER sources EXCLUDE REGEX MHyPro.cpp)
+list(FILTER sources EXCLUDE REGEX MHyPro.cpp|MReach.cpp|CompareMHyProAndCORA/example_box.cpp|CompareMHyProAndCORA/example_zonotope.cpp)
 message(STATUS "sources after filtering: ${sources}")
 
 add_library(${PROJECT_NAME}-objects OBJECT ${sources})
@@ -94,6 +94,7 @@ target_include_directories(${PROJECT_NAME}-objects
 
 	add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
 	add_dependencies(${PROJECT_NAME} resources)
+
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")

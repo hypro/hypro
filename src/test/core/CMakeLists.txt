@@ -7,7 +7,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#LoggerTest.cpp
 		#endif
 		OptimizerTest.cpp
-		ParserTest.cpp
 		PlotterTest.cpp
 		UtilityTest.cpp
 	)
@@ -34,6 +33,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_test( NAME core COMMAND runCoreTests )
 
+	add_dependencies(allTests runCoreTests)
 
 	################################
 	# Parser Unit Tests
@@ -41,6 +41,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runParserTests
 		AntlrParserTest.cpp
+		ParserTest.cpp
 		#AntlrParserCIFTest.cpp
 	)
 	add_dependencies(runParserTests resources antlr4cpp)
@@ -48,5 +49,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${GTEST_LIBRARIES})
 	#message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
 	add_test( NAME parser COMMAND runParserTests )
+
+	add_dependencies(allTests runParserTests)
 
 endif()

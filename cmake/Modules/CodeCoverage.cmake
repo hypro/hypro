@@ -117,7 +117,8 @@ if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif() # NOT CMAKE_BUILD_TYPE STREQUAL "Debug"
 
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    link_libraries(gcov)
+load_library(${PROJECT_NAME} gcov 0)
+#link_libraries(gcov)
 else()
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
 endif()
@@ -147,6 +148,10 @@ function(SETUP_TARGET_FOR_COVERAGE)
         message(FATAL_ERROR "genhtml not found! Aborting...")
     endif() # NOT GENHTML_PATH
 
+    message(STATUS "Coverage executable: ${Coverage_EXECUTABLE}")
+    message(STATUS "Coverage Name: ${Coverage_NAME}")
+    message(STATUS "Coverage Dependencies: ${Coverage_DEPENDENCIES}")
+
     # Setup target
     set(Coverage_NAME hypro_coverage)
     add_custom_target(${Coverage_NAME}
@@ -157,7 +162,7 @@ function(SETUP_TARGET_FOR_COVERAGE)
         COMMAND ${LCOV_PATH} -c -i -d . -o ${Coverage_NAME}.base
 
         # Run tests
-        COMMAND ${Coverage_EXECUTABLE}
+        COMMAND ${CMAKE_MAKE_PROGRAM} ${Coverage_EXECUTABLE}
 
         # Capturing lcov counters and generating report
         COMMAND ${LCOV_PATH} --directory . --capture --output-file ${Coverage_NAME}.info

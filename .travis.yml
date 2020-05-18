@@ -1,23 +1,16 @@
 dist: xenial
 env:
   global:
-   - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
-
-before_install:
-  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+    - GH_REPO_NAME: hypro
+    - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
+    - GH_REPO_REF: github.com/hypro/hypro.git
+    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
 
 language: cpp
 branches:
   only:
-  - master
-  - alpha
-
-# Environment variables
-env:
-  global:
-    - GH_REPO_NAME: hypro
-    - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
-    - GH_REPO_REF: github.com/hypro/hypro.git
+    - master
+    - alpha
 
 notifications:
   email:
@@ -27,13 +20,12 @@ notifications:
     rooms:
       - hypro:v2n2cgATRJJYPctLTL1MSfOn#github
 
-sudo: required
+#sudo: required
 
 # caching
 cache:
   directories:
-    - carl
-
+    - build/carl
 
 addons:
   apt:
@@ -43,7 +35,7 @@ addons:
       - uuid-dev
       - openjdk-9-jre
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - os: linux
@@ -56,28 +48,29 @@ matrix:
     - os: linux
       compiler: g++-8
       addons:
-        apt:
-          sources: [*sources_base]
-          packages: [*packages_base, g++-8, lcov]
-      env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-8 CXX=g++-8
-    - os: linux
-      compiler: g++-9
-      addons:
-        apt:
-          sources: [*sources_base]
-          packages: [*packages_base, g++-9, lcov]
-      env: COMPILER=g++-9 CC=gcc-9 CXX=g++-9
-    - os: linux
-      compiler: clang++-5.0
-      addons:
         sonarcloud:
           organization: "hypro-github"
           token:
             secure: "ISgh4qcPIZhB/oVqkvRVHwYTwpD0HqxkmOP3nETL3Sy06UFQmHkZCsnkZ30w5bBquMqPQ4vvIUKGatIAHXjtQiv8tqSwTAQ2r9iG+hrHpnEXZRB/7ZH4f26zqUCe7tkAf8fFz3O0lZ7Njkt6EDj/ynBtq82RMyPtBsQH/tzCel0UB1jhbK9AAepn4Aq5oW5wxBjXXxrPIqBIUddgbHr48IVfTtB4G0SpEqKhm56FHWG5vcsaB4+cH+v67OYs/3+HfrFZD2kkGPGxj4317Q83ZlcIp/bwKiETV8ez+8z8YRD/J/QKbmrole0M5T5KeNAOdetS9d0RhNKnygFMx75cDSfE7OXys5fhheOdXsLljgvoWqP3FOc7HMeAs/rn/SLrbZlQe5DucyyeQI9u2/elKntmuPfLOQvvX6suwJM7avSEndhrGcdE5x9Z9Shy4GDU4YCmpxRYlfcRpwQK7dn5KpkRLUB9FrgtGRroGdW7XRbFFmXNMJKmDUXLqWx5Ses8pEFY37rBpGi50NcRHzl/ZCAkXboYSS7x1b6hcwNL3w0SfWXbCkuna8/DFwdX7hvDNxiafyZX3GdsXpvQffgbtlZZUSlPbWakzVhV6cZptcV0V0/2HVP+m+azMRt3lbI3l2dfmWhq8l3fJJfkD/D0FsKMD3xVfqZT+xZIYxyWMy0="
         apt:
+          sources: [*sources_base]
+          packages: [*packages_base, g++-8, lcov, gcovr]
+      env: COMPILER=g++-8 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-8 CXX=g++-8
+    - os: linux
+      compiler: g++-9
+      addons:
+        apt:
+          sources: [*sources_base]
+          packages: [*packages_base, g++-9]
+      env: COMPILER=g++-9 CC=gcc-9 CXX=g++-9
+    - os: linux
+      compiler: clang++-5.0
+      addons:
+        apt:
           sources: [*sources_base, llvm-toolchain-xenial-5.0]
-          packages: [*packages_base, clang-5.0 lcov libstdc++-8-dev libc++abi-dev]
-      env: COMPILER=clang++-5.0 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON
+          packages:
+            [*packages_base, clang-5.0 lcov libstdc++-8-dev libc++abi-dev]
+      env: COMPILER=clang++-5.0
     - os: linux
       compiler: clang++-6.0
       addons:
@@ -98,13 +91,17 @@ matrix:
         apt:
           sources: [*sources_base, llvm-toolchain-xenial-8]
           packages: [*packages_base, clang-8 libc++abi-dev libstdc++-8-dev]
-      env: COMPILER=clang++-8
+      env: COMPILER=clang++-8 TASK=clang-sanitizer
     - os: linux
       compiler: clang++-9
       addons:
         apt:
           sources: [*sources_base, llvm-toolchain-xenial-9]
-          packages: [*packages_base, clang-9 libc++abi-dev libstdc++-9-dev]
+          packages:
+            [
+              *packages_base,
+              clang-9 libc++abi-dev libstdc++-9-dev llvm-symbolizer,
+            ]
       env: COMPILER=clang++-9
     - os: linux
       compiler: clang++-10
@@ -118,7 +115,7 @@ matrix:
       addons:
         homebrew:
           packages:
-          - llvm
+            - llvm
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -127,7 +124,7 @@ matrix:
       addons:
         homebrew:
           packages:
-          - llvm
+            - llvm
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -136,7 +133,7 @@ matrix:
       addons:
         homebrew:
           packages:
-          - llvm
+            - llvm
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -145,7 +142,7 @@ matrix:
       addons:
         homebrew:
           packages:
-          - llvm
+            - llvm
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -154,7 +151,7 @@ matrix:
       addons:
         homebrew:
           packages:
-          - llvm
+            - llvm
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -163,7 +160,7 @@ matrix:
       addons:
         homebrew:
           packages:
-          - llvm
+            - llvm
           update: true
       compiler: clang
       env: COMPILER=clang++
@@ -171,7 +168,10 @@ matrix:
     - os: osx
       env: COMPILER=clang++
       compiler: clang
-
+    - os: linux
+      env: COMPILER=clang++-9
+    - os: linux
+      env: COMPILER=clang++-10
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
@@ -186,6 +186,4 @@ after_success:
   - cd ${TRAVIS_BUILD_DIR}
   - chmod +x .travis/buildDoc.sh
   - ./.travis/buildDoc.sh
-  # coveralls
-  - chmod +x processCoverage.sh
-  - ./processCoverage.sh
+  - sonar-scanner

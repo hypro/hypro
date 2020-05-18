@@ -15,11 +15,13 @@
 #include "../../datastructures/reachability/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/HybridAutomaton/State.h"
+#include "../../datastructures/reachability/ReachTree.h"
 #include "../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../config.h"
 #include "../../util/plotting/Plotter.h"
 #include "../../representations/Ellipsoids/Ellipsoid.h"
-#include "../../representations/GeometricObject.h"
+#include "../../representations/GeometricObjectBase.h"
+
 #include "boost/tuple/tuple.hpp"
 
 CLANG_WARNING_DISABLE("-Wdeprecated-register")
@@ -76,7 +78,7 @@ class Reach {
 	std::map<unsigned, std::vector<flowpipe_t>> mReachableStates;
 	WorkQueue<TaskTypePtr> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
-	representation_name mType;
+	representation_name mType = representation_name::UNDEF;
 	bool mInitialStatesSet = false;
 	std::unique_ptr<ReachTree<State>> mReachabilityTree;
 
@@ -141,7 +143,10 @@ class Reach {
 	bool checkTransitions( const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<std::tuple<Transition<Number>*, State>>& nextInitialSets ) const;
 
 	const ReachabilitySettings& settings() const { return mSettings; }
-	void setSettings( const ReachabilitySettings& settings ) { mSettings = settings; }
+	void setSettings( const ReachabilitySettings& settings ) {
+		mSettings = settings;
+		assert( mSettings.timeBound >= 0 );
+	}
 
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType( const representation_name& type ) { mType = type; }

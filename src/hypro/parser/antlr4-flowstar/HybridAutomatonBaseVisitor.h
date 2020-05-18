@@ -173,7 +173,15 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitQrprecond(HybridAutomatonParser::QrprecondContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitFixedorders(HybridAutomatonParser::FixedordersContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAdaptiveorders(HybridAutomatonParser::AdaptiveordersContext *ctx) override {
     return visitChildren(ctx);
   }
 

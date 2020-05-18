@@ -40,18 +40,23 @@ class UnionOp : public RootGrowNode<Number, Converter, Setting> {
 
 	UnionOp( const SupportFunctionNewT<Number, Converter, Setting>& lhs, const SupportFunctionNewT<Number, Converter, Setting>& rhs )
 		: mDimension( lhs.dimension() ) {
-		assert( lhs.dimension() == rhs.dimension() );
+		assert( lhs.dimension() == rhs.dimension() || lhs.empty() || rhs.empty() );
 		lhs.addOperation( this, std::vector<SupportFunctionNewT<Number, Converter, Setting>>{rhs} );
+		// update and set empty-cache
+		if ( lhs.empty() && rhs.empty() ) {
+			RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
+		}
 	}
 
 	UnionOp( const SupportFunctionNewT<Number, Converter, Setting>& lhs, const std::vector<SupportFunctionNewT<Number, Converter, Setting>>& rhs )
 		: mDimension( lhs.dimension() ) {
 #ifndef NDEBUG
 		for ( const auto& sf : rhs ) {
-			assert( lhs.dimension() == sf.dimension() );
+			assert( lhs.dimension() == sf.dimension() || lhs.empty() || sf.empty() );
 		}
 #endif
 		lhs.addOperation( this, rhs );
+		// check for rhs is too expensive at the moment -> update usage of cache everywhere, then this is fine.
 	}
 
 	UnionOp( const RGNData& ) {}

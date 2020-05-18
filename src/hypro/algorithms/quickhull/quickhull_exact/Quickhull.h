@@ -4,7 +4,7 @@
 #include <boost/dynamic_bitset.hpp>
 #include "datastructures/Halfspace.h"
 #include "carl/numbers/numbers.h"
-#include "../number_traits.h"
+#include "util/typetraits.h"
 
 namespace hypro {
 
