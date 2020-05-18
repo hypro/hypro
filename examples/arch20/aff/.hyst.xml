@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_202" class="java.beans.XMLDecoder">
+ <object class="com.verivital.hyst.main.GuiState" id="GuiState0">
+  <void property="cfg">
+   <string>/home/ptse/hiwi/benchmarks_hybrid/hypro/arch19competition/aff/GRBX01-MES01.cfg</string>
+  </void>
+  <void property="output">
+   <string>/home/ptse/hiwi/benchmarks_hybrid/hypro/arch19competition/aff/gearbox_direct.flowstar</string>
+  </void>
+  <void property="passIndex">
+   <void method="add">
+    <int>7</int>
+   </void>
+  </void>
+  <void property="passParam">
+   <void method="add">
+    <string></string>
+   </void>
+  </void>
+  <void property="printerParams">
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+   <void method="add">
+    <string></string>
+   </void>
+  </void>
+  <void property="xml">
+   <string>/home/ptse/hiwi/benchmarks_hybrid/hypro/arch19competition/aff/GRBX01-MES01.xml</string>
+  </void>
+ </object>
+</java>

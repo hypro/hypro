@@ -1,0 +1,207 @@
+# Hyst v1.17
+# Hybrid Automaton in Flow*
+# Converted from: /home/stefan/Desktop/SRA01-SR0_.xml
+# Using command line arguments: -flowstar /home/stefan/Desktop/SRA01-SR0_.xml /home/stefan/Desktop/SRNA01-SR0.cfg
+#
+# NOTE: Like SRA01, but aborting occurs nondeterministically at t in [120,145].
+# NOTE: Time invariants of approaching and aborting are set to t <= 145
+
+hybrid reachability
+{
+  # Vars
+  state var x, y, vx, vy, t
+
+  setting
+  {
+    fixed steps 1
+    time 300
+    remainder estimation 1e-4
+    identity precondition
+    gnuplot octagon x,y
+    cutoff 1e-15
+    precision 53
+    output SRA03_SR02
+    max jumps 99999999
+    print on
+  }
+
+  modes
+  {
+
+    approaching
+    {
+      linear ode
+      {
+        x' = vx
+        y' = vy
+        vx' = -0.057599765881773 * x + 0.000200959896519766 * y - 2.89995083970656 * vx + 0.00877200894463775 * vy
+        vy' = -0.000174031357370456 * x - 0.0665123984901026 * y - 0.00875351105536225 * vx - 2.90300269286856 * vy
+        t' = 1.0
+      }
+      inv
+      {
+        # Original invariant: t <= 120.0 & x <= -100.0
+
+        t <= 145.0   x <= -100.0
+      }
+    }
+
+
+    rendevous_attempt
+    {
+      linear ode
+      {
+        x' = vx
+        y' = vy
+        vx' = -0.575999943070835 * x + 0.000262486079431672 * y - 19.2299795908647 * vx + 0.00876275931760007 * vy
+        vy' = -0.000262486080737868 * x - 0.575999940191886 * y - 0.00876276068239993 * vx - 19.2299765959399 * vy
+        t' = 1.0
+      }
+      inv
+      {
+        # Original invariant: t <= 120.0 & y >= -100.0 & x + y >= -141.1 & x >= -100.0 & y - x <= 141.1 & y <= 100.0 & x + y <= 141.1 & x <= 100.0 & y - x >= -141.1
+
+        t <= 145.0   y >= -100.0   x + y >= -141.1   x >= -100.0   y - x <= 141.1   y <= 100.0   x + y <= 141.1   x <= 100.0   y - x >= -141.1
+      }
+    }
+
+
+    aborting
+    {
+      linear ode
+      {
+        x' = vx
+        y' = vy
+        vx' = 0.0000575894721132 * x + 0.00876276 * vy
+        vy' = -0.00876276 * vx
+        t' = 1.0
+      }
+      inv
+      {
+        # Original invariant: t >= 120.0 & t <= 300.0
+
+        t >= 120.0   t <= 300.0
+      }
+    }
+  }
+
+  jumps
+  {
+
+    approaching -> rendevous_attempt
+    guard
+    {
+      # Original guard: y >= -100.0 & x + y >= -141.1 & x >= -100.0 & y - x <= 141.1 & y <= 100.0 & x + y <= 141.1 & x <= 100.0 & y - x >= -141.1
+
+      y >= -100.0   x + y >= -141.1   x >= -100.0   y - x <= 141.1   y <= 100.0   x + y <= 141.1   x <= 100.0   y - x >= -141.1
+    }
+    reset
+    {
+    }
+    parallelotope aggregation {}
+
+
+    approaching -> aborting
+    guard
+    {
+      # Original guard: t >= 120.0
+
+      t in [120.0,145.0]
+    }
+    reset
+    {
+    }
+    parallelotope aggregation {}
+
+
+    rendevous_attempt -> aborting
+    guard
+    {
+      # Original guard: t >= 120.0
+
+      t in [120.0,145.0]
+    }
+    reset
+    {
+    }
+    parallelotope aggregation {}
+  }
+
+  init
+  {
+    approaching
+    {
+      t in [0, 0]
+      vx in [0, 0]
+      vy in [0, 0]
+      x in [-925, -875]
+      y in [-425, -375]
+    }
+  }
+}
+
+unsafe set
+{
+  rendevous_attempt
+	{
+		vx >= 0.055
+	}
+
+  rendevous_attempt
+	{
+		vx <= -0.055
+	}
+
+  rendevous_attempt
+	{
+		vy >= 0.055
+	}
+
+  rendevous_attempt
+	{
+		vy <= -0.055
+	}
+
+  rendevous_attempt
+	{
+		0.70712*vx + 0.70712*vy >= 0.055
+	}
+
+  rendevous_attempt
+	{
+		0.70712*vx - 0.70712*vy >= 0.055
+	}
+
+  rendevous_attempt
+	{
+		-0.70712*vx - 0.70712*vy >= 0.055
+	}
+
+  rendevous_attempt
+	{
+		-0.70712*vx + 0.70712*vy >= 0.055
+	}
+
+  rendevous_attempt
+	{
+		x <= -100
+	}
+
+  rendevous_attempt
+	{
+		y <= 0.5774*x
+	}
+
+  rendevous_attempt
+	{
+		-y <= 0.5774*x
+	}
+
+  aborting
+	{
+		x in [-0.2, 0.2]
+		y in [-0.2, 0.2]
+	}
+
+	
+}
