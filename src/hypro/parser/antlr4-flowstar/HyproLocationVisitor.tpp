@@ -49,45 +49,40 @@ namespace hypro {
 		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
-		Condition<Number> inv;
-		if(ctx->invariants().size() > 0){
-			bool firstTime = true;
-			for(auto& currInvCtx : ctx->invariants()){
-
-				Condition<Number> currInv = visit(currInvCtx);
-
-				if(currInv != Condition<Number>() && !firstTime){
-
-					//Extend inv.matrix with currInv.matrix
-					matrix_t<Number> newMat = inv.getMatrix();
-					matrix_t<Number> currInvMat = currInv.getMatrix();
-					assert(newMat.cols() == currInvMat.cols());
-					std::size_t newMatRowsBefore = newMat.rows();
-					newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
-					for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
-						newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
-					}
-
-					//Extend inv.vector with currInv.vector
-					vector_t<Number> newVec = inv.getVector();
-					vector_t<Number> currInvVec = currInv.getVector();
-					newVec.conservativeResize(newVec.rows()+currInvVec.rows());
-					for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
-						newVec(i) = currInvVec(i-newMatRowsBefore);
-					}
-
-					inv = Condition<Number>(newMat, newVec);
-
-				}
-
+		Condition<Number> inv{ConstraintSetT<Number>{}};
+		
+		bool firstTime = true;
+		for(auto& currInvCtx : ctx->invariants()){
+			Condition<Number> currInv = visit(currInvCtx);
+			if(currInv != Condition<Number>()){  
 				if(firstTime){
 					inv = currInv;
 					firstTime = false;
+					continue;
 				}
-				//std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
-			}
-		}
+			 
+				//Extend inv.matrix with currInv.matrix
+				matrix_t<Number> newMat = inv.getMatrix();
+				matrix_t<Number> currInvMat = currInv.getMatrix();
+				assert(newMat.cols() == currInvMat.cols());
+				std::size_t newMatRowsBefore = newMat.rows();
+				newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
+				for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
+					newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
+				}
 
+				//Extend inv.vector with currInv.vector
+				vector_t<Number> newVec = inv.getVector();
+				vector_t<Number> currInvVec = currInv.getVector();
+				newVec.conservativeResize(newVec.rows()+currInvVec.rows());
+				for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
+					newVec(i) = currInvVec(i-newMatRowsBefore);
+				}
+
+				inv = Condition<Number>(newMat, newVec);
+			}
+		} 
+		
 		//3.Returns a ptr to location
 		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
@@ -189,6 +184,6 @@ namespace hypro {
 		}
 
 		return Condition<Number>();
-
+		
 	}
 }
