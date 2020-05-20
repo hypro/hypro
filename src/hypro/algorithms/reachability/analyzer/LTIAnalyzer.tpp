@@ -22,10 +22,29 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 	}
 
 	while ( !mWorkQueue.empty() ) {
+
 		LTIWorker<State> worker{mHybridAutomaton, mAnalysisSettings};
 		ReachTreeNode<State>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
+
+		//Fixed point detection for TemplatePolyhedrons
+		bool skipComputation = false;
+		if(currentNode->getState().getSetType(0) == hypro::representation_name::polytope_t){
+			for(const auto& segment : mFirstStates){
+				assert(segment.getSetType(0) == hypro::representation_name::polytope_t);
+				if(segment.contains(currentNode->getState())){
+					//skip the computation of this flowpipe
+					COUNT("Fixpoint detected");
+					skipComputation = true;
+					break;
+				}
+			}
+		}
+		if(skipComputation){
+			continue;
+		}
+
 		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
 			safetyResult = worker.computeForwardReachability( *currentNode );
 		} else {
@@ -34,6 +53,8 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 
 		// only for plotting
 		mFlowpipes.emplace_back( worker.getFlowpipe() );
+		// for fixed point detection
+		mFirstStates.emplace_back( currentNode->getState() );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
 			return safetyResult;

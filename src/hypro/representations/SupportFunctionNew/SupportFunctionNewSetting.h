@@ -1,9 +1,19 @@
 #pragma once
 
+#include "../../util/type_handling/better_enums/enum.h"
+#include "../../util/type_handling/meta/RepresentationCombinations.h"
+
 namespace hypro {
+
+BETTER_ENUM( sfnSetting_name, int,
+			 SupportFunctionNewDefault,
+			 SupportFunctionNewMorePrecision,
+			 SupportFunctionNewNoReduction,
+			 SupportFunctionNewLeGuernic )
 
 //This is the default setting, which is the fastest setting, but not as precise
 struct SupportFunctionNewDefault {
+	static constexpr int type_enum = sfnSetting_name::SupportFunctionNewDefault;
 	//Whether multiple linear transformations in succession should be condensed into one linear transformation
 	//Generally makes flowpipe construction faster without loss of precision
 	static constexpr bool LIN_TRANS_REDUCTION = true;
@@ -25,6 +35,7 @@ struct SupportFunctionNewDefault {
 
 //The setting if more precision is needed, but runtime will be greater
 struct SupportFunctionNewMorePrecision {
+	static constexpr int type_enum = sfnSetting_name::SupportFunctionNewMorePrecision;
 	static constexpr bool LIN_TRANS_REDUCTION = true;
 	static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 	static constexpr bool APPROXIMATE_AS_BOX = false;
@@ -34,6 +45,7 @@ struct SupportFunctionNewMorePrecision {
 
 //Inefficient setting for experimental purposes
 struct SupportFunctionNewNoReduction {
+	static constexpr int type_enum = sfnSetting_name::SupportFunctionNewNoReduction;
 	static constexpr bool LIN_TRANS_REDUCTION = false;
 	static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 1;
 	static constexpr bool APPROXIMATE_AS_BOX = false;
@@ -43,6 +55,7 @@ struct SupportFunctionNewNoReduction {
 
 //Setting which is better for high dimensional tasks
 struct SupportFunctionNewLeGuernic {
+	static constexpr int type_enum = sfnSetting_name::SupportFunctionNewLeGuernic;
 	static constexpr bool LIN_TRANS_REDUCTION = true;
 	static constexpr unsigned LIN_TRANS_REDUCTION_GROUP_SIZE = 2;
 	static constexpr bool APPROXIMATE_AS_BOX = true;

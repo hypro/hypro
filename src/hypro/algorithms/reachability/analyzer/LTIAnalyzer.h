@@ -29,6 +29,7 @@ class LTIAnalyzer {
 	HybridAutomaton<Number> mHybridAutomaton;
 	Settings mAnalysisSettings;
 	ReachTree<State> mReachTree;
+	std::vector<State> mFirstStates;
 };
 
 }  // namespace hypro

@@ -21,11 +21,17 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 
 	// call to plotting.
 	START_BENCHMARK_OPERATION( Plotting );
+	std::size_t amount = 0;
+	for ( const auto& fp : analyzer.getFlowpipes() ) {
+		amount += fp.size(); 
+	}
+	std::size_t segmentCount = 0;
 	auto& plt = Plotter<typename State::NumberType>::getInstance();
 	for ( std::size_t pic = 0; pic < setting.plotDimensions.size(); ++pic ) {
 		plt.setFilename( setting.plotFileNames[pic] );
 		for ( const auto& fp : analyzer.getFlowpipes() ) {
 			for ( const auto& segment : fp ) {
+				std::cout << "\r" << segmentCount++ << "/" << amount << "..." << std::flush;
 				plt.addObject( segment.project( setting.plotDimensions[pic] ).vertices() );
 			}
 		}
