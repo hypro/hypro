@@ -17,10 +17,7 @@ using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
 template <typename Number>
 using Ellipsoid = typename Converter<Number>::Ellipsoid;
 
-template <typename Number>
-using GeneralizedStar = typename Converter<Number>::GeneralizedStar;
-
-template <typename Number>
+template<typename Number>
 using HPolytope = typename Converter<Number>::HPolytope;
 
 template <typename Number>
@@ -40,10 +37,16 @@ using SupportFunction = typename Converter<Number>::SupportFunction;
 template <typename Number>
 using SupportFunctionNew = typename Converter<Number>::SupportFunctionNew;
 
-/**
- * Typedef for ZonotopeT.
- */
-template <typename Number>
+template<typename Number>
 using Zonotope = typename Converter<Number>::Zonotope;
 
-}  // namespace hypro
+template<typename Number>
+using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
+
+template<typename Number>
+using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;
+
+//template<typename Number>
+//using Orthoplex = typename Converter<Number>::Orthoplex;
+
+} // namespace hypro

@@ -9,6 +9,8 @@
 #include "IContext.h"
 #include "LTIContext.h"
 #include "TimedContext.h"
+#include "TemplatePolyhedronContext.h"
+
 
 namespace hypro {
 template <typename State>

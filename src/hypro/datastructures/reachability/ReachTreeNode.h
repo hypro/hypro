@@ -150,6 +150,8 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>> {
 	{
 		assert( !state.getTimestamp().isEmpty() );
 		assert( level <= mRefinements.size() );
+		//mRefinements.insert(mRefinements.begin()+level, RefinementSetting<State>( state, state.getLocation() ));
+		//mRefinements[level] = RefinementSetting<State>( state, state.getLocation() );
 		// append or update
 		if ( level == mRefinements.size() ) {
 			mRefinements.push_back( RefinementSetting<State>( state, state.getLocation() ) );

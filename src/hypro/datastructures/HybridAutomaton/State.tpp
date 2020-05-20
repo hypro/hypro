@@ -396,7 +396,6 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
 	res.setSetDirect( std::visit( genericAffineTransformationVisitor<repVariant, Number>( trafo.matrix(), trafo.vector() ), mSets.at( I ) ), I );
-
 	return res;
 }
 

@@ -29,10 +29,11 @@ class CarlPolytopeT : private GeometricObjectBase {
 	// typedefs
 	using Settings = Setting;
 	using NumberType = Number;
+	static constexpr auto type_enum = representation_name::carl_polytope;
 
   private:
 	FormulaT<tNumber> mFormula;							 /// The description of the polytope as a conjunction of linear constraints.
-	mutable std::vector<Halfspace<Number>> mHalfspaces;  /// Caches transformed half-spaces.
+	mutable std::vector<Halfspace<Number>> mHalfspaces;	 /// Caches transformed half-spaces.
 	mutable std::size_t mDimension = 0;					 /// Stores the state space dimension the polytope resides in.
 	mutable bool mSpaceDimensionSet = false;			 /// used to indicate that the space dimension has been set externally, which overrides anything else.
   public:

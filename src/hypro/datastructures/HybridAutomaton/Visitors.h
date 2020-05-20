@@ -45,14 +45,15 @@ class genericMinkowskiSumVisitor {
 template <typename T>
 class genericIntersectVisitor {
   public:
+	template <typename A>
+	inline T operator()( const A& lhs, const A& rhs ) const {
+		return lhs.intersect( rhs );
+	}
+	
 	template <typename A, typename B>
 	inline T operator()( const A& lhs, const B& ) const {
 		assert( false && "INTERSECTION OF DIFFERENT TYPES." );
 		return lhs;
-	}
-
-	inline T operator()( const T& lhs, const T& rhs ) const {
-		return lhs.intersect( rhs );
 	}
 };
 
@@ -179,7 +180,8 @@ class genericOutstreamVisitor {
 
 	template <typename T>
 	inline std::ostream& operator()( const T& shape ) const {
-		return out << shape;
+		out << shape;
+		return out;
 	}
 };
 
@@ -253,7 +255,6 @@ class genericSetContainsVisitor {
   public:
 	template <typename A, typename B>
 	inline bool operator()( const A&, const B& ) const {
-		std::cout << "Types: " << A::type() << " and " << B::type() << std::endl;
 		assert( false && "CONTAINS CHECK OF DIFFERENT TYPES." );
 		return false;
 	}

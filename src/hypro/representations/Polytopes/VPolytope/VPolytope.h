@@ -93,6 +93,10 @@ class VPolytopeT : private GeometricObjectBase {
 	~VPolytopeT() {
 	}
 
+	/***************************************************************************
+	* General interface
+	**************************************************************************/
+	
 	matrix_t<Number> matrix() const {
 		assert( false && "NOT IMPLEMENTED YET" );
 		return matrix_t<Number>::Zero( 1, 1 );

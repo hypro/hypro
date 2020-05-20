@@ -1,20 +1,24 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	# reduce compiler optimization for tests
-	set(representation_test_sources BoxTest.cpp
-	CarlPolytopeTest.cpp
-	ConverterTest.cpp
-	DifferenceBoundsTest.cpp
-	GridTest.cpp
-	HPolytopeTest.cpp
-	NeighborhoodContainerTest.cpp
-	OrthogonalPolyhedronTest.cpp
-	PolytopeSupportFunctionTest.cpp
-	SupportFunctionTest.cpp
-	#TaylorModelTest.cpp
-	VPolytopeTest.cpp
-	ZonotopeTest.cpp
-	SupportFunctionNewTest.cpp)
+	set(representation_test_sources 
+		BoxTest.cpp
+		CarlPolytopeTest.cpp
+		ConverterTest.cpp
+		DifferenceBoundsTest.cpp
+		GridTest.cpp
+		HPolytopeTest.cpp
+		NeighborhoodContainerTest.cpp
+		OrthogonalPolyhedronTest.cpp
+		PolytopeSupportFunctionTest.cpp
+		SupportFunctionTest.cpp
+		#TaylorModelTest.cpp
+		VPolytopeTest.cpp
+		ZonotopeTest.cpp
+		SupportFunctionNewTest.cpp
+		TemplatePolyhedronTest.cpp
+		#OrthoplexTest.cpp
+	)
 
 	if(HYPRO_USE_PPL)
 		set(representation_test_sources "${representation_test_sources} PolytopeTest.cpp PolytopeUtilTest.cpp")

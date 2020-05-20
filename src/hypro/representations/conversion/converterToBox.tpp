@@ -370,9 +370,29 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Carl
 	return BoxT<Number, Converter, BoxSetting>( source.matrix(), source.vector() );
 }
 
-template <typename Number>
-template <typename BoxSetting, typename inSetting>
-BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
+template<typename Number>
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
+	if(source.empty()) return BoxT<Number,Converter<Number>,BoxSetting>();
+	auto isSourceBox = isBox(source.matrix(), source.vector());
+	if(std::get<0>(isSourceBox)){
+		return BoxT<Number,Converter,BoxSetting>(std::get<1>(isSourceBox));
+	} else {
+		auto tmp = typename Converter::HPolytope(source.matrix(), source.vector());
+		return toBox(tmp);
+	}
+}
+
+//template<typename Number>
+//template<typename BoxSetting, typename inSetting>
+//BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return BoxT<Number,Converter<Number>,BoxSetting>();
+//}
+
+template<typename Number>
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
+	
 	//gets dimension from the source object
 	std::size_t dim = _source.dimension();
 

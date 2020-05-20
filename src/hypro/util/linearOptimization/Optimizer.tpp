@@ -62,8 +62,17 @@ Optimizer<Number>::Optimizer( const Optimizer<Number>& orig )
 	, mRelationSymbols( orig.mRelationSymbols ) {
 	TRACE( "hypro.optimizer", "" );
 	assert( isSane() );
+	//mConstraintMatrix = orig.matrix();
+	//mConstraintVector = orig.vector();
+	//mConsistencyChecked = false;
+	////TODO: Instead of cleaning the glp context every time we copy,
+	////clarify how copying the contexts works in glpk and fix that in glpk_context.h
+	////mLastConsistencyAnswer = orig.getLastConsistencyAnswer();
+	//cleanGLPInstance();
+	//mGlpkContext = std::map<std::thread::id, glpk_context>();
 	cleanContexts();
 	assert( isSane() );
+	assert( !mConsistencyChecked );
 }
 
 //Copy assignment via Copy-and-Swap idiom
@@ -171,7 +180,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 		if ( this->checkConsistency() ) {
 			return EvaluationResult<Number>( Number( 0 ), vector_t<Number>::Zero( 1 ), SOLUTION::FEAS );  // origin, feasible
 		}
-		return EvaluationResult<Number>();  // defaults to infeasible.
+		return EvaluationResult<Number>();	// defaults to infeasible.
 	}
 
 	// return value
@@ -282,6 +291,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 
 template <typename Number>
 bool Optimizer<Number>::checkConsistency() const {
+	//assert((mConsistencyChecked && mLastConsistencyAnswer != SOLUTION::UNKNOWN) || (!mConsistencyChecked && mLastConsistencyAnswer == SOLUTION::UNKNOWN));
 	assert( isSane() );
 	updateConstraints();
 
@@ -405,7 +415,7 @@ bool Optimizer<Number>::isSane() const {
 				return false;
 			TRACE("hypro.optimizer","Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
 		}
-		*/
+	*/
 #endif
 	return true;
 }
@@ -413,6 +423,9 @@ bool Optimizer<Number>::isSane() const {
 template <typename Number>
 void Optimizer<Number>::initialize() const {
 	assert( isSane() );
+	//assert( hasContext( std::this_thread::get_id() ) );
+	//mGlpkContext[std::this_thread::get_id()].createLPInstance();
+	//assert( mGlpkContext[std::this_thread::get_id()].mInitialized == true );
 
 #if defined( HYPRO_USE_GLPK )
 	if ( mGlpkContexts.find( std::this_thread::get_id() ) == mGlpkContexts.end() ) {

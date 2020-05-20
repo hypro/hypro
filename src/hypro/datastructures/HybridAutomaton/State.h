@@ -209,7 +209,7 @@ class State {
      * @brief      Gets the location.
      * @return     The location.
      */
-	Location<Number>* rGetLocation() { return mLoc; }
+	Location<Number>* rGetLocation() { return const_cast<Location<Number>*>(mLoc); }
 
 	/**
      * @brief      Gets the number of contained sets.
@@ -416,7 +416,7 @@ class State {
 
 	State<Number, Representation, Rargs...> intersectHalfspaces( const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I = 0 ) const;
 
-	/**
+    /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.
      * @param[in]  matrixExponentials   The solution to the differential equation system.
@@ -641,11 +641,11 @@ State parallelCompose(
 */
 
 #ifdef HYPRO_USE_PPL
-template <typename Number>
-using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, Polytope<Number>>;
+template<typename Number>
+using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, TemplatePolyhedron<Number>, Polytope<Number>>;
 #else
-template <typename Number>
-using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>>;
+template<typename Number>
+using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, TemplatePolyhedron<Number>>;
 #endif
 
 }  // namespace hypro

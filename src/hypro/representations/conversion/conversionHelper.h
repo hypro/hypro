@@ -42,9 +42,19 @@ void convert( const In& in, ZonotopeT<Number, Converter<Number>, OutSettings>& o
 	out = Converter<Number>::template toZonotope<OutSettings>( in );
 }
 
-template <typename Number, typename OutSettings, typename In>
-void convert( const In& in, SupportFunctionNewT<Number, Converter<Number>, OutSettings>& out ) {
-	out = Converter<Number>::template toSupportFunctionNew<OutSettings>( in );
+template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, TemplatePolyhedronT<Number,Converter<Number>,OutSettings>& out) {
+    out = Converter<Number>::template toTemplatePolyhedron<OutSettings>(in);
+}
+
+//template<typename Number, typename OutSettings, typename In>
+//void convert(const In& in, OrthoplexT<Number,Converter<Number>,OutSettings>& out) {
+//	out = Converter<Number>::template toOrthoplex<OutSettings>(in); 
+//}
+
+template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, SupportFunctionNewT<Number,Converter<Number>,OutSettings>& out) {
+    out = Converter<Number>::template toSupportFunctionNew<OutSettings>(in);
 }
 
 #ifdef HYPRO_USE_PPL

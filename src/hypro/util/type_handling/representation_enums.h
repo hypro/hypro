@@ -17,6 +17,7 @@ BETTER_ENUM( representation_name, int,
 			 zonotope,
 			 difference_bounds,
 			 SFN,
+			 polytope_t,
 			 UNDEF,
 			 genStar )
 }  // namespace hypro

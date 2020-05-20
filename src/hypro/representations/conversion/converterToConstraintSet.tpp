@@ -70,11 +70,22 @@ ConstraintSetT<Number, CSSetting> Converter<Number>::toConstraintSet( const Diff
 	return toConstraintSet( toHPolytope( _source, mode ) );
 }
 
-//TODO
-template <typename Number>
-template <typename CSSetting, typename inSetting>
-ConstraintSetT<Number, CSSetting> Converter<Number>::toConstraintSet( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
-	return ConstraintSetT<Number, CSSetting>( _source.matrix(), _source.vector() );
+template<typename Number>
+template<typename ConstraintSetSetting, typename inSetting>
+ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return ConstraintSetT<Number,ConstraintSetSetting>(source.matrix(), source.vector());
+}
+
+//template<typename Number>
+//template<typename ConstraintSetSetting, typename inSetting>
+//ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return ConstraintSetT<Number,ConstraintSetSetting>();
+//}
+
+template<typename Number>
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
+	return ConstraintSetT<Number,CSSetting>(_source.matrix(), _source.vector());
 }
 
 }  // namespace hypro

@@ -142,18 +142,9 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 	}
 }
 
-//template<typename Number, typename Converter, typename S>
-//matrix_t<Number> matrix() const {
-//
-//}
-//template<typename Number, typename Converter, typename S>
-//vector_t<Number> vector() const {
-//
-//}
-
-template <typename Number, typename Converter, typename S>
-VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project( const std::vector<std::size_t> &dimensions ) const {
-	if ( dimensions.empty() ) {
+template<typename Number, typename Converter, typename S>
+VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project( const std::vector<std::size_t>& dimensions ) const {
+	if(dimensions.empty()) {
 		return Empty();
 	}
 

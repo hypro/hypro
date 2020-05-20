@@ -724,7 +724,6 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 	assert( _directions.cols() == Eigen::Index( dimension() ) );
 	if ( mHPlanes.empty() ) {
 		return std::vector<EvaluationResult<Number>>();
-		//return std::vector<EvaluationResult<Number>>(_directions.rows(), EvaluationResult<Number>(Number(1), SOLUTION::INFTY));
 	}
 	std::vector<EvaluationResult<Number>> res;
 	if ( Setting::OPTIMIZER_CACHING ) {
@@ -742,6 +741,15 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 		for ( int i = 0; i < _directions.rows(); ++i ) {
 			res.emplace_back( opt.evaluate( _directions.row( i ), useExact ) );
 		}
+	}
+	return res;
+}
+
+template <typename Number, typename Converter, class Setting>
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions ) const {
+	std::vector<EvaluationResult<Number>> res;
+	for(int i = 0; i < _directions.rows(); ++i){
+		res.push_back(evaluate(_directions.row(i)));
 	}
 	return res;
 }

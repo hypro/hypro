@@ -13,7 +13,7 @@ INCLUDE(FindPkgConfig)
 INCLUDE(CheckCXXSourceRuns)
 INCLUDE(FindPackageHandleStandardArgs)
 
-message(STATUS "Looking for BSD native UUID")
+#message(STATUS "Looking for BSD native UUID")
 set(CMAKE_REQUIRED_QUIET 1)
 check_cxx_source_runs("
 			#include <uuid.h>
@@ -25,23 +25,29 @@ check_cxx_source_runs("
 			}" FOUND_BSD_UUID)
 
 if (FOUND_BSD_UUID)
-	message(STATUS "Looking for BSD native UUID - found")
+	#message(STATUS "Looking for BSD native UUID - found")
 	set(UUID_FOUND 1)
 endif()
 
 if(NOT UUID_FOUND)
-	message(STATUS "Looking for libuuid")
+	#message(STATUS "Looking for libuuid")
 	pkg_search_module(_UUID libuuid QUIET)
 	if(NOT _UUID_FOUND)
 		FIND_PATH(UUID_INCLUDE_DIRS uuid/uuid.h)
 		FIND_LIBRARY(UUID_LIBRARIES uuid)
 
 		if(UUID_INCLUDE_DIRS)
-			message(STATUS "Looking for libuuid - found")
+			#message(STATUS "Looking for libuuid - found")
 			set(UUID_FOUND 1)
 			set(FOUND_LIBUUID 1)
 		endif()
 	endif()
+endif()
+
+if(UUID_FOUND)
+	message(STATUS "Found libuuid: ${UUID_INCLUDE_DIRS}")
+else()
+	message(STATUS "Library libuuid was not found.")
 endif()
 
 find_package_handle_standard_args(UUID DEFAULT_MSG UUID_FOUND)

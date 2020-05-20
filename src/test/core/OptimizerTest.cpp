@@ -27,3 +27,22 @@ TEST(OptimizerTest, EvaluationResult) {
 	EXPECT_EQ(SOLUTION::FEAS, evRes4.errorCode);
 	EXPECT_EQ(sol, evRes4.optimumValue);
 }
+
+TEST(OptimizerTest, Minimize){
+	
+	//Constraints as box around center with corners (2,2)(2,-2)(-2,2)(-2,-2)
+	matrix_t<double> boxMat = matrix_t<double>::Zero(4,2);
+	boxMat << 1,0,
+		   -1,0,
+		   0,1,
+		   0,-1;
+	vector_t<double> boxVec = vector_t<double>::Zero(4);
+	boxVec << 2,2,2,2;
+	Optimizer<double> op(boxMat,boxVec,false);
+	auto res = op.evaluate(vector_t<double>::Ones(2),false);
+	auto controlVec = -2.0*vector_t<double>::Ones(2);
+	EXPECT_EQ(-4.0, res.supportValue);
+	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
+	EXPECT_EQ(controlVec, res.optimumValue);
+
+}

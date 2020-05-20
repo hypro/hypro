@@ -75,6 +75,7 @@ std::tuple<bool, std::vector<carl::Interval<Number>>> isBox( const matrix_t<Numb
 		}
 	}
 	// return true and the collected intervals.
+	//std::cout << "Described set is a box." << std::endl;
 	return std::tuple<bool, std::vector<carl::Interval<Number>>>( true, boundsDefined );
 }
 

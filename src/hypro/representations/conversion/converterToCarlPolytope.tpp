@@ -95,7 +95,7 @@ CarlPolytopeT<Number, Converter<Number>, CarlPolySetting> Converter<Number>::toC
 	if ( vertices.empty() ) {
 		return CarlPolytopeT<Number, Converter<Number>, CarlPolySetting>();
 	}
-	VPolytope vpoly = VPolytope( vertices );
+	Converter<Number>::VPolytope vpoly = VPolytope( vertices );
 
 	return toCarlPolytope( vpoly, mode );
 }
@@ -260,7 +260,6 @@ CarlPolytopeT<Number, Converter<Number>, CarlPolySetting> Converter<Number>::toC
 }
 
 #ifdef HYPRO_USE_PPL
-
 //Convert a ppl polytope into a CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>. Luckily, ppl polytopes have halfspaces internally.
 template <typename Number>
 template <typename CarlPolySetting, typename inSetting>
@@ -276,11 +275,24 @@ CarlPolytopeT<Number, Converter<Number>, CarlPolySetting> Converter<Number>::toC
 	return CarlPolytopeT<Number, Converter<Number>, CarlPolySetting>( source.matrix(), source.vector() );
 }
 
-template <typename Number>
-template <typename CarlPolySetting, typename inSetting>
-CarlPolytopeT<Number, Converter<Number>, CarlPolySetting> Converter<Number>::toCarlPolytope( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections ) {
-	//gets dimension of source object
-	std::size_t dim = _source.dimension();
+template<typename Number>
+template<typename CarlPolySetting, typename inSetting>
+CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>(source.matrix(), source.vector());
+}
+
+//template<typename Number>
+//template<typename CarlPolySetting, typename inSetting>
+//CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>();
+//}
+
+template<typename Number>
+template<typename CarlPolySetting, typename inSetting>
+CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+
+    //gets dimension of source object
+    std::size_t dim = _source.dimension();
 
 	std::vector<std::size_t> projections = _source.collectProjections();
 	//std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;

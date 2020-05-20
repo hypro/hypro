@@ -61,6 +61,7 @@ class BoxT : private GeometricObjectBase {
 
 	typedef Setting Settings;
 	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::box;
 
   protected:
 	std::vector<carl::Interval<Number>> mLimits; /*!< Box as a vector of intervals. */
@@ -245,7 +246,7 @@ class BoxT : private GeometricObjectBase {
 		mLimits.push_back( val );
 		if ( mLimits.back().isEmpty() ) {
 			mEmptyState = SETSTATE::EMPTY;
-		} else if ( mLimits.size() == 1 ) {  // the new interval was the first and it is not empty.
+		} else if ( mLimits.size() == 1 ) {	 // the new interval was the first and it is not empty.
 			mEmptyState = mLimits.front().isUnbounded() ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
 		} else if ( val.isUnbounded() ) {
 			mEmptyState = SETSTATE::UNIVERSAL;

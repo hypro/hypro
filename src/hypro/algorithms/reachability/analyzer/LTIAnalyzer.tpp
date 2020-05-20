@@ -57,12 +57,6 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 		}
 	}
 
-	std::cout << "Flowpipe sizes:" << std::endl;
-
-	for ( auto& flowpipe : mFlowpipes ) {
-		std::cout << flowpipe.size() << std::endl;
-	}
-
 	return REACHABILITY_RESULT::SAFE;
 }
 

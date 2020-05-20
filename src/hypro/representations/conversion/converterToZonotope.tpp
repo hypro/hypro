@@ -635,10 +635,22 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 			//computes generators
 			generators.col( i ) = scaling.second * normal;
 		}
-
 		res = Zonotope( center, generators );
 	}
 	return res;
 }
+
+template<typename Number>
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE mode){
+    auto tmp = toVPolytope(source);
+    return Converter<Number>::toZonotope(tmp, mode);
+}
+
+//template<typename Number>
+//template<typename ZonotopeSetting, typename inSetting>
+//ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
+//}
 
 }  // namespace hypro

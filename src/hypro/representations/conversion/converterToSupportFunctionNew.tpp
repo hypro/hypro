@@ -97,4 +97,16 @@ SupportFunctionNewT<Number, Converter<Number>, SFNSetting> Converter<Number>::to
 	return SupportFunctionNewT<Number, Converter<Number>, SFNSetting>( _source.matrix(), _source.vector() );
 }
 
-}  // namespace hypro
+template<typename Number>
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
+}
+
+//template<typename Number>
+//template<typename SFNSetting, typename inSetting>
+//SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const OrthoplexT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+//	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
+//}
+
+} // namespace hypro

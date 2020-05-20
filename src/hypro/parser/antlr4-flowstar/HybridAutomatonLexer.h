@@ -15,20 +15,20 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, POLY = 19, LINEAR = 20, 
-    ODE = 21, IN = 22, TRUE = 23, FALSE = 24, PAR = 25, JUMPS = 26, URGENT = 27, 
-    GUARD = 28, RESET = 29, PARALLELOTOPE = 30, BOX = 31, JUMP = 32, DEFINE = 33, 
-    COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38, 
-    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44, 
-    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, INTERVALAGG = 49, 
-    EXPONENTIAL = 50
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
+    T__20 = 21, POLY = 22, LINEAR = 23, ODE = 24, IN = 25, TRUE = 26, FALSE = 27, 
+    PAR = 28, JUMPS = 29, URGENT = 30, GUARD = 31, RESET = 32, PARALLELOTOPE = 33, 
+    BOX = 34, JUMP = 35, DEFINE = 36, COMMENT = 37, EQUALS = 38, BOOLRELATION = 39, 
+    PLUS = 40, MINUS = 41, TIMES = 42, SBOPEN = 43, SBCLOSE = 44, CBOPEN = 45, 
+    CBCLOSE = 46, COMMA = 47, NUMBER = 48, CONSTANT = 49, VARIABLE = 50, 
+    WS = 51, INTERVALAGG = 52, EXPONENTIAL = 53
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);
   ~HybridAutomatonLexer();
 
 
-  	bool parsingConstants = false;	
+  	bool parsingConstants = false;
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;

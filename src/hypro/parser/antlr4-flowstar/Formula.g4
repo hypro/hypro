@@ -12,7 +12,7 @@ grammar Formula;
 /////////////////// C++ FOR USAGE ///////////////////////
 
 @lexer::members {
-	bool parsingConstants = false;	
+	bool parsingConstants = false;
 }
 
 @parser::postinclude {
@@ -71,14 +71,14 @@ constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 
 /////////////////// Parser Rules /////////////////////
 
-connector 			: PLUS | MINUS ; 
+connector 			: PLUS | MINUS ;
 term 				: (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
 polynom				: connector* term (connector+ term)* ;
 interval 			: '[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']' ;
 
 equation 			: VARIABLE EQUALS polynom (connector interval)?;
-constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
-intervalexpr		: VARIABLE IN interval; 
+constraint			: polynom (BOOLRELATION | EQUALS) polynom;
+intervalexpr		: VARIABLE IN interval;
 constrset	 		: ((constraint | intervalexpr)+ | TRUE | FALSE) ;
 
 //constantexpr is above in C++ or in Java
@@ -119,7 +119,7 @@ fragment DIGIT		: [0-9] ;
 fragment SPECIALCHAR: '_' | '\'' ;
 
 //BEWARE! Numbers itself can now only be positive. A negative number has an odd number of MINUS connectors in front.
-NUMBER				: DIGIT+ ('.' DIGIT+)? ;
+NUMBER				: (DIGIT+ ('.' DIGIT+)? | '.' DIGIT+ ) ;
 CONSTANT 			: (UPPERCASE | LOWERCASE) { if(!parsingConstants) { setType(VARIABLE); } };
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* { if(parsingConstants){ setType(CONSTANT); } };
 

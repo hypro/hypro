@@ -13,7 +13,7 @@ import Formula;
 
 //////// Parser Rules
 
-setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | plotsetting | fixedorders | cutoff | precision | filename | maxjumps | print)* '}' ;
+setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | qrprecond | plotsetting | fixedorders | adaptiveorders | cutoff | precision | filename | maxjumps | print)* '}' ;
 //setting 		: 'setting' '{' (fixedsteps | time | identity | plotsetting | fixedorders | precision | filename | maxjumps | print)* '}' ;
 
 //// Important Parser Rules
@@ -22,21 +22,25 @@ fixedsteps		: 'fixed steps' NUMBER ;
 
 time 			: 'time' NUMBER ;
 
-plotsetting 	: 'gnuplot octagon' VARIABLE ((',' VARIABLE)+)? ; 
+plotsetting 	: 'gnuplot octagon' VARIABLE ((',' VARIABLE)+)? ;
 
-filename 		: 'output' VARIABLE ; 
+filename 		: 'output' VARIABLE ;
 
 maxjumps 		: 'max jumps' NUMBER ;
 
-print 			: 'print' VARIABLE ; 
+print 			: 'print' VARIABLE ;
 
 //// Unimportant Parser Rules
 
-remainder 		: 'remainder estimation' EXPONENTIAL ; 
+remainder 		: 'remainder estimation' EXPONENTIAL ;
 
 identity 		: 'identity precondition' ;
 
+qrprecond 		: 'QR precondition' ;
+
 fixedorders 	: 'fixed orders' NUMBER ;
+
+adaptiveorders  : 'adaptive orders { min ' NUMBER ' , max ' NUMBER '}' ;
 
 cutoff 			: 'cutoff' EXPONENTIAL ;
 
