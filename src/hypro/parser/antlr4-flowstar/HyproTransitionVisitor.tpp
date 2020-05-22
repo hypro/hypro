@@ -129,7 +129,7 @@ namespace hypro {
 			return inv;
 		}
 		//Return empty condition if no guard given
-		return Condition<Number>();
+		return Condition<Number>{ConstraintSetT<Number>{}};
 
 	}
 
