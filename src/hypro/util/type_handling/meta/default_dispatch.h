@@ -17,7 +17,10 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
-				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting> >;
+				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting>,
+			RepresentationCombinations<
+				  TemplatePolyhedronT, TemplatePolyhedronDefault>
+			>;
 
 template <class Number, class Converter>
 using DefaultDispatcher = Dispatcher<Number, Converter, DefaultRepresentations>;

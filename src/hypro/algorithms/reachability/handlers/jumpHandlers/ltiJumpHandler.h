@@ -3,6 +3,7 @@
 #include "../../../../datastructures/reachability/NodeManager.h"
 #include "../../../../datastructures/reachability/ReachTreeNode.h"
 #include "../../../../datastructures/reachability/Task.h"
+#include "../../../../flags.h"
 #include "../../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../HandlerFactory.h"
 #include "../IHandler.h"

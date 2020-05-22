@@ -1,0 +1,1 @@
+This folder contains all files of the Matlab-wrapper for HyPro. To run the benchmarks automatically the two shell scrpts can be used. For running MHyPro benchmarks run runMHyProBenchmarks.sh. For running CORA benchmarks run runCORABenchmarks.sh. For further information how to compile see the make_MHyPro.m file.

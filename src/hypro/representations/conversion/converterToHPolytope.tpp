@@ -110,7 +110,7 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	if ( vertices.empty() ) {
 		return HPolytopeT<Number, Converter<Number>, HPolytopeSetting>();
 	}
-	VPolytope vpoly = VPolytope( vertices );
+	Converter<Number>::VPolytope vpoly = VPolytope( vertices );
 
 	return toHPolytope( vpoly, mode );
 }
@@ -305,9 +305,22 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	return HPolytopeT<Number, Converter<Number>, HPolySetting>( source.getHalfspaces() );
 }
 
-template <typename Number>
-template <typename HPolySetting, typename inSetting>
-HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolytope( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections ) {
+template<typename Number>
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.matrix(), source.vector());
+}
+
+//template<typename Number>
+//template<typename HPolySetting, typename inSetting>
+//HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return HPolytopeT<Number,Converter<Number>,HPolySetting>();
+//}
+
+template<typename Number>
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+	
 	//gets dimension of source object
 	//assert(!_source.empty());
 	std::size_t dim = _source.dimension();

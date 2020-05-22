@@ -23,7 +23,10 @@ struct stringToSetting_Impl<Enum> {
 };
 
 int stringToSetting( const std::string& name ) {
-	return stringToSetting_Impl<boxSetting_name, supportFunctionSetting_name>::toSetting( name );
+	return stringToSetting_Impl<
+		boxSetting_name, 
+		supportFunctionSetting_name, 
+		tpolySetting_name >::toSetting( name );
 }
 
 }  // namespace hypro

@@ -14,8 +14,8 @@ State ltiFirstSegmentHandler<State>::operator()( State initialStateSet, tNumber 
 	// if the location has no flow, stop computation and exit.
 	if ( initialStateSet.getLocation()->getLinearFlow( 0 ).isDiscrete() ) {
 		// TRACE("Avoid further computation as the flow is zero." << std::endl);
-		mTrafo = matrix_t<Number>::Identity( dim - 1, dim - 1 );
-		mTranslation = vector_t<Number>::Zero( dim - 1 );
+		mTrafo = matrix_t<Number>::Identity( dim, dim );
+		mTranslation = vector_t<Number>::Zero( dim );
 		return initialStateSet;
 	}
 
@@ -54,11 +54,12 @@ State ltiFirstSegmentHandler<State>::operator()( State initialStateSet, tNumber 
 
 	firstSegment = deltaValuation.unite( initialStateSet );
 
-	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
-
-	TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
-	TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
-
+	if(!errorBoxVector.empty()){
+		TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
+		TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
+		TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
+	}
+	
 	firstSegment = bloatBox( firstSegment, Number( Number( 1 ) / Number( 4 ) ) * errorBoxVector[2], 0 );
 
 	TRACE( "hypro.worker", "Epsilon errorbox: " << errorBoxVector[2] );

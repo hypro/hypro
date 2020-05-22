@@ -14,6 +14,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       UtilityTest.cpp
       QuickhullTest.cpp
       QuickIntersectionTest.cpp
+      #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
+      #FirstSegmentHandlersTest.cpp #BROKEN
     )
 
   SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)
@@ -29,9 +31,9 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     add_dependencies(runAlgorithmTests resources)
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-    target_link_libraries(runAlgorithmTests
-			${PROJECT_NAME}-shared
+    target_link_libraries(runAlgorithmTests LINK_PUBLIC
 			${GTEST_LIBRARIES}
+			${PROJECT_NAME}-shared
 			)
 
     cotire(runAlgorithmTests)

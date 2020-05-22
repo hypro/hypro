@@ -95,9 +95,32 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 	std::vector<EvaluationResult<Number>> aggregate( std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const override {
 		TRACE( "hypro.representations.supportFunction", ": INTERSECT, accumulate results." )
 		assert( resultStackBack.size() >= 2 );
-		std::vector<EvaluationResult<Number>> accumulatedResult;
-
 		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
+		std::vector<EvaluationResult<Number>> accumulatedResult = resultStackBack.front();
+		for(unsigned operand = 1; operand < resultStackBack.size(); ++operand){
+			for(unsigned index = 0; index < resultStackBack.front().size(); ++index){
+				EvaluationResult<Number> r = resultStackBack.at(operand).at(index);
+				if(r.errorCode == SOLUTION::INFEAS) 
+					return resultStackBack.at(operand);
+				if(r.errorCode == SOLUTION::INFTY){
+					continue;
+				} else {
+					assert(r.errorCode == SOLUTION::FEAS);
+					if(accumulatedResult.at(index).errorCode == SOLUTION::INFTY){
+						accumulatedResult.at(index) = r;
+						assert(accumulatedResult.at(index).errorCode != SOLUTION::INFTY);
+					} else {
+						assert(accumulatedResult.at(index).errorCode == SOLUTION::FEAS);
+						accumulatedResult.at(index).supportValue = r.supportValue < accumulatedResult.at(index).supportValue ? r.supportValue : accumulatedResult.at(index).supportValue;
+						//accumulatedResult.at(index).optimumValue = r.optimumValue < accumulatedResult.at(index).optimumValue ? r.optimumValue : accumulatedResult.at(index).optimumValue;	
+					}
+				}
+			}
+		}
+		return accumulatedResult;
+/*
+		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
+		std::vector<EvaluationResult<Number>> accumulatedResult;
 		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {
 			EvaluationResult<Number> r = resultStackBack.front().at( i );
 			for ( const auto& res : resultStackBack ) {
@@ -107,17 +130,20 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 					if ( r.errorCode == SOLUTION::INFTY ) {
 						r.errorCode = SOLUTION::FEAS;
 						r.supportValue = res[i].supportValue;
-						r.optimumValue = res[i].optimumValue;
+						std::cout << "IntersectOp::aggregate, entry was infty" << std::endl;
+						//r.optimumValue = res[i].optimumValue;
 					} else {
 						r.errorCode = SOLUTION::FEAS;
 						r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue;
-						r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue;
+						std::cout << "IntersectOp::aggregate, after choosing min between " << r.supportValue << " and  " << res[i].supportValue << " r is:" << r.supportValue << std::endl;
+						//r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue;
 					}
 				}
 			}
 			accumulatedResult.emplace_back( r );
 		}
 		return accumulatedResult;
+*/
 	}
 
   public:
@@ -171,17 +197,16 @@ class IntersectOp : public RootGrowNode<Number, Converter, Setting> {
 
 		for ( const auto& direction : directions ) {
 			//Determine supportValue of direction and reverse direction for chosenOne
-			EvaluationResult<Number> chosenNegEval = chosenOne.evaluate( -direction, false );
-			EvaluationResult<Number> chosenPosEval = chosenOne.evaluate( direction, false );
-
 			//Check if the supportValues don't overlap -> there is no intersection between at least two -> empty -> return true
 			//Check in both directions since directions and children do not have to be symmetrical
 			for ( const auto& child : sfChildren ) {
+				EvaluationResult<Number> chosenNegEval = chosenOne.evaluate( -direction, false );
 				EvaluationResult<Number> childPosEval = child.evaluate( direction, false );
 				if ( childPosEval.supportValue < -chosenNegEval.supportValue && childPosEval.errorCode != SOLUTION::INFTY && chosenNegEval.errorCode != SOLUTION::INFTY ) {
 					RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;
 					return true;
 				}
+				EvaluationResult<Number> chosenPosEval = chosenOne.evaluate( direction, false );
 				EvaluationResult<Number> childNegEval = child.evaluate( -direction, false );
 				if ( -childNegEval.supportValue > chosenPosEval.supportValue && childNegEval.errorCode != SOLUTION::INFTY && chosenPosEval.errorCode != SOLUTION::INFTY ) {
 					RootGrowNode<Number, Converter, Setting>::mEmptyState = SETSTATE::EMPTY;

@@ -7,7 +7,8 @@
 
 #include "algorithms/reachability/Reach.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/LocationManager.h"
+//#include "datastructures/HybridAutomaton/LocationManager.h"
+#include "algorithms/reachability/Reach.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
 #include "representations/GeometricObjectBase.h"
 #include <signal.h>

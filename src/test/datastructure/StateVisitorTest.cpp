@@ -46,3 +46,38 @@ TEST( StateVisitorTest, ConvertAndGetTest ) {
 
 	bType2 tmp = std::visit( genericConvertAndGetVisitor<bType2>(), bVar1 );
 }
+
+TEST( StateVisitorTest, SettingTest) {
+
+	using bType1 = BoxT<double, Converter<double>, BoxLinearOptimizationOff>;
+	using bType2 = BoxT<double, Converter<double>, BoxIntervalArithmeticOff>;
+
+	std::variant<bType1> bVar1 = bType1{carl::Interval<double>( 1, 2 )};
+	//auto tmp = std::visit( genericSettingVisitor(), bVar1);
+	auto tmp = std::visit([](const auto& obj){ return obj.getSettings(); }, bVar1);
+	EXPECT_TRUE(tmp.HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true);
+	EXPECT_TRUE(tmp.USE_INTERVAL_ARITHMETIC == true);	
+	EXPECT_TRUE(tmp.DETECT_BOX == true);
+
+	std::variant<bType2> bVar2 = bType2{carl::Interval<double>( 1, 2 )};
+	//auto tmp2 = std::visit( genericSettingVisitor(), bVar2);
+	auto tmp2 = std::visit([](const auto& obj){ return obj.getSettings(); }, bVar2);
+	EXPECT_TRUE(tmp2.HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true);
+	EXPECT_TRUE(tmp2.USE_INTERVAL_ARITHMETIC == false);	
+	EXPECT_TRUE(tmp2.DETECT_BOX == true);
+
+
+
+	//std::variant<bType1,bType2> bVar3 = bType2{carl::Interval<double>( 1, 2 )};
+	//auto blub = std::visit( genericGetVisitor(), bVar3);
+
+	//auto tmp3 = std::visit( genericSettingVisitor(), bVar3);
+	//auto lambda = 
+	//auto tmp3 = std::visit([](decltype(obj) obj) { return obj.getSettings(); }, bVar3);
+	//auto tmp3 = settingVisitor<std::variant<bType1,bType2>>(bVar3);
+	
+	//EXPECT_TRUE(tmp3.HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true);
+	//EXPECT_TRUE(tmp3.USE_INTERVAL_ARITHMETIC == false);	
+	//EXPECT_TRUE(tmp3.DETECT_BOX == true);
+
+}

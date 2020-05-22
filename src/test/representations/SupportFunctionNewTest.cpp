@@ -47,15 +47,28 @@ TYPED_TEST( SupportFunctionNewTest, LeafTest ) {
 	// Test with Halfspace
 	Halfspace<TypeParam> hspace( {TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 1 ) );
 	SupportFunctionNew<TypeParam> sfHSpace( hspace );
-	EXPECT_TRUE( sfHpoly.getRoot()->getType() == SFNEW_TYPE::LEAF );
-	EXPECT_EQ( sfHpoly.getRoot()->getOriginCount(), unsigned( 0 ) );
-	EXPECT_EQ( sfHpoly.getRoot()->getChildren().size(), std::size_t( 0 ) );
-	EXPECT_EQ( sfHpoly.getRoot().use_count(), long( 1 ) );
+	EXPECT_TRUE( sfHSpace.getRoot()->getType() == SFNEW_TYPE::LEAF );
+	EXPECT_EQ( sfHSpace.getRoot()->getOriginCount(), unsigned( 0 ) );
+	EXPECT_EQ( sfHSpace.getRoot()->getChildren().size(), std::size_t( 0 ) );
+	EXPECT_EQ( sfHSpace.getRoot().use_count(), long( 1 ) );
 	EXPECT_TRUE( std::get<0>( isBox( hspace.matrix(), hspace.vector() ) ) );
 	EXPECT_TRUE( std::get<0>( isBox( sfHSpace.matrix(), sfHSpace.vector() ) ) );
 	EXPECT_EQ( ( dynamic_cast<Leaf<N, C, S, Halfspace<TypeParam>>*>( sfHSpace.getRoot().get() )->getRepresentation() )
 					 ->type(),
 			   representation_name::constraint_set );
+
+	// Test with Template polytope
+	TemplatePolyhedron<TypeParam> tpoly( matrix_t<TypeParam>::Ones(2,2), vector_t<TypeParam>::Ones(2) );
+	SupportFunctionNew<TypeParam> sfTPoly( tpoly );
+	EXPECT_TRUE( sfTPoly.getRoot()->getType() == SFNEW_TYPE::LEAF );
+	EXPECT_EQ( sfTPoly.getRoot()->getOriginCount(), unsigned( 0 ) );
+	EXPECT_EQ( sfTPoly.getRoot()->getChildren().size(), std::size_t( 0 ) );
+	EXPECT_EQ( sfTPoly.getRoot().use_count(), long( 1 ) );
+	EXPECT_FALSE( std::get<0>( isBox( tpoly.matrix(), tpoly.vector() ) ) );
+	EXPECT_FALSE( std::get<0>( isBox( sfTPoly.matrix(), sfTPoly.vector() ) ) );
+	//EXPECT_EQ( ( dynamic_cast<Leaf<N, C, S, TemplatePolyhedron<TypeParam>>*>( sfTPoly.getRoot().get() )->getRepresentation() )
+	//				 ->type(),
+	//		   representation_name::polytope_t );
 }
 
 // Have a box as a leaf. Put a chain of trafoOps above the leaf.
@@ -610,7 +623,7 @@ TYPED_TEST( SupportFunctionNewTest, Constructors ) {
 	EXPECT_EQ( ( dynamic_cast<Leaf<TypeParam, Converter<TypeParam>, Setting, HPoly>*>( sfMatVec2.getRoot().get() )
 					   ->getRepresentation()
 					   ->type() ),
-			   representation_name::polytope_h );
+			   HPoly::type() );
 	EXPECT_EQ( ( dynamic_cast<Leaf<TypeParam, Converter<TypeParam>, Setting, HPoly>*>( sfMatVec2.getRoot().get() )
 					   ->getRepresentation()
 					   ->dimension() ),

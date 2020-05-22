@@ -245,7 +245,8 @@ class HPolytopeT : private GeometricObjectBase {
 	bool isExtremePoint( const vector_t<Number>& point ) const;
 	bool isExtremePoint( const Point<Number>& point ) const;
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _direction ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const;
 	std::vector<Point<Number>> vertexEnumeration() const;
 
 	/*

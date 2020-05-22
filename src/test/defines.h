@@ -39,7 +39,8 @@ typedef ::testing::Types<
 // List tests which should be typed
 
 // Algorithm
-
+TYPED_TEST_CASE(TemplatePolyhedronContextTest, floatTypes);
+TYPED_TEST_CASE(FirstSegmentHandlersTest, floatTypes);
 TYPED_TEST_CASE(BoxReachabilityTest, allTypes);
 TYPED_TEST_CASE(VertexEnumerationTest, allTypes);
 TYPED_TEST_CASE(QuickhullTest, allTypes);
@@ -50,8 +51,9 @@ TYPED_TEST_CASE(Benchmark, allTypes);
 
 // Core
 TYPED_TEST_CASE(EigenAdaptionsTest, allTypes);
+TYPED_TEST_CASE(OptimizerTest, allTypes);
 TYPED_TEST_CASE(AntlrParserTest, allTypes);
-TYPED_TEST_CASE(AntlrParserCIFTest, allTypes);
+//TYPED_TEST_CASE(AntlrParserCIFTest, allTypes);
 
 // Datastructure
 TYPED_TEST_CASE(HalfspaceTest, allTypes);
@@ -72,12 +74,13 @@ TYPED_TEST_CASE(PolytopeTest, floatTypes);
 TYPED_TEST_CASE(PolytopeUtilTest, allTypes);
 TYPED_TEST_CASE(PolytopeSupportFunctionTest, allTypes);
 TYPED_TEST_CASE(SupportFunctionTest, allTypes);
-TYPED_TEST_CASE(TaylorModelTest, floatTypes); // problem in carl/src/carl/interval/Interval.h:641:19
+//TYPED_TEST_CASE(TaylorModelTest, floatTypes); // problem in carl/src/carl/interval/Interval.h:641:19
 TYPED_TEST_CASE(VPolytopeTest, allTypes);
 TYPED_TEST_CASE(ZonotopeTest, allTypes); // problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 TYPED_TEST_CASE(DifferenceBoundsTest, allTypes);
-
 TYPED_TEST_CASE(SupportFunctionNewTest, allTypes);
+TYPED_TEST_CASE(TemplatePolyhedronTest, allTypes);
+//TYPED_TEST_CASE(OrthoplexTest, allTypes);
 
 // Practical term
 //TYPED_TEST_CASE(PTermBoxTest, allTypes);

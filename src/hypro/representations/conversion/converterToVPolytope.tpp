@@ -342,12 +342,24 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 }
 
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
-template <typename Number>
-template <typename VPolySetting, typename inSetting>
-VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolytope( const CarlPolytopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
+template<typename Number>
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
 	//exact conversion
-	return VPolytopeT<Number, Converter<Number>, VPolySetting>( _source.matrix(), _source.vector() );
+	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
 }
+
+template<typename Number>
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
+    return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
+}
+
+//template<typename Number>
+//template<typename VPolytopeSetting, typename inSetting>
+//VPolytopeT<Number,Converter<Number>,VPolytopeSetting> Converter<Number>::toVPolytope( const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+//	return VPolytopeT<Number,Converter<Number>,VPolytopeSetting>();
+//}
 
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)

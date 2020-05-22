@@ -15,7 +15,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		( "jobs,j", po::value<unsigned>()->default_value( 1 ), "<number> of jobs/threads to be used in parallel. Default is 1." )
 		( "model,m", po::value<std::string>()->required(), "<path> to model file." )
 		("representation,r", po::value<std::string>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
-    ( "setting", po::value<std::string>(), "the setting to use for the representation")
+    	( "setting", po::value<std::string>(), "the setting to use for the representation")
 		( "skipplot", po::bool_switch(), "skips plotting step" )
 		( "noTimingInformation", po::bool_switch(), "do not collect any timing information during refinement" )
 		( "noBadStateTimingInformation", po::bool_switch(), "do not collect bad state timing information during refinement" )
@@ -27,7 +27,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		( "queueBalangingRatio,q", po::value<double>()->default_value( 1.0 ), "ratio of tasks which get pushed to a global queue from a local queue. Has no effect if onlyGlobalQueues is enabled." )
 		( "strategy,s", po::value<std::string>(), "choose reachability strategy. Valid options are tacas18_1, tacas18_2, tacas18_3." )
 		( "delta,d", po::value<mpq_class>(), "choose time step size (rational, i.e., 1/100). Overrides settings in the input file." )
-    ( "timehorizon,t", po::value<mpq_class>(), "choose *local* timehorizon (rational, i.e., 1/100). Overrides settings in the input file." )
+    	( "timehorizon,t", po::value<mpq_class>(), "choose *local* timehorizon (rational, i.e., 1/100). Overrides settings in the input file." )
 		( "clustering,c", po::value<int>(), "Select clustering option, -1=off, 0=all, i=max. number of clustered segments. Overrides settings in the input file." )
 		// ( "customStrategy", po::bool_switch(), "Enters strategy building mode. Choose a representation, and customize its settings and different reachability settings." )
 		( "snode,sn", po::value<std::vector<std::string>>()->multitoken(), "Adds a custom strategy node." );

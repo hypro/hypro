@@ -99,6 +99,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Repr
 		} else {
 			using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( r.matrix(), r.vector() ) );
+			//mRoot = std::make_shared<Leaf<Number, Converter, Setting, Representation>>( std::make_shared<Representation>(tmp) );
 		}
 	}
 	assert( mRoot != nullptr );
@@ -111,7 +112,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 										 << mat << " and vec: \n"
 										 << vec );
 	std::tuple<bool, std::vector<carl::Interval<Number>>> areArgsBox = isBox( mat, vec );
-	if ( std::get<0>( areArgsBox ) && Setting::DETECT_BOX ) {
+	if ( Setting::DETECT_BOX && std::get<0>( areArgsBox ) ) {
 		if ( std::get<1>( areArgsBox ).size() == 0 ) {
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( Converter::Box::Empty() ) );
 			assert( false );
@@ -120,7 +121,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, typename Converter::Box>>( std::make_shared<typename Converter::Box>( std::get<1>( areArgsBox ) ) );
 		}
 	} else {
-		INFO( "hypro.representations", "SFN mat-vec-constr: constraints were hpoly!" )
+		INFO( "hypro.representations", "SFN mat-vec-constr: constraints were tpoly!" )
 		using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 		mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( mat, vec ) );
 	}
@@ -133,8 +134,9 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 }
 
 //Halfspace vector constructor
+/*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) { /*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
+SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) { 
 	using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 	mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( hspaces ) );
 }
@@ -524,6 +526,7 @@ std::size_t SupportFunctionNewT<Number, Converter, Setting>::size() const {
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportFunctionNewT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	TRACE( "hypro.representations.supportFunctionNew", "Halfspace: " << rhs );
+	//std::cout << "SFN::satisfiesHalfspace, this mat: \n" << this->matrix() << "vector: \n" << this->vector() << "halfspace: \n" << rhs << std::endl;
 	if ( mRoot == nullptr ) {
 		return std::make_pair( CONTAINMENT::BOT, *this );
 	}
@@ -533,14 +536,14 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 	//Check for emptiness not needed here since satisfiesHalfspace() is only called via satisfiedHalfspaces(), which already checks emptiness
 	bool limiting = false;
 	EvaluationResult<Number> planeEvalRes = this->evaluate( rhs.normal(), false );
-	//std::cout << "planeEvalRes: " << planeEvalRes << " rhs offset: " << rhs.offset() << std::endl;
+	//std::cout << "SFN::satisfiesHalfspace, planeEvalRes: " << planeEvalRes << " rhs offset: " << rhs.offset() << std::endl;
 	if ( planeEvalRes.errorCode == SOLUTION::INFEAS ) {
 		//std::cout << "SFN::satisfiesHalfspace, Is infeasible (should not happen)." << std::endl;
 		////std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 		//assert(Converter::toHPolytope(*this).empty());
 		return std::make_pair( CONTAINMENT::NO, *this );
 	} else if ( planeEvalRes.supportValue > rhs.offset() ) {
-		//std::cout << "Object will be limited. " << std::endl;
+		//std::cout << "SFN::satisfiesHalfspace, Object will be limited. " << std::endl;
 		// the actual object will be limited by the new plane
 		limiting = true;
 		// //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
@@ -552,8 +555,10 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		}
 	}
 	if ( limiting ) {
+		//std::cout << "SFN::satisfiesHalfspace, partial containment" << std::endl;
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspace( rhs ) );
 	} else {
+		//std::cout << "SFN::satisfiesHalfspace, full containment" << std::endl;
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
 }
@@ -571,11 +576,17 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 	if ( _mat.rows() == 0 ) {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
+
 	assert( _mat.rows() == _vec.rows() );
 	assert( _mat.cols() == Eigen::Index( dimension() ) || this->empty() );
 	if ( _mat.rows() == 1 && _vec.rows() == 1 ) {
 		return satisfiesHalfspace( Halfspace<Number>( vector_t<Number>( _mat.row( 0 ) ), _vec( 0 ) ) );
 	}
+
+	//auto res = this->intersectHalfspaces( _mat, _vec );
+	//CONTAINMENT empty = res.empty() ? CONTAINMENT::NO : CONTAINMENT::YES;
+	//return std::make_pair( empty, res );
+
 	std::vector<unsigned> limitingPlanes;
 	for ( unsigned rowI = 0; rowI < _mat.rows(); ++rowI ) {
 		DEBUG( "hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
@@ -583,39 +594,47 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		DEBUG( "hypro.representations.supportFunctionNew", "Return from evaluate." );
 		if ( planeEvalRes.errorCode == SOLUTION::INFEAS ) {
 			TRACE( "hypro.representations.supportFunctionNew", "Is infeasible (should not happen)." );
+			//std::cout << "SFN::satisfiesHalfspaces, infeas" << std::endl;
 			return std::make_pair( CONTAINMENT::NO, *this );
 			//return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 		} else if ( !carl::AlmostEqual2sComplement( planeEvalRes.supportValue, _vec( rowI ), 2 ) && planeEvalRes.supportValue > _vec( rowI ) ) {
 			TRACE( "hypro.representations.supportFunctionNew", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec( rowI ) );
+			//std::cout << "SFN::satisfiesHalfspaces, limited" << std::endl;
 			// the actual object will be limited by the new plane
 			limitingPlanes.push_back( rowI );
-			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), false ).supportValue;
+			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), true ).supportValue;
 			//TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
 			//TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
-			if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal >= _vec( rowI ) ) {
-				// exact verification in case the values are close to each other
-				if ( carl::AlmostEqual2sComplement( Number( -invDirVal ), planeEvalRes.supportValue, 16 ) ) {
-					EvaluationResult<Number> secndPosEval = this->evaluate( _mat.row( rowI ), true );
-					if ( secndPosEval.supportValue > _vec( rowI ) ) {
-						EvaluationResult<Number> secndNegEval = this->evaluate( -( _mat.row( rowI ) ), true );
-						if ( secndNegEval.supportValue < -( _vec( rowI ) ) ) {
-							TRACE( "hypro.representations.supportFunctionNew", "fullyOutside" );
-							// the object lies fully outside one of the planes -> return false
-							return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
-						}
-					}
-				} else {
-					// the values are far enough away from each other to make this result a false negative.
-					TRACE( "hypro.representations.supportFunctionNew", "fullyOutside, as " << invDirVal << " >= " << -( _vec( rowI ) ) );
-					// the object lies fully outside one of the planes -> return false
-					return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
-				}
+			if(-invDirVal > _vec( rowI )){
+				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 			}
+			//if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal > _vec( rowI ) ) {
+			//	// exact verification in case the values are close to each other
+			//	if ( carl::AlmostEqual2sComplement( Number( -invDirVal ), planeEvalRes.supportValue, 16 ) ) {
+			//		EvaluationResult<Number> secndPosEval = this->evaluate( _mat.row( rowI ), true );
+			//		if ( secndPosEval.supportValue > _vec( rowI ) ) {
+			//			EvaluationResult<Number> secndNegEval = this->evaluate( -( _mat.row( rowI ) ), true );
+			//			if ( secndNegEval.supportValue < -( _vec( rowI ) ) ) {
+			//				TRACE( "hypro.representations.supportFunctionNew", "fullyOutside" );
+			//				// the object lies fully outside one of the planes -> return false
+			//				//std::cout << "SFN::satisfiesHalfspaces, exact fullyOutside" << std::endl;
+			//				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
+			//			}
+			//		}
+			//	} else {
+			//		// the values are far enough away from each other to make this result a false negative.
+			//		TRACE( "hypro.representations.supportFunctionNew", "fullyOutside, as " << invDirVal << " >= " << -( _vec( rowI ) ) );
+			//		// the object lies fully outside one of the planes -> return false
+			//		//std::cout << "SFN::satisfiesHalfspaces, non exact fullyOutside" << std::endl;
+			//		return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
+			//	}
+			//}
 		}
 	}
 	if ( limitingPlanes.size() < unsigned( _mat.rows() ) ) {
 		if ( limitingPlanes.size() == 0 ) {
 			TRACE( "hypro.representations.supportFunctionNew", " Object will stay the same" );
+			//std::cout << "SFN::satisfiesHalfspaces, full inside since no liming planes" << std::endl;
 			return std::make_pair( CONTAINMENT::FULL, *this );
 		}
 		TRACE( "hypro.representations.supportFunctionNew", " Object will be limited but not empty (" << limitingPlanes.size() << " planes)" );
@@ -630,15 +649,14 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		}
 		assert( limitingPlanes.empty() );
 		TRACE( "hypro.representations.supportFunctionNew", "Intersect with " << planes << ", " << distances );
-		//std::cout << "SFN::satisfiesHalfspaces(), partial 1, limiting planes: \n " << planes << "distances:\n" << distances << std::endl;
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( planes, distances ) );
 	} else {
 		TRACE( "hypro.representations.supportFunctionNew", " Object will be fully limited but not empty" );
 		assert( limitingPlanes.size() == unsigned( _mat.rows() ) );
 		TRACE( "hypro.representations.supportFunctionNew", "Intersect with " << _mat << ", " << _vec );
-		//std::cout << "SFN::satisfiesHalfspaces(), partial 2, Intersect with " << _mat << ", " << _vec << std::endl;
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( _mat, _vec ) );
 	}
+
 }
 
 template <typename Number, typename Converter, typename Setting>

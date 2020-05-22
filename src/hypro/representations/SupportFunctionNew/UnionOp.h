@@ -85,7 +85,7 @@ class UnionOp : public RootGrowNode<Number, Converter, Setting> {
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	//Given two or more result vecs, sum them coefficientwise
+	//Given two or more result vecs, get maximum
 	std::vector<EvaluationResult<Number>> aggregate( std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const override {
 		TRACE( "hypro.representations.supportFunction", ": UNITE, accumulate results." )
 		assert( resultStackBack.size() >= 2 );
@@ -98,9 +98,11 @@ class UnionOp : public RootGrowNode<Number, Converter, Setting> {
 				} else if ( ( *resIt )[resultId].errorCode == SOLUTION::INFTY ) {
 					( *resIt )[resultId].supportValue = 1;
 					accumulatedResult[resultId] = ( *resIt )[resultId];
+					//std::cout << "UnionOp::aggregate, entry was infty" << std::endl;					
 				} else {
 					assert( ( *resIt )[resultId].errorCode == SOLUTION::FEAS );
 					accumulatedResult[resultId] = ( *resIt )[resultId] > accumulatedResult[resultId] ? ( *resIt )[resultId] : accumulatedResult[resultId];
+					//std::cout << "UnionOp::aggregate, after choosing mas between " << accumulatedResult[resultId] << " and  " << ( *resIt )[resultId] << " r is:" << accumulatedResult[resultId] << std::endl;	
 				}
 			}
 		}

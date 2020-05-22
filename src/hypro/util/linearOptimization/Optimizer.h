@@ -51,10 +51,10 @@ class Optimizer {
 	vector_t<Number> mConstraintVector;
 
 	mutable bool mConsistencyChecked = false;
-	mutable SOLUTION mLastConsistencyAnswer;
+	mutable SOLUTION mLastConsistencyAnswer = SOLUTION::UNKNOWN;
 	static bool warnInexact;
 	bool maximize = true;
-	std::vector<carl::Relation> mRelationSymbols;
+	mutable std::vector<carl::Relation> mRelationSymbols;
 
 	// dependent members, all mutable
 #ifdef HYPRO_USE_SMTRAT
@@ -78,8 +78,8 @@ class Optimizer {
 
   public:
 	/**
-		 * @brief      Default constructor.
-		 */
+	 * @brief      Default constructor.
+	 */
 	explicit Optimizer( bool max = true )
 		: mConstraintMatrix()
 		, mConstraintVector()
@@ -142,6 +142,10 @@ class Optimizer {
 
 	void cleanContexts();
 
+#ifndef NDEBUG
+	inline SOLUTION getLastConsistencyAnswer() const { return mLastConsistencyAnswer; }
+	inline bool getConsistencyChecked() const { return mConsistencyChecked; }
+#endif
 #ifdef HYPRO_USE_GLPK
 	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
 		return mGlpkContexts;
@@ -170,9 +174,9 @@ class Optimizer {
 	}
 
 	/**
-		 * @brief      Comparison operator.
+		 * @brief      Copy Assign operator.
 		 * @param[in]  orig  The right-hand-side object.
-		 * @return     True, if both problem instances are equal, false otherwise.
+		 * @return     A reference to the the current object with the values of orig.
 		 */
 	Optimizer<Number>& operator=( const Optimizer<Number>& orig );
 

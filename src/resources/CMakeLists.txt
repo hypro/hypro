@@ -45,6 +45,10 @@ if(NOT UUID_FOUND)
 	message(SEND_ERROR "Package uuid-dev required to build antlr.")
 endif()
 
+if(HYPRO_MATLAB_BINDINGS)
+	include(matlab.cmake)
+endif()
+
 #include external cmake file
 include(ExternalAntlr4Cpp.cmake)
 

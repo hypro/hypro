@@ -5,13 +5,16 @@ namespace hypro {
 template <typename State>
 IFirstSegmentHandler<State>* HandlerFactory<State>::buildFirstSegmentHandler( representation_name name, State* state, size_t index, tNumber timeStep ) {
 	switch ( name ) {
-		case representation_name::difference_bounds: {
-			if ( SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find( state->getLocation() )->second == LOCATIONTYPE::TIMEDLOC ) {
-				if ( SettingsProvider<State>::getInstance().isFullTimed() ) {
-					return new timedElapseFirstSegmentHandler<State>( state, index, timeStep );
-				}
-			}
-			return new timedFirstSegmentHandler<State>( state, index, timeStep );
+		//case representation_name::difference_bounds: {
+		//	if ( SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find( state->getLocation() )->second == LOCATIONTYPE::TIMEDLOC ) {
+		//		if ( SettingsProvider<State>::getInstance().isFullTimed() ) {
+		//			return new timedElapseFirstSegmentHandler<State>( state, index, timeStep );
+		//		}
+		//	}
+		//	return new timedFirstSegmentHandler<State>( state, index, timeStep );
+		//}
+		case representation_name::polytope_t: {
+			return new TPolyFirstSegmentHandler<State>( state, index, timeStep );
 		}
 		case representation_name::carl_polytope: {
 			//return new rectangularFirstSegmentHandler<State>( state, index );
@@ -124,30 +127,37 @@ ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler( r
 			if ( tmp.getFlowMatrix() == matrix_t<Number>::Identity( tmp.getFlowMatrix().rows(), tmp.getFlowMatrix().rows() ) && tmp.getTranslation() == vector_t<Number>::Zero( tmp.getFlowMatrix().rows() ) ) {
 				return nullptr;
 			}
-			if ( SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find( state->getLocation() )->second == LOCATIONTYPE::TIMEDLOC ) {
-				if ( SettingsProvider<State>::getInstance().isFullTimed() ) {
-					assert( std::visit( flowTypeVisitor(), flow ) == DynamicType::timed );
-					return new timedElapseTimeEvolutionHandler<State>( state, index, timeStep, timeBound, tmp.getFlowMatrix(), tmp.getTranslation() );
-				}
-				// on mixed contexts a first segment with tick was computed
-				else if ( SettingsProvider<State>::getInstance().useContextSwitch() ) {
-					return new timedElapseAfterTickTimeEvolutionHandler<State>( state, index, timeStep, timeBound, tmp.getFlowMatrix(), tmp.getTranslation() );
-				}
-			}
-			return new timedTickTimeEvolutionHandler<State>( state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation() );
+			//if ( SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find( state->getLocation() )->second == LOCATIONTYPE::TIMEDLOC ) {
+			//	if ( SettingsProvider<State>::getInstance().isFullTimed() ) {
+			//		assert( std::visit( flowTypeVisitor(), flow ) == DynamicType::timed );
+			//		return new timedElapseTimeEvolutionHandler<State>( state, index, timeStep, timeBound, tmp.getFlowMatrix(), tmp.getTranslation() );
+			//	}
+			//	// on mixed contexts a first segment with tick was computed
+			//	else if ( SettingsProvider<State>::getInstance().useContextSwitch() ) {
+			//		return new timedElapseAfterTickTimeEvolutionHandler<State>( state, index, timeStep, timeBound, tmp.getFlowMatrix(), tmp.getTranslation() );
+			//	}
+			//}
+			//return new timedTickTimeEvolutionHandler<State>( state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation() );
 		}
 		case representation_name::carl_polytope: {
 			// TODO!!
 			//return new rectangularTimeEvolutionHandler<State>( state, index, std::get<rectangularFlow<Number>>( flow ) );
 		}
-		default:
-			auto tmp = std::get<affineFlow<typename State::NumberType>>( flow );
-			if ( tmp.getFlowMatrix() == matrix_t<Number>::Identity( tmp.getFlowMatrix().rows(), tmp.getFlowMatrix().rows() ) && tmp.getTranslation() == vector_t<Number>::Zero( tmp.getFlowMatrix().rows() ) ) {
+		case representation_name::polytope_t: {
+			auto tmp = std::get<affineFlow<typename State::NumberType>>(flow);
+			if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
 				return nullptr;
 			}
-			return new ltiTimeEvolutionHandler<State>( state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation() );
+			return new TPolyTimeEvolutionHandler<State>(state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation());
+		}
+		default:
+			auto tmp = std::get<affineFlow<typename State::NumberType>>(flow);
+			if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().rows())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+				return nullptr;
+			}
+			//return new ltiTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());
 	}
-	assert( false && "SHOULD NEVER REACH THIS" );
+	assert(false && "SHOULD NEVER REACH THIS");
 	return nullptr;
 }
 
@@ -199,7 +209,8 @@ IJumpHandler* HandlerFactory<State>::buildDiscreteSuccessorHandler( std::vector<
 																	WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 																	WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
 																	const EventTimingContainer<typename State::NumberType>& timings ) {
-	return new ltiJumpHandler<State>( successorBuffer, task, transition, sPars, localQueue, localCEXQueue, timings );
+	//return new ltiJumpHandler<State>( successorBuffer, task, transition, sPars, localQueue, localCEXQueue, timings );
+	return new ltiJumpHandler<State>();
 }
 
 }  // namespace hypro
