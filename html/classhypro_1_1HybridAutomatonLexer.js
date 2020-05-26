@@ -22,6 +22,7 @@ var classhypro_1_1HybridAutomatonLexer =
     [ "T__18", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a2d324425ba790896e7e18823e8b66cfa", null ],
     [ "T__19", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a57f2197a8436eee6f7c9c994b4c439d4", null ],
     [ "T__20", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a0cabfe0560c488711612c0eb11cde64a", null ],
+    [ "T__21", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a94a1d6a2d4522aa7682e8842e5f6a74c", null ],
     [ "POLY", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a3162b4898051d6825237905ca5846263", null ],
     [ "LINEAR", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4ad906e70b1290e07f22c160eb1d8cd9ad", null ],
     [ "ODE", "classhypro_1_1HybridAutomatonLexer.html#ab7e9174d5f5e4239dd9cbdb50093ebc4a800d2b39e9324255db73148057a32227", null ],

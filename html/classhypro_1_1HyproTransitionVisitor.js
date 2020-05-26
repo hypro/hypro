@@ -7,6 +7,7 @@ var classhypro_1_1HyproTransitionVisitor =
     [ "visitFromto", "classhypro_1_1HyproTransitionVisitor.html#a9914a14aea43a79ed74dc4a0fb1e71ca", null ],
     [ "visitGuard", "classhypro_1_1HyproTransitionVisitor.html#af2f0002f3d40cf7cc0764b9224bf8163", null ],
     [ "visitJumps", "classhypro_1_1HyproTransitionVisitor.html#aba100f62e0dde125b21e990c6df548cc", null ],
+    [ "visitLabels", "classhypro_1_1HyproTransitionVisitor.html#a2bcd48ad6b9a025b8ddbf0748a94222a", null ],
     [ "visitResetfct", "classhypro_1_1HyproTransitionVisitor.html#a4de302574dc9199df21a64831e53ea72", null ],
     [ "visitTransition", "classhypro_1_1HyproTransitionVisitor.html#a6a0761ea13e61879c1e6c6426391a38e", null ],
     [ "HyproHAVisitor< Number >", "classhypro_1_1HyproTransitionVisitor.html#aefad9e7bb2a635a29c9203f6ba7a9e77", null ],

@@ -361,6 +361,7 @@ var hierarchy =
       [ "hypro::HybridAutomatonParser::IntervalexprContext", "classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext.html", null ],
       [ "hypro::HybridAutomatonParser::InvariantsContext", "classhypro_1_1HybridAutomatonParser_1_1InvariantsContext.html", null ],
       [ "hypro::HybridAutomatonParser::JumpsContext", "classhypro_1_1HybridAutomatonParser_1_1JumpsContext.html", null ],
+      [ "hypro::HybridAutomatonParser::LabelsContext", "classhypro_1_1HybridAutomatonParser_1_1LabelsContext.html", null ],
       [ "hypro::HybridAutomatonParser::LbadstateContext", "classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html", null ],
       [ "hypro::HybridAutomatonParser::LocationContext", "classhypro_1_1HybridAutomatonParser_1_1LocationContext.html", null ],
       [ "hypro::HybridAutomatonParser::MaxjumpsContext", "classhypro_1_1HybridAutomatonParser_1_1MaxjumpsContext.html", null ],

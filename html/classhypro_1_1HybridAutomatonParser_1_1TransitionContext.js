@@ -8,6 +8,8 @@ var classhypro_1_1HybridAutomatonParser_1_1TransitionContext =
     [ "getRuleIndex", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a6f639c60dd7c69338d2ad2a00ea4f3cc", null ],
     [ "guard", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a59bc1b2378c0acbfbf7548053fec6be9", null ],
     [ "guard", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a005be255a25ed01a09fa0d5c51344b64", null ],
+    [ "labels", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a6d6e84631218ee0a45ddb0b96f3abefc", null ],
+    [ "labels", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a7f6c6cc60ed058d06d36ca23b6e741e8", null ],
     [ "resetfct", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a39165466f1196af652c8df3a42470d0b", null ],
     [ "resetfct", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#aba1c592cef1ee2639d48d2a0ec4f798b", null ],
     [ "urgent", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html#a2b411c6186bf753c3f88430e56cb0921", null ],

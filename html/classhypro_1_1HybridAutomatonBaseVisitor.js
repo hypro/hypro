@@ -24,6 +24,7 @@ var classhypro_1_1HybridAutomatonBaseVisitor =
     [ "visitIntervalexpr", "classhypro_1_1HybridAutomatonBaseVisitor.html#ad7f2feed70bbf1ffda4c977158ce2a96", null ],
     [ "visitInvariants", "classhypro_1_1HybridAutomatonBaseVisitor.html#ac9d24bc306f1eebb8c6a081369c2106e", null ],
     [ "visitJumps", "classhypro_1_1HybridAutomatonBaseVisitor.html#aa165d3cd8378b8280cfaf54f925a071d", null ],
+    [ "visitLabels", "classhypro_1_1HybridAutomatonBaseVisitor.html#adeba1dd6b6fb032a96e79bbdbbdeb831", null ],
     [ "visitLbadstate", "classhypro_1_1HybridAutomatonBaseVisitor.html#afb24c5413cfd306a61288f52c8a793f4", null ],
     [ "visitLocation", "classhypro_1_1HybridAutomatonBaseVisitor.html#a34a90838ad9fd3106c04ffe96bc2067b", null ],
     [ "visitMaxjumps", "classhypro_1_1HybridAutomatonBaseVisitor.html#a8520e2d6e0bc57ddbd7a4729766058d9", null ],
