@@ -8034,9 +8034,6 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: t = 0.0
-
-                t = 0.0
             }
         }
     }
