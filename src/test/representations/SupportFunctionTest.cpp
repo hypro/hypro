@@ -433,14 +433,19 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 	SupportFunction<double> boxsf2 = SupportFunction<double>( intervals );
 
 	matrix_t<double> constraints = matrix_t<double>( 7, 10 );
-	constraints << 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
-		  0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, -0.8, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0.8,
-		  0, 0;
-
+	constraints << 	0, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+	 				0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 
+					0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 
+					0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 
+					1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+					0, -1, 0, 0, 0, 0, 0, -0.8, 0, 0, 
+					0, 1, 0, 0, 0, 0, 0, 0.8, 0, 0;
 	vector_t<double> constants = vector_t<double>( 7 );
 	constants << -28, 28, 15, 12, 1.46667, 1.53281, -0.919687;
 
+	std::cout << "=== TEST DRAISINE" << std::endl;
 	auto resultPair = boxsf.satisfiesHalfspaces( constraints, constants );
+	std::cout << "=== TEST DRAISINE OVER" << std::endl;
 	EXPECT_TRUE( resultPair.second.empty() );
 	EXPECT_EQ( CONTAINMENT::NO, resultPair.first );
 

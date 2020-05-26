@@ -15,15 +15,15 @@ hybrid reachability
 
     setting
     {
-        fixed steps 1
+        fixed steps 0.0001
         time 1
         remainder estimation 1e-4
         identity precondition
         gnuplot octagon px,py
         cutoff 1e-15
         precision 53
-        output out
-        max jumps 5
+        output GRBX01_MES01
+        max jumps 999
         print on
     }
 
@@ -207,11 +207,9 @@ hybrid reachability
             vx in [0, 0]
             vy in [0, 0]
             t in [0, 0]
-            urgent_clock in [0, 0.0001]
             px in [-0.0168, -0.0166]
             I in [0, 0]
             py in [0.0029, 0.0031]
-            clock_variation in [0.0, 0.0001]
         }
     }
 }

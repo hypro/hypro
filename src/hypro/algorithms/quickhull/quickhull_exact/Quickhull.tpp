@@ -24,12 +24,15 @@ namespace hypro {
         }
 
         buildInitialPolytope();
-        
+
+#ifndef NDEBUG        
         for(Facet& facet : fSpace.facets) {
             TRACE("quickhull", "furthest " << facet.furthestPoint << std::endl << " distance " << facet.furthestPointDistance);
         }
-        
+#endif  
+
         processPoints();
+        
 #ifndef NDEBUG        
         TRACE("quickhull", "ALL facets:" << std::endl << fSpace.printAll());
 #endif
