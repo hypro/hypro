@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="mesh">
+    <param name="Sx" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="Sy" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="Vx" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="Vy" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="n" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="F0" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="T0" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="ms" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="mg" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="Jg" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="R" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="b" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="tancita" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="sincita" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="coscita" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="eps" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="delta" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="impacts1" type="label" local="false" />
+    <param name="impacts2" type="label" local="false" />
+    <param name="hop1" type="label" local="false" />
+    <param name="hop2" type="label" local="false" />
+    <param name="switch1" type="label" local="false" />
+    <param name="switch2" type="label" local="false" />
+    <location id="1" name="out" x="371.0" y="129.0" width="388.0" height="94.0">
+      <invariant>Sy&gt;=2*b*n-b &amp; Sy&lt;=2*b*n+b &amp; Sx&lt;=-b/tancita</invariant>
+      <flow>Vy'==T0*R/Jg &amp; Sy'==Vy &amp; Vx'==F0/ms &amp; Sx'==Vx &amp; n'==0</flow>
+    </location>
+    <location id="2" name="in" x="391.0" y="354.0" width="500.0" height="72.0">
+      <invariant>tancita*Sx+Sy-(2*b*n)&lt;=0 &amp; -tancita*Sx+Sy-(2*b*n)&gt;=0 &amp; Sx&gt;=-b/tancita</invariant>
+      <flow>Vy'==T0*R/Jg &amp; Sy'==Vy &amp; Vx'==F0/ms &amp; Sx'==Vx &amp; n'==0</flow>
+    </location>
+    <transition source="1" target="1">
+      <label>hop1</label>
+      <guard>Sy&gt;=2*b*n+b &amp; Vy&gt;0</guard>
+      <assignment>n:=n+1</assignment>
+      <labelposition x="35.0" y="-27.0" width="146.0" height="66.0" />
+      <middlepoint x="1.0" y="-93.0" />
+    </transition>
+    <transition source="1" target="1">
+      <label>hop2</label>
+      <guard>Sy&lt;=2*b*n-b &amp; Vy&lt;0</guard>
+      <assignment>n:=n-1</assignment>
+      <labelposition x="24.0" y="-35.0" width="136.0" height="72.0" />
+      <middlepoint x="2.0" y="83.0" />
+    </transition>
+    <transition source="1" target="2">
+      <label>switch1</label>
+      <guard>Sx&gt;=-b/tancita &amp; Vx&gt;0</guard>
+      <labelposition x="-108.0" y="-71.0" width="146.0" height="56.0" />
+      <middlepoint x="244.5" y="258.5" />
+    </transition>
+    <transition source="2" target="1">
+      <label>switch2</label>
+      <guard>Sx&lt;=-b/tancita &amp; Vx&lt;=0</guard>
+      <labelposition x="-158.0" y="8.0" width="200.0" height="74.0" />
+      <middlepoint x="274.5" y="254.5" />
+    </transition>
+    <transition source="2" target="2">
+      <label>impacts1</label>
+      <guard>tancita*Sx+Sy-(2*b*n)&gt;=0 &amp;  Vx*sincita+Vy*coscita&gt;0</guard>
+      <assignment>Vx:=((ms-(eps*mg))*Vx*sincita-((eps+1)*mg*Vy*coscita))/(ms+mg)/sincita &amp;
+Vy:=((mg-(eps*ms))*Vy*coscita-((eps+1)*ms*Vx*sincita))/(ms+mg)/coscita</assignment>
+      <labelposition x="-21.0" y="-84.0" width="474.0" height="96.0" />
+      <middlepoint x="0.0" y="-48.0" />
+    </transition>
+    <transition source="2" target="2">
+      <label>impacts2</label>
+      <guard>-tancita*Sx+Sy-(2*b*n)&lt;=0 &amp; Vx*sincita-Vy*coscita&gt;0</guard>
+      <assignment>Vx:=((ms-(eps*mg))*Vx*sincita+((eps+1)*mg*Vy*coscita))/(ms+mg)/sincita &amp;
+Vy:=((mg-(eps*ms))*Vy*coscita+((eps+1)*ms*Vx*sincita))/(ms+mg)/coscita</assignment>
+      <labelposition x="-76.0" y="-5.0" width="476.0" height="82.0" />
+      <middlepoint x="-3.0" y="44.0" />
+    </transition>
+  </component>
+  <component id="time">
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="stoptime" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <location id="1" name="running" x="222.0" y="113.0">
+      <invariant>t&lt;stoptime</invariant>
+      <flow>t'==1</flow>
+    </location>
+  </component>
+  <component id="system">
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="stoptime" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="Sx" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="Sy" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="Vx" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="Vy" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="n" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="F0" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="T0" type="real" local="false" d1="1" d2="1" dynamics="const" controlled="true" />
+    <param name="impacts1" type="label" local="false" />
+    <param name="impacts2" type="label" local="false" />
+    <param name="hop1" type="label" local="false" />
+    <param name="hop2" type="label" local="false" />
+    <param name="switch1" type="label" local="false" />
+    <param name="switch2" type="label" local="false" />
+    <bind component="time" as="time" x="183.0" y="4.0">
+      <map key="t">t</map>
+      <map key="stoptime">stoptime</map>
+    </bind>
+    <bind component="mesh" as="mesh" x="493.0" y="24.0">
+      <map key="Sx">Sx</map>
+      <map key="Sy">Sy</map>
+      <map key="Vx">Vx</map>
+      <map key="Vy">Vy</map>
+      <map key="F0">F0</map>
+      <map key="T0">T0</map>
+      <map key="ms">6.2000</map>
+      <map key="mg">4.1000</map>
+      <map key="Jg">0.0900</map>
+      <map key="R">0.0800</map>
+      <map key="b">0.0100</map>
+      <map key="tancita">0.7265</map>
+      <map key="sincita">0.5878</map>
+      <map key="coscita">0.8090</map>
+      <map key="eps">0.9000</map>
+      <map key="delta">0.0001</map>
+      <map key="impacts1">impacts1</map>
+      <map key="impacts2">impacts2</map>
+      <map key="hop1">hop1</map>
+      <map key="hop2">hop2</map>
+      <map key="switch1">switch1</map>
+      <map key="switch2">switch2</map>
+      <map key="n">n</map>
+    </bind>
+  </component>
+</sspaceex>
+
+
