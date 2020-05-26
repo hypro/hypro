@@ -429,23 +429,45 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 	intervals.emplace_back( carl::Interval<double>( 0.0, 0.0 ) );
 	intervals.emplace_back( carl::Interval<double>( -15.0, 15.0 ) );
 
+	TRACE( "hypro.representations.supportFunction", "Start of test, construction." );
+
 	SupportFunction<double> boxsf = SupportFunction<double>( intervals );
 	SupportFunction<double> boxsf2 = SupportFunction<double>( intervals );
 
-	matrix_t<double> constraints = matrix_t<double>( 7, 10 );
-	constraints << 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0,
-		  0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, -0.8, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0.8,
-		  0, 0;
+	TRACE( "hypro.representations.supportFunction", "Start of test, construction done." );
 
-	vector_t<double> constants = vector_t<double>( 7 );
-	constants << -28, 28, 15, 12, 1.46667, 1.53281, -0.919687;
+	// clang-format off
+	matrix_t<double> constraints = matrix_t<double>( 5, 10 );
+	constraints << 0, 0, 0, 0, 0, 0, 0, -1, 0, 0,
+	               0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+				   //0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+				   //0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				   1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+				   0, -1, 0, 0, 0, 0, 0, -0.8, 0, 0,
+				   0, 1, 0, 0, 0, 0, 0, 0.8, 0, 0;
+	// clang-format on
+
+	vector_t<double> constants = vector_t<double>( 5 );
+	constants << -28, 28,
+		  // 15, 12,
+		  1.46667, 1.53281, -0.919687;
+
+	TRACE( "hypro.representations.supportFunction", "First intersection" );
 
 	auto resultPair = boxsf.satisfiesHalfspaces( constraints, constants );
 	EXPECT_TRUE( resultPair.second.empty() );
 	EXPECT_EQ( CONTAINMENT::NO, resultPair.first );
 
+	TRACE( "hypro.representations.supportFunction", "First intersection done." );
+
 	auto result = boxsf2.intersectHalfspaces( constraints, constants );
 	EXPECT_TRUE( result.empty() );
+
+	// validation using boxes
+	Box<double> validationBox{intervals};
+	auto [containment, resultBox] = validationBox.satisfiesHalfspaces( constraints, constants );
+	EXPECT_TRUE( resultBox.empty() );
+	EXPECT_EQ( CONTAINMENT::NO, containment );
 }
 
 TYPED_TEST( SupportFunctionTest, intersectHalfspaces ) {
