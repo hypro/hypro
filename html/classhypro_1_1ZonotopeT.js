@@ -23,6 +23,7 @@ var classhypro_1_1ZonotopeT =
     [ "generators", "classhypro_1_1ZonotopeT.html#aec30497b9cf4a3dcd954d6d3265bd5e9", null ],
     [ "intersect", "classhypro_1_1ZonotopeT.html#a5110d3e513ceb7be61a53f89d48e34d3", null ],
     [ "intersect", "classhypro_1_1ZonotopeT.html#a659ce0e40f43f92bee549f706163e0c9", null ],
+    [ "intersect", "classhypro_1_1ZonotopeT.html#a11194be053f2687261ceba76d0ae0803", null ],
     [ "intersect", "classhypro_1_1ZonotopeT.html#ab9aefdf4c910a414bd75b9abb01d820b", null ],
     [ "intersect", "classhypro_1_1ZonotopeT.html#a4d79b64345d3d23f6147d228ef6eb31e", null ],
     [ "intersectHalfspace", "classhypro_1_1ZonotopeT.html#a215742fc4c4c97359adcfa4aa1f89732", null ],

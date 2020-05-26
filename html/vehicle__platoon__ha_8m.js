@@ -1,0 +1,26 @@
+var vehicle__platoon__ha_8m =
+[
+    [ "equation:", "vehicle__platoon__ha_8m.html#a51fd73b3bab0bf2a80d617a2a8ab368f", null ],
+    [ "resetA", "vehicle__platoon__ha_8m.html#a7bd93b2a56eaf002b85def5800f4119f", null ],
+    [ "__pad142__", "vehicle__platoon__ha_8m.html#a207e53c8d1db675b50dd6579bb7a4a1a", null ],
+    [ "__pad143__", "vehicle__platoon__ha_8m.html#a815e4affae5c6eed3a6367d193529240", null ],
+    [ "__pad144__", "vehicle__platoon__ha_8m.html#a45fed4bb0916746696f2223c25f96b0d", null ],
+    [ "__pad145__", "vehicle__platoon__ha_8m.html#a901b4fdfde53db46b13e86f74a9b5dd1", null ],
+    [ "__pad146__", "vehicle__platoon__ha_8m.html#afe155be2d1275733f03907308df8953d", null ],
+    [ "__pad147__", "vehicle__platoon__ha_8m.html#a5bfe151fdda78eee8b68865583b69bbb", null ],
+    [ "An", "vehicle__platoon__ha_8m.html#a3f114ae99d4e6cf13658a5d6a29727eb", null ],
+    [ "dynamics", "vehicle__platoon__ha_8m.html#a47655072b1000abafc6bc72ce167f90e", null ],
+    [ "dynB", "vehicle__platoon__ha_8m.html#a4a4fcaf768d113f3b38ff70a91623bad", null ],
+    [ "dync", "vehicle__platoon__ha_8m.html#a69e34c3a0f2337d08bd2089e1cc75e32", null ],
+    [ "guard", "vehicle__platoon__ha_8m.html#a83cc13fcba770c23cf4ce55e7562a631", null ],
+    [ "guardb", "vehicle__platoon__ha_8m.html#a2dc5cc0e1bb69e454f881f7f1a7246e5", null ],
+    [ "guardOpt", "vehicle__platoon__ha_8m.html#adad8672ca56671a52eb7c249f17cac01", null ],
+    [ "HA", "vehicle__platoon__ha_8m.html#a25adfe55fd639fcfd1c09e57ccddbd33", null ],
+    [ "inv", "vehicle__platoon__ha_8m.html#a7bce0f4eb9b673e284663cd25776a19b", null ],
+    [ "invb", "vehicle__platoon__ha_8m.html#a47e95962542644e878316e659f6e035a", null ],
+    [ "invOpt", "vehicle__platoon__ha_8m.html#ab74b640bf03c51e1eee3c54611c3a40b", null ],
+    [ "loc", "vehicle__platoon__ha_8m.html#aeee9f371db14fda0de35d16324a167df", null ],
+    [ "reset", "vehicle__platoon__ha_8m.html#a48bcfbb87c0af0d5390626d1ab65ab64", null ],
+    [ "resetb", "vehicle__platoon__ha_8m.html#a251db3eabcaef18e7b0e800158c5fcab", null ],
+    [ "trans", "vehicle__platoon__ha_8m.html#ad6027d985db20cf51f811ba799277c5c", null ]
+];

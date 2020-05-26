@@ -35,12 +35,7 @@ var dir_ed1721d58ff6a73f1e36256aaa069f62 =
       [ "Dummy", "structhypro_1_1Dummy.html", "structhypro_1_1Dummy" ],
       [ "Parameters", "structhypro_1_1Parameters.html", "structhypro_1_1Parameters" ]
     ] ],
-    [ "SupportFunctionNewSetting.h", "SupportFunctionNewSetting_8h.html", [
-      [ "SupportFunctionNewDefault", "structhypro_1_1SupportFunctionNewDefault.html", null ],
-      [ "SupportFunctionNewMorePrecision", "structhypro_1_1SupportFunctionNewMorePrecision.html", null ],
-      [ "SupportFunctionNewNoReduction", "structhypro_1_1SupportFunctionNewNoReduction.html", null ],
-      [ "SupportFunctionNewLeGuernic", "structhypro_1_1SupportFunctionNewLeGuernic.html", null ]
-    ] ],
+    [ "SupportFunctionNewSetting.h", "SupportFunctionNewSetting_8h.html", "SupportFunctionNewSetting_8h" ],
     [ "TrafoOp.h", "TrafoOp_8h.html", [
       [ "RootGrowNode", "classhypro_1_1RootGrowNode.html", "classhypro_1_1RootGrowNode" ],
       [ "TrafoData", "structhypro_1_1TrafoData.html", "structhypro_1_1TrafoData" ],

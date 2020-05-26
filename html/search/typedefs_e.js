@@ -8,6 +8,6 @@ var searchData=
   ['pointvector',['pointVector',['../classhypro_1_1Facet.html#ae08237c186f0e0c1fc6f8783969fa61a',1,'hypro::Facet::pointVector()'],['../classhypro_1_1VPolytopeT.html#af7eaddfaa395b22218720b263ae27611',1,'hypro::VPolytopeT::pointVector()']]],
   ['pointvector_5ft',['pointVector_t',['../classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html#a38125b5d0832c864246cec28615ca3ca',1,'hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;']]],
   ['polyt',['PolyT',['../namespacehypro.html#a8d83c8b5f3242a9cd21807082625cfff',1,'hypro']]],
-  ['polytope',['Polytope',['../classhypro_1_1Converter.html#a8771cf87f9806fbf2f66795a9bed2382',1,'hypro::Converter::Polytope()'],['../namespacehypro.html#aa6af5ae15627e25d854eaacb1f4f96bf',1,'hypro::Polytope()']]],
+  ['polytope',['Polytope',['../classhypro_1_1Converter.html#a3de72a7f6c5d71c0e3da384b1a840f8b',1,'hypro::Converter::Polytope()'],['../namespacehypro.html#aa6af5ae15627e25d854eaacb1f4f96bf',1,'hypro::Polytope()']]],
   ['pplcarlmap',['pplCarlMap',['../classhypro_1_1VariablePool.html#a950937316f5880949ce00f4dede2056b',1,'hypro::VariablePool']]]
 ];

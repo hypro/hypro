@@ -3,7 +3,6 @@ var searchData=
   ['gbadstatecontext',['GbadstateContext',['../classhypro_1_1HybridAutomatonParser_1_1GbadstateContext.html',1,'hypro::HybridAutomatonParser']]],
   ['gen_5fseq',['gen_seq',['../structhypro_1_1detail_1_1gen__seq.html',1,'hypro::detail']]],
   ['gen_5fseq_3c_200_2c_20is_2e_2e_2e_20_3e',['gen_seq&lt; 0, Is... &gt;',['../structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html',1,'hypro::detail']]],
-  ['generalizedstardefault',['GeneralizedStarDefault',['../structhypro_1_1GeneralizedStarDefault.html',1,'hypro']]],
   ['generalizedstart',['GeneralizedStarT',['../classhypro_1_1GeneralizedStarT.html',1,'hypro']]],
   ['genericaffinetransformationvisitor',['genericAffineTransformationVisitor',['../classhypro_1_1genericAffineTransformationVisitor.html',1,'hypro']]],
   ['genericassignintervalsvisitor',['genericAssignIntervalsVisitor',['../classhypro_1_1genericAssignIntervalsVisitor.html',1,'hypro']]],

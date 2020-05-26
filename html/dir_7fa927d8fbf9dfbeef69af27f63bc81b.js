@@ -8,11 +8,13 @@ var dir_7fa927d8fbf9dfbeef69af27f63bc81b =
     [ "GeneralizedStar", "dir_7a672da45aa9da1947d7ca7dad2e8885.html", "dir_7a672da45aa9da1947d7ca7dad2e8885" ],
     [ "helperMethods", "dir_347b12423904bd932c4239ca1a522dfa.html", "dir_347b12423904bd932c4239ca1a522dfa" ],
     [ "OrthogonalPolyhedron", "dir_c3a99445e85233736dff89b095acd8fe.html", "dir_c3a99445e85233736dff89b095acd8fe" ],
+    [ "Orthoplex", "dir_e9faec396abe072602619481b2929e50.html", "dir_e9faec396abe072602619481b2929e50" ],
     [ "Polytope", "dir_dbbb4b37ecf24276c0f25796d6496cf7.html", "dir_dbbb4b37ecf24276c0f25796d6496cf7" ],
     [ "Polytopes", "dir_ad938787f25f17484dcf7b42a899a1a5.html", "dir_ad938787f25f17484dcf7b42a899a1a5" ],
     [ "SupportFunction", "dir_5cc8785239517cfd59e944398d6252f9.html", "dir_5cc8785239517cfd59e944398d6252f9" ],
     [ "SupportFunctionNew", "dir_ed1721d58ff6a73f1e36256aaa069f62.html", "dir_ed1721d58ff6a73f1e36256aaa069f62" ],
     [ "TaylorModel", "dir_f299c51bddf4791e0a4b318d117b72c2.html", "dir_f299c51bddf4791e0a4b318d117b72c2" ],
+    [ "TemplatePolyhedron", "dir_de6b33db193c266697157d1795ff13ca.html", "dir_de6b33db193c266697157d1795ff13ca" ],
     [ "Zonotope", "dir_97de49a5bc6f4f4b12a8405ff97bd656.html", "dir_97de49a5bc6f4f4b12a8405ff97bd656" ],
     [ "GeometricObjectBase.h", "GeometricObjectBase_8h.html", [
       [ "Point", "classhypro_1_1Point.html", "classhypro_1_1Point" ],

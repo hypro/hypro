@@ -16,6 +16,9 @@ var dir_1d177bd438e269a304e1f07d1a6d36f2 =
     [ "RectangularContext.h", "RectangularContext_8h.html", [
       [ "RectangularContext", "classhypro_1_1RectangularContext.html", "classhypro_1_1RectangularContext" ]
     ] ],
+    [ "TemplatePolyhedronContext.h", "TemplatePolyhedronContext_8h.html", [
+      [ "TemplatePolyhedronContext", "classhypro_1_1TemplatePolyhedronContext.html", "classhypro_1_1TemplatePolyhedronContext" ]
+    ] ],
     [ "TimedContext.h", "TimedContext_8h.html", [
       [ "TimedContext", "classhypro_1_1TimedContext.html", "classhypro_1_1TimedContext" ]
     ] ]

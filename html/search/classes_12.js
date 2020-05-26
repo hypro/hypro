@@ -28,7 +28,6 @@ var searchData=
   ['sumop',['SumOp',['../classhypro_1_1SumOp.html',1,'hypro']]],
   ['supkindcontext',['SupKindContext',['../classhypro_1_1HybridSystemParser_1_1SupKindContext.html',1,'hypro::HybridSystemParser']]],
   ['supportfunctioncontent',['SupportFunctionContent',['../classhypro_1_1SupportFunctionContent.html',1,'hypro']]],
-  ['supportfunctionnewdefault',['SupportFunctionNewDefault',['../structhypro_1_1SupportFunctionNewDefault.html',1,'hypro']]],
   ['supportfunctionnewleguernic',['SupportFunctionNewLeGuernic',['../structhypro_1_1SupportFunctionNewLeGuernic.html',1,'hypro']]],
   ['supportfunctionnewmoreprecision',['SupportFunctionNewMorePrecision',['../structhypro_1_1SupportFunctionNewMorePrecision.html',1,'hypro']]],
   ['supportfunctionnewnoreduction',['SupportFunctionNewNoReduction',['../structhypro_1_1SupportFunctionNewNoReduction.html',1,'hypro']]],

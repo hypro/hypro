@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['ellipsoid',['Ellipsoid',['../classhypro_1_1Converter.html#ac41c2231b430ff6251436978f12aeed8',1,'hypro::Converter::Ellipsoid()'],['../namespacehypro.html#a59e69be0f51280c4b18721ea43acdc78',1,'hypro::Ellipsoid()']]],
+  ['ellipsoid',['Ellipsoid',['../classhypro_1_1Converter.html#a782e84d160d8571b3d56bbf371686832',1,'hypro::Converter::Ellipsoid()'],['../namespacehypro.html#a59e69be0f51280c4b18721ea43acdc78',1,'hypro::Ellipsoid()']]],
   ['enable_5fif',['enable_if',['../namespacehypro.html#ad6738fafec718bbae54ac01aa448a55b',1,'hypro']]],
   ['enableifexact',['EnableIfExact',['../namespacehypro.html#abe16eeb9548211d80334a984d958be58',1,'hypro']]],
   ['enableiffloatingpoint',['EnableIfFloatingpoint',['../namespacehypro.html#a728211bcb9a33544295795a90e211466',1,'hypro']]],

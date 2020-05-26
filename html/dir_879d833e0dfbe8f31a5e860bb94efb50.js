@@ -3,6 +3,7 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     [ "adaptions_eigen", "dir_24cbef118a2511338dada52e6e2bd544.html", "dir_24cbef118a2511338dada52e6e2bd544" ],
     [ "linearOptimization", "dir_3100e148cb0b6b745355fdee31bcb5c6.html", "dir_3100e148cb0b6b745355fdee31bcb5c6" ],
     [ "logging", "dir_e44977c2db40c89968aef6d4236fe8a8.html", "dir_e44977c2db40c89968aef6d4236fe8a8" ],
+    [ "matlab", "dir_2f47bff1d2a403c3b4f359a4d573c7a6.html", "dir_2f47bff1d2a403c3b4f359a4d573c7a6" ],
     [ "multithreading", "dir_7ca2da3d0bdc47450f74c631953a3473.html", "dir_7ca2da3d0bdc47450f74c631953a3473" ],
     [ "plotting", "dir_88175a59a487d6ac58f6c5607ce909d5.html", "dir_88175a59a487d6ac58f6c5607ce909d5" ],
     [ "sampling", "dir_d93f25bb6eeed2fcb95055e30f52c726.html", "dir_d93f25bb6eeed2fcb95055e30f52c726" ],

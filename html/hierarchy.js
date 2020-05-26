@@ -43,6 +43,7 @@ var hierarchy =
     [ "hypro::qe::CellTreeNode< Data >", "structhypro_1_1qe_1_1CellTreeNode.html", null ],
     [ "hypro::ChildTimingInformation< N >", "structhypro_1_1ChildTimingInformation.html", null ],
     [ "hypro::ChildTimingInformation< Number >", "structhypro_1_1ChildTimingInformation.html", null ],
+    [ "ClassHandle< T >", "classClassHandle.html", null ],
     [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
     [ "hypro::concat_i< List, Lists >", "structhypro_1_1concat__i.html", null ],
     [ "hypro::concat_i< TypeList< Ts... >, TypeList< Us... > >", "structhypro_1_1concat__i_3_01TypeList_3_01Ts_8_8_8_01_4_00_01TypeList_3_01Us_8_8_8_01_4_01_4.html", null ],
@@ -108,7 +109,6 @@ var hierarchy =
     [ "hypro::FourierMotzkinQE< Number >", "classhypro_1_1FourierMotzkinQE.html", null ],
     [ "Functor", "structFunctor.html", null ],
     [ "hypro::detail::gen_seq< N, Is >", "structhypro_1_1detail_1_1gen__seq.html", null ],
-    [ "hypro::GeneralizedStarDefault", "structhypro_1_1GeneralizedStarDefault.html", null ],
     [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
     [ "hypro::genericAssignIntervalsVisitor< T, N >", "classhypro_1_1genericAssignIntervalsVisitor.html", null ],
     [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
@@ -178,6 +178,7 @@ var hierarchy =
     [ "hypro::HybridAutomatonComp< Number >", "classhypro_1_1HybridAutomatonComp.html", null ],
     [ "hypro::IContext", "classhypro_1_1IContext.html", [
       [ "hypro::LTIContext< State >", "classhypro_1_1LTIContext.html", [
+        [ "hypro::TemplatePolyhedronContext< State >", "classhypro_1_1TemplatePolyhedronContext.html", null ],
         [ "hypro::TimedContext< State >", "classhypro_1_1TimedContext.html", null ]
       ] ],
       [ "hypro::RectangularContext< State >", "classhypro_1_1RectangularContext.html", null ]
@@ -187,7 +188,8 @@ var hierarchy =
         [ "hypro::rectangularBadStateHandler< State >", "classhypro_1_1rectangularBadStateHandler.html", null ]
       ] ],
       [ "hypro::IFirstSegmentHandler< State >", "classhypro_1_1IFirstSegmentHandler.html", [
-        [ "hypro::rectangularFirstSegmentHandler< State >", "classhypro_1_1rectangularFirstSegmentHandler.html", null ]
+        [ "hypro::rectangularFirstSegmentHandler< State >", "classhypro_1_1rectangularFirstSegmentHandler.html", null ],
+        [ "hypro::TPolyFirstSegmentHandler< State >", "classhypro_1_1TPolyFirstSegmentHandler.html", null ]
       ] ],
       [ "hypro::IGuardHandler< State >", "classhypro_1_1IGuardHandler.html", [
         [ "hypro::rectangularGuardHandler< State >", "classhypro_1_1rectangularGuardHandler.html", null ]
@@ -205,7 +207,8 @@ var hierarchy =
       ] ],
       [ "hypro::ITimeEvolutionHandler", "classhypro_1_1ITimeEvolutionHandler.html", [
         [ "hypro::discreteTimeEvolutionHandler", "classhypro_1_1discreteTimeEvolutionHandler.html", null ],
-        [ "hypro::rectangularTimeEvolutionHandler< State >", "classhypro_1_1rectangularTimeEvolutionHandler.html", null ]
+        [ "hypro::rectangularTimeEvolutionHandler< State >", "classhypro_1_1rectangularTimeEvolutionHandler.html", null ],
+        [ "hypro::TPolyTimeEvolutionHandler< State >", "classhypro_1_1TPolyTimeEvolutionHandler.html", null ]
       ] ]
     ] ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", null ],
@@ -275,12 +278,48 @@ var hierarchy =
     [ "better_enums::map_compare< T >", "structbetter__enums_1_1map__compare.html", null ],
     [ "better_enums::map_compare< const char * >", "structbetter__enums_1_1map__compare_3_01const_01char_01_5_01_4.html", null ],
     [ "better_enums::map_compare< const wchar_t * >", "structbetter__enums_1_1map__compare_3_01const_01wchar__t_01_5_01_4.html", null ],
+    [ "MCondition", "classMCondition.html", null ],
+    [ "MFlow< T >", "classMFlow.html", null ],
+    [ "MFlow< hypro::affineFlow< double > >", "classMFlow.html", [
+      [ "MAffineFlow", "classMAffineFlow.html", null ]
+    ] ],
+    [ "MFlow< hypro::linearFlow< double > >", "classMFlow.html", [
+      [ "MLinearFlow", "classMLinearFlow.html", null ]
+    ] ],
+    [ "MGeometricObject< T >", "classMGeometricObject.html", null ],
+    [ "MGeometricObject< hypro::Box< double > >", "classMGeometricObject.html", [
+      [ "MBox", "classMBox.html", null ]
+    ] ],
+    [ "MGeometricObject< hypro::ConstraintSet< double > >", "classMGeometricObject.html", [
+      [ "MConstraintSet", "classMConstraintSet.html", null ]
+    ] ],
+    [ "MGeometricObject< hypro::Ellipsoid< double > >", "classMGeometricObject.html", [
+      [ "MEllipsoid", "classMEllipsoid.html", null ]
+    ] ],
+    [ "MGeometricObject< hypro::SupportFunction< double > >", "classMGeometricObject.html", [
+      [ "MSupportFunction", "classMSupportFunction.html", null ]
+    ] ],
+    [ "MGeometricObject< hypro::Zonotope< double > >", "classMGeometricObject.html", [
+      [ "MZonotope", "classMZonotope.html", null ]
+    ] ],
+    [ "MHybridAutomaton", "classMHybridAutomaton.html", null ],
+    [ "MLabel", "classMLabel.html", null ],
+    [ "MLocation", "classMLocation.html", null ],
+    [ "MReach", "classMReach.html", null ],
+    [ "MReset", "classMReset.html", null ],
+    [ "MState", "classMState.html", null ],
+    [ "MTransition", "classMTransition.html", null ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::nodeUpdater< State >", "structhypro_1_1nodeUpdater.html", null ],
     [ "hypro::NoneAssignment", "structhypro_1_1NoneAssignment.html", null ],
     [ "hypro::detail::nth_element_impl< I, T, Ts >", "structhypro_1_1detail_1_1nth__element__impl.html", null ],
     [ "hypro::detail::nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01T_00_01Ts_8_8_8_01_4.html", null ],
     [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "object", null, [
+      [ "run_hydra.Model", "classrun__hydra_1_1Model.html", null ],
+      [ "run_hydra.Results", "classrun__hydra_1_1Results.html", null ]
+    ] ],
+    [ "ObjectHandle", "classObjectHandle.html", null ],
     [ "hypro::statistics::OperationCounter", "structhypro_1_1statistics_1_1OperationCounter.html", [
       [ "hypro::statistics::AtomicOperationCounter", "structhypro_1_1statistics_1_1AtomicOperationCounter.html", null ]
     ] ],
@@ -288,6 +327,7 @@ var hierarchy =
     [ "better_enums::optional< T >", "structbetter__enums_1_1optional.html", null ],
     [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
     [ "hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
+    [ "hypro::OrthoplexDefault", "structhypro_1_1OrthoplexDefault.html", null ],
     [ "pair", null, [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >::DBMEntry", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html", null ]
     ] ],
@@ -506,11 +546,7 @@ var hierarchy =
     [ "hypro::QuickhullAlgorithm< Number, Euclidian, typename >", "classhypro_1_1QuickhullAlgorithm.html", null ],
     [ "hypro::QuickhullAlgorithm< Number, Euclidian, EnableIfExact< Number > >", "classhypro_1_1QuickhullAlgorithm_3_01Number_00_01Euclidian_00_01EnableIfExact_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Range< Number >", "classhypro_1_1Range.html", null ],
-    [ "hypro::reachability::Reach< Number, ReacherSettings, State >", "classhypro_1_1reachability_1_1Reach.html", null ],
     [ "hypro::ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", null ],
-    [ "hypro::reachability::ReachSettings", "structhypro_1_1reachability_1_1ReachSettings.html", [
-      [ "hypro::reachability::ReachQuiet", "structhypro_1_1reachability_1_1ReachQuiet.html", null ]
-    ] ],
     [ "hypro::ReachTree< State >", "classhypro_1_1ReachTree.html", null ],
     [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangularFlow.html", null ],
     [ "hypro::rectangularFlow< N >", "classhypro_1_1rectangularFlow.html", null ],
@@ -567,7 +603,6 @@ var hierarchy =
     [ "hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1SupportFunctionContent.html", [
       [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ]
     ] ],
-    [ "hypro::SupportFunctionNewDefault", "structhypro_1_1SupportFunctionNewDefault.html", null ],
     [ "hypro::SupportFunctionNewLeGuernic", "structhypro_1_1SupportFunctionNewLeGuernic.html", null ],
     [ "hypro::SupportFunctionNewMorePrecision", "structhypro_1_1SupportFunctionNewMorePrecision.html", null ],
     [ "hypro::SupportFunctionNewNoReduction", "structhypro_1_1SupportFunctionNewNoReduction.html", null ],
@@ -582,6 +617,9 @@ var hierarchy =
     [ "hypro::TaylorModel< Number >", "classhypro_1_1TaylorModel.html", null ],
     [ "hypro::TaylorModelVec< Number >", "classhypro_1_1TaylorModelVec.html", null ],
     [ "hypro::TBacktrackingInfo< Number >", "structhypro_1_1TBacktrackingInfo.html", null ],
+    [ "hypro::TemplatePolyhedronDefault", "structhypro_1_1TemplatePolyhedronDefault.html", [
+      [ "hypro::OctagonShape", "structhypro_1_1OctagonShape.html", null ]
+    ] ],
     [ "hypro::TimingAggregate< Number >", "classhypro_1_1TimingAggregate.html", null ],
     [ "hypro::TimingAggregate< N >", "classhypro_1_1TimingAggregate.html", null ],
     [ "hypro::TPathElement< Number, tNumber >", "structhypro_1_1TPathElement.html", null ],
@@ -620,7 +658,6 @@ var hierarchy =
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< State > > >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< TaskType >", "classhypro_1_1WorkQueueT.html", null ],
-    [ "hypro::WorkQueueT< TaskTypePtr >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< Workable >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ]
 ];

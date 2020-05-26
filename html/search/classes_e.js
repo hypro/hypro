@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['objecthandle',['ObjectHandle',['../classObjectHandle.html',1,'']]],
+  ['octagonshape',['OctagonShape',['../structhypro_1_1OctagonShape.html',1,'hypro']]],
   ['operationcounter',['OperationCounter',['../structhypro_1_1statistics_1_1OperationCounter.html',1,'hypro::statistics']]],
   ['optautdeclscontext',['OptAutDeclsContext',['../classhypro_1_1HybridSystemParser_1_1OptAutDeclsContext.html',1,'hypro::HybridSystemParser']]],
   ['optcontrollabilitycontext',['OptControllabilityContext',['../classhypro_1_1HybridSystemParser_1_1OptControllabilityContext.html',1,'hypro::HybridSystemParser']]],
@@ -27,5 +29,6 @@ var searchData=
   ['optsvgineventelifscontext',['OptSvgInEventElifsContext',['../classhypro_1_1HybridSystemParser_1_1OptSvgInEventElifsContext.html',1,'hypro::HybridSystemParser']]],
   ['orexpressioncontext',['OrExpressionContext',['../classhypro_1_1HybridSystemParser_1_1OrExpressionContext.html',1,'hypro::HybridSystemParser']]],
   ['orthogonalpolyhedron',['OrthogonalPolyhedron',['../classhypro_1_1OrthogonalPolyhedron.html',1,'hypro']]],
-  ['orthogonalpolyhedront',['OrthogonalPolyhedronT',['../classhypro_1_1OrthogonalPolyhedronT.html',1,'hypro']]]
+  ['orthogonalpolyhedront',['OrthogonalPolyhedronT',['../classhypro_1_1OrthogonalPolyhedronT.html',1,'hypro']]],
+  ['orthoplexdefault',['OrthoplexDefault',['../structhypro_1_1OrthoplexDefault.html',1,'hypro']]]
 ];

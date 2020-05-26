@@ -7,10 +7,14 @@ var searchData=
   ['incomplete_5fexample_5ffacetenumeration_2ecpp',['INCOMPLETE_example_facetEnumeration.cpp',['../INCOMPLETE__example__facetEnumeration_8cpp.html',1,'']]],
   ['installation_2emd',['installation.md',['../installation_8md.html',1,'']]],
   ['intersecthalfspaceop_2eh',['IntersectHalfspaceOp.h',['../IntersectHalfspaceOp_8h.html',1,'']]],
+  ['intersectinvariant_5fexperiments_2em',['intersectInvariant_experiments.m',['../intersectInvariant__experiments_8m.html',1,'']]],
+  ['intersectinvariant_5fexperiments_5fha_2em',['intersectInvariant_experiments_ha.m',['../intersectInvariant__experiments__ha_8m.html',1,'']]],
   ['intersectop_2eh',['IntersectOp.h',['../IntersectOp_8h.html',1,'']]],
   ['intervalmethods_2ecpp',['intervalMethods.cpp',['../intervalMethods_8cpp.html',1,'']]],
   ['intervalmethods_2eh',['intervalMethods.h',['../intervalMethods_8h.html',1,'']]],
   ['invarianthandlers_2eh',['InvariantHandlers.h',['../InvariantHandlers_8h.html',1,'']]],
   ['isbox_2eh',['isBox.h',['../isBox_8h.html',1,'']]],
+  ['iscelloftype_2em',['iscelloftype.m',['../iscelloftype_8m.html',1,'']]],
+  ['isrepresentation_2em',['isRepresentation.m',['../isRepresentation_8m.html',1,'']]],
   ['iworker_2eh',['IWorker.h',['../IWorker_8h.html',1,'']]]
 ];

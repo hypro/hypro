@@ -60,6 +60,7 @@ var classhypro_1_1HPolytopeT =
     [ "linearTransformation", "classhypro_1_1HPolytopeT.html#a9f735d35cdb9ebda948ef1b754931212", null ],
     [ "matrix", "classhypro_1_1HPolytopeT.html#a792108927c587c5e43c98b456c158d22", null ],
     [ "minkowskiSum", "classhypro_1_1HPolytopeT.html#a0dd8fa027162de65280b62842e7755cd", null ],
+    [ "multiEvaluate", "classhypro_1_1HPolytopeT.html#ab7aff54319dafcaea95927ddcc3b21e5", null ],
     [ "multiEvaluate", "classhypro_1_1HPolytopeT.html#ad238f49c40efa2a2b7f5fb119a92d6f3", null ],
     [ "operator=", "classhypro_1_1HPolytopeT.html#ae628d5682b33acacffdb5c07605f1cc3", null ],
     [ "operator==", "classhypro_1_1HPolytopeT.html#ac52811596b91c4b9cc5f1c4b053858a5", null ],

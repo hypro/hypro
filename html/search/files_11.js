@@ -12,6 +12,7 @@ var searchData=
   ['simplexsolver_2eh',['SimplexSolver.h',['../SimplexSolver_8h.html',1,'']]],
   ['spinlock_2ecpp',['Spinlock.cpp',['../Spinlock_8cpp.html',1,'']]],
   ['spinlock_2eh',['Spinlock.h',['../Spinlock_8h.html',1,'']]],
+  ['sr_5fparam_5fexperiments_2em',['sr_param_experiments.m',['../sr__param__experiments_8m.html',1,'']]],
   ['state_2eh',['State.h',['../State_8h.html',1,'']]],
   ['statesets_2emd',['stateSets.md',['../stateSets_8md.html',1,'']]],
   ['stateutil_2eh',['StateUtil.h',['../StateUtil_8h.html',1,'']]],
@@ -26,5 +27,8 @@ var searchData=
   ['supportfunctioncontent_2eh',['SupportFunctionContent.h',['../SupportFunctionContent_8h.html',1,'']]],
   ['supportfunctionnew_2eh',['SupportFunctionNew.h',['../SupportFunctionNew_8h.html',1,'']]],
   ['supportfunctionnewsetting_2eh',['SupportFunctionNewSetting.h',['../SupportFunctionNewSetting_8h.html',1,'']]],
-  ['supportfunctionsetting_2eh',['SupportFunctionSetting.h',['../SupportFunctionSetting_8h.html',1,'']]]
+  ['supportfunctionsetting_2eh',['SupportFunctionSetting.h',['../SupportFunctionSetting_8h.html',1,'']]],
+  ['sw_5fparam_5fexperiments_2em',['sw_param_experiments.m',['../sw__param__experiments_8m.html',1,'']]],
+  ['switching_5fsystem_5fmhypro_2em',['switching_system_mhypro.m',['../switching__system__mhypro_8m.html',1,'']]],
+  ['switching_5fsystem_5fparam_5fexperiments_2em',['switching_system_param_experiments.m',['../switching__system__param__experiments_8m.html',1,'']]]
 ];

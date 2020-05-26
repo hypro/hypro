@@ -126,18 +126,20 @@ $(document).ready(function(){initNavTree('src_2hypro_2CMakeLists_8txt.html','');
 Functions</h2></td></tr>
 <tr class="memitem:a0ecf150bc32b9f376f17c3798fb5c454"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2hypro_2CMakeLists_8txt.html#a0ecf150bc32b9f376f17c3798fb5c454">configure_file</a> (${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/flags.h @ONLY) <a class="el" href="examples_2CMakeLists_8txt.html#abe2cb74d0225715e3d30429d01c78d97">file</a>(GLOB_RECURSE sources RELATIVE $</td></tr>
 <tr class="separator:a0ecf150bc32b9f376f17c3798fb5c454"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac553e17b5ce28c7b1fe3dc0ac038f7a"><td class="memItemLeft" align="right" valign="top">*cpp&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2hypro_2CMakeLists_8txt.html#aac553e17b5ce28c7b1fe3dc0ac038f7a">add_library</a> (${PROJECT_NAME}-objects OBJECT ${sources}) add_dependencies($</td></tr>
-<tr class="separator:aac553e17b5ce28c7b1fe3dc0ac038f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5db3bda54430e396f0ad16fbdf891065"><td class="memItemLeft" align="right" valign="top">objects resources&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2hypro_2CMakeLists_8txt.html#a5db3bda54430e396f0ad16fbdf891065">target_include_dirs_from</a> (${PROJECT_NAME}-objects SYSTEM PUBLIC EIGEN3 COCOA_SHARED Boost_SHARED Boost_program_options_SHARED carl-shared GMP_SHARED GMPXX_SHARED GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC) target_include_directories($</td></tr>
+<tr class="memitem:af3e1f6cac1186d1e0a487cef56f5d396"><td class="memItemLeft" align="right" valign="top">*cpp&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2hypro_2CMakeLists_8txt.html#af3e1f6cac1186d1e0a487cef56f5d396">message</a> (STATUS&quot;sources before filtering: ${sources}&quot;) list(FILTER sources EXCLUDE REGEX MHyPro.cpp|MReach.cpp|CompareMHyProAndCORA/example_box.cpp|CompareMHyProAndCORA/example_zonotope.cpp) message(STATUS&quot;sources after filtering</td></tr>
+<tr class="separator:af3e1f6cac1186d1e0a487cef56f5d396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0fa02e5db4a3fbb46947d5d261e9fc5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2hypro_2CMakeLists_8txt.html#ae0fa02e5db4a3fbb46947d5d261e9fc5">add_library</a> (${PROJECT_NAME}-objects OBJECT ${sources}) add_dependencies($</td></tr>
+<tr class="separator:ae0fa02e5db4a3fbb46947d5d261e9fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5db3bda54430e396f0ad16fbdf891065"><td class="memItemLeft" align="right" valign="top">objects resources&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="src_2hypro_2CMakeLists_8txt.html#a5db3bda54430e396f0ad16fbdf891065">target_include_dirs_from</a> (${PROJECT_NAME}-objects SYSTEM PUBLIC EIGEN3 COCOA_SHARED Boost_SHARED Boost_program_options_SHARED <a class="el" href="make__mHyPro_8m.html#a4807fa3508b428b1c3ecb99658d85e67">carl</a>-shared GMP_SHARED GMPXX_SHARED GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC) target_include_directories($</td></tr>
 <tr class="separator:a5db3bda54430e396f0ad16fbdf891065"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="aac553e17b5ce28c7b1fe3dc0ac038f7a"></a>
+<a class="anchor" id="ae0fa02e5db4a3fbb46947d5d261e9fc5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">* cpp add_library </td>
+          <td class="memname">add_library </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>${PROJECT_NAME}-objects OBJECT ${sources}</em></td><td>)</td>
@@ -146,9 +148,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00009">9</a> of file <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html">CMakeLists.txt</a>.</p>
-
-<p>Referenced by <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00011">target_include_dirs_from()</a>.</p>
+<p>Definition at line <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00013">13</a> of file <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html">CMakeLists.txt</a>.</p>
 
 </div>
 </div>
@@ -168,7 +168,27 @@ Functions</h2></td></tr>
 
 <p>Definition at line <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00003">3</a> of file <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html">CMakeLists.txt</a>.</p>
 
-<p>References <a class="el" href="examples_2CMakeLists_8txt_source.html#l00001">file()</a>.</p>
+<p>References <a class="el" href="examples_2CMakeLists_8txt_source.html#l00001">file()</a>, <a class="el" href="make__mHyPro_8m_source.html#l00034">matlab</a>, and <a class="el" href="compareZonotopeFunctions_8m_source.html#l00551">out</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af3e1f6cac1186d1e0a487cef56f5d396"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">* cpp message </td>
+          <td>(</td>
+          <td class="paramtype">STATUS&quot;sources before filtering: ${sources}&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00009">9</a> of file <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html">CMakeLists.txt</a>.</p>
+
+<p>Referenced by <a class="el" href="ErrorListener_8cpp_source.html#l00005">hypro::ErrorListener::syntaxError()</a>.</p>
 
 </div>
 </div>
@@ -186,9 +206,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00011">11</a> of file <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html">CMakeLists.txt</a>.</p>
+<p>Definition at line <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00015">15</a> of file <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html">CMakeLists.txt</a>.</p>
 
-<p>References <a class="el" href="src_2hypro_2CMakeLists_8txt_source.html#l00009">add_library()</a>.</p>
+<p>References <a class="el" href="findSafetyProperties_8m.html#a4c4a545f32d7cba3415662780c96f593">min()</a>.</p>
 
 </div>
 </div>

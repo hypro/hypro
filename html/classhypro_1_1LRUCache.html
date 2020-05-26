@@ -147,7 +147,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6c984866194f711f7b6016e83a06f889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae344b6df13636fbb16706601520b3757"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#ae344b6df13636fbb16706601520b3757">has</a> (const Key &amp;key) const </td></tr>
 <tr class="separator:ae344b6df13636fbb16706601520b3757"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4649d9e646a2964f3081b833c31de537"><td class="memItemLeft" align="right" valign="top">CacheList::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a4649d9e646a2964f3081b833c31de537">insert</a> (const Key &amp;key, const Value &amp;value)</td></tr>
+<tr class="memitem:a4649d9e646a2964f3081b833c31de537"><td class="memItemLeft" align="right" valign="top">CacheList::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a4649d9e646a2964f3081b833c31de537">insert</a> (const Key &amp;key, const Value &amp;<a class="el" href="verifySafetyPropertiesCORA_8m.html#afcc7a4b78ecd8fa7e713f8cfa0f51017">value</a>)</td></tr>
 <tr class="separator:a4649d9e646a2964f3081b833c31de537"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b69a8c560638669a64ed88dd322f065"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a8b69a8c560638669a64ed88dd322f065">size</a> () const </td></tr>
 <tr class="separator:a8b69a8c560638669a64ed88dd322f065"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,7 +163,7 @@ Private Types</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9a15f1ffdfeb24722fbb6806f255d8da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1LRUCache.html#ac2978e0793e4e779533c6846c0e71cbc">CacheList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a9a15f1ffdfeb24722fbb6806f255d8da">mCacheList</a></td></tr>
 <tr class="separator:a9a15f1ffdfeb24722fbb6806f255d8da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85d0f296b265dadc0c8a30f0cd5feae7"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; Key, typename CacheList::iterator, std::hash&lt; Key &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a85d0f296b265dadc0c8a30f0cd5feae7">mCacheMap</a></td></tr>
+<tr class="memitem:a85d0f296b265dadc0c8a30f0cd5feae7"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; Key, typename CacheList::iterator, <a class="el" href="MHyProResetTest_8m.html#a28b5828ac3b16e22c26077eedf5674ff">std::hash</a>&lt; Key &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a85d0f296b265dadc0c8a30f0cd5feae7">mCacheMap</a></td></tr>
 <tr class="separator:a85d0f296b265dadc0c8a30f0cd5feae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7abe21a5b0b59f2ba4edd725433bd37b"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LRUCache.html#a7abe21a5b0b59f2ba4edd725433bd37b">mEntryCount</a> = 0</td></tr>
 <tr class="separator:a7abe21a5b0b59f2ba4edd725433bd37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -548,7 +548,7 @@ template&lt;typename Key, typename Value&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::unordered_map&lt;Key, typename CacheList::iterator, std::hash&lt;Key&gt; &gt; <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::mCacheMap</td>
+          <td class="memname">std::unordered_map&lt;Key, typename CacheList::iterator, <a class="el" href="MHyProResetTest_8m.html#a28b5828ac3b16e22c26077eedf5674ff">std::hash</a>&lt;Key&gt; &gt; <a class="el" href="classhypro_1_1LRUCache.html">hypro::LRUCache</a>&lt; Key, Value &gt;::mCacheMap</td>
         </tr>
       </table>
   </td>

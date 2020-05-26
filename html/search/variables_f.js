@@ -1,11 +1,21 @@
 var searchData=
 [
-  ['ode',['ode',['../classhypro_1_1ContinuousSystem.html#a6bdbc35100434ead188952c728d13eb7',1,'hypro::ContinuousSystem']]],
-  ['optimizer_5fcaching',['OPTIMIZER_CACHING',['../structhypro_1_1HPolytopeOptimizerCaching.html#a8ea5c0ac96de53d5b99df82294725350',1,'hypro::HPolytopeOptimizerCaching']]],
-  ['optimumvalue',['optimumValue',['../structhypro_1_1EvaluationResult.html#ad04c4d370454e1b426f487819bc99361',1,'hypro::EvaluationResult']]],
-  ['orig_5fsys_5fplot',['ORIG_SYS_PLOT',['../structFlags.html#a47d59eb0bd2a0e7ca8c2e7ce70d929a1',1,'Flags']]],
-  ['origin',['origin',['../structhypro_1_1trafoContent.html#acd0d808592c93c00b81c7a2b5a720213',1,'hypro::trafoContent::origin()'],['../structhypro_1_1scaleContent.html#aa7795cfdee1b9c6d9af38853de204a86',1,'hypro::scaleContent::origin()'],['../structhypro_1_1projectionContent.html#af0d1be0823a3dcf4d1cf3890ea894855',1,'hypro::projectionContent::origin()']]],
-  ['origincount',['originCount',['../classhypro_1_1IntersectHalfspaceOp.html#a3a08729284f949f09abf3ebd9a517513',1,'hypro::IntersectHalfspaceOp::originCount()'],['../classhypro_1_1IntersectOp.html#a0c9d33616497dcf90fa026139dcb0308',1,'hypro::IntersectOp::originCount()'],['../classhypro_1_1Leaf.html#aac5cc2c3668adf40ebabed5dfc0dddc1',1,'hypro::Leaf::originCount()'],['../classhypro_1_1ProjectOp.html#abd6a6051494ea839562e13345f61b066',1,'hypro::ProjectOp::originCount()'],['../classhypro_1_1RootGrowNode.html#a2babe0025831127d2fe4d4392ac0eb07',1,'hypro::RootGrowNode::originCount()'],['../classhypro_1_1ScaleOp.html#ad0d01549b6533442228e422229825735',1,'hypro::ScaleOp::originCount()'],['../classhypro_1_1SumOp.html#a263af1c61572008b253c11f962c58adc',1,'hypro::SumOp::originCount()'],['../classhypro_1_1TrafoOp.html#a920c0e4358f9894b3596843c06f9fe63',1,'hypro::TrafoOp::originCount()'],['../classhypro_1_1UnionOp.html#a5fb4957f3e2d2d27fda9c896b217fa23',1,'hypro::UnionOp::originCount()']]],
-  ['out',['out',['../classhypro_1_1genericOutstreamVisitor.html#a8941e4bd7ccc3b34c790e4c328f524d8',1,'hypro::genericOutstreamVisitor']]],
-  ['overwritefiles',['overwriteFiles',['../structhypro_1_1plotting_1_1gnuplotSettings.html#af425d9d70edc6de35ff5688827bc0161',1,'hypro::plotting::gnuplotSettings']]]
+  ['n',['N',['../cora__bouncing__ball_8m.html#a0076fcdcb5eccb2bfc6be0a6a2aef4b3',1,'cora_bouncing_ball.m']]],
+  ['name',['name',['../structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d',1,'hypro::plotting::gnuplotSettings::name()'],['../classrun__hydra_1_1Model.html#a310f3447012dd4bf1abe46e6c09a4856',1,'run_hydra.Model.name()'],['../MHyProLocationTest_8m.html#ab74e6bf80237ddc4109968cedc58c151',1,'name():&#160;MHyProLocationTest.m']]],
+  ['name1',['name1',['../MHyProLabelTest_8m.html#a1c6e607581a1eea981c219e646bb81bc',1,'MHyProLabelTest.m']]],
+  ['name2',['name2',['../MHyProLabelTest_8m.html#aecd2b4abfd553d4d27e5885cf7fb2afa',1,'MHyProLabelTest.m']]],
+  ['name_5fm',['name_m',['../classClassHandle.html#a1e98570d544032b6d25aa31963189e59',1,'ClassHandle']]],
+  ['names',['names',['../runCORABenchmarks_8m.html#a7d9df0b08f5a808d295f7a8335151070',1,'names():&#160;runCORABenchmarks.m'],['../runMHyProBenchmarks_8m.html#a7d9df0b08f5a808d295f7a8335151070',1,'names():&#160;runMHyProBenchmarks.m']]],
+  ['nequal',['nequal',['../MHyProConstraintSetTest_8m.html#a67eee639f2126f0f2bde4e928a8feb3e',1,'nequal():&#160;MHyProConstraintSetTest.m'],['../MHyProFlowTest_8m.html#a2dadbaf588ee4b63238e7c78ce269253',1,'nequal():&#160;MHyProFlowTest.m'],['../MHyProLabelTest_8m.html#a67eee639f2126f0f2bde4e928a8feb3e',1,'nequal():&#160;MHyProLabelTest.m'],['../MHyProLocationTest_8m.html#a67eee639f2126f0f2bde4e928a8feb3e',1,'nequal():&#160;MHyProLocationTest.m'],['../MHyProTransitionTest_8m.html#a67eee639f2126f0f2bde4e928a8feb3e',1,'nequal():&#160;MHyProTransitionTest.m']]],
+  ['nodecnt',['nodeCnt',['../structhypro_1_1TreeStatistic.html#aca25ba14077d4e11455cd32106b31eba',1,'hypro::TreeStatistic']]],
+  ['nor',['nor',['../MHyProBoxTest_8m.html#a461222600d1762c02654065ee09a086d',1,'nor():&#160;MHyProBoxTest.m'],['../MHyProConstraintSetTest_8m.html#a461222600d1762c02654065ee09a086d',1,'nor():&#160;MHyProConstraintSetTest.m']]],
+  ['norod',['noRod',['../compareRR__CORA__MHyPro_8m.html#afbfc648f46153b788f5c656659ad75d8',1,'noRod():&#160;compareRR_CORA_MHyPro.m'],['../rod__reactor__mhypro_8m.html#afbfc648f46153b788f5c656659ad75d8',1,'noRod():&#160;rod_reactor_mhypro.m']]],
+  ['note',['Note',['../runMHyProBenchmarks_8m.html#ae78a8928086e2baab8e907c625b2a247',1,'runMHyProBenchmarks.m']]],
+  ['notsymmetric_5fbox',['notsymmetric_box',['../MHyProBoxTest_8m.html#accc84b3b407321cb8b3d1e5740381350',1,'MHyProBoxTest.m']]],
+  ['nr',['nr',['../getCORAStrategy_8m.html#a690404535018e558b12259dac2d112c3',1,'nr():&#160;getCORAStrategy.m'],['../getNewStrategy_8m.html#a690404535018e558b12259dac2d112c3',1,'nr():&#160;getNewStrategy.m']]],
+  ['num_5fflow',['num_flow',['../MHyProLocationTest_8m.html#a4ab484c21ba7ef94f75ce4ff163810f9',1,'MHyProLocationTest.m']]],
+  ['num_5fstates',['num_states',['../MHyProReach_8m.html#a05ab0b43b96869729cd6f3cdafd62175',1,'MHyProReach.m']]],
+  ['numberoflocationswithoutaname',['numberOfLocationsWithoutAName',['../classhypro_1_1HybridCIFVisitor.html#aff7f5abe16b55189abfa44ec864418b2',1,'hypro::HybridCIFVisitor']]],
+  ['numbertoken',['numberToken',['../classhypro_1_1HybridAutomatonParser_1_1ConstantexprContext.html#a5924fe9576279553fcb558fb35d0f3b8',1,'hypro::HybridAutomatonParser::ConstantexprContext']]],
+  ['numlocks',['numLocks',['../classhypro_1_1LockableObjectWrapper.html#a1a1ca002e3314e4568c414741422a631',1,'hypro::LockableObjectWrapper']]]
 ];

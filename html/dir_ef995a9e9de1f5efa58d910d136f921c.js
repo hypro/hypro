@@ -16,5 +16,8 @@ var dir_ef995a9e9de1f5efa58d910d136f921c =
     [ "timedTickTimeEvolutionHandler.h", "timedTickTimeEvolutionHandler_8h.html", [
       [ "timedTickTimeEvolutionHandler", "classhypro_1_1timedTickTimeEvolutionHandler.html", "classhypro_1_1timedTickTimeEvolutionHandler" ]
     ] ],
-    [ "TimeEvolutionHandlers.h", "TimeEvolutionHandlers_8h.html", null ]
+    [ "TimeEvolutionHandlers.h", "TimeEvolutionHandlers_8h.html", null ],
+    [ "TPolyTimeEvolutionHandler.h", "TPolyTimeEvolutionHandler_8h.html", [
+      [ "TPolyTimeEvolutionHandler", "classhypro_1_1TPolyTimeEvolutionHandler.html", "classhypro_1_1TPolyTimeEvolutionHandler" ]
+    ] ]
 ];

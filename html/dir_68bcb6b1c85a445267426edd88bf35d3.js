@@ -13,5 +13,8 @@ var dir_68bcb6b1c85a445267426edd88bf35d3 =
     [ "timedFirstSegmentHandler.h", "timedFirstSegmentHandler_8h.html", [
       [ "timedFirstSegmentHandler", "classhypro_1_1timedFirstSegmentHandler.html", "classhypro_1_1timedFirstSegmentHandler" ]
     ] ],
+    [ "TPolyFirstSegmentHandler.h", "TPolyFirstSegmentHandler_8h.html", [
+      [ "TPolyFirstSegmentHandler", "classhypro_1_1TPolyFirstSegmentHandler.html", "classhypro_1_1TPolyFirstSegmentHandler" ]
+    ] ],
     [ "utility.h", "utility_8h.html", "utility_8h" ]
 ];

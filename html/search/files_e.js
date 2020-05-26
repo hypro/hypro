@@ -15,5 +15,6 @@ var searchData=
   ['polytope_2eh',['Polytope.h',['../Polytope_8h.html',1,'']]],
   ['polytopesetting_2eh',['PolytopeSetting.h',['../PolytopeSetting_8h.html',1,'']]],
   ['polytopesupportfunction_2eh',['PolytopeSupportFunction.h',['../PolytopeSupportFunction_8h.html',1,'']]],
-  ['projectop_2eh',['ProjectOp.h',['../ProjectOp_8h.html',1,'']]]
+  ['projectop_2eh',['ProjectOp.h',['../ProjectOp_8h.html',1,'']]],
+  ['ptr2object_2em',['ptr2Object.m',['../ptr2Object_8m.html',1,'']]]
 ];

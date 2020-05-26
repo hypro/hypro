@@ -9,6 +9,7 @@ var searchData=
   ['childtiminginformation_3c_20number_20_3e',['ChildTimingInformation&lt; Number &gt;',['../structhypro_1_1ChildTimingInformation.html',1,'hypro']]],
   ['cifexprvisitor',['CIFExprVisitor',['../classhypro_1_1CIFExprVisitor.html',1,'hypro']]],
   ['ciflocvisitor',['CIFLocVisitor',['../classhypro_1_1CIFLocVisitor.html',1,'hypro']]],
+  ['classhandle',['ClassHandle',['../classClassHandle.html',1,'']]],
   ['clp_5fcontext',['clp_context',['../structhypro_1_1clp__context.html',1,'hypro']]],
   ['compareexpressioncontext',['CompareExpressionContext',['../classhypro_1_1HybridSystemParser_1_1CompareExpressionContext.html',1,'hypro::HybridSystemParser']]],
   ['concat_5fi',['concat_i',['../structhypro_1_1concat__i.html',1,'hypro']]],

@@ -178,9 +178,6 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 <li>rBox()
 : <a class="el" href="classhypro_1_1SupportFunctionContent.html#a89729c060bd781457384c8ee01f6cd82">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
 </li>
-<li>Reach()
-: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#aa42d7888aac0e1b2d546db2b19044546">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
-</li>
 <li>reach_picard()
 : <a class="el" href="classhypro_1_1ContinuousSystem.html#ac051c2879c5f3a2c734f6de61f41e167">hypro::ContinuousSystem&lt; Number &gt;</a>
 </li>
@@ -188,7 +185,10 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 : <a class="el" href="structhypro_1_1ReachabilitySettings.html#af91b99cf64b956259347ba1595d0ad4d">hypro::ReachabilitySettings</a>
 </li>
 <li>reachedBadStates()
-: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a3d01651acfd13484fbd42d123cd5d591">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
+: <a class="el" href="classMReach.html#abb9e48c2cf36680d876a94456a088d8f">MReach</a>
+</li>
+<li>Reacher
+: <a class="el" href="classMReach.html#a5afa5fb42de25141b2162be47a0a5507">MReach</a>
 </li>
 <li>reachSettings
 : <a class="el" href="classhypro_1_1HyproHAVisitor.html#a1184646da5923e4f836b26d9b65da3fe">hypro::HyproHAVisitor&lt; Number &gt;</a>
@@ -242,6 +242,7 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 <li>reduce()
 : <a class="el" href="classhypro_1_1HPolytopeT.html#abb837e9d9f73cdcecc24973c666d4501">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1HybridAutomaton.html#a18ace72be9084ee3df5c54aead596737">hypro::HybridAutomaton&lt; Number &gt;</a>
+, <a class="el" href="classMHybridAutomaton.html#a45ffcce73fc6ae359207cb79f35a98ec">MHybridAutomaton</a>
 </li>
 <li>reduce_directed()
 : <a class="el" href="classhypro_1_1HPolytopeT.html#ae1125bc43f6f9a49f8ee92f192445653">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;</a>
@@ -275,9 +276,14 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#a984e8f701a7be81a3831b129e769a468">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1VPolytopeT.html#a91ae10497bcab6acac51db2a062153f3">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#a2d2195cc78e65c1ed42c51dd50e63650">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classMConstraintSet.html#a33091b488fcdb191abd0e1ebe8eb5c9d">MConstraintSet</a>
+, <a class="el" href="classMGeometricObject.html#a16dc5d582a24a289f538a5cfec8bef3b">MGeometricObject&lt; T &gt;</a>
+, <a class="el" href="classMSupportFunction.html#ae6a5a14e96f5d4f634a49be5c9bff524">MSupportFunction</a>
+, <a class="el" href="classMZonotope.html#a0402e41ce9eed09f20d61fb83f647978">MZonotope</a>
 </li>
 <li>reduceOrder()
 : <a class="el" href="classhypro_1_1ZonotopeT.html#a4ca07528e34888d71b21268b5423b245">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classMZonotope.html#aad40e04e6fc03a58136e997f77812694">MZonotope</a>
 </li>
 <li>reduceRepresentation()
 : <a class="el" href="classhypro_1_1BoxT.html#a0647c38c34ce94c61ba5826768330549">hypro::BoxT&lt; Number, Converter, Setting &gt;</a>
@@ -291,6 +297,8 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#a1beee2b99f7a5f440edc300bfec26e02">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1VPolytopeT.html#a584ddb1d0d1446e534a45a19b3542865">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#a877e9010a178e05e1d1634f28b10b40d">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classMGeometricObject.html#a7097c3682fe9943773e4e5845c5b2ad8">MGeometricObject&lt; T &gt;</a>
+, <a class="el" href="classMState.html#a368e54fa496180ebe4411812ba18c02c">MState</a>
 </li>
 <li>reduceToDimensions()
 : <a class="el" href="classhypro_1_1Point.html#ae16e7b5a07b33a60357365eb9b895414">hypro::Point&lt; Number &gt;</a>
@@ -343,6 +351,7 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 </li>
 <li>removeEmptyGenerators()
 : <a class="el" href="classhypro_1_1ZonotopeT.html#a2a2f65a547b6e619fb00e1d2a0cd2c2b">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classMZonotope.html#acb77b12a9e8d988f0ff5b944811a20d5">MZonotope</a>
 </li>
 <li>removeGenerator()
 : <a class="el" href="classhypro_1_1ZonotopeT.html#acf406931ade6cf3cab08d52d5052a02a">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
@@ -366,6 +375,8 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 , <a class="el" href="classhypro_1_1SupportFunctionT.html#a955bd8a5c840311013ce82ebff67c105">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;</a>
 , <a class="el" href="classhypro_1_1VPolytopeT.html#a182e213daaef7a6e15a3160fd50f9b7d">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 , <a class="el" href="classhypro_1_1ZonotopeT.html#a648c4dddf715382314f1910e64f17e3a">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;</a>
+, <a class="el" href="classMGeometricObject.html#a81ce834fcacc96de364867a6c1349fdc">MGeometricObject&lt; T &gt;</a>
+, <a class="el" href="classMState.html#a675efd4d29c724f912df1a58d386d65b">MState</a>
 </li>
 <li>removeSharedPrefix()
 : <a class="el" href="classhypro_1_1Path.html#ac626c1b57e1dce829cb925f74725e53b">hypro::Path&lt; Number, tNumber &gt;</a>
@@ -468,9 +479,6 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 <li>rGetNode()
 : <a class="el" href="classhypro_1_1EventTimingProvider.html#a26ffa86e373f27dae9e8646ec5cd0b0a">hypro::EventTimingProvider&lt; Number &gt;</a>
 </li>
-<li>rGetQueue()
-: <a class="el" href="classhypro_1_1reachability_1_1Reach.html#a9fe5309dbe91b02be7424807f6367860">hypro::reachability::Reach&lt; Number, ReacherSettings, State &gt;</a>
-</li>
 <li>rGetRectangularFlow()
 : <a class="el" href="classhypro_1_1Location.html#a7154d06faf592373da5ee9286842fd5a">hypro::Location&lt; Number &gt;</a>
 </li>
@@ -503,7 +511,7 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 , <a class="el" href="structhypro_1_1sumContent.html#ae889a9f408ba2d59e214d0e69e7962fa">hypro::sumContent&lt; Number, Setting &gt;</a>
 </li>
 <li>Ridge()
-: <a class="el" href="classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1">hypro::Ridge&lt; Number &gt;</a>
+: <a class="el" href="classhypro_1_1Ridge.html#aa5e3591049fe55484625a60d27807a9e">hypro::Ridge&lt; Number &gt;</a>
 </li>
 <li>rIntersectionParameters()
 : <a class="el" href="classhypro_1_1SupportFunctionContent.html#afdaca35ae70c6324e834d80edfad5b2a">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
@@ -1005,6 +1013,7 @@ $(document).ready(function(){initNavTree('functions_r.html','');});
 </li>
 <li>run()
 : <a class="el" href="classhypro_1_1LTIAnalyzer.html#a9eaf7bb1b03494aab3896afa03287833">hypro::LTIAnalyzer&lt; State &gt;</a>
+, <a class="el" href="classrun__hydra_1_1Model.html#ab45ae8679a4ceb8a3fdb9c5ea5fad23e">run_hydra.Model</a>
 </li>
 <li>rUnionParameters()
 : <a class="el" href="classhypro_1_1SupportFunctionContent.html#a2138d75299529b15fdc7af3480373f1d">hypro::SupportFunctionContent&lt; Number, Setting &gt;</a>
