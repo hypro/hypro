@@ -95,6 +95,7 @@ class SupportFunctionNewT : private GeometricObjectBase {
 	//Needed for Converter.h
 	typedef Setting Settings;
 	typedef Number NumberType;
+	static constexpr auto type_enum = representation_name::SFN;
 
 	/***************************************************************************
 	 * Members

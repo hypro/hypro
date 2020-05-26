@@ -26,6 +26,7 @@ int stringToSetting( const std::string& name ) {
 	return stringToSetting_Impl<
 		boxSetting_name, 
 		supportFunctionSetting_name, 
+		sfnSetting_name,
 		tpolySetting_name >::toSetting( name );
 }
 

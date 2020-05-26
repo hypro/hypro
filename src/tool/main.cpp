@@ -46,5 +46,7 @@ int main( int argc, char const *argv[] ) {
 	// run reachability analysis
 	hydra::reachability::analyze( automaton, settings );
 
+	PRINT_STATS();
+
 	return 0;
 }

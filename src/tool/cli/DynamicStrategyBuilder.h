@@ -24,25 +24,25 @@ namespace po = boost::program_options;
 
 class DynamicStrategyBuilder {
 
-private:
-  // For parsing in gui mode
-  po::variables_map vmStrat;
-  po::options_description mOptions =
-      po::options_description("Allowed Parameters: ");
+ private:
+	// For parsing in gui mode
+	po::variables_map vmStrat;
+	po::options_description mOptions =
+		po::options_description("Allowed Parameters: ");
 
-  // For holding values
-  hypro::representation_name mChosenRep;
-  std::string mChosenSetting;
-  hypro::StrategyParameters mStratSettings;
-  hypro::Strategy<State> mStrategy;
-  bool done = false;
+	// For holding values
+	hypro::representation_name mChosenRep;
+	std::string mChosenSetting;
+	hypro::StrategyParameters mStratSettings;
+	hypro::Strategy<State> mStrategy;
+	bool done = false;
 
-  // Shows instructions in the gui mode
-  void showMessage();
-  // Parses input in the gui mode
-  void parse();
-  // Handles parsed input in the gui mode
-  void handle();
+	// Shows instructions in the gui mode
+	void showMessage();
+	// Parses input in the gui mode
+	void parse();
+	// Handles parsed input in the gui mode
+	void handle();
 
 public:
   // Default constructor

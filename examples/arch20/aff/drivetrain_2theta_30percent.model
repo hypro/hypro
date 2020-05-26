@@ -2,7 +2,7 @@
 # Hybrid Automaton in Flow*
 # Converted from: drivetrain/drivetrain_2theta_30percent.xml
 # Using command line arguments: -flowstar drivetrain/drivetrain_2theta_30percent.xml
-
+# - reduced ma jumps from 99999999 to 9999
 
 hybrid reachability
 {
@@ -12,16 +12,15 @@ hybrid reachability
   setting
   {
     fixed steps 0.0005
-    time 1
-    #time 2
+    time 2
     remainder estimation 1e-4
     identity precondition
     gnuplot octagon x1,x3
     #adaptive orders { min 3, max 8 } 
     cutoff 1e-15
     precision 53
-    output out
-    max jumps 99999999
+    output drivetrain
+    max jumps 9999
     print on
   }
 

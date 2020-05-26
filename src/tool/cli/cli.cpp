@@ -122,7 +122,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		if ( vm.count( "strategy" ) >= 1 ) {
 			if ( vm.count( "strategy" ) == 1 ) {
 				hypro::SettingsProvider<State>::getInstance().setStrategy(
-					  hydra::getStrategyFromName( vm["strategy"].as<std::string>() ) );
+						hydra::getStrategyFromName( vm["strategy"].as<std::string>() ) );
 			} else {
 				CERR( "You can not have more than one strategy!\n" );
 				exit( 1 );
@@ -130,12 +130,11 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		}
 
 		/*
-    if (vm.count("snode") >= 1) {
-      DynamicStrategyBuilder d(snodes);
-      hypro::SettingsProvider<State>::getInstance().setStrategy(
-              d.getStrategy());
-    }
-    */
+		if (vm.count("snode") >= 1) {
+			DynamicStrategyBuilder d(snodes);
+			hypro::SettingsProvider<State>::getInstance().setStrategy(d.getStrategy());
+		}
+		*/
 	} catch ( std::exception &e ) {
 		CERR( e.what() );
 		COUT( options << std::endl );
