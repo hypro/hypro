@@ -20,12 +20,12 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14,
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20,
-    T__20 = 21, POLY = 22, LINEAR = 23, ODE = 24, IN = 25, TRUE = 26, FALSE = 27,
-    PAR = 28, JUMPS = 29, URGENT = 30, GUARD = 31, RESET = 32, PARALLELOTOPE = 33,
-    BOX = 34, JUMP = 35, DEFINE = 36, COMMENT = 37, EQUALS = 38, BOOLRELATION = 39,
-    PLUS = 40, MINUS = 41, TIMES = 42, SBOPEN = 43, SBCLOSE = 44, CBOPEN = 45,
-    CBCLOSE = 46, COMMA = 47, NUMBER = 48, CONSTANT = 49, VARIABLE = 50,
-    WS = 51, INTERVALAGG = 52, EXPONENTIAL = 53
+    T__20 = 21, T__21 = 22, POLY = 23, LINEAR = 24, ODE = 25, IN = 26, TRUE = 27,
+    FALSE = 28, PAR = 29, JUMPS = 30, URGENT = 31, GUARD = 32, RESET = 33,
+    PARALLELOTOPE = 34, BOX = 35, JUMP = 36, DEFINE = 37, COMMENT = 38,
+    EQUALS = 39, BOOLRELATION = 40, PLUS = 41, MINUS = 42, TIMES = 43, SBOPEN = 44,
+    SBCLOSE = 45, CBOPEN = 46, CBCLOSE = 47, COMMA = 48, NUMBER = 49, CONSTANT = 50,
+    VARIABLE = 51, WS = 52, INTERVALAGG = 53, EXPONENTIAL = 54
   };
 
   enum {
@@ -36,11 +36,11 @@ public:
     RuleIntervalexpr = 15, RuleConstrset = 16, RuleInit = 17, RuleInitstate = 18,
     RuleUnsafeset = 19, RuleLbadstate = 20, RuleGbadstate = 21, RuleJumps = 22,
     RuleTransition = 23, RuleFromto = 24, RuleUrgent = 25, RuleGuard = 26,
-    RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleSetting = 30,
-    RuleFixedsteps = 31, RuleTime = 32, RulePlotsetting = 33, RuleFilename = 34,
-    RuleMaxjumps = 35, RulePrint = 36, RuleRemainder = 37, RuleIdentity = 38,
-    RuleQrprecond = 39, RuleFixedorders = 40, RuleAdaptiveorders = 41, RuleCutoff = 42,
-    RulePrecision = 43
+    RuleLabels = 27, RuleAllocation = 28, RuleResetfct = 29, RuleAggregation = 30,
+    RuleSetting = 31, RuleFixedsteps = 32, RuleTime = 33, RulePlotsetting = 34,
+    RuleFilename = 35, RuleMaxjumps = 36, RulePrint = 37, RuleRemainder = 38,
+    RuleIdentity = 39, RuleQrprecond = 40, RuleFixedorders = 41, RuleAdaptiveorders = 42,
+    RuleCutoff = 43, RulePrecision = 44
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -83,6 +83,7 @@ public:
   class FromtoContext;
   class UrgentContext;
   class GuardContext;
+  class LabelsContext;
   class AllocationContext;
   class ResetfctContext;
   class AggregationContext;
@@ -484,6 +485,8 @@ public:
     UrgentContext* urgent(size_t i);
     std::vector<GuardContext *> guard();
     GuardContext* guard(size_t i);
+    std::vector<LabelsContext *> labels();
+    LabelsContext* labels(size_t i);
     std::vector<ResetfctContext *> resetfct();
     ResetfctContext* resetfct(size_t i);
     std::vector<AggregationContext *> aggregation();
@@ -535,6 +538,21 @@ public:
   };
 
   GuardContext* guard();
+
+  class  LabelsContext : public antlr4::ParserRuleContext {
+  public:
+    LabelsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
+    std::vector<antlr4::tree::TerminalNode *> VARIABLE();
+    antlr4::tree::TerminalNode* VARIABLE(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+  };
+
+  LabelsContext* labels();
 
   class  AllocationContext : public antlr4::ParserRuleContext {
   public:

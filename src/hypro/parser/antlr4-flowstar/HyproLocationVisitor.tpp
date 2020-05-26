@@ -49,18 +49,19 @@ namespace hypro {
 		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
-		Condition<Number> inv{ConstraintSetT<Number>{}};
-		
+		//By default, if no invariant is given, return a 0xn matrix because we have zero contraints over n variables
+		Condition<Number> inv{ConstraintSetT<Number>{matrix_t<Number>::Zero(0,vars.size()), vector_t<Number>::Zero(0)}};
+
 		bool firstTime = true;
 		for(auto& currInvCtx : ctx->invariants()){
 			Condition<Number> currInv = visit(currInvCtx);
-			if(currInv != Condition<Number>()){  
+			if(currInv != Condition<Number>()){
 				if(firstTime){
 					inv = currInv;
 					firstTime = false;
 					continue;
 				}
-			 
+
 				//Extend inv.matrix with currInv.matrix
 				matrix_t<Number> newMat = inv.getMatrix();
 				matrix_t<Number> currInvMat = currInv.getMatrix();
@@ -81,8 +82,8 @@ namespace hypro {
 
 				inv = Condition<Number>(newMat, newVec);
 			}
-		} 
-		
+		}
+
 		//3.Returns a ptr to location
 		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
@@ -184,6 +185,6 @@ namespace hypro {
 		}
 
 		return Condition<Number>();
-		
+
 	}
 }

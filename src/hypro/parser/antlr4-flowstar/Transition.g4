@@ -18,13 +18,15 @@ import Formula;
 
 jumps		: 'jumps' '{' transition* '}' ;
 
-transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
+transition 	: fromto (urgent | guard | labels | resetfct | aggregation)* ;
 
 fromto		: VARIABLE JUMP VARIABLE ;
 
 urgent		: 'urgent' ;
 
 guard		: 'guard' '{' constrset? '}' ;
+
+labels      : 'label' '{' VARIABLE* '}' ;
 
 allocation	: VARIABLE DEFINE (polynom | interval) ;
 

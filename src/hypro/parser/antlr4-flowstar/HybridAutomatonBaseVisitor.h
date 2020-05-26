@@ -125,6 +125,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override {
     return visitChildren(ctx);
   }

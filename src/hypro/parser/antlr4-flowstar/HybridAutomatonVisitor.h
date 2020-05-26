@@ -74,6 +74,8 @@ public:
 
     virtual antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *context) = 0;
 
+    virtual antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *context) = 0;
+
     virtual antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *context) = 0;
 
     virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *context) = 0;

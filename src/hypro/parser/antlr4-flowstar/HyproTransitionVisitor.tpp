@@ -85,6 +85,15 @@ namespace hypro {
 			t->setAggregation(agg);
 		}
 
+		//6. Collect synchronization labels
+		if(ctx->labels().size() > 0){
+			std::vector<Label> transformed{};
+			for(const auto& l : ctx->labels()) {
+				transformed.emplace_back(visit(l));
+			}
+			t->setLabels(transformed);
+		}
+
 		return t;
 	}
 
@@ -128,9 +137,19 @@ namespace hypro {
 			inv.setVector(result.second);
 			return inv;
 		}
-		//Return empty condition if no guard given
-		return Condition<Number>{ConstraintSetT<Number>{}};
+		//Return empty condition as 0xn matrix because we have zero contraints over n variables.
+		return Condition<Number>(ConstraintSetT<Number>{   matrix_t<Number>::Zero(0, vars.size()), vector_t<Number>::Zero(0)    });
 
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabels(HybridAutomatonParser::LabelsContext *ctx) {
+		// TODO
+		std::vector<std::string> labels{};
+		std::transform(ctx->VARIABLE().begin(), ctx->VARIABLE().end(), std::back_inserter(labels) ,[&](auto lab){
+			return visit(lab).template as<std::string>();
+		}  );
+		return labels;
 	}
 
 	template<typename Number>

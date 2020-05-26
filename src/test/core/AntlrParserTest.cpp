@@ -134,6 +134,48 @@ TYPED_TEST( AntlrParserTest, EmptyFile ) {
 	}
 }
 
+TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
+	std::string path( "../../../../src/test/core/examples/test_transition_parsing_2.txt" );
+	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
+	try {
+		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
+
+		auto loc = *automaton.getLocation( "l1" );
+
+		auto transition = std::find_if( loc.getTransitions().begin(), loc.getTransitions().end(),
+										[]( auto& transPtr ) { return transPtr->getTarget()->getName() == "l2"; } );
+
+		ASSERT_TRUE( transition != loc.getTransitions().end() );
+
+		EXPECT_EQ( "sync_1", ( *transition )->getLabels().front().getName() );
+
+		loc = *automaton.getLocation( "l3" );
+
+		transition = std::find_if( loc.getTransitions().begin(), loc.getTransitions().end(),
+								   []( auto& transPtr ) { return transPtr->getTarget()->getName() == "l1"; } );
+
+		ASSERT_TRUE( transition != loc.getTransitions().end() );
+		EXPECT_EQ( std::size_t( 2 ), ( *transition )->getLabels().size() );
+
+		EXPECT_EQ( "sync_2", ( *transition )->getLabels().at( 0 ).getName() );
+		EXPECT_EQ( "sync_3", ( *transition )->getLabels().at( 1 ).getName() );
+
+		EXPECT_TRUE( std::find( ( *transition )->getLabels().begin(), ( *transition )->getLabels().end(),
+								Label( "sync_2" ) ) != ( *transition )->getLabels().end() );
+
+		EXPECT_TRUE( std::find( ( *transition )->getLabels().begin(), ( *transition )->getLabels().end(),
+								Label( "sync_3" ) ) != ( *transition )->getLabels().end() );
+
+		EXPECT_FALSE( std::find( ( *transition )->getLabels().begin(), ( *transition )->getLabels().end(),
+								 Label( "sync_1" ) ) != ( *transition )->getLabels().end() );
+
+		SUCCEED();
+	} catch ( const std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+
 TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 	/*
 	 * The simplest hybrid automaton HA that will be accepted by the parser is:

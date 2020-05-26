@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/Transition.h"
+#include "../../types.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
 
@@ -40,6 +40,7 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 		antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override;
 		antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *ctx) override;
 		antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *ctx) override;
+		antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *ctx) override;
 		antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override;
 		antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override;
 		antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override;

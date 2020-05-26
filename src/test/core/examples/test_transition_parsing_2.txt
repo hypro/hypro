@@ -103,19 +103,23 @@ hybrid reachability
   l1 -> l2
   guard { t = 2.5 }
   reset { }
+  label { sync_1 }
   parallelotope aggregation {}
 
   l2 -> l4
   guard { t = 2.5 v in [15,16] }
   reset { t' := 0 }
+  label { sync_1 }
   parallelotope aggregation {}
 
   l3 -> l1
   guard { t = 1.3 v in [18,20] }
   reset { t' := 0 }
   parallelotope aggregation {}
+  label { sync_2 sync_3 }
 
   l4 -> l3
+  label { sync_3 }
   guard { t = 1.3  v in [5,20] }
   reset { }
   parallelotope aggregation {}

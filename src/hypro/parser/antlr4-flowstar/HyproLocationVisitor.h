@@ -9,14 +9,14 @@
 
 #pragma once
 
-#include <antlr4-runtime.h>
+#include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../types.h"
+#include "../../util/VariablePool.h"
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HyproFormulaVisitor.h"
-#include "../../types.h"
-#include "../../datastructures/HybridAutomaton/Location.h"
-#include "../../datastructures/HybridAutomaton/Condition.h"
-#include "../../util/VariablePool.h"
+#include <antlr4-runtime.h>
 
 using namespace antlr4;
 
