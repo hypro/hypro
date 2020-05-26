@@ -102,8 +102,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	}
 
 	// run reacher. Return type explicit to be able to monitor changes
-	std::vector<std::pair<unsigned, std::vector<hypro::State_t<Number>>>> flowpipes =
-		  reacher.computeForwardReachability();
+	auto flowpipes = reacher.computeForwardReachability();
 
 	EXPECT_EQ( std::size_t( 3 ), flowpipes.size() );
 	// the first jump happens somewhat around 1.45

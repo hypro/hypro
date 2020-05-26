@@ -38,13 +38,10 @@ void Reach<Number, ReacherSettings, State>::addInitialState( State&& initialStat
 }
 
 template <typename Number, typename ReacherSettings, typename State>
-std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::flowpipe_t>> Reach<Number, ReacherSettings, State>::computeForwardReachability() {
+const std::map<typename Reach<Number, ReacherSettings, State>::NodePtr, typename Reach<Number, ReacherSettings, State>::flowpipe_t>& Reach<Number, ReacherSettings, State>::computeForwardReachability() {
 	if ( !mInitialStatesSet ) {
 		WARN( "hypro.reachability", "Attention, initial states have not been set yet." );
 	}
-
-	// collect all computed reachable states
-	std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::flowpipe_t>> collectedReachableStates;
 
 	if ( ReacherSettings::printStatus ) {
 		std::cout << std::endl
@@ -70,11 +67,11 @@ std::vector<std::pair<unsigned, typename Reach<Number, ReacherSettings, State>::
 		flowpipe_t newFlowpipe = computeForwardTimeClosure( nextInitialSet->second );
 
 		if ( !newFlowpipe.empty() ) {
-			collectedReachableStates.emplace_back( std::make_pair( nextInitialSet->second->getState().getLocation()->hash(), newFlowpipe ) );
+			mReachableStates[nextInitialSet->second] = newFlowpipe;
 		}
 	}
 
-	return collectedReachableStates;
+	return mReachableStates;
 }
 
 template <typename Number, typename ReacherSettings, typename State>

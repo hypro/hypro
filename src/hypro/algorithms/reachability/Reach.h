@@ -11,20 +11,19 @@
  */
 
 #pragma once
-#include "FirstSegment.h"
-#include "../../datastructures/reachability/Settings.h"
+#include "../../config.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/HybridAutomaton/State.h"
 #include "../../datastructures/reachability/ReachTree.h"
+#include "../../datastructures/reachability/Settings.h"
 #include "../../datastructures/reachability/workQueue/WorkQueue.h"
-#include "../../config.h"
-#include "../../util/plotting/Plotter.h"
 #include "../../representations/Ellipsoids/Ellipsoid.h"
 #include "../../representations/GeometricObjectBase.h"
-
+#include "../../util/plotting/Plotter.h"
+#include "FirstSegment.h"
 #include "boost/tuple/tuple.hpp"
 
-CLANG_WARNING_DISABLE("-Wdeprecated-register")
+CLANG_WARNING_DISABLE( "-Wdeprecated-register" )
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
 CLANG_WARNING_RESET
 
@@ -75,7 +74,7 @@ class Reach {
 	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
 	Number mBloatingFactor = 0;
-	std::map<unsigned, std::vector<flowpipe_t>> mReachableStates;
+	std::map<NodePtr, flowpipe_t> mReachableStates;
 	WorkQueue<TaskTypePtr> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	representation_name mType = representation_name::UNDEF;
@@ -98,7 +97,7 @@ class Reach {
 	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	std::vector<std::pair<unsigned, flowpipe_t>> computeForwardReachability();
+	const std::map<NodePtr, flowpipe_t>& computeForwardReachability();
 
 	void setInitialStates( std::vector<State>&& initialStates );
 	void addInitialState( State&& initialState );
@@ -152,6 +151,8 @@ class Reach {
 	void setRepresentationType( const representation_name& type ) { mType = type; }
 
 	ReachTree<State>* getReachabilityTree() const { return mReachabilityTree.get(); }
+
+	const flowpipe_t& getFlowpipeForNode( ReachTreeNode<State>* node ) { return mReachableStates.at( node ); }
 
   private:
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
