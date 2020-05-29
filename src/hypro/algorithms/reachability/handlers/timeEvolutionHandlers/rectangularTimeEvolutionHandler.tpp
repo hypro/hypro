@@ -2,7 +2,7 @@
 
 namespace hypro {
 template <typename State>
-void rectangularTimeEvolutionHandler<State>::handle() {
+void rectangularTimeEvolutionHandler<State>::operator()() {
 	if ( !mComputed ) {
 		//DEBUG( "hydra.worker", "Applying timestep to " << mState->getSet( mIndex ) );
 		auto& vpool = hypro::VariablePool::getInstance();
@@ -59,7 +59,6 @@ void rectangularTimeEvolutionHandler<State>::handle() {
 		mState->setSetDirect( initial, mIndex );
 		// set computed flag
 		mComputed = true;
-		mMarkedForDelete = true;
-	}
+	}  // if mComputed
 }
 }  // namespace hypro

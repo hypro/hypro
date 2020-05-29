@@ -3,29 +3,17 @@
 
 namespace hypro {
 template <typename State>
-class rectangularBadStateHandler : public IBadStateHandler {
+class rectangularBadStateHandler {
 	using Number = typename State::NumberType;
 
   protected:
-	State& mState;
-	size_t mIndex;
-	CONTAINMENT mContainment = CONTAINMENT::NO;
-	bool mNoBadStates = false;
-	bool mMarkedForDelete = false;
+	size_t mIndex = 0;
+	CONTAINMENT mContainment = CONTAINMENT::BOT;
 
   public:
-	rectangularBadStateHandler() = delete;
-	rectangularBadStateHandler( State& state, size_t index )
-		: mState( state )
-		, mIndex( index ) {}
-
-	void handle();
-	const char* handlerName() { return "rectangularBadStateHandler"; }
+	CONTAINMENT operator()( State& currentStateSet );
 	// return intersection status
-	virtual bool intersectsBadState() override { return mContainment != CONTAINMENT::NO; }
-
-	virtual bool getMarkedForDelete() override { return mMarkedForDelete; }
-	virtual void setMarkedForDelete( bool toDelete ) override { mMarkedForDelete = toDelete; }
+	bool intersectsBadState() { return mContainment != CONTAINMENT::NO; }
 };
 }  // namespace hypro
 
