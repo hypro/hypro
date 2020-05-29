@@ -1,5 +1,8 @@
 var NAVTREEINDEX47 =
 {
+"representations_2Polytopes_2carlPolytope_2util_8h.html#ad2e1f80e6bf06373d6ec4b11dfbe8198":[9,0,1,0,3,10,0,2,2],
+"representations_2Polytopes_2carlPolytope_2util_8h.html#ad9206abd8852942714a6cd4ffc64728f":[9,0,1,0,3,10,0,2,7],
+"representations_2Polytopes_2carlPolytope_2util_8h.html#adb9dc35d36c51f524a6f8d4d9684d3c8":[9,0,1,0,3,10,0,2,3],
 "representations_2Polytopes_2carlPolytope_2util_8h.html#ae7ed77f8299bd92b4a64357f97c1e9c8":[9,0,1,0,3,10,0,2,0],
 "representations_2Polytopes_2carlPolytope_2util_8h_source.html":[9,0,1,0,3,10,0,2],
 "representations_2SupportFunction_2util_8h.html":[9,0,1,0,3,11,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX47 =
 "sampling_8h.html#a86e665c06b8271dc9895ce33cb2ce40e":[9,0,1,0,4,6,0,2],
 "sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8":[9,0,1,0,4,6,0,0],
 "sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8a2e182522bc70be75f15f20a319f906da":[9,0,1,0,4,6,0,0,1],
-"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8a32a0947c195c76d9586dd4cf75e58cc0":[9,0,1,0,4,6,0,0,2],
-"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8ac6b502f0b23b3da587a15b27e646f28f":[9,0,1,0,4,6,0,0,0],
-"sampling_8h.html#af4c85ea08f845de363019cfc27f271e5":[9,0,1,0,4,6,0,3],
-"sampling_8h_source.html":[9,0,1,0,4,6,0]
+"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8a32a0947c195c76d9586dd4cf75e58cc0":[9,0,1,0,4,6,0,0,2]
 };

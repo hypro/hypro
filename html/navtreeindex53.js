@@ -1,5 +1,8 @@
 var NAVTREEINDEX53 =
 {
+"two__tanks__mhypro_8m.html#aa54e20a5a155af69c64fa0fa4b148f55":[9,0,1,0,4,3,4,12,12],
+"two__tanks__mhypro_8m.html#aa8ac1383e7790efb10c9d0dea00380c6":[9,0,1,0,4,3,4,12,14],
+"two__tanks__mhypro_8m.html#aa8cf1974c6ed1f81a09c1bb8b3118a36":[9,0,1,0,4,3,4,12,91],
 "two__tanks__mhypro_8m.html#aab2463cd078f7c5368f6eb80f5a549b8":[9,0,1,0,4,3,4,12,114],
 "two__tanks__mhypro_8m.html#aabc75045f1e059797b03fb885cd6738a":[9,0,1,0,4,3,4,12,54],
 "two__tanks__mhypro_8m.html#ab0a8da0a31223849ebe1118bb1b40e2d":[9,0,1,0,4,3,4,12,101],
@@ -114,8 +117,8 @@ var NAVTREEINDEX53 =
 "util_2convenienceOperators_8h_source.html":[9,0,1,0,4,10],
 "util_2linearOptimization_2Strategy_8h.html":[9,0,1,0,4,1,9],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31":[9,0,1,0,4,1,9,0],
-"util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[9,0,1,0,4,1,9,0,2],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[9,0,1,0,4,1,9,0,0],
+"util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31a39eef95d7be97f32f33f623348b19be2":[9,0,1,0,4,1,9,0,2],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31aa0cbb49caeb5c27038583028e54bfa60":[9,0,1,0,4,1,9,0,3],
 "util_2linearOptimization_2Strategy_8h.html#a6598e45e920a0a6146db1120a3617a31ab8c6c5ac894a59c2c63a3f1c4989adde":[9,0,1,0,4,1,9,0,1],
 "util_2linearOptimization_2Strategy_8h_source.html":[9,0,1,0,4,1,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX53 =
 "vehicle__platoon__mhypro_8m.html#a5171ad81e4ab3f2e25556ef8dddba0ca":[9,0,1,0,4,3,4,13,65],
 "vehicle__platoon__mhypro_8m.html#a586b2abb2085785139c7a22bdaacadd0":[9,0,1,0,4,3,4,13,30],
 "vehicle__platoon__mhypro_8m.html#a599fe37b30a31bc65c593f3096122bce":[9,0,1,0,4,3,4,13,77],
-"vehicle__platoon__mhypro_8m.html#a5cd2b087dad0fea67c5454eafd5f0e3d":[9,0,1,0,4,3,4,13,58],
-"vehicle__platoon__mhypro_8m.html#a5d99723e0a96f53d1e686d5e3d2308dc":[9,0,1,0,4,3,4,13,48],
-"vehicle__platoon__mhypro_8m.html#a6215e022267dc11d572ec677098947ab":[9,0,1,0,4,3,4,13,74],
-"vehicle__platoon__mhypro_8m.html#a652b36dd0b3496b1f76118a95d3c72be":[9,0,1,0,4,3,4,13,88]
+"vehicle__platoon__mhypro_8m.html#a5cd2b087dad0fea67c5454eafd5f0e3d":[9,0,1,0,4,3,4,13,58]
 };

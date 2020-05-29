@@ -4,6 +4,7 @@ var classrun__hydra_1_1Results =
     [ "get_csv_header", "classrun__hydra_1_1Results.html#a8a43f771d264cd9f4e1f36dd8e3aad03", null ],
     [ "set_error", "classrun__hydra_1_1Results.html#a78e5f36635caf6332ad5bd2d0ce6c64b", null ],
     [ "to_csv", "classrun__hydra_1_1Results.html#a42f08f57153a9d1466fd0ba619a0cbe1", null ],
+    [ "to_string", "classrun__hydra_1_1Results.html#aa8b2092298996337bde979b013d5c337", null ],
     [ "endTime", "classrun__hydra_1_1Results.html#a54959a5f8920d0fe7cbf1b6f60c3b6aa", null ],
     [ "error", "classrun__hydra_1_1Results.html#af5a733dead6c5d8fd255b7697b0df504", null ],
     [ "errorMsg", "classrun__hydra_1_1Results.html#a62b9cdb5880e3b32adb9b8d2c2a3c8df", null ],

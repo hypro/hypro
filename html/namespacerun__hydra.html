@@ -165,8 +165,16 @@ Optional arguments:
         This is NOT indicated in the output but will cause an error 
         in the tool execution and the error message has to be interpreted.
     --verbose Verbose execution: The output of the tool will be printed.
-Example call:
-    `python3 run_hydra.py ../bin/hydra input/settings results.csv -t 1200 -m 16000 --verbose`
+    --benchmark Faster execution: The output is written to a file and analyzed
+        after execution is complete. This lowers runtime but disables
+        the timeout and verbose option as well as skipping functionality.
+        (These arguments are ignored.)
+Example calls:
+    (1) `python3 run_hydra.py ../bin/hydra input/settings results.csv -t 1200 -m 16000 --verbose`
+        Call for testing models with a timeout of 20min and memout of 16gb with verbose mode.
+    (2) `python3 run_hydra.py ../bin/hydra input/settings results.csv --benchmark`
+        Call for benchmarking and faster execution. Adding the timeout or verbose option
+        will have no effect.
 </pre> </div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a1540e984601d65e39c15f4210b623809"></a>
 <div class="memitem">
@@ -181,9 +189,9 @@ Example call:
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00175">175</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
+<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00221">221</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
 
-<p>Referenced by <a class="el" href="run__hydra_8py_source.html#l00201">main()</a>.</p>
+<p>Referenced by <a class="el" href="run__hydra_8py_source.html#l00252">main()</a>.</p>
 
 </div>
 </div>
@@ -201,9 +209,9 @@ Example call:
       </table>
 </div><div class="memdoc">
 <pre class="fragment">Limit the memory-usage to memLimit (in MB).</pre> 
-<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00041">41</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
+<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00050">50</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
 
-<p>Referenced by <a class="el" href="run__hydra_8py_source.html#l00110">run_hydra.Model._run()</a>.</p>
+<p>Referenced by <a class="el" href="run__hydra_8py_source.html#l00162">run_hydra.Model._run_benchmark()</a>, and <a class="el" href="run__hydra_8py_source.html#l00132">run_hydra.Model._run_test()</a>.</p>
 
 </div>
 </div>
@@ -220,9 +228,9 @@ Example call:
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00201">201</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
+<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00252">252</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
 
-<p>References <a class="el" href="run__hydra_8py_source.html#l00175">get_cli_args()</a>, and <a class="el" href="run__hydra_8py_source.html#l00048">read_file()</a>.</p>
+<p>References <a class="el" href="run__hydra_8py_source.html#l00221">get_cli_args()</a>, and <a class="el" href="run__hydra_8py_source.html#l00057">read_file()</a>.</p>
 
 </div>
 </div>
@@ -242,9 +250,9 @@ Example call:
 <pre class="fragment">Return the lines of the file as a list. Lines that start with
 '#' and empty lines are ignored. Multiple whitespaces are removed
 from lines and lines are stripped.</pre> 
-<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00048">48</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
+<p>Definition at line <a class="el" href="run__hydra_8py_source.html#l00057">57</a> of file <a class="el" href="run__hydra_8py_source.html">run_hydra.py</a>.</p>
 
-<p>Referenced by <a class="el" href="run__hydra_8py_source.html#l00201">main()</a>.</p>
+<p>Referenced by <a class="el" href="run__hydra_8py_source.html#l00252">main()</a>.</p>
 
 </div>
 </div>

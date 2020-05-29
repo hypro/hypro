@@ -1,5 +1,8 @@
 var NAVTREEINDEX49 =
 {
+"structhypro_1_1EvaluationResult.html#a9277925fdcd332e8b9528b9ca603e846":[8,0,2,53,9],
+"structhypro_1_1EvaluationResult.html#ad04c4d370454e1b426f487819bc99361":[8,0,2,53,8],
+"structhypro_1_1EvaluationResult.html#ad6864807ee9d817d6479b6dcdac7bce5":[8,0,2,53,1],
 "structhypro_1_1EvaluationResult.html#adeba850ed63df18f04b910986ecacf86":[8,0,2,53,6],
 "structhypro_1_1EvaluationResult.html#ae03f55adb2f72fd7693e40a8d4ac6799":[8,0,2,53,7],
 "structhypro_1_1ExactQuickhull_1_1Facet.html":[8,0,2,1,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX49 =
 "structhypro_1_1endPoint.html#a92577af1d4b880781f23df21c29e722f":[8,0,2,51,1],
 "structhypro_1_1endPoint.html#ac9d6e769c3cf80dad3b348164baa2c92":[8,0,2,51,2],
 "structhypro_1_1flattenRepresentations__i.html":[8,0,2,60],
-"structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html":[8,0,2,61],
-"structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html#a76d304c3615df9e688f2ed19cf4a5f62":[8,0,2,61,0],
-"structhypro_1_1flowDimensionVisitor.html":[8,0,2,62],
-"structhypro_1_1flowDimensionVisitor.html#a28a53c70e512cc045ad4e06ecc6328a2":[8,0,2,62,0]
+"structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html":[8,0,2,61]
 };

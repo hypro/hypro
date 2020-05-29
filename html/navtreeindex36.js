@@ -1,5 +1,8 @@
 var NAVTREEINDEX36 =
 {
+"cora__bouncing__ball_8m.html#a9f33d34e89611eb3a7314115b68d5272":[9,0,1,0,4,3,1,1,51],
+"cora__bouncing__ball_8m.html#aa96c05067eafa55556caecb193a5f4b9":[9,0,1,0,4,3,1,1,26],
+"cora__bouncing__ball_8m.html#aab66bc30358b612d702ac35e7de8ae8d":[9,0,1,0,4,3,1,1,43],
 "cora__bouncing__ball_8m.html#aac7977d22322d7b513b97940ad366423":[9,0,1,0,4,3,1,1,22],
 "cora__bouncing__ball_8m.html#aaf0125d55848e05414d31b722608d576":[9,0,1,0,4,3,1,1,14],
 "cora__bouncing__ball_8m.html#ab0a8da0a31223849ebe1118bb1b40e2d":[9,0,1,0,4,3,1,1,35],
@@ -246,8 +249,5 @@ var NAVTREEINDEX36 =
 "cora__filtered__oscillator__8_8m.html#a26bc797cce08b0ff6bbb4cd9eefaf538":[9,0,1,0,4,3,1,7,24],
 "cora__filtered__oscillator__8_8m.html#a272362b9a9b2366447bd4767884c19e8":[9,0,1,0,4,3,1,7,16],
 "cora__filtered__oscillator__8_8m.html#a2ce8cb2ec26e9d91142fd9b01d798652":[9,0,1,0,4,3,1,7,39],
-"cora__filtered__oscillator__8_8m.html#a2fb1c5cf58867b5bbc9a1b145a86f3a0":[9,0,1,0,4,3,1,7,50],
-"cora__filtered__oscillator__8_8m.html#a349589ff15dcff515f130ca34dc3740f":[9,0,1,0,4,3,1,7,3],
-"cora__filtered__oscillator__8_8m.html#a38f3dc22f3c3edf1c27ecc923e34ab7d":[9,0,1,0,4,3,1,7,45],
-"cora__filtered__oscillator__8_8m.html#a3d52940f7d0b3c78ee24d6ef458aba72":[9,0,1,0,4,3,1,7,5]
+"cora__filtered__oscillator__8_8m.html#a2fb1c5cf58867b5bbc9a1b145a86f3a0":[9,0,1,0,4,3,1,7,50]
 };
