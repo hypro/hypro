@@ -105,13 +105,6 @@ class Results(object):
             "Error: " + self.errorMsg if self.error else None
         ]
         return head + ", ".join(filter(None, body))
-        line += (self.safetyResult or "No safety result") + ", "
-        line += "running time: "
-        line += str(self.endTime - self.startTime) \
-                if self.endTime > 0 and self.startTime > 0 else ''
-        line += ", Error: " if self.error else ""
-        line += self.errorMsg or ""
-        return line
 
 class Model(object):
     def __init__(self, clString, name=None):
