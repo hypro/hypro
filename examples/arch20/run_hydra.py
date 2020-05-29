@@ -200,7 +200,7 @@ def get_cli_args():
 
 def main():
     args = get_cli_args()
-    tool = os.path.expanduser(args.tool)
+    tool = os.path.abspath(os.path.expanduser(args.tool))
     settingsFile = os.path.abspath(os.path.expanduser(args.settings))
     settingsDir = os.path.dirname(settingsFile)
     outputFile = os.path.expanduser(args.output)
