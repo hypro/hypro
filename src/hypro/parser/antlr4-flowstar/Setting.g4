@@ -40,7 +40,7 @@ qrprecond 		: 'QR precondition' ;
 
 fixedorders 	: 'fixed orders' NUMBER ;
 
-adaptiveorders  : 'adaptive orders { min ' NUMBER ' , max ' NUMBER '}' ;
+adaptiveorders  : 'adaptive orders' '{' 'min' NUMBER ',' 'max' NUMBER '}' ;
 
 cutoff 			: 'cutoff' EXPONENTIAL ;
 

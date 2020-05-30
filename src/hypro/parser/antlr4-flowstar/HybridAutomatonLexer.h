@@ -16,12 +16,12 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, POLY = 23, LINEAR = 24, ODE = 25, IN = 26, TRUE = 27, 
-    FALSE = 28, PAR = 29, JUMPS = 30, URGENT = 31, GUARD = 32, RESET = 33, 
-    PARALLELOTOPE = 34, BOX = 35, JUMP = 36, DEFINE = 37, COMMENT = 38, 
-    EQUALS = 39, BOOLRELATION = 40, PLUS = 41, MINUS = 42, TIMES = 43, SBOPEN = 44, 
-    SBCLOSE = 45, CBOPEN = 46, CBCLOSE = 47, COMMA = 48, NUMBER = 49, CONSTANT = 50, 
-    VARIABLE = 51, WS = 52, INTERVALAGG = 53, EXPONENTIAL = 54
+    T__20 = 21, T__21 = 22, T__22 = 23, POLY = 24, LINEAR = 25, ODE = 26, 
+    IN = 27, TRUE = 28, FALSE = 29, PAR = 30, JUMPS = 31, URGENT = 32, GUARD = 33, 
+    RESET = 34, PARALLELOTOPE = 35, BOX = 36, JUMP = 37, DEFINE = 38, COMMENT = 39, 
+    EQUALS = 40, BOOLRELATION = 41, PLUS = 42, MINUS = 43, TIMES = 44, SBOPEN = 45, 
+    SBCLOSE = 46, CBOPEN = 47, CBCLOSE = 48, COMMA = 49, NUMBER = 50, CONSTANT = 51, 
+    VARIABLE = 52, WS = 53, INTERVALAGG = 54, EXPONENTIAL = 55
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);
