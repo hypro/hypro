@@ -98,10 +98,16 @@ struct ANTLR4CPP_PUBLIC Any
     return _ptr == other._ptr;
   }
 
+  std::type_info const& get_typeinfo() const {
+    if (!_ptr) return typeid(std::nullptr_t);
+    return _ptr->get_typeinfo();
+  }
+
 private:
   struct Base {
     virtual ~Base();
     virtual Base* clone() const = 0;
+    virtual std::type_info const& get_typeinfo() const = 0;
   };
 
   template<typename T>
@@ -116,6 +122,9 @@ private:
       return new Derived<T>(value);
     }
 
+    std::type_info const& get_typeinfo() const override {
+      return typeid(T);
+    }
   };
 
   Base* clone() const

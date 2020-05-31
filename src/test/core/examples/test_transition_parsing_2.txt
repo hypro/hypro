@@ -1,7 +1,20 @@
 hybrid reachability
 {
  state var x,v,t
-
+ # TODO: the settings somehow got lost or were never specified. Were added to make TransitionParsing2 test run.
+ #setting {
+ #   fixed steps 0.5
+ #   time 2
+ #   remainder estimation 1e-4
+ #   identity precondition
+ #   gnuplot octagon x,v
+ #   adaptive orders { min 3, max 8 } 
+ #   cutoff 1e-15
+ #   precision 53
+ #   output out
+ #   max jumps 9
+ #   print on
+ #}
  modes
  {
   l1
@@ -159,6 +172,17 @@ hybrid reachability
   reset { x' := 0 }
   parallelotope aggregation {}
  }
+
+ # TODO: original initial sets somehow got lost. This initial set is improvised to make the TransitionParsing2 test run.
+ #init 
+ #{
+ # l1 
+ # {
+ #   x in [0,0]
+ #   v in [0,0]
+ #   t in [0,0]
+ # }
+ #}
 }
 
 #unsafe set

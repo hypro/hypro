@@ -62,6 +62,7 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		~HyproFormulaVisitor();
 
 		//Functions inherited by HybridAutomatonBaseVisitor
+		antlrcpp::Any visitExpression(HybridAutomatonParser::ExpressionContext *ctx) override;
 		antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *ctx) override;
 		antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *ctx) override;
 		antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *ctx) override;

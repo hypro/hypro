@@ -56,6 +56,12 @@ namespace hypro {
 				multed = Number(-1)*multed;
 			}
 		}
+
+		//If term has a minus in front, inverse the result
+		if(ctx->MINUS() != nullptr){
+			multed = Number(-1)*multed;
+		}
+
 		return multed;
 	}
 
@@ -156,8 +162,61 @@ namespace hypro {
 			exit(0);
 		}
 
-		//1.Call visit(ctx->polynom()) to get vector and return it
-		return visit(ctx->polynom());
+		//1.Call visit(ctx->expression()) to get vector and return it
+		return visit(ctx->expression()).as<vector_t<Number>>();
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproFormulaVisitor<Number>::visitExpression(HybridAutomatonParser::ExpressionContext *ctx) {
+		
+		DEBUG("hypro.parser", "current expression: " << ctx->getText());
+
+		//If expression is only a polynom, return the coeff vector of the polynom
+		if(ctx->polynom() != nullptr){
+			vector_t<Number> result = visit(ctx->polynom()).as<vector_t<Number>>();
+			return result;
+		}
+
+		//Assert that terms do not have variable names inside (do not allow multiplication of multiple variables)
+		//if(ctx->term().size() > 0 && ctx->term(0)->VARIABLE().size() > 0 || ctx->term(1)->VARIABLE().size() > 0){
+		//	std::cerr << "ERROR: Multiplication of multiple variables not allowed" << std::endl;
+		//}
+
+		//Get factor left and right outside the expressions
+		assert(0 <= ctx->term().size() && ctx->term().size() <= 2);
+		Number leftFactor = 1;
+		Number rightFactor = 1;
+		if(ctx->term().size() != 0){
+			if(ctx->term(0)->start->getStartIndex() > ctx->expression().back()->stop->getStopIndex()){
+				//There was no left term, so the first term is the right-hand side term
+				rightFactor = multTogether(ctx->term(0));
+			} else {
+				//The first term is the left term
+				leftFactor = multTogether(ctx->term(0));
+				rightFactor = ctx->term().size() == 2 ? multTogether(ctx->term(1)) : 1;
+			}
+		}
+
+		//Get the vectors of each subexpression and aggregate them according to the connector in front
+		assert(ctx->expression().size() >= 1);
+		assert(ctx->expression().size() == ctx->connector().size() + 1);
+		vector_t<Number> aggregateResult = visit(ctx->expression(0)).template as<vector_t<Number>>();
+		for(std::size_t i = 1; i < ctx->expression().size(); ++i){
+			if(ctx->connector()[i-1]->getText() == "+"){
+				aggregateResult += visit(ctx->expression()[i]).template as<vector_t<Number>>();
+			} else if(ctx->connector()[i-1]->getText() == "-"){
+				aggregateResult -= visit(ctx->expression()[i]).template as<vector_t<Number>>();
+			} else {
+				std::cerr << "ERROR: Unknown operation found during expression aggregation." << std::endl;
+			}
+		}
+
+		//Multiply/Divide by the left and right factors with the result and return it
+		if(ctx->DIVIDE() != nullptr){
+			return vector_t<Number>((leftFactor / rightFactor) * aggregateResult);
+		} else {
+			return vector_t<Number>((leftFactor * rightFactor) * aggregateResult);
+		}
 	}
 
 	template<typename Number>
@@ -171,9 +230,9 @@ namespace hypro {
 			}
 		}
 
-		//1.Call visit(ctx->polynom()) for both sides to get 2 vectors
-		vector_t<Number> poly1 = visit(ctx->polynom()[0]);
-		vector_t<Number> poly2 = visit(ctx->polynom()[1]);
+		//1.Call visit(ctx->expression()) for both sides to get 2 vectors
+		vector_t<Number> poly1 = visit(ctx->expression()[0]);
+		vector_t<Number> poly2 = visit(ctx->expression()[1]);
 
 		//2.Shorten both vectors by one, save last coeff and save everything in pair
 		Number poly1Back = poly1(poly1.size()-1);

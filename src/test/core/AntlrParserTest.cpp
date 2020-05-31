@@ -67,8 +67,8 @@ class AntlrParserTest : public ::testing::Test {
 };
 
 TYPED_TEST( AntlrParserTest, JustTesting ) {
-	std::string path( "../../../../src/test/core/examples/test_bouncing_ball.txt" );
-	// std::string path("../src/test/core/examples/test_bouncing_ball.txt");
+	// std::string path( "../../../../src/test/core/examples/test_bouncing_ball.txt" );
+	std::string path("../src/test/core/examples/test_bouncing_ball.txt");
 	// std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
 	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
 
@@ -83,7 +83,8 @@ TYPED_TEST( AntlrParserTest, JustTesting ) {
 }
 
 TYPED_TEST( AntlrParserTest, Settings ) {
-	std::string path( "../../../../src/test/core/examples/test_settings.txt" );
+	std::string path( "../src/test/core/examples/test_settings.txt" );
+	//std::string path( "../../../../src/test/core/examples/test_settings.txt" );
 
 	this->cwd();
 	try {
@@ -96,7 +97,8 @@ TYPED_TEST( AntlrParserTest, Settings ) {
 }
 
 TYPED_TEST( AntlrParserTest, PlainRectangular ) {
-	std::string path( "../../../../src/test/core/examples/test_plain_rectangular.txt" );
+	std::string path( "../src/test/core/examples/test_plain_rectangular.txt" );
+	//std::string path( "../../../../src/test/core/examples/test_plain_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -109,7 +111,8 @@ TYPED_TEST( AntlrParserTest, PlainRectangular ) {
 }
 
 TYPED_TEST( AntlrParserTest, MixedRectangular ) {
-	std::string path( "../../../../src/test/core/examples/test_mixed_rectangular.txt" );
+	std::string path( "../src/test/core/examples/test_mixed_rectangular.txt" );
+	//std::string path( "../../../../src/test/core/examples/test_mixed_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -122,9 +125,9 @@ TYPED_TEST( AntlrParserTest, MixedRectangular ) {
 }
 
 TYPED_TEST( AntlrParserTest, EmptyFile ) {
-	std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
-	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
-
+	std::string path( "../src/test/core/examples/test_empty_file.txt" );
+	//std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
+	
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
 		FAIL();
@@ -135,7 +138,8 @@ TYPED_TEST( AntlrParserTest, EmptyFile ) {
 }
 
 TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
-	std::string path( "../../../../src/test/core/examples/test_transition_parsing_2.txt" );
+	std::string path( "../src/test/core/examples/test_transition_parsing_2.txt" );
+	//std::string path( "../../../../src/test/core/examples/test_transition_parsing_2.txt" );
 	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
@@ -176,7 +180,41 @@ TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
 	}
 }
 
-TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
+TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
+
+	std::string path( "../src/test/core/examples/test_bracket_parsing.txt" );
+	//std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
+	
+	try {
+		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
+		Location<TypeParam>* loc = h.first.getLocation("negAngle");
+		matrix_t<TypeParam> controlMatrix = matrix_t<TypeParam>::Zero(13,13);
+		controlMatrix << 0,0,0,0,0,0,0,0,0,0,0,0,0.13453709720348,
+						23.4,-0.5,3,0,0,0,0,0,0,0,0,0,0,
+						1,0,0,0,0,0,0,0,0,0,0,0,0,
+						1,-1,1,0,0,0,0,0,0,0,0,0,0,
+						10,-10,10,0,0,0,0,0,0,0,0,0,0,
+						-2,2,-2,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,
+						1,0,0,0,0,0,0,0,0,0,0,0,0,
+						1,-1,1,0,0,0,0,0,0,0,0,0,0,
+						1,-1,10,0,0,0,0,0,0,0,0,0,0,
+						1,-1,1,0,0,0,0,0,0,0,0,0,0,
+						20,-25,10,40,0,0,-20,-10,0,0,0,0,30.3,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0;
+		if(std::is_same<TypeParam,double>::value){
+			EXPECT_TRUE(controlMatrix.isApprox(loc->getLinearFlow().getFlowMatrix()));
+		} else {
+			SUCCEED();
+		}
+	} catch ( const std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+
+}
+
+//TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 	/*
 	 * The simplest hybrid automaton HA that will be accepted by the parser is:
 	 * - location l with x' = 1, no invariant, no transitions
@@ -260,7 +298,7 @@ TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 		//Check global badstates - none
 		EXPECT_EQ(parsedHA.getGlobalBadStates().size(), std::size_t(0));
 	*/
-}
+//}
 
 /*
 TYPED_TEST(AntlrParserTest, parallelComposition){

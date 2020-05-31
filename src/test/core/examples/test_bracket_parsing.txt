@@ -1,0 +1,159 @@
+# This test is based on the benchmark drivetrain_2theta_5percent.
+
+hybrid reachability
+{
+    # Vars
+    state var x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, t
+
+    setting
+    {
+        fixed steps 0.0005
+        time 2
+        remainder estimation 1e-4
+        identity precondition
+        gnuplot octagon x1,x3
+        adaptive orders { min 3, max 8 } 
+        cutoff 1e-15
+        precision 53
+        output out
+        max jumps 9
+        print on
+    }
+
+    modes
+    {
+        negAngle
+        {
+            nonpoly ode
+            {
+                # Case: only number
+                x1' = ---+-0.13453709720348
+                # Case: linear expression
+                x2' = 23.4*x1 - 0.5*x2 + 3*x3
+                # Case: Simple bracket expression
+                x3' = (x1)
+                # Case: Bracket with linear expression inside
+                x4' = (x1 - x2 + x3)
+                # Case: Bracket with linear expression and multiplying terms
+                x5' = -5 * (x1 - x2 + x3) * -2
+                # Case: Bracket with linear expression and diving terms
+                x6' = -6 * (x1 - x2 + x3) / 3
+                # Case: Bracket within bracket
+                x7' = ((x1))
+                # Case: Three brackets within bracket 
+                x8' = ((x1)-(x2)+(x3))
+                # Case: Bracket with trailing terms
+                x9' = ((x1-x2)+10*x3)
+                # Case: Bracket in bracket in bracket
+                x10' = (((x1)-x2)+x3)
+                # Case: Wild expression
+                x11' = (2 * (2 * x4 - x7) + 0.5 * (2.0 * x3 - 2.0 * (x1 + x8)) + 0.5 * (6 - 3 * (x2 - 2 * (x1 - -0.01))) - x2) / 0.1
+                t' = 0
+            }
+            inv
+            {
+
+            }
+        }
+
+        deadzone
+        {
+            nonpoly ode
+            {
+                x1' = 0.08333333333333333 * x7 - x9
+                x2' = (0.5 * (12.0 * x4 - x7) + 0.5 * (12.0 * x3 - 12.0 * (x1 + x8)) + 0.5 * (60.0 - 3.3333333333333335 * x2) - x2) / 0.1
+                x3' = x4
+                x4' = 5.0
+                x5' = x6
+                x6' = 0.007142857142857143 * (100000.0 * (x10 - x5) - 5.6 * x6)
+                x7' = 3.3333333333333335 * x2
+                x8' = x9
+                x9' = 0.01 * (0.0 - 100000.0 * (x8 - x10) - 1.0 * x9)
+                x10' = x11
+                x11' = 0.01 * (100000.0 * (x8 - x10) - 100000.0 * (x10 - x5) - 1.0 * x11)
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: -0.03 <= x1 & x1 <= 0.03
+
+                -0.03 <= x1   x1 <= 0.03
+            }
+        }
+
+        negAngleInit
+        {
+            nonpoly ode
+            {
+                x1' = 0.08333333333333333 * x7 - x9
+                x2' = (0.5 * (12.0 * x4 - x7) + 0.5 * (12.0 * x3 - 12.0 * (x1 + x8)) + 0.5 * (-60.0 - 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - -0.03))) - x2) / 0.1
+                x3' = x4
+                x4' = -5.0
+                x5' = x6
+                x6' = 0.007142857142857143 * (100000.0 * (x10 - x5) - 5.6 * x6)
+                x7' = 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - -0.03))
+                x8' = x9
+                x9' = 0.01 * (10000.0 * (x1 - -0.03) - 100000.0 * (x8 - x10) - 1.0 * x9)
+                x10' = x11
+                x11' = 0.01 * (100000.0 * (x8 - x10) - 100000.0 * (x10 - x5) - 1.0 * x11)
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: t <= 0.2
+
+                t <= 0.2
+            }
+        }
+
+        error
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = 0.0
+                x4' = 0.0
+                x5' = 0.0
+                x6' = 0.0
+                x7' = 0.0
+                x8' = 0.0
+                x9' = 0.0
+                x10' = 0.0
+                x11' = 0.0
+                t' = 0.0
+            }
+            inv
+            {
+            }
+        }
+    }
+
+    jumps
+    {
+    }
+
+    init
+    {
+        negAngleInit
+        {
+            x8 in [-0.00135, -0.00129]
+            x9 in [29.5, 30.5]
+            t in [0, 0]
+            x10 in [-0.00135, -0.00129]
+            x1 in [-0.04348, -0.04292]
+            x11 in [29.5, 30.5]
+            x2 in [-11.2335, -10.7665]
+            x3 in [0, 0]
+            x4 in [29.5, 30.5]
+            x5 in [0, 0]
+            x6 in [29.5, 30.5]
+            x7 in [354, 366]
+        }
+    }
+}
+
+unsafe
+{
+    error { }
+}
