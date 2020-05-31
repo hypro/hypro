@@ -200,7 +200,7 @@ TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
 						1,-1,10,0,0,0,0,0,0,0,0,0,0,
 						1,-1,1,0,0,0,0,0,0,0,0,0,0,
 						20,-25,10,40,0,0,-20,-10,0,0,0,0,30.3,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,
+						6,3,0,0,0,0,0,0,0,0,0,0,4,
 						0,0,0,0,0,0,0,0,0,0,0,0,0;
 		if(std::is_same<TypeParam,double>::value){
 			EXPECT_TRUE(controlMatrix.isApprox(loc->getLinearFlow().getFlowMatrix()));
