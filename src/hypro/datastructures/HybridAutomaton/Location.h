@@ -69,7 +69,8 @@ class Location {
 	transitionVector& rGetTransitions() { return mTransitions; }
 	const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
 	bool hasExternalInput() const { return mHasExternalInput; }
-	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; } std::string getName() const { return mName; }
+	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
+	std::string getName() const { return mName; }
 	std::size_t dimension() const;
 	std::size_t dimension( std::size_t i ) const;
 
@@ -235,18 +236,20 @@ namespace std {
 template <typename Number>
 struct hash<hypro::Location<Number>> {
 	std::size_t operator()( const hypro::Location<Number>& loc ) const {
-		TRACE( "hypro.datastructures", "Hash for location " << loc.getName() );
+		//TRACE( "hypro.datastructures", "Hash for location " << loc.getName() );
 		//Flows
 		std::size_t seed = 0;
 		for ( const auto& f : loc.getLinearFlows() ) {
+			//TRACE( "hypro.datastructures", "Add flow hash " << std::hash<hypro::linearFlow<Number>>()( f ) );
 			carl::hash_add( seed, std::hash<hypro::linearFlow<Number>>()( f ) );
 		}
 		for ( const auto& f : loc.getRectangularFlows() ) {
+			//TRACE( "hypro.datastructures", "Add flow hash " << std::hash<hypro::rectangularFlow<Number>>()( f ) );
 			carl::hash_add( seed, std::hash<hypro::rectangularFlow<Number>>()( f ) );
 		}
 
 		//Name
-		//TRACE("hypro.datastructures","Add name hash " << std::hash<std::string>()(loc.getName()));
+		//TRACE( "hypro.datastructures", "Add name hash " << std::hash<std::string>()( loc.getName() ) );
 		carl::hash_add( seed, std::hash<std::string>()( loc.getName() ) );
 
 		////Transitions
@@ -259,11 +262,11 @@ struct hash<hypro::Location<Number>> {
 		//  seed += std::hash<Box<Number>>()(mExternalInput);
 		//}
 
-		////Imvariant
-		//TRACE("hypro.datastructures","Add invariant hash " << loc.getInvariant().hash());
+		// Invariant
+		//TRACE( "hypro.datastructures", "Add invariant hash " << loc.getInvariant().hash() );
 		carl::hash_add( seed, loc.getInvariant().hash() );
 
-		TRACE( "hypro.datastructures", "Resulting hash " << seed );
+		//TRACE( "hypro.datastructures", "Resulting hash " << seed );
 		return seed;
 	}
 };

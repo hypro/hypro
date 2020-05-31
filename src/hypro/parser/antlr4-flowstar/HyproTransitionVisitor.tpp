@@ -89,8 +89,10 @@ namespace hypro {
 		if(ctx->labels().size() > 0){
 			std::vector<Label> transformed{};
 			for(const auto& l : ctx->labels()) {
-				transformed.emplace_back(visit(l));
+				auto labels = visit(l).template as<std::vector<hypro::Label>>();
+				transformed.insert(transformed.end(),labels.begin(),labels.end());
 			}
+
 			t->setLabels(transformed);
 		}
 
@@ -145,10 +147,10 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabels(HybridAutomatonParser::LabelsContext *ctx) {
 		// TODO
-		std::vector<std::string> labels{};
-		std::transform(ctx->VARIABLE().begin(), ctx->VARIABLE().end(), std::back_inserter(labels) ,[&](auto lab){
-			return visit(lab).template as<std::string>();
-		}  );
+		std::vector<hypro::Label> labels{};
+		for(const auto& l : ctx->VARIABLE() ) {
+			labels.emplace_back(hypro::Label(l->getText()));
+		}
 		return labels;
 	}
 

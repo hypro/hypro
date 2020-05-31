@@ -493,9 +493,10 @@ template <typename Number, typename Setting>
 EvaluationResult<Number> SupportFunctionContent<Number, Setting>::evaluate( const vector_t<Number>& _direction, bool useExact ) const {
 	matrix_t<Number> tmp = matrix_t<Number>::Zero( 1, _direction.rows() );
 	tmp << _direction.transpose();
-	auto res = multiEvaluate( tmp, useExact ).at( 0 );
+	auto res = multiEvaluate( tmp, useExact );
+	assert( res.size() == 1 );
 	//TRACE("hypro.representations.supportFunction","Return result.");
-	return res;
+	return res.at( 0 );
 }
 
 template <typename Number, typename Setting>
@@ -509,7 +510,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 
 	std::vector<Node> callStack;
 	std::vector<Param> paramStack;
-	std::vector<std::pair<int, std::vector<Res>>> resultStack;  // The first value is an iterator to the calling frame
+	std::vector<std::pair<int, std::vector<Res>>> resultStack;	// The first value is an iterator to the calling frame
 
 	callStack.push_back( getThis() );
 	paramStack.push_back( _directions );
@@ -612,6 +613,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 						}
 						//TRACE("hypro.representations.supportFunction",": LINTRAFO, accumulate results done.");
 						accumulatedResult = resultStack.back().second.front();
+						assert( !accumulatedResult.empty() );
 						break;
 					}
 					case SF_TYPE::PROJECTION: {
@@ -619,6 +621,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 						assert( resultStack.back().second.size() == 1 );
 						// simply forward the results
 						accumulatedResult = resultStack.back().second.front();
+						assert( !accumulatedResult.empty() );
 						break;
 					}
 					case SF_TYPE::SCALE: {
@@ -635,6 +638,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 							}
 						}
 						accumulatedResult = resultStack.back().second.front();
+						assert( !accumulatedResult.empty() );
 						break;
 					}
 					case SF_TYPE::SUM: {
@@ -661,7 +665,11 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 								accumulatedResult.emplace_back( r );
 							}
 							assert( accumulatedResult.size() == std::size_t( currentParam.rows() ) );
+							assert( !accumulatedResult.empty() );
+						} else {
+							accumulatedResult.emplace_back( EvaluationResult<Number>{} );
 						}
+						assert( !accumulatedResult.empty() );
 						break;
 					}
 					case SF_TYPE::UNITE: {
@@ -684,6 +692,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 								}
 							}
 						}
+						assert( !accumulatedResult.empty() );
 						break;
 					}
 					case SF_TYPE::INTERSECT: {
@@ -695,44 +704,50 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 						// in case one of the results is infeasible (the set is empty), return this result.
 						if ( resA.begin()->errorCode == SOLUTION::INFEAS ) {
 							accumulatedResult = std::move( resA );
+							assert( !accumulatedResult.empty() );
 							break;
 						}
 						if ( resB.begin()->errorCode == SOLUTION::INFEAS ) {
 							accumulatedResult = std::move( resB );
+							assert( !accumulatedResult.empty() );
 							break;
 						}
 						for ( unsigned i = 0; i < resA.size(); ++i ) {
 							//std::cout << "Eval in direction " << convert<Number,double>(_directions.row(i)).transpose() << std::endl;
-							assert( resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS );
 							EvaluationResult<Number> res;
-							if ( resA[i].errorCode == SOLUTION::INFTY ) {
-								//TRACE("hypro.representations.supportFunction","resA infinite");
-								res.errorCode = resB[i].errorCode;
-								res.supportValue = resB[i].supportValue;
-								res.optimumValue = resB[i].optimumValue;
-							} else if ( resB[i].errorCode == SOLUTION::INFTY ) {
-								//TRACE("hypro.representations.supportFunction","resB infinite");
-								assert( resA[i].errorCode == SOLUTION::FEAS );
-								res.errorCode = resA[i].errorCode;
-								res.supportValue = resA[i].supportValue;
-								res.optimumValue = resA[i].optimumValue;
-							} else {
-								assert( resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS );
-								//TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
-								res.errorCode = SOLUTION::FEAS;
-								if ( resA[i].supportValue < resB[i].supportValue ) {
+							// intersection with the empty set is the empty set -> skip further computation
+							if ( resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS ) {
+								if ( resA[i].errorCode == SOLUTION::INFTY ) {
+									//TRACE("hypro.representations.supportFunction","resA infinite");
+									res.errorCode = resB[i].errorCode;
+									res.supportValue = resB[i].supportValue;
+									res.optimumValue = resB[i].optimumValue;
+								} else if ( resB[i].errorCode == SOLUTION::INFTY ) {
+									//TRACE("hypro.representations.supportFunction","resB infinite");
+									assert( resA[i].errorCode == SOLUTION::FEAS );
+									res.errorCode = resA[i].errorCode;
 									res.supportValue = resA[i].supportValue;
 									res.optimumValue = resA[i].optimumValue;
 								} else {
-									res.supportValue = resB[i].supportValue;
-									res.optimumValue = resB[i].optimumValue;
+									assert( resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS );
+									//TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
+									res.errorCode = SOLUTION::FEAS;
+									if ( resA[i].supportValue < resB[i].supportValue ) {
+										res.supportValue = resA[i].supportValue;
+										res.optimumValue = resA[i].optimumValue;
+									} else {
+										res.supportValue = resB[i].supportValue;
+										res.optimumValue = resB[i].optimumValue;
+									}
 								}
 							}
+
 							//auto t = convert<Number,double>(res.optimumValue);
 							////TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulated result: " << t << " and value: " << res.supportValue );
 							accumulatedResult.emplace_back( std::move( res ) );
 						}
 						assert( accumulatedResult.size() == std::size_t( currentParam.rows() ) );
+						assert( !accumulatedResult.empty() );
 						break;
 					}
 					case SF_TYPE::NONE: {
@@ -749,12 +764,14 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number, Setting>::m
 				if ( resultStack.back().first == -1 ) {
 					// we reached the top, exit
 					//TRACE("hypro.representations.supportFunction","Return accumulated result.");
+					assert( !accumulatedResult.empty() );
 					return accumulatedResult;
 				}
 
 				// forward result.
 				////TRACE("hypro.representations.supportFunction","Push accumulated result up.");
 				//resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
+				assert( !accumulatedResult.empty() );
 				resultStack.at( resultStack.back().first ).second.emplace_back( std::move( accumulatedResult ) );
 
 				// delete result frame and close recursive call
@@ -888,7 +905,7 @@ unsigned SupportFunctionContent<Number, Setting>::multiplicationsPerEvaluation()
 	using Node = std::shared_ptr<SupportFunctionContent<Number, Setting>>;
 	using Res = long int;
 	std::vector<Node> callStack;
-	std::vector<std::pair<std::size_t, std::vector<Res>>> resultStack;  // The first value is an iterator to the calling frame
+	std::vector<std::pair<std::size_t, std::vector<Res>>> resultStack;	// The first value is an iterator to the calling frame
 
 	callStack.push_back( getThis() );
 	resultStack.push_back( std::make_pair( -1, std::vector<Res>() ) );
@@ -1200,7 +1217,7 @@ std::vector<std::size_t> SupportFunctionContent<Number, Setting>::collectProject
 
 	std::vector<Node> callStack;
 	//std::vector<vector_t<Number>> paramStack;
-	std::vector<std::pair<int, std::vector<Res>>> resultStack;  // The first value is an iterator to the calling frame
+	std::vector<std::pair<int, std::vector<Res>>> resultStack;	// The first value is an iterator to the calling frame
 
 	callStack.push_back( getThis() );
 	//paramStack.push_back(1);
@@ -1493,7 +1510,7 @@ bool SupportFunctionContent<Number, Setting>::contains( const vector_t<Number>& 
 		}
 		case SF_TYPE::PROJECTION: {
 			//DEBUG("hypro.representations.supportFunction","PROJECTION, point: " << _point);
-			return projectionParameters()->origin->contains( _point );  // TODO: Correct?
+			return projectionParameters()->origin->contains( _point );	// TODO: Correct?
 		}
 		case SF_TYPE::SCALE: {
 			//DEBUG("hypro.representations.supportFunction","SCALE, point: " << _point);
@@ -1596,7 +1613,7 @@ bool SupportFunctionContent<Number, Setting>::empty() const {
 			if ( scaleParameters()->factor == 0 )
 				return true;
 			else
-				return scaleParameters()->origin->empty();  // Todo: What if factor is negative?
+				return scaleParameters()->origin->empty();	// Todo: What if factor is negative?
 		}
 		case SF_TYPE::SUM: {
 			return ( summands()->lhs->empty() || summands()->rhs->empty() );
