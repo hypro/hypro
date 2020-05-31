@@ -1,5 +1,9 @@
 var NAVTREEINDEX40 =
 {
+"example__differenceBounds_8cpp.html#a74b8af69c63646f0506fdb685aa73306":[9,0,0,13,8],
+"example__differenceBounds_8cpp.html#a8b1528ea47dc86906283e6d3ccd75b5b":[9,0,0,13,18],
+"example__differenceBounds_8cpp.html#a92134928dfc884b9af4e90d79afd8382":[9,0,0,13,26],
+"example__differenceBounds_8cpp.html#a96fa3da350197e3b8dada689a592636b":[9,0,0,13,10],
 "example__differenceBounds_8cpp.html#a99686ca8f01e170a61dba333c7370c87":[9,0,0,13,16],
 "example__differenceBounds_8cpp.html#aa26e787fa3a123f9e4e3e0cc5946d8b9":[9,0,0,13,29],
 "example__differenceBounds_8cpp.html#aaaa99afd8b9ff705b90494a29d014815":[9,0,0,13,31],
@@ -181,8 +185,8 @@ var NAVTREEINDEX40 =
 "example_converter_8cpp-example.html":[10,3],
 "example_differenceBounds_8cpp-example.html":[10,4],
 "example_plot_8cpp-example.html":[10,6],
-"examples.html":[1],
 "examples.html":[10],
+"examples.html":[1],
 "examples_2example__box_8cpp.html":[9,0,0,4],
 "examples_2example__box_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[9,0,0,4,0],
 "examples_2example__box_8cpp_source.html":[9,0,0,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX40 =
 "filtered__oscillator__16__mhypro_8m.html#a1995e098e6240a1ee790b30ad7a9dfe5":[9,0,1,0,4,3,4,3,67],
 "filtered__oscillator__16__mhypro_8m.html#a1b3402e7302544af84cb8f12d9b0a45a":[9,0,1,0,4,3,4,3,10],
 "filtered__oscillator__16__mhypro_8m.html#a1e79478aa2054936317b9dfc737b34d9":[9,0,1,0,4,3,4,3,29],
-"filtered__oscillator__16__mhypro_8m.html#a26176c84888450f3e6b065bde5283ec1":[9,0,1,0,4,3,4,3,66],
-"filtered__oscillator__16__mhypro_8m.html#a2658ab9409e046beaf198d720042105c":[9,0,1,0,4,3,4,3,32],
-"filtered__oscillator__16__mhypro_8m.html#a27ad7cc2f156a0ea37a0be3966283d0a":[9,0,1,0,4,3,4,3,52],
-"filtered__oscillator__16__mhypro_8m.html#a283bef517057a74ff5e248abec223cb0":[9,0,1,0,4,3,4,3,91],
-"filtered__oscillator__16__mhypro_8m.html#a28509c7fbde9c3505b0294f48f1c1916":[9,0,1,0,4,3,4,3,0]
+"filtered__oscillator__16__mhypro_8m.html#a26176c84888450f3e6b065bde5283ec1":[9,0,1,0,4,3,4,3,66]
 };
