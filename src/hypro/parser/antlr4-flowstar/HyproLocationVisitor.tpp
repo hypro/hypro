@@ -119,7 +119,7 @@ namespace hypro {
 		for(unsigned i=0; i < ctx->equation().size(); i++){
 			//std::cout << "Try to parse linear flow." << std::endl;
 			//insert into row according to state var order
-			vector_t<Number> tmpRow = equationVisitor.visit(ctx->equation()[i]);
+			vector_t<Number> tmpRow = equationVisitor.visit(ctx->equation(i)).template as<vector_t<Number>>();
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
 					//std::cout << "Linear flow for variable " << j << ", row: " << tmpRow << std::endl;

@@ -454,9 +454,9 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 
 	TRACE( "hypro.representations.supportFunction", "First intersection" );
 
-	std::cout << "=== TEST DRAISINE" << std::endl;
+	// std::cout << "=== TEST DRAISINE" << std::endl;
 	auto resultPair = boxsf.satisfiesHalfspaces( constraints, constants );
-	std::cout << "=== TEST DRAISINE OVER" << std::endl;
+	// std::cout << "=== TEST DRAISINE OVER" << std::endl;
 	EXPECT_TRUE( resultPair.second.empty() );
 	EXPECT_EQ( CONTAINMENT::NO, resultPair.first );
 

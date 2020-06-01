@@ -1,0 +1,80 @@
+# Created by Hyst v1.6
+# Hybrid Automaton in Flow*
+# Converted from file: ../../hypro/examples/arch20/aff/embrake.xml
+# Command Line arguments: -i ../../hypro/examples/arch20/aff/embrake.xml ../../hypro/examples/arch20/aff/embrake_deterministic.cfg -o embrake_ECD.model -tool flowstar ""
+
+
+hybrid reachability
+{
+    # Vars
+    state var I, x, T, x_e, x_c, t
+
+    setting
+    {
+        fixed steps 0.000001
+        time 0.1
+        remainder estimation 1e-4
+        identity precondition
+        gnuplot octagon t,x
+        adaptive orders { min 3, max 8 } 
+        cutoff 1e-15
+        precision 53
+        output embrake_ECD
+        max jumps 1000
+        print on
+    }
+
+    modes
+    {
+        loc_loc
+        {
+            lti ode
+            {
+                I' = 10000000.0 * x_e + 1000000.0 * x_c - 500.0 * I - 4.0 * I
+                x' = 0.0017680855258330555 * I
+                T' = 1.0
+                x_e' = 0.0
+                x_c' = 0.0
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: T <= 0.0001 + 0.0
+
+                T <= 0.0001
+            }
+        }
+    }
+
+    jumps
+    {
+        loc_loc -> loc_loc
+        guard
+        {
+            # Original guard: T >= 0.0001 - 0.0
+
+            T >= 0.0001
+        }
+        reset
+        {
+            T' := 0.0
+            x_c' := x_c + 0.00005 - 0.0001 * x
+            #x_c' := x_c + 0.0001 * (0.05 - x)
+            x_e' := 0.05 - x
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        loc_loc
+        {
+            T in [0, 0]
+            t in [0, 0]
+            x in [0, 0]
+            I in [0, 0]
+            x_c in [0, 0]
+            x_e in [0, 0]
+        }
+    }
+}
