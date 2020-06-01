@@ -30,6 +30,10 @@ int main( int argc, char const *argv[] ) {
 								  ? options["timehorizon"].as<mpq_class>()
 								  : reachSettings.timeBound;
 
+	if ( options.count( "skipplot" ) ) {
+		reachSettings.plotDimensions.clear();
+	}
+
 	hypro::representation_name representation =
 		  hypro::representation_name::_from_string( options["representation"].as<std::string>().c_str() );
 

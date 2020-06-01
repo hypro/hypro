@@ -1,4 +1,4 @@
--m BLDC01-BDS01.model -d 1/500 -r support_function --setting SupportFunctionSetting
+-m BLDC01-BDS01.model -d 1/250 -r support_function --setting SupportFunctionSetting
 -m PLAD01_BND42.model -d 1/10 -r support_function --setting SupportFunctionSetting
 -m PLAD01_BND30.model -d 1/10 -t 20 -r support_function --setting NoBoxReduction
 -m SRA01.model -d 1/10 -r support_function --setting SupportFunctionSetting

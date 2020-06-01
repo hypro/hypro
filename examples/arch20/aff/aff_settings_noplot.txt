@@ -1,0 +1,7 @@
+-m BLDC01-BDS01.model -d 1/250 -r support_function --setting SupportFunctionSetting --skipplot
+-m PLAD01_BND42.model -d 1/4 -r support_function --setting SupportFunctionSetting --skipplot
+-m PLAD01_BND30.model -d 30/100 -t 20 -r support_function --setting NoBoxReduction --skipplot
+-m SRA01.model -d 1/10 -r support_function --setting SupportFunctionSetting --skipplot
+-m SRA02.model -d 1/10 -r support_function --setting SupportFunctionSetting --skipplot
+-m SRA03.model -d 1/10 -r support_function --setting SupportFunctionSetting --skipplot
+-m SRA04.model -d 1/10 -r support_function --setting SupportFunctionSetting --skipplot
