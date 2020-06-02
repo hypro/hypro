@@ -4,8 +4,6 @@ var classhypro_1_1HybridAutomatonParser_1_1SettingContext =
     [ "accept", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a49d13e798b1dfecffdbfd54d79dbc618", null ],
     [ "adaptiveorders", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a77c15be64feff67e0eb1a1fc89a97ec3", null ],
     [ "adaptiveorders", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a356f93cf859eae2b6c67d87a328599b6", null ],
-    [ "CBCLOSE", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a56495b6d4de0dec99f91767e68db4ffb", null ],
-    [ "CBOPEN", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a490bda3a67296c37fc3d3bc7f674ffce", null ],
     [ "cutoff", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a8ad45cff3780558bbb715cc0643a8e25", null ],
     [ "cutoff", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#a7a0b11703a9a9227301f06830f02efee", null ],
     [ "filename", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html#abafb450a7134e31f12bf84f575356ee1", null ],

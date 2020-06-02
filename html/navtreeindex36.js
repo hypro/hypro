@@ -1,9 +1,5 @@
 var NAVTREEINDEX36 =
 {
-"cora__bouncing__ball_8m.html#a867f1ee51e3548309da9266fc4dd7c27":[9,0,1,0,4,3,1,1,8],
-"cora__bouncing__ball_8m.html#a8e45694ef55a8bbf4e169109cf7f35d8":[9,0,1,0,4,3,1,1,1],
-"cora__bouncing__ball_8m.html#a8e89138870bb43185cfdcd15eb6938f1":[9,0,1,0,4,3,1,1,40],
-"cora__bouncing__ball_8m.html#a8fb092330ecda60587643305d0d9738a":[9,0,1,0,4,3,1,1,46],
 "cora__bouncing__ball_8m.html#a9f33d34e89611eb3a7314115b68d5272":[9,0,1,0,4,3,1,1,51],
 "cora__bouncing__ball_8m.html#aa96c05067eafa55556caecb193a5f4b9":[9,0,1,0,4,3,1,1,26],
 "cora__bouncing__ball_8m.html#aab66bc30358b612d702ac35e7de8ae8d":[9,0,1,0,4,3,1,1,43],
@@ -249,5 +245,9 @@ var NAVTREEINDEX36 =
 "cora__filtered__oscillator__8_8m.html#a1d106eee89146f2808495a49a42330da":[9,0,1,0,4,3,1,7,35],
 "cora__filtered__oscillator__8_8m.html#a212c9afab37cf4608b3788073ec17fbd":[9,0,1,0,4,3,1,7,6],
 "cora__filtered__oscillator__8_8m.html#a22e284546bebd3965dc0922869f2572c":[9,0,1,0,4,3,1,7,37],
-"cora__filtered__oscillator__8_8m.html#a2332b9a4a4d6e4088c425e05a13e10f7":[9,0,1,0,4,3,1,7,0]
+"cora__filtered__oscillator__8_8m.html#a2332b9a4a4d6e4088c425e05a13e10f7":[9,0,1,0,4,3,1,7,0],
+"cora__filtered__oscillator__8_8m.html#a26bc797cce08b0ff6bbb4cd9eefaf538":[9,0,1,0,4,3,1,7,24],
+"cora__filtered__oscillator__8_8m.html#a272362b9a9b2366447bd4767884c19e8":[9,0,1,0,4,3,1,7,16],
+"cora__filtered__oscillator__8_8m.html#a2ce8cb2ec26e9d91142fd9b01d798652":[9,0,1,0,4,3,1,7,39],
+"cora__filtered__oscillator__8_8m.html#a2fb1c5cf58867b5bbc9a1b145a86f3a0":[9,0,1,0,4,3,1,7,50]
 };

@@ -348,6 +348,7 @@ var hierarchy =
       [ "hypro::HybridAutomatonParser::ConstrsetContext", "classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html", null ],
       [ "hypro::HybridAutomatonParser::CutoffContext", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext.html", null ],
       [ "hypro::HybridAutomatonParser::EquationContext", "classhypro_1_1HybridAutomatonParser_1_1EquationContext.html", null ],
+      [ "hypro::HybridAutomatonParser::ExpressionContext", "classhypro_1_1HybridAutomatonParser_1_1ExpressionContext.html", null ],
       [ "hypro::HybridAutomatonParser::FilenameContext", "classhypro_1_1HybridAutomatonParser_1_1FilenameContext.html", null ],
       [ "hypro::HybridAutomatonParser::FixedordersContext", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext.html", null ],
       [ "hypro::HybridAutomatonParser::FixedstepsContext", "classhypro_1_1HybridAutomatonParser_1_1FixedstepsContext.html", null ],

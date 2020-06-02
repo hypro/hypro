@@ -8,6 +8,7 @@ var classhypro_1_1HyproFormulaVisitor =
     [ "visitConstraint", "classhypro_1_1HyproFormulaVisitor.html#af6bf082d76130c1beacaa33be1d79b6a", null ],
     [ "visitConstrset", "classhypro_1_1HyproFormulaVisitor.html#a91bbc21a28fe6463296611e3784c1223", null ],
     [ "visitEquation", "classhypro_1_1HyproFormulaVisitor.html#a7198ce4c686bf38c7817350cc8ea1557", null ],
+    [ "visitExpression", "classhypro_1_1HyproFormulaVisitor.html#a1db3f57afec9e6765eeb2dc56cd809e4", null ],
     [ "visitInterval", "classhypro_1_1HyproFormulaVisitor.html#aa8ed1a255ebf11b26cb7b261a909ae7f", null ],
     [ "visitIntervalexpr", "classhypro_1_1HyproFormulaVisitor.html#a70fd165baeb7fc46c32c1b76a11d59fe", null ],
     [ "visitPolynom", "classhypro_1_1HyproFormulaVisitor.html#a8eceaf7706d1566f3b3a5682f752edbe", null ],

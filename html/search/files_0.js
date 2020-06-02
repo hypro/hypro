@@ -11,5 +11,6 @@ var searchData=
   ['adaptions_5fz3_2eh',['adaptions_z3.h',['../adaptions__z3_8h.html',1,'']]],
   ['adaptions_5fz3_5fdouble_2ecpp',['adaptions_z3_double.cpp',['../adaptions__z3__double_8cpp.html',1,'']]],
   ['aff_5fsettings_2etxt',['aff_settings.txt',['../aff__settings_8txt.html',1,'']]],
+  ['aff_5fsettings_5fnoplot_2etxt',['aff_settings_noplot.txt',['../aff__settings__noplot_8txt.html',1,'']]],
   ['affine_2eh',['affine.h',['../affine_8h.html',1,'']]]
 ];

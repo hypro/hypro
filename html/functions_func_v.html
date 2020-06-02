@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.05</span>
+   &#160;<span id="projectnumber">20.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -182,7 +182,7 @@ $(document).ready(function(){initNavTree('functions_func_v.html','');});
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FilenameContext.html#af1391742dfad26b7dceb70698d2ebd0b">hypro::HybridAutomatonParser::FilenameContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1FromtoContext.html#a27b67ebccc04fdd41d71bf8f2e87675f">hypro::HybridAutomatonParser::FromtoContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1InitstateContext.html#a053eb4f860a934e6535f3af99ca71545">hypro::HybridAutomatonParser::InitstateContext</a>
-, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IntervalContext.html#ac901dbee06c6ba394b20bc6c7de6fe09">hypro::HybridAutomatonParser::IntervalContext</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IntervalContext.html#a4ebbe7c0f0f616a939f0dc382fc8f6c1">hypro::HybridAutomatonParser::IntervalContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext.html#ae94c807dd1185bb66dace78bda7e1f13">hypro::HybridAutomatonParser::IntervalexprContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LabelsContext.html#a48ca07f14545cd3ac56dc30976465062">hypro::HybridAutomatonParser::LabelsContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html#ab0826b1610e36484d2a30dd50f596095">hypro::HybridAutomatonParser::LbadstateContext</a>
@@ -190,10 +190,10 @@ $(document).ready(function(){initNavTree('functions_func_v.html','');});
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PlotsettingContext.html#a60f992e2a66f0a588439c0a2f135ac27">hypro::HybridAutomatonParser::PlotsettingContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PrintContext.html#ace3b1be373a48142430b245e8c56e818">hypro::HybridAutomatonParser::PrintContext</a>
 , <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1TermContext.html#a381bba7e6aec346ef81e974d91739fd7">hypro::HybridAutomatonParser::TermContext</a>
-, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1VardeclarationContext.html#a6ae52be52ceb139d60bbc748a55c6919">hypro::HybridAutomatonParser::VardeclarationContext</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonParser_1_1VardeclarationContext.html#a02531566d21bf29706121ae8250d18a9">hypro::HybridAutomatonParser::VardeclarationContext</a>
 </li>
 <li>variable()
-: <a class="el" href="classhypro_1_1VariablePool.html#a30b975e5a0a6a1116e15bd2393d0e4e2">hypro::VariablePool</a>
+: <a class="el" href="classhypro_1_1VariablePool.html#a68470cb3e82879165953a04f5fa65591">hypro::VariablePool</a>
 </li>
 <li>VARIABLEAction()
 : <a class="el" href="classhypro_1_1HybridAutomatonLexer.html#a0ae5e860f6597e73624c011663427067">hypro::HybridAutomatonLexer</a>
@@ -448,8 +448,11 @@ $(document).ready(function(){initNavTree('functions_func_v.html','');});
 </li>
 <li>visitExpression()
 : <a class="el" href="classhypro_1_1CIFExprVisitor.html#ad9c44741bfca3c210deba99e52d48c8d">hypro::CIFExprVisitor&lt; Number &gt;</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html#ad7f36259d61ef407454584f71f2288d0">hypro::HybridAutomatonBaseVisitor</a>
+, <a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#ad64bd7c7efaf62cbed9a9d74ad695347">hypro::HybridAutomatonVisitor</a>
 , <a class="el" href="classhypro_1_1HybridSystemBaseVisitor.html#ab1891c1a4561aced08fea78229ecfad6">hypro::HybridSystemBaseVisitor</a>
 , <a class="el" href="classhypro_1_1HybridSystemVisitor.html#a5d5e532c6185bf9d2ac19c25f6bc64de">hypro::HybridSystemVisitor</a>
+, <a class="el" href="classhypro_1_1HyproFormulaVisitor.html#a1db3f57afec9e6765eeb2dc56cd809e4">hypro::HyproFormulaVisitor&lt; Number &gt;</a>
 </li>
 <li>visitExpressions()
 : <a class="el" href="classhypro_1_1CIFExprVisitor.html#a74c1c9820fb94a26eb9454fc12796321">hypro::CIFExprVisitor&lt; Number &gt;</a>
@@ -1056,7 +1059,7 @@ $(document).ready(function(){initNavTree('functions_func_v.html','');});
 , <a class="el" href="classhypro_1_1HyproHAVisitor.html#a6575a4d318b43f167d55e7550407bc51">hypro::HyproHAVisitor&lt; Number &gt;</a>
 </li>
 <li>VPolytopeT()
-: <a class="el" href="classhypro_1_1VPolytopeT.html#a513ccc125be65d705151b347311b2730">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
+: <a class="el" href="classhypro_1_1VPolytopeT.html#a8b664290b58d92042538ec70a24b7cfc">hypro::VPolytopeT&lt; Number, Converter, S &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

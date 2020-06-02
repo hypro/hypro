@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.05</span>
+   &#160;<span id="projectnumber">20.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -153,12 +153,14 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8e6ee655f022eff772b63acec08ff36d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fc06ebfabd60d996ba747c9fcdee9a5"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#a0fc06ebfabd60d996ba747c9fcdee9a5">visitPolynom</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html">HybridAutomatonParser::PolynomContext</a> *context)=0</td></tr>
 <tr class="separator:a0fc06ebfabd60d996ba747c9fcdee9a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7bd8691441fc2181fd78da068c7a82f1"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#a7bd8691441fc2181fd78da068c7a82f1">visitInterval</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IntervalContext.html">HybridAutomatonParser::IntervalContext</a> *context)=0</td></tr>
-<tr class="separator:a7bd8691441fc2181fd78da068c7a82f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad64bd7c7efaf62cbed9a9d74ad695347"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#ad64bd7c7efaf62cbed9a9d74ad695347">visitExpression</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ExpressionContext.html">HybridAutomatonParser::ExpressionContext</a> *context)=0</td></tr>
+<tr class="separator:ad64bd7c7efaf62cbed9a9d74ad695347"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6fda20ae5d2dce6ad26822e8e6cf7c8"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#aa6fda20ae5d2dce6ad26822e8e6cf7c8">visitEquation</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1EquationContext.html">HybridAutomatonParser::EquationContext</a> *context)=0</td></tr>
 <tr class="separator:aa6fda20ae5d2dce6ad26822e8e6cf7c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96e7da987ca1421188d3b2f4b51963d3"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#a96e7da987ca1421188d3b2f4b51963d3">visitConstraint</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html">HybridAutomatonParser::ConstraintContext</a> *context)=0</td></tr>
 <tr class="separator:a96e7da987ca1421188d3b2f4b51963d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bd8691441fc2181fd78da068c7a82f1"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#a7bd8691441fc2181fd78da068c7a82f1">visitInterval</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IntervalContext.html">HybridAutomatonParser::IntervalContext</a> *context)=0</td></tr>
+<tr class="separator:a7bd8691441fc2181fd78da068c7a82f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fd318f4b8c590420e85b0433bb14797"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#a4fd318f4b8c590420e85b0433bb14797">visitIntervalexpr</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext.html">HybridAutomatonParser::IntervalexprContext</a> *context)=0</td></tr>
 <tr class="separator:a4fd318f4b8c590420e85b0433bb14797"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1b7850485ff0f1fe62ed8fb1c3c0df5"><td class="memItemLeft" align="right" valign="top">virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomatonVisitor.html#aa1b7850485ff0f1fe62ed8fb1c3c0df5">visitConstrset</a> (<a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html">HybridAutomatonParser::ConstrsetContext</a> *context)=0</td></tr>
@@ -508,6 +510,32 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html#a03cb0f95e50cf6462855e15d7c5902b8">hypro::HybridAutomatonBaseVisitor</a>, and <a class="el" href="classhypro_1_1HyproFormulaVisitor.html#a7198ce4c686bf38c7817350cc8ea1557">hypro::HyproFormulaVisitor&lt; Number &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ad64bd7c7efaf62cbed9a9d74ad695347"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual antlrcpp::Any hypro::HybridAutomatonVisitor::visitExpression </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1HybridAutomatonParser_1_1ExpressionContext.html">HybridAutomatonParser::ExpressionContext</a> *&#160;</td>
+          <td class="paramname"><em>context</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classhypro_1_1HybridAutomatonBaseVisitor.html#ad7f36259d61ef407454584f71f2288d0">hypro::HybridAutomatonBaseVisitor</a>, and <a class="el" href="classhypro_1_1HyproFormulaVisitor.html#a1db3f57afec9e6765eeb2dc56cd809e4">hypro::HyproFormulaVisitor&lt; Number &gt;</a>.</p>
 
 </div>
 </div>

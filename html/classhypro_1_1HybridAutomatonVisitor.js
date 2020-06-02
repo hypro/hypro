@@ -11,6 +11,7 @@ var classhypro_1_1HybridAutomatonVisitor =
     [ "visitConstrset", "classhypro_1_1HybridAutomatonVisitor.html#aa1b7850485ff0f1fe62ed8fb1c3c0df5", null ],
     [ "visitCutoff", "classhypro_1_1HybridAutomatonVisitor.html#a0ce4947042ee9e6f1bc7dd014f8a99eb", null ],
     [ "visitEquation", "classhypro_1_1HybridAutomatonVisitor.html#aa6fda20ae5d2dce6ad26822e8e6cf7c8", null ],
+    [ "visitExpression", "classhypro_1_1HybridAutomatonVisitor.html#ad64bd7c7efaf62cbed9a9d74ad695347", null ],
     [ "visitFilename", "classhypro_1_1HybridAutomatonVisitor.html#ad89ef731ca46783dc1e23bb6e60961a4", null ],
     [ "visitFixedorders", "classhypro_1_1HybridAutomatonVisitor.html#a8cbcc80e52645351892389d940b03486", null ],
     [ "visitFixedsteps", "classhypro_1_1HybridAutomatonVisitor.html#a0e69c42e0b1caaef8cde0beeb0e08366", null ],
