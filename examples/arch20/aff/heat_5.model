@@ -300,3 +300,16 @@ hybrid reachability
         }
     }
 }
+unsafe set
+{   
+    # Check that tempmax+delta is not reachable for tempax=0.10369885, delta=1e-4
+    loc1
+    {
+        x_62 >= 0.10379885
+    }
+    #loc1
+    #{
+    ## Check that tempmax-delta is reachable (expect unsafe result)
+    #    x_62 >= 0.10359884999999999
+    #}
+}
