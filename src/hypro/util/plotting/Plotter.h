@@ -19,7 +19,6 @@
 #include <stack>
 #include <string>
 #include <vector>
-#include <fstream>
 
 namespace hypro {
 
@@ -51,17 +50,18 @@ const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
 	 */
 struct gnuplotSettings {
 	std::string name = "";			   // title
-	std::string filename = "out";	  // filename
+	std::string filename = "out";	   // filename
 	std::size_t color = colors[blue];  // default blue
 	bool fill = false;				   // do not fill
 	bool axes = true;				   // plot axes
 	bool grid = true;				   // plot grid
+	bool title = false;				   // plot title
 
-	double pointSize = 0.6;  // pointsize
+	double pointSize = 0.6;	 // pointsize
 
 	double linewidth = 0.1;												// linewidth
 	bool keepAspectRatio = true;										// keep aspect ratio for both axes
-	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );  // dimensions to plot
+	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	// dimensions to plot
 	bool cummulative = false;											// if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
 	bool plain = false;
 	bool overwriteFiles = false;  // set to enable file overwriting
@@ -143,6 +143,11 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @brief      Creates a .eps file of the currently passed objects, which can be used in gnuplot as well.
 	 */
 	void plotEps() const;
+
+	/**
+	 * @brief      Creates a .eps file of the currently passed objects, which can be used in gnuplot as well.
+	 */
+	void plotPng() const;
 
 	/**
 	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,

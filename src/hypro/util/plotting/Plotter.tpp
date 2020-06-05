@@ -45,11 +45,13 @@ void Plotter<Number>::plot2d() const {
 
 	mOutfile.open( filename + "_pdf.plt" );
 
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {	 // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << title << "\"\n";
+		if ( mSettings.title ) {
+			mOutfile << "set title \"" << mSettings.name << "\"\n";
+		}
 		if ( mSettings.keepAspectRatio ) {
 			mOutfile << "set size square\n";
 		}
@@ -67,7 +69,9 @@ void Plotter<Number>::plotTex() const {
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
 		// preamble
 		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << mSettings.name << "\"\n";
+		if ( mSettings.title ) {
+			mOutfile << "set title \"" << mSettings.name << "\"\n";
+		}
 		if ( mSettings.keepAspectRatio ) {
 			mOutfile << "set size square\n";
 		}
@@ -131,7 +135,9 @@ void Plotter<Number>::plotEps() const {
 	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
 		// preamble
 		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << mSettings.name << "\"\n";
+		if ( mSettings.title ) {
+			mOutfile << "set title \"" << mSettings.name << "\"\n";
+		}
 		if ( mSettings.keepAspectRatio ) {
 			mOutfile << "set size square\n";
 		}
@@ -143,6 +149,30 @@ void Plotter<Number>::plotEps() const {
 
 	std::cout << std::endl
 			  << "Plotted to " << mSettings.filename << "_eps.plt" << std::endl;
+	mOutfile.close();
+}
+
+template <typename Number>
+void Plotter<Number>::plotPng() const {
+	mOutfile.open( mSettings.filename + "_png.plt" );
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
+		// preamble
+		mOutfile << "# settings\n";
+		if ( mSettings.title ) {
+			mOutfile << "set title \"" << mSettings.name << "\"\n";
+		}
+
+		if ( mSettings.keepAspectRatio ) {
+			mOutfile << "set size square\n";
+		}
+		mOutfile << "set terminal png size 1280,800\n";
+		mOutfile << "set output \"" << mSettings.filename << ".png\" \n";
+
+		writeGnuplot();
+	}
+
+	std::cout << std::endl
+			  << "Plotted to " << mSettings.filename << "_png.plt" << std::endl;
 	mOutfile.close();
 }
 
@@ -469,7 +499,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		}
 	}
 
-	TRACE("hypro", "points: " << _points);
+	TRACE( "hypro", "points: " << _points );
 
 	// std::cout << "Minimum: " << min.rawCoordinates().transpose() <<
 	// std::endl;
@@ -505,7 +535,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 					// we assume to be sorted, so check all angles, which are smaller or
 					// equal for equality -
 					// afterwards simply insert
-					else if ( angle > newAngle ) {  // not equal and smaller -> continue
+					else if ( angle > newAngle ) {	// not equal and smaller -> continue
 													// search (at end, simply insert)
 						++pos;
 						if ( pos == sortedPoints.end() ) {
