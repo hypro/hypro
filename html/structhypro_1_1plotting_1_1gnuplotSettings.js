@@ -12,5 +12,6 @@ var structhypro_1_1plotting_1_1gnuplotSettings =
     [ "name", "structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d", null ],
     [ "overwriteFiles", "structhypro_1_1plotting_1_1gnuplotSettings.html#af425d9d70edc6de35ff5688827bc0161", null ],
     [ "plain", "structhypro_1_1plotting_1_1gnuplotSettings.html#a3591c6d9451b17e32b233d188e6b70e1", null ],
-    [ "pointSize", "structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6", null ]
+    [ "pointSize", "structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6", null ],
+    [ "title", "structhypro_1_1plotting_1_1gnuplotSettings.html#a7f8214513be9e15e5781042de2b27082", null ]
 ];

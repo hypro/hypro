@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quantifiertype',['QuantifierType',['../namespacehypro.html#ae5184b1af344f33b02bb7c5a0e414e24',1,'hypro']]]
+  ['plottype',['PLOTTYPE',['../namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530',1,'hypro']]]
 ];

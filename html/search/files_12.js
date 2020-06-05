@@ -34,8 +34,9 @@ var searchData=
   ['two_5ftanks_5fmhypro_2em',['two_tanks_mhypro.m',['../two__tanks__mhypro_8m.html',1,'']]],
   ['typedefs_2eh',['typedefs.h',['../typedefs_8h.html',1,'']]],
   ['typelist_2eh',['TypeList.h',['../TypeList_8h.html',1,'']]],
-  ['types_2eh',['types.h',['../representations_2types_8h.html',1,'']]],
+  ['types_2ecpp',['types.cpp',['../types_8cpp.html',1,'']]],
   ['types_2eh',['types.h',['../types_8h.html',1,'']]],
-  ['typetraits_2eh',['typetraits.h',['../datastructures_2HybridAutomaton_2flow_2typetraits_8h.html',1,'']]],
-  ['typetraits_2eh',['typetraits.h',['../util_2typetraits_8h.html',1,'']]]
+  ['types_2eh',['types.h',['../representations_2types_8h.html',1,'']]],
+  ['typetraits_2eh',['typetraits.h',['../util_2typetraits_8h.html',1,'']]],
+  ['typetraits_2eh',['typetraits.h',['../datastructures_2HybridAutomaton_2flow_2typetraits_8h.html',1,'']]]
 ];

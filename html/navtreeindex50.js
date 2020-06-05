@@ -1,5 +1,7 @@
 var NAVTREEINDEX50 =
 {
+"structhypro_1_1flattenRepresentations__i.html":[8,0,2,60],
+"structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html":[8,0,2,61],
 "structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html#a76d304c3615df9e688f2ed19cf4a5f62":[8,0,2,61,0],
 "structhypro_1_1flowDimensionVisitor.html":[8,0,2,62],
 "structhypro_1_1flowDimensionVisitor.html#a28a53c70e512cc045ad4e06ecc6328a2":[8,0,2,62,0],
@@ -85,6 +87,7 @@ var NAVTREEINDEX50 =
 "structhypro_1_1plotting_1_1gnuplotSettings.html#a3591c6d9451b17e32b233d188e6b70e1":[8,0,2,2,0,11],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f":[8,0,2,2,0,7],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#a50a13c98532eef47b41211361ed19303":[8,0,2,2,0,2],
+"structhypro_1_1plotting_1_1gnuplotSettings.html#a7f8214513be9e15e5781042de2b27082":[8,0,2,2,0,13],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#ab65196566bbe095d5bdadb43b40e4800":[8,0,2,2,0,3],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#abd230e8c60e90101c6dd02defb3f9ef7":[8,0,2,2,0,6],
 "structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d":[8,0,2,2,0,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX50 =
 "sw__param__experiments_8m.html#a7d8009769698f0e3cfe8c1c04ba126a8":[9,0,1,0,4,3,4,0,5,46],
 "sw__param__experiments_8m.html#a804b3311849c8095d102cedc4c3dc5ff":[9,0,1,0,4,3,4,0,5,20],
 "sw__param__experiments_8m.html#a84caa2f33babc4e9450ce225f9698cd2":[9,0,1,0,4,3,4,0,5,69],
-"sw__param__experiments_8m.html#a8e583d1cad238aff62a8a1c25c010307":[9,0,1,0,4,3,4,0,5,73],
-"sw__param__experiments_8m.html#a8fb092330ecda60587643305d0d9738a":[9,0,1,0,4,3,4,0,5,88],
-"sw__param__experiments_8m.html#a90323292a38a38d1e4976afb49292f0f":[9,0,1,0,4,3,4,0,5,61],
-"sw__param__experiments_8m.html#a90492192e9e79285343b63d669c57c96":[9,0,1,0,4,3,4,0,5,15]
+"sw__param__experiments_8m.html#a8e583d1cad238aff62a8a1c25c010307":[9,0,1,0,4,3,4,0,5,73]
 };

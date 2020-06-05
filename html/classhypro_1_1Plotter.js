@@ -14,6 +14,7 @@ var classhypro_1_1Plotter =
     [ "plot2d", "classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8", null ],
     [ "plotEps", "classhypro_1_1Plotter.html#a54b1944b908e221164588894ea4050dc", null ],
     [ "plotGen", "classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30", null ],
+    [ "plotPng", "classhypro_1_1Plotter.html#a77a7c07f8ee7fe803a6433dbeb026973", null ],
     [ "plotTex", "classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed", null ],
     [ "prepareObjects", "classhypro_1_1Plotter.html#a773e6e6552ddee2fa1032907f0c91868", null ],
     [ "rSettings", "classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d", null ],

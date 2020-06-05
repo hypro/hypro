@@ -1,5 +1,6 @@
 var NAVTREEINDEX49 =
 {
+"structhypro_1_1EvaluationResult.html#a555738f7c876f135a6703b08d519b472":[8,0,2,53,0],
 "structhypro_1_1EvaluationResult.html#a9277925fdcd332e8b9528b9ca603e846":[8,0,2,53,9],
 "structhypro_1_1EvaluationResult.html#ad04c4d370454e1b426f487819bc99361":[8,0,2,53,8],
 "structhypro_1_1EvaluationResult.html#ad6864807ee9d817d6479b6dcdac7bce5":[8,0,2,53,1],
@@ -152,8 +153,9 @@ var NAVTREEINDEX49 =
 "structhypro_1_1Settings.html#a1b899729417938bc14745c53dfa1999c":[8,0,2,219,0],
 "structhypro_1_1Settings.html#a6906b5b5ff99bd3406c6f26820c2f36c":[8,0,2,219,3],
 "structhypro_1_1Settings.html#a7d8d0ae360ed723117ec5e30d5a3d36b":[8,0,2,219,2],
-"structhypro_1_1Settings.html#ab22c7f48ca5ab4bdc037e3c75a998370":[8,0,2,219,4],
-"structhypro_1_1Settings.html#abcc3fa192d8d71cddedd4c4fb276b657":[8,0,2,219,5],
+"structhypro_1_1Settings.html#ab22c7f48ca5ab4bdc037e3c75a998370":[8,0,2,219,5],
+"structhypro_1_1Settings.html#abcc3fa192d8d71cddedd4c4fb276b657":[8,0,2,219,6],
+"structhypro_1_1Settings.html#aea32ab973ec61ac9f2e556df63fb1951":[8,0,2,219,4],
 "structhypro_1_1SupportFunctionNewLeGuernic.html":[8,0,2,231],
 "structhypro_1_1SupportFunctionNewMorePrecision.html":[8,0,2,232],
 "structhypro_1_1SupportFunctionNewNoReduction.html":[8,0,2,233],
@@ -247,7 +249,5 @@ var NAVTREEINDEX49 =
 "structhypro_1_1endPoint.html#a6075e987b10d5af189798f06ee13bd25":[8,0,2,51,4],
 "structhypro_1_1endPoint.html#a7058277d3f2a2fc9af996f8dea0acebe":[8,0,2,51,0],
 "structhypro_1_1endPoint.html#a92577af1d4b880781f23df21c29e722f":[8,0,2,51,1],
-"structhypro_1_1endPoint.html#ac9d6e769c3cf80dad3b348164baa2c92":[8,0,2,51,2],
-"structhypro_1_1flattenRepresentations__i.html":[8,0,2,60],
-"structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html":[8,0,2,61]
+"structhypro_1_1endPoint.html#ac9d6e769c3cf80dad3b348164baa2c92":[8,0,2,51,2]
 };

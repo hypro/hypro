@@ -29,6 +29,14 @@ var types_8h =
       [ "TIMEDLOC", "types_8h.html#a591ce576c89c11741bb7ee90db71c677a6a69247abc4b097fa949c7105cdf0fd4", null ],
       [ "RECTANGULARLOC", "types_8h.html#a591ce576c89c11741bb7ee90db71c677a16af997c92e8e2eb3613d3f187aa7be3", null ]
     ] ],
+    [ "PLOTTYPE", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530", [
+      [ "pdf", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530a437175ba4191210ee004e1d937494d09", null ],
+      [ "png", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530abff139fa05ac583f685a523ab3d110a0", null ],
+      [ "eps", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530ace8e4a184e2e534c09d6bf6ae773ca4a", null ],
+      [ "gen", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530adaffed346e29c5654f54133d1fc65ccb", null ],
+      [ "tex", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530a5df398e7946db5ded47290cbb43c5028", null ],
+      [ "nset", "types_8h.html#a2c90f4ceb0870516400989a05ebd2530a26bc4f2496a8d63a5c6c34f0a2f7728c", null ]
+    ] ],
     [ "REACHABILITY_RESULT", "types_8h.html#a25980153cbf1c156dc5c47e3b1f2e05e", [
       [ "SAFE", "types_8h.html#a25980153cbf1c156dc5c47e3b1f2e05eab18288babd4636cff34b15e0d1340fc2", null ],
       [ "UNKNOWN", "types_8h.html#a25980153cbf1c156dc5c47e3b1f2e05ea696b031073e74bf2cb98e5ef201d4aa3", null ]
@@ -57,5 +65,6 @@ var types_8h =
       [ "NSET", "types_8h.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169", null ]
     ] ],
     [ "operator<<", "types_8h.html#afef89b9ee2e7f9125ec2a96aaf347047", null ],
-    [ "operator<<", "types_8h.html#a874d482d06ecb5ff93606cb5c19647f5", null ]
+    [ "operator<<", "types_8h.html#a874d482d06ecb5ff93606cb5c19647f5", null ],
+    [ "outputFormat", "types_8h.html#aea4e4c7f045d7454a1352236aa64815c", null ]
 ];

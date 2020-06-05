@@ -140,6 +140,8 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacehypro"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html">hypro</a></td></tr>
 <tr class="memdesc:namespacehypro"><td class="mdescLeft">&#160;</td><td class="mdescRight">General context interface to set up a reachability worker. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacehypro_1_1plotting"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1plotting.html">hypro::plotting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespaceEigen"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceEigen.html">Eigen</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -167,6 +169,17 @@ Enumerations</h2></td></tr>
 <a class="el" href="namespacehypro.html#a25980153cbf1c156dc5c47e3b1f2e05ea696b031073e74bf2cb98e5ef201d4aa3">hypro::REACHABILITY_RESULT::UNKNOWN</a>
  }</td></tr>
 <tr class="separator:a25980153cbf1c156dc5c47e3b1f2e05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c90f4ceb0870516400989a05ebd2530"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530">hypro::PLOTTYPE</a> { <br />
+&#160;&#160;<a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530a437175ba4191210ee004e1d937494d09">hypro::PLOTTYPE::pdf</a>, 
+<a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530abff139fa05ac583f685a523ab3d110a0">hypro::PLOTTYPE::png</a>, 
+<a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530ace8e4a184e2e534c09d6bf6ae773ca4a">hypro::PLOTTYPE::eps</a>, 
+<a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530adaffed346e29c5654f54133d1fc65ccb">hypro::PLOTTYPE::gen</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530a5df398e7946db5ded47290cbb43c5028">hypro::PLOTTYPE::tex</a>, 
+<a class="el" href="namespacehypro.html#a2c90f4ceb0870516400989a05ebd2530a26bc4f2496a8d63a5c6c34f0a2f7728c">hypro::PLOTTYPE::nset</a>
+<br />
+ }</td></tr>
+<tr class="separator:a2c90f4ceb0870516400989a05ebd2530"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9468253f740d3ba4388c00408ddb841"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841">hypro::SETSTATE</a> { <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a696b031073e74bf2cb98e5ef201d4aa3">hypro::SETSTATE::UNKNOWN</a>, 
 <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841a8409775fd1592ee7eb20b33dba52ad04">hypro::SETSTATE::NONEMPTY</a>, 
 <a class="el" href="namespacehypro.html#ad9468253f740d3ba4388c00408ddb841aba2b45bdc11e2a4a6e86aab2ac693cbb">hypro::SETSTATE::EMPTY</a>, 
@@ -224,6 +237,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:aea4e4c7f045d7454a1352236aa64815c"><td class="memItemLeft" align="right" valign="top">PLOTTYPE&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1plotting.html#aea4e4c7f045d7454a1352236aa64815c">hypro::plotting::outputFormat</a> (const <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;in)</td></tr>
+<tr class="separator:aea4e4c7f045d7454a1352236aa64815c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afef89b9ee2e7f9125ec2a96aaf347047"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#afef89b9ee2e7f9125ec2a96aaf347047">std::operator&lt;&lt;</a> (std::ostream &amp;_out, const <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cc">hypro::SOLUTION</a> &amp;_in)</td></tr>
 <tr class="memdesc:afef89b9ee2e7f9125ec2a96aaf347047"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator for the SOLUTION enum.  <a href="types_8h.html#afef89b9ee2e7f9125ec2a96aaf347047">More...</a><br /></td></tr>
 <tr class="separator:afef89b9ee2e7f9125ec2a96aaf347047"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,7 +289,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00181">181</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00192">192</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 <p>References <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca57e8bcd22ac5b56703b233e135f2a7f2">hypro::FEAS</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cca9d0f11bf0a1789410bf9780c8948ebb9">hypro::INFEAS</a>, <a class="el" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3ccac9b5a0979420dfb983a9aa10933ea169">hypro::INFTY</a>, and <a class="el" href="namespacehypro.html#a25980153cbf1c156dc5c47e3b1f2e05ea696b031073e74bf2cb98e5ef201d4aa3">hypro::UNKNOWN</a>.</p>
 
@@ -322,7 +337,7 @@ Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00211">211</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00222">222</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 <p>References <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dab24436a7bab0fa6dc89ad0684c6fc675">hypro::BOT</a>, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615daba7de5bc6888294e5884b024a4c894f1">hypro::FULL</a>, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dac2f3f489a00553e7a01d369c103c7251">hypro::NO</a>, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dafba5cdfa4bcb408f641c743519a0fe19">hypro::PARTIAL</a>, and <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615da7469a286259799e5b37e5db9296f00b3">hypro::YES</a>.</p>
 
