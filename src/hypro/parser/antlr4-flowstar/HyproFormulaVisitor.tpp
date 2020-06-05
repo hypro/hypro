@@ -163,7 +163,7 @@ namespace hypro {
 		}
 
 		//1.Call visit(ctx->expression()) to get vector and return it
-		return visit(ctx->expression()).as<vector_t<Number>>();
+		return visit(ctx->expression()).template as<vector_t<Number>>();
 	}
 
 	template<typename Number>
@@ -173,7 +173,7 @@ namespace hypro {
 
 		//If expression is only a polynom, return the coeff vector of the polynom
 		if(ctx->polynom() != nullptr){
-			vector_t<Number> result = visit(ctx->polynom()).as<vector_t<Number>>();
+			vector_t<Number> result = visit(ctx->polynom()).template as<vector_t<Number>>();
 			return result;
 		}
 
