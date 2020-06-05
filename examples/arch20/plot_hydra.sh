@@ -19,3 +19,9 @@ for e in "$1"/*pdf.plt; do
   pdftoppm "$BASE.pdf" "$1/$BASE" -png
   rm "$BASE.pdf"
 done
+
+for e in "$1"/*eps.plt; do
+  BASE=`basename "$e" "_eps.plt"`
+  echo "[+] Plotting $BASE"
+  gnuplot "$e"
+done

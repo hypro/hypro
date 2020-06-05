@@ -16,7 +16,7 @@ hybrid reachability
         remainder estimation 1e-4
         identity precondition
         gnuplot octagon t,x_62
-        #adaptive orders { min 3, max 8 } 
+        #adaptive orders { min 3, max 8 }
         cutoff 1e-15
         precision 53
         output heat_5
@@ -301,7 +301,7 @@ hybrid reachability
     }
 }
 unsafe set
-{   
+{
     # Check that tempmax+delta is not reachable for tempax=0.10369885, delta=1e-4
     loc1
     {
