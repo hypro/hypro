@@ -37,6 +37,26 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 				plt.addObject( segment.project( setting.plotDimensions[pic] ).vertices() );
 			}
 		}
+		switch ( setting.plottingFileType ) {
+			case PLOTTYPE::png:
+				plt.plotPng();
+				break;
+			case PLOTTYPE::pdf:
+				plt.plot2d();
+				break;
+			case PLOTTYPE::eps:
+				plt.plotEps();
+				break;
+			case PLOTTYPE::tex:
+				plt.plotTex();
+				break;
+			case PLOTTYPE::gen:
+				plt.plotGen();
+				break;
+			default:
+				assert( false && "Plottype wrongly set." );
+				exit( 1 );
+		}
 		plt.plot2d();  // writes to .plt file for pdf creation
 	}
 	EVALUATE_BENCHMARK_RESULT( Plotting );

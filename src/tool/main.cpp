@@ -30,9 +30,16 @@ int main( int argc, char const *argv[] ) {
 								  ? options["timehorizon"].as<mpq_class>()
 								  : reachSettings.timeBound;
 
+	hypro::PLOTTYPE pltType = hypro::PLOTTYPE::pdf;
 	if ( options.count( "skipplot" ) and options["skipplot"].as<bool>() ) {
 		std::cout << "Skip plotting." << std::endl;
 		reachSettings.plotDimensions.clear();
+	} else {
+		pltType = hypro::plotting::outputFormat( options["plotoutputformat"].as<std::string>() );
+	}
+
+	if ( options.count( "plotoutput" ) ) {
+		reachSettings.fileName = options["plotoutput"].as<std::string>();
 	}
 
 	hypro::representation_name representation =
@@ -44,7 +51,8 @@ int main( int argc, char const *argv[] ) {
 							 reachSettings.jumpDepth,
 							 timehorizon,
 							 {reachSettings.plotDimensions},
-							 {std::vector<std::string>( {reachSettings.plotDimensions.size(), reachSettings.fileName} )}};
+							 {std::vector<std::string>( {reachSettings.plotDimensions.size(), reachSettings.fileName} )},
+							 {pltType}};
 
 	EVALUATE_BENCHMARK_RESULT( Parsing );
 
