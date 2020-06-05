@@ -89,9 +89,6 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		if ( vm["decider"].as<bool>() ) {
 			sProvider.setUseDecider( true );
 		}
-		if ( vm["skipplot"].as<bool>() ) {
-			sProvider.setSkipPlot( true );
-		}
 
 		// If we have at least two of the three strategy options "strategy",
 		// "customstrategy" or "snode", then throw error
@@ -122,7 +119,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		if ( vm.count( "strategy" ) >= 1 ) {
 			if ( vm.count( "strategy" ) == 1 ) {
 				hypro::SettingsProvider<State>::getInstance().setStrategy(
-						hydra::getStrategyFromName( vm["strategy"].as<std::string>() ) );
+					  hydra::getStrategyFromName( vm["strategy"].as<std::string>() ) );
 			} else {
 				CERR( "You can not have more than one strategy!\n" );
 				exit( 1 );

@@ -30,7 +30,8 @@ int main( int argc, char const *argv[] ) {
 								  ? options["timehorizon"].as<mpq_class>()
 								  : reachSettings.timeBound;
 
-	if ( options.count( "skipplot" ) ) {
+	if ( options.count( "skipplot" ) and options["skipplot"].as<bool>() ) {
+		std::cout << "Skip plotting." << std::endl;
 		reachSettings.plotDimensions.clear();
 	}
 
