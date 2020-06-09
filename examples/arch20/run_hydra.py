@@ -79,20 +79,16 @@ class Results(object):
         self.errorMsg = errorMsg.strip()
 
     def get_csv_header():
-        h = ['Model name', 'Execution time', 'Safety result', 'Timeout', 
-             'Skipped', 'Error during execution', 'Error message']
+        h = ['HyDRA']
         return h
 
     def to_csv(self):
         line = [
-            self.modelName,
+            self.modelName.replace('.model',''),
+            '1' if self.safetyResult == 'Safe' else '0',
             str(self.endTime - self.startTime) \
-                if self.endTime > 0 and self.startTime > 0 else '',
-            self.safetyResult or '',
-            str(self.timeout),
-            str(self.skipped),
-            str(self.error),
-            self.errorMsg or '']
+                if self.endTime > 0 and self.startTime > 0 else ''
+            ]
         return line
 
     def to_string(self):
@@ -263,7 +259,7 @@ def main():
         result = m.run(args.benchmark, tool, args.timeLimit, 
                        args.memLimit, args.verbose)
         resultList.append(result)    
-    csvWriter = csv.writer(open(outputFile, 'w'))
+    csvWriter = csv.writer(open(outputFile, 'w'), delimiter=';')
     csvWriter.writerow(Results.get_csv_header())
     print("Results:")
     for result in resultList:
