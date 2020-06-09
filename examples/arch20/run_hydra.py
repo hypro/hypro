@@ -82,6 +82,10 @@ class Results(object):
         h = ['HyDRA']
         return h
 
+    def get_csv_footer():
+        f = ['End of HyDRA']
+        return f
+
     def to_csv(self):
         line = [
             self.modelName.replace('.model',''),
@@ -265,6 +269,7 @@ def main():
     for result in resultList:
         csvWriter.writerow(result.to_csv())
         print(result.to_string())
+    csvWriter.writerow(Results.get_csv_footer())
 
 if __name__=='__main__':
     main()
