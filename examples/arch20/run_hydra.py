@@ -64,8 +64,9 @@ def read_file(fileName):
 
 class Results(object):
     """Stores results from a model execution."""
-    def __init__(self, modelName):
+    def __init__(self, modelName, instance=''):
         self.modelName = modelName
+        self.instance = instance
         self.startTime = -1
         self.endTime = -1
         self.timeout = False
@@ -79,7 +80,7 @@ class Results(object):
         self.errorMsg = errorMsg.strip()
 
     def get_csv_header():
-        h = ['HyDRA']
+        h = ['Tool', 'Benchmark ID', 'Instance', 'Verified', 'Time']
         return h
 
     def get_csv_footer():
@@ -88,7 +89,9 @@ class Results(object):
 
     def to_csv(self):
         line = [
+            'HyDRA',
             self.modelName.replace('.model',''),
+            self.instance,
             '1' if self.safetyResult == 'Safe' else '0',
             str(self.endTime - self.startTime) \
                 if self.endTime > 0 and self.startTime > 0 else ''
@@ -264,12 +267,12 @@ def main():
                        args.memLimit, args.verbose)
         resultList.append(result)    
     csvWriter = csv.writer(open(outputFile, 'w'), delimiter=';')
-    csvWriter.writerow(Results.get_csv_header())
+    #csvWriter.writerow(Results.get_csv_header())
     print("Results:")
     for result in resultList:
         csvWriter.writerow(result.to_csv())
         print(result.to_string())
-    csvWriter.writerow(Results.get_csv_footer())
+    #csvWriter.writerow(Results.get_csv_footer())
 
 if __name__=='__main__':
     main()
