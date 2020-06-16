@@ -20,8 +20,8 @@ class discreteGuardHandler : public ltiGuardHandler<State> {
 	void handle();
 	void reinitialize();
 	const char* handlerName() { return "discreteGuardHandler"; }
-	virtual double getSortIndex() override { return this->mSortIndex; }
-	virtual void setSortIndex( double sortIndex ) override { this->mSortIndex = sortIndex; }
+	double getSortIndex() { return this->mSortIndex; }
+	void setSortIndex( double sortIndex ) { this->mSortIndex = sortIndex; }
 };
 }  // namespace hypro
 
