@@ -8,8 +8,11 @@ int main() {
 	using Matrix = hypro::matrix_t<Number>;
 	using Vector = hypro::vector_t<Number>;
 
-	hypro::Location<Number>* loc = new hypro::Location<Number>();
-	hypro::Location<Number>* loc2 = new hypro::Location<Number>();
+	hypro::Location<Number> loc = hypro::Location<Number>();
+	hypro::Location<Number> loc2 = hypro::Location<Number>();
+
+	std::unique_ptr<hypro::Location<Number>> unique_loc{std::make_unique<hypro::Location<Number>>( loc )};
+	std::unique_ptr<hypro::Location<Number>> unique_loc2{std::make_unique<hypro::Location<Number>>( loc2 )};
 
 	// flows
 	Matrix flowMatrix = Matrix::Zero( 4, 4 );
@@ -20,18 +23,18 @@ int main() {
 	flowMatrix2( 0, 3 ) = 1;
 
 	// assign flows to locations
-	loc->setFlow( flowMatrix );
-	loc2->setFlow( flowMatrix2 );
+	unique_loc->setFlow( flowMatrix );
+	unique_loc2->setFlow( flowMatrix2 );
 
 	// transition
 	hypro::Transition<Number> trans;
 	trans.setAggregation( hypro::Aggregation::clustering );
 	trans.setClusterBound( 5 );
-	trans.setSource( loc );
-	trans.setTarget( loc2 );
+	trans.setSource( unique_loc.get() );
+	trans.setTarget( unique_loc2.get() );
 
 	// write transition
-	loc->addTransition( std::make_unique<hypro::Transition<Number>>( trans ) );
+	unique_loc->addTransition( std::make_unique<hypro::Transition<Number>>( trans ) );
 
 	// initial state set
 	Matrix initConstraints = Matrix( 6, 3 );
@@ -48,11 +51,11 @@ int main() {
 	hypro::HybridAutomaton<Number> ha;
 
 	// write initial state
-	ha.addInitialState( loc, hypro::Condition<Number>( initConstraints, initConstants ) );
+	ha.addInitialState( unique_loc.get(), hypro::Condition<Number>( initConstraints, initConstants ) );
 
 	// write locations
-	ha.addLocation( std::move( std::make_unique<hypro::Location<Number>>( *loc ) ) );
-	ha.addLocation( std::move( std::make_unique<hypro::Location<Number>>( *loc2 ) ) );
+	ha.addLocation( std::move( unique_loc ) );
+	ha.addLocation( std::move( unique_loc2 ) );
 
 	// call reachability analysis
 
