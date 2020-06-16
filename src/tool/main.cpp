@@ -3,6 +3,7 @@
 #include "../hypro/parser/antlr4-flowstar/ParserWrapper.h"
 #include "../hypro/types.h"
 #include "../hypro/util/logging/Logger.h"
+#include "../hypro/util/type_handling/plottype_enums.h"
 #include "cli/cli.h"
 #include "preprocessing/preprocessing.h"
 #include "reachability/analysis.h"

@@ -11,6 +11,7 @@
 #include "../../config.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
+#include "../type_handling/plottype_enums.h"
 #include "PlotterUtil.h"
 
 #include <carl/interval/Interval.h>
@@ -122,32 +123,30 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	plotting::gnuplotSettings& rSettings();
 
 	/**
-	 * @brief      Creates a gnuplot file of the currently passed objects.
+	 * @brief Creates a gnuplot file of the currently passed objects.
 	 * @details    The resulting *.plt file can be compiled to a pdf invoking gnuplot.
+	 * @param outformat Specifies the type of output file generated.
 	 */
-	void plot2d() const;
+	void plot2d( PLOTTYPE outformat = PLOTTYPE::pdf ) const;
 
 	/**
 	 * @brief      Creates a LaTeX file of the currently passed objects.
 	 * @details    We use the gnuplot latex terminal type in standalone mode. Note that for Linux systems at least Texlive 2015 has to be
 	 * installed to be able to compile the resulting *.tex file.
 	 */
-	void plotTex() const;
-
-	/**
-	 * @brief      Creates a .gen file of the currently passed objects, which can be used in gnuplot as well.
-	 */
-	void plotGen() const;
+	[[deprecated( "Use plot2d(PLOTTYPE::tex) instead." )]] void plotTex() const;  // marked for deprecation: 6.6.20
 
 	/**
 	 * @brief      Creates a .eps file of the currently passed objects, which can be used in gnuplot as well.
 	 */
-	void plotEps() const;
+	[[deprecated( "Use plot2d(PLOTTYPE::eps) instead." )]] void plotEps() const;  // marked for deprecation: 6.6.20
 
 	/**
 	 * @brief      Creates a .eps file of the currently passed objects, which can be used in gnuplot as well.
 	 */
-	void plotPng() const;
+	[[deprecated( "Use plot2d(PLOTTYPE::png) instead." )]] void plotPng() const;  // marked for deprecation: 6.6.20
+
+	[[deprecated( "Use plot2d(PLOTTYPE::gen) instead." )]] void plotGen() const;  // marked for deprecation: 6.6.20
 
 	/**
 	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,
@@ -228,6 +227,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	// auxiliary functions
 	void init( const std::string& _filename );
 	void writeGnuplot() const;
+	void writeGen() const;
 	static bool isLeftTurn( const Point<Number>& a, const Point<Number>& b, const Point<Number>& c );
 	void prepareObjects() const;
 };
