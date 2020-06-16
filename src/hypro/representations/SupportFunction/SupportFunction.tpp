@@ -497,7 +497,8 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 
 	// maintain potential result
 	std::optional<SupportFunctionT<Number, Converter, Setting>> res;
-	for ( unsigned rowI = 0; rowI < _mat.rows(); ++rowI ) {
+	std::vector<Eigen::Index> intersectingHalfspaces;
+	for ( Eigen::Index rowI = 0; rowI < _mat.rows(); ++rowI ) {
 		// catch zero-constraints separately
 		if ( _mat.row( rowI ).isZero() ) {
 			if ( _vec( rowI ) > 0 ) {
@@ -506,8 +507,15 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 			}
 			continue;
 		}
+#ifdef HYPRO_LOGGING
+		if ( std::find( intersectingHalfspaces.begin(), intersectingHalfspaces.end(), rowI ) != intersectingHalfspaces.end() ) {
+			TRACE( "hypro.representations.supportFunction", "Re-evaluation against plane " << rowI );
+		} else {
+			TRACE( "hypro.representations.supportFunction", "First-time evaluation against plane " << rowI );
+		}
 
-		TRACE( "hypro.representations.supportFunction", "Evaluate against plane " << rowI );
+#endif
+
 		EvaluationResult<Number> planeEvalRes;
 		if ( res ) {
 			planeEvalRes = res.value().evaluate( _mat.row( rowI ), false );
@@ -531,7 +539,7 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 				invDirVal = content->evaluate( -( _mat.row( rowI ) ), false ).supportValue;
 			}
 
-			TRACE( "hypro.representations.supportFunction", "Potentially fully empty, as " << invDirVal << " < " << -( _vec( rowI ) ) );
+			TRACE( "hypro.representations.supportFunction", "Potentially fully empty, if " << invDirVal << " < " << -( _vec( rowI ) ) );
 
 			// case where the result is empty, i.e., when the supporting hyperplane in the opposite direction lies outside the current half-space.
 			if ( invDirVal < -( _vec( rowI ) ) ) {
@@ -565,22 +573,29 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 					return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 				}
 			} else {
-				// object is not empty. Create intersection object, and use this to add all limiting planes.
+				// as we do multiple checks, only add if not already contained.
+				if ( std::find( intersectingHalfspaces.begin(), intersectingHalfspaces.end(), rowI ) == intersectingHalfspaces.end() ) {
+					// update cache
+					intersectingHalfspaces.push_back( rowI );
+					// object is not empty. Create intersection object, and use this to add all limiting planes.
+					if ( res ) {
+						// the result, whose right-hand-side are the added planes
+						intersectionContent<Number, Setting>* intersection = res.value().rGetContent()->rIntersectionParameters();
+						// add constraint to right-hand-side
+						appendRow( intersection->rhs->rPolytope()->rMatrix(), vector_t<Number>( _mat.row( rowI ) ) );
+						appendRow( intersection->rhs->rPolytope()->rVector(), _vec( rowI ) );
 
-				if ( res ) {
-					// the result, whose right-hand-side are the added planes
-					intersectionContent<Number, Setting>* intersection = res.value().rGetContent()->rIntersectionParameters();
-					// add constraint to right-hand-side
-					appendRow( intersection->rhs->rPolytope()->rMatrix(), vector_t<Number>( _mat.row( rowI ) ) );
-					appendRow( intersection->rhs->rPolytope()->rVector(), _vec( rowI ) );
+						TRACE( "hypro.representations.supportFunction", "Add plane at index " << rowI << " to intersection object." );
+					} else {
+						TRACE( "hypro.representations.supportFunction", "Initialize intersection object with plane at index " << rowI );
+						// use override reduction to enforce, that the resulting support function is of type polytope to be able to add halfspaces, this is currently not supported for boxes.
+						matrix_t<Number> constraint = _mat.row( rowI );
+						vector_t<Number> constant = _vec.row( rowI );
+						res = SupportFunctionT<Number, Converter, Setting>( content->intersect( SupportFunctionT<Number, Converter, Setting>( constraint, constant, true ).content ) );
+					}
 
-					TRACE( "hypro.representations.supportFunction", "Add plane at index " << rowI << " to intersection object." );
-				} else {
-					TRACE( "hypro.representations.supportFunction", "Initialize intersection object with plane at index " << rowI );
-					// use override reduction to enforce, that the resulting support function is of type polytope to be able to add halfspaces, this is currently not supported for boxes.
-					matrix_t<Number> constraint = _mat.row( rowI );
-					vector_t<Number> constant = _vec.row( rowI );
-					res = SupportFunctionT<Number, Converter, Setting>( content->intersect( SupportFunctionT<Number, Converter, Setting>( constraint, constant, true ).content ) );
+					// finally, reset rowI to zero (to re-check all other constraints), as the limitation might have rendered the object emtpy in combination with other constraints.
+					rowI = 0;
 				}
 			}
 		}
@@ -590,8 +605,15 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 	if ( !res.has_value() ) {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	} else {
-		//assert( !res.value().empty() );
-		return std::make_pair( CONTAINMENT::PARTIAL, res.value() );
+//assert( !res.value().empty() );
+//return std::make_pair( CONTAINMENT::PARTIAL, res.value() );
+#ifdef HYPRO_LOGGING
+		intersectionContent<Number, Setting>* intersection = res.value().rGetContent()->rIntersectionParameters();
+		TRACE( "hypro.representations.supportFunction", "Final intersection constraints " << intersection->rhs->rPolytope()->constraints() );
+		TRACE( "hypro.representations.supportFunction", "Final intersection constants " << intersection->rhs->rPolytope()->constants() );
+#endif
+		CONTAINMENT containmentState = res.value().empty() ? CONTAINMENT::NO : CONTAINMENT::PARTIAL;
+		return std::make_pair( containmentState, res.value() );
 	}
 }
 
