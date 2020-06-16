@@ -49,10 +49,6 @@ enum class PLOTTYPE { pdf,
 					  tex,
 					  nset };
 
-namespace plotting {
-PLOTTYPE outputFormat( const std::string& in );
-}  // namespace plotting
-
 /**
  * @brief Enum to represent set states such as empty and universal.
  */
