@@ -7,3 +7,4 @@
 -m SRA03.model -d 1/10 -r support_function --setting SupportFunctionSetting --plotoutputformat eps
 -m SRA04.model -d 1/10 -r support_function --setting SupportFunctionSetting --plotoutputformat eps
 -m heat_5.model -d 1/500 -t 40 -r SFN --setting SupportFunctionNewDefault --plotoutputformat eps
+-m heat_10.model -d 1/75 -t 40 -r SFN --setting SupportFunctionNewDefault --plotoutputformat eps
