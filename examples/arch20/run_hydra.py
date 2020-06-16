@@ -64,8 +64,9 @@ def read_file(fileName):
 
 class Results(object):
     """Stores results from a model execution."""
-    def __init__(self, modelName):
+    def __init__(self, modelName, instance=''):
         self.modelName = modelName
+        self.instance = instance
         self.startTime = -1
         self.endTime = -1
         self.timeout = False
@@ -79,20 +80,22 @@ class Results(object):
         self.errorMsg = errorMsg.strip()
 
     def get_csv_header():
-        h = ['Model name', 'Execution time', 'Safety result', 'Timeout', 
-             'Skipped', 'Error during execution', 'Error message']
+        h = ['Tool', 'Benchmark ID', 'Instance', 'Verified', 'Time']
         return h
+
+    def get_csv_footer():
+        f = ['End of HyDRA']
+        return f
 
     def to_csv(self):
         line = [
-            self.modelName,
+            'HyDRA',
+            self.modelName.replace('.model',''),
+            self.instance,
+            '1' if self.safetyResult == 'Safe' else '0',
             str(self.endTime - self.startTime) \
-                if self.endTime > 0 and self.startTime > 0 else '',
-            self.safetyResult or '',
-            str(self.timeout),
-            str(self.skipped),
-            str(self.error),
-            self.errorMsg or '']
+                if self.endTime > 0 and self.startTime > 0 else ''
+            ]
         return line
 
     def to_string(self):
@@ -263,12 +266,13 @@ def main():
         result = m.run(args.benchmark, tool, args.timeLimit, 
                        args.memLimit, args.verbose)
         resultList.append(result)    
-    csvWriter = csv.writer(open(outputFile, 'w'))
-    csvWriter.writerow(Results.get_csv_header())
+    csvWriter = csv.writer(open(outputFile, 'w'), delimiter=';')
+    #csvWriter.writerow(Results.get_csv_header())
     print("Results:")
     for result in resultList:
         csvWriter.writerow(result.to_csv())
         print(result.to_string())
+    #csvWriter.writerow(Results.get_csv_footer())
 
 if __name__=='__main__':
     main()
