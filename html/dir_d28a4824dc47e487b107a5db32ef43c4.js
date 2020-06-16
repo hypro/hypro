@@ -58,7 +58,6 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_singularReachability.cpp", "example__singularReachability_8cpp.html", "example__singularReachability_8cpp" ],
     [ "example_supportFunction.cpp", "example__supportFunction_8cpp.html", "example__supportFunction_8cpp" ],
     [ "example_vertexEnumeration.cpp", "example__vertexEnumeration_8cpp.html", "example__vertexEnumeration_8cpp" ],
-    [ "example_worker.cpp", "example__worker_8cpp.html", "example__worker_8cpp" ],
     [ "example_zonotope.cpp", "examples_2example__zonotope_8cpp.html", "examples_2example__zonotope_8cpp" ],
     [ "INCOMPLETE_example_benchmarks.cpp", "INCOMPLETE__example__benchmarks_8cpp.html", "INCOMPLETE__example__benchmarks_8cpp" ],
     [ "INCOMPLETE_example_bouncingBall_Plotter.cpp", "INCOMPLETE__example__bouncingBall__Plotter_8cpp.html", "INCOMPLETE__example__bouncingBall__Plotter_8cpp" ],

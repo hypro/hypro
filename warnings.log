@@ -4248,7 +4248,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/matlab/tests/MHyProLocationTest.m:91: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/util/matlab/tests/MHyProLocationTest.m:91: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/util/matlab/tests/MHyProSupportFunctionTest.m:61: warning: member with no name found.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:78: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:79: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:22: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2

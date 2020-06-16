@@ -1,5 +1,9 @@
 var NAVTREEINDEX54 =
 {
+"vehicle__platoon__mhypro_8m.html#a3691308f2a4c2f6983f2880d32e29c84":[9,0,1,0,4,3,4,13,90],
+"vehicle__platoon__mhypro_8m.html#a391b62ef580aa92ea13066185bc353b9":[9,0,1,0,4,3,4,13,93],
+"vehicle__platoon__mhypro_8m.html#a3f114ae99d4e6cf13658a5d6a29727eb":[9,0,1,0,4,3,4,13,64],
+"vehicle__platoon__mhypro_8m.html#a3f322b7a384349ea158e9ff1d067fdaa":[9,0,1,0,4,3,4,13,98],
 "vehicle__platoon__mhypro_8m.html#a3fa05e1944bb0f95cb705a24795fc8fd":[9,0,1,0,4,3,4,13,28],
 "vehicle__platoon__mhypro_8m.html#a4039b1a0324198ec2888ac1931dbb1f7":[9,0,1,0,4,3,4,13,41],
 "vehicle__platoon__mhypro_8m.html#a40a0babc267b042e5fa2690bd57f9e4b":[9,0,1,0,4,3,4,13,31],

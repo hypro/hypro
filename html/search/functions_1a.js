@@ -57,7 +57,7 @@ var searchData=
   ['_7elabel',['~Label',['../classhypro_1_1Label.html#a7b2e35f347efdf58a9f8347f4c59b88e',1,'hypro::Label']]],
   ['_7eleaf',['~Leaf',['../classhypro_1_1Leaf.html#af5116af0eb0a02ee966052b3c330a94a',1,'hypro::Leaf']]],
   ['_7elinearflow',['~linearFlow',['../classhypro_1_1linearFlow.html#adb81dcf1eb42418fc3a62ef6c0ff0f50',1,'hypro::linearFlow']]],
-  ['_7elintrafoparameters',['~LinTrafoParameters',['../structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e',1,'hypro::LinTrafoParameters::~LinTrafoParameters()'],['../structhypro_1_1lintrafoParameters.html#a9bb556aaf89b8f05b548047c90a227f2',1,'hypro::lintrafoParameters::~lintrafoParameters()']]],
+  ['_7elintrafoparameters',['~lintrafoParameters',['../structhypro_1_1lintrafoParameters.html#a9bb556aaf89b8f05b548047c90a227f2',1,'hypro::lintrafoParameters::~lintrafoParameters()'],['../structhypro_1_1LinTrafoParameters.html#a8b45152e12b495c7f185163fd577ec8e',1,'hypro::LinTrafoParameters::~LinTrafoParameters()']]],
   ['_7elocation',['~Location',['../classhypro_1_1Location.html#ac6bc63470680fc9f68e250e74557d8d0',1,'hypro::Location']]],
   ['_7elockableobjectwrapper',['~LockableObjectWrapper',['../classhypro_1_1LockableObjectWrapper.html#abb1759c29d559f70369dba62ce27c551',1,'hypro::LockableObjectWrapper']]],
   ['_7elticontext',['~LTIContext',['../classhypro_1_1LTIContext.html#ae0a3c6d6ece1578168cd85c3ce2b60ac',1,'hypro::LTIContext']]],

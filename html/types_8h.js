@@ -65,6 +65,5 @@ var types_8h =
       [ "NSET", "types_8h.html#aadba9c45e18a68d4ad85d2032811081daf8a8262d3dc6d6fa9e948c6aa1ad1169", null ]
     ] ],
     [ "operator<<", "types_8h.html#afef89b9ee2e7f9125ec2a96aaf347047", null ],
-    [ "operator<<", "types_8h.html#a874d482d06ecb5ff93606cb5c19647f5", null ],
-    [ "outputFormat", "types_8h.html#aea4e4c7f045d7454a1352236aa64815c", null ]
+    [ "operator<<", "types_8h.html#a874d482d06ecb5ff93606cb5c19647f5", null ]
 ];

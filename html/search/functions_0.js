@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['_5f_5finit_5f_5f',['__init__',['../classrun__hydra_1_1Results.html#a72ac06f6a99e53b0df49ae9dafe8e34b',1,'run_hydra.Results.__init__()'],['../classrun__hydra_1_1Model.html#a4ab98d5735893bb6a3ccd8a1e262b896',1,'run_hydra.Model.__init__()']]],
+  ['_5f_5finit_5f_5f',['__init__',['../classrun__hydra_1_1Results.html#a81c7960520648f18bb6bfe7d269419d8',1,'run_hydra.Results.__init__()'],['../classrun__hydra_1_1Model.html#a4ab98d5735893bb6a3ccd8a1e262b896',1,'run_hydra.Model.__init__()']]],
   ['_5fcheck_5fskip',['_check_skip',['../classrun__hydra_1_1Model.html#a92ddd83c765175b4a35b5e89087bed4c',1,'run_hydra::Model']]],
   ['_5fcheck_5ftimeout',['_check_timeout',['../classrun__hydra_1_1Model.html#a3a973bd39172dfa209b5b97d9216f2a6',1,'run_hydra::Model']]],
   ['_5fconstant_5flength',['_constant_length',['../namespacebetter__enums.html#ad44f0fdc429311d9301d933e0e2953d5',1,'better_enums']]],

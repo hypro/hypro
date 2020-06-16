@@ -1,5 +1,13 @@
 var NAVTREEINDEX47 =
 {
+"representations_2Polytopes_2VPolytope_2util_8h.html":[9,0,1,0,3,10,2,0],
+"representations_2Polytopes_2VPolytope_2util_8h.html#a8a362522e64815653528fedc5728d2b3":[9,0,1,0,3,10,2,0,0],
+"representations_2Polytopes_2VPolytope_2util_8h_source.html":[9,0,1,0,3,10,2,0],
+"representations_2Polytopes_2carlPolytope_2util_8h.html":[9,0,1,0,3,10,0,2],
+"representations_2Polytopes_2carlPolytope_2util_8h.html#a10f09edf869c720ff3e970230a9d10be":[9,0,1,0,3,10,0,2,1],
+"representations_2Polytopes_2carlPolytope_2util_8h.html#a3c4de19a152992343ab533ff3153068a":[9,0,1,0,3,10,0,2,8],
+"representations_2Polytopes_2carlPolytope_2util_8h.html#a472b90e12df7df640129c2b8af34ce16":[9,0,1,0,3,10,0,2,5],
+"representations_2Polytopes_2carlPolytope_2util_8h.html#a4cecc1d8703fcf52ec7cb57a07be30bf":[9,0,1,0,3,10,0,2,6],
 "representations_2Polytopes_2carlPolytope_2util_8h.html#a924376207c20a5bd1a0e5ca2cab6190c":[9,0,1,0,3,10,0,2,4],
 "representations_2Polytopes_2carlPolytope_2util_8h.html#ad2e1f80e6bf06373d6ec4b11dfbe8198":[9,0,1,0,3,10,0,2,2],
 "representations_2Polytopes_2carlPolytope_2util_8h.html#ad9206abd8852942714a6cd4ffc64728f":[9,0,1,0,3,10,0,2,7],
@@ -241,13 +249,5 @@ var NAVTREEINDEX47 =
 "run__hydra_8py.html#abf1d3a8a9e4fffefd70609d0f314baae":[9,0,0,0,0,3],
 "run__hydra_8py.html#af7e07901b3b10ad784aa802bf5232d3d":[9,0,0,0,0,4],
 "run__hydra_8py.html#aff7b161f0c50972a114643f80b89899d":[9,0,0,0,0,5],
-"run__hydra_8py_source.html":[9,0,0,0,0],
-"sampling_8h.html":[9,0,1,0,4,6,0],
-"sampling_8h.html#a3e37feb43640833bd84cbb3b5f3e0143":[9,0,1,0,4,6,0,1],
-"sampling_8h.html#a3e37feb43640833bd84cbb3b5f3e0143a214f76594d89e177a7749e5c57eebc75":[9,0,1,0,4,6,0,1,1],
-"sampling_8h.html#a3e37feb43640833bd84cbb3b5f3e0143a6a78c7d9e6af3fd5887efbef32e12b15":[9,0,1,0,4,6,0,1,2],
-"sampling_8h.html#a3e37feb43640833bd84cbb3b5f3e0143a784551076ae733c0961eb25db53cb573":[9,0,1,0,4,6,0,1,0],
-"sampling_8h.html#a86e665c06b8271dc9895ce33cb2ce40e":[9,0,1,0,4,6,0,2],
-"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8":[9,0,1,0,4,6,0,0],
-"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8a2e182522bc70be75f15f20a319f906da":[9,0,1,0,4,6,0,0,1]
+"run__hydra_8py_source.html":[9,0,0,0,0]
 };

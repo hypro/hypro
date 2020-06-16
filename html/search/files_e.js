@@ -10,6 +10,8 @@ var searchData=
   ['plotter_2eh',['Plotter.h',['../Plotter_8h.html',1,'']]],
   ['plotterutil_2ecpp',['PlotterUtil.cpp',['../PlotterUtil_8cpp.html',1,'']]],
   ['plotterutil_2eh',['PlotterUtil.h',['../PlotterUtil_8h.html',1,'']]],
+  ['plottype_5fenums_2ecpp',['plottype_enums.cpp',['../plottype__enums_8cpp.html',1,'']]],
+  ['plottype_5fenums_2eh',['plottype_enums.h',['../plottype__enums_8h.html',1,'']]],
   ['point_2ecpp',['Point.cpp',['../Point_8cpp.html',1,'']]],
   ['point_2eh',['Point.h',['../Point_8h.html',1,'']]],
   ['polytope_2eh',['Polytope.h',['../Polytope_8h.html',1,'']]],

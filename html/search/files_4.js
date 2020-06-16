@@ -70,9 +70,8 @@ var searchData=
   ['example_5fsingularreachability_2ecpp',['example_singularReachability.cpp',['../example__singularReachability_8cpp.html',1,'']]],
   ['example_5fsupportfunction_2ecpp',['example_supportFunction.cpp',['../example__supportFunction_8cpp.html',1,'']]],
   ['example_5fvertexenumeration_2ecpp',['example_vertexEnumeration.cpp',['../example__vertexEnumeration_8cpp.html',1,'']]],
-  ['example_5fworker_2ecpp',['example_worker.cpp',['../example__worker_8cpp.html',1,'']]],
-  ['example_5fzonotope_2ecpp',['example_zonotope.cpp',['../examples_2example__zonotope_8cpp.html',1,'']]],
   ['example_5fzonotope_2ecpp',['example_zonotope.cpp',['../src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html',1,'']]],
+  ['example_5fzonotope_2ecpp',['example_zonotope.cpp',['../examples_2example__zonotope_8cpp.html',1,'']]],
   ['examples_2emd',['examples.md',['../examples_8md.html',1,'']]],
   ['exceptions_2eh',['Exceptions.h',['../Exceptions_8h.html',1,'']]]
 ];
