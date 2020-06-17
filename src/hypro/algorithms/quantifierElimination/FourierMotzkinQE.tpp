@@ -166,14 +166,14 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 		// lower bounds
 		for ( auto fc : bounds[0] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
-			constraints.emplace_back( carl::substitute( fc.constraint().lhs(), v, substitute ),
+			constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
 			// std::cout << "substitute lower bound to " << constraints.back() << std::endl;
 		}
 		// upper bounds
 		for ( auto fc : bounds[1] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
-			constraints.emplace_back( carl::substitute( fc.constraint().lhs(), v, substitute ),
+			constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
 			// std::cout << "substitute upper bound to " << constraints.back() << std::endl;
 		}
@@ -184,7 +184,7 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 
 template <typename Number>
 PolyT<Number> FourierMotzkinQE<Number>::getRemainder( const ConstraintT<Number>& c, carl::Variable v, bool ) {
-	auto tmp = c.lhs() / c.coefficient( v, 1 );  // now v has the coefficient 1.
+	auto tmp = c.lhs() / c.coefficient( v, 1 );	 // now v has the coefficient 1.
 	return -tmp;
 	/*
 	if(isLowerBnd) {

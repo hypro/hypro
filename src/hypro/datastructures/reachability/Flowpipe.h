@@ -47,6 +47,8 @@ class Flowpipe {
 	typename States::iterator end() { return mStates.end(); }
 	typename States::const_iterator begin() const { return mStates.begin(); }
 	typename States::const_iterator end() const { return mStates.end(); }
+
+	std::size_t size() const { return mStates.size(); }
 };
 
 }  // namespace hypro

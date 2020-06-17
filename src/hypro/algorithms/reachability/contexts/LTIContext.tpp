@@ -656,7 +656,7 @@ void LTIContext<State>::checkTransition() {
 				}
 				// if this guardHandler is not satisfied, it is likely not satisfied next time, so adjust its sortindex to move it to the front
 				else if ( !guardSatisfied ) {
-					if ( i != 0 ) {  //lassen wir einen handler an position 0 mal nicht in den sonnenuntergang reiten
+					if ( i != 0 ) {	 //lassen wir einen handler an position 0 mal nicht in den sonnenuntergang reiten
 						( *guardIt )->setSortIndex( it->second.at( 0 )->getSortIndex() - 1 );
 						sortIndexChanged.push_back( it );
 					}
@@ -882,14 +882,12 @@ void LTIContext<State>::execOnEnd() {
 			currentTimingNode->setTimings( mLocalTimings );
 		}
 	}
+	TRACE( "hypro.worker.refinement", "Done printing refinements." );
+	TRACE( "hypro.worker", "Unlock node " << mTask->treeNode );
+	mTask->treeNode->getMutex().unlock();
 }
 
 //LOLOLO
 //EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
-TRACE( "hypro.worker.refinement", "Done printing refinements." );
-TRACE( "hypro.worker", "Unlock node " << mTask->treeNode );
-mTask->treeNode->getMutex().unlock();
-}  // namespace hypro
 
 }  // namespace hypro
