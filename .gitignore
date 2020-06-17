@@ -14,3 +14,7 @@ src/resources/glpk-4.45/
 *.tokens
 .travis/sonar-project.properties
 .vscode
+.plt
+.png
+.log
+.csv
