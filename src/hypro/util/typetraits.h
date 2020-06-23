@@ -16,6 +16,19 @@ struct is_unique_ptr : std::false_type {};
 template <class T, class D>
 struct is_unique_ptr<std::unique_ptr<T, D>> : std::true_type {};
 
+//representation traits
+template<class Representation>
+struct rep_number_i;
+
+template<template<class...> class Rep, class Number, class... Ts>
+struct rep_number_i<Rep<Number, Ts...>> {
+    using type = Number;
+};
+
+template<class Representation>
+using rep_number = typename rep_number_i<Representation>::type;
+
+
 // short hands
 template <bool B>
 using enable_if = std::enable_if_t<B, int>;
