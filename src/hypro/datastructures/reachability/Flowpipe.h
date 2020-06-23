@@ -14,12 +14,11 @@ namespace hypro {
  *
  * @tparam State Used state type.
  */
-template <typename State>
+template <typename Representation>
 class Flowpipe {
   private:
-	using States = std::vector<State>;
 
-	States mStates;
+	std::vector<Representation> mStates;
 
   public:
 	Flowpipe( /* args */ );
@@ -30,15 +29,9 @@ class Flowpipe {
 	void addState( const State& state ) { mStates.emplace_back( state ); }
 	void addState( State&& state ) { mStates.emplace_back( state ); }
 
-	const States& getStates() const { return mStates; }
-	States& rGetStates() { return mStates; }
-	Range<States> selectTimestamps( const carl::Interval<tNumber>& span ) {
-		return selectFirstConsecutiveRange( mStates, [&]( const State& in ) -> bool { return in.timeStamp.intersects( span ); } );
-	}
-
 	template <typename Number>
 	Range<States> selectSatisfyingStates( const Condition<Number>& cond ) {
-		return selectFirstConsecutiveRange( mStates, [&]( const State& in ) -> bool { auto tmp = in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()).first; return tmp != CONTAINMENT::NO && tmp != CONTAINMENT::BOT; } );
+		return selectFirstConsecutiveRange( mStates, [&]( const State& in ) -> bool { auto tmp = in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()).first; return tmp != CONTAINMENT::NO && tmp != CONTAINMENT::BOT; } ); 
 	}
 
 	std::vector<PlotData<State>> getPlotData( std::size_t refinementLevel = 0, std::size_t threadId = 0 ) const;
