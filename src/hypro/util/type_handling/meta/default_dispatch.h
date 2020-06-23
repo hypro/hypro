@@ -21,10 +21,12 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
 			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault>
-			>;
+				  TemplatePolyhedronT, TemplatePolyhedronDefault>>;
 
 template <class Number, class Converter>
-using DefaultDispatcher = Dispatcher<Number, Converter, DefaultRepresentations>;
+using RepresentationsList = flattenRepresentations<Number, Converter, DefaultRepresentations>;
+
+template <class Number, class Converter>
+using DefaultDispatcher = Dispatcher<Number, Converter, RepresentationsList<Number, Converter>>;
 
 }  // namespace hypro

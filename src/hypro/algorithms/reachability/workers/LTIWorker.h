@@ -1,37 +1,40 @@
 #pragma once
 
-#include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
+#include "../../algorithms/reachability/workers/LTIFlowpipeConstruction.h"
 #include "../handlers/firstSegmentHandlers/ltiFirstSegmentHandler.h"
 #include "../handlers/guardHandlers/ltiGuardHandler.h"
 #include "../handlers/invariantHandlers/ltiInvariantHandler.h"
 #include "../handlers/jumpHandlers/ltiJumpHandler.h"
 #include "../handlers/timeEvolutionHandlers/ltiTimeEvolutionHandler.h"
+#include "../datastructures/reachability/timing/HierarchicalIntervalVector.h"
 
 #include <vector>
 
 namespace hypro {
 
-template <typename State>
+template <typename Representation>
 class LTIWorker {
   private:
-	using Number = typename State::NumberType;
-	using JumpSuccessors = typename ltiGuardHandler<State>::TransitionStatesMap;
+	using Number = typename Representation::NumberType;
+	using JumpSuccessors = std::map<Transition<Number>*, std::vector<Representation>>;
 
   public:
-	LTIWorker( const HybridAutomaton<Number>& ha, const Settings& settings )
+	LTIWorker( const HybridAutomaton<Number>& ha, const Settings& settings, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )
-		, mSettings( settings ) {}
+		, mSettings( settings )
+		, mTrafoCache( trafoCache ) {}
 
-	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeForwardReachability( Location<Number> const* loc, const Representation& initialSet, const matrix_t<Number>& transformation );
 
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet, const matrix_t<Number>& transformation );
+
 	void computeJumpSuccessors();
 
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
-	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
+	const std::vector<Representation>& getFlowpipe() const { return mFlowpipe; }
 
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
@@ -42,7 +45,8 @@ class LTIWorker {
 	const HybridAutomaton<Number>& mHybridAutomaton;
 	const Settings& mSettings;
 	JumpSuccessors mJumpSuccessorSets;
-	Flowpipe<State> mFlowpipe;
+	std::vector<Representation> mFlowpipe;
+	TimeTransformationCache<Number>& mTrafoCache;
 };
 
 }  // namespace hypro

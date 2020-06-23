@@ -12,7 +12,6 @@
 #include "../HybridAutomaton/Path.h"
 #include "../HybridAutomaton/State.h"
 #include "../HybridAutomaton/Transition.h"
-#include "SettingsProvider.h"
 #include "TreeNode.h"
 #include "timing/EventTimingContainer.h"
 

@@ -29,7 +29,7 @@ class LTIAnalyzer {
 	HybridAutomaton<Number> mHybridAutomaton;
 	Settings mAnalysisSettings;
 	ReachTree<State> mReachTree;
-	std::vector<State> mFirstStates;
+	std::vector<State> mFirstStates;  ///< Store first segments for fixed-point detection
 };
 
 }  // namespace hypro

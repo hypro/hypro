@@ -16,6 +16,11 @@ namespace hypro {
 using tNumber = mpq_class;
 
 /**
+ * @brief Number type for time points (internal)
+ */
+using SegmentInd = int;
+
+/**
  * typedef wrapping an Eigen::Matrix type with only one column.
  */
 template <typename Number>

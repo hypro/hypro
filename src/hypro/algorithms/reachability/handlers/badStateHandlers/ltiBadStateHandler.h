@@ -3,11 +3,11 @@
 
 namespace hypro {
 
-template <typename State>
-std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton );
+template <typename Representation, typename Number>
+std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, const HybridAutomaton<Number>& automaton );
 
-template <typename State>
-std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet, const Condition<typename State::Number>& localBadState, const std::vector<Condition<typename State::Number>>& globalBadStates );
+template <typename Representation, typename Number>
+std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, const Condition<Number>& localBadState, const std::vector<Condition<Number>>& globalBadStates );
 
 }  // namespace hypro
 

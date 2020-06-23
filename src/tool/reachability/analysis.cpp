@@ -5,10 +5,9 @@ namespace reachability {
 
 using namespace hypro;
 
-template <typename State>
-void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+template <typename Analyzer>
+void concrete_analyze( Analyzer& analyzer ) {
 	START_BENCHMARK_OPERATION( Verification );
-	LTIAnalyzer<State> analyzer{automaton, setting};
 	auto result = analyzer.run();
 
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -45,14 +44,17 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 struct Dispatcher {
 	template <typename Rep>
 	void operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
-		using concreteState = hypro::State<hydra::Number, Rep>;
-		concrete_analyze<concreteState>( automaton, setting );
+		LTIAnalyzer<hypro::State<hydra::Number>, Rep> > analyzer{ automaton, setting };
+		concrete_analyze( analyzer );
 	}
 };
 
 void analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
-													   setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting );
+	if ( setting.strategy.size() == 1 ) {
+		dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type, setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting );
+	} else {
+		CEGARAnalyzer<Number> analyzer{ automaton, setting.strategy };
+	}
 }
 
 }  // namespace reachability

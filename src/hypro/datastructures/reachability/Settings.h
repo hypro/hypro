@@ -18,17 +18,15 @@ struct AnalysisParameters {
 	bool uniformBloating = false;
 };
 
-using DynamicStrategy = std::vector<AnalysisParameters>;
-
 struct Settings {
-	std::vector<AnalysisParameters> strategy{1};
-	int jumpDepth{std::numeric_limits<int>::max()};
-	tNumber localTimeHorizon{tNumber( 0 )};
-	std::vector<std::vector<std::size_t>> plotDimensions{{0, 1}};
-	std::vector<std::string> plotFileNames{"out"};
-	PLOTTYPE plottingFileType{PLOTTYPE::png};
+	std::vector<AnalysisParameters> strategy{ 1 };
+	int jumpDepth{ std::numeric_limits<int>::max() };
+	tNumber localTimeHorizon{ tNumber( 0 ) };
+	std::vector<std::vector<std::size_t>> plotDimensions{ { 0, 1 } };
+	std::vector<std::string> plotFileNames{ "out" };
+	PLOTTYPE plottingFileType{ PLOTTYPE::png };
 #if HYPRO_USE_PPL
-	unsigned long pplDenominator{defaultPPLDenominator};
+	unsigned long pplDenominator{ defaultPPLDenominator };
 #endif
 };
 
