@@ -1,7 +1,6 @@
 #pragma once
 #include "../../hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../hypro/datastructures/reachability/Settings.h"
-#include "../../hypro/datastructures/reachability/SettingsProvider.h"
 #include "../typedefs.h"
 #include <boost/program_options.hpp>
 
