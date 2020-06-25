@@ -9,6 +9,8 @@
 #include <carl/interval/Interval.h>
 #include <vector>
 
+namespace hypro {
+
 template <class Representation>
 class ReachTreeNodev2 : TreeNodev2<ReachTreeNodev2<Representation>> {
   private:
@@ -50,3 +52,5 @@ class ReachTreeNodev2 : TreeNodev2<ReachTreeNodev2<Representation>> {
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };
+
+}

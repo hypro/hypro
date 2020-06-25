@@ -4,6 +4,8 @@
 #include <vector>
 #include <boost/range/adaptor/transformed.hpp>
 
+namespace hypro {
+
 template<class DerivedNode>
 class TreeNodev2 {
 
@@ -12,8 +14,8 @@ class TreeNodev2 {
     int mDepth{0};
 
     public:
-        TreeNode() = default;
-        TreeNode(DerivedNode* parent) : mParent(parent), mDepth(parent->getDepth() + 1) {}
+        TreeNodev2() = default;
+        TreeNodev2(DerivedNode* parent) : mParent(parent), mDepth(parent->getDepth() + 1) {}
 
 
     int getDepth() { return mDepth; }
@@ -36,3 +38,5 @@ class TreeNodev2 {
     }
 
 };
+
+}
