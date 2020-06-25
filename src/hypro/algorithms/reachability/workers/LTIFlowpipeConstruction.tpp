@@ -132,8 +132,8 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	return { errorBoxX0, errorBoxExternalInput, differenceBox };
 }
 
-templtee<class Representation>
-	  std::vector<Representation> aggregate( size_t segmentsPerBlock, std::vector<Representation>& valuationSets ) {
+template<class Representation> 
+std::vector<Representation> aggregate( size_t segmentsPerBlock, std::vector<Representation>& valuationSets ) {
 	assert( segmentsPerBlock > 1 );
 
 	std::vector<Representation> aggregated{};

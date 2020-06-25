@@ -33,31 +33,8 @@ template <class Representation, class Number>
 ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> const& flowMatrix, Representation const& initialSet, matrix_t<Number> const& trafoMatrix, Box<Number> const& externalInput );
 
 template <class Representation>
-std::vector<Representation> aggregate( int segmentsPerBlock, std::vector<Representation>& valuationSets )
-
-// template <class Representation, class Number, class OutputIterator>
-// REACHABILITY_RESULT constructFlowpipe( Representation& initialSet,
-// 									   Location<Number> const& location,
-// 									   matrix_t<Number> const& rawTransformation,
-// 									   HybridAutomaton<Number> const& automaton,
-// 									   OutputIterator out,
-// 									   int segments,
-// 									   tNumber timeStep );
-
-// template <class Representation, class Number, class OutputIterator>
-// REACHABILITY_RESULT extendFlowpipe( Representation const& tailSegment,
-// 									Location<Number> const& location,
-// 									AffineTransformationMatrix<Number> const& transformation,
-// 									HybridAutomaton<Number> const& automaton,
-// 									OutputIterator out,
-// 									int segments );
-
-// template <class Representation, class Number>
-// REACHABILITY_RESULT intersectBadStates( Representation const& valuationSet, HybridAutomaton<Number> const& automaton, Location<Number> const& loc );
-
-// template <class Representation, class Number>
-// JumpCandidates<Representation> getJumpCandidates( Transition<Number> const& transition, FlowpipeView<Representation> const& pipeView );
+std::vector<Representation> aggregate( int segmentsPerBlock, std::vector<Representation>& valuationSets );
 
 }  // namespace hypro
 
-#include "LTIFlowpipeConstruction.tpp" a
+#include "LTIFlowpipeConstruction.tpp" 
