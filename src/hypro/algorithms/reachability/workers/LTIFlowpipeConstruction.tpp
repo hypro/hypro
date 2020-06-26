@@ -132,26 +132,33 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	return { errorBoxX0, errorBoxExternalInput, differenceBox };
 }
 
-template<class Representation> 
-std::vector<Representation> aggregate( size_t segmentsPerBlock, std::vector<Representation>& valuationSets ) {
+template <class Representation>
+std::vector<TimedValuationSet<Representation>> aggregate( size_t segmentsPerBlock, std::vector<IndexedValuationSet<Representation>>& enabled ) {
 	assert( segmentsPerBlock > 1 );
 
-	std::vector<Representation> aggregated{};
+	std::vector<TimedValuationSet<Representation>> aggregated{};
+
+	if ( enabled.empty() ) return aggregated;
 
 	size_t blockCount = 0;
-	for ( auto& valSet : valuationSets ) {
+	for ( auto& [set, ind] : enabled ) {
 		if ( blockCount == 0 ) {
 			//beginning of block
-			aggregated.push_back( valSet );
+			aggregated.emplace_back( set, { ind, ind } );
 		} else {
 			//in a block
-			aggregated.back() = aggregated.back().unite( valSet );
+			aggregated.back().valuationSet = aggregated.back().unite( set );
 		}
 		blockCount += 1;
 
-		//block is now full, start next one
-		if ( blockCount == segmentsPerBlock ) blockCount = 0;
+		//block is now full, finish previous and start next one
+		if ( blockCount == segmentsPerBlock ) {
+			aggregated.back().time.upper = ind;
+			blockCount = 0;
+		}
 	}
+	// closure of last block which might be incomplete
+	aggregated.back().time.upper = enabled.back().index;
 
 	return aggregated;
 }

@@ -6,7 +6,7 @@ namespace reachability {
 using namespace hypro;
 
 template <typename Analyzer>
-void concrete_analyze( Analyzer& analyzer ) {
+void concrete_analyze( Analyzer& analyzer, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
 	auto result = analyzer.run();
 
@@ -44,8 +44,8 @@ void concrete_analyze( Analyzer& analyzer ) {
 struct Dispatcher {
 	template <typename Rep>
 	void operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
-		LTIAnalyzer<hypro::State<hydra::Number>, Rep> > analyzer{ automaton, setting };
-		concrete_analyze( analyzer );
+		LTIAnalyzer<hypro::State<Number, Rep>> analyzer{ automaton, setting };
+		concrete_analyze( analyzer, setting );
 	}
 };
 
@@ -53,7 +53,7 @@ void analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	if ( setting.strategy.size() == 1 ) {
 		dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type, setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting );
 	} else {
-		CEGARAnalyzer<Number> analyzer{ automaton, setting.strategy };
+		CEGARAnalyzer<Number> analyzer{ automaton, setting };
 	}
 }
 

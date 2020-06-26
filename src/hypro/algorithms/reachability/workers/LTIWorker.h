@@ -15,34 +15,35 @@ template <typename Representation>
 class LTIWorker {
   private:
 	using Number = typename Representation::NumberType;
-	using JumpSuccessors = std::map<Transition<Number>*, std::vector<Representation>>;
 
   public:
-	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, TimeTransformationCache<Number>& trafoCache )
+	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
+		, mLocalTimeHorizon( localTimeHorizon )
 		, mTrafoCache( trafoCache ) {}
 
-	REACHABILITY_RESULT computeForwardReachability( Location<Number> const* loc, const Representation& initialSet, const matrix_t<Number>& transformation );
+	REACHABILITY_RESULT computeForwardReachability( Location<Number> const* loc, const Representation& initialSet );
 
-	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet, const matrix_t<Number>& transformation );
+	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet );
 
-	void computeJumpSuccessors( Location<Number> const* loc, AnalysisParameters settings );
+	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( Location<Number> const* loc, AnalysisParameters settings );
 
-	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
+	const std::vector<JumpSuccessor<Representation>>& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const std::vector<Representation>& getFlowpipe() const { return mFlowpipe; }
 
   private:
-	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
-
-	bool requireTimeSuccessorComputation( std::size_t segmentCount ) const { return segmentCount <= mSettings.localTimeHorizon / mSettings.strategy.front().timeStep; }
+	bool requireTimeSuccessorComputation( std::size_t segmentCount ) const { return segmentCount <= mNumSegments; }
 
   protected:
-	const HybridAutomaton<Number>& mHybridAutomaton;
+	const HybridAutomaton<Number>& mHybridAutomaton;  /// TODO add documentation
 	const AnalysisParameters& mSettings;
-	JumpSuccessors mJumpSuccessorSets;
+	tNumber mLocalTimeHorizon;
+	std::vector<JumpSuccessor<Representation>> mJumpSuccessorSets;
 	std::vector<Representation> mFlowpipe;
 	TimeTransformationCache<Number>& mTrafoCache;
+
+	size_t const mNumSegments = std::size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };
 
 }  // namespace hypro

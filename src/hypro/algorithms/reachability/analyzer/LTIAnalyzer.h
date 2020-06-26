@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../types.h"
 #include "../workers/LTIWorker.h"
 
@@ -16,19 +17,19 @@ class LTIAnalyzer {
 	LTIAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
-		, mReachTree( new ReachTreeNode<State> ) {
+		, mReachTree( ReachTreeNode<State>{ nullptr, nullptr } ) {
 	}
 
 	REACHABILITY_RESULT run();
 
-	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
+	const std::list<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
 
   protected:
 	std::queue<ReachTreeNode<State>*> mWorkQueue;
-	std::vector<Flowpipe<State>> mFlowpipes;
+	std::list<Flowpipe<State>> mFlowpipes;
 	HybridAutomaton<Number> mHybridAutomaton;
 	Settings mAnalysisSettings;
-	ReachTree<State> mReachTree;
+	ReachTreeNode<State> mReachTree;
 	std::vector<State> mFirstStates;  ///< Store first segments for fixed-point detection
 };
 

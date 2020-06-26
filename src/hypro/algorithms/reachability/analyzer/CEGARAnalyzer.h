@@ -5,6 +5,7 @@
 #include "../../../types.h"
 #include "../workers/LTIWorker.h"
 #include "./impl/RefinementAnalyzer.h"
+#include "util/type_handling/meta/default_dispatch.h"
 
 #include <queue>
 #include <variant>
@@ -24,12 +25,7 @@ class CEGARAnalyzer {
 	 */
 	CEGARAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
-		, mStrategy( Strategy{ { setting } } ) {
-	}
-
-	CEGARAnalyzer( const HybridAutomaton<Number>& ha, const Strategy& strategy )
-		: mHybridAutomaton( ha )
-		, mStrategy( strategy ) {
+		, mSetting( setting ) {
 	}
 
 	REACHABILITY_RESULT run();
@@ -42,7 +38,7 @@ class CEGARAnalyzer {
 	//std::queue<ReachTreeNode<State>*> mWorkQueue{};
 	HybridAutomaton<Number> mHybridAutomaton;
 	std::vector<Variant> mAnalyzers{};
-	Strategy mStrategy{};
+	Settings mSetting{};
 	TimeTransformationCache<Number> mTrafoCache{};
 };
 

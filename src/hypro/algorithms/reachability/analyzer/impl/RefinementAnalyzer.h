@@ -1,8 +1,8 @@
 #pragma once
-#include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../../datastructures/reachability/ReachTreev2.h"
-#include "../../../types.h"
-#include "../workers/LTIWorker.h"
+#include "../../workers/LTIWorker.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/reachability/ReachTreev2.h"
+#include "types.h"
 
 #include <queue>
 
@@ -28,7 +28,7 @@ class RefinementAnalyzer {
 	RefinementAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
-		, mReachTree( new ReachTreeNode<State> ) {
+		, mRoots() {
 	}
 
 	/**
@@ -51,11 +51,11 @@ class RefinementAnalyzer {
 	const std::vector<Representation>& getFlowpipes() const { return mFlowpipes; }
 
   protected:
-	std::queue<ReachTreeNodev2<Representation>*> mWorkQueue;  ///< Queue for nodes in the tree which require processing
-	std::list<std::vector<Representation>> mFlowpipes;		  ///< Computed flowpipe segments
-	const HybridAutomaton<Number>& mHybridAutomaton;		  ///< Hybrid automaton
-	Settings mAnalysisSettings;								  ///< Used analysis settings
-	std::vector<ReachTreeNodev2<Representation>> mRoots{};	  ///< Root nodes of the internal reachability tree
+	std::queue<ReachTreeNode<Representation>*> mWorkQueue;	///< Queue for nodes in the tree which require processing
+	std::list<std::vector<Representation>> mFlowpipes;		///< Computed flowpipe segments
+	const HybridAutomaton<Number>& mHybridAutomaton;		///< Hybrid automaton
+	Settings mAnalysisSettings;								///< Used analysis settings
+	std::vector<ReachTreeNode<Representation>> mRoots{};	///< Root nodes of the internal reachability tree
 };
 
 }  // namespace hypro

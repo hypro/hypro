@@ -1,7 +1,6 @@
 #pragma once
 #include "../../datastructures/HybridAutomaton/Condition.h"
 #include "../../util/Range.h"
-#include "../../util/plotting/PlotData.h"
 
 /*
     Requirements:
@@ -17,33 +16,28 @@ namespace hypro {
 template <typename Representation>
 class Flowpipe {
   private:
-
 	std::vector<Representation> mStates;
 
   public:
-	Flowpipe( /* args */ );
-	~Flowpipe();
+	Flowpipe( /* args */ ){};
+	~Flowpipe(){};
 
-	void setStates( const States& states ) { mStates = states; }
-	void setStates( States&& states ) { mStates = std::move( states ); }
-	void addState( const State& state ) { mStates.emplace_back( state ); }
-	void addState( State&& state ) { mStates.emplace_back( state ); }
+	void setStates( const std::vector<Representation>& states ) { mStates = states; }
+	void setStates( std::vector<Representation>&& states ) { mStates = std::move( states ); }
+	void addState( const Representation& state ) { mStates.emplace_back( state ); }
+	void addState( Representation&& state ) { mStates.emplace_back( state ); }
 
 	template <typename Number>
-	Range<States> selectSatisfyingStates( const Condition<Number>& cond ) {
-		return selectFirstConsecutiveRange( mStates, [&]( const State& in ) -> bool { auto tmp = in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()).first; return tmp != CONTAINMENT::NO && tmp != CONTAINMENT::BOT; } ); 
+	Range<std::vector<Representation>> selectSatisfyingStates( const Condition<Number>& cond ) {
+		return selectFirstConsecutiveRange( mStates, [&]( const Representation& in ) -> bool { auto tmp = in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()).first; return tmp != CONTAINMENT::NO && tmp != CONTAINMENT::BOT; } );
 	}
 
-	std::vector<PlotData<State>> getPlotData( std::size_t refinementLevel = 0, std::size_t threadId = 0 ) const;
-
-	typename States::iterator begin() { return mStates.begin(); }
-	typename States::iterator end() { return mStates.end(); }
-	typename States::const_iterator begin() const { return mStates.begin(); }
-	typename States::const_iterator end() const { return mStates.end(); }
+	typename std::vector<Representation>::iterator begin() { return mStates.begin(); }
+	typename std::vector<Representation>::iterator end() { return mStates.end(); }
+	typename std::vector<Representation>::const_iterator begin() const { return mStates.begin(); }
+	typename std::vector<Representation>::const_iterator end() const { return mStates.end(); }
 
 	std::size_t size() const { return mStates.size(); }
 };
 
 }  // namespace hypro
-
-#include "Flowpipe.tpp"

@@ -27,6 +27,6 @@ template <class Number, class Converter>
 using RepresentationsList = flattenRepresentations<Number, Converter, DefaultRepresentations>;
 
 template <class Number, class Converter>
-using DefaultDispatcher = Dispatcher<Number, Converter, RepresentationsList<Number, Converter>>;
+using DefaultDispatcher = Dispatcher<RepresentationsList<Number, Converter>>;
 
 }  // namespace hypro

@@ -1,42 +1,41 @@
 #pragma once
 
+#include <boost/range/adaptor/transformed.hpp>
 #include <memory>
 #include <vector>
-#include <boost/range/adaptor/transformed.hpp>
 
 namespace hypro {
 
-template<class DerivedNode>
-class TreeNodev2 {
+template <class DerivedNode>
+class TreeNode {
+	DerivedNode* mParent{};
+	std::vector<std::unique_ptr<DerivedNode>> mChildren{};
+	int mDepth{ 0 };
 
-    DerivedNode* mParent{};
-    std::vector<std::unique_ptr<DerivedNode>> mChildren{};
-    int mDepth{0};
+  public:
+	TreeNode() = default;
+	TreeNode( DerivedNode* parent )
+		: mParent( parent )
+		, mDepth( parent->getDepth() + 1 ) {}
 
-    public:
-        TreeNodev2() = default;
-        TreeNodev2(DerivedNode* parent) : mParent(parent), mDepth(parent->getDepth() + 1) {}
+	int getDepth() { return mDepth; }
 
+	template <class... Args>
+	DerivedNode& addChild( Args&&... args ) {
+		return *mChildren.emplace_back( std::make_unique<Args>( args )... );
+	}
 
-    int getDepth() { return mDepth; }
+	auto getChildren() {
+		return boost::adaptors::transform( mChildren, []( auto& uPtr ) -> DerivedNode& {
+			return *uPtr;
+		} );
+	}
 
-    template<class... Args>
-    DerivedNode& addChild(Args&&... args) {
-        return *mChildren.emplace_back(std::make_unique<Args>(args)...);
-    }
-
-    auto getChildren() {
-        return boost::adaptors::transform(mChildren, [](auto& uPtr) -> DerivedNode& {
-            return *uPtr;
-        });
-    }
-
-    auto getChildren() const {
-        return boost::adaptors::transform(mChildren, [](auto const& uPtr) -> DerivedNode const& {
-            return *uPtr;
-        });
-    }
-
+	auto getChildren() const {
+		return boost::adaptors::transform( mChildren, []( auto const& uPtr ) -> DerivedNode const& {
+			return *uPtr;
+		} );
+	}
 };
 
-}
+}  // namespace hypro

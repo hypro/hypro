@@ -16,7 +16,7 @@ REACHABILITY_RESULT RefinementAnalyzer<Representation>::run() {
 	}
 
 	while ( !mWorkQueue.empty() ) {
-		LTIWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
+		LTIWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
 		auto* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
@@ -38,13 +38,13 @@ REACHABILITY_RESULT RefinementAnalyzer<Representation>::run() {
 		for ( const auto& [transition, states] : worker.getJumpSuccessorSets() ) {
 			for ( const auto jmpSucc : states ) {
 				// update reachTree
-				auto* childNode = new ReachTreeNodev2<Representation>{ currentNode, jmpSucc };
+				auto* childNode = new ReachTreeNode<Representation>{ currentNode, jmpSucc };
 				childNode->setParent( currentNode );
 				currentNode->addChild( childNode );
 
 				// update path (global time)
 				childNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().begin()->getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
-				childNode->addTransitionToPath( transitionStatesPair.first, jmpSucc.getTimestamp() );
+				childNode->addTransitionToPath( transition, jmpSucc.getTimestamp() );
 
 				// create Task
 				mWorkQueue.push( childNode );
