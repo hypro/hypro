@@ -13,8 +13,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeForwardReachability( Locat
 
 template <typename Representation>
 REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet, const matrix_t<Number>& transformation ) {
-	ltiFirstSegmentHandler<State> firstSegmentHandler;
-	auto timeStep = mSettings.settings.front().timeStep;
+	auto timeStep = mSettings.timeStep;
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, timeStep ), timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
@@ -60,19 +59,19 @@ void LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* l
 
 	// timing information
 	std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT, SegmentInd>> timings;
-	std::vector<CONTAINMENT> order{ CONTAINMENT::BOT, CONTAINMENT::PARTIAL, CONTAINMENT::FULL, CONTAINMENT::NO };
+	std::vector<CONTAINMENT> order{CONTAINMENT::BOT, CONTAINMENT::PARTIAL, CONTAINMENT::FULL, CONTAINMENT::NO};
 
 	for ( auto& valuationSet : mFlowpipe ) {
 		for ( const auto& transition : loc->getTransitions() ) {
-			auto [containment, valuationSet] = intersect( state, transition->getGuard() );
+			auto [containment, valuationSet] = intersect( valuationSet, transition->getGuard() );
 
 			if ( containment != CONTAINMENT::NO ) {
-				succ[transition.get()].emplace_back( { valuationSet, cnt } );
+				succ[transition.get()].emplace_back( {valuationSet, cnt} );
 
 				// prepare timing information
 				auto it = timings.find( transition );
 				if ( transition == timings.end() ) {
-					timings.emplace( std::make_pair( transition, { order } ) );
+					timings.emplace( std::make_pair( transition, {order} ) );
 				}
 				timings[transition].insertInterval( containment, carl::Interval<SegmentInd>( cnt, cnt + 1 ) );
 			}
@@ -85,7 +84,7 @@ void LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* l
 	for ( auto& [transition, segments] : succ ) {
 		// no aggregation
 		if ( settings.aggregation == AGG_SETTING::AGG ) {
-			if ( settings.clusterSize > 0 ) {
+			if ( settings.clustering > 0 ) {
 				size_t blockSize = ( segments.size() + 1 ) / settings.clusterSize;	//division rounding up
 				succ[transition] = aggregate( blockSize, segments );
 			} else {
@@ -109,7 +108,7 @@ void LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* l
 template <typename Representation>
 void LTIWorker<Representation>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
 	ltiJumpHandler<Representation> jmpHandler;
-	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, nullptr, mSettings.settings.front() );
+	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, nullptr, mSettings );
 }
 
 }  // namespace hypro

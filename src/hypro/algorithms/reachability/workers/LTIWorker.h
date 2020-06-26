@@ -1,15 +1,11 @@
 #pragma once
 
-#include "../../../datastructures/reachability/Settings.h"
-#include "../../../util/logging/Logger.h"
-#include "../../../util/plotting/PlotData.h"
-#include "../../algorithms/reachability/workers/LTIFlowpipeConstruction.h"
-#include "../handlers/firstSegmentHandlers/ltiFirstSegmentHandler.h"
-#include "../handlers/guardHandlers/ltiGuardHandler.h"
-#include "../handlers/invariantHandlers/ltiInvariantHandler.h"
-#include "../handlers/jumpHandlers/ltiJumpHandler.h"
-#include "../handlers/timeEvolutionHandlers/ltiTimeEvolutionHandler.h"
-#include "../datastructures/reachability/timing/HierarchicalIntervalVector.h"
+#include "algorithms/reachability/workers/LTIFlowpipeConstruction.h"
+#include "datastructures/reachability/Settings.h"
+#include "datastructures/reachability/TimeTransformationCache.h"
+#include "datastructures/reachability/timing/HierarchicalIntervalVector.h"
+#include "util/logging/Logger.h"
+#include "util/plotting/PlotData.h"
 
 #include <vector>
 
@@ -22,7 +18,7 @@ class LTIWorker {
 	using JumpSuccessors = std::map<Transition<Number>*, std::vector<Representation>>;
 
   public:
-	LTIWorker( const HybridAutomaton<Number>& ha, const Settings& settings, TimeTransformationCache<Number>& trafoCache )
+	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
 		, mTrafoCache( trafoCache ) {}
@@ -31,7 +27,7 @@ class LTIWorker {
 
 	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet, const matrix_t<Number>& transformation );
 
-	void computeJumpSuccessors();
+	void computeJumpSuccessors( Location<Number> const* loc, AnalysisParameters settings );
 
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const std::vector<Representation>& getFlowpipe() const { return mFlowpipe; }
@@ -43,7 +39,7 @@ class LTIWorker {
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;
-	const Settings& mSettings;
+	const AnalysisParameters& mSettings;
 	JumpSuccessors mJumpSuccessorSets;
 	std::vector<Representation> mFlowpipe;
 	TimeTransformationCache<Number>& mTrafoCache;
