@@ -22,7 +22,7 @@ class TreeNode {
 
 	template <class... Args>
 	DerivedNode& addChild( Args&&... args ) {
-		return *mChildren.emplace_back( std::make_unique<Args>( args )... );
+		return *mChildren.emplace_back( std::make_unique<DerivedNode>( args... ) );
 	}
 
 	auto getChildren() {

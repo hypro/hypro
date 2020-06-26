@@ -29,7 +29,7 @@ class LTIAnalyzer {
 	std::list<Flowpipe<State>> mFlowpipes;
 	HybridAutomaton<Number> mHybridAutomaton;
 	Settings mAnalysisSettings;
-	ReachTreeNode<State> mReachTree;
+	ReachTreeNode<State> mReachTree;  /// TODO: implement via several roots
 	std::vector<State> mFirstStates;  ///< Store first segments for fixed-point detection
 };
 
