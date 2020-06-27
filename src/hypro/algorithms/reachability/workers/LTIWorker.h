@@ -1,11 +1,13 @@
 #pragma once
 
 #include "algorithms/reachability/workers/LTIFlowpipeConstruction.h"
+#include "algorithms/reachability/FlowpipeConstructionConvenience.h"
 #include "datastructures/reachability/Settings.h"
 #include "datastructures/reachability/TimeTransformationCache.h"
 #include "datastructures/reachability/timing/HierarchicalIntervalVector.h"
 #include "util/logging/Logger.h"
 #include "util/plotting/PlotData.h"
+#include "algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h"
 
 #include <vector>
 
@@ -27,7 +29,7 @@ class LTIWorker {
 
 	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet );
 
-	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( Location<Number> const* loc, AnalysisParameters settings );
+	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( Location<Number> const* loc );
 
 	const std::vector<JumpSuccessor<Representation>>& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const std::vector<Representation>& getFlowpipe() const { return mFlowpipe; }

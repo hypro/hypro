@@ -7,7 +7,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeForwardReachability( Locat
 	if ( computeTimeSuccessors( loc, initialSet ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
-	computeJumpSuccessors();
+	computeJumpSuccessors( loc );
 	return REACHABILITY_RESULT::SAFE;
 }
 
@@ -53,12 +53,12 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( Location<N
 }
 
 template <typename Representation>
-std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* loc, AnalysisParameters settings ) {
+std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* loc ) {
 	//transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};
 
 	for ( const auto& transition : loc->getTransitions() ) {
-		auto& currentSucc = enabledSegments.emplace_back( &transition );
+		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{transition.get()} );
 
 		SegmentInd cnt = 0;
 		for ( auto& valuationSet : mFlowpipe ) {
@@ -66,7 +66,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 			std::tie( containment, valuationSet ) = intersect( valuationSet, transition->getGuard() );
 
 			if ( containment != CONTAINMENT::NO ) {
-				currentSucc.emplace_back( valuationSet, cnt );
+				currentSucc.valuationSets.push_back( {valuationSet, cnt} );
 			}
 			++cnt;
 		}
@@ -74,37 +74,36 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 
 	std::vector<JumpSuccessor<Representation>> successors{};
 
-	// aggregation, keep track of segInd
-	// Entscheidung: AGG zusammenhängende Sequenzen von Segmenten.
+	//aggregation
 	// for each transition
 	for ( auto& [transition, valuationSets] : enabledSegments ) {
 		// no aggregation
 		std::size_t blockSize = 1;
-		if ( settings.aggregation == AGG_SETTING::AGG ) {
-			if ( settings.clustering > 0 ) {
-				size_t blockSize = ( valuationSets.size() + settings.clustering ) / settings.clustering;  //division rounding up
+		if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+			if ( mSettings.clustering > 0 ) {
+				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
 			} else {
-				size_t blockSize = valuationSets.size();
+				blockSize = valuationSets.size();
 			}
 
-		} else if ( settings.aggregation == AGG_SETTING::MODEL && transition.getAggregation() != Aggregation::none ) {
-			if ( transition.getAggregation() == Aggregation::clustering ) {
+		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
+			if ( transition->getAggregation() == Aggregation::clustering ) {
 				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
 			}
 		}
-		successors.emplace_back( transition, aggregate( blockSize, valuationSets ) );
+		successors.emplace_back( JumpSuccessor<Representation>{transition, aggregate( blockSize, valuationSets )} );
 	}
 
 	// applyReset
 	for ( auto& [transition, valuationSets] : successors ) {
-		valuationSets = applyReset( transition, valuationSets );
-		for ( auto setIt = valuationSets.begin(); setIt != valuationSets.end(); ) {
+		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
+			it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
 			CONTAINMENT containment;
-			std::tie( containment, *setIt ) = intersect( *setIt, transition->getTarget()->getInvariant() );
-			if ( containment == CONTAINMENT::NO ) {
-				setIt = valuationSets.erase( setIt );
+			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
+			if ( containment != CONTAINMENT::NO ) {
+				it = valuationSets.erase( it );
 			} else {
-				++setIt;
+				++it;
 			}
 		}
 	}
