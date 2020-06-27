@@ -50,6 +50,7 @@ Representation constructFirstSegment( Representation const& initialSet,
 
 	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
 
+	//Horrible interface. Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
 	Representation bloatingSet{};
 	convert( Number( Number( 1 ) / Number( 4 ) ) * errorBoxes.DifferenceBox, bloatingSet );
 
@@ -144,21 +145,21 @@ std::vector<TimedValuationSet<Representation>> aggregate( size_t segmentsPerBloc
 	for ( auto& [set, ind] : enabled ) {
 		if ( blockCount == 0 ) {
 			//beginning of block
-			aggregated.emplace_back( set, { ind, ind } );
+			aggregated.emplace_back( TimedValuationSet<Representation>{ set, carl::Interval{ ind, ind } } );
 		} else {
 			//in a block
-			aggregated.back().valuationSet = aggregated.back().unite( set );
+			aggregated.back().valuationSet = aggregated.back().valuationSet.unite( set );
 		}
 		blockCount += 1;
 
 		//block is now full, finish previous and start next one
 		if ( blockCount == segmentsPerBlock ) {
-			aggregated.back().time.upper = ind;
+			aggregated.back().time.setUpper( ind );
 			blockCount = 0;
 		}
 	}
 	// closure of last block which might be incomplete
-	aggregated.back().time.upper = enabled.back().index;
+	aggregated.back().time.setUpper( enabled.back().index );
 
 	return aggregated;
 }
