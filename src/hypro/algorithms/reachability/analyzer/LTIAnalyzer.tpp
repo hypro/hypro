@@ -50,9 +50,9 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 		}
 
 		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
-			safetyResult = worker.computeForwardReachability( currentNode.getLocation(), currentNode.getInitialSet() );
+			safetyResult = worker.computeForwardReachability( currentNode->getLocation(), currentNode->getInitialSet() );
 		} else {
-			safetyResult = worker.computeTimeSuccessors( currentNode.getLocation(), currentNode.getInitialSet() );
+			safetyResult = worker.computeTimeSuccessors( currentNode->getLocation(), currentNode->getInitialSet() );
 		}
 
 		// only for plotting
