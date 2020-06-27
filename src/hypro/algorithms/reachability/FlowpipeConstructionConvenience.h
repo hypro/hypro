@@ -27,4 +27,9 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
 	return valuationSet.affineTransformation( timeTrafoMatrixBlock( timeTransformation ), timeTrafoVectorBlock( timeTransformation ) );
 }
 
+template <class Representation, class Number>
+Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
+	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
+}
+
 }  // namespace hypro
