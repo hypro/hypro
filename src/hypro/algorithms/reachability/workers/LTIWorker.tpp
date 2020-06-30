@@ -53,7 +53,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( Location<N
 }
 
 template <typename Representation>
-std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* loc ) {
+std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* loc ) const {
 	//transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};
 
@@ -61,12 +61,11 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{transition.get()} );
 
 		SegmentInd cnt = 0;
-		for ( auto& valuationSet : mFlowpipe ) {
-			CONTAINMENT containment;
-			std::tie( containment, valuationSet ) = intersect( valuationSet, transition->getGuard() );
+		for ( auto const& valuationSet : mFlowpipe ) {
+			auto [containment, intersected] = intersect( valuationSet, transition->getGuard() );
 
 			if ( containment != CONTAINMENT::NO ) {
-				currentSucc.valuationSets.push_back( {valuationSet, cnt} );
+				currentSucc.valuationSets.push_back( {intersected, cnt} );
 			}
 			++cnt;
 		}

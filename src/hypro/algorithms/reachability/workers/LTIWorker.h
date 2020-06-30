@@ -29,7 +29,7 @@ class LTIWorker {
 
 	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet );
 
-	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( Location<Number> const* loc );
+	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( Location<Number> const* loc ) const;
 
 	const std::vector<JumpSuccessor<Representation>>& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const std::vector<Representation>& getFlowpipe() const { return mFlowpipe; }

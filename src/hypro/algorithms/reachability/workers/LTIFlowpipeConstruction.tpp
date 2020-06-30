@@ -135,8 +135,6 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 
 template <class Representation>
 std::vector<TimedValuationSet<Representation>> aggregate( size_t segmentsPerBlock, std::vector<IndexedValuationSet<Representation>>& enabled ) {
-	assert( segmentsPerBlock > 1 );
-
 	std::vector<TimedValuationSet<Representation>> aggregated{};
 
 	if ( enabled.empty() ) return aggregated;
