@@ -44,7 +44,7 @@ void concrete_analyze( Analyzer& analyzer, Settings setting ) {
 struct Dispatcher {
 	template <typename Rep>
 	void operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
-		LTIAnalyzer<hypro::State<Number, Rep>> analyzer{ automaton, setting };
+		LTIAnalyzer<Rep> analyzer{ automaton, setting };
 		concrete_analyze( analyzer, setting );
 	}
 };

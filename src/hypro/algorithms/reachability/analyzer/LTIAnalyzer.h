@@ -23,7 +23,7 @@ class LTIAnalyzer {
 
 	REACHABILITY_RESULT run();
 
-	const std::list<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
+	const std::list<std::vector<State>>& getFlowpipes() const { return mFlowpipes; }
 
   protected:
 	std::queue<ReachTreeNode<State>*> mWorkQueue;

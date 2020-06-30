@@ -7,10 +7,7 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 	// initialize queue
 	for ( auto& [location, condition] : mHybridAutomaton.getInitialStates() ) {
 		// create initial state
-		State initialSet{ location };
-		// TODO: needs update in case we switch to Representation template
-		initialSet.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-		initialSet.setTimestamp( carl::Interval<tNumber>( 0 ) );
+		State initialSet{ condition.getMatrix(), condition.getVector() };
 
 		ReachTreeNode<State>& initialNode = mReachTree.addChild( &mReachTree, location, &mFlowpipes.emplace_back(), initialSet );
 
