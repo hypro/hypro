@@ -47,13 +47,13 @@ int main( int argc, char const *argv[] ) {
 		  hypro::representation_name::_from_string( options["representation"].as<std::string>().c_str() );
 
 	// create strategy
-	hypro::Settings settings{{{timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
-							   hypro::stringToSetting( options["setting"].as<std::string>() )}},
-							 reachSettings.jumpDepth,
-							 timehorizon,
-							 {reachSettings.plotDimensions},
-							 {std::vector<std::string>( {reachSettings.plotDimensions.size(), reachSettings.fileName} )},
-							 {pltType}};
+	hypro::Settings settings{ { { timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
+								  hypro::stringToSetting( options["setting"].as<std::string>() ) } },
+							  reachSettings.jumpDepth,
+							  timehorizon,
+							  { reachSettings.plotDimensions },
+							  { std::vector<std::string>( { reachSettings.plotDimensions.size(), reachSettings.fileName } ) },
+							  pltType };
 
 	EVALUATE_BENCHMARK_RESULT( Parsing );
 
