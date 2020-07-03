@@ -8,14 +8,14 @@
  * version 1.1 on September 15, 2015
  */
 
-#ifndef UTILITY_H
-#define UTILITY_H
+#pragma once
 
 #include "../../config.h"
 
 #include <cmath>
 #include <eigen3/Eigen/Dense>
 
+namespace hypro {
 namespace ZUtility {
 
 // Options for checking for intersect
@@ -95,5 +95,4 @@ struct Line_t {
 };
 
 }  // namespace ZUtility
-
-#endif /* UTILITY_H */
+}  // namespace hypro
