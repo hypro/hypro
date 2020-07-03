@@ -1,4 +1,4 @@
 var namespacehypro_1_1plotting =
 [
-    [ "gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", "structhypro_1_1plotting_1_1gnuplotSettings" ]
+    [ "gnuplotSettings", "namespacehypro_1_1plotting.html#structhypro_1_1plotting_1_1gnuplot_settings", "namespacehypro_1_1plotting_structhypro_1_1plotting_1_1gnuplot_settings_dup" ]
 ];

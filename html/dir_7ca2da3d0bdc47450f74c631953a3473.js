@@ -1,16 +1,16 @@
 var dir_7ca2da3d0bdc47450f74c631953a3473 =
 [
-    [ "LockableBase.h", "LockableBase_8h.html", [
-      [ "LockableBase", "classhypro_1_1LockableBase.html", "classhypro_1_1LockableBase" ]
+    [ "LockableBase.h", "_lockable_base_8h.html", [
+      [ "LockableBase", "classhypro_1_1_lockable_base.html", "classhypro_1_1_lockable_base" ]
     ] ],
-    [ "LockableObjectWrapper.h", "LockableObjectWrapper_8h.html", [
-      [ "LockableObjectWrapper", "classhypro_1_1LockableObjectWrapper.html", "classhypro_1_1LockableObjectWrapper" ]
+    [ "LockableObjectWrapper.h", "_lockable_object_wrapper_8h.html", [
+      [ "LockableObjectWrapper", "classhypro_1_1_lockable_object_wrapper.html", "classhypro_1_1_lockable_object_wrapper" ]
     ] ],
-    [ "ScopedLock.h", "ScopedLock_8h.html", [
-      [ "ScopedLock", "classhypro_1_1ScopedLock.html", "classhypro_1_1ScopedLock" ]
+    [ "ScopedLock.h", "_scoped_lock_8h.html", [
+      [ "ScopedLock", "classhypro_1_1_scoped_lock.html", "classhypro_1_1_scoped_lock" ]
     ] ],
-    [ "Spinlock.cpp", "Spinlock_8cpp.html", null ],
-    [ "Spinlock.h", "Spinlock_8h.html", [
-      [ "Spinlock", "classhypro_1_1Spinlock.html", "classhypro_1_1Spinlock" ]
+    [ "Spinlock.cpp", "_spinlock_8cpp.html", null ],
+    [ "Spinlock.h", "_spinlock_8h.html", [
+      [ "Spinlock", "classhypro_1_1_spinlock.html", "classhypro_1_1_spinlock" ]
     ] ]
 ];

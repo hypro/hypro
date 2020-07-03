@@ -1,4 +1,0 @@
-var structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4 =
-[
-    [ "type", "structhypro_1_1flattenRepresentations__i_3_01Number_00_01Converter_00_01TypeList_3_01RepCombinationsList_8_8_8_01_4_01_4.html#a76d304c3615df9e688f2ed19cf4a5f62", null ]
-];

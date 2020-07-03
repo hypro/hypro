@@ -1,26 +1,32 @@
 var dir_6ddbc195065ff24a50313c8ded16f5fe =
 [
-    [ "ETC_util.cpp", "ETC__util_8cpp.html", "ETC__util_8cpp" ],
-    [ "ETC_util.h", "ETC__util_8h.html", "ETC__util_8h" ],
-    [ "ETN_util.h", "ETN__util_8h.html", null ],
-    [ "EventTimingContainer.h", "EventTimingContainer_8h.html", [
-      [ "Transition", "classhypro_1_1Transition.html", "classhypro_1_1Transition" ],
-      [ "EventTimingContainer", "classhypro_1_1EventTimingContainer.html", "classhypro_1_1EventTimingContainer" ]
+    [ "ETC_util.cpp", "_e_t_c__util_8cpp.html", "_e_t_c__util_8cpp" ],
+    [ "ETC_util.h", "_e_t_c__util_8h.html", "_e_t_c__util_8h" ],
+    [ "ETN_util.h", "_e_t_n__util_8h.html", null ],
+    [ "EventTimingContainer.h", "_event_timing_container_8h.html", [
+      [ "Transition", "classhypro_1_1_transition.html", "classhypro_1_1_transition" ],
+      [ "EventTimingContainer", "classhypro_1_1_event_timing_container.html", "classhypro_1_1_event_timing_container" ]
     ] ],
-    [ "EventTimingNode.h", "EventTimingNode_8h.html", [
-      [ "EventTimingNode", "classhypro_1_1EventTimingNode.html", "classhypro_1_1EventTimingNode" ]
+    [ "EventTimingContainer.tpp", "_event_timing_container_8tpp.html", null ],
+    [ "EventTimingNode.h", "_event_timing_node_8h.html", [
+      [ "EventTimingNode", "classhypro_1_1_event_timing_node.html", "classhypro_1_1_event_timing_node" ]
     ] ],
-    [ "EventTimingProvider.h", "EventTimingProvider_8h.html", [
-      [ "EventTimingProvider", "classhypro_1_1EventTimingProvider.html", "classhypro_1_1EventTimingProvider" ]
+    [ "EventTimingNode.tpp", "_event_timing_node_8tpp.html", null ],
+    [ "EventTimingProvider.h", "_event_timing_provider_8h.html", [
+      [ "EventTimingProvider", "classhypro_1_1_event_timing_provider.html", "classhypro_1_1_event_timing_provider" ]
     ] ],
-    [ "HierarchicalIntervalVector.h", "HierarchicalIntervalVector_8h.html", [
-      [ "endPoint", "structhypro_1_1endPoint.html", "structhypro_1_1endPoint" ],
-      [ "HierarchicalIntervalVector", "classhypro_1_1HierarchicalIntervalVector.html", "classhypro_1_1HierarchicalIntervalVector" ]
+    [ "EventTimingProvider.tpp", "_event_timing_provider_8tpp.html", null ],
+    [ "HierarchicalIntervalVector.h", "_hierarchical_interval_vector_8h.html", [
+      [ "endPoint", "structhypro_1_1end_point.html", "structhypro_1_1end_point" ],
+      [ "HierarchicalIntervalVector", "classhypro_1_1_hierarchical_interval_vector.html", "classhypro_1_1_hierarchical_interval_vector" ]
     ] ],
-    [ "HIV_util.h", "HIV__util_8h.html", null ],
-    [ "TimingAggregate.h", "TimingAggregate_8h.html", [
-      [ "EventTimingNode", "classhypro_1_1EventTimingNode.html", "classhypro_1_1EventTimingNode" ],
-      [ "ChildTimingInformation", "structhypro_1_1ChildTimingInformation.html", "structhypro_1_1ChildTimingInformation" ],
-      [ "TimingAggregate", "classhypro_1_1TimingAggregate.html", "classhypro_1_1TimingAggregate" ]
+    [ "HierarchicalIntervalVector.tpp", "_hierarchical_interval_vector_8tpp.html", null ],
+    [ "HIV_util.h", "_h_i_v__util_8h.html", null ],
+    [ "TimingAggregate.h", "_timing_aggregate_8h.html", [
+      [ "EventTimingNode", "classhypro_1_1_event_timing_node.html", "classhypro_1_1_event_timing_node" ],
+      [ "ChildTimingInformation", "namespacehypro.html#structhypro_1_1_child_timing_information", [
+        [ "timingInformation", "namespacehypro.html#a086eb42c041e7d218032e77bcc1384ec", null ]
+      ] ],
+      [ "TimingAggregate", "classhypro_1_1_timing_aggregate.html", "classhypro_1_1_timing_aggregate" ]
     ] ]
 ];

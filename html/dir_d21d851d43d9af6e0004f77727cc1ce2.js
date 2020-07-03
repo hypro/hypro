@@ -1,106 +1,111 @@
 var dir_d21d851d43d9af6e0004f77727cc1ce2 =
 [
-    [ "ErrorListener.cpp", "ErrorListener_8cpp.html", null ],
-    [ "ErrorListener.h", "ErrorListener_8h.html", [
-      [ "ErrorListener", "classhypro_1_1ErrorListener.html", "classhypro_1_1ErrorListener" ]
+    [ "ErrorListener.cpp", "_error_listener_8cpp.html", null ],
+    [ "ErrorListener.h", "_error_listener_8h.html", [
+      [ "ErrorListener", "classhypro_1_1_error_listener.html", "classhypro_1_1_error_listener" ]
     ] ],
-    [ "FlowstarParser.cpp", "FlowstarParser_8cpp.html", "FlowstarParser_8cpp" ],
-    [ "FlowstarParser.h", "FlowstarParser_8h.html", "FlowstarParser_8h" ],
-    [ "HybridAutomatonBaseVisitor.cpp", "HybridAutomatonBaseVisitor_8cpp.html", null ],
-    [ "HybridAutomatonBaseVisitor.h", "HybridAutomatonBaseVisitor_8h.html", [
-      [ "HybridAutomatonBaseVisitor", "classhypro_1_1HybridAutomatonBaseVisitor.html", "classhypro_1_1HybridAutomatonBaseVisitor" ]
+    [ "FlowstarParser.cpp", "_flowstar_parser_8cpp.html", "_flowstar_parser_8cpp" ],
+    [ "FlowstarParser.h", "_flowstar_parser_8h.html", "_flowstar_parser_8h" ],
+    [ "HybridAutomatonBaseVisitor.cpp", "_hybrid_automaton_base_visitor_8cpp.html", null ],
+    [ "HybridAutomatonBaseVisitor.h", "_hybrid_automaton_base_visitor_8h.html", [
+      [ "HybridAutomatonBaseVisitor", "classhypro_1_1_hybrid_automaton_base_visitor.html", "classhypro_1_1_hybrid_automaton_base_visitor" ]
     ] ],
-    [ "HybridAutomatonLexer.cpp", "HybridAutomatonLexer_8cpp.html", null ],
-    [ "HybridAutomatonLexer.h", "HybridAutomatonLexer_8h.html", [
-      [ "HybridAutomatonLexer", "classhypro_1_1HybridAutomatonLexer.html", "classhypro_1_1HybridAutomatonLexer" ],
-      [ "Initializer", "structhypro_1_1HybridAutomatonLexer_1_1Initializer.html", "structhypro_1_1HybridAutomatonLexer_1_1Initializer" ]
+    [ "HybridAutomatonLexer.cpp", "_hybrid_automaton_lexer_8cpp.html", null ],
+    [ "HybridAutomatonLexer.h", "_hybrid_automaton_lexer_8h.html", [
+      [ "HybridAutomatonLexer", "classhypro_1_1_hybrid_automaton_lexer.html", "classhypro_1_1_hybrid_automaton_lexer" ]
     ] ],
-    [ "HybridAutomatonParser.cpp", "HybridAutomatonParser_8cpp.html", null ],
-    [ "HybridAutomatonParser.h", "HybridAutomatonParser_8h.html", [
-      [ "HybridAutomatonParser", "classhypro_1_1HybridAutomatonParser.html", "classhypro_1_1HybridAutomatonParser" ],
-      [ "StartContext", "classhypro_1_1HybridAutomatonParser_1_1StartContext.html", "classhypro_1_1HybridAutomatonParser_1_1StartContext" ],
-      [ "VardeclarationContext", "classhypro_1_1HybridAutomatonParser_1_1VardeclarationContext.html", "classhypro_1_1HybridAutomatonParser_1_1VardeclarationContext" ],
-      [ "ConstantdeclarationContext", "classhypro_1_1HybridAutomatonParser_1_1ConstantdeclarationContext.html", "classhypro_1_1HybridAutomatonParser_1_1ConstantdeclarationContext" ],
-      [ "ModesContext", "classhypro_1_1HybridAutomatonParser_1_1ModesContext.html", "classhypro_1_1HybridAutomatonParser_1_1ModesContext" ],
-      [ "LocationContext", "classhypro_1_1HybridAutomatonParser_1_1LocationContext.html", "classhypro_1_1HybridAutomatonParser_1_1LocationContext" ],
-      [ "ActivitiesContext", "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext.html", "classhypro_1_1HybridAutomatonParser_1_1ActivitiesContext" ],
-      [ "InvariantsContext", "classhypro_1_1HybridAutomatonParser_1_1InvariantsContext.html", "classhypro_1_1HybridAutomatonParser_1_1InvariantsContext" ],
-      [ "ReplacedexprContext", "classhypro_1_1HybridAutomatonParser_1_1ReplacedexprContext.html", "classhypro_1_1HybridAutomatonParser_1_1ReplacedexprContext" ],
-      [ "ConstantexprContext", "classhypro_1_1HybridAutomatonParser_1_1ConstantexprContext.html", "classhypro_1_1HybridAutomatonParser_1_1ConstantexprContext" ],
-      [ "ConnectorContext", "classhypro_1_1HybridAutomatonParser_1_1ConnectorContext.html", "classhypro_1_1HybridAutomatonParser_1_1ConnectorContext" ],
-      [ "TermContext", "classhypro_1_1HybridAutomatonParser_1_1TermContext.html", "classhypro_1_1HybridAutomatonParser_1_1TermContext" ],
-      [ "PolynomContext", "classhypro_1_1HybridAutomatonParser_1_1PolynomContext.html", "classhypro_1_1HybridAutomatonParser_1_1PolynomContext" ],
-      [ "ExpressionContext", "classhypro_1_1HybridAutomatonParser_1_1ExpressionContext.html", "classhypro_1_1HybridAutomatonParser_1_1ExpressionContext" ],
-      [ "EquationContext", "classhypro_1_1HybridAutomatonParser_1_1EquationContext.html", "classhypro_1_1HybridAutomatonParser_1_1EquationContext" ],
-      [ "ConstraintContext", "classhypro_1_1HybridAutomatonParser_1_1ConstraintContext.html", "classhypro_1_1HybridAutomatonParser_1_1ConstraintContext" ],
-      [ "IntervalContext", "classhypro_1_1HybridAutomatonParser_1_1IntervalContext.html", "classhypro_1_1HybridAutomatonParser_1_1IntervalContext" ],
-      [ "IntervalexprContext", "classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext.html", "classhypro_1_1HybridAutomatonParser_1_1IntervalexprContext" ],
-      [ "ConstrsetContext", "classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext.html", "classhypro_1_1HybridAutomatonParser_1_1ConstrsetContext" ],
-      [ "InitContext", "classhypro_1_1HybridAutomatonParser_1_1InitContext.html", "classhypro_1_1HybridAutomatonParser_1_1InitContext" ],
-      [ "InitstateContext", "classhypro_1_1HybridAutomatonParser_1_1InitstateContext.html", "classhypro_1_1HybridAutomatonParser_1_1InitstateContext" ],
-      [ "UnsafesetContext", "classhypro_1_1HybridAutomatonParser_1_1UnsafesetContext.html", "classhypro_1_1HybridAutomatonParser_1_1UnsafesetContext" ],
-      [ "LbadstateContext", "classhypro_1_1HybridAutomatonParser_1_1LbadstateContext.html", "classhypro_1_1HybridAutomatonParser_1_1LbadstateContext" ],
-      [ "GbadstateContext", "classhypro_1_1HybridAutomatonParser_1_1GbadstateContext.html", "classhypro_1_1HybridAutomatonParser_1_1GbadstateContext" ],
-      [ "JumpsContext", "classhypro_1_1HybridAutomatonParser_1_1JumpsContext.html", "classhypro_1_1HybridAutomatonParser_1_1JumpsContext" ],
-      [ "TransitionContext", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext.html", "classhypro_1_1HybridAutomatonParser_1_1TransitionContext" ],
-      [ "FromtoContext", "classhypro_1_1HybridAutomatonParser_1_1FromtoContext.html", "classhypro_1_1HybridAutomatonParser_1_1FromtoContext" ],
-      [ "UrgentContext", "classhypro_1_1HybridAutomatonParser_1_1UrgentContext.html", "classhypro_1_1HybridAutomatonParser_1_1UrgentContext" ],
-      [ "GuardContext", "classhypro_1_1HybridAutomatonParser_1_1GuardContext.html", "classhypro_1_1HybridAutomatonParser_1_1GuardContext" ],
-      [ "LabelsContext", "classhypro_1_1HybridAutomatonParser_1_1LabelsContext.html", "classhypro_1_1HybridAutomatonParser_1_1LabelsContext" ],
-      [ "AllocationContext", "classhypro_1_1HybridAutomatonParser_1_1AllocationContext.html", "classhypro_1_1HybridAutomatonParser_1_1AllocationContext" ],
-      [ "ResetfctContext", "classhypro_1_1HybridAutomatonParser_1_1ResetfctContext.html", "classhypro_1_1HybridAutomatonParser_1_1ResetfctContext" ],
-      [ "AggregationContext", "classhypro_1_1HybridAutomatonParser_1_1AggregationContext.html", "classhypro_1_1HybridAutomatonParser_1_1AggregationContext" ],
-      [ "SettingContext", "classhypro_1_1HybridAutomatonParser_1_1SettingContext.html", "classhypro_1_1HybridAutomatonParser_1_1SettingContext" ],
-      [ "FixedstepsContext", "classhypro_1_1HybridAutomatonParser_1_1FixedstepsContext.html", "classhypro_1_1HybridAutomatonParser_1_1FixedstepsContext" ],
-      [ "TimeContext", "classhypro_1_1HybridAutomatonParser_1_1TimeContext.html", "classhypro_1_1HybridAutomatonParser_1_1TimeContext" ],
-      [ "PlotsettingContext", "classhypro_1_1HybridAutomatonParser_1_1PlotsettingContext.html", "classhypro_1_1HybridAutomatonParser_1_1PlotsettingContext" ],
-      [ "FilenameContext", "classhypro_1_1HybridAutomatonParser_1_1FilenameContext.html", "classhypro_1_1HybridAutomatonParser_1_1FilenameContext" ],
-      [ "MaxjumpsContext", "classhypro_1_1HybridAutomatonParser_1_1MaxjumpsContext.html", "classhypro_1_1HybridAutomatonParser_1_1MaxjumpsContext" ],
-      [ "PrintContext", "classhypro_1_1HybridAutomatonParser_1_1PrintContext.html", "classhypro_1_1HybridAutomatonParser_1_1PrintContext" ],
-      [ "RemainderContext", "classhypro_1_1HybridAutomatonParser_1_1RemainderContext.html", "classhypro_1_1HybridAutomatonParser_1_1RemainderContext" ],
-      [ "IdentityContext", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext.html", "classhypro_1_1HybridAutomatonParser_1_1IdentityContext" ],
-      [ "QrprecondContext", "classhypro_1_1HybridAutomatonParser_1_1QrprecondContext.html", "classhypro_1_1HybridAutomatonParser_1_1QrprecondContext" ],
-      [ "FixedordersContext", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext.html", "classhypro_1_1HybridAutomatonParser_1_1FixedordersContext" ],
-      [ "AdaptiveordersContext", "classhypro_1_1HybridAutomatonParser_1_1AdaptiveordersContext.html", "classhypro_1_1HybridAutomatonParser_1_1AdaptiveordersContext" ],
-      [ "CutoffContext", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext.html", "classhypro_1_1HybridAutomatonParser_1_1CutoffContext" ],
-      [ "PrecisionContext", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext.html", "classhypro_1_1HybridAutomatonParser_1_1PrecisionContext" ],
-      [ "Initializer", "structhypro_1_1HybridAutomatonParser_1_1Initializer.html", "structhypro_1_1HybridAutomatonParser_1_1Initializer" ]
+    [ "HybridAutomatonParser.cpp", "_hybrid_automaton_parser_8cpp.html", null ],
+    [ "HybridAutomatonParser.h", "_hybrid_automaton_parser_8h.html", [
+      [ "HybridAutomatonParser", "classhypro_1_1_hybrid_automaton_parser.html", "classhypro_1_1_hybrid_automaton_parser" ],
+      [ "StartContext", "classhypro_1_1_hybrid_automaton_parser_1_1_start_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_start_context" ],
+      [ "VardeclarationContext", "classhypro_1_1_hybrid_automaton_parser_1_1_vardeclaration_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_vardeclaration_context" ],
+      [ "ConstantdeclarationContext", "classhypro_1_1_hybrid_automaton_parser_1_1_constantdeclaration_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_constantdeclaration_context" ],
+      [ "ModesContext", "classhypro_1_1_hybrid_automaton_parser_1_1_modes_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_modes_context" ],
+      [ "LocationContext", "classhypro_1_1_hybrid_automaton_parser_1_1_location_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_location_context" ],
+      [ "ActivitiesContext", "classhypro_1_1_hybrid_automaton_parser_1_1_activities_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_activities_context" ],
+      [ "InvariantsContext", "classhypro_1_1_hybrid_automaton_parser_1_1_invariants_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_invariants_context" ],
+      [ "ReplacedexprContext", "classhypro_1_1_hybrid_automaton_parser_1_1_replacedexpr_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_replacedexpr_context" ],
+      [ "ConstantexprContext", "classhypro_1_1_hybrid_automaton_parser_1_1_constantexpr_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_constantexpr_context" ],
+      [ "ConnectorContext", "classhypro_1_1_hybrid_automaton_parser_1_1_connector_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_connector_context" ],
+      [ "TermContext", "classhypro_1_1_hybrid_automaton_parser_1_1_term_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_term_context" ],
+      [ "PolynomContext", "classhypro_1_1_hybrid_automaton_parser_1_1_polynom_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_polynom_context" ],
+      [ "ExpressionContext", "classhypro_1_1_hybrid_automaton_parser_1_1_expression_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_expression_context" ],
+      [ "EquationContext", "classhypro_1_1_hybrid_automaton_parser_1_1_equation_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_equation_context" ],
+      [ "ConstraintContext", "classhypro_1_1_hybrid_automaton_parser_1_1_constraint_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_constraint_context" ],
+      [ "IntervalContext", "classhypro_1_1_hybrid_automaton_parser_1_1_interval_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_interval_context" ],
+      [ "IntervalexprContext", "classhypro_1_1_hybrid_automaton_parser_1_1_intervalexpr_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_intervalexpr_context" ],
+      [ "ConstrsetContext", "classhypro_1_1_hybrid_automaton_parser_1_1_constrset_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_constrset_context" ],
+      [ "InitContext", "classhypro_1_1_hybrid_automaton_parser_1_1_init_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_init_context" ],
+      [ "InitstateContext", "classhypro_1_1_hybrid_automaton_parser_1_1_initstate_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_initstate_context" ],
+      [ "UnsafesetContext", "classhypro_1_1_hybrid_automaton_parser_1_1_unsafeset_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_unsafeset_context" ],
+      [ "LbadstateContext", "classhypro_1_1_hybrid_automaton_parser_1_1_lbadstate_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_lbadstate_context" ],
+      [ "GbadstateContext", "classhypro_1_1_hybrid_automaton_parser_1_1_gbadstate_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_gbadstate_context" ],
+      [ "JumpsContext", "classhypro_1_1_hybrid_automaton_parser_1_1_jumps_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_jumps_context" ],
+      [ "TransitionContext", "classhypro_1_1_hybrid_automaton_parser_1_1_transition_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_transition_context" ],
+      [ "FromtoContext", "classhypro_1_1_hybrid_automaton_parser_1_1_fromto_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_fromto_context" ],
+      [ "UrgentContext", "classhypro_1_1_hybrid_automaton_parser_1_1_urgent_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_urgent_context" ],
+      [ "GuardContext", "classhypro_1_1_hybrid_automaton_parser_1_1_guard_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_guard_context" ],
+      [ "LabelsContext", "classhypro_1_1_hybrid_automaton_parser_1_1_labels_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_labels_context" ],
+      [ "AllocationContext", "classhypro_1_1_hybrid_automaton_parser_1_1_allocation_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_allocation_context" ],
+      [ "ResetfctContext", "classhypro_1_1_hybrid_automaton_parser_1_1_resetfct_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_resetfct_context" ],
+      [ "AggregationContext", "classhypro_1_1_hybrid_automaton_parser_1_1_aggregation_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_aggregation_context" ],
+      [ "SettingContext", "classhypro_1_1_hybrid_automaton_parser_1_1_setting_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_setting_context" ],
+      [ "FixedstepsContext", "classhypro_1_1_hybrid_automaton_parser_1_1_fixedsteps_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_fixedsteps_context" ],
+      [ "TimeContext", "classhypro_1_1_hybrid_automaton_parser_1_1_time_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_time_context" ],
+      [ "PlotsettingContext", "classhypro_1_1_hybrid_automaton_parser_1_1_plotsetting_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_plotsetting_context" ],
+      [ "FilenameContext", "classhypro_1_1_hybrid_automaton_parser_1_1_filename_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_filename_context" ],
+      [ "MaxjumpsContext", "classhypro_1_1_hybrid_automaton_parser_1_1_maxjumps_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_maxjumps_context" ],
+      [ "PrintContext", "classhypro_1_1_hybrid_automaton_parser_1_1_print_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_print_context" ],
+      [ "RemainderContext", "classhypro_1_1_hybrid_automaton_parser_1_1_remainder_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_remainder_context" ],
+      [ "IdentityContext", "classhypro_1_1_hybrid_automaton_parser_1_1_identity_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_identity_context" ],
+      [ "QrprecondContext", "classhypro_1_1_hybrid_automaton_parser_1_1_qrprecond_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_qrprecond_context" ],
+      [ "FixedordersContext", "classhypro_1_1_hybrid_automaton_parser_1_1_fixedorders_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_fixedorders_context" ],
+      [ "AdaptiveordersContext", "classhypro_1_1_hybrid_automaton_parser_1_1_adaptiveorders_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_adaptiveorders_context" ],
+      [ "CutoffContext", "classhypro_1_1_hybrid_automaton_parser_1_1_cutoff_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_cutoff_context" ],
+      [ "PrecisionContext", "classhypro_1_1_hybrid_automaton_parser_1_1_precision_context.html", "classhypro_1_1_hybrid_automaton_parser_1_1_precision_context" ]
     ] ],
-    [ "HybridAutomatonVisitor.cpp", "HybridAutomatonVisitor_8cpp.html", null ],
-    [ "HybridAutomatonVisitor.h", "HybridAutomatonVisitor_8h.html", [
-      [ "HybridAutomatonVisitor", "classhypro_1_1HybridAutomatonVisitor.html", "classhypro_1_1HybridAutomatonVisitor" ]
+    [ "HybridAutomatonVisitor.cpp", "_hybrid_automaton_visitor_8cpp.html", null ],
+    [ "HybridAutomatonVisitor.h", "_hybrid_automaton_visitor_8h.html", [
+      [ "HybridAutomatonVisitor", "classhypro_1_1_hybrid_automaton_visitor.html", "classhypro_1_1_hybrid_automaton_visitor" ]
     ] ],
-    [ "HyproBadStatesVisitor.h", "HyproBadStatesVisitor_8h.html", [
-      [ "HyproHAVisitor", "classhypro_1_1HyproHAVisitor.html", "classhypro_1_1HyproHAVisitor" ],
-      [ "HyproBadStatesVisitor", "classhypro_1_1HyproBadStatesVisitor.html", "classhypro_1_1HyproBadStatesVisitor" ]
+    [ "HyproBadStatesVisitor.h", "_hypro_bad_states_visitor_8h.html", [
+      [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ],
+      [ "HyproBadStatesVisitor", "classhypro_1_1_hypro_bad_states_visitor.html", "classhypro_1_1_hypro_bad_states_visitor" ]
     ] ],
-    [ "HyproFormulaVisitor.h", "HyproFormulaVisitor_8h.html", [
-      [ "HyproLocationVisitor", "classhypro_1_1HyproLocationVisitor.html", "classhypro_1_1HyproLocationVisitor" ],
-      [ "HyproTransitionVisitor", "classhypro_1_1HyproTransitionVisitor.html", "classhypro_1_1HyproTransitionVisitor" ],
-      [ "HyproInitialSetVisitor", "classhypro_1_1HyproInitialSetVisitor.html", "classhypro_1_1HyproInitialSetVisitor" ],
-      [ "HyproSettingVisitor", "classhypro_1_1HyproSettingVisitor.html", "classhypro_1_1HyproSettingVisitor" ],
-      [ "HyproBadStatesVisitor", "classhypro_1_1HyproBadStatesVisitor.html", "classhypro_1_1HyproBadStatesVisitor" ],
-      [ "HyproFormulaVisitor", "classhypro_1_1HyproFormulaVisitor.html", "classhypro_1_1HyproFormulaVisitor" ]
+    [ "HyproBadStatesVisitor.tpp", "_hypro_bad_states_visitor_8tpp.html", null ],
+    [ "HyproFormulaVisitor.h", "_hypro_formula_visitor_8h.html", [
+      [ "HyproLocationVisitor", "classhypro_1_1_hypro_location_visitor.html", "classhypro_1_1_hypro_location_visitor" ],
+      [ "HyproTransitionVisitor", "classhypro_1_1_hypro_transition_visitor.html", "classhypro_1_1_hypro_transition_visitor" ],
+      [ "HyproInitialSetVisitor", "classhypro_1_1_hypro_initial_set_visitor.html", "classhypro_1_1_hypro_initial_set_visitor" ],
+      [ "HyproSettingVisitor", "classhypro_1_1_hypro_setting_visitor.html", "classhypro_1_1_hypro_setting_visitor" ],
+      [ "HyproBadStatesVisitor", "classhypro_1_1_hypro_bad_states_visitor.html", "classhypro_1_1_hypro_bad_states_visitor" ],
+      [ "HyproFormulaVisitor", "classhypro_1_1_hypro_formula_visitor.html", "classhypro_1_1_hypro_formula_visitor" ]
     ] ],
-    [ "HyproHAVisitor.h", "HyproHAVisitor_8h.html", [
-      [ "HyproHAVisitor", "classhypro_1_1HyproHAVisitor.html", "classhypro_1_1HyproHAVisitor" ]
+    [ "HyproFormulaVisitor.tpp", "_hypro_formula_visitor_8tpp.html", null ],
+    [ "HyproHAVisitor.h", "_hypro_h_a_visitor_8h.html", [
+      [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ]
     ] ],
-    [ "HyproInitialSetVisitor.h", "HyproInitialSetVisitor_8h.html", [
-      [ "HyproHAVisitor", "classhypro_1_1HyproHAVisitor.html", "classhypro_1_1HyproHAVisitor" ],
-      [ "HyproInitialSetVisitor", "classhypro_1_1HyproInitialSetVisitor.html", "classhypro_1_1HyproInitialSetVisitor" ]
+    [ "HyproHAVisitor.tpp", "_hypro_h_a_visitor_8tpp.html", null ],
+    [ "HyproInitialSetVisitor.h", "_hypro_initial_set_visitor_8h.html", [
+      [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ],
+      [ "HyproInitialSetVisitor", "classhypro_1_1_hypro_initial_set_visitor.html", "classhypro_1_1_hypro_initial_set_visitor" ]
     ] ],
-    [ "HyproLocationVisitor.h", "HyproLocationVisitor_8h.html", [
-      [ "HyproHAVisitor", "classhypro_1_1HyproHAVisitor.html", "classhypro_1_1HyproHAVisitor" ],
-      [ "HyproLocationVisitor", "classhypro_1_1HyproLocationVisitor.html", "classhypro_1_1HyproLocationVisitor" ]
+    [ "HyproInitialSetVisitor.tpp", "_hypro_initial_set_visitor_8tpp.html", null ],
+    [ "HyproLocationVisitor.h", "_hypro_location_visitor_8h.html", [
+      [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ],
+      [ "HyproLocationVisitor", "classhypro_1_1_hypro_location_visitor.html", "classhypro_1_1_hypro_location_visitor" ]
     ] ],
-    [ "HyproSettingVisitor.h", "HyproSettingVisitor_8h.html", [
-      [ "HyproHAVisitor", "classhypro_1_1HyproHAVisitor.html", "classhypro_1_1HyproHAVisitor" ],
-      [ "HyproSettingVisitor", "classhypro_1_1HyproSettingVisitor.html", "classhypro_1_1HyproSettingVisitor" ]
+    [ "HyproLocationVisitor.tpp", "_hypro_location_visitor_8tpp.html", null ],
+    [ "HyproSettingVisitor.h", "_hypro_setting_visitor_8h.html", [
+      [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ],
+      [ "HyproSettingVisitor", "classhypro_1_1_hypro_setting_visitor.html", "classhypro_1_1_hypro_setting_visitor" ]
     ] ],
-    [ "HyproTransitionVisitor.h", "HyproTransitionVisitor_8h.html", [
-      [ "HyproHAVisitor", "classhypro_1_1HyproHAVisitor.html", "classhypro_1_1HyproHAVisitor" ],
-      [ "HyproTransitionVisitor", "classhypro_1_1HyproTransitionVisitor.html", "classhypro_1_1HyproTransitionVisitor" ]
+    [ "HyproSettingVisitor.tpp", "_hypro_setting_visitor_8tpp.html", null ],
+    [ "HyproTransitionVisitor.h", "_hypro_transition_visitor_8h.html", [
+      [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ],
+      [ "HyproTransitionVisitor", "classhypro_1_1_hypro_transition_visitor.html", "classhypro_1_1_hypro_transition_visitor" ]
     ] ],
-    [ "ParserWrapper.cpp", "ParserWrapper_8cpp.html", "ParserWrapper_8cpp" ],
-    [ "ParserWrapper.h", "ParserWrapper_8h.html", "ParserWrapper_8h" ]
+    [ "HyproTransitionVisitor.tpp", "_hypro_transition_visitor_8tpp.html", null ],
+    [ "ParserWrapper.cpp", "_parser_wrapper_8cpp.html", "_parser_wrapper_8cpp" ],
+    [ "ParserWrapper.h", "_parser_wrapper_8h.html", "_parser_wrapper_8h" ]
 ];

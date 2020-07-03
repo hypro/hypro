@@ -1,8 +1,8 @@
 var for__each_8h =
 [
-    [ "seq", "structhypro_1_1detail_1_1seq.html", null ],
-    [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
-    [ "gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html", null ],
+    [ "seq", "namespacehypro_1_1detail.html#structhypro_1_1detail_1_1seq", null ],
+    [ "gen_seq", "namespacehypro_1_1detail.html#structhypro_1_1detail_1_1gen__seq", null ],
+    [ "gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01_is_8_8_8_01_4.html", null ],
     [ "for_each", "for__each_8h.html#a70fa308cd95d8305dff628dad52bbb76", null ],
     [ "for_each", "for__each_8h.html#a73a7e0d0f898c506e2d7416801ca0de0", null ],
     [ "for_each", "for__each_8h.html#a1ea621e84987f39a5e67470ddd1f8e5c", null ],

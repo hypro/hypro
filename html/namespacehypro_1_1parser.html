@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.06</span>
+   &#160;<span id="projectnumber">20.07</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -124,11 +124,11 @@ $(document).ready(function(){initNavTree('namespacehypro_1_1parser.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a880eca04df8ef2ce234a1e35eca05522"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html#a880eca04df8ef2ce234a1e35eca05522">openFile</a> (const <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;<a class="el" href="runMHyProBenchmarks_8m.html#a2ff994e16bf9521154de4cf659a3b689">filename</a>, ANTLRInputStream &amp;<a class="el" href="MHyProLocationTest_8m.html#a877535c3b6ffdf230bce90c82c597d17">input</a>)</td></tr>
+<tr class="memitem:a880eca04df8ef2ce234a1e35eca05522"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html#a880eca04df8ef2ce234a1e35eca05522">openFile</a> (const std::string &amp;filename, ANTLRInputStream &amp;input)</td></tr>
 <tr class="separator:a880eca04df8ef2ce234a1e35eca05522"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b2e7b7a56a2c6e8a760507dbb6d0a25"><td class="memItemLeft" align="right" valign="top"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html#a9b2e7b7a56a2c6e8a760507dbb6d0a25">replaceConstantsWithValues</a> (TokenStreamRewriter &amp;rewriter, std::map&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt; constants)</td></tr>
+<tr class="memitem:a9b2e7b7a56a2c6e8a760507dbb6d0a25"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html#a9b2e7b7a56a2c6e8a760507dbb6d0a25">replaceConstantsWithValues</a> (TokenStreamRewriter &amp;rewriter, std::map&lt; std::string, std::string &gt; constants)</td></tr>
 <tr class="separator:a9b2e7b7a56a2c6e8a760507dbb6d0a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a695a569b5a96d2739f112ff4e3d07b1a"><td class="memItemLeft" align="right" valign="top">tree::ParseTree *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html#a695a569b5a96d2739f112ff4e3d07b1a">createFlowstarParseTree</a> (const <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;<a class="el" href="runMHyProBenchmarks_8m.html#a2ff994e16bf9521154de4cf659a3b689">filename</a>)</td></tr>
+<tr class="memitem:a695a569b5a96d2739f112ff4e3d07b1a"><td class="memItemLeft" align="right" valign="top">tree::ParseTree *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1parser.html#a695a569b5a96d2739f112ff4e3d07b1a">createFlowstarParseTree</a> (const std::string &amp;filename)</td></tr>
 <tr class="separator:a695a569b5a96d2739f112ff4e3d07b1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -139,16 +139,16 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">tree::ParseTree * hypro::parser::createFlowstarParseTree </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="FlowstarParser_8cpp_source.html#l00039">39</a> of file <a class="el" href="FlowstarParser_8cpp_source.html">FlowstarParser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_flowstar_parser_8cpp_source.html#l00039">39</a> of file <a class="el" href="_flowstar_parser_8cpp_source.html">FlowstarParser.cpp</a>.</p>
 
-<p>References <a class="el" href="HybridAutomatonParser_8h_source.html#l00057">hypro::HybridAutomatonParser::getConstants()</a>, <a class="el" href="compareBB__CORA__MHyPro_8m_source.html#l00136">input</a>, <a class="el" href="FlowstarParser_8cpp_source.html#l00006">openFile()</a>, <a class="el" href="FlowstarParser_8cpp_source.html#l00028">replaceConstantsWithValues()</a>, <a class="el" href="HybridAutomatonParser_8cpp_source.html#l00097">hypro::HybridAutomatonParser::start()</a>, <a class="el" href="examples_2CMakeLists_8txt_source.html#l00011">string()</a>, and <a class="el" href="make__mHyPro_8m_source.html#l00039">tree</a>.</p>
+<p>References <a class="el" href="_hybrid_automaton_parser_8h_source.html#l00057">hypro::HybridAutomatonParser::getConstants()</a>, <a class="el" href="_flowstar_parser_8cpp_source.html#l00006">openFile()</a>, <a class="el" href="_flowstar_parser_8cpp_source.html#l00028">replaceConstantsWithValues()</a>, and <a class="el" href="_hybrid_automaton_parser_8cpp_source.html#l00097">hypro::HybridAutomatonParser::start()</a>.</p>
 
 </div>
 </div>
@@ -159,7 +159,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void hypro::parser::openFile </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &amp;&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em>, </td>
         </tr>
         <tr>
@@ -176,9 +176,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="FlowstarParser_8cpp_source.html#l00006">6</a> of file <a class="el" href="FlowstarParser_8cpp_source.html">FlowstarParser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_flowstar_parser_8cpp_source.html#l00006">6</a> of file <a class="el" href="_flowstar_parser_8cpp_source.html">FlowstarParser.cpp</a>.</p>
 
-<p>Referenced by <a class="el" href="FlowstarParser_8cpp_source.html#l00039">createFlowstarParseTree()</a>.</p>
+<p>Referenced by <a class="el" href="_flowstar_parser_8cpp_source.html#l00039">createFlowstarParseTree()</a>.</p>
 
 </div>
 </div>
@@ -187,7 +187,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> hypro::parser::replaceConstantsWithValues </td>
+          <td class="memname">std::string hypro::parser::replaceConstantsWithValues </td>
           <td>(</td>
           <td class="paramtype">TokenStreamRewriter &amp;&#160;</td>
           <td class="paramname"><em>rewriter</em>, </td>
@@ -195,7 +195,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::map&lt; <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a>, <a class="el" href="examples_2CMakeLists_8txt.html#a61798b458ca5bfcb9b28f6f188d8dab8">std::string</a> &gt;&#160;</td>
+          <td class="paramtype">std::map&lt; std::string, std::string &gt;&#160;</td>
           <td class="paramname"><em>constants</em>&#160;</td>
         </tr>
         <tr>
@@ -206,11 +206,9 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="FlowstarParser_8cpp_source.html#l00028">28</a> of file <a class="el" href="FlowstarParser_8cpp_source.html">FlowstarParser.cpp</a>.</p>
+<p>Definition at line <a class="el" href="_flowstar_parser_8cpp_source.html#l00028">28</a> of file <a class="el" href="_flowstar_parser_8cpp_source.html">FlowstarParser.cpp</a>.</p>
 
-<p>References <a class="el" href="compareREND__CORA__MHyPro_8m_source.html#l00234">i</a>.</p>
-
-<p>Referenced by <a class="el" href="FlowstarParser_8cpp_source.html#l00039">createFlowstarParseTree()</a>.</p>
+<p>Referenced by <a class="el" href="_flowstar_parser_8cpp_source.html#l00039">createFlowstarParseTree()</a>.</p>
 
 </div>
 </div>

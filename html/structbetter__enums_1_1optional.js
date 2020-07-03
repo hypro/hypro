@@ -5,7 +5,5 @@ var structbetter__enums_1_1optional =
     [ "operator bool", "structbetter__enums_1_1optional.html#a84d874d166b7d39348217eb863ec5760", null ],
     [ "operator*", "structbetter__enums_1_1optional.html#a1fc8bd647f687bafcf2b77652a0f3500", null ],
     [ "operator->", "structbetter__enums_1_1optional.html#af1f22852c5921ff1710d873f78b5ac34", null ],
-    [ "value", "structbetter__enums_1_1optional.html#a06f8ac8fbec180fc99e1a0af2e61309c", null ],
-    [ "_valid", "structbetter__enums_1_1optional.html#a15ae57d95602f6d99faccc12aaec3847", null ],
-    [ "_value", "structbetter__enums_1_1optional.html#ae544de2f1fb6bcca6f2c7f5aa6a8555b", null ]
+    [ "value", "structbetter__enums_1_1optional.html#a06f8ac8fbec180fc99e1a0af2e61309c", null ]
 ];

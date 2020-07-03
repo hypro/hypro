@@ -1,7 +1,7 @@
 var namespacehypro_1_1statistics =
 [
-    [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1AtomicOperationCounter.html", "structhypro_1_1statistics_1_1AtomicOperationCounter" ],
-    [ "CounterRepository", "classhypro_1_1statistics_1_1CounterRepository.html", "classhypro_1_1statistics_1_1CounterRepository" ],
-    [ "OperationCounter", "structhypro_1_1statistics_1_1OperationCounter.html", "structhypro_1_1statistics_1_1OperationCounter" ],
-    [ "Statistician", "classhypro_1_1statistics_1_1Statistician.html", "classhypro_1_1statistics_1_1Statistician" ]
+    [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1_atomic_operation_counter.html", "structhypro_1_1statistics_1_1_atomic_operation_counter" ],
+    [ "CounterRepository", "classhypro_1_1statistics_1_1_counter_repository.html", "classhypro_1_1statistics_1_1_counter_repository" ],
+    [ "OperationCounter", "structhypro_1_1statistics_1_1_operation_counter.html", "structhypro_1_1statistics_1_1_operation_counter" ],
+    [ "Statistician", "classhypro_1_1statistics_1_1_statistician.html", "classhypro_1_1statistics_1_1_statistician" ]
 ];

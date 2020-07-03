@@ -16,11 +16,11 @@ var dir_7fa927d8fbf9dfbeef69af27f63bc81b =
     [ "TaylorModel", "dir_f299c51bddf4791e0a4b318d117b72c2.html", "dir_f299c51bddf4791e0a4b318d117b72c2" ],
     [ "TemplatePolyhedron", "dir_de6b33db193c266697157d1795ff13ca.html", "dir_de6b33db193c266697157d1795ff13ca" ],
     [ "Zonotope", "dir_97de49a5bc6f4f4b12a8405ff97bd656.html", "dir_97de49a5bc6f4f4b12a8405ff97bd656" ],
-    [ "GeometricObjectBase.h", "GeometricObjectBase_8h.html", [
-      [ "Point", "classhypro_1_1Point.html", "classhypro_1_1Point" ],
-      [ "Halfspace", "classhypro_1_1Halfspace.html", "classhypro_1_1Halfspace" ],
-      [ "Location", "classhypro_1_1Location.html", "classhypro_1_1Location" ]
+    [ "GeometricObjectBase.h", "_geometric_object_base_8h.html", [
+      [ "Point", "classhypro_1_1_point.html", "classhypro_1_1_point" ],
+      [ "Halfspace", "classhypro_1_1_halfspace.html", "classhypro_1_1_halfspace" ],
+      [ "Location", "classhypro_1_1_location.html", "classhypro_1_1_location" ]
     ] ],
     [ "types.h", "representations_2types_8h.html", null ],
-    [ "volumeApproximation.h", "volumeApproximation_8h.html", null ]
+    [ "volumeApproximation.h", "volume_approximation_8h.html", null ]
 ];

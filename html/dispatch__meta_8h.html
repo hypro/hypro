@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.06</span>
+   &#160;<span id="projectnumber">20.07</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -128,13 +128,13 @@ $(document).ready(function(){initNavTree('dispatch__meta_8h.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TypeMapping.html">hypro::TypeMapping&lt; Representation &gt;</a></td></tr>
+<tr class="memitem:structhypro_1_1_type_mapping"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#structhypro_1_1_type_mapping">hypro::TypeMapping&lt; Representation &gt;</a></td></tr>
+<tr class="separator:structhypro_1_1_type_mapping"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_type_mapping_3_01_r_3_01_n_00_01_c_00_01_setting_01_4_01_4.html">hypro::TypeMapping&lt; R&lt; N, C, Setting &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TypeMapping_3_01R_3_01N_00_01C_00_01Setting_01_4_01_4.html">hypro::TypeMapping&lt; R&lt; N, C, Setting &gt; &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_dispatcher__i.html">hypro::Dispatcher_i&lt; Representation, Representations &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1Dispatcher__i.html">hypro::Dispatcher_i&lt; Representation, Representations &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1Dispatcher__i_3_01Representation_01_4.html">hypro::Dispatcher_i&lt; Representation &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_dispatcher__i_3_01_representation_01_4.html">hypro::Dispatcher_i&lt; Representation &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -146,9 +146,27 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a2ccd1ea28907703f51dac0d2cc8aadb5"><td class="memTemplParams" colspan="2">template&lt;class Number , class Converter , class RepresentationCombinationsList &gt; </td></tr>
-<tr class="memitem:a2ccd1ea28907703f51dac0d2cc8aadb5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a2ccd1ea28907703f51dac0d2cc8aadb5">hypro::Dispatcher</a> = apply&lt; Dispatcher_i, flattenRepresentations&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a>, Converter, RepresentationCombinationsList &gt;&gt;</td></tr>
+<tr class="memitem:a2ccd1ea28907703f51dac0d2cc8aadb5"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a2ccd1ea28907703f51dac0d2cc8aadb5">hypro::Dispatcher</a> = apply&lt; Dispatcher_i, flattenRepresentations&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, Converter, RepresentationCombinationsList &gt;&gt;</td></tr>
 <tr class="separator:a2ccd1ea28907703f51dac0d2cc8aadb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<hr/><h2 class="groupheader">Class Documentation</h2>
+<a name="structhypro_1_1_type_mapping" id="structhypro_1_1_type_mapping"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct hypro::TypeMapping</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="textblock"><h3>template&lt;class Representation&gt;<br />
+struct hypro::TypeMapping&lt; Representation &gt;</h3>
+
+
+<p>Definition at line <a class="el" href="dispatch__meta_8h_source.html#l00018">18</a> of file <a class="el" href="dispatch__meta_8h_source.html">dispatch_meta.h</a>.</p>
+</div>
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

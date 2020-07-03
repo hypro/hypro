@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['eigen',['Eigen',['../namespaceEigen.html',1,'']]]
+  ['eigen',['Eigen',['../namespace_eigen.html',1,'']]]
 ];

@@ -1,7 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$structhypro_1_1is__flow_3_01affineFlow_3_01N_01_4_01_4.html" title="hypro::is_flow\&lt; affineFlow\l\&lt; N \&gt; \&gt;" alt="" coords="141,5,325,47"/>
-<area shape="rect" id="node3" href="$structhypro_1_1is__flow_3_01linearFlow_3_01N_01_4_01_4.html" title="hypro::is_flow\&lt; linearFlow\l\&lt; N \&gt; \&gt;" alt="" coords="141,71,325,112"/>
-<area shape="rect" id="node4" href="$structhypro_1_1is__flow_3_01rectangularFlow_3_01N_01_4_01_4.html" title="hypro::is_flow\&lt; rectangular\lFlow\&lt; N \&gt; \&gt;" alt="" coords="136,136,331,177"/>
-<area shape="rect" id="node5" href="$structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html" title="hypro::is_shared_ptr\l\&lt; std::shared_ptr\&lt; T \&gt; \&gt;" alt="" coords="140,201,327,243"/>
-<area shape="rect" id="node6" href="$structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html" title="hypro::is_unique_ptr\l\&lt; std::unique_ptr\&lt; T,\l D \&gt; \&gt;" alt="" coords="154,266,313,322"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_i_worker.html" title="hypro::IWorker\&lt; std\l::shared_ptr\&lt; Task\&lt;\l State \&gt; \&gt;, State \&gt;" alt="" coords="5,5,157,61"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_context_based_reachability_worker.html" title="hypro::ContextBasedReachability\lWorker\&lt; State \&gt;" alt="" coords="205,13,436,54"/>
 </map>

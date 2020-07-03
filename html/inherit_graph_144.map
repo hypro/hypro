@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1LRUCache.html" title="hypro::LRUCache\&lt; Key,\l Value \&gt;" alt="" coords="5,5,177,47"/>
+<area shape="rect" id="node1" href="$classhypro_1_1lti_bad_state_handler.html" title="hypro::ltiBadStateHandler\l\&lt; State \&gt;" alt="" coords="5,39,192,80"/>
+<area shape="rect" id="node2" href="$classhypro_1_1discrete_bad_state_handler.html" title="hypro::discreteBadStateHandler\l\&lt; State \&gt;" alt="" coords="240,5,467,47"/>
+<area shape="rect" id="node3" href="$classhypro_1_1timed_bad_state_handler.html" title="hypro::timedBadStateHandler\l\&lt; State \&gt;" alt="" coords="247,71,460,112"/>
 </map>

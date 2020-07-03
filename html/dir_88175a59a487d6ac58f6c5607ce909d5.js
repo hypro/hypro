@@ -1,9 +1,10 @@
 var dir_88175a59a487d6ac58f6c5607ce909d5 =
 [
-    [ "PlotData.h", "PlotData_8h.html", [
-      [ "PlotData", "structhypro_1_1PlotData.html", "structhypro_1_1PlotData" ]
+    [ "PlotData.h", "_plot_data_8h.html", [
+      [ "PlotData", "structhypro_1_1_plot_data.html", "structhypro_1_1_plot_data" ]
     ] ],
-    [ "Plotter.h", "Plotter_8h.html", "Plotter_8h" ],
-    [ "PlotterUtil.cpp", "PlotterUtil_8cpp.html", "PlotterUtil_8cpp" ],
-    [ "PlotterUtil.h", "PlotterUtil_8h.html", "PlotterUtil_8h" ]
+    [ "Plotter.h", "_plotter_8h.html", "_plotter_8h" ],
+    [ "Plotter.tpp", "_plotter_8tpp.html", null ],
+    [ "PlotterUtil.cpp", "_plotter_util_8cpp.html", "_plotter_util_8cpp" ],
+    [ "PlotterUtil.h", "_plotter_util_8h.html", "_plotter_util_8h" ]
 ];

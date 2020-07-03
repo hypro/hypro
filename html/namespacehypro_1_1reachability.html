@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.06</span>
+   &#160;<span id="projectnumber">20.07</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -117,6 +117,7 @@ $(document).ready(function(){initNavTree('namespacehypro_1_1reachability.html','
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::reachability Namespace Reference</div>  </div>
@@ -128,18 +129,56 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacehypro_1_1reachability_1_1detail"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability_1_1detail.html">detail</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a2bc39024daae2db5a75fe4260fdf3f17"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a2bc39024daae2db5a75fe4260fdf3f17">clock</a> = std::chrono::high_resolution_clock</td></tr>
+<tr class="separator:a2bc39024daae2db5a75fe4260fdf3f17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a781e854174c74213ffb55f333409d649"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a781e854174c74213ffb55f333409d649">timeunit</a> = std::chrono::microseconds</td></tr>
+<tr class="separator:a781e854174c74213ffb55f333409d649"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#acda04bdd7355b6fb2fc3a5882ebd34cf">computeTrafoMatrix</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt; *_loc, <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> <a class="el" href="vp__param__experiments_8m.html#ad0133f2ebf52e1be940907d51f8b1eef">timeStep</a>)</td></tr>
+<tr class="memitem:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#acda04bdd7355b6fb2fc3a5882ebd34cf">computeTrafoMatrix</a> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *_loc, <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> timeStep)</td></tr>
 <tr class="separator:acda04bdd7355b6fb2fc3a5882ebd34cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename State &gt; </td></tr>
-<tr class="memitem:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a9127e144bf32d2976e6a0c4e60ee6c1a">bloatBox</a> (State &amp;in, const <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt; &amp;bloatBox)</td></tr>
+<tr class="memitem:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a9127e144bf32d2976e6a0c4e60ee6c1a">bloatBox</a> (State &amp;in, const <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;bloatBox)</td></tr>
 <tr class="separator:a9127e144bf32d2976e6a0c4e60ee6c1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename State &gt; </td></tr>
-<tr class="memitem:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, State, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a0292cc1cc006e7f7c859ea48ceda58c7">computeFirstSegment</a> (const State &amp;_state, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> <a class="el" href="vp__param__experiments_8m.html#ad0133f2ebf52e1be940907d51f8b1eef">timeStep</a>)</td></tr>
+<tr class="memitem:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memTemplItemLeft" align="right" valign="top">std::tuple&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, State, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability.html#a0292cc1cc006e7f7c859ea48ceda58c7">computeFirstSegment</a> (const State &amp;_state, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep)</td></tr>
 <tr class="separator:a0292cc1cc006e7f7c859ea48ceda58c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a2bc39024daae2db5a75fe4260fdf3f17"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacehypro_1_1reachability.html#a2bc39024daae2db5a75fe4260fdf3f17">hypro::reachability::clock</a> = typedef std::chrono::high_resolution_clock</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#a0">example_benchmark.cpp</a>.</dd>
+</dl>
+<p>Definition at line <a class="el" href="_reach_8tpp_source.html#l00006">6</a> of file <a class="el" href="_reach_8tpp_source.html">Reach.tpp</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a781e854174c74213ffb55f333409d649"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacehypro_1_1reachability.html#a781e854174c74213ffb55f333409d649">hypro::reachability::timeunit</a> = typedef std::chrono::microseconds</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#a1">example_benchmark.cpp</a>.</dd>
+</dl>
+<p>Definition at line <a class="el" href="_reach_8tpp_source.html#l00007">7</a> of file <a class="el" href="_reach_8tpp_source.html">Reach.tpp</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a9127e144bf32d2976e6a0c4e60ee6c1a"></a>
 <div class="memitem">
@@ -156,7 +195,7 @@ template&lt;typename Number , typename State &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>bloatBox</em>&#160;</td>
         </tr>
         <tr>
@@ -167,7 +206,7 @@ template&lt;typename Number , typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="FirstSegment_8h_source.html#l00050">50</a> of file <a class="el" href="FirstSegment_8h_source.html">FirstSegment.h</a>.</p>
+<p>Definition at line <a class="el" href="_first_segment_8h_source.html#l00050">50</a> of file <a class="el" href="_first_segment_8h_source.html">FirstSegment.h</a>.</p>
 
 </div>
 </div>
@@ -178,7 +217,7 @@ template&lt;typename Number , typename State &gt; </div>
 template&lt;typename Number , typename State &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::tuple&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, State, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a>&gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a>&gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt;<a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a>&gt; &gt; hypro::reachability::computeFirstSegment </td>
+          <td class="memname">std::tuple&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, State, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;<a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;, <a class="el" href="namespacehypro.html#a26fa0b70f0eef004bebcc80332eab2dd">Box</a>&lt;<a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; &gt; hypro::reachability::computeFirstSegment </td>
           <td>(</td>
           <td class="paramtype">const State &amp;&#160;</td>
           <td class="paramname"><em>_state</em>, </td>
@@ -197,9 +236,9 @@ template&lt;typename Number , typename State &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="FirstSegment_8h_source.html#l00056">56</a> of file <a class="el" href="FirstSegment_8h_source.html">FirstSegment.h</a>.</p>
+<p>Definition at line <a class="el" href="_first_segment_8h_source.html#l00056">56</a> of file <a class="el" href="_first_segment_8h_source.html">FirstSegment.h</a>.</p>
 
-<p>References <a class="el" href="compareZonotopeFunctions_8m.html#a130d32517740630a9df017fda3fe411f">assert()</a>, <a class="el" href="checkIntervals_8m_source.html#l00005">cols</a>, <a class="el" href="FirstSegment_8h_source.html#l00014">computeTrafoMatrix()</a>, <a class="el" href="MHyProFlowTest_8m.html#a3b2a06152be9a08021b2eb4266f90115">dimension()</a>, <a class="el" href="algorithms_2reachability_2util_8h_source.html#l00075">hypro::errorBoxes()</a>, <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dac2f3f489a00553e7a01d369c103c7251">hypro::NO</a>, and <a class="el" href="compareMHyProAndCORA_8m_source.html#l00055">timeStep</a>.</p>
+<p>References <a class="el" href="_first_segment_8h_source.html#l00014">computeTrafoMatrix()</a>, <a class="el" href="algorithms_2reachability_2util_8h_source.html#l00075">hypro::errorBoxes()</a>, and <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615dac2f3f489a00553e7a01d369c103c7251">hypro::NO</a>.</p>
 
 </div>
 </div>
@@ -210,15 +249,15 @@ template&lt;typename Number , typename State &gt; </div>
 template&lt;typename Number &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a>&gt; hypro::reachability::computeTrafoMatrix </td>
+          <td class="memname"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;<a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt; hypro::reachability::computeTrafoMatrix </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; <a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a> &gt; *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *&#160;</td>
           <td class="paramname"><em>_loc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="src_2hypro_2util_2matlab_2CompareMHyProAndCORA_2example__zonotope_8cpp.html#a3476cca2cf5691536be7176a832fed98">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td>
           <td class="paramname"><em>timeStep</em>&#160;</td>
         </tr>
         <tr>
@@ -229,11 +268,11 @@ template&lt;typename Number &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="FirstSegment_8h_source.html#l00014">14</a> of file <a class="el" href="FirstSegment_8h_source.html">FirstSegment.h</a>.</p>
+<p>Definition at line <a class="el" href="_first_segment_8h_source.html#l00014">14</a> of file <a class="el" href="_first_segment_8h_source.html">FirstSegment.h</a>.</p>
 
-<p>References <a class="el" href="compareFO4__CORA__MHyPro_8m_source.html#l00122">flowMatrix</a>, <a class="el" href="Location_8h_source.html#l00059">hypro::Location&lt; Number &gt;::getLinearFlow()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00372">hypro::matrixExponential()</a>, and <a class="el" href="compareMHyProAndCORA_8m_source.html#l00055">timeStep</a>.</p>
+<p>References <a class="el" href="_location_8h_source.html#l00059">hypro::Location&lt; Number &gt;::getLinearFlow()</a>, and <a class="el" href="adaptions__eigen_8h_source.html#l00372">hypro::matrixExponential()</a>.</p>
 
-<p>Referenced by <a class="el" href="Reach_8h_source.html#l00026">CLANG_WARNING_DISABLE()</a>, and <a class="el" href="FirstSegment_8h_source.html#l00056">computeFirstSegment()</a>.</p>
+<p>Referenced by <a class="el" href="_reach_8h_source.html#l00026">CLANG_WARNING_DISABLE()</a>, <a class="el" href="_first_segment_8h_source.html#l00056">computeFirstSegment()</a>, and <a class="el" href="lti_first_segment_handler_8tpp_source.html#l00005">hypro::ltiFirstSegmentHandler&lt; State &gt;::operator()()</a>.</p>
 
 </div>
 </div>

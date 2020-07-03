@@ -1,7 +1,7 @@
 var adaptions__eigen_8h =
 [
-    [ "hash< hypro::vector_t< Number > >", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4" ],
-    [ "hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4" ],
+    [ "hash< hypro::vector_t< Number > >", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01_number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01_number_01_4_01_4" ],
+    [ "hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01_number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01_number_01_4_01_4" ],
     [ "abs", "adaptions__eigen_8h.html#a86f8cdb062cebb054e7d1b8be0fa0013", null ],
     [ "CLANG_WARNING_DISABLE", "adaptions__eigen_8h.html#a65833df199579a0852a41bcae1c6b7bb", null ],
     [ "convert", "adaptions__eigen_8h.html#a68ae3af2a7228b818bab49bced6e60a5", null ],

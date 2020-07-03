@@ -1,7 +1,7 @@
 var types_8h =
 [
-    [ "NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4" ],
-    [ "NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", "structEigen_1_1NumTraits_3_01mpq__class_01_4" ],
+    [ "NumTraits< carl::FLOAT_T< Number > >", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4" ],
+    [ "NumTraits< mpq_class >", "struct_eigen_1_1_num_traits_3_01mpq__class_01_4.html", "struct_eigen_1_1_num_traits_3_01mpq__class_01_4" ],
     [ "matrix_t", "types_8h.html#a52a4896e811a0710bcfc5a410a780034", null ],
     [ "tNumber", "types_8h.html#aecbc4b3475e1d41764127bd99c0e2b1c", null ],
     [ "vector_t", "types_8h.html#aa70b7a97ac898c2b28a2af61f4607e3a", null ],

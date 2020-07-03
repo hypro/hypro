@@ -5,7 +5,5 @@ var structbetter__enums_1_1__iterable =
     [ "begin", "structbetter__enums_1_1__iterable.html#a9a0bd24abac55e22f36ecc1eef610264", null ],
     [ "end", "structbetter__enums_1_1__iterable.html#a9d656f715548f0039c6110c30103f66f", null ],
     [ "operator[]", "structbetter__enums_1_1__iterable.html#a96b4bcfd048464013f0bc88cc51878ae", null ],
-    [ "size", "structbetter__enums_1_1__iterable.html#ac4b6df585d56707420ab7faebd68f785", null ],
-    [ "_array", "structbetter__enums_1_1__iterable.html#a216efec838a3c92c897556f0db43b6bf", null ],
-    [ "_size", "structbetter__enums_1_1__iterable.html#ab23e1e4fd729685cecf2fa6931189d42", null ]
+    [ "size", "structbetter__enums_1_1__iterable.html#ac4b6df585d56707420ab7faebd68f785", null ]
 ];

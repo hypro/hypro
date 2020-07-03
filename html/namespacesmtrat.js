@@ -1,4 +1,4 @@
 var namespacesmtrat =
 [
-    [ "SimplexSolver", "classsmtrat_1_1SimplexSolver.html", "classsmtrat_1_1SimplexSolver" ]
+    [ "SimplexSolver", "classsmtrat_1_1_simplex_solver.html", "classsmtrat_1_1_simplex_solver" ]
 ];

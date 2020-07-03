@@ -1,0 +1,28 @@
+var classhypro_1_1_exact_quickhull_1_1_facet_space =
+[
+    [ "FacetSpace", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#aed35ab06c883173781ac42605b7d1264", null ],
+    [ "compressVector", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a4645acabbdc3590442e290e87534907f", null ],
+    [ "computeNormal", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a83097864406695566eaa3008c6c27bb3", null ],
+    [ "containsAllPoints", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a4b3d447f58e6f31334651f44b4f360d6", null ],
+    [ "containsVertices", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a6e6f74c63633b3d3f9a525f6e56a3aac", null ],
+    [ "containsVertices", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a5b8a0bf6998a4c2ee21442ed780b96fa", null ],
+    [ "deleteFacet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a5f2d62b7c5ddf3f8988e09999c229927", null ],
+    [ "endModificationPhase", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#ac8d2800149da2406bad6409e700afe49", null ],
+    [ "establishNeighborhood", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a1322964cab8879433aac1dcd84fcc94a", null ],
+    [ "findFacet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#aa9fce9c39eb427bf2ffc13e0b007c892", null ],
+    [ "findFacet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a49da59f4614264446eac02df68cec1b1", null ],
+    [ "insertConePart", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#aadf61ac3b27ff683added160b159f059", null ],
+    [ "insertNew", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a7bdab581278fe7a511380c8e5bbe6d56", null ],
+    [ "insertReduced", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#aaacb2c9cfbc0b117b1abf8028a3b1080", null ],
+    [ "insertTrivialFacet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a98113ff9507d46c5bfc6a44b8be31532", null ],
+    [ "printAll", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a82d04830344b0f851816ba83f824dc5f", null ],
+    [ "printFacet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a3c1f6d4ef1fadcfeb77e726c0b196425", null ],
+    [ "removeCoplanarFacets", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a4530744e43fdc2a2243d25f96bb0efc6", null ],
+    [ "tryAddToOutsideSet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#aec2648e4032d8dcc833db8d718f87174", null ],
+    [ "validateFacet", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a2156bb6373ae829e4328ba54f9af925c", null ],
+    [ "validateVertexContainment", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a502cad47c6b974465203377c2d57d6b3", null ],
+    [ "deletedPositions", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a783abef02ca9f5789244db5e69b40cf8", null ],
+    [ "facets", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#afe75fcf81aa154a06ff6945730779ec4", null ],
+    [ "firstDeleted", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a8569ad5540d133a0779f29097a66b889", null ],
+    [ "firstInserted", "classhypro_1_1_exact_quickhull_1_1_facet_space.html#a68bc92f07461c73fef569a3472d5ffef", null ]
+];
