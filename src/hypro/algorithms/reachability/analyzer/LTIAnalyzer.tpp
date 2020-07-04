@@ -28,18 +28,17 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
 
-		auto& newPipe = mFlowpipes.emplace_back();
-		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( newPipe ) );
+		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( *currentNode->getFlowpipe() ) );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) return safetyResult;
 
 		//Take dummy root into account
 		size_t performedJumps = currentNode->getDepth() - 1;
 		//Do not perform discrete jump if jump depth was reached
-		if ( performedJumps == mAnalysisSettings.jumpDepth ) return REACHABILITY_RESULT::SAFE;
+		if ( performedJumps == mAnalysisSettings.jumpDepth ) continue;
 
 		// create jump successor tasks
-		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( newPipe, currentNode->getLocation() ) ) {
+		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( *currentNode->getFlowpipe(), currentNode->getLocation() ) ) {
 			for ( const auto [valuationSet, duration] : timedValuationSets ) {
 				// update reachTree
 				ReachTreeNode<State>& childNode = currentNode->addChild( currentNode, transition->getTarget(), &mFlowpipes.emplace_back(), valuationSet );
