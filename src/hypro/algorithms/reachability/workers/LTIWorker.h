@@ -25,27 +25,20 @@ class LTIWorker {
 		, mLocalTimeHorizon( localTimeHorizon )
 		, mTrafoCache( trafoCache ) {}
 
-	REACHABILITY_RESULT computeForwardReachability( Location<Number> const* loc, const Representation& initialSet );
+	template<typename OutputIt>
+	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const;
 
-	REACHABILITY_RESULT computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet );
-
-	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( Location<Number> const* loc ) const;
-
-	const std::vector<JumpSuccessor<Representation>>& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
-	const std::vector<Representation>& getFlowpipe() const { return mFlowpipe; }
+	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
 
   private:
-	bool requireTimeSuccessorComputation( std::size_t segmentCount ) const { return segmentCount <= mNumSegments; }
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;  /// TODO add documentation
 	const AnalysisParameters& mSettings;
 	tNumber mLocalTimeHorizon;
-	std::vector<JumpSuccessor<Representation>> mJumpSuccessorSets;
-	std::vector<Representation> mFlowpipe;
 	TimeTransformationCache<Number>& mTrafoCache;
 
-	size_t const mNumSegments = std::size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
+	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };
 
 }  // namespace hypro

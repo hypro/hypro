@@ -49,7 +49,7 @@ int main( int argc, char const *argv[] ) {
 	// create strategy
 	hypro::Settings settings{ { { timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
 								  hypro::stringToSetting( options["setting"].as<std::string>() ) } },
-							  reachSettings.jumpDepth,
+							  static_cast<size_t>(reachSettings.jumpDepth),
 							  timehorizon,
 							  { reachSettings.plotDimensions },
 							  { std::vector<std::string>( { reachSettings.plotDimensions.size(), reachSettings.fileName } ) },

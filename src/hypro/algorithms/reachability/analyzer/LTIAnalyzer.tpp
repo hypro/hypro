@@ -15,55 +15,31 @@ REACHABILITY_RESULT LTIAnalyzer<State>::run() {
 		mWorkQueue.push( &initialNode );
 	}
 
+	//Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
+	LTIWorker<State> worker{
+		  mHybridAutomaton,
+		  mAnalysisSettings.strategy.front(),
+		  mAnalysisSettings.localTimeHorizon,
+		  transformationCache };
 
 	while ( !mWorkQueue.empty() ) {
-		LTIWorker<State> worker{
-			  mHybridAutomaton,
-			  mAnalysisSettings.strategy.front(),
-			  mAnalysisSettings.localTimeHorizon,
-			  transformationCache };
 		ReachTreeNode<State>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
 
-		//Fixed point detection for TemplatePolyhedrons
-		bool skipComputation = false;
-		/*
-		if ( currentNode->getInitialSet().getSetType( 0 ) == hypro::representation_name::polytope_t ) {
-			for ( const auto& segment : mFirstStates ) {
-				assert( segment.getSetType( 0 ) == hypro::representation_name::polytope_t );
-				if ( segment.contains( currentNode->getInitialSet() ) ) {
-					//skip the computation of this flowpipe
-					COUNT( "Fixpoint detected" );
-					skipComputation = true;
-					break;
-				}
-			}
-		}
-		*/
-		if ( skipComputation ) {
-			continue;
-		}
+		auto& newPipe = mFlowpipes.emplace_back();
+		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( newPipe ) );
 
-		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
-			safetyResult = worker.computeForwardReachability( currentNode->getLocation(), currentNode->getInitialSet() );
-		} else {
-			safetyResult = worker.computeTimeSuccessors( currentNode->getLocation(), currentNode->getInitialSet() );
-		}
+		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) return safetyResult;
 
-		// only for plotting
-		mFlowpipes.emplace_back( worker.getFlowpipe() );
-		// for fixed point detection
-		// TODO: this should be done on the tree, not in a member.
-		// mFirstStates.emplace_back( currentNode->getInitialSet() );
-
-		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return safetyResult;
-		}
+		//Take dummy root into account
+		size_t performedJumps = currentNode->getDepth() - 1;
+		//Do not perform discrete jump if jump depth was reached
+		if ( performedJumps == mAnalysisSettings.jumpDepth ) return REACHABILITY_RESULT::SAFE;
 
 		// create jump successor tasks
-		for ( const auto& [transition, timedValuationSets] : worker.getJumpSuccessorSets() ) {
+		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( newPipe, currentNode->getLocation() ) ) {
 			for ( const auto [valuationSet, duration] : timedValuationSets ) {
 				// update reachTree
 				ReachTreeNode<State>& childNode = currentNode->addChild( currentNode, transition->getTarget(), &mFlowpipes.emplace_back(), valuationSet );

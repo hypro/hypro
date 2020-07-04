@@ -3,47 +3,39 @@
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT LTIWorker<Representation>::computeForwardReachability( Location<Number> const* loc, const Representation& initialSet ) {
-	if ( computeTimeSuccessors( loc, initialSet ) == REACHABILITY_RESULT::UNKNOWN ) {
-		return REACHABILITY_RESULT::UNKNOWN;
-	}
-	computeJumpSuccessors( loc );
-	return REACHABILITY_RESULT::SAFE;
-}
-
-template <typename Representation>
-REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( Location<Number> const* loc, const Representation& initialSet ) {
+template <typename OutputIt>
+REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
 	auto timeStep = mSettings.timeStep;
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, timeStep ), timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
-	if ( containment == CONTAINMENT::NO ) {
-		return REACHABILITY_RESULT::SAFE;
-	}
+	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
+	assert( containment != CONTAINMENT::NO );
 
-	// add state to flowpipe
-	mFlowpipe.emplace_back( segment );
+	// insert segment
+	*out = segment;
+	++out;
 
-	std::tie( containment, segment ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
+	// intersect with badstates
+	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
 	// while not done
-	size_t segmentCounter = 1;
-	while ( requireTimeSuccessorComputation( segmentCounter ) ) {
-		auto currentSegment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, timeStep ) );
-		std::tie( containment, segment ) = intersect( currentSegment, loc->getInvariant() );
+	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
+		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, timeStep ) );
+		std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
 		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
 		}
 
-		// add state to flowpipe
-		mFlowpipe.emplace_back( segment );
-		++segmentCounter;
+		*out = segment;
+		++out;
 
-		std::tie( containment, segment ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
+		// intersect with badstates
+		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;
@@ -53,19 +45,19 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( Location<N
 }
 
 template <typename Representation>
-std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( Location<Number> const* loc ) const {
+std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
 	//transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};
 
 	for ( const auto& transition : loc->getTransitions() ) {
-		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{transition.get()} );
+		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{ transition.get() } );
 
 		SegmentInd cnt = 0;
-		for ( auto const& valuationSet : mFlowpipe ) {
+		for ( auto const& valuationSet : flowpipe ) {
 			auto [containment, intersected] = intersect( valuationSet, transition->getGuard() );
 
 			if ( containment != CONTAINMENT::NO ) {
-				currentSucc.valuationSets.push_back( {intersected, cnt} );
+				currentSucc.valuationSets.push_back( { intersected, cnt } );
 			}
 			++cnt;
 		}
@@ -90,7 +82,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
 			}
 		}
-		successors.emplace_back( JumpSuccessor<Representation>{transition, aggregate( blockSize, valuationSets )} );
+		successors.emplace_back( JumpSuccessor<Representation>{ transition, aggregate( blockSize, valuationSets ) } );
 	}
 
 	// applyReset
@@ -99,7 +91,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 			it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
 			CONTAINMENT containment;
 			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
-			if ( containment != CONTAINMENT::NO ) {
+			if ( containment == CONTAINMENT::NO ) {
 				it = valuationSets.erase( it );
 			} else {
 				++it;
