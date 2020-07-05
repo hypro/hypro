@@ -10,7 +10,7 @@ template <class DerivedNode>
 class TreeNode {
 	DerivedNode* mParent{};
 	std::vector<std::unique_ptr<DerivedNode>> mChildren{};
-	int mDepth{ 0 };
+	size_t mDepth{ 0 };
 
   public:
 	TreeNode() = default;
@@ -18,7 +18,17 @@ class TreeNode {
 		: mParent( parent )
 		, mDepth( parent->getDepth() + 1 ) {}
 
-	int getDepth() { return mDepth; }
+	// special member functions
+	// making sure the noone tries to use the copy ctor. Necessary because the mChildren copy ctor is not deleted and only breaks once instantiated.
+	TreeNode( TreeNode const& ) = delete;
+	TreeNode& operator=( TreeNode const& ) = delete;
+
+	TreeNode( TreeNode&& ) = default;
+	TreeNode& operator=( TreeNode&& ) = default;
+
+	~TreeNode() = default;
+
+	size_t getDepth() { return mDepth; }
 
 	template <class... Args>
 	DerivedNode& addChild( Args&&... args ) {

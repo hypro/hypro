@@ -17,8 +17,7 @@ class LTIAnalyzer {
 	LTIAnalyzer() = delete;
 	LTIAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
-		, mAnalysisSettings( setting )
-		, mReachTree( ReachTreeNode<State>{ nullptr, nullptr, State() } ) {
+		, mAnalysisSettings( setting ) {
 	}
 
 	REACHABILITY_RESULT run();
@@ -30,8 +29,7 @@ class LTIAnalyzer {
 	std::list<std::vector<State>> mFlowpipes;
 	HybridAutomaton<Number> mHybridAutomaton;
 	Settings mAnalysisSettings;
-	ReachTreeNode<State> mReachTree;  /// TODO: implement via several roots
-	std::vector<State> mFirstStates;  ///< Store first segments for fixed-point detection
+	std::vector<ReachTreeNode<State>> mRoots;
 };
 
 }  // namespace hypro
