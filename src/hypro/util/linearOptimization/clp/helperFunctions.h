@@ -16,9 +16,9 @@ namespace detail {
 template <typename Number>
 CoinPackedMatrix createMatrix( const matrix_t<Number>& in ) {
 	CoinBigIndex numberElements = in.cols() * in.rows();
-	double elements[numberElements];
-	int rowIndices[numberElements];
-	int colIndices[numberElements];
+	double* elements = new double[numberElements];
+	int* rowIndices = new int[numberElements];
+	int* colIndices = new int[numberElements];
 
 	int pos = 0;
 	for ( int rowI = 0; rowI < in.rows(); ++rowI ) {
@@ -31,7 +31,11 @@ CoinPackedMatrix createMatrix( const matrix_t<Number>& in ) {
 	}
 	assert( pos == numberElements );
 
-	return CoinPackedMatrix( true, rowIndices, colIndices, elements, numberElements );
+	CoinPackedMatrix matrix = CoinPackedMatrix( true, rowIndices, colIndices, elements, numberElements );
+	delete[] elements;
+	delete[] rowIndices;
+	delete[] colIndices;
+	return matrix;
 }
 
 }  // namespace detail
