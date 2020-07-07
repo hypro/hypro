@@ -3,14 +3,7 @@
 
 namespace hypro {
 template <typename State>
-class rectangularInvariantHandler {
-	using Number = typename State::NumberType;
-
-  public:
-	rectangularInvariantHandler() = default;
-
-	CONTAINMENT operator()( State& stateSet );
-};
+std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet );
 }  // namespace hypro
 
 #include "rectangularInvariantHandler.tpp"
