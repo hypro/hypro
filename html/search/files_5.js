@@ -1,24 +1,5 @@
 var searchData=
 [
-  ['facet_2eh',['Facet.h',['../algorithms_2quickhull_2quickhull__exact_2_facet_8h.html',1,'']]],
-  ['facet_2eh',['Facet.h',['../datastructures_2_facet_8h.html',1,'']]],
-  ['facet_2etpp',['Facet.tpp',['../_facet_8tpp.html',1,'']]],
-  ['facetspace_2eh',['FacetSpace.h',['../_facet_space_8h.html',1,'']]],
-  ['facetspace_2etpp',['FacetSpace.tpp',['../_facet_space_8tpp.html',1,'']]],
-  ['fan_2eh',['Fan.h',['../_fan_8h.html',1,'']]],
-  ['features_2emd',['features.md',['../features_8md.html',1,'']]],
-  ['filewriter_2eh',['Filewriter.h',['../_filewriter_8h.html',1,'']]],
-  ['firstsegment_2eh',['FirstSegment.h',['../_first_segment_8h.html',1,'']]],
-  ['firstsegmenthandlers_2eh',['FirstSegmentHandlers.h',['../_first_segment_handlers_8h.html',1,'']]],
-  ['flags_2eh',['flags.h',['../flags_8h.html',1,'']]],
-  ['flow_2eh',['flow.h',['../flow_8h.html',1,'']]],
-  ['flowpipe_2eh',['Flowpipe.h',['../_flowpipe_8h.html',1,'']]],
-  ['flowpipe_2etpp',['Flowpipe.tpp',['../_flowpipe_8tpp.html',1,'']]],
-  ['flowstar_2eh',['Flowstar.h',['../_flowstar_8h.html',1,'']]],
-  ['flowstarparser_2ecpp',['FlowstarParser.cpp',['../_flowstar_parser_8cpp.html',1,'']]],
-  ['flowstarparser_2eh',['FlowstarParser.h',['../_flowstar_parser_8h.html',1,'']]],
-  ['for_5feach_2eh',['for_each.h',['../for__each_8h.html',1,'']]],
-  ['forwarddeclarations_2eh',['forwardDeclarations.h',['../forward_declarations_8h.html',1,'']]],
-  ['fouriermotzkinqe_2eh',['FourierMotzkinQE.h',['../_fourier_motzkin_q_e_8h.html',1,'']]],
-  ['fouriermotzkinqe_2etpp',['FourierMotzkinQE.tpp',['../_fourier_motzkin_q_e_8tpp.html',1,'']]]
+  ['neighborhood_2eh',['Neighborhood.h',['../_neighborhood_8h.html',1,'']]],
+  ['neighborhoodcontainer_2ecpp',['NeighborhoodContainer.cpp',['../_neighborhood_container_8cpp.html',1,'']]]
 ];

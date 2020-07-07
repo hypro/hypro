@@ -82,7 +82,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -134,24 +133,26 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a3e37feb43640833bd84cbb3b5f3e0143"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a3e37feb43640833bd84cbb3b5f3e0143">hypro::sampling_strategy_set</a> { <a class="el" href="namespacehypro.html#a3e37feb43640833bd84cbb3b5f3e0143a784551076ae733c0961eb25db53cb573">hypro::CENTER</a>, 
-<a class="el" href="namespacehypro.html#a3e37feb43640833bd84cbb3b5f3e0143a214f76594d89e177a7749e5c57eebc75">hypro::VERTICES</a>, 
-<a class="el" href="namespacehypro.html#a3e37feb43640833bd84cbb3b5f3e0143a6a78c7d9e6af3fd5887efbef32e12b15">hypro::RANDOM_SET_K</a>
+<tr class="memitem:a3e37feb43640833bd84cbb3b5f3e0143"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e37feb43640833bd84cbb3b5f3e0143"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>sampling_strategy_set</b> { <b>CENTER</b>, 
+<b>VERTICES</b>, 
+<b>RANDOM_SET_K</b>
  }</td></tr>
 <tr class="separator:a3e37feb43640833bd84cbb3b5f3e0143"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97972edfa147ffef68658c9df3c5f0f8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a97972edfa147ffef68658c9df3c5f0f8">hypro::sampling_strategy_interval</a> { <a class="el" href="namespacehypro.html#a97972edfa147ffef68658c9df3c5f0f8ac6b502f0b23b3da587a15b27e646f28f">hypro::UNIFORM_K</a>, 
-<a class="el" href="namespacehypro.html#a97972edfa147ffef68658c9df3c5f0f8a2e182522bc70be75f15f20a319f906da">hypro::BORDERS</a>, 
-<a class="el" href="namespacehypro.html#a97972edfa147ffef68658c9df3c5f0f8a32a0947c195c76d9586dd4cf75e58cc0">hypro::RANDOM_INTV_K</a>
+<tr class="memitem:a97972edfa147ffef68658c9df3c5f0f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97972edfa147ffef68658c9df3c5f0f8"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>sampling_strategy_interval</b> { <b>UNIFORM_K</b>, 
+<b>BORDERS</b>, 
+<b>RANDOM_INTV_K</b>
  }</td></tr>
 <tr class="separator:a97972edfa147ffef68658c9df3c5f0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memTemplParams" colspan="2">template&lt;typename SetType , typename Number , sampling_strategy_set SMPL_STRAT&gt; </td></tr>
-<tr class="memitem:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; SimulationSample&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a86e665c06b8271dc9895ce33cb2ce40e">hypro::sample</a> (const SetType &amp;in, unsigned k=0)</td></tr>
+<tr class="memitem:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a86e665c06b8271dc9895ce33cb2ce40e"></a>
+template&lt;typename SetType , typename Number , sampling_strategy_set SMPL_STRAT&gt; </td></tr>
+<tr class="memitem:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; SimulationSample&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hypro::sample</b> (const SetType &amp;in, unsigned k=0)</td></tr>
 <tr class="separator:a86e665c06b8271dc9895ce33cb2ce40e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4c85ea08f845de363019cfc27f271e5"><td class="memTemplParams" colspan="2">template&lt;typename tNumber , sampling_strategy_interval SMPL_STRAT&gt; </td></tr>
-<tr class="memitem:af4c85ea08f845de363019cfc27f271e5"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; tNumber &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#af4c85ea08f845de363019cfc27f271e5">hypro::sample</a> (const carl::Interval&lt; tNumber &gt; guardIntersectInterval, unsigned k=0)</td></tr>
+<tr class="memitem:af4c85ea08f845de363019cfc27f271e5"><td class="memTemplParams" colspan="2"><a class="anchor" id="af4c85ea08f845de363019cfc27f271e5"></a>
+template&lt;typename tNumber , sampling_strategy_interval SMPL_STRAT&gt; </td></tr>
+<tr class="memitem:af4c85ea08f845de363019cfc27f271e5"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; tNumber &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>hypro::sample</b> (const carl::Interval&lt; tNumber &gt; guardIntersectInterval, unsigned k=0)</td></tr>
 <tr class="separator:af4c85ea08f845de363019cfc27f271e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

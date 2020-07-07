@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('structhypro_1_1_t_path_element.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a33f659c0faae4459800ef4ffe6a5111c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a33f659c0faae4459800ef4ffe6a5111c">TPathElement</a> (<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *t, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;enabledTime)</td></tr>
+<tr class="memitem:a33f659c0faae4459800ef4ffe6a5111c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a33f659c0faae4459800ef4ffe6a5111c">TPathElement</a> (<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *t, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;enabledTime)</td></tr>
 <tr class="memdesc:a33f659c0faae4459800ef4ffe6a5111c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.  <a href="#a33f659c0faae4459800ef4ffe6a5111c">More...</a><br /></td></tr>
 <tr class="separator:a33f659c0faae4459800ef4ffe6a5111c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35b17ecda1c25bb4686cb2d7fbea1571"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a35b17ecda1c25bb4686cb2d7fbea1571">TPathElement</a> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timeStep)</td></tr>
@@ -141,28 +141,32 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a451a1f73c31990c6937b9b6161c54992"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a451a1f73c31990c6937b9b6161c54992">isDiscreteStep</a> () const </td></tr>
 <tr class="memdesc:a451a1f73c31990c6937b9b6161c54992"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the element represents a discrete step.  <a href="#a451a1f73c31990c6937b9b6161c54992">More...</a><br /></td></tr>
 <tr class="separator:a451a1f73c31990c6937b9b6161c54992"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a986eca962cc18e19bd77ed4bc718ca65"><td class="memItemLeft" align="right" valign="top">const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a986eca962cc18e19bd77ed4bc718ca65">getTimestamp</a> () const </td></tr>
+<tr class="memitem:a986eca962cc18e19bd77ed4bc718ca65"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a986eca962cc18e19bd77ed4bc718ca65"></a>
+const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTimestamp</b> () const </td></tr>
 <tr class="separator:a986eca962cc18e19bd77ed4bc718ca65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2671c369f7dab94ba453163e4d0f4684"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a2671c369f7dab94ba453163e4d0f4684">getTransition</a> () const </td></tr>
+<tr class="memitem:a2671c369f7dab94ba453163e4d0f4684"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2671c369f7dab94ba453163e4d0f4684"></a>
+<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getTransition</b> () const </td></tr>
 <tr class="separator:a2671c369f7dab94ba453163e4d0f4684"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a5a711210c45c6cf2dccb43297650562c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a5a711210c45c6cf2dccb43297650562c">transition</a> = nullptr</td></tr>
+<tr class="memitem:a5a711210c45c6cf2dccb43297650562c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a711210c45c6cf2dccb43297650562c"></a>
+<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>transition</b> = nullptr</td></tr>
 <tr class="separator:a5a711210c45c6cf2dccb43297650562c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a571a283d729e8360a3b7473537759349"><td class="memItemLeft" align="right" valign="top">carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a571a283d729e8360a3b7473537759349">timeInterval</a> = carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;::unboundedInterval()</td></tr>
-<tr class="memdesc:a571a283d729e8360a3b7473537759349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a transition in case of a discrete step.  <a href="#a571a283d729e8360a3b7473537759349">More...</a><br /></td></tr>
+<tr class="memitem:a571a283d729e8360a3b7473537759349"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a571a283d729e8360a3b7473537759349"></a>
+carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a571a283d729e8360a3b7473537759349">timeInterval</a> = carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;::unboundedInterval()</td></tr>
+<tr class="memdesc:a571a283d729e8360a3b7473537759349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a transition in case of a discrete step. <br /></td></tr>
 <tr class="separator:a571a283d729e8360a3b7473537759349"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a76c791e47ed6763781727016dc55e7eb"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a76c791e47ed6763781727016dc55e7eb">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;pathElem)</td></tr>
+<tr class="memitem:a76c791e47ed6763781727016dc55e7eb"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a76c791e47ed6763781727016dc55e7eb">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;pathElem)</td></tr>
 <tr class="memdesc:a76c791e47ed6763781727016dc55e7eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#a76c791e47ed6763781727016dc55e7eb">More...</a><br /></td></tr>
 <tr class="separator:a76c791e47ed6763781727016dc55e7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf4295736b2bddb3641a6d2243d562ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#aaf4295736b2bddb3641a6d2243d562ee">operator==</a> (const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;lhs, const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs)</td></tr>
+<tr class="memitem:aaf4295736b2bddb3641a6d2243d562ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#aaf4295736b2bddb3641a6d2243d562ee">operator==</a> (const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;lhs, const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs)</td></tr>
 <tr class="memdesc:aaf4295736b2bddb3641a6d2243d562ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality comparison operator.  <a href="#aaf4295736b2bddb3641a6d2243d562ee">More...</a><br /></td></tr>
 <tr class="separator:aaf4295736b2bddb3641a6d2243d562ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03b4f43b9e27d1dea8e47b597ef143c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a03b4f43b9e27d1dea8e47b597ef143c2">operator!=</a> (const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;lhs, const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs)</td></tr>
+<tr class="memitem:a03b4f43b9e27d1dea8e47b597ef143c2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_t_path_element.html#a03b4f43b9e27d1dea8e47b597ef143c2">operator!=</a> (const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;lhs, const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs)</td></tr>
 <tr class="memdesc:a03b4f43b9e27d1dea8e47b597ef143c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not-equal operator.  <a href="#a03b4f43b9e27d1dea8e47b597ef143c2">More...</a><br /></td></tr>
 <tr class="separator:a03b4f43b9e27d1dea8e47b597ef143c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -190,9 +194,9 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a> </td>
+          <td class="memname"><a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; *&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *&#160;</td>
           <td class="paramname"><em>t</em>, </td>
         </tr>
         <tr>
@@ -237,7 +241,7 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a> </td>
+          <td class="memname"><a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::<a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a> </td>
           <td>(</td>
           <td class="paramtype">const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>timeStep</em></td><td>)</td>
@@ -264,64 +268,6 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a986eca962cc18e19bd77ed4bc718ca65"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;&amp; <a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::getTimestamp </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_path_8h_source.html#l00046">46</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
-
-<p>References <a class="el" href="_path_8h_source.html#l00019">hypro::TPathElement&lt; Number, tNumber &gt;::timeInterval</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a2671c369f7dab94ba453163e4d0f4684"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt;<a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;* <a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::getTransition </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_path_8h_source.html#l00050">50</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
-
-<p>References <a class="el" href="_path_8h_source.html#l00018">hypro::TPathElement&lt; Number, tNumber &gt;::transition</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a451a1f73c31990c6937b9b6161c54992"></a>
 <div class="memitem">
 <div class="memproto">
@@ -332,7 +278,7 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::isDiscreteStep </td>
+          <td class="memname">bool <a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::isDiscreteStep </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -350,6 +296,8 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
 
 <p>Definition at line <a class="el" href="_path_8h_source.html#l00042">42</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
 
+<p>References <a class="el" href="_path_8h_source.html#l00019">hypro::TPathElement&lt; Number, tNumber &gt;::timeInterval</a>.</p>
+
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
@@ -365,13 +313,13 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
         <tr>
           <td class="memname">bool operator!= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>lhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em>&#160;</td>
         </tr>
         <tr>
@@ -419,7 +367,7 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>pathElem</em>&#160;</td>
         </tr>
         <tr>
@@ -461,13 +409,13 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
         <tr>
           <td class="memname">bool operator== </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>lhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1_t_path_element.html">TPathElement</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em>&#160;</td>
         </tr>
         <tr>
@@ -494,45 +442,6 @@ template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>True if both elements are equal, False otherwise. </dd></dl>
 
 <p>Definition at line <a class="el" href="_path_8h_source.html#l00077">77</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a571a283d729e8360a3b7473537759349"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt; <a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::timeInterval = carl::Interval&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&gt;::unboundedInterval()</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Pointer to a transition in case of a discrete step. </p>
-
-<p>Definition at line <a class="el" href="_path_8h_source.html#l00019">19</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
-
-<p>Referenced by <a class="el" href="_path_8h_source.html#l00046">hypro::TPathElement&lt; Number, tNumber &gt;::getTimestamp()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5a711210c45c6cf2dccb43297650562c"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename tNumber = hypro::tNumber&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt;<a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&gt;* <a class="el" href="structhypro_1_1_t_path_element.html">hypro::TPathElement</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;::transition = nullptr</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_path_8h_source.html#l00018">18</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
-
-<p>Referenced by <a class="el" href="_path_8h_source.html#l00050">hypro::TPathElement&lt; Number, tNumber &gt;::getTransition()</a>.</p>
 
 </div>
 </div>

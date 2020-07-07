@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1_hybrid_automaton.html" title="Class for linear hybrid automata. " alt="" coords="5,5,184,47"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_i_worker.html" title="hypro::IWorker\&lt; std\l::shared_ptr\&lt; Task\&lt;\l State \&gt; \&gt;, State \&gt;" alt="" coords="5,5,157,61"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_context_based_reachability_worker.html" title="hypro::ContextBasedReachability\lWorker\&lt; State \&gt;" alt="" coords="205,13,436,54"/>
 </map>

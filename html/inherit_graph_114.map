@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1_h_polytope_optimizer_caching.html" title="hypro::HPolytopeOptimizer\lCaching" alt="" coords="5,5,199,47"/>
+<area shape="rect" id="node2" href="$structhypro_1_1is__flow.html" title="hypro::is_flow\&lt; T \&gt;" alt="" coords="163,5,307,32"/>
+<area shape="rect" id="node3" href="$structhypro_1_1is__shared__ptr.html" title="hypro::is_shared_ptr\&lt; T \&gt;" alt="" coords="140,56,329,83"/>
+<area shape="rect" id="node4" href="$structhypro_1_1is__unique__ptr.html" title="hypro::is_unique_ptr\&lt; T \&gt;" alt="" coords="141,107,329,133"/>
 </map>

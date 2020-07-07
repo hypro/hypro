@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classhypro_1_1_error_listener.html" title="hypro::ErrorListener" alt="" coords="189,5,337,32"/>
+<area shape="rect" id="node1" title="STL class. " alt="" coords="5,42,117,69"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_finish_with_discrete_processing_exception.html" title="hypro::FinishWithDiscrete\lProcessingException" alt="" coords="186,5,367,47"/>
+<area shape="rect" id="node3" href="$classhypro_1_1_hard_terminate_exception.html" title="hypro::HardTerminateException" alt="" coords="165,71,388,98"/>
 </map>

@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['vardeclarationcontext',['VardeclarationContext',['../classhypro_1_1_hybrid_automaton_parser_1_1_vardeclaration_context.html',1,'hypro::HybridAutomatonParser']]],
-  ['variablepool',['VariablePool',['../classhypro_1_1_variable_pool.html',1,'hypro']]],
-  ['vertex',['Vertex',['../classhypro_1_1_vertex.html',1,'hypro']]],
-  ['vertex_3c_20std_3a_3asize_5ft_20_3e',['Vertex&lt; std::size_t &gt;',['../classhypro_1_1_vertex.html',1,'hypro']]],
-  ['vertexcontainer',['VertexContainer',['../classhypro_1_1_vertex_container.html',1,'hypro']]],
-  ['vertexenumeration',['VertexEnumeration',['../classhypro_1_1_vertex_enumeration.html',1,'hypro']]],
-  ['vpolytopesetting',['VPolytopeSetting',['../structhypro_1_1_v_polytope_setting.html',1,'hypro']]],
-  ['vpolytopet',['VPolytopeT',['../classhypro_1_1_v_polytope_t.html',1,'hypro']]]
+  ['workqueuedefaultsetting',['WorkQueueDefaultSetting',['../structhypro_1_1_work_queue_default_setting.html',1,'hypro']]],
+  ['workqueuemanager',['WorkQueueManager',['../classhypro_1_1_work_queue_manager.html',1,'hypro']]],
+  ['workqueuet',['WorkQueueT',['../classhypro_1_1_work_queue_t.html',1,'hypro']]],
+  ['workqueuet_3c_20std_3a_3ashared_5fptr_3c_20hypro_3a_3atask_3c_20state_20_3e_20_3e_20_3e',['WorkQueueT&lt; std::shared_ptr&lt; hypro::Task&lt; State &gt; &gt; &gt;',['../classhypro_1_1_work_queue_t.html',1,'hypro']]],
+  ['workqueuet_3c_20tasktype_20_3e',['WorkQueueT&lt; TaskType &gt;',['../classhypro_1_1_work_queue_t.html',1,'hypro']]],
+  ['workqueuet_3c_20workable_20_3e',['WorkQueueT&lt; Workable &gt;',['../classhypro_1_1_work_queue_t.html',1,'hypro']]]
 ];

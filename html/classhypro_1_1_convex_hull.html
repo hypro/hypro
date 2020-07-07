@@ -125,62 +125,93 @@ $(document).ready(function(){initNavTree('classhypro_1_1_convex_hull.html','');}
 </div><!--header-->
 <div class="contents">
 
-<p>Class for convex hull computation.  
+<p>Class for Fukuda's reverse search.  
  <a href="classhypro_1_1_convex_hull.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae65257a677b4f0a22b15ca0a71b43c87"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ae65257a677b4f0a22b15ca0a71b43c87">ConvexHull</a> ()=default</td></tr>
+<tr class="memitem:ae65257a677b4f0a22b15ca0a71b43c87"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae65257a677b4f0a22b15ca0a71b43c87"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ae65257a677b4f0a22b15ca0a71b43c87">ConvexHull</a> ()=default</td></tr>
+<tr class="memdesc:ae65257a677b4f0a22b15ca0a71b43c87"><td class="mdescLeft">&#160;</td><td class="mdescRight">default constructor <br /></td></tr>
 <tr class="separator:ae65257a677b4f0a22b15ca0a71b43c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cd0cce18327874cff206c16f13156c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a7cd0cce18327874cff206c16f13156c2">ConvexHull</a> (const <a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;_orig)=default</td></tr>
+<tr class="memitem:a7cd0cce18327874cff206c16f13156c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cd0cce18327874cff206c16f13156c2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a7cd0cce18327874cff206c16f13156c2">ConvexHull</a> (const <a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a>&lt; Number &gt; &amp;_orig)=default</td></tr>
+<tr class="memdesc:a7cd0cce18327874cff206c16f13156c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy constructor <br /></td></tr>
 <tr class="separator:a7cd0cce18327874cff206c16f13156c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37706c1c709cdd78440a2c07110ea913"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a37706c1c709cdd78440a2c07110ea913">ConvexHull</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; points)</td></tr>
+<tr class="memitem:a37706c1c709cdd78440a2c07110ea913"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37706c1c709cdd78440a2c07110ea913"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a37706c1c709cdd78440a2c07110ea913">ConvexHull</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&gt; points)</td></tr>
+<tr class="memdesc:a37706c1c709cdd78440a2c07110ea913"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor from a point set <br /></td></tr>
 <tr class="separator:a37706c1c709cdd78440a2c07110ea913"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72d25c1b65f34c147196b1a0d5574c0f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a72d25c1b65f34c147196b1a0d5574c0f">ConvexHull</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; points, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; cone)</td></tr>
+<tr class="memitem:a72d25c1b65f34c147196b1a0d5574c0f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a72d25c1b65f34c147196b1a0d5574c0f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a72d25c1b65f34c147196b1a0d5574c0f">ConvexHull</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&gt; points, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; cone)</td></tr>
+<tr class="memdesc:a72d25c1b65f34c147196b1a0d5574c0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor from a point set and a cone <br /></td></tr>
 <tr class="separator:a72d25c1b65f34c147196b1a0d5574c0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac518a93a564cc5b27f0b79549783a735"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ac518a93a564cc5b27f0b79549783a735">ConvexHull</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; points, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; cone, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; linealty)</td></tr>
+<tr class="memitem:ac518a93a564cc5b27f0b79549783a735"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac518a93a564cc5b27f0b79549783a735"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ac518a93a564cc5b27f0b79549783a735">ConvexHull</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&gt; points, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; cone, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; linealty)</td></tr>
+<tr class="memdesc:ac518a93a564cc5b27f0b79549783a735"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor from a point set, a cone, and a lineality space <br /></td></tr>
 <tr class="separator:ac518a93a564cc5b27f0b79549783a735"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d3d4de40613c42c0d880a3ed8e1841e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a0d3d4de40613c42c0d880a3ed8e1841e">getPoints</a> () const </td></tr>
+<tr class="memitem:a0d3d4de40613c42c0d880a3ed8e1841e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d3d4de40613c42c0d880a3ed8e1841e"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a0d3d4de40613c42c0d880a3ed8e1841e">getPoints</a> () const </td></tr>
+<tr class="memdesc:a0d3d4de40613c42c0d880a3ed8e1841e"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for the points <br /></td></tr>
 <tr class="separator:a0d3d4de40613c42c0d880a3ed8e1841e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a996d3483533313ed093dc88ec91d9329"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a996d3483533313ed093dc88ec91d9329">getCone</a> () const </td></tr>
+<tr class="memitem:a996d3483533313ed093dc88ec91d9329"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a996d3483533313ed093dc88ec91d9329"></a>
+std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a996d3483533313ed093dc88ec91d9329">getCone</a> () const </td></tr>
+<tr class="memdesc:a996d3483533313ed093dc88ec91d9329"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for the cone <br /></td></tr>
 <tr class="separator:a996d3483533313ed093dc88ec91d9329"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e59cd23877d751d373d8b73857c72fd"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a6e59cd23877d751d373d8b73857c72fd">getLinealtySpace</a> () const </td></tr>
+<tr class="memitem:a6e59cd23877d751d373d8b73857c72fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e59cd23877d751d373d8b73857c72fd"></a>
+std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a6e59cd23877d751d373d8b73857c72fd">getLinealtySpace</a> () const </td></tr>
+<tr class="memdesc:a6e59cd23877d751d373d8b73857c72fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for the lineality space <br /></td></tr>
 <tr class="separator:a6e59cd23877d751d373d8b73857c72fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a888fca1c4b7ce996b2c9401e9c0102f2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a888fca1c4b7ce996b2c9401e9c0102f2">getConeHsv</a> () const </td></tr>
+<tr class="memitem:a888fca1c4b7ce996b2c9401e9c0102f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a888fca1c4b7ce996b2c9401e9c0102f2"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a888fca1c4b7ce996b2c9401e9c0102f2">getConeHsv</a> () const </td></tr>
+<tr class="memdesc:a888fca1c4b7ce996b2c9401e9c0102f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for the half spaces defining the cone <br /></td></tr>
 <tr class="separator:a888fca1c4b7ce996b2c9401e9c0102f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cd3c8351199e96744e691a46aac71f3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a6cd3c8351199e96744e691a46aac71f3">getDualHsv</a> () const </td></tr>
+<tr class="memitem:a6cd3c8351199e96744e691a46aac71f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6cd3c8351199e96744e691a46aac71f3"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a6cd3c8351199e96744e691a46aac71f3">getDualHsv</a> () const </td></tr>
+<tr class="memdesc:a6cd3c8351199e96744e691a46aac71f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for the dual representation <br /></td></tr>
 <tr class="separator:a6cd3c8351199e96744e691a46aac71f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebdbba8d974bfd5ddbae5a426fb47974"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#aebdbba8d974bfd5ddbae5a426fb47974">getHsv</a> () const </td></tr>
+<tr class="memitem:aebdbba8d974bfd5ddbae5a426fb47974"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebdbba8d974bfd5ddbae5a426fb47974"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#aebdbba8d974bfd5ddbae5a426fb47974">getHsv</a> () const </td></tr>
+<tr class="memdesc:aebdbba8d974bfd5ddbae5a426fb47974"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter <br /></td></tr>
 <tr class="separator:aebdbba8d974bfd5ddbae5a426fb47974"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90be3f4fd6e65cc5c114c909786d12e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a90be3f4fd6e65cc5c114c909786d12e3">findOffset</a> ()</td></tr>
-<tr class="memdesc:a90be3f4fd6e65cc5c114c909786d12e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">substracts to every point the barycenter of all the group  <a href="#a90be3f4fd6e65cc5c114c909786d12e3">More...</a><br /></td></tr>
+<tr class="memitem:a90be3f4fd6e65cc5c114c909786d12e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90be3f4fd6e65cc5c114c909786d12e3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a90be3f4fd6e65cc5c114c909786d12e3">findOffset</a> ()</td></tr>
+<tr class="memdesc:a90be3f4fd6e65cc5c114c909786d12e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">substracts to every point the barycenter of all the group <br /></td></tr>
 <tr class="separator:a90be3f4fd6e65cc5c114c909786d12e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad7cf4ffa337f35a465d84940f8b2f917"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ad7cf4ffa337f35a465d84940f8b2f917">toDual</a> ()</td></tr>
-<tr class="memdesc:ad7cf4ffa337f35a465d84940f8b2f917"><td class="mdescLeft">&#160;</td><td class="mdescRight">fils mDualHsv with the dual of the points in mPoints  <a href="#ad7cf4ffa337f35a465d84940f8b2f917">More...</a><br /></td></tr>
+<tr class="memitem:ad7cf4ffa337f35a465d84940f8b2f917"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7cf4ffa337f35a465d84940f8b2f917"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ad7cf4ffa337f35a465d84940f8b2f917">toDual</a> ()</td></tr>
+<tr class="memdesc:ad7cf4ffa337f35a465d84940f8b2f917"><td class="mdescLeft">&#160;</td><td class="mdescRight">fils mDualHsv with the dual of the points in mPoints <br /></td></tr>
 <tr class="separator:ad7cf4ffa337f35a465d84940f8b2f917"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affce5c30592a0551bd9bf94578f8c515"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#affce5c30592a0551bd9bf94578f8c515">toPrimal</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt; points)</td></tr>
-<tr class="memdesc:affce5c30592a0551bd9bf94578f8c515"><td class="mdescLeft">&#160;</td><td class="mdescRight">puts the dual of the points in "points" in mHsv  <a href="#affce5c30592a0551bd9bf94578f8c515">More...</a><br /></td></tr>
+<tr class="memitem:affce5c30592a0551bd9bf94578f8c515"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="affce5c30592a0551bd9bf94578f8c515"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#affce5c30592a0551bd9bf94578f8c515">toPrimal</a> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&gt; points)</td></tr>
+<tr class="memdesc:affce5c30592a0551bd9bf94578f8c515"><td class="mdescLeft">&#160;</td><td class="mdescRight">puts the dual of the points in "points" in mHsv <br /></td></tr>
 <tr class="separator:affce5c30592a0551bd9bf94578f8c515"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a1ef906a71ffcb97131ec56dda09dde"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a5a1ef906a71ffcb97131ec56dda09dde">convexHullVertices</a> ()</td></tr>
-<tr class="memdesc:a5a1ef906a71ffcb97131ec56dda09dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">finds the convex hull of the vertices in mPoints by Fukuda  <a href="#a5a1ef906a71ffcb97131ec56dda09dde">More...</a><br /></td></tr>
+<tr class="memitem:a5a1ef906a71ffcb97131ec56dda09dde"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a1ef906a71ffcb97131ec56dda09dde"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a5a1ef906a71ffcb97131ec56dda09dde">convexHullVertices</a> ()</td></tr>
+<tr class="memdesc:a5a1ef906a71ffcb97131ec56dda09dde"><td class="mdescLeft">&#160;</td><td class="mdescRight">finds the convex hull of the vertices in mPoints by Fukuda <br /></td></tr>
 <tr class="separator:a5a1ef906a71ffcb97131ec56dda09dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7154e0b98a29f63698ab13b1b9f183e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a7154e0b98a29f63698ab13b1b9f183e2">conicHull</a> ()</td></tr>
-<tr class="memdesc:a7154e0b98a29f63698ab13b1b9f183e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">finds the conic hull of the vectors in mCones.  <a href="#a7154e0b98a29f63698ab13b1b9f183e2">More...</a><br /></td></tr>
+<tr class="memitem:a7154e0b98a29f63698ab13b1b9f183e2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7154e0b98a29f63698ab13b1b9f183e2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#a7154e0b98a29f63698ab13b1b9f183e2">conicHull</a> ()</td></tr>
+<tr class="memdesc:a7154e0b98a29f63698ab13b1b9f183e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">finds the conic hull of the vectors in mCones. <br /></td></tr>
 <tr class="separator:a7154e0b98a29f63698ab13b1b9f183e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad211bd75ad9a017703f091fa8b1b3ce0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ad211bd75ad9a017703f091fa8b1b3ce0">polyhedriclHull</a> ()</td></tr>
-<tr class="memdesc:ad211bd75ad9a017703f091fa8b1b3ce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the convex hull of a polyhedron.  <a href="#ad211bd75ad9a017703f091fa8b1b3ce0">More...</a><br /></td></tr>
+<tr class="memitem:ad211bd75ad9a017703f091fa8b1b3ce0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad211bd75ad9a017703f091fa8b1b3ce0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ad211bd75ad9a017703f091fa8b1b3ce0">polyhedriclHull</a> ()</td></tr>
+<tr class="memdesc:ad211bd75ad9a017703f091fa8b1b3ce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the convex hull of a polyhedron. <br /></td></tr>
 <tr class="separator:ad211bd75ad9a017703f091fa8b1b3ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3a6390cab0ea7170b8f15d88d973368"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ad3a6390cab0ea7170b8f15d88d973368">translateHsv</a> ()</td></tr>
-<tr class="memdesc:ad3a6390cab0ea7170b8f15d88d973368"><td class="mdescLeft">&#160;</td><td class="mdescRight">modify the hyperplanes in mHsv to take ino account the offset -&gt; translate back/revert moving to the barycenter.  <a href="#ad3a6390cab0ea7170b8f15d88d973368">More...</a><br /></td></tr>
+<tr class="memitem:ad3a6390cab0ea7170b8f15d88d973368"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3a6390cab0ea7170b8f15d88d973368"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#ad3a6390cab0ea7170b8f15d88d973368">translateHsv</a> ()</td></tr>
+<tr class="memdesc:ad3a6390cab0ea7170b8f15d88d973368"><td class="mdescLeft">&#160;</td><td class="mdescRight">modify the hyperplanes in mHsv to take ino account the offset -&gt; translate back/revert moving to the barycenter. <br /></td></tr>
 <tr class="separator:ad3a6390cab0ea7170b8f15d88d973368"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec105b132fc95888343d2773a569c10b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#aec105b132fc95888343d2773a569c10b">projectOnLinealty</a> ()</td></tr>
+<tr class="memitem:aec105b132fc95888343d2773a569c10b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec105b132fc95888343d2773a569c10b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_convex_hull.html#aec105b132fc95888343d2773a569c10b">projectOnLinealty</a> ()</td></tr>
+<tr class="memdesc:aec105b132fc95888343d2773a569c10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">projection <br /></td></tr>
 <tr class="separator:aec105b132fc95888343d2773a569c10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
 class hypro::ConvexHull&lt; Number &gt;</h3>
 
-<p>Class for convex hull computation. </p>
+<p>Class for Fukuda's reverse search. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
@@ -189,449 +220,7 @@ class hypro::ConvexHull&lt; Number &gt;</h3>
 </dl>
 
 <p>Definition at line <a class="el" href="_convex_hull_8h_source.html#l00015">15</a> of file <a class="el" href="_convex_hull_8h_source.html">ConvexHull.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ae65257a677b4f0a22b15ca0a71b43c87"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7cd0cce18327874cff206c16f13156c2"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a> </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_orig</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a37706c1c709cdd78440a2c07110ea913"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a> </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>points</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00006">6</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a72d25c1b65f34c147196b1a0d5574c0f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a> </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>points</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>cone</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00014">14</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ac518a93a564cc5b27f0b79549783a735"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::<a class="el" href="classhypro_1_1_convex_hull.html">ConvexHull</a> </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>points</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>cone</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>linealty</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00023">23</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7154e0b98a29f63698ab13b1b9f183e2"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::conicHull </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>finds the conic hull of the vectors in mCones. </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00178">178</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>References <a class="el" href="_convex_hull_8tpp_source.html#l00104">hypro::ConvexHull&lt; Number &gt;::convexHullVertices()</a>, <a class="el" href="_convex_hull_8tpp_source.html#l00059">hypro::ConvexHull&lt; Number &gt;::getHsv()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; Number &gt;::Zero()</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00206">hypro::ConvexHull&lt; Number &gt;::polyhedriclHull()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5a1ef906a71ffcb97131ec56dda09dde"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::convexHullVertices </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>finds the convex hull of the vertices in mPoints by Fukuda </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00104">104</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>References <a class="el" href="vertex_enumeration_8tpp_source.html#l00098">hypro::VertexEnumeration&lt; Number &gt;::enumerateVertices()</a>, <a class="el" href="_convex_hull_8tpp_source.html#l00064">hypro::ConvexHull&lt; Number &gt;::findOffset()</a>, <a class="el" href="vertex_enumeration_8tpp_source.html#l00062">hypro::VertexEnumeration&lt; Number &gt;::getLinealtySpace()</a>, <a class="el" href="vertex_enumeration_8tpp_source.html#l00050">hypro::VertexEnumeration&lt; Number &gt;::getPoints()</a>, <a class="el" href="_convex_hull_8tpp_source.html#l00087">hypro::ConvexHull&lt; Number &gt;::toDual()</a>, <a class="el" href="_convex_hull_8tpp_source.html#l00095">hypro::ConvexHull&lt; Number &gt;::toPrimal()</a>, and <a class="el" href="_convex_hull_8tpp_source.html#l00262">hypro::ConvexHull&lt; Number &gt;::translateHsv()</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00178">hypro::ConvexHull&lt; Number &gt;::conicHull()</a>, and <a class="el" href="example__convex_hull_8cpp_source.html#l00005">main()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a90be3f4fd6e65cc5c114c909786d12e3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::findOffset </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>substracts to every point the barycenter of all the group </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00064">64</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00104">hypro::ConvexHull&lt; Number &gt;::convexHullVertices()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a996d3483533313ed093dc88ec91d9329"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getCone </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00039">39</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a888fca1c4b7ce996b2c9401e9c0102f2"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getConeHsv </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00049">49</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00206">hypro::ConvexHull&lt; Number &gt;::polyhedriclHull()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6cd3c8351199e96744e691a46aac71f3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getDualHsv </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00054">54</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aebdbba8d974bfd5ddbae5a426fb47974"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getHsv </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00059">59</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00178">hypro::ConvexHull&lt; Number &gt;::conicHull()</a>, and <a class="el" href="example__convex_hull_8cpp_source.html#l00005">main()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a6e59cd23877d751d373d8b73857c72fd"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getLinealtySpace </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00044">44</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a0d3d4de40613c42c0d880a3ed8e1841e"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt; &gt; <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::getPoints </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00034">34</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad211bd75ad9a017703f091fa8b1b3ce0"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::polyhedriclHull </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Finds the convex hull of a polyhedron. </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00206">206</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>References <a class="el" href="_convex_hull_8tpp_source.html#l00178">hypro::ConvexHull&lt; Number &gt;::conicHull()</a>, and <a class="el" href="_convex_hull_8tpp_source.html#l00049">hypro::ConvexHull&lt; Number &gt;::getConeHsv()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aec105b132fc95888343d2773a569c10b"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::projectOnLinealty </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00272">272</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad7cf4ffa337f35a465d84940f8b2f917"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::toDual </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>fils mDualHsv with the dual of the points in mPoints </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00087">87</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00104">hypro::ConvexHull&lt; Number &gt;::convexHullVertices()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="affce5c30592a0551bd9bf94578f8c515"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::toPrimal </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;&gt;&#160;</td>
-          <td class="paramname"><em>points</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>puts the dual of the points in "points" in mHsv </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00095">95</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00104">hypro::ConvexHull&lt; Number &gt;::convexHullVertices()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ad3a6390cab0ea7170b8f15d88d973368"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_convex_hull.html">hypro::ConvexHull</a>&lt; <a class="el" href="example__difference_bounds_8cpp.html#a288a17d7858455cb06f6bce13912c92c">Number</a> &gt;::translateHsv </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>modify the hyperplanes in mHsv to take ino account the offset -&gt; translate back/revert moving to the barycenter. </p>
-
-<p>Definition at line <a class="el" href="_convex_hull_8tpp_source.html#l00262">262</a> of file <a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="_convex_hull_8tpp_source.html#l00104">hypro::ConvexHull&lt; Number &gt;::convexHullVertices()</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/<a class="el" href="_convex_hull_8h_source.html">ConvexHull.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/<a class="el" href="_convex_hull_8tpp_source.html">ConvexHull.tpp</a></li>
 </ul>

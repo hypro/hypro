@@ -128,18 +128,23 @@ $(document).ready(function(){initNavTree('classhypro_1_1_work_queue_manager.html
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4f6d88b21dabcc9a0876edd286f60036"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; Workable &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_work_queue_manager.html#a4f6d88b21dabcc9a0876edd286f60036">addQueue</a> ()</td></tr>
+<tr class="memitem:a4f6d88b21dabcc9a0876edd286f60036"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f6d88b21dabcc9a0876edd286f60036"></a>
+<a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; Workable &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>addQueue</b> ()</td></tr>
 <tr class="separator:a4f6d88b21dabcc9a0876edd286f60036"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba624b8a95b16bfd735ddda8ad07b9c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; Workable &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_work_queue_manager.html#aba624b8a95b16bfd735ddda8ad07b9c7">getQueue</a> (std::size_t index)</td></tr>
+<tr class="memitem:aba624b8a95b16bfd735ddda8ad07b9c7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba624b8a95b16bfd735ddda8ad07b9c7"></a>
+<a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; Workable &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getQueue</b> (std::size_t index)</td></tr>
 <tr class="separator:aba624b8a95b16bfd735ddda8ad07b9c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade7cd8a7e71d5a8083f89ebcba1916e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_work_queue_manager.html#ade7cd8a7e71d5a8083f89ebcba1916e0">hasWorkable</a> (bool lockedAcces) const </td></tr>
+<tr class="memitem:ade7cd8a7e71d5a8083f89ebcba1916e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade7cd8a7e71d5a8083f89ebcba1916e0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasWorkable</b> (bool lockedAcces) const </td></tr>
 <tr class="separator:ade7cd8a7e71d5a8083f89ebcba1916e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a207706f9f5eb4396cc6e89924654d06a"><td class="memItemLeft" align="right" valign="top">Workable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_work_queue_manager.html#a207706f9f5eb4396cc6e89924654d06a">getNextWorkable</a> (bool lockedAccess, bool dequeueFront)</td></tr>
+<tr class="memitem:a207706f9f5eb4396cc6e89924654d06a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a207706f9f5eb4396cc6e89924654d06a"></a>
+Workable&#160;</td><td class="memItemRight" valign="bottom"><b>getNextWorkable</b> (bool lockedAccess, bool dequeueFront)</td></tr>
 <tr class="separator:a207706f9f5eb4396cc6e89924654d06a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a5dd1bbeffecc7eaaed575c78e3c97fbe"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; Workable &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_work_queue_manager.html#a5dd1bbeffecc7eaaed575c78e3c97fbe">mQueues</a></td></tr>
+<tr class="memitem:a5dd1bbeffecc7eaaed575c78e3c97fbe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5dd1bbeffecc7eaaed575c78e3c97fbe"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; Workable &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mQueues</b></td></tr>
 <tr class="separator:a5dd1bbeffecc7eaaed575c78e3c97fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -148,128 +153,7 @@ class hypro::WorkQueueManager&lt; Workable &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="_work_queue_manager_8h_source.html#l00008">8</a> of file <a class="el" href="_work_queue_manager_8h_source.html">WorkQueueManager.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a4f6d88b21dabcc9a0876edd286f60036"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Workable &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; Workable &gt; * <a class="el" href="classhypro_1_1_work_queue_manager.html">hypro::WorkQueueManager</a>&lt; Workable &gt;::addQueue </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_work_queue_manager_8tpp_source.html#l00005">5</a> of file <a class="el" href="_work_queue_manager_8tpp_source.html">WorkQueueManager.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="example__rectangular_reachability_8cpp_source.html#l00015">main()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a207706f9f5eb4396cc6e89924654d06a"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Workable &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">Workable <a class="el" href="classhypro_1_1_work_queue_manager.html">hypro::WorkQueueManager</a>&lt; Workable &gt;::getNextWorkable </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>lockedAccess</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>dequeueFront</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_work_queue_manager_8tpp_source.html#l00045">45</a> of file <a class="el" href="_work_queue_manager_8tpp_source.html">WorkQueueManager.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="example__rectangular_reachability_8cpp_source.html#l00015">main()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aba624b8a95b16bfd735ddda8ad07b9c7"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Workable &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; Workable &gt; * <a class="el" href="classhypro_1_1_work_queue_manager.html">hypro::WorkQueueManager</a>&lt; Workable &gt;::getQueue </td>
-          <td>(</td>
-          <td class="paramtype">std::size_t&#160;</td>
-          <td class="paramname"><em>index</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_work_queue_manager_8tpp_source.html#l00022">22</a> of file <a class="el" href="_work_queue_manager_8tpp_source.html">WorkQueueManager.tpp</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ade7cd8a7e71d5a8083f89ebcba1916e0"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Workable &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1_work_queue_manager.html">hypro::WorkQueueManager</a>&lt; Workable &gt;::hasWorkable </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>lockedAcces</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_work_queue_manager_8tpp_source.html#l00029">29</a> of file <a class="el" href="_work_queue_manager_8tpp_source.html">WorkQueueManager.tpp</a>.</p>
-
-<p>Referenced by <a class="el" href="example__rectangular_reachability_8cpp_source.html#l00015">main()</a>.</p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a5dd1bbeffecc7eaaed575c78e3c97fbe"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Workable&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;std::unique_ptr&lt;<a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt;Workable&gt; &gt; &gt; <a class="el" href="classhypro_1_1_work_queue_manager.html">hypro::WorkQueueManager</a>&lt; Workable &gt;::mQueues</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_work_queue_manager_8h_source.html#l00009">9</a> of file <a class="el" href="_work_queue_manager_8h_source.html">WorkQueueManager.h</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/<a class="el" href="_work_queue_manager_8h_source.html">WorkQueueManager.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/<a class="el" href="_work_queue_manager_8tpp_source.html">WorkQueueManager.tpp</a></li>
 </ul>

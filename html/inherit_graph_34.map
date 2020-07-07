@@ -6,6 +6,6 @@
 <area shape="rect" id="node6" href="$classhypro_1_1_node_manager.html" title="hypro::NodeManager\l\&lt; State \&gt;" alt="" coords="156,267,312,308"/>
 <area shape="rect" id="node7" href="$classhypro_1_1_plotter.html" title="Class implementing a plotter. The plotter is implemented using carl::Singleton. " alt="" coords="139,333,329,359"/>
 <area shape="rect" id="node8" href="$classhypro_1_1_settings_provider.html" title="hypro::SettingsProvider\l\&lt; State \&gt;" alt="" coords="149,384,319,425"/>
-<area shape="rect" id="node9" href="$classhypro_1_1statistics_1_1_statistician.html" title="hypro::statistics::\lStatistician" alt="" coords="169,449,299,491"/>
+<area shape="rect" id="node9" href="$classhypro_1_1statistics_1_1_statistician.html" title="Class which implements several counters on demand. " alt="" coords="169,449,299,491"/>
 <area shape="rect" id="node10" href="$classhypro_1_1_variable_pool.html" title="hypro::VariablePool" alt="" coords="162,515,306,542"/>
 </map>

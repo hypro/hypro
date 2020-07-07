@@ -1,9 +1,23 @@
 var annotated_dup =
 [
-    [ "better_enums", "namespacebetter__enums.html", "namespacebetter__enums" ],
-    [ "Eigen", "namespace_eigen.html", "namespace_eigen" ],
+    [ "better_enums", null, [
+      [ "_eat_assign", "structbetter__enums_1_1__eat__assign.html", "structbetter__enums_1_1__eat__assign" ],
+      [ "_initialize_at_program_start", "structbetter__enums_1_1__initialize__at__program__start.html", "structbetter__enums_1_1__initialize__at__program__start" ],
+      [ "_iterable", "structbetter__enums_1_1__iterable.html", "structbetter__enums_1_1__iterable" ],
+      [ "map", "structbetter__enums_1_1map.html", "structbetter__enums_1_1map" ],
+      [ "map_compare", "structbetter__enums_1_1map__compare.html", null ],
+      [ "map_compare< const char * >", "structbetter__enums_1_1map__compare_3_01const_01char_01_5_01_4.html", null ],
+      [ "map_compare< const wchar_t * >", "structbetter__enums_1_1map__compare_3_01const_01wchar__t_01_5_01_4.html", null ],
+      [ "optional", "structbetter__enums_1_1optional.html", "structbetter__enums_1_1optional" ]
+    ] ],
+    [ "Eigen", null, [
+      [ "NumTraits< carl::FLOAT_T< Number > >", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4" ],
+      [ "NumTraits< mpq_class >", "struct_eigen_1_1_num_traits_3_01mpq__class_01_4.html", "struct_eigen_1_1_num_traits_3_01mpq__class_01_4" ]
+    ] ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
-    [ "smtrat", "namespacesmtrat.html", "namespacesmtrat" ],
+    [ "smtrat", null, [
+      [ "SimplexSolver", "classsmtrat_1_1_simplex_solver.html", "classsmtrat_1_1_simplex_solver" ]
+    ] ],
     [ "std", null, [
       [ "hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affine_flow_3_01_number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1affine_flow_3_01_number_01_4_01_4" ],
       [ "hash< hypro::AffineTransformation< Number > >", "structstd_1_1hash_3_01hypro_1_1_affine_transformation_3_01_number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1_affine_transformation_3_01_number_01_4_01_4" ],

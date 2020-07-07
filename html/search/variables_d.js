@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['name',['name',['../namespacehypro_1_1plotting.html#ad3e9a2e11d309052a706f3fe7cbc131d',1,'hypro::plotting::gnuplotSettings']]],
-  ['nodecnt',['nodeCnt',['../namespacehypro.html#aca25ba14077d4e11455cd32106b31eba',1,'hypro::TreeStatistic']]],
-  ['numbertoken',['numberToken',['../classhypro_1_1_hybrid_automaton_parser_1_1_constantexpr_context.html#a5924fe9576279553fcb558fb35d0f3b8',1,'hypro::HybridAutomatonParser::ConstantexprContext']]]
+  ['uniformbloating',['uniformBloating',['../namespacehypro.html#a1aa79bb2069cef509293f08e80f79483',1,'hypro::AnalysisParameters::uniformBloating()'],['../structhypro_1_1_reachability_settings.html#a75dab1f6c8dcf210c5e8319ece734829',1,'hypro::ReachabilitySettings::uniformBloating()']]],
+  ['useinvarianttiminginformation',['useInvariantTimingInformation',['../structhypro_1_1_reachability_settings.html#aa879f947713bf99a791174af672ba59d',1,'hypro::ReachabilitySettings']]]
 ];

@@ -1,13 +1,37 @@
 var namespacehypro =
 [
-    [ "detail", "namespacehypro_1_1detail.html", "namespacehypro_1_1detail" ],
-    [ "ExactQuickhull", "namespacehypro_1_1_exact_quickhull.html", "namespacehypro_1_1_exact_quickhull" ],
-    [ "examples", "namespacehypro_1_1examples.html", "namespacehypro_1_1examples" ],
-    [ "plotting", "namespacehypro_1_1plotting.html", "namespacehypro_1_1plotting" ],
-    [ "qe", "namespacehypro_1_1qe.html", "namespacehypro_1_1qe" ],
-    [ "reachability", "namespacehypro_1_1reachability.html", "namespacehypro_1_1reachability" ],
-    [ "statistics", "namespacehypro_1_1statistics.html", "namespacehypro_1_1statistics" ],
-    [ "ZUtility", "namespacehypro_1_1_z_utility.html", "namespacehypro_1_1_z_utility" ],
+    [ "detail", null, [
+      [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
+      [ "gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01_is_8_8_8_01_4.html", null ],
+      [ "nth_element_impl", "structhypro_1_1detail_1_1nth__element__impl.html", "structhypro_1_1detail_1_1nth__element__impl" ],
+      [ "nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4.html", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4" ],
+      [ "ResetVisitor", "structhypro_1_1detail_1_1_reset_visitor.html", "structhypro_1_1detail_1_1_reset_visitor" ],
+      [ "seq", "structhypro_1_1detail_1_1seq.html", null ]
+    ] ],
+    [ "ExactQuickhull", null, [
+      [ "Facet", "structhypro_1_1_exact_quickhull_1_1_facet.html", "structhypro_1_1_exact_quickhull_1_1_facet" ],
+      [ "FacetSpace", "classhypro_1_1_exact_quickhull_1_1_facet_space.html", "classhypro_1_1_exact_quickhull_1_1_facet_space" ]
+    ] ],
+    [ "plotting", null, [
+      [ "gnuplotSettings", "structhypro_1_1plotting_1_1gnuplot_settings.html", "structhypro_1_1plotting_1_1gnuplot_settings" ]
+    ] ],
+    [ "qe", null, [
+      [ "CellTreeNode", "structhypro_1_1qe_1_1_cell_tree_node.html", "structhypro_1_1qe_1_1_cell_tree_node" ]
+    ] ],
+    [ "reachability", null, [
+      [ "detail", null, [
+        [ "bloatBoxVisitor", "classhypro_1_1reachability_1_1detail_1_1bloat_box_visitor.html", "classhypro_1_1reachability_1_1detail_1_1bloat_box_visitor" ]
+      ] ]
+    ] ],
+    [ "statistics", null, [
+      [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1_atomic_operation_counter.html", "structhypro_1_1statistics_1_1_atomic_operation_counter" ],
+      [ "CounterRepository", "classhypro_1_1statistics_1_1_counter_repository.html", "classhypro_1_1statistics_1_1_counter_repository" ],
+      [ "OperationCounter", "structhypro_1_1statistics_1_1_operation_counter.html", "structhypro_1_1statistics_1_1_operation_counter" ],
+      [ "Statistician", "classhypro_1_1statistics_1_1_statistician.html", "classhypro_1_1statistics_1_1_statistician" ]
+    ] ],
+    [ "ZUtility", null, [
+      [ "Line_t", "structhypro_1_1_z_utility_1_1_line__t.html", "structhypro_1_1_z_utility_1_1_line__t" ]
+    ] ],
     [ "affineFlow", "classhypro_1_1affine_flow.html", "classhypro_1_1affine_flow" ],
     [ "AffineTransformation", "structhypro_1_1_affine_transformation.html", "structhypro_1_1_affine_transformation" ],
     [ "AnalysisParameters", "namespacehypro.html#structhypro_1_1_analysis_parameters", "namespacehypro_structhypro_1_1_analysis_parameters_dup" ],
@@ -22,8 +46,6 @@ var namespacehypro =
     [ "Cacheable", "structhypro_1_1_cacheable.html", "structhypro_1_1_cacheable" ],
     [ "CarlPolytopeT", "classhypro_1_1_carl_polytope_t.html", "classhypro_1_1_carl_polytope_t" ],
     [ "ChildTimingInformation", "namespacehypro.html#structhypro_1_1_child_timing_information", "namespacehypro_structhypro_1_1_child_timing_information_dup" ],
-    [ "CIFExprVisitor", "classhypro_1_1_c_i_f_expr_visitor.html", "classhypro_1_1_c_i_f_expr_visitor" ],
-    [ "CIFLocVisitor", "classhypro_1_1_c_i_f_loc_visitor.html", "classhypro_1_1_c_i_f_loc_visitor" ],
     [ "clp_context", "structhypro_1_1clp__context.html", "structhypro_1_1clp__context" ],
     [ "concat_i", "namespacehypro.html#structhypro_1_1concat__i", "namespacehypro_structhypro_1_1concat__i_dup" ],
     [ "concat_i< TypeList< Ts... >, TypeList< Us... > >", "namespacehypro.html#structhypro_1_1concat__i_3_01_type_list_3_01_ts_8_8_8_01_4_00_01_type_list_3_01_us_8_8_8_01_4_01_4", "namespacehypro_structhypro_1_1concat__i_3_01_type_list_3_01_ts_8_8_8_01_4_00_01_type_list_3_01_us_8_8_8_01_4_01_4_dup" ],
@@ -54,7 +76,6 @@ var namespacehypro =
     [ "EllipsoidSupportFunction", "classhypro_1_1_ellipsoid_support_function.html", "classhypro_1_1_ellipsoid_support_function" ],
     [ "EllipsoidT", "classhypro_1_1_ellipsoid_t.html", "classhypro_1_1_ellipsoid_t" ],
     [ "endPoint", "structhypro_1_1end_point.html", "structhypro_1_1end_point" ],
-    [ "ErrorListener", "classhypro_1_1_error_listener.html", "classhypro_1_1_error_listener" ],
     [ "EvaluationResult", "structhypro_1_1_evaluation_result.html", "structhypro_1_1_evaluation_result" ],
     [ "EventTimingContainer", "classhypro_1_1_event_timing_container.html", "classhypro_1_1_event_timing_container" ],
     [ "EventTimingNode", "classhypro_1_1_event_timing_node.html", "classhypro_1_1_event_timing_node" ],
@@ -105,23 +126,7 @@ var namespacehypro =
     [ "HPolytopeOptimizerCaching", "structhypro_1_1_h_polytope_optimizer_caching.html", null ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html", "classhypro_1_1_h_polytope_t" ],
     [ "HybridAutomaton", "classhypro_1_1_hybrid_automaton.html", "classhypro_1_1_hybrid_automaton" ],
-    [ "HybridAutomatonBaseVisitor", "classhypro_1_1_hybrid_automaton_base_visitor.html", "classhypro_1_1_hybrid_automaton_base_visitor" ],
     [ "HybridAutomatonComp", "classhypro_1_1_hybrid_automaton_comp.html", "classhypro_1_1_hybrid_automaton_comp" ],
-    [ "HybridAutomatonLexer", "classhypro_1_1_hybrid_automaton_lexer.html", "classhypro_1_1_hybrid_automaton_lexer" ],
-    [ "HybridAutomatonParser", "classhypro_1_1_hybrid_automaton_parser.html", "classhypro_1_1_hybrid_automaton_parser" ],
-    [ "HybridAutomatonVisitor", "classhypro_1_1_hybrid_automaton_visitor.html", "classhypro_1_1_hybrid_automaton_visitor" ],
-    [ "HybridCIFVisitor", "classhypro_1_1_hybrid_c_i_f_visitor.html", "classhypro_1_1_hybrid_c_i_f_visitor" ],
-    [ "HybridSystemBaseVisitor", "classhypro_1_1_hybrid_system_base_visitor.html", "classhypro_1_1_hybrid_system_base_visitor" ],
-    [ "HybridSystemLexer", "classhypro_1_1_hybrid_system_lexer.html", "classhypro_1_1_hybrid_system_lexer" ],
-    [ "HybridSystemParser", "classhypro_1_1_hybrid_system_parser.html", "classhypro_1_1_hybrid_system_parser" ],
-    [ "HybridSystemVisitor", "classhypro_1_1_hybrid_system_visitor.html", "classhypro_1_1_hybrid_system_visitor" ],
-    [ "HyproBadStatesVisitor", "classhypro_1_1_hypro_bad_states_visitor.html", "classhypro_1_1_hypro_bad_states_visitor" ],
-    [ "HyproFormulaVisitor", "classhypro_1_1_hypro_formula_visitor.html", "classhypro_1_1_hypro_formula_visitor" ],
-    [ "HyproHAVisitor", "classhypro_1_1_hypro_h_a_visitor.html", "classhypro_1_1_hypro_h_a_visitor" ],
-    [ "HyproInitialSetVisitor", "classhypro_1_1_hypro_initial_set_visitor.html", "classhypro_1_1_hypro_initial_set_visitor" ],
-    [ "HyproLocationVisitor", "classhypro_1_1_hypro_location_visitor.html", "classhypro_1_1_hypro_location_visitor" ],
-    [ "HyproSettingVisitor", "classhypro_1_1_hypro_setting_visitor.html", "classhypro_1_1_hypro_setting_visitor" ],
-    [ "HyproTransitionVisitor", "classhypro_1_1_hypro_transition_visitor.html", "classhypro_1_1_hypro_transition_visitor" ],
     [ "IBadStateHandler", "classhypro_1_1_i_bad_state_handler.html", "classhypro_1_1_i_bad_state_handler" ],
     [ "IContext", "classhypro_1_1_i_context.html", "classhypro_1_1_i_context" ],
     [ "IFirstSegmentHandler", "classhypro_1_1_i_first_segment_handler.html", "classhypro_1_1_i_first_segment_handler" ],
@@ -149,8 +154,8 @@ var namespacehypro =
     [ "Leaf", "classhypro_1_1_leaf.html", "classhypro_1_1_leaf" ],
     [ "LeafData", "structhypro_1_1_leaf_data.html", "structhypro_1_1_leaf_data" ],
     [ "linearFlow", "classhypro_1_1linear_flow.html", "classhypro_1_1linear_flow" ],
-    [ "LinTrafoParameters", "structhypro_1_1_lin_trafo_parameters.html", "structhypro_1_1_lin_trafo_parameters" ],
     [ "lintrafoParameters", "structhypro_1_1lintrafo_parameters.html", "structhypro_1_1lintrafo_parameters" ],
+    [ "LinTrafoParameters", "structhypro_1_1_lin_trafo_parameters.html", "structhypro_1_1_lin_trafo_parameters" ],
     [ "Location", "classhypro_1_1_location.html", "classhypro_1_1_location" ],
     [ "LockableBase", "classhypro_1_1_lockable_base.html", "classhypro_1_1_lockable_base" ],
     [ "LockableObjectWrapper", "classhypro_1_1_lockable_object_wrapper.html", "classhypro_1_1_lockable_object_wrapper" ],
@@ -223,7 +228,6 @@ var namespacehypro =
     [ "setCreationVisitor", "structhypro_1_1set_creation_visitor.html", "structhypro_1_1set_creation_visitor" ],
     [ "Settings", "namespacehypro.html#structhypro_1_1_settings", "namespacehypro_structhypro_1_1_settings_dup" ],
     [ "SettingsProvider", "classhypro_1_1_settings_provider.html", "classhypro_1_1_settings_provider" ],
-    [ "Spinlock", "classhypro_1_1_spinlock.html", "classhypro_1_1_spinlock" ],
     [ "STallValues", "namespacehypro.html#structhypro_1_1_s_tall_values", "namespacehypro_structhypro_1_1_s_tall_values_dup" ],
     [ "StatisticWrapper", "classhypro_1_1_statistic_wrapper.html", "classhypro_1_1_statistic_wrapper" ],
     [ "STflowpipeSegment", "namespacehypro.html#structhypro_1_1_s_tflowpipe_segment", "namespacehypro_structhypro_1_1_s_tflowpipe_segment_dup" ],

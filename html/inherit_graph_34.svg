@@ -113,7 +113,7 @@
 </g>
 <!-- Node9 -->
 <g id="node9" class="node"><title>Node9</title>
-<g id="a_node9"><a xlink:href="classhypro_1_1statistics_1_1_statistician.html" target="_top" xlink:title="hypro::statistics::\lStatistician">
+<g id="a_node9"><a xlink:href="classhypro_1_1statistics_1_1_statistician.html" target="_top" xlink:title="Class which implements several counters on demand. ">
 <polygon fill="white" stroke="black" points="122.5,-39 122.5,-69 220.5,-69 220.5,-39 122.5,-39"/>
 <text text-anchor="start" x="130.5" y="-57" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::statistics::</text>
 <text text-anchor="middle" x="171.5" y="-46" font-family="Helvetica,sans-Serif" font-size="10.00">Statistician</text>

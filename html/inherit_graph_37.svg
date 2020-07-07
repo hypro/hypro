@@ -11,7 +11,7 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-35 115,-35 115,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="classhypro_1_1_convex_hull.html" target="_top" xlink:title="Class for convex hull computation. ">
+<g id="a_node1"><a xlink:href="classhypro_1_1_convex_hull.html" target="_top" xlink:title="Class for Fukuda&#39;s reverse search. ">
 <polygon fill="white" stroke="black" points="-7.10543e-15,-0.5 -7.10543e-15,-30.5 111,-30.5 111,-0.5 -7.10543e-15,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::ConvexHull&lt;</text>
 <text text-anchor="middle" x="55.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00"> Number &gt;</text>

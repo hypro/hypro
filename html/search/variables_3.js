@@ -1,21 +1,6 @@
 var searchData=
 [
-  ['d',['D',['../namespacehypro.html#ab6585fd1aef43ba50ff3d25dc43a9d50',1,'hypro::STindependentFunct::D()'],['../namespacehypro_1_1detail.html#a578dbfcb74f9fa96c37432277ede029c',1,'hypro::detail::Independent_part_funct::D()']]],
   ['default_5fdouble_5fcomparison_5fulps',['default_double_comparison_ulps',['../group__globals.html#gab2f19f742ea698a529102d85c3c0be0e',1,'config.h']]],
-  ['defaultppldenominator',['defaultPPLDenominator',['../group__globals.html#ga4508383d9f9b10c10f08f180d5086337',1,'config.h']]],
   ['defaulttemplatedirectioncount',['defaultTemplateDirectionCount',['../group__globals.html#ga6416b4b09ad3984e740a0e19ef391467',1,'config.h']]],
-  ['deletedpositions',['deletedPositions',['../classhypro_1_1_exact_quickhull_1_1_facet_space.html#a783abef02ca9f5789244db5e69b40cf8',1,'hypro::ExactQuickhull::FacetSpace']]],
-  ['delta',['delta',['../namespacehypro_1_1detail.html#a933288f6ad7445708a4669325f56d7dc',1,'hypro::detail::Independent_part_funct']]],
-  ['deltalimit',['deltalimit',['../namespacehypro_1_1detail.html#abc27c21ef63cba735c4c0e027d63c3fd',1,'hypro::detail::Independent_part_funct']]],
-  ['depth',['depth',['../namespacehypro.html#a2dee5385bc879fbb5b4e23a8e8a7f4f0',1,'hypro::TreeStatistic']]],
-  ['deriv',['deriv',['../namespacehypro_1_1detail.html#aa3368e9639e6492877bca4e50be8d4e3',1,'hypro::detail::Eval_functions']]],
-  ['derivative_5forder',['DERIVATIVE_ORDER',['../structhypro_1_1_template_polyhedron_default.html#ac754155209b6e9433665fe8b3fbbb380',1,'hypro::TemplatePolyhedronDefault']]],
-  ['detect_5fbox',['DETECT_BOX',['../structhypro_1_1_box_linear_optimization_off.html#ac557c2926d2b97ba83609b28b1d2425d',1,'hypro::BoxLinearOptimizationOff::DETECT_BOX()'],['../structhypro_1_1_box_interval_arithmetic_off.html#a8d019bc144ec81fe176c1ca75050f373',1,'hypro::BoxIntervalArithmeticOff::DETECT_BOX()'],['../structhypro_1_1_box_all_off.html#a9607b5dde3c3b778b06a587f4e6f3e0a',1,'hypro::BoxAllOff::DETECT_BOX()'],['../structhypro_1_1_no_box_detection.html#a3c97ecfa808da31ca54240b60090ab0f',1,'hypro::NoBoxDetection::DETECT_BOX()'],['../structhypro_1_1_no_reduction.html#a3cd641e4fdf418c5fa5eef81424f10ed',1,'hypro::NoReduction::DETECT_BOX()'],['../structhypro_1_1_support_function_new_more_precision.html#a6d6e09b36c9e5d3b8c73250d51fb90a0',1,'hypro::SupportFunctionNewMorePrecision::DETECT_BOX()'],['../structhypro_1_1_support_function_new_no_reduction.html#a153e40e0c95ae99bbdce9a91eda167cb',1,'hypro::SupportFunctionNewNoReduction::DETECT_BOX()'],['../structhypro_1_1_support_function_new_le_guernic.html#a0490006956848b4fad58ca7e08c58406',1,'hypro::SupportFunctionNewLeGuernic::DETECT_BOX()']]],
-  ['dim_5fplot',['DIM_PLOT',['../namespacehypro_1_1detail.html#a2e1a62bdf22a9d2857c133b5902220b6',1,'hypro::detail::Flags']]],
-  ['dimensions',['dimensions',['../structhypro_1_1projection_content.html#ab0a05fc03e6abc1693081a769169739b',1,'hypro::projectionContent::dimensions()'],['../structhypro_1_1_project_data.html#a7db29b824049ff21bbeabe83196ac928',1,'hypro::ProjectData::dimensions()'],['../namespacehypro_1_1plotting.html#ab65196566bbe095d5bdadb43b40e4800',1,'hypro::plotting::gnuplotSettings::dimensions()']]],
-  ['direct',['direct',['../namespacehypro_1_1detail.html#a18e3f12842025a46bb39081b895f60a2',1,'hypro::detail::Eval_functions']]],
-  ['direction',['direction',['../structhypro_1_1_z_utility_1_1_line__t.html#a2fdbd1c793ba06046bb2ea1551892251',1,'hypro::ZUtility::Line_t']]],
-  ['directly_5fcompute_5froots',['DIRECTLY_COMPUTE_ROOTS',['../structhypro_1_1_template_polyhedron_default.html#ae1e3201c7d9bdd30c1886bee748e0156',1,'hypro::TemplatePolyhedronDefault']]],
-  ['domain',['domain',['../classhypro_1_1_flowpipe.html#a6673613547b9f66f6d391605d0f1c8ca',1,'hypro::Flowpipe']]],
   ['dynamicheuristic',['DYNAMICHEURISTIC',['../group__globals.html#ga607d8cb76bcf54172542359fda640812',1,'config.h']]]
 ];

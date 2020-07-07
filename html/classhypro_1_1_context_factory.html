@@ -127,7 +127,8 @@ $(document).ready(function(){initNavTree('classhypro_1_1_context_factory.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9e34f21c7f366c1a4a020b183dbeac85"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_i_context.html">IContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_context_factory.html#a9e34f21c7f366c1a4a020b183dbeac85">createContext</a> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;t, const Strategy&lt; State &gt; &amp;strat, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments, <a class="el" href="structhypro_1_1_reachability_settings.html">hypro::ReachabilitySettings</a> &amp;settings)</td></tr>
+<tr class="memitem:a9e34f21c7f366c1a4a020b183dbeac85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e34f21c7f366c1a4a020b183dbeac85"></a>
+<a class="el" href="classhypro_1_1_i_context.html">IContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createContext</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;t, const Strategy&lt; State &gt; &amp;strat, <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt;&gt; *localCEXQueue, <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments, <a class="el" href="structhypro_1_1_reachability_settings.html">hypro::ReachabilitySettings</a> &amp;settings)</td></tr>
 <tr class="separator:a9e34f21c7f366c1a4a020b183dbeac85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -136,66 +137,7 @@ class hypro::ContextFactory&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="_context_factory_8h_source.html#l00017">17</a> of file <a class="el" href="_context_factory_8h_source.html">ContextFactory.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a9e34f21c7f366c1a4a020b183dbeac85"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename State &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_i_context.html">IContext</a> * <a class="el" href="classhypro_1_1_context_factory.html">hypro::ContextFactory</a>&lt; State &gt;::createContext </td>
-          <td>(</td>
-          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;&#160;</td>
-          <td class="paramname"><em>t</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Strategy&lt; State &gt; &amp;&#160;</td>
-          <td class="paramname"><em>strat</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt;&gt; *&#160;</td>
-          <td class="paramname"><em>localQueue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="namespacehypro.html#ab35d78181722676f0636d7a390fe5848">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt;&gt; *&#160;</td>
-          <td class="paramname"><em>localCEXQueue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td>
-          <td class="paramname"><em>localSegments</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structhypro_1_1_reachability_settings.html">hypro::ReachabilitySettings</a> &amp;&#160;</td>
-          <td class="paramname"><em>settings</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Definition at line <a class="el" href="_context_factory_8tpp_source.html#l00005">5</a> of file <a class="el" href="_context_factory_8tpp_source.html">ContextFactory.tpp</a>.</p>
-
-<p>References <a class="el" href="_settings_provider_8h_source.html#l00091">hypro::SettingsProvider&lt; State &gt;::getLocationTypeMap()</a>, <a class="el" href="_settings_provider_8h_source.html#l00079">hypro::SettingsProvider&lt; State &gt;::isFullTimed()</a>, <a class="el" href="namespacehypro.html#a591ce576c89c11741bb7ee90db71c677a16af997c92e8e2eb3613d3f187aa7be3">hypro::RECTANGULARLOC</a>, <a class="el" href="namespacehypro.html#a591ce576c89c11741bb7ee90db71c677a6a69247abc4b097fa949c7105cdf0fd4">hypro::TIMEDLOC</a>, <a class="el" href="_settings_provider_8h_source.html#l00083">hypro::SettingsProvider&lt; State &gt;::useContextSwitch()</a>, and <a class="el" href="_settings_provider_8tpp_source.html#l00025">hypro::SettingsProvider&lt; State &gt;::useDecider()</a>.</p>
-
-<p>Referenced by <a class="el" href="_context_based_reachability_worker_8tpp_source.html#l00017">hypro::ContextBasedReachabilityWorker&lt; State &gt;::computeForwardReachability()</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/<a class="el" href="_context_factory_8h_source.html">ContextFactory.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/<a class="el" href="_context_factory_8tpp_source.html">ContextFactory.tpp</a></li>
 </ul>

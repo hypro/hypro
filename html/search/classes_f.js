@@ -1,31 +1,5 @@
 var searchData=
 [
-  ['parameters',['Parameters',['../structhypro_1_1_parameters.html',1,'hypro']]],
-  ['path',['Path',['../classhypro_1_1_path.html',1,'hypro']]],
-  ['permutator',['Permutator',['../classhypro_1_1_permutator.html',1,'hypro']]],
-  ['plotdata',['PlotData',['../structhypro_1_1_plot_data.html',1,'hypro']]],
-  ['plotsettingcontext',['PlotsettingContext',['../classhypro_1_1_hybrid_automaton_parser_1_1_plotsetting_context.html',1,'hypro::HybridAutomatonParser']]],
-  ['plotter',['Plotter',['../classhypro_1_1_plotter.html',1,'hypro']]],
-  ['point',['Point',['../classhypro_1_1_point.html',1,'hypro']]],
-  ['point_3c_20int_20_3e',['Point&lt; int &gt;',['../classhypro_1_1_point.html',1,'hypro']]],
-  ['point_3c_20std_3a_3asize_5ft_20_3e',['Point&lt; std::size_t &gt;',['../classhypro_1_1_point.html',1,'hypro']]],
-  ['pointit',['pointIt',['../structhypro_1_1point_it.html',1,'hypro']]],
-  ['polynomcontext',['PolynomContext',['../classhypro_1_1_hybrid_automaton_parser_1_1_polynom_context.html',1,'hypro::HybridAutomatonParser']]],
-  ['polynomialode',['PolynomialODE',['../classhypro_1_1_polynomial_o_d_e.html',1,'hypro']]],
-  ['polytopesetting',['PolytopeSetting',['../structhypro_1_1_polytope_setting.html',1,'hypro']]],
-  ['polytopesupportfunction',['PolytopeSupportFunction',['../classhypro_1_1_polytope_support_function.html',1,'hypro']]],
-  ['polytopesupportfunctionsetting',['PolytopeSupportFunctionSetting',['../structhypro_1_1_polytope_support_function_setting.html',1,'hypro']]],
-  ['precisioncontext',['PrecisionContext',['../classhypro_1_1_hybrid_automaton_parser_1_1_precision_context.html',1,'hypro::HybridAutomatonParser']]],
-  ['principalcomponentanalysis',['PrincipalComponentAnalysis',['../classhypro_1_1_principal_component_analysis.html',1,'hypro']]],
-  ['printcontext',['PrintContext',['../classhypro_1_1_hybrid_system_parser_1_1_print_context.html',1,'hypro::HybridSystemParser']]],
-  ['printcontext',['PrintContext',['../classhypro_1_1_hybrid_automaton_parser_1_1_print_context.html',1,'hypro::HybridAutomatonParser']]],
-  ['printfilecontext',['PrintFileContext',['../classhypro_1_1_hybrid_system_parser_1_1_print_file_context.html',1,'hypro::HybridSystemParser']]],
-  ['printforcontext',['PrintForContext',['../classhypro_1_1_hybrid_system_parser_1_1_print_for_context.html',1,'hypro::HybridSystemParser']]],
-  ['printforscontext',['PrintForsContext',['../classhypro_1_1_hybrid_system_parser_1_1_print_fors_context.html',1,'hypro::HybridSystemParser']]],
-  ['printtxtcontext',['PrintTxtContext',['../classhypro_1_1_hybrid_system_parser_1_1_print_txt_context.html',1,'hypro::HybridSystemParser']]],
-  ['projectdata',['ProjectData',['../structhypro_1_1_project_data.html',1,'hypro']]],
-  ['projectioncontent',['projectionContent',['../structhypro_1_1projection_content.html',1,'hypro']]],
-  ['projectioncontext',['ProjectionContext',['../classhypro_1_1_hybrid_system_parser_1_1_projection_context.html',1,'hypro::HybridSystemParser']]],
-  ['projectionscontext',['ProjectionsContext',['../classhypro_1_1_hybrid_system_parser_1_1_projections_context.html',1,'hypro::HybridSystemParser']]],
-  ['projectop',['ProjectOp',['../classhypro_1_1_project_op.html',1,'hypro']]]
+  ['quickhullalgorithm',['QuickhullAlgorithm',['../namespacehypro.html#classhypro_1_1_quickhull_algorithm',1,'hypro']]],
+  ['quickhullalgorithm_3c_20number_2c_20euclidian_2c_20enableifexact_3c_20number_20_3e_20_3e',['QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;',['../classhypro_1_1_quickhull_algorithm_3_01_number_00_01_euclidian_00_01_enable_if_exact_3_01_number_01_4_01_4.html',1,'hypro']]]
 ];

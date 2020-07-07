@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1glpk__context.html" title="hypro::glpk_context" alt="" coords="5,5,152,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_i_context.html" title="hypro::IContext" alt="" coords="5,78,124,105"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_l_t_i_context.html" title="hypro::LTIContext\&lt;\l State \&gt;" alt="" coords="196,37,339,79"/>
+<area shape="rect" id="node5" href="$classhypro_1_1_rectangular_context.html" title="hypro::RectangularContext\l\&lt; State \&gt;" alt="" coords="172,103,363,144"/>
+<area shape="rect" id="node3" href="$classhypro_1_1_template_polyhedron_context.html" title="hypro::TemplatePolyhedron\lContext\&lt; State \&gt;" alt="" coords="411,5,605,47"/>
+<area shape="rect" id="node4" href="$classhypro_1_1_timed_context.html" title="hypro::TimedContext\l\&lt; State \&gt;" alt="" coords="431,71,585,112"/>
 </map>

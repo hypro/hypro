@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bound_5ftype',['BOUND_TYPE',['../classhypro_1_1_difference_bounds_t.html#a1168d084536f90893cae2589dfd1cb50',1,'hypro::DifferenceBoundsT']]]
+  ['dynamictype',['DynamicType',['../namespacehypro.html#ade3e42b7b774f60999db5eb776027882',1,'hypro']]]
 ];

@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1_interval_assignment.html" title="hypro::IntervalAssignment\&lt; N \&gt;" alt="" coords="5,5,235,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_lockable_base.html" title="hypro::LockableBase" alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_locked_file_writer.html" title="hypro::LockedFileWriter" alt="" coords="208,5,375,32"/>
 </map>

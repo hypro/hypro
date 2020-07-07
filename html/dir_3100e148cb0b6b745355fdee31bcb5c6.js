@@ -5,14 +5,10 @@ var dir_3100e148cb0b6b745355fdee31bcb5c6 =
     [ "smtrat", "dir_390abfd5d68d503b469591b35069a435.html", "dir_390abfd5d68d503b469591b35069a435" ],
     [ "soplex", "dir_a938320afa8b4ed01722153f3c100ea6.html", "dir_a938320afa8b4ed01722153f3c100ea6" ],
     [ "z3", "dir_41e6b291ceaca213b8048a0ff55a26ee.html", "dir_41e6b291ceaca213b8048a0ff55a26ee" ],
-    [ "EvaluationResult.h", "_evaluation_result_8h.html", "_evaluation_result_8h" ],
-    [ "glpk_context.h", "glpk__context_8h.html", [
-      [ "glpk_context", "structhypro_1_1glpk__context.html", "structhypro_1_1glpk__context" ]
-    ] ],
-    [ "Optimizer.cpp", "_optimizer_8cpp.html", null ],
-    [ "Optimizer.h", "_optimizer_8h.html", [
-      [ "Optimizer", "classhypro_1_1_optimizer.html", "classhypro_1_1_optimizer" ]
-    ] ],
-    [ "Optimizer.tpp", "_optimizer_8tpp.html", null ],
-    [ "Strategy.h", "util_2linear_optimization_2_strategy_8h.html", "util_2linear_optimization_2_strategy_8h" ]
+    [ "EvaluationResult.h", "_evaluation_result_8h_source.html", null ],
+    [ "glpk_context.h", "glpk__context_8h_source.html", null ],
+    [ "Optimizer.cpp", "_optimizer_8cpp_source.html", null ],
+    [ "Optimizer.h", "_optimizer_8h_source.html", null ],
+    [ "Optimizer.tpp", "_optimizer_8tpp_source.html", null ],
+    [ "Strategy.h", "util_2linear_optimization_2_strategy_8h_source.html", null ]
 ];

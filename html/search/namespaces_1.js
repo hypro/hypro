@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['eigen',['Eigen',['../namespace_eigen.html',1,'']]]
+  ['parser',['parser',['../namespaceparser.html',1,'']]],
+  ['plotting',['plotting',['../namespaceplotting.html',1,'']]]
 ];

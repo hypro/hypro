@@ -9,21 +9,17 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     [ "statistics", "dir_57790bb148fd18efc2431dd25a248521.html", "dir_57790bb148fd18efc2431dd25a248521" ],
     [ "tuple_expansion", "dir_3a35ee46332157846b55808bff5bb8c8.html", "dir_3a35ee46332157846b55808bff5bb8c8" ],
     [ "type_handling", "dir_46df0c505137c4ea9ebf8f65132b3ec3.html", "dir_46df0c505137c4ea9ebf8f65132b3ec3" ],
-    [ "convenienceOperators.h", "util_2convenience_operators_8h.html", "util_2convenience_operators_8h" ],
-    [ "conversion.h", "conversion_8h.html", "conversion_8h" ],
-    [ "convexHull.h", "convex_hull_8h.html", null ],
+    [ "convenienceOperators.h", "util_2convenience_operators_8h_source.html", null ],
+    [ "conversion.h", "conversion_8h_source.html", null ],
+    [ "convexHull.h", "convex_hull_8h_source.html", null ],
     [ "pca.h", "pca_8h.html", [
       [ "PrincipalComponentAnalysis", "classhypro_1_1_principal_component_analysis.html", "classhypro_1_1_principal_component_analysis" ]
     ] ],
     [ "pca.tpp", "pca_8tpp.html", null ],
-    [ "Permutator.h", "_permutator_8h.html", [
-      [ "Permutator", "classhypro_1_1_permutator.html", "classhypro_1_1_permutator" ]
-    ] ],
-    [ "Range.h", "_range_8h.html", "_range_8h" ],
+    [ "Permutator.h", "_permutator_8h_source.html", null ],
+    [ "Range.h", "_range_8h_source.html", null ],
     [ "templateDirections.h", "template_directions_8h.html", null ],
-    [ "typetraits.h", "util_2typetraits_8h.html", "util_2typetraits_8h" ],
-    [ "unreachable.h", "unreachable_8h.html", "unreachable_8h" ],
-    [ "VariablePool.h", "_variable_pool_8h.html", [
-      [ "VariablePool", "classhypro_1_1_variable_pool.html", "classhypro_1_1_variable_pool" ]
-    ] ]
+    [ "typetraits.h", "util_2typetraits_8h_source.html", null ],
+    [ "unreachable.h", "unreachable_8h_source.html", null ],
+    [ "VariablePool.h", "_variable_pool_8h_source.html", null ]
 ];

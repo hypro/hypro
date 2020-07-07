@@ -82,7 +82,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -119,13 +118,13 @@ $(document).ready(function(){initNavTree('plot_8md.html','');});
 <div class="title">/home/travis/build/hypro/hypro/doc/markdown/utilityFunctions/plot.md</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="plot_8md.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;Plotting {#plotting}</div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;===========</div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;The plotting engine defined in HyPro provides an easy-to-use interface to create gnuplot output files to visualize computed sets. The singleton object \ref hypro::Plotter&lt;Number&gt; &quot;Plotter&quot; thereby collects objects which are to be plotted and as soon as one of the plotting functions is called, writes an according output file. An object thereby is referenced by a unique id, which is returned upon adding the respective object. An object is a set of 2-dimensional \ref hypro::Point&lt;Number&gt; &quot;points&quot;, which does not necessarily have to be minimal, as an implementation of Graham&#39;s scan will reduce and order each collected set of vertices before plotting.</div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;In its current state, the returned id allows for changing the color of the passed object.</div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;A usage example of the plotting engine can be found in</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;- @ref example_plot.cpp</div></div><!-- fragment --></div><!-- contents -->
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;Plotting {#plotting}</div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;===========</div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;The plotting engine defined in HyPro provides an easy-to-use interface to create gnuplot output files to visualize computed sets. The singleton object \ref hypro::Plotter&lt;Number&gt; &quot;Plotter&quot; thereby collects objects which are to be plotted and as soon as one of the plotting functions is called, writes an according output file. An object thereby is referenced by a unique id, which is returned upon adding the respective object. An object is a set of 2-dimensional \ref hypro::Point&lt;Number&gt; &quot;points&quot;, which does not necessarily have to be minimal, as an implementation of Graham&#39;s scan will reduce and order each collected set of vertices before plotting.</div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;In its current state, the returned id allows for changing the color of the passed object.</div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;A usage example of the plotting engine can be found in</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;- @ref example_plot.cpp</div></div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="plot_8md.html">plot.md</a></li>
+    <li class="navelem"><b>plot.md</b></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>

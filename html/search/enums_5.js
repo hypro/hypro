@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['intersectionmethod_5ft',['IntersectionMethod_t',['../namespacehypro_1_1_z_utility.html#ac449bcb9216a53bc9119720f19ad9a5d',1,'hypro::ZUtility']]]
+  ['tribool',['TRIBOOL',['../namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d',1,'hypro']]]
 ];

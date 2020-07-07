@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['agg_5fsetting',['AGG_SETTING',['../namespacehypro.html#adf33fb69a3e5bd3c22df3034d24143db',1,'hypro']]],
-  ['aggregation',['Aggregation',['../namespacehypro.html#a03ed815dbbaab8a64776d7b39035977f',1,'hypro']]]
+  ['containment',['CONTAINMENT',['../namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d',1,'hypro']]],
+  ['conv_5fmode',['CONV_MODE',['../namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd',1,'hypro']]]
 ];
