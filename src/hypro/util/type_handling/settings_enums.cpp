@@ -4,6 +4,7 @@
 
 namespace hypro {
 
+/// Recursive call of string to setting enum conversion
 template <class Enum, class... Enums>
 struct stringToSetting_Impl {
 	static int toSetting( const std::string& name ) {
@@ -13,6 +14,7 @@ struct stringToSetting_Impl {
 	}
 };
 
+/// Base case of string to setting enum conversion
 template <class Enum>
 struct stringToSetting_Impl<Enum> {
 	static int toSetting( const std::string& name ) {
@@ -24,10 +26,10 @@ struct stringToSetting_Impl<Enum> {
 
 int stringToSetting( const std::string& name ) {
 	return stringToSetting_Impl<
-		boxSetting_name, 
-		supportFunctionSetting_name, 
-		sfnSetting_name,
-		tpolySetting_name >::toSetting( name );
+		  boxSetting_name,
+		  supportFunctionSetting_name,
+		  sfnSetting_name,
+		  tpolySetting_name>::toSetting( name );
 }
 
 }  // namespace hypro

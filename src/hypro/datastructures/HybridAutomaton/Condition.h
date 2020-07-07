@@ -13,17 +13,17 @@ template <typename Number>
 class Condition {
   private:
 	std::vector<ConstraintSetT<Number>> mConstraints;  /// holds the constraints specifying the condition
-	mutable std::vector<TRIBOOL> mConditionIsBox;	  /// cache to check whether constraints are axis-aligned
+	mutable std::vector<TRIBOOL> mConditionIsBox;	   /// cache to check whether constraints are axis-aligned
 	mutable std::size_t mHash = 0;					   /// cache for the hash value
   public:
 	Condition() = default;
 	Condition( const matrix_t<Number>& mat, const vector_t<Number>& vec )
-		: mConstraints( {ConstraintSetT<Number>( mat, vec )} )
-		, mConditionIsBox( {TRIBOOL::NSET} )
+		: mConstraints( { ConstraintSetT<Number>( mat, vec ) } )
+		, mConditionIsBox( { TRIBOOL::NSET } )
 		, mHash( 0 ) {}
 	explicit Condition( const ConstraintSetT<Number>& constraints )
-		: mConstraints( {constraints} )
-		, mConditionIsBox( {TRIBOOL::NSET} )
+		: mConstraints( { constraints } )
+		, mConditionIsBox( { TRIBOOL::NSET } )
 		, mHash( 0 ) {}
 	explicit Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets );
 	Condition( const Condition& orig ) = default;

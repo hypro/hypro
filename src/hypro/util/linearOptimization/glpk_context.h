@@ -5,16 +5,21 @@
 #include <glpk.h>
 
 namespace hypro {
+/**
+	 * @brief Context for linear optimization using glpk as a backend
+	 *
+	 */
 struct glpk_context {
-	glp_prob* lp = nullptr;
-	glp_smcp parm;
-	int* ia = nullptr;
-	int* ja = nullptr;
-	double* ar = nullptr;
-	bool arraysCreated = false;			   // true if array variables have been created.
-	mutable bool mInitialized = false;	 // true if lp instance has been created.
-	mutable bool mConstraintsSet = false;  // true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
+	glp_prob* lp = nullptr;				   ///< glpk problem instance
+	glp_smcp parm;						   ///< glpk parameter struct
+	int* ia = nullptr;					   ///< row indices
+	int* ja = nullptr;					   ///< column indices
+	double* ar = nullptr;				   ///< coefficients
+	bool arraysCreated = false;			   ///< true if array variables have been created.
+	mutable bool mInitialized = false;	   ///< true if lp instance has been created.
+	mutable bool mConstraintsSet = false;  ///< true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
 
+	/// default constructor
 	glpk_context()
 		: lp( nullptr )
 		, parm()
@@ -27,6 +32,7 @@ struct glpk_context {
 		TRACE( "hypro.optimizer", "Create glpk_context " << this );
 	}
 
+	/// copy constructor
 	glpk_context( const glpk_context& orig ) {
 		if ( orig.mInitialized ) {
 			glp_copy_prob( lp, orig.lp, GLP_ON );
@@ -41,8 +47,10 @@ struct glpk_context {
 		mConstraintsSet = false;
 	}
 
+	/// move constructor (deleted)
 	glpk_context( glpk_context&& orig ) = delete;
 
+	/// copy-assignment operator
 	glpk_context& operator=( const glpk_context& orig ) {
 		// compare problem instances to avoid self-assignment
 		if ( *this == orig ) {
@@ -64,12 +72,13 @@ struct glpk_context {
 		return *this;
 	}
 
+	/// move-assignment operator (deleted)
 	glpk_context& operator=( glpk_context&& orig ) = delete;
-
+	/// compare-equal operator
 	bool operator==( const glpk_context& rhs ) {
 		return this->lp == rhs.lp;
 	}
-
+	/// initializer function for the LP-problem arrays
 	void createArrays( unsigned size ) {
 		TRACE( "hypro.optimizer", "" );
 		if ( arraysCreated ) {
@@ -80,7 +89,7 @@ struct glpk_context {
 		ar = new double[size + 1];
 		arraysCreated = true;
 	}
-
+	/// cleanup function for the problem arrays
 	void deleteArrays() {
 		TRACE( "hypro.optimizer", "" );
 		if ( arraysCreated ) {
@@ -93,7 +102,7 @@ struct glpk_context {
 			arraysCreated = false;
 		}
 	}
-
+	/// initialization of the lp-problem instance
 	void createLPInstance() {
 		if ( !mInitialized ) {
 			lp = glp_create_prob();
@@ -106,7 +115,7 @@ struct glpk_context {
 			mConstraintsSet = false;
 		}
 	}
-
+	/// cleanup of lp-instance
 	void deleteLPInstance() {
 		TRACE( "hypro.optimizer", "Start."
 										<< " instance @" << this );
@@ -120,7 +129,14 @@ struct glpk_context {
 		TRACE( "hypro.optimizer", "Done."
 										<< " instance @" << this );
 	}
-
+	/**
+	 * @brief Setter for the lp coefficients	 *
+	 * @tparam Number
+	 * @param constraints
+	 * @param constants
+	 * @param relations
+	 * @param maximize
+	 */
 	template <typename Number>
 	void updateConstraints( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, bool maximize ) {
 		if ( !mConstraintsSet ) {
@@ -188,14 +204,14 @@ struct glpk_context {
 				glp_load_matrix( lp, numberOfConstraints * cols, ia, ja, ar );
 				for ( int i = 0; i < cols; ++i ) {
 					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-					glp_set_obj_coef( lp, i + 1, 1.0 );  // not needed?
+					glp_set_obj_coef( lp, i + 1, 1.0 );	 // not needed?
 				}
 			}
 
 			mConstraintsSet = true;
 		}
 	}
-
+	/// destructor
 	~glpk_context() {
 		TRACE( "hypro.optimizer", "Arrays created: " << arraysCreated << " instance @" << this );
 		// deleteLPInstance();

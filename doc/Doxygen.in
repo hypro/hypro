@@ -265,7 +265,7 @@ TYPEDEF_HIDES_STRUCT   = NO
 # normally produced when WARNINGS is set to YES.
 # The default value is: NO.
 
-EXTRACT_ALL            = YES
+EXTRACT_ALL            = NO
 
 # If the EXTRACT_PRIVATE tag is set to YES all private members of a class will
 # be included in the documentation.
@@ -545,7 +545,9 @@ RECURSIVE              = YES
 # run.
 
 #EXCLUDE                = ../../src/hypro/algorithms/reachability/HyReach ../../src/hypro/parser/flowstar
-EXCLUDE = ../../src/hypro/util/matlab
+EXCLUDE = ../../src/hypro/util/matlab \
+../../src/hypro/parser
+../../src/hypro/util/type_handling/better_enums
 
 # If the value of the INPUT tag contains directories, you can use the
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
@@ -563,7 +565,8 @@ EXCLUDE = ../../src/hypro/util/matlab
 #                         *Lexer.* \
 #                         *Listener.*
 
-EXCLUDE_PATTERNS = *.py
+EXCLUDE_PATTERNS = *.py \
+                    example_*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
