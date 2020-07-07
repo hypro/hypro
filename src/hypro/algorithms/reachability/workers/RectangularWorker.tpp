@@ -30,16 +30,16 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 	}
 
 	// compute time successor states
-	State timeSuccessors = rectangularApplyTimeEvolution( segment );
-	auto [invariantContainment, timeSuccessors] = rectangularIntersectInvariant( timeSuccessors );
+	State timeSuccessors = rectangularApplyTimeEvolution( segment, initialSet.getLocation()->getRectangularFlow() );
+	auto [invariantContainment, constrainedTimeSuccessors] = rectangularIntersectInvariant( timeSuccessors );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
 
 	// add state to flowpipe
-	mFlowpipe.addState( segment );
+	mFlowpipe.addState( constrainedTimeSuccessors );
 
-	std::tie( containment, segment ) = rectangularIntersectBadStates( segment, mHybridAutomaton );
+	std::tie( containment, segment ) = rectangularIntersectBadStates( constrainedTimeSuccessors, mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;

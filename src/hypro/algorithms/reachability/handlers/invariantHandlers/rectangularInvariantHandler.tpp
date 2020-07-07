@@ -5,7 +5,6 @@ template <typename State>
 std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet ) {
 	// check if initial Valuation fulfills Invariant
 	assert( stateSet.getLocation() != nullptr );
-	auto& vpool = hypro::VariablePool::getInstance();
 	CONTAINMENT containmentResult = CONTAINMENT::BOT;
 
 	TRACE( "hydra.worker", "Check invariant: " << stateSet.getLocation()->getInvariant() << " for set " << stateSet );
@@ -16,10 +15,10 @@ std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateS
 	State invariant{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };
 
 	// intersect
-	auto resultingSet{ stateSet.intersect( invariant ) };
+	auto resultingSet = stateSet.intersect( invariant );
 
 	// determine full vs. partial containment
-	if ( std::get<CarlPolytope<typename State::NumberType>>( resultingSet ) == std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ) ) {
+	if ( resultingSet == stateSet ) {
 		containmentResult = CONTAINMENT::FULL;
 	}
 
@@ -27,7 +26,7 @@ std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateS
 	resultingSet.removeRedundancy();
 
 	// return containment information
-	if ( resultingSet.empty() ) {
+	if ( resultingSet.isEmpty() ) {
 		return std::make_pair( CONTAINMENT::NO, resultingSet );
 	} else if ( containmentResult != CONTAINMENT::FULL ) {
 		return std::make_pair( CONTAINMENT::PARTIAL, resultingSet );

@@ -6,7 +6,7 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 	using Number = typename State::NumberType;
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get initial state
-	CarlPolytope<Number> initial = std::get<CarlPolytope<Number>>( initialSet->getSet() );
+	CarlPolytope<Number> initial = std::get<CarlPolytope<Number>>( initialSet.getSet() );
 	// storage to build elimination query
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse

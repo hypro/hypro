@@ -2,6 +2,7 @@
 #include "../typedefs.h"
 
 #include <hypro/algorithms/reachability/analyzer/LTIAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
 #include <hypro/datastructures/HybridAutomaton/State.h>
 #include <hypro/datastructures/reachability/PreprocessingInformation.h>
 #include <hypro/datastructures/reachability/Settings.h>
@@ -11,7 +12,7 @@
 
 namespace hydra {
 namespace reachability {
-void analyze( hypro::HybridAutomaton<Number> &automaton, hypro::Settings setting, hypro::PreprocessingInformation );
+void analyze( hypro::HybridAutomaton<Number> &automaton, hypro::Settings setting, hypro::PreprocessingInformation information );
 
 }  // namespace reachability
 }  // namespace hydra

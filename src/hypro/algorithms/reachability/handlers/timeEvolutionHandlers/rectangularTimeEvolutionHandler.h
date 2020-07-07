@@ -9,8 +9,8 @@
 
 namespace hypro {
 
-template <typename State, typename Number>
-State rectangularApplyTimeEvolution( const State& initialSet, const rectangularFlow<Number>& flow );
+template <typename State>
+State rectangularApplyTimeEvolution( const State& initialSet, const rectangularFlow<typename State::NumberType>& flow );
 
 }  // namespace hypro
 

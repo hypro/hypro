@@ -1,7 +1,7 @@
 #pragma once
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../types.h"
-#include "../workers/LTIWorker.h"
+#include "../workers/RectangularWorker.h"
 
 #include <queue>
 
@@ -22,7 +22,7 @@ class RectangularAnalyzer {
 	RectangularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
-		, mReachTree( new ReachTreeNode<State> ) {
+		, mReachTree() {
 	}
 	/// main method for reachability analysis
 	REACHABILITY_RESULT run();
@@ -30,11 +30,11 @@ class RectangularAnalyzer {
 	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
 
   protected:
-	std::queue<ReachTreeNode<State>*> mWorkQueue;			 ///< Queue holds all nodes that require processing
-	std::vector<Flowpipe<State>> mFlowpipes;				 ///< Storage for already computed flowpipes
-	HybridAutomaton<Number> mHybridAutomaton;				 ///< Automaton which is analyzed
-	Settings mAnalysisSettings;								 ///< Settings used for analysis
-	std::vector<std::unique_ptr<ReachTreeNode>> mReachTree;	 ///< Forest of ReachTrees computed
+	std::queue<ReachTreeNode<State>*> mWorkQueue;					///< Queue holds all nodes that require processing
+	std::vector<Flowpipe<State>> mFlowpipes;						///< Storage for already computed flowpipes
+	HybridAutomaton<Number> mHybridAutomaton;						///< Automaton which is analyzed
+	Settings mAnalysisSettings;										///< Settings used for analysis
+	std::vector<std::unique_ptr<ReachTreeNode<State>>> mReachTree;	///< Forest of ReachTrees computed
 };
 
 }  // namespace hypro
