@@ -1,8 +1,13 @@
 #pragma once
+
+#include <iostream>
 #include <vector>
 
 namespace hypro {
 
+/**
+ * @brief Struct representing a subspace decomposition of a hybrid automaton
+ */
 struct Decomposition {
 	std::vector<std::vector<std::size_t>> mDecomposition;
 
@@ -16,5 +21,8 @@ struct Decomposition {
 	std::vector<std::vector<std::size_t>>::iterator end() { return mDecomposition.end(); }
 	std::vector<std::vector<std::size_t>>::const_iterator end() const { return mDecomposition.end(); }
 };
+
+/// outstream operator
+std::ostream& operator<<( std::ostream& out, const Decomposition& decomposition );
 
 }  // namespace hypro

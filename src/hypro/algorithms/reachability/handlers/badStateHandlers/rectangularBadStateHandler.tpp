@@ -3,8 +3,6 @@
 namespace hypro {
 template <typename State>
 std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton ) {
-	auto& vpool = hypro::VariablePool::getInstance();
-
 	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getLocalBadStates().size() << " local bad states." );
 	auto localBadState = automaton.getLocalBadStates().find( stateSet.getLocation() );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
@@ -22,7 +20,7 @@ std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateS
 
 		// process containment information
 		if ( !resultingSet.empty() ) {
-			DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << mContainment << ")" );
+			DEBUG( "hydra.worker", "Intersection with local bad states." );
 			return std::make_pair( CONTAINMENT::YES, resultingSet );
 		}
 	}
