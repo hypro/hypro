@@ -1,3 +1,4 @@
+#!/bin/bash
 TOOL_PATH=../../build/bin/hydra
 
 run_benchmark() {
