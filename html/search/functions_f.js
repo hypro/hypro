@@ -2,6 +2,8 @@ var searchData=
 [
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1_point.html#a6043b600ceea75a32970ab2939027ac1',1,'hypro::Point']]],
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html#af91b99cf64b956259347ba1595d0ad4d',1,'hypro::ReachabilitySettings']]],
+  ['rectangularanalyzer',['RectangularAnalyzer',['../classhypro_1_1_rectangular_analyzer.html#a944f8a795ade0b26abe2b9362f24e50c',1,'hypro::RectangularAnalyzer::RectangularAnalyzer()=delete'],['../classhypro_1_1_rectangular_analyzer.html#a3de280c34125071b0e23273495eae81a',1,'hypro::RectangularAnalyzer::RectangularAnalyzer(const HybridAutomaton&lt; Number &gt; &amp;ha, const Settings &amp;setting)']]],
+  ['rectangularworker',['RectangularWorker',['../classhypro_1_1_rectangular_worker.html#ac88809c07f542e2c0b1ea42fa1484319',1,'hypro::RectangularWorker']]],
   ['reduce',['reduce',['../classhypro_1_1_hybrid_automaton.html#a18ace72be9084ee3df5c54aead596737',1,'hypro::HybridAutomaton']]],
   ['reduced',['reduced',['../classhypro_1_1_v_polytope_t.html#a7f1d3b3c38761d773df2acc4e5961ffc',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1_point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],
@@ -21,5 +23,6 @@ var searchData=
   ['ridge',['Ridge',['../classhypro_1_1_ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
   ['rpoint',['rPoint',['../classhypro_1_1_vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
   ['rsettings',['rSettings',['../classhypro_1_1_plotter.html#a02a94273e330fcd5ced4216cf10b9c40',1,'hypro::Plotter']]],
+  ['run',['run',['../classhypro_1_1_rectangular_analyzer.html#a7e113f483e0cf18fc225e48f065608a3',1,'hypro::RectangularAnalyzer']]],
   ['rvertices',['rVertices',['../classhypro_1_1_ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge']]]
 ];

@@ -13,5 +13,6 @@ var searchData=
   ['translatehsv',['translateHsv',['../classhypro_1_1_convex_hull.html#ad3a6390cab0ea7170b8f15d88d973368',1,'hypro::ConvexHull']]],
   ['translatetoinduced',['translateToInduced',['../classhypro_1_1_grid.html#a42a0df930a61a02a5503ef8aadec59f4',1,'hypro::Grid']]],
   ['translatetooriginal',['translateToOriginal',['../classhypro_1_1_grid.html#aae5bcfe25d1546fb8e6601bc2a5aed63',1,'hypro::Grid']]],
+  ['treenode',['TreeNode',['../classhypro_1_1_tree_node.html#a8fa66e94c071fb175863a3e510a20404',1,'hypro::TreeNode::TreeNode()'],['../classhypro_1_1_tree_node.html#a34f2f8edb30a74da49751542341180f3',1,'hypro::TreeNode::TreeNode(unsigned _depth, const std::vector&lt; Data * &gt; &amp;_children, Data *_parent)']]],
   ['type',['type',['../classhypro_1_1_halfspace.html#a79c4f5b77a363c2265dc048332995cee',1,'hypro::Halfspace::type()'],['../classhypro_1_1_v_polytope_t.html#ad2446979de7c30dcbb3232880421fe01',1,'hypro::VPolytopeT::type()'],['../classhypro_1_1_support_function_new_t.html#a70d8b60218e23af9cda07a75bda81032',1,'hypro::SupportFunctionNewT::type()']]]
 ];

@@ -128,60 +128,42 @@ $(document).ready(function(){initNavTree('classhypro_1_1rectangular_guard_handle
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae2334bb4139f0081b53a184b835b9a8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2334bb4139f0081b53a184b835b9a8c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>rectangularGuardHandler</b> (std::shared_ptr&lt; State &gt; state, size_t index, <a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
-<tr class="separator:ae2334bb4139f0081b53a184b835b9a8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e17a0707de9e7b64bcfdc9987b6b1c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3e17a0707de9e7b64bcfdc9987b6b1c1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()</td></tr>
-<tr class="separator:a3e17a0707de9e7b64bcfdc9987b6b1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae80a3b48efef2bbddbe65d63247d7f61"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae80a3b48efef2bbddbe65d63247d7f61"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()</td></tr>
-<tr class="separator:ae80a3b48efef2bbddbe65d63247d7f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e534844cc5e88146ff7bbc9aa30dc6f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e534844cc5e88146ff7bbc9aa30dc6f"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesGuard</b> () override</td></tr>
-<tr class="separator:a7e534844cc5e88146ff7bbc9aa30dc6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a361d62f8bca062ad699c8c04a59d20ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a361d62f8bca062ad699c8c04a59d20ac"></a>
-virtual std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getState</b> () override</td></tr>
-<tr class="separator:a361d62f8bca062ad699c8c04a59d20ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa834be99c44082ced03570567cd8109"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afa834be99c44082ced03570567cd8109"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setState</b> (std::shared_ptr&lt; State &gt; ptr) override</td></tr>
-<tr class="separator:afa834be99c44082ced03570567cd8109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a478cb7f42c01010019aeb1c4334418e2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a478cb7f42c01010019aeb1c4334418e2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>rectangularGuardHandler</b> (<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
+<tr class="separator:a478cb7f42c01010019aeb1c4334418e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53f6cfa30d112464697694332635841b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53f6cfa30d112464697694332635841b"></a>
+<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const State &amp;state)</td></tr>
+<tr class="separator:a53f6cfa30d112464697694332635841b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac48755596c919a8dd2f07126d9a066c5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac48755596c919a8dd2f07126d9a066c5"></a>
+<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getGuardContainment</b> ()</td></tr>
+<tr class="separator:ac48755596c919a8dd2f07126d9a066c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a177897970f2f697128eafc27176f5bc6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a177897970f2f697128eafc27176f5bc6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>guardSatisfied</b> ()</td></tr>
+<tr class="separator:a177897970f2f697128eafc27176f5bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aff51d05f188cb6e04ae6c0e1bc322d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9aff51d05f188cb6e04ae6c0e1bc322d"></a>
+const State &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getState</b> ()</td></tr>
+<tr class="separator:a9aff51d05f188cb6e04ae6c0e1bc322d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a896d5f820f6b114b3c7da74126eeb73a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a896d5f820f6b114b3c7da74126eeb73a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setState</b> (const State &amp;state)</td></tr>
+<tr class="separator:a896d5f820f6b114b3c7da74126eeb73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1588962497f1a02173a9a2d2cdf5402"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1588962497f1a02173a9a2d2cdf5402"></a>
+<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionPtr</b> ()</td></tr>
+<tr class="separator:ac1588962497f1a02173a9a2d2cdf5402"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e980142b862938ea226a3a1d411a9fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e980142b862938ea226a3a1d411a9fb"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reinitialize</b> ()</td></tr>
 <tr class="separator:a9e980142b862938ea226a3a1d411a9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a379fe7c760e02e2ee6e8d0b0353331f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a379fe7c760e02e2ee6e8d0b0353331f4"></a>
-virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getSortIndex</b> () override</td></tr>
-<tr class="separator:a379fe7c760e02e2ee6e8d0b0353331f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a011f0166a2344d8a2b4d7c4d4423e206"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a011f0166a2344d8a2b4d7c4d4423e206"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setSortIndex</b> (double sortIndex) override</td></tr>
-<tr class="separator:a011f0166a2344d8a2b4d7c4d4423e206"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83810352045a3fa76649581088f78aaa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83810352045a3fa76649581088f78aaa"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getMarkedForDelete</b> () override</td></tr>
-<tr class="separator:a83810352045a3fa76649581088f78aaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3869f822191b58761db72c4758288e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3869f822191b58761db72c4758288e0"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setMarkedForDelete</b> (bool toDelete) override</td></tr>
-<tr class="separator:ac3869f822191b58761db72c4758288e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a3188a51df33bfc90466802e4ad26575e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3188a51df33bfc90466802e4ad26575e"></a>
-<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mContainment</b> = CONTAINMENT::NO</td></tr>
+<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mContainment</b> = CONTAINMENT::BOT</td></tr>
 <tr class="separator:a3188a51df33bfc90466802e4ad26575e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9b334db8107c544b540a1bf90d13af5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9b334db8107c544b540a1bf90d13af5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mMarkedForDelete</b> = false</td></tr>
-<tr class="separator:aa9b334db8107c544b540a1bf90d13af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82af53769d2f930666973bf2217b1642"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82af53769d2f930666973bf2217b1642"></a>
-std::shared_ptr&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mState</b></td></tr>
-<tr class="separator:a82af53769d2f930666973bf2217b1642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a238735cec47154920b56833b074ce96c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a238735cec47154920b56833b074ce96c"></a>
+State&#160;</td><td class="memItemRight" valign="bottom"><b>mState</b></td></tr>
+<tr class="separator:a238735cec47154920b56833b074ce96c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d351bdb1d1c47b0805cdf50d846d9f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16d351bdb1d1c47b0805cdf50d846d9f"></a>
-<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mTransition</b></td></tr>
+<a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mTransition</b> = nullptr</td></tr>
 <tr class="separator:a16d351bdb1d1c47b0805cdf50d846d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e56d64dab844500415fd0b922fc5b24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e56d64dab844500415fd0b922fc5b24"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mIndex</b></td></tr>
-<tr class="separator:a4e56d64dab844500415fd0b922fc5b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9da99dbf53a5b15434bad051932a7db5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9da99dbf53a5b15434bad051932a7db5"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>mSortIndex</b></td></tr>
-<tr class="separator:a9da99dbf53a5b15434bad051932a7db5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />

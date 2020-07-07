@@ -155,19 +155,13 @@ var hierarchy =
       [ "hypro::RectangularContext< State >", "classhypro_1_1_rectangular_context.html", null ]
     ] ],
     [ "hypro::IHandler", "classhypro_1_1_i_handler.html", [
-      [ "hypro::IBadStateHandler", "classhypro_1_1_i_bad_state_handler.html", [
-        [ "hypro::rectangularBadStateHandler< State >", "classhypro_1_1rectangular_bad_state_handler.html", null ]
-      ] ],
+      [ "hypro::IBadStateHandler", "classhypro_1_1_i_bad_state_handler.html", null ],
       [ "hypro::IFirstSegmentHandler< State >", "classhypro_1_1_i_first_segment_handler.html", [
         [ "hypro::rectangularFirstSegmentHandler< State >", "classhypro_1_1rectangular_first_segment_handler.html", null ],
         [ "hypro::TPolyFirstSegmentHandler< State >", "classhypro_1_1_t_poly_first_segment_handler.html", null ]
       ] ],
-      [ "hypro::IGuardHandler< State >", "classhypro_1_1_i_guard_handler.html", [
-        [ "hypro::rectangularGuardHandler< State >", "classhypro_1_1rectangular_guard_handler.html", null ]
-      ] ],
-      [ "hypro::IInvariantHandler", "classhypro_1_1_i_invariant_handler.html", [
-        [ "hypro::rectangularInvariantHandler< State >", "classhypro_1_1rectangular_invariant_handler.html", null ]
-      ] ],
+      [ "hypro::IGuardHandler< State >", "classhypro_1_1_i_guard_handler.html", null ],
+      [ "hypro::IInvariantHandler", "classhypro_1_1_i_invariant_handler.html", null ],
       [ "hypro::IJumpHandler", "classhypro_1_1_i_jump_handler.html", null ],
       [ "hypro::IResetHandler", "classhypro_1_1_i_reset_handler.html", [
         [ "hypro::ltiResetHandler< State >", "classhypro_1_1lti_reset_handler.html", [
@@ -178,7 +172,6 @@ var hierarchy =
       ] ],
       [ "hypro::ITimeEvolutionHandler", "classhypro_1_1_i_time_evolution_handler.html", [
         [ "hypro::discreteTimeEvolutionHandler", "classhypro_1_1discrete_time_evolution_handler.html", null ],
-        [ "hypro::rectangularTimeEvolutionHandler< State >", "classhypro_1_1rectangular_time_evolution_handler.html", null ],
         [ "hypro::TPolyTimeEvolutionHandler< State >", "classhypro_1_1_t_poly_time_evolution_handler.html", null ]
       ] ]
     ] ],
@@ -266,6 +259,7 @@ var hierarchy =
     [ "hypro::PolynomialODE< Number >", "classhypro_1_1_polynomial_o_d_e.html", null ],
     [ "hypro::PolytopeSetting", "structhypro_1_1_polytope_setting.html", null ],
     [ "hypro::PolytopeSupportFunction< Number, Setting >", "classhypro_1_1_polytope_support_function.html", null ],
+    [ "hypro::PreprocessingInformation", "namespacehypro.html#structhypro_1_1_preprocessing_information", null ],
     [ "hypro::PrincipalComponentAnalysis< Number >", "classhypro_1_1_principal_component_analysis.html", null ],
     [ "hypro::projectionContent< Number, Setting >", "structhypro_1_1projection_content.html", null ],
     [ "hypro::QuickhullAlgorithm< Number, Euclidian, typename >", "namespacehypro.html#classhypro_1_1_quickhull_algorithm", null ],
@@ -273,8 +267,14 @@ var hierarchy =
     [ "hypro::Range< Number >", "classhypro_1_1_range.html", null ],
     [ "hypro::ReachabilitySettings", "structhypro_1_1_reachability_settings.html", null ],
     [ "hypro::ReachTree< State >", "classhypro_1_1_reach_tree.html", null ],
+    [ "hypro::RectangularAnalyzer< State >", "classhypro_1_1_rectangular_analyzer.html", null ],
+    [ "hypro::rectangularBadStateHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_bad_state_handler", null ],
     [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangular_flow.html", null ],
     [ "hypro::rectangularFlow< N >", "classhypro_1_1rectangular_flow.html", null ],
+    [ "hypro::rectangularGuardHandler< State >", "classhypro_1_1rectangular_guard_handler.html", null ],
+    [ "hypro::rectangularInvariantHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_invariant_handler", null ],
+    [ "hypro::rectangularTimeEvolutionHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_time_evolution_handler", null ],
+    [ "hypro::RectangularWorker< State >", "classhypro_1_1_rectangular_worker.html", null ],
     [ "hypro::RefinementSetting< State >", "structhypro_1_1_refinement_setting.html", null ],
     [ "hypro::RepresentationCombinations< Representation, Settings >", "namespacehypro.html#structhypro_1_1_representation_combinations", null ],
     [ "hypro::Reset< Number >", "classhypro_1_1_reset.html", null ],

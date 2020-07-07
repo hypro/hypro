@@ -1,5 +1,10 @@
 var NAVTREEINDEX3 =
 {
+"classhypro_1_1_difference_bounds_t_1_1_d_b_m_entry.html#ac7f3e4f9dc2ef63c061918ac993a6d55":[6,1,2,0,8],
+"classhypro_1_1_difference_bounds_t_1_1_d_b_m_entry.html#ad493824d4e946ad9f9fc42eb88c06154":[6,1,2,0,9],
+"classhypro_1_1_difference_bounds_t_1_1_d_b_m_entry.html#ad87bfc0e4dc2db52d9f02e08f08fac54":[6,1,2,0,5],
+"classhypro_1_1_difference_bounds_t_1_1_d_b_m_entry.html#ae3a3b2586883f504111ecf41538dba5f":[6,1,2,0,6],
+"classhypro_1_1_domain.html":[8,0,2,46],
 "classhypro_1_1_domain.html#a373ddf059267721032c119344b2a1869":[8,0,2,46,0],
 "classhypro_1_1_domain.html#a4177cc98abc40922d1805b1911463e93":[8,0,2,46,10],
 "classhypro_1_1_domain.html#a4aab6280649f2f51ab5ed9b886147c30":[8,0,2,46,6],
@@ -244,10 +249,5 @@ var NAVTREEINDEX3 =
 "classhypro_1_1_fourier_motzkin_q_e.html#ab6c196d60a3616cbd5cc7b48d73a4a9b":[8,0,2,66,0],
 "classhypro_1_1_generalized_star_t.html":[6,1,3],
 "classhypro_1_1_generalized_star_t.html#a087fc676f997e94dccc426767c92c6b7":[6,1,3,35],
-"classhypro_1_1_generalized_star_t.html#a1036435cea1d506bdcc8d616de652906":[6,1,3,12],
-"classhypro_1_1_generalized_star_t.html#a2898681c24a90dda4a00ed3c503714cc":[6,1,3,18],
-"classhypro_1_1_generalized_star_t.html#a2b9bbf85398302beac83efd45ec7aa69":[6,1,3,15],
-"classhypro_1_1_generalized_star_t.html#a332408f735c02f15e7f145a9c14aa582":[6,1,3,17],
-"classhypro_1_1_generalized_star_t.html#a43c50e435863ec47856ef2dcefbf1639":[6,1,3,9],
-"classhypro_1_1_generalized_star_t.html#a45d233c5441d35cec32229233a2a907f":[6,1,3,14]
+"classhypro_1_1_generalized_star_t.html#a1036435cea1d506bdcc8d616de652906":[6,1,3,12]
 };

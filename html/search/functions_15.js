@@ -13,6 +13,7 @@ var searchData=
   ['_7estatistician',['~Statistician',['../classhypro_1_1statistics_1_1_statistician.html#a08984d2b7fd321674d2e165dffc0c6cd',1,'hypro::statistics::Statistician']]],
   ['_7esupportfunctionnewt',['~SupportFunctionNewT',['../classhypro_1_1_support_function_new_t.html#a408d0430af3d4ceef395c8fc0c67e53f',1,'hypro::SupportFunctionNewT']]],
   ['_7etransition',['~Transition',['../classhypro_1_1_transition.html#a538386202b6b77ca1e296332931db302',1,'hypro::Transition']]],
+  ['_7etreenode',['~TreeNode',['../classhypro_1_1_tree_node.html#aec5e63a998b66a6f00918360875d7f4a',1,'hypro::TreeNode']]],
   ['_7evertex',['~Vertex',['../classhypro_1_1_vertex.html#a09df1f7c19b8f1696c9027b20e06faaa',1,'hypro::Vertex']]],
   ['_7evpolytopet',['~VPolytopeT',['../classhypro_1_1_v_polytope_t.html#a2c0ebca0e6512fd06572b8c4d16822cf',1,'hypro::VPolytopeT']]],
   ['_7eworkqueuet',['~WorkQueueT',['../classhypro_1_1_work_queue_t.html#a57ee87bd75ed2aa560fc67a9c979f245',1,'hypro::WorkQueueT']]]
