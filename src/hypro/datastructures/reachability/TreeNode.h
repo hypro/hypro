@@ -16,20 +16,20 @@ namespace hypro {
 template <typename Data>
 class TreeNode {
   protected:
-	int mDepth;					   /// depth cache
-	std::vector<Data*> mChildren;  /// children list
-	Data* mParent;				   /// pointer to parent node, nullptr if root.
+	int mDepth;					   ///< depth cache
+	std::vector<Data*> mChildren;  ///< children list
+	Data* mParent = nullptr;	   ///< pointer to parent node, nullptr if root.
 
   public:
 	using Node_t = Data*;
 	using const_Node_t = const Data*;
 	using NodeList_t = std::vector<Data*>;
-
+	/// default constructor
 	TreeNode<Data>()
 		: mDepth( 0 )
 		, mChildren()
 		, mParent( nullptr ) {}
-
+	/// all-initializing constructor
 	TreeNode<Data>( unsigned _depth, const std::vector<Data*>& _children, Data* _parent )
 		: mDepth( _depth )
 		, mChildren( _children )
@@ -48,13 +48,13 @@ class TreeNode {
 		}
 #endif
 	}
-
+	/// destructor
 	~TreeNode() {
 		for ( auto child : mChildren ) {
 			delete child;
 		}
 	}
-
+	/// returns depth of the current node
 	int getDepth() const {
 		if ( this->getParent() == nullptr ) {
 			return -1;
@@ -70,7 +70,7 @@ class TreeNode {
 #endif
 		return mDepth;
 	}
-
+	/// returns depth of the subtree of this node
 	std::size_t getSubtreeDepth() const {
 		if ( getChildren().empty() ) return 0;
 
@@ -81,7 +81,7 @@ class TreeNode {
 		}
 		return maxDepth + 1;
 	}
-
+	/// returns size of the subtree of this node
 	std::size_t getSubtreeSize() const {
 		if ( getChildren().empty() ) return 0;
 
@@ -91,7 +91,7 @@ class TreeNode {
 		}
 		return getChildren().size() + size;
 	}
-
+	/// computes average branching factor of the subtree of this node
 	double getAvgSubtreeBranching() const {
 		if ( getChildren().empty() ) return 0;
 		double res = 0.0;
@@ -107,15 +107,15 @@ class TreeNode {
 		res /= getChildren().size() + 1 - zeroes;
 		return res;
 	}
-
+	/// getter for child nodes
 	const std::vector<Data*>& getChildren() const {
 		return mChildren;
 	}
-
+	/// getter for parent node
 	Data* getParent() const {
 		return mParent;
 	}
-
+	/// sets depth cache directly
 	void setDepth( int _depth ) {
 		mDepth = _depth;
 #ifndef NDEBUG
@@ -132,20 +132,20 @@ class TreeNode {
 		}
 #endif
 	}
-
+	/// adds child node
 	void addChild( Data* child ) {
 		assert( *child->getParent() == *this );
 		// set / update depth
 		child->setDepth( this->getDepth() + 1 );
 		mChildren.push_back( child );
 	}
-
+	/// sets parent node
 	void setParent( Data* parent ) {
 		mParent = parent;
 		// set / update depth
 		mDepth = mParent->getDepth() + 1;
 	}
-
+	/// equal comparison operator
 	friend bool operator==( const TreeNode<Data>& lhs, const TreeNode<Data>& rhs ) {
 		return ( lhs.mDepth == rhs.mDepth && lhs.mParent == rhs.mParent && lhs.mChildren == rhs.mChildren );
 	}
