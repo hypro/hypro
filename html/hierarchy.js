@@ -308,7 +308,6 @@ var hierarchy =
     [ "hypro::Settings", "namespacehypro.html#structhypro_1_1_settings", null ],
     [ "Singleton", null, [
       [ "hypro::ContextFactory< State >", "classhypro_1_1_context_factory.html", null ],
-      [ "hypro::DecisionEntity< Number >", "classhypro_1_1_decision_entity.html", null ],
       [ "hypro::EventTimingProvider< Number >", "classhypro_1_1_event_timing_provider.html", null ],
       [ "hypro::HandlerFactory< State >", "classhypro_1_1_handler_factory.html", null ],
       [ "hypro::NodeManager< State >", "classhypro_1_1_node_manager.html", null ],

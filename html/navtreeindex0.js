@@ -42,9 +42,10 @@ var NAVTREEINDEX0 =
 "_convex_hull_8tpp_source.html":[9,0,1,0,0,0,2],
 "_counter_repository_8h_source.html":[9,0,1,0,3,6,0],
 "_d_a_g_node_8h_source.html":[9,0,1,0,1,1,2],
-"_decision_entity_8h_source.html":[9,0,1,0,1,0,0,0],
-"_decision_entity_8tpp_source.html":[9,0,1,0,1,0,0,1],
-"_decomposition_8h_source.html":[9,0,1,0,1,0,0,3],
+"_decomposition_8cpp_source.html":[9,0,1,0,1,0,0,1],
+"_decomposition_8h_source.html":[9,0,1,0,1,0,0,2],
+"_decomposition_methods_8h_source.html":[9,0,1,0,1,0,0,3],
+"_decomposition_methods_8tpp_source.html":[9,0,1,0,1,0,0,4],
 "_dictionary_8h_source.html":[9,0,1,0,0,0,3],
 "_dictionary_8tpp_source.html":[9,0,1,0,0,0,4],
 "_difference_bounds_8h_source.html":[9,0,1,0,2,3,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "_timed_context_8tpp_source.html":[9,0,1,0,0,4,1,11],
 "_timing_aggregate_8h_source.html":[9,0,1,0,1,1,0,12],
 "_trafo_op_8h_source.html":[9,0,1,0,2,12,11],
-"_trafo_parameters_8h_source.html":[9,0,1,0,0,4,9],
-"_transformation_8h.html":[9,0,1,0,0,1,0]
+"_trafo_parameters_8h_source.html":[9,0,1,0,0,4,9]
 };

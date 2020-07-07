@@ -193,9 +193,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_d_a_g_node.html">DAGNode</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_decision_entity.html">DecisionEntity</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_decomposition.html">Decomposition</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Struct representing a subspace decomposition of a hybrid automaton.  <a href="structhypro_1_1_decomposition.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_dictionary.html">Dictionary</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1101,7 +1100,9 @@ Enumerations</h2></td></tr>
 <b>rectangular</b>, 
 <b>timed</b>, 
 <br />
-&#160;&#160;<b>discrete</b>
+&#160;&#160;<b>discrete</b>, 
+<b>mixed</b>, 
+<b>undefined</b>
 <br />
  }<tr class="memdesc:ade3e42b7b774f60999db5eb776027882"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of dynamics of a flow for a location. <br /></td></tr>
 </td></tr>
@@ -1242,6 +1243,89 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;template&lt; typename, typename &gt; typename Rep, typename Number , typename Settings &gt; </td></tr>
 <tr class="memitem:a50fd3bb2faea4292ff0079cbd508571a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decomposeConstraintSet</b> (Rep&lt; Number, <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &gt; &amp;in, const <a class="el" href="structhypro_1_1_decomposition.html">Decomposition</a> &amp;decomposition, std::vector&lt; Rep&lt; Number, <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &gt;&gt; &amp;result)</td></tr>
 <tr class="separator:a50fd3bb2faea4292ff0079cbd508571a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08156f5b85275501371a85d1138dc489"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a08156f5b85275501371a85d1138dc489"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a08156f5b85275501371a85d1138dc489">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="structhypro_1_1_decomposition.html">Decomposition</a> &amp;decomposition)</td></tr>
+<tr class="memdesc:a08156f5b85275501371a85d1138dc489"><td class="mdescLeft">&#160;</td><td class="mdescRight">outstream operator <br /></td></tr>
+<tr class="separator:a08156f5b85275501371a85d1138dc489"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74452608bcafaba4f2b0f697f2a7ecac"><td class="memTemplParams" colspan="2"><a class="anchor" id="a74452608bcafaba4f2b0f697f2a7ecac"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a74452608bcafaba4f2b0f697f2a7ecac"><td class="memTemplItemLeft" align="right" valign="top">representation_name&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getRepresentationForAutomaton</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha)</td></tr>
+<tr class="separator:a74452608bcafaba4f2b0f697f2a7ecac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f6c131ad416c23d4f885ec39d1c51cf"><td class="memTemplParams" colspan="2"><a class="anchor" id="a5f6c131ad416c23d4f885ec39d1c51cf"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a5f6c131ad416c23d4f885ec39d1c51cf"><td class="memTemplItemLeft" align="right" valign="top">representation_name&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getRepresentationForLocation</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc)</td></tr>
+<tr class="separator:a5f6c131ad416c23d4f885ec39d1c51cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d4a40c6219c38205520cb33d47478ae"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0d4a40c6219c38205520cb33d47478ae"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a0d4a40c6219c38205520cb33d47478ae"><td class="memTemplItemLeft" align="right" valign="top">representation_name&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getRepresentationForSubspace</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc, size_t index)</td></tr>
+<tr class="separator:a0d4a40c6219c38205520cb33d47478ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d135fd9e1961ce20d519b5b7a36e3ef"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a2d135fd9e1961ce20d519b5b7a36e3ef"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1_decomposition.html">Decomposition</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a2d135fd9e1961ce20d519b5b7a36e3ef">getSubspaceDecomposition</a> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
+<tr class="separator:a2d135fd9e1961ce20d519b5b7a36e3ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cb993590f4f8bd9445a7e9ec0c81e11"><td class="memTemplParams" colspan="2"><a class="anchor" id="a6cb993590f4f8bd9445a7e9ec0c81e11"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a6cb993590f4f8bd9445a7e9ec0c81e11"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>checkDecomposed</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
+<tr class="separator:a6cb993590f4f8bd9445a7e9ec0c81e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f39d8ed15a1f3b9aec28d4fd2d35f6b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a4f39d8ed15a1f3b9aec28d4fd2d35f6b"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a4f39d8ed15a1f3b9aec28d4fd2d35f6b"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt;, <a class="el" href="structhypro_1_1_decomposition.html">Decomposition</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decomposeAutomaton</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
+<tr class="separator:a4f39d8ed15a1f3b9aec28d4fd2d35f6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a518170b497f39e715d18c68816d09efc"><td class="memTemplParams" colspan="2"><a class="anchor" id="a518170b497f39e715d18c68816d09efc"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a518170b497f39e715d18c68816d09efc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addEdgesForLinTrafo</b> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; linTrafo, boost::adjacency_list&lt; boost::vecS, boost::vecS, boost::undirectedS &gt; &amp;graph)</td></tr>
+<tr class="separator:a518170b497f39e715d18c68816d09efc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1228499fad00598a201a3b839022802b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a1228499fad00598a201a3b839022802b"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a1228499fad00598a201a3b839022802b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addEdgesForAffineTrafo</b> (<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; affineTrafo, boost::adjacency_list&lt; boost::vecS, boost::vecS, boost::undirectedS &gt; &amp;graph)</td></tr>
+<tr class="separator:a1228499fad00598a201a3b839022802b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a782e9924fed0f2364b97572932b4fbfb"><td class="memTemplParams" colspan="2"><a class="anchor" id="a782e9924fed0f2364b97572932b4fbfb"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a782e9924fed0f2364b97572932b4fbfb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addEdgesForCondition</b> (Condition&lt; Number &gt; condition, boost::adjacency_list&lt; boost::vecS, boost::vecS, boost::undirectedS &gt; &amp;graph)</td></tr>
+<tr class="separator:a782e9924fed0f2364b97572932b4fbfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd59b15c4c85cf521e59cdc545b0c85e"><td class="memTemplParams" colspan="2"><a class="anchor" id="acd59b15c4c85cf521e59cdc545b0c85e"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:acd59b15c4c85cf521e59cdc545b0c85e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addEdgesForRectTrafo</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervals, boost::adjacency_list&lt; boost::vecS, boost::vecS, boost::undirectedS &gt; &amp;graph)</td></tr>
+<tr class="separator:acd59b15c4c85cf521e59cdc545b0c85e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2ef794d7adc0a72c20f048321575a4e"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa2ef794d7adc0a72c20f048321575a4e"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:aa2ef794d7adc0a72c20f048321575a4e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addEdgesForRectMap</b> (const std::map&lt; carl::Variable, carl::Interval&lt; Number &gt;&gt; &amp;map, boost::adjacency_list&lt; boost::vecS, boost::vecS, boost::undirectedS &gt; &amp;graph)</td></tr>
+<tr class="separator:aa2ef794d7adc0a72c20f048321575a4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b18569f0884a83ac3247ef5e48a15a8"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0b18569f0884a83ac3247ef5e48a15a8"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a0b18569f0884a83ac3247ef5e48a15a8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isTimedAutomaton</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha)</td></tr>
+<tr class="separator:a0b18569f0884a83ac3247ef5e48a15a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c9c0086a5481d5bb82209e83023396"><td class="memTemplParams" colspan="2"><a class="anchor" id="a25c9c0086a5481d5bb82209e83023396"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a25c9c0086a5481d5bb82209e83023396"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isRectangularAutomaton</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha)</td></tr>
+<tr class="separator:a25c9c0086a5481d5bb82209e83023396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a247d53a7369ec70137b670af1e3b5490"><td class="memTemplParams" colspan="2"><a class="anchor" id="a247d53a7369ec70137b670af1e3b5490"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a247d53a7369ec70137b670af1e3b5490"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isTimedLocation</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc)</td></tr>
+<tr class="separator:a247d53a7369ec70137b670af1e3b5490"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f58db1fe13cac59b8bf2e9b799913bc"><td class="memTemplParams" colspan="2"><a class="anchor" id="a4f58db1fe13cac59b8bf2e9b799913bc"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a4f58db1fe13cac59b8bf2e9b799913bc"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isRectangularLocation</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc)</td></tr>
+<tr class="separator:a4f58db1fe13cac59b8bf2e9b799913bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98d480b5bd408a9338cd39e9b17585d9"><td class="memTemplParams" colspan="2"><a class="anchor" id="a98d480b5bd408a9338cd39e9b17585d9"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a98d480b5bd408a9338cd39e9b17585d9"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isTimedSubspace</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc, size_t index)</td></tr>
+<tr class="separator:a98d480b5bd408a9338cd39e9b17585d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bebb9a5aa0db9cdf9b93199b8c7faa7"><td class="memTemplParams" colspan="2"><a class="anchor" id="a1bebb9a5aa0db9cdf9b93199b8c7faa7"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a1bebb9a5aa0db9cdf9b93199b8c7faa7"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isRectangularSubspace</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc, size_t index)</td></tr>
+<tr class="separator:a1bebb9a5aa0db9cdf9b93199b8c7faa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a614358552578d2f57a70b0710b8279f8"><td class="memTemplParams" colspan="2"><a class="anchor" id="a614358552578d2f57a70b0710b8279f8"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a614358552578d2f57a70b0710b8279f8"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isDiscreteSubspace</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;loc, size_t index)</td></tr>
+<tr class="separator:a614358552578d2f57a70b0710b8279f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8c28fcf467153f5e97550bae1860feb"><td class="memTemplParams" colspan="2"><a class="anchor" id="ad8c28fcf467153f5e97550bae1860feb"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:ad8c28fcf467153f5e97550bae1860feb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882">DynamicType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getDynamicType</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
+<tr class="separator:ad8c28fcf467153f5e97550bae1860feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f7f506e024376881330dfe74f2a5c3c"><td class="memTemplParams" colspan="2"><a class="anchor" id="a4f7f506e024376881330dfe74f2a5c3c"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a4f7f506e024376881330dfe74f2a5c3c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882">DynamicType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getDynamicType</b> (const <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; &amp;location)</td></tr>
+<tr class="separator:a4f7f506e024376881330dfe74f2a5c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a877d582d8092e49ca549532b989dc7"><td class="memTemplParams" colspan="2"><a class="anchor" id="a3a877d582d8092e49ca549532b989dc7"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3a877d582d8092e49ca549532b989dc7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882">DynamicType</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getFlowType</b> (const T &amp;f)</td></tr>
@@ -3128,6 +3212,29 @@ template&lt;typename Number &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The spanned dimension. </dd></dl>
 
 <p>Definition at line <a class="el" href="_point_8h_source.html#l00647">647</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2d135fd9e1961ce20d519b5b7a36e3ef"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1_decomposition.html">Decomposition</a> hypro::getSubspaceDecomposition </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>automaton</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>decomposed the given space into a set of set of variables. Each of the variable sets indicate dependent variables </p>
+
+<p>Definition at line <a class="el" href="_decomposition_methods_8tpp_source.html#l00334">334</a> of file <a class="el" href="_decomposition_methods_8tpp_source.html">DecompositionMethods.tpp</a>.</p>
+
+<p>References <a class="el" href="_hybrid_automaton_8tpp_source.html#l00280">hypro::HybridAutomaton&lt; Number &gt;::decompose()</a>, <a class="el" href="_hybrid_automaton_8tpp_source.html#l00188">hypro::HybridAutomaton&lt; Number &gt;::dimension()</a>, <a class="el" href="_hybrid_automaton_8h_source.html#l00116">hypro::HybridAutomaton&lt; Number &gt;::getGlobalBadStates()</a>, <a class="el" href="_hybrid_automaton_8h_source.html#l00114">hypro::HybridAutomaton&lt; Number &gt;::getLocalBadStates()</a>, <a class="el" href="_hybrid_automaton_8tpp_source.html#l00146">hypro::HybridAutomaton&lt; Number &gt;::getLocations()</a>, and <a class="el" href="_hybrid_automaton_8tpp_source.html#l00177">hypro::HybridAutomaton&lt; Number &gt;::getTransitions()</a>.</p>
 
 </div>
 </div>

@@ -3,7 +3,6 @@ var searchData=
   ['dagnode',['DAGNode',['../classhypro_1_1_d_a_g_node.html',1,'hypro']]],
   ['dagnode_3c_20eventtimingnode_3c_20number_20_3e_20_3e',['DAGNode&lt; EventTimingNode&lt; Number &gt; &gt;',['../classhypro_1_1_d_a_g_node.html',1,'hypro']]],
   ['dbmentry',['DBMEntry',['../classhypro_1_1_difference_bounds_t_1_1_d_b_m_entry.html',1,'hypro::DifferenceBoundsT']]],
-  ['decisionentity',['DecisionEntity',['../classhypro_1_1_decision_entity.html',1,'hypro']]],
   ['decomposition',['Decomposition',['../structhypro_1_1_decomposition.html',1,'hypro']]],
   ['dictionary',['Dictionary',['../classhypro_1_1_dictionary.html',1,'hypro']]],
   ['differenceboundssetting',['DifferenceBoundsSetting',['../namespacehypro.html#structhypro_1_1_difference_bounds_setting',1,'hypro']]],

@@ -59,7 +59,7 @@ var searchData=
   ['getpredecessorindimension',['getPredecessorInDimension',['../classhypro_1_1_point.html#a90ed65a1520fd9e9d8e837192213ffda',1,'hypro::Point::getPredecessorInDimension(const carl::Variable &amp;_d) const '],['../classhypro_1_1_point.html#ae94be93b2063a385dc83120b7033c5bd',1,'hypro::Point::getPredecessorInDimension(unsigned _d) const ']]],
   ['getroot',['getRoot',['../classhypro_1_1_support_function_new_t.html#aae1981a346ad948da25879d409646c24',1,'hypro::SupportFunctionNewT']]],
   ['getsettings',['getSettings',['../classhypro_1_1_support_function_new_t.html#a3eb1f83039f104dfa1b3c3cfc52f776c',1,'hypro::SupportFunctionNewT']]],
-  ['getsubspacedecomposition',['getSubspaceDecomposition',['../classhypro_1_1_decision_entity.html#a94aa2d360ceea7af839ab8683b372d40',1,'hypro::DecisionEntity']]],
+  ['getsubspacedecomposition',['getSubspaceDecomposition',['../namespacehypro.html#a2d135fd9e1961ce20d519b5b7a36e3ef',1,'hypro']]],
   ['getsubtreedepth',['getSubtreeDepth',['../classhypro_1_1_tree_node.html#a1ead1ef0a3be00a57fa0acdea4da6da8',1,'hypro::TreeNode']]],
   ['getsubtreesize',['getSubtreeSize',['../classhypro_1_1_tree_node.html#a28ce02959783c660f0cbdb1de5b1a310',1,'hypro::TreeNode']]],
   ['getsuccessorcount',['getSuccessorCount',['../classhypro_1_1_timing_aggregate.html#a1b8668292ace3c3978e44b9046da03da',1,'hypro::TimingAggregate']]],

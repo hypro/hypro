@@ -59,7 +59,6 @@ var namespacehypro =
     [ "Converter", "classhypro_1_1_converter.html", "classhypro_1_1_converter" ],
     [ "ConvexHull", "classhypro_1_1_convex_hull.html", "classhypro_1_1_convex_hull" ],
     [ "DAGNode", "classhypro_1_1_d_a_g_node.html", "classhypro_1_1_d_a_g_node" ],
-    [ "DecisionEntity", "classhypro_1_1_decision_entity.html", "classhypro_1_1_decision_entity" ],
     [ "Decomposition", "structhypro_1_1_decomposition.html", "structhypro_1_1_decomposition" ],
     [ "Dictionary", "classhypro_1_1_dictionary.html", "classhypro_1_1_dictionary" ],
     [ "DifferenceBoundsSetting", "namespacehypro.html#structhypro_1_1_difference_bounds_setting", null ],
