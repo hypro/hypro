@@ -9,6 +9,9 @@ build
 *.lo
 *.Plo
 *.log
+*.plt
+*.png
+*.csv
 src/hypro/flags.h
 src/resources/glpk-4.45/
 *.sublime-*

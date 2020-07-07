@@ -96,7 +96,7 @@ IGuardHandler<State>* HandlerFactory<State>::buildGuardHandler( representation_n
 		// no constraints for this subspace
 		return nullptr;
 	}
-
+	/*
 	if ( noFlow ) {
 		return new discreteGuardHandler<State>( state, index, transition );
 	}
@@ -111,6 +111,7 @@ IGuardHandler<State>* HandlerFactory<State>::buildGuardHandler( representation_n
 		default:
 			return new ltiGuardHandler<State>( state, index, transition );
 	}
+	*/
 	assert( false && "SHOULD NEVER REACH THIS" );
 	return nullptr;
 }
@@ -144,20 +145,20 @@ ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler( r
 			//return new rectangularTimeEvolutionHandler<State>( state, index, std::get<rectangularFlow<Number>>( flow ) );
 		}
 		case representation_name::polytope_t: {
-			auto tmp = std::get<affineFlow<typename State::NumberType>>(flow);
-			if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().cols())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+			auto tmp = std::get<affineFlow<typename State::NumberType>>( flow );
+			if ( tmp.getFlowMatrix().isApprox( matrix_t<Number>::Identity( tmp.getFlowMatrix().rows(), tmp.getFlowMatrix().cols() ) ) && tmp.getTranslation() == vector_t<Number>::Zero( tmp.getFlowMatrix().rows() ) ) {
 				return nullptr;
 			}
-			return new TPolyTimeEvolutionHandler<State>(state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation());
+			return new TPolyTimeEvolutionHandler<State>( state, index, timeStep, tmp.getFlowMatrix(), tmp.getTranslation() );
 		}
 		default:
-			auto tmp = std::get<affineFlow<typename State::NumberType>>(flow);
-			if(tmp.getFlowMatrix().isApprox(matrix_t<Number>::Identity(tmp.getFlowMatrix().rows(),tmp.getFlowMatrix().rows())) && tmp.getTranslation() == vector_t<Number>::Zero(tmp.getFlowMatrix().rows())){
+			auto tmp = std::get<affineFlow<typename State::NumberType>>( flow );
+			if ( tmp.getFlowMatrix().isApprox( matrix_t<Number>::Identity( tmp.getFlowMatrix().rows(), tmp.getFlowMatrix().rows() ) ) && tmp.getTranslation() == vector_t<Number>::Zero( tmp.getFlowMatrix().rows() ) ) {
 				return nullptr;
 			}
 			//return new ltiTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());
 	}
-	assert(false && "SHOULD NEVER REACH THIS");
+	assert( false && "SHOULD NEVER REACH THIS" );
 	return nullptr;
 }
 
@@ -210,7 +211,9 @@ IJumpHandler* HandlerFactory<State>::buildDiscreteSuccessorHandler( std::vector<
 																	WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
 																	const EventTimingContainer<typename State::NumberType>& timings ) {
 	//return new ltiJumpHandler<State>( successorBuffer, task, transition, sPars, localQueue, localCEXQueue, timings );
-	return new ltiJumpHandler<State>();
+
+	//return new ltiJumpHandler<State>();
+	return nullptr;
 }
 
 }  // namespace hypro

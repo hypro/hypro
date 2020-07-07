@@ -17,7 +17,7 @@ modes			: 'modes' '{' location* '}' ;
 
 location 		: VARIABLE '{' activities invariants* '}' ;
 
-activities 		: (POLY ODE NUMBER | LINEAR ODE) '{' (equation | intervalexpr)* '}' ;
+activities 		: (POLY | LINEAR | NONLINEAR | NONPOLY | LTI) ODE NUMBER* '{' (equation | intervalexpr)* '}' ;
 
 invariants		: 'inv' '{' constrset? '}' ;
 
@@ -26,6 +26,12 @@ invariants		: 'inv' '{' constrset? '}' ;
 POLY  			: 'poly' ;
 
 LINEAR 			: 'linear' ;
+
+NONLINEAR       : 'nonlinear' ;
+
+NONPOLY         : 'nonpoly' ;
+
+LTI             : 'lti' ; 
 
 ODE 			: 'ode' ;
 

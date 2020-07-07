@@ -42,7 +42,7 @@ constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 };
 
 /////////////////// JAVA FOR TESTING //////////////////
-//
+
 //@lexer::members {
 //	private boolean parsingConstants = false;
 //}
@@ -72,12 +72,17 @@ constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 /////////////////// Parser Rules /////////////////////
 
 connector 			: PLUS | MINUS ;
-term 				: (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
+term 				: MINUS? (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
 polynom				: connector* term (connector+ term)* ;
-interval 			: '[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']' ;
 
-equation 			: VARIABLE EQUALS polynom (connector interval)?;
-constraint			: polynom (BOOLRELATION | EQUALS) polynom;
+//TODO: Upgrade to newest antlr version to get rid of left-recursiveness of expression grammar.
+//If we do that we can just write expr: expr PLUS expr | expr MINUS expr | ...
+
+expression			: polynom | (term TIMES)? '(' expression (connector expression)* ')' ((TIMES | DIVIDE) term)? ;
+
+equation 			: VARIABLE EQUALS expression (connector interval)?;
+constraint			: expression (BOOLRELATION | EQUALS) expression;
+interval 			: '[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']' ;
 intervalexpr		: VARIABLE IN interval;
 constrset	 		: ((constraint | intervalexpr)+ | TRUE | FALSE) ;
 
@@ -107,10 +112,13 @@ BOOLRELATION		: '<=' | '>=' | '<' | '>' ;
 PLUS				: '+' ;
 MINUS 				: '-' ;
 TIMES				: '*' ;
+DIVIDE				: '/' ;
 SBOPEN				: '[' ;
 SBCLOSE 			: ']' ;
 CBOPEN 				: '{' ;
 CBCLOSE 			: '}' { if(parsingConstants){ parsingConstants = false; } };
+RBOPEN				: '(' ;
+RBCLOSE 			: ')' ;
 COMMA 				: ',' ;
 
 fragment UPPERCASE	: [A-Z] ;

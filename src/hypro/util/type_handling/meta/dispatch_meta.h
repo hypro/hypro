@@ -24,6 +24,7 @@ struct TypeMapping<R<N, C, Setting>> {
 	}
 };
 
+/// Recursive dispatch to find correct representation
 template <class Representation, class... Representations>
 struct Dispatcher_i {
 	template <class Callable, class... Args>
@@ -36,6 +37,7 @@ struct Dispatcher_i {
 	}
 };
 
+/// Base case dispatch to find correct representation
 template <class Representation>
 struct Dispatcher_i<Representation> {
 	template <class Callable, class... Args>

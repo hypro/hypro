@@ -28,12 +28,12 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 }
 
 template <typename Number>
-void Plotter<Number>::plot2d() const {
+void Plotter<Number>::plot2d( PLOTTYPE outformat ) const {
 	std::size_t cnt = 0;
 	std::string filename = mSettings.filename;
 	std::string title = mSettings.name;
 	if ( !mSettings.overwriteFiles ) {
-		while ( file_exists( filename + "_pdf.plt" ) ) {
+		while ( file_exists( filename + "_" + plotting::to_string( outformat ) + ".plt" ) ) {
 			std::stringstream ss;
 			ss << mSettings.filename << "-" << cnt;
 			//title = ss.str();
@@ -43,107 +43,67 @@ void Plotter<Number>::plot2d() const {
 		}
 	}
 
-	mOutfile.open( filename + "_pdf.plt" );
+	mOutfile.open( filename + "_" + plotting::to_string( outformat ) + ".plt" );
 
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {	 // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << title << "\"\n";
+		if ( mSettings.title ) {
+			mOutfile << "set title \"" << mSettings.name << "\"\n";
+		}
 		if ( mSettings.keepAspectRatio ) {
 			mOutfile << "set size square\n";
 		}
-		mOutfile << "set term pdf font ',10'\n";
-		mOutfile << "set output \"" << filename << ".pdf\n";
 
-		writeGnuplot();
+		switch ( outformat ) {
+			case PLOTTYPE::pdf:
+				//mOutfile << "set term pdf font ',10'\n";
+				mOutfile << "set term pdfcairo enhanced crop font ',10'\n";
+				break;
+			case PLOTTYPE::tex:
+				mOutfile << "set terminal lua tikz latex standalone color header \"\\\\usepackage[T1]{fontenc}\\\n\\\\usepackage{mathptmx}\\\n\\\\usepackage{helvet}\\\n\\\\usepackage{amsmath}\"\n";
+				break;
+			case PLOTTYPE::eps:
+				mOutfile << "set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2\n";
+				break;
+			case PLOTTYPE::png:
+				mOutfile << "set terminal png size 1280,800\n";
+				break;
+			default:
+				break;
+		}
+
+		mOutfile << "set output \"" << filename << "." + plotting::to_string( outformat ) + "\n";
+
+		// gen-format has to be written manually
+		if ( outformat != PLOTTYPE::gen ) {
+			writeGnuplot();
+		} else {
+			writeGen();
+		}
 	}
 	mOutfile.close();
 }
 
 template <typename Number>
 void Plotter<Number>::plotTex() const {
-	mOutfile.open( mSettings.filename + "_tex.plt" );
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
-		// preamble
-		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << mSettings.name << "\"\n";
-		if ( mSettings.keepAspectRatio ) {
-			mOutfile << "set size square\n";
-		}
-		mOutfile << "set terminal lua tikz latex standalone color header \"\\\\usepackage[T1]{fontenc}\\\n\\\\usepackage{mathptmx}\\\n\\\\usepackage{helvet}\\\n\\\\usepackage{amsmath}\"\n";
-		mOutfile << "set output \"" << mSettings.filename << ".tex\" \n";
-
-		writeGnuplot();
-	}
-
-	mOutfile.close();
-}
-
-template <typename Number>
-void Plotter<Number>::plotGen() const {
-	prepareObjects();
-
-	mOutfile.open( mSettings.filename + ".gen" );
-
-	if ( !mVectors.empty() ) {
-		// TODO: implement gen file plotting for vectors.
-	}
-
-	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
-		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
-			if ( objectIt->second.size() > 0 ) {
-				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
-					assert( objectIt->second[pointIndex].dimension() == 2 );
-					if ( objectIt->second[pointIndex].dimension() == 0 ) {
-						continue;
-					}
-					mOutfile << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
-					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
-						mOutfile << " " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
-					}
-					mOutfile << "\n";
-				}
-				mOutfile << carl::toDouble( objectIt->second[0].at( 0 ) );
-				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
-					mOutfile << " " << carl::toDouble( objectIt->second[0].at( d ) );
-				}
-				mOutfile << "\n";
-			}
-			mOutfile << "\n\n\n";
-		}
-
-		// create plane functions
-		if ( !mPlanes.empty() ) {
-			// TODO: implement.
-		}
-
-		if ( !mPoints.empty() ) {
-			// TODO: implement.
-		}
-	}
-	mOutfile.close();
+	plot2d( PLOTTYPE::tex );
 }
 
 template <typename Number>
 void Plotter<Number>::plotEps() const {
-	mOutfile.open( mSettings.filename + "_eps.plt" );
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.empty() ) || !mPoints.empty() ) {
-		// preamble
-		mOutfile << "# settings\n";
-		mOutfile << "set title \"" << mSettings.name << "\"\n";
-		if ( mSettings.keepAspectRatio ) {
-			mOutfile << "set size square\n";
-		}
-		mOutfile << "set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2\n";
-		mOutfile << "set output \"" << mSettings.filename << ".eps\" \n";
+	plot2d( PLOTTYPE::eps );
+}
 
-		writeGnuplot();
-	}
+template <typename Number>
+void Plotter<Number>::plotPng() const {
+	plot2d( PLOTTYPE::png );
+}
 
-	std::cout << std::endl
-			  << "Plotted to " << mSettings.filename << "_eps.plt" << std::endl;
-	mOutfile.close();
+template <typename Number>
+void Plotter<Number>::plotGen() const {
+	plot2d( PLOTTYPE::gen );
 }
 
 template <typename Number>
@@ -259,6 +219,7 @@ void Plotter<Number>::init( const std::string& _filename ) {
 
 template <typename Number>
 void Plotter<Number>::writeGnuplot() const {
+	assert( mOutfile.is_open() );
 	prepareObjects();
 	TRACE( "hypro.plotter", "Prepared objects." );
 
@@ -453,6 +414,49 @@ void Plotter<Number>::writeGnuplot() const {
 }
 
 template <typename Number>
+void Plotter<Number>::writeGen() const {
+	assert( mOutfile.is_open() );
+	prepareObjects();
+
+	if ( !mVectors.empty() ) {
+		// TODO: implement gen file plotting for vectors.
+	}
+
+	if ( !mObjects.empty() || !mObjects.begin()->second.empty() || !mPoints.empty() ) {
+		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
+			if ( objectIt->second.size() > 0 ) {
+				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
+					assert( objectIt->second[pointIndex].dimension() == 2 );
+					if ( objectIt->second[pointIndex].dimension() == 0 ) {
+						continue;
+					}
+					mOutfile << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
+					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
+						mOutfile << " " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
+					}
+					mOutfile << "\n";
+				}
+				mOutfile << carl::toDouble( objectIt->second[0].at( 0 ) );
+				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
+					mOutfile << " " << carl::toDouble( objectIt->second[0].at( d ) );
+				}
+				mOutfile << "\n";
+			}
+			mOutfile << "\n\n\n";
+		}
+
+		// create plane functions
+		if ( !mPlanes.empty() ) {
+			// TODO: implement.
+		}
+
+		if ( !mPoints.empty() ) {
+			// TODO: implement.
+		}
+	}
+}
+
+template <typename Number>
 std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<Number>>& _points ) {
 	std::vector<Point<Number>> res;
 	if ( _points.size() < 3 ) {
@@ -469,7 +473,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 		}
 	}
 
-	TRACE("hypro", "points: " << _points);
+	TRACE( "hypro", "points: " << _points );
 
 	// std::cout << "Minimum: " << min.rawCoordinates().transpose() <<
 	// std::endl;
@@ -505,7 +509,7 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 					// we assume to be sorted, so check all angles, which are smaller or
 					// equal for equality -
 					// afterwards simply insert
-					else if ( angle > newAngle ) {  // not equal and smaller -> continue
+					else if ( angle > newAngle ) {	// not equal and smaller -> continue
 													// search (at end, simply insert)
 						++pos;
 						if ( pos == sortedPoints.end() ) {

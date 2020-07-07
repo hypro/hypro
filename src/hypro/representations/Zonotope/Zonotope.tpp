@@ -101,7 +101,7 @@ ZonotopeT<Number, Converter, Setting>::ZonotopeT( const ZonotopeT<Number, Conver
 
 	Eigen::Matrix<Number, 2, 1> center;
 	Eigen::Matrix<Number, 2, Eigen::Dynamic> generators;
-	center = {other.center()( d1 ), other.center()( d2 )};
+	center = { other.center()( d1 ), other.center()( d2 ) };
 
 	generators.resize( Eigen::NoChange, other.size() );
 	generators << other.generators().row( d1 ), other.generators().row( d2 );
@@ -627,9 +627,9 @@ ZonotopeT<Number, Converter, Setting> intersectZonotopeHalfspaceDSearch( const Z
 	res.uniteEqualVectors();
 
 	Number p1 = intersect2d<Number>( res, hp, 1 );
-	Eigen::Matrix<Number, 2, 1> p1Vec = {0, p1};
+	Eigen::Matrix<Number, 2, 1> p1Vec = { 0, p1 };
 	Number p2 = intersect2d<Number>( res, hp, 0 );
-	Eigen::Matrix<Number, 2, 1> p2Vec = {0, p2};
+	Eigen::Matrix<Number, 2, 1> p2Vec = { 0, p2 };
 
 	res = ZonotopeT<Number, Converter, Setting>( ( p1Vec + p2Vec ) / 2, ( p1Vec - p2Vec ) / 2 );
 	return res;
@@ -653,7 +653,7 @@ static ZonotopeT<Number, Converter, Setting> intersectZonotopeHalfspace( Zonotop
 
 		xhp.row( 1 ) << ( minVecY( 1 ) - carl::abs( Number( maxVecY( 1 ) - minVecY( 1 ) ) ) / 10 ),
 			  ( maxVecY( 1 ) + carl::abs( Number( maxVecY( 1 ) - minVecY( 1 ) ) ) / 10 );
-		Eigen::Matrix<Number, 1, 2> eVec = {hp.offset(), hp.offset()};
+		Eigen::Matrix<Number, 1, 2> eVec = { hp.offset(), hp.offset() };
 		xhp.row( 0 ) = ( eVec - hp.normal()( 1 ) * xhp.row( 1 ) ) / hp.normal()( 0 );
 	} else {
 		Eigen::Matrix<Number, 2, 1> minVecX, maxVecX;
@@ -662,7 +662,7 @@ static ZonotopeT<Number, Converter, Setting> intersectZonotopeHalfspace( Zonotop
 
 		xhp.row( 0 ) << ( minVecX( 0 ) - carl::abs( Number( maxVecX( 0 ) - minVecX( 0 ) ) ) / 10 ),
 			  ( maxVecX( 0 ) + carl::abs( Number( maxVecX( 0 ) - minVecX( 0 ) ) ) / 10 );
-		Eigen::Matrix<Number, 1, 2> eVec = {hp.offset(), hp.offset()};
+		Eigen::Matrix<Number, 1, 2> eVec = { hp.offset(), hp.offset() };
 		xhp.row( 1 ) = ( eVec - hp.normal()( 0 ) * xhp.row( 0 ) ) / hp.normal()( 1 );
 	}
 	// Real algorithm starts here
@@ -748,7 +748,7 @@ template <typename Number, typename Converter, typename Setting>
 ZonotopeT<Number, Converter, Setting> intersectAlamo( const ZonotopeT<Number, Converter, Setting> &inputZonotope, const Halfspace<Number> &hp ) {
 	assert( inputZonotope.dimension() == hp.dimension() );
 	// Determine intersect as Zonotope, according to Tabatabaeipour et al., 2013
-	Number sgm = 0;  // could be redundant
+	Number sgm = 0;	 // could be redundant
 	matrix_t<Number> H = inputZonotope.generators();
 	matrix_t<Number> HHT = H * H.transpose();
 	vector_t<Number> center = inputZonotope.center();
@@ -922,13 +922,13 @@ ZonotopeT<Number, Converter, Setting> ZonotopeT<Number, Converter, Setting>::int
 	// qu holds the maximal value one can go into direction of the Halfspace ->
 	// if this is less than the scalar, the
 	// zonotope is fully contained
-	Number qu = dc + zs, qd = dc - zs;  // qd holds the minimal value of the zonotope generators
+	Number qu = dc + zs, qd = dc - zs;	// qd holds the minimal value of the zonotope generators
 										// evaluated into the direction of the
 										// Halfspace (with respect to the center)
 	// Qu and Qd are the offsets of the supporting hyperplanes in direction of the normal vector of the half-space
 	if ( qd <= rhs.offset() ) {		 // the zonotope is below the Halfspace -> there is an
 									 // intersection
-		if ( qu <= rhs.offset() ) {  // the zonotopes maximal evaluation is also below the
+		if ( qu <= rhs.offset() ) {	 // the zonotopes maximal evaluation is also below the
 									 // Halfspace -> it is fully contained
 			result = *this;
 		} else {  // partly contained
@@ -1011,7 +1011,7 @@ std::pair<CONTAINMENT, ZonotopeT<Number, Converter, Setting>> ZonotopeT<Number, 
 	// qu holds the maximal value one can go into direction of the Halfspace ->
 	// if this is less than the scalar, the
 	// zonotope is fully contained
-	Number qu = dc + zs, qd = dc - zs;  // qd holds the minimal value of the zonotope generators
+	Number qu = dc + zs, qd = dc - zs;	// qd holds the minimal value of the zonotope generators
 										// evaluated into the direction of the
 										// Halfspace (with respect to the center)
 	if ( qd <= rhs.offset() ) {			// the zonotope is below the Halfspace -> there is an

@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -44,11 +44,13 @@ public:
 
     virtual antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *context) = 0;
 
-    virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
+    virtual antlrcpp::Any visitExpression(HybridAutomatonParser::ExpressionContext *context) = 0;
 
     virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *context) = 0;
 
     virtual antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *context) = 0;
+
+    virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
 
     virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
 

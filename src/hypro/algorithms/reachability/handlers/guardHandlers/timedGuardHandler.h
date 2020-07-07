@@ -22,8 +22,8 @@ class timedGuardHandler : public ltiGuardHandler<State> {
 	void handle();
 	const char* handlerName() { return "timedGuardHandler"; }
 	// 1+ because standard before timed of same dimension
-	virtual double getSortIndex() override { return this->mSortIndex; }
-	virtual void setSortIndex( double sortIndex ) override { this->mSortIndex = sortIndex; }
+	double getSortIndex() { return this->mSortIndex; }
+	void setSortIndex( double sortIndex ) { this->mSortIndex = sortIndex; }
 };
 }  // namespace hypro
 

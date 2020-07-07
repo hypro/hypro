@@ -42,6 +42,13 @@ enum class REACHABILITY_RESULT {
 	UNKNOWN
 };
 
+enum class PLOTTYPE { pdf,
+					  png,
+					  eps,
+					  gen,
+					  tex,
+					  nset };
+
 /**
  * @brief Enum to represent set states such as empty and universal.
  */

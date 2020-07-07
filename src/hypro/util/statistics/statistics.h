@@ -18,6 +18,10 @@
 namespace hypro {
 namespace statistics {
 
+/**
+ * @brief Class which implements several counters on demand
+ *
+ */
 class Statistician : public carl::Singleton<Statistician> {
 	friend carl::Singleton<Statistician>;
 
@@ -25,20 +29,25 @@ class Statistician : public carl::Singleton<Statistician> {
 	CounterRepository counters;
 
   public:
+	/// destructor
 	~Statistician() {}
 
+	/// adds a counter
 	void add( std::string name ) {
 		counters.add( name );
 	}
 
+	/// getter for counter
 	OperationCounter& get( std::string name ) {
 		return counters.get( name );
 	}
 
+	/// resets all counters
 	void reset() {
 		counters.reset();
 	}
 
+	/// outputs all current counter values
 	friend std::ostream& operator<<( std::ostream& ostr, const Statistician& stats ) {
 		ostr << "Statistics:" << std::endl;
 		ostr << stats.counters;

@@ -52,7 +52,7 @@ Location<Number>::Location( const matrix_t<Number>& _mat )
 	: mLinearFlows()
 	, mRectangularFlows()
 	, mExternalInput()
-	, mTransitions() 
+	, mTransitions()
 	, mId() {
 	mLinearFlows.push_back( linearFlow<Number>( _mat ) );
 	mRectangularFlows.emplace_back( rectangularFlow<Number>() );
@@ -89,12 +89,15 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mTransitions.back()->setSource( this );
 	}
 
+	mLinearFlows.clear();
 	for ( const auto& f : in.getLinearFlows() ) {
 		mLinearFlows.emplace_back( f );
 	}
+	mRectangularFlows.clear();
 	for ( const auto& f : in.getRectangularFlows() ) {
 		mRectangularFlows.emplace_back( f );
 	}
+	//TRACE( "hypro.datastructures", "Comparing hashes after assignment of " << in.getName() << " to this." );
 	assert( this->hash() == in.hash() );
 	return *this;
 }

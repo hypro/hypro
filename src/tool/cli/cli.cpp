@@ -10,8 +10,8 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 	po::options_description options( "Allowed Parameters" );
 	options.add_options()
 		( "help,h", "Shows this help message" )
-		( "plotoutput,po", po::value<std::string>(), "Plotoutput file path." )
-		( "plotoutputformat,pof", po::value<std::string>(), "Plotoutput format - allowed are 'tex' and 'gnuplot'." )
+		( "plotoutput", po::value<std::string>(), "Plotoutput file path." )
+		( "plotoutputformat", po::value<std::string>()->default_value( "png" ), "Plotoutput format - allowed are 'pdf','png','eps,'gen', and 'tex'." )
 		( "jobs,j", po::value<unsigned>()->default_value( 1 ), "<number> of jobs/threads to be used in parallel. Default is 1." )
 		( "model,m", po::value<std::string>()->required(), "<path> to model file." )
 		("representation,r", po::value<std::string>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
@@ -83,14 +83,18 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 			exit( 1 );
 		}
 
+		if ( vm.count( "plotoutputformat" ) ) {
+			if ( vm["plotoutputformat"].as<std::string>() != "pdf" && vm["plotoutputformat"].as<std::string>() != "png" && vm["plotoutputformat"].as<std::string>() != "gen" && vm["plotoutputformat"].as<std::string>() != "tex" && vm["plotoutputformat"].as<std::string>() != "eps" ) {
+				CERR( "Please chose a valid type of plot output. " );
+				exit( 1 );
+			}
+		}
+
 		if ( vm["decompose"].as<bool>() ) {
 			sProvider.setDecomposeAutomaton( true );
 		}
 		if ( vm["decider"].as<bool>() ) {
 			sProvider.setUseDecider( true );
-		}
-		if ( vm["skipplot"].as<bool>() ) {
-			sProvider.setSkipPlot( true );
 		}
 
 		// If we have at least two of the three strategy options "strategy",
@@ -122,7 +126,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		if ( vm.count( "strategy" ) >= 1 ) {
 			if ( vm.count( "strategy" ) == 1 ) {
 				hypro::SettingsProvider<State>::getInstance().setStrategy(
-						hydra::getStrategyFromName( vm["strategy"].as<std::string>() ) );
+					  hydra::getStrategyFromName( vm["strategy"].as<std::string>() ) );
 			} else {
 				CERR( "You can not have more than one strategy!\n" );
 				exit( 1 );

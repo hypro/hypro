@@ -43,7 +43,13 @@ struct TrafoData : public RGNData {
 	}
 };
 
-//Specialized subclass for transformations as example of a unary operator
+/**
+ * @brief Specialized subclass for transformations as example of a unary operator
+ *
+ * @tparam Number
+ * @tparam Converter
+ * @tparam Setting
+ */
 template <typename Number, typename Converter, typename Setting>
 class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 	using PointerVec = typename RootGrowNode<Number, Converter, Setting>::PointerVec;
@@ -60,7 +66,7 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 
 	unsigned currentExponent;												//Has value 2^power if 2^power successive transformations has been reached, else 1
 	std::size_t successiveTransformations;									//Counts how many transformations with the same parameters are used consecutively
-	std::shared_ptr<const LinTrafoParameters<Number, Setting>> parameters;  //A ptr to the object where its parameters are stored
+	std::shared_ptr<const LinTrafoParameters<Number, Setting>> parameters;	//A ptr to the object where its parameters are stored
 
   public:
 	////// Constructors & Destructors
@@ -119,10 +125,10 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 		}
 	}
 
-	//TrafoData constructor
+	/// TrafoData constructor
 	TrafoOp( const TrafoData<Number, Setting>& d )
 		: originCount( 1 )
-		, mChildren( PointerVec( {1, nullptr} ) )
+		, mChildren( PointerVec( { 1, nullptr } ) )
 		//, mDimension(d.origin->getDimension())
 		, currentExponent( d.currentExponent )
 		, successiveTransformations( d.successiveTransformations )
@@ -143,19 +149,19 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 
 	////// RootGrowNode Interface
 
-	//transforms given evaluation directions with the transformation matrix and vector
+	/// transforms given evaluation directions with the transformation matrix and vector
 	matrix_t<Number> transform( const matrix_t<Number>& param ) const override {
 		return parameters->getTransformedDirections( param, currentExponent );
 	}
 
-	//should not be reachable
+	/// Compute-method: should not be reachable
 	std::vector<EvaluationResult<Number>> compute( const matrix_t<Number>&, bool ) const override {
 		std::cout << "USED COMPUTE FROM TRAFOOP SUBCLASS.\n";
 		assert( false );
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	//Given the results, return vector of evaluation results (here only first place needed, since unary op), transform the evaluation results
+	/// Given the results, return vector of evaluation results (here only first place needed, since unary op), transform the evaluation results
 	std::vector<EvaluationResult<Number>> aggregate( std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam ) const override {
 		assert( resultStackBack.size() == 1 );
 		assert( Eigen::Index( resultStackBack.front().size() ) == currentParam.rows() );
@@ -172,26 +178,26 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 				} else {
 					assert( entry.errorCode != SOLUTION::INFEAS );
 					//std::cout << "TrafoOp::aggregate, entry before: " << entry.supportValue << std::endl;
-					entry.supportValue = entry.supportValue + currentDir.dot(parameterPair.second);
+					entry.supportValue = entry.supportValue + currentDir.dot( parameterPair.second );
 					//std::cout << "TrafoOp::aggregate, entry after: " << entry.supportValue << std::endl;
-					
+
 					//if ( parameterPair.first.cols() != entry.optimumValue.rows() || Setting::LE_GUERNIC_HSPACE_INTERSECTION ) {
-						//Generate a point that will be on the same plane as the optimal value,
-						//Since le guernic hspace intersection does not return an optimal value
-						//vector_t<Number> pointOnPlane = vector_t<Number>::Zero( currentDir.rows() );
-						//unsigned i = 0;
-						//while ( i < currentDir.rows() && currentDir( i ) == 0 ) {
-						//	++i;
-						//}
-						//std::cout << "TrafoOp::aggregate, pointOnPlane before adding support: " << pointOnPlane.transpose() << std::endl;
-						//pointOnPlane( i ) = entry.supportValue;
-						//std::cout << "TrafoOp::aggregate, pointOnPlane after adding support: " << pointOnPlane.transpose() << std::endl;
-						////pointOnPlane += parameterPair.second;
-						//std::cout << "TrafoOp::aggregate, parameter pair: \n" << parameterPair.first << "\n" << parameterPair.second << std::endl;
-						//pointOnPlane = parameterPair.first * pointOnPlane + parameterPair.second;
-						//std::cout << "TrafoOp::aggregate, pointOnPlane after adding parameter vec: " << pointOnPlane.transpose() << std::endl;
-						//entry.supportValue = pointOnPlane.dot( currentDir );
-						//std::cout << "TrafoOp::aggregate, currentDir: " << currentDir.transpose() << " entry.supportValue: " << entry.supportValue << std::endl;
+					//Generate a point that will be on the same plane as the optimal value,
+					//Since le guernic hspace intersection does not return an optimal value
+					//vector_t<Number> pointOnPlane = vector_t<Number>::Zero( currentDir.rows() );
+					//unsigned i = 0;
+					//while ( i < currentDir.rows() && currentDir( i ) == 0 ) {
+					//	++i;
+					//}
+					//std::cout << "TrafoOp::aggregate, pointOnPlane before adding support: " << pointOnPlane.transpose() << std::endl;
+					//pointOnPlane( i ) = entry.supportValue;
+					//std::cout << "TrafoOp::aggregate, pointOnPlane after adding support: " << pointOnPlane.transpose() << std::endl;
+					////pointOnPlane += parameterPair.second;
+					//std::cout << "TrafoOp::aggregate, parameter pair: \n" << parameterPair.first << "\n" << parameterPair.second << std::endl;
+					//pointOnPlane = parameterPair.first * pointOnPlane + parameterPair.second;
+					//std::cout << "TrafoOp::aggregate, pointOnPlane after adding parameter vec: " << pointOnPlane.transpose() << std::endl;
+					//entry.supportValue = pointOnPlane.dot( currentDir );
+					//std::cout << "TrafoOp::aggregate, currentDir: " << currentDir.transpose() << " entry.supportValue: " << entry.supportValue << std::endl;
 					//} else {
 					//	std::cout << "TrafoOp::aggregate, parameter: " << parameterPair.first << " entry optimum: " << entry.optimumValue << std::endl;
 					//	assert( parameterPair.first.cols() == entry.optimumValue.rows() );
@@ -208,14 +214,14 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 		return resultStackBack.front();
 	}
 
-	//Checks emptiness
+	/// Checks emptiness
 	bool empty( const std::vector<bool>& childrenEmpty ) const override {
 		assert( childrenEmpty.size() == 1 );
 		if ( childrenEmpty.front() ) return true;
 		return false;
 	}
 
-	//Transform the supremum
+	/// Transform the supremum
 	Point<Number> supremumPoint( std::vector<Point<Number>>& points ) const override {
 		assert( points.size() == 1 );
 		if ( points.front().dimension() == 0 ) return points.front();
@@ -223,20 +229,20 @@ class TrafoOp : public RootGrowNode<Number, Converter, Setting> {
 		return Point<Number>( parameterPair.first * points.front().rawCoordinates() + parameterPair.second );
 	}
 
-	//Invert transformation
+	/// Invert transformation
 	vector_t<Number> reverseOp( const vector_t<Number>& point ) const override {
 		std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = parameters->getParameterSet( currentExponent );
 		vector_t<Number> tmp = ( parameterPair.first.inverse() * point ) - parameterPair.second;
 		return tmp;
 	}
 
-	//If child contains p, then scaled version will contain it too
+	/// If child contains p, then scaled version will contain it too
 	bool contains( const std::vector<bool>& v, const vector_t<Number>& /*point*/ ) const override {
 		assert( v.size() == 1 );
 		if ( v.front() ) return true;
 		return false;
 	}
-
+	/// checks whether matrix exponential has already been computed
 	bool hasTrafo( std::shared_ptr<const LinTrafoParameters<Number, Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b ) {
 		//Use eigen3's isApprox() to make fuzzy matrix comparison instead of exact comparison.
 		//Saves computation time if matrices are big.

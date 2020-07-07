@@ -1,51 +1,82 @@
 
+#include "../src/hypro/algorithms/reachability/Reach.h"
 #include "../src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../src/hypro/representations/GeometricObjectBase.h"
 
-using namespace hypro;
-
 int main() {
-  using Number = double;
+	using Number = double;
+	using Matrix = hypro::matrix_t<Number>;
+	using Vector = hypro::vector_t<Number>;
 
-  LocationManager<Number> &lMan = LocationManager<Number>::getInstance();
-  Location<Number> *l1 = lMan.create();
+	hypro::Location<Number> loc = hypro::Location<Number>();
+	hypro::Location<Number> loc2 = hypro::Location<Number>();
 
-  State<Number, ConstraintSet<Number>> s1(l1);
+	std::unique_ptr<hypro::Location<Number>> unique_loc{std::make_unique<hypro::Location<Number>>( loc )};
+	std::unique_ptr<hypro::Location<Number>> unique_loc2{std::make_unique<hypro::Location<Number>>( loc2 )};
 
-  matrix_t<Number> matr = matrix_t<Number>::Identity(2, 2);
-  vector_t<Number> vec = vector_t<Number>(2);
-  vec << 1, 2;
-  State<Number, ConstraintSet<Number>> s2(l1, ConstraintSet<Number>(matr, vec));
-  State<Number, ConstraintSet<Number>, ConstraintSet<Number>> s3(
-      l1, ConstraintSet<Number>(matr, vec), ConstraintSet<Number>(matr, vec));
+	// flows
+	Matrix flowMatrix = Matrix::Zero( 4, 4 );
+	flowMatrix.col( 3 ) = Vector::Ones( 4 );
+	flowMatrix( 3, 3 ) = 0;
 
-  std::cout << "Equal: " << (s1.getLocation()->getId() == l1->getId())
-            << std::endl;
-  std::cout << "Equal: " << (s2.getLocation()->getId() == l1->getId())
-            << std::endl;
-  std::cout << "Equal: " << (s2.getSet().matrix() == matr) << std::endl;
-  std::cout << "Equal: " << (s2.getSet().vector() == vec) << std::endl;
-  std::cout << "Equal: " << (s2.getSet<0>().matrix() == matr) << std::endl;
-  std::cout << "Equal: " << (s2.getSet<0>().vector() == vec) << std::endl;
-  std::cout << "Equal: " << (s3.getSet<1>().matrix() == matr) << std::endl;
-  std::cout << "Equal: " << (s3.getSet<1>().vector() == vec) << std::endl;
+	Matrix flowMatrix2 = Matrix::Zero( 4, 4 );
+	flowMatrix2( 0, 3 ) = 1;
 
-  matrix_t<Number> matr2 = matrix_t<Number>::Identity(2, 2);
-  vector_t<Number> vec2 = vector_t<Number>(2);
-  vec << 2, 3;
+	// assign flows to locations
+	unique_loc->setFlow( flowMatrix );
+	unique_loc2->setFlow( flowMatrix2 );
 
-  ConstraintSet<Number> setUpd(matr2, vec2);
+	// transition
+	hypro::Transition<Number> trans;
+	trans.setAggregation( hypro::Aggregation::clustering );
+	trans.setClusterBound( 5 );
+	trans.setSource( unique_loc.get() );
+	trans.setTarget( unique_loc2.get() );
 
-  s3.setSet<1>(setUpd);
-  std::cout << "Equal: " << (s3.getSet<1>().matrix() == matr) << std::endl;
-  std::cout << "Equal: " << (s3.getSet<1>().vector() == vec)
-            << " (should be false) " << std::endl;
-  std::cout << "Equal: " << (s3.getSet<1>().matrix() == matr2) << std::endl;
-  std::cout << "Equal: " << (s3.getSet<1>().vector() == vec2) << std::endl;
+	// write transition
+	unique_loc->addTransition( std::make_unique<hypro::Transition<Number>>( trans ) );
 
-  State<Number, ConstraintSet<Number>, ConstraintSet<Number>> s4(
-      l1, ConstraintSet<Number>(matr, vec), ConstraintSet<Number>(matr, vec));
+	// initial state set
+	Matrix initConstraints = Matrix( 6, 3 );
+	Vector initConstants = Vector::Zero( 6 );
 
-  State<Number, ConstraintSet<Number>, ConstraintSet<Number>> unionResult =
-      s4.aggregate(s3);
+	initConstraints << 1, 0, 0,
+		  -1, 0, 0,
+		  0, 1, 0,
+		  0, -1, 0,
+		  0, 0, 1,
+		  0, 0, -1;
+
+	// create hybrid automaton
+	hypro::HybridAutomaton<Number> ha;
+
+	// write initial state
+	ha.addInitialState( unique_loc.get(), hypro::Condition<Number>( initConstraints, initConstants ) );
+
+	// write locations
+	ha.addLocation( std::move( unique_loc ) );
+	ha.addLocation( std::move( unique_loc2 ) );
+
+	// call reachability analysis
+
+	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher{ha};
+	auto settings = reacher.settings();
+	settings.timeStep = carl::convert<double, hypro::tNumber>( 0.5 );
+	settings.timeBound = hypro::tNumber( 20 );
+	settings.jumpDepth = 10;
+	reacher.setSettings( settings );
+	reacher.setRepresentationType( hypro::representation_name::polytope_h );
+
+	std::vector<hypro::State_t<Number>> initialStates;
+	for ( const auto& locationConditionPair : ha.getInitialStates() ) {
+		hypro::State_t<Number> tmp{locationConditionPair.first};
+		tmp.setSet( hypro::HPolytope<Number>( locationConditionPair.second.getMatrix(),
+											  locationConditionPair.second.getVector() ) );
+		initialStates.emplace_back( std::move( tmp ) );
+	}
+	reacher.setInitialStates( std::move( initialStates ) );
+
+	auto result = reacher.computeForwardReachability();
+
+	return 0;
 }

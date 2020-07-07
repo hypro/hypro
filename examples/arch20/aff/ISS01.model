@@ -612,10 +612,22 @@ hybrid reachability
     }
 }
 
-unsafe set 
+unsafe set
 {
     Model
     {
-        y3 in [-0.0007,0.0007]
+        y3 <= -0.0007
+    }
+Model
+    {
+        y3 >= 0.0007
     }
 }
+
+#unsafe set 
+#{
+#    Model
+#    {
+#        y3 in [-0.0007,0.0007]
+#    }
+#}
