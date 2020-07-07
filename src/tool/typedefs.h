@@ -1,6 +1,6 @@
 #pragma once
-#include "../hypro/datastructures/HybridAutomaton/State.h"
-#include "../hypro/types.h"
+#include <hypro/datastructures/HybridAutomaton/State.h>
+#include <hypro/types.h>
 
 namespace hydra {
 
@@ -8,9 +8,9 @@ using Number = double;
 using tNumber = hypro::tNumber;
 
 using SFType = hypro::SupportFunctionT<Number, hypro::Converter<Number>,
-                                       hypro::SupportFunctionSetting>;
+									   hypro::SupportFunctionSetting>;
 using CarlPolytopeType = hypro::CarlPolytopeT<Number, hypro::Converter<Number>,
-                                              hypro::CarlPolytopeSetting>;
+											  hypro::CarlPolytopeSetting>;
 using BoxType = hypro::Box<Number>;
 using HPolyType = hypro::HPolytope<Number>;
 using VPolyType = hypro::VPolytope<Number>;
@@ -22,4 +22,4 @@ using PolytopeType = hypro::Polytope<Number>;
 #endif
 
 using State = hypro::State_t<Number>;
-} // namespace hydra
+}  // namespace hydra

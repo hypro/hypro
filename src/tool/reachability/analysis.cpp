@@ -8,7 +8,7 @@ using namespace hypro;
 template <typename State>
 void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
-	LTIAnalyzer<State> analyzer{automaton, setting};
+	LTIAnalyzer<State> analyzer{ automaton, setting };
 	auto result = analyzer.run();
 
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -50,7 +50,7 @@ struct Dispatcher {
 	}
 };
 
-void analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+void analyze( HybridAutomaton<Number>& automaton, Settings setting, hypro::PreprocessingInformation ) {
 	dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
 													   setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting );
 }
