@@ -50,7 +50,7 @@ struct Dispatcher {
 	}
 };
 
-void analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+void analyze( HybridAutomaton<Number>& automaton, Settings setting, hypro::PreprocessingInformation ) {
 	dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
 													   setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting );
 }

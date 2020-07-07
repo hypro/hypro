@@ -11,7 +11,7 @@
 
 namespace hydra {
 namespace reachability {
-void analyze( hypro::HybridAutomaton<Number> &automaton, hypro::Settings setting );
+void analyze( hypro::HybridAutomaton<Number> &automaton, hypro::Settings setting, hypro::PreprocessingInformation );
 
 }  // namespace reachability
 }  // namespace hydra
