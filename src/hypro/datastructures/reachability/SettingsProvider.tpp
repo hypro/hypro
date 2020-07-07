@@ -73,15 +73,15 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping( const HybridAu
 
 		std::vector<SUBSPACETYPE> vec;
 		for ( std::size_t i = 0; i < decompositions.size(); i++ ) {
-			if ( DecisionEntity<Number>::getInstance().isTimedSubspace( *location, i ) ) {
-				vec.push_back( SUBSPACETYPE::TIMED );
-			} else if ( DecisionEntity<Number>::getInstance().isDiscreteSubspace( *location, i ) ) {
-				vec.push_back( SUBSPACETYPE::DISCRETE );
-			} else if ( DecisionEntity<Number>::getInstance().isRectangularSubspace( *location, i ) ) {
-				vec.push_back( SUBSPACETYPE::RECTANGULAR );
-			} else {
-				vec.push_back( SUBSPACETYPE::LTI );
-			}
+			//if ( DecisionEntity<Number>::getInstance().isTimedSubspace( *location, i ) ) {
+			//	vec.push_back( SUBSPACETYPE::TIMED );
+			//} else if ( DecisionEntity<Number>::getInstance().isDiscreteSubspace( *location, i ) ) {
+			//	vec.push_back( SUBSPACETYPE::DISCRETE );
+			//} else if ( DecisionEntity<Number>::getInstance().isRectangularSubspace( *location, i ) ) {
+			//	vec.push_back( SUBSPACETYPE::RECTANGULAR );
+			//} else {
+			//	vec.push_back( SUBSPACETYPE::LTI );
+			//}
 			DEBUG( "hypro.utility", "Decomposition " << i << ": " << vec.at( i ) );
 		}
 		mLocationSubspaceTypeMap.insert( std::make_pair( location, std::make_shared<std::vector<SUBSPACETYPE>>( vec ) ) );

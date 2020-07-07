@@ -2,10 +2,11 @@
 
 namespace hydra {
 namespace preprocessing {
-hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::Number> &,
-											const hypro::ReachabilitySettings & ) {
-	// do some preprocessing, write results to the settingsProvider.
-	return hypro::PreprocessingInformation{};
+hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::Number>& automaton,
+											const hypro::ReachabilitySettings& ) {
+	auto dynamicsType = getDynamicType( automaton );
+
+	return hypro::PreprocessingInformation{ dynamicsType };
 }
 
 }  // namespace preprocessing

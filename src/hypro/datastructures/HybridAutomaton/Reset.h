@@ -26,7 +26,7 @@ struct ResetVisitor {
 
 template <class Result, class Func>
 ResetVisitor<Result, std::decay_t<Func>> make_reset_visitor( Func&& func ) {
-	return {std::forward<Func>( func )};
+	return { std::forward<Func>( func ) };
 }
 
 }  // namespace detail

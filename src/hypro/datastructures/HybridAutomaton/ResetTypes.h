@@ -37,6 +37,13 @@ struct AffineTransformation {
 		return true;
 	}
 
+	bool isConstant() const {
+		if ( mTransformation.matrix() == matrix_t<Number>::Zero( mTransformation.matrix().rows(), mTransformation.matrix().rows() ) ) {
+			return true;
+		}
+		return false;
+	}
+
 	friend std::ostream& operator<<( std::ostream& out, const AffineTransformation<Number>& in ) {
 		out << in.mTransformation;
 		return out;
