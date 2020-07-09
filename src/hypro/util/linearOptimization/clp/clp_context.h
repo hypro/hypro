@@ -12,22 +12,41 @@ namespace hypro {
 struct clp_context {
 	ClpSimplex lp;
 	CoinPackedMatrix matrix;
-	double* mUpperBounds;
-	double* mLowerBounds;
-	double* mColumnLowerBounds;
-	double* mColumnUpperBounds;
+	double* mUpperBounds = nullptr;
+	double* mLowerBounds = nullptr;
+	double* mColumnLowerBounds = nullptr;
+	double* mColumnUpperBounds = nullptr;
 	bool arraysCreated = false;			   // true if array variables have been created.
 	mutable bool mInitialized = false;	 // true if lp instance has been created.
 	mutable bool mConstraintsSet = false;  // true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
 
 	bool operator==( const clp_context& rhs ) {
-		// TODO
+		return this == &rhs;
 	}
 
-	void createArrays( unsigned ) {
+	void createArrays( unsigned rows, unsigned columns ) {
+		if ( arraysCreated ) {
+			deleteArrays();
+		}
+		mUpperBounds = new double[rows];
+		mLowerBounds = new double[rows];
+		mColumnLowerBounds = new double[columns];
+		mColumnUpperBounds = new double[columns];
+		arraysCreated = true;
 	}
 
 	void deleteArrays() {
+		if ( arraysCreated ) {
+			delete[] mUpperBounds;
+			delete[] mLowerBounds;
+			delete[] mColumnUpperBounds;
+			delete[] mColumnLowerBounds;
+			mUpperBounds = nullptr;
+			mLowerBounds = nullptr;
+			mColumnUpperBounds = nullptr;
+			mColumnLowerBounds = nullptr;
+			arraysCreated = false;
+		}
 	}
 
 	void createLPInstance() {
@@ -37,16 +56,17 @@ struct clp_context {
 	}
 
 	~clp_context() {
+		deleteArrays();
 	}
 
 	template <typename Number>
 	void setMatrix( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
-		if ( !arraysCreated ) {
+		createArrays( constraints.rows(), constraints.cols() );
+		if ( !mInitialized ) {
 			matrix = detail::createMatrix( constraints );
-			mUpperBounds = new double[constants.cols()];
-			mLowerBounds = new double[constants.cols()];
-			mColumnLowerBounds = new double[constraints.cols()];
-			mColumnUpperBounds = new double[constraints.cols()];
+			mInitialized = true;
+		}
+		if ( !mConstraintsSet ){
 			for ( int i = 0; i < constants.rows(); ++i ) {
 				switch ( relations[i] ) {
 					case carl::Relation::LEQ:
@@ -71,8 +91,7 @@ struct clp_context {
 				mColumnLowerBounds[i] = -COIN_DBL_MAX;
 				mColumnUpperBounds[i] = COIN_DBL_MAX;
 			}
-			arraysCreated = true;
-			mInitialized = false;
+			mConstraintsSet = true;
 		}
 	}
 
@@ -83,6 +102,8 @@ struct clp_context {
 		} else {
 			lp.setOptimizationDirection( 1 );
 		}
+		// turn off clp output
+		lp.setLogLevel( 0 );
 
 		// initialize problem + bounds
 		setMatrix( constraints, constants, relations );
