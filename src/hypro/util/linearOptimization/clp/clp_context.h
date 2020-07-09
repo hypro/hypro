@@ -12,10 +12,10 @@ namespace hypro {
 struct clp_context {
 	ClpSimplex lp;
 	CoinPackedMatrix matrix;
-	double* mUpperBounds;
-	double* mLowerBounds;
-	double* mColumnLowerBounds;
-	double* mColumnUpperBounds;
+	double* mUpperBounds = nullptr;
+	double* mLowerBounds = nullptr;
+	double* mColumnLowerBounds = nullptr;
+	double* mColumnUpperBounds = nullptr;
 	bool arraysCreated = false;			   // true if array variables have been created.
 	mutable bool mInitialized = false;	   // true if lp instance has been created, not needed for clp
 	mutable bool mConstraintsSet = false;  // true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
@@ -57,17 +57,16 @@ struct clp_context {
 
 	~clp_context() {
 		deleteArrays();
-		mConstraintsSet = false;
 	}
 
 	template <typename Number>
 	void setMatrix( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
-		if ( !mConstraintsSet ) {
+		createArrays( constraints.rows(), constraints.cols() );
+		if ( !mInitialized ) {
 			matrix = detail::createMatrix( constraints );
-			mUpperBounds = new double[constants.cols()];
-			mLowerBounds = new double[constants.cols()];
-			mColumnLowerBounds = new double[constraints.cols()];
-			mColumnUpperBounds = new double[constraints.cols()];
+			mInitialized = true;
+		}
+		if ( !mConstraintsSet ) {
 			for ( int i = 0; i < constants.rows(); ++i ) {
 				switch ( relations[i] ) {
 					case carl::Relation::LEQ:
@@ -92,8 +91,7 @@ struct clp_context {
 				mColumnLowerBounds[i] = -COIN_DBL_MAX;
 				mColumnUpperBounds[i] = COIN_DBL_MAX;
 			}
-			arraysCreated = true;
-			mInitialized = false;
+			mConstraintsSet = true;
 		}
 	}
 
@@ -104,6 +102,8 @@ struct clp_context {
 		} else {
 			lp.setOptimizationDirection( 1 );
 		}
+		// turn off clp output
+		lp.setLogLevel( 0 );
 
 		// initialize problem + bounds
 		setMatrix( constraints, constants, relations );
