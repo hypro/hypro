@@ -9,7 +9,6 @@ var searchData=
   ['rectangularcontext',['RectangularContext',['../classhypro_1_1_rectangular_context.html',1,'hypro']]],
   ['rectangularfirstsegmenthandler',['rectangularFirstSegmentHandler',['../classhypro_1_1rectangular_first_segment_handler.html',1,'hypro']]],
   ['rectangularflow',['rectangularFlow',['../classhypro_1_1rectangular_flow.html',1,'hypro']]],
-  ['rectangularflow_3c_20n_20_3e',['rectangularFlow&lt; N &gt;',['../classhypro_1_1rectangular_flow.html',1,'hypro']]],
   ['rectangularguardhandler',['rectangularGuardHandler',['../classhypro_1_1rectangular_guard_handler.html',1,'hypro']]],
   ['rectangularinvarianthandler',['rectangularInvariantHandler',['../namespacehypro.html#classhypro_1_1rectangular_invariant_handler',1,'hypro']]],
   ['rectangularresethandler',['rectangularResetHandler',['../classhypro_1_1rectangular_reset_handler.html',1,'hypro']]],

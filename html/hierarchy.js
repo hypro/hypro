@@ -42,7 +42,7 @@ var hierarchy =
     [ "hypro::DAGNode< EventTimingNode< Number > >", "classhypro_1_1_d_a_g_node.html", [
       [ "hypro::EventTimingNode< Number >", "classhypro_1_1_event_timing_node.html", null ]
     ] ],
-    [ "hypro::Decomposition", "structhypro_1_1_decomposition.html", null ],
+    [ "hypro::Decomposition", "namespacehypro.html#structhypro_1_1_decomposition", null ],
     [ "hypro::Dictionary< Number >", "classhypro_1_1_dictionary.html", null ],
     [ "hypro::DifferenceBoundsSetting", "namespacehypro.html#structhypro_1_1_difference_bounds_setting", null ],
     [ "hypro::Dispatcher_i< Representation, Representations >", "structhypro_1_1_dispatcher__i.html", null ],
@@ -72,6 +72,7 @@ var hierarchy =
     [ "hypro::flattenRepresentations_i< Number, Converter, CombinationsList >", "namespacehypro.html#structhypro_1_1flatten_representations__i", null ],
     [ "hypro::flattenRepresentations_i< Number, Converter, TypeList< RepCombinationsList... > >", "namespacehypro.html#structhypro_1_1flatten_representations__i_3_01_number_00_01_converter_00_01_type_list_3_01_rep_c998c63914da0aac3968b8b40e6527b30", null ],
     [ "hypro::flowDimensionVisitor", "structhypro_1_1flow_dimension_visitor.html", null ],
+    [ "hypro::flowDynamicsTypeVisitor", "structhypro_1_1flow_dynamics_type_visitor.html", null ],
     [ "hypro::flowHashVisitor", "structhypro_1_1flow_hash_visitor.html", null ],
     [ "hypro::flowIsDiscreteVisitor", "structhypro_1_1flow_is_discrete_visitor.html", null ],
     [ "hypro::flowIsTimedVisitor", "structhypro_1_1flow_is_timed_visitor.html", null ],
@@ -187,7 +188,6 @@ var hierarchy =
     [ "hypro::linearFlow< Number >", "classhypro_1_1linear_flow.html", [
       [ "hypro::affineFlow< Number >", "classhypro_1_1affine_flow.html", null ]
     ] ],
-    [ "hypro::linearFlow< N >", "classhypro_1_1linear_flow.html", null ],
     [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafo_parameters.html", null ],
     [ "hypro::LinTrafoParameters< Number, Setting >", "structhypro_1_1_lin_trafo_parameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1_location.html", null ],
@@ -270,7 +270,6 @@ var hierarchy =
     [ "hypro::RectangularAnalyzer< State >", "classhypro_1_1_rectangular_analyzer.html", null ],
     [ "hypro::rectangularBadStateHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_bad_state_handler", null ],
     [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangular_flow.html", null ],
-    [ "hypro::rectangularFlow< N >", "classhypro_1_1rectangular_flow.html", null ],
     [ "hypro::rectangularGuardHandler< State >", "classhypro_1_1rectangular_guard_handler.html", null ],
     [ "hypro::rectangularInvariantHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_invariant_handler", null ],
     [ "hypro::rectangularTimeEvolutionHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_time_evolution_handler", null ],

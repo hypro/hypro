@@ -20,6 +20,7 @@ var searchData=
   ['reverseop',['reverseOp',['../classhypro_1_1_trafo_op.html#a1d55de4fd928833525747ac9e72e994a',1,'hypro::TrafoOp']]],
   ['rewind',['rewind',['../classhypro_1_1_difference_bounds_t.html#a5ff14b424650f04052cd24d703f8e017',1,'hypro::DifferenceBoundsT']]],
   ['rgetnode',['rGetNode',['../classhypro_1_1_event_timing_provider.html#adaa8d5c4e35a2c49420777cc48909ca6',1,'hypro::EventTimingProvider']]],
+  ['rgettransitions',['rGetTransitions',['../classhypro_1_1_location.html#a71ed6bfd985e5c9410b58a99b645212a',1,'hypro::Location']]],
   ['ridge',['Ridge',['../classhypro_1_1_ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
   ['rpoint',['rPoint',['../classhypro_1_1_vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
   ['rsettings',['rSettings',['../classhypro_1_1_plotter.html#a02a94273e330fcd5ced4216cf10b9c40',1,'hypro::Plotter']]],

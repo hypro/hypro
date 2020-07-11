@@ -6,6 +6,7 @@ var classhypro_1_1linear_flow =
     [ "~linearFlow", "classhypro_1_1linear_flow.html#adb81dcf1eb42418fc3a62ef6c0ff0f50", null ],
     [ "addRow", "classhypro_1_1linear_flow.html#a581893c8ca52d55ade304fa613db1615", null ],
     [ "dimension", "classhypro_1_1linear_flow.html#acd0be0bc254458dd3c8be0fb4bf3a197", null ],
+    [ "getDynamicsType", "classhypro_1_1linear_flow.html#a981a0ffa8a45e03501c1e4e42c04f5a9", null ],
     [ "getFlowMatrix", "classhypro_1_1linear_flow.html#a5f8f51f955e66be0e45f897e1411c190", null ],
     [ "hasNoFlow", "classhypro_1_1linear_flow.html#ae45e352b70cab2c7c170ce2972650268", null ],
     [ "isDiscrete", "classhypro_1_1linear_flow.html#a19a11d8714de518a8ec7a9703b4c4015", null ],

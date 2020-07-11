@@ -1,13 +1,5 @@
 var NAVTREEINDEX16 =
 {
-"structstd_1_1hash_3_01hypro_1_1_point_3_01_number_01_4_01_4.html#a6b7d24a1757259fb4bdad132dfcf3d5c":[8,0,4,9,0],
-"structstd_1_1hash_3_01hypro_1_1_reset_3_01_number_01_4_01_4.html":[8,0,4,11],
-"structstd_1_1hash_3_01hypro_1_1_reset_3_01_number_01_4_01_4.html#a7dc3c2efb83aa627833fab228079deef":[8,0,4,11,0],
-"structstd_1_1hash_3_01hypro_1_1_ridge_3_01_number_01_4_01_4.html":[8,0,4,12],
-"structstd_1_1hash_3_01hypro_1_1_ridge_3_01_number_01_4_01_4.html#a0e73e68b1a8ba609e6c6065756a04c63":[8,0,4,12,0],
-"structstd_1_1hash_3_01hypro_1_1_transition_3_01_number_01_4_01_4.html":[8,0,4,13],
-"structstd_1_1hash_3_01hypro_1_1_transition_3_01_number_01_4_01_4.html#aa38739c9920c796c6e80fbb563ad94c9":[8,0,4,13,0],
-"structstd_1_1hash_3_01hypro_1_1_vertex_3_01_number_01_4_01_4.html":[8,0,4,15],
 "structstd_1_1hash_3_01hypro_1_1_vertex_3_01_number_01_4_01_4.html#aa94e1ae68aac89555c9de7e798274bd2":[8,0,4,15,0],
 "structstd_1_1hash_3_01hypro_1_1_vertex_container_3_01_number_01_4_01_4.html":[8,0,4,16],
 "structstd_1_1hash_3_01hypro_1_1_vertex_container_3_01_number_01_4_01_4.html#a33211884b447ffbd0f2318d8fbd49655":[8,0,4,16,0],

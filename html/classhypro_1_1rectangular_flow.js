@@ -6,6 +6,7 @@ var classhypro_1_1rectangular_flow =
     [ "~rectangularFlow", "classhypro_1_1rectangular_flow.html#ad57cf66c5399616fd88efe0264ce8f0a", null ],
     [ "dimension", "classhypro_1_1rectangular_flow.html#abb4d1b21090b2766d08b141a156bd7e9", null ],
     [ "empty", "classhypro_1_1rectangular_flow.html#ab872f0feddd2117b7444d23d6404d201", null ],
+    [ "getDynamicsType", "classhypro_1_1rectangular_flow.html#a6a480fb88772e1f4b12fdcf4cb956714", null ],
     [ "getFlowIntervalForDimension", "classhypro_1_1rectangular_flow.html#a905d518a4f11e02e05171efe7d7b2b1f", null ],
     [ "getFlowIntervals", "classhypro_1_1rectangular_flow.html#aa3223972416d7b0497ad7d5358beea3c", null ],
     [ "isDiscrete", "classhypro_1_1rectangular_flow.html#a05da941400220311f61ae4103b7e6012", null ],

@@ -11,10 +11,10 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-35 152,-35 152,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="structhypro_1_1_support_function_new_le_guernic.html" target="_top" xlink:title="hypro::SupportFunctionNew\lLeGuernic">
+<g id="a_node1"><a xlink:href="structhypro_1_1_support_function_new_more_precision.html" target="_top" xlink:title="hypro::SupportFunctionNew\lMorePrecision">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-30.5 148,-30.5 148,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::SupportFunctionNew</text>
-<text text-anchor="middle" x="74" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">LeGuernic</text>
+<text text-anchor="middle" x="74" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">MorePrecision</text>
 </a>
 </g>
 </g>
