@@ -225,7 +225,7 @@ void Reset<Number>::decompose( const Decomposition& decomposition ) {
 	mIntervalResets.clear();
 
 	// select constrains i,j,k into new constraint vector
-	for ( auto set : decomposition ) {
+	for ( auto set : decomposition.subspaces ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "decompose constraint for set: {" );
 		for ( auto entry : set ) {

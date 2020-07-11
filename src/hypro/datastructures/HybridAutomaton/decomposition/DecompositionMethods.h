@@ -86,63 +86,53 @@ DynamicType getDynamicType( const HybridAutomaton<Number> &automaton ) {
 	return res;
 }
 
+/// detects most common dynamics type for a location of a hybrid automaton.
+/// This function is NOT a sanity check - if rectangular dynamics are present we assume that the according constraints are axis-aligned.
 template <typename Number>
 DynamicType getDynamicType( const Location<Number> &location ) {
-	if ( location.getLinearFlows().size() > 0 ) {
-		if ( location.getRectangularFlows().size() > 0 ) {
-			// both types of flow are present
-			return DynamicType::mixed;
-		}
-
-		// check subtypes of affine dynamic
-		// dynamic
-		DynamicType res = DynamicType::discrete;
-		std::for_each( location.getLinearFlows().begin(), location.getLinearFlows().end(), [&res]( const auto &f ) {
-			if ( res != DynamicType::affine ) {
-				if ( !f.isDiscrete() ) {
-					if ( !f.isTimed() ) {
-						res = DynamicType::affine;
-					} else {
-						res = DynamicType::timed;
-					}
-				}
-			}
-		} );
-		// invariant
-		if ( res != DynamicType::affine ) {
-			if ( !location.getInvariant().isAxisAligned() ) {
-				res = DynamicType::affine;
-			}
-		}
-		// transitions: guard & reset
-		if ( res != DynamicType::affine ) {
-			for ( const auto &transition : location.getTransitions() ) {
-				// check guard
-				if ( !transition->getGuard().isAxisAligned() ) {
-					res = DynamicType::affine;
-				}
-				// corner case: resets to intervals
-				if ( transition->getReset().getIntervalResets().size() > 0 ) {
-					return DynamicType::mixed;
-				}
-				// check reset
-				if ( res != DynamicType::affine ) {
-					std::for_each( transition->getReset().getAffineResets().begin(), transition->getReset().getAffineResets().end(), [&res]( const auto &reset ) {
-						if ( !reset.isConstant() ) {
-							res = DynamicType::affine;
-						}
-					} );
-				}
-			}
-		}
-		return res;
-	} else if ( location.getRectangularFlows().size() > 0 ) {
-		// as soon as there is rectangular flow we return
-		return DynamicType::rectangular;
-	} else {
-		// happens only when no flow at all is defined
+	// if no flows are defined the automaton is discrete
+	if ( location.getFlows().empty() ) {
 		return DynamicType::discrete;
 	}
+
+	// first initialization, can either be linear or rectangular
+	DynamicType res{ DynamicType::undefined };
+	// flow
+	for ( std::size_t i = 0; i < location.getFlowTypes().size(); ++i ) {
+		auto curType = std::visit( flowDynamicsTypeVisitor{}, location.getFlows()[i] );
+		if ( res != DynamicType::undefined && res != curType ) {
+			return DynamicType::mixed;
+		}
+		res = curType;
+	}
+	// invariant
+	if ( res != DynamicType::linear && res != DynamicType::rectangular ) {
+		if ( !location.getInvariant().isAxisAligned() ) {
+			res = DynamicType::linear;
+		}
+	}
+	// transitions: guard & reset
+	if ( res != DynamicType::linear && res != DynamicType::rectangular ) {
+		for ( const auto &transition : location.getTransitions() ) {
+			// check guard
+			if ( !transition->getGuard().isAxisAligned() ) {
+				res = DynamicType::linear;
+			}
+			// corner case: resets to intervals
+			if ( transition->getReset().getIntervalResets().size() > 0 ) {
+				return DynamicType::mixed;
+			}
+			// check reset
+			if ( res != DynamicType::linear ) {
+				std::for_each( transition->getReset().getAffineResets().begin(), transition->getReset().getAffineResets().end(), [&res]( const auto &reset ) {
+					if ( !reset.isConstant() ) {
+						res = DynamicType::linear;
+					}
+				} );
+			}
+		}
+	}
+	return res;
 }
 
 }  // namespace hypro
