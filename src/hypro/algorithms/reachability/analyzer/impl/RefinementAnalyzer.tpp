@@ -3,60 +3,48 @@
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT RefinementAnalyzer<Representation>::run() {
-	// initialize queue
-	for ( auto& [location, condition] : mHybridAutomaton.getInitialStates() ) {
-		auto* fp = &mFlowpipes.emplace_back();
-		fp->emplace_back( { condition.getMatrix(), condition.getVector() } );
-		// create node from state
-		auto* initialNode = &mRoots.emplace_back( location, fp );
-
-		// add to queue
-		mWorkQueue.push( initialNode );
-	}
+std::pair<REACHABILITY_RESULT, ReachTreeNode<Representation>*> RefinementAnalyzer<Representation>::run() {
+	//Setup settings for flowpipe construction in worker
+	TimeTransformationCache<Number> transformationCache;
+	LTIWorker<Representation> worker{
+		  mHybridAutomaton,
+		  mAnalysisSettings.strategy.front(),
+		  mAnalysisSettings.localTimeHorizon,
+		  transformationCache };
 
 	while ( !mWorkQueue.empty() ) {
-		LTIWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
-		auto* currentNode = mWorkQueue.front();
-		mWorkQueue.pop();
+		ReachTreeNode<Representation>* currentNode = mWorkQueue.back();
+		mWorkQueue.pop_back();
 		REACHABILITY_RESULT safetyResult;
 
-		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
-			safetyResult = worker.computeForwardReachability( *currentNode );
-		} else {
-			safetyResult = worker.computeTimeSuccessors( *currentNode );
-		}
-
-		// only for plotting
-		currentNode->getFlowpipe()->emplace_back( worker.getFlowpipe() );
+		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return safetyResult;
+			return { safetyResult, currentNode };
 		}
 
-		// create jump successor tasks
-		for ( const auto& [transition, states] : worker.getJumpSuccessorSets() ) {
-			for ( const auto jmpSucc : states ) {
-				// update reachTree
-				auto* childNode = new ReachTreeNode<Representation>{ currentNode, jmpSucc };
-				childNode->setParent( currentNode );
-				currentNode->addChild( childNode );
+		//Do not perform discrete jump if jump depth was reached
+		if ( currentNode->getDepth() == mAnalysisSettings.jumpDepth ) continue;
 
-				// update path (global time)
-				childNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().begin()->getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
-				childNode->addTransitionToPath( transition, jmpSucc.getTimestamp() );
+		// create jump successor tasks
+		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( currentNode->getFlowpipe(), currentNode->getLocation() ) ) {
+			for ( const auto [valuationSet, localDuration] : timedValuationSets ) {
+				// update reachTree
+
+				// convert local time to global time
+				//TODO currently assuming time step is scaled to 1
+				carl::Interval<SegmentInd> const& initialSetDuration = currentNode->getTimings();
+				carl::Interval<SegmentInd> globalDuration = carl::Interval( initialSetDuration.lower() + localDuration.lower(), initialSetDuration.upper() + 1 + localDuration.upper() );
+
+				ReachTreeNode<Representation>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
 
 				// create Task
-				mWorkQueue.push( childNode );
+				mWorkQueue.push_front( &childNode );
 			}
 		}
 	}
 
-	return REACHABILITY_RESULT::SAFE;
-}
-
-template <typename Representation>
-REACHABILITY_RESULT RefinementAnalyzer<Representation>::run( const Path<Number, SegmentInd>& path ) {
+	return { REACHABILITY_RESULT::SAFE, nullptr };
 }
 
 }  // namespace hypro

@@ -4,7 +4,7 @@
 #include "datastructures/reachability/ReachTreev2.h"
 #include "types.h"
 
-#include <queue>
+#include <deque>
 
 namespace hypro {
 
@@ -17,45 +17,27 @@ class RefinementAnalyzer {
 	using Number = typename Representation::NumberType;
 
   public:
-	RefinementAnalyzer() = delete;
-	RefinementAnalyzer( const RefinementAnalyzer& other ) = delete;
-
-	/**
-	 * @brief Construct a new Refinement Analyzer object
-	 * @param ha
-	 * @param setting
-	 */
-	RefinementAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
+	RefinementAnalyzer( HybridAutomaton<Number> const& ha, Settings const& setting, ReachTreeNode<Representation>& root, Path<Number> path )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
-		, mRoots() {
+		, mPath( path ) {
+		mWorkQueue.push_front( &root );
 	}
-
-	/**
-	 * @brief Starts forward reachability analysis
-	 * @return REACHABILITY_RESULT
-	 */
-	REACHABILITY_RESULT run();
 
 	/**
 	 * @brief Refinement on a specific path
 	 * @param path
 	 * @return REACHABILITY_RESULT
 	 */
-	REACHABILITY_RESULT run( const Path<Number, SegmentInd>& path );
+	std::pair<REACHABILITY_RESULT, ReachTreeNode<Representation>*> run();
 
-	/**
-	 * @brief Get the computed flowpipes
-	 * @return const std::vector<Representation>&
-	 */
-	const std::vector<Representation>& getFlowpipes() const { return mFlowpipes; }
+	std::deque<ReachTreeNode<Representation>*> const& workQueue() { return mWorkQueue; }
 
   protected:
-	std::queue<ReachTreeNode<Representation>*> mWorkQueue;	///< Queue for nodes in the tree which require processing
-	std::list<std::vector<Representation>> mFlowpipes;		///< Computed flowpipe segments
+	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	///< Queue for nodes in the tree which require processing
 	const HybridAutomaton<Number>& mHybridAutomaton;		///< Hybrid automaton
 	Settings mAnalysisSettings;								///< Used analysis settings
-	std::vector<ReachTreeNode<Representation>> mRoots{};	///< Root nodes of the internal reachability tree
+	Path<Number> mPath{};
 };
 
 }  // namespace hypro

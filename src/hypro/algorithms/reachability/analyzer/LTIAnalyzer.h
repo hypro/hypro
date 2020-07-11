@@ -14,22 +14,20 @@ class LTIAnalyzer {
 	using Number = typename State::NumberType;
 
   public:
-	LTIAnalyzer() = delete;
-	LTIAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
+	LTIAnalyzer( HybridAutomaton<Number> const & ha, Settings const& setting, std::vector<ReachTreeNode<State>>& roots )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting ) {
+		for ( auto& root : roots ) {
+			mWorkQueue.push_front( &root );
+		}
 	}
 
-	REACHABILITY_RESULT run();
-
-	const std::list<std::vector<State>>& getFlowpipes() const { return mFlowpipes; }
+	std::pair<REACHABILITY_RESULT, ReachTreeNode<State>*> run();
 
   protected:
-	std::queue<ReachTreeNode<State>*> mWorkQueue;
-	std::list<std::vector<State>> mFlowpipes;
+	std::deque<ReachTreeNode<State>*> mWorkQueue;
 	HybridAutomaton<Number> mHybridAutomaton;
 	Settings mAnalysisSettings;
-	std::vector<ReachTreeNode<State>> mRoots;
 };
 
 }  // namespace hypro

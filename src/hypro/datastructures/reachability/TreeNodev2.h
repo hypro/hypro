@@ -8,6 +8,7 @@ namespace hypro {
 
 template <class DerivedNode>
 class TreeNode {
+  protected:
 	DerivedNode* mParent{};
 	std::vector<std::unique_ptr<DerivedNode>> mChildren{};
 	size_t mDepth{ 0 };
@@ -36,16 +37,18 @@ class TreeNode {
 	}
 
 	auto getChildren() {
-		return boost::adaptors::transform( mChildren, []( auto& uPtr ) -> DerivedNode& {
-			return *uPtr;
+		return boost::adaptors::transform( mChildren, []( auto& uPtr ) -> DerivedNode* {
+			return uPtr.get();
 		} );
 	}
 
 	auto getChildren() const {
 		return boost::adaptors::transform( mChildren, []( auto const& uPtr ) -> DerivedNode const& {
-			return *uPtr;
+			return uPtr.get();
 		} );
 	}
+
+
 };
 
 }  // namespace hypro

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../HybridAutomaton/Location.h"
-#include "../HybridAutomaton/Path.h"
+#include "../HybridAutomaton/Pathv2.h"
 #include "../HybridAutomaton/Transition.h"
 #include "TreeNodev2.h"
 #include "util/typetraits.h"
@@ -17,28 +17,30 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-	Location<Number> const* mLocation;						///< location in which the flowpipe was computed
-	std::vector<Transition<Number> const*> mTransitions{};	///< contains the corresponding transition for each child
-	std::vector<Representation>* mFlowpipe{};				///< contains computed flowpipe
-	Representation mInitialSet;								///< contains initial set for the flowpipe
-	carl::Interval<SegmentInd> mTimings{};					///< global time covered by inital set the flowpipe (used as offset)
+	Location<Number> const* mLocation;		   ///< location in which the flowpipe was computed
+	Transition<Number> const* mTransition{};  ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};   ///< contains computed flowpipe
+	Representation mInitialSet;				   ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};	   ///< global time covered by inital set the flowpipe (used as offset)
 
   public:
+	//Exposition types
+	using Rep = Representation;
+
 	//Forwarding from base
 	using Base::getChildren;
 	using Base::getDepth;
 
-	ReachTreeNode( ReachTreeNode* parent, Location<Number> const* loc, std::vector<Representation>* flowpipe, Representation initialSet, carl::Interval<SegmentInd> timings )
+	ReachTreeNode( ReachTreeNode* parent, Transition<Number> const* transition, Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: Base( parent )
 		, mLocation( loc )
-		, mFlowpipe( flowpipe )
+		, mTransition( transition )
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
 	}
 
-	ReachTreeNode( Location<Number> const* loc, std::vector<Representation>* flowpipe, Representation initialSet, carl::Interval<SegmentInd> timings )
+	ReachTreeNode( Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: mLocation( loc )
-		, mFlowpipe( flowpipe )
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
 	}
@@ -51,19 +53,22 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 * @param transition The transition taken to the new location
 	 * @return A reference to the new child
 	 */
-	ReachTreeNode& addChild( std::vector<Representation>* flowpipe, Representation initialSet, carl::Interval<SegmentInd> timings, Transition<Number> const* transition );
+	ReachTreeNode& addChild( Representation initialSet, carl::Interval<SegmentInd> timings, Transition<Number> const* transition );
 
 	/**
      * @brief Get the path to the current node (computed)
      * @return Path<Number, SegmentInd>
      */
-	Path<Number, SegmentInd> getPath() const;
+	Path<Number> getPath() const;
+
+	Transition<Number> const* getTransition() const { return mTransition; }
 
 	/**
      * @brief Get access to the flowpipe
      * @return std::vector<Representation>*
      */
-	std::vector<Representation>* getFlowpipe() const { return mFlowpipe; }
+	std::vector<Representation>& getFlowpipe() { return mFlowpipe; }
+	std::vector<Representation> const& getFlowpipe() const { return mFlowpipe; }
 
 	/**
 	 * @brief Get the initial set
@@ -82,6 +87,29 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };
+
+template <class Representation, class Number>
+std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha ) {
+	std::vector<ReachTreeNode<Representation>> roots{};
+
+	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), []( auto const& locCond ) {
+		auto const& [location, condition] = locCond;
+		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, { 0, 0 } };
+	} );
+
+	return roots;
+}
+
+template <class RTN>
+struct RTN_Rep_i;
+
+template <class Representation>
+struct RTN_Rep_i<ReachTreeNode<Representation>> {
+	using type = Representation;
+};
+
+template <class RTN>
+using RTN_Rep = typename RTN_Rep_i<std::remove_pointer_t<std::remove_reference_t<std::remove_cv_t<RTN>>>>::type;
 
 }  // namespace hypro
 
