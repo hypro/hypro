@@ -225,6 +225,7 @@ std::string Location<Number>::getDotRepresentation( const std::vector<std::strin
 	return o.str();
 }
 
+/*
 template <typename Number>
 bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
 	// verify name (future work: we need some stronger criterion, also to speed-up the look-up)
@@ -246,7 +247,6 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 	// The check searches for matching variables - the *I indices refer to the rhs-related indices
 	// while the *Pos indices refer to this.
 
-	//std::cout << "compare flows " << mLinearFlows[0] << " and " << rhs.getFlow() << std::endl;
 	for ( Eigen::Index rowI = 0; rowI != rhs.getLinearFlow().getFlowMatrix().rows() - 1; ++rowI ) {
 		// find according row in this.
 		Eigen::Index rowPos = 0;
@@ -342,6 +342,7 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 
 	return true;
 }
+*/
 
 /*
 template<typename Number>

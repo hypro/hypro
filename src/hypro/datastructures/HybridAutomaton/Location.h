@@ -26,7 +26,8 @@ template <typename Number>
 using flowVariant = std::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 /**
- * @brief      Class for location.
+ * @brief      Class for a location of a hybrid automaton.
+ * @details    The dynamics can be linear or rectangular, the class also provides ways to combine both. Furthermore, subspaces are supported.
  * @tparam     Number  The used number type.
  */
 template <typename Number>
@@ -46,13 +47,19 @@ class Location {
 	mutable std::size_t mHash = 0;
 
   public:
+	/// default constructor
 	Location();
+	/// construction by name
 	Location( const std::string& name );
+	/// copy constructor
 	Location( const Location& loc );
+	/// construction from flow matrix
 	explicit Location( const matrix_t<Number>& mat );
+	/// construction from matrix, vector and invariant condition
 	Location( const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv );
+	/// destructor
 	~Location() {}
-
+	/// assignment operator
 	Location<Number>& operator=( const Location<Number>& in );
 
 	std::size_t getNumberFlow() const { return mLinearFlows.size(); }
@@ -65,23 +72,35 @@ class Location {
 	const std::vector<rectangularFlow<Number>>& getRectangularFlows() const { return mRectangularFlows; }
 
 	const Condition<Number>& getInvariant() const { return mInvariant; }
+	/// getter for outgoing transitions
 	const transitionVector& getTransitions() const { return mTransitions; }
+	/// getter to non-const reference of transitions (allows in-place modifications)
 	transitionVector& rGetTransitions() { return mTransitions; }
 	const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
+	/// returns whether the locations' dynamics is influenced by external input/disturbances
 	bool hasExternalInput() const { return mHasExternalInput; }
+	/// getter for the locations' id (deprecated)
 	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
+	/// getter for the name of the location
 	std::string getName() const { return mName; }
+	/// getter for the state space dimension
 	std::size_t dimension() const;
+	/// getter for the state space dimension of a specific subspace
 	std::size_t dimension( std::size_t i ) const;
-
+	/// setter for the name
 	void setName( const std::string& name ) {
 		mName = name;
 		mHash = 0;
 	}
+	/// setter for linear flow of a subspace (optional, default 0) via passing a matrix
 	void setFlow( const matrix_t<Number>& f, std::size_t I = 0 ) { this->setLinearFlow( linearFlow<Number>( f ), I ); }
+	/// setter for linear flow of a subspace (optional, default 0)
 	void setFlow( const linearFlow<Number>& f, std::size_t I = 0 ) { this->setLinearFlow( f, I ); }
+	/// setter for rectangular flow of a subspace (optional, default 0)
 	void setFlow( const rectangularFlow<Number>& f, std::size_t I = 0 ) { this->setRectangularFlow( f, I ); }
+	/// explicit setter of linear flow for a subspace (optional, default 0)
 	void setLinearFlow( const linearFlow<Number>& f, std::size_t I = 0 );
+	/// explicit setter of rectangular flow for a subspace (optional, default 0)
 	void setRectangularFlow( const rectangularFlow<Number>& f, std::size_t I = 0 );
 	void setLinearFlow( const std::vector<linearFlow<Number>>& flows ) {
 		mLinearFlows = flows;
@@ -95,11 +114,13 @@ class Location {
 		mInvariant = inv;
 		mHash = 0;
 	}
+	/// setter for vector of outgoing transitions (move)
 	void setTransitions( transitionVector&& trans );
+	/// adds outgoing transitions
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
-	//void updateTransition(Transition<Number>* original, Transition<Number>* newT);
+	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
-
+	/// returns hash value of the location
 	std::size_t hash() const;
 
 	/**
@@ -112,15 +133,13 @@ class Location {
      *
      * @return     True if composed of, False otherwise.
      */
-	bool isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
+	//bool isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
 
+	/// returns dot-representation of the location
 	std::string getDotRepresentation( const std::vector<std::string>& vars ) const;
-
-	/*
-    * decomposes flow and invariant of this location.
-    */
+	/// decomposes location into subspaces defined in the passed decomposition
 	void decompose( const Decomposition& decomposition );
-
+	/// hash-based less operator
 	inline bool operator<( const Location<Number>& rhs ) const {
 		if ( this->hash() != rhs.hash() ) {
 			return this->hash() < rhs.hash();
@@ -131,7 +150,7 @@ class Location {
 			return mName < rhs.getName();
 		}
 	}
-
+	/// equal comparison
 	inline bool operator==( const Location<Number>& rhs ) const {
 		//TRACE("hypro.datastructures","Comparison of " << *this << " and " << rhs);
 		if ( this->hash() != rhs.hash() ) {
@@ -212,6 +231,10 @@ class Location {
 	}
 };
 
+/**
+ * @brief Pointer-comparison functor
+ * @tparam Number
+ */
 template <typename Number>
 struct locPtrComp {
 	bool operator()( const Location<Number>* lhs, const Location<Number>* rhs ) const { return ( *lhs < *rhs ); }

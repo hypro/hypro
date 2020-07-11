@@ -8,6 +8,7 @@
 #include "../flow/operations.h"
 #include "Decomposition.h"
 
+#include <algorithm>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graph_traits.hpp>
@@ -31,34 +32,49 @@ bool checkDecomposed( const HybridAutomaton<Number> &automaton );
 template <typename Number>
 std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton );
 
+namespace detail {
+/// adds edges in the subspace graph for related variables of a linear transformation
 template <typename Number>
 void addEdgesForLinTrafo( matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+/// adds edges in the subspace graph for related variables of an affine transformation
 template <typename Number>
 void addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+/// adds edges in the subspace graph for related variables in a condition
 template <typename Number>
 void addEdgesForCondition( Condition<Number> condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+/// adds edges in the subspace graph for related variables in an interval transformation
 template <typename Number>
 void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+/// adds edges in the subspace graph for related variables in an interval assignment
 template <typename Number>
 void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> &map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+}  // namespace detail
 
+/// checks whether the automaton is a timed automaton
 template <typename Number>
 bool isTimedAutomaton( const HybridAutomaton<Number> &ha );
+/// checks whether the automaton is a rectangular automaton
 template <typename Number>
 bool isRectangularAutomaton( const HybridAutomaton<Number> &ha );
 
+/// checks whether the location exhibits timed automata semantics
 template <typename Number>
 bool isTimedLocation( const Location<Number> &loc );
+/// checks whether the location exhibits rectangular automata semantics
 template <typename Number>
 bool isRectangularLocation( const Location<Number> &loc );
 
+/// checks whether the subspace at index exhibits timed automata semantics
 template <typename Number>
 bool isTimedSubspace( const Location<Number> &loc, size_t index );
+/// checks whether the subspace at index exhibits rectangular automata semantics
 template <typename Number>
 bool isRectangularSubspace( const Location<Number> &loc, size_t index );
+/// checks whether the subspace at index exhibits discrete automata semantics
 template <typename Number>
 bool isDiscreteSubspace( const Location<Number> &loc, size_t index );
 
+/// detects most common dynamics type for a hybrid automaton
 template <typename Number>
 DynamicType getDynamicType( const HybridAutomaton<Number> &automaton ) {
 	DynamicType res = DynamicType::undefined;

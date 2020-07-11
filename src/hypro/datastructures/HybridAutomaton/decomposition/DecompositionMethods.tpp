@@ -216,10 +216,8 @@ bool isTimedLocation( const Location<Number> &loc ) {
 
 template <typename Number>
 bool isRectangularLocation( const Location<Number> &loc ) {
-	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() );
 	for ( size_t i = 0; i < loc.getNumberFlow(); i++ ) {
 		if ( !isRectangularSubspace( loc, i ) ) {
-			TRACE( "hypro.decisionEntity", "Subspace " << i << " is not rectangular." );
 			return false;
 		}
 	}
@@ -329,6 +327,8 @@ void addEdgesForCondition( Condition<Number> condition, boost::adjacency_list<bo
 		}
 	}
 }
+
+}  // namespace detail
 
 template <typename Number>
 Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton ) {
