@@ -17,7 +17,7 @@ struct clp_context {
 	double* mColumnLowerBounds = nullptr;
 	double* mColumnUpperBounds = nullptr;
 	bool arraysCreated = false;			   // true if array variables have been created.
-	mutable bool mInitialized = false;	 // true if lp instance has been created.
+	mutable bool mInitialized = false;	 // true if lp instance has been created, not needed for clp
 	mutable bool mConstraintsSet = false;  // true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
 
 	bool operator==( const clp_context& rhs ) {
@@ -57,16 +57,14 @@ struct clp_context {
 
 	~clp_context() {
 		deleteArrays();
+		mConstraintsSet = false;
 	}
 
 	template <typename Number>
 	void setMatrix( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
-		createArrays( constraints.rows(), constraints.cols() );
-		if ( !mInitialized ) {
-			matrix = detail::createMatrix( constraints );
-			mInitialized = true;
-		}
 		if ( !mConstraintsSet ){
+			matrix = detail::createMatrix( constraints );
+			createArrays( constraints.rows(), constraints.cols() );
 			for ( int i = 0; i < constants.rows(); ++i ) {
 				switch ( relations[i] ) {
 					case carl::Relation::LEQ:
