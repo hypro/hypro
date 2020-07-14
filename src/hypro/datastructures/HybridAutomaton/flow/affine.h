@@ -31,6 +31,13 @@ class affineFlow : public linearFlow<Number> {
 	}
 	const vector_t<Number>& getTranslation() const { return mTranslation; }
 
+	DynamicType getDynamicsType() const {
+		if ( dimension() == 0 || mTranslation == vector_t<Number>::Zero( dimension() ) ) {
+			return linearFlow<Number>::getDynamicsType();
+		}
+		return DynamicType::affine;
+	}
+
 	bool hasTranslation() const {
 		if ( mIsNoTranslation == TRIBOOL::NSET ) {
 			if ( mTranslation.rows() == 0 ) {
