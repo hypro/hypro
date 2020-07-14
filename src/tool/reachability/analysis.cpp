@@ -63,7 +63,7 @@ void analyze( HybridAutomaton<Number>& automaton, Settings settings ) {
 	if ( false ) {
 		dispatch<hydra::Number, Converter<hydra::Number>>( settings.strategy.front().representation_type, settings.strategy.front().representation_setting, Dispatcher{}, automaton, settings );
 	} else {
-		CEGARAnalyzer<Number> analyzer{ automaton, settings };
+		CEGARAnalyzerDefault<Number> analyzer{ automaton, settings };
 		analyzer.run();
 		analyzer.plot();
 	}

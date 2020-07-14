@@ -8,27 +8,52 @@
 #include "util/plotting/Plotter.h"
 #include "util/type_handling/dispatch.h"
 
+#include <boost/range/adaptor/transformed.hpp>
+#include <boost/range/counting_range.hpp>
 #include <functional>
 #include <queue>
 #include <variant>
 
 namespace hypro {
 
-template <class Number>
+template <class Number, class... Representations>
 class CEGARAnalyzer {
-	template <class... Representations>
-	using TreeNodePtrVariant = std::variant<ReachTreeNode<Representations>*...>;
-
-	using TreeNodePtr = apply<TreeNodePtrVariant, RepresentationsList<Number, Converter<Number>>>;
+	using TreeNodePtr = std::variant<ReachTreeNode<Representations>*...>;
 
 	template <class Representation>
 	struct ConcreteRefinementLevel {
 		RefinementAnalyzer<Representation> analyzer;
-		ReachTreeNode<Representation> root{};
+		std::vector<ReachTreeNode<Representation>> roots{};
+
+		ReachTreeNode<Representation>& addOrGetRoot( HybridAutomaton<Number> const& automaton, Location<Number> const* loc ) {
+			auto rootIt = std::find_if( roots.begin(), roots.end(), [&]( auto& root ) { return root.getLocation() == loc; } );
+			if ( rootIt == roots.end() ) {
+				auto const& condition = automaton.getInitialStates().at( loc );
+				return roots.emplace_back( loc, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval{ 0, 0 } );
+			}
+			return *rootIt;
+		}
+
+		ConcreteRefinementLevel( ConcreteRefinementLevel const& ) = delete;
+		ConcreteRefinementLevel& operator=( ConcreteRefinementLevel const& ) = delete;
+
+		ConcreteRefinementLevel( ConcreteRefinementLevel&& ) = default;
+		ConcreteRefinementLevel& operator=( ConcreteRefinementLevel&& ) = default;
 	};
 
-	template <class... Representations>
-	struct RefinementLevelVariant {
+	template <class Representation>
+	struct ConcreteBaseLevel {
+		LTIAnalyzer<Representation> analyzer;
+		std::vector<ReachTreeNode<Representation>> roots{};
+
+		ConcreteBaseLevel( ConcreteBaseLevel const& ) = delete;
+		ConcreteBaseLevel& operator=( ConcreteBaseLevel const& ) = delete;
+
+		ConcreteBaseLevel( ConcreteBaseLevel&& ) = default;
+		ConcreteBaseLevel& operator=( ConcreteBaseLevel&& ) = default;
+	};
+
+	struct RefinementLevel {
 		std::variant<ConcreteRefinementLevel<Representations>...> variant;
 
 		std::pair<REACHABILITY_RESULT, TreeNodePtr> run() {
@@ -38,15 +63,7 @@ class CEGARAnalyzer {
 							   variant );
 		}
 	};
-
-	template <class Representation>
-	struct ConcreteBaseLevel {
-		LTIAnalyzer<Representation> analyzer;
-		std::vector<ReachTreeNode<Representation>> roots{};
-	};
-
-	template <class... Representations>
-	struct BaseLevelVariant {
+	struct BaseLevel {
 		std::variant<ConcreteBaseLevel<Representations>...> variant;
 
 		std::pair<REACHABILITY_RESULT, TreeNodePtr> run() {
@@ -60,11 +77,10 @@ class CEGARAnalyzer {
 	struct CreateBaseLevel;
 	struct CreateRefinementLevel;
 
-	using RefinementLevel = apply<RefinementLevelVariant, RepresentationsList<Number, Converter<Number>>>;
-	using BaseLevel = apply<BaseLevelVariant, RepresentationsList<Number, Converter<Number>>>;
-
-	BaseLevel createBaseLevel();
-	RefinementLevel& createRefinementLevel( size_t index, Path<Number> path, Location<Number> const* loc );
+	static BaseLevel createBaseLevel( HybridAutomaton<Number> const& automaton, Settings const& setting );
+	RefinementLevel& createRefinementLevel( size_t index );
+	template <class LevelFrom, class LevelTo>
+	void transferNodes( LevelFrom& from, TreeNodePtr& nodePtrFrom, LevelTo& to );
 
   public:
 	CEGARAnalyzer() = delete;
@@ -76,23 +92,38 @@ class CEGARAnalyzer {
 	 */
 	CEGARAnalyzer( const HybridAutomaton<Number>& ha, const Settings& settings )
 		: mHybridAutomaton( ha )
-		, mSettings( settings ) {
+		, mSettings( settings )
+		, mBaseLevel( createBaseLevel( ha, settings ) ) {
 	}
 
 	REACHABILITY_RESULT run();
+
+	using TreePtrVariant = std::variant<std::vector<ReachTreeNode<Representations>>*...>;
+
+	TreePtrVariant getTree( size_t levelIndex ) {
+		if ( levelIndex == 0 ) {
+			return std::visit( []( auto& baseLevel ) -> TreePtrVariant { return &baseLevel.roots; }, mBaseLevel.variant );
+		} else {
+			return std::visit( []( auto& refinementLevel ) -> TreePtrVariant { return &refinementLevel.roots; }, mLevels[levelIndex - 1].variant );
+		}
+	}
+
+	auto getTrees() {
+		return boost::adaptors::transform( boost::counting_range( 0ul, mLevels.size() + 1 ), [&]( size_t ind ) { return getTree( ind ); } );
+	}
 
 	void plot() {
 		// call to plotting.
 		START_BENCHMARK_OPERATION( Plotting );
 
 		std::size_t amount = 0;
-		for ( auto& level : mLevels ) {
-			std::visit( [&]( auto& concLevel ) {
-				for ( const auto& node : preorder( concLevel.root ) ) {
+		for ( auto roots : getTrees() ) {
+			std::visit( [&]( auto* r ) {
+				for ( const auto& node : preorder( *r ) ) {
 					amount += node.getFlowpipe().size();
 				}
 			},
-						level.variant );
+						roots );
 		}
 
 		auto& plt = Plotter<Number>::getInstance();
@@ -100,16 +131,16 @@ class CEGARAnalyzer {
 			std::cout << "Prepare plot " << pic + 1 << "/" << mSettings.plotDimensions.size() << "." << std::endl;
 			plt.setFilename( mSettings.plotFileNames[pic] );
 			std::size_t segmentCount = 0;
-			for ( auto& level : mLevels ) {
-				std::visit( [&]( auto& concLevel ) {
-					for ( const auto& node : preorder( concLevel.root ) ) {
+			for ( auto roots : getTrees() ) {
+				std::visit( [&]( auto* r ) {
+					for ( const auto& node : preorder( *r ) ) {
 						for ( const auto& segment : node.getFlowpipe() ) {
 							std::cout << "\r" << segmentCount++ << "/" << amount << "..." << std::flush;
 							plt.addObject( segment.project( mSettings.plotDimensions[pic] ).vertices() );
 						}
 					}
 				},
-							level.variant );
+							roots );
 			}
 			plt.plot2d( mSettings.plottingFileType );  // writes to .plt file for pdf creation
 		}
@@ -118,9 +149,13 @@ class CEGARAnalyzer {
 
   protected:
 	HybridAutomaton<Number> mHybridAutomaton;
-	std::vector<RefinementLevel> mLevels{};
 	Settings mSettings{};
+	BaseLevel mBaseLevel;
+	std::vector<RefinementLevel> mLevels{};
 };
+
+template <class Number>
+using CEGARAnalyzerDefault = apply<CEGARAnalyzer, concat<TypeList<Number>, RepresentationsList<Number, Converter<Number>>>>;
 
 }  // namespace hypro
 

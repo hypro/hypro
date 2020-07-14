@@ -23,6 +23,7 @@ class LTIAnalyzer {
 	}
 
 	std::pair<REACHABILITY_RESULT, ReachTreeNode<State>*> run();
+	void addToQueue( ReachTreeNode<State>* node ) { mWorkQueue.push_front( node ); }
 
   protected:
 	std::deque<ReachTreeNode<State>*> mWorkQueue;
