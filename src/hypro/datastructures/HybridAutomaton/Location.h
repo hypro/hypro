@@ -64,15 +64,30 @@ class Location {
 	Location<Number>& operator=( const Location<Number>& in );
 
 	/// returns the number of subspaces
-	std::size_t getNumberSubspaces() const { return mFlows.size(); }
+	std::size_t getNumberSubspaces() const {
+		assert( isConsistent() );
+		return mFlows.size();
+	}
 	/// returns a linear flow for a subspace. The type of subspace needs to be linear, otherwise this operation fails.
-	linearFlow<Number> getLinearFlow( std::size_t I = 0 ) const { return std::get<linearFlow<Number>>( mFlows[I] ); }
+	linearFlow<Number> getLinearFlow( std::size_t I = 0 ) const {
+		assert( isConsistent() );
+		return std::get<linearFlow<Number>>( mFlows[I] );
+	}
 	/// returns a rectangular flow for a subspace. The type of subspace needs to be rectangular, otherwise this operation fails.
-	rectangularFlow<Number> getRectangularFlow( std::size_t I = 0 ) const { return std::get<rectangularFlow<Number>>( mFlows[I] ); }
+	rectangularFlow<Number> getRectangularFlow( std::size_t I = 0 ) const {
+		assert( isConsistent() );
+		return std::get<rectangularFlow<Number>>( mFlows[I] );
+	}
 	/// getter for vector of flow-variants
-	const std::vector<flowVariant>& getFlows() const { return mFlows; }
+	const std::vector<flowVariant>& getFlows() const {
+		assert( isConsistent() );
+		return mFlows;
+	}
 	/// getter for vector of flow types
-	const std::vector<DynamicType>& getFlowTypes() const { return mFlowTypes; }
+	const std::vector<DynamicType>& getFlowTypes() const {
+		assert( isConsistent() );
+		return mFlowTypes;
+	}
 	/// returns index of the subspace the requested state space dimension is contained in (assuming linear, ascending order of subspaces and variables)
 	std::size_t getSubspaceIndexForStateSpaceDimension( std::size_t dimension ) const;
 	/// getter for invariant condition
@@ -251,6 +266,9 @@ class Location {
 #endif
 		return ostr;
 	}
+
+  private:
+	bool isConsistent() const { return mFlows.size() == mFlowTypes.size(); }
 };
 
 /**

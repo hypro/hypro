@@ -95,9 +95,11 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			return { rectangularDisp.operator()<CarlPolytope<Number>>( automaton, setting ) };
 		} break;
 		case DynamicType::timed:
-			break;
+			[[fallthrough]];
 		case DynamicType::discrete:
-			break;
+			[[fallthrough]];
+		case DynamicType::mixed:
+			assert( false && "specialized analysis not implemented yet." );
 		default:
 			assert( false && "No analyzer selected." );
 			break;
