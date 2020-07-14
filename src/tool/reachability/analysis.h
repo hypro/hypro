@@ -15,13 +15,13 @@ namespace reachability {
 
 using namespace hypro;
 
-using FullState = hypro::apply<hypro::State, concat<TypeList<Number>, RepresentationsList<Number, Converter<Number>>>>;
+using FullState = hypro::apply<hypro::State, concat<TypeList<Number, CarlPolytope<Number>>, RepresentationsList<Number, Converter<Number>>>>;
 
 struct AnalysisResult {
 	std::vector<hypro::PlotData<FullState>> plotData{};
 };
 
-AnalysisResult analyze( HybridAutomaton<Number> &automaton, hypro::Settings setting );
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, hypro::PreprocessingInformation information );
 
 }  // namespace reachability
 }  // namespace hydra

@@ -69,7 +69,7 @@ struct LTIDispatcher {
 	template <typename Rep>
 	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
 		using concreteState = hypro::State<hydra::Number, Rep>;
-		reuturn lti_analyze<concreteState>( automaton, setting );
+		return lti_analyze<concreteState>( automaton, setting );
 	}
 };
 
@@ -81,7 +81,7 @@ struct RectangularDispatcher {
 	}
 };
 
-AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, hypro::PreprocessingInformation information ) {
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
 	switch ( information.dynamic ) {
 		case DynamicType::affine:
 			[[fallthrough]];
@@ -92,7 +92,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, hy
 		case DynamicType::rectangular: {
 			// no dispatch for rectangular automata, representation and setting are fixed
 			RectangularDispatcher rectangularDisp{};
-			return { rectangularDisp.operator()<hypro::CarlPolytope<hydra::Number>>( automaton, setting ) };
+			return { rectangularDisp.operator()<CarlPolytope<Number>>( automaton, setting ) };
 		} break;
 		case DynamicType::timed:
 			break;
