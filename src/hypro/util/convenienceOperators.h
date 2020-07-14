@@ -9,36 +9,22 @@
 #include <vector>
 
 namespace hypro {
-/*
-	template<typename T>
-	bool operator ==(const std::vector<T>& lhs, const std::vector<T>& rhs) {
-		if(lhs.size() != rhs.size()){
-			return false;
-		}
 
-		for(std::size_t i = 0; i < lhs.size(); ++i){
-			if(lhs.at(i) != rhs.at(i)){
-				return false;
-			}
-		}
-
-		return true;
-	}
-	*/
-
-// enum outstream operators
+/// enum-to-int conversion
 template <typename Enumeration>
 auto as_integer( Enumeration const value )
 	  -> typename std::underlying_type<Enumeration>::type {
 	return static_cast<typename std::underlying_type<Enumeration>::type>( value );
 }
 
+/// enum outstream operator
 template <typename Enumeration, carl::EnableIf<std::is_enum<Enumeration>> = carl::dummy>
 std::ostream& operator<<( std::ostream& out, Enumeration in ) {
 	out << as_integer( in );
 	return out;
 }
 
+/// set-outstream operator (element-wise)
 template <typename T>
 std::ostream& operator<<( std::ostream& _out, const std::set<T>& _set ) {
 	if ( !_set.empty() ) {
@@ -51,6 +37,7 @@ std::ostream& operator<<( std::ostream& _out, const std::set<T>& _set ) {
 	return _out;
 }
 
+/// vector-outstream operator (element-wise)
 template <typename T>
 std::ostream& operator<<( std::ostream& _out, const std::vector<T>& _vector ) {
 	if ( !_vector.empty() ) {
@@ -63,6 +50,7 @@ std::ostream& operator<<( std::ostream& _out, const std::vector<T>& _vector ) {
 	return _out;
 }
 
+/// pair-outstream operator (element-wise)
 template <typename T>
 std::ostream& operator<<( std::ostream& _out, const std::pair<T, T>& _pair ) {
 	_out << _pair.first << ", " << _pair.second;
@@ -70,6 +58,7 @@ std::ostream& operator<<( std::ostream& _out, const std::pair<T, T>& _pair ) {
 	return _out;
 }
 
+/// map-outstream operator (element-wise)
 template <typename Key, typename T>
 std::ostream& operator<<( std::ostream& _out, const std::map<Key, T>& _map ) {
 	if ( !_map.empty() ) {
@@ -82,20 +71,21 @@ std::ostream& operator<<( std::ostream& _out, const std::map<Key, T>& _map ) {
 	return _out;
 }
 
+/// default case typename to string
 template <typename T>
 struct typeName {
 	std::string get() {
 		return "unknown";
 	}
 };
-
+/// typename to string: double
 template <>
 struct typeName<double> {
 	std::string get() {
 		return "double";
 	}
 };
-
+/// typename to string: mpq_class
 template <>
 struct typeName<mpq_class> {
 	std::string get() {

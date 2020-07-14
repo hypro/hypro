@@ -8,6 +8,8 @@
 
 using namespace hypro;
 
+namespace hypro {
+namespace examples {
 struct Functor {
 	template <typename Representation>
 	void operator()( representation_name name ) {
@@ -20,6 +22,8 @@ struct Functor {
 		}
 	}
 };
+}  // namespace examples
+}  // namespace hypro
 
 int main( int argc, char **argv ) {
 	assert( argc == 3 );
@@ -29,7 +33,7 @@ int main( int argc, char **argv ) {
 	representation_name representation = representation_name::_from_string( representationStr.c_str() );
 	int setting = stringToSetting( settingStr );
 
-	dispatch<double, Converter<double>>( representation, setting, Functor{},
+	dispatch<double, Converter<double>>( representation, setting, hypro::examples::Functor{},
 										 representation );
 
 	return 0;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../../util/logging/Logger.h"
-#include "../../../util/multithreading/Spinlock.h"
 #include "../../../util/typetraits.h"
 #include "WorkQueueSettings.h"
 

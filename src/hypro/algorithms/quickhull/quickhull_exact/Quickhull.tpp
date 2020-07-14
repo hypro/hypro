@@ -1,3 +1,6 @@
+#pragma once
+#include "Quickhull.h"
+
 namespace hypro {
 template <typename Number, bool Euclidian>
 ExactQuickhull<Number, Euclidian>::QuickhullAlgorithm( pointVector_t& points, dimension_t dimension )
@@ -219,7 +222,7 @@ void ExactQuickhull<Number, Euclidian>::processPoints() {
 	facet_ind_t facetToProcess_i = getFacetToProcess();
 
 	while ( facetToProcess_i != fSpace.facets.size() ) {
-		bitset_t visited{fSpace.facets.size()};
+		bitset_t visited{ fSpace.facets.size() };
 		visited.set( facetToProcess_i );
 		buildCone( facetToProcess_i, fSpace.facets[facetToProcess_i].furthestPoint, visited );
 
@@ -294,7 +297,7 @@ void ExactQuickhull<Number, Euclidian>::constructLowerDimensional() {
 	pointVector_t reducedPoints;
 
 	std::transform( points.begin(), points.end(), std::back_inserter<pointVector_t>( reducedPoints ), [reducableDimension, this]( point_t& point ) {
-		point_t reducedPoint{pointSize() - 1};
+		point_t reducedPoint{ pointSize() - 1 };
 
 		for ( size_t i = 0, j = 0; i < pointSize() - 1; ++i, ++j ) {
 			if ( j == reducableDimension ) j += 1;
@@ -306,7 +309,7 @@ void ExactQuickhull<Number, Euclidian>::constructLowerDimensional() {
 	} );
 
 	//TODO I have no idea how the 'Euclidian' template argument of Quickhull us inferred here.
-	QuickhullAlgorithm<Number, Euclidian> qh{reducedPoints, dimension - 1};
+	QuickhullAlgorithm<Number, Euclidian> qh{ reducedPoints, dimension - 1 };
 
 	qh.compute();
 

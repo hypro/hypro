@@ -10,15 +10,16 @@
 
 #pragma once
 
-#include "../hypro/datastructures/reachability/Strategy.h"
-#include "../hypro/util/logging/Logger.h"
 #include "typedefs.h"
+
+#include <hypro/datastructures/reachability/Strategy.h>
+#include <hypro/util/logging/Logger.h>
 #include <string>
 
 namespace hydra {
 
-hypro::Strategy<State> getStrategyFromName(const std::string &name);
+hypro::Strategy<State> getStrategyFromName( const std::string &name );
 
 std::map<std::string, hypro::Strategy<State>> getStrategiesMap();
 
-} // namespace hydra
+}  // namespace hydra

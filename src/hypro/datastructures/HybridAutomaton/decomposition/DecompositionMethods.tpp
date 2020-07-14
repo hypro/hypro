@@ -1,7 +1,8 @@
-#include "DecisionEntity.h"
+#include "DecompositionMethods.h"
+
 namespace hypro {
 template <typename Number>
-representation_name DecisionEntity<Number>::getRepresentationForSubspace( const Location<Number> &loc, size_t index ) {
+representation_name getRepresentationForSubspace( const Location<Number> &loc, size_t index ) {
 	// in the beginning we assume it is a timed automaton
 	bool isTimed = isTimedSubspace( loc, index );
 
@@ -13,7 +14,7 @@ representation_name DecisionEntity<Number>::getRepresentationForSubspace( const 
 }
 
 template <typename Number>
-representation_name DecisionEntity<Number>::getRepresentationForAutomaton( const HybridAutomaton<Number> &ha ) {
+representation_name getRepresentationForAutomaton( const HybridAutomaton<Number> &ha ) {
 	// in the beginning we assume it is a timed automaton
 	bool isTimed = isTimedAutomaton( ha );
 
@@ -25,7 +26,7 @@ representation_name DecisionEntity<Number>::getRepresentationForAutomaton( const
 }
 
 template <typename Number>
-representation_name DecisionEntity<Number>::getRepresentationForLocation( const Location<Number> &loc ) {
+representation_name getRepresentationForLocation( const Location<Number> &loc ) {
 	// in the beginning we assume it is a timed automaton
 	bool isTimed = isTimedLocation( loc );
 
@@ -37,12 +38,12 @@ representation_name DecisionEntity<Number>::getRepresentationForLocation( const 
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isDiscreteSubspace( const Location<Number> &loc, size_t index ) {
+bool isDiscreteSubspace( const Location<Number> &loc, size_t index ) {
 	return loc.getLinearFlow( index ).isDiscrete() && loc.getRectangularFlow( index ).isDiscrete();
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isTimedSubspace( const Location<Number> &loc, size_t index ) {
+bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
 	// check if flow is of the form
 	//	0 ... 0 1
@@ -107,7 +108,7 @@ bool DecisionEntity<Number>::isTimedSubspace( const Location<Number> &loc, size_
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isRectangularSubspace( const Location<Number> &loc, size_t index ) {
+bool isRectangularSubspace( const Location<Number> &loc, size_t index ) {
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
 
 	if ( !( loc.getLinearFlow( index ).hasNoFlow() && !loc.getRectangularFlow( index ).empty() ) ) {
@@ -153,7 +154,7 @@ bool DecisionEntity<Number>::isRectangularSubspace( const Location<Number> &loc,
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isTimedLocation( const Location<Number> &loc ) {
+bool isTimedLocation( const Location<Number> &loc ) {
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() );
 	// check if flow is of the form
 	//	0 ... 0 1
@@ -214,11 +215,9 @@ bool DecisionEntity<Number>::isTimedLocation( const Location<Number> &loc ) {
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isRectangularLocation( const Location<Number> &loc ) {
-	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() );
+bool isRectangularLocation( const Location<Number> &loc ) {
 	for ( size_t i = 0; i < loc.getNumberFlow(); i++ ) {
 		if ( !isRectangularSubspace( loc, i ) ) {
-			TRACE( "hypro.decisionEntity", "Subspace " << i << " is not rectangular." );
 			return false;
 		}
 	}
@@ -226,53 +225,38 @@ bool DecisionEntity<Number>::isRectangularLocation( const Location<Number> &loc 
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isTimedAutomaton( const HybridAutomaton<Number> &ha ) {
-	for ( auto location : ha.getLocations() ) {
-		if ( !isTimedLocation( *location ) ) {
-			return false;
-		}
-	}
-	return true;
+bool isTimedAutomaton( const HybridAutomaton<Number> &ha ) {
+	return std::all_of( ha.getLocations().begin(), ha.getLocations().end(), []( auto locPtr ) { return isTimedLocation( *locPtr ); } );
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::isRectangularAutomaton( const HybridAutomaton<Number> &ha ) {
-	for ( auto location : ha.getLocations() ) {
-		if ( !isRectangularLocation( *location ) ) {
-			return false;
-		}
-	}
-	return true;
+bool isRectangularAutomaton( const HybridAutomaton<Number> &ha ) {
+	return std::all_of( ha.getLocations().begin(), ha.getLocations().end(), []( auto locPtr ) { return isRectangularLocation( *locPtr ); } );
 }
 
 template <typename Number>
-bool DecisionEntity<Number>::checkDecomposed( const HybridAutomaton<Number> &automaton ) {
-	auto initialStates = automaton.getInitialStates();
-	for ( auto stateMapIt = initialStates.begin(); stateMapIt != initialStates.end(); ++stateMapIt ) {
-		if ( stateMapIt->second.size() > 1 ) {
+bool checkDecomposed( const HybridAutomaton<Number> &automaton ) {
+	for ( const auto &[locPtr, condition] : automaton.getInitialStates() ) {
+		if ( condition.size() > 1 ) {
 			return true;
 		}
 	}
 	return false;
 }
 
+namespace detail {
+
 template <typename Number>
-void DecisionEntity<Number>::addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
 	matrix_t<Number> tmp( affineTrafo );
 	// we do not consider the constant part of the trafo
 	tmp.conservativeResize( tmp.rows() - 1, tmp.cols() - 1 );
 
-	for ( Eigen::Index i = 0; i < tmp.rows(); i++ ) {
-		for ( Eigen::Index j = 0; j < tmp.cols(); j++ ) {
-			if ( tmp( i, j ) != 0 ) {
-				boost::add_edge( i, j, graph );
-			}
-		}
-	}
+	addEdgesForLinTrafo( tmp, graph );
 }
 
 template <typename Number>
-void DecisionEntity<Number>::addEdgesForLinTrafo( matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForLinTrafo( matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
 	for ( Eigen::Index i = 0; i < linTrafo.rows(); i++ ) {
 		for ( Eigen::Index j = 0; j < linTrafo.cols(); j++ ) {
 			if ( linTrafo( i, j ) != 0 ) {
@@ -283,7 +267,7 @@ void DecisionEntity<Number>::addEdgesForLinTrafo( matrix_t<Number> linTrafo, boo
 }
 
 template <typename Number>
-void DecisionEntity<Number>::addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
 	for ( size_t i = 0; i < intervals.size(); i++ ) {
 		for ( size_t j = 0; j < intervals.size(); j++ ) {
 			if ( i != j && intervals[i] != carl::Interval<Number>::emptyInterval() && intervals[j] != carl::Interval<Number>::emptyInterval() ) {
@@ -294,7 +278,7 @@ void DecisionEntity<Number>::addEdgesForRectTrafo( const std::vector<carl::Inter
 }
 
 template <typename Number>
-void DecisionEntity<Number>::addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> &map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> &map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
 	auto &vpool = VariablePool::getInstance();
 	for ( const auto &keyValPair1 : map ) {
 		for ( const auto &keyValPair2 : map ) {
@@ -306,7 +290,7 @@ void DecisionEntity<Number>::addEdgesForRectMap( const std::map<carl::Variable, 
 }
 
 template <typename Number>
-void DecisionEntity<Number>::addEdgesForCondition( Condition<Number> condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForCondition( const Condition<Number> &condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
 	if ( !( condition.size() > 0 ) ) {
 		//empty condition (e.g. location with no invariant) --> do nothing
 		return;
@@ -329,22 +313,10 @@ void DecisionEntity<Number>::addEdgesForCondition( Condition<Number> condition, 
 	}
 }
 
-template <typename Number>
-void DecisionEntity<Number>::printDecomposition( const Decomposition &decomposition ) {
-	int i = 0;
-	for ( auto bucket : decomposition ) {
-		std::cout << "Decomposition " << i << ": " << std::endl;
-		TRACE( "hypro.decisionEntity", "Decomposition " << i << ":" );
-		for ( auto var : bucket ) {
-			std::cout << "Var " << var << std::endl;
-			TRACE( "hypro.decisionEntity", "Var " << var );
-		}
-		i++;
-	}
-}
+}  // namespace detail
 
 template <typename Number>
-Decomposition DecisionEntity<Number>::getSubspaceDecomposition( const HybridAutomaton<Number> &automaton ) {
+Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton ) {
 	if ( checkDecomposed( automaton ) ) {
 		// return empty decomposition
 		return Decomposition();
@@ -353,31 +325,29 @@ Decomposition DecisionEntity<Number>::getSubspaceDecomposition( const HybridAuto
 	Graph G( automaton.dimension() - 1 );
 
 	//check flow and invariant of locations
-	for ( auto loc : automaton.getLocations() ) {
-		for ( std::size_t i = 0; i < loc->getNumberFlow(); ++i ) {
-			addEdgesForAffineTrafo( loc->getLinearFlow( i ).getFlowMatrix(), G );
-			addEdgesForRectMap( loc->getRectangularFlow( i ).getFlowIntervals(), G );
+	for ( auto locPtr : automaton.getLocations() ) {
+		for ( std::size_t i = 0; i < locPtr->getNumberFlow(); ++i ) {
+			detail::addEdgesForAffineTrafo( locPtr->getLinearFlow( i ).getFlowMatrix(), G );
+			detail::addEdgesForRectMap( locPtr->getRectangularFlow( i ).getFlowIntervals(), G );
 		}
 		// TODO: add further flow types
-		addEdgesForCondition( loc->getInvariant(), G );
+		detail::addEdgesForCondition( locPtr->getInvariant(), G );
 	}
 
 	//check reset and guards of transitions
-	for ( const auto transition : automaton.getTransitions() ) {
-		addEdgesForLinTrafo( transition->getReset().getMatrix(), G );
-		addEdgesForRectTrafo( transition->getReset().getIntervals(), G );
-		addEdgesForCondition( transition->getGuard(), G );
+	for ( const auto &transition : automaton.getTransitions() ) {
+		detail::addEdgesForLinTrafo( transition->getReset().getMatrix(), G );
+		detail::addEdgesForRectTrafo( transition->getReset().getIntervals(), G );
+		detail::addEdgesForCondition( transition->getGuard(), G );
 	}
 
 	//check local bad states
-	const std::map<const Location<Number> *, Condition<Number>> localBadstates = automaton.getLocalBadStates();
-	for ( auto it = localBadstates.begin(); it != localBadstates.end(); ++it ) {
-		addEdgesForCondition( it->second, G );
+	for ( const auto &[locPtr, condition] : automaton.getLocalBadStates() ) {
+		detail::addEdgesForCondition( condition, G );
 	}
 	//check global bad states
-	std::vector<Condition<Number>> globalBadStateConditions = automaton.getGlobalBadStates();
-	for ( auto condition : globalBadStateConditions ) {
-		addEdgesForCondition( condition, G );
+	for ( const auto &condition : automaton.getGlobalBadStates() ) {
+		detail::addEdgesForCondition( condition, G );
 	}
 
 	std::vector<int> component( num_vertices( G ) );
@@ -386,23 +356,24 @@ Decomposition DecisionEntity<Number>::getSubspaceDecomposition( const HybridAuto
 	// we parse this to a vector of vectors. each vector contains the variable indices for one component
 	// and can consequently can be given to project.
 	Decomposition res;
-	res.mDecomposition = std::vector<std::vector<size_t>>( num );
+	res.subspaces = std::vector<std::vector<size_t>>( num );
+	res.subspaceTypes = std::vector<DynamicType>( num, DynamicType::undefined );
 	std::vector<size_t>::size_type i;
 	for ( i = 0; i != component.size(); i++ ) {
-		res.mDecomposition[component[i]].push_back( i );
+		res.subspaces[component[i]].push_back( i );
 	}
 	return res;
 }
 
 template <typename Number>
-std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton( const HybridAutomaton<Number> &automaton ) {
+std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton ) {
+	// compute decomposition
 	Decomposition decomposition = getSubspaceDecomposition( automaton );
-	//SettingsProvider<State>::getInstance().setSubspaceDecomposition(decomposition);
-	if ( decomposition.size() <= 1 ) {
+
+	if ( decomposition.subspaces.size() <= 1 ) {
 		// decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
 		return std::make_pair( automaton, decomposition );
 	}
-	printDecomposition( decomposition );
 	TRACE( "hypro.decisionEntity", "Automaton before decomposition: " << automaton );
 	auto automatonCopy = automaton;
 	automatonCopy.decompose( decomposition );
