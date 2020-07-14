@@ -551,7 +551,7 @@ void Location<Number>::decompose( const Decomposition& decomposition ) {
 				std::size_t accumulatedDimension = std::visit( flowDimensionVisitor{}, mFlows[0] );
 				// accumulate state space dimensions
 				for ( std::size_t clusterIndex = 0; clusterIndex < clusterpos; ++clusterIndex ) {
-					accumulatedDimension += std::visit( flowDimensionVisitor{}, f );
+					accumulatedDimension += std::visit( flowDimensionVisitor{}, mFlows[clusterIndex] );
 				}
 				// correct cluster found, get offset and write row
 				assert( mFlowTypes[clusterpos] == DynamicType::linear );
