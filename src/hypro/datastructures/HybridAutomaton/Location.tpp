@@ -549,7 +549,10 @@ void Location<Number>::decompose( const Decomposition& decomposition ) {
 				// first find correct flow-cluster in existing dynamics
 				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
 				std::size_t accumulatedDimension = std::visit( flowDimensionVisitor{}, mFlows[0] );
-				std::for_each_n( mFlows.begin(), clusterpos, [&accumulatedDimension]( const auto& f ) { accumulatedDimension += std::visit( flowDimensionVisitor{}, f ); } );
+				// accumulate state space dimensions
+				for ( std::size_t clusterIndex = 0; clusterIndex < clusterpos; ++clusterIndex ) {
+					accumulatedDimension += std::visit( flowDimensionVisitor{}, f );
+				}
 				// correct cluster found, get offset and write row
 				assert( mFlowTypes[clusterpos] == DynamicType::linear );
 				newFlow.row( rowIndex ) = std::get<linearFlow<Number>>( mFlows[clusterpos] ).getFlowMatrix().row( accumulatedDimension - dimension - 1 );
