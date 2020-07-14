@@ -5,6 +5,7 @@ var classhypro_1_1affine_flow =
     [ "affineFlow", "classhypro_1_1affine_flow.html#a3482f025ce7248eaac1f0058c1bea9ce", null ],
     [ "~affineFlow", "classhypro_1_1affine_flow.html#ad0e5b97a36359c013eaaaf9cd3a9c4ce", null ],
     [ "dimension", "classhypro_1_1affine_flow.html#a6e443a875c180689388814148c084138", null ],
+    [ "getDynamicsType", "classhypro_1_1affine_flow.html#ae0909090cfe34c72ff6cb4a535a31e87", null ],
     [ "getTranslation", "classhypro_1_1affine_flow.html#af444d92184b6745b385c941f51b54ca9", null ],
     [ "hasTranslation", "classhypro_1_1affine_flow.html#abefc7f9305386c8fdf657b4f131f616e", null ],
     [ "isDiscrete", "classhypro_1_1affine_flow.html#a3a8acb42bc0040a6f588a427d4a01b2f", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"classhypro_1_1generic_assign_intervals_visitor.html":[8,0,2,69],
 "classhypro_1_1generic_assign_intervals_visitor.html#a6d648cfdd271de3b19c74c13af5ee7ca":[8,0,2,69,2],
 "classhypro_1_1generic_assign_intervals_visitor.html#a73bb16e7db0450538757a8f29a9b6448":[8,0,2,69,1],
 "classhypro_1_1generic_assign_intervals_visitor.html#aae4b532ac275b7f523c411592ffc8783":[8,0,2,69,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "continuous_8tpp_source.html":[9,0,1,0,2,13,1],
 "convenience_8h_source.html":[9,0,1,0,3,1,2,2],
 "conversion_8h_source.html":[9,0,1,0,3,10],
-"conversion_helper_8h_source.html":[9,0,1,0,2,2,1],
-"converter_to_box_8tpp.html":[9,0,1,0,2,2,3]
+"conversion_helper_8h_source.html":[9,0,1,0,2,2,1]
 };

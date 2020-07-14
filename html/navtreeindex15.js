@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"structhypro_1_1_refinement_setting.html#a78398fa4ee05be7cd74c0daa963cf2dc":[8,0,2,193,11],
 "structhypro_1_1_refinement_setting.html#aa41db5f06dfec2471c33bf92b0e50e65":[8,0,2,193,7],
 "structhypro_1_1_refinement_setting.html#ab71e70941d2a0e43acb5a2662355e925":[8,0,2,193,16],
 "structhypro_1_1_refinement_setting.html#ab9b6b81e3582a8333be993296524445c":[8,0,2,193,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "structstd_1_1hash_3_01hypro_1_1_ridge_3_01_number_01_4_01_4.html":[8,0,4,12],
 "structstd_1_1hash_3_01hypro_1_1_ridge_3_01_number_01_4_01_4.html#a0e73e68b1a8ba609e6c6065756a04c63":[8,0,4,12,0],
 "structstd_1_1hash_3_01hypro_1_1_transition_3_01_number_01_4_01_4.html":[8,0,4,13],
-"structstd_1_1hash_3_01hypro_1_1_transition_3_01_number_01_4_01_4.html#aa38739c9920c796c6e80fbb563ad94c9":[8,0,4,13,0],
-"structstd_1_1hash_3_01hypro_1_1_vertex_3_01_number_01_4_01_4.html":[8,0,4,15]
+"structstd_1_1hash_3_01hypro_1_1_transition_3_01_number_01_4_01_4.html#aa38739c9920c796c6e80fbb563ad94c9":[8,0,4,13,0]
 };

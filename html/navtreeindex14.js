@@ -1,5 +1,6 @@
 var NAVTREEINDEX14 =
 {
+"rectangular_invariant_handler_8tpp_source.html":[9,0,1,0,0,4,2,3,6],
 "rectangular_operations_8h_source.html":[9,0,1,0,1,0,1,5],
 "rectangular_reset_handler_8h_source.html":[9,0,1,0,0,4,2,5,3],
 "rectangular_reset_handler_8tpp_source.html":[9,0,1,0,0,4,2,5,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX14 =
 "structhypro_1_1_refinement_setting.html#a4e7926b0e7047f50a04733ccd803dfd8":[8,0,2,193,14],
 "structhypro_1_1_refinement_setting.html#a5aabc29003c8c7e326bd4331a14832b3":[8,0,2,193,0],
 "structhypro_1_1_refinement_setting.html#a618ebea3d493894d21939fc0788e3e58":[8,0,2,193,9],
-"structhypro_1_1_refinement_setting.html#a7242295cbc4f8db4cff7540186d9f8f7":[8,0,2,193,13],
-"structhypro_1_1_refinement_setting.html#a78398fa4ee05be7cd74c0daa963cf2dc":[8,0,2,193,11]
+"structhypro_1_1_refinement_setting.html#a7242295cbc4f8db4cff7540186d9f8f7":[8,0,2,193,13]
 };
