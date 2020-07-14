@@ -6,9 +6,9 @@ namespace reachability {
 using namespace hypro;
 
 template <typename State>
-void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+std::vector<PlotData<FullState>> concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
-	LTIAnalyzer<State> analyzer{automaton, setting};
+	LTIAnalyzer<State> analyzer{ automaton, setting };
 	auto result = analyzer.run();
 
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -17,42 +17,34 @@ void concrete_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	} else {
 		std::cout << "The model is safe." << std::endl;
 	}
-	EVALUATE_BENCHMARK_RESULT( Verification );
 
-	// call to plotting.
-	START_BENCHMARK_OPERATION( Plotting );
-	std::size_t amount = 0;
+	// create plot data
+	std::vector<PlotData<FullState>> plotData{};
+
 	for ( const auto& fp : analyzer.getFlowpipes() ) {
-		amount += fp.size();
+		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
+			FullState state{};
+			std::visit( [&]( auto& valuationSet ) {
+				state.setSet( valuationSet );
+			},
+						segment.getSet() );
+			return PlotData{ state, 0, 0 };
+		} );
 	}
-
-	auto& plt = Plotter<typename State::NumberType>::getInstance();
-	for ( std::size_t pic = 0; pic < setting.plotDimensions.size(); ++pic ) {
-		std::cout << "Prepare plot " << pic + 1 << "/" << setting.plotDimensions.size() << "." << std::endl;
-		plt.setFilename( setting.plotFileNames[pic] );
-		std::size_t segmentCount = 0;
-		for ( const auto& fp : analyzer.getFlowpipes() ) {
-			for ( const auto& segment : fp ) {
-				std::cout << "\r" << segmentCount++ << "/" << amount << "..." << std::flush;
-				plt.addObject( segment.project( setting.plotDimensions[pic] ).vertices() );
-			}
-		}
-		plt.plot2d( setting.plottingFileType );	 // writes to .plt file for pdf creation
-	}
-	EVALUATE_BENCHMARK_RESULT( Plotting );
+	return plotData;
 }
 
 struct Dispatcher {
 	template <typename Rep>
-	void operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
+	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
 		using concreteState = hypro::State<hydra::Number, Rep>;
-		concrete_analyze<concreteState>( automaton, setting );
+		return concrete_analyze<concreteState>( automaton, setting );
 	}
 };
 
-void analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
-													   setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting );
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
+																setting.strategy.front().representation_setting, Dispatcher{}, automaton, setting ) };
 }
 
 }  // namespace reachability
