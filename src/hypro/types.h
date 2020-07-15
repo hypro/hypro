@@ -102,7 +102,9 @@ enum class DynamicType { linear = 0,
 						 affine,
 						 rectangular,
 						 timed,
-						 discrete };
+						 discrete,
+						 mixed,
+						 undefined };
 
 enum class AGG_SETTING { MODEL,
 						 AGG,

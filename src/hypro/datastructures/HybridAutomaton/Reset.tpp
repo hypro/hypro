@@ -133,7 +133,7 @@ Reset<Number> combine(
 		std::size_t lhsIC = 0;
 		std::size_t rhsIR = 0;
 		std::size_t rhsIC = 0;
-		bool admissible = true;  // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
+		bool admissible = true;	 // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
 		// iterate over all rows
 		for ( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
 			//std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
@@ -225,7 +225,7 @@ void Reset<Number>::decompose( const Decomposition& decomposition ) {
 	mIntervalResets.clear();
 
 	// select constrains i,j,k into new constraint vector
-	for ( auto set : decomposition ) {
+	for ( auto set : decomposition.subspaces ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "decompose constraint for set: {" );
 		for ( auto entry : set ) {

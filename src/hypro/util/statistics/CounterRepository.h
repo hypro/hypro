@@ -23,14 +23,18 @@ namespace hypro {
  */
 namespace statistics {
 
+/**
+ * @brief Class which stores counters identified by strings
+ */
 class CounterRepository {
   private:
 	using CounterMapType = std::map<std::string, OperationCounter*>;
 
-	mutable std::mutex mtx;
-	CounterMapType counterMap;
+	mutable std::mutex mtx;		///< lock to enable mutable exclusive access to counters
+	CounterMapType counterMap;	///< stored counters
 
   public:
+	/// adds a counter
 	void add( std::string name ) {
 		ScopedLock<std::mutex>( this->mtx );
 		if ( counterMap.find( name ) == counterMap.end() ) {
@@ -38,11 +42,13 @@ class CounterRepository {
 		}
 	}
 
+	/// resets all counters
 	void reset() {
 		ScopedLock<std::mutex>( this->mtx );
 		counterMap.clear();
 	}
 
+	/// getter for a specific counter
 	OperationCounter& get( std::string name ) {
 		ScopedLock<std::mutex>( this->mtx );
 		auto counterIt = counterMap.find( name );
@@ -52,11 +58,13 @@ class CounterRepository {
 		return *( counterIt->second );
 	}
 
+	/// returns number of stored counters
 	std::size_t size() const {
 		ScopedLock<std::mutex>( this->mtx );
 		return counterMap.size();
 	}
 
+	/// outstream operator outputs all current counter values
 	friend std::ostream& operator<<( std::ostream& ostr, const CounterRepository& repo ) {
 		for ( const auto& counterPair : repo.counterMap ) {
 			ostr << counterPair.first << ": " << *counterPair.second << std::endl;

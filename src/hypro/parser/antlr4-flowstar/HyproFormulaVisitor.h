@@ -53,9 +53,16 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		std::vector<std::string>& vars;
 
 		//Helping functions
-		Number stringToNumber(const std::string& string) const;
-		Number multTogether(HybridAutomatonParser::TermContext* ctx) const;
-		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const;
+		Number stringToNumber(const std::string& string);
+		Number multTogether(HybridAutomatonParser::TermContext* ctx);
+		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx);
+
+		template<typename L, typename R>
+		bool isBefore(L* lhs, R* rhs);
+		template<typename L, typename R>
+		bool isAfter(L* lhs, R* rhs);
+		template<typename C, typename L, typename R>
+		bool isBetween(C* c, L* lhs, R* rhs);
 
 		//Constructor and Destructor
 		HyproFormulaVisitor(std::vector<std::string>& varVec);
@@ -69,6 +76,8 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *ctx) override;
 		antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override;
 		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;
+		antlrcpp::Any visitBracketExpression(HybridAutomatonParser::BracketExpressionContext *ctx) override;
+
 };
 
 } //namespace hypro

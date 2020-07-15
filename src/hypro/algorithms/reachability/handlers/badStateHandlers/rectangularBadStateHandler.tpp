@@ -2,42 +2,26 @@
 
 namespace hypro {
 template <typename State>
-void rectangularBadStateHandler<State>::handle() {
-	auto& vpool = hypro::VariablePool::getInstance();
-	auto& automaton = SettingsProvider<State>::getInstance().getHybridAutomaton();
-
+std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton ) {
 	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getLocalBadStates().size() << " local bad states." );
-	auto localBadState = automaton.getLocalBadStates().find( mState.getLocation() );
+	auto localBadState = automaton.getLocalBadStates().find( stateSet.getLocation() );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking local bad state: " << localBadState->second );
 
 		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 		// create carlPolytope, as intersection is defined for those
-		CarlPolytope<typename State::NumberType> badStateConstraints{localBadState->second.getMatrix( mIndex ), localBadState->second.getVector( mIndex )};
-		// substitute variables in the formulas by the correct ones in the subspace of the state
-		// 1. Determine offset
-		std::size_t dimensionOffset = mState.getDimensionOffset( mIndex );
-		// 2. substitute
-		for ( std::size_t i = 0; i < mState.getDimension( mIndex ); ++i ) {
-			badStateConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
-		}
+		CarlPolytope<typename State::NumberType> badStateConstraints{ localBadState->second.getMatrix(), localBadState->second.getVector() };
 
 		// intersect
-		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ).intersect( badStateConstraints );
+		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ).intersect( badStateConstraints );
 
 		// reduction
 		resultingSet.removeRedundancy();
 
-		// set containment information
-		if ( resultingSet.empty() ) {
-			mContainment = CONTAINMENT::NO;
-		} else {
-			mContainment = CONTAINMENT::YES;
-		}
-
-		if ( mContainment != hypro::CONTAINMENT::NO ) {
-			DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << mContainment << ")" );
-			return;
+		// process containment information
+		if ( !resultingSet.empty() ) {
+			DEBUG( "hydra.worker", "Intersection with local bad states." );
+			return std::make_pair( CONTAINMENT::YES, resultingSet );
 		}
 	}
 
@@ -45,38 +29,25 @@ void rectangularBadStateHandler<State>::handle() {
 
 	// check global bad states
 	for ( const auto& badState : automaton.getGlobalBadStates() ) {
-		if ( badState.getMatrix( mIndex ).rows() != 0 ) {
+		if ( badState.getMatrix().rows() != 0 ) {
 			// at least one global bad state in this subspace
 			// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 			// create carlPolytope, as intersection is defined for those
-			CarlPolytope<typename State::NumberType> badStateConstraints{badState.getMatrix( mIndex ), badState.getVector( mIndex )};
-			// substitute variables in the formulas by the correct ones in the subspace of the state
-			// 1. Determine offset
-			std::size_t dimensionOffset = mState.getDimensionOffset( mIndex );
-			// 2. substitute
-			for ( std::size_t i = 0; i < mState.getDimension( mIndex ); ++i ) {
-				badStateConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
-			}
+			CarlPolytope<typename State::NumberType> badStateConstraints{ badState.getMatrix(), badState.getVector() };
 
 			// intersect
-			auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ).intersect( badStateConstraints );
+			auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ).intersect( badStateConstraints );
 
 			// reduction
 			resultingSet.removeRedundancy();
 
 			// set containment information
-			if ( resultingSet.empty() ) {
-				mContainment = CONTAINMENT::NO;
-			} else {
-				mContainment = CONTAINMENT::YES;
-			}
-
-			if ( mContainment != hypro::CONTAINMENT::NO ) {
-				DEBUG( "hydra.worker", "Intersection with global bad states." );
-				return;
+			if ( !resultingSet.empty() ) {
+				return std::make_pair( CONTAINMENT::YES, resultingSet );
 			}
 		}
 	}
-	mContainment = CONTAINMENT::NO;
+	return std::make_pair( CONTAINMENT::NO, stateSet );
 }
+
 }  // namespace hypro

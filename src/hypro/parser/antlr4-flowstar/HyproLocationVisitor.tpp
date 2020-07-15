@@ -87,8 +87,13 @@ namespace hypro {
 		//3.Returns a ptr to location
 		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
-		loc->setLinearFlow(std::get<0>(flowAndExtInput));
-		loc->setRectangularFlow(std::get<1>(flowAndExtInput));
+		if(std::get<0>(flowAndExtInput).size() > 0) {
+			loc->setLinearFlow(std::get<0>(flowAndExtInput));
+		}
+		if(!std::get<1>(flowAndExtInput).empty()) {
+			loc->setRectangularFlow(std::get<1>(flowAndExtInput));
+		}
+
 		loc->setInvariant(inv);
 
 		// only set external input, if it is different from zero

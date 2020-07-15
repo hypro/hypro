@@ -6,6 +6,10 @@
 
 namespace hypro {
 
+/**
+ * @brief Set union visitor for std::variant of geometric object types
+ * @tparam T
+ */
 template <typename T>
 class genericUniteVisitor {
   public:
@@ -25,6 +29,10 @@ class genericUniteVisitor {
 	}
 };
 
+/**
+ * @brief Minkowski-sum visitor for std::variant of geometric object types
+ * @tparam T
+ */
 template <typename T>
 class genericMinkowskiSumVisitor {
   public:
@@ -37,11 +45,15 @@ class genericMinkowskiSumVisitor {
 
 	template <template <typename, typename, typename> typename A, typename S1, typename S2, typename N, typename C>
 	inline T operator()( const A<N, C, S1>& lhs, const A<N, C, S2>& rhs ) const {
-		A<N, C, S1> tmp{rhs};
+		A<N, C, S1> tmp{ rhs };
 		return lhs.minkowskiSum( tmp );
 	}
 };
 
+/**
+ * @brief Intersection visitor for std::variant of geometric object types
+ * @tparam T
+ */
 template <typename T>
 class genericIntersectVisitor {
   public:
@@ -49,7 +61,7 @@ class genericIntersectVisitor {
 	inline T operator()( const A& lhs, const A& rhs ) const {
 		return lhs.intersect( rhs );
 	}
-	
+
 	template <typename A, typename B>
 	inline T operator()( const A& lhs, const B& ) const {
 		assert( false && "INTERSECTION OF DIFFERENT TYPES." );
@@ -57,6 +69,11 @@ class genericIntersectVisitor {
 	}
 };
 
+/**
+ * @brief Affine transformation visitor for std::variant of geometric object types
+ * @tparam T
+ * @tparam Number
+ */
 template <typename T, typename Number>
 class genericAffineTransformationVisitor {
   protected:
@@ -77,6 +94,11 @@ class genericAffineTransformationVisitor {
 	}
 };
 
+/**
+ * @brief Conversion visitor for std::variant of geometric object types
+ * @tparam T
+ * @tparam To
+ */
 template <typename T, typename To>
 class genericConversionVisitor {
   public:
@@ -88,6 +110,11 @@ class genericConversionVisitor {
 	}
 };
 
+/**
+ * @brief Conversion visitor for std::variant of geometric object types
+ * @tparam T
+ * @tparam Ext
+ */
 template <typename T, typename Ext>
 class genericInternalConversionVisitor {
   protected:
@@ -106,6 +133,10 @@ class genericInternalConversionVisitor {
 	}
 };
 
+/**
+ * @brief Conversion and concretization for std::variant of geometric object types
+ * @tparam OutType
+ */
 template <typename OutType>
 class genericConvertAndGetVisitor {
   protected:
@@ -118,6 +149,11 @@ class genericConvertAndGetVisitor {
 	}
 };
 
+/**
+ * @brief Redundancy removal for std::variant of geometric object types
+ * @tparam T
+ * @tparam Number
+ */
 template <typename T, typename Number>
 class genericRedundancyVisitor {
   public:
@@ -128,6 +164,11 @@ class genericRedundancyVisitor {
 	}
 };
 
+/**
+ * @brief Reduction for std::variant of geometric object types
+ * @tparam T
+ * @tparam Number
+ */
 template <typename T, typename Number>
 class genericReductionVisitor {
   public:
@@ -138,6 +179,11 @@ class genericReductionVisitor {
 	}
 };
 
+/**
+ * @brief Test for half space containment for std::variant of geometric object types
+ * @tparam T
+ * @tparam Number
+ */
 template <typename T, typename Number>
 class genericSatisfiesHalfspacesVisitor {
   protected:
@@ -156,6 +202,9 @@ class genericSatisfiesHalfspacesVisitor {
 	}
 };
 
+/**
+ * @brief Equality comparison for std::variant of geometric object types
+ */
 class genericCompareVisitor {
   public:
 	template <typename A, typename B>
@@ -169,6 +218,9 @@ class genericCompareVisitor {
 	}
 };
 
+/**
+ * @brief Outstream operator for std::variant of geometric object types
+ */
 class genericOutstreamVisitor {
   protected:
 	std::ostream& out;
@@ -185,6 +237,9 @@ class genericOutstreamVisitor {
 	}
 };
 
+/**
+ * @brief State space dimension for std::variant of geometric object types
+ */
 class genericDimensionVisitor {
   public:
 	template <typename T>
@@ -193,6 +248,10 @@ class genericDimensionVisitor {
 	}
 };
 
+/**
+ * @brief Supremum function for std::variant of geometric object types
+ * @tparam T
+ */
 template <typename T>
 class genericSupremumVisitor {
   public:
@@ -202,6 +261,9 @@ class genericSupremumVisitor {
 	}
 };
 
+/**
+ * @brief Representation_name getter for std::variant of geometric object types
+ */
 class genericTypeVisitor {
   public:
 	template <typename A>
@@ -210,6 +272,10 @@ class genericTypeVisitor {
 	}
 };
 
+/**
+ * @brief Vertex enumeration for std::variant of geometric object types
+ * @tparam Number
+ */
 template <typename Number>
 class genericVerticesVisitor {
   public:
@@ -219,6 +285,10 @@ class genericVerticesVisitor {
 	}
 };
 
+/**
+ * @brief Subspace projection for std::variant of geometric object types
+ * @tparam T
+ */
 template <typename T>
 class genericProjectionVisitor {
   protected:
@@ -235,6 +305,11 @@ class genericProjectionVisitor {
 	}
 };
 
+/**
+ * @brief Assignment to intervals for std::variant of geometric object types
+ * @tparam T
+ * @tparam N
+ */
 template <typename T, typename N>
 class genericAssignIntervalsVisitor {
   protected:
@@ -251,6 +326,9 @@ class genericAssignIntervalsVisitor {
 	}
 };
 
+/**
+ * @brief Containment test for std::variant of geometric object types
+ */
 class genericSetContainsVisitor {
   public:
 	template <typename A, typename B>
@@ -265,6 +343,12 @@ class genericSetContainsVisitor {
 	}
 };
 
+/**
+ * @brief Assignment to intervals for std::variant of geometric object types
+ * @tparam T
+ * @tparam Number
+ */
+// TODO is this a duplicate?
 template <typename T, typename Number>
 class genericIntervalAssignmentVisitor {
 	const std::vector<carl::Interval<Number>>& mAssignments;
@@ -279,7 +363,7 @@ class genericIntervalAssignmentVisitor {
 	inline T operator()( const CarlPolytopeT<N, C, S>& lhs ) const {
 		DEBUG( "hypro.datastructures", "Interval assignment." );
 		assert( mAssignments.size() >= lhs.dimension() );
-		auto res{lhs};
+		auto res{ lhs };
 		for ( std::size_t i = 0; i < mAssignments.size(); ++i ) {
 			// the empty interval is used to encode identity resets.
 			if ( !mAssignments[i].isEmpty() ) {
@@ -301,6 +385,9 @@ class genericIntervalAssignmentVisitor {
 	}
 };
 
+/**
+ * @brief to string method for std::variant of geometric object types
+ */
 class genericToStringVisitor {
   public:
 	template <typename A>
@@ -311,6 +398,9 @@ class genericToStringVisitor {
 	}
 };
 
+/**
+ * @brief Test for emptiness for std::variant of geometric object types
+ */
 class genericEmptyVisitor {
   public:
 	template <typename A>

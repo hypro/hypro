@@ -4,7 +4,6 @@
 #include "../../util/logging/Filewriter.h"
 #include "../../util/logging/Logger.h"
 #include "../HybridAutomaton/HybridAutomaton.h"
-#include "../HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../HybridAutomaton/decomposition/Decomposition.h"
 #include "Settings.h"
 #include "Strategy.h"

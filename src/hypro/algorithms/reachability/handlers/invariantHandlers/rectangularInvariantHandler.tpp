@@ -2,43 +2,37 @@
 
 namespace hypro {
 template <typename State>
-void rectangularInvariantHandler<State>::handle() {
-	assert( !mState.getTimestamp().isEmpty() );
+std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet ) {
 	// check if initial Valuation fulfills Invariant
-	assert( mState.getLocation() != nullptr );
-	auto& vpool = hypro::VariablePool::getInstance();
+	assert( stateSet.getLocation() != nullptr );
+	CONTAINMENT containmentResult = CONTAINMENT::BOT;
 
-	TRACE( "hydra.worker", "Check invariant: " << mState.getLocation()->getInvariant() << " for set " << mState );
+	TRACE( "hydra.worker", "Check invariant: " << stateSet.getLocation()->getInvariant() << " for set " << stateSet );
 
 	// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 	// create carlPolytope, as intersection is defined for those
-	CarlPolytope<typename State::NumberType> invariantConstraints{mState.getLocation()->getInvariant().getMatrix( mIndex ), mState.getLocation()->getInvariant().getVector( mIndex )};
-	// substitute variables in the formulas by the correct ones in the subspace of the state
-	// 1. Determine offset
-	std::size_t dimensionOffset = mState.getDimensionOffset( mIndex );
-	// 2. substitute
-	for ( std::size_t i = 0; i < mState.getDimension( mIndex ); ++i ) {
-		invariantConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
-	}
+	// TEMPORARY!
+	State invariant{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };
 
 	// intersect
-	auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ).intersect( invariantConstraints );
+	auto resultingSet = stateSet.intersect( invariant );
 
 	// determine full vs. partial containment
-	if ( resultingSet == std::get<CarlPolytope<typename State::NumberType>>( mState.getSet( mIndex ) ) ) {
-		mContainment = CONTAINMENT::FULL;
+	if ( resultingSet == stateSet ) {
+		containmentResult = CONTAINMENT::FULL;
 	}
 
 	// reduction
 	resultingSet.removeRedundancy();
 
-	// set containment information
-	if ( resultingSet.empty() ) {
-		mContainment = CONTAINMENT::NO;
-	} else if ( mContainment != CONTAINMENT::FULL ) {
-		mContainment = CONTAINMENT::PARTIAL;
+	// return containment information
+	if ( resultingSet.isEmpty() ) {
+		return std::make_pair( CONTAINMENT::NO, resultingSet );
+	} else if ( containmentResult != CONTAINMENT::FULL ) {
+		return std::make_pair( CONTAINMENT::PARTIAL, resultingSet );
+	} else {
+		return std::make_pair( CONTAINMENT::FULL, resultingSet );
 	}
-
-	mState.setSet( resultingSet, mIndex );
 }
+
 }  // namespace hypro

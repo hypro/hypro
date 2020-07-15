@@ -1,24 +1,25 @@
-// /*
-//  * Strategies.h
-//  *
-//  * A file that lets you choose a reachability strategy by simply denoting its
-//  * name in the console. The string is received via CMDHandle.cc. The outputted
-//  * strategy is fed into the SettingsProvider.
-//  *
-//  * The strategies themselves are named after the TACAS conference.
-//  */
+/*
+ * Strategies.h
+ *
+ * A file that lets you choose a reachability strategy by simply denoting its
+ * name in the console. The string is received via CMDHandle.cc. The outputted
+ * strategy is fed into the SettingsProvider.
+ *
+ * The strategies themselves are named after the TACAS conference.
+ */
 
-// #pragma once
+#pragma once
 
-// #include "../hypro/datastructures/reachability/Strategy.h"
-// #include "../hypro/util/logging/Logger.h"
-// #include "typedefs.h"
-// #include <string>
+#include "typedefs.h"
 
-// namespace hydra {
+#include <hypro/datastructures/reachability/Strategy.h>
+#include <hypro/util/logging/Logger.h>
+#include <string>
 
-// hypro::Strategy<State> getStrategyFromName(const std::string &name);
+namespace hydra {
 
-// std::map<std::string, hypro::Strategy<State>> getStrategiesMap();
+hypro::Strategy<State> getStrategyFromName( const std::string &name );
 
-// } // namespace hydra
+std::map<std::string, hypro::Strategy<State>> getStrategiesMap();
+
+}  // namespace hydra

@@ -7,7 +7,7 @@ Condition<Number>::Condition( const std::vector<std::variant<ConstraintSetT<Numb
 	for ( const auto& item : sets ) {
 		mConstraints.push_back( std::get<ConstraintSetT<Number>>( item ) );
 	}
-	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(), TRIBOOL::NSET};
+	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
 	mHash = 0;
 }
 
@@ -37,7 +37,7 @@ void Condition<Number>::setMatrix( const matrix_t<Number>& m, std::size_t I ) {
 	}
 	mConstraints[I].rMatrix() = m;
 	DEBUG( "hypro.datastructures", "Set matrix at pos " << I << ", mConstraints.size() = " << mConstraints.size() );
-	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(), TRIBOOL::NSET};
+	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
 	mHash = 0;
 }
 
@@ -48,7 +48,7 @@ void Condition<Number>::setVector( const vector_t<Number>& v, std::size_t I ) {
 	}
 	mConstraints[I].rVector() = v;
 	DEBUG( "hypro.datastructures", "Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size() );
-	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(), TRIBOOL::NSET};
+	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
 	mHash = 0;
 }
 
@@ -121,15 +121,15 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 	if ( mConstraints.size() > 1 ) {
 		//already decomposed/empty constraints
 		return;
-	} else if ( mConstraints.size() == 0 && decomposition.size() > 0 ) {
+	} else if ( mConstraints.size() == 0 && decomposition.subspaces.size() > 0 ) {
 		//fill mConstaints with empty constraint sets
 		std::vector<ConstraintSetT<Number>> newCset;
-		for ( std::size_t i = 0; i < decomposition.size(); i++ ) {
+		for ( std::size_t i = 0; i < decomposition.subspaces.size(); i++ ) {
 			ConstraintSetT<Number> res = ConstraintSetT<Number>();
 			newCset.push_back( res );
 		}
 		mConstraints = newCset;
-		mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(), TRIBOOL::NSET};
+		mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
 		mHash = 0;
 		return;
 	}
@@ -142,7 +142,7 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 
 	std::vector<ConstraintSetT<Number>> newCset;
 	// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
-	for ( auto set : decomposition ) {
+	for ( auto set : decomposition.subspaces ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "decompose constraint for set: {" );
 		for ( auto entry : set ) {
@@ -189,7 +189,7 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 	}
 
 	mConstraints = newCset;
-	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(), TRIBOOL::NSET};
+	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
 	mHash = 0;
 	DEBUG( "hypro.datastructures", "Decomposed Condition, created " << mConstraints.size() << " new constraint sets." );
 }

@@ -9,7 +9,7 @@ void decomposeConstraintSet( Rep<Number, Settings>& in, const Decomposition& dec
 	matrix_t<Number> constraintsOld( in.matrix() );
 	vector_t<Number> constantsOld( in.vector() );
 	int i = 0;
-	for ( auto decomp : decomposition ) {
+	for ( auto decomp : decomposition.subspaces ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "Trying to project set: \n " << in << "\n to dimensions: " );
 		DEBUG( "hypro.datastructures", "{" );

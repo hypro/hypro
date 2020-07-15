@@ -1,25 +1,15 @@
 #include "analysis.h"
 
-#include "../../hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h"
-#include "../../hypro/algorithms/reachability/analyzer/LTIAnalyzer.h"
-#include "../../hypro/datastructures/HybridAutomaton/State.h"
-#include "../../hypro/datastructures/reachability/TreeTraversal.h"
-#include "../../hypro/representations/conversion/Converter.h"
-#include "../../hypro/util/plotting/Plotter.h"
-#include "../../hypro/util/type_handling/dispatch.h"
-
 namespace hydra {
 namespace reachability {
 
 using namespace hypro;
 
-template <class Analyzer, class Representation, class Number>
-void concrete_analyze( HybridAutomaton<Number> const& automaton, Settings settings ) {
+template <typename State>
+std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
-
-	auto roots = makeRoots<Representation>(automaton);
-	Analyzer analyzer{automaton, settings, roots};
-	auto [result, _] = analyzer.run();
+	LTIAnalyzer<State> analyzer{ automaton, setting };
+	auto result = analyzer.run();
 
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
 		std::cout << "Could not verify safety." << std::endl;
@@ -29,43 +19,90 @@ void concrete_analyze( HybridAutomaton<Number> const& automaton, Settings settin
 	}
 	EVALUATE_BENCHMARK_RESULT( Verification );
 
-	// call to plotting.
-	START_BENCHMARK_OPERATION( Plotting );
-	std::size_t amount = 0;
-	for ( const auto& node : preorder(roots) ) {
-		amount += node.getFlowpipe().size();
-	}
+	// create plot data
+	std::vector<PlotData<FullState>> plotData{};
 
-	auto& plt = Plotter<typename State::NumberType>::getInstance();
-	for ( std::size_t pic = 0; pic < settings.plotDimensions.size(); ++pic ) {
-		std::cout << "Prepare plot " << pic + 1 << "/" << settings.plotDimensions.size() << "." << std::endl;
-		plt.setFilename( settings.plotFileNames[pic] );
-		std::size_t segmentCount = 0;
-		for ( const auto& node : preorder(roots) ) {
-			for ( const auto& segment : node.getFlowpipe() ) {
-				std::cout << "\r" << segmentCount++ << "/" << amount << "..." << std::flush;
-				plt.addObject( segment.project( settings.plotDimensions[pic] ).vertices() );
-			}
-		}
-		plt.plot2d( settings.plottingFileType );	 // writes to .plt file for pdf creation
+	for ( const auto& fp : analyzer.getFlowpipes() ) {
+		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
+			FullState state{};
+			std::visit( [&]( auto& valuationSet ) {
+				state.setSet( valuationSet );
+			},
+						segment.getSet() );
+			return PlotData{ state, 0, 0 };
+		} );
 	}
-	EVALUATE_BENCHMARK_RESULT( Plotting );
+	return plotData;
 }
 
-struct Dispatcher {
+template <typename State>
+std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	START_BENCHMARK_OPERATION( Verification );
+	RectangularAnalyzer<State> analyzer{ automaton, setting };
+	auto result = analyzer.run();
+
+	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
+		std::cout << "Could not verify safety." << std::endl;
+		// Call bad state handling (e.g., return path)
+	} else {
+		std::cout << "The model is safe." << std::endl;
+	}
+	EVALUATE_BENCHMARK_RESULT( Verification );
+
+	// create plot data
+	std::vector<PlotData<FullState>> plotData{};
+
+	for ( const auto& fp : analyzer.getFlowpipes() ) {
+		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
+			FullState state{};
+			std::visit( [&]( auto& valuationSet ) {
+				state.setSet( valuationSet );
+			},
+						segment.getSet() );
+			return PlotData{ state, 0, 0 };
+		} );
+	}
+	return plotData;
+}
+
+struct LTIDispatcher {
 	template <typename Rep>
-	void operator()( HybridAutomaton<Number>& automaton, Settings settings ) {
-		concrete_analyze<LTIAnalyzer<Rep>, Rep>( automaton, settings );
+	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
+		using concreteState = hypro::State<hydra::Number, Rep>;
+		return lti_analyze<concreteState>( automaton, setting );
 	}
 };
 
-void analyze( HybridAutomaton<Number>& automaton, Settings settings ) {
-	if ( false ) {
-		dispatch<hydra::Number, Converter<hydra::Number>>( settings.strategy.front().representation_type, settings.strategy.front().representation_setting, Dispatcher{}, automaton, settings );
-	} else {
-		CEGARAnalyzerDefault<Number> analyzer{ automaton, settings };
-		analyzer.run();
-		analyzer.plot();
+struct RectangularDispatcher {
+	template <typename Rep>
+	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
+		using concreteState = hypro::State<hydra::Number, Rep>;
+		return rectangular_analyze<concreteState>( automaton, setting );
+	}
+};
+
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
+	switch ( information.dynamic ) {
+		case DynamicType::affine:
+			[[fallthrough]];
+		case DynamicType::linear:
+			return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
+																		setting.strategy.front().representation_setting, LTIDispatcher{}, automaton, setting ) };
+			break;
+		case DynamicType::rectangular: {
+			// no dispatch for rectangular automata, representation and setting are fixed
+			RectangularDispatcher rectangularDisp{};
+			return { rectangularDisp.operator()<CarlPolytope<Number>>( automaton, setting ) };
+		} break;
+		case DynamicType::timed:
+			[[fallthrough]];
+		case DynamicType::discrete:
+			[[fallthrough]];
+		case DynamicType::mixed:
+			assert( false && "specialized analysis not implemented yet." );
+		default:
+			assert( false && "No analyzer selected." );
+			break;
 	}
 }
 
