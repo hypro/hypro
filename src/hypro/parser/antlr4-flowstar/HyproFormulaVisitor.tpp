@@ -15,7 +15,7 @@ namespace hypro {
 	///////////// Helping functions
 
 	template<typename Number>
-	Number HyproFormulaVisitor<Number>::stringToNumber(const std::string& string) const {
+	Number HyproFormulaVisitor<Number>::stringToNumber(const std::string& string)  {
 		double numInFloat = boost::lexical_cast<double>(string);
 		//double numInFloat = std::stod(string);
 		//std::cerr << "String: " << string << " converted with lexical_cast(string) to double numInFloat: " << numInFloat << std::endl;
@@ -24,7 +24,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Number HyproFormulaVisitor<Number>::multTogether(HybridAutomatonParser::TermContext* ctx) const {
+	Number HyproFormulaVisitor<Number>::multTogether(HybridAutomatonParser::TermContext* ctx)  {
 
 		//Turn -2*3*4*-5*x ... into 120*x
 		Number multed = 1;
@@ -68,11 +68,12 @@ namespace hypro {
 	//For a given polynom context, return the vector of coefficients in the order of variables pushed into vars
 	//The last coefficient is a constant, so the one without a respective variable
 	template<typename Number>
-	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const {
+	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) {
 
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
 		std::size_t lastTermEndIndex = 0;
 
+		// handle plain terms
 		for(const auto& mTerm : ctx->term()){
 
 			//Multiply numbers and handle connectors within term
@@ -109,7 +110,42 @@ namespace hypro {
 			lastTermEndIndex = mTerm->stop->getStopIndex();
 
 		}
+
+		lastTermEndIndex = 0;
+		for(auto bracketExpr : ctx->bracketExpression()) {
+			vector_t<Number> coefficients = visitBracketExpression(bracketExpr).template as<vector_t<Number>>();
+			// handle minuses
+			std::size_t minusCount = 0;
+			for(const auto& mConnector : ctx->connector()){
+				std::size_t connectorStartIndex = mConnector->start->getStartIndex();
+				if(lastTermEndIndex < connectorStartIndex && connectorStartIndex < bracketExpr->start->getStartIndex() && mConnector->getText() == "-"){
+					minusCount++;
+				}
+			}
+			if(minusCount % 2 == 1) {
+				coefficients = -coefficients;
+			}
+			coeffVec += coefficients;
+			lastTermEndIndex = bracketExpr->stop->getStopIndex();
+		}
 		return coeffVec;
+	}
+
+	template<typename Number>
+	template<typename L, typename R>
+	bool HyproFormulaVisitor<Number>::isBefore(L* lhs, R* rhs) {
+		return lhs->stop->getStopIndex() < rhs->start->getStartIndex();
+	}
+
+	template<typename Number>
+	template<typename L, typename R>
+	bool HyproFormulaVisitor<Number>::isAfter(L* lhs, R* rhs) {
+		return lhs->start->getStartIndex() > rhs->stop->getStopIndex();
+	}
+	template<typename Number>
+	template<typename C, typename L, typename R>
+	bool HyproFormulaVisitor<Number>::isBetween(C* c, L* lhs, R* rhs) {
+		return isAfter(c,lhs) and isBefore(c, rhs);
 	}
 
 	///////////// Functions inherited by FormulaBaseVisitor
@@ -168,55 +204,15 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitExpression(HybridAutomatonParser::ExpressionContext *ctx) {
-		
+
 		DEBUG("hypro.parser", "current expression: " << ctx->getText());
 
 		//If expression is only a polynom, return the coeff vector of the polynom
-		if(ctx->polynom() != nullptr){
+
 			vector_t<Number> result = visit(ctx->polynom()).template as<vector_t<Number>>();
 			return result;
-		}
 
-		//Assert that terms do not have variable names inside (do not allow multiplication of multiple variables)
-		//if(ctx->term().size() > 0 && ctx->term(0)->VARIABLE().size() > 0 || ctx->term(1)->VARIABLE().size() > 0){
-		//	std::cerr << "ERROR: Multiplication of multiple variables not allowed" << std::endl;
-		//}
 
-		//Get factor left and right outside the expressions
-		assert(0 <= ctx->term().size() && ctx->term().size() <= 2);
-		Number leftFactor = 1;
-		Number rightFactor = 1;
-		if(ctx->term().size() != 0){
-			if(ctx->term(0)->start->getStartIndex() > ctx->expression().back()->stop->getStopIndex()){
-				//There was no left term, so the first term is the right-hand side term
-				rightFactor = multTogether(ctx->term(0));
-			} else {
-				//The first term is the left term
-				leftFactor = multTogether(ctx->term(0));
-				rightFactor = ctx->term().size() == 2 ? multTogether(ctx->term(1)) : 1;
-			}
-		}
-
-		//Get the vectors of each subexpression and aggregate them according to the connector in front
-		assert(ctx->expression().size() >= 1);
-		assert(ctx->expression().size() == ctx->connector().size() + 1);
-		vector_t<Number> aggregateResult = visit(ctx->expression(0)).template as<vector_t<Number>>();
-		for(std::size_t i = 1; i < ctx->expression().size(); ++i){
-			if(ctx->connector()[i-1]->getText() == "+"){
-				aggregateResult += visit(ctx->expression()[i]).template as<vector_t<Number>>();
-			} else if(ctx->connector()[i-1]->getText() == "-"){
-				aggregateResult -= visit(ctx->expression()[i]).template as<vector_t<Number>>();
-			} else {
-				std::cerr << "ERROR: Unknown operation found during expression aggregation." << std::endl;
-			}
-		}
-
-		//Multiply/Divide by the left and right factors with the result and return it
-		if(ctx->DIVIDE() != nullptr){
-			return vector_t<Number>((leftFactor / rightFactor) * aggregateResult);
-		} else {
-			return vector_t<Number>((leftFactor * rightFactor) * aggregateResult);
-		}
 	}
 
 	template<typename Number>
@@ -413,5 +409,47 @@ namespace hypro {
 
 			return std::make_pair(tmpMatrix, tmpVector);
 		}
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproFormulaVisitor<Number>::visitBracketExpression(HybridAutomatonParser::BracketExpressionContext *ctx) {
+		//Get factor left and right outside the expressions
+		assert(0 <= ctx->NUMBER().size() && ctx->NUMBER().size() <= 2);
+		Number leftFactor = 1;
+		Number rightFactor = 1;
+		if(ctx->NUMBER().size() != 0){
+			if( ctx->NUMBER(0)->getSymbol()->getStartIndex() > ctx->polynom()->getStop()->getStopIndex()){
+				//There was no left term, so the first term is the right-hand side term
+				rightFactor = stringToNumber(ctx->NUMBER(0)->getText());
+			} else {
+				//The first term is the left term
+				leftFactor = stringToNumber(ctx->NUMBER(0)->getText());
+				rightFactor = ctx->NUMBER().size() == 2 ? stringToNumber(ctx->NUMBER(1)->getText()) : 1;
+			}
+		}
+
+		if(ctx->MINUS().size() != 0){
+			if( ctx->MINUS(0)->getSymbol()->getStartIndex() >  ctx->polynom()->getStop()->getStopIndex()){
+				//There was no left minus, so the first term is the right-hand side term
+				rightFactor = -rightFactor;
+			} else {
+				//The first term is the left term
+				leftFactor = -leftFactor;
+				rightFactor = ctx->MINUS().size() == 2 ? -rightFactor : rightFactor;
+			}
+		}
+
+		// get polynomial coefficients vector
+		vector_t<Number> coefficients = visitPolynom(ctx->polynom()).template as<vector_t<Number>>();
+
+		// apply left factor
+		coefficients = leftFactor * coefficients;
+		// apply right factor/divisor
+		if(ctx->DIVIDE() != nullptr) {
+			coefficients = coefficients / rightFactor;
+		} else {
+			coefficients = coefficients * rightFactor;
+		}
+		return coefficients;
 	}
 }

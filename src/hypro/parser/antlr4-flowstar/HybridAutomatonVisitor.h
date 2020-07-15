@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -41,6 +41,8 @@ public:
     virtual antlrcpp::Any visitConnector(HybridAutomatonParser::ConnectorContext *context) = 0;
 
     virtual antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *context) = 0;
+
+    virtual antlrcpp::Any visitBracketExpression(HybridAutomatonParser::BracketExpressionContext *context) = 0;
 
     virtual antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *context) = 0;
 

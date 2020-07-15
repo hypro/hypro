@@ -68,7 +68,7 @@ class AntlrParserTest : public ::testing::Test {
 
 TYPED_TEST( AntlrParserTest, JustTesting ) {
 	// std::string path( "../../../../src/test/core/examples/test_bouncing_ball.txt" );
-	std::string path("../src/test/core/examples/test_bouncing_ball.txt");
+	std::string path( "../src/test/core/examples/test_bouncing_ball.txt" );
 	// std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
 	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
 
@@ -84,7 +84,7 @@ TYPED_TEST( AntlrParserTest, JustTesting ) {
 
 TYPED_TEST( AntlrParserTest, Settings ) {
 	std::string path( "../src/test/core/examples/test_settings.txt" );
-	//std::string path( "../../../../src/test/core/examples/test_settings.txt" );
+	// std::string path( "../../../../src/test/core/examples/test_settings.txt" );
 
 	this->cwd();
 	try {
@@ -98,7 +98,7 @@ TYPED_TEST( AntlrParserTest, Settings ) {
 
 TYPED_TEST( AntlrParserTest, PlainRectangular ) {
 	std::string path( "../src/test/core/examples/test_plain_rectangular.txt" );
-	//std::string path( "../../../../src/test/core/examples/test_plain_rectangular.txt" );
+	// std::string path( "../../../../src/test/core/examples/test_plain_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -112,7 +112,7 @@ TYPED_TEST( AntlrParserTest, PlainRectangular ) {
 
 TYPED_TEST( AntlrParserTest, MixedRectangular ) {
 	std::string path( "../src/test/core/examples/test_mixed_rectangular.txt" );
-	//std::string path( "../../../../src/test/core/examples/test_mixed_rectangular.txt" );
+	// std::string path( "../../../../src/test/core/examples/test_mixed_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -126,8 +126,8 @@ TYPED_TEST( AntlrParserTest, MixedRectangular ) {
 
 TYPED_TEST( AntlrParserTest, EmptyFile ) {
 	std::string path( "../src/test/core/examples/test_empty_file.txt" );
-	//std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
-	
+	// std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
+
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
 		FAIL();
@@ -139,7 +139,7 @@ TYPED_TEST( AntlrParserTest, EmptyFile ) {
 
 TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
 	std::string path( "../src/test/core/examples/test_transition_parsing_2.txt" );
-	//std::string path( "../../../../src/test/core/examples/test_transition_parsing_2.txt" );
+	// std::string path( "../../../../src/test/core/examples/test_transition_parsing_2.txt" );
 	// std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
@@ -181,29 +181,56 @@ TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
 }
 
 TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
-
 	std::string path( "../src/test/core/examples/test_bracket_parsing.txt" );
-	//std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
-	
+	// std::string path( "../../../../src/test/core/examples/test_empty_file.txt" );
+
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
-		Location<TypeParam>* loc = h.first.getLocation("negAngle");
-		matrix_t<TypeParam> controlMatrix = matrix_t<TypeParam>::Zero(13,13);
-		controlMatrix << 0,0,0,0,0,0,0,0,0,0,0,0,0.13453709720348,
-						23.4,-0.5,3,0,0,0,0,0,0,0,0,0,0,
-						1,0,0,0,0,0,0,0,0,0,0,0,0,
-						1,-1,1,0,0,0,0,0,0,0,0,0,0,
-						10,-10,10,0,0,0,0,0,0,0,0,0,0,
-						-2,2,-2,-0,-0,-0,-0,-0,-0,-0,-0,-0,-0,
-						1,0,0,0,0,0,0,0,0,0,0,0,0,
-						1,-1,1,0,0,0,0,0,0,0,0,0,0,
-						1,-1,10,0,0,0,0,0,0,0,0,0,0,
-						1,-1,1,0,0,0,0,0,0,0,0,0,0,
-						20,-25,10,40,0,0,-20,-10,0,0,0,0,30.3,
-						6,3,0,0,0,0,0,0,0,0,0,0,4,
-						0,0,0,0,0,0,0,0,0,0,0,0,0;
-		if(std::is_same<TypeParam,double>::value){
-			EXPECT_TRUE(controlMatrix.isApprox(loc->getLinearFlow().getFlowMatrix()));
+		Location<TypeParam>* loc = h.first.getLocation( "negAngle" );
+
+		matrix_t<TypeParam> controlMatrix = matrix_t<TypeParam>::Zero( 14, 14 );
+		controlMatrix( 0, 13 ) = TypeParam( 0.13453709720348 );
+		controlMatrix( 1, 0 ) = TypeParam( 23.4 );
+		controlMatrix( 1, 1 ) = -0.5;
+		controlMatrix( 1, 2 ) = 3;
+		controlMatrix( 1, 13 ) = 4;
+		controlMatrix( 2, 0 ) = TypeParam( 1 );
+		controlMatrix( 3, 0 ) = 1;
+		controlMatrix( 3, 1 ) = -1;
+		controlMatrix( 3, 2 ) = 1;
+		controlMatrix( 4, 0 ) = 10;
+		controlMatrix( 4, 1 ) = -10;
+		controlMatrix( 4, 2 ) = 10;
+		controlMatrix( 5, 0 ) = -2;
+		controlMatrix( 5, 1 ) = 2;
+		controlMatrix( 5, 2 ) = -2;
+		controlMatrix( 6, 0 ) = 1;
+		controlMatrix( 7, 0 ) = 1;
+		controlMatrix( 7, 1 ) = -1;
+		controlMatrix( 7, 2 ) = 1;
+		controlMatrix( 8, 0 ) = 1;
+		controlMatrix( 8, 1 ) = -1;
+		controlMatrix( 8, 2 ) = 10;
+		controlMatrix( 9, 0 ) = 1;
+		controlMatrix( 9, 1 ) = -1;
+		controlMatrix( 9, 2 ) = 1;
+		controlMatrix( 10, 0 ) = 20;
+		controlMatrix( 10, 1 ) = -25;
+		controlMatrix( 10, 2 ) = 10;
+		controlMatrix( 10, 3 ) = 40;
+		controlMatrix( 10, 6 ) = -20;
+		controlMatrix( 10, 7 ) = -10;
+		controlMatrix( 10, 13 ) = 30.3;
+		controlMatrix( 11, 0 ) = 6;
+		controlMatrix( 11, 1 ) = 3;
+		controlMatrix( 12, 0 ) = 6;
+		controlMatrix( 12, 1 ) = 3;
+		controlMatrix( 12, 13 ) = 4;
+		if ( std::is_same<TypeParam, double>::value ) {
+			std::cout << loc->getLinearFlow().getFlowMatrix() << std::endl;
+
+			std::cout << "Expected: " << std::endl << controlMatrix << std::endl;
+			EXPECT_TRUE( controlMatrix.isApprox( loc->getLinearFlow().getFlowMatrix() ) );
 		} else {
 			SUCCEED();
 		}
@@ -211,93 +238,92 @@ TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
 		std::cout << e.what() << std::endl;
 		FAIL();
 	}
-
 }
 
-//TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
-	/*
-	 * The simplest hybrid automaton HA that will be accepted by the parser is:
-	 * - location l with x' = 1, no invariant, no transitions
-	 * - initial state x in [0,0]
-	 * - Settings for stepsize, maximum amount of jumps, duration of computation, output name, dimensions to plot
-	 */
-	/*
-		std::string path("../../../../src/test/core/examples/test_minimal_accepted_file.txt");
-		//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_minimal_accepted_file.txt");
-		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h;
-		try{
-			h = parseFlowstarFile<TypeParam>(path);
-		} catch(const std::runtime_error& e){
-			std::cout << e.what() << std::endl;
-			FAIL();
-		}
+// TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
+/*
+ * The simplest hybrid automaton HA that will be accepted by the parser is:
+ * - location l with x' = 1, no invariant, no transitions
+ * - initial state x in [0,0]
+ * - Settings for stepsize, maximum amount of jumps, duration of computation, output name, dimensions to plot
+ */
+/*
+	std::string path("../../../../src/test/core/examples/test_minimal_accepted_file.txt");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_minimal_accepted_file.txt");
+	std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h;
+	try{
+		h = parseFlowstarFile<TypeParam>(path);
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
 
-		//Test if Settings were right
-		ReachabilitySettings controlSettings;
-		controlSettings.timeBound = TypeParam(3);
-		controlSettings.jumpDepth = 1;
-		controlSettings.timeStep = TypeParam(0.01);
-		controlSettings.fileName = std::string("test_minimal_accepted_file");
-		//std::vector<std::size_t> dimensions;
-		//dimensions.push_back(0);
-		std::vector<std::vector<std::size_t>> plotDims;
-		//plotDims.push_back(dimensions);
-		controlSettings.plotDimensions = plotDims;
-		EXPECT_EQ(std::get<1>(h).plotDimensions.size(), size_t(0));
-		EXPECT_EQ(std::get<1>(h).plotDimensions.size(), controlSettings.plotDimensions.size());
-		EXPECT_EQ(std::get<1>(h), controlSettings);
+	//Test if Settings were right
+	ReachabilitySettings controlSettings;
+	controlSettings.timeBound = TypeParam(3);
+	controlSettings.jumpDepth = 1;
+	controlSettings.timeStep = TypeParam(0.01);
+	controlSettings.fileName = std::string("test_minimal_accepted_file");
+	//std::vector<std::size_t> dimensions;
+	//dimensions.push_back(0);
+	std::vector<std::vector<std::size_t>> plotDims;
+	//plotDims.push_back(dimensions);
+	controlSettings.plotDimensions = plotDims;
+	EXPECT_EQ(std::get<1>(h).plotDimensions.size(), size_t(0));
+	EXPECT_EQ(std::get<1>(h).plotDimensions.size(), controlSettings.plotDimensions.size());
+	EXPECT_EQ(std::get<1>(h), controlSettings);
 
-		//Build hybrid automaton HA
-		//The location
-		matrix_t<TypeParam> flow = matrix_t<TypeParam>::Zero(2,2);
-		flow(0,1) = TypeParam(1);
-		LocationManager<TypeParam>& locManager = LocationManager<TypeParam>::getInstance();
-		Location<TypeParam>* loc = locManager.create(flow);
-		std::string name("l");
-		loc->setName(name);
-		//External Input
-		//std::vector<carl::Interval<TypeParam>> ExtInput;
-		//ExtInput.push_back(carl::Interval<TypeParam>(-1,4));
-		//ExtInput.push_back(carl::Interval<TypeParam>());
-		//loc->setExtInput(Box<TypeParam>(ExtInput));
-		//Put location into locSet
-		std::set<Location<TypeParam>*> locSet;
-		locSet.insert(loc);
-		//Initial state
-		State_t<TypeParam> initState(loc);
-		initState.setTimestamp(carl::Interval<TypeParam>(0));
-		typename HybridAutomaton<TypeParam, State_t<TypeParam>>::locationStateMap lsMap;
-		lsMap.insert(std::make_pair(loc, initState));
-		//put everything together
-		HybridAutomaton<TypeParam,State_t<TypeParam>> controlHA;
-		controlHA.setLocations(locSet);
-		controlHA.setInitialStates(lsMap);
+	//Build hybrid automaton HA
+	//The location
+	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Zero(2,2);
+	flow(0,1) = TypeParam(1);
+	LocationManager<TypeParam>& locManager = LocationManager<TypeParam>::getInstance();
+	Location<TypeParam>* loc = locManager.create(flow);
+	std::string name("l");
+	loc->setName(name);
+	//External Input
+	//std::vector<carl::Interval<TypeParam>> ExtInput;
+	//ExtInput.push_back(carl::Interval<TypeParam>(-1,4));
+	//ExtInput.push_back(carl::Interval<TypeParam>());
+	//loc->setExtInput(Box<TypeParam>(ExtInput));
+	//Put location into locSet
+	std::set<Location<TypeParam>*> locSet;
+	locSet.insert(loc);
+	//Initial state
+	State_t<TypeParam> initState(loc);
+	initState.setTimestamp(carl::Interval<TypeParam>(0));
+	typename HybridAutomaton<TypeParam, State_t<TypeParam>>::locationStateMap lsMap;
+	lsMap.insert(std::make_pair(loc, initState));
+	//put everything together
+	HybridAutomaton<TypeParam,State_t<TypeParam>> controlHA;
+	controlHA.setLocations(locSet);
+	controlHA.setInitialStates(lsMap);
 
-		//Test if parsed HybridAutomaton has the same content as HA
-		//NOTE: We cannot check for equality via operator== yet as locations differ in their id
-		//EXPECT_EQ(std::get<0>(h), controlHA);
+	//Test if parsed HybridAutomaton has the same content as HA
+	//NOTE: We cannot check for equality via operator== yet as locations differ in their id
+	//EXPECT_EQ(std::get<0>(h), controlHA);
 
-		//Check location - this hybrid automaton should only have one location
-		HybridAutomaton<TypeParam, State_t<TypeParam>>& parsedHA = std::get<0>(h);
-		EXPECT_EQ(parsedHA.getLocations().size(), std::size_t(1));
-		EXPECT_TRUE(this->equals(parsedHA.getLocation(name), controlHA.getLocation(name)));
-		//Check Transitions - this automaton has no transitions
-		EXPECT_EQ(parsedHA.getTransitions().size(), std::size_t(0));
-		EXPECT_EQ(controlHA.getTransitions().size(), std::size_t(0));
-		//Check Initialstates - one init state with one state
-		EXPECT_EQ(parsedHA.getInitialStates().size(), std::size_t(1));
-		EXPECT_EQ(controlHA.getInitialStates().size(), std::size_t(1));
-		EXPECT_NE(parsedHA.getInitialStates().find(parsedHA.getLocation(name)), parsedHA.getInitialStates().end());
-		EXPECT_NE(controlHA.getInitialStates().find(controlHA.getLocation(name)), controlHA.getInitialStates().end());
-		EXPECT_TRUE(this->equals(parsedHA.getInitialStates().begin()->first,
-	   parsedHA.getInitialStates().begin()->first));
-		EXPECT_TRUE(this->equals(parsedHA.getInitialStates().begin()->second,
-	   parsedHA.getInitialStates().begin()->second));
-		//Check local badstates - none
-		EXPECT_EQ(parsedHA.getLocalBadStates().size(), std::size_t(0));
-		//Check global badstates - none
-		EXPECT_EQ(parsedHA.getGlobalBadStates().size(), std::size_t(0));
-	*/
+	//Check location - this hybrid automaton should only have one location
+	HybridAutomaton<TypeParam, State_t<TypeParam>>& parsedHA = std::get<0>(h);
+	EXPECT_EQ(parsedHA.getLocations().size(), std::size_t(1));
+	EXPECT_TRUE(this->equals(parsedHA.getLocation(name), controlHA.getLocation(name)));
+	//Check Transitions - this automaton has no transitions
+	EXPECT_EQ(parsedHA.getTransitions().size(), std::size_t(0));
+	EXPECT_EQ(controlHA.getTransitions().size(), std::size_t(0));
+	//Check Initialstates - one init state with one state
+	EXPECT_EQ(parsedHA.getInitialStates().size(), std::size_t(1));
+	EXPECT_EQ(controlHA.getInitialStates().size(), std::size_t(1));
+	EXPECT_NE(parsedHA.getInitialStates().find(parsedHA.getLocation(name)), parsedHA.getInitialStates().end());
+	EXPECT_NE(controlHA.getInitialStates().find(controlHA.getLocation(name)), controlHA.getInitialStates().end());
+	EXPECT_TRUE(this->equals(parsedHA.getInitialStates().begin()->first,
+   parsedHA.getInitialStates().begin()->first));
+	EXPECT_TRUE(this->equals(parsedHA.getInitialStates().begin()->second,
+   parsedHA.getInitialStates().begin()->second));
+	//Check local badstates - none
+	EXPECT_EQ(parsedHA.getLocalBadStates().size(), std::size_t(0));
+	//Check global badstates - none
+	EXPECT_EQ(parsedHA.getGlobalBadStates().size(), std::size_t(0));
+*/
 //}
 
 /*

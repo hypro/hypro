@@ -23,8 +23,8 @@ TEST( ParserTest, ParseAutomaton ) {
 	ReachabilitySettings settings = parseResult.second;
 	HybridAutomaton<mpq_class> automaton = parseResult.first;
 
-	EXPECT_EQ( automaton.getLocations().size(), unsigned( 2 ) );
-	EXPECT_EQ( automaton.getTransitions().size(), unsigned( 3 ) );
+	EXPECT_EQ( unsigned( 3 ), automaton.getLocations().size() );
+	EXPECT_EQ( unsigned( 3 ), automaton.getTransitions().size() );
 }
 
 TEST( ParserTest, ParseAutomaton_2 ) {
@@ -34,18 +34,18 @@ TEST( ParserTest, ParseAutomaton_2 ) {
 
 	std::ofstream file( "/tmp/automaton_2.model" );
 
-#include "models/automaton.h"
+#include "models/automaton_2.h"
 	file << autString;
 	file.close();
 
 	// test content
 
-	std::string filename = "/tmp/automaton.model";
+	std::string filename = "/tmp/automaton_2.model";
 	std::pair<HybridAutomaton<mpq_class>, ReachabilitySettings> parseResult = parseFlowstarFile<mpq_class>( filename );
 
 	ReachabilitySettings settings = parseResult.second;
 	HybridAutomaton<mpq_class> automaton = parseResult.first;
 
-	EXPECT_EQ( automaton.getLocations().size(), unsigned( 2 ) );
-	EXPECT_EQ( automaton.getTransitions().size(), unsigned( 3 ) );
+	EXPECT_EQ( unsigned( 2 ), automaton.getLocations().size() );
+	EXPECT_EQ( unsigned( 3 ), automaton.getTransitions().size() );
 }

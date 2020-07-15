@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -58,6 +58,10 @@ public:
   }
 
   virtual antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitBracketExpression(HybridAutomatonParser::BracketExpressionContext *ctx) override {
     return visitChildren(ctx);
   }
 

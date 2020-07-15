@@ -65,16 +65,20 @@ term:
 	MINUS? (NUMBER | VARIABLE) (
 		TIMES connector* (NUMBER | VARIABLE)
 	)*;
-polynom: connector* term (connector+ term)*;
+bracketExpression:
+	(MINUS? NUMBER TIMES)? '(' polynom ')' (
+		(TIMES | DIVIDE) MINUS? NUMBER
+	)?;
+polynom:
+	connector* (term | bracketExpression) (
+		connector+ (term | bracketExpression)
+	)*;
 
 //TODO: Upgrade to newest antlr version to get rid of left-recursiveness of expression grammar. If
 // we do that we can just write expr: expr PLUS expr | expr MINUS expr | ...
 
-expression:
-	polynom
-	| (term TIMES)? '(' expression (connector expression)* ')' (
-		(TIMES | DIVIDE) term
-	)?;
+expression: polynom;
+//| (term TIMES)? '(' expression (connector expression)* ')' ( (TIMES | DIVIDE) term )?;
 
 equation: VARIABLE EQUALS expression (connector interval)?;
 constraint: expression (BOOLRELATION | EQUALS) expression;
