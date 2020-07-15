@@ -50,6 +50,6 @@ struct Dispatcher_i<Representation> {
 	}
 };
 
-template <class Number, class Converter, class RepresentationCombinationsList>
-using Dispatcher = apply<Dispatcher_i, flattenRepresentations<Number, Converter, RepresentationCombinationsList>>;
+template <class RepresentationsList>
+using Dispatcher = apply<Dispatcher_i, RepresentationsList>;
 }  // namespace hypro

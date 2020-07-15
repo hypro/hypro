@@ -78,9 +78,14 @@ bool isDiscreteSubspace( const Location<Number> &loc, size_t index );
 template <typename Number>
 DynamicType getDynamicType( const HybridAutomaton<Number> &automaton ) {
 	DynamicType res = DynamicType::undefined;
-	std::for_each( automaton.getLocations().begin(), automaton.getLocations().end(), [&res]( const auto *loc ) {
+	auto locPtrs = automaton.getLocations();
+	std::for_each( locPtrs.begin(), locPtrs.end(), [&res]( const auto *loc ) {
 		DynamicType cur = getDynamicType( *loc );
-		res = cur == res ? res : DynamicType::mixed;
+		if ( res == DynamicType::undefined ) {
+			res = cur;
+		} else {
+			res = cur == res ? res : DynamicType::mixed;
+		}
 	} );
 	assert( res != DynamicType::undefined );
 	return res;
@@ -119,7 +124,7 @@ DynamicType getDynamicType( const Location<Number> &location ) {
 				res = DynamicType::linear;
 			}
 			// corner case: resets to intervals
-			if ( transition->getReset().getIntervalResets().size() > 0 ) {
+			if ( std::any_of( transition->getReset().getIntervalResets().begin(), transition->getReset().getIntervalResets().end(), []( const auto &assignment ) { return !assignment.isIdentity(); } ) ) {
 				return DynamicType::mixed;
 			}
 			// check reset
