@@ -35,6 +35,7 @@ int main( int argc, char const* argv[] ) {
 	EVALUATE_BENCHMARK_RESULT( Parsing );
 
 	// run reachability analysis
+	START_BENCHMARK_OPERATION( Verification );
 	auto result = hydra::reachability::analyze( automaton, settings, preprocessingInformation );
 
 	EVALUATE_BENCHMARK_RESULT( Verification );
