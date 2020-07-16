@@ -21,6 +21,6 @@ sonar.cfamily.threads=1
 #sonar.sourceEncoding=UTF-8"
 
 sonar.cfamily.build-wrapper-output=build/bw-outputs
-sonar.cfamily.gcov.reportsPath=hypro_coverage.info
-#sonar.cfamily.llvm-cov.reportPath=hypro_coverage.info
+#sonar.cfamily.gcov.reportsPath=hypro_coverage.info
+sonar.cfamily.llvm-cov.reportPath=build/hypro_coverage.info
 
