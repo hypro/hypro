@@ -332,6 +332,7 @@ TYPED_TEST( SupportFunctionTest, intersect ) {
 	std::cout << "Evaluated 4" << std::endl;
 }
 
+/*
 TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>::Zero( 4, 2 );
 	constraints1 << 1, 0, -1, 0, 0, 1, 0, -1;
@@ -439,7 +440,7 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 	// clang-format off
 	matrix_t<double> constraints = matrix_t<double>( 5, 10 );
 	constraints << 0, 0, 0, 0, 0, 0, 0, -1, 0, 0,
-	               0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+				   0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
 				   //0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
 				   //0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				   1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -471,6 +472,7 @@ TYPED_TEST( SupportFunctionTest, satisfiesHalfspaces ) {
 	EXPECT_TRUE( resultBox.empty() );
 	EXPECT_EQ( CONTAINMENT::NO, containment );
 }
+*/
 
 TYPED_TEST( SupportFunctionTest, intersectHalfspaces ) {
 	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>::Zero( 4, 2 );
@@ -603,28 +605,28 @@ TYPED_TEST( SupportFunctionTest, unite ) {
 TYPED_TEST( SupportFunctionTest, contains ) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>( this->constraints, this->constants );
 	vector_t<TypeParam> p = vector_t<TypeParam>::Zero( 2 );
-	EXPECT_TRUE( psf1.contains( Point<TypeParam>( {0, 0} ) ) );
+	EXPECT_TRUE( psf1.contains( Point<TypeParam>( { 0, 0 } ) ) );
 	p << 0, 0;
 	EXPECT_TRUE( psf1.contains( p ) );
-	EXPECT_TRUE( psf1.contains( Point<TypeParam>( {-2, -2} ) ) );
+	EXPECT_TRUE( psf1.contains( Point<TypeParam>( { -2, -2 } ) ) );
 	p << -2, -2;
 	EXPECT_TRUE( psf1.contains( p ) );
-	EXPECT_TRUE( psf1.contains( Point<TypeParam>( {3, 3} ) ) );
+	EXPECT_TRUE( psf1.contains( Point<TypeParam>( { 3, 3 } ) ) );
 	p << 3, 3;
 	EXPECT_TRUE( psf1.contains( p ) );
 
 	TypeParam xCoord = TypeParam( -12 ) / carl::rationalize<TypeParam>( 4.5 ) - carl::rationalize<TypeParam>( 0.0001 );
 	TypeParam yCoord = TypeParam( 4 ) * xCoord + TypeParam( 17 ) - carl::rationalize<TypeParam>( 0.0001 );
 
-	EXPECT_TRUE( psf1.contains( Point<TypeParam>( {xCoord, yCoord} ) ) );
+	EXPECT_TRUE( psf1.contains( Point<TypeParam>( { xCoord, yCoord } ) ) );
 	p << xCoord, yCoord;
 	EXPECT_TRUE( psf1.contains( p ) );
 
 	EXPECT_FALSE( psf1.contains( Point<TypeParam>(
-		  {xCoord + carl::rationalize<TypeParam>( 0.001 ), yCoord + carl::rationalize<TypeParam>( 0.001 )} ) ) );
+		  { xCoord + carl::rationalize<TypeParam>( 0.001 ), yCoord + carl::rationalize<TypeParam>( 0.001 ) } ) ) );
 
-	EXPECT_TRUE( this->sfChainComplete.contains( Point<TypeParam>( {1, 1} ) ) );
-	EXPECT_FALSE( this->sfChainComplete.contains( Point<TypeParam>( {-1, -1} ) ) );
+	EXPECT_TRUE( this->sfChainComplete.contains( Point<TypeParam>( { 1, 1 } ) ) );
+	EXPECT_FALSE( this->sfChainComplete.contains( Point<TypeParam>( { -1, -1 } ) ) );
 
 	// Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.vertices());
 	// std::cout << "vertices: " << std::endl;
