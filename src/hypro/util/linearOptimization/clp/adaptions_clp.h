@@ -28,6 +28,8 @@ EvaluationResult<Number> clpGetInternalPoint( clp_context& context );
 
 SOLUTION clpCheckConsistency( clp_context& context );
 
+void clpPrintProblem( clp_context& context, double* objective );
+
 }  // namespace hypro
 
 #include "adaptions_clp.tpp"
