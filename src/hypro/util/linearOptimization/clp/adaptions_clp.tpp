@@ -6,6 +6,8 @@
 
 namespace hypro {
 
+
+
 template <typename Number>
 EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>&, bool ) {
 	double* objective = new double[ constraints.cols() ];
@@ -23,7 +25,15 @@ EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t
 	context.lp.primal();
 	EvaluationResult<Number> res;
 	if ( context.lp.primalFeasible() ) {
-		res.errorCode = SOLUTION::FEAS;
+		// In this case there is a solution
+		if ( context.lp.dualFeasible() ) {
+			// optimal solution
+			res.errorCode = SOLUTION::FEAS;
+		}
+		else {
+			// unbounded
+			res.errorCode = SOLUTION::INFTY;
+		}
 		const double* solution = context.lp.primalColumnSolution();
 		res.optimumValue = vector_t<Number>( constraints.cols() );
 		for ( int i = 0; i < constraints.cols(); ++i ) {
@@ -33,7 +43,7 @@ EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t
 		}
 		res.supportValue = carl::convert<double, Number>( context.lp.objectiveValue() );
 	} else {
-		res.errorCode = SOLUTION::INFEAS;
+		res = EvaluationResult<Number>( 0, vector_t<Number>::Zero( 1 ), SOLUTION::INFEAS );
 	}
 	delete[] objective;
 	return res;
@@ -71,61 +81,56 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 		return res;
 	}
 
+	bool redundant;
+	carl::Relation relation;
+	EvaluationResult<Number> actualRes;
+	EvaluationResult<Number> updatedRes;
+
 
 	for ( std::size_t constraintIndex = std::size_t( constraints.rows() - 1 );; --constraintIndex ) {
-		EvaluationResult<Number> actualRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-
-		// remove constraint by removing the boundaries
-		context.mUpperBounds[ int( constraintIndex ) ] = COIN_DBL_MAX;
-		context.mLowerBounds[ int( constraintIndex ) ] = -COIN_DBL_MAX;
-		EvaluationResult<Number> updatedRes;
-
-		switch ( relations[ constraintIndex ] ){
-			case carl::Relation::LEQ:
-				context.lp.setOptimizationDirection(-1);
-				updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-				if ( updatedRes.optimumValue == actualRes.optimumValue ) {
-					res.push_back( constraintIndex );
-				} else {
-					context.mUpperBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
-				}
-				break;
-			case carl::Relation::GEQ:
-				context.lp.setOptimizationDirection(1);
-				updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-				if ( updatedRes.optimumValue == actualRes.optimumValue ) {
-					res.push_back( constraintIndex );
-				} else {
-					context.mLowerBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
-				}
-				break;
-			case carl::Relation::EQ:
-				context.lp.setOptimizationDirection(-1);
-				updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-				if ( updatedRes.optimumValue != actualRes.optimumValue ){
-					context.mLowerBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
-					context.mUpperBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
-				} else {
-					context.lp.setOptimizationDirection(1);
-					updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-					if ( updatedRes.optimumValue == actualRes.optimumValue ) {
-						res.push_back( constraintIndex );
-					} else {
-						context.mLowerBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
-						context.mUpperBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
-					}
-				}
-				break;
-			default:
-				// clp cannot handle strict inequalities.
-				assert( false );
-				std::cout << "This should not happen." << std::endl;
+		redundant = true;
+		relation = relations[ constraintIndex ];
+		if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ){
+			// test if upper bound is redundant
+			context.lp.setOptimizationDirection( -1 );
+			actualRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			context.mUpperBounds[ int( constraintIndex ) ] = COIN_DBL_MAX;
+			updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
+			if ( actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue ){
+				redundant = false;
+			}
 		}
-		if ( constraintIndex == 0 ) {
+		if ( relation == carl::Relation::GEQ || relation == carl::Relation::EQ ){
+			// test if lower bound is redundant
+			context.lp.setOptimizationDirection( 1 );
+			actualRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			context.mUpperBounds[ int( constraintIndex ) ] = COIN_DBL_MAX;
+			updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
+			if ( actualRes.errorCode != updatedRes.errorCode && actualRes.supportValue != updatedRes.supportValue ){
+				redundant = false;
+			}
+		}
+
+
+		if ( redundant ){
+			res.push_back( constraintIndex );
+		} else {
+			if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ){
+				context.mUpperBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
+			}
+			if  (relation == carl::Relation::GEQ || relation == carl::Relation::EQ ){
+				context.mLowerBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
+			} 
+		}
+
+		if ( constraintIndex == 0 ){
 			break;
 		}
 	}
 
+	
 	// restore original problem
 	for ( const auto item : res ) {
 		switch ( relations[ int( item ) ] ){
