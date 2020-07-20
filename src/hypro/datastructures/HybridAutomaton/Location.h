@@ -26,80 +26,114 @@ template <typename Number>
 using flowVariant = std::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 /**
- * @brief      Class for location.
+ * @brief      Class for a location of a hybrid automaton.
+ * @details    The dynamics can be linear or rectangular, the class also provides ways to combine both. Furthermore, subspaces are supported.
  * @tparam     Number  The used number type.
  */
 template <typename Number>
 class Location {
   public:
 	using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
+	using flowVariant = std::variant<linearFlow<Number>, rectangularFlow<Number>>;
 
   private:
-	mutable std::vector<linearFlow<Number>> mLinearFlows;
-	mutable std::vector<rectangularFlow<Number>> mRectangularFlows;
-	std::vector<carl::Interval<Number>> mExternalInput;
-	bool mHasExternalInput = false;
-	transitionVector mTransitions;
-	Condition<Number> mInvariant;
-	std::string mName = "";
-	unsigned mId;
-	mutable std::size_t mHash = 0;
+	std::vector<flowVariant> mFlows;					 ///< Dynamics
+	std::vector<DynamicType> mFlowTypes;				 ///< Types of dynamics
+	std::vector<carl::Interval<Number>> mExternalInput;	 ///< External input/disturbance
+	bool mHasExternalInput = false;						 ///< Cache-flag
+	transitionVector mTransitions;						 ///< Outgoing transitions
+	Condition<Number> mInvariant;						 ///< Invariant condition
+	std::string mName = "";								 ///< Name of the location
+	unsigned mId;										 ///< ID - was used for comparison (deprecated)
+	mutable std::size_t mHash = 0;						 ///< Hash of the location
 
   public:
+	/// default constructor
 	Location();
+	/// construction by name
 	Location( const std::string& name );
+	/// copy constructor
 	Location( const Location& loc );
+	/// construction from flow matrix
 	explicit Location( const matrix_t<Number>& mat );
+	/// construction from matrix, vector and invariant condition
 	Location( const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv );
+	/// destructor
 	~Location() {}
-
+	/// assignment operator
 	Location<Number>& operator=( const Location<Number>& in );
 
-	std::size_t getNumberFlow() const { return mLinearFlows.size(); }
-	linearFlow<Number> getLinearFlow( std::size_t I = 0 ) const { return mLinearFlows.at( I ); }
-	linearFlow<Number>& rGetLinearFlow( std::size_t I = 0 ) { return mLinearFlows[I]; }
-	rectangularFlow<Number> getRectangularFlow( std::size_t I = 0 ) const { return mRectangularFlows.at( I ); }
-	rectangularFlow<Number>& rGetRectangularFlow( std::size_t I = 0 ) { return mRectangularFlows[I]; }
-
-	const std::vector<linearFlow<Number>>& getLinearFlows() const { return mLinearFlows; }
-	const std::vector<rectangularFlow<Number>>& getRectangularFlows() const { return mRectangularFlows; }
-
+	/// returns the number of subspaces
+	std::size_t getNumberSubspaces() const {
+		assert( isConsistent() );
+		return mFlows.size();
+	}
+	/// returns a linear flow for a subspace. The type of subspace needs to be linear, otherwise this operation fails.
+	linearFlow<Number> getLinearFlow( std::size_t I = 0 ) const {
+		assert( isConsistent() );
+		return std::get<linearFlow<Number>>( mFlows[I] );
+	}
+	/// returns a rectangular flow for a subspace. The type of subspace needs to be rectangular, otherwise this operation fails.
+	rectangularFlow<Number> getRectangularFlow( std::size_t I = 0 ) const {
+		assert( isConsistent() );
+		return std::get<rectangularFlow<Number>>( mFlows[I] );
+	}
+	/// getter for vector of flow-variants
+	const std::vector<flowVariant>& getFlows() const {
+		assert( isConsistent() );
+		return mFlows;
+	}
+	/// getter for vector of flow types
+	const std::vector<DynamicType>& getFlowTypes() const {
+		assert( isConsistent() );
+		return mFlowTypes;
+	}
+	/// returns index of the subspace the requested state space dimension is contained in (assuming linear, ascending order of subspaces and variables)
+	std::size_t getSubspaceIndexForStateSpaceDimension( std::size_t dimension ) const;
+	/// getter for invariant condition
 	const Condition<Number>& getInvariant() const { return mInvariant; }
+	/// getter for outgoing transitions
 	const transitionVector& getTransitions() const { return mTransitions; }
+	/// getter to non-const reference of transitions (allows in-place modifications)
 	transitionVector& rGetTransitions() { return mTransitions; }
 	const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
+	/// returns whether the locations' dynamics is influenced by external input/disturbances
 	bool hasExternalInput() const { return mHasExternalInput; }
+	/// getter for the locations' id (deprecated)
 	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
+	/// getter for the name of the location
 	std::string getName() const { return mName; }
+	/// getter for the state space dimension
 	std::size_t dimension() const;
+	/// getter for the state space dimension of a specific subspace
 	std::size_t dimension( std::size_t i ) const;
-
+	/// setter for the name
 	void setName( const std::string& name ) {
 		mName = name;
 		mHash = 0;
 	}
+	/// setter for linear flow of a subspace (optional, default 0) via passing a matrix
 	void setFlow( const matrix_t<Number>& f, std::size_t I = 0 ) { this->setLinearFlow( linearFlow<Number>( f ), I ); }
+	/// setter for linear flow of a subspace (optional, default 0)
 	void setFlow( const linearFlow<Number>& f, std::size_t I = 0 ) { this->setLinearFlow( f, I ); }
+	/// setter for rectangular flow of a subspace (optional, default 0)
 	void setFlow( const rectangularFlow<Number>& f, std::size_t I = 0 ) { this->setRectangularFlow( f, I ); }
+	/// explicit setter of linear flow for a subspace (optional, default 0)
 	void setLinearFlow( const linearFlow<Number>& f, std::size_t I = 0 );
+	/// explicit setter of rectangular flow for a subspace (optional, default 0)
 	void setRectangularFlow( const rectangularFlow<Number>& f, std::size_t I = 0 );
-	void setLinearFlow( const std::vector<linearFlow<Number>>& flows ) {
-		mLinearFlows = flows;
-		mHash = 0;
-	};
-	void setRectangularFlow( const std::vector<rectangularFlow<Number>>& flows ) {
-		mRectangularFlows = flows;
-		mHash = 0;
-	};
+	/// setter for invariant condition
 	void setInvariant( const Condition<Number>& inv ) {
 		mInvariant = inv;
 		mHash = 0;
 	}
+	/// setter for vector of outgoing transitions (move)
 	void setTransitions( transitionVector&& trans );
+	/// adds outgoing transitions
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
-	//void updateTransition(Transition<Number>* original, Transition<Number>* newT);
+	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
-
+	/// returns hash value of the location
 	std::size_t hash() const;
 
 	/**
@@ -112,15 +146,13 @@ class Location {
      *
      * @return     True if composed of, False otherwise.
      */
-	bool isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
+	//bool isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
 
+	/// returns dot-representation of the location
 	std::string getDotRepresentation( const std::vector<std::string>& vars ) const;
-
-	/*
-    * decomposes flow and invariant of this location.
-    */
+	/// decomposes location into subspaces defined in the passed decomposition
 	void decompose( const Decomposition& decomposition );
-
+	/// hash-based less operator
 	inline bool operator<( const Location<Number>& rhs ) const {
 		if ( this->hash() != rhs.hash() ) {
 			return this->hash() < rhs.hash();
@@ -131,7 +163,7 @@ class Location {
 			return mName < rhs.getName();
 		}
 	}
-
+	/// equal comparison
 	inline bool operator==( const Location<Number>& rhs ) const {
 		//TRACE("hypro.datastructures","Comparison of " << *this << " and " << rhs);
 		if ( this->hash() != rhs.hash() ) {
@@ -146,18 +178,33 @@ class Location {
 			//TRACE("hypro.datastructures","Invariants not equal.");
 			return false;
 		}
-		if ( mLinearFlows.size() != rhs.getLinearFlows().size() ) {
+		if ( mFlows.size() != rhs.getFlows().size() ) {
 			//TRACE("hypro.datastructures","Number of flows not equal.");
 			return false;
 		}
-		for ( std::size_t i = 0; i < mLinearFlows.size(); ++i ) {
-			if ( mLinearFlows[i] != rhs.getLinearFlow( i ) ) {
-				//TRACE("hypro.datastructures","Flows not equal.");
+		if ( mFlowTypes.size() != rhs.getFlowTypes().size() ) {
+			//TRACE("hypro.datastructures","Number of flows not equal.");
+			return false;
+		}
+		for ( std::size_t i = 0; i < mFlows.size(); ++i ) {
+			if ( mFlowTypes[i] != rhs.getFlowTypes()[i] ) {
 				return false;
 			}
-			if ( mRectangularFlows[i] != rhs.getRectangularFlow( i ) ) {
-				//TRACE("hypro.datastructures","Flows not equal.");
-				return false;
+			switch ( mFlowTypes[i] ) {
+				case DynamicType::linear:
+					if ( std::get<linearFlow<Number>>( mFlows[i] ) != std::get<linearFlow<Number>>( rhs.getFlows()[i] ) ) {
+						return false;
+					}
+					break;
+				case DynamicType::rectangular:
+					if ( std::get<rectangularFlow<Number>>( mFlows[i] ) != std::get<rectangularFlow<Number>>( rhs.getFlows()[i] ) ) {
+						return false;
+					}
+					break;
+				default:
+					assert( false );
+					return false;
+					break;
 			}
 		}
 		if ( mExternalInput != rhs.getExternalInput() ) {
@@ -186,15 +233,24 @@ class Location {
 		//TRACE("hypro.datastructures","Equal.");
 		return true;
 	}
-
+	/// not equal comparison
 	inline bool operator!=( const Location<Number>& rhs ) const { return !( *this == rhs ); }
-
+	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& ostr, const Location<Number>& l ) {
 #ifdef HYPRO_LOGGING
 		ostr << "location " << l.getName() << " ptr " << &l << " (id: " << l.hash() << ")" << std::endl
 			 << "\t Flow: " << std::endl;
-		for ( size_t i = 0; i < l.getNumberFlow(); i++ ) {
-			ostr << i << ": " << l.getLinearFlow( i ) << ", rect.: " << l.getRectangularFlow( i ) << std::endl;
+		for ( size_t i = 0; i < l.getNumberSubspaces(); i++ ) {
+			switch ( l.getFlowTypes()[i] ) {
+				case DynamicType::linear:
+					ostr << std::get<linearFlow<Number>>( l.getFlows()[i] ) << std::endl;
+					break;
+				case DynamicType::rectangular:
+					ostr << std::get<rectangularFlow<Number>>( l.getFlows()[i] ) << std::endl;
+					break;
+				default:
+					break;
+			}
 		}
 		ostr << "\t Inv: " << std::endl
 			 << l.getInvariant();
@@ -210,8 +266,15 @@ class Location {
 #endif
 		return ostr;
 	}
+
+  private:
+	bool isConsistent() const { return mFlows.size() == mFlowTypes.size(); }
 };
 
+/**
+ * @brief Pointer-comparison functor
+ * @tparam Number
+ */
 template <typename Number>
 struct locPtrComp {
 	bool operator()( const Location<Number>* lhs, const Location<Number>* rhs ) const { return ( *lhs < *rhs ); }
@@ -233,19 +296,19 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 
 namespace std {
 
+/**
+ * @brief override of std::hash for locations.
+ * @tparam Number
+ */
 template <typename Number>
 struct hash<hypro::Location<Number>> {
 	std::size_t operator()( const hypro::Location<Number>& loc ) const {
 		//TRACE( "hypro.datastructures", "Hash for location " << loc.getName() );
 		//Flows
 		std::size_t seed = 0;
-		for ( const auto& f : loc.getLinearFlows() ) {
+		for ( const auto& f : loc.getFlows() ) {
 			//TRACE( "hypro.datastructures", "Add flow hash " << std::hash<hypro::linearFlow<Number>>()( f ) );
-			carl::hash_add( seed, std::hash<hypro::linearFlow<Number>>()( f ) );
-		}
-		for ( const auto& f : loc.getRectangularFlows() ) {
-			//TRACE( "hypro.datastructures", "Add flow hash " << std::hash<hypro::rectangularFlow<Number>>()( f ) );
-			carl::hash_add( seed, std::hash<hypro::rectangularFlow<Number>>()( f ) );
+			carl::hash_add( seed, std::visit( hypro::flowHashVisitor{}, f ) );
 		}
 
 		//Name

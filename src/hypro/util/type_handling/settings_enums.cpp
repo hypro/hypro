@@ -21,6 +21,7 @@ struct stringToSetting_Impl<Enum> {
 		auto result = Enum::_from_string_nothrow( name.c_str() );
 		if ( result ) return result->_to_integral();
 		assert( false && "No enum was matched." );
+		return -1;
 	}
 };
 

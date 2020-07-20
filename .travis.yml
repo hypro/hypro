@@ -48,21 +48,21 @@ jobs:
     - os: linux
       compiler: g++-8
       addons:
+        apt:
+          sources: [*sources_base]
+          packages: [*packages_base]
+      env: COMPILER=g++-8 CC=gcc-8 CXX=g++-8
+    - os: linux
+      compiler: g++-9
+      addons:
         sonarcloud:
           organization: "hypro-github"
           token:
             secure: "ISgh4qcPIZhB/oVqkvRVHwYTwpD0HqxkmOP3nETL3Sy06UFQmHkZCsnkZ30w5bBquMqPQ4vvIUKGatIAHXjtQiv8tqSwTAQ2r9iG+hrHpnEXZRB/7ZH4f26zqUCe7tkAf8fFz3O0lZ7Njkt6EDj/ynBtq82RMyPtBsQH/tzCel0UB1jhbK9AAepn4Aq5oW5wxBjXXxrPIqBIUddgbHr48IVfTtB4G0SpEqKhm56FHWG5vcsaB4+cH+v67OYs/3+HfrFZD2kkGPGxj4317Q83ZlcIp/bwKiETV8ez+8z8YRD/J/QKbmrole0M5T5KeNAOdetS9d0RhNKnygFMx75cDSfE7OXys5fhheOdXsLljgvoWqP3FOc7HMeAs/rn/SLrbZlQe5DucyyeQI9u2/elKntmuPfLOQvvX6suwJM7avSEndhrGcdE5x9Z9Shy4GDU4YCmpxRYlfcRpwQK7dn5KpkRLUB9FrgtGRroGdW7XRbFFmXNMJKmDUXLqWx5Ses8pEFY37rBpGi50NcRHzl/ZCAkXboYSS7x1b6hcwNL3w0SfWXbCkuna8/DFwdX7hvDNxiafyZX3GdsXpvQffgbtlZZUSlPbWakzVhV6cZptcV0V0/2HVP+m+azMRt3lbI3l2dfmWhq8l3fJJfkD/D0FsKMD3xVfqZT+xZIYxyWMy0="
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-8, lcov, gcovr]
-      env: COMPILER=g++-8 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-8 CXX=g++-8
-    - os: linux
-      compiler: g++-9
-      addons:
-        apt:
-          sources: [*sources_base]
-          packages: [*packages_base, g++-9]
-      env: COMPILER=g++-9 CC=gcc-9 CXX=g++-9
+          packages: [*packages_base, g++-9, lcov, gcovr]
+      env: COMPILER=g++-9 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-9 CXX=g++-9
     - os: linux
       compiler: clang++-5.0
       addons:

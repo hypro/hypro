@@ -480,7 +480,7 @@ template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments, std::size_t I ) const {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	State res{*this};
+	State res{ *this };
 	res.setSetDirect( std::visit( genericAssignIntervalsVisitor<repVariant, Number>( assignments ), mSets.at( I ) ) );
 	return res;
 }
@@ -589,7 +589,7 @@ bool State<Number, Representation, Rargs...>::isEmpty() const {
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::setSets( const std::vector<std::variant<Representation, Rargs...>>& sets ) {
 	mSets = sets;
-	mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+	mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 }
 
 template <typename Number, typename Representation, typename... Rargs>
@@ -600,20 +600,20 @@ void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<std
 		setSetType( std::visit( genericTypeVisitor(), sets.at( i ) ), i );
 	}
 	mSets = sets;
-	mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+	mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 	assert( checkConsistency() );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::decompose( const Decomposition& decomposition ) {
-	if ( decomposition.size() == 1 || mSets.size() != 1 ) {
+	if ( decomposition.subspaces.size() == 1 || mSets.size() != 1 ) {
 		// no decomposition/already decomposed
 	}
 	// initial set is a constraint set
 	matrix_t<Number> constraintsOld( std::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).matrix() );
 	vector_t<Number> constantsOld( std::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).vector() );
 	int i = 0;
-	for ( auto decomp : decomposition ) {
+	for ( auto decomp : decomposition.subspaces ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "Trying to project set: \n " << mSets.at( 0 ) << "\n to dimensions: " );
 		DEBUG( "hypro.datastructures", "{" );
@@ -677,7 +677,7 @@ void State<Number, Representation, Rargs...>::decompose( const Decomposition& de
 		}
 		i++;
 	}
-	mIsEmpty = std::vector<TRIBOOL>{mSets.size(), TRIBOOL::NSET};
+	mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
 	DEBUG( "hypro.datastructures", "State after decomposition: " << *this );
 }
 

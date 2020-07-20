@@ -35,6 +35,10 @@ class rectangularFlow {
 	std::size_t size() const { return mFlowIntervals.size(); }
 	bool empty() const { return mFlowIntervals.empty(); }
 
+	DynamicType getDynamicsType() const {
+		return DynamicType::rectangular;
+	}
+
 	bool isTimed() const {
 		for ( const auto& keyVal : mFlowIntervals ) {
 			if ( keyVal.second != carl::Interval<Number>( 1 ) ) {

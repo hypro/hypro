@@ -24,6 +24,13 @@ struct flowTypeVisitor {
 	}
 };
 
+struct flowDynamicsTypeVisitor {
+	template <typename F>
+	inline DynamicType operator()( const F& flow ) const {
+		return flow.getDynamicsType();
+	}
+};
+
 struct flowIsTimedVisitor {
 	template <typename F>
 	inline bool operator()( const F& flow ) const {

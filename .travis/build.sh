@@ -20,6 +20,8 @@ elif [[ ${TASK} == "clang-sanitizer" ]]; then
 	make resources -j2 || return 1
 	keep_waiting &
 	make -j2 VERBOSE=1 || return 1
+	keep_waiting &
+	make example_reachability -j2 VERBOSE=1 || return 1
 	kill $!
 	make test
 	./../.travis/runSanitizedTests.sh

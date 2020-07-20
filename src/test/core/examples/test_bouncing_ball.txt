@@ -32,6 +32,7 @@ hybrid reachability {
     #v' = --9.81 + -+-v*42*-3 + [2,5]
     #x' = +++4*-+--v
     x' = 3*v + gabunga + c*v + [-1,4]
+    v' = 1
     #v' = gabunga + c*v
    }
 

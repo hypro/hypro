@@ -4,8 +4,8 @@ namespace hypro {
 
 template <typename Number>
 Location<Number>::Location()
-	: mLinearFlows()
-	, mRectangularFlows()
+	: mFlows()
+	, mFlowTypes()
 	, mExternalInput()
 	, mTransitions()
 	, mInvariant()
@@ -14,8 +14,8 @@ Location<Number>::Location()
 
 template <typename Number>
 Location<Number>::Location( const std::string& name )
-	: mLinearFlows()
-	, mRectangularFlows()
+	: mFlows()
+	, mFlowTypes()
 	, mExternalInput()
 	, mTransitions()
 	, mInvariant()
@@ -25,7 +25,9 @@ Location<Number>::Location( const std::string& name )
 
 template <typename Number>
 Location<Number>::Location( const Location<Number>& _loc )
-	: mExternalInput( _loc.getExternalInput() )
+	: mFlows( _loc.getFlows() )
+	, mFlowTypes( _loc.getFlowTypes() )
+	, mExternalInput( _loc.getExternalInput() )
 	, mTransitions()
 	, mInvariant( _loc.getInvariant() )
 	, mName( _loc.getName() )
@@ -37,33 +39,26 @@ Location<Number>::Location( const Location<Number>& _loc )
 		mTransitions.back()->setSource( this );
 	}
 
-	for ( const auto& f : _loc.getLinearFlows() ) {
-		mLinearFlows.emplace_back( f );
-	}
-	for ( const auto& f : _loc.getRectangularFlows() ) {
-		mRectangularFlows.emplace_back( f );
-	}
-
 	assert( this->hash() == _loc.hash() );
 }
 
 template <typename Number>
 Location<Number>::Location( const matrix_t<Number>& _mat )
-	: mLinearFlows()
-	, mRectangularFlows()
+	: mFlows()
+	, mFlowTypes()
 	, mExternalInput()
 	, mTransitions()
 	, mId() {
-	mLinearFlows.push_back( linearFlow<Number>( _mat ) );
-	mRectangularFlows.emplace_back( rectangularFlow<Number>() );
+	mFlows.emplace_back( linearFlow<Number>( _mat ) );
+	mFlowTypes.emplace_back( DynamicType::linear );
 	mHasExternalInput = false;
 	mHash = 0;
 }
 
 template <typename Number>
 Location<Number>::Location( const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv )
-	: mLinearFlows()
-	, mRectangularFlows()
+	: mFlows()
+	, mFlowTypes()
 	, mExternalInput()
 	, mTransitions( std::move( _trans ) )
 	, mInvariant( _inv )
@@ -71,8 +66,8 @@ Location<Number>::Location( const matrix_t<Number>& _mat, typename Location<Numb
 	for ( auto& t : mTransitions ) {
 		t->setSource( this );
 	}
-	mLinearFlows.push_back( linearFlow<Number>( _mat ) );
-	mRectangularFlows.emplace_back( rectangularFlow<Number>() );
+	mFlows.push_back( linearFlow<Number>( _mat ) );
+	mFlowTypes.push_back( DynamicType::affine );
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -89,51 +84,78 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mTransitions.back()->setSource( this );
 	}
 
-	mLinearFlows.clear();
-	for ( const auto& f : in.getLinearFlows() ) {
-		mLinearFlows.emplace_back( f );
-	}
-	mRectangularFlows.clear();
-	for ( const auto& f : in.getRectangularFlows() ) {
-		mRectangularFlows.emplace_back( f );
-	}
+	mFlows.clear();
+	mFlowTypes.clear();
+	mFlows.insert( mFlows.begin(), in.getFlows().begin(), in.getFlows().end() );
+	mFlowTypes.insert( mFlowTypes.begin(), in.getFlowTypes().begin(), in.getFlowTypes().end() );
+
 	//TRACE( "hypro.datastructures", "Comparing hashes after assignment of " << in.getName() << " to this." );
 	assert( this->hash() == in.hash() );
 	return *this;
 }
 
 template <typename Number>
+std::size_t Location<Number>::getSubspaceIndexForStateSpaceDimension( std::size_t dimension ) const {
+	std::size_t clusterpos = 0;
+	std::size_t accumulatedDimension = std::visit( flowDimensionVisitor{}, mFlows[clusterpos] );
+	while ( dimension > accumulatedDimension && clusterpos < mFlows.size() ) {
+		++clusterpos;
+		accumulatedDimension += std::visit( flowDimensionVisitor{}, mFlows[clusterpos] );
+	}
+	return clusterpos;
+}
+
+template <typename Number>
 std::size_t Location<Number>::dimension() const {
 	std::size_t res = 0;
-	for ( const auto& f : mLinearFlows ) {
-		res += f.dimension();
+	for ( std::size_t i = 0; i < mFlows.size(); ++i ) {
+		if ( mFlowTypes[i] == DynamicType::rectangular ) {
+			res += std::get<rectangularFlow<Number>>( mFlows[i] ).dimension();
+		} else if ( mFlowTypes[i] == DynamicType::linear ) {
+			res += std::get<linearFlow<Number>>( mFlows[i] ).dimension();
+		}
 	}
 	return res;
 }
 
 template <typename Number>
 std::size_t Location<Number>::dimension( std::size_t i ) const {
-	assert( i < mLinearFlows.size() );
-	return mLinearFlows[i].dimension();
+	assert( i < mFlows.size() );
+	if ( mFlowTypes[i] == DynamicType::rectangular ) {
+		return std::get<rectangularFlow<Number>>( mFlows[i] ).dimension();
+	} else if ( mFlowTypes[i] == DynamicType::linear ) {
+		return std::get<linearFlow<Number>>( mFlows[i] ).dimension();
+	}
+	return 0;
 }
 
 template <typename Number>
 void Location<Number>::setLinearFlow( const linearFlow<Number>& f, std::size_t I ) {
-	while ( mLinearFlows.size() <= I ) {
-		mLinearFlows.push_back( linearFlow<Number>() );
-		mRectangularFlows.push_back( rectangularFlow<Number>() );
+	assert( I <= mFlows.size() );
+	if ( I < mFlows.size() ) {
+		auto flowpos = mFlows.erase( std::next( mFlows.begin(), I ) );
+		auto typepos = mFlowTypes.erase( std::next( mFlowTypes.begin(), I ) );
+		mFlows.insert( flowpos, f );
+		mFlowTypes.insert( typepos, DynamicType::linear );
+	} else if ( I == mFlows.size() ) {
+		mFlows.push_back( f );
+		mFlowTypes.push_back( DynamicType::linear );
 	}
-	mLinearFlows[I] = f;
 	mHash = 0;
 }
 
 template <typename Number>
 void Location<Number>::setRectangularFlow( const rectangularFlow<Number>& f, std::size_t I ) {
-	while ( mLinearFlows.size() <= I ) {
-		mLinearFlows.push_back( linearFlow<Number>() );
-		mRectangularFlows.push_back( rectangularFlow<Number>() );
+	assert( I <= mFlows.size() );
+	if ( I < mFlows.size() ) {
+		auto flowpos = mFlows.erase( std::next( mFlows.begin(), I ) );
+		auto typepos = mFlowTypes.erase( std::next( mFlowTypes.begin(), I ) );
+		mFlows.insert( flowpos, f );
+		mFlowTypes.insert( typepos, DynamicType::rectangular );
+	} else if ( I == mFlows.size() ) {
+		mFlows.push_back( f );
+		mFlowTypes.push_back( DynamicType::rectangular );
 	}
-	mRectangularFlows[I] = f;
 	mHash = 0;
 }
 
@@ -200,23 +222,28 @@ std::string Location<Number>::getDotRepresentation( const std::vector<std::strin
 	o << "<TABLE>";
 	o << "<TR><TD>" << this->getName() << " (" << this->hash() << ") </TD></TR>";
 	// flow
-	const matrix_t<Number>& flow = mLinearFlows.begin()->getFlowMatrix();
-	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
-	for ( unsigned i = 0; i < flow.rows() - 1; ++i ) {
-		o << vars[i] << "' = ";
-		bool allZero = true;
-		for ( unsigned j = 0; j < flow.cols() - 1; ++j ) {
-			if ( flow( i, j ) != 0 ) {
-				o << flow( i, j ) << "*" << vars[j] << " + ";
-				allZero = false;
+	for ( std::size_t i = 0; i < mFlows.size(); ++i ) {
+		if ( mFlowTypes[i] == DynamicType::linear ) {
+			const matrix_t<Number>& flow = std::get<linearFlow<Number>>( mFlows[i] ).getFlowMatrix();
+			o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
+			for ( unsigned i = 0; i < flow.rows() - 1; ++i ) {
+				o << vars[i] << "' = ";
+				bool allZero = true;
+				for ( unsigned j = 0; j < flow.cols() - 1; ++j ) {
+					if ( flow( i, j ) != 0 ) {
+						o << flow( i, j ) << "*" << vars[j] << " + ";
+						allZero = false;
+					}
+				}
+				if ( flow( i, flow.cols() - 1 ) != 0 || allZero ) o << flow( i, flow.cols() - 1 );
+				if ( i < flow.rows() - 1 )
+					o << "<BR/>";
 			}
+			o << "</TD>";
+			o << "</TR>";
 		}
-		if ( flow( i, flow.cols() - 1 ) != 0 || allZero ) o << flow( i, flow.cols() - 1 );
-		if ( i < flow.rows() - 1 )
-			o << "<BR/>";
 	}
-	o << "</TD>";
-	o << "</TR>";
+
 	// invariant
 	o << mInvariant.getDotRepresentation( vars );
 	o << "</TABLE>";
@@ -225,6 +252,7 @@ std::string Location<Number>::getDotRepresentation( const std::vector<std::strin
 	return o.str();
 }
 
+/*
 template <typename Number>
 bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
 	// verify name (future work: we need some stronger criterion, also to speed-up the look-up)
@@ -246,7 +274,6 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 	// The check searches for matching variables - the *I indices refer to the rhs-related indices
 	// while the *Pos indices refer to this.
 
-	//std::cout << "compare flows " << mLinearFlows[0] << " and " << rhs.getFlow() << std::endl;
 	for ( Eigen::Index rowI = 0; rowI != rhs.getLinearFlow().getFlowMatrix().rows() - 1; ++rowI ) {
 		// find according row in this.
 		Eigen::Index rowPos = 0;
@@ -342,6 +369,7 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 
 	return true;
 }
+*/
 
 /*
 template<typename Number>
@@ -504,60 +532,58 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 
 template <typename Number>
 void Location<Number>::decompose( const Decomposition& decomposition ) {
-	if ( mLinearFlows.size() > 1 || mInvariant.size() > 1 ) {
-		//already decomposed
-		return;
-	}
-	DEBUG( "hypro.datastructures", "Flow Matrix before: \n " << mLinearFlows.at( 0 ).getFlowMatrix() );
+	auto newFlowTypes = decomposition.subspaceTypes;
+	std::vector<flowVariant> newFlows;
+	using Matrix = matrix_t<Number>;
+
 	auto& vpool = VariablePool::getInstance();
 
-	// decompose flow
-	matrix_t<Number> oldFlow = mLinearFlows[0].getFlowMatrix();
-	auto oldIntervals = mRectangularFlows[0].getFlowIntervals();
-
-	std::vector<linearFlow<Number>> newFlows;
-	std::vector<rectangularFlow<Number>> newRectangularFlows;
 	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
-	for ( auto set : decomposition ) {
-#ifdef HYPRO_LOGGING
-		DEBUG( "hypro.datastructures", "decompose flow for set: {" );
-		for ( auto entry : set ) {
-			DEBUG( "hypro.datastructures", "" << entry << ", " );
-		}
-		DEBUG( "hypro.datastructures", "}" );
-#endif
-		// +1 row for last-row of affine transformation
-		matrix_t<Number> rowMat = matrix_t<Number>::Zero( set.size() + 1, oldFlow.cols() );
-		// -1 because of last-row
-		for ( Eigen::Index index = 0; index < rowMat.rows() - 1; index++ ) {
-			// select the specific rows into rowMat
-			rowMat.row( index ) = oldFlow.row( set[index] );
-		}
-		//copy last row over
-		rowMat.row( rowMat.rows() - 1 ) = oldFlow.row( oldFlow.rows() - 1 );
+	for ( std::size_t i = 0; i < decomposition.subspaces.size(); ++i ) {
+		if ( decomposition.subspaceTypes[i] == DynamicType::linear ) {
+			Matrix newFlow = Matrix::Zero( decomposition.subspaces[i].size() + 1, this->dimension() + 1 );
 
-		// +1 for constant column
-		matrix_t<Number> finMat = matrix_t<Number>::Zero( rowMat.rows(), set.size() + 1 );
-		// -1 for constant column
-		for ( Eigen::Index index = 0; index < finMat.cols() - 1; index++ ) {
-			finMat.col( index ) = rowMat.col( set[index] );
-		}
-		finMat.col( finMat.cols() - 1 ) = rowMat.col( rowMat.cols() - 1 );
-		DEBUG( "hypro.datastructures", "Final decomposed Flow: \n"
-											 << finMat );
-		newFlows.emplace_back( linearFlow<Number>( finMat ) );
-
-		rectangularFlow<Number> newRectFlow;
-		for ( auto entry : set ) {
-			auto it = oldIntervals.find( vpool.carlVarByIndex( entry ) );
-			if ( it != oldIntervals.end() ) {
-				newRectFlow.setFlowIntervalForDimension( it->second, it->first );
+			// assemble new flow matrix: iterate over all existing flows to find the correct row
+			Eigen::Index rowIndex = 0;
+			for ( std::size_t dimension : decomposition.subspaces[i] ) {
+				// first find correct flow-cluster in existing dynamics
+				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
+				std::size_t accumulatedDimension = std::visit( flowDimensionVisitor{}, mFlows[0] );
+				// accumulate state space dimensions
+				for ( std::size_t clusterIndex = 0; clusterIndex < clusterpos; ++clusterIndex ) {
+					accumulatedDimension += std::visit( flowDimensionVisitor{}, mFlows[clusterIndex] );
+				}
+				// correct cluster found, get offset and write row
+				assert( mFlowTypes[clusterpos] == DynamicType::linear );
+				newFlow.row( rowIndex ) = std::get<linearFlow<Number>>( mFlows[clusterpos] ).getFlowMatrix().row( accumulatedDimension - dimension - 1 );
+				++rowIndex;
 			}
+			// re-shape columns
+			// +1 for constant column
+			auto dimensionsCopy = decomposition.subspaces[i];
+			dimensionsCopy.push_back( newFlow.cols() - 1 );
+			newFlow = selectRows( newFlow, dimensionsCopy );
+
+			newFlows.emplace_back( linearFlow<Number>( newFlow ) );
+
+		} else if ( decomposition.subspaceTypes[i] == DynamicType::rectangular ) {
+			std::map<carl::Variable, carl::Interval<Number>> newIntervals;
+			// iterate over selected dimensions and find corresponding rectangular flows in the existing flow definition
+			for ( std::size_t dimension : decomposition.subspaces[i] ) {
+				// first find correct flow-cluster in existing dynamics
+				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
+				// correct cluster found, get offset and write row
+				assert( mFlowTypes[clusterpos] == DynamicType::rectangular );
+				auto variable = vpool.carlVarByIndex( dimension );
+				newIntervals.insert( std::make_pair( variable, std::get<rectangularFlow<Number>>( mFlows[clusterpos] ).getFlowIntervalForDimension( variable ) ) );
+			}
+			newFlows.emplace_back( rectangularFlow<Number>( newIntervals ) );
 		}
-		newRectangularFlows.emplace_back( newRectFlow );
 	}
-	mLinearFlows = std::move( newFlows );
-	mRectangularFlows = std::move( newRectangularFlows );
+	assert( newFlows.size() == newFlowTypes.size() );
+	assert( newFlows.size() == decomposition.subspaces.size() );
+	mFlows = std::move( newFlows );
+	mFlowTypes = std::move( newFlowTypes );
 
 	// decompose invariant
 	mInvariant.decompose( decomposition );

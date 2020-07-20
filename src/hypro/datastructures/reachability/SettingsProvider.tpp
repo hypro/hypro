@@ -67,12 +67,12 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping( const HybridAu
 	// assert(SettingsProvider<State>::getInstance().getSubspaceDecomposition().size() != 0);
 
 	Decomposition decompositions = SettingsProvider<State>::getInstance().getSubspaceDecomposition();
-	TRACE( "hypro.utility", "Having " << decompositions.size() << " decompositions." );
+	TRACE( "hypro.utility", "Having " << decompositions.subspaces.size() << " decompositions." );
 	for ( auto location : ha.getLocations() ) {
 		DEBUG( "hypro.utility", "Subspace types for location " << location->getName() << " (" << location << "):" );
 
 		std::vector<SUBSPACETYPE> vec;
-		for ( std::size_t i = 0; i < decompositions.size(); i++ ) {
+		for ( std::size_t i = 0; i < decompositions.subspaces.size(); i++ ) {
 			//if ( DecisionEntity<Number>::getInstance().isTimedSubspace( *location, i ) ) {
 			//	vec.push_back( SUBSPACETYPE::TIMED );
 			//} else if ( DecisionEntity<Number>::getInstance().isDiscreteSubspace( *location, i ) ) {

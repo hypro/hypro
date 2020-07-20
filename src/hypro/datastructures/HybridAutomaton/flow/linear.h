@@ -77,6 +77,16 @@ class linearFlow {
 		return mNoFlow == TRIBOOL::TRUE;
 	}
 
+	DynamicType getDynamicsType() const {
+		if ( isTimed() ) {
+			return DynamicType::timed;
+		}
+		if ( isDiscrete() ) {
+			return DynamicType::discrete;
+		}
+		return DynamicType::linear;
+	}
+
 	bool isTimed() const {
 		TRACE( "hypro.decisionEntity", "Flowmatrix: " << mFlowMatrix );
 		Eigen::Index rows = mFlowMatrix.rows();

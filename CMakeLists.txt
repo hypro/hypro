@@ -162,3 +162,9 @@ include(export)
 if(CREATE_DOC)
 	add_subdirectory(doc EXCLUDE_FROM_ALL)
 endif()
+
+# # # # # # # # # # # # # # # # # # # # # #
+# F. Adding tool folder.
+# # # # # # # # # # # # # # # # # # # # # #
+
+add_subdirectory(src/tool)
