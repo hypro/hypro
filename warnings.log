@@ -21,7 +21,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/timeEvolutionHandlers/discreteTimeEvolutionHandler.h:5: warning: Compound hypro::discreteTimeEvolutionHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/timedGuardHandler.h:7: warning: Compound hypro::timedGuardHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:42: warning: Compound hypro::timedGuardHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:152: warning: Compound std::hash< hypro::NoneAssignment > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:147: warning: Compound std::hash< hypro::NoneAssignment > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:31: warning: Compound hypro::NoBoxReduction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:112: warning: Compound Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:37: warning: Compound hypro::SupportFunctionNewMorePrecision is not documented.
@@ -60,13 +60,13 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:10: warning: Compound hypro::timedElapseFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/timedElapseFirstSegmentHandler.h:7: warning: Compound hypro::timedElapseFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:36: warning: Compound hypro::statistics::AtomicOperationCounter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:143: warning: Compound std::hash< hypro::IntervalAssignment< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:138: warning: Compound std::hash< hypro::IntervalAssignment< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:22: warning: Compound hypro::Cone is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:71: warning: Compound hypro::IResetHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:50: warning: Compound hypro::PolynomialODE is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:8: warning: Compound hypro::rectangularFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/rectangularFirstSegmentHandler.h:7: warning: Compound hypro::rectangularFirstSegmentHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:99: warning: Compound hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:94: warning: Compound hypro::NoneAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/invariantHandlers/timedInvariantHandler.h:7: warning: Compound hypro::timedInvariantHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:22: warning: Compound hypro::timedInvariantHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:47: warning: Compound hypro::NoReduction is not documented.
@@ -84,7 +84,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:27: warning: Compound hypro::flowDynamicsTypeVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h:15: warning: Compound hypro::Label is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:42: warning: Compound hypro::NoTrafoReduction is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:133: warning: Compound std::hash< hypro::AffineTransformation< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:128: warning: Compound std::hash< hypro::AffineTransformation< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:191: warning: Compound hypro::TaylorModelVec is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:44: warning: Compound hypro::TaylorModelVec is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:1063: warning: Compound better_enums::map is not documented.
@@ -2347,8 +2347,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:73: warning: Member isIdentity() const  (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:69: warning: Member type() (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:59: warning: Member mIntervals (variable) of class hypro::IntervalAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:82: warning: Member operator<<(std::ostream &out, const IntervalAssignment< Number > &in) (friend) of class hypro::IntervalAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:89: warning: Member operator==(const IntervalAssignment< Number > &lhs, const IntervalAssignment< Number > &rhs) (friend) of class hypro::IntervalAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:77: warning: Member operator<<(std::ostream &out, const IntervalAssignment< Number > &in) (friend) of class hypro::IntervalAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:84: warning: Member operator==(const IntervalAssignment< Number > &lhs, const IntervalAssignment< Number > &rhs) (friend) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:74: warning: Member handle()=0 (function) of class hypro::IResetHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:75: warning: Member handlerName()=0 (function) of class hypro::IResetHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:65: warning: Member handle()=0 (function) of class hypro::ITimeEvolutionHandler is not documented.
@@ -2597,12 +2597,12 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/util.h:72: warning: Member createAndRaiseRefinementTask(typename ReachTreeNode< State >::Node_t node, typename ReachTreeNode< State >::Node_t update) (function) of class hypro::nodeUpdater is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/util.h:109: warning: Member createAndRaiseTask(typename ReachTreeNode< State >::Node_t node, typename ReachTreeNode< State >::Node_t update) (function) of class hypro::nodeUpdater is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/util.h:151: warning: Member operator()(typename ReachTreeNode< State >::NodeList_t &toMatch, typename ReachTreeNode< State >::NodeList_t &reference, Transition< typename State::NumberType > *transition) (function) of class hypro::nodeUpdater is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:104: warning: Member size() const  (function) of class hypro::NoneAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:106: warning: Member isIdentity() const  (function) of class hypro::NoneAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:102: warning: Member type() (function) of class hypro::NoneAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:100: warning: Member mDimensions (variable) of class hypro::NoneAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:110: warning: Member operator<<(std::ostream &out, const NoneAssignment &in) (friend) of class hypro::NoneAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:115: warning: Member operator==(const NoneAssignment &lhs, const NoneAssignment &rhs) (friend) of class hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:99: warning: Member size() const  (function) of class hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:101: warning: Member isIdentity() const  (function) of class hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:97: warning: Member type() (function) of class hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:95: warning: Member mDimensions (variable) of class hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:105: warning: Member operator<<(std::ostream &out, const NoneAssignment &in) (friend) of class hypro::NoneAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:110: warning: Member operator==(const NoneAssignment &lhs, const NoneAssignment &rhs) (friend) of class hypro::NoneAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:382: warning: Member getEpsilonpsi() (function) of class hypro::NonLinearOmega0Supportfunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:393: warning: Member NonLinearOmega0Supportfunction(matrix_t< double > *A, SupportFunctionContent *V, SupportFunctionContent *X0, double delta, artificialDirections *aD) (function) of class hypro::NonLinearOmega0Supportfunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:318: warning: Member operator=(const std::shared_ptr< SupportFunctionContent< Number, Setting >> &_orig) (function) of class hypro::SupportFunctionContent is not documented.
@@ -4213,14 +4213,14 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:93: warning: Member point (variable) of class hypro::ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:94: warning: Member direction (variable) of class hypro::ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:85: warning: Member operator()(const hypro::affineFlow< Number > &f) const  (function) of class std::hash< hypro::affineFlow< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:134: warning: Member operator()(const hypro::AffineTransformation< Number > &reset) const  (function) of class std::hash< hypro::AffineTransformation< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:129: warning: Member operator()(const hypro::AffineTransformation< Number > &reset) const  (function) of class std::hash< hypro::AffineTransformation< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:64: warning: Member operator()(hypro::Cacheable< Content > const &item) const  (function) of class std::hash< hypro::Cacheable< Content > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:435: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:144: warning: Member operator()(const hypro::IntervalAssignment< Number > &reset) const  (function) of class std::hash< hypro::IntervalAssignment< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:139: warning: Member operator()(const hypro::IntervalAssignment< Number > &reset) const  (function) of class std::hash< hypro::IntervalAssignment< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:124: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:305: warning: Member operator()(const hypro::Location< Number > &loc) const  (function) of class std::hash< hypro::Location< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:437: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class std::hash< hypro::matrix_t< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:153: warning: Member operator()(const hypro::NoneAssignment &reset) const  (function) of class std::hash< hypro::NoneAssignment > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:148: warning: Member operator()(const hypro::NoneAssignment &reset) const  (function) of class std::hash< hypro::NoneAssignment > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:685: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/rectangular.h:95: warning: Member operator()(const hypro::rectangularFlow< Number > &f) const  (function) of class std::hash< hypro::rectangularFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:132: warning: Member operator()(const hypro::Reset< Number > &reset) const  (function) of class std::hash< hypro::Reset< Number > > is not documented.
