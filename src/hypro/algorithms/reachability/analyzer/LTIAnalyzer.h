@@ -4,17 +4,23 @@
 #include "../../../types.h"
 #include "../workers/LTIWorker.h"
 #include "datastructures/reachability/ReachTreev2.h"
+#include "./ReturnTypes.h"
 
 #include <queue>
 
 namespace hypro {
+
+// indicates that the lti analysis succeeded, i.e. no
+struct LTISuccess {};
 
 template <typename State>
 class LTIAnalyzer {
 	using Number = typename State::NumberType;
 
   public:
-	LTIAnalyzer( HybridAutomaton<Number> const & ha, Settings const& setting, std::vector<ReachTreeNode<State>>& roots )
+	using LTIResult = AnalysisResult<LTISuccess, Failure<State>>;
+
+	LTIAnalyzer( HybridAutomaton<Number> const& ha, Settings const& setting, std::vector<ReachTreeNode<State>>& roots )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting ) {
 		for ( auto& root : roots ) {
@@ -22,7 +28,7 @@ class LTIAnalyzer {
 		}
 	}
 
-	std::pair<REACHABILITY_RESULT, ReachTreeNode<State>*> run();
+	LTIResult run();
 	void addToQueue( ReachTreeNode<State>* node ) { mWorkQueue.push_front( node ); }
 
   protected:

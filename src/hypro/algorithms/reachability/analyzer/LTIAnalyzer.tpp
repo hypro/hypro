@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename State>
-std::pair<REACHABILITY_RESULT, ReachTreeNode<State>*> LTIAnalyzer<State>::run() {
+auto LTIAnalyzer<State>::run() -> LTIResult {
 	//Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
 	LTIWorker<State> worker{
@@ -20,7 +20,7 @@ std::pair<REACHABILITY_RESULT, ReachTreeNode<State>*> LTIAnalyzer<State>::run() 
 		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return { safetyResult, currentNode };
+			return { Failure{ currentNode } };
 		}
 
 		//Do not perform discrete jump if jump depth was reached
@@ -44,7 +44,7 @@ std::pair<REACHABILITY_RESULT, ReachTreeNode<State>*> LTIAnalyzer<State>::run() 
 		}
 	}
 
-	return { REACHABILITY_RESULT::SAFE, nullptr };
+	return { LTISuccess{} };
 }
 
 }  // namespace hypro
