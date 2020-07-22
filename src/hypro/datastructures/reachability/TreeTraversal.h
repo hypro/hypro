@@ -14,13 +14,13 @@ class TreeIterator {
 	TreeIterator() = default;
 
 	TreeIterator( NodeType& node )
-		  : mStack( {&node} ) {}
+		: mStack( { &node } ) {}
 
 	TreeIterator( NodeType* node )
-		  : mStack( {node} ) {}
+		: mStack( { node } ) {}
 
-	TreeIterator(std::vector<NodeType*> const& nodes)
-		  : mStack(nodes) {}
+	TreeIterator( std::vector<NodeType*>& nodes )
+		: mStack( nodes ) {}
 
 	using difference_type = std::ptrdiff_t;
 	using value_type = NodeType;
@@ -63,14 +63,19 @@ class TreeIterator {
 
 template <class NodeType>
 boost::iterator_range<TreeIterator<NodeType>> preorder( NodeType& node ) {
-	return {TreeIterator{node}, TreeIterator<NodeType>{}};
+	return { TreeIterator{ node }, TreeIterator<NodeType>{} };
 }
 
 template <class NodeType>
 boost::iterator_range<TreeIterator<NodeType>> preorder( std::vector<NodeType>& nodes ) {
 	std::vector<NodeType*> ptrs{};
-	std::transform(nodes.begin(), nodes.end(), std::back_inserter(ptrs), [](auto& node) {return &node;});
-	return {TreeIterator<NodeType>{ptrs}, TreeIterator<NodeType>{}};
+	std::transform( nodes.begin(), nodes.end(), std::back_inserter( ptrs ), []( auto& node ) { return &node; } );
+	return { TreeIterator<NodeType>{ ptrs }, TreeIterator<NodeType>{} };
+}
+
+template <class NodeType>
+boost::iterator_range<TreeIterator<NodeType>> preorder( std::vector<NodeType*>& nodePtrs ) {
+	return { TreeIterator<NodeType>{ nodePtrs }, TreeIterator<NodeType>{} };
 }
 
 }  // namespace hypro
