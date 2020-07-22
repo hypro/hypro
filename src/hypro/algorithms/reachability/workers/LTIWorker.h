@@ -10,6 +10,7 @@
 #include "algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h"
 
 #include <vector>
+#include <optional>
 
 namespace hypro {
 
@@ -18,7 +19,12 @@ class LTIWorker {
   private:
 	using Number = typename Representation::NumberType;
 
+	struct EnabledSegmentsGen;
+	struct AggregatedGen;
+
   public:
+	class JumpSuccessorGen;
+
 	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
@@ -29,8 +35,7 @@ class LTIWorker {
 	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const;
 
 	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
-
-  private:
+	JumpSuccessorGen getJumpSuccessors(std::vector<Representation> const& flowpipe, Transition<Number> const* transition) const;
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;  /// TODO add documentation

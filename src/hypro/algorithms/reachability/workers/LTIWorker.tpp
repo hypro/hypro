@@ -44,6 +44,112 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	return REACHABILITY_RESULT::SAFE;
 }
 
+template <class Representation>
+auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const -> JumpSuccessorGen {
+	return JumpSuccessorGen{ flowpipe, transition, 1 };
+}
+
+template <class Representation>
+struct LTIWorker<Representation>::EnabledSegmentsGen {
+	std::vector<Representation> const* flowpipe;
+	Transition<Number> const* transition;
+	size_t current = 0;
+
+	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number> const* transition )
+		: flowpipe( flowpipe )
+		, transition( transition ) {}
+
+	std::optional<std::pair<std::vector<Representation>, SegmentInd>> next() {
+		std::vector<Representation> enabledSegments{};
+
+		SegmentInd firstEnabled{};
+
+		// find next enabled segment
+		for ( ; current < flowpipe->size(); ++current ) {
+			auto [containment, intersected] = intersect( ( *flowpipe )[current], transition->getGuard() );
+			if ( containment != CONTAINMENT::NO ) {
+				enabledSegments.push_back( intersected );
+				firstEnabled = current;
+				break;
+			}
+		}
+
+		// collect enabled segments
+		for ( current += 1; current < flowpipe->size(); ++current ) {
+			auto [containment, intersected] = intersect( ( *flowpipe )[current], transition->getGuard() );
+			if ( containment == CONTAINMENT::NO ) break;
+			enabledSegments.push_back( intersected );
+		}
+
+		if ( enabledSegments.empty() ) return std::nullopt;
+		return std::pair{ enabledSegments, firstEnabled };
+	}
+};
+
+template <class Representation>
+struct LTIWorker<Representation>::AggregatedGen {
+	size_t segmentsPerBlock{};
+	std::vector<Representation>* enabled{};
+	SegmentInd firstEnabled{};
+	size_t current = 0;
+
+	AggregatedGen( size_t segmentsPerBlock, std::vector<Representation>& enabled, SegmentInd firstEnabled )
+		: segmentsPerBlock( segmentsPerBlock )
+		, enabled( &enabled )
+		, firstEnabled( firstEnabled ) {}
+
+	AggregatedGen( size_t segmentsPerBlock, std::pair<std::vector<Representation>, SegmentInd>& p )
+		: AggregatedGen( segmentsPerBlock, p.first, p.second ) {}
+
+	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
+		if ( current == enabled->size() ) return std::nullopt;
+		Representation aggregated = ( *enabled )[current];
+		SegmentInd timeBegin = firstEnabled + current;
+		current += 1;
+		for ( size_t inBlock = 0; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
+			aggregated.unite( ( *enabled )[current] );
+		}
+		return std::pair{ aggregated, carl::Interval<int>{ timeBegin, current - 1 } };
+	}
+};
+
+template <class Representation>
+class LTIWorker<Representation>::JumpSuccessorGen {
+	std::optional<std::pair<std::vector<Representation>, SegmentInd>> mEnabledRange = std::pair<std::vector<Representation>, SegmentInd>{};
+
+	size_t mSegmentsPerBlock{};
+	Transition<Number> const* mTransition;
+
+	EnabledSegmentsGen mEnabled;
+	AggregatedGen mAggregated;
+
+  public:
+	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<Number> const* transition, size_t segmentsPerBlock )
+		: mSegmentsPerBlock( segmentsPerBlock )
+		, mTransition( transition )
+		, mEnabled( &flowpipe, transition )
+		, mAggregated( segmentsPerBlock, *mEnabledRange ) {}
+
+	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
+		while ( true ) {
+			auto agg = mAggregated.next();
+
+			while ( !agg ) {
+				auto mEnabledRange = mEnabled.next();
+				if ( !mEnabledRange ) return std::nullopt;
+				mAggregated = AggregatedGen{ mSegmentsPerBlock, *mEnabledRange };
+				agg = mAggregated.next();
+			}
+
+			agg->first = applyReset( agg->first, mTransition->getReset() );
+			CONTAINMENT containment;
+			std::tie( containment, agg->first ) = intersect( agg->first, mTransition->getTarget()->getInvariant() );
+
+			if ( containment != CONTAINMENT::NO ) return agg;
+		}
+	}
+};
+
 template <typename Representation>
 std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
 	//transition x enabled segments, segment ind
@@ -65,7 +171,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 
 	std::vector<JumpSuccessor<Representation>> successors{};
 
-	//aggregation
+	// aggregation
 	// for each transition
 	for ( auto& [transition, valuationSets] : enabledSegments ) {
 		// no aggregation
