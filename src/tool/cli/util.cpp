@@ -31,7 +31,7 @@ hypro::Settings processSettings( const hypro::ReachabilitySettings& parsedSettin
 	// create strategy inside settings
 	hypro::Settings settings{ { { timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
 								  hypro::stringToSetting( cliOptions["setting"].as<std::string>() ) } },
-							  parsedSettings.jumpDepth,
+							  static_cast<size_t>( parsedSettings.jumpDepth ),
 							  timehorizon,
 							  plotDimensions,
 							  { std::vector<std::string>( { parsedSettings.plotDimensions.size(), fileName } ) },
