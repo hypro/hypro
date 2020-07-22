@@ -12,8 +12,12 @@ State<Number, Representation, Rargs...> applyReset( const State<Number, Represen
 	}
 	auto res = inState;
 	for ( std::size_t pos = 0; pos < reset.size(); ++pos ) {
-		res = res.applyTransformation( reset.getAffineReset( pos ).mTransformation, pos );
-		res = res.partialIntervalAssignment( reset.getIntervalReset( pos ).mIntervals, pos );
+		if ( !reset.getAffineReset( pos ).isIdentity() ) {
+			res = res.applyTransformation( reset.getAffineReset( pos ).mTransformation, pos );
+		}
+		if ( !reset.getIntervalReset( pos ).isIdentity() ) {
+			res = res.partialIntervalAssignment( reset.getIntervalReset( pos ).mIntervals, pos );
+		}
 	}
 
 	return res;
