@@ -4,6 +4,7 @@
 #include <carl/util/hash.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
+#include <util/type_handling/better_enums/enum_default_ctor.h>
 #include <iosfwd>
 #include <set>
 
@@ -47,12 +48,13 @@ enum class REACHABILITY_RESULT {
 	UNKNOWN
 };
 
-enum class PLOTTYPE { pdf,
-					  png,
-					  eps,
-					  gen,
-					  tex,
-					  nset };
+BETTER_ENUM( PLOTTYPE, int,
+			 pdf,
+			 png,
+			 eps,
+			 gen,
+			 tex,
+			 nset )
 
 /**
  * @brief Enum to represent set states such as empty and universal.
@@ -106,9 +108,10 @@ enum class DynamicType { linear = 0,
 						 mixed,
 						 undefined };
 
-enum class AGG_SETTING { MODEL,
-						 AGG,
-						 NO_AGG };
+BETTER_ENUM( AGG_SETTING, int,
+			 MODEL,
+			 AGG,
+			 NO_AGG )
 
 }  // namespace hypro
 
