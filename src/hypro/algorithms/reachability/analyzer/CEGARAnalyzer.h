@@ -18,12 +18,23 @@ namespace hypro {
 
 template <class Number, class... Representations>
 class CEGARAnalyzer {
-	using TreeNodePtr = std::variant<ReachTreeNode<Representations>*...>;
+	using TreeNodePtrVariant = std::variant<ReachTreeNode<Representations>*...>;
 
 	template <class Representation>
-	struct ConcreteRefinementLevel {
-		RefinementAnalyzer<Representation> analyzer;
+	struct ConcreteRootsHolder {
 		std::vector<ReachTreeNode<Representation>> roots{};
+
+		ConcreteRootsHolder( ConcreteRootsHolder const& ) = delete;
+		ConcreteRootsHolder& operator=( ConcreteRootsHolder const& ) = delete;
+
+		ConcreteRootsHolder( ConcreteRootsHolder&& ) = default;
+		ConcreteRootsHolder& operator=( ConcreteRootsHolder&& ) = default;
+	};
+
+	template <class Representation>
+	struct ConcreteRefinementLevel : public ConcreteRootsHolder<Representation> {
+		RefinementAnalyzer<Representation> analyzer;
+		using ConcreteRootsHolder<Representation>::roots;
 
 		ReachTreeNode<Representation>& addOrGetRoot( HybridAutomaton<Number> const& automaton, Location<Number> const* loc ) {
 			auto rootIt = std::find_if( roots.begin(), roots.end(), [&]( auto& root ) { return root.getLocation() == loc; } );
@@ -33,45 +44,19 @@ class CEGARAnalyzer {
 			}
 			return *rootIt;
 		}
-
-		ConcreteRefinementLevel( ConcreteRefinementLevel const& ) = delete;
-		ConcreteRefinementLevel& operator=( ConcreteRefinementLevel const& ) = delete;
-
-		ConcreteRefinementLevel( ConcreteRefinementLevel&& ) = default;
-		ConcreteRefinementLevel& operator=( ConcreteRefinementLevel&& ) = default;
 	};
 
 	template <class Representation>
-	struct ConcreteBaseLevel {
+	struct ConcreteBaseLevel : public ConcreteRootsHolder<Representation> {
 		LTIAnalyzer<Representation> analyzer;
-		std::vector<ReachTreeNode<Representation>> roots{};
-
-		ConcreteBaseLevel( ConcreteBaseLevel const& ) = delete;
-		ConcreteBaseLevel& operator=( ConcreteBaseLevel const& ) = delete;
-
-		ConcreteBaseLevel( ConcreteBaseLevel&& ) = default;
-		ConcreteBaseLevel& operator=( ConcreteBaseLevel&& ) = default;
 	};
 
 	struct RefinementLevel {
 		std::variant<ConcreteRefinementLevel<Representations>...> variant;
-
-		std::pair<REACHABILITY_RESULT, TreeNodePtr> run() {
-			return std::visit( []( auto& level ) -> std::pair<REACHABILITY_RESULT, TreeNodePtr> {
-				return level.analyzer.run();
-			},
-							   variant );
-		}
 	};
+
 	struct BaseLevel {
 		std::variant<ConcreteBaseLevel<Representations>...> variant;
-
-		std::pair<REACHABILITY_RESULT, TreeNodePtr> run() {
-			return std::visit( []( auto& level ) -> std::pair<REACHABILITY_RESULT, TreeNodePtr> {
-				return level.analyzer.run();
-			},
-							   variant );
-		}
 	};
 
 	struct CreateBaseLevel;
@@ -79,8 +64,23 @@ class CEGARAnalyzer {
 
 	static BaseLevel createBaseLevel( HybridAutomaton<Number> const& automaton, Settings const& setting );
 	RefinementLevel& createRefinementLevel( size_t index );
-	template <class LevelFrom, class LevelTo>
-	void transferNodes( LevelFrom& from, TreeNodePtr& nodePtrFrom, LevelTo& to );
+	template <class SourceRep, class TargetLevel>
+	void transferNodes( std::vector<ReachTreeNode<SourceRep>*>& sourceNodes,
+						std::variant<Failure<Representations>...> targetFailure,
+						TargetLevel& targetLevel );
+
+	template<class Representation>
+	void handleFailure( ReachTreeNode<Representation>* conflictNode, size_t targetIndex );
+
+	/**
+	 * @brief Gets the level at index. Helps with the offset of mLevels.
+	 */
+//	RefinementLevel& getRefinementLevel( size_t index ) {
+//		assert( index >= 1 );
+//		assert( index <= mLevels.size() );
+//
+//		return mLevels[index - 1];
+//	}
 
   public:
 	CEGARAnalyzer() = delete;
@@ -98,53 +98,18 @@ class CEGARAnalyzer {
 
 	REACHABILITY_RESULT run();
 
-	using TreePtrVariant = std::variant<std::vector<ReachTreeNode<Representations>>*...>;
+	using TreePtrVariant = std::variant<ConcreteRootsHolder<Representations>*...>;
 
-	TreePtrVariant getTree( size_t levelIndex ) {
+	TreePtrVariant getLevel( size_t levelIndex ) {
 		if ( levelIndex == 0 ) {
-			return std::visit( []( auto& baseLevel ) -> TreePtrVariant { return &baseLevel.roots; }, mBaseLevel.variant );
+			return std::visit( []( auto& baseLevel ) -> TreePtrVariant { return &baseLevel; }, mBaseLevel.variant );
 		} else {
-			return std::visit( []( auto& refinementLevel ) -> TreePtrVariant { return &refinementLevel.roots; }, mLevels[levelIndex - 1].variant );
+			return std::visit( []( auto& refinementLevel ) -> TreePtrVariant { return &refinementLevel; }, mLevels[levelIndex - 1].variant );
 		}
 	}
 
-	auto getTrees() {
-		return boost::adaptors::transform( boost::counting_range( 0ul, mLevels.size() + 1 ), [&]( size_t ind ) { return getTree( ind ); } );
-	}
-
-	void plot() {
-		// call to plotting.
-		START_BENCHMARK_OPERATION( Plotting );
-
-		std::size_t amount = 0;
-		for ( auto roots : getTrees() ) {
-			std::visit( [&]( auto* r ) {
-				for ( const auto& node : preorder( *r ) ) {
-					amount += node.getFlowpipe().size();
-				}
-			},
-						roots );
-		}
-
-		auto& plt = Plotter<Number>::getInstance();
-		for ( std::size_t pic = 0; pic < mSettings.plotDimensions.size(); ++pic ) {
-			std::cout << "Prepare plot " << pic + 1 << "/" << mSettings.plotDimensions.size() << "." << std::endl;
-			plt.setFilename( mSettings.plotFileNames[pic] );
-			std::size_t segmentCount = 0;
-			for ( auto roots : getTrees() ) {
-				std::visit( [&]( auto* r ) {
-					for ( const auto& node : preorder( *r ) ) {
-						for ( const auto& segment : node.getFlowpipe() ) {
-							std::cout << "\r" << segmentCount++ << "/" << amount << "..." << std::flush;
-							plt.addObject( segment.project( mSettings.plotDimensions[pic] ).vertices() );
-						}
-					}
-				},
-							roots );
-			}
-			plt.plot2d( mSettings.plottingFileType );  // writes to .plt file for pdf creation
-		}
-		EVALUATE_BENCHMARK_RESULT( Plotting );
+	auto getLevels() {
+		return boost::adaptors::transform( boost::counting_range( 0ul, mLevels.size() + 1 ), [&]( size_t ind ) { return getLevel( ind ); } );
 	}
 
   protected:

@@ -11,7 +11,7 @@ struct CEGARAnalyzer<Number, Representations...>::CreateBaseLevel {
 		auto roots = makeRoots<Representation>( ha );
 		auto analyzer = LTIAnalyzer<Representation>{ ha, settings, roots };
 
-		return BaseLevel{ ConcreteBaseLevel<Representation>{ std::move( analyzer ), std::move( roots ) } };
+		return BaseLevel{ ConcreteBaseLevel<Representation>{ { std::move( roots ) }, std::move( analyzer ) } };
 	}
 };
 
@@ -20,7 +20,7 @@ struct CEGARAnalyzer<Number, Representations...>::CreateRefinementLevel {
 	template <class Representation>
 	RefinementLevel operator()( HybridAutomaton<Number> const& ha, Settings const& settings ) {
 		auto analyzer = RefinementAnalyzer<Representation>{ ha, settings };
-		return RefinementLevel{ ConcreteRefinementLevel<Representation>{ std::move( analyzer ), {} } };
+		return RefinementLevel{ ConcreteRefinementLevel<Representation>{ {}, std::move( analyzer ) } };
 	}
 };
 
@@ -44,129 +44,89 @@ auto CEGARAnalyzer<Number, Representations...>::createRefinementLevel( size_t in
 }
 
 template <class Number, class... Representations>
-template <class LevelFrom, class LevelTo>
-void CEGARAnalyzer<Number, Representations...>::transferNodes( LevelFrom& from, TreeNodePtr& nodePtrTo, LevelTo& to ) {
-	std::visit( [&]( auto& currLevel ) {
-		std::visit( [&]( auto& prevLevel ) {
-			using PrevRep = analyzer_rep<decltype( prevLevel.analyzer )>;
+template <class SourceRep, class TargetLevel>
+void CEGARAnalyzer<Number, Representations...>::transferNodes( std::vector<ReachTreeNode<SourceRep>*>& sourceNodes,
+															   std::variant<Failure<Representations>...> targetFailure,
+															   TargetLevel& targetLevel ) {
+	std::visit( [&]( auto& targetLevel_c ) {
+		using TargetRep = analyzer_rep<decltype( targetLevel_c.analyzer )>;
 
-			auto* prevNode = std::get<ReachTreeNode<PrevRep>*>( nodePtrTo );
-			for ( auto* currNode : currLevel.analyzer.workQueue() ) {
-				PrevRep initialSet{};
-				convert( currNode->getInitialSet(), initialSet );  // bad syntax. Means: initialSet = convert( node->getInitialSet() )
+		auto* targetNode_c = std::get<Failure<TargetRep>>( targetFailure ).conflictNode;
+		for ( auto* sourceNode : sourceNodes ) {
+			TargetRep initialSet{};
+			convert( sourceNode->getInitialSet(), initialSet );	 // bad syntax. Means: initialSet = convert( node->getInitialSet() );
 
-				auto& child = prevNode->addChild( initialSet, currNode->getTimings(), currNode->getTransition() );
+			auto& child = targetNode_c->addChild( initialSet, sourceNode->getTimings(), sourceNode->getTransition() );
 
-				prevLevel.analyzer.addToQueue( &child );
-			}
-		},
-					to.variant );
+			targetLevel_c.analyzer.addToQueue( &child );
+		}
 	},
-				from.variant );
+				targetLevel.variant );
+}
+
+template <class Number, class... Representations>
+template <class Representation>
+void CEGARAnalyzer<Number, Representations...>::handleFailure( ReachTreeNode<Representation>* conflictNode, size_t targetIndex ) {
+	std::visit( [&]( auto& targetLevel ) {
+		Path path = conflictNode->getPath();
+		auto* targetRoot = &targetLevel.addOrGetRoot( mHybridAutomaton, path.rootLocation );
+		targetLevel.analyzer.setRefinement( targetRoot, std::move( path ) );
+	},
+				createRefinementLevel( targetIndex ).variant );
 }
 
 template <class Number, class... Representations>
 REACHABILITY_RESULT CEGARAnalyzer<Number, Representations...>::run() {
+	// data persistent through loop cycles
+	std::vector<std::variant<Failure<Representations>...>> results( mSettings.strategy.size() );
+	size_t levelInd = 0;
+	bool save = true;
 
 	// procedure:
-	// if on first level -> run level, on success: return , on failure: prepare next level
-	// if on different level -> run level, on success: reset to previous level, on failure: prepare next level
+	// run -> handle success or failure
 
-	// invariant at start of loop: level at levelInd is created and ready to run
 
-	/*while ( true ) {
-		// trying a level higher than we have available means we failed at all levels :'(
-		if ( levelInd == mSettings.strategy.size() ) return REACHABILITY_RESULT::UNKNOWN;
 
-		// special handling for first level
+	// continue while previous was safe or we can go to higher refinement
+	while ( save || levelInd < mSettings.strategy.size() - 1 ) {
 		if ( levelInd == 0 ) {
-			// run level
-			REACHABILITY_RESULT result;
-			std::tie( result, nodes.at( levelInd ) ) = mBaseLevel.run();
-			//on success: return
-			if ( result == REACHABILITY_RESULT::SAFE ) return REACHABILITY_RESULT::SAFE;
-
-			//on failure: prepare next level
-			auto [path, location] = std::visit( []( auto* n ) {
-				return std::pair{ n->getPath(), n->getLocation() };
+			save = std::visit( [&]( auto& level ) {
+				// run
+				auto result = level.analyzer.run();
+				// handle success
+				if ( result.isSuccess() ) return true;
+				// handle failure
+				results.at( levelInd ) = result.failure();
+				handleFailure( result.failure().conflictNode, levelInd + 1 );
+				return false;
 			},
-												nodes.at( levelInd ) );
-
-			createRefinementLevel( levelInd + 1, path, location );
+							   mBaseLevel.variant );
+			if ( save ) return REACHABILITY_RESULT::SAFE;
 			levelInd += 1;
 		} else {
-			// run level
-			REACHABILITY_RESULT result;
-			std::tie( result, nodes.at( levelInd ) ) = mLevels.at( levelInd - 1 ).run();  // mLevels is offset by -1 because first level is handeled specially
-
-			if ( result == REACHABILITY_RESULT::SAFE ) {  // on success: reset to previous level
-				transferNodes( mLevels.at( levelInd - 1 ), nodes.at( levelInd ), mLevels.at( levelInd - 2 ) );
-				levelInd -= 1;
-			} else {
-				// on failure: prepare next level
-				auto [path, loc] = std::visit( []( auto* n ) {
-					return std::pair{ n->getPath(), n->getLocation() };
-				},
-													nodes.at( levelInd ) );
-
-				auto& level = createRefinementLevel( levelInd + 1 );
-				std::visit( [loc=loc, &path = path]( auto& l ) {
-					l.analyzer.setPath( path );
-					auto rootIt = std::find_if( l.roots.begin(), l.roots.end(), [&]( auto& root ) { return root.getLocation() == loc; } );
-					auto& root = ( rootIt == l.roots.end() ) ? l.roots.emplace_back( loc, { m }, carl::Interval{ 0, 0 } ): ;
-				} )
-
-					  levelInd += 1;
-			}
-		}
-	}*/
-
-	// procedure:
-	// check results of prev. invocation -> prepare next run -> run
-
-	std::vector<TreeNodePtr> nodes( mSettings.strategy.size() );
-	size_t levelInd = 0;
-	REACHABILITY_RESULT result;
-
-	std::tie( result, nodes.at( levelInd ) ) = mBaseLevel.run();
-	if ( result == REACHABILITY_RESULT::SAFE ) return REACHABILITY_RESULT::SAFE;
-
-	while ( levelInd < mSettings.strategy.size() - 1 ) {
-		// prev invocation ran into bad states -> climbing levels
-		// get info from last invocation
-		auto [path, loc] = std::visit( []( auto* n ) {
-			return std::pair{ n->getPath(), n->getLocation() };
-		},
-											nodes.at( levelInd ) );
-		// make sure next level exists and set path and initial state
-		auto& level = createRefinementLevel( levelInd + 1 );
-		std::visit( [&, &path=path, loc=loc]( auto& l ) {
-			auto& root = l.addOrGetRoot( mHybridAutomaton, loc );
-			l.analyzer.addToQueue( &root );
-			l.analyzer.setPath( path );
-		},
-					level.variant );
-
-		std::tie( result, nodes.at( levelInd + 1 ) ) = level.run();
-		levelInd = levelInd + 1;
-
-		while ( result == REACHABILITY_RESULT::SAFE ) {
-			// prev invocation went through -> descend levels
-			if ( levelInd == 0 ) return REACHABILITY_RESULT::SAFE;
-
-			if ( levelInd == 1 ) {
-				transferNodes( mLevels.at( levelInd - 1 ), nodes.at( levelInd ), mBaseLevel );	// mLevels is offset by one, so moving nodes from lvl 1 to 0
-				std::tie( result, nodes.at( levelInd - 1 ) ) = mBaseLevel.run();
-			} else {
-				transferNodes( mLevels.at( levelInd - 1 ), nodes.at( levelInd ), mLevels.at( levelInd - 2 ) );	// moving nodes from levelInd to levelInd - 1
-				std::tie( result, nodes.at( levelInd - 1 ) ) = mLevels[levelInd - 2].run();
-			}
-
-			levelInd -= 1;
+			save = std::visit( [&]( auto& level ) {
+				// run
+				auto result = level.analyzer.run();
+				if ( result.isSuccess() ) {
+					// handle success
+					if ( levelInd == 1 ) {
+						transferNodes( result.success().pathSuccessors, results.at( 0 ), mBaseLevel );
+					} else {
+						auto& level = createRefinementLevel( levelInd - 1 );
+						transferNodes( result.success().pathSuccessors, results.at( levelInd - 1 ), level );
+					}
+				} else {
+					// handle failure
+					results.at( levelInd ) = result.failure();
+					handleFailure( result.failure().conflictNode, levelInd + 1 );
+				}
+				return result.isSuccess();
+			},
+							   createRefinementLevel( levelInd ).variant );
+			levelInd = save ? levelInd - 1 : levelInd + 1;
 		}
 	}
-
-	return REACHABILITY_RESULT::SAFE;
+	return REACHABILITY_RESULT::UNKNOWN;
 }
 
 }  // namespace hypro
