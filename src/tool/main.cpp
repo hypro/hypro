@@ -43,18 +43,19 @@ int main( int argc, char const* argv[] ) {
 	// call to plotting.
 	START_BENCHMARK_OPERATION( Plotting );
 
+	auto& plotSettings = settings.plotting;
 	auto& plt = Plotter<Number>::getInstance();
-	for ( std::size_t pic = 0; pic < settings.plotDimensions.size(); ++pic ) {
-		std::cout << "Prepare plot " << pic + 1 << "/" << settings.plotDimensions.size() << "." << std::endl;
-		plt.setFilename( settings.plotFileNames[pic] );
+	for ( std::size_t pic = 0; pic < plotSettings.plotDimensions.size(); ++pic ) {
+		std::cout << "Prepare plot " << pic + 1 << "/" << plotSettings.plotDimensions.size() << "." << std::endl;
+		plt.setFilename( plotSettings.plotFileNames[pic] );
 		std::size_t segmentCount = 0;
 
 		for ( const auto& segment : result.plotData ) {
 			std::cout << "\r" << segmentCount++ << "/" << result.plotData.size() << "..." << std::flush;
-			plt.addObject( segment.sets.project( settings.plotDimensions[pic] ).vertices() );
+			plt.addObject( segment.sets.project( plotSettings.plotDimensions[pic] ).vertices() );
 		}
 
-		plt.plot2d( settings.plottingFileType );  // writes to .plt file for pdf creation
+		plt.plot2d( plotSettings.plottingFileType );  // writes to .plt file for pdf creation
 	}
 	EVALUATE_BENCHMARK_RESULT( Plotting );
 

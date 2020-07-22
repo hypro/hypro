@@ -18,16 +18,21 @@ struct AnalysisParameters {
 	bool uniformBloating = false;
 };
 
+struct PlottingSettings {
+	std::vector<std::vector<size_t>> plotDimensions{};
+	std::vector<std::string> plotFileNames{};
+	PLOTTYPE plottingFileType = PLOTTYPE::nset;
+};
+
 struct Settings {
-	std::vector<AnalysisParameters> strategy{ 1 };
 	size_t jumpDepth{ std::numeric_limits<int>::max() };
 	tNumber localTimeHorizon{ tNumber( 0 ) };
-	std::vector<std::vector<std::size_t>> plotDimensions{ { 0, 1 } };
-	std::vector<std::string> plotFileNames{ "out" };
-	PLOTTYPE plottingFileType{ PLOTTYPE::png };
 #if HYPRO_USE_PPL
 	unsigned long pplDenominator{ defaultPPLDenominator };
 #endif
+
+	PlottingSettings plotting{};
+	std::vector<AnalysisParameters> strategy{ 1 };
 };
 
 /**
