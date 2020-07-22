@@ -13,13 +13,16 @@ template <class Representation>
 auto ReachTreeNode<Representation>::getPath() const -> Path<Number> {
 	Path<Number> path{ this->mDepth };
 
-	size_t currentPos = this->mDepth - 1;
+	size_t currentPos = this->mDepth;  // one past end
 	auto const* node = this;
 
 	while ( node->mParent != nullptr ) {
-		path.elements[currentPos] = std::pair( mTimings, node->mTransition );
 		currentPos -= 1;
+		path.elements[currentPos] = std::pair( node->mTimings, node->mTransition );
+		node = node->mParent;
 	}
+
+	path.rootLocation = node->getLocation();
 
 	assert( currentPos == 0 );
 
