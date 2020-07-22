@@ -85,10 +85,8 @@ REACHABILITY_RESULT CEGARAnalyzer<Number, Representations...>::run() {
 	// procedure:
 	// run -> handle success or failure
 
-
-
 	// continue while previous was safe or we can go to higher refinement
-	while ( save || levelInd < mSettings.strategy.size() - 1 ) {
+	while ( true ) {
 		if ( levelInd == 0 ) {
 			save = std::visit( [&]( auto& level ) {
 				// run
@@ -123,10 +121,10 @@ REACHABILITY_RESULT CEGARAnalyzer<Number, Representations...>::run() {
 				return result.isSuccess();
 			},
 							   createRefinementLevel( levelInd ).variant );
-			levelInd = save ? levelInd - 1 : levelInd + 1;
+			levelInd += save ? -1 : 1;
+			if ( levelInd == mSettings.strategy.size() ) return REACHABILITY_RESULT::UNKNOWN;
 		}
 	}
-	return REACHABILITY_RESULT::UNKNOWN;
 }
 
 }  // namespace hypro
