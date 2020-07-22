@@ -1,5 +1,6 @@
 #pragma once
 #include "../../workers/LTIWorker.h"
+#include "../ReturnTypes.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/reachability/ReachTreev2.h"
 #include "types.h"
@@ -8,15 +9,23 @@
 
 namespace hypro {
 
+template <class Representation>
+struct RefinementSuccess {
+	std::vector<ReachTreeNode<Representation>*> pathSuccessors{};
+};
+template <class Representation>
+RefinementSuccess(std::vector<ReachTreeNode<Representation>*>) -> RefinementSuccess<Representation>;
+
 /**
  * @brief Analyzer implementation for refinement (internal)
  * @tparam Representation
  */
 template <typename Representation>
 class RefinementAnalyzer {
-	using Number = typename Representation::NumberType;
-
   public:
+	using Number = rep_number<Representation>;
+	using RefinementResult = AnalysisResult<RefinementSuccess<Representation>, Failure<Representation>>;
+
 	RefinementAnalyzer( HybridAutomaton<Number> const& ha, Settings const& setting )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting ) {}
@@ -26,12 +35,15 @@ class RefinementAnalyzer {
 	 * @param path
 	 * @return REACHABILITY_RESULT
 	 */
-	std::pair<REACHABILITY_RESULT, ReachTreeNode<Representation>*> run();
+	void setRefinement( ReachTreeNode<Representation>* node, Path<Number> path ) {
+		assert( mWorkQueue.empty() );
+		mWorkQueue.push_front( node );
+		mPath = std::move( path );
+	}
 
-	std::deque<ReachTreeNode<Representation>*> const& workQueue() { return mWorkQueue; }
+	RefinementResult run();
+
 	void addToQueue( ReachTreeNode<Representation>* node ) { mWorkQueue.push_front( node ); }
-
-	void setPath( Path<Number> path ) { mPath = path; }
 
   protected:
 	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	///< Queue for nodes in the tree which require processing
