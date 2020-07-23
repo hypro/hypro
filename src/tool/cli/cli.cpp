@@ -33,7 +33,7 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 		// preprocessing
 			( "decider", po::bool_switch(), "Use decision entity to decide on future representation/handlers to use based on the current state to allow for optimized computations." )
 			( "decompose", po::bool_switch(), "Decompose automaton into syntactically independent subspaces." );
-		// ( "configuration", po::value<std::string>(), "Specify a file to load options from. Command line overwrites them." )
+		//( "configuration", po::value<std::string>(), "Specify a file to load options from. Command line overwrites them." )
 
 	// clang-format on
 	try {
