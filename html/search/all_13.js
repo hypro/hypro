@@ -19,7 +19,7 @@ var searchData=
   ['timedresethandler',['timedResetHandler',['../classhypro_1_1timed_reset_handler.html',1,'hypro']]],
   ['timedticktimeevolutionhandler',['timedTickTimeEvolutionHandler',['../classhypro_1_1timed_tick_time_evolution_handler.html',1,'hypro']]],
   ['timeinterval',['timeInterval',['../structhypro_1_1_t_path_element.html#a571a283d729e8360a3b7473537759349',1,'hypro::TPathElement']]],
-  ['timestep',['timeStep',['../structhypro_1_1_reachability_settings.html#a52e2aa09e72bba3c3c4385c18f7248aa',1,'hypro::ReachabilitySettings']]],
+  ['timestep',['timeStep',['../namespacehypro.html#aaf98adf21450393f826cdf92721b5c63',1,'hypro::AnalysisParameters::timeStep()'],['../structhypro_1_1_reachability_settings.html#a52e2aa09e72bba3c3c4385c18f7248aa',1,'hypro::ReachabilitySettings::timeStep()']]],
   ['timingaggregate',['TimingAggregate',['../classhypro_1_1_timing_aggregate.html',1,'hypro']]],
   ['timingaggregate_3c_20n_20_3e',['TimingAggregate&lt; N &gt;',['../classhypro_1_1_timing_aggregate.html',1,'hypro']]],
   ['tnumber',['tNumber',['../namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c',1,'hypro']]],

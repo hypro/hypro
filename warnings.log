@@ -36,7 +36,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:6: warning: Compound hypro::flowHashVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:12: warning: Compound hypro::IWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectOp.h:26: warning: Compound hypro::IntersectOp is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:304: warning: Compound std::hash< hypro::Transition< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:303: warning: Compound std::hash< hypro::Transition< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:10: warning: Compound hypro::affineFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:165: warning: Compound hypro::projectionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/timeEvolutionHandlers/timedElapseTimeEvolutionHandler.h:8: warning: Compound hypro::timedElapseTimeEvolutionHandler is not documented.
@@ -3857,31 +3857,31 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:117: warning: argument '_hybrid' of command @param is not found in the argument list of hypro::Transformation< Number >::Transformation(const Transformation< Number > &_trafo)
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:107: warning: The following parameters of hypro::Transformation::Transformation(const Transformation< Number > &_trafo) are not documented:
   parameter '_trafo'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:114: warning: Member getSource() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:118: warning: Member getTarget() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:122: warning: Member getGuard() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:123: warning: Member getReset() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:124: warning: Member getAggregation() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:125: warning: Member getClusterBound() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:126: warning: Member getTriggerTime() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:127: warning: Member isUrgent() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:128: warning: Member isTimeTriggered() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:129: warning: Member hasIdentityReset() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:130: warning: Member getLabels() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:131: warning: Member hash() const  (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:133: warning: Member setSource(Location< Number > *source) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:137: warning: Member setTarget(Location< Number > *target) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:141: warning: Member setSource(std::unique_ptr< Location< Number >> &source) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:145: warning: Member setTarget(std::unique_ptr< Location< Number >> &target) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:149: warning: Member setGuard(const Condition< Number > &guard) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:153: warning: Member setReset(const Reset< Number > &val) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:157: warning: Member setAggregation(Aggregation agg) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:164: warning: Member setClusterBound(std::size_t cluster) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:168: warning: Member setUrgent(bool urgent=true) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:172: warning: Member setTriggerTime(Number t) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:176: warning: Member setLabels(const std::vector< Label > &labels) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:180: warning: Member addLabel(const Label &lab) (function) of class hypro::Transition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:185: warning: Member getDotRepresentation(const std::vector< std::string > &vars) const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:113: warning: Member getSource() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:117: warning: Member getTarget() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:121: warning: Member getGuard() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:122: warning: Member getReset() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:123: warning: Member getAggregation() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:124: warning: Member getClusterBound() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:125: warning: Member getTriggerTime() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:126: warning: Member isUrgent() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:127: warning: Member isTimeTriggered() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:128: warning: Member hasIdentityReset() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:129: warning: Member getLabels() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:130: warning: Member hash() const  (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:132: warning: Member setSource(Location< Number > *source) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:136: warning: Member setTarget(Location< Number > *target) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:140: warning: Member setSource(std::unique_ptr< Location< Number >> &source) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:144: warning: Member setTarget(std::unique_ptr< Location< Number >> &target) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:148: warning: Member setGuard(const Condition< Number > &guard) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:152: warning: Member setReset(const Reset< Number > &val) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:156: warning: Member setAggregation(Aggregation agg) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:163: warning: Member setClusterBound(std::size_t cluster) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:167: warning: Member setUrgent(bool urgent=true) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:171: warning: Member setTriggerTime(Number t) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:175: warning: Member setLabels(const std::vector< Label > &labels) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:179: warning: Member addLabel(const Label &lab) (function) of class hypro::Transition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:184: warning: Member getDotRepresentation(const std::vector< std::string > &vars) const  (function) of class hypro::Transition is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeNode.h:24: warning: Member Node_t (typedef) of class hypro::TreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeNode.h:25: warning: Member const_Node_t (typedef) of class hypro::TreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeNode.h:26: warning: Member NodeList_t (typedef) of class hypro::TreeNode is not documented.
@@ -4225,7 +4225,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/rectangular.h:95: warning: Member operator()(const hypro::rectangularFlow< Number > &f) const  (function) of class std::hash< hypro::rectangularFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:132: warning: Member operator()(const hypro::Reset< Number > &reset) const  (function) of class std::hash< hypro::Reset< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:94: warning: Member operator()(const hypro::Ridge< Number > &ridge) const  (function) of class std::hash< hypro::Ridge< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:305: warning: Member operator()(const hypro::Transition< Number > &trans) (function) of class std::hash< hypro::Transition< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:304: warning: Member operator()(const hypro::Transition< Number > &trans) (function) of class std::hash< hypro::Transition< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:430: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:257: warning: Member operator()(const hypro::Vertex< Number > &vertex) (function) of class std::hash< hypro::Vertex< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h:309: warning: Member operator()(hypro::VertexContainer< Number > const &vertexContainer) const  (function) of class std::hash< hypro::VertexContainer< Number > > is not documented.
