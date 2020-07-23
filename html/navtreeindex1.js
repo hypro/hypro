@@ -64,7 +64,7 @@ var NAVTREEINDEX1 =
 "adaptions__z3__double_8cpp_source.html":[9,0,1,0,3,1,4,2],
 "affine_8h_source.html":[9,0,1,0,1,0,1,0],
 "algorithms_2quickhull_2quickhull__exact_2_facet_8h_source.html":[9,0,1,0,0,3,0,0],
-"algorithms_2reachability_2handlers_2jump_handlers_2util_8h_source.html":[9,0,1,0,0,4,2,4,4],
+"algorithms_2reachability_2handlers_2jump_handlers_2util_8h_source.html":[9,0,1,0,0,4,2,4,5],
 "algorithms_2reachability_2util_8h_source.html":[9,0,1,0,0,4,10],
 "annotated.html":[8,0],
 "boxDetails.html":[3,0,0],
