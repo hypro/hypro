@@ -16,6 +16,9 @@ template <typename Number>
 vector_t<Number> refineSolution( glpk_context& context, const matrix_t<Number>& constraints, const vector_t<Number>& constants );
 
 template <typename Number>
+EvaluationResult<Number> glpkOptimizeLinearPostSolve( glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact, const EvaluationResult<Number>& preSolution );
+
+template <typename Number>
 EvaluationResult<Number> glpkOptimizeLinear( glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact );
 
 template <typename Number>
