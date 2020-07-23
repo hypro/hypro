@@ -9,7 +9,6 @@ std::vector<std::size_t> clusterDistribution( std::size_t numberClusters, std::s
 	}
 	std::vector<std::size_t> clusterDistribution;
 	std::size_t minSegmentsPerCluster = numberStateSets / numberClusters;
-	std::size_t maxSegmentsPerCluster = ceil( double( numberStateSets ) / double( numberClusters ) );
 	std::size_t largerClusterCount = numberStateSets - minSegmentsPerCluster * numberClusters;
 
 	assert( minSegmentsPerCluster > 0 );
