@@ -10,25 +10,25 @@
 namespace hypro {
 
 struct AnalysisParameters {
-	mpq_class timeStep = 0;												   /// the used time step size
-	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   /// the forced aggregation settings
-	int clustering = -1;												   /// if clustering is used: number of clusters
-	representation_name representation_type = representation_name::UNDEF;  /// type of representation
-	int representation_setting = 0;										   /// used settings for the representation
+	mpq_class timeStep = 0;												   ///< the used time step size
+	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   ///< the forced aggregation settings
+	int clustering = -1;												   ///< if clustering is used: number of clusters
+	representation_name representation_type = representation_name::UNDEF;  ///< type of representation
+	int representation_setting = 0;										   ///< used settings for the representation
 	bool uniformBloating = false;
 };
 
 using DynamicStrategy = std::vector<AnalysisParameters>;
 
 struct Settings {
-	std::vector<AnalysisParameters> strategy{1};
-	int jumpDepth{std::numeric_limits<int>::max()};
-	tNumber localTimeHorizon{tNumber( 0 )};
-	std::vector<std::vector<std::size_t>> plotDimensions{{0, 1}};
-	std::vector<std::string> plotFileNames{"out"};
-	PLOTTYPE plottingFileType{PLOTTYPE::png};
+	std::vector<AnalysisParameters> strategy{ 1 };
+	int jumpDepth{ std::numeric_limits<int>::max() };
+	tNumber localTimeHorizon{ tNumber( 0 ) };
+	std::vector<std::vector<std::size_t>> plotDimensions{ { 0, 1 } };
+	std::vector<std::string> plotFileNames{ "out" };
+	PLOTTYPE plottingFileType{ PLOTTYPE::png };
 #if HYPRO_USE_PPL
-	unsigned long pplDenominator{defaultPPLDenominator};
+	unsigned long pplDenominator{ defaultPPLDenominator };
 #endif
 };
 

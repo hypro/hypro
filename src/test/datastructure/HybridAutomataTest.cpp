@@ -293,8 +293,8 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	EXPECT_EQ( t->getTarget(), this->loc2.get() );
 	EXPECT_EQ( t->getAggregation(), Aggregation::none );
 	EXPECT_FALSE( t->isTimeTriggered() );
-	t->setAggregation( Aggregation::boxAgg );
-	EXPECT_EQ( t->getAggregation(), Aggregation::boxAgg );
+	t->setAggregation( Aggregation::aggregation );
+	EXPECT_EQ( t->getAggregation(), Aggregation::aggregation );
 
 	t->setTriggerTime( TypeParam( 1 ) );
 	EXPECT_TRUE( t->isTimeTriggered() );

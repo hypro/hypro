@@ -183,10 +183,8 @@ void MTransition::getAggregation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 
 	if ( agg == hypro::Aggregation::none ) {
 		mexPrintf( "none\n" );
-	} else if ( agg == hypro::Aggregation::boxAgg ) {
-		mexPrintf( "boxAgg\n" );
-	} else {
-		mexPrintf( "parallelotopeAgg\n" );
+	} else if ( agg == hypro::Aggregation::aggregation ) {
+		mexPrintf( "Agg\n" );
 	}
 }
 
@@ -270,7 +268,7 @@ void MTransition::getLabels( int nlhs, mxArray* plhs[], int nrhs, const mxArray*
 	hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>( prhs[2] );
 	std::vector<hypro::Label> labs = temp->getLabels();
 	int len = labs.size();
-	const mwSize dims[2] = {1, (mwSize)len};
+	const mwSize dims[2] = { 1, (mwSize)len };
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( labs, plhs[0], len );
 
@@ -390,9 +388,7 @@ void MTransition::setAggregation( int nlhs, mxArray* plhs[], int nrhs, const mxA
 	if ( agg == 0 ) {
 		tran->setAggregation( hypro::Aggregation::none );
 	} else if ( agg == 1 ) {
-		tran->setAggregation( hypro::Aggregation::boxAgg );
-	} else {
-		tran->setAggregation( hypro::Aggregation::parallelotopeAgg );
+		tran->setAggregation( hypro::Aggregation::aggregation );
 	}
 
 	// //+++++++++++++TESTING++++++++++++++++++++
