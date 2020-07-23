@@ -46,12 +46,12 @@ jobs:
           packages: [*packages_base, g++-7, gcc-7, doxygen, graphviz]
       env: COMPILER=g++-7 FLAGS=-DCREATE_DOC=ON CC=gcc-7 CXX=g++-7
     - os: linux
-      compiler: g++-8.0
+      compiler: g++-8
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base]
-      env: COMPILER=g++-8.0 CC=gcc-8.0 CXX=g++-8.0
+          packages: [*packages_base, g++-8, gcc-8]
+      env: COMPILER=g++-8 CC=gcc-8 CXX=g++-8
     - os: linux
       compiler: g++-9
       addons:
