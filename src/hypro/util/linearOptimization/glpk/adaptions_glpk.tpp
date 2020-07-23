@@ -66,6 +66,29 @@ vector_t<Number> refineSolution( glpk_context& context, const matrix_t<Number>& 
 }
 
 template <typename Number>
+EvaluationResult<Number> glpkOptimizeLinearPostSolve( glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact, const EvaluationResult<Number>& preSolution  ) {
+
+	glp_add_rows( context.lp, 1 );
+
+	int len = constraints.cols();
+	int* ind = new int[ constraints.cols() ];
+	double* val = new double[ constraints.cols() ];
+	for ( int i = 0; i < len; ++i ) {
+		val[i] = carl::toDouble( _direction( i ) );
+		ind[i] = i;
+	}
+	glp_set_mat_row( context.lp, constraints.rows(), len, ind, val );
+	EvaluationResult<Number> res = glpkOptimizeLinear( context, _direction, constraints, constants, useExact );
+	
+	int* del = { constraints.rows() };
+	glp_del_rows( context.lp, 1, del );
+	delete[] ind;
+	delete[] val;
+
+
+}
+
+template <typename Number>
 EvaluationResult<Number> glpkOptimizeLinear( glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact ) {
 	/*
 		std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << std::endl;
