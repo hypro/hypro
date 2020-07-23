@@ -28,19 +28,12 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "plotoutput", po::value<std::string>(), "Plotoutput file path." )
 			( "plotoutputformat", po::value<hypro::PLOTTYPE>()->default_value( hypro::PLOTTYPE::png ), "Plotoutput format - allowed are 'pdf','png','eps,'gen', and 'tex'." )
 			( "skipplot", po::bool_switch(), "skips plotting step" )
-		// other
+		// multithreading
 			( "jobs,j", po::value<unsigned>()->default_value( 1 ), "<number> of jobs/threads to be used in parallel. Default is 1." )
-			( "noTimingInformation", po::bool_switch(), "do not collect any timing information during refinement" )
-			( "noBadStateTimingInformation", po::bool_switch(), "do not collect bad state timing information during refinement" )
-			( "noInvariantTimingInformation", po::bool_switch(), "do not collect invariant timing information during refinement" )
-			( "noTransitionTimingInformation", po::bool_switch(), "do not collect transition timing information during refinement" )
+		// preprocessing
 			( "decider", po::bool_switch(), "Use decision entity to decide on future representation/handlers to use based on the current state to allow for optimized computations." )
 			( "decompose", po::bool_switch(), "Decompose automaton into syntactically independent subspaces." );
-		//( "strategy,s", po::value<std::string>(), "choose reachability strategy. Valid options are tacas18_1, tacas18_2, tacas18_3." )
-		//( "onlyGlobalQueues", po::bool_switch(), "use only global queues for tasks instead of intermediate local queues." )
-		//( "queueBalangingRatio,q", po::value<double>()->default_value( 1.0 ), "ratio of tasks which get pushed to a global queue from a local queue. Has no effect if onlyGlobalQueues is enabled." )
-		//( "customStrategy", po::bool_switch(), "Enters strategy building mode. Choose a representation, and customize its settings and different reachability settings." )
-		//( "snode,sn", po::value<std::vector<std::string>>()->multitoken(), "Adds a custom strategy node." );
+		// ( "configuration", po::value<std::string>(), "Specify a file to load options from. Command line overwrites them." )
 
 	// clang-format on
 	try {
@@ -64,7 +57,6 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			COUT( options << std::endl );
 			exit( 0 );
 		}
-
 
 	} catch ( std::exception& e ) {
 		CERR( e.what() << std::endl );
