@@ -6,7 +6,37 @@
 
 namespace hypro {
 
+template <typename Number>
+EvaluationResult<Number> clpOptimizeLinearPostSolve( clp_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact, const EvaluationResult<Number>& preSolution  ) {
+	// Create new row
+	// TODO: don't need all entries in elements, only nonzero. Do we need to determine beforehand how many there are?
+	int numberInRow = constraints.cols();
+	int* columns = new int[ constraints.cols() ];
+	double* elements = new double[ constraints.cols() ];
+	double rowLower;
+	double rowUpper;
+	for( int i = 0; i < numberInRow; ++i ) {
+		elements[i] = carl::toDouble( _direction( i ) );
+		columns[i] = i;
+	}
+	if ( context.lp.optimizationDirection() == -1 ) {
+		rowUpper = COIN_DBL_MAX;
+		rowLower = carl::toDouble( preSolution.supportValue );
+	} else {
+		rowUpper = carl::toDouble( preSolution.supportValue );
+		rowLower = -COIN_DBL_MAX;
+	}
+	context.lp.addRow( numberInRow, columns, elements, rowLower, rowUpper );
 
+	EvaluationResult<Number> res = clpOptimizeLinear( context, _direction, constraints, constants, useExact );
+
+	// Restore original problem
+	context.lp.loadProblem( context.matrix, context.mColumnLowerBounds, context.mColumnUpperBounds, nullptr, context.mLowerBounds, context.mUpperBounds );
+
+	delete[] columns;
+	delete[] elements;
+	return res;
+}
 
 template <typename Number>
 EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>&, bool ) {
@@ -15,12 +45,15 @@ EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t
 	for ( int i = 0; i < constraints.cols(); ++i ) {
 		objective[i] = carl::toDouble( _direction( i ) );
 	}
-	// remove lower bounds on columns    
+	// remove bounds on columns    
     for(int i = 0; i < constraints.cols(); ++i){
     	context.mColumnLowerBounds[i] = -COIN_DBL_MAX;
+    	context.mColumnUpperBounds[i] = COIN_DBL_MAX;
     }
     // load problem into problem instance
-	context.lp.loadProblem( context.matrix, context.mColumnLowerBounds, nullptr, objective, context.mLowerBounds, context.mUpperBounds );
+    context.lp.chgColumnLower( context.mColumnLowerBounds );
+    context.lp.chgColumnUpper( context.mColumnUpperBounds );
+    context.lp.chgObjCoefficients( objective );	
 
 	context.lp.primal();
 	EvaluationResult<Number> res;
@@ -60,7 +93,9 @@ bool clpCheckPoint( clp_context& context, const matrix_t<Number>& constraints, c
 	}
 
 	// load problem with fixed column and without objective
-	context.lp.loadProblem( context.matrix, context.mColumnLowerBounds, context.mColumnUpperBounds, nullptr, context.mLowerBounds, context.mUpperBounds );
+	context.lp.chgColumnLower( context.mColumnLowerBounds );
+    context.lp.chgColumnUpper( context.mColumnUpperBounds );
+    context.lp.chgObjCoefficients( nullptr );	
 	context.lp.primal();
 
 	return context.lp.primalFeasible();
@@ -73,8 +108,11 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 	// first call to check satisfiability
     for(int i = 0; i < constraints.cols(); ++i){
     	context.mColumnLowerBounds[i] = -COIN_DBL_MAX;
+    	context.mColumnUpperBounds[i] = COIN_DBL_MAX;
     }
-	context.lp.loadProblem( context.matrix, context.mColumnLowerBounds, nullptr, nullptr, context.mLowerBounds, context.mUpperBounds );
+	context.lp.chgColumnLower( context.mColumnLowerBounds );
+    context.lp.chgColumnUpper( context.mColumnUpperBounds );
+    context.lp.chgObjCoefficients( nullptr );
 	context.lp.primal();
 
 	if ( !context.lp.primalFeasible() ) {
@@ -94,7 +132,7 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 			// test if upper bound is redundant
 			context.lp.setOptimizationDirection( -1 );
 			actualRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-			context.mUpperBounds[ int( constraintIndex ) ] = COIN_DBL_MAX;
+			context.lp.setRowUpper( constraintIndex, COIN_DBL_MAX );
 			updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
 			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
 			if ( actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue ){
@@ -105,7 +143,7 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 			// test if lower bound is redundant
 			context.lp.setOptimizationDirection( 1 );
 			actualRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
-			context.mLowerBounds[ int( constraintIndex ) ] = -COIN_DBL_MAX;
+			context.lp.setRowLower( constraintIndex, -COIN_DBL_MAX );
 			updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
 			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
 			if ( actualRes.errorCode != updatedRes.errorCode && actualRes.supportValue != updatedRes.supportValue ){
@@ -113,15 +151,14 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 			}
 		}
 
-
 		if ( redundant ){
 			res.push_back( constraintIndex );
 		} else {
 			if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ){
-				context.mUpperBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
+				context.lp.setRowUpper( constraintIndex, carl::toDouble( constants( constraintIndex ) ) );
 			}
 			if  (relation == carl::Relation::GEQ || relation == carl::Relation::EQ ){
-				context.mLowerBounds[ constraintIndex ] = carl::toDouble( constants( constraintIndex ) );
+				context.lp.setRowLower( constraintIndex, carl::toDouble( constants( constraintIndex ) ) );
 			} 
 		}
 
@@ -132,36 +169,22 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 
 	
 	// restore original problem
-	for ( const auto item : res ) {
-		switch ( relations[ int( item ) ] ){
-			case carl::Relation::LEQ:
-				context.mUpperBounds[ int( item ) ] = carl::toDouble( constants( item ) );
-				break;
-			case carl::Relation::GEQ:
-				context.mLowerBounds[ int( item ) ] = carl::toDouble( constants( item ) );
-				break;
-			case carl::Relation::EQ:
-				context.mUpperBounds[ int( item ) ] = carl::toDouble( constants( item ) );
-				context.mLowerBounds[ int( item ) ] = carl::toDouble( constants( item ) );
-				break;
-			default:
-				// clp cannot handle strict inequalities.
-				assert( false );
-				std::cout << "This should not happen." << std::endl;
-		}
-	}
+	context.lp.chgRowUpper( context.mUpperBounds );
+	context.lp.chgRowLower( context.mLowerBounds );
 
 	return res;
 }
 
 template <typename Number>
 EvaluationResult<Number> clpGetInternalPoint( clp_context& context ) {
-	// remove lower bounds on columns
+	// remove bounds on columns
     for(int i = 0; i < context.matrix.getNumCols(); ++i){
     	context.mColumnLowerBounds[i] = -COIN_DBL_MAX;
+    	context.mColumnUpperBounds[i] = COIN_DBL_MAX;
     }
-	context.lp.loadProblem( context.matrix, context.mColumnLowerBounds, nullptr, nullptr, context.mLowerBounds, context.mUpperBounds );
-	context.lp.setOptimizationDirection(0);
+	context.lp.chgColumnLower( context.mColumnLowerBounds );
+    context.lp.chgColumnUpper( context.mColumnUpperBounds );
+    context.lp.chgObjCoefficients( nullptr );
 	context.lp.primal();
 
 	EvaluationResult<Number> res;

@@ -18,6 +18,9 @@ template <typename Number>
 EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool );
 
 template <typename Number>
+EvaluationResult<Number> clpOptimizeLinearPost( clp_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>&, bool, const EvaluationResult<Number>& preSolution  );
+
+template <typename Number>
 bool clpCheckPoint( clp_context& context, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const Point<Number>& _point );
 
 template <typename Number>
@@ -28,7 +31,7 @@ EvaluationResult<Number> clpGetInternalPoint( clp_context& context );
 
 SOLUTION clpCheckConsistency( clp_context& context );
 
-void clpPrintProblem( clp_context& context, double* objective );
+void clpPrintProblem( clp_context& context );
 
 }  // namespace hypro
 

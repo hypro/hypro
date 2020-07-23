@@ -89,6 +89,7 @@ struct clp_context {
 				mColumnLowerBounds[i] = -COIN_DBL_MAX;
 				mColumnUpperBounds[i] = COIN_DBL_MAX;
 			}
+			lp.loadProblem( matrix, mColumnLowerBounds, mColumnUpperBounds, nullptr, mLowerBounds, mUpperBounds );
 			mConstraintsSet = true;
 		}
 	}

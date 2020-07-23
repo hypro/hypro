@@ -18,11 +18,7 @@ SOLUTION clpCheckConsistency( clp_context& context ) {
     return context.lp.primalFeasible() ? SOLUTION::FEAS : SOLUTION::INFEAS;
 }
 
-void clpPrintProblem( clp_context& context, double* objective ) {
-    for (int i = 0; i < context.matrix.getNumCols(); ++i ){
-        std::cout << objective[i] << " ";
-    }
-    std::cout << "\n";
+void clpPrintProblem( clp_context& context ) {
     for ( int i = 0; i < context.matrix.getNumRows(); ++i ){
     std::cout << context.mLowerBounds[i] << " <= ";
     for(int j= 0; j< context.matrix.getNumCols(); ++j ){
