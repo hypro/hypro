@@ -26,11 +26,11 @@ void ltiJumpHandler<State>::handle() {
 		// we need to determine the time interval during which the transition was enabled.
 		// The covered time interval is required for the timing updates and spans the time interval the transition was enabled
 		// irregardless of aggregation settings (that is, why this is not computed during state stage)
-		carl::Interval<tNumber> coveredTimeInterval = transitionStatePair.second.begin()->getTimestamp();
+		carl::Interval<tNumber> coveredTimeInterval = stateSets.begin()->getTimestamp();
 
 		// children holds the nodes which need to be added,
 		// also writes to the coveredTimeInterval to obtain the time the transition was enabled.
-		typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates( transitionStatePair.first, transitionStatePair.second, currentTargetLevel, coveredTimeInterval, mTask->treeNode );
+		typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates( transition, stateSets, currentTargetLevel, coveredTimeInterval, mTask->treeNode );
 
 		TRACE( "hydra.worker.discrete", "Transition covers time " << coveredTimeInterval );
 		TRACE( "hydra.worker.discrete", "Created " << children.size() << " new nodes which have to be added to the tree." );
@@ -44,9 +44,9 @@ void ltiJumpHandler<State>::handle() {
 		for ( const auto& child : children ) {
 			if ( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
 				auto newNode = tProvider.addChildToNode( timingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon() );
-				newNode->setEntryTransition( transitionStatePair.first );
+				newNode->setEntryTransition( transition );
 				newNode->setEntryTimestamp( child->getTimestamp( currentTargetLevel ) );
-				newNode->setLocation( transitionStatePair.first->getTarget() );
+				newNode->setLocation( transition->getTarget() );
 				newNode->setLevel( currentTargetLevel );
 			}
 		}
@@ -61,7 +61,7 @@ void ltiJumpHandler<State>::handle() {
 		// Note: There can also be children for this transition, but with a whole different timestamp (wavy trajectories).
 		// Note: This branch is only taken, if the bt-path is empty and there do not exist child-nodes for this transition.
 		// TODO: Pass the time interval to isTreeExtension and check for the time intervals the transition was enabled.
-		if ( !wasRefinementTask && isTreeExtension<State>( mTask->treeNode, transitionStatePair.first ) ) {
+		if ( !wasRefinementTask && isTreeExtension<State>( mTask->treeNode, transition ) ) {
 			TRACE( "hydra.worker.discrete", "Regular tree extension." );
 			for ( const auto& child : children ) {
 				// if the following is set, copy the refinement to any other refinement level.
@@ -121,13 +121,13 @@ void ltiJumpHandler<State>::handle() {
 
 			TRACE( "hydra.worker.discrete", "Current->treeNode is: " << mTask->treeNode );
 
-			typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition( transitionStatePair.first );
+			typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition( transition );
 
 			// collect the time-spans where the transition to existing child nodes was enabled to map new child nodes (update).
 			std::vector<carl::Interval<tNumber>> oldTimespans;
 			collectTimespansForRefinementLevel<State>( oldTimespans, oldChildren, currentTargetLevel );
 
-			DEBUG( "hydra.worker.refinement", "For transition " << *transitionStatePair.first << " there are " << oldChildren.size() << " existing relevant children and we attempt to add " << children.size() << " new ones." );
+			DEBUG( "hydra.worker.refinement", "For transition " << *transition << " there are " << oldChildren.size() << " existing relevant children and we attempt to add " << children.size() << " new ones." );
 
 			// now we need to map the children via their timestamp.
 			// Note: All this relies on the child-nodes to be sorted ascending in their transition timestamps.
@@ -137,7 +137,7 @@ void ltiJumpHandler<State>::handle() {
 				preProcess<State>( children, oldTimespans );
 				// node updater matches new nodes (children) to existing nodes and creates new Tasks.
 				nodeUpdater<State> nu( mTask, mLocalQueue, mLocalCEXQueue, currentTargetLevel );
-				nu( children, oldChildren, transitionStatePair.first );
+				nu( children, oldChildren, transition );
 			}  // not old children empty
 
 			// at this point either oldChildren or children should be empty (or both).
@@ -262,7 +262,6 @@ void ltiJumpHandler<State>::applyReset( State& state, Transition<Number>* transi
 
 template <typename State>
 void ltiJumpHandler<State>::applyReduction( State& state ) const {
-	// TODO why does the reduction visitor not work for multi sets?
 	for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
 		if ( state.getSetType( i ) == representation_name::support_function ) {
 			state.partiallyReduceRepresentation( i );
@@ -293,12 +292,12 @@ template <typename State>
 void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const {
 	// Aggregation
 	DEBUG( "hydra.worker.discrete", "Number of transitions to aggregate: " << toAggregate.size() << std::endl );
-	for ( const auto& transitionStatePair : toAggregate ) {
-		assert( !transitionStatePair.second.empty() );
-		TRACE( "hydra.worker.discrete", transitionStatePair.second.size() << " sets to aggregate for transition " << transitionStatePair.first->getSource()->getName() << " -> " << transitionStatePair.first->getTarget()->getName() );
+	for ( const auto& [transition, stateSets] : toAggregate ) {
+		assert( !stateSets.empty() );
+		TRACE( "hydra.worker.discrete", stateSets.size() << " sets to aggregate for transition " << transitionStatePair.first->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		std::vector<State> aggregatedStates;
-		// Aggregate sets by using sequential unite operations (TODO: Implement and make use of multi-unite).
-		State aggregatedState( *transitionStatePair.second.begin() );
+		// Aggregate sets by using sequential unite operations (TODO Implement and make use of multi-unite).
+		State aggregatedState( *stateSets.begin() );
 		// counts the number of processed sets - just for debugging.
 		unsigned setCnt = 1;
 		// counts the number of sets in the current cluster.
@@ -311,9 +310,9 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 		// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 		std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
 		// contains the aggregated timestamp, initialized with the first timestamp
-		carl::Interval<tNumber> aggregatedTimestamp = ( *transitionStatePair.second.begin() ).getTimestamp();
+		carl::Interval<tNumber> aggregatedTimestamp = ( *stateSets.begin() ).getTimestamp();
 		//START_BENCHMARK_OPERATION(AGGREGATE);
-		for ( auto stateIt = ++transitionStatePair.second.begin(); stateIt != transitionStatePair.second.end(); ++stateIt ) {
+		for ( auto stateIt = ++stateSets.begin(); stateIt != stateSets.end(); ++stateIt ) {
 			TRACE( "hydra.worker.discrete", "Agg. aggState and set " << setCnt );
 			// actual aggregation.
 			for ( std::size_t i = 0; i < aggregatedState.getNumberSets(); i++ ) {
@@ -330,11 +329,11 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 			++setCnt;
 			++clusterCnt;
 #ifdef CLUSTERING_NUMBER_LIMITS_SUCESSORS
-			if ( strategy.clustering > 0 && clusterCnt == std::ceil( double( transitionStatePair.second.size() ) / double( strategy.clustering ) ) ) {
+			if ( strategy.clustering > 0 && clusterCnt == std::ceil( double( stateSets.size() ) / double( strategy.clustering ) ) ) {
 				TRACE( "hydra.worker.discrete", "Clustering." );
 				aggregatedStates.emplace_back( aggregatedState );
 				leftovers = false;
-				if ( stateIt + 1 != transitionStatePair.second.end() ) {
+				if ( stateIt + 1 != stateSets.end() ) {
 					aggregatedState = *( ++stateIt );
 					aggregatedTimestamp = aggregatedState.getTimestamp();
 					clusterCnt = 1;
@@ -347,7 +346,7 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 				TRACE( "hydra.worker.discrete", "Clustering." );
 				aggregatedStates.emplace_back( aggregatedState );
 				leftovers = false;
-				if ( stateIt + 1 != transitionStatePair.second.end() ) {
+				if ( stateIt + 1 != stateSets.end() ) {
 					aggregatedState = *( ++stateIt );
 					aggregatedTimestamp = aggregatedState.getTimestamp();
 					clusterCnt = 1;
@@ -370,10 +369,10 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 
 		// add to final mapping.
 		for ( auto& state : aggregatedStates ) {
-			if ( processedStates.find( transitionStatePair.first ) == processedStates.end() ) {
-				processedStates[transitionStatePair.first] = std::vector<State>();
+			if ( processedStates.find( transition ) == processedStates.end() ) {
+				processedStates[transition] = std::vector<State>();
 			}
-			processedStates[transitionStatePair.first].emplace_back( state );
+			processedStates[transition].emplace_back( state );
 		}
 	}
 }

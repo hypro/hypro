@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../../../../datastructures/reachability/ReachTreeNode.h"
+#include "../../../../datastructures/reachability/Task.h"
+#include "../../../../datastructures/reachability/workQueue/WorkQueue.h"
 
 namespace hypro {
 
@@ -20,6 +22,11 @@ bool isTreeExtension( typename ReachTreeNode<State>::Node_t node, Transition<typ
 	}
 	return false;
 }
+
+namespace reachability {
+/// distributes a number of state sets onto a number of clusters
+std::vector<std::size_t> clusterDistribution( std::size_t numberClusters, std::size_t numberStateSets );
+}  // namespace reachability
 
 template <typename State>
 inline void collectTimespansForRefinementLevel( std::vector<carl::Interval<tNumber>>& timespans, typename ReachTreeNode<State>::NodeList_t& nodes, unsigned targetLevel ) {
