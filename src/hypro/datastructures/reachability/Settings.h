@@ -10,12 +10,23 @@
 namespace hypro {
 
 struct AnalysisParameters {
-	mpq_class timeStep = 0;												   /// the used time step size
+	tNumber timeStep = 0;												   /// the used time step size/// the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
 	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   /// the forced aggregation settings
 	int clustering = -1;												   /// if clustering is used: number of clusters
 	representation_name representation_type = representation_name::UNDEF;  /// type of representation
 	int representation_setting = 0;										   /// used settings for the representation
 	bool uniformBloating = false;
+	int timeStepFactor = 0;
+};
+
+struct FixedAnalysisParameters {
+	size_t jumpDepth{ std::numeric_limits<int>::max() };
+	tNumber localTimeHorizon = 0;
+#if HYPRO_USE_PPL
+	unsigned long pplDenominator{ defaultPPLDenominator };
+#endif
+	tNumber fixedTimeStep = 0;
+	TimePoint localTimeHorizonScaled = 0;
 };
 
 struct PlottingSettings {
@@ -24,15 +35,59 @@ struct PlottingSettings {
 	PLOTTYPE plottingFileType = PLOTTYPE::nset;
 };
 
-struct Settings {
-	size_t jumpDepth{ std::numeric_limits<int>::max() };
-	tNumber localTimeHorizon{ tNumber( 0 ) };
-#if HYPRO_USE_PPL
-	unsigned long pplDenominator{ defaultPPLDenominator };
-#endif
+class Settings {
+	PlottingSettings mPlotting{};
+	FixedAnalysisParameters mFixedParameters{};
+	std::vector<AnalysisParameters> mStrategy{ 1 };
 
-	PlottingSettings plotting{};
-	std::vector<AnalysisParameters> strategy{ 1 };
+  public:
+	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy )
+		: mPlotting( plotting )
+		, mFixedParameters( fixedParameters )
+		, mStrategy( strategy ) {
+		if ( strategy.empty() ) return;
+		// calculate gcd of the strategies timesteps
+
+		mpz_class numerator_gcd = mStrategy.front().timeStep.get_num();
+		mpz_class denominator_lcm = mStrategy.front().timeStep.get_den();
+
+		TRACE( "hypro.settings", "numerator_gcd " << numerator_gcd )
+		TRACE( "hypro.settings", "denominator_lcm " << denominator_lcm );
+
+		for ( AnalysisParameters const& params : mStrategy ) {
+			numerator_gcd = gcd( numerator_gcd, params.timeStep.get_num() );
+			denominator_lcm = lcm( denominator_lcm, params.timeStep.get_den() );
+
+			TRACE( "hypro.settings", "params.timeStep.get_num() " << params.timeStep.get_num() )
+			TRACE( "hypro.settings", "params.timeStep.get_den() " << params.timeStep.get_den() );
+			TRACE( "hypro.settings", "numerator_gcd " << numerator_gcd )
+			TRACE( "hypro.settings", "denominator_lcm " << denominator_lcm );
+		}
+
+		mFixedParameters.fixedTimeStep = mpq_class( numerator_gcd, denominator_lcm );
+
+		TRACE( "hypro.settings", "fixedTimeStep " << mFixedParameters.fixedTimeStep );
+
+		for ( AnalysisParameters& params : mStrategy ) {
+			mpq_class timeStepFactor = params.timeStep / mFixedParameters.fixedTimeStep;
+			TRACE( "hypro.settings", "timeStepFactor " << timeStepFactor );
+			assert( timeStepFactor.get_den() == 1 );
+			assert( timeStepFactor.get_num().fits_sint_p() );
+			params.timeStepFactor = timeStepFactor.get_num().get_si();
+		}
+	}
+
+	PlottingSettings const& plotting() const {
+		return mPlotting;
+	}
+
+	FixedAnalysisParameters const& fixedParameters() const {
+		return mFixedParameters;
+	}
+
+	std::vector<AnalysisParameters> const& strategy() const {
+		return mStrategy;
+	}
 };
 
 /**
