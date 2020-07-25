@@ -17,9 +17,14 @@ namespace hypro {
 using tNumber = mpq_class;
 
 /**
- * @brief Number type for time points (internal)
+ * @brief Used to designate the index of a segment in a flowpipe
  */
 using SegmentInd = int;
+
+/**
+ * @brief Used to designate time points as multiples of some delta, usually given as a value of type tNumber
+ */
+using TimePoint = int;
 
 /**
  * typedef wrapping an Eigen::Matrix type with only one column.
