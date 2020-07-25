@@ -1,5 +1,5 @@
 #include "cli/cli.h"
-#include "cli/util.h"
+#include "cli/settingsProcessing.h"
 #include "preprocessing/preprocessing.h"
 #include "reachability/analysis.h"
 #include "typedefs.h"
@@ -43,7 +43,7 @@ int main( int argc, char const* argv[] ) {
 	// call to plotting.
 	START_BENCHMARK_OPERATION( Plotting );
 
-	auto& plotSettings = settings.plotting;
+	auto const& plotSettings = settings.plotting();
 	auto& plt = Plotter<Number>::getInstance();
 	for ( std::size_t pic = 0; pic < plotSettings.plotDimensions.size(); ++pic ) {
 		std::cout << "Prepare plot " << pic + 1 << "/" << plotSettings.plotDimensions.size() << "." << std::endl;
