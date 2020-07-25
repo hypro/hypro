@@ -47,7 +47,7 @@ template <typename State>
 std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
 	auto roots = makeRoots<State>( automaton );
-	LTIAnalyzer<State> analyzer{ automaton, setting, roots };
+	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
 
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -113,9 +113,9 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 		case DynamicType::affine:
 			[[fallthrough]];
 		case DynamicType::linear:
-			if ( false /*setting.strategy.size() == 1.*/ ) {
-				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy.front().representation_type,
-																			setting.strategy.front().representation_setting, LTIDispatcher{}, automaton, setting ) };
+			if ( setting.strategy().size() == 1 ) {
+				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+																			setting.strategy().front().representation_setting, LTIDispatcher{}, automaton, setting ) };
 			} else {
 				return { cegar_analyze( automaton, setting ) };
 			}
