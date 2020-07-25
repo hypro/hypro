@@ -23,7 +23,7 @@ class LTIWorker {
 	struct AggregatedGen;
 
   public:
-	class JumpSuccessorGen;
+	struct JumpSuccessorGen;
 
 	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )

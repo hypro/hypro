@@ -14,7 +14,7 @@ struct RefinementSuccess {
 	std::vector<ReachTreeNode<Representation>*> pathSuccessors{};
 };
 template <class Representation>
-RefinementSuccess(std::vector<ReachTreeNode<Representation>*>) -> RefinementSuccess<Representation>;
+RefinementSuccess( std::vector<ReachTreeNode<Representation>*> ) -> RefinementSuccess<Representation>;
 
 /**
  * @brief Analyzer implementation for refinement (internal)
@@ -26,9 +26,12 @@ class RefinementAnalyzer {
 	using Number = rep_number<Representation>;
 	using RefinementResult = AnalysisResult<RefinementSuccess<Representation>, Failure<Representation>>;
 
-	RefinementAnalyzer( HybridAutomaton<Number> const& ha, Settings const& setting )
+	RefinementAnalyzer( HybridAutomaton<Number> const& ha,
+						FixedAnalysisParameters const& fixedParameters,
+						AnalysisParameters const& parameters )
 		: mHybridAutomaton( ha )
-		, mAnalysisSettings( setting ) {}
+		, mFixedParameters( fixedParameters )
+		, mParameters( parameters ) {}
 
 	/**
 	 * @brief Refinement on a specific path
@@ -43,12 +46,21 @@ class RefinementAnalyzer {
 
 	RefinementResult run();
 
-	void addToQueue( ReachTreeNode<Representation>* node ) { mWorkQueue.push_front( node ); }
+	void addToQueue( ReachTreeNode<Representation>* node ) {
+		if ( matchesPathTiming( node ) && matchesPathTransition( node ) ) {
+			mWorkQueue.push_front( node );
+		}
+	}
+
+  private:
+	bool matchesPathTiming( ReachTreeNode<Representation>* node );
+	bool matchesPathTransition( ReachTreeNode<Representation>* node );
 
   protected:
 	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	///< Queue for nodes in the tree which require processing
 	const HybridAutomaton<Number>& mHybridAutomaton;		///< Hybrid automaton
-	Settings mAnalysisSettings;								///< Used analysis settings
+	FixedAnalysisParameters mFixedParameters;
+	AnalysisParameters mParameters;	 ///< Used analysis settings
 	Path<Number> mPath{};
 };
 

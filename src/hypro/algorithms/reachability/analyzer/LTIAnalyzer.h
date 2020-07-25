@@ -3,8 +3,8 @@
 #include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../types.h"
 #include "../workers/LTIWorker.h"
-#include "datastructures/reachability/ReachTreev2.h"
 #include "./ReturnTypes.h"
+#include "datastructures/reachability/ReachTreev2.h"
 
 #include <queue>
 
@@ -20,9 +20,13 @@ class LTIAnalyzer {
   public:
 	using LTIResult = AnalysisResult<LTISuccess, Failure<State>>;
 
-	LTIAnalyzer( HybridAutomaton<Number> const& ha, Settings const& setting, std::vector<ReachTreeNode<State>>& roots )
-		: mHybridAutomaton( ha )
-		, mAnalysisSettings( setting ) {
+	LTIAnalyzer( HybridAutomaton<Number> const& ha,
+				 FixedAnalysisParameters const& fixedParameters,
+				 AnalysisParameters const& parameters,
+				 std::vector<ReachTreeNode<State>>& roots )
+		: mHybridAutomaton( &ha )
+		, mFixedParameters( fixedParameters )
+		, mParameters( parameters ) {
 		for ( auto& root : roots ) {
 			mWorkQueue.push_front( &root );
 		}
@@ -33,8 +37,9 @@ class LTIAnalyzer {
 
   protected:
 	std::deque<ReachTreeNode<State>*> mWorkQueue;
-	HybridAutomaton<Number> mHybridAutomaton;
-	Settings mAnalysisSettings;
+	HybridAutomaton<Number> const* mHybridAutomaton;
+	FixedAnalysisParameters mFixedParameters;
+	AnalysisParameters mParameters;
 };
 
 }  // namespace hypro

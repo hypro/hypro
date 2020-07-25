@@ -7,9 +7,9 @@ namespace hypro {
 template <class Number, class... Representations>
 struct CEGARAnalyzer<Number, Representations...>::CreateBaseLevel {
 	template <class Representation>
-	BaseLevel operator()( HybridAutomaton<Number> const& ha, Settings const& settings ) {
+	BaseLevel operator()( HybridAutomaton<Number> const& ha, FixedAnalysisParameters const& fixedParameters, AnalysisParameters const& parameters ) {
 		auto roots = makeRoots<Representation>( ha );
-		auto analyzer = LTIAnalyzer<Representation>{ ha, settings, roots };
+		auto analyzer = LTIAnalyzer<Representation>{ ha, fixedParameters, parameters, roots };
 
 		return BaseLevel{ ConcreteBaseLevel<Representation>{ { std::move( roots ) }, std::move( analyzer ) } };
 	}
@@ -18,18 +18,18 @@ struct CEGARAnalyzer<Number, Representations...>::CreateBaseLevel {
 template <class Number, class... Representations>
 struct CEGARAnalyzer<Number, Representations...>::CreateRefinementLevel {
 	template <class Representation>
-	RefinementLevel operator()( HybridAutomaton<Number> const& ha, Settings const& settings ) {
-		auto analyzer = RefinementAnalyzer<Representation>{ ha, settings };
+	RefinementLevel operator()( HybridAutomaton<Number> const& ha, FixedAnalysisParameters const& fixedParameters, AnalysisParameters const& parameters ) {
+		auto analyzer = RefinementAnalyzer<Representation>{ ha, fixedParameters, parameters };
 		return RefinementLevel{ ConcreteRefinementLevel<Representation>{ {}, std::move( analyzer ) } };
 	}
 };
 
 template <class Number, class... Representations>
 auto CEGARAnalyzer<Number, Representations...>::createBaseLevel( HybridAutomaton<Number> const& automaton, Settings const& settings ) -> BaseLevel {
-	return dispatch<Number, Converter<Number>>( settings.strategy.front().representation_type,
-												settings.strategy.front().representation_setting,
+	return dispatch<Number, Converter<Number>>( settings.strategy().front().representation_type,
+												settings.strategy().front().representation_setting,
 												CreateBaseLevel{},
-												automaton, settings );
+												automaton, settings.fixedParameters(), settings.strategy().front() );
 }
 
 template <class Number, class... Representations>
@@ -37,10 +37,10 @@ auto CEGARAnalyzer<Number, Representations...>::createRefinementLevel( size_t in
 	// if mLevels[index - 1] exists, return it
 	if ( mLevels.size() >= index ) return mLevels.at( index - 1 );
 	return mLevels.emplace_back(
-		  dispatch<Number, Converter<Number>>( mSettings.strategy.at( index ).representation_type,
-											   mSettings.strategy.at( index ).representation_setting,
+		  dispatch<Number, Converter<Number>>( mSettings.strategy().at( index ).representation_type,
+											   mSettings.strategy().at( index ).representation_setting,
 											   CreateRefinementLevel{},
-											   mHybridAutomaton, mSettings ) );
+											   mHybridAutomaton, mSettings.fixedParameters(), mSettings.strategy().at( index ) ) );
 }
 
 template <class Number, class... Representations>
@@ -78,7 +78,7 @@ void CEGARAnalyzer<Number, Representations...>::handleFailure( ReachTreeNode<Rep
 template <class Number, class... Representations>
 REACHABILITY_RESULT CEGARAnalyzer<Number, Representations...>::run() {
 	// data persistent through loop cycles
-	std::vector<std::variant<Failure<Representations>...>> results( mSettings.strategy.size() );
+	std::vector<std::variant<Failure<Representations>...>> results( mSettings.strategy().size() );
 	size_t levelInd = 0;
 	bool save = true;
 
@@ -122,7 +122,7 @@ REACHABILITY_RESULT CEGARAnalyzer<Number, Representations...>::run() {
 			},
 							   createRefinementLevel( levelInd ).variant );
 			levelInd += save ? -1 : 1;
-			if ( levelInd == mSettings.strategy.size() ) return REACHABILITY_RESULT::UNKNOWN;
+			if ( levelInd == mSettings.strategy().size() ) return REACHABILITY_RESULT::UNKNOWN;
 		}
 	}
 }

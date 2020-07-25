@@ -46,7 +46,20 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 
 template <class Representation>
 auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const -> JumpSuccessorGen {
-	return JumpSuccessorGen{ flowpipe, transition, 1 };
+	std::size_t blockSize = 1;
+	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+		if ( mSettings.clustering > 0 ) {
+			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+		} else {
+			blockSize = flowpipe.size();
+		}
+
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
+		if ( transition->getAggregation() == Aggregation::clustering ) {
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+		}
+	}
+	return JumpSuccessorGen{ flowpipe, transition, blockSize };
 }
 
 template <class Representation>
@@ -104,17 +117,17 @@ struct LTIWorker<Representation>::AggregatedGen {
 	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
 		if ( current == enabled->size() ) return std::nullopt;
 		Representation aggregated = ( *enabled )[current];
-		SegmentInd timeBegin = firstEnabled + current;
+		SegmentInd indexFirst = firstEnabled + current; // flowpipe ind of first aggregated segment
 		current += 1;
-		for ( size_t inBlock = 0; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
+		for ( size_t inBlock = 1; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
 			aggregated.unite( ( *enabled )[current] );
 		}
-		return std::pair{ aggregated, carl::Interval<int>{ timeBegin, current - 1 } };
+		return std::pair{ aggregated, carl::Interval<int>{ indexFirst, firstEnabled + current } };
 	}
 };
 
 template <class Representation>
-class LTIWorker<Representation>::JumpSuccessorGen {
+struct LTIWorker<Representation>::JumpSuccessorGen {
 	std::optional<std::pair<std::vector<Representation>, SegmentInd>> mEnabledRange = std::pair<std::vector<Representation>, SegmentInd>{};
 
 	size_t mSegmentsPerBlock{};
@@ -135,7 +148,7 @@ class LTIWorker<Representation>::JumpSuccessorGen {
 			auto agg = mAggregated.next();
 
 			while ( !agg ) {
-				auto mEnabledRange = mEnabled.next();
+				mEnabledRange = mEnabled.next();
 				if ( !mEnabledRange ) return std::nullopt;
 				mAggregated = AggregatedGen{ mSegmentsPerBlock, *mEnabledRange };
 				agg = mAggregated.next();

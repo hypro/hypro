@@ -93,8 +93,8 @@ class CEGARAnalyzer {
 	CEGARAnalyzer( const HybridAutomaton<Number>& ha, const Settings& settings )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
-		, mBaseLevel( createBaseLevel( ha, settings ) ) {
-	}
+		, mBaseLevel( createBaseLevel( mHybridAutomaton, settings ) ) {} // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
+																		 // thus location and transition pointers are different between them.
 
 	REACHABILITY_RESULT run();
 
@@ -114,7 +114,7 @@ class CEGARAnalyzer {
 
   protected:
 	HybridAutomaton<Number> mHybridAutomaton;
-	Settings mSettings{};
+	Settings mSettings;
 	BaseLevel mBaseLevel;
 	std::vector<RefinementLevel> mLevels{};
 };

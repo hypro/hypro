@@ -7,9 +7,9 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 	//Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
 	LTIWorker<State> worker{
-		  mHybridAutomaton,
-		  mAnalysisSettings.strategy.front(),
-		  mAnalysisSettings.localTimeHorizon,
+		  *mHybridAutomaton,
+		  mParameters,
+		  mFixedParameters.localTimeHorizon,
 		  transformationCache };
 
 	while ( !mWorkQueue.empty() ) {
@@ -24,17 +24,20 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		}
 
 		//Do not perform discrete jump if jump depth was reached
-		if ( currentNode->getDepth() == mAnalysisSettings.jumpDepth ) continue;
+		if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
 
 		// create jump successor tasks
 		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( currentNode->getFlowpipe(), currentNode->getLocation() ) ) {
-			for ( const auto [valuationSet, localDuration] : timedValuationSets ) {
+			for ( const auto [valuationSet, segmentsInterval] : timedValuationSets ) {
 				// update reachTree
 
 				// convert local time to global time
-				//TODO currently assuming time step is scaled to 1
-				carl::Interval<SegmentInd> const& initialSetDuration = currentNode->getTimings();
-				carl::Interval<SegmentInd> globalDuration = carl::Interval( initialSetDuration.lower() + localDuration.lower(), initialSetDuration.upper() + 1 + localDuration.upper() );
+
+				carl::Interval<TimePoint> const& initialSetDuration = currentNode->getTimings();
+				// add one to upper to convert from segment indices to time points
+				// multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
+				carl::Interval<TimePoint> enabledDuration{ segmentsInterval.lower() * mParameters.timeStepFactor, ( segmentsInterval.upper() + 1 ) * mParameters.timeStepFactor };
+				carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 
 				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
 
