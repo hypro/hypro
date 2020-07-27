@@ -49,7 +49,7 @@ auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> c
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
-			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	//division rounding up
 		} else {
 			blockSize = flowpipe.size();
 		}
@@ -117,7 +117,7 @@ struct LTIWorker<Representation>::AggregatedGen {
 	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
 		if ( current == enabled->size() ) return std::nullopt;
 		Representation aggregated = ( *enabled )[current];
-		SegmentInd indexFirst = firstEnabled + current; // flowpipe ind of first aggregated segment
+		SegmentInd indexFirst = firstEnabled + current;	 // flowpipe ind of first aggregated segment
 		current += 1;
 		for ( size_t inBlock = 1; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
 			aggregated.unite( ( *enabled )[current] );
@@ -158,7 +158,10 @@ struct LTIWorker<Representation>::JumpSuccessorGen {
 			CONTAINMENT containment;
 			std::tie( containment, agg->first ) = intersect( agg->first, mTransition->getTarget()->getInvariant() );
 
-			if ( containment != CONTAINMENT::NO ) return agg;
+			if ( containment != CONTAINMENT::NO ) {
+				agg->first.reduceRepresentation();
+				return agg;
+			}
 		}
 	}
 };
@@ -213,6 +216,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 			if ( containment == CONTAINMENT::NO ) {
 				it = valuationSets.erase( it );
 			} else {
+				it->valuationSet.reduceRepresentation();
 				++it;
 			}
 		}
