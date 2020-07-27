@@ -378,7 +378,7 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 #elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
 	res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif defined( HYPRO_USE_GLPK )
-	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector );
+	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif defined( HYPRO_USE_CLP )
 	res = clpRedundantConstraints( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
