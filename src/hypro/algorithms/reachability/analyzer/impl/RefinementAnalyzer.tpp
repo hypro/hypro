@@ -55,6 +55,13 @@ auto RefinementAnalyzer<Representation>::run() -> RefinementResult {
 		// pop node
 		ReachTreeNode<Representation>* currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
+
+		// if node is child of last node in path, collect it in return value
+		if ( currentNode->getDepth() == mPath.elements.size() + 1 ) {
+			pathSuccessors.push_back( currentNode );
+			continue;
+		}
+
 		REACHABILITY_RESULT safetyResult;
 
 		// compute flowpipe

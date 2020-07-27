@@ -47,9 +47,14 @@ class RefinementAnalyzer {
 	RefinementResult run();
 
 	void addToQueue( ReachTreeNode<Representation>* node ) {
-		if ( matchesPathTiming( node ) && matchesPathTransition( node ) ) {
+		// add node if it's past the end of the path or otherwise matches the path
+		if ( node->getDepth() > mPath.elements.size() || ( matchesPathTiming( node ) && matchesPathTransition( node ) ) ) {
 			mWorkQueue.push_front( node );
 		}
+	}
+
+	void addPastPath( ReachTreeNode<Representation>* node ) {
+		mWorkQueue.push_front( node );
 	}
 
   private:
