@@ -50,7 +50,7 @@ jobs:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base]
+          packages: [*packages_base, g++-8, gcc-8]
       env: COMPILER=g++-8 CC=gcc-8 CXX=g++-8
     - os: linux
       compiler: g++-9

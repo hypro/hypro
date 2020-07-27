@@ -22,6 +22,9 @@
 #include "../../util/plotting/Plotter.h"
 #include "FirstSegment.h"
 #include "boost/tuple/tuple.hpp"
+#include "handlers/jumpHandlers/util.h"
+
+#include <algorithm>
 
 CLANG_WARNING_DISABLE( "-Wdeprecated-register" )
 #include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>

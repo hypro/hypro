@@ -19,9 +19,8 @@
 
 namespace hypro {
 enum Aggregation { none = 0,
-				   boxAgg,
-				   clustering,
-				   parallelotopeAgg };
+				   aggregation,
+				   clustering };
 
 template <typename Number>
 class Location;
@@ -156,7 +155,7 @@ class Transition {
 	}
 	void setAggregation( Aggregation agg ) {
 		mAggregationSetting = agg;
-		if ( agg == Aggregation::boxAgg || agg == Aggregation::parallelotopeAgg ) {
+		if ( agg == Aggregation::aggregation ) {
 			mClustering = 1;
 		}
 		mHash = 0;

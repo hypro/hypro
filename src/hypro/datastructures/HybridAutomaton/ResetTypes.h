@@ -71,12 +71,7 @@ struct IntervalAssignment {
 	std::size_t size() { return mIntervals.size(); }
 
 	bool isIdentity() const {
-		for ( const auto& i : mIntervals ) {
-			if ( i != carl::Interval<Number>::emptyInterval() ) {
-				return false;
-			}
-		}
-		return true;
+		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return i.isEmpty(); } );
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const IntervalAssignment<Number>& in ) {
