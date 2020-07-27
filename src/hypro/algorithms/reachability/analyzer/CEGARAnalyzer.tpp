@@ -113,8 +113,8 @@ REACHABILITY_RESULT CEGARAnalyzer<Number, Representations...>::run() {
 						auto& level = createRefinementLevel( levelInd - 1 );
 						transferNodes( result.success().pathSuccessors, results.at( levelInd - 1 ), level );
 					}
-				} else {
-					// handle failure
+				} else if ( levelInd + 1 < mSettings.strategy().size() ) {
+					// handle failure, if there's a next level to go to
 					results.at( levelInd ) = result.failure();
 					handleFailure( result.failure().conflictNode, levelInd + 1 );
 				}
