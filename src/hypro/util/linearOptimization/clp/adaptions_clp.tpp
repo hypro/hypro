@@ -8,33 +8,35 @@ namespace hypro {
 
 template <typename Number>
 EvaluationResult<Number> clpOptimizeLinearPostSolve( clp_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact, const EvaluationResult<Number>& preSolution  ) {
-	// Create new row
-	// TODO: don't need all entries in elements, only nonzero. Do we need to determine beforehand how many there are?
-	int numberInRow = constraints.cols();
-	int* columns = new int[ constraints.cols() ];
-	double* elements = new double[ constraints.cols() ];
-	double rowLower;
-	double rowUpper;
-	for( int i = 0; i < numberInRow; ++i ) {
-		elements[i] = carl::toDouble( _direction( i ) );
-		columns[i] = i;
+	// Add presolution as new row constraint to the lp
+	int* rowIndices = new int[ constraints.cols() ];
+	double* rowValues = new double[ constraints.cols() ];
+	double rowLowerBound;
+	double rowUpperBound;
+	for( int i = 0; i < constraints.cols(); ++i ) {
+		rowValues[i] = carl::toDouble( _direction( i ) );
+		rowIndices[i] = i;
 	}
 	if ( context.lp.optimizationDirection() == -1 ) {
-		rowUpper = COIN_DBL_MAX;
-		rowLower = carl::toDouble( preSolution.supportValue );
+		rowUpperBound = COIN_DBL_MAX;
+		rowLowerBound = carl::toDouble( preSolution.supportValue );
 	} else {
-		rowUpper = carl::toDouble( preSolution.supportValue );
-		rowLower = -COIN_DBL_MAX;
+		rowUpperBound = carl::toDouble( preSolution.supportValue );
+		rowLowerBound = -COIN_DBL_MAX;
 	}
-	context.lp.addRow( numberInRow, columns, elements, rowLower, rowUpper );
+	context.lp.addRow( constraints.cols(), rowIndices, rowValues, rowLowerBound, rowUpperBound );
 
+	// Evaluate new problem
 	EvaluationResult<Number> res = clpOptimizeLinear( context, _direction, constraints, constants, useExact );
+	if ( res.errorCode == SOLUTION::INFEAS ) {
+		res = preSolution;
+	}
 
 	// Restore original problem
 	context.lp.loadProblem( context.matrix, context.mColumnLowerBounds, context.mColumnUpperBounds, nullptr, context.mLowerBounds, context.mUpperBounds );
 
-	delete[] columns;
-	delete[] elements;
+	delete[] rowIndices;
+	delete[] rowValues;
 	return res;
 }
 

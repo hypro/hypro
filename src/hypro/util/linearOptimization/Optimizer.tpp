@@ -9,30 +9,25 @@ void Optimizer<Number>::cleanContexts() {
 
 	std::lock_guard<std::mutex> lock( mContextLock );
 #ifdef HYPRO_USE_GLPK
-	auto ctxtIt = mGlpkContexts.find( std::this_thread::get_id() );
-	if ( ctxtIt != mGlpkContexts.end() ) {
-#ifdef HYPRO_STATISTICS
-		contextDeletions++;
-		//std::cout << "Constructions: " << contextConstructions << ", deletions: " << contextDeletions << std::endl;
-#endif
-		/*
+	auto ctxtItGlpk = mGlpkContexts.find( std::this_thread::get_id() );
+	if ( ctxtItGlpk != mGlpkContexts.end() ) {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContexts.size() );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-		ctxtIt->second.deleteLPInstance();
+		ctxtItGlpk->second.deleteLPInstance();
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
-		mGlpkContexts.erase( ctxtIt );
+		mGlpkContexts.erase( ctxtItGlpk );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
 		*/
 	}
 #endif
 #ifdef HYPRO_USE_CLP
-	auto ctxtIt = mClpContexts.find( std::this_thread::get_id() );
-	if ( ctxtIt != mClpContexts.end() ) {
+	auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
+	if ( ctxtItClp != mClpContexts.end() ) {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-		ctxtIt->second.deleteLPInstance();
+		ctxtItClp->second.deleteLPInstance();
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
-		mClpContexts.erase( ctxtIt );
+		mClpContexts.erase( ctxtItClp );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
 	}
 #endif
@@ -199,18 +194,12 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = clpOptimizeLinear( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
 #endif
 
-// call to secondary solver
-#if HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
-
-#elif HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-#elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
-
-#else
+#if !defined( HYPRO_SECONDARY_SOLVER )
 	return res;
 #endif
-#if defined( HYPRO_USE_SMTRAT ) || defined( HYPRO_USE_Z3 ) || defined( HYPRO_USE_SOPLEX )
 
-	// At this point we can check, whether the glpk result is already exact and optimal.
+#if HYPRO_SECONDARY_SOLVER == SOLVER_CLP || HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+	// At this point we can check, whether the primary result is already exact and optimal.
 	// We do this by inserting the solution into the constraints. The solution is exact,
 	// whenever it lies at least on one hyperplane (the respective constraint is saturated). Moreover
 	// the solution should always satisfy all constraints and if the direction is linear independent from
@@ -275,22 +264,12 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 			COUNT( "linear dependence failure" )
 		};
 
-#ifdef HYPRO_USE_Z3
-		COUNT( "z3" );
-		res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, res );
-#elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
-		COUNT( "smtrat" );
-		res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
-#elif defined( HYPRO_USE_SOPLEX )
-		COUNT( "soplex" );
-		res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, res );
+#if HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+	res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_CLP
+	res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #endif
 	}
-
-	// if there is a valid solution (FEAS), it implies the optimumValue is set.
-	//assert(res.errorCode  !=SOLUTION::FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
-	//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
-	//assert(res.errorCode  !=SOLUTION::FEAS || checkPoint(Point<Number>(res.optimumValue)));
 	return res;
 #endif
 }
