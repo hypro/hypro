@@ -67,23 +67,40 @@ vector_t<Number> refineSolution( glpk_context& context, const matrix_t<Number>& 
 
 template <typename Number>
 EvaluationResult<Number> glpkOptimizeLinearPostSolve( glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact, const EvaluationResult<Number>& preSolution  ) {
-
-	glp_add_rows( context.lp, 1 );
-
-	int len = constraints.cols();
-	int* ind = new int[ constraints.cols() ];
-	double* val = new double[ constraints.cols() ];
-	for ( int i = 0; i < len; ++i ) {
-		val[i] = carl::toDouble( _direction( i ) );
-		ind[i] = i;
-	}
-	glp_set_mat_row( context.lp, constraints.rows(), len, ind, val );
-	EvaluationResult<Number> res = glpkOptimizeLinear( context, _direction, constraints, constants, useExact );
 	
-	int* del = { constraints.rows() };
-	glp_del_rows( context.lp, 1, del );
-	delete[] ind;
-	delete[] val;
+	// Add presolution as new row constraint to the lp
+	// Create row:
+	glp_add_rows( context.lp, 1 );
+	int* rowIndices = new int[ constraints.cols()+1 ];
+	double* rowValues = new double[ constraints.cols()+1 ];
+	for ( int i = 0; i <= constraints.cols(); ++i ) {
+		rowValues[i] = carl::toDouble( _direction( i-1 ) );
+		rowIndices[i] = i;
+	}
+	// Add row to problem:
+	glp_set_mat_row( context.lp, constraints.rows() + 1, constraints.cols(), rowIndices, rowValues );
+
+	// Set presolution bound:
+	if( glp_get_obj_dir( context.lp ) == GLP_MAX ) {
+		glp_set_row_bnds( context.lp, constraints.rows()+1, GLP_LO, carl::toDouble( preSolution.supportValue ), 0.0 );
+	} else{
+		assert( glp_get_obj_dir( context.lp ) == GLP_MIN );
+		glp_set_row_bnds( context.lp, constraints.rows()+1, GLP_UP, 0.0, carl::toDouble( preSolution.supportValue ) );
+	}
+
+	EvaluationResult<Number> res = glpkOptimizeLinear( context, _direction, constraints, constants, useExact );
+	if ( res.errorCode == SOLUTION::INFEAS ) {
+		// glpk thinks the solution is infeasible, so we don't get an improvement
+		res = preSolution;
+	}
+
+	// Restore original problem. Glp starts indexing at 1 so the first index does not matter
+	int delRow[] = { 0, (int) constraints.rows() + 1 };
+	glp_del_rows( context.lp, 1, delRow );
+	
+	delete[] rowIndices;
+	delete[] rowValues;
+	return res;
 
 
 }

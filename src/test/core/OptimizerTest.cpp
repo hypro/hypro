@@ -2,6 +2,12 @@
 #include "util/linearOptimization/Optimizer.h"
 #include <iostream>
 
+#define EXPECT_NEAR_VECTORS(expected, actual, thresh) \
+        ASSERT_EQ(expected.size(), actual.size()) << "Array sizes differ.";\
+        for (int idx = 0; idx < expected.size(); ++idx) \
+        { \
+            EXPECT_NEAR(expected[idx], actual[idx], thresh) << "At index: " << idx;\
+        }
 using namespace hypro;
 
 TEST(OptimizerTest, EvaluationResult) {
@@ -41,18 +47,18 @@ TEST(OptimizerTest, Minimize){
 	Optimizer<double> op(boxMat,boxVec,false);
 	auto res = op.evaluate(vector_t<double>::Ones(2), false);
 	vector_t<double> controlVec = -2.0*vector_t<double>::Ones(2);
-	EXPECT_EQ(-4.0, res.supportValue);
+	EXPECT_NEAR(-4.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8)
 
 	vector_t<double> objective = vector_t<double>::Zero(2);
 	objective << -2, 1;
 	controlVec = vector_t<double>::Zero(2);
 	controlVec << 2, -2;
 	res = op.evaluate(objective, false);
-	EXPECT_EQ(-6.0, res.supportValue);
+	EXPECT_NEAR(-6.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 }
 
 TEST(OptimizerTest, Maximize){
@@ -68,18 +74,18 @@ TEST(OptimizerTest, Maximize){
 	Optimizer<double> op(boxMat,boxVec,true);
 	auto res = op.evaluate(vector_t<double>::Ones(2), false);
 	vector_t<double> controlVec = 2.0*vector_t<double>::Ones(2);
-	EXPECT_EQ(4.0, res.supportValue);
+	EXPECT_NEAR(4.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 
 	vector_t<double> objective = vector_t<double>::Zero(2);
 	objective << -2, 1;
 	controlVec = vector_t<double>::Zero(2);
 	controlVec << -2, 2;
 	res = op.evaluate(objective, false);
-	EXPECT_EQ(6.0, res.supportValue);
+	EXPECT_NEAR(6.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 }
 
 TEST(OptimizerTest, optimizeUnbounded){
@@ -105,18 +111,18 @@ TEST(OptimizerTest, setVector){
 	Optimizer<double> op(boxMat,boxVec,true);
 	auto res = op.evaluate(vector_t<double>::Ones(2), false);
 	vector_t<double> controlVec = 2.0*vector_t<double>::Ones(2);
-	EXPECT_EQ(4.0, res.supportValue);
+	EXPECT_NEAR(4.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 
 	// Switch to second constraint vector and maximize again
 	boxVec << 3, 3, 3, 3;
 	op.setVector(boxVec);
 	res = op.evaluate(vector_t<double>::Ones(2), false);
 	controlVec = 3.0*vector_t<double>::Ones(2);
-	EXPECT_EQ(6.0, res.supportValue);
+	EXPECT_NEAR(6.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 }
 
 TEST(OptimizerTest, checkConsistency){
@@ -131,19 +137,19 @@ TEST(OptimizerTest, checkConsistency){
 	boxVec << 2,2,2,2;
 	Optimizer<double> op(boxMat,boxVec);
 	bool res = op.checkConsistency();
-	EXPECT_EQ(true, res);
+	EXPECT_TRUE(res);
 
 	// switching to unsatisfiable constraints
 	boxVec << 2, -3, 2, 2;
 	op.setVector(boxVec);
 	res = op.checkConsistency();
-	EXPECT_EQ(false, res);
+	EXPECT_FALSE(res);
 
 	// single point
 	boxVec << 0, 0, 0, 0;
 	op.setVector(boxVec);
 	res = op.checkConsistency();
-	EXPECT_EQ(true, res);
+	EXPECT_TRUE(res);
 }
 
 TEST(OptimizerTest, checkPoint){
@@ -160,11 +166,11 @@ TEST(OptimizerTest, checkPoint){
 
 	Point<double> pointSat(vector_t<double>::Zero(2));
 	bool res = op.checkPoint(pointSat);
-	EXPECT_EQ(true, res);
+	EXPECT_TRUE(res);
 
 	Point<double> pointUnsat(3.0*vector_t<double>::Ones(2));
 	res = op.checkPoint(pointUnsat);
-	EXPECT_EQ(false, res);
+	EXPECT_FALSE(res);
 }
 
 TEST(OptimizerTest, getInternalPoint){
@@ -181,7 +187,7 @@ TEST(OptimizerTest, getInternalPoint){
 	Point<double> point(res.optimumValue);
 	bool consistent = op.checkPoint(point);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(true, consistent);
+	EXPECT_TRUE(consistent);
 
 	// Switch constraint vector, such that 0 is not an inner point
 	boxVec << 10, -2, -5, 10;
@@ -190,7 +196,7 @@ TEST(OptimizerTest, getInternalPoint){
 	point = Point<double>(res.optimumValue);
 	consistent = op.checkPoint(point);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(true, consistent);
+	EXPECT_TRUE(consistent);
 
 	// Switch to unsatisfiable constraints
 	boxVec << 10, -11, 2, 2;
@@ -247,9 +253,9 @@ TEST(OptimizerTest, maximize_mixedConstraints){
 	op.setRelations(relations);
 	auto res = op.evaluate(vector_t<double>::Ones(2), false);
 	vector_t<double> controlVec = 2.0*vector_t<double>::Ones(2);
-	EXPECT_EQ(4.0, res.supportValue);
+	EXPECT_NEAR(4.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 
 	relations = {carl::Relation::LEQ,
 				carl::Relation::LEQ,
@@ -258,9 +264,9 @@ TEST(OptimizerTest, maximize_mixedConstraints){
 	op.setRelations(relations);
 	res = op.evaluate(vector_t<double>::Ones(2), false);
 	controlVec = -2.0*vector_t<double>::Ones(2);
-	EXPECT_EQ(-4.0, res.supportValue);
+	EXPECT_NEAR(-4.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
-	EXPECT_EQ(controlVec, res.optimumValue);
+	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
 
 }
 
