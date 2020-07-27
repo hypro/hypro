@@ -4,11 +4,10 @@
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
-#include "../handlers/firstSegmentHandlers/ltiFirstSegmentHandler.h"
-#include "../handlers/guardHandlers/ltiGuardHandler.h"
-#include "../handlers/invariantHandlers/ltiInvariantHandler.h"
+#include "../handlers/guardHandlers/rectangularGuardHandler.h"
+#include "../handlers/invariantHandlers/rectangularInvariantHandler.h"
 #include "../handlers/jumpHandlers/ltiJumpHandler.h"
-#include "../handlers/timeEvolutionHandlers/ltiTimeEvolutionHandler.h"
+#include "../handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
 
 #include <vector>
 

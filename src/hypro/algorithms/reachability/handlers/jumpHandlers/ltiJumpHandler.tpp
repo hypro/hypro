@@ -223,15 +223,15 @@ auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transit
 			newState.setLocation( transitionPtr->getTarget() );
 
 			// check invariant in new location
-			auto containmentStateSetPair = ltiIntersectInvariant( newState );
-			if ( containmentStateSetPair.first == CONTAINMENT::NO ) {
+			auto [containment, stateSet] = ltiIntersectInvariant( newState );
+			if ( containment == CONTAINMENT::NO ) {
 				continue;
 			}
 
 			// reduce if possible (Currently only for support functions)
-			applyReduction( containmentStateSetPair.second );
+			applyReduction( stateSet );
 
-			DEBUG( "hydra.worker.discrete", "State after reduction: " << containmentStateSetPair.second );
+			DEBUG( "hydra.worker.discrete", "State after reduction: " << stateSet );
 
 			// Note: Here we misuse the state's timestamp to carry the transition timing to the next stage -> just don't reset
 			// the timestamp in case no aggregation happens.
@@ -239,7 +239,7 @@ auto ltiJumpHandler<State>::applyJump( const TransitionStateMap& states, Transit
 			if ( processedStates.find( transitionPtr ) == processedStates.end() ) {
 				processedStates[transitionPtr] = std::vector<State>();
 			}
-			processedStates[transitionPtr].emplace_back( containmentStateSetPair.second );
+			processedStates[transitionPtr].emplace_back( stateSet );
 		}
 	}
 	return processedStates;
@@ -294,7 +294,7 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 	DEBUG( "hydra.worker.discrete", "Number of transitions to aggregate: " << toAggregate.size() << std::endl );
 	for ( const auto& [transition, stateSets] : toAggregate ) {
 		assert( !stateSets.empty() );
-		TRACE( "hydra.worker.discrete", stateSets.size() << " sets to aggregate for transition " << transitionStatePair.first->getSource()->getName() << " -> " << transition->getTarget()->getName() );
+		TRACE( "hydra.worker.discrete", stateSets.size() << " sets to aggregate for transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		std::vector<State> aggregatedStates;
 		// Aggregate sets by using sequential unite operations (TODO Implement and make use of multi-unite).
 		State aggregatedState( *stateSets.begin() );
