@@ -25,7 +25,7 @@ struct ChildNodeGen {
 	}
 };
 template <class Gen, class Rep>
-ChildNodeGen( Gen*, ReachTreeNode<Rep>*, int) -> ChildNodeGen<Rep>;
+ChildNodeGen( Gen*, ReachTreeNode<Rep>*, int ) -> ChildNodeGen<Rep>;
 
 template <typename Representation>
 bool RefinementAnalyzer<Representation>::matchesPathTiming( ReachTreeNode<Representation>* node ) {
@@ -58,11 +58,13 @@ auto RefinementAnalyzer<Representation>::run() -> RefinementResult {
 		REACHABILITY_RESULT safetyResult;
 
 		// compute flowpipe
-		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
+		if ( currentNode->getFlowpipe().empty() ) {
+			safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
 
-		// fail if bad state was hit
-		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return { Failure{ currentNode } };
+			// fail if bad state was hit
+			if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
+				return { Failure{ currentNode } };
+			}
 		}
 
 		// do not perform discrete jump if jump depth was reached
