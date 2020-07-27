@@ -120,16 +120,12 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 	if ( !context.lp.primalFeasible() ) {
 		return res;
 	}
-
-	bool redundant;
-	carl::Relation relation;
-	EvaluationResult<Number> actualRes;
-	EvaluationResult<Number> updatedRes;
-
-
+	
 	for ( std::size_t constraintIndex = std::size_t( constraints.rows() - 1 );; --constraintIndex ) {
-		redundant = true;
-		relation = relations[ constraintIndex ];
+		bool redundant = true;
+		carl::Relation relation = relations[ constraintIndex ];
+		EvaluationResult<Number> actualRes;
+		EvaluationResult<Number> updatedRes;
 		if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ){
 			// test if upper bound is redundant
 			context.lp.setOptimizationDirection( -1 );
