@@ -29,7 +29,9 @@ int main() {
 	loc1.setRectangularFlow( flow );
 
 	// add location
+	std::map<const hypro::Location<Number>*, std::size_t> locationMapping;
 	ha.addLocation( loc1 );
+	locationMapping[&loc1] = ha.getLocations().size() - 1;
 
 	// initial set is a unit box
 	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>( 4, 2 );
@@ -38,7 +40,7 @@ int main() {
 	constants << 1, 1, 1, 1;
 
 	// create and add initial state
-	ha.addInitialState( &loc1, hypro::Condition<Number>( constraints, constants ) );
+	ha.addInitialState( ha.getLocations()[locationMapping[&loc1]], hypro::Condition<Number>( constraints, constants ) );
 
 	// create settings
 	hypro::Settings settings;

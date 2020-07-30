@@ -54,6 +54,9 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 
 	DEBUG( "hydra.worker", "State set after time elapse: " << initial );
 
-	return initial;
+	State res(initialSet);
+	res.setSet(initial);
+
+	return res;
 }
 }  // namespace hypro

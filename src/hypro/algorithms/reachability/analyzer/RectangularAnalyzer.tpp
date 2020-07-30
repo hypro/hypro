@@ -14,7 +14,7 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 		// create node from state
 		auto initialNode{ std::make_unique<ReachTreeNode<State>>( initialState ) };
 		// add to reachTree
-		initialNode->setParent( nullptr );
+		// initialNode->setParent( nullptr );
 		mReachTree.emplace_back( std::move( initialNode ) );
 		// add to queue
 		mWorkQueue.push( mReachTree.back().get() );
