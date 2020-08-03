@@ -104,7 +104,7 @@ bool clpCheckPoint( clp_context& context, const matrix_t<Number>& constraints, c
 }
 
 template <typename Number>
-std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::vector<carl::Relation>& relations ) {
+std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
 	std::vector<std::size_t> res;
 
 	// first call to check satisfiability
