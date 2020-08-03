@@ -144,7 +144,7 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 			context.lp.setRowLower( constraintIndex, -COIN_DBL_MAX );
 			updatedRes = clpOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
 			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
-			if ( actualRes.errorCode != updatedRes.errorCode && actualRes.supportValue != updatedRes.supportValue ){
+			if ( actualRes.errorCode != updatedRes.errorCode ||actualRes.supportValue != updatedRes.supportValue ){
 				redundant = false;
 			}
 		}
