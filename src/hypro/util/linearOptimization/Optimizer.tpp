@@ -197,7 +197,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	return res;
 #endif
 
-#if HYPRO_SECONDARY_SOLVER == SOLVER_CLP || HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+#if HYPRO_SECONDARY_SOLVER == SOLVER_CLP || HYPRO_SECONDARY_SOLVER == SOLVER_GLPK || HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	// At this point we can check, whether the primary result is already exact and optimal.
 	// We do this by inserting the solution into the constraints. The solution is exact,
 	// whenever it lies at least on one hyperplane (the respective constraint is saturated). Moreover
@@ -267,6 +267,8 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
+	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #endif
 	}
 	return res;
@@ -292,7 +294,7 @@ bool Optimizer<Number>::checkConsistency() const {
 	mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #elif defined( HYPRO_USE_SOPLEX )
-	mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+	mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #endif
 
@@ -325,10 +327,10 @@ bool Optimizer<Number>::checkPoint( const Point<Number>& _point ) const {
 #elif defined( HYPRO_USE_SMTRAT )
 	return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif defined( HYPRO_USE_SOPLEX )
-	return soplexCheckPoint( mConstraintMatrix, mConstraintVector, _point );
-#elif defined( HYPRO_USE_GLPK )
+	return soplexCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	return glpkCheckPoint( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
-#elif defined( HYPRO_USE_CLP )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	return clpCheckPoint( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
 #endif
 }
@@ -350,11 +352,11 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	res = smtratGetInternalPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
-#elif defined( HYPRO_USE_GLPK )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
-#elif defined( HYPRO_USE_CLP )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpGetInternalPoint<Number>( mClpContexts[std::this_thread::get_id()] );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
@@ -376,9 +378,9 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector );
 #elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
 	res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
-#elif defined( HYPRO_USE_GLPK )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
-#elif defined( HYPRO_USE_CLP )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpRedundantConstraints( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
