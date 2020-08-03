@@ -205,7 +205,7 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 			glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FR, 0.0, 0.0 );
 			updatedRes = glpkOptimizeLinear( context, vector_t<Number>( constraints.row( constraintIndex ) ), constraints, constants, true );
 			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
-			if ( actualRes.errorCode != updatedRes.errorCode && actualRes.supportValue != updatedRes.supportValue ){
+			if ( actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue ){
 				redundant = false;
 			}
 		}
