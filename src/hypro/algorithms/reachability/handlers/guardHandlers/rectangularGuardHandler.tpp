@@ -2,50 +2,43 @@
 
 namespace hypro {
 template <typename State>
-CONTAINMENT rectangularGuardHandler<State>::operator()( const State& state ) {
-	assert( !state->getTimestamp().isEmpty() );
+void rectangularGuardHandler<State>::operator()( const State& state ) {
+	assert( !state.getTimestamp().isEmpty() );
 
-	TRACE( "hydra.worker.discrete", "Applying handler " << this->handlerName() );
+	// TRACE( "hydra.worker.discrete", "Applying handler " << this->handlerName() );
 
-	auto& vpool = VariablePool::getInstance();
+	for ( auto& transitionPtr : state.getLocation()->getTransitions() ) {
+		CONTAINMENT containmentResult = CONTAINMENT::BOT;
+		State guard(state);
+		if ( !transitionPtr->getGuard().empty() ){
+			guard = State{ CarlPolytope<typename State::NumberType>{ transitionPtr->getGuard().getMatrix(), transitionPtr->getGuard().getVector() } };
+		}
 
-	// create constraints for the guard. Note that we need to properly match dimension indices with variable names at some point.
-	// create carlPolytope, as intersection is defined for those
-	CarlPolytope<typename State::NumberType> guardConstraints{mTransition->getGuard().getMatrix(), mTransition->getGuard().getVector()};
-	// substitute variables in the formulas by the correct ones in the subspace of the state
-	// 1. Determine offset
-	std::size_t dimensionOffset = state->getDimensionOffset();
-	// 2. substitute
-	for ( std::size_t i = 0; i < state->getDimension(); ++i ) {
-		guardConstraints.substituteVariable( vpool.carlVarByIndex( i ), vpool.carlVarByIndex( i + dimensionOffset ) );
+		// intersect
+		auto resultingSet = state.intersect( guard );
+
+		// determine full vs. partial containment
+		if ( resultingSet == state ) {
+			containmentResult = CONTAINMENT::FULL;
+		}
+
+		// reduction
+		resultingSet.removeRedundancy();
+
+		// return containment information
+		if ( resultingSet.isEmpty() ) {
+			containmentResult = CONTAINMENT::NO;
+		} else if ( containmentResult != CONTAINMENT::FULL ) {
+			containmentResult = CONTAINMENT::PARTIAL;
+		} else {
+			containmentResult = CONTAINMENT::FULL;
+		}
+
+		if ( containmentResult != CONTAINMENT::NO ) {
+			mGuardSatisfyingStates[transitionPtr.get()].emplace_back( std::move( resultingSet ) );
+		}
+		mGuardContainment[transitionPtr.get()] = containmentResult;
 	}
-
-	// intersect
-	auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( state->getSet() ).intersect( guardConstraints );
-
-	// determine full vs. partial containment
-	if ( resultingSet == std::get<CarlPolytope<typename State::NumberType>>( state->getSet() ) ) {
-		mContainment = CONTAINMENT::FULL;
-	}
-
-	// reduction
-	resultingSet.removeRedundancy();
-
-	// set containment information
-	if ( resultingSet.empty() ) {
-		mContainment = CONTAINMENT::NO;
-	} else if ( mContainment != CONTAINMENT::FULL ) {
-		//assert(resultingSet != std::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)));
-		mContainment = CONTAINMENT::PARTIAL;
-	}
-
-	mState->setSet( resultingSet );
-	return mContainment;
 }
 
-template <typename State>
-void rectangularGuardHandler<State>::reinitialize() {
-	TRACE( "hydra.worker.discrete", "Reinitializing handler " << this->handlerName() );
-	mContainment = CONTAINMENT::BOT;
-}
 }  // namespace hypro

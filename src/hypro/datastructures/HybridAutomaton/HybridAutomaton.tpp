@@ -21,7 +21,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 	}
 
 	//update locations of transitions and transitions of locations
-	for ( auto& l : mLocations ) {
+	for ( auto& l : hybrid.getLocations() ) {
 		for ( auto& t : l->rGetTransitions() ) {
 			// verify that the source of the location already corresponds to the new location.
 			assert( t->getSource() == l.get() );

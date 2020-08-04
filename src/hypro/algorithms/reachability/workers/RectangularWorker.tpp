@@ -50,10 +50,21 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 
 template <typename State>
 void RectangularWorker<State>::computeJumpSuccessors() {
-	std::vector<State> guardSatisfyingStateSets;
-	// TODO: for each transition intersect each computed time successor set with the guard. If the intersection is non-empty, store for post-processing.
+	//std::vector<State> guardSatisfyingStateSets;
+	// for each transition intersect each computed time successor set with the guard. If the intersection is non-empty, store for post-processing.
+	rectangularGuardHandler<State> guardHandler;
+	for ( auto& state : mFlowpipe ) {
+		guardHandler( state );
+	}
 
-	// TODO: post processing: apply reset on those sets, intersect the sets with the invariant of the target location. If the resulting state set is non-empty, add it to the jump successors set.
+	// post processing: apply reset on those sets, intersect the sets with the invariant of the target location. If the resulting state set is non-empty, add it to the jump successors set.
+	postProcessJumpSuccessors( guardHandler.getGuardSatisfyingStateSets() );
+}
+
+template <typename State>
+void RectangularWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
+	rectangularJumpHandler<State> jmpHandler;
+	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, nullptr, mSettings.strategy.front() );
 }
 
 }  // namespace hypro

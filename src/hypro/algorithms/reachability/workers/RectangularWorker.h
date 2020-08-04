@@ -6,7 +6,7 @@
 #include "../../../util/plotting/PlotData.h"
 #include "../handlers/guardHandlers/rectangularGuardHandler.h"
 #include "../handlers/invariantHandlers/rectangularInvariantHandler.h"
-#include "../handlers/jumpHandlers/ltiJumpHandler.h"
+#include "../handlers/jumpHandlers/rectangularJumpHandler.h"
 #include "../handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
 
 #include <vector>
@@ -22,7 +22,7 @@ template <typename State>
 class RectangularWorker {
   private:
 	using Number = typename State::NumberType;
-	using JumpSuccessors = typename ltiGuardHandler<State>::TransitionStatesMap;
+	using JumpSuccessors = typename rectangularGuardHandler<State>::TransitionStatesMap;
 
   public:
 	/// constructor from rectangular automaton and settings
@@ -39,6 +39,9 @@ class RectangularWorker {
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	/// getter for time successor sets
 	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
+
+  private:
+	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;  ///< Reference to the rectangular automaton
