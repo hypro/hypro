@@ -294,7 +294,7 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 	DEBUG( "hydra.worker.discrete", "Number of transitions to aggregate: " << toAggregate.size() << std::endl );
 	for ( const auto& [transition, stateSets] : toAggregate ) {
 		assert( !stateSets.empty() );
-		TRACE( "hydra.worker.discrete", stateSets.size() << " sets to aggregate for transition " << transitionStatePair.first->getSource()->getName() << " -> " << transition->getTarget()->getName() );
+		TRACE( "hydra.worker.discrete", stateSets.size() << " sets to aggregate for transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		std::vector<State> aggregatedStates;
 		// Aggregate sets by using sequential unite operations (TODO Implement and make use of multi-unite).
 		State aggregatedState( *stateSets.begin() );
