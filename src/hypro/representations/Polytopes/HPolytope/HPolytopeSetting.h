@@ -13,6 +13,7 @@ struct HPolytopeSetting {
 	static constexpr bool REDUCE_NUMBERS = true;
 	static constexpr bool AVOID_CONVERSION = true;
 	static constexpr bool OPTIMIZER_CACHING = false;
+	static constexpr bool NAIVE_ALGORITHMS = false;
 };
 
 //For usage as leaf in SupportFunctionNew
@@ -21,5 +22,6 @@ struct HPolytopeOptimizerCaching {
 	static constexpr bool REDUCE_NUMBERS = true;
 	static constexpr bool AVOID_CONVERSION = true;
 	static constexpr bool OPTIMIZER_CACHING = true;
+	static constexpr bool NAIVE_ALGORITHMS = false;
 };
 }  // namespace hypro

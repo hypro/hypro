@@ -1,10 +1,10 @@
 #pragma once
 
-#include "carl/numbers/numbers.h"
-#include "datastructures/Halfspace.h"
-#include "util/typetraits.h"
+#include "../../../datastructures/Halfspace.h"
+#include "../../../util/typetraits.h"
 
 #include <boost/dynamic_bitset.hpp>
+#include <carl/numbers/numbers.h>
 #include <vector>
 
 namespace hypro {

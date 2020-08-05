@@ -9,13 +9,13 @@
 static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
+#include "../../../algorithms/quickhull/Quickhull.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/templateDirections.h"
+#include "../../../util/typetraits.h"
 #include "HPolytopeSetting.h"
-#include "algorithms/quickhull/Quickhull.h"
-#include "util/typetraits.h"
 
 #include <algorithm>
 #include <cassert>
@@ -246,7 +246,7 @@ class HPolytopeT : private GeometricObjectBase {
 	bool isExtremePoint( const Point<Number>& point ) const;
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _direction ) const;
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const;
 	std::vector<Point<Number>> vertexEnumeration() const;
 
 	/*

@@ -162,28 +162,27 @@ TYPED_TEST( DifferenceBoundsTest, Vertices ) {
 
 	//( 4[0] , 4[1]), ( 4[0] , 6[1]), ( 9[0] , 9[1]), ( 9[0] , 11[1])/
 	std::vector<Point<TypeParam>> vertices = dbm.vertices();
-	EXPECT_EQ( vertices.size(), std::size_t( 4 ) );
+	ASSERT_EQ( vertices.size(), std::size_t( 4 ) );
 
 	std::vector<TypeParam> coord0;
 	coord0.push_back( TypeParam( 4 ) );
 	coord0.push_back( TypeParam( 4 ) );
-	EXPECT_EQ( vertices[0], Point<TypeParam>( coord0 ) );
+	EXPECT_TRUE( std::find( vertices.begin(), vertices.end(), Point<TypeParam>( coord0 ) ) != vertices.end() );
 
 	std::vector<TypeParam> coord1;
 	coord1.push_back( TypeParam( 4 ) );
 	coord1.push_back( TypeParam( 6 ) );
-	EXPECT_EQ( vertices[1], Point<TypeParam>( coord1 ) );
+	EXPECT_TRUE( std::find( vertices.begin(), vertices.end(), Point<TypeParam>( coord1 ) ) != vertices.end() );
 
 	std::vector<TypeParam> coord2;
 	coord2.push_back( TypeParam( 9 ) );
 	coord2.push_back( TypeParam( 9 ) );
-	EXPECT_EQ( vertices[2], Point<TypeParam>( coord2 ) );
+	EXPECT_TRUE( std::find( vertices.begin(), vertices.end(), Point<TypeParam>( coord2 ) ) != vertices.end() );
 
 	std::vector<TypeParam> coord3;
 	coord3.push_back( TypeParam( 9 ) );
 	coord3.push_back( TypeParam( 11 ) );
-	EXPECT_EQ( vertices[3], Point<TypeParam>( coord3 ) );
-	SUCCEED();
+	EXPECT_TRUE( std::find( vertices.begin(), vertices.end(), Point<TypeParam>( coord3 ) ) != vertices.end() );
 }
 
 TYPED_TEST( DifferenceBoundsTest, Elapse ) {
@@ -326,7 +325,7 @@ TYPED_TEST( DifferenceBoundsTest, Copy ) {
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );
 
-	DifferenceBounds<TypeParam> res = dbm.copy( 1, 2 );  // copy x to y
+	DifferenceBounds<TypeParam> res = dbm.copy( 1, 2 );	 // copy x to y
 	//( 0, <= )( -4, <= )( -4, <= )
 	//( 9, <= )( 0, <= )( 0, <= )
 	//( 9, <= )( 0, <= )( 0, <= )
@@ -360,7 +359,7 @@ TYPED_TEST( DifferenceBoundsTest, Shift ) {
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );
 
-	DifferenceBounds<TypeParam> res = dbm.shift( 1, 5.0 );  // shift x 5 to the right
+	DifferenceBounds<TypeParam> res = dbm.shift( 1, 5.0 );	// shift x 5 to the right
 	//( 0, <= )( -9, <= )( -4, <= )
 	//( 14, <= )( 0, <= )( 5, <= )
 	//( 11, <= )( -3, <= )( 0, <= )
@@ -605,7 +604,7 @@ TYPED_TEST( DifferenceBoundsTest, ExtraM ) {
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );
 
-	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> MBounds( 3 );  //+1 for 0 clock
+	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> MBounds( 3 );	//+1 for 0 clock
 	/*
 	 * MBounds(x_0)=0
 	 * MBounds(x_1)=3
@@ -652,7 +651,7 @@ TYPED_TEST( DifferenceBoundsTest, ExtraMPlus ) {
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );
 
-	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> MBounds( 3 );  //+1 for 0 clock
+	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> MBounds( 3 );	//+1 for 0 clock
 	/*
 	 * MBounds(x_0)=0
 	 * MBounds(x_1)=3
@@ -699,8 +698,8 @@ TYPED_TEST( DifferenceBoundsTest, ExtraLU ) {
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );
 
-	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> LBounds( 3 );  //+1 for 0 clock
-	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> UBounds( 3 );  //+1 for 0 clock
+	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> LBounds( 3 );	//+1 for 0 clock
+	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> UBounds( 3 );	//+1 for 0 clock
 
 	LBounds << typename DifferenceBounds<TypeParam>::DBMEntry( TypeParam( 0 ),
 															   DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ ),
@@ -750,8 +749,8 @@ TYPED_TEST( DifferenceBoundsTest, ExtraLUPlus ) {
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );
 
-	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> LBounds( 3 );  //+1 for 0 clock
-	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> UBounds( 3 );  //+1 for 0 clock
+	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> LBounds( 3 );	//+1 for 0 clock
+	vector_t<typename DifferenceBounds<TypeParam>::DBMEntry> UBounds( 3 );	//+1 for 0 clock
 
 	LBounds << typename DifferenceBounds<TypeParam>::DBMEntry( TypeParam( 0 ),
 															   DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ ),
