@@ -79,7 +79,6 @@ template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 	// initialize queue
 	for ( auto& [location, condition] : mHybridAutomaton.getLocalBadStates() ) {
-		std::cout << "bad states check" << std::endl;
 		// create local bad state
 		State badState{ location };
 		badState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
@@ -94,7 +93,6 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 	}
 
 	for ( auto& condition : mHybridAutomaton.getGlobalBadStates() ) {
-		std::cout << "global bad check" << std::endl;
 		if ( condition.getMatrix().rows() != 0 ) {
 			for ( auto& location : mHybridAutomaton.getLocations() ) {
 				// create global bad state
