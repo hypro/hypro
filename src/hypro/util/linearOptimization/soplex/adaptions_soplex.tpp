@@ -170,8 +170,8 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 }
 
 template <typename Number>
-EvaluationResult<Number> clpGetInternalPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
-	soplex::SoPlex solver = initializeSolver( constraints, constants, relations );
+EvaluationResult<Number> soplexGetInternalPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
+	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
 
 	EvaluationResult<Number> res = detail::extractSolution<Number>( solver );
 	return res;

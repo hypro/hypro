@@ -1,8 +1,8 @@
 # options for primary and secondary solver backends
 if(NOT PRIMARY_SOLVER_BACKEND)
-	set(PRIMARY_SOLVER_BACKEND "glpk" CACHE STRING "Primary backend-solver. Options are: glpk, clp")
+	set(PRIMARY_SOLVER_BACKEND "glpk" CACHE STRING "Primary backend-solver. Options are: glpk, clp, soplex")
 endif()
-set_property(CACHE PRIMARY_SOLVER_BACKEND PROPERTY STRINGS "clp" "glpk")
+set_property(CACHE PRIMARY_SOLVER_BACKEND PROPERTY STRINGS "clp" "glpk" "soplex")
 
 if(NOT SECONDARY_SOLVER_BACKEND)
 	set(SECONDARY_SOLVER_BACKEND "none" CACHE STRING "Secondary backend-solver used after invoking glpk. Options are: none, smtrat, z3, soplex")
@@ -16,6 +16,9 @@ if(${PRIMARY_SOLVER_BACKEND} STREQUAL "clp")
 elseif(${PRIMARY_SOLVER_BACKEND} STREQUAL "glpk")
     set(HYPRO_USE_GLPK "ON")
     set(HYPRO_PRIMARY_SOLVER "SOLVER_GLPK")
+elseif(${PRIMARY_SOLVER_BACKEND} STREQUAL "soplex")
+    set(HYPRO_USE_SOPLEX "ON")
+    set(HYPRO_PRIMARY_SOLVER "SOLVER_SOPLEX")
 endif()
 
 if(${SECONDARY_SOLVER_BACKEND} STREQUAL "smtrat")

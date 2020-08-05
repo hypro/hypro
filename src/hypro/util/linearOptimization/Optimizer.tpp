@@ -191,6 +191,8 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = glpkOptimizeLinear( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpOptimizeLinear( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX
+	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #endif
 
 #if !defined( HYPRO_SECONDARY_SOLVER )
@@ -268,7 +270,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
-	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	res = soplexOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
 #endif
 	}
 	return res;
@@ -352,6 +354,10 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	res = smtratGetInternalPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
+#elif defined( HYPRO_USE_SOPLEX )
+	res = soplexGetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false );
 	mConsistencyChecked = true;
@@ -378,6 +384,8 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector );
 #elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
 	res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+#elif defined( HYPRO_USE_SOPLEX )
+	res = soplexRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
