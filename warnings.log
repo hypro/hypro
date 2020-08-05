@@ -14,7 +14,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/ConstrainSet.h:8: warning: Compound hypro::ConstrainSet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:136: warning: Compound hypro::unionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:30: warning: Compound hypro::reachability::detail::bloatBoxVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:19: warning: Compound hypro::HPolytopeOptimizerCaching is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:20: warning: Compound hypro::HPolytopeOptimizerCaching is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/UnionOp.h:25: warning: Compound hypro::UnionOp is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Task.h:42: warning: Compound hypro::Task is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/EllipsoidSupportFunction.h:25: warning: Compound hypro::EllipsoidSupportFunction is not documented.
@@ -648,7 +648,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:797: warning: documented symbol `Point< Number > hypro::PolytopeT::computeMaxPoint' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:818: warning: documented symbol `Point< Number > hypro::PolytopeT::computeInitVertex' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:835: warning: documented symbol `Point< Number > hypro::PolytopeT::localSearch' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:989: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1033: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const hypro::HPolytopeT< Number, hypro::Converter< Number >, Setting > &rhs) const
 Possible candidates:
@@ -2144,10 +2144,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/HierarchicalIntervalVector.h:127: warning: Member operator<<(std::ostream &out, const HierarchicalIntervalVector< T, Number > &in) (friend) of class hypro::HierarchicalIntervalVector is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/HierarchicalIntervalVector.h:134: warning: Member operator==(const HierarchicalIntervalVector< T, Number > &lhs, const HierarchicalIntervalVector< T, Number > &rhs) (friend) of class hypro::HierarchicalIntervalVector is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/HierarchicalIntervalVector.h:138: warning: Member operator!=(const HierarchicalIntervalVector< T, Number > &lhs, const HierarchicalIntervalVector< T, Number > &rhs) (friend) of class hypro::HierarchicalIntervalVector is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:20: warning: Member type_enum (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:21: warning: Member REDUCE_NUMBERS (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:22: warning: Member AVOID_CONVERSION (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:23: warning: Member OPTIMIZER_CACHING (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:21: warning: Member type_enum (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:22: warning: Member REDUCE_NUMBERS (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:23: warning: Member AVOID_CONVERSION (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:24: warning: Member OPTIMIZER_CACHING (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:25: warning: Member NAIVE_ALGORITHMS (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:38: warning: Member REDUCTION_STRATEGY (enumeration) of class hypro::HPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:50: warning: Member HalfspaceVector (typedef) of class hypro::HPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:52: warning: Member Settings (typedef) of class hypro::HPolytopeT is not documented.
