@@ -14,6 +14,7 @@ struct AnalysisParameters {
 	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   ///< the forced aggregation settings
 	int clustering = -1;												   ///< if clustering is used: number of clusters
 	representation_name representation_type = representation_name::UNDEF;  ///< type of representation
+	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;   ///< method of reachability analysis
 	int representation_setting = 0;										   ///< used settings for the representation
 	bool uniformBloating = false;
 };
