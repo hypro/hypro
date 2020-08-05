@@ -23,7 +23,7 @@ template <typename Number>
 std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations );
 
 template <typename Number>
-EvaluationResult<Number> clpGetInternalPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations );
+EvaluationResult<Number> soplexGetInternalPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations );
 
 }  // namespace hypro
 
