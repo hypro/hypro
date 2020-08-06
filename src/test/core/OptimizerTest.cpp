@@ -235,6 +235,20 @@ TEST(OptimizerTest, redundantConstraints){
 	res = op.redundantConstraints();
 	controlVec = std::vector<std::size_t>();
 	EXPECT_EQ(controlVec, res);
+
+	boxMat = matrix_t<double>::Zero(5,2);
+	boxMat << 1,0,
+			-1,0,
+			0,1,
+			0,-1,
+			1,1;
+	boxVec = vector_t<double>::Zero(5);
+	boxVec << 2,2,2,2,0;
+	op.setMatrix(boxMat);
+	op.setVector(boxVec);
+	res = op.redundantConstraints();
+	controlVec = std::vector<std::size_t> {0, 2};
+	EXPECT_EQ(controlVec, res);
 }
 
 TEST(OptimizerTest, maximize_mixedConstraints){

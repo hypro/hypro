@@ -69,7 +69,6 @@ EvaluationResult<Number> soplexOptimizeLinear( const vector_t<Number>& direction
 		mpq_clear( a );
 	}
 
-	/* solve LP */
 	EvaluationResult<Number> res = detail::extractSolution<Number>( solver );
 	return res;
 }
@@ -78,10 +77,9 @@ EvaluationResult<Number> soplexOptimizeLinear( const vector_t<Number>& direction
 
 template <typename Number>
 bool soplexCheckConsistency( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
-	
+
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
 
-	/* solve LP */
 	solver.solve();
 	return solver.isPrimalFeasible();
 }
@@ -89,6 +87,7 @@ bool soplexCheckConsistency( const matrix_t<Number>& constraints, const vector_t
 template <typename Number>
 bool soplexCheckPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const Point<Number>& point ) {
 	
+	// Set column bounds equal to the point and check whether lp is feasible
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
 	for( unsigned varIndex = 0; varIndex < constraints.cols(); ++varIndex ) {
 		mpq_t a;
@@ -98,7 +97,7 @@ bool soplexCheckPoint( const matrix_t<Number>& constraints, const vector_t<Numbe
 		mpq_clear( a );
 	}
 
-	/* solve LP */
+	
 	solver.solve();
 	return solver.isPrimalFeasible();
 }
@@ -115,11 +114,8 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 	}
 
 	for ( std::size_t constraintIndex = std::size_t( constraints.rows() - 1 );; --constraintIndex ) {
-		bool redundant = true;
-		carl::Relation relation = relations[ constraintIndex ];
-		EvaluationResult<Number> actualRes;
-		EvaluationResult<Number> updatedRes;
 
+		// Set current row as objective
 		for ( unsigned varIndex = 0; varIndex < constraints.cols(); ++varIndex ) {
 			mpq_t a;
 			mpq_init( a );
@@ -128,38 +124,77 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 			mpq_clear( a );
 		}
 
-		if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ){
-			solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
-			actualRes = detail::extractSolution<Number>( solver );
-			solver.changeRhsRational( constraintIndex,  soplex::infinity );
-			updatedRes = detail::extractSolution<Number>( solver );
-			if ( actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue ){
-				redundant = false;
-			}
-		}
-		if( relation == carl::Relation::GEQ || relation == carl::Relation::EQ ) {
-			solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MINIMIZE );
-			actualRes = detail::extractSolution<Number>( solver );
-			solver.changeLhsRational( constraintIndex,  soplex::Rational( -1 ) * soplex::infinity );
-			updatedRes = detail::extractSolution<Number>( solver );
-			if ( actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue ){
-				redundant = false;
-			}
+		bool redundant = true;
+		EvaluationResult<Number> actualMax;
+		EvaluationResult<Number> actualMin;
+		EvaluationResult<Number> updatedMax;
+		EvaluationResult<Number> updatedMin;
+		soplex::LPRowRational currentRow( constraints.cols() );
+
+		// Save current constraints before removing
+		solver.getRowRational( constraintIndex, currentRow );
+		soplex::Rational lowerBound = solver.lhsRational( constraintIndex );
+		soplex::Rational upperBound = solver.rhsRational( constraintIndex );
+
+		switch( relations[ constraintIndex ] ) {
+			case carl::Relation::LEQ:
+				// test upper bound
+				solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
+
+				actualMax = detail::extractSolution<Number>( solver );
+				solver.removeRowRational(constraintIndex);
+
+				updatedMax = detail::extractSolution<Number>( solver );
+				if ( actualMax.errorCode != updatedMax.errorCode || actualMax.supportValue != updatedMax.supportValue ){
+					redundant = false;
+				}
+				break;
+			case carl::Relation::GEQ:
+				// test lower bound
+				solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MINIMIZE );
+
+				actualMin = detail::extractSolution<Number>( solver );
+				solver.removeRowRational(constraintIndex);
+
+				updatedMin = detail::extractSolution<Number>( solver );
+				if ( actualMin.errorCode != updatedMin.errorCode || actualMin.supportValue != updatedMin.supportValue ){
+					redundant = false;
+				}
+				break;
+			case carl::Relation::EQ:
+				// test both upper and lower bound
+				solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
+				actualMax = detail::extractSolution<Number>( solver );
+				actualMin = detail::extractSolution<Number>( solver );
+				solver.removeRowRational(constraintIndex);
+				if ( actualMin.errorCode != updatedMin.errorCode || actualMin.supportValue != updatedMin.supportValue ||
+					 actualMax.errorCode != updatedMax.errorCode || actualMax.supportValue != updatedMax.supportValue ) {
+					redundant = false;
+				}
+				break;
+			default:
+				assert( false );
 		}
 
 		if ( redundant ){
 			res.push_back( constraintIndex );
 		} else {
-			mpq_t a;
-        	mpq_init( a );
-        	mpq_set( a, ( carl::convert<Number, mpq_class>( constants( constraintIndex ) ) ).get_mpq_t() );
+			// Restore constraint. Note that the row is appended as the last row to the matrix, so the order of constraints is changed
+			solver.addRowRational( currentRow );
 
-			if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ){
-				solver.changeRhsRational( constraintIndex, a );
+			switch( relations[ constraintIndex ] ) {
+				case carl::Relation::LEQ:
+					solver.changeRhsRational( solver.numRows() - 1, upperBound );
+					break;
+				case carl::Relation::GEQ:
+					solver.changeLhsRational( solver.numRows() - 1, lowerBound );
+					break;
+				case carl::Relation::EQ:
+					solver.changeRangeRational( solver.numRows() - 1, lowerBound, upperBound );
+					break;
+				default:
+					assert( false );
 			}
-			if  (relation == carl::Relation::GEQ || relation == carl::Relation::EQ ){
-				solver.changeLhsRational( constraintIndex, a );
-			} 
 		}
 
 		if ( constraintIndex == 0 ){
