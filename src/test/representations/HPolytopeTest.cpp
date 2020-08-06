@@ -81,6 +81,10 @@ TYPED_TEST( HPolytopeTest, Access ) {
 	for ( auto& constraint : planes ) {
 		EXPECT_TRUE( hpt1.hasConstraint( constraint ) );
 	}
+
+	auto [constraints, constants] = hpt1.inequalities();
+	EXPECT_EQ( constraints, hpt1.matrix() );
+	EXPECT_EQ( constants, hpt1.vector() );
 }
 
 TYPED_TEST( HPolytopeTest, Swap ) {
@@ -373,6 +377,25 @@ TYPED_TEST( HPolytopeTest, Intersection ) {
 
 TYPED_TEST( HPolytopeTest, Membership ) {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
+
+	Point<TypeParam> p1( { TypeParam( 0 ), TypeParam( 0 ) } );
+	EXPECT_TRUE( hpt1.contains( p1 ) );
+
+	Point<TypeParam> p2( { carl::rationalize<TypeParam>( 1.5 ), carl::rationalize<TypeParam>( 1.5 ) } );
+	EXPECT_TRUE( hpt1.contains( p2 ) );
+
+	Point<TypeParam> p3( { TypeParam( -2 ), TypeParam( 0 ) } );
+	EXPECT_TRUE( hpt1.contains( p3 ) );
+
+	Point<TypeParam> p4( { TypeParam( 2 ), TypeParam( 2 ) } );
+	EXPECT_TRUE( hpt1.contains( p4 ) );
+
+	Point<TypeParam> p5( { carl::rationalize<TypeParam>( 2.1 ), TypeParam( 0 ) } );
+	EXPECT_FALSE( hpt1.contains( p5 ) );
+}
+
+TYPED_TEST( HPolytopeTestm, MembershipCached ) {
+	HPolytope<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
 
 	Point<TypeParam> p1( { TypeParam( 0 ), TypeParam( 0 ) } );
 	EXPECT_TRUE( hpt1.contains( p1 ) );

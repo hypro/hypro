@@ -127,23 +127,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			TRACE( "hypro.representations.HPolytope", tmp );
 		}
 #endif
-		/*
-			if ( !points.empty() ) {
-				mDimension = points.begin()->dimension();
-				ConvexHull<Number> ch(points);
-				ch.convexHullVertices();
-				mHPlanes = ch.getHsv();
-				//std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
-				assert(ch.getCone().empty());
-				assert(ch.getLinealtySpace().empty());
-
-				//std::cout << "Object constructed from vertices: " << *this << std::endl;
-				//std::cout << "Vertices: " << std::endl;
-				//for(const auto& vertex : points) {
-				//	std::cout << vertex << std::endl;
-				//}
-			}
-			*/
 
 		// special case: 1 point - we can directly use box constraints.
 		if ( points.size() == 1 ) {
@@ -236,12 +219,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					TRACE( "hypro.representations.HPolytope", "Projected point " << point.project( projectionDimensions ) );
 					projectedPoints.emplace_back( point.project( projectionDimensions ) );
 				}
-				/*
-					std::cout << "Projected points are:\n";
-					for(auto& point : projectedPoints){
-						std::cout << point << std::endl;
-					}
-					*/
+
 				HPolytopeT<Number, Converter, Setting> projectedPoly( projectedPoints );
 				//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 				projectedPoly.insertEmptyDimensions( projectionDimensions, droppedDimensions );
@@ -374,9 +352,7 @@ template <typename Number, typename Converter, class Setting>
 matrix_t<Number> HPolytopeT<Number, Converter, Setting>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		//std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
 		assert( mHPlanes.at( planeIndex ).normal().rows() == int( dimension() ) );
-		//std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}
 	return res;
@@ -393,13 +369,7 @@ vector_t<Number> HPolytopeT<Number, Converter, Setting>::vector() const {
 
 template <typename Number, typename Converter, class Setting>
 std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter, Setting>::inequalities() const {
-	matrix_t<Number> A( mHPlanes.size(), dimension() );
-	vector_t<Number> b( mHPlanes.size() );
-	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		A.row( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
-		b( planeIndex ) = mHPlanes.at( planeIndex ).offset();
-	}
-	return std::make_pair( A, b );
+	return std::make_pair( this->matrix(), this->vector() );
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -649,6 +619,7 @@ void HPolytopeT<Number, Converter, Setting>::insert( const Halfspace<Number> &pl
 			mUpdated = false;
 		}
 	}
+	invalidateCache();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -668,6 +639,7 @@ void HPolytopeT<Number, Converter, Setting>::erase( const unsigned index ) {
 		setEmptyState( SETSTATE::UNKNOWN );
 	}
 	mUpdated = false;
+	invalidateCache();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1020,6 +992,23 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number> &poin
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &vec ) const {
+	if ( Setting::CACHE_BOUNDING_BOX ) {
+		if ( !mBox ) {
+			// update cache
+			updateBoundingBox();
+		}
+		assert( vec.rows() == mBox->size() );
+		// check containment in bounding box
+		for ( std::size_t i = 0; i < mBox->size(); ++i ) {
+			if ( !( *mBox )[i].contains( vec( i ) ) ) {
+				return false;
+			}
+		}
+	}
+	// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
+	return std::all_of( mHPlanes.begin(), mHPlanes.end(), [&vec]( const auto &plane ) { return carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) || plane.normal().dot( vec ) <= plane.offset(); } );
+
+	/*
 	for ( const auto &plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) && plane.normal().dot( vec ) > plane.offset() ) {
@@ -1027,6 +1016,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &v
 		}
 	}
 	return true;
+	*/
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1159,6 +1149,7 @@ void HPolytopeT<Number, Converter, Setting>::clear() {
 	if ( Setting::OPTIMIZER_CACHING ) {
 		mOptimizer->cleanContexts();
 	}
+	invalidateCache();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1212,6 +1203,45 @@ void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions( const std::v
 	}
 	mDimension = existingDimensions.size() + newDimensions.size();
 	mUpdated = false;
+}
+
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::updateBoundingBox() const {
+	if ( Settings::CACHE_BOUNDING_BOX ) {
+		std::size_t dim = this->dimension();
+		mBox = decltype( mBox )( dim );
+		for ( std::size_t i = 0; i < dim; ++i ) {
+			vector_t<Number> direction = vector_t<Number>::Zero( dim );
+			direction( i ) = Number( 1 );
+			auto evalResUpper = this->evaluate( direction );
+			carl::BoundType upperBound = carl::BoundType::WEAK;
+			//if no bound is found in that direction (infinity) set interval end point to infinity
+			if ( evalResUpper.errorCode == SOLUTION::INFTY ) {
+				upperBound = carl::BoundType::INFTY;
+			}
+
+			direction( i ) = Number( -1 );
+			auto evalResLower = this->evaluate( direction );
+			carl::BoundType lowerBound = carl::BoundType::WEAK;
+			//if no bound is found in that direction (infinity) set interval end point to infinity
+			if ( evalResLower.errorCode == SOLUTION::INFTY ) {
+				lowerBound = carl::BoundType::INFTY;
+			}
+			( *mBox )[i] = carl::Interval<Number>( -evalResLower.supportValue, lowerBound, evalResUpper.supportValue, upperBound );
+		}
+	}
+}
+
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::updateCache() const {
+	updateBoundingBox();
+}
+
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::invalidateCache() const {
+	if ( Settings::CACHE_BOUNDING_BOX ) {
+		mBox = std::nullopt;
+	}
 }
 
 template <typename Number, typename Converter, class Setting>

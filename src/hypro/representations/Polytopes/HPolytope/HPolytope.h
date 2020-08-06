@@ -54,17 +54,12 @@ class HPolytopeT : private GeometricObjectBase {
 	static constexpr auto type_enum = representation_name::polytope_h;
 
   private:
-	mutable HalfspaceVector mHPlanes;
-	std::size_t mDimension;
-
-	// State flags
-	mutable bool mNonRedundant;
-
-	// A hpoly will only have an own Optimizer if the setting CACHE_OPTIMIZER = true
-	mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;
-
-	// Flag whether the content of the optimizer is still up to date
-	mutable bool mUpdated = false;
+	mutable HalfspaceVector mHPlanes;												 ///< halfspaces defining the polytope
+	std::size_t mDimension;															 ///< cache for the state space dimension
+	mutable bool mNonRedundant;														 ///< cache for redundancy information
+	mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;				 ///< optional cache (settings-dependent) for an LP instance
+	mutable bool mUpdated = false;													 ///< cache flag to mark a required update of the optional LP instance
+	mutable std::optional<std::vector<carl::Interval<Number>>> mBox = std::nullopt;	 ///< cache of the bounding box
 
   public:
 	/**
@@ -114,7 +109,7 @@ class HPolytopeT : private GeometricObjectBase {
 	 */
 	HPolytopeT( const std::vector<Point<Number>>& points );
 
-	//Settings conversion constructor
+	/// Settings conversion constructor
 	template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
 	HPolytopeT( const HPolytopeT<Number, Converter, SettingRhs>& orig );
 
@@ -292,8 +287,6 @@ class HPolytopeT : private GeometricObjectBase {
 			mOptimizer->cleanContexts();
 			setOptimizer( rhs.matrix(), rhs.vector() );
 		}
-		// TODO: I am not sure, whether the copy constructor of the base class is called here or not.
-		// Observation: Apparently it is not.
 		assert( mEmptyState == rhs.getEmptyState() );
 		return *this;
 	}
@@ -406,12 +399,6 @@ class HPolytopeT : private GeometricObjectBase {
 
   private:
 	/*
-	 * Auxiliary functions
-	 */
-
-	//void calculateFan() const;
-
-	/*
      * Computes a set of constraints that correpsonds to the convex hull of the points
 	 * @param points The set of points. Note that auxilarry points might be added to this vector.
 	 * @param degeneratedDimensions the number of dimensions in which the convex hull of the points is degenerated, i.e., spaceDimension - effectiveDimension
@@ -437,6 +424,11 @@ class HPolytopeT : private GeometricObjectBase {
 	 * @param[in]  newDimensions       The new dimensions.
 	 */
 	void insertEmptyDimensions( const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions );
+
+	void updateBoundingBox() const;
+	/// TODO
+	void updateCache() const;
+	void invalidateCache() const;
 
   public:
 	//If CACHE_OPTIMIZER = true, initialize optimizer
