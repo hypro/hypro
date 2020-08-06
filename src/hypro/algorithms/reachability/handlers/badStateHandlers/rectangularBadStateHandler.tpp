@@ -54,7 +54,7 @@ template <typename State>
 std::pair<CONTAINMENT, State> rectangularBadIntersectInitialStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton ) {
 	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getInitialStates().size() << " initial states." );
 	auto initialState = automaton.getInitialStates().find( stateSet.getLocation() );
-	if ( initialState != automaton.getLocalBadStates().end() ) {
+	if ( initialState != automaton.getInitialStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking initial state: " << initialState->second );
 
 		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.

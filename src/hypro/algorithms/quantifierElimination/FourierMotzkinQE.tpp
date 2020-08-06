@@ -166,14 +166,14 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 		// lower bounds
 		for ( auto fc : bounds[0] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
-			constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
+			constraints.emplace_back( carl::substitute( fc.constraint().lhs(), v, substitute ),
 									  fc.constraint().relation() );
 			// std::cout << "substitute lower bound to " << constraints.back() << std::endl;
 		}
 		// upper bounds
 		for ( auto fc : bounds[1] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
-			constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
+			constraints.emplace_back( carl::substitute( fc.constraint().lhs(), v, substitute ),
 									  fc.constraint().relation() );
 			// std::cout << "substitute upper bound to " << constraints.back() << std::endl;
 		}

@@ -105,6 +105,9 @@ enum class AGG_SETTING { MODEL,
 						 AGG,
 						 NO_AGG };
 
+enum class REACH_SETTING { FORWARD,
+						   BACKWARD };
+
 }  // namespace hypro
 
 namespace Eigen {
