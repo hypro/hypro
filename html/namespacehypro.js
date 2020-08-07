@@ -123,6 +123,7 @@ var namespacehypro =
     [ "HandlerFactory", "classhypro_1_1_handler_factory.html", "classhypro_1_1_handler_factory" ],
     [ "HardTerminateException", "classhypro_1_1_hard_terminate_exception.html", "classhypro_1_1_hard_terminate_exception" ],
     [ "HierarchicalIntervalVector", "classhypro_1_1_hierarchical_interval_vector.html", "classhypro_1_1_hierarchical_interval_vector" ],
+    [ "HPolytopeBoundingBoxCaching", "structhypro_1_1_h_polytope_bounding_box_caching.html", null ],
     [ "HPolytopeOptimizerCaching", "structhypro_1_1_h_polytope_optimizer_caching.html", null ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html", "classhypro_1_1_h_polytope_t" ],
     [ "HybridAutomaton", "classhypro_1_1_hybrid_automaton.html", "classhypro_1_1_hybrid_automaton" ],

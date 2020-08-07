@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1node_updater.html" title="hypro::nodeUpdater\l\&lt; State \&gt;" alt="" coords="5,5,156,47"/>
+<area shape="rect" id="node2" href="$structhypro_1_1_no_box_detection.html" title="hypro::NoBoxDetection" alt="" coords="253,5,423,32"/>
+<area shape="rect" id="node3" href="$structhypro_1_1_no_box_reduction.html" title="hypro::NoBoxReduction" alt="" coords="253,56,423,83"/>
+<area shape="rect" id="node4" href="$structhypro_1_1_no_reduction.html" title="hypro::NoReduction" alt="" coords="265,107,411,133"/>
+<area shape="rect" id="node5" href="$structhypro_1_1_no_trafo_reduction.html" title="hypro::NoTrafoReduction" alt="" coords="250,157,426,184"/>
+<area shape="rect" id="node6" href="$structhypro_1_1_polytope_support_function_setting.html" title="hypro::PolytopeSupportFunction\lSetting" alt="" coords="225,209,451,250"/>
 </map>

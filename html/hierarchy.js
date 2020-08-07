@@ -145,6 +145,7 @@ var hierarchy =
     [ "std::hash< std::pair< first, second > >", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html", null ],
     [ "hypro::HierarchicalIntervalVector< T, Number >", "classhypro_1_1_hierarchical_interval_vector.html", null ],
     [ "hypro::HierarchicalIntervalVector< CONTAINMENT, tNumber >", "classhypro_1_1_hierarchical_interval_vector.html", null ],
+    [ "hypro::HPolytopeBoundingBoxCaching", "structhypro_1_1_h_polytope_bounding_box_caching.html", null ],
     [ "hypro::HPolytopeOptimizerCaching", "structhypro_1_1_h_polytope_optimizer_caching.html", null ],
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1_hybrid_automaton.html", null ],
     [ "hypro::HybridAutomatonComp< Number >", "classhypro_1_1_hybrid_automaton_comp.html", null ],

@@ -24,6 +24,7 @@ var searchData=
   ['hash_3c_20std_3a_3apair_3c_20first_2c_20second_20_3e_20_3e',['hash&lt; std::pair&lt; first, second &gt; &gt;',['../structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html',1,'std']]],
   ['hierarchicalintervalvector',['HierarchicalIntervalVector',['../classhypro_1_1_hierarchical_interval_vector.html',1,'hypro']]],
   ['hierarchicalintervalvector_3c_20containment_2c_20tnumber_20_3e',['HierarchicalIntervalVector&lt; CONTAINMENT, tNumber &gt;',['../classhypro_1_1_hierarchical_interval_vector.html',1,'hypro']]],
+  ['hpolytopeboundingboxcaching',['HPolytopeBoundingBoxCaching',['../structhypro_1_1_h_polytope_bounding_box_caching.html',1,'hypro']]],
   ['hpolytopeoptimizercaching',['HPolytopeOptimizerCaching',['../structhypro_1_1_h_polytope_optimizer_caching.html',1,'hypro']]],
   ['hpolytopet',['HPolytopeT',['../classhypro_1_1_h_polytope_t.html',1,'hypro']]],
   ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1_hybrid_automaton.html',1,'hypro']]],
