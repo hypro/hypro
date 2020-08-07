@@ -10,12 +10,10 @@ StateSet linearApplyTimeEvolution( const StateSet& initialSet, const StateSet& f
 	// set rays
 	auto combinedRays = initSet.rays();
 	// add rays from flow set
-	std::remove_copy_if( flowSet.rays().begin(), flowSet.rays().end(), combinedRays.end(), [&]( const auto& ray ) { return std::find( combinedRays.begin(), combinedRays.end(), ray ) != combinedRays.end(); } );
+	combinedRays.insert( flowSet.rays().begin(), flowSet.rays().end() );
 	// add rays originating from vertices of the flow set
 	std::for_each( flowSet.vertices().begin(), flowSet.vertices().end(), [&]( const auto& point ) {
-		if ( std::find( combinedRays.begin(), combinedRays.end(), point.rawCoordinates() ) != combinedRays.end() ) {
-			combinedRays.push_back( point.rawCoordinates() );
-		}
+		combinedRays.insert( point.rawCoordinates() );
 	} );
 
 	timeElapse.setRays( combinedRays );
@@ -30,26 +28,24 @@ StateSet linearApplyBoundedTimeEvolution( const StateSet& initialSet, const Stat
 	VPolytope<Number> flowSet = hypro::Converter<Number>::toVPolytope( flow );
 	VPolytope<Number> timeElapse{ initSet.vertices() };
 	// process rays: bound time, create new vertices
-	VPolytope<Number>::pointVector newVertices;
+	typename VPolytope<Number>::pointVector newVertices;
 
 	auto combinedRays = initSet.rays();
 	// add rays from flow set
-	std::remove_copy_if( flowSet.rays().begin(), flowSet.rays().end(), combinedRays.end(), [&]( const auto& ray ) { return std::find( combinedRays.begin(), combinedRays.end(), ray ) != combinedRays.end(); } );
+	combinedRays.insert( flowSet.rays().begin(), flowSet.rays().end() );
 	// add rays originating from vertices of the flow set
 	std::for_each( flowSet.vertices().begin(), flowSet.vertices().end(), [&]( const auto& point ) {
-		if ( std::find( combinedRays.begin(), combinedRays.end(), point.rawCoordinates() ) != combinedRays.end() ) {
-			combinedRays.push_back( point.rawCoordinates() );
-		}
+		combinedRays.insert( point.rawCoordinates() );
 	} );
 
 	for ( const auto& vertex : initSet.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
-			newVertices.emplace_back( { vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray } );
+			newVertices.emplace_back( Point<Number>( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray ) );
 		}
 	}
 
 	// update vertices
-	timeElapse.addVertices( newVertices );
+	timeElapse.insert( newVertices.begin(), newVertices.end() );
 	timeElapse.removeRedundancy();
 
 	assert( timeElapse.rays().empty() );

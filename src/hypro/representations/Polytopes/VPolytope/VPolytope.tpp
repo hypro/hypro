@@ -64,7 +64,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 			inputHalfspaces.back()[dimension] = -_constants[i];
 		}
 
-		QuickIntersection<Number> qInt{inputHalfspaces, (size_t)dimension};
+		QuickIntersection<Number> qInt{ inputHalfspaces, (size_t)dimension };
 		qInt.compute();
 
 		for ( auto &facet : qInt.getFacets() ) {
@@ -142,9 +142,9 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 	}
 }
 
-template<typename Number, typename Converter, typename S>
-VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project( const std::vector<std::size_t>& dimensions ) const {
-	if(dimensions.empty()) {
+template <typename Number, typename Converter, typename S>
+VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::project( const std::vector<std::size_t> &dimensions ) const {
+	if ( dimensions.empty() ) {
 		return Empty();
 	}
 
@@ -166,7 +166,6 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::linearTransfo
 			result.emplace_back( std::move( tmp ) );
 		}
 	}
-	result.setCone( mCone.linearTransformation( A ) );
 	result.unsafeSetNeighbors( mNeighbors );
 	return result;
 }
@@ -182,7 +181,6 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::affineTransfo
 			result.emplace_back( std::move( tmp ) );
 		}
 	}
-	result.setCone( mCone.affineTransformation( A, b ) );
 	result.unsafeSetNeighbors( mNeighbors );
 	return result;
 }
@@ -199,7 +197,6 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::minkowskiSum(
 			result.insert( lhsVertex + rhsVertex );
 		}
 	}
-	result.setCone( mCone.minkowskiSum( rhs.cone() ) );
 	return result;
 }
 
