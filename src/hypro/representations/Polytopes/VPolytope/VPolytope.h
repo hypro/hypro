@@ -34,13 +34,14 @@ template <typename Number, typename Converter, typename S>
 class VPolytopeT : private GeometricObjectBase {
   public:
 	using pointVector = std::vector<Point<Number>>;
+	using Rays = std::set<vector_t<Number>>;
 	typedef S Settings;
 	typedef Number NumberType;
 
   private:
-	mutable pointVector mVertices;
-	Cone<Number> mCone;
-	bool mReduced = false;
+	mutable pointVector mVertices;	///< set of generating vertices
+	Rays mRays;						///< set of generating rays
+	bool mReduced = false;			///< caches if the polyhedron is reduced
 
 	std::vector<std::set<unsigned>> mNeighbors;
 
@@ -96,7 +97,7 @@ class VPolytopeT : private GeometricObjectBase {
 	/***************************************************************************
 	* General interface
 	**************************************************************************/
-	
+
 	matrix_t<Number> matrix() const {
 		assert( false && "NOT IMPLEMENTED YET" );
 		return matrix_t<Number>::Zero( 1, 1 );
@@ -212,17 +213,11 @@ class VPolytopeT : private GeometricObjectBase {
 	 */
 	Number supremum() const;
 
-	/**
-	 * @brief      Returns the cone of this.
-	 * @return     The cone.
-	 */
-	const Cone<Number>& cone() const { return mCone; }
+	/// getter for generating rays
+	const Rays& rays() const { return mRays; }
 
-	/**
-	 * @brief      Explicitly sets the cone.
-	 * @param[in]  _cone  The cone.
-	 */
-	void setCone( const Cone<Number>& _cone ) { mCone = _cone; }
+	/// setter for generating rays
+	void setRays( const Rays& rays ) { mRays = rays; }
 
 	void setNeighbors( const Point<Number>& _point, const std::set<Point<Number>>& _neighbors ) {
 		unsigned pos = 0;
