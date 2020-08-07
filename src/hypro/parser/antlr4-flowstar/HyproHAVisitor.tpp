@@ -113,6 +113,7 @@ namespace hypro {
 		ha.setInitialStates(initSet);
 		ha.setLocalBadStates(lBadStates);
 		ha.setGlobalBadStates(gBadStates);
+                ha.setVariables(varVec);
 
 		return ha;			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
