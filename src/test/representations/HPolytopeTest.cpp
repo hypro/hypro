@@ -394,7 +394,7 @@ TYPED_TEST( HPolytopeTest, Membership ) {
 	EXPECT_FALSE( hpt1.contains( p5 ) );
 }
 
-TYPED_TEST( HPolytopeTestm, MembershipCached ) {
+TYPED_TEST( HPolytopeTest, MembershipCached ) {
 	HPolytope<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
 
 	Point<TypeParam> p1( { TypeParam( 0 ), TypeParam( 0 ) } );
