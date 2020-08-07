@@ -394,23 +394,23 @@ TYPED_TEST( HPolytopeTest, Membership ) {
 	EXPECT_FALSE( hpt1.contains( p5 ) );
 }
 
-TYPED_TEST( HPolytopeTestm, MembershipCached ) {
-	HPolytope<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
+TYPED_TEST( HPolytopeTest, MembershipCached ) {
+	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
 
 	Point<TypeParam> p1( { TypeParam( 0 ), TypeParam( 0 ) } );
-	EXPECT_TRUE( hpt1.contains( p1 ) );
+	EXPECT_TRUE( cachedPoly.contains( p1 ) );
 
 	Point<TypeParam> p2( { carl::rationalize<TypeParam>( 1.5 ), carl::rationalize<TypeParam>( 1.5 ) } );
-	EXPECT_TRUE( hpt1.contains( p2 ) );
+	EXPECT_TRUE( cachedPoly.contains( p2 ) );
 
 	Point<TypeParam> p3( { TypeParam( -2 ), TypeParam( 0 ) } );
-	EXPECT_TRUE( hpt1.contains( p3 ) );
+	EXPECT_TRUE( cachedPoly.contains( p3 ) );
 
 	Point<TypeParam> p4( { TypeParam( 2 ), TypeParam( 2 ) } );
-	EXPECT_TRUE( hpt1.contains( p4 ) );
+	EXPECT_TRUE( cachedPoly.contains( p4 ) );
 
 	Point<TypeParam> p5( { carl::rationalize<TypeParam>( 2.1 ), TypeParam( 0 ) } );
-	EXPECT_FALSE( hpt1.contains( p5 ) );
+	EXPECT_FALSE( cachedPoly.contains( p5 ) );
 }
 
 TYPED_TEST( HPolytopeTest, MultiEvaluate ) {
