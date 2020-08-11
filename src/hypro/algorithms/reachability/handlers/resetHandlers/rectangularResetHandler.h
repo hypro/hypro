@@ -17,11 +17,6 @@ class rectangularResetHandler : public IResetHandler {
 	size_t mIndex;
 
   public:
-	// rectangularResetHandler() = delete;
-	// rectangularResetHandler( State* state, size_t index, const std::vector<carl::Interval<Number>>& intervalResets )
-	// 	: mState( state )
-	// 	, mIntervalResets( intervalResets )
-	// 	, mIndex( index ) {}
 
 	void handle();
 	const char* handlerName() { return "rectangularResetHandler"; }

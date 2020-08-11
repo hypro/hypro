@@ -26,6 +26,10 @@ class rectangularJumpHandler {
 
 	void applyReduction( State& state ) const;
 
+	TransitionStateMap applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy );
+
+	void applyGuard( State& state, Transition<Number>* transitionPtr ) const;
+
 	// typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
 };
 

@@ -29,7 +29,6 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 		// create node from state
 		auto initialNode{ std::make_unique<ReachTreeNode<State>>( initialState ) };
 		// add to reachTree
-		// initialNode->setParent( nullptr );
 		mReachTree.emplace_back( std::move( initialNode ) );
 		// add to queue
 		mWorkQueue.push( mReachTree.back().get() );
@@ -103,7 +102,6 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 				// create node from state
 				auto badNode{ std::make_unique<ReachTreeNode<State>>( badState ) };
 				// add to reachTree
-				// initialNode->setParent( nullptr );
 				mReachTree.emplace_back( std::move( badNode ) );
 				// add to queue
 				mWorkQueue.push( mReachTree.back().get() );

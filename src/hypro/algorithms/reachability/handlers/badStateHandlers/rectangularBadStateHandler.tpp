@@ -57,7 +57,7 @@ std::pair<CONTAINMENT, State> rectangularBadIntersectInitialStates( const State&
 	if ( initialState != automaton.getInitialStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking initial state: " << initialState->second );
 
-		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
+		// create constraints for initial state set
 		// create carlPolytope, as intersection is defined for those
 		CarlPolytope<typename State::NumberType> initialConstraints{ initialState->second.getMatrix(), initialState->second.getVector() };
 
