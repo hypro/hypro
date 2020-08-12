@@ -193,13 +193,13 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = clpOptimizeLinear( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX
 	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT
+	res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #endif
 
 #if !defined( HYPRO_SECONDARY_SOLVER )
 	return res;
-#endif
-
-#if HYPRO_SECONDARY_SOLVER == SOLVER_CLP || HYPRO_SECONDARY_SOLVER == SOLVER_GLPK || HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
+#else
 	// At this point we can check, whether the primary result is already exact and optimal.
 	// We do this by inserting the solution into the constraints. The solution is exact,
 	// whenever it lies at least on one hyperplane (the respective constraint is saturated). Moreover
@@ -271,6 +271,10 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	res = soplexOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
+	res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_Z3
+	res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, res );
 #endif
 	}
 	return res;
