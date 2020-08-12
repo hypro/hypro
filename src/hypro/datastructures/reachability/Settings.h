@@ -17,6 +17,7 @@ struct AnalysisParameters {
 	int representation_setting = 0;										   /// used settings for the representation
 	bool uniformBloating = false;
 	int timeStepFactor = 0;
+	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
 };
 
 struct FixedAnalysisParameters {

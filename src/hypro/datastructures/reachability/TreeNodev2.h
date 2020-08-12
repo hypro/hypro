@@ -47,8 +47,6 @@ class TreeNode {
 			return uPtr.get();
 		} );
 	}
-
-
 };
 
 }  // namespace hypro

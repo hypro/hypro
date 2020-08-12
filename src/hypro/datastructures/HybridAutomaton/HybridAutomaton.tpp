@@ -27,7 +27,11 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 			assert( t->getSource() == l.get() );
 
 			// the target is updated to the new location.
-			t->setTarget( mLocations[locationMapping[t->getTarget()]].get() );
+			for ( auto& target : mLocations ) {
+				if ( target->hash() == t->getTarget()->hash() ) {
+					t->setTarget( target.get() );
+				}
+			}
 		}
 	}
 

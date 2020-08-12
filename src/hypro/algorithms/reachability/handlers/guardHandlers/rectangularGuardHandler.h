@@ -4,29 +4,19 @@ namespace hypro {
 template <typename State>
 class rectangularGuardHandler {
 	using Number = typename State::NumberType;
-
-  protected:
-	CONTAINMENT mContainment = CONTAINMENT::BOT;
-	State mState;
-	Transition<Number>* mTransition = nullptr;
+	using TransitionContainmentMap = std::map<const Transition<Number>*, CONTAINMENT>;
 
   public:
-	rectangularGuardHandler() = delete;
-	rectangularGuardHandler( Transition<Number>* transition )
-		: mState()
-		, mTransition( transition ) {
-	}
+	using TransitionStatesMap = std::map<Transition<Number>*, std::vector<State>>;
 
-	CONTAINMENT operator()( const State& state );
-	CONTAINMENT getGuardContainment() { return mContainment; }
-	bool guardSatisfied() {
-		assert( mContainment != CONTAINMENT::BOT );
-		return mContainment != CONTAINMENT::NO;
-	}
-	const State& getState() { return mState; }
-	void setState( const State& state ) { mState = state; }
-	Transition<Number>* getTransitionPtr() { return mTransition; }
-	void reinitialize();
+	void operator()( const State& stateSet );
+
+	const TransitionStatesMap& getGuardSatisfyingStateSets() const { return mGuardSatisfyingStates; }
+	const TransitionContainmentMap& getGuardContainment() const { return mGuardContainment; }
+
+  protected:
+	TransitionStatesMap mGuardSatisfyingStates;
+	TransitionContainmentMap mGuardContainment;
 };
 }  // namespace hypro
 

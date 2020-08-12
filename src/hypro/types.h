@@ -118,6 +118,9 @@ BETTER_ENUM( AGG_SETTING, int,
 			 AGG,
 			 NO_AGG )
 
+enum class REACH_SETTING { FORWARD,
+						   BACKWARD };
+
 }  // namespace hypro
 
 namespace Eigen {

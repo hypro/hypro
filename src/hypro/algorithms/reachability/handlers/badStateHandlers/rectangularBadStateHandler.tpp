@@ -50,4 +50,33 @@ std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateS
 	return std::make_pair( CONTAINMENT::NO, stateSet );
 }
 
+template <typename State>
+std::pair<CONTAINMENT, State> rectangularBadIntersectInitialStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton ) {
+	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getInitialStates().size() << " initial states." );
+	auto initialState = automaton.getInitialStates().find( stateSet.getLocation() );
+	if ( initialState != automaton.getInitialStates().end() ) {
+		TRACE( "hydra.worker.continuous", "Checking initial state: " << initialState->second );
+
+		// create constraints for initial state set
+		// create carlPolytope, as intersection is defined for those
+		CarlPolytope<typename State::NumberType> initialConstraints{ initialState->second.getMatrix(), initialState->second.getVector() };
+
+		// intersect
+		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ).intersect( initialConstraints );
+
+		// reduction
+		resultingSet.removeRedundancy();
+
+		// process containment information
+		if ( !resultingSet.empty() ) {
+			DEBUG( "hydra.worker", "Intersection with initial states." );
+			return std::make_pair( CONTAINMENT::YES, resultingSet );
+		}
+	}
+
+	TRACE( "hydra.worker.continuous", "No intersection with local, continuous bad states" );
+
+	return std::make_pair( CONTAINMENT::NO, stateSet );
+}
+
 }  // namespace hypro

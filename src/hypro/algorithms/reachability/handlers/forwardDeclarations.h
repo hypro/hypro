@@ -62,6 +62,8 @@ template<typename State>
 class timedResetHandler;
 template<typename State>
 class ltiJumpHandler;
+template<typename State>
+class rectangularJumpHandler;
 //template<typename State>
 //class TPolyResetHandler;
 

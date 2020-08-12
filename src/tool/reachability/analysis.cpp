@@ -71,35 +71,35 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 	return plotData;
 }
 
-//template <typename State>
-//std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-//	START_BENCHMARK_OPERATION( Verification );
-//	RectangularAnalyzer<State> analyzer{ automaton, setting };
-//	auto result = analyzer.run();
-//
-//	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
-//		std::cout << "Could not verify safety." << std::endl;
-//		// Call bad state handling (e.g., return path)
-//	} else {
-//		std::cout << "The model is safe." << std::endl;
-//	}
-//	EVALUATE_BENCHMARK_RESULT( Verification );
-//
-//	// create plot data
-//	std::vector<PlotData<FullState>> plotData{};
-//
-//	for ( const auto& fp : analyzer.getFlowpipes() ) {
-//		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
-//			FullState state{};
-//			std::visit( [&]( auto& valuationSet ) {
-//				state.setSet( valuationSet );
-//			},
-//						segment.getSet() );
-//			return PlotData{ state, 0, 0 };
-//		} );
-//	}
-//	return plotData;
-//}
+template <typename State>
+std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	START_BENCHMARK_OPERATION( Verification );
+	RectangularAnalyzer<State> analyzer{ automaton, setting };
+	auto result = analyzer.run();
+
+	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
+		std::cout << "Could not verify safety." << std::endl;
+		// Call bad state handling (e.g., return path)
+	} else {
+		std::cout << "The model is safe." << std::endl;
+	}
+	EVALUATE_BENCHMARK_RESULT( Verification );
+
+	// create plot data
+	std::vector<PlotData<FullState>> plotData{};
+
+	for ( const auto& fp : analyzer.getFlowpipes() ) {
+		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
+			FullState state{};
+			std::visit( [&]( auto& valuationSet ) {
+				state.setSet( valuationSet );
+			},
+						segment.getSet() );
+			return PlotData{ state, 0, 0 };
+		} );
+	}
+	return plotData;
+}
 
 struct LTIDispatcher {
 	template <typename Rep>
@@ -122,8 +122,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			break;
 		case DynamicType::rectangular: {
 			// no dispatch for rectangular automata, representation and setting are fixed
-			//			RectangularDispatcher rectangularDisp{};
-			//			return { rectangular_analyze<CarlPolytope<Number>>( automaton, setting ) };
+			return { rectangular_analyze<hypro::State<Number, CarlPolytope<Number>>>( automaton, setting ) };
 			[[fallthrough]];
 		}
 		case DynamicType::timed:

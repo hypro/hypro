@@ -76,6 +76,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 */
 	const Representation& getInitialSet() const { return mInitialSet; }
 
+	[[deprecated( "Use getInitialSet() instead." )]] const Representation& getState() const { return mInitialSet; }
+
 	const Location<Number>* getLocation() const { return mLocation; }
 
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }

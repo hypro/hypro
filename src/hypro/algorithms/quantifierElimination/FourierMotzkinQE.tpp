@@ -45,7 +45,7 @@ template <typename Number>
 typename FourierMotzkinQE<Number>::FormulaPartition FourierMotzkinQE<Number>::findBounds(
 	  const carl::Variable& variable ) {
 	// result vector initialized with three subsets
-	typename FourierMotzkinQE<Number>::FormulaPartition res{4, std::vector<FormulaT<Number>>()};
+	typename FourierMotzkinQE<Number>::FormulaPartition res{ 4, std::vector<FormulaT<Number>>() };
 
 	// if the formula only contains one constraint, check for occurence of the variable.
 	if ( mFormula.getType() == carl::FormulaType::CONSTRAINT ) {
@@ -166,6 +166,7 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 		// lower bounds
 		for ( auto fc : bounds[0] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
+			// constraints.emplace_back( carl::substitute( fc.constraint().lhs(), v, substitute ),
 			constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
 			// std::cout << "substitute lower bound to " << constraints.back() << std::endl;
@@ -173,6 +174,7 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 		// upper bounds
 		for ( auto fc : bounds[1] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
+			// constraints.emplace_back( carl::substitute( fc.constraint().lhs(), v, substitute ),
 			constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
 			// std::cout << "substitute upper bound to " << constraints.back() << std::endl;
@@ -184,7 +186,7 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 
 template <typename Number>
 PolyT<Number> FourierMotzkinQE<Number>::getRemainder( const ConstraintT<Number>& c, carl::Variable v, bool ) {
-	auto tmp = c.lhs() / c.coefficient( v, 1 );  // now v has the coefficient 1.
+	auto tmp = c.lhs() / c.coefficient( v, 1 );	 // now v has the coefficient 1.
 	return -tmp;
 	/*
 	if(isLowerBnd) {
