@@ -15,7 +15,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 
 		// create location
 		std::unique_ptr<hypro::Location<Number>> loc{
-			  std::make_unique<hypro::Location<Number>>( hypro::Location<Number>{"l0"} )};
+			  std::make_unique<hypro::Location<Number>>( hypro::Location<Number>{ "l0" } ) };
 		// create flow
 		Matrix flow = Matrix::Zero( 3, 3 );
 		flow( 0, 1 ) = Number( 1 );
@@ -31,7 +31,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 		loc->setInvariant( hypro::Condition( invariantConstraints, invariantOffsets ) );
 
 		// create transition
-		hypro::Transition<Number> loop{loc.get(), loc.get()};
+		hypro::Transition<Number> loop{ loc.get(), loc.get() };
 		// create guard
 		Matrix guardConstraints = Matrix::Zero( 3, 2 );
 		Vector guardOffsets = Vector::Zero( 3 );
@@ -48,7 +48,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		loop.setReset( hypro::Reset<Number>( resetMatrix, resetVector ) );
 		// set aggregation settings of transition to full aggregation
-		loop.setAggregation( hypro::Aggregation::boxAgg );
+		loop.setAggregation( hypro::Aggregation::aggregation );
 		// assign transition to location
 		loc->addTransition( std::make_unique<hypro::Transition<Number>>( loop ) );
 

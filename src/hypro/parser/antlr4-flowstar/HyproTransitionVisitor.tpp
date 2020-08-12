@@ -243,9 +243,9 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAggregation(HybridAutomatonParser::AggregationContext *ctx){
 		if(ctx->PARALLELOTOPE() != NULL){
-			return Aggregation::parallelotopeAgg;
+			return Aggregation::aggregation;
 		} else if(ctx->BOX() != NULL || ctx->INTERVALAGG() != NULL){
-			return Aggregation::boxAgg;
+			return Aggregation::aggregation;
 		} else {
 			return Aggregation::none;
 		}

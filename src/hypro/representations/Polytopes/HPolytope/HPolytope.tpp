@@ -88,6 +88,12 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 	, mDimension( 0 )
 	, mNonRedundant( true ) {
 	mEmptyState = points.empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
+
+	// skip
+	if ( points.empty() ) {
+		return;
+	}
+
 	if constexpr ( is_exact<Number> ) {
 		mDimension = points.front().dimension();
 
@@ -99,7 +105,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		}
 
 		//Initialize and run quickhull
-		Quickhull<Number> qh{inputPoints, mDimension};
+		Quickhull<Number> qh{ inputPoints, mDimension };
 		qh.compute();
 
 		//Convert resulting facets into halfspaces
@@ -121,23 +127,6 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			TRACE( "hypro.representations.HPolytope", tmp );
 		}
 #endif
-		/*
-			if ( !points.empty() ) {
-				mDimension = points.begin()->dimension();
-				ConvexHull<Number> ch(points);
-				ch.convexHullVertices();
-				mHPlanes = ch.getHsv();
-				//std::cout << "After CH there are " << mHPlanes.size() << " new hplanes." << std::endl;
-				assert(ch.getCone().empty());
-				assert(ch.getLinealtySpace().empty());
-
-				//std::cout << "Object constructed from vertices: " << *this << std::endl;
-				//std::cout << "Vertices: " << std::endl;
-				//for(const auto& vertex : points) {
-				//	std::cout << vertex << std::endl;
-				//}
-			}
-			*/
 
 		// special case: 1 point - we can directly use box constraints.
 		if ( points.size() == 1 ) {
@@ -230,12 +219,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					TRACE( "hypro.representations.HPolytope", "Projected point " << point.project( projectionDimensions ) );
 					projectedPoints.emplace_back( point.project( projectionDimensions ) );
 				}
-				/*
-					std::cout << "Projected points are:\n";
-					for(auto& point : projectedPoints){
-						std::cout << point << std::endl;
-					}
-					*/
+
 				HPolytopeT<Number, Converter, Setting> projectedPoly( projectedPoints );
 				//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 				projectedPoly.insertEmptyDimensions( projectionDimensions, droppedDimensions );
@@ -269,6 +253,11 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 
 				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 				for ( auto &facet : facets ) {
+#ifndef NDEBUG
+					std::for_each( points.begin(), points.end(), [&facet]( const auto &p ) { if(!facet->halfspace().contains(p)) {
+						std::cout << "Facet " << *facet << " does not contain point " << p << ", distance: " << facet->getDist(p) <<  std::endl;
+					} } );
+#endif
 					assert( facet->halfspace().contains( points ) );
 					mHPlanes.push_back( facet->halfspace() );
 				}
@@ -363,9 +352,7 @@ template <typename Number, typename Converter, class Setting>
 matrix_t<Number> HPolytopeT<Number, Converter, Setting>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		//std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
 		assert( mHPlanes.at( planeIndex ).normal().rows() == int( dimension() ) );
-		//std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}
 	return res;
@@ -382,78 +369,105 @@ vector_t<Number> HPolytopeT<Number, Converter, Setting>::vector() const {
 
 template <typename Number, typename Converter, class Setting>
 std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter, Setting>::inequalities() const {
-	matrix_t<Number> A( mHPlanes.size(), dimension() );
-	vector_t<Number> b( mHPlanes.size() );
-	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		A.row( planeIndex ) = mHPlanes.at( planeIndex ).normal().transpose();
-		b( planeIndex ) = mHPlanes.at( planeIndex ).offset();
-	}
-	return std::make_pair( A, b );
+	return std::make_pair( this->matrix(), this->vector() );
 }
 
 template <typename Number, typename Converter, class Setting>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vertices( const matrix_t<Number> & ) const {
 	typename std::vector<Point<Number>> vertices;
-	if ( !mHPlanes.empty() && mHPlanes.size() >= this->dimension() && !this->empty() ) {
-		std::size_t dim = this->dimension();
+	// empty polytope
+	if ( mHPlanes.empty() || this->empty() ) {
+		return vertices;
+	}
 
-		Permutator permutator( mHPlanes.size(), dim );
-		std::vector<std::size_t> permutation;
-		while ( !permutator.end() ) {
-			permutation = permutator();
+	if ( Setting::NAIVE_ALGORITHMS ) {
+		if ( !mHPlanes.empty() && mHPlanes.size() >= this->dimension() && !this->empty() ) {
+			std::size_t dim = this->dimension();
 
-			matrix_t<Number> A( dim, dim );
-			vector_t<Number> b( dim );
-			unsigned pos = 0;
-			//std::cout << "Permute planes ";
-			for ( auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt ) {
-				//std::cout << *planeIt << ", ";
-				A.row( pos ) = mHPlanes.at( *planeIt ).normal().transpose();
-				// std::cout << A.row(pos) << std::endl;
-				b( pos ) = mHPlanes.at( *planeIt ).offset();
-				// std::cout << b(pos) << std::endl;
-				++pos;
-			}
-			//std::cout << std::endl;
+			Permutator permutator( mHPlanes.size(), dim );
+			std::vector<std::size_t> permutation;
+			while ( !permutator.end() ) {
+				permutation = permutator();
 
-			//std::cout << "Created first matrix" << std::endl;
+				matrix_t<Number> A( dim, dim );
+				vector_t<Number> b( dim );
+				unsigned pos = 0;
+				//std::cout << "Permute planes ";
+				for ( auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt ) {
+					//std::cout << *planeIt << ", ";
+					A.row( pos ) = mHPlanes.at( *planeIt ).normal().transpose();
+					// std::cout << A.row(pos) << std::endl;
+					b( pos ) = mHPlanes.at( *planeIt ).offset();
+					// std::cout << b(pos) << std::endl;
+					++pos;
+				}
+				//std::cout << std::endl;
 
-			Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
-			if ( lu_decomp.rank() < A.rows() ) {
-				continue;
-			}
+				//std::cout << "Created first matrix" << std::endl;
 
-			vector_t<Number> res = lu_decomp.solve( b );
+				Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
+				if ( lu_decomp.rank() < A.rows() ) {
+					continue;
+				}
 
-			TRACE( "hypro.representations.HPolytope", "Computed Vertex: " << ( convert<Number, double>( res ).transpose() ) );
+				vector_t<Number> res = lu_decomp.solve( b );
 
-			// Check if the computed vertex is a real vertex
-			bool outside = false;
-			for ( unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos ) {
-				bool skip = false;
-				for ( unsigned permPos = 0; permPos < permutation.size(); ++permPos ) {
-					if ( planePos == permutation.at( permPos ) ) {
-						//std::cout << "Skip plane " << planePos << std::endl;
-						skip = true;
+				TRACE( "hypro.representations.HPolytope", "Computed Vertex: " << ( convert<Number, double>( res ).transpose() ) );
+
+				// Check if the computed vertex is a real vertex
+				bool outside = false;
+				for ( unsigned planePos = 0; planePos < mHPlanes.size(); ++planePos ) {
+					bool skip = false;
+					for ( unsigned permPos = 0; permPos < permutation.size(); ++permPos ) {
+						if ( planePos == permutation.at( permPos ) ) {
+							//std::cout << "Skip plane " << planePos << std::endl;
+							skip = true;
+							break;
+						}
+					}
+
+					if ( !skip && !carl::AlmostEqual2sComplement( mHPlanes.at( planePos ).offset(), mHPlanes.at( planePos ).normal().dot( res ), default_double_comparison_ulps ) && mHPlanes.at( planePos ).offset() - mHPlanes.at( planePos ).normal().dot( res ) < 0 ) {
+						TRACE( "hypro.representations.HPolytope", "Drop vertex: " << ( convert<Number, double>( res ).transpose() ) << " because of plane " << planePos );
+						outside = true;
 						break;
 					}
 				}
-
-				if ( !skip && !carl::AlmostEqual2sComplement( mHPlanes.at( planePos ).offset(), mHPlanes.at( planePos ).normal().dot( res ), default_double_comparison_ulps ) && mHPlanes.at( planePos ).offset() - mHPlanes.at( planePos ).normal().dot( res ) < 0 ) {
-					TRACE( "hypro.representations.HPolytope", "Drop vertex: " << ( convert<Number, double>( res ).transpose() ) << " because of plane " << planePos );
-					outside = true;
-					break;
+				if ( !outside ) {
+					// insert, if no duplicate
+					Point<Number> tmp( res );
+					if ( std::find( vertices.begin(), vertices.end(), tmp ) == vertices.end() ) {
+						vertices.push_back( tmp );
+					}
+					TRACE( "hypro.representations.HPolytope", "Final vertex: " << ( convert<Number, double>( res ).transpose() ) );
 				}
-			}
-			if ( !outside ) {
-				// insert, if no duplicate
-				Point<Number> tmp( res );
-				if ( std::find( vertices.begin(), vertices.end(), tmp ) == vertices.end() ) {
-					vertices.push_back( tmp );
-				}
-				TRACE( "hypro.representations.HPolytope", "Final vertex: " << ( convert<Number, double>( res ).transpose() ) );
 			}
 		}
+		return vertices;
+	} else {  // Use quickhull (exact arithmetic) for vertex-enumeration
+
+		// conversion to mpq_class
+		std::vector<vector_t<mpq_class>> halfspaces;
+		for ( std::size_t i = 0; i < mHPlanes.size(); ++i ) {
+			halfspaces.emplace_back( this->dimension() + 1 );
+			halfspaces.back().head( this->dimension() ) = convert<Number, mpq_class>( mHPlanes[i].normal() );
+			halfspaces.back()[this->dimension()] = carl::convert<Number, mpq_class>( mHPlanes[i].offset() );
+		}
+		// compute vertices (dual)
+		QuickIntersection<mpq_class> facetEnumerator{ halfspaces, this->dimension() };
+		facetEnumerator.compute();
+
+		// re-transform and convert
+		for ( auto facet : facetEnumerator.getFacets() ) {
+			vertices.emplace_back( this->dimension() );
+			//The resulting points can't be points at infinity
+			if ( facet.mOffset == 0 ) {
+				std::cout << "Polytope is unbounded." << std::endl;
+			} else {
+				facet.mNormal /= facet.mOffset;
+				vertices.back() = convert<mpq_class, Number>( facet.mNormal );
+			}
+		}
+		return vertices;
 	}
 
 	// verify against reverse-search algorithm.
@@ -482,7 +496,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 	return ev.getPoints();
 #endif
 	*/
-	return vertices;
+
 	/*
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
 	ev.enumerateVertices();
@@ -605,6 +619,7 @@ void HPolytopeT<Number, Converter, Setting>::insert( const Halfspace<Number> &pl
 			mUpdated = false;
 		}
 	}
+	invalidateCache();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -624,6 +639,7 @@ void HPolytopeT<Number, Converter, Setting>::erase( const unsigned index ) {
 		setEmptyState( SETSTATE::UNKNOWN );
 	}
 	mUpdated = false;
+	invalidateCache();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -746,10 +762,10 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 }
 
 template <typename Number, typename Converter, class Setting>
-std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions ) const {
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number> &_directions ) const {
 	std::vector<EvaluationResult<Number>> res;
-	for(int i = 0; i < _directions.rows(); ++i){
-		res.push_back(evaluate(_directions.row(i)));
+	for ( int i = 0; i < _directions.rows(); ++i ) {
+		res.push_back( evaluate( _directions.row( i ) ) );
 	}
 	return res;
 }
@@ -976,6 +992,23 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number> &poin
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &vec ) const {
+	if ( Setting::CACHE_BOUNDING_BOX ) {
+		if ( !mBox ) {
+			// update cache
+			updateBoundingBox();
+		}
+		assert( vec.rows() == mBox->size() );
+		// check containment in bounding box
+		for ( std::size_t i = 0; i < mBox->size(); ++i ) {
+			if ( !( *mBox )[i].contains( vec( i ) ) ) {
+				return false;
+			}
+		}
+	}
+	// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
+	return std::all_of( mHPlanes.begin(), mHPlanes.end(), [&vec]( const auto &plane ) { return carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) || plane.normal().dot( vec ) <= plane.offset(); } );
+
+	/*
 	for ( const auto &plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) && plane.normal().dot( vec ) > plane.offset() ) {
@@ -983,6 +1016,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &v
 		}
 	}
 	return true;
+	*/
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1115,6 +1149,7 @@ void HPolytopeT<Number, Converter, Setting>::clear() {
 	if ( Setting::OPTIMIZER_CACHING ) {
 		mOptimizer->cleanContexts();
 	}
+	invalidateCache();
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1139,7 +1174,7 @@ typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Numb
 	// Furthermore, one of the faces of the convex hull of points is the polytope we are looking for.
 	// This is exactly the face we get when we intersect the convex hull with the halfspace h
 	HalfspaceVector result = commputeConstraintsForDegeneratedPolytope( points, degeneratedDimensions - 1 );
-	result.push_back( std::move( h ) );  // decreases the effective dimension again
+	result.push_back( std::move( h ) );	 // decreases the effective dimension again
 	return result;
 }
 
@@ -1168,6 +1203,45 @@ void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions( const std::v
 	}
 	mDimension = existingDimensions.size() + newDimensions.size();
 	mUpdated = false;
+}
+
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::updateBoundingBox() const {
+	if ( Settings::CACHE_BOUNDING_BOX ) {
+		std::size_t dim = this->dimension();
+		mBox = decltype( mBox )( dim );
+		for ( std::size_t i = 0; i < dim; ++i ) {
+			vector_t<Number> direction = vector_t<Number>::Zero( dim );
+			direction( i ) = Number( 1 );
+			auto evalResUpper = this->evaluate( direction );
+			carl::BoundType upperBound = carl::BoundType::WEAK;
+			//if no bound is found in that direction (infinity) set interval end point to infinity
+			if ( evalResUpper.errorCode == SOLUTION::INFTY ) {
+				upperBound = carl::BoundType::INFTY;
+			}
+
+			direction( i ) = Number( -1 );
+			auto evalResLower = this->evaluate( direction );
+			carl::BoundType lowerBound = carl::BoundType::WEAK;
+			//if no bound is found in that direction (infinity) set interval end point to infinity
+			if ( evalResLower.errorCode == SOLUTION::INFTY ) {
+				lowerBound = carl::BoundType::INFTY;
+			}
+			( *mBox )[i] = carl::Interval<Number>( -evalResLower.supportValue, lowerBound, evalResUpper.supportValue, upperBound );
+		}
+	}
+}
+
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::updateCache() const {
+	updateBoundingBox();
+}
+
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::invalidateCache() const {
+	if ( Settings::CACHE_BOUNDING_BOX ) {
+		mBox = std::nullopt;
+	}
 }
 
 template <typename Number, typename Converter, class Setting>

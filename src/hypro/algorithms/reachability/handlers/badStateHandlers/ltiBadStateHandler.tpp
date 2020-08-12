@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Representation, typename Number>
-std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, Location<Number> const * location, const HybridAutomaton<Number>& automaton ) {
+std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, Location<Number> const* location, const HybridAutomaton<Number>& automaton ) {
 	auto localBadState = automaton.getLocalBadStates().find( location );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
 		std::pair<CONTAINMENT, Representation> badStatePair = intersect( valuationSet, localBadState->second );

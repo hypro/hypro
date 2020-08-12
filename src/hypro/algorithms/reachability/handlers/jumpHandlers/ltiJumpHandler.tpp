@@ -87,7 +87,6 @@ void ltiJumpHandler<State>::applyReset( State& state, Transition<Number>* transi
 
 template <typename State>
 void ltiJumpHandler<State>::applyReduction( State& state ) const {
-	// TODO why does the reduction visitor not work for multi sets?
 	for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
 		if ( state.getSetType( i ) == representation_name::support_function ) {
 			state.partiallyReduceRepresentation( i );
@@ -118,12 +117,12 @@ template <typename State>
 void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const {
 	// Aggregation
 	DEBUG( "hydra.worker.discrete", "Number of transitions to aggregate: " << toAggregate.size() << std::endl );
-	for ( const auto& transitionStatePair : toAggregate ) {
-		assert( !transitionStatePair.second.empty() );
-		TRACE( "hydra.worker.discrete", transitionStatePair.second.size() << " sets to aggregate for transition " << transitionStatePair.first->getSource()->getName() << " -> " << transitionStatePair.first->getTarget()->getName() );
+	for ( const auto& [transition, stateSets] : toAggregate ) {
+		assert( !stateSets.empty() );
+		TRACE( "hydra.worker.discrete", stateSets.size() << " sets to aggregate for transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 		std::vector<State> aggregatedStates;
-		// Aggregate sets by using sequential unite operations (TODO: Implement and make use of multi-unite).
-		State aggregatedState( *transitionStatePair.second.begin() );
+		// Aggregate sets by using sequential unite operations (TODO Implement and make use of multi-unite).
+		State aggregatedState( *stateSets.begin() );
 		// counts the number of processed sets - just for debugging.
 		unsigned setCnt = 1;
 		// counts the number of sets in the current cluster.
@@ -136,9 +135,9 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 		// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 		std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
 		// contains the aggregated timestamp, initialized with the first timestamp
-		carl::Interval<tNumber> aggregatedTimestamp = ( *transitionStatePair.second.begin() ).getTimestamp();
+		carl::Interval<tNumber> aggregatedTimestamp = ( *stateSets.begin() ).getTimestamp();
 		//START_BENCHMARK_OPERATION(AGGREGATE);
-		for ( auto stateIt = ++transitionStatePair.second.begin(); stateIt != transitionStatePair.second.end(); ++stateIt ) {
+		for ( auto stateIt = ++stateSets.begin(); stateIt != stateSets.end(); ++stateIt ) {
 			TRACE( "hydra.worker.discrete", "Agg. aggState and set " << setCnt );
 			// actual aggregation.
 			for ( std::size_t i = 0; i < aggregatedState.getNumberSets(); i++ ) {
@@ -155,11 +154,11 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 			++setCnt;
 			++clusterCnt;
 #ifdef CLUSTERING_NUMBER_LIMITS_SUCESSORS
-			if ( strategy.clustering > 0 && clusterCnt == std::ceil( double( transitionStatePair.second.size() ) / double( strategy.clustering ) ) ) {
+			if ( strategy.clustering > 0 && clusterCnt == std::ceil( double( stateSets.size() ) / double( strategy.clustering ) ) ) {
 				TRACE( "hydra.worker.discrete", "Clustering." );
 				aggregatedStates.emplace_back( aggregatedState );
 				leftovers = false;
-				if ( stateIt + 1 != transitionStatePair.second.end() ) {
+				if ( stateIt + 1 != stateSets.end() ) {
 					aggregatedState = *( ++stateIt );
 					aggregatedTimestamp = aggregatedState.getTimestamp();
 					clusterCnt = 1;
@@ -172,7 +171,7 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 				TRACE( "hydra.worker.discrete", "Clustering." );
 				aggregatedStates.emplace_back( aggregatedState );
 				leftovers = false;
-				if ( stateIt + 1 != transitionStatePair.second.end() ) {
+				if ( stateIt + 1 != stateSets.end() ) {
 					aggregatedState = *( ++stateIt );
 					aggregatedTimestamp = aggregatedState.getTimestamp();
 					clusterCnt = 1;
@@ -195,7 +194,7 @@ void ltiJumpHandler<State>::aggregate( TransitionStateMap& processedStates, cons
 
 		// add to final mapping.
 		for ( auto& state : aggregatedStates ) {
-			processedStates[transitionStatePair.first].emplace_back( state );
+			processedStates[transition].emplace_back( state );
 		}
 	}
 }

@@ -9,15 +9,15 @@ class HPolytopeTest : public ::testing::Test {
   protected:
 	virtual void SetUp() {
 		// A rectangle
-		Halfspace<Number> hp1( {Number( 1 ), Number( 0 )}, Number( 2 ) );
-		Halfspace<Number> hp2( {Number( 0 ), Number( 1 )}, Number( 2 ) );
-		Halfspace<Number> hp3( {Number( -1 ), Number( 0 )}, Number( 2 ) );
-		Halfspace<Number> hp4( {Number( 0 ), -Number( 1 )}, Number( 2 ) );
+		Halfspace<Number> hp1( { Number( 1 ), Number( 0 ) }, Number( 2 ) );
+		Halfspace<Number> hp2( { Number( 0 ), Number( 1 ) }, Number( 2 ) );
+		Halfspace<Number> hp3( { Number( -1 ), Number( 0 ) }, Number( 2 ) );
+		Halfspace<Number> hp4( { Number( 0 ), -Number( 1 ) }, Number( 2 ) );
 
 		// A triangle
-		Halfspace<Number> hp5( {Number( 1 ), Number( 1 )}, Number( 1 ) );
-		Halfspace<Number> hp6( {Number( -1 ), Number( 1 )}, Number( 1 ) );
-		Halfspace<Number> hp7( {Number( 0 ), Number( -1 )}, Number( 1 ) );
+		Halfspace<Number> hp5( { Number( 1 ), Number( 1 ) }, Number( 1 ) );
+		Halfspace<Number> hp6( { Number( -1 ), Number( 1 ) }, Number( 1 ) );
+		Halfspace<Number> hp7( { Number( 0 ), Number( -1 ) }, Number( 1 ) );
 
 		planes1.push_back( hp1 );
 		planes1.push_back( hp2 );
@@ -45,8 +45,8 @@ TYPED_TEST( HPolytopeTest, Constructor ) {
 	HPolytope<TypeParam> copyAssignment = HPolytope<TypeParam>( anotherHPolytope );
 
 	VPolytope<TypeParam> alien;
-	Point<TypeParam> p1( {5, 3, 2} );
-	Point<TypeParam> p2( {7, 5, -1} );
+	Point<TypeParam> p1( { 5, 3, 2 } );
+	Point<TypeParam> p2( { 7, 5, -1 } );
 	alien.insert( p1 );
 	alien.insert( p2 );
 
@@ -54,9 +54,9 @@ TYPED_TEST( HPolytopeTest, Constructor ) {
 	EXPECT_TRUE( alienPolytope.contains( p1 ) );
 	EXPECT_TRUE( alienPolytope.contains( p2 ) );
 
-	Point<TypeParam> p3( {1, 0, 0} );
-	Point<TypeParam> p4( {0, 1, 0} );
-	Point<TypeParam> p5( {0, 0, 1} );
+	Point<TypeParam> p3( { 1, 0, 0 } );
+	Point<TypeParam> p4( { 0, 1, 0 } );
+	Point<TypeParam> p5( { 0, 0, 1 } );
 
 	VPolytope<TypeParam> alien2;
 	alien2.insert( p3 );
@@ -81,6 +81,10 @@ TYPED_TEST( HPolytopeTest, Access ) {
 	for ( auto& constraint : planes ) {
 		EXPECT_TRUE( hpt1.hasConstraint( constraint ) );
 	}
+
+	auto [constraints, constants] = hpt1.inequalities();
+	EXPECT_EQ( constraints, hpt1.matrix() );
+	EXPECT_EQ( constants, hpt1.vector() );
 }
 
 TYPED_TEST( HPolytopeTest, Swap ) {
@@ -97,19 +101,19 @@ TYPED_TEST( HPolytopeTest, Swap ) {
 }
 
 ////////////TODO: change this test to work with a 3D HPolytope<TypeParam>
-TYPED_TEST( HPolytopeTest, Corners ) {
+TYPED_TEST( HPolytopeTest, VertexEnumeration ) {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
 
-	typename std::vector<Point<TypeParam>> corners = hpt1.vertices();
-	for ( const auto& corner : corners ) {
-		EXPECT_TRUE( hpt1.isExtremePoint( corner ) );
+	typename std::vector<Point<TypeParam>> vertices = hpt1.vertices();
+	for ( const auto& vertex : vertices ) {
+		EXPECT_TRUE( hpt1.isExtremePoint( vertex ) );
 	}
 
-	corners = hpt2.vertices();
+	vertices = hpt2.vertices();
 
-	for ( const auto& corner : corners ) {
-		EXPECT_TRUE( hpt2.isExtremePoint( corner ) );
+	for ( const auto& vertex : vertices ) {
+		EXPECT_TRUE( hpt2.isExtremePoint( vertex ) );
 	}
 
 	// test extremepoints
@@ -119,7 +123,7 @@ TYPED_TEST( HPolytopeTest, Corners ) {
 	EXPECT_FALSE( hpt1.isExtremePoint( p1 ) );
 
 	// test overapproximation
-	HPolytope<TypeParam> reproduction( corners );
+	HPolytope<TypeParam> reproduction( vertices );
 
 	EXPECT_TRUE( hpt2.contains( reproduction ) );
 }
@@ -129,7 +133,7 @@ TYPED_TEST( HPolytopeTest, Insertion ) {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 
 	// halfspace containing the whole box
-	Halfspace<TypeParam> p1( {TypeParam( 1 ), TypeParam( 1 )}, TypeParam( 4 ) );
+	Halfspace<TypeParam> p1( { TypeParam( 1 ), TypeParam( 1 ) }, TypeParam( 4 ) );
 	hpt1.insert( p1 );
 
 	EXPECT_TRUE( hpt1.hasConstraint( p1 ) );
@@ -137,7 +141,7 @@ TYPED_TEST( HPolytopeTest, Insertion ) {
 	EXPECT_EQ( hpt1.vertices().size(), std::size_t( 4 ) );
 
 	// halfspace containing parts of the box
-	Halfspace<TypeParam> p2( {TypeParam( 1 ), TypeParam( 1 )}, TypeParam( 2 ) );
+	Halfspace<TypeParam> p2( { TypeParam( 1 ), TypeParam( 1 ) }, TypeParam( 2 ) );
 	hpt1.insert( p2 );
 
 	EXPECT_TRUE( hpt1.hasConstraint( p2 ) );
@@ -145,7 +149,7 @@ TYPED_TEST( HPolytopeTest, Insertion ) {
 	EXPECT_EQ( hpt1.vertices().size(), std::size_t( 5 ) );
 
 	// halfspace containing one point of the box
-	Halfspace<TypeParam> p3( {TypeParam( 1 ), TypeParam( 1 )}, TypeParam( -4 ) );
+	Halfspace<TypeParam> p3( { TypeParam( 1 ), TypeParam( 1 ) }, TypeParam( -4 ) );
 	hpt1.insert( p3 );
 
 	EXPECT_TRUE( hpt1.hasConstraint( p3 ) );
@@ -153,7 +157,7 @@ TYPED_TEST( HPolytopeTest, Insertion ) {
 	EXPECT_EQ( hpt1.vertices().size(), std::size_t( 1 ) );
 
 	// halfspace not containing the box
-	Halfspace<TypeParam> p4( {TypeParam( 1 ), TypeParam( 1 )}, TypeParam( -5 ) );
+	Halfspace<TypeParam> p4( { TypeParam( 1 ), TypeParam( 1 ) }, TypeParam( -5 ) );
 	hpt1.insert( p4 );
 
 	EXPECT_TRUE( hpt1.hasConstraint( p4 ) );
@@ -177,17 +181,17 @@ TYPED_TEST( HPolytopeTest, Union ) {
 
 	std::vector<Halfspace<TypeParam>> ps3;
 	Halfspace<TypeParam> p01 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 )}, TypeParam( 1 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 ) }, TypeParam( 1 ) );
 	Halfspace<TypeParam> p02 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 )}, TypeParam( -3 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( -3 ) );
 	Halfspace<TypeParam> p03 =
-		  Halfspace<TypeParam>( {TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( 1 ) );
+		  Halfspace<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( 1 ) );
 	Halfspace<TypeParam> p04 =
-		  Halfspace<TypeParam>( {TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( -3 ) );
+		  Halfspace<TypeParam>( { TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( -3 ) );
 	Halfspace<TypeParam> p05 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 0 ), TypeParam( -1 )}, TypeParam( 1 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ), TypeParam( -1 ) }, TypeParam( 1 ) );
 	Halfspace<TypeParam> p06 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 0 ), TypeParam( 1 )}, TypeParam( -3 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( -3 ) );
 
 	ps3.push_back( p01 );
 	ps3.push_back( p02 );
@@ -197,16 +201,17 @@ TYPED_TEST( HPolytopeTest, Union ) {
 	ps3.push_back( p06 );
 
 	HPolytope<TypeParam> pt3 = HPolytope<TypeParam>( ps3 );
+	EXPECT_TRUE( pt3.empty() );
 
 	std::vector<Halfspace<TypeParam>> ps4;
 	Halfspace<TypeParam> p07 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 )}, TypeParam( 3 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 ) }, TypeParam( 3 ) );
 	Halfspace<TypeParam> p08 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 )}, TypeParam( -5 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( -5 ) );
 	Halfspace<TypeParam> p09 =
-		  Halfspace<TypeParam>( {TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( 3 ) );
+		  Halfspace<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( 3 ) );
 	Halfspace<TypeParam> p10 =
-		  Halfspace<TypeParam>( {TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( -5 ) );
+		  Halfspace<TypeParam>( { TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( -5 ) );
 
 	ps4.push_back( p05 );
 	ps4.push_back( p06 );
@@ -236,10 +241,10 @@ TYPED_TEST( HPolytopeTest, Union ) {
 
 TYPED_TEST( HPolytopeTest, Evaluate ) {
 	matrix_t<TypeParam> A( 4, 2 );
-	A( 0, 0 ) = 1;  //     1    1
-	A( 0, 1 ) = 1;  //     1    0
-	A( 1, 0 ) = 1;  //     0    1
-	A( 1, 1 ) = 0;  //     0   -1
+	A( 0, 0 ) = 1;	//     1    1
+	A( 0, 1 ) = 1;	//     1    0
+	A( 1, 0 ) = 1;	//     0    1
+	A( 1, 1 ) = 0;	//     0   -1
 	A( 2, 0 ) = 0;
 	A( 2, 1 ) = 1;
 	A( 3, 0 ) = 0;
@@ -318,14 +323,17 @@ TYPED_TEST( HPolytopeTest, Intersection ) {
 
 	std::vector<Halfspace<TypeParam>> ps3;
 	Halfspace<TypeParam> p01 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 )}, TypeParam( 1 ) );
-	Halfspace<TypeParam> p02 = Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 )}, TypeParam( 3 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 ) }, TypeParam( 1 ) );
+	Halfspace<TypeParam> p02 =
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( 3 ) );
 	Halfspace<TypeParam> p03 =
-		  Halfspace<TypeParam>( {TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( 1 ) );
-	Halfspace<TypeParam> p04 = Halfspace<TypeParam>( {TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( 3 ) );
+		  Halfspace<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( 1 ) );
+	Halfspace<TypeParam> p04 =
+		  Halfspace<TypeParam>( { TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( 3 ) );
 	Halfspace<TypeParam> p05 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 0 ), TypeParam( -1 )}, TypeParam( 1 ) );
-	Halfspace<TypeParam> p06 = Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 3 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ), TypeParam( -1 ) }, TypeParam( 1 ) );
+	Halfspace<TypeParam> p06 =
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( 3 ) );
 
 	ps3.push_back( p01 );
 	ps3.push_back( p02 );
@@ -338,11 +346,13 @@ TYPED_TEST( HPolytopeTest, Intersection ) {
 
 	std::vector<Halfspace<TypeParam>> ps4;
 	Halfspace<TypeParam> p07 =
-		  Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 )}, TypeParam( 3 ) );
-	Halfspace<TypeParam> p08 = Halfspace<TypeParam>( {TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 )}, TypeParam( 5 ) );
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ), TypeParam( 0 ) }, TypeParam( 3 ) );
+	Halfspace<TypeParam> p08 =
+		  Halfspace<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( 5 ) );
 	Halfspace<TypeParam> p09 =
-		  Halfspace<TypeParam>( {TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( 3 ) );
-	Halfspace<TypeParam> p10 = Halfspace<TypeParam>( {TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 )}, TypeParam( 5 ) );
+		  Halfspace<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( 3 ) );
+	Halfspace<TypeParam> p10 =
+		  Halfspace<TypeParam>( { TypeParam( 1 ), TypeParam( 0 ), TypeParam( 0 ) }, TypeParam( 5 ) );
 
 	ps4.push_back( p05 );
 	ps4.push_back( p06 );
@@ -368,20 +378,39 @@ TYPED_TEST( HPolytopeTest, Intersection ) {
 TYPED_TEST( HPolytopeTest, Membership ) {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 
-	Point<TypeParam> p1( {TypeParam( 0 ), TypeParam( 0 )} );
+	Point<TypeParam> p1( { TypeParam( 0 ), TypeParam( 0 ) } );
 	EXPECT_TRUE( hpt1.contains( p1 ) );
 
-	Point<TypeParam> p2( {carl::rationalize<TypeParam>( 1.5 ), carl::rationalize<TypeParam>( 1.5 )} );
+	Point<TypeParam> p2( { carl::rationalize<TypeParam>( 1.5 ), carl::rationalize<TypeParam>( 1.5 ) } );
 	EXPECT_TRUE( hpt1.contains( p2 ) );
 
-	Point<TypeParam> p3( {TypeParam( -2 ), TypeParam( 0 )} );
+	Point<TypeParam> p3( { TypeParam( -2 ), TypeParam( 0 ) } );
 	EXPECT_TRUE( hpt1.contains( p3 ) );
 
-	Point<TypeParam> p4( {TypeParam( 2 ), TypeParam( 2 )} );
+	Point<TypeParam> p4( { TypeParam( 2 ), TypeParam( 2 ) } );
 	EXPECT_TRUE( hpt1.contains( p4 ) );
 
-	Point<TypeParam> p5( {carl::rationalize<TypeParam>( 2.1 ), TypeParam( 0 )} );
+	Point<TypeParam> p5( { carl::rationalize<TypeParam>( 2.1 ), TypeParam( 0 ) } );
 	EXPECT_FALSE( hpt1.contains( p5 ) );
+}
+
+TYPED_TEST( HPolytopeTest, MembershipCached ) {
+	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
+
+	Point<TypeParam> p1( { TypeParam( 0 ), TypeParam( 0 ) } );
+	EXPECT_TRUE( cachedPoly.contains( p1 ) );
+
+	Point<TypeParam> p2( { carl::rationalize<TypeParam>( 1.5 ), carl::rationalize<TypeParam>( 1.5 ) } );
+	EXPECT_TRUE( cachedPoly.contains( p2 ) );
+
+	Point<TypeParam> p3( { TypeParam( -2 ), TypeParam( 0 ) } );
+	EXPECT_TRUE( cachedPoly.contains( p3 ) );
+
+	Point<TypeParam> p4( { TypeParam( 2 ), TypeParam( 2 ) } );
+	EXPECT_TRUE( cachedPoly.contains( p4 ) );
+
+	Point<TypeParam> p5( { carl::rationalize<TypeParam>( 2.1 ), TypeParam( 0 ) } );
+	EXPECT_FALSE( cachedPoly.contains( p5 ) );
 }
 
 TYPED_TEST( HPolytopeTest, MultiEvaluate ) {
@@ -422,7 +451,7 @@ TYPED_TEST( HPolytopeTest, OptimizerCaching ) {
 	EXPECT_EQ( hspaces.getOptimizer()->vector(), controlVec );
 
 	// We add a halfspace to hspaces, should not be up to date then
-	Halfspace<TypeParam> extra( {TypeParam( 1 ), ( TypeParam( 0 ) )}, TypeParam( 1 ) );
+	Halfspace<TypeParam> extra( { TypeParam( 1 ), ( TypeParam( 0 ) ) }, TypeParam( 1 ) );
 	hspaces.insert( extra );
 	EXPECT_TRUE( hspaces.getOptimizer().has_value() );
 	EXPECT_FALSE( hspaces.getUpdated() );

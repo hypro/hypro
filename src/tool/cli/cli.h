@@ -3,5 +3,5 @@
 
 namespace hydra {
 boost::program_options::variables_map handleCMDArguments( int argc,
-														  const char **argv );
+														  const char** argv );
 }  // namespace hydra

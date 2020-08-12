@@ -9,14 +9,18 @@ sonar.projectVersion=${hypro_VERSION}
 # This property is optional if sonar.modules is set.
 sonar.language=cpp
 sonar.sources=src
-sonar.exclusions=src/resources/**/*, src/hypro/parser/**/*, src/test, src/tmlib_tmp, src/hypro/util/linearOptimization/clp/*
+sonar.exclusions=src/resources/**/*, src/hypro/parser/**/*, src/test, src/tmlib_tmp, src/hypro/util/linearOptimization/clp/*, src/hypro/util/matlab/**/*
 sonar.cpp.file.suffixes=.h,.tpp,.cpp
 sonar.c.file.suffixes=.c
+
+# caching and multithreading settings (required to be set, here we disable the new features for now)
+sonar.cfamily.cache.enabled=false
+sonar.cfamily.threads=1
 
 # Encoding of the source code. Default is default system encoding
 #sonar.sourceEncoding=UTF-8"
 
 sonar.cfamily.build-wrapper-output=build/bw-outputs
-sonar.cfamily.gcov.reportsPath=hypro_coverage.info
-#sonar.cfamily.llvm-cov.reportPath=hypro_coverage.info
+#sonar.cfamily.gcov.reportsPath=hypro_coverage.info
+sonar.cfamily.llvm-cov.reportPath=build/hypro_coverage.info
 

@@ -1,9 +1,13 @@
 #pragma once
+#include <vector>
 
-#include "../../../../datastructures/reachability/ReachTreeNode.h"
+//#include "../../../../datastructures/reachability/ReachTreeNode.h"
+//#include "../../../../datastructures/reachability/Task.h"
+//#include "../../../../datastructures/reachability/workQueue/WorkQueue.h"
 
 namespace hypro {
 
+/*
 template <typename State>
 bool isTreeExtension( typename ReachTreeNode<State>::Node_t node, Transition<typename State::NumberType>* transition ) {
 	if ( node->getChildren().empty() ) {
@@ -20,7 +24,14 @@ bool isTreeExtension( typename ReachTreeNode<State>::Node_t node, Transition<typ
 	}
 	return false;
 }
+*/
 
+namespace reachability {
+/// distributes a number of state sets onto a number of clusters
+std::vector<std::size_t> clusterDistribution( std::size_t numberClusters, std::size_t numberStateSets );
+}  // namespace reachability
+
+/*
 template <typename State>
 inline void collectTimespansForRefinementLevel( std::vector<carl::Interval<tNumber>>& timespans, typename ReachTreeNode<State>::NodeList_t& nodes, unsigned targetLevel ) {
 	for ( auto nodeIt = nodes.begin(); nodeIt != nodes.end(); ) {
@@ -40,7 +51,9 @@ inline void collectTimespansForRefinementLevel( std::vector<carl::Interval<tNumb
 		}
 	}
 }
+*/
 
+/*
 template <typename State>
 inline void preProcess( typename ReachTreeNode<State>::NodeList_t& toMatch, const std::vector<carl::Interval<tNumber>>& timespans ) {
 	// if the nodes timestamp lies completely outside the pre-defined timespan, do not consider this.
@@ -60,7 +73,9 @@ inline void preProcess( typename ReachTreeNode<State>::NodeList_t& toMatch, cons
 		}
 	}
 }
+*/
 
+/*
 template <typename State>
 struct nodeUpdater {
 	nodeUpdater( const std::shared_ptr<Task<State>>& currentTask, WorkQueue<std::shared_ptr<Task<State>>>* localQueue, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue, std::size_t targetLevel )
@@ -206,7 +221,9 @@ struct nodeUpdater {
 	WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
 	std::size_t mTargetLevel;
 };
+*/
 
+/*
 template <typename State>
 inline void insertAndCreateTask( typename ReachTreeNode<State>::NodeList_t& toInsert, const std::shared_ptr<Task<State>>& currentTask, WorkQueue<std::shared_ptr<Task<State>>>* localQueue, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue, std::size_t targetLevel ) {
 	auto nodeIt = toInsert.begin();
@@ -279,5 +296,6 @@ inline void insertAndCreateTask( typename ReachTreeNode<State>::NodeList_t& toIn
 		++nodeIt;
 	}
 }
+*/
 
 }  // namespace hypro
