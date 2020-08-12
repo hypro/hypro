@@ -31,14 +31,11 @@ std::pair<CONTAINMENT, State> ltiIntersectBadStates( const State& stateSet, cons
 	//TODO @Stefan Not sure if this is right.
 	size_t index = 0;
 
-	// TRACE( "hydra.worker.continuous", "Having a total of " << SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().size() << " local bad states." );
-	if ( localBadState != SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().end() ) {
-		TRACE( "hydra.worker.continuous", "Checking local bad state: " << localBadState->second );
-		std::pair<CONTAINMENT, State> badStatePair = stateSet.partiallySatisfies( localBadState->second, index );
-		if ( badStatePair.first != hypro::CONTAINMENT::NO ) {
-			DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << badStatePair.first << ")" );
-			return badStatePair;
-		}
+	TRACE( "hydra.worker.continuous", "Checking local bad state: " << localBadState->second );
+	std::pair<CONTAINMENT, State> badStatePair = stateSet.partiallySatisfies( localBadState->second, index );
+	if ( badStatePair.first != hypro::CONTAINMENT::NO ) {
+		DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << badStatePair.first << ")" );
+		return badStatePair;
 	}
 	TRACE( "hydra.worker.continuous", "No intersection with local, continuous bad states" );
 

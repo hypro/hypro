@@ -59,15 +59,12 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 			po::store( parsedOptions, vm );
 		}
 
-		// set settings in settingsProvider
-		hypro::SettingsProvider<State> &sProvider =
-			  hypro::SettingsProvider<State>::getInstance();
-
 		if ( vm.count( "help" ) || argc == 1 ) {
 			COUT( options << std::endl );
 			exit( 0 );
 		}
 
+		/*
 		if ( vm.count( "jobs" ) ) {
 			if ( vm["jobs"].as<unsigned>() == 0 ) {
 				CERR( "You can not use 0 worker threads!\n" );
@@ -76,6 +73,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 				sProvider.setWorkerThreadCount( vm["jobs"].as<unsigned>() );
 			}
 		}
+		*/
 
 		if ( vm["queueBalangingRatio"].as<double>() < 0.0 ||
 			 vm["queueBalangingRatio"].as<double>() > 1.0 ) {
@@ -90,12 +88,14 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 			}
 		}
 
+		/*
 		if ( vm["decompose"].as<bool>() ) {
 			sProvider.setDecomposeAutomaton( true );
 		}
 		if ( vm["decider"].as<bool>() ) {
 			sProvider.setUseDecider( true );
 		}
+		*/
 
 		// If we have at least two of the three strategy options "strategy",
 		// "customstrategy" or "snode", then throw error
@@ -123,6 +123,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 		}
     */
 
+		/*
 		if ( vm.count( "strategy" ) >= 1 ) {
 			if ( vm.count( "strategy" ) == 1 ) {
 				hypro::SettingsProvider<State>::getInstance().setStrategy(
@@ -132,6 +133,7 @@ boost::program_options::variables_map handleCMDArguments( int argc,
 				exit( 1 );
 			}
 		}
+		*/
 
 		/*
 		if (vm.count("snode") >= 1) {

@@ -1,4 +1,6 @@
 #pragma once
+#include "../Strategies.h"
+
 #include <boost/program_options.hpp>
 #include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/types.h>

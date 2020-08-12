@@ -3,7 +3,6 @@
 #include "../typedefs.h"
 
 #include <boost/program_options.hpp>
-#include <hypro/datastructures/reachability/SettingsProvider.h>
 #include <hypro/types.h>
 #include <hypro/util/logging/Logger.h>
 

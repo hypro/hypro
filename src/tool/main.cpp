@@ -6,7 +6,6 @@
 
 #include <hypro/datastructures/reachability/PreprocessingInformation.h>
 #include <hypro/datastructures/reachability/Settings.h>
-#include <hypro/datastructures/reachability/SettingsProvider.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/types.h>
 #include <hypro/util/logging/Logger.h>

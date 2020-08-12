@@ -28,9 +28,15 @@ hypro::Settings processSettings( const hypro::ReachabilitySettings& parsedSettin
 	hypro::representation_name representation =
 		  hypro::representation_name::_from_string( cliOptions["representation"].as<std::string>().c_str() );
 
+	// if strategy has been passed, use this
+	std::vector<hypro::AnalysisParameters> strategy{ { timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
+													   hypro::stringToSetting( cliOptions["setting"].as<std::string>() ) } };
+	if ( cliOptions.count( "strategy" ) ) {
+		strategy = hydra::getStrategyFromName( cliOptions["strategy"].as<std::string>() );
+	}
+
 	// create strategy inside settings
-	hypro::Settings settings{ { { timeStep, hypro::AGG_SETTING::MODEL, -1, representation,
-								  hypro::stringToSetting( cliOptions["setting"].as<std::string>() ) } },
+	hypro::Settings settings{ strategy,
 							  parsedSettings.jumpDepth,
 							  timehorizon,
 							  plotDimensions,
