@@ -1,6 +1,5 @@
 var classhypro_1_1_settings_provider =
 [
-    [ "addStrategyElement", "classhypro_1_1_settings_provider.html#a89648e73b16bebd30fdbac58b7aa44c7", null ],
     [ "computeLocationSubspaceTypeMapping", "classhypro_1_1_settings_provider.html#a01484ad5dce3b7b05aea51f201a644b0", null ],
     [ "computeLocationTypeMapping", "classhypro_1_1_settings_provider.html#af3b59a900cd5c148cf1cce721d00fe36", null ],
     [ "decomposeAutomaton", "classhypro_1_1_settings_provider.html#a90a58f82e0bdaef637d1263bc31f4acf", null ],
@@ -13,7 +12,7 @@ var classhypro_1_1_settings_provider =
     [ "getNumberVariables", "classhypro_1_1_settings_provider.html#a8e8b1acb93525a95cb265f7dd7edfd4b", null ],
     [ "getQueueBalancingRatio", "classhypro_1_1_settings_provider.html#ae126d5616dc276ab3e65bd56ba847069", null ],
     [ "getReachabilitySettings", "classhypro_1_1_settings_provider.html#aea608df3bec96297b84f700156039187", null ],
-    [ "getStrategy", "classhypro_1_1_settings_provider.html#a6c434e36bee4e38fd9db32c40c95e474", null ],
+    [ "getStrategy", "classhypro_1_1_settings_provider.html#a5c344ecc0f5305d9ab0fa41cc1d20b82", null ],
     [ "getSubspaceDecomposition", "classhypro_1_1_settings_provider.html#a08f948e876b80f0cd4df808e1331d291", null ],
     [ "getTimeStepSize", "classhypro_1_1_settings_provider.html#ab2a90d003202f44a213148926a995c48", null ],
     [ "getWorkerThreadCount", "classhypro_1_1_settings_provider.html#a6e4c49ba2b7221c6980e0887fc6b1492", null ],
@@ -24,7 +23,7 @@ var classhypro_1_1_settings_provider =
     [ "setReachabilitySettings", "classhypro_1_1_settings_provider.html#a68535b7fe45d5cd3e9aaa8a6b892e13f", null ],
     [ "setReachabilitySettings", "classhypro_1_1_settings_provider.html#a670e1cb8b5b0f8ad1527c330e948b6c5", null ],
     [ "setSkipPlot", "classhypro_1_1_settings_provider.html#ac597ae0467a4b5e3b668d049644be31f", null ],
-    [ "setStrategy", "classhypro_1_1_settings_provider.html#a88c9bf1d08ac42ca41034d9016020c8d", null ],
+    [ "setStrategy", "classhypro_1_1_settings_provider.html#a872396d9239d541fd612210af040be9b", null ],
     [ "setSubspaceDecomposition", "classhypro_1_1_settings_provider.html#a66129a10243ad1f0ac26805fedbe3e24", null ],
     [ "setUseDecider", "classhypro_1_1_settings_provider.html#aa8e375a122815e4689d9dd787c4d886f", null ],
     [ "setWorkerThreadCount", "classhypro_1_1_settings_provider.html#a4420bc55d5e63969f24ca4252121238f", null ],

@@ -6,15 +6,17 @@ var searchData=
   ['mdepth',['mDepth',['../classhypro_1_1_tree_node.html#a0f5412f89fda4535ac9c9088aae52757',1,'hypro::TreeNode']]],
   ['mflowpipe',['mFlowpipe',['../classhypro_1_1_rectangular_worker.html#a1919c8c3b8514c80ea7cc0f21b99b5ab',1,'hypro::RectangularWorker']]],
   ['mflowpipes',['mFlowpipes',['../classhypro_1_1_rectangular_analyzer.html#a2604ae87b5d3d267891c40e9ae2f88ef',1,'hypro::RectangularAnalyzer']]],
-  ['mhybridautomaton',['mHybridAutomaton',['../classhypro_1_1_rectangular_analyzer.html#a97bd277a42bfe1d0350bcca5409d709f',1,'hypro::RectangularAnalyzer::mHybridAutomaton()'],['../classhypro_1_1_rectangular_worker.html#a8191adfe9ad0b045843e121fac6a8882',1,'hypro::RectangularWorker::mHybridAutomaton()']]],
+  ['mhybridautomaton',['mHybridAutomaton',['../classhypro_1_1_refinement_analyzer.html#a717b0dbec8e7d0f79e225b56872d85f1',1,'hypro::RefinementAnalyzer::mHybridAutomaton()'],['../classhypro_1_1_rectangular_analyzer.html#a97bd277a42bfe1d0350bcca5409d709f',1,'hypro::RectangularAnalyzer::mHybridAutomaton()'],['../classhypro_1_1_rectangular_worker.html#a8191adfe9ad0b045843e121fac6a8882',1,'hypro::RectangularWorker::mHybridAutomaton()']]],
   ['minitialized',['mInitialized',['../structhypro_1_1glpk__context.html#a161cfaf59da4a76f01e3431996906920',1,'hypro::glpk_context']]],
+  ['mjumppredecessorsets',['mJumpPredecessorSets',['../classhypro_1_1_rectangular_worker.html#acd6d50d21db1282546c21d99477ae159',1,'hypro::RectangularWorker']]],
   ['mjumpsuccessorsets',['mJumpSuccessorSets',['../classhypro_1_1_rectangular_worker.html#a5a0ad22368e47c0b138af9b01e7c4f07',1,'hypro::RectangularWorker']]],
   ['mlimits',['mLimits',['../classhypro_1_1_box_t.html#a5b0f6eb0f2b1b742f453bbe0984eae8b',1,'hypro::BoxT']]],
+  ['mparameters',['mParameters',['../classhypro_1_1_refinement_analyzer.html#a166100e9e5c3a0680454577a448d9de8',1,'hypro::RefinementAnalyzer']]],
   ['mparent',['mParent',['../classhypro_1_1_tree_node.html#a9d2f003348321ef60086b24bd4945294',1,'hypro::TreeNode']]],
   ['mparents',['mParents',['../classhypro_1_1_d_a_g_node.html#a46542e19736fe7f4ead6dad66ccb0bd0',1,'hypro::DAGNode']]],
   ['mreachtree',['mReachTree',['../classhypro_1_1_rectangular_analyzer.html#ae5d1e26ec369c0c6f29148378c6c01ba',1,'hypro::RectangularAnalyzer']]],
   ['mrefinements',['mRefinements',['../classhypro_1_1_reach_tree_node.html#a2f70ad4cf1c030acd54a1fb0e364f451',1,'hypro::ReachTreeNode']]],
-  ['msettings',['mSettings',['../classhypro_1_1_rectangular_worker.html#aa5c31bc2498e2120c727be0c0bf47ed6',1,'hypro::RectangularWorker']]],
+  ['msettings',['mSettings',['../classhypro_1_1_l_t_i_worker.html#abfc10be593f2ceb376329a853ea44307',1,'hypro::LTIWorker::mSettings()'],['../classhypro_1_1_rectangular_worker.html#aa5c31bc2498e2120c727be0c0bf47ed6',1,'hypro::RectangularWorker::mSettings()']]],
   ['mutex',['mutex',['../classhypro_1_1_reach_tree_node.html#a5ebb16119a90db37ff2b377865b1f307',1,'hypro::ReachTreeNode']]],
-  ['mworkqueue',['mWorkQueue',['../classhypro_1_1_rectangular_analyzer.html#a9e22743529b0c379bef7339e42566cd6',1,'hypro::RectangularAnalyzer']]]
+  ['mworkqueue',['mWorkQueue',['../classhypro_1_1_refinement_analyzer.html#a59958bf695b8efffb07d8740bb1d0d1f',1,'hypro::RefinementAnalyzer::mWorkQueue()'],['../classhypro_1_1_rectangular_analyzer.html#a9e22743529b0c379bef7339e42566cd6',1,'hypro::RectangularAnalyzer::mWorkQueue()']]]
 ];

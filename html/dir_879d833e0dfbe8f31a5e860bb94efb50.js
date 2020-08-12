@@ -9,6 +9,7 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     [ "statistics", "dir_57790bb148fd18efc2431dd25a248521.html", "dir_57790bb148fd18efc2431dd25a248521" ],
     [ "tuple_expansion", "dir_3a35ee46332157846b55808bff5bb8c8.html", "dir_3a35ee46332157846b55808bff5bb8c8" ],
     [ "type_handling", "dir_46df0c505137c4ea9ebf8f65132b3ec3.html", "dir_46df0c505137c4ea9ebf8f65132b3ec3" ],
+    [ "combine.h", "combine_8h_source.html", null ],
     [ "convenienceOperators.h", "util_2convenience_operators_8h_source.html", null ],
     [ "conversion.h", "conversion_8h_source.html", null ],
     [ "convexHull.h", "convex_hull_8h_source.html", null ],

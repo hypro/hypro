@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>HyPro: hypro::Flowpipe&lt; State &gt; Class Template Reference</title>
+<title>HyPro: hypro::Flowpipe&lt; Representation &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -122,7 +122,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1_flowpipe.html','');});
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhypro_1_1_flowpipe-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::Flowpipe&lt; State &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::Flowpipe&lt; Representation &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -131,49 +131,37 @@ $(document).ready(function(){initNavTree('classhypro_1_1_flowpipe.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aaffc20d746d1ddeb997b9854edf82eb0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaffc20d746d1ddeb997b9854edf82eb0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setStates</b> (const States &amp;states)</td></tr>
-<tr class="separator:aaffc20d746d1ddeb997b9854edf82eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4bbbba23ea67df1469d4c66ed880a05"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4bbbba23ea67df1469d4c66ed880a05"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setStates</b> (States &amp;&amp;states)</td></tr>
-<tr class="separator:ad4bbbba23ea67df1469d4c66ed880a05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88cb90a12e3e9154ac21f685f49eefef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88cb90a12e3e9154ac21f685f49eefef"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addState</b> (const State &amp;state)</td></tr>
-<tr class="separator:a88cb90a12e3e9154ac21f685f49eefef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f92fd82e25c9da96dc038dd7464cd98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f92fd82e25c9da96dc038dd7464cd98"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addState</b> (State &amp;&amp;state)</td></tr>
-<tr class="separator:a5f92fd82e25c9da96dc038dd7464cd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab32bb79331b16a56c73efe46dd52c5c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab32bb79331b16a56c73efe46dd52c5c8"></a>
-const States &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStates</b> () const </td></tr>
-<tr class="separator:ab32bb79331b16a56c73efe46dd52c5c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3eebe527efdbdac01da07d2954c4b55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3eebe527efdbdac01da07d2954c4b55"></a>
-States &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetStates</b> ()</td></tr>
-<tr class="separator:ad3eebe527efdbdac01da07d2954c4b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05aa3fb565a5fcb1edf3365bfabbba06"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05aa3fb565a5fcb1edf3365bfabbba06"></a>
-<a class="el" href="classhypro_1_1_range.html">Range</a>&lt; States &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>selectTimestamps</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;span)</td></tr>
-<tr class="separator:a05aa3fb565a5fcb1edf3365bfabbba06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cd08f6b234e35c07881af352f4eef8f"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0cd08f6b234e35c07881af352f4eef8f"></a>
+<tr class="memitem:a4f43846782af78ab05d15a89b93e9538"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f43846782af78ab05d15a89b93e9538"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStates</b> (const std::vector&lt; Representation &gt; &amp;states)</td></tr>
+<tr class="separator:a4f43846782af78ab05d15a89b93e9538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c51bf138203f133017c8e5835909cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92c51bf138203f133017c8e5835909cd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStates</b> (std::vector&lt; Representation &gt; &amp;&amp;states)</td></tr>
+<tr class="separator:a92c51bf138203f133017c8e5835909cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ef9ba7fe9cb69ac0a1d7bbd0601dcc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac7ef9ba7fe9cb69ac0a1d7bbd0601dcc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addState</b> (const Representation &amp;state)</td></tr>
+<tr class="separator:ac7ef9ba7fe9cb69ac0a1d7bbd0601dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a993053410bb57af4f02bb4d0bde074de"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a993053410bb57af4f02bb4d0bde074de"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addState</b> (Representation &amp;&amp;state)</td></tr>
+<tr class="separator:a993053410bb57af4f02bb4d0bde074de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d224af7393cad2aef4fdb631b99d637"><td class="memTemplParams" colspan="2"><a class="anchor" id="a3d224af7393cad2aef4fdb631b99d637"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a0cd08f6b234e35c07881af352f4eef8f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_range.html">Range</a>&lt; States &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectSatisfyingStates</b> (const Condition&lt; Number &gt; &amp;cond)</td></tr>
-<tr class="separator:a0cd08f6b234e35c07881af352f4eef8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01d3da6ba1769e5577541078717f4522"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01d3da6ba1769e5577541078717f4522"></a>
-std::vector&lt; <a class="el" href="structhypro_1_1_plot_data.html">PlotData</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPlotData</b> (std::size_t refinementLevel=0, std::size_t threadId=0) const </td></tr>
-<tr class="separator:a01d3da6ba1769e5577541078717f4522"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeda8b7815692540194062e1d50e10c73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeda8b7815692540194062e1d50e10c73"></a>
-States::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
-<tr class="separator:aeda8b7815692540194062e1d50e10c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a210cff3123dfdfab64e090871a8351d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a210cff3123dfdfab64e090871a8351d2"></a>
-States::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
-<tr class="separator:a210cff3123dfdfab64e090871a8351d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe95f6d589b1432cc5ae8b1be94af6e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe95f6d589b1432cc5ae8b1be94af6e9"></a>
-States::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const </td></tr>
-<tr class="separator:abe95f6d589b1432cc5ae8b1be94af6e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58bbedc7e5a64dd28568aaca9a1404a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58bbedc7e5a64dd28568aaca9a1404a0"></a>
-States::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const </td></tr>
-<tr class="separator:a58bbedc7e5a64dd28568aaca9a1404a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe4f31c8232d1cda4a8ac378e80822b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe4f31c8232d1cda4a8ac378e80822b0"></a>
+<tr class="memitem:a3d224af7393cad2aef4fdb631b99d637"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_range.html">Range</a>&lt; std::vector&lt; Representation &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectSatisfyingStates</b> (const Condition&lt; Number &gt; &amp;cond)</td></tr>
+<tr class="separator:a3d224af7393cad2aef4fdb631b99d637"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a7254911bd1c3cac858afb105d00c6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a7254911bd1c3cac858afb105d00c6a"></a>
+std::vector&lt; Representation &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
+<tr class="separator:a9a7254911bd1c3cac858afb105d00c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc7ffe5e8adba6a0852172ba0d8b734d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc7ffe5e8adba6a0852172ba0d8b734d"></a>
+std::vector&lt; Representation &gt;::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
+<tr class="separator:abc7ffe5e8adba6a0852172ba0d8b734d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1e051f23c5bf7baeecd333745ee590a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1e051f23c5bf7baeecd333745ee590a"></a>
+std::vector&lt; Representation &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const </td></tr>
+<tr class="separator:ab1e051f23c5bf7baeecd333745ee590a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca077528ad8b71cf6941d0767a1f6edf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aca077528ad8b71cf6941d0767a1f6edf"></a>
+std::vector&lt; Representation &gt;::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const </td></tr>
+<tr class="separator:aca077528ad8b71cf6941d0767a1f6edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38241062ed60e1e724df0062941d01b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38241062ed60e1e724df0062941d01b4"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
-<tr class="separator:afe4f31c8232d1cda4a8ac378e80822b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a38241062ed60e1e724df0062941d01b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2aa06b241de21cd471f5dd88cdc14fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2aa06b241de21cd471f5dd88cdc14fc"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Flowpipe</b> (const <a class="el" href="classhypro_1_1_taylor_model_vec.html">TaylorModelVec</a>&lt; Number &gt; &amp;tmv_input, const <a class="el" href="classhypro_1_1_domain.html">Domain</a>&lt; Number &gt; &amp;domain_input)</td></tr>
 <tr class="separator:ad2aa06b241de21cd471f5dd88cdc14fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,19 +193,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>output</b> (std::ostr
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:ac9151d4fca834fb6f3f06c2eccea3816"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac9151d4fca834fb6f3f06c2eccea3816"></a>
+<tr class="memitem:abca60731af5ee1feca2e175d6e8f55c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abca60731af5ee1feca2e175d6e8f55c2"></a>
 <a class="el" href="classhypro_1_1_taylor_model_vec.html">TaylorModelVec</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tmvPre</b></td></tr>
-<tr class="separator:ac9151d4fca834fb6f3f06c2eccea3816"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4cd19fa3db555fa9f752b6cad607ff9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad4cd19fa3db555fa9f752b6cad607ff9"></a>
+<tr class="separator:abca60731af5ee1feca2e175d6e8f55c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88dee04872079efc8766b8b09fe60918"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88dee04872079efc8766b8b09fe60918"></a>
 <a class="el" href="classhypro_1_1_taylor_model_vec.html">TaylorModelVec</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tmv</b></td></tr>
-<tr class="separator:ad4cd19fa3db555fa9f752b6cad607ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6673613547b9f66f6d391605d0f1c8ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6673613547b9f66f6d391605d0f1c8ca"></a>
+<tr class="separator:a88dee04872079efc8766b8b09fe60918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa44b9f51ce55ba7f705ce4ed6450157f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa44b9f51ce55ba7f705ce4ed6450157f"></a>
 <a class="el" href="classhypro_1_1_domain.html">Domain</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>domain</b></td></tr>
-<tr class="separator:a6673613547b9f66f6d391605d0f1c8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:aa44b9f51ce55ba7f705ce4ed6450157f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename State&gt;<br />
-class hypro::Flowpipe&lt; State &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Representation&gt;<br />
+class hypro::Flowpipe&lt; Representation &gt;</h3>
 
 <p>Container for a flowpipe, i.e. an ordered sequence of state sets (flowpipe segments). </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -227,11 +215,10 @@ class hypro::Flowpipe&lt; State &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_flowpipe_8h_source.html#l00018">18</a> of file <a class="el" href="_flowpipe_8h_source.html">Flowpipe.h</a>.</p>
+<p>Definition at line <a class="el" href="_flowpipe_8h_source.html#l00017">17</a> of file <a class="el" href="_flowpipe_8h_source.html">Flowpipe.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/<a class="el" href="_flowpipe_8h_source.html">Flowpipe.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/<a class="el" href="continuous_8h_source.html">continuous.h</a></li>
-<li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/<a class="el" href="_flowpipe_8tpp_source.html">Flowpipe.tpp</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/<a class="el" href="continuous_8tpp_source.html">continuous.tpp</a></li>
 </ul>
 </div><!-- contents -->

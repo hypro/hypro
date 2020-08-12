@@ -136,13 +136,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a944f8a795ade0b26abe2b9362f24e50c"><td class="mdescLeft">&#160;</td><td class="mdescRight">default constructor (deleted) <br /></td></tr>
 <tr class="separator:a944f8a795ade0b26abe2b9362f24e50c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3de280c34125071b0e23273495eae81a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3de280c34125071b0e23273495eae81a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#a3de280c34125071b0e23273495eae81a">RectangularAnalyzer</a> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &amp;setting)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#a3de280c34125071b0e23273495eae81a">RectangularAnalyzer</a> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="classhypro_1_1_settings.html">Settings</a> &amp;setting)</td></tr>
 <tr class="memdesc:a3de280c34125071b0e23273495eae81a"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor from automaton and settings <br /></td></tr>
 <tr class="separator:a3de280c34125071b0e23273495eae81a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e113f483e0cf18fc225e48f065608a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e113f483e0cf18fc225e48f065608a3"></a>
 REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#a7e113f483e0cf18fc225e48f065608a3">run</a> ()</td></tr>
 <tr class="memdesc:a7e113f483e0cf18fc225e48f065608a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">main method for reachability analysis <br /></td></tr>
 <tr class="separator:a7e113f483e0cf18fc225e48f065608a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0d8c5610a109671a21e3f694ecfde93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0d8c5610a109671a21e3f694ecfde93"></a>
+REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><b>forwardRun</b> ()</td></tr>
+<tr class="separator:ae0d8c5610a109671a21e3f694ecfde93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0945f5c13a498a52ac07af616077ef1d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0945f5c13a498a52ac07af616077ef1d"></a>
+REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><b>backwardRun</b> ()</td></tr>
+<tr class="separator:a0945f5c13a498a52ac07af616077ef1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60784603b3614450f4ef7f3e774aa7e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60784603b3614450f4ef7f3e774aa7e7"></a>
 const std::vector&lt; <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#a60784603b3614450f4ef7f3e774aa7e7">getFlowpipes</a> () const </td></tr>
 <tr class="memdesc:a60784603b3614450f4ef7f3e774aa7e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for computed flowpipes <br /></td></tr>
@@ -163,8 +169,8 @@ std::vector&lt; <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&l
 <tr class="memdesc:a97bd277a42bfe1d0350bcca5409d709f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Automaton which is analyzed. <br /></td></tr>
 <tr class="separator:a97bd277a42bfe1d0350bcca5409d709f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5621d5c9ea7972cebfa0a43c3469a210"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5621d5c9ea7972cebfa0a43c3469a210"></a>
-<a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#a5621d5c9ea7972cebfa0a43c3469a210">mAnalysisSettings</a></td></tr>
-<tr class="memdesc:a5621d5c9ea7972cebfa0a43c3469a210"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> used for analysis. <br /></td></tr>
+<a class="el" href="classhypro_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#a5621d5c9ea7972cebfa0a43c3469a210">mAnalysisSettings</a></td></tr>
+<tr class="memdesc:a5621d5c9ea7972cebfa0a43c3469a210"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classhypro_1_1_settings.html">Settings</a> used for analysis. <br /></td></tr>
 <tr class="separator:a5621d5c9ea7972cebfa0a43c3469a210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5d1e26ec369c0c6f29148378c6c01ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5d1e26ec369c0c6f29148378c6c01ba"></a>
 std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_analyzer.html#ae5d1e26ec369c0c6f29148378c6c01ba">mReachTree</a></td></tr>

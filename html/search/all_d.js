@@ -7,7 +7,6 @@ var searchData=
   ['noboxdetection',['NoBoxDetection',['../structhypro_1_1_no_box_detection.html',1,'hypro']]],
   ['noboxreduction',['NoBoxReduction',['../structhypro_1_1_no_box_reduction.html',1,'hypro']]],
   ['nodemanager',['NodeManager',['../classhypro_1_1_node_manager.html',1,'hypro']]],
-  ['nodeupdater',['nodeUpdater',['../structhypro_1_1node_updater.html',1,'hypro']]],
   ['noneassignment',['NoneAssignment',['../structhypro_1_1_none_assignment.html',1,'hypro']]],
   ['nonlinearomega0supportfunction',['NonLinearOmega0Supportfunction',['../classhypro_1_1_non_linear_omega0_supportfunction.html',1,'hypro']]],
   ['nonslacktobase',['nonSlackToBase',['../classhypro_1_1_dictionary.html#a75e63ae2dfe9f4230904067e12d854bd',1,'hypro::Dictionary']]],

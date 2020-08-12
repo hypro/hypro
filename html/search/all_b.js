@@ -11,9 +11,10 @@ var searchData=
   ['linearindependance',['linearIndependance',['../classhypro_1_1_vertex_enumeration.html#ab5be5a73569a8cc642868a5af2bd866f',1,'hypro::VertexEnumeration']]],
   ['lineartransformation',['linearTransformation',['../classhypro_1_1_halfspace.html#abb68c9ddd3207672710de8517ba263c5',1,'hypro::Halfspace::linearTransformation()'],['../classhypro_1_1_point.html#a027db2b48bb7708dbdcba1405d9fed35',1,'hypro::Point::linearTransformation()'],['../classhypro_1_1_box_t.html#afdfd6ebd766b2bac9c8706467e61e610',1,'hypro::BoxT::linearTransformation()'],['../classhypro_1_1_ellipsoid_t.html#ae42885bcdd6d89f25f73671c459d74fb',1,'hypro::EllipsoidT::linearTransformation()'],['../classhypro_1_1_support_function_new_t.html#a32f2d9c7985fd56de7e925837d50170e',1,'hypro::SupportFunctionNewT::linearTransformation()'],['../classhypro_1_1_statistic_wrapper.html#a07bf45a2b81953bd3b9211d563ac6c04',1,'hypro::StatisticWrapper::linearTransformation()']]],
   ['lintrafoparameters',['lintrafoParameters',['../structhypro_1_1lintrafo_parameters.html',1,'hypro::lintrafoParameters&lt; Number &gt;'],['../structhypro_1_1_lin_trafo_parameters.html',1,'hypro::LinTrafoParameters&lt; Number, Setting &gt;']]],
-  ['location',['Location',['../classhypro_1_1_location.html',1,'hypro']]],
   ['location',['Location',['../classhypro_1_1_location.html#a5341ef657623c4188e479cf17c39ef11',1,'hypro::Location::Location()'],['../classhypro_1_1_location.html#a9949750959f5a116d427ffe81f2d121c',1,'hypro::Location::Location(const std::string &amp;name)'],['../classhypro_1_1_location.html#a84a35d2b77c229f685c9c304997ff776',1,'hypro::Location::Location(const Location &amp;loc)'],['../classhypro_1_1_location.html#aeffc26c683ac9afcc6850a6c03e85df7',1,'hypro::Location::Location(const matrix_t&lt; Number &gt; &amp;mat)'],['../classhypro_1_1_location.html#ae636049e31a377d3268934a3458ad0d7',1,'hypro::Location::Location(const matrix_t&lt; Number &gt; &amp;mat, transitionVector &amp;&amp;trans, const Condition&lt; Number &gt; &amp;inv)']]],
+  ['location',['Location',['../classhypro_1_1_location.html',1,'hypro']]],
   ['location_3c_20n_20_3e',['Location&lt; N &gt;',['../classhypro_1_1_location.html',1,'hypro']]],
+  ['location_3c_20rep_5fnumber_3c_20representation_20_3e_20_3e',['Location&lt; rep_number&lt; Representation &gt; &gt;',['../classhypro_1_1_location.html',1,'hypro']]],
   ['locationtype',['LOCATIONTYPE',['../namespacehypro.html#a591ce576c89c11741bb7ee90db71c677',1,'hypro']]],
   ['lockablebase',['LockableBase',['../classhypro_1_1_lockable_base.html',1,'hypro']]],
   ['lockableobjectwrapper',['LockableObjectWrapper',['../classhypro_1_1_lockable_object_wrapper.html',1,'hypro']]],
@@ -24,6 +25,7 @@ var searchData=
   ['lrucache_3c_20hypro_3a_3acacheable_3c_20matrix_5ft_3c_20number_20_3e_20_3e_2c_20matrix_5ft_3c_20number_20_3e_20_3e',['LRUCache&lt; hypro::Cacheable&lt; matrix_t&lt; Number &gt; &gt;, matrix_t&lt; Number &gt; &gt;',['../classhypro_1_1_l_r_u_cache.html',1,'hypro']]],
   ['lrucache_3c_20hypro_3a_3acacheable_3c_20vector_5ft_3c_20number_20_3e_20_3e_2c_20vector_5ft_3c_20number_20_3e_20_3e',['LRUCache&lt; hypro::Cacheable&lt; vector_t&lt; Number &gt; &gt;, vector_t&lt; Number &gt; &gt;',['../classhypro_1_1_l_r_u_cache.html',1,'hypro']]],
   ['ltianalyzer',['LTIAnalyzer',['../classhypro_1_1_l_t_i_analyzer.html',1,'hypro']]],
+  ['ltianalyzer_3c_20representation_20_3e',['LTIAnalyzer&lt; Representation &gt;',['../classhypro_1_1_l_t_i_analyzer.html',1,'hypro']]],
   ['ltibadstatehandler',['ltiBadStateHandler',['../classhypro_1_1lti_bad_state_handler.html',1,'hypro']]],
   ['lticontext',['LTIContext',['../classhypro_1_1_l_t_i_context.html',1,'hypro']]],
   ['ltifirstsegmenthandler',['ltiFirstSegmentHandler',['../classhypro_1_1lti_first_segment_handler.html',1,'hypro']]],
@@ -31,6 +33,7 @@ var searchData=
   ['ltiinvarianthandler',['ltiInvariantHandler',['../classhypro_1_1lti_invariant_handler.html',1,'hypro']]],
   ['ltijumphandler',['ltiJumpHandler',['../classhypro_1_1lti_jump_handler.html',1,'hypro']]],
   ['ltiresethandler',['ltiResetHandler',['../classhypro_1_1lti_reset_handler.html',1,'hypro']]],
+  ['ltisuccess',['LTISuccess',['../namespacehypro.html#structhypro_1_1_l_t_i_success',1,'hypro']]],
   ['ltitimeevolutionhandler',['ltiTimeEvolutionHandler',['../classhypro_1_1lti_time_evolution_handler.html',1,'hypro']]],
   ['ltiworker',['LTIWorker',['../classhypro_1_1_l_t_i_worker.html',1,'hypro']]]
 ];

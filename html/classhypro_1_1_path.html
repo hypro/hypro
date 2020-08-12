@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>HyPro: hypro::Path&lt; Number, tNumber &gt; Class Template Reference</title>
+<title>HyPro: hypro::Path&lt; Number, tNumber &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -121,10 +121,11 @@ $(document).ready(function(){initNavTree('classhypro_1_1_path.html','');});
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
-<a href="classhypro_1_1_path-members.html">List of all members</a>  </div>
+<a href="structhypro_1_1_path-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::Path&lt; Number, tNumber &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::Path&lt; Number, tNumber &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -235,12 +236,25 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:ac795ff5e25a594f1a774c9875c6d479f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac795ff5e25a594f1a774c9875c6d479f"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1_path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs) const </td></tr>
 <tr class="separator:ac795ff5e25a594f1a774c9875c6d479f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e55f17032d61fb62b98250774c9c680"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e55f17032d61fb62b98250774c9c680"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Path</b> (size_t numElements)</td></tr>
+<tr class="separator:a7e55f17032d61fb62b98250774c9c680"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a43ec8db2c2744236389331dd9274c995"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a43ec8db2c2744236389331dd9274c995"></a>
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>sharePrefix</b> (const <a class="el" href="classhypro_1_1_path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;lhs, const <a class="el" href="classhypro_1_1_path.html">Path</a>&lt; Number, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;rhs)</td></tr>
 <tr class="separator:a43ec8db2c2744236389331dd9274c995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a66bb96a8732798ba9cef88d859cc348d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66bb96a8732798ba9cef88d859cc348d"></a>
+<a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; const *&#160;</td><td class="memItemRight" valign="bottom"><b>rootLocation</b> {}</td></tr>
+<tr class="separator:a66bb96a8732798ba9cef88d859cc348d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34b29c2a911dc7f8605fe71d96cf33c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34b29c2a911dc7f8605fe71d96cf33c1"></a>
+std::vector&lt; std::pair&lt; carl::Interval&lt; <a class="el" href="namespacehypro.html#a54357ff502acd434d581c749cac1c2a0">SegmentInd</a> &gt;, <a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; const * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_path.html#a34b29c2a911dc7f8605fe71d96cf33c1">elements</a> {}</td></tr>
+<tr class="memdesc:a34b29c2a911dc7f8605fe71d96cf33c1"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classhypro_1_1_path.html" title="Class to define a path in some hybrid automaton. ">Path</a> in pairs of time and discrete steps. Intervals holds the information when the transition was taken. <br /></td></tr>
+<tr class="separator:a34b29c2a911dc7f8605fe71d96cf33c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -250,7 +264,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename tNumber = Number&gt;<br />
-class hypro::Path&lt; Number, tNumber &gt;</h3>
+struct hypro::Path&lt; Number, tNumber &gt;</h3>
 
 <p>Class to define a path in some hybrid automaton. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -261,8 +275,9 @@ class hypro::Path&lt; Number, tNumber &gt;</h3>
 </dl>
 
 <p>Definition at line <a class="el" href="_path_8h_source.html#l00106">106</a> of file <a class="el" href="_path_8h_source.html">Path.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="_path_8h_source.html">Path.h</a></li>
+<li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="_pathv2_8h_source.html">Pathv2.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="_path_8tpp_source.html">Path.tpp</a></li>
 </ul>
 </div><!-- contents -->

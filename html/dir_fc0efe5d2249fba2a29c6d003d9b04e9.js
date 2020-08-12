@@ -14,6 +14,7 @@ var dir_fc0efe5d2249fba2a29c6d003d9b04e9 =
     [ "Location.tpp", "_location_8tpp_source.html", null ],
     [ "Path.h", "_path_8h_source.html", null ],
     [ "Path.tpp", "_path_8tpp_source.html", null ],
+    [ "Pathv2.h", "_pathv2_8h_source.html", null ],
     [ "Reset.h", "_reset_8h_source.html", null ],
     [ "Reset.tpp", "_reset_8tpp_source.html", null ],
     [ "ResetTypes.h", "_reset_types_8h_source.html", null ],

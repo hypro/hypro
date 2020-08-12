@@ -5,6 +5,8 @@ var classhypro_1_1_path =
     [ "Path", "classhypro_1_1_path.html#a8472e229d647ab14908ff3b099ca319c", null ],
     [ "Path", "classhypro_1_1_path.html#aa07b2de9fab37fc451ef3b921f07e30f", null ],
     [ "~Path", "classhypro_1_1_path.html#aa8c5d3cf388c86f59e2c2652e12d3019", null ],
+    [ "Path", "classhypro_1_1_path.html#a840f2cb08dcb9f92c210e291121bb820", null ],
+    [ "Path", "classhypro_1_1_path.html#a7e55f17032d61fb62b98250774c9c680", null ],
     [ "add", "classhypro_1_1_path.html#a638bfb0372adc5336181c386dd4d2a7c", null ],
     [ "addTimeStep", "classhypro_1_1_path.html#a01ee87d5ef9cb76c5a807aa0cecdddec", null ],
     [ "addTransition", "classhypro_1_1_path.html#a391e302fe17175b1083528a1d1f70cb1", null ],
@@ -35,5 +37,7 @@ var classhypro_1_1_path =
     [ "sharedPrefix", "classhypro_1_1_path.html#a1914c145c573fb1cbaed425e4a888996", null ],
     [ "sharesPrefix", "classhypro_1_1_path.html#adc455bc9c3902b36a77df4aae94d50d2", null ],
     [ "size", "classhypro_1_1_path.html#aa1b47ff49192164d8bf24107503e0cd7", null ],
-    [ "operator<<", "classhypro_1_1_path.html#aeb0efe753dd97d35fdb2dd90143c913c", null ]
+    [ "operator<<", "classhypro_1_1_path.html#aeb0efe753dd97d35fdb2dd90143c913c", null ],
+    [ "elements", "classhypro_1_1_path.html#a34b29c2a911dc7f8605fe71d96cf33c1", null ],
+    [ "rootLocation", "classhypro_1_1_path.html#a66bb96a8732798ba9cef88d859cc348d", null ]
 ];

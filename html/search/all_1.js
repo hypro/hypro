@@ -1,7 +1,7 @@
 var searchData=
 [
   ['add',['add',['../classhypro_1_1statistics_1_1_counter_repository.html#a78ee1b2b1d0ad215d354d64f2da20bb1',1,'hypro::statistics::CounterRepository::add()'],['../classhypro_1_1statistics_1_1_statistician.html#a634a3a9148799842daf6135227ae6df9',1,'hypro::statistics::Statistician::add()']]],
-  ['addchild',['addChild',['../classhypro_1_1_tree_node.html#a23a7592615c21b6ea14f1454b5ec5150',1,'hypro::TreeNode']]],
+  ['addchild',['addChild',['../classhypro_1_1_reach_tree_node.html#a433636727ec9af1ce0619944368c14ec',1,'hypro::ReachTreeNode::addChild()'],['../classhypro_1_1_tree_node.html#a23a7592615c21b6ea14f1454b5ec5150',1,'hypro::TreeNode::addChild()']]],
   ['addconstraint',['addConstraint',['../classhypro_1_1_optimizer.html#ae0f45b33ba78df88b93e2d393823fe42',1,'hypro::Optimizer']]],
   ['addgenerators',['addGenerators',['../classhypro_1_1_zonotope_t.html#a9f59e04172b514229a25d8c9946f1355',1,'hypro::ZonotopeT']]],
   ['addglobalbadstate',['addGlobalBadState',['../classhypro_1_1_hybrid_automaton.html#af9210469bda0406b9b1cf0c3c0b12c4c',1,'hypro::HybridAutomaton']]],
@@ -18,9 +18,14 @@ var searchData=
   ['affinetransformation',['AffineTransformation',['../structhypro_1_1_affine_transformation.html',1,'hypro']]],
   ['affinetransformation',['affineTransformation',['../classhypro_1_1_halfspace.html#a3bb48f312d8f85ac321159cf7db6eb92',1,'hypro::Halfspace::affineTransformation()'],['../classhypro_1_1_point.html#a8a78350a528c03cad490f1387c90e580',1,'hypro::Point::affineTransformation()'],['../classhypro_1_1_box_t.html#ad63c73c1a390429914d4aee154c1bb63',1,'hypro::BoxT::affineTransformation()'],['../classhypro_1_1_ellipsoid_t.html#a67bd785a8cd634793bef4459e75bff20',1,'hypro::EllipsoidT::affineTransformation()'],['../classhypro_1_1_statistic_wrapper.html#a83534c60329e0480ccd9249f4c5c409f',1,'hypro::StatisticWrapper::affineTransformation()']]],
   ['affinetransformation_3c_20n_20_3e',['AffineTransformation&lt; N &gt;',['../structhypro_1_1_affine_transformation.html',1,'hypro']]],
+  ['affinetransformation_3c_20rep_5fnumber_3c_20representation_20_3e_20_3e',['AffineTransformation&lt; rep_number&lt; Representation &gt; &gt;',['../structhypro_1_1_affine_transformation.html',1,'hypro']]],
   ['aggregate',['aggregate',['../classhypro_1_1_trafo_op.html#a8927d247d6336642cc22b5e05d60dae1',1,'hypro::TrafoOp']]],
+  ['aggregatedgen',['AggregatedGen',['../structhypro_1_1_l_t_i_worker_1_1_aggregated_gen.html',1,'hypro::LTIWorker']]],
   ['aggregation',['aggregation',['../namespacehypro.html#ac33855372ca216ed99309c3177fca4f0',1,'hypro::AnalysisParameters']]],
   ['analysisparameters',['AnalysisParameters',['../namespacehypro.html#structhypro_1_1_analysis_parameters',1,'hypro']]],
+  ['analysisresult',['AnalysisResult',['../structhypro_1_1_analysis_result.html',1,'hypro']]],
+  ['analyzer_5frep_5fi',['analyzer_rep_i',['../namespacehypro.html#structhypro_1_1analyzer__rep__i',1,'hypro']]],
+  ['analyzer_5frep_5fi_3c_20analyzer_3c_20rep_2c_20ts_2e_2e_2e_20_3e_20_3e',['analyzer_rep_i&lt; Analyzer&lt; Rep, Ts... &gt; &gt;',['../namespacehypro.html#structhypro_1_1analyzer__rep__i_3_01_analyzer_3_01_rep_00_01_ts_8_8_8_01_4_01_4',1,'hypro']]],
   ['apply',['apply',['../namespacehypro.html#a841d0aa4a328ee7e77f3049f02982abe',1,'hypro']]],
   ['apply_5fi',['apply_i',['../namespacehypro.html#structhypro_1_1apply__i',1,'hypro']]],
   ['apply_5fi_3c_20templ_2c_20typelist_3c_20args_2e_2e_2e_20_3e_20_3e',['apply_i&lt; Templ, TypeList&lt; Args... &gt; &gt;',['../namespacehypro.html#structhypro_1_1apply__i_3_01_templ_00_01_type_list_3_01_args_8_8_8_01_4_01_4',1,'hypro']]],

@@ -102,6 +102,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_b"><span>b</span></a></li>
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_d"><span>d</span></a></li>
+      <li><a href="#index_e"><span>e</span></a></li>
       <li><a href="#index_f"><span>f</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_j"><span>j</span></a></li>
@@ -174,6 +175,9 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="namespacehypro.html#aec764955210067c3eab3a538cd9ba71e">hypro::AnalysisParameters</a>
 , <a class="el" href="structhypro_1_1_reachability_settings.html#aec7ef31f8312516dd54b2b338903e6fd">hypro::ReachabilitySettings</a>
 </li>
+<li>conflictNode
+: <a class="el" href="namespacehypro.html#ac738a37b77547e3b03d96acbac01fbf9">hypro::Failure&lt; Representation &gt;</a>
+</li>
 <li>currentBTPosition
 : <a class="el" href="structhypro_1_1_t_backtracking_info.html#a113aa00925adc4303c6cdc62dad52991">hypro::TBacktrackingInfo&lt; Number &gt;</a>
 </li>
@@ -183,6 +187,13 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <h3><a class="anchor" id="index_d"></a>- d -</h3><ul>
 <li>dynamic
 : <a class="el" href="namespacehypro.html#a4a88dfa1cbef6e1ffadd45caf4e6d3d6">hypro::PreprocessingInformation</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_e"></a>- e -</h3><ul>
+<li>elements
+: <a class="el" href="classhypro_1_1_path.html#a34b29c2a911dc7f8605fe71d96cf33c1">hypro::Path&lt; Number, tNumber &gt;</a>
 </li>
 </ul>
 
@@ -240,15 +251,22 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 <li>mHybridAutomaton
 : <a class="el" href="classhypro_1_1_rectangular_analyzer.html#a97bd277a42bfe1d0350bcca5409d709f">hypro::RectangularAnalyzer&lt; State &gt;</a>
 , <a class="el" href="classhypro_1_1_rectangular_worker.html#a8191adfe9ad0b045843e121fac6a8882">hypro::RectangularWorker&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1_refinement_analyzer.html#a717b0dbec8e7d0f79e225b56872d85f1">hypro::RefinementAnalyzer&lt; Representation &gt;</a>
 </li>
 <li>mInitialized
 : <a class="el" href="structhypro_1_1glpk__context.html#a161cfaf59da4a76f01e3431996906920">hypro::glpk_context</a>
+</li>
+<li>mJumpPredecessorSets
+: <a class="el" href="classhypro_1_1_rectangular_worker.html#acd6d50d21db1282546c21d99477ae159">hypro::RectangularWorker&lt; State &gt;</a>
 </li>
 <li>mJumpSuccessorSets
 : <a class="el" href="classhypro_1_1_rectangular_worker.html#a5a0ad22368e47c0b138af9b01e7c4f07">hypro::RectangularWorker&lt; State &gt;</a>
 </li>
 <li>mLimits
 : <a class="el" href="classhypro_1_1_box_t.html#a5b0f6eb0f2b1b742f453bbe0984eae8b">hypro::BoxT&lt; Number, Converter, Setting &gt;</a>
+</li>
+<li>mParameters
+: <a class="el" href="classhypro_1_1_refinement_analyzer.html#a166100e9e5c3a0680454577a448d9de8">hypro::RefinementAnalyzer&lt; Representation &gt;</a>
 </li>
 <li>mParent
 : <a class="el" href="classhypro_1_1_tree_node.html#a9d2f003348321ef60086b24bd4945294">hypro::TreeNode&lt; Data &gt;</a>
@@ -263,13 +281,15 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="classhypro_1_1_reach_tree_node.html#a2f70ad4cf1c030acd54a1fb0e364f451">hypro::ReachTreeNode&lt; State &gt;</a>
 </li>
 <li>mSettings
-: <a class="el" href="classhypro_1_1_rectangular_worker.html#aa5c31bc2498e2120c727be0c0bf47ed6">hypro::RectangularWorker&lt; State &gt;</a>
+: <a class="el" href="classhypro_1_1_l_t_i_worker.html#abfc10be593f2ceb376329a853ea44307">hypro::LTIWorker&lt; Representation &gt;</a>
+, <a class="el" href="classhypro_1_1_rectangular_worker.html#aa5c31bc2498e2120c727be0c0bf47ed6">hypro::RectangularWorker&lt; State &gt;</a>
 </li>
 <li>mutex
 : <a class="el" href="classhypro_1_1_reach_tree_node.html#a5ebb16119a90db37ff2b377865b1f307">hypro::ReachTreeNode&lt; State &gt;</a>
 </li>
 <li>mWorkQueue
 : <a class="el" href="classhypro_1_1_rectangular_analyzer.html#a9e22743529b0c379bef7339e42566cd6">hypro::RectangularAnalyzer&lt; State &gt;</a>
+, <a class="el" href="classhypro_1_1_refinement_analyzer.html#a59958bf695b8efffb07d8740bb1d0d1f">hypro::RefinementAnalyzer&lt; Representation &gt;</a>
 </li>
 </ul>
 
@@ -288,6 +308,9 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 
 
 <h3><a class="anchor" id="index_r"></a>- r -</h3><ul>
+<li>reachability_analysis_method
+: <a class="el" href="namespacehypro.html#ad4fd2a57ccb06efb8978eee3558214a9">hypro::AnalysisParameters</a>
+</li>
 <li>representation_setting
 : <a class="el" href="namespacehypro.html#aa65155691c065601013c0db4f1c72915">hypro::AnalysisParameters</a>
 </li>
@@ -312,15 +335,15 @@ $(document).ready(function(){initNavTree('functions_vars.html','');});
 : <a class="el" href="structhypro_1_1_t_path_element.html#a571a283d729e8360a3b7473537759349">hypro::TPathElement&lt; Number, tNumber &gt;</a>
 </li>
 <li>timeStep
-: <a class="el" href="namespacehypro.html#aaf98adf21450393f826cdf92721b5c63">hypro::AnalysisParameters</a>
-, <a class="el" href="structhypro_1_1_reachability_settings.html#a52e2aa09e72bba3c3c4385c18f7248aa">hypro::ReachabilitySettings</a>
+: <a class="el" href="structhypro_1_1_reachability_settings.html#a52e2aa09e72bba3c3c4385c18f7248aa">hypro::ReachabilitySettings</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_u"></a>- u -</h3><ul>
 <li>uniformBloating
-: <a class="el" href="structhypro_1_1_reachability_settings.html#a75dab1f6c8dcf210c5e8319ece734829">hypro::ReachabilitySettings</a>
+: <a class="el" href="namespacehypro.html#a1aa79bb2069cef509293f08e80f79483">hypro::AnalysisParameters</a>
+, <a class="el" href="structhypro_1_1_reachability_settings.html#a75dab1f6c8dcf210c5e8319ece734829">hypro::ReachabilitySettings</a>
 </li>
 <li>useInvariantTimingInformation
 : <a class="el" href="structhypro_1_1_reachability_settings.html#aa879f947713bf99a791174af672ba59d">hypro::ReachabilitySettings</a>

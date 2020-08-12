@@ -132,7 +132,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1_rectangular_worker.html
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac88809c07f542e2c0b1ea42fa1484319"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac88809c07f542e2c0b1ea42fa1484319"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#ac88809c07f542e2c0b1ea42fa1484319">RectangularWorker</a> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &amp;settings)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#ac88809c07f542e2c0b1ea42fa1484319">RectangularWorker</a> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="classhypro_1_1_settings.html">Settings</a> &amp;settings)</td></tr>
 <tr class="memdesc:ac88809c07f542e2c0b1ea42fa1484319"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor from rectangular automaton and settings <br /></td></tr>
 <tr class="separator:ac88809c07f542e2c0b1ea42fa1484319"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58541884a8c4361073fa23c3dbd834e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58541884a8c4361073fa23c3dbd834e9"></a>
@@ -147,10 +147,22 @@ REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><a class=
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#a1d2eb225eb8428928fbfd6590465de07">computeJumpSuccessors</a> ()</td></tr>
 <tr class="memdesc:a1d2eb225eb8428928fbfd6590465de07"><td class="mdescLeft">&#160;</td><td class="mdescRight">computes a discrete transition. Requires available time successors. <br /></td></tr>
 <tr class="separator:a1d2eb225eb8428928fbfd6590465de07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5685bf40bc8db1bd378dd3156b1bfce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5685bf40bc8db1bd378dd3156b1bfce"></a>
+REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#af5685bf40bc8db1bd378dd3156b1bfce">computeBackwardReachability</a> (const <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; &amp;task)</td></tr>
+<tr class="memdesc:af5685bf40bc8db1bd378dd3156b1bfce"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for discrete jump successor sets <br /></td></tr>
+<tr class="separator:af5685bf40bc8db1bd378dd3156b1bfce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a176757c87e242c6bb2bcc69bd1c82b5c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a176757c87e242c6bb2bcc69bd1c82b5c"></a>
+REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><b>computeTimePredecessors</b> (const <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; &amp;task)</td></tr>
+<tr class="separator:a176757c87e242c6bb2bcc69bd1c82b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae393bc739576baffb32960d46a4051c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae393bc739576baffb32960d46a4051c9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>computeJumpPredecessors</b> ()</td></tr>
+<tr class="separator:ae393bc739576baffb32960d46a4051c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33d05eab87bd0730141ff2db306df2ae"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33d05eab87bd0730141ff2db306df2ae"></a>
-const JumpSuccessors &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#a33d05eab87bd0730141ff2db306df2ae">getJumpSuccessorSets</a> () const </td></tr>
-<tr class="memdesc:a33d05eab87bd0730141ff2db306df2ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for discrete jump successor sets <br /></td></tr>
+const JumpSuccessors &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getJumpSuccessorSets</b> () const </td></tr>
 <tr class="separator:a33d05eab87bd0730141ff2db306df2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac650c204335e530ab3f2d00cf2f7fa1b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac650c204335e530ab3f2d00cf2f7fa1b"></a>
+const JumpSuccessors &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getJumpPredecessorSets</b> () const </td></tr>
+<tr class="separator:ac650c204335e530ab3f2d00cf2f7fa1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5373b8e24adea205fa917fc92c36c8e5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5373b8e24adea205fa917fc92c36c8e5"></a>
 const <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#a5373b8e24adea205fa917fc92c36c8e5">getFlowpipe</a> () const </td></tr>
 <tr class="memdesc:a5373b8e24adea205fa917fc92c36c8e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for time successor sets <br /></td></tr>
@@ -163,13 +175,17 @@ const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton<
 <tr class="memdesc:a8191adfe9ad0b045843e121fac6a8882"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to the rectangular automaton. <br /></td></tr>
 <tr class="separator:a8191adfe9ad0b045843e121fac6a8882"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5c31bc2498e2120c727be0c0bf47ed6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5c31bc2498e2120c727be0c0bf47ed6"></a>
-const <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#aa5c31bc2498e2120c727be0c0bf47ed6">mSettings</a></td></tr>
+const <a class="el" href="classhypro_1_1_settings.html">Settings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#aa5c31bc2498e2120c727be0c0bf47ed6">mSettings</a></td></tr>
 <tr class="memdesc:aa5c31bc2498e2120c727be0c0bf47ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference to the used analysis settings. <br /></td></tr>
 <tr class="separator:aa5c31bc2498e2120c727be0c0bf47ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a0ad22368e47c0b138af9b01e7c4f07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a0ad22368e47c0b138af9b01e7c4f07"></a>
 JumpSuccessors&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#a5a0ad22368e47c0b138af9b01e7c4f07">mJumpSuccessorSets</a></td></tr>
 <tr class="memdesc:a5a0ad22368e47c0b138af9b01e7c4f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Storage of computed jump successors. <br /></td></tr>
 <tr class="separator:a5a0ad22368e47c0b138af9b01e7c4f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd6d50d21db1282546c21d99477ae159"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd6d50d21db1282546c21d99477ae159"></a>
+JumpPredecessors&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#acd6d50d21db1282546c21d99477ae159">mJumpPredecessorSets</a></td></tr>
+<tr class="memdesc:acd6d50d21db1282546c21d99477ae159"><td class="mdescLeft">&#160;</td><td class="mdescRight">Storage of computed jump predecessors. <br /></td></tr>
+<tr class="separator:acd6d50d21db1282546c21d99477ae159"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1919c8c3b8514c80ea7cc0f21b99b5ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1919c8c3b8514c80ea7cc0f21b99b5ab"></a>
 <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_rectangular_worker.html#a1919c8c3b8514c80ea7cc0f21b99b5ab">mFlowpipe</a></td></tr>
 <tr class="memdesc:a1919c8c3b8514c80ea7cc0f21b99b5ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Storage of computed time successors. <br /></td></tr>
@@ -187,7 +203,7 @@ class hypro::RectangularWorker&lt; State &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_rectangular_worker_8h_source.html#l00023">23</a> of file <a class="el" href="_rectangular_worker_8h_source.html">RectangularWorker.h</a>.</p>
+<p>Definition at line <a class="el" href="_rectangular_worker_8h_source.html#l00024">24</a> of file <a class="el" href="_rectangular_worker_8h_source.html">RectangularWorker.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/<a class="el" href="_rectangular_worker_8h_source.html">RectangularWorker.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/<a class="el" href="_rectangular_worker_8tpp_source.html">RectangularWorker.tpp</a></li>

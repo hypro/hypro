@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>HyPro: hypro::LTIWorker&lt; State &gt; Class Template Reference</title>
+<title>HyPro: hypro::LTIWorker&lt; Representation &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -118,53 +118,62 @@ $(document).ready(function(){initNavTree('classhypro_1_1_l_t_i_worker.html','');
 
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhypro_1_1_l_t_i_worker-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::LTIWorker&lt; State &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::LTIWorker&lt; Representation &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_l_t_i_worker_1_1_aggregated_gen.html">AggregatedGen</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_l_t_i_worker_1_1_enabled_segments_gen.html">EnabledSegmentsGen</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_l_t_i_worker_1_1_jump_successor_gen.html">JumpSuccessorGen</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a507dc4f5fc9bbdf012971ffa0d09d111"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a507dc4f5fc9bbdf012971ffa0d09d111"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LTIWorker</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &amp;settings)</td></tr>
-<tr class="separator:a507dc4f5fc9bbdf012971ffa0d09d111"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a763fd9c0ec4b734d41efd4cb31c64acc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a763fd9c0ec4b734d41efd4cb31c64acc"></a>
-REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><b>computeForwardReachability</b> (const <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; &amp;task)</td></tr>
-<tr class="separator:a763fd9c0ec4b734d41efd4cb31c64acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae06c313dbcecc469aa7b88d2a1460640"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae06c313dbcecc469aa7b88d2a1460640"></a>
-REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><b>computeTimeSuccessors</b> (const <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; &amp;task)</td></tr>
-<tr class="separator:ae06c313dbcecc469aa7b88d2a1460640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf96efadf2f10b94196244244d8374ee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf96efadf2f10b94196244244d8374ee"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>computeJumpSuccessors</b> ()</td></tr>
-<tr class="separator:abf96efadf2f10b94196244244d8374ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0dfa669d4b407bb44e27e5023cc9735f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0dfa669d4b407bb44e27e5023cc9735f"></a>
-const JumpSuccessors &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getJumpSuccessorSets</b> () const </td></tr>
-<tr class="separator:a0dfa669d4b407bb44e27e5023cc9735f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b5b2c5ff9927c937585d5c1661830fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b5b2c5ff9927c937585d5c1661830fb"></a>
-const <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowpipe</b> () const </td></tr>
-<tr class="separator:a5b5b2c5ff9927c937585d5c1661830fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a726793ad0df6d18f7c5c8695c3e01485"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a726793ad0df6d18f7c5c8695c3e01485"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>LTIWorker</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="namespacehypro.html#structhypro_1_1_analysis_parameters">AnalysisParameters</a> &amp;settings, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> localTimeHorizon, <a class="el" href="classhypro_1_1_time_transformation_cache.html">TimeTransformationCache</a>&lt; Number &gt; &amp;trafoCache)</td></tr>
+<tr class="separator:a726793ad0df6d18f7c5c8695c3e01485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a077e7ace0b9f3fed16077f059f9b3bc8"><td class="memTemplParams" colspan="2"><a class="anchor" id="a077e7ace0b9f3fed16077f059f9b3bc8"></a>
+template&lt;typename OutputIt &gt; </td></tr>
+<tr class="memitem:a077e7ace0b9f3fed16077f059f9b3bc8"><td class="memTemplItemLeft" align="right" valign="top">REACHABILITY_RESULT&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeTimeSuccessors</b> (const Representation &amp;initialSet, <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; const *loc, OutputIt out) const </td></tr>
+<tr class="separator:a077e7ace0b9f3fed16077f059f9b3bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abea9c0e06e3fb779467ab763368a5cba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abea9c0e06e3fb779467ab763368a5cba"></a>
+std::vector&lt; <a class="el" href="namespacehypro.html#structhypro_1_1_jump_successor">JumpSuccessor</a>&lt; Representation &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>computeJumpSuccessors</b> (std::vector&lt; Representation &gt; const &amp;flowpipe, <a class="el" href="classhypro_1_1_location.html">Location</a>&lt; Number &gt; const *loc) const </td></tr>
+<tr class="separator:abea9c0e06e3fb779467ab763368a5cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbd1a57a10312aa413c0adace739e7bc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbd1a57a10312aa413c0adace739e7bc"></a>
+<a class="el" href="structhypro_1_1_l_t_i_worker_1_1_jump_successor_gen.html">JumpSuccessorGen</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getJumpSuccessors</b> (std::vector&lt; Representation &gt; const &amp;flowpipe, <a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt; const *transition) const </td></tr>
+<tr class="separator:adbd1a57a10312aa413c0adace739e7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a2cc1e76620ac67d73bf30ab00ba50c0e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2cc1e76620ac67d73bf30ab00ba50c0e"></a>
+<tr class="memitem:a3588da0576e7676511a7bd71a84d5f30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3588da0576e7676511a7bd71a84d5f30"></a>
 const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mHybridAutomaton</b></td></tr>
-<tr class="separator:a2cc1e76620ac67d73bf30ab00ba50c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecf10099a2d3dd81b748f56449e112c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aecf10099a2d3dd81b748f56449e112c9"></a>
-const <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mSettings</b></td></tr>
-<tr class="separator:aecf10099a2d3dd81b748f56449e112c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeefdd14e781442d1fa2b4d1f21e8294a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeefdd14e781442d1fa2b4d1f21e8294a"></a>
-JumpSuccessors&#160;</td><td class="memItemRight" valign="bottom"><b>mJumpSuccessorSets</b></td></tr>
-<tr class="separator:aeefdd14e781442d1fa2b4d1f21e8294a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98b85295c2f715aa0bd01413725ff57f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98b85295c2f715aa0bd01413725ff57f"></a>
-<a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowpipe</b></td></tr>
-<tr class="separator:a98b85295c2f715aa0bd01413725ff57f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3588da0576e7676511a7bd71a84d5f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfc10be593f2ceb376329a853ea44307"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abfc10be593f2ceb376329a853ea44307"></a>
+const <a class="el" href="namespacehypro.html#structhypro_1_1_analysis_parameters">AnalysisParameters</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_l_t_i_worker.html#abfc10be593f2ceb376329a853ea44307">mSettings</a></td></tr>
+<tr class="memdesc:abfc10be593f2ceb376329a853ea44307"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO add documentation. <br /></td></tr>
+<tr class="separator:abfc10be593f2ceb376329a853ea44307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e0f16797aded2a62c907cc4ff24d2b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e0f16797aded2a62c907cc4ff24d2b4"></a>
+<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalTimeHorizon</b></td></tr>
+<tr class="separator:a4e0f16797aded2a62c907cc4ff24d2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae6184e98fc9b69b28b823548e2346b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae6184e98fc9b69b28b823548e2346b6"></a>
+<a class="el" href="classhypro_1_1_time_transformation_cache.html">TimeTransformationCache</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mTrafoCache</b></td></tr>
+<tr class="separator:aae6184e98fc9b69b28b823548e2346b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6eb977c778311800caa75c39b297d111"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6eb977c778311800caa75c39b297d111"></a>
+size_t const&#160;</td><td class="memItemRight" valign="bottom"><b>mNumSegments</b> = size_t( std::ceil( std::nextafter( carl::convert&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>, double&gt;( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits&lt;double&gt;::max() ) ) )</td></tr>
+<tr class="separator:a6eb977c778311800caa75c39b297d111"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename State&gt;<br />
-class hypro::LTIWorker&lt; State &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Representation&gt;<br />
+class hypro::LTIWorker&lt; Representation &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="_l_t_i_worker_8h_source.html#l00018">18</a> of file <a class="el" href="_l_t_i_worker_8h_source.html">LTIWorker.h</a>.</p>

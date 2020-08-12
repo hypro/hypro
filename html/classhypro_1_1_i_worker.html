@@ -140,7 +140,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>TaskType</b> = std::
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ae5d4c1f8f4318a64a973ee5ebe441a54"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_i_worker.html#ae5d4c1f8f4318a64a973ee5ebe441a54">IWorker</a> (const <a class="el" href="structhypro_1_1_reachability_settings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
 <tr class="separator:ae5d4c1f8f4318a64a973ee5ebe441a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a873645f3c29c459ce0b7d90e4efdde79"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_i_worker.html#a873645f3c29c459ce0b7d90e4efdde79">processTask</a> (const Workable &amp;w, const Strategy&lt; State &gt; &amp;strategy, <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; TaskType &gt; *localQueue, <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; TaskType &gt; *localCEXQueue, <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments)=0</td></tr>
+<tr class="memitem:a873645f3c29c459ce0b7d90e4efdde79"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_i_worker.html#a873645f3c29c459ce0b7d90e4efdde79">processTask</a> (const Workable &amp;w, const <a class="el" href="namespacehypro.html#structhypro_1_1_strategy">Strategy</a>&lt; State &gt; &amp;strategy, <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; TaskType &gt; *localQueue, <a class="el" href="classhypro_1_1_work_queue_t.html">WorkQueue</a>&lt; TaskType &gt; *localCEXQueue, <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &amp;localSegments)=0</td></tr>
 <tr class="separator:a873645f3c29c459ce0b7d90e4efdde79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4c3c995bc6555be3f37273f12097953"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa4c3c995bc6555be3f37273f12097953"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>detectedUnsafety</b> () const </td></tr>
@@ -210,7 +210,7 @@ template&lt;class Workable, typename State&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const Strategy&lt; State &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#structhypro_1_1_strategy">Strategy</a>&lt; State &gt; &amp;&#160;</td>
           <td class="paramname"><em>strategy</em>, </td>
         </tr>
         <tr>

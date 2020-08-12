@@ -5,7 +5,12 @@ var hierarchy =
     [ "better_enums::_iterable< Element >", "structbetter__enums_1_1__iterable.html", null ],
     [ "hypro::AffineTransformation< Number >", "structhypro_1_1_affine_transformation.html", null ],
     [ "hypro::AffineTransformation< N >", "structhypro_1_1_affine_transformation.html", null ],
+    [ "hypro::AffineTransformation< rep_number< Representation > >", "structhypro_1_1_affine_transformation.html", null ],
+    [ "hypro::LTIWorker< Representation >::AggregatedGen", "structhypro_1_1_l_t_i_worker_1_1_aggregated_gen.html", null ],
     [ "hypro::AnalysisParameters", "namespacehypro.html#structhypro_1_1_analysis_parameters", null ],
+    [ "hypro::AnalysisResult< Success, Failure >", "structhypro_1_1_analysis_result.html", null ],
+    [ "hypro::analyzer_rep_i< Representation >", "namespacehypro.html#structhypro_1_1analyzer__rep__i", null ],
+    [ "hypro::analyzer_rep_i< Analyzer< Rep, Ts... > >", "namespacehypro.html#structhypro_1_1analyzer__rep__i_3_01_analyzer_3_01_rep_00_01_ts_8_8_8_01_4_01_4", null ],
     [ "hypro::apply_i< Templ, ArgList >", "namespacehypro.html#structhypro_1_1apply__i", null ],
     [ "hypro::apply_i< Templ, TypeList< Args... > >", "namespacehypro.html#structhypro_1_1apply__i_3_01_templ_00_01_type_list_3_01_args_8_8_8_01_4_01_4", null ],
     [ "hypro::BallSupportFunction< Number >", "classhypro_1_1_ball_support_function.html", null ],
@@ -17,11 +22,14 @@ var hierarchy =
     [ "hypro::Cacheable< Content >", "structhypro_1_1_cacheable.html", null ],
     [ "hypro::Cacheable< matrix_t< Number > >", "structhypro_1_1_cacheable.html", null ],
     [ "hypro::Cacheable< vector_t< Number > >", "structhypro_1_1_cacheable.html", null ],
+    [ "hypro::CEGARAnalyzer< Number, Representations >", "classhypro_1_1_c_e_g_a_r_analyzer.html", null ],
     [ "hypro::qe::CellTreeNode< Data >", "structhypro_1_1qe_1_1_cell_tree_node.html", null ],
+    [ "hypro::ChildNodeGen< Representation >", "structhypro_1_1_child_node_gen.html", null ],
     [ "hypro::ChildTimingInformation< N >", "namespacehypro.html#structhypro_1_1_child_timing_information", null ],
     [ "hypro::ChildTimingInformation< Number >", "namespacehypro.html#namespacehypro", null ],
     [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
     [ "hypro::concat_i< List, Lists >", "namespacehypro.html#structhypro_1_1concat__i", null ],
+    [ "hypro::concat_i< TypeList< Ts... > >", "namespacehypro.html#structhypro_1_1concat__i_3_01_type_list_3_01_ts_8_8_8_01_4_01_4", null ],
     [ "hypro::concat_i< TypeList< Ts... >, TypeList< Us... > >", "namespacehypro.html#structhypro_1_1concat__i_3_01_type_list_3_01_ts_8_8_8_01_4_00_01_type_list_3_01_us_8_8_8_01_4_01_4", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1_cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1_constrain_set.html", null ],
@@ -29,6 +37,7 @@ var hierarchy =
     [ "hypro::ConstraintSetT< Number, S >", "classhypro_1_1_constraint_set_t.html", null ],
     [ "hypro::ConstraintSetT< N >", "classhypro_1_1_constraint_set_t.html", null ],
     [ "hypro::ConstraintSetT< Number >", "classhypro_1_1_constraint_set_t.html", null ],
+    [ "hypro::ConstraintSetT< rep_number< Representation > >", "classhypro_1_1_constraint_set_t.html", null ],
     [ "context", null, [
       [ "hypro::z3Context", "classhypro_1_1z3_context.html", null ]
     ] ],
@@ -36,6 +45,8 @@ var hierarchy =
     [ "hypro::Converter< Number >", "classhypro_1_1_converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1_convex_hull.html", null ],
     [ "hypro::statistics::CounterRepository", "classhypro_1_1statistics_1_1_counter_repository.html", null ],
+    [ "hypro::CEGARAnalyzer< Number, Representations >::CreateBaseLevel", "structhypro_1_1_c_e_g_a_r_analyzer_1_1_create_base_level.html", null ],
+    [ "hypro::CEGARAnalyzer< Number, Representations >::CreateRefinementLevel", "structhypro_1_1_c_e_g_a_r_analyzer_1_1_create_refinement_level.html", null ],
     [ "hypro::DAGNode< Data >", "classhypro_1_1_d_a_g_node.html", [
       [ "hypro::EventTimingNode< N >", "classhypro_1_1_event_timing_node.html", null ]
     ] ],
@@ -49,10 +60,16 @@ var hierarchy =
     [ "hypro::Dispatcher_i< Representation >", "structhypro_1_1_dispatcher__i_3_01_representation_01_4.html", null ],
     [ "hypro::Domain< Number >", "classhypro_1_1_domain.html", null ],
     [ "hypro::Dummy", "structhypro_1_1_dummy.html", null ],
+    [ "element", null, [
+      [ "std::tuple_element< I, boost::tuples::cons< T, U > >", "structstd_1_1tuple__element_3_01_i_00_01boost_1_1tuples_1_1cons_3_01_t_00_01_u_01_4_01_4.html", null ]
+    ] ],
     [ "hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1_ellipsoid_support_function.html", null ],
     [ "hypro::EllipsoidT< Number, Converter >", "classhypro_1_1_ellipsoid_t.html", null ],
+    [ "hypro::LTIWorker< Representation >::EnabledSegmentsGen", "structhypro_1_1_l_t_i_worker_1_1_enabled_segments_gen.html", null ],
+    [ "hypro::EnabledSets< Representation >", "namespacehypro.html#structhypro_1_1_enabled_sets", null ],
     [ "hypro::endPoint< T, Number >", "structhypro_1_1end_point.html", null ],
     [ "hypro::endPoint< CONTAINMENT, tNumber >", "structhypro_1_1end_point.html", null ],
+    [ "hypro::ErrorBoxes< Number >", "namespacehypro.html#structhypro_1_1_error_boxes", null ],
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1_evaluation_result.html", null ],
     [ "hypro::EventTimingContainer< Number >", "classhypro_1_1_event_timing_container.html", null ],
     [ "hypro::EventTimingContainer< N >", "classhypro_1_1_event_timing_container.html", null ],
@@ -63,12 +80,14 @@ var hierarchy =
     [ "hypro::ExactQuickhull::Facet< Number, Euclidian >", "structhypro_1_1_exact_quickhull_1_1_facet.html", null ],
     [ "hypro::Facet< Number >", "classhypro_1_1_facet.html", null ],
     [ "hypro::ExactQuickhull::FacetSpace< Number, Euclidian >", "classhypro_1_1_exact_quickhull_1_1_facet_space.html", null ],
+    [ "hypro::Failure< Representation >", "namespacehypro.html#structhypro_1_1_failure", null ],
     [ "false_type", null, [
       [ "hypro::is_flow< T >", "structhypro_1_1is__flow.html", null ],
       [ "hypro::is_shared_ptr< T >", "structhypro_1_1is__shared__ptr.html", null ],
       [ "hypro::is_unique_ptr< T >", "structhypro_1_1is__unique__ptr.html", null ]
     ] ],
     [ "hypro::Fan< Number >", "classhypro_1_1_fan.html", null ],
+    [ "hypro::FixedAnalysisParameters", "namespacehypro.html#structhypro_1_1_fixed_analysis_parameters", null ],
     [ "hypro::flattenRepresentations_i< Number, Converter, CombinationsList >", "namespacehypro.html#structhypro_1_1flatten_representations__i", null ],
     [ "hypro::flattenRepresentations_i< Number, Converter, TypeList< RepCombinationsList... > >", "namespacehypro.html#structhypro_1_1flatten_representations__i_3_01_number_00_01_converter_00_01_type_list_3_01_rep_c998c63914da0aac3968b8b40e6527b30", null ],
     [ "hypro::flowDimensionVisitor", "structhypro_1_1flow_dimension_visitor.html", null ],
@@ -76,8 +95,10 @@ var hierarchy =
     [ "hypro::flowHashVisitor", "structhypro_1_1flow_hash_visitor.html", null ],
     [ "hypro::flowIsDiscreteVisitor", "structhypro_1_1flow_is_discrete_visitor.html", null ],
     [ "hypro::flowIsTimedVisitor", "structhypro_1_1flow_is_timed_visitor.html", null ],
-    [ "hypro::Flowpipe< State >", "classhypro_1_1_flowpipe.html", null ],
+    [ "hypro::Flowpipe< Representation >", "classhypro_1_1_flowpipe.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1_flowpipe.html", null ],
+    [ "hypro::Flowpipe< State >", "classhypro_1_1_flowpipe.html", null ],
+    [ "hypro::FlowpipeTimingVector", "classhypro_1_1_flowpipe_timing_vector.html", null ],
     [ "hypro::flowTypeVisitor", "structhypro_1_1flow_type_visitor.html", null ],
     [ "hypro::FourierMotzkinQE< Number >", "classhypro_1_1_fourier_motzkin_q_e.html", null ],
     [ "hypro::detail::gen_seq< N, Is >", "structhypro_1_1detail_1_1gen__seq.html", null ],
@@ -177,14 +198,22 @@ var hierarchy =
         [ "hypro::TPolyTimeEvolutionHandler< State >", "classhypro_1_1_t_poly_time_evolution_handler.html", null ]
       ] ]
     ] ],
+    [ "hypro::IndexedValuationSet< Representation >", "namespacehypro.html#structhypro_1_1_indexed_valuation_set", null ],
     [ "hypro::intersectionContent< Number, Setting >", "structhypro_1_1intersection_content.html", null ],
+    [ "hypro::Interval", "structhypro_1_1_interval.html", null ],
     [ "hypro::IntervalAssignment< Number >", "structhypro_1_1_interval_assignment.html", null ],
     [ "hypro::IntervalAssignment< N >", "structhypro_1_1_interval_assignment.html", null ],
+    [ "hypro::IntervalAssignment< rep_number< Representation > >", "structhypro_1_1_interval_assignment.html", null ],
     [ "hypro::IWorker< Workable, State >", "classhypro_1_1_i_worker.html", null ],
     [ "hypro::IWorker< std::shared_ptr< Task< State > >, State >", "classhypro_1_1_i_worker.html", [
       [ "hypro::ContextBasedReachabilityWorker< State >", "classhypro_1_1_context_based_reachability_worker.html", null ]
     ] ],
+    [ "hypro::JumpSuccessor< Representation >", "namespacehypro.html#structhypro_1_1_jump_successor", null ],
+    [ "hypro::LTIWorker< Representation >::JumpSuccessorGen", "structhypro_1_1_l_t_i_worker_1_1_jump_successor_gen.html", null ],
     [ "hypro::Label", "classhypro_1_1_label.html", null ],
+    [ "length", null, [
+      [ "std::tuple_size< boost::tuples::cons< T, U > >", "structstd_1_1tuple__size_3_01boost_1_1tuples_1_1cons_3_01_t_00_01_u_01_4_01_4.html", null ]
+    ] ],
     [ "hypro::ZUtility::Line_t< Number >", "structhypro_1_1_z_utility_1_1_line__t.html", null ],
     [ "hypro::linearFlow< Number >", "classhypro_1_1linear_flow.html", [
       [ "hypro::affineFlow< Number >", "classhypro_1_1affine_flow.html", null ]
@@ -193,6 +222,7 @@ var hierarchy =
     [ "hypro::LinTrafoParameters< Number, Setting >", "structhypro_1_1_lin_trafo_parameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1_location.html", null ],
     [ "hypro::Location< N >", "classhypro_1_1_location.html", null ],
+    [ "hypro::Location< rep_number< Representation > >", "classhypro_1_1_location.html", null ],
     [ "hypro::LockableBase", "classhypro_1_1_lockable_base.html", [
       [ "hypro::LockedFileWriter", "classhypro_1_1_locked_file_writer.html", null ]
     ] ],
@@ -202,6 +232,7 @@ var hierarchy =
     [ "hypro::LRUCache< hypro::Cacheable< matrix_t< Number > >, matrix_t< Number > >", "classhypro_1_1_l_r_u_cache.html", null ],
     [ "hypro::LRUCache< hypro::Cacheable< vector_t< Number > >, vector_t< Number > >", "classhypro_1_1_l_r_u_cache.html", null ],
     [ "hypro::LTIAnalyzer< State >", "classhypro_1_1_l_t_i_analyzer.html", null ],
+    [ "hypro::LTIAnalyzer< Representation >", "classhypro_1_1_l_t_i_analyzer.html", null ],
     [ "hypro::ltiBadStateHandler< State >", "classhypro_1_1lti_bad_state_handler.html", [
       [ "hypro::discreteBadStateHandler< State >", "classhypro_1_1discrete_bad_state_handler.html", null ],
       [ "hypro::timedBadStateHandler< State >", "classhypro_1_1timed_bad_state_handler.html", null ]
@@ -219,12 +250,13 @@ var hierarchy =
       [ "hypro::timedInvariantHandler< State >", "classhypro_1_1timed_invariant_handler.html", null ]
     ] ],
     [ "hypro::ltiJumpHandler< State >", "classhypro_1_1lti_jump_handler.html", null ],
+    [ "hypro::LTISuccess", "namespacehypro.html#structhypro_1_1_l_t_i_success", null ],
     [ "hypro::ltiTimeEvolutionHandler< State >", "classhypro_1_1lti_time_evolution_handler.html", [
       [ "hypro::timedElapseAfterTickTimeEvolutionHandler< State >", "classhypro_1_1timed_elapse_after_tick_time_evolution_handler.html", null ],
       [ "hypro::timedElapseTimeEvolutionHandler< State >", "classhypro_1_1timed_elapse_time_evolution_handler.html", null ],
       [ "hypro::timedTickTimeEvolutionHandler< State >", "classhypro_1_1timed_tick_time_evolution_handler.html", null ]
     ] ],
-    [ "hypro::LTIWorker< State >", "classhypro_1_1_l_t_i_worker.html", null ],
+    [ "hypro::LTIWorker< Representation >", "classhypro_1_1_l_t_i_worker.html", null ],
     [ "Manager", null, [
       [ "smtrat::SimplexSolver", "classsmtrat_1_1_simplex_solver.html", null ]
     ] ],
@@ -233,7 +265,6 @@ var hierarchy =
     [ "better_enums::map_compare< const char * >", "structbetter__enums_1_1map__compare_3_01const_01char_01_5_01_4.html", null ],
     [ "better_enums::map_compare< const wchar_t * >", "structbetter__enums_1_1map__compare_3_01const_01wchar__t_01_5_01_4.html", null ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1_neighborhood_container.html", null ],
-    [ "hypro::nodeUpdater< State >", "structhypro_1_1node_updater.html", null ],
     [ "hypro::NoneAssignment", "structhypro_1_1_none_assignment.html", null ],
     [ "hypro::detail::nth_element_impl< I, T, Ts >", "structhypro_1_1detail_1_1nth__element__impl.html", null ],
     [ "hypro::detail::nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4.html", null ],
@@ -251,8 +282,10 @@ var hierarchy =
     ] ],
     [ "hypro::Parameters< Rargs >", "structhypro_1_1_parameters.html", null ],
     [ "hypro::Path< Number, tNumber >", "classhypro_1_1_path.html", null ],
+    [ "hypro::Path< Number >", "classhypro_1_1_path.html", null ],
     [ "hypro::Permutator", "classhypro_1_1_permutator.html", null ],
     [ "hypro::PlotData< State >", "structhypro_1_1_plot_data.html", null ],
+    [ "hypro::PlottingSettings", "namespacehypro.html#structhypro_1_1_plotting_settings", null ],
     [ "hypro::Point< Number >", "classhypro_1_1_point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1_point.html", null ],
     [ "hypro::Point< std::size_t >", "classhypro_1_1_point.html", null ],
@@ -273,12 +306,19 @@ var hierarchy =
     [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangular_flow.html", null ],
     [ "hypro::rectangularGuardHandler< State >", "classhypro_1_1rectangular_guard_handler.html", null ],
     [ "hypro::rectangularInvariantHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_invariant_handler", null ],
+    [ "hypro::rectangularJumpHandler< State >", "classhypro_1_1rectangular_jump_handler.html", null ],
     [ "hypro::rectangularTimeEvolutionHandler< State >", "namespacehypro.html#classhypro_1_1rectangular_time_evolution_handler", null ],
     [ "hypro::RectangularWorker< State >", "classhypro_1_1_rectangular_worker.html", null ],
+    [ "hypro::RefinementAnalyzer< Representation >", "classhypro_1_1_refinement_analyzer.html", null ],
     [ "hypro::RefinementSetting< State >", "structhypro_1_1_refinement_setting.html", null ],
+    [ "hypro::RefinementSetting< Representation >", "structhypro_1_1_refinement_setting.html", null ],
+    [ "hypro::RefinementSuccess< Representation >", "namespacehypro.html#structhypro_1_1_refinement_success", null ],
+    [ "hypro::rep_number_i< Representation >", "namespacehypro.html#structhypro_1_1rep__number__i", null ],
+    [ "hypro::rep_number_i< Rep< Number, Ts... > >", "namespacehypro.html#structhypro_1_1rep__number__i_3_01_rep_3_01_number_00_01_ts_8_8_8_01_4_01_4", null ],
     [ "hypro::RepresentationCombinations< Representation, Settings >", "namespacehypro.html#structhypro_1_1_representation_combinations", null ],
     [ "hypro::Reset< Number >", "classhypro_1_1_reset.html", null ],
     [ "hypro::Reset< N >", "classhypro_1_1_reset.html", null ],
+    [ "hypro::Reset< rep_number< Representation > >", "classhypro_1_1_reset.html", null ],
     [ "hypro::detail::ResetVisitor< ReturnType, Function >", "structhypro_1_1detail_1_1_reset_visitor.html", null ],
     [ "hypro::RGNData", "structhypro_1_1_r_g_n_data.html", [
       [ "hypro::IntersectHalfspaceData< Number >", "structhypro_1_1_intersect_halfspace_data.html", null ],
@@ -298,6 +338,8 @@ var hierarchy =
       [ "hypro::TrafoOp< Number, Converter, Setting >", "classhypro_1_1_trafo_op.html", null ],
       [ "hypro::UnionOp< Number, Converter, Setting >", "classhypro_1_1_union_op.html", null ]
     ] ],
+    [ "hypro::RTN_Rep_i< RTN >", "namespacehypro.html#structhypro_1_1_r_t_n___rep__i", null ],
+    [ "hypro::RTN_Rep_i< ReachTreeNode< Representation > >", "namespacehypro.html#structhypro_1_1_r_t_n___rep__i_3_01_reach_tree_node_3_01_representation_01_4_01_4", null ],
     [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scale_content.html", null ],
     [ "hypro::ScopedLock< Lockable >", "classhypro_1_1_scoped_lock.html", null ],
     [ "hypro::detail::seq< Is >", "structhypro_1_1detail_1_1seq.html", null ],
@@ -305,9 +347,10 @@ var hierarchy =
       [ "hypro::detail::gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01_is_8_8_8_01_4.html", null ]
     ] ],
     [ "hypro::setCreationVisitor< State >", "structhypro_1_1set_creation_visitor.html", null ],
-    [ "hypro::Settings", "namespacehypro.html#structhypro_1_1_settings", null ],
+    [ "hypro::Settings", "classhypro_1_1_settings.html", null ],
     [ "Singleton", null, [
       [ "hypro::ContextFactory< State >", "classhypro_1_1_context_factory.html", null ],
+      [ "hypro::DecisionEntity< Number >", "classhypro_1_1_decision_entity.html", null ],
       [ "hypro::EventTimingProvider< Number >", "classhypro_1_1_event_timing_provider.html", null ],
       [ "hypro::HandlerFactory< State >", "classhypro_1_1_handler_factory.html", null ],
       [ "hypro::NodeManager< State >", "classhypro_1_1_node_manager.html", null ],
@@ -319,6 +362,8 @@ var hierarchy =
     [ "hypro::STallValues< Number >", "namespacehypro.html#structhypro_1_1_s_tall_values", null ],
     [ "hypro::STflowpipeSegment< Number >", "namespacehypro.html#structhypro_1_1_s_tflowpipe_segment", null ],
     [ "hypro::STindependentFunct< Number >", "namespacehypro.html#structhypro_1_1_s_tindependent_funct", null ],
+    [ "hypro::Strategy", "namespacehypro.html#structhypro_1_1_strategy", null ],
+    [ "hypro::Strategy< State >", "namespacehypro.html#namespacehypro", null ],
     [ "hypro::stringToSetting_Impl< Enum, Enums >", "structhypro_1_1string_to_setting___impl.html", null ],
     [ "hypro::stringToSetting_Impl< Enum >", "structhypro_1_1string_to_setting___impl_3_01_enum_01_4.html", null ],
     [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sum_content.html", null ],
@@ -342,15 +387,25 @@ var hierarchy =
     [ "hypro::TemplatePolyhedronDefault", "structhypro_1_1_template_polyhedron_default.html", [
       [ "hypro::OctagonShape", "structhypro_1_1_octagon_shape.html", null ]
     ] ],
+    [ "hypro::TimedValuationSet< Representation >", "namespacehypro.html#structhypro_1_1_timed_valuation_set", null ],
+    [ "hypro::TimeTransformationCache< Number >", "classhypro_1_1_time_transformation_cache.html", null ],
     [ "hypro::TimingAggregate< Number >", "classhypro_1_1_timing_aggregate.html", null ],
     [ "hypro::TimingAggregate< N >", "classhypro_1_1_timing_aggregate.html", null ],
     [ "hypro::TPathElement< Number, tNumber >", "structhypro_1_1_t_path_element.html", null ],
+    [ "hypro::TPathElement< Number, Number >", "structhypro_1_1_t_path_element.html", null ],
     [ "hypro::trafoContent< Number, Setting >", "structhypro_1_1trafo_content.html", null ],
     [ "hypro::TrafoParameters< Number >", "classhypro_1_1_trafo_parameters.html", null ],
     [ "hypro::Transformation< Number >", "classhypro_1_1_transformation.html", null ],
     [ "hypro::Transition< Number >", "classhypro_1_1_transition.html", null ],
     [ "hypro::Transition< N >", "classhypro_1_1_transition.html", null ],
+    [ "hypro::Transition< rep_number< Representation > >", "classhypro_1_1_transition.html", null ],
+    [ "hypro::TreeIterator< NodeType >", "classhypro_1_1_tree_iterator.html", null ],
     [ "hypro::TreeNode< Data >", "classhypro_1_1_tree_node.html", null ],
+    [ "hypro::TreeNode< ReachTreeNode< Representation > >", "classhypro_1_1_tree_node.html", [
+      [ "hypro::ReachTreeNode< State >", "classhypro_1_1_reach_tree_node.html", null ],
+      [ "hypro::ReachTreeNode< Representation >", "classhypro_1_1_reach_tree_node.html", null ],
+      [ "hypro::ReachTreeNode< Representation >", "classhypro_1_1_reach_tree_node.html", null ]
+    ] ],
     [ "hypro::TreeNode< ReachTreeNode< State > >", "classhypro_1_1_tree_node.html", [
       [ "hypro::ReachTreeNode< State >", "classhypro_1_1_reach_tree_node.html", null ]
     ] ],
@@ -362,6 +417,7 @@ var hierarchy =
       [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01_t_01_4_01_4.html", null ],
       [ "hypro::is_unique_ptr< std::unique_ptr< T, D > >", "structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01_t_00_01_d_01_4_01_4.html", null ]
     ] ],
+    [ "hypro::TypedTimingVector", "classhypro_1_1_typed_timing_vector.html", null ],
     [ "hypro::TypeList< Types >", "namespacehypro.html#structhypro_1_1_type_list", null ],
     [ "hypro::TypeMapping< Representation >", "namespacehypro.html#structhypro_1_1_type_mapping", null ],
     [ "hypro::TypeMapping< R< N, C, Setting > >", "structhypro_1_1_type_mapping_3_01_r_3_01_n_00_01_c_00_01_setting_01_4_01_4.html", null ],
@@ -378,7 +434,6 @@ var hierarchy =
     [ "hypro::WorkQueueDefaultSetting", "structhypro_1_1_work_queue_default_setting.html", null ],
     [ "hypro::WorkQueueManager< Workable >", "classhypro_1_1_work_queue_manager.html", null ],
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1_work_queue_t.html", null ],
-    [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< State > > >", "classhypro_1_1_work_queue_t.html", null ],
     [ "hypro::WorkQueueT< TaskType >", "classhypro_1_1_work_queue_t.html", null ],
     [ "hypro::WorkQueueT< Workable >", "classhypro_1_1_work_queue_t.html", null ],
     [ "hypro::ZonotopeSetting", "structhypro_1_1_zonotope_setting.html", null ]

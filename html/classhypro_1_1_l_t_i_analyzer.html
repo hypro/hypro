@@ -118,6 +118,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1_l_t_i_analyzer.html',''
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhypro_1_1_l_t_i_analyzer-members.html">List of all members</a>  </div>
@@ -126,45 +127,45 @@ $(document).ready(function(){initNavTree('classhypro_1_1_l_t_i_analyzer.html',''
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:ae69387e860ad9354d6ead2cf90a36af3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae69387e860ad9354d6ead2cf90a36af3"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>LTIResult</b> = <a class="el" href="structhypro_1_1_analysis_result.html">AnalysisResult</a>&lt; <a class="el" href="namespacehypro.html#structhypro_1_1_l_t_i_success">LTISuccess</a>, <a class="el" href="namespacehypro.html#structhypro_1_1_failure">Failure</a>&lt; State &gt;&gt;</td></tr>
+<tr class="separator:ae69387e860ad9354d6ead2cf90a36af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6290af24fd7718f199d575fc6ee148ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6290af24fd7718f199d575fc6ee148ff"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LTIAnalyzer</b> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a> &amp;setting)</td></tr>
-<tr class="separator:a6290af24fd7718f199d575fc6ee148ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eaf7bb1b03494aab3896afa03287833"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9eaf7bb1b03494aab3896afa03287833"></a>
-REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
-<tr class="separator:a9eaf7bb1b03494aab3896afa03287833"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d81cb25afeffee5ebe69091a3be8a82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d81cb25afeffee5ebe69091a3be8a82"></a>
-const std::vector&lt; <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowpipes</b> () const </td></tr>
-<tr class="separator:a2d81cb25afeffee5ebe69091a3be8a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab217b2ae6b8b54ac5c2bf2c1f06a160b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab217b2ae6b8b54ac5c2bf2c1f06a160b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>LTIAnalyzer</b> (<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; const &amp;ha, <a class="el" href="namespacehypro.html#structhypro_1_1_fixed_analysis_parameters">FixedAnalysisParameters</a> const &amp;fixedParameters, <a class="el" href="namespacehypro.html#structhypro_1_1_analysis_parameters">AnalysisParameters</a> const &amp;parameters, std::vector&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt;&gt; &amp;roots)</td></tr>
+<tr class="separator:ab217b2ae6b8b54ac5c2bf2c1f06a160b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43e45c1fd49cb9f7f2f6ac06acdb1dc6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a43e45c1fd49cb9f7f2f6ac06acdb1dc6"></a>
+<a class="el" href="structhypro_1_1_analysis_result.html">LTIResult</a>&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
+<tr class="separator:a43e45c1fd49cb9f7f2f6ac06acdb1dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fffb3f8f2199d870722635613d09f7a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fffb3f8f2199d870722635613d09f7a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addToQueue</b> (<a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; *node)</td></tr>
+<tr class="separator:a8fffb3f8f2199d870722635613d09f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:aad9cfcc63529b210f07f36549faaffbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad9cfcc63529b210f07f36549faaffbc"></a>
-std::queue&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mWorkQueue</b></td></tr>
-<tr class="separator:aad9cfcc63529b210f07f36549faaffbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4411a04bbfaf56fb17d66b0aa62ece8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4411a04bbfaf56fb17d66b0aa62ece8c"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; State &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowpipes</b></td></tr>
-<tr class="separator:a4411a04bbfaf56fb17d66b0aa62ece8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a269033b0534c30eb886757425178730e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a269033b0534c30eb886757425178730e"></a>
-<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mHybridAutomaton</b></td></tr>
-<tr class="separator:a269033b0534c30eb886757425178730e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f12446bc67ccb816027ead7f5d1fda6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f12446bc67ccb816027ead7f5d1fda6"></a>
-<a class="el" href="namespacehypro.html#structhypro_1_1_settings">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mAnalysisSettings</b></td></tr>
-<tr class="separator:a3f12446bc67ccb816027ead7f5d1fda6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cb3d427ad3a511400af56a3edd92d35"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5cb3d427ad3a511400af56a3edd92d35"></a>
-<a class="el" href="classhypro_1_1_reach_tree.html">ReachTree</a>&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mReachTree</b></td></tr>
-<tr class="separator:a5cb3d427ad3a511400af56a3edd92d35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa17881fee66807c6d22ac08d1b4c0b27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa17881fee66807c6d22ac08d1b4c0b27"></a>
-std::vector&lt; State &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFirstStates</b></td></tr>
-<tr class="separator:aa17881fee66807c6d22ac08d1b4c0b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66cbe6cec474c0d29edd99bc029a0113"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66cbe6cec474c0d29edd99bc029a0113"></a>
+std::deque&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; State &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mWorkQueue</b></td></tr>
+<tr class="separator:a66cbe6cec474c0d29edd99bc029a0113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6579833f52ac6a095eda3220510b32f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad6579833f52ac6a095eda3220510b32f"></a>
+<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; const *&#160;</td><td class="memItemRight" valign="bottom"><b>mHybridAutomaton</b></td></tr>
+<tr class="separator:ad6579833f52ac6a095eda3220510b32f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affbfe24c478dd87814f1604d1a920bcd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="affbfe24c478dd87814f1604d1a920bcd"></a>
+<a class="el" href="namespacehypro.html#structhypro_1_1_fixed_analysis_parameters">FixedAnalysisParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mFixedParameters</b></td></tr>
+<tr class="separator:affbfe24c478dd87814f1604d1a920bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ac0b68c50f927f22de6f35268bf9f00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ac0b68c50f927f22de6f35268bf9f00"></a>
+<a class="el" href="namespacehypro.html#structhypro_1_1_analysis_parameters">AnalysisParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mParameters</b></td></tr>
+<tr class="separator:a9ac0b68c50f927f22de6f35268bf9f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename State&gt;<br />
 class hypro::LTIAnalyzer&lt; State &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="_l_t_i_analyzer_8h_source.html#l00011">11</a> of file <a class="el" href="_l_t_i_analyzer_8h_source.html">LTIAnalyzer.h</a>.</p>
+<p>Definition at line <a class="el" href="_l_t_i_analyzer_8h_source.html#l00017">17</a> of file <a class="el" href="_l_t_i_analyzer_8h_source.html">LTIAnalyzer.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/<a class="el" href="_l_t_i_analyzer_8h_source.html">LTIAnalyzer.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/<a class="el" href="_l_t_i_analyzer_8tpp_source.html">LTIAnalyzer.tpp</a></li>

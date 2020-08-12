@@ -128,15 +128,21 @@ $(document).ready(function(){initNavTree('classhypro_1_1rectangular_reset_handle
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af6ff7bc11b7fdae8942917618ba99670"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6ff7bc11b7fdae8942917618ba99670"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>rectangularResetHandler</b> (State *state, size_t index, const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervalResets)</td></tr>
-<tr class="separator:af6ff7bc11b7fdae8942917618ba99670"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b347eb311fd81334e92ca0ec855ff4a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b347eb311fd81334e92ca0ec855ff4a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()</td></tr>
 <tr class="separator:a4b347eb311fd81334e92ca0ec855ff4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab74ea4b10bab7f2ce8cbf928aa8fe719"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab74ea4b10bab7f2ce8cbf928aa8fe719"></a>
 const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()</td></tr>
 <tr class="separator:ab74ea4b10bab7f2ce8cbf928aa8fe719"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82bad81c943ce45566718e4085214de8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a82bad81c943ce45566718e4085214de8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>rectangularIntersectReset</b> (const State &amp;stateSet, const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;automaton)</td></tr>
+<tr class="separator:a82bad81c943ce45566718e4085214de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5633954f0c60e23e75aa11aa68d13ce8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5633954f0c60e23e75aa11aa68d13ce8"></a>
+const TransitionStatesMap &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getResetSatisfyingStateSets</b> () const </td></tr>
+<tr class="separator:a5633954f0c60e23e75aa11aa68d13ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeeacbebd2a79bd9c25f8ad5ead87a7cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeeacbebd2a79bd9c25f8ad5ead87a7cf"></a>
+const TransitionContainmentMap &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getResetContainment</b> () const </td></tr>
+<tr class="separator:aeeacbebd2a79bd9c25f8ad5ead87a7cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -146,6 +152,12 @@ State *&#160;</td><td class="memItemRight" valign="bottom"><b>mState</b></td></t
 <tr class="memitem:aa59be81ec0e3a920f3c65eeb333ea232"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa59be81ec0e3a920f3c65eeb333ea232"></a>
 std::vector&lt; carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mIntervalResets</b></td></tr>
 <tr class="separator:aa59be81ec0e3a920f3c65eeb333ea232"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3aa2ff0d643b392da1ea95f8e56f49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f3aa2ff0d643b392da1ea95f8e56f49"></a>
+TransitionStatesMap&#160;</td><td class="memItemRight" valign="bottom"><b>mResetSatisfyingStates</b></td></tr>
+<tr class="separator:a4f3aa2ff0d643b392da1ea95f8e56f49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae76b2c937fc1f088dc78003eec891cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae76b2c937fc1f088dc78003eec891cf"></a>
+TransitionContainmentMap&#160;</td><td class="memItemRight" valign="bottom"><b>mResetContainment</b></td></tr>
+<tr class="separator:aae76b2c937fc1f088dc78003eec891cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59538f65ef9b556d911301c556234122"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a59538f65ef9b556d911301c556234122"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mIndex</b></td></tr>
 <tr class="separator:a59538f65ef9b556d911301c556234122"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -4,6 +4,7 @@ var searchData=
   ['dagnode',['DAGNode',['../classhypro_1_1_d_a_g_node.html#a427ccb7ef14cd56cb5e0a446958599d0',1,'hypro::DAGNode']]],
   ['dagnode_3c_20eventtimingnode_3c_20number_20_3e_20_3e',['DAGNode&lt; EventTimingNode&lt; Number &gt; &gt;',['../classhypro_1_1_d_a_g_node.html',1,'hypro']]],
   ['dbmentry',['DBMEntry',['../classhypro_1_1_difference_bounds_t_1_1_d_b_m_entry.html',1,'hypro::DifferenceBoundsT']]],
+  ['decisionentity',['DecisionEntity',['../classhypro_1_1_decision_entity.html',1,'hypro']]],
   ['decompose',['decompose',['../classhypro_1_1_hybrid_automaton.html#a0330392633323d928f32f04e2d2cb088',1,'hypro::HybridAutomaton::decompose()'],['../classhypro_1_1_location.html#ae2072188d156cafa50e0c0bcc4809c27',1,'hypro::Location::decompose()'],['../classhypro_1_1_reset.html#a0a31929c7f990bcecceaf32835e7d681',1,'hypro::Reset::decompose()'],['../classhypro_1_1_transition.html#ae34b8848beb4860f2a2ef1a4f5ae33a8',1,'hypro::Transition::decompose()']]],
   ['decomposition',['Decomposition',['../namespacehypro.html#structhypro_1_1_decomposition',1,'hypro']]],
   ['decrementinfixeddim',['decrementInFixedDim',['../classhypro_1_1_point.html#a6364ad4b0857f49cdc1633e118cd2481',1,'hypro::Point::decrementInFixedDim(const carl::Variable &amp;_d)'],['../classhypro_1_1_point.html#a63eb94a9722755edcd2eea333d8a4293',1,'hypro::Point::decrementInFixedDim(unsigned _d)']]],

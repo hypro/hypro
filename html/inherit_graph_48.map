@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$namespacehypro.html#structhypro_1_1_difference_bounds_setting" title="hypro::DifferenceBoundsSetting" alt="" coords="5,5,231,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_d_a_g_node.html" title="hypro::DAGNode\&lt; Data \&gt;" alt="" coords="5,5,196,32"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_event_timing_node.html" title="hypro::EventTimingNode\&lt; N \&gt;" alt="" coords="244,5,463,32"/>
 </map>

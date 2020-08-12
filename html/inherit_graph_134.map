@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1lti_guard_handler.html" title="hypro::ltiGuardHandler\l\&lt; State \&gt;" alt="" coords="5,39,172,80"/>
-<area shape="rect" id="node2" href="$classhypro_1_1discrete_guard_handler.html" title="hypro::discreteGuardHandler\l\&lt; State \&gt;" alt="" coords="220,5,427,47"/>
-<area shape="rect" id="node3" href="$classhypro_1_1timed_guard_handler.html" title="hypro::timedGuardHandler\l\&lt; State \&gt;" alt="" coords="227,71,419,112"/>
+<area shape="rect" id="node2" href="$structhypro_1_1is__flow_3_01affine_flow_3_01_n_01_4_01_4.html" title="hypro::is_flow\&lt; affineFlow\l\&lt; N \&gt; \&gt;" alt="" coords="141,5,325,47"/>
+<area shape="rect" id="node3" href="$structhypro_1_1is__flow_3_01linear_flow_3_01_n_01_4_01_4.html" title="hypro::is_flow\&lt; linearFlow\l\&lt; N \&gt; \&gt;" alt="" coords="141,71,325,112"/>
+<area shape="rect" id="node4" href="$structhypro_1_1is__flow_3_01rectangular_flow_3_01_n_01_4_01_4.html" title="hypro::is_flow\&lt; rectangular\lFlow\&lt; N \&gt; \&gt;" alt="" coords="136,136,331,177"/>
+<area shape="rect" id="node5" href="$structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01_t_01_4_01_4.html" title="hypro::is_shared_ptr\l\&lt; std::shared_ptr\&lt; T \&gt; \&gt;" alt="" coords="140,201,327,243"/>
+<area shape="rect" id="node6" href="$structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01_t_00_01_d_01_4_01_4.html" title="hypro::is_unique_ptr\l\&lt; std::unique_ptr\&lt; T,\l D \&gt; \&gt;" alt="" coords="154,266,313,322"/>
 </map>

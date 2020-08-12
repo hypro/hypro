@@ -1,21 +1,10 @@
 var searchData=
 [
-  ['parameters',['Parameters',['../structhypro_1_1_parameters.html',1,'hypro']]],
-  ['path',['Path',['../classhypro_1_1_path.html',1,'hypro']]],
-  ['permutator',['Permutator',['../classhypro_1_1_permutator.html',1,'hypro']]],
-  ['plotdata',['PlotData',['../structhypro_1_1_plot_data.html',1,'hypro']]],
-  ['plotter',['Plotter',['../classhypro_1_1_plotter.html',1,'hypro']]],
-  ['point',['Point',['../classhypro_1_1_point.html',1,'hypro']]],
-  ['point_3c_20int_20_3e',['Point&lt; int &gt;',['../classhypro_1_1_point.html',1,'hypro']]],
-  ['point_3c_20std_3a_3asize_5ft_20_3e',['Point&lt; std::size_t &gt;',['../classhypro_1_1_point.html',1,'hypro']]],
-  ['pointit',['pointIt',['../structhypro_1_1point_it.html',1,'hypro']]],
-  ['polynomialode',['PolynomialODE',['../classhypro_1_1_polynomial_o_d_e.html',1,'hypro']]],
-  ['polytopesetting',['PolytopeSetting',['../structhypro_1_1_polytope_setting.html',1,'hypro']]],
-  ['polytopesupportfunction',['PolytopeSupportFunction',['../classhypro_1_1_polytope_support_function.html',1,'hypro']]],
-  ['polytopesupportfunctionsetting',['PolytopeSupportFunctionSetting',['../structhypro_1_1_polytope_support_function_setting.html',1,'hypro']]],
-  ['preprocessinginformation',['PreprocessingInformation',['../namespacehypro.html#structhypro_1_1_preprocessing_information',1,'hypro']]],
-  ['principalcomponentanalysis',['PrincipalComponentAnalysis',['../classhypro_1_1_principal_component_analysis.html',1,'hypro']]],
-  ['projectdata',['ProjectData',['../structhypro_1_1_project_data.html',1,'hypro']]],
-  ['projectioncontent',['projectionContent',['../structhypro_1_1projection_content.html',1,'hypro']]],
-  ['projectop',['ProjectOp',['../classhypro_1_1_project_op.html',1,'hypro']]]
+  ['octagonshape',['OctagonShape',['../structhypro_1_1_octagon_shape.html',1,'hypro']]],
+  ['operationcounter',['OperationCounter',['../structhypro_1_1statistics_1_1_operation_counter.html',1,'hypro::statistics']]],
+  ['optimizer',['Optimizer',['../classhypro_1_1_optimizer.html',1,'hypro']]],
+  ['optional',['optional',['../structbetter__enums_1_1optional.html',1,'better_enums']]],
+  ['orthogonalpolyhedron',['OrthogonalPolyhedron',['../classhypro_1_1_orthogonal_polyhedron.html',1,'hypro']]],
+  ['orthogonalpolyhedront',['OrthogonalPolyhedronT',['../classhypro_1_1_orthogonal_polyhedron_t.html',1,'hypro']]],
+  ['orthoplexdefault',['OrthoplexDefault',['../namespacehypro.html#structhypro_1_1_orthoplex_default',1,'hypro']]]
 ];

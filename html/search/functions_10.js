@@ -37,6 +37,7 @@ var searchData=
   ['setpoint',['setPoint',['../classhypro_1_1_vertex.html#a7f6466528dbc07736390861973b69162',1,'hypro::Vertex']]],
   ['setrectangularflow',['setRectangularFlow',['../classhypro_1_1_location.html#aa96f7b9bf000373b460fc2c68e981c3f',1,'hypro::Location']]],
   ['setreduced',['setReduced',['../classhypro_1_1_h_polytope_t.html#a1a60fa4ec4f30fa1c570bdd7d321b56f',1,'hypro::HPolytopeT']]],
+  ['setrefinement',['setRefinement',['../classhypro_1_1_refinement_analyzer.html#a3829c4e31acbfd425bd52cb46e18c3c1',1,'hypro::RefinementAnalyzer']]],
   ['setrelation',['setRelation',['../classhypro_1_1_optimizer.html#aacdf38eaa3ceecf0e3b8fb4b2d941160',1,'hypro::Optimizer']]],
   ['setrelations',['setRelations',['../classhypro_1_1_optimizer.html#a192502b9b22d8f3a9550c673ff218621',1,'hypro::Optimizer']]],
   ['setsamples',['setSamples',['../classhypro_1_1_principal_component_analysis.html#aa4a3606e5c28d6af0e78a01e5a2aaa91',1,'hypro::PrincipalComponentAnalysis']]],
