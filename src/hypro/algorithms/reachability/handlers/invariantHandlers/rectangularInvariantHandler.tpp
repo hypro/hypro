@@ -12,7 +12,12 @@ std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateS
 	// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 	// create carlPolytope, as intersection is defined for those
 	// TEMPORARY!
-	State invariant{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };
+	State invariant(stateSet);
+	if ( !stateSet.getLocation()->getInvariant().empty() ){
+		invariant = State{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };
+	}
+
+	// State invariant{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };
 
 	// intersect
 	auto resultingSet = stateSet.intersect( invariant );

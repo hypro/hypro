@@ -4,6 +4,7 @@
 #include <carl/util/hash.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
+#include <util/type_handling/better_enums/enum_default_ctor.h>
 #include <iosfwd>
 #include <set>
 
@@ -14,6 +15,16 @@ namespace hypro {
  * @brief Number type used for timings and time intervals.
  */
 using tNumber = mpq_class;
+
+/**
+ * @brief Used to designate the index of a segment in a flowpipe
+ */
+using SegmentInd = int;
+
+/**
+ * @brief Used to designate time points as multiples of some delta, usually given as a value of type tNumber
+ */
+using TimePoint = int;
 
 /**
  * typedef wrapping an Eigen::Matrix type with only one column.
@@ -42,12 +53,13 @@ enum class REACHABILITY_RESULT {
 	UNKNOWN
 };
 
-enum class PLOTTYPE { pdf,
-					  png,
-					  eps,
-					  gen,
-					  tex,
-					  nset };
+BETTER_ENUM( PLOTTYPE, int,
+			 pdf,
+			 png,
+			 eps,
+			 gen,
+			 tex,
+			 nset )
 
 /**
  * @brief Enum to represent set states such as empty and universal.
@@ -101,9 +113,13 @@ enum class DynamicType { linear = 0,
 						 mixed,
 						 undefined };
 
-enum class AGG_SETTING { MODEL,
-						 AGG,
-						 NO_AGG };
+BETTER_ENUM( AGG_SETTING, int,
+			 MODEL,
+			 AGG,
+			 NO_AGG )
+
+enum class REACH_SETTING { FORWARD,
+						   BACKWARD };
 
 }  // namespace hypro
 

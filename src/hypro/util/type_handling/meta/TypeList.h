@@ -20,6 +20,11 @@ struct concat_i<TypeList<Ts...>, TypeList<Us...>> {
 	using type = TypeList<Ts..., Us...>;
 };
 
+template<class... Ts>
+struct concat_i<TypeList<Ts...>> {
+	using type = TypeList<Ts...>;
+};
+
 /// Quick access
 template <class... Lists>
 using concat = typename concat_i<Lists...>::type;

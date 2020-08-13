@@ -1,48 +1,49 @@
 #pragma once
 
-#include "../../../datastructures/reachability/Flowpipe.h"
-#include "../../../datastructures/reachability/Settings.h"
-#include "../../../util/logging/Logger.h"
-#include "../../../util/plotting/PlotData.h"
-#include "../handlers/firstSegmentHandlers/ltiFirstSegmentHandler.h"
-#include "../handlers/guardHandlers/ltiGuardHandler.h"
-#include "../handlers/invariantHandlers/ltiInvariantHandler.h"
-#include "../handlers/jumpHandlers/ltiJumpHandler.h"
-#include "../handlers/timeEvolutionHandlers/ltiTimeEvolutionHandler.h"
+#include "algorithms/reachability/workers/LTIFlowpipeConstruction.h"
+#include "algorithms/reachability/FlowpipeConstructionConvenience.h"
+#include "datastructures/reachability/Settings.h"
+#include "datastructures/reachability/TimeTransformationCache.h"
+#include "datastructures/reachability/timing/HierarchicalIntervalVector.h"
+#include "util/logging/Logger.h"
+#include "util/plotting/PlotData.h"
+#include "algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h"
 
 #include <vector>
+#include <optional>
 
 namespace hypro {
 
-template <typename State>
+template <typename Representation>
 class LTIWorker {
   private:
-	using Number = typename State::NumberType;
-	using JumpSuccessors = typename ltiGuardHandler<State>::TransitionStatesMap;
+	using Number = typename Representation::NumberType;
+
+	struct EnabledSegmentsGen;
+	struct AggregatedGen;
 
   public:
-	LTIWorker( const HybridAutomaton<Number>& ha, const Settings& settings )
+	struct JumpSuccessorGen;
+
+	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )
-		, mSettings( settings ) {}
+		, mSettings( settings )
+		, mLocalTimeHorizon( localTimeHorizon )
+		, mTrafoCache( trafoCache ) {}
 
-	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<State>& task );
+	template<typename OutputIt>
+	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const;
 
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<State>& task );
-	void computeJumpSuccessors();
-
-	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
-	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
-
-  private:
-	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
-
-	bool requireTimeSuccessorComputation( std::size_t segmentCount ) const { return segmentCount <= mSettings.localTimeHorizon / mSettings.strategy.front().timeStep; }
+	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
+	JumpSuccessorGen getJumpSuccessors(std::vector<Representation> const& flowpipe, Transition<Number> const* transition) const;
 
   protected:
-	const HybridAutomaton<Number>& mHybridAutomaton;
-	const Settings& mSettings;
-	JumpSuccessors mJumpSuccessorSets;
-	Flowpipe<State> mFlowpipe;
+	const HybridAutomaton<Number>& mHybridAutomaton;  /// TODO add documentation
+	const AnalysisParameters& mSettings;
+	tNumber mLocalTimeHorizon;
+	TimeTransformationCache<Number>& mTrafoCache;
+
+	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };
 
 }  // namespace hypro

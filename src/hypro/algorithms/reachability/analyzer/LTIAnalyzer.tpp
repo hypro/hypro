@@ -3,82 +3,51 @@
 namespace hypro {
 
 template <typename State>
-REACHABILITY_RESULT LTIAnalyzer<State>::run() {
-	// initialize queue
-	for ( auto& locationConditionPair : mHybridAutomaton.getInitialStates() ) {
-		// create initial state
-		State initialState{locationConditionPair.first};
-		initialState.setSet( typename State::template nth_representation<0>{locationConditionPair.second.getMatrix(), locationConditionPair.second.getVector()} );
-		initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
-
-		// create node from state
-		auto* initialNode = new ReachTreeNode<State>{initialState};
-		// add to reachTree
-		initialNode->setParent( mReachTree.getRoot() );
-		mReachTree.getRoot()->addChild( initialNode );
-
-		// add to queue
-		mWorkQueue.push( initialNode );
-	}
+auto LTIAnalyzer<State>::run() -> LTIResult {
+	//Setup settings for flowpipe construction in worker
+	TimeTransformationCache<Number> transformationCache;
+	LTIWorker<State> worker{
+		  *mHybridAutomaton,
+		  mParameters,
+		  mFixedParameters.localTimeHorizon,
+		  transformationCache };
 
 	while ( !mWorkQueue.empty() ) {
-
-		LTIWorker<State> worker{mHybridAutomaton, mAnalysisSettings};
-		ReachTreeNode<State>* currentNode = mWorkQueue.front();
-		mWorkQueue.pop();
+		ReachTreeNode<State>* currentNode = mWorkQueue.back();
+		mWorkQueue.pop_back();
 		REACHABILITY_RESULT safetyResult;
 
-		//Fixed point detection for TemplatePolyhedrons
-		bool skipComputation = false;
-		if(currentNode->getState().getSetType(0) == hypro::representation_name::polytope_t){
-			for(const auto& segment : mFirstStates){
-				assert(segment.getSetType(0) == hypro::representation_name::polytope_t);
-				if(segment.contains(currentNode->getState())){
-					//skip the computation of this flowpipe
-					COUNT("Fixpoint detected");
-					skipComputation = true;
-					break;
-				}
-			}
-		}
-		if(skipComputation){
-			continue;
-		}
-
-		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
-			safetyResult = worker.computeForwardReachability( *currentNode );
-		} else {
-			safetyResult = worker.computeTimeSuccessors( *currentNode );
-		}
-
-		// only for plotting
-		mFlowpipes.emplace_back( worker.getFlowpipe() );
-		// for fixed point detection
-		mFirstStates.emplace_back( currentNode->getState() );
+		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return safetyResult;
+			return { Failure{ currentNode } };
 		}
 
-		// create jump successor tasks
-		for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
-			for ( const auto jmpSucc : transitionStatesPair.second ) {
-				// update reachTree
-				auto* childNode = new ReachTreeNode<State>{jmpSucc};
-				childNode->setParent( currentNode );
-				currentNode->addChild( childNode );
+		//Do not perform discrete jump if jump depth was reached
+		if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
 
-				// update path (global time)
-				childNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().begin()->getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
-				childNode->addTransitionToPath( transitionStatesPair.first, jmpSucc.getTimestamp() );
+		// create jump successor tasks
+		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( currentNode->getFlowpipe(), currentNode->getLocation() ) ) {
+			for ( const auto [valuationSet, segmentsInterval] : timedValuationSets ) {
+				// update reachTree
+
+				// convert local time to global time
+
+				carl::Interval<TimePoint> const& initialSetDuration = currentNode->getTimings();
+				// add one to upper to convert from segment indices to time points
+				// multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
+				carl::Interval<TimePoint> enabledDuration{ segmentsInterval.lower() * mParameters.timeStepFactor, ( segmentsInterval.upper() + 1 ) * mParameters.timeStepFactor };
+				carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
+
+				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
 
 				// create Task
-				mWorkQueue.push( childNode );
+				mWorkQueue.push_front( &childNode );
 			}
 		}
 	}
 
-	return REACHABILITY_RESULT::SAFE;
+	return { LTISuccess{} };
 }
 
 }  // namespace hypro

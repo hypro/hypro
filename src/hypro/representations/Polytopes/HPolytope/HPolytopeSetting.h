@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../util/type_handling/better_enums/enum.h"
+#include "../../../util/type_handling/better_enums/enum_default_ctor.h"
 #include "../../../util/type_handling/meta/RepresentationCombinations.h"
 
 namespace hypro {

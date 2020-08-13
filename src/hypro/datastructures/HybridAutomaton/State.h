@@ -183,21 +183,21 @@ class State {
      * @param sets The state set.
      * @param _timestamp
      */
-	State( const Rargs... sets,
-		   const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval() )
-		: mLoc( nullptr )
-		, mTimestamp( _timestamp ) {
-// parameter pack expansion
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
-		int dummy[sizeof...( Rargs )] = { ( mSets.push_back( sets ), 0 )... };
-		int dummy2[sizeof...( Rargs )] = { ( mTypes.push_back( sets.type() ), 0 )... };
-#pragma GCC diagnostic pop
-		(void)dummy;
-		(void)dummy2;
-		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
-		assert( checkConsistency() );
-	}
+	//	State( const Rargs... sets,
+	//		   const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval() )
+	//		: mLoc( nullptr )
+	//		, mTimestamp( _timestamp ) {
+	//// parameter pack expansion
+	//#pragma GCC diagnostic push
+	//#pragma GCC diagnostic ignored "-Wpedantic"
+	//		int dummy[sizeof...( Rargs )] = { ( mSets.push_back( sets ), 0 )... };
+	//		int dummy2[sizeof...( Rargs )] = { ( mTypes.push_back( sets.type() ), 0 )... };
+	//#pragma GCC diagnostic pop
+	//		(void)dummy;
+	//		(void)dummy2;
+	//		mIsEmpty = std::vector<TRIBOOL>{ mSets.size(), TRIBOOL::NSET };
+	//		assert( checkConsistency() );
+	//	}
 
 	/**
      * @brief      Gets the location.
@@ -416,7 +416,7 @@ class State {
 
 	State<Number, Representation, Rargs...> intersectHalfspaces( const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I = 0 ) const;
 
-    /**
+	/**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.
      * @param[in]  matrixExponentials   The solution to the differential equation system.

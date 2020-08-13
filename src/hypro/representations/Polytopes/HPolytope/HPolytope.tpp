@@ -13,7 +13,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT()
 
 //copy constructor
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT &orig )
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT& orig )
 	: GeometricObjectBase( orig )
 	, mHPlanes( orig.constraints() )
 	, mDimension( orig.dimension() )
@@ -24,13 +24,13 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT &orig )
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &planes )
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector& planes )
 	: mHPlanes()
 	, mDimension( 0 )
 	, mNonRedundant( false ) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
-		for ( const auto &plane : planes ) {
+		for ( const auto& plane : planes ) {
 			mHPlanes.push_back( plane );
 		}
 #ifndef NDEBUG
@@ -49,7 +49,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &plane
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number>& A, const vector_t<Number>& b )
 	: mHPlanes()
 	, mDimension( A.cols() )
 	, mNonRedundant( false ) {
@@ -70,7 +70,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A, c
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A )
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number>& A )
 	: mHPlanes()
 	, mDimension( A.cols() )
 	, mNonRedundant( false ) {
@@ -83,7 +83,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A )
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>> &points )
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes()
 	, mDimension( 0 )
 	, mNonRedundant( true ) {
@@ -100,7 +100,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		//Get raw data for quickhull
 		std::vector<vector_t<Number>> inputPoints;
 
-		for ( auto const &point : points ) {
+		for ( auto const& point : points ) {
 			inputPoints.push_back( point.rawCoordinates() );
 		}
 
@@ -109,13 +109,13 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		qh.compute();
 
 		//Convert resulting facets into halfspaces
-		for ( auto const &facet : qh.getFacets() ) {
+		for ( auto const& facet : qh.getFacets() ) {
 			mHPlanes.emplace_back( facet.mNormal, facet.mOffset );
 		}
 
 		//Assert containment
-		assert( std::all_of( mHPlanes.begin(), mHPlanes.end(), [&]( auto const &hplane ) {
-			return std::all_of( points.begin(), points.end(), [&]( auto const &point ) {
+		assert( std::all_of( mHPlanes.begin(), mHPlanes.end(), [&]( auto const& hplane ) {
+			return std::all_of( points.begin(), points.end(), [&]( auto const& point ) {
 				return hplane.contains( point );
 			} );
 		} ) );
@@ -148,7 +148,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			mDimension = points.begin()->dimension();
 			// check affine independence - verify object dimension.
 			std::vector<vector_t<Number>> coordinates;
-			for ( const auto &vertex : points ) {
+			for ( const auto& vertex : points ) {
 				coordinates.push_back( vertex.rawCoordinates() );
 			}
 			int effectiveDim = effectiveDimension( coordinates );
@@ -174,7 +174,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 				// So to say: Drop dimensions with minimal coordinate range
 				Point<Number> maxP = points[0];
 				Point<Number> minP = points[0];
-				for ( const auto &point : points ) {
+				for ( const auto& point : points ) {
 					maxP = Point<Number>::coeffWiseMax( maxP, point );
 					minP = Point<Number>::coeffWiseMin( minP, point );
 				}
@@ -215,7 +215,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					}
 					*/
 				std::vector<Point<Number>> projectedPoints;
-				for ( const auto &point : points ) {
+				for ( const auto& point : points ) {
 					TRACE( "hypro.representations.HPolytope", "Projected point " << point.project( projectionDimensions ) );
 					projectedPoints.emplace_back( point.project( projectionDimensions ) );
 				}
@@ -252,9 +252,9 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					*/
 
 				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
-				for ( auto &facet : facets ) {
+				for ( auto& facet : facets ) {
 #ifndef NDEBUG
-					std::for_each( points.begin(), points.end(), [&facet]( const auto &p ) { if(!facet->halfspace().contains(p)) {
+					std::for_each( points.begin(), points.end(), [&facet]( const auto& p ) { if(!facet->halfspace().contains(p)) {
 						std::cout << "Facet " << *facet << " does not contain point " << p << ", distance: " << facet->getDist(p) <<  std::endl;
 					} } );
 #endif
@@ -274,7 +274,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 //conversion ctor - just like copy ctor
 template <typename Number, typename Converter, class Setting>
 template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>>>
-HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT<Number, Converter, SettingRhs> &orig )
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT<Number, Converter, SettingRhs>& orig )
 	: mHPlanes( orig.constraints() )
 	, mDimension( orig.dimension() )
 	, mNonRedundant( orig.isNonRedundant() ) {
@@ -373,7 +373,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter, Sett
 }
 
 template <typename Number, typename Converter, class Setting>
-typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vertices( const matrix_t<Number> & ) const {
+typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vertices( const matrix_t<Number>& ) const {
 	typename std::vector<Point<Number>> vertices;
 	// empty polytope
 	if ( mHPlanes.empty() || this->empty() ) {
@@ -534,7 +534,7 @@ Number HPolytopeT<Number, Converter, Setting>::supremum() const {
 	Number max = 0;
 	assert( !this->empty() );
 	assert( !this->vertices().empty() );
-	for ( const auto &point : this->vertices() ) {
+	for ( const auto& point : this->vertices() ) {
 		Number inftyNorm = Point<Number>::inftyNorm( point );
 		max = max > inftyNorm ? max : inftyNorm;
 	}
@@ -597,7 +597,7 @@ Number HPolytopeT<Number, Converter, Setting>::supremum() const {
 //}
 
 template <typename Number, typename Converter, class Setting>
-void HPolytopeT<Number, Converter, Setting>::insert( const Halfspace<Number> &plane ) {
+void HPolytopeT<Number, Converter, Setting>::insert( const Halfspace<Number>& plane ) {
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
@@ -643,20 +643,20 @@ void HPolytopeT<Number, Converter, Setting>::erase( const unsigned index ) {
 }
 
 template <typename Number, typename Converter, class Setting>
-const typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector &HPolytopeT<Number, Converter, Setting>::constraints() const {
+const typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector& HPolytopeT<Number, Converter, Setting>::constraints() const {
 	return mHPlanes;
 }
 
 template <typename Number, typename Converter, class Setting>
-bool HPolytopeT<Number, Converter, Setting>::hasConstraint( const Halfspace<Number> &hplane ) const {
-	for ( const auto &plane : mHPlanes ) {
+bool HPolytopeT<Number, Converter, Setting>::hasConstraint( const Halfspace<Number>& hplane ) const {
+	for ( const auto& plane : mHPlanes ) {
 		if ( hplane == plane ) return true;
 	}
 	return false;
 }
 
 template <typename Number, typename Converter, class Setting>
-const HPolytopeT<Number, Converter, Setting> &HPolytopeT<Number, Converter, Setting>::removeRedundancy() {
+const HPolytopeT<Number, Converter, Setting>& HPolytopeT<Number, Converter, Setting>::removeRedundancy() {
 	//std::cout << __func__ << std::endl;
 	if ( !mNonRedundant && mHPlanes.size() > 1 ) {
 		std::vector<std::size_t> redundant;
@@ -696,9 +696,9 @@ const HPolytopeT<Number, Converter, Setting> &HPolytopeT<Number, Converter, Sett
 }
 
 template <typename Number, typename Converter, class Setting>
-bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const vector_t<Number> &point ) const {
+bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const vector_t<Number>& point ) const {
 	unsigned cnt = 0;
-	for ( const auto &plane : mHPlanes ) {
+	for ( const auto& plane : mHPlanes ) {
 		Number val = plane.evaluate( point );
 		if ( plane.offset() == val ) {
 			++cnt;
@@ -710,12 +710,12 @@ bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const vector_t<Numb
 }
 
 template <typename Number, typename Converter, class Setting>
-bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const Point<Number> &point ) const {
+bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const Point<Number>& point ) const {
 	return isExtremePoint( point.rawCoordinates() );
 }
 
 template <typename Number, typename Converter, class Setting>
-EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const vector_t<Number> &_direction ) const {
+EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const vector_t<Number>& _direction ) const {
 	if ( mHPlanes.empty() ) {
 		//return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
 		return EvaluationResult<Number>();
@@ -736,7 +736,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 }
 
 template <typename Number, typename Converter, class Setting>
-std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
 	assert( _directions.cols() == Eigen::Index( dimension() ) );
 	if ( mHPlanes.empty() ) {
 		return std::vector<EvaluationResult<Number>>();
@@ -762,7 +762,7 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
 }
 
 template <typename Number, typename Converter, class Setting>
-std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number> &_directions ) const {
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions ) const {
 	std::vector<EvaluationResult<Number>> res;
 	for ( int i = 0; i < _directions.rows(); ++i ) {
 		res.push_back( evaluate( _directions.row( i ) ) );
@@ -775,7 +775,7 @@ std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::mu
  */
 
 template <typename Number, typename Converter, class Setting>
-std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
+std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	TRACE( "hypro.representations.HPolytope", "(P AND ex <= d) == emptyset?, e: " << rhs.normal() << "d: " << rhs.offset() );
 	if ( this->empty() ) {
 		return std::make_pair( CONTAINMENT::NO, *this );
@@ -793,7 +793,7 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number
 }
 
 template <typename Number, typename Converter, class Setting>
-std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number> &_mat, const vector_t<Number> &_vec ) const {
+std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	TRACE( "hypro.representations.HPolytope", "(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec );
 	assert( _mat.rows() == _vec.rows() );
 	if ( this->empty() ) {
@@ -818,7 +818,7 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::project( const std::vector<std::size_t> &dimensions ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::project( const std::vector<std::size_t>& dimensions ) const {
 	TRACE( "hypro.representations.HPolytope", "on dimensions " << dimensions );
 	if ( dimensions.empty() ) {
 		return Empty();
@@ -839,7 +839,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::p
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number> &A ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number>& A ) const {
 	TRACE( "hypro.representations.HPolytope", "P' = A*P, A:" << std::endl
 															 << A );
 	if ( A.nonZeros() == 0 ) {
@@ -867,8 +867,8 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::l
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number> &A,
-																									 const vector_t<Number> &b ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A,
+																									 const vector_t<Number>& b ) const {
 	TRACE( "hypro.representations.HPolytope", "P' = A*P + b, A: " << std::endl
 																  << A << "b: " << std::endl
 																  << b );
@@ -901,7 +901,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::a
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::minkowskiSum( const HPolytopeT &rhs ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::minkowskiSum( const HPolytopeT& rhs ) const {
 	TRACE( "hypro.representations.HPolytope", "P' = P + " << rhs << std::endl );
 	HPolytopeT<Number, Converter, Setting> res;
 	Number result;
@@ -937,16 +937,16 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersect( const HPolytopeT &rhs ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersect( const HPolytopeT& rhs ) const {
 	TRACE( "hypro.representations.HPolytope", "with " << rhs << std::endl );
 	if ( rhs.empty() || this->empty() ) {
 		return HPolytopeT<Number, Converter, Setting>::Empty();
 	} else {
 		HPolytopeT<Number, Converter, Setting> res;
-		for ( const auto &plane : mHPlanes ) {
+		for ( const auto& plane : mHPlanes ) {
 			res.insert( plane );
 		}
-		for ( const auto &plane : rhs.constraints() ) {
+		for ( const auto& plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
 
@@ -955,7 +955,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
 #ifdef HYPRO_LOGGING
 	TRACE( "hypro.representations.HPolytope", "with " << rhs << std::endl );
 #endif
@@ -968,8 +968,8 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number> &_mat,
-																									const vector_t<Number> &_vec ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat,
+																									const vector_t<Number>& _vec ) const {
 	TRACE( "hypro.representations.HPolytope", "P' = P AND Ax <= b,  A: " << std::endl
 																		 << _mat << std::endl
 																		 << "b: " << _vec );
@@ -983,7 +983,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 }
 
 template <typename Number, typename Converter, class Setting>
-bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number> &point ) const {
+bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
 #ifdef HYPRO_LOGGING
 	TRACE( "hypro.representations.HPolytope", point );
 #endif
@@ -991,13 +991,13 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number> &poin
 }
 
 template <typename Number, typename Converter, class Setting>
-bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &vec ) const {
+bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number>& vec ) const {
 	if ( Setting::CACHE_BOUNDING_BOX ) {
 		if ( !mBox ) {
 			// update cache
 			updateBoundingBox();
 		}
-		assert( vec.rows() == mBox->size() );
+		assert( vec.rows() == Eigen::Index( mBox->size() ) );
 		// check containment in bounding box
 		for ( std::size_t i = 0; i < mBox->size(); ++i ) {
 			if ( !( *mBox )[i].contains( vec( i ) ) ) {
@@ -1006,7 +1006,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &v
 		}
 	}
 	// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
-	return std::all_of( mHPlanes.begin(), mHPlanes.end(), [&vec]( const auto &plane ) { return carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) || plane.normal().dot( vec ) <= plane.offset(); } );
+	return std::all_of( mHPlanes.begin(), mHPlanes.end(), [&vec]( const auto& plane ) { return carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) || plane.normal().dot( vec ) <= plane.offset(); } );
 
 	/*
 	for ( const auto &plane : mHPlanes ) {
@@ -1020,7 +1020,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &v
 }
 
 template <typename Number, typename Converter, class Setting>
-bool HPolytopeT<Number, Converter, Setting>::contains( const HPolytopeT<Number, Converter, Setting> &rhs ) const {
+bool HPolytopeT<Number, Converter, Setting>::contains( const HPolytopeT<Number, Converter, Setting>& rhs ) const {
 	if ( this->empty() ) {
 		return false;
 	}
@@ -1028,7 +1028,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const HPolytopeT<Number, 
 		return true;
 	}
 
-	for ( const auto &plane : rhs.constraints() ) {
+	for ( const auto& plane : rhs.constraints() ) {
 		EvaluationResult<Number> evalRes = this->evaluate( plane.normal() );
 		if ( evalRes.errorCode == SOLUTION::INFEAS ) {
 			return false;  // empty!
@@ -1043,7 +1043,7 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const HPolytopeT<Number, 
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::unite( const HPolytopeT &_rhs ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::unite( const HPolytopeT& _rhs ) const {
 	TRACE( "hypro.representations.HPolytope", "with " << _rhs << std::endl );
 	if ( this->empty() ) {
 		// if this is empty, the result is _rhs, even if _rhs is empty, too.
@@ -1061,7 +1061,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::u
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( this->dimension(), numberOfDirections );
 		// as the template directions are ordered, we assume the same order for the results.
 		HalfspaceVector newHalfspaces;
-		for ( const auto &direction : templateDirections ) {
+		for ( const auto& direction : templateDirections ) {
 			EvaluationResult<Number> thisResult = this->evaluate( direction );
 			EvaluationResult<Number> rhsResult = _rhs.evaluate( direction );
 			assert( thisResult.errorCode != SOLUTION::INFEAS );
@@ -1129,11 +1129,11 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::u
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::unite( const std::vector<HPolytopeT> &rhs ) {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::unite( const std::vector<HPolytopeT>& rhs ) {
 	// Todo: Implement alternative avoiding conversion.
 	// Idea: Use templated evaluation.
 	std::vector<Point<Number>> vertices;
-	for ( const auto &poly : rhs ) {
+	for ( const auto& poly : rhs ) {
 		vertices.insert( vertices.end(), poly.vertices().begin(), poly.vertices().end() );
 	}
 	return HPolytopeT( vertices );
@@ -1162,7 +1162,7 @@ void HPolytopeT<Number, Converter, Setting>::print() const {
  */
 
 template <typename Number, typename Converter, class Setting>
-typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Number, Converter, Setting>::computeConstraintsForDegeneratedPolytope( std::vector<Point<Number>> &points, unsigned degeneratedDimensions ) const {
+typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Number, Converter, Setting>::computeConstraintsForDegeneratedPolytope( std::vector<Point<Number>>& points, unsigned degeneratedDimensions ) const {
 	if ( degeneratedDimensions == 0 ) {
 		return std::move( HPolytopeT<Number, Converter, Setting>( points ).mHPlanes );
 	}
@@ -1179,12 +1179,12 @@ typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Numb
 }
 
 template <typename Number, typename Converter, class Setting>
-void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions( const std::vector<std::size_t> &existingDimensions, const std::vector<std::size_t> &newDimensions ) {
+void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions( const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions ) {
 	assert( mDimension == existingDimensions.size() );
 
 	//std::cout << __func__ << "Existing dimensions: " << existingDimensions << " and new dimensions: " << newDimensions << std::endl;
 
-	for ( auto &halfspace : mHPlanes ) {
+	for ( auto& halfspace : mHPlanes ) {
 		vector_t<Number> newNormal = vector_t<Number>::Zero( existingDimensions.size() + newDimensions.size() );
 		//std::cout << "New normal: " << newNormal << std::endl;
 		unsigned currentPos = 0;
@@ -1245,7 +1245,7 @@ void HPolytopeT<Number, Converter, Setting>::invalidateCache() const {
 }
 
 template <typename Number, typename Converter, class Setting>
-void HPolytopeT<Number, Converter, Setting>::setOptimizer( const matrix_t<Number> &mat, const vector_t<Number> &vec ) const {
+void HPolytopeT<Number, Converter, Setting>::setOptimizer( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
 	if ( mOptimizer.has_value() ) {
 		mOptimizer->setMatrix( mat );
 		mOptimizer->setVector( vec );

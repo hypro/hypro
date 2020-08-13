@@ -1,8 +1,5 @@
 #pragma once
 
-#include "../../representations/GeometricObjectBase.h"
-#include "better_enums/enum.h"
-
 #include <string>
 
 namespace hypro {

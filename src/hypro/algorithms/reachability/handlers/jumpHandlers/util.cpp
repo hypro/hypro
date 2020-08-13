@@ -1,5 +1,9 @@
 #include "util.h"
 
+#include <algorithm>
+#include <cassert>
+#include <numeric>
+
 namespace hypro {
 namespace reachability {
 

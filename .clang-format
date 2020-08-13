@@ -16,9 +16,10 @@ BreakBeforeBinaryOperators: false
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 BinPackParameters: true
+BinPackArguments: true
 ColumnLimit:     0
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
-DerivePointerAlignment: true
+DerivePointerAlignment: false
 ExperimentalAutoDetectBinPacking: false
 IndentCaseLabels: true
 IndentWrappedFunctionNames: false

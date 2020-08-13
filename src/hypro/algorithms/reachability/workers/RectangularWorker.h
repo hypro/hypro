@@ -4,11 +4,12 @@
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
-#include "../handlers/firstSegmentHandlers/ltiFirstSegmentHandler.h"
-#include "../handlers/guardHandlers/ltiGuardHandler.h"
-#include "../handlers/invariantHandlers/ltiInvariantHandler.h"
-#include "../handlers/jumpHandlers/ltiJumpHandler.h"
-#include "../handlers/timeEvolutionHandlers/ltiTimeEvolutionHandler.h"
+#include "../handlers/badStateHandlers/rectangularBadStateHandler.h"
+#include "../handlers/guardHandlers/rectangularGuardHandler.h"
+#include "../handlers/invariantHandlers/rectangularInvariantHandler.h"
+#include "../handlers/jumpHandlers/rectangularJumpHandler.h"
+#include "../handlers/resetHandlers/rectangularResetHandler.h"
+#include "../handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
 
 #include <vector>
 
@@ -23,7 +24,8 @@ template <typename State>
 class RectangularWorker {
   private:
 	using Number = typename State::NumberType;
-	using JumpSuccessors = typename ltiGuardHandler<State>::TransitionStatesMap;
+	using JumpSuccessors = typename rectangularGuardHandler<State>::TransitionStatesMap;
+	using JumpPredecessors = typename rectangularGuardHandler<State>::TransitionStatesMap;
 
   public:
 	/// constructor from rectangular automaton and settings
@@ -37,14 +39,23 @@ class RectangularWorker {
 	/// computes a discrete transition. Requires available time successors.
 	void computeJumpSuccessors();
 	/// getter for discrete jump successor sets
+	REACHABILITY_RESULT computeBackwardReachability( const ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeTimePredecessors( const ReachTreeNode<State>& task );
+	void computeJumpPredecessors();
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
+	const JumpSuccessors& getJumpPredecessorSets() const { return mJumpPredecessorSets; }
 	/// getter for time successor sets
 	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
+
+  private:
+	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
+	void reverseProcessJumpPredecessors( const JumpSuccessors& guardSatisfyingSets );
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;  ///< Reference to the rectangular automaton
 	const Settings& mSettings;						  ///< Reference to the used analysis settings
 	JumpSuccessors mJumpSuccessorSets;				  ///< Storage of computed jump successors
+	JumpPredecessors mJumpPredecessorSets;			  ///< Storage of computed jump predecessors
 	Flowpipe<State> mFlowpipe;						  ///< Storage of computed time successors
 };
 

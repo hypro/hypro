@@ -2,48 +2,40 @@
 
 namespace hypro {
 
-template <typename State>
-REACHABILITY_RESULT LTIWorker<State>::computeForwardReachability( const ReachTreeNode<State>& task ) {
-	if ( computeTimeSuccessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
-		return REACHABILITY_RESULT::UNKNOWN;
-	}
-	computeJumpSuccessors();
-	return REACHABILITY_RESULT::SAFE;
-}
+template <typename Representation>
+template <typename OutputIt>
+REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
+	auto timeStep = mSettings.timeStep;
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, timeStep ), timeStep );
 
-template <typename State>
-REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode<State>& task ) {
-	ltiFirstSegmentHandler<State> firstSegmentHandler;
-	State firstSegment = firstSegmentHandler( task.getState(), mSettings.strategy.front().timeStep );
+	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
+	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
+	assert( containment != CONTAINMENT::NO );
 
-	auto [containment, segment] = ltiIntersectInvariant( firstSegment );
-	if ( containment == CONTAINMENT::NO ) {
-		return REACHABILITY_RESULT::SAFE;
-	}
+	// insert segment
+	*out = segment;
+	++out;
 
-	// add state to flowpipe
-	mFlowpipe.addState( segment );
-
-	std::tie( containment, segment ) = ltiIntersectBadStates( segment, mHybridAutomaton );
+	// intersect with badstates
+	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
 	// while not done
-	std::size_t segmentCounter = 1;
-	while ( requireTimeSuccessorComputation( segmentCounter ) ) {
-		State currentSegment = ltiApplyTimeEvolution( segment, firstSegmentHandler.getTrafo(), firstSegmentHandler.getTranslation(), mSettings.strategy.front().timeStep );
-		std::tie( containment, segment ) = ltiIntersectInvariant( currentSegment );
+	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
+		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, timeStep ) );
+		std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
 		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
 		}
 
-		// add state to flowpipe
-		mFlowpipe.addState( segment );
-		++segmentCounter;
+		*out = segment;
+		++out;
 
-		std::tie( containment, segment ) = ltiIntersectBadStates( segment, mHybridAutomaton );
+		// intersect with badstates
+		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;
@@ -52,20 +44,185 @@ REACHABILITY_RESULT LTIWorker<State>::computeTimeSuccessors( const ReachTreeNode
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State>
-void LTIWorker<State>::computeJumpSuccessors() {
-	ltiGuardHandler<State> guardHandler;
-	for ( auto& state : mFlowpipe ) {
-		guardHandler( state );
-	}
+template <class Representation>
+auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const -> JumpSuccessorGen {
+	std::size_t blockSize = 1;
+	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+		if ( mSettings.clustering > 0 ) {
+			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	//division rounding up
+		} else {
+			blockSize = flowpipe.size();
+		}
 
-	postProcessJumpSuccessors( guardHandler.getGuardSatisfyingStateSets() );
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
+		if ( transition->getAggregation() == Aggregation::clustering ) {
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+		}
+	}
+	return JumpSuccessorGen{ flowpipe, transition, blockSize };
 }
 
-template <typename State>
-void LTIWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
-	ltiJumpHandler<State> jmpHandler;
-	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, nullptr, mSettings.strategy.front() );
+template <class Representation>
+struct LTIWorker<Representation>::EnabledSegmentsGen {
+	std::vector<Representation> const* flowpipe;
+	Transition<Number> const* transition;
+	size_t current = 0;
+
+	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number> const* transition )
+		: flowpipe( flowpipe )
+		, transition( transition ) {}
+
+	std::optional<std::pair<std::vector<Representation>, SegmentInd>> next() {
+		std::vector<Representation> enabledSegments{};
+
+		SegmentInd firstEnabled{};
+
+		// find next enabled segment
+		for ( ; current < flowpipe->size(); ++current ) {
+			auto [containment, intersected] = intersect( ( *flowpipe )[current], transition->getGuard() );
+			if ( containment != CONTAINMENT::NO ) {
+				enabledSegments.push_back( intersected );
+				firstEnabled = current;
+				break;
+			}
+		}
+
+		// collect enabled segments
+		for ( current += 1; current < flowpipe->size(); ++current ) {
+			auto [containment, intersected] = intersect( ( *flowpipe )[current], transition->getGuard() );
+			if ( containment == CONTAINMENT::NO ) break;
+			enabledSegments.push_back( intersected );
+		}
+
+		if ( enabledSegments.empty() ) return std::nullopt;
+		return std::pair{ enabledSegments, firstEnabled };
+	}
+};
+
+template <class Representation>
+struct LTIWorker<Representation>::AggregatedGen {
+	size_t segmentsPerBlock{};
+	std::vector<Representation>* enabled{};
+	SegmentInd firstEnabled{};
+	size_t current = 0;
+
+	AggregatedGen( size_t segmentsPerBlock, std::vector<Representation>& enabled, SegmentInd firstEnabled )
+		: segmentsPerBlock( segmentsPerBlock )
+		, enabled( &enabled )
+		, firstEnabled( firstEnabled ) {}
+
+	AggregatedGen( size_t segmentsPerBlock, std::pair<std::vector<Representation>, SegmentInd>& p )
+		: AggregatedGen( segmentsPerBlock, p.first, p.second ) {}
+
+	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
+		if ( current == enabled->size() ) return std::nullopt;
+		Representation aggregated = ( *enabled )[current];
+		SegmentInd indexFirst = firstEnabled + current;	 // flowpipe ind of first aggregated segment
+		current += 1;
+		for ( size_t inBlock = 1; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
+			aggregated.unite( ( *enabled )[current] );
+		}
+		return std::pair{ aggregated, carl::Interval<int>{ indexFirst, firstEnabled + current } };
+	}
+};
+
+template <class Representation>
+struct LTIWorker<Representation>::JumpSuccessorGen {
+	std::optional<std::pair<std::vector<Representation>, SegmentInd>> mEnabledRange = std::pair<std::vector<Representation>, SegmentInd>{};
+
+	size_t mSegmentsPerBlock{};
+	Transition<Number> const* mTransition;
+
+	EnabledSegmentsGen mEnabled;
+	AggregatedGen mAggregated;
+
+  public:
+	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<Number> const* transition, size_t segmentsPerBlock )
+		: mSegmentsPerBlock( segmentsPerBlock )
+		, mTransition( transition )
+		, mEnabled( &flowpipe, transition )
+		, mAggregated( segmentsPerBlock, *mEnabledRange ) {}
+
+	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
+		while ( true ) {
+			auto agg = mAggregated.next();
+
+			while ( !agg ) {
+				mEnabledRange = mEnabled.next();
+				if ( !mEnabledRange ) return std::nullopt;
+				mAggregated = AggregatedGen{ mSegmentsPerBlock, *mEnabledRange };
+				agg = mAggregated.next();
+			}
+
+			agg->first = applyReset( agg->first, mTransition->getReset() );
+			CONTAINMENT containment;
+			std::tie( containment, agg->first ) = intersect( agg->first, mTransition->getTarget()->getInvariant() );
+
+			if ( containment != CONTAINMENT::NO ) {
+				agg->first.reduceRepresentation();
+				return agg;
+			}
+		}
+	}
+};
+
+template <typename Representation>
+std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
+	//transition x enabled segments, segment ind
+	std::vector<EnabledSets<Representation>> enabledSegments{};
+
+	for ( const auto& transition : loc->getTransitions() ) {
+		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{ transition.get() } );
+
+		SegmentInd cnt = 0;
+		for ( auto const& valuationSet : flowpipe ) {
+			auto [containment, intersected] = intersect( valuationSet, transition->getGuard() );
+
+			if ( containment != CONTAINMENT::NO ) {
+				currentSucc.valuationSets.push_back( { intersected, cnt } );
+			}
+			++cnt;
+		}
+	}
+
+	std::vector<JumpSuccessor<Representation>> successors{};
+
+	// aggregation
+	// for each transition
+	for ( auto& [transition, valuationSets] : enabledSegments ) {
+		// no aggregation
+		std::size_t blockSize = 1;
+		if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+			if ( mSettings.clustering > 0 ) {
+				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+			} else {
+				blockSize = valuationSets.size();
+			}
+
+		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
+			if ( transition->getAggregation() == Aggregation::clustering ) {
+				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+			}
+		}
+		successors.emplace_back( JumpSuccessor<Representation>{ transition, aggregate( blockSize, valuationSets ) } );
+	}
+
+	// applyReset
+	for ( auto& [transition, valuationSets] : successors ) {
+		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
+			it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
+			CONTAINMENT containment;
+			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
+			if ( containment == CONTAINMENT::NO ) {
+				it = valuationSets.erase( it );
+			} else {
+				it->valuationSet.reduceRepresentation();
+				++it;
+			}
+		}
+	}
+
+	return successors;
 }
 
 }  // namespace hypro

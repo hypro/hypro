@@ -1,5 +1,6 @@
 #include "settings_enums.h"
 
+#include <representations/GeometricObjectBase.h>
 #include <assert.h>
 
 namespace hypro {

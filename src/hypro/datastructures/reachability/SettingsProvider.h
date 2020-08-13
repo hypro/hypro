@@ -65,13 +65,11 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>> {
 		mReachabilitySettings = rsConverted;
 	}
 
-	template <typename Representation>
-	void addStrategyElement( tNumber timeStep, AGG_SETTING agg, int clustering );
-	void setStrategy( const Strategy<State>& strat ) { mStrategy = strat; }
-	const Strategy<State>& getStrategy() const { return mStrategy; }
+	void setStrategy( const Strategy& strat ) { mStrategy = strat; }
+	const Strategy& getStrategy() const { return mStrategy; }
 
 	tNumber getLocalTimeHorizon() const { return mReachabilitySettings.timeBound; }
-	tNumber getTimeStepSize( std::size_t i = 0 ) const { return mStrategy.getParameters( i ).timeStep; }
+	tNumber getTimeStepSize( std::size_t i = 0 ) const { return mStrategy.Settings.at( i ).timeStep; }
 
 	const LockedFileWriter& getDotFileWriter() const { return treeDotFileWriter; }
 
@@ -93,7 +91,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>> {
   private:
 	HybridAutomaton<Number> mHybridAutomaton;
 	ReachabilitySettings mReachabilitySettings;
-	Strategy<State> mStrategy;
+	Strategy mStrategy;
 	bool mGlobalQueuesOnly = false;
 	bool mSkipPlot = false;
 	bool mUseLocalTiming = false;

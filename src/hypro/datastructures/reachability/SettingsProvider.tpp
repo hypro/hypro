@@ -57,12 +57,6 @@ void SettingsProvider<State>::setReachabilitySettings( const ReachabilitySetting
 }
 
 template <typename State>
-template <typename Representation>
-void SettingsProvider<State>::addStrategyElement( tNumber timeStep, AGG_SETTING agg, int clustering ) {
-	mStrategy.emplace_back( StrategyNode<Representation>( timeStep, agg, clustering ) );
-}
-
-template <typename State>
 void SettingsProvider<State>::computeLocationSubspaceTypeMapping( const HybridAutomaton<Number>& ha ) {
 	// assert(SettingsProvider<State>::getInstance().getSubspaceDecomposition().size() != 0);
 

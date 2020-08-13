@@ -12,6 +12,9 @@ namespace hypro {
 template <typename State>
 State rectangularApplyTimeEvolution( const State& initialSet, const rectangularFlow<typename State::NumberType>& flow );
 
+template <typename State>
+State rectangularApplyReverseTimeEvolution( const State& badSet, const rectangularFlow<typename State::NumberType>& flow );
+
 }  // namespace hypro
 
 #include "rectangularTimeEvolutionHandler.tpp"

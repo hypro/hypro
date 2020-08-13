@@ -87,11 +87,11 @@ std::vector<Halfspace<D>> constraintToHalfspace( const ConstraintT<N>& constrain
 	D offset = normalizedOffset<N, D>( constraint );
 	vector_t<D> normalV = constraintNormal<N, D>( constraint, dim );
 
-	res.emplace_back( Halfspace<D>{normalV, offset} );
+	res.emplace_back( Halfspace<D>{ normalV, offset } );
 	TRACE( "hypro.representations.carlPolytope", "Hsp: " << res.back() );
 
 	if ( constraint.relation() == carl::Relation::EQ ) {
-		res.emplace_back( Halfspace<D>{-normalV, -offset} );
+		res.emplace_back( Halfspace<D>{ -normalV, -offset } );
 		TRACE( "hypro.representations.carlPolytope", "Hsp: " << res.back() );
 	}
 

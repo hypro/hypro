@@ -26,6 +26,8 @@ class RectangularAnalyzer {
 	}
 	/// main method for reachability analysis
 	REACHABILITY_RESULT run();
+	REACHABILITY_RESULT forwardRun();
+	REACHABILITY_RESULT backwardRun();
 	/// getter for computed flowpipes
 	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
 

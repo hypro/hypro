@@ -148,7 +148,7 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 		INFO( "hypro.reacher", "Compute forwards time closure: " << forward );
 		// intersection of bad states and violation of invariant is handled inside the loop
 		while ( !noFlow && ( ( forward && currentLocalTime <= mSettings.timeBound ) || ( !forward && currentLocalTime >= -mSettings.timeBound ) ) ) {
-			INFO( "hypro.reacher", "Time: " << std::setprecision( 4 ) << std::setw( 8 ) << fixed << carl::toDouble( currentLocalTime ) );
+			INFO( "hypro.reacher", "Time: " << std::setprecision( 4 ) << std::setw( 8 ) << std::fixed << carl::toDouble( currentLocalTime ) );
 			// Verify transitions on the current set.
 			if ( int( mCurrentLevel ) < mSettings.jumpDepth || mSettings.jumpDepth < 0 ) {
 				//State currentState = _state;
