@@ -103,6 +103,8 @@ struct clp_context {
 		}
 		// turn off clp output
 		lp.setLogLevel( 0 );
+		lp.setPrimalTolerance( 1e-50 );
+		lp.setDualTolerance( 1e-50 );
 
 		// initialize problem + bounds
 		setMatrix( constraints, constants, relations );
