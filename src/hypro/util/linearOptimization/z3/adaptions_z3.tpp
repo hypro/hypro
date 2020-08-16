@@ -5,139 +5,125 @@
 namespace hypro {
 
 template <typename Number>
-EvaluationResult<Number> z3OptimizeLinear( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution ) {
-	//std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
+EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const EvaluationResult<Number> preSolution ){
 	EvaluationResult<Number> res;
 	z3Context c;
 	z3::optimize z3Optimizer( c );
 	std::vector<z3::expr> variables;
 
-	// create formula and objective
-	std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<Number>( constraints, constants, _direction, c, variables );
-
-	// inform and add constraints
+	std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<Number>( constraints, constants, relations, _direction, c, variables );
 	z3Optimizer.add( formulaObjectivePair.first );
 
-#ifdef USE_PRESOLUTION
 	z3Optimizer.push();
 	if ( preSolution.errorCode == SOLUTION::FEAS ) {
 		addPreSolution( z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second );
 	} else if ( preSolution.errorCode == SOLUTION::INFEAS ) {
 		if ( z3Optimizer.check() == z3::unsat ) {
 			//std::cout << "Z3 infeas." << std::endl;
-			return preSolution;  // glpk correctly detected infeasibility.
-		}						 // if glpk falsely detected infeasibility, we cope with this case below.
-	} else {					 // if glpk already detected unboundedness we return its result.
+			return preSolution;  // presolver correctly detected infeasibility.
+		}						 // if presolver falsely detected infeasibility, we cope with this case below.
+	} else {					 // if presolver already detected unboundedness we return its result.
 		return preSolution;		 // Todo: Check unboundedness
 	}
-#endif
 
-	// optimize with objective function
-	z3::optimize::handle result;
+	z3::optimize::handle result( 0 );
 	if ( maximize ) {
 		result = z3Optimizer.maximize( formulaObjectivePair.second );
 	} else {
 		result = z3Optimizer.minimize( formulaObjectivePair.second );
 	}
 
-#ifdef DEBUG_MSG
-	//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
-#endif
-
-	// verify and set result
-	z3::check_result chck = z3Optimizer.check();
-	if ( z3::sat == chck ) {
-		z3::expr z3res = z3Optimizer.upper( result );
+	if ( z3::sat == z3Optimizer.check() ) {
+		z3::expr z3res = maximize ? z3Optimizer.upper( result ) : z3Optimizer.lower( result );
 		assert( z3res.is_arith() );
 
 		z3::model m = z3Optimizer.get_model();
-		//std::cout << "Model: " << m << std::endl;
-		//std::cout << "Num consts in model: " << m.num_consts() << ", and dimension: " << constraints.cols() << " and variable size: " << variables.size() <<std::endl;
-		//assert(m.num_consts() == constraints.cols());
-		//assert(variables.size() == m.num_consts());
-		vector_t<Number> pointCoordinates = vector_t<Number>::Zero( constraints.cols() );
-		for ( unsigned i = 0; i < variables.size(); ++i ) {
-			z3::func_decl tmp = variables.at( i ).decl();
-			//std::cout << Z3_get_numeral_decimal_string(c, m.get_const_interp(m.get_const_decl(i)), 100) << std::endl;
-			if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
-				pointCoordinates( i ) = Number( Z3_get_numeral_string( c, m.get_const_interp( tmp ) ) );
-			}
-		}
-		res.errorCode = SOLUTION::FEAS;
 		// check whether unbounded
 		std::stringstream sstr;
 		sstr << z3res;
 
-		if ( std::string( "oo" ) == sstr.str() ) {
-			res = EvaluationResult<Number>( 1, pointCoordinates, SOLUTION::INFTY );
+		if ( sstr.str() == std::string( "oo" ) || sstr.str() == std::string( "(* (- 1) oo)" ) ) {
+			res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 		} else {
-			// std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-			// std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
-			res.supportValue = Number( Z3_get_numeral_string( c, z3res ) );
-			res.optimumValue = pointCoordinates;
-		}
-	} else {
-#ifdef USE_PRESOLUTION
-		// in this case the constraints introduced by the presolution made the problem infeasible
-
-		z3Optimizer.pop();
-		z3::optimize::handle z3Check;
-		if ( maximize ) {
-			z3Check = z3Optimizer.maximize( formulaObjectivePair.second );
-		} else {
-			z3Check = z3Optimizer.minimize( formulaObjectivePair.second );
-		}
-
-		chck = z3Optimizer.check();
-		assert( z3::unknown != chck );
-		if ( z3::sat == chck ) {
-			z3::expr z3res = z3Optimizer.upper( z3Check );
-			assert( z3res.is_arith() );
-
-			z3::model m = z3Optimizer.get_model();
-			//std::cout << "Model: " << m << std::endl;
-			//std::cout << "Num consts in model: " << m.num_consts() << ", and dimension: " << constraints.cols() << " and variable size: " << variables.size() <<std::endl;
-			//assert(m.num_consts() == constraints.cols());
-			//assert(variables.size() == m.num_consts());
+			res.supportValue = Number( Z3_get_numeral_double( c, z3res ) );
 			vector_t<Number> pointCoordinates = vector_t<Number>::Zero( constraints.cols() );
 			for ( unsigned i = 0; i < variables.size(); ++i ) {
 				z3::func_decl tmp = variables.at( i ).decl();
-				//std::cout << Z3_get_numeral_decimal_string(c, m.get_const_interp(m.get_const_decl(i)), 100) << std::endl;
 				if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
-					pointCoordinates( i ) = Number( Z3_get_numeral_string( c, m.get_const_interp( tmp ) ) );
+					pointCoordinates( i ) = Number( Z3_get_numeral_double( c, m.get_const_interp( tmp ) ) );
 				}
 			}
 			res.errorCode = SOLUTION::FEAS;
-			// check whether unbounded
-			std::stringstream sstr;
-			sstr << z3res;
-
-			if ( std::string( "oo" ) == sstr.str() ) {
-				res = EvaluationResult<Number>( 1, pointCoordinates, SOLUTION::INFTY );
-			} else {
-				// std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-				// std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
-				res.supportValue = Number( Z3_get_numeral_string( c, z3res ) );
-				res.optimumValue = pointCoordinates;
-			}
-		} else {
-			assert( z3::unsat == chck );
-			return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+			res.optimumValue = pointCoordinates;
 		}
-#else
-		return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-#endif
+	} else {
+		// presolution made the problem infeasible
+		res = preSolution;
 	}
 	return res;
 }
 
 template <typename Number>
-bool z3CheckConsistency( const matrix_t<Number>& constraints, const vector_t<Number>& constants ) {
+EvaluationResult<Number> z3OptimizeLinear( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
+	//std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
+	// TODO: To get results from z3 some exact conversion should be performed (not via Z3_get_numeral_double).
+	// 		Rational numbers could be constructed with Z3_get_numerator and Z3_get_denominator together with Z3_get_numeral_int
+	EvaluationResult<Number> res;
+	z3Context c;
+	z3::optimize z3Optimizer( c );
+	std::vector<z3::expr> variables;
+
+	// create formula and objective
+	std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<Number>( constraints, constants, relations, _direction, c, variables );
+
+	// inform and add constraints
+	z3Optimizer.add( formulaObjectivePair.first );
+
+	// optimize with objective function
+	z3::optimize::handle result( 0 );
+	if ( maximize ) {
+		result = z3Optimizer.maximize( formulaObjectivePair.second );
+	} else {
+		result = z3Optimizer.minimize( formulaObjectivePair.second );
+	}
+
+	// verify and set result
+	if ( z3::sat == z3Optimizer.check() ) {
+		z3::expr z3res = maximize ? z3Optimizer.upper( result ) : z3Optimizer.lower( result );
+		assert( z3res.is_arith() );
+
+		z3::model m = z3Optimizer.get_model();
+		// check whether unbounded
+		std::stringstream sstr;
+		sstr << z3res;
+
+		if ( sstr.str() == std::string( "oo" ) || sstr.str() == std::string( "(* (- 1) oo)" ) ) {
+			res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
+		} else {
+			res.supportValue = Number( Z3_get_numeral_double( c, z3res ) );
+			vector_t<Number> pointCoordinates = vector_t<Number>::Zero( constraints.cols() );
+			for ( unsigned i = 0; i < variables.size(); ++i ) {
+				z3::func_decl tmp = variables.at( i ).decl();
+				if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
+					pointCoordinates( i ) = Number( Z3_get_numeral_double( c, m.get_const_interp( tmp ) ) );
+				}
+			}
+			res.errorCode = SOLUTION::FEAS;
+			res.optimumValue = pointCoordinates;
+		}
+	} else {
+		res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+	}
+	return res;
+}
+
+template <typename Number>
+bool z3CheckConsistency( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
 	z3Context c;
 	z3::optimize z3Optimizer( c );
 
 	// create formula and objective
-	z3::expr_vector constraintsExpression = createFormula<Number>( constraints, constants, c );
+	z3::expr_vector constraintsExpression = createFormula<Number>( constraints, constants, relations, c );
 	//std::cout << "constraints " << constraintsExpression << std::endl;
 	//std::cout << constraints << std::endl << constants << std::endl;
 	for ( unsigned i = 0; i < constraintsExpression.size(); i++ ) {
@@ -150,12 +136,12 @@ bool z3CheckConsistency( const matrix_t<Number>& constraints, const vector_t<Num
 }
 
 template <typename Number>
-bool z3CheckPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const Point<Number>& point ) {
+bool z3CheckPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const Point<Number>& point ) {
 	z3Context c;
 	z3::solver z3Solver( c );
 
 	// create formula and objective
-	z3::expr formula = createFormula<Number>( point, constraints, constants, c );
+	z3::expr formula = createFormula<Number>( point, constraints, constants, relations, c );
 
 	// inform and add constraints
 	z3Solver.add( formula );
@@ -165,14 +151,41 @@ bool z3CheckPoint( const matrix_t<Number>& constraints, const vector_t<Number>& 
 }
 
 template <typename Number>
-std::vector<std::size_t> z3RedundantConstraints( const matrix_t<Number>& constraints, const vector_t<Number>& constants ) {
+EvaluationResult<Number> z3GetInternalPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ){
+	z3Context c;
+	EvaluationResult<Number> res;
+	z3::solver z3Solver( c );
+
+	z3::expr_vector constraintsExpression = createFormula<Number>( constraints, constants, relations, c );
+	for ( unsigned i = 0; i < constraintsExpression.size(); i++ ) {
+		z3Solver.add( constraintsExpression[i] );
+	}
+
+	if( z3Solver.check() == z3::sat ) {
+		z3::model m = z3Solver.get_model();
+		vector_t<Number> pointCoordinates = vector_t<Number>::Zero( constraints.cols() );
+		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
+			z3::func_decl var = m.get_const_decl( i );
+			if ( Z3_model_get_const_interp( c, m, var ) != nullptr ) {
+				pointCoordinates( i ) = Number( Z3_get_numeral_double( c, m.get_const_interp( var ) ) );
+			}
+		}
+		res = EvaluationResult<Number>( pointCoordinates, SOLUTION::FEAS );
+	} else {
+		res = EvaluationResult<Number>( SOLUTION::INFEAS );
+	}
+	return res;
+}
+
+template <typename Number>
+std::vector<std::size_t> z3RedundantConstraints( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
 	std::vector<std::size_t> res;
 	z3Context c;
 	z3::solver z3Solver( c );
 	z3Solver.push();
 
 	// TODO: ATTENTION: This relies upon that Z3 maintains the order of the constraints!
-	z3::expr_vector formulas = createFormula( constraints, constants, c );
+	z3::expr_vector formulas = createFormula( constraints, constants, relations, c );
 
 	if ( formulas.size() == 1 ) {
 		return res;
@@ -220,7 +233,7 @@ std::vector<std::size_t> z3RedundantConstraints( const matrix_t<Number>& constra
 					ignore = true;
 				}
 			}
-			if ( ignore ) break;
+			if ( ignore ) continue;
 
 			//Add constraints
 			if ( i == constraintIndex ) {

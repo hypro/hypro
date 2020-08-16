@@ -6,9 +6,9 @@
 
 namespace hypro {
 
-// specialization for double as double requires to use std::stod to be created from a string (the Z3 result).
+// specialization for double to get result directly from z3 via Z3_get_numeral_double
 template <>
-EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const EvaluationResult<double>& preSolution ) {
+EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const std::vector<carl::Relation>& relations ) {
 	//std::cout << __func__ << " in direction " << convert<double,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
 	EvaluationResult<double> res;
 	z3Context c;
@@ -16,11 +16,11 @@ EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>
 	std::vector<z3::expr> variables;
 
 	// create formula and objective
-	std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<double>( constraints, constants, _direction, c, variables );
+	std::pair<z3::expr, z3::expr> formulaObjectivePair = createFormula<double>( constraints, constants, relations, _direction, c, variables );
 
 	// inform and add constraints
 	z3Optimizer.add( formulaObjectivePair.first );
-
+/*
 #ifdef USE_PRESOLUTION
 	z3Optimizer.push();
 	if ( preSolution.errorCode == SOLUTION::FEAS ) {
@@ -34,9 +34,9 @@ EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>
 		return preSolution;
 	}
 #endif
-
+*/
 	// optimize with objective function
-	z3::optimize::handle result;
+	z3::optimize::handle result( 0 );
 	if ( maximize ) {
 		result = z3Optimizer.maximize( formulaObjectivePair.second );
 	} else {
@@ -45,81 +45,37 @@ EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>
 
 	// verify and set result
 	if ( z3::sat == z3Optimizer.check() ) {
-		z3::expr z3res = z3Optimizer.upper( result );
+		z3::expr z3res = maximize ? z3Optimizer.upper( result ) : z3Optimizer.lower( result );
 		assert( z3res.is_arith() );
 
 		z3::model m = z3Optimizer.get_model();
-		vector_t<double> pointCoordinates = vector_t<double>::Zero( constraints.cols() );
-		for ( unsigned i = 0; i < variables.size(); ++i ) {
-			z3::func_decl tmp = variables.at( i ).decl();
-			if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
-				pointCoordinates( i ) = std::stod( Z3_get_numeral_string( c, m.get_const_interp( tmp ) ) );
-			}
-		}
-		res.errorCode = SOLUTION::FEAS;
 		// check whether unbounded
 		std::stringstream sstr;
 		sstr << z3res;
 
-		if ( std::string( "oo" ) == sstr.str() ) {
-			res = EvaluationResult<double>( 1, pointCoordinates, SOLUTION::INFTY );
+		if ( sstr.str() == std::string( "oo" ) || sstr.str() == std::string( "(* (- 1) oo)" ) ) {
+			res = EvaluationResult<double>( 1, SOLUTION::INFTY );
 		} else {
+			//int* enumerator = new int;
+			//Z3_get_numeral_int( c, Z3_get_numerator( c, z3res ), enumerator );
+			//std::cout << "int: " << *enumerator << "\n";
+			//std::cout << "Numerator: " << Z3_get_numeral_string(c, Z3_get_numerator( c, z3res )) << "\n";
+			//std::cout << "Denominator: " << Z3_get_numeral_string(c, Z3_get_denominator( c, z3res )) << "\n";
 			// std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
 			// std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
-			res.supportValue = std::stod( Z3_get_numeral_string( c, z3res ) );
-			res.optimumValue = pointCoordinates;
-		}
-	} else {
-#ifdef USE_PRESOLUTION
-		// in this case the constraints introduced by the presolution made the problem infeasible
-
-		z3Optimizer.pop();
-		z3::optimize::handle z3Check;
-		if ( maximize ) {
-			z3Check = z3Optimizer.maximize( formulaObjectivePair.second );
-		} else {
-			z3Check = z3Optimizer.minimize( formulaObjectivePair.second );
-		}
-
-		z3::check_result chck = z3Optimizer.check();
-		assert( z3::unknown != chck );
-		if ( z3::sat == chck ) {
-			z3::expr z3res = z3Optimizer.upper( z3Check );
-			assert( z3res.is_arith() );
-
-			z3::model m = z3Optimizer.get_model();
-			//std::cout << "Model: " << m << std::endl;
-			//std::cout << "Num consts in model: " << m.num_consts() << ", and dimension: " << constraints.cols() << " and variable size: " << variables.size() <<std::endl;
-			//assert(m.num_consts() == constraints.cols());
-			//assert(variables.size() == m.num_consts());
+			res.supportValue = double( Z3_get_numeral_double( c, z3res ) );
 			vector_t<double> pointCoordinates = vector_t<double>::Zero( constraints.cols() );
 			for ( unsigned i = 0; i < variables.size(); ++i ) {
 				z3::func_decl tmp = variables.at( i ).decl();
-				//std::cout << Z3_get_numeral_decimal_string(c, m.get_const_interp(m.get_const_decl(i)), 100) << std::endl;
 				if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
-					pointCoordinates( i ) = std::stod( Z3_get_numeral_string( c, m.get_const_interp( tmp ) ) );
+					pointCoordinates( i ) = double( Z3_get_numeral_double( c, m.get_const_interp( tmp ) ) );
 				}
 			}
 			res.errorCode = SOLUTION::FEAS;
-			// check whether unbounded
-			std::stringstream sstr;
-			sstr << z3res;
-
-			if ( std::string( "oo" ) == sstr.str() ) {
-				res = EvaluationResult<double>( 1, pointCoordinates, SOLUTION::INFTY );
-			} else {
-				// std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-				// std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
-				res.supportValue = std::stod( Z3_get_numeral_string( c, z3res ) );
-				res.optimumValue = pointCoordinates;
-			}
-		} else {
-			assert( z3::unsat == chck );
-			return EvaluationResult<double>( 0, SOLUTION::INFEAS );
+			res.optimumValue = pointCoordinates;
 		}
-#else
-		return EvaluationResult<double>( 0, SOLUTION::INFEAS );
-#endif
+	} else {
+		res = EvaluationResult<double>( 0, SOLUTION::INFEAS );
 	}
 	return res;
 }
