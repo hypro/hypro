@@ -196,6 +196,8 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT
 	res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_Z3
+	res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
 #if !defined( HYPRO_SECONDARY_SOLVER )
@@ -275,7 +277,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_Z3
-	res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, res );
+	res = z3OptimizeLinearPostSolve( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
 #endif
 	}
 	return res;
@@ -298,7 +300,7 @@ bool Optimizer<Number>::checkConsistency() const {
 	mLastConsistencyAnswer = smtratCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #elif defined( HYPRO_USE_Z3 )
-	mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+	mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #elif defined( HYPRO_USE_SOPLEX )
 	mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
@@ -330,7 +332,7 @@ bool Optimizer<Number>::checkPoint( const Point<Number>& _point ) const {
 	}
 
 #ifdef HYPRO_USE_Z3
-	return z3CheckPoint( mConstraintMatrix, mConstraintVector, _point );
+	return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif defined( HYPRO_USE_SMTRAT )
 	return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif defined( HYPRO_USE_SOPLEX )
@@ -371,6 +373,10 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	res = clpGetInternalPoint<Number>( mClpContexts[std::this_thread::get_id()] );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_Z3
+	res = z3GetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
 #endif
 	return res;
 }
@@ -386,7 +392,7 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 	}
 
 #ifdef HYPRO_USE_Z3
-	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector );
+	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
 	res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif defined( HYPRO_USE_SOPLEX )
