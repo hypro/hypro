@@ -196,7 +196,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT
 	res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
-#elif HYPRO_PRIMARY_SOLVER == SOLVER_Z3
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE
 	res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
@@ -276,7 +276,7 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = soplexOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
-#elif HYPRO_SECONDARY_SOLVER == SOLVER_Z3
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
 	res = z3OptimizeLinearPostSolve( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
 #endif
 	}
@@ -373,7 +373,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	res = clpGetInternalPoint<Number>( mClpContexts[std::this_thread::get_id()] );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
-#elif HYPRO_PRIMARY_SOLVER == SOLVER_Z3
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE
 	res = z3GetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
