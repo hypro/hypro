@@ -72,6 +72,34 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 }
 
 template <typename State>
+std::vector<PlotData<PolytopalState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	START_BENCHMARK_OPERATION( Verification );
+	auto roots = makeRoots<State>( automaton );
+	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
+	auto result = analyzer.run();
+
+	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+		std::cout << "Could not verify safety." << std::endl;
+		// Call bad state handling (e.g., return path)
+	} else {
+		std::cout << "The model is safe." << std::endl;
+	}
+	EVALUATE_BENCHMARK_RESULT( Verification );
+
+	// create plot data
+	std::vector<PlotData<PolytopalState>> plotData{};
+
+	for ( const auto& node : preorder( roots ) ) {
+		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
+			PolytopalState state{};
+			state.setSet( segment );
+			return PlotData{ state, 0, 0 };
+		} );
+	}
+	return plotData;
+}
+
+template <typename State>
 std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
 	RectangularAnalyzer<State> analyzer{ automaton, setting };
@@ -108,6 +136,13 @@ struct LTIDispatcher {
 	}
 };
 
+struct SingularDispatcher {
+	template <typename Rep>
+	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
+		return singular_analyze<Rep>( automaton, setting );
+	}
+};
+
 AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
 	switch ( information.dynamic ) {
 		case DynamicType::affine:
@@ -123,6 +158,12 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 		case DynamicType::rectangular: {
 			// no dispatch for rectangular automata, representation and setting are fixed
 			return { rectangular_analyze<hypro::State<Number, CarlPolytope<Number>>>( automaton, setting ) };
+			[[fallthrough]];
+		}
+		case DynamicType::singular: {
+			// no dispatch for rectangular automata, representation and setting are fixed
+			return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+																		setting.strategy().front().representation_setting, SingularDispatcher{}, automaton, setting ) };
 			[[fallthrough]];
 		}
 		case DynamicType::timed:

@@ -23,8 +23,23 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  TemplatePolyhedronT, TemplatePolyhedronDefault>>;
 
+using PolytopalRepresentations =
+	  TypeList<
+			//RepresentationCombinations<
+			//	  CarlPolytopeT, CarlPolytopeSetting>,
+			RepresentationCombinations<
+				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
+			RepresentationCombinations<
+				  VPolytopeT, VPolytopeSetting>
+			//RepresentationCombinations<
+			//	  TemplatePolyhedronT, TemplatePolyhedronDefault>
+			>;
+
 template <class Number, class Converter>
 using RepresentationsList = flattenRepresentations<Number, Converter, DefaultRepresentations>;
+
+template <class Number, class Converter>
+using PolytopeTypesList = flattenRepresentations<Number, Converter, PolytopalRepresentations>;
 
 template <class Number, class Converter>
 using DefaultDispatcher = Dispatcher<RepresentationsList<Number, Converter>>;

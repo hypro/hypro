@@ -12,12 +12,10 @@ REACHABILITY_RESULT SingularAnalyzer<Representation>::forwardRun() {
 	// initialize queue
 	for ( auto& [location, condition] : mHybridAutomaton.getInitialStates() ) {
 		// create initial state
-		Representation initialState{ location };
-		initialState.setSet( typename Representation::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-		initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+		Representation initialStateSet{ condition.getMatrix(), condition.getVector() };
 
 		// create node from state
-		auto initialNode{ std::make_unique<ReachTreeNode<Representation>>( location, initialState, carl::Interval<SegmentInd>( 0 ) ) };
+		auto initialNode{ std::make_unique<ReachTreeNode<Representation>>( location, initialStateSet, carl::Interval<SegmentInd>( 0 ) ) };
 		// add to reachTree
 		mReachTree.emplace_back( std::move( initialNode ) );
 		// add to queue
@@ -25,7 +23,7 @@ REACHABILITY_RESULT SingularAnalyzer<Representation>::forwardRun() {
 	}
 
 	while ( !mWorkQueue.empty() ) {
-		RectangularWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
+		SingularWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
 		ReachTreeNode<Representation>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
@@ -44,11 +42,11 @@ REACHABILITY_RESULT SingularAnalyzer<Representation>::forwardRun() {
 		}
 
 		// create jump successor tasks
-		for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
-			for ( const auto jmpSucc : transitionStatesPair.second ) {
+		for ( const auto& [transition, stateSets] : worker.getJumpSuccessorSets() ) {
+			for ( const auto jmpSucc : stateSets ) {
 				// update reachTree
 				// time is not considered in singular analysis so we store a dummy
-				auto& childNode = currentNode->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
+				auto& childNode = currentNode->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transition );
 
 				// create Task
 				mWorkQueue.push( &childNode );

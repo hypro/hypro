@@ -13,7 +13,7 @@ using Linear Relation Analysis" (Halbwachs et al.).
  * @return StateSet
  */
 template <typename StateSet>
-StateSet linearApplyTimeEvolution( const StateSet& initialSet, const StateSet& flow );
+StateSet singularApplyTimeEvolution( const StateSet& initialSet, const StateSet& flow );
 
 /**
  * @brief Compute time elapse (bounded) starting from an initial set.
@@ -25,8 +25,8 @@ StateSet linearApplyTimeEvolution( const StateSet& initialSet, const StateSet& f
  * @return StateSet
  */
 template <typename StateSet>
-StateSet linearApplyBoundedTimeEvolution( const StateSet& initialSet, const StateSet& flow, tNumber timeBound );
+StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const StateSet& flow, tNumber timeBound );
 
 }  // namespace hypro
 
-#include "linearTimeEvolutionHandler.tpp"
+#include "singularTimeEvolutionHandler.tpp"

@@ -1,8 +1,8 @@
-#include "linearTimeEvolutionHandler.h"
+#include "singularTimeEvolutionHandler.h"
 
 namespace hypro {
 template <typename StateSet>
-StateSet linearApplyTimeEvolution( const StateSet& initialSet, const StateSet& flow ) {
+StateSet singularApplyTimeEvolution( const StateSet& initialSet, const StateSet& flow ) {
 	using Number = typename StateSet::NumberType;
 	VPolytope<Number> initSet = hypro::Converter<Number>::toVPolytope( initialSet );
 	VPolytope<Number> flowSet = hypro::Converter<Number>::toVPolytope( flow );
@@ -22,7 +22,7 @@ StateSet linearApplyTimeEvolution( const StateSet& initialSet, const StateSet& f
 }
 
 template <typename StateSet>
-StateSet linearApplyBoundedTimeEvolution( const StateSet& initialSet, const StateSet& flow, tNumber timeBound ) {
+StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const StateSet& flow, tNumber timeBound ) {
 	using Number = typename StateSet::NumberType;
 	VPolytope<Number> initSet = hypro::Converter<Number>::toVPolytope( initialSet );
 	VPolytope<Number> flowSet = hypro::Converter<Number>::toVPolytope( flow );

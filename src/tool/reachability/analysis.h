@@ -18,6 +18,8 @@ using namespace hypro;
 
 using FullState = hypro::apply<hypro::State, concat<TypeList<Number, CarlPolytope<Number>>, RepresentationsList<Number, Converter<Number>>>>;
 
+using PolytopalState = hypro::apply<hypro::State, PolytopeTypesList>;
+
 struct AnalysisResult {
 	std::vector<hypro::PlotData<FullState>> plotData{};
 };
