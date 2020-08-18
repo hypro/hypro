@@ -5,7 +5,7 @@
 namespace hypro {
 
 template <typename Number>
-EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const EvaluationResult<Number> preSolution ){
+EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const EvaluationResult<Number>& preSolution ){
 	EvaluationResult<Number> res;
 	z3Context c;
 	z3::optimize z3Optimizer( c );
@@ -45,12 +45,13 @@ EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_
 		if ( sstr.str() == std::string( "oo" ) || sstr.str() == std::string( "(* (- 1) oo)" ) ) {
 			res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 		} else {
-			res.supportValue = Number( Z3_get_numeral_double( c, z3res ) );
+			res.supportValue = z3ResToNumber<Number>(c, z3res );
 			vector_t<Number> pointCoordinates = vector_t<Number>::Zero( constraints.cols() );
 			for ( unsigned i = 0; i < variables.size(); ++i ) {
-				z3::func_decl tmp = variables.at( i ).decl();
-				if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
-					pointCoordinates( i ) = Number( Z3_get_numeral_double( c, m.get_const_interp( tmp ) ) );
+				z3::func_decl currentVar = variables.at( i ).decl();
+				if ( Z3_model_get_const_interp( c, m, currentVar ) != nullptr ) {
+					z3::ast varValue = m.get_const_interp( currentVar );
+					pointCoordinates( i ) = z3ResToNumber<Number>( c, varValue );
 				}
 			}
 			res.errorCode = SOLUTION::FEAS;
@@ -66,8 +67,6 @@ EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_
 template <typename Number>
 EvaluationResult<Number> z3OptimizeLinear( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
 	//std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
-	// TODO: To get results from z3 some exact conversion should be performed (not via Z3_get_numeral_double).
-	// 		Rational numbers could be constructed with Z3_get_numerator and Z3_get_denominator together with Z3_get_numeral_int
 	EvaluationResult<Number> res;
 	z3Context c;
 	z3::optimize z3Optimizer( c );
@@ -100,12 +99,13 @@ EvaluationResult<Number> z3OptimizeLinear( bool maximize, const vector_t<Number>
 		if ( sstr.str() == std::string( "oo" ) || sstr.str() == std::string( "(* (- 1) oo)" ) ) {
 			res = EvaluationResult<Number>( 1, SOLUTION::INFTY );
 		} else {
-			res.supportValue = Number( Z3_get_numeral_double( c, z3res ) );
+			res.supportValue = z3ResToNumber<Number>(c, z3res );
 			vector_t<Number> pointCoordinates = vector_t<Number>::Zero( constraints.cols() );
 			for ( unsigned i = 0; i < variables.size(); ++i ) {
-				z3::func_decl tmp = variables.at( i ).decl();
-				if ( Z3_model_get_const_interp( c, m, tmp ) != nullptr ) {
-					pointCoordinates( i ) = Number( Z3_get_numeral_double( c, m.get_const_interp( tmp ) ) );
+				z3::func_decl currentVar = variables.at( i ).decl();
+				if ( Z3_model_get_const_interp( c, m, currentVar ) != nullptr ) {
+					z3::ast varValue = m.get_const_interp( currentVar );
+					pointCoordinates( i ) = z3ResToNumber<Number>( c, varValue );
 				}
 			}
 			res.errorCode = SOLUTION::FEAS;

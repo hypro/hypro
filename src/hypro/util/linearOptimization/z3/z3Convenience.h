@@ -174,6 +174,24 @@ static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _con
 	return std::make_pair( formula, objective );
 }
 
+template <typename Number>
+Number z3ResToNumber( z3::context& c, z3::ast& resZ3 ) {
+	int* p = new int;
+	unsigned* q = new unsigned;
+	mpq_t resRational;
+
+	Z3_get_numeral_int( c, Z3_get_numerator( c, resZ3 ), p );
+	Z3_get_numeral_uint( c, Z3_get_denominator( c, resZ3 ), q );
+
+	mpq_init( resRational );
+	mpq_set_si( resRational, *p, *q );
+	Number resNumber = carl::convert<mpq_class, Number>( mpq_class( resRational ) );
+	mpq_clear( resRational );
+	delete p;
+	delete q;
+	return resNumber;
+}
+
 }  // namespace hypro
 
 #endif

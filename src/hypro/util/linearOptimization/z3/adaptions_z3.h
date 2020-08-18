@@ -1,13 +1,15 @@
 
 #pragma once
-//#include "helper_methods.h"
+#include "flags.h"
+#ifdef HYPRO_USE_Z3
+#include "helper_methods.h"
 #include "z3Convenience.h"
 
 #include <z3.h>
 
 namespace hypro {
 template <typename Number>
-EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const EvaluationResult<Number>& preSolution = EvaluationResult<Number>() );
+EvaluationResult<Number> z3OptimizeLinearPostSolve( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const EvaluationResult<Number>& preSolution );
 
 template <typename Number>
 EvaluationResult<Number> z3OptimizeLinear( bool maximize, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations );
@@ -28,3 +30,4 @@ std::vector<std::size_t> z3RedundantConstraints( const matrix_t<Number>& constra
 }  // namespace hypro
 
 #include "adaptions_z3.tpp"
+#endif // HYPRO_USE_Z3
