@@ -211,11 +211,12 @@ class Location {
 			//TRACE("hypro.datastructures","External input not equal.");
 			return false;
 		}
+
+		if ( mTransitions.size() != rhs.getTransitions().size() ) {
+			//TRACE( "hypro.datastructures", "Number of transitions not equal." );
+			return false;
+		}
 		/*
-        if(mTransitions.size() != rhs.getTransitions().size()) {
-            TRACE("hypro.datastructures","Number of transitions not equal.");
-            return false;
-        }
         for(auto lhsIt = mTransitions.begin(); lhsIt != mTransitions.end(); ++lhsIt) {
             bool found = false;
             for(auto rhsIt = rhs.getTransitions().begin(); rhsIt != rhs.getTransitions().end(); ++rhsIt) {
