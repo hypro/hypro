@@ -4,13 +4,12 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     set(algorithm_test_sources
       #FacetEnumerationTest.cpp
       #ForwardReachabilityTest.cpp
-			#HyReachTest.cpp
       #MinkowskiSumTest.cpp
       #SumPerformanceTest.cpp
       # rahsTwoTankTest.cpp
       ReachabilityAnalysisTest.cpp
       FourierMotzkinQETest.cpp
-      VertexEnumerationTest.cpp
+      #VertexEnumerationTest.cpp
       UtilityTest.cpp
       QuickhullTest.cpp
       QuickIntersectionTest.cpp
