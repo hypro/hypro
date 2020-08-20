@@ -74,23 +74,26 @@ Location<Number>::Location( const matrix_t<Number>& _mat, typename Location<Numb
 
 template <typename Number>
 Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
-	mInvariant = in.getInvariant();
-	mName = in.getName();
-	mExternalInput = in.getExternalInput();
-	mHash = 0;
-	// update copied transitions
-	for ( const auto& t : in.getTransitions() ) {
-		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
-		mTransitions.back()->setSource( this );
+	if ( this != &in ) {
+		mInvariant = in.getInvariant();
+		mName = in.getName();
+		mExternalInput = in.getExternalInput();
+		mHash = 0;
+		// update copied transitions
+		mTransitions.clear();
+		for ( const auto& t : in.getTransitions() ) {
+			mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
+			mTransitions.back()->setSource( this );
+		}
+
+		mFlows.clear();
+		mFlowTypes.clear();
+		mFlows.insert( mFlows.begin(), in.getFlows().begin(), in.getFlows().end() );
+		mFlowTypes.insert( mFlowTypes.begin(), in.getFlowTypes().begin(), in.getFlowTypes().end() );
+
+		//TRACE( "hypro.datastructures", "Comparing hashes after assignment of " << in.getName() << " to this." );
+		assert( this->hash() == in.hash() );
 	}
-
-	mFlows.clear();
-	mFlowTypes.clear();
-	mFlows.insert( mFlows.begin(), in.getFlows().begin(), in.getFlows().end() );
-	mFlowTypes.insert( mFlowTypes.begin(), in.getFlowTypes().begin(), in.getFlowTypes().end() );
-
-	//TRACE( "hypro.datastructures", "Comparing hashes after assignment of " << in.getName() << " to this." );
-	assert( this->hash() == in.hash() );
 	return *this;
 }
 
