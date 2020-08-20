@@ -86,6 +86,10 @@ TEST(OptimizerTest, Maximize){
 	EXPECT_NEAR(6.0, res.supportValue, 1.0e-8);
 	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
 	EXPECT_NEAR_VECTORS(controlVec, res.optimumValue, 1.0e-8);
+
+	res = op.evaluate(0.1*vector_t<double>::Ones(2), false);
+	EXPECT_EQ(SOLUTION::FEAS, res.errorCode);
+	EXPECT_NEAR(0.4, res.supportValue, 1.0e-8);
 }
 
 TEST(OptimizerTest, optimizeUnbounded){
