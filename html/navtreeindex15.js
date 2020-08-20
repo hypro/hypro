@@ -1,6 +1,5 @@
 var NAVTREEINDEX15 =
 {
-"structhypro_1_1_affine_transformation.html#a9cc38ffcd696b9e621a1faab34a7c71c":[8,0,2,8,12],
 "structhypro_1_1_affine_transformation.html#ac8312bc10204f5ef8bf467c351c6f0cd":[8,0,2,8,9],
 "structhypro_1_1_affine_transformation.html#ad9c9d64f67e38c811a49d857aa1f5f3f":[8,0,2,8,8],
 "structhypro_1_1_affine_transformation.html#adb004b2af128df0c535157b598a5dc6d":[8,0,2,8,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX15 =
 "structhypro_1_1_zonotope_setting.html":[8,0,2,296],
 "structhypro_1_1clp__context.html":[8,0,2,26],
 "structhypro_1_1clp__context.html#a18364c55fce6952a4a297a854e02959a":[8,0,2,26,10],
-"structhypro_1_1clp__context.html#a2ced850cf805f810561fe0e0bf8616f2":[8,0,2,26,5]
+"structhypro_1_1clp__context.html#a2ced850cf805f810561fe0e0bf8616f2":[8,0,2,26,5],
+"structhypro_1_1clp__context.html#a34a3b3919e971425010d89904409dcfc":[8,0,2,26,0]
 };
