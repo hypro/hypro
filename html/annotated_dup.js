@@ -40,5 +40,6 @@ var annotated_dup =
       [ "hash< std::pair< first, second > >", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4" ],
       [ "tuple_element< I, boost::tuples::cons< T, U > >", "structstd_1_1tuple__element_3_01_i_00_01boost_1_1tuples_1_1cons_3_01_t_00_01_u_01_4_01_4.html", null ],
       [ "tuple_size< boost::tuples::cons< T, U > >", "structstd_1_1tuple__size_3_01boost_1_1tuples_1_1cons_3_01_t_00_01_u_01_4_01_4.html", null ]
-    ] ]
+    ] ],
+    [ "Clock", "class_clock.html", "class_clock" ]
 ];

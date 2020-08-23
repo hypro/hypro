@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['add',['add',['../classhypro_1_1statistics_1_1_counter_repository.html#a78ee1b2b1d0ad215d354d64f2da20bb1',1,'hypro::statistics::CounterRepository::add()'],['../classhypro_1_1statistics_1_1_statistician.html#a634a3a9148799842daf6135227ae6df9',1,'hypro::statistics::Statistician::add()']]],
+  ['add',['add',['../classhypro_1_1statistics_1_1_clock_repository.html#aafdf30c163ac84c3003dac28040d221f',1,'hypro::statistics::ClockRepository::add()'],['../classhypro_1_1statistics_1_1_counter_repository.html#a78ee1b2b1d0ad215d354d64f2da20bb1',1,'hypro::statistics::CounterRepository::add()'],['../classhypro_1_1statistics_1_1_statistician.html#a634a3a9148799842daf6135227ae6df9',1,'hypro::statistics::Statistician::add()']]],
   ['addchild',['addChild',['../classhypro_1_1_reach_tree_node.html#a433636727ec9af1ce0619944368c14ec',1,'hypro::ReachTreeNode::addChild()'],['../classhypro_1_1_tree_node.html#a23a7592615c21b6ea14f1454b5ec5150',1,'hypro::TreeNode::addChild()']]],
   ['addconstraint',['addConstraint',['../classhypro_1_1_optimizer.html#ae0f45b33ba78df88b93e2d393823fe42',1,'hypro::Optimizer']]],
   ['addgenerators',['addGenerators',['../classhypro_1_1_zonotope_t.html#a9f59e04172b514229a25d8c9946f1355',1,'hypro::ZonotopeT']]],

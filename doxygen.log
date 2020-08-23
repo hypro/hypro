@@ -981,6 +981,10 @@ Reading /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/ClockRepository.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/statistics/ClockRepository.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h...
@@ -1025,14 +1029,14 @@ Reading /home/travis/build/hypro/hypro/src/hypro/util/type_handling/settings_enu
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/type_handling/settings_enums.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h...
-Reading /home/travis/build/hypro/hypro/src/hypro/util/unreachable.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/unreachable.h..error opening bib14142.bbl: No such file or directory
+bibtex command failed: No such file or directory
+.
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/unreachable.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h...
 Reading /home/travis/build/hypro/hypro/doc/markdown/features/features.md...
-Reading /home/travis/build/hyprerror opening bib14088.bbl: No such file or directory
-bibtex command failed: No such file or directory
-o/hypro/doc/markdown/gettingStarted/dependencies.md...
+Reading /home/travis/build/hypro/hypro/doc/markdown/gettingStarted/dependencies.md...
 Reading /home/travis/build/hypro/hypro/doc/markdown/gettingStarted/examples.md...
 Reading /home/travis/build/hypro/hypro/doc/markdown/gettingStarted/installation.md...
 Reading /home/travis/build/hypro/hypro/doc/markdown/gettingStarted.md...
@@ -1504,6 +1508,8 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/plotting/
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/Range.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/ClockRepository.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h...
@@ -1576,6 +1582,7 @@ Generating docs for page utilFunc...
 Generating docs for page citelist...
 Generating group documentation...
 Generating class documentation...
+Generating docs for compound Clock...
 Generating namespace index...
 Generating docs for compound better_enums::_eat_assign...
 Generating docs for compound better_enums::_initialize_at_program_start...
@@ -1855,6 +1862,7 @@ Generating docs for compound hypro::plotting::gnuplotSettings...
 Generating docs for compound hypro::qe::CellTreeNode...
 Generating docs for compound hypro::reachability::detail::bloatBoxVisitor...
 Generating docs for compound hypro::statistics::AtomicOperationCounter...
+Generating docs for compound hypro::statistics::ClockRepository...
 Generating docs for compound hypro::statistics::CounterRepository...
 Generating docs for compound hypro::statistics::OperationCounter...
 Generating docs for compound hypro::statistics::Statistician...
@@ -1904,612 +1912,616 @@ finalizing index lists...
 writing tag file...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/303
-Running dot for graph 2/303
-Running dot for graph 3/303
-Running dot for graph 4/303
-Running dot for graph 5/303
-Running dot for graph 6/303
-Running dot for graph 7/303
-Running dot for graph 8/303
-Running dot for graph 9/303
-Running dot for graph 10/303
-Running dot for graph 11/303
-Running dot for graph 12/303
-Running dot for graph 13/303
-Running dot for graph 14/303
-Running dot for graph 15/303
-Running dot for graph 16/303
-Running dot for graph 17/303
-Running dot for graph 18/303
-Running dot for graph 19/303
-Running dot for graph 20/303
-Running dot for graph 21/303
-Running dot for graph 22/303
-Running dot for graph 23/303
-Running dot for graph 24/303
-Running dot for graph 25/303
-Running dot for graph 26/303
-Running dot for graph 27/303
-Running dot for graph 28/303
-Running dot for graph 29/303
-Running dot for graph 30/303
-Running dot for graph 31/303
-Running dot for graph 32/303
-Running dot for graph 33/303
-Running dot for graph 34/303
-Running dot for graph 35/303
-Running dot for graph 36/303
-Running dot for graph 37/303
-Running dot for graph 38/303
-Running dot for graph 39/303
-Running dot for graph 40/303
-Running dot for graph 41/303
-Running dot for graph 42/303
-Running dot for graph 43/303
-Running dot for graph 44/303
-Running dot for graph 45/303
-Running dot for graph 46/303
-Running dot for graph 47/303
-Running dot for graph 48/303
-Running dot for graph 49/303
-Running dot for graph 50/303
-Running dot for graph 51/303
-Running dot for graph 52/303
-Running dot for graph 53/303
-Running dot for graph 54/303
-Running dot for graph 55/303
-Running dot for graph 56/303
-Running dot for graph 57/303
-Running dot for graph 58/303
-Running dot for graph 59/303
-Running dot for graph 60/303
-Running dot for graph 61/303
-Running dot for graph 62/303
-Running dot for graph 63/303
-Running dot for graph 64/303
-Running dot for graph 65/303
-Running dot for graph 66/303
-Running dot for graph 67/303
-Running dot for graph 68/303
-Running dot for graph 69/303
-Running dot for graph 70/303
-Running dot for graph 71/303
-Running dot for graph 72/303
-Running dot for graph 73/303
-Running dot for graph 74/303
-Running dot for graph 75/303
-Running dot for graph 76/303
-Running dot for graph 77/303
-Running dot for graph 78/303
-Running dot for graph 79/303
-Running dot for graph 80/303
-Running dot for graph 81/303
-Running dot for graph 82/303
-Running dot for graph 83/303
-Running dot for graph 84/303
-Running dot for graph 85/303
-Running dot for graph 86/303
-Running dot for graph 87/303
-Running dot for graph 88/303
-Running dot for graph 89/303
-Running dot for graph 90/303
-Running dot for graph 91/303
-Running dot for graph 92/303
-Running dot for graph 93/303
-Running dot for graph 94/303
-Running dot for graph 95/303
-Running dot for graph 96/303
-Running dot for graph 97/303
-Running dot for graph 98/303
-Running dot for graph 99/303
-Running dot for graph 100/303
-Running dot for graph 101/303
-Running dot for graph 102/303
-Running dot for graph 103/303
-Running dot for graph 104/303
-Running dot for graph 105/303
-Running dot for graph 106/303
-Running dot for graph 107/303
-Running dot for graph 108/303
-Running dot for graph 109/303
-Running dot for graph 110/303
-Running dot for graph 111/303
-Running dot for graph 112/303
-Running dot for graph 113/303
-Running dot for graph 114/303
-Running dot for graph 115/303
-Running dot for graph 116/303
-Running dot for graph 117/303
-Running dot for graph 118/303
-Running dot for graph 119/303
-Running dot for graph 120/303
-Running dot for graph 121/303
-Running dot for graph 122/303
-Running dot for graph 123/303
-Running dot for graph 124/303
-Running dot for graph 125/303
-Running dot for graph 126/303
-Running dot for graph 127/303
-Running dot for graph 128/303
-Running dot for graph 129/303
-Running dot for graph 130/303
-Running dot for graph 131/303
-Running dot for graph 132/303
-Running dot for graph 133/303
-Running dot for graph 134/303
-Running dot for graph 135/303
-Running dot for graph 136/303
-Running dot for graph 137/303
-Running dot for graph 138/303
-Running dot for graph 139/303
-Running dot for graph 140/303
-Running dot for graph 141/303
-Running dot for graph 142/303
-Running dot for graph 143/303
-Running dot for graph 144/303
-Running dot for graph 145/303
-Running dot for graph 146/303
-Running dot for graph 147/303
-Running dot for graph 148/303
-Running dot for graph 149/303
-Running dot for graph 150/303
-Running dot for graph 151/303
-Running dot for graph 152/303
-Running dot for graph 153/303
-Running dot for graph 154/303
-Running dot for graph 155/303
-Running dot for graph 156/303
-Running dot for graph 157/303
-Running dot for graph 158/303
-Running dot for graph 159/303
-Running dot for graph 160/303
-Running dot for graph 161/303
-Running dot for graph 162/303
-Running dot for graph 163/303
-Running dot for graph 164/303
-Running dot for graph 165/303
-Running dot for graph 166/303
-Running dot for graph 167/303
-Running dot for graph 168/303
-Running dot for graph 169/303
-Running dot for graph 170/303
-Running dot for graph 171/303
-Running dot for graph 172/303
-Running dot for graph 173/303
-Running dot for graph 174/303
-Running dot for graph 175/303
-Running dot for graph 176/303
-Running dot for graph 177/303
-Running dot for graph 178/303
-Running dot for graph 179/303
-Running dot for graph 180/303
-Running dot for graph 181/303
-Running dot for graph 182/303
-Running dot for graph 183/303
-Running dot for graph 184/303
-Running dot for graph 185/303
-Running dot for graph 186/303
-Running dot for graph 187/303
-Running dot for graph 188/303
-Running dot for graph 189/303
-Running dot for graph 190/303
-Running dot for graph 191/303
-Running dot for graph 192/303
-Running dot for graph 193/303
-Running dot for graph 194/303
-Running dot for graph 195/303
-Running dot for graph 196/303
-Running dot for graph 197/303
-Running dot for graph 198/303
-Running dot for graph 199/303
-Running dot for graph 200/303
-Running dot for graph 201/303
-Running dot for graph 202/303
-Running dot for graph 203/303
-Running dot for graph 204/303
-Running dot for graph 205/303
-Running dot for graph 206/303
-Running dot for graph 207/303
-Running dot for graph 208/303
-Running dot for graph 209/303
-Running dot for graph 210/303
-Running dot for graph 211/303
-Running dot for graph 212/303
-Running dot for graph 213/303
-Running dot for graph 214/303
-Running dot for graph 215/303
-Running dot for graph 216/303
-Running dot for graph 217/303
-Running dot for graph 218/303
-Running dot for graph 219/303
-Running dot for graph 220/303
-Running dot for graph 221/303
-Running dot for graph 222/303
-Running dot for graph 223/303
-Running dot for graph 224/303
-Running dot for graph 225/303
-Running dot for graph 226/303
-Running dot for graph 227/303
-Running dot for graph 228/303
-Running dot for graph 229/303
-Running dot for graph 230/303
-Running dot for graph 231/303
-Running dot for graph 232/303
-Running dot for graph 233/303
-Running dot for graph 234/303
-Running dot for graph 235/303
-Running dot for graph 236/303
-Running dot for graph 237/303
-Running dot for graph 238/303
-Running dot for graph 239/303
-Running dot for graph 240/303
-Running dot for graph 241/303
-Running dot for graph 242/303
-Running dot for graph 243/303
-Running dot for graph 244/303
-Running dot for graph 245/303
-Running dot for graph 246/303
-Running dot for graph 247/303
-Running dot for graph 248/303
-Running dot for graph 249/303
-Running dot for graph 250/303
-Running dot for graph 251/303
-Running dot for graph 252/303
-Running dot for graph 253/303
-Running dot for graph 254/303
-Running dot for graph 255/303
-Running dot for graph 256/303
-Running dot for graph 257/303
-Running dot for graph 258/303
-Running dot for graph 259/303
-Running dot for graph 260/303
-Running dot for graph 261/303
-Running dot for graph 262/303
-Running dot for graph 263/303
-Running dot for graph 264/303
-Running dot for graph 265/303
-Running dot for graph 266/303
-Running dot for graph 267/303
-Running dot for graph 268/303
-Running dot for graph 269/303
-Running dot for graph 270/303
-Running dot for graph 271/303
-Running dot for graph 272/303
-Running dot for graph 273/303
-Running dot for graph 274/303
-Running dot for graph 275/303
-Running dot for graph 276/303
-Running dot for graph 277/303
-Running dot for graph 278/303
-Running dot for graph 279/303
-Running dot for graph 280/303
-Running dot for graph 281/303
-Running dot for graph 282/303
-Running dot for graph 283/303
-Running dot for graph 284/303
-Running dot for graph 285/303
-Running dot for graph 286/303
-Running dot for graph 287/303
-Running dot for graph 288/303
-Running dot for graph 289/303
-Running dot for graph 290/303
-Running dot for graph 291/303
-Running dot for graph 292/303
-Running dot for graph 293/303
-Running dot for graph 294/303
-Running dot for graph 295/303
-Running dot for graph 296/303
-Running dot for graph 297/303
-Running dot for graph 298/303
-Running dot for graph 299/303
-Running dot for graph 300/303
-Running dot for graph 301/303
-Running dot for graph 302/303
-Running dot for graph 303/303
-Patching output file 1/304
-Patching output file 2/304
-Patching output file 3/304
-Patching output file 4/304
-Patching output file 5/304
-Patching output file 6/304
-Patching output file 7/304
-Patching output file 8/304
-Patching output file 9/304
-Patching output file 10/304
-Patching output file 11/304
-Patching output file 12/304
-Patching output file 13/304
-Patching output file 14/304
-Patching output file 15/304
-Patching output file 16/304
-Patching output file 17/304
-Patching output file 18/304
-Patching output file 19/304
-Patching output file 20/304
-Patching output file 21/304
-Patching output file 22/304
-Patching output file 23/304
-Patching output file 24/304
-Patching output file 25/304
-Patching output file 26/304
-Patching output file 27/304
-Patching output file 28/304
-Patching output file 29/304
-Patching output file 30/304
-Patching output file 31/304
-Patching output file 32/304
-Patching output file 33/304
-Patching output file 34/304
-Patching output file 35/304
-Patching output file 36/304
-Patching output file 37/304
-Patching output file 38/304
-Patching output file 39/304
-Patching output file 40/304
-Patching output file 41/304
-Patching output file 42/304
-Patching output file 43/304
-Patching output file 44/304
-Patching output file 45/304
-Patching output file 46/304
-Patching output file 47/304
-Patching output file 48/304
-Patching output file 49/304
-Patching output file 50/304
-Patching output file 51/304
-Patching output file 52/304
-Patching output file 53/304
-Patching output file 54/304
-Patching output file 55/304
-Patching output file 56/304
-Patching output file 57/304
-Patching output file 58/304
-Patching output file 59/304
-Patching output file 60/304
-Patching output file 61/304
-Patching output file 62/304
-Patching output file 63/304
-Patching output file 64/304
-Patching output file 65/304
-Patching output file 66/304
-Patching output file 67/304
-Patching output file 68/304
-Patching output file 69/304
-Patching output file 70/304
-Patching output file 71/304
-Patching output file 72/304
-Patching output file 73/304
-Patching output file 74/304
-Patching output file 75/304
-Patching output file 76/304
-Patching output file 77/304
-Patching output file 78/304
-Patching output file 79/304
-Patching output file 80/304
-Patching output file 81/304
-Patching output file 82/304
-Patching output file 83/304
-Patching output file 84/304
-Patching output file 85/304
-Patching output file 86/304
-Patching output file 87/304
-Patching output file 88/304
-Patching output file 89/304
-Patching output file 90/304
-Patching output file 91/304
-Patching output file 92/304
-Patching output file 93/304
-Patching output file 94/304
-Patching output file 95/304
-Patching output file 96/304
-Patching output file 97/304
-Patching output file 98/304
-Patching output file 99/304
-Patching output file 100/304
-Patching output file 101/304
-Patching output file 102/304
-Patching output file 103/304
-Patching output file 104/304
-Patching output file 105/304
-Patching output file 106/304
-Patching output file 107/304
-Patching output file 108/304
-Patching output file 109/304
-Patching output file 110/304
-Patching output file 111/304
-Patching output file 112/304
-Patching output file 113/304
-Patching output file 114/304
-Patching output file 115/304
-Patching output file 116/304
-Patching output file 117/304
-Patching output file 118/304
-Patching output file 119/304
-Patching output file 120/304
-Patching output file 121/304
-Patching output file 122/304
-Patching output file 123/304
-Patching output file 124/304
-Patching output file 125/304
-Patching output file 126/304
-Patching output file 127/304
-Patching output file 128/304
-Patching output file 129/304
-Patching output file 130/304
-Patching output file 131/304
-Patching output file 132/304
-Patching output file 133/304
-Patching output file 134/304
-Patching output file 135/304
-Patching output file 136/304
-Patching output file 137/304
-Patching output file 138/304
-Patching output file 139/304
-Patching output file 140/304
-Patching output file 141/304
-Patching output file 142/304
-Patching output file 143/304
-Patching output file 144/304
-Patching output file 145/304
-Patching output file 146/304
-Patching output file 147/304
-Patching output file 148/304
-Patching output file 149/304
-Patching output file 150/304
-Patching output file 151/304
-Patching output file 152/304
-Patching output file 153/304
-Patching output file 154/304
-Patching output file 155/304
-Patching output file 156/304
-Patching output file 157/304
-Patching output file 158/304
-Patching output file 159/304
-Patching output file 160/304
-Patching output file 161/304
-Patching output file 162/304
-Patching output file 163/304
-Patching output file 164/304
-Patching output file 165/304
-Patching output file 166/304
-Patching output file 167/304
-Patching output file 168/304
-Patching output file 169/304
-Patching output file 170/304
-Patching output file 171/304
-Patching output file 172/304
-Patching output file 173/304
-Patching output file 174/304
-Patching output file 175/304
-Patching output file 176/304
-Patching output file 177/304
-Patching output file 178/304
-Patching output file 179/304
-Patching output file 180/304
-Patching output file 181/304
-Patching output file 182/304
-Patching output file 183/304
-Patching output file 184/304
-Patching output file 185/304
-Patching output file 186/304
-Patching output file 187/304
-Patching output file 188/304
-Patching output file 189/304
-Patching output file 190/304
-Patching output file 191/304
-Patching output file 192/304
-Patching output file 193/304
-Patching output file 194/304
-Patching output file 195/304
-Patching output file 196/304
-Patching output file 197/304
-Patching output file 198/304
-Patching output file 199/304
-Patching output file 200/304
-Patching output file 201/304
-Patching output file 202/304
-Patching output file 203/304
-Patching output file 204/304
-Patching output file 205/304
-Patching output file 206/304
-Patching output file 207/304
-Patching output file 208/304
-Patching output file 209/304
-Patching output file 210/304
-Patching output file 211/304
-Patching output file 212/304
-Patching output file 213/304
-Patching output file 214/304
-Patching output file 215/304
-Patching output file 216/304
-Patching output file 217/304
-Patching output file 218/304
-Patching output file 219/304
-Patching output file 220/304
-Patching output file 221/304
-Patching output file 222/304
-Patching output file 223/304
-Patching output file 224/304
-Patching output file 225/304
-Patching output file 226/304
-Patching output file 227/304
-Patching output file 228/304
-Patching output file 229/304
-Patching output file 230/304
-Patching output file 231/304
-Patching output file 232/304
-Patching output file 233/304
-Patching output file 234/304
-Patching output file 235/304
-Patching output file 236/304
-Patching output file 237/304
-Patching output file 238/304
-Patching output file 239/304
-Patching output file 240/304
-Patching output file 241/304
-Patching output file 242/304
-Patching output file 243/304
-Patching output file 244/304
-Patching output file 245/304
-Patching output file 246/304
-Patching output file 247/304
-Patching output file 248/304
-Patching output file 249/304
-Patching output file 250/304
-Patching output file 251/304
-Patching output file 252/304
-Patching output file 253/304
-Patching output file 254/304
-Patching output file 255/304
-Patching output file 256/304
-Patching output file 257/304
-Patching output file 258/304
-Patching output file 259/304
-Patching output file 260/304
-Patching output file 261/304
-Patching output file 262/304
-Patching output file 263/304
-Patching output file 264/304
-Patching output file 265/304
-Patching output file 266/304
-Patching output file 267/304
-Patching output file 268/304
-Patching output file 269/304
-Patching output file 270/304
-Patching output file 271/304
-Patching output file 272/304
-Patching output file 273/304
-Patching output file 274/304
-Patching output file 275/304
-Patching output file 276/304
-Patching output file 277/304
-Patching output file 278/304
-Patching output file 279/304
-Patching output file 280/304
-Patching output file 281/304
-Patching output file 282/304
-Patching output file 283/304
-Patching output file 284/304
-Patching output file 285/304
-Patching output file 286/304
-Patching output file 287/304
-Patching output file 288/304
-Patching output file 289/304
-Patching output file 290/304
-Patching output file 291/304
-Patching output file 292/304
-Patching output file 293/304
-Patching output file 294/304
-Patching output file 295/304
-Patching output file 296/304
-Patching output file 297/304
-Patching output file 298/304
-Patching output file 299/304
-Patching output file 300/304
-Patching output file 301/304
-Patching output file 302/304
-Patching output file 303/304
-Patching output file 304/304
-lookup cache used 12406/65536 hits=160124 misses=13838
+Running dot for graph 1/305
+Running dot for graph 2/305
+Running dot for graph 3/305
+Running dot for graph 4/305
+Running dot for graph 5/305
+Running dot for graph 6/305
+Running dot for graph 7/305
+Running dot for graph 8/305
+Running dot for graph 9/305
+Running dot for graph 10/305
+Running dot for graph 11/305
+Running dot for graph 12/305
+Running dot for graph 13/305
+Running dot for graph 14/305
+Running dot for graph 15/305
+Running dot for graph 16/305
+Running dot for graph 17/305
+Running dot for graph 18/305
+Running dot for graph 19/305
+Running dot for graph 20/305
+Running dot for graph 21/305
+Running dot for graph 22/305
+Running dot for graph 23/305
+Running dot for graph 24/305
+Running dot for graph 25/305
+Running dot for graph 26/305
+Running dot for graph 27/305
+Running dot for graph 28/305
+Running dot for graph 29/305
+Running dot for graph 30/305
+Running dot for graph 31/305
+Running dot for graph 32/305
+Running dot for graph 33/305
+Running dot for graph 34/305
+Running dot for graph 35/305
+Running dot for graph 36/305
+Running dot for graph 37/305
+Running dot for graph 38/305
+Running dot for graph 39/305
+Running dot for graph 40/305
+Running dot for graph 41/305
+Running dot for graph 42/305
+Running dot for graph 43/305
+Running dot for graph 44/305
+Running dot for graph 45/305
+Running dot for graph 46/305
+Running dot for graph 47/305
+Running dot for graph 48/305
+Running dot for graph 49/305
+Running dot for graph 50/305
+Running dot for graph 51/305
+Running dot for graph 52/305
+Running dot for graph 53/305
+Running dot for graph 54/305
+Running dot for graph 55/305
+Running dot for graph 56/305
+Running dot for graph 57/305
+Running dot for graph 58/305
+Running dot for graph 59/305
+Running dot for graph 60/305
+Running dot for graph 61/305
+Running dot for graph 62/305
+Running dot for graph 63/305
+Running dot for graph 64/305
+Running dot for graph 65/305
+Running dot for graph 66/305
+Running dot for graph 67/305
+Running dot for graph 68/305
+Running dot for graph 69/305
+Running dot for graph 70/305
+Running dot for graph 71/305
+Running dot for graph 72/305
+Running dot for graph 73/305
+Running dot for graph 74/305
+Running dot for graph 75/305
+Running dot for graph 76/305
+Running dot for graph 77/305
+Running dot for graph 78/305
+Running dot for graph 79/305
+Running dot for graph 80/305
+Running dot for graph 81/305
+Running dot for graph 82/305
+Running dot for graph 83/305
+Running dot for graph 84/305
+Running dot for graph 85/305
+Running dot for graph 86/305
+Running dot for graph 87/305
+Running dot for graph 88/305
+Running dot for graph 89/305
+Running dot for graph 90/305
+Running dot for graph 91/305
+Running dot for graph 92/305
+Running dot for graph 93/305
+Running dot for graph 94/305
+Running dot for graph 95/305
+Running dot for graph 96/305
+Running dot for graph 97/305
+Running dot for graph 98/305
+Running dot for graph 99/305
+Running dot for graph 100/305
+Running dot for graph 101/305
+Running dot for graph 102/305
+Running dot for graph 103/305
+Running dot for graph 104/305
+Running dot for graph 105/305
+Running dot for graph 106/305
+Running dot for graph 107/305
+Running dot for graph 108/305
+Running dot for graph 109/305
+Running dot for graph 110/305
+Running dot for graph 111/305
+Running dot for graph 112/305
+Running dot for graph 113/305
+Running dot for graph 114/305
+Running dot for graph 115/305
+Running dot for graph 116/305
+Running dot for graph 117/305
+Running dot for graph 118/305
+Running dot for graph 119/305
+Running dot for graph 120/305
+Running dot for graph 121/305
+Running dot for graph 122/305
+Running dot for graph 123/305
+Running dot for graph 124/305
+Running dot for graph 125/305
+Running dot for graph 126/305
+Running dot for graph 127/305
+Running dot for graph 128/305
+Running dot for graph 129/305
+Running dot for graph 130/305
+Running dot for graph 131/305
+Running dot for graph 132/305
+Running dot for graph 133/305
+Running dot for graph 134/305
+Running dot for graph 135/305
+Running dot for graph 136/305
+Running dot for graph 137/305
+Running dot for graph 138/305
+Running dot for graph 139/305
+Running dot for graph 140/305
+Running dot for graph 141/305
+Running dot for graph 142/305
+Running dot for graph 143/305
+Running dot for graph 144/305
+Running dot for graph 145/305
+Running dot for graph 146/305
+Running dot for graph 147/305
+Running dot for graph 148/305
+Running dot for graph 149/305
+Running dot for graph 150/305
+Running dot for graph 151/305
+Running dot for graph 152/305
+Running dot for graph 153/305
+Running dot for graph 154/305
+Running dot for graph 155/305
+Running dot for graph 156/305
+Running dot for graph 157/305
+Running dot for graph 158/305
+Running dot for graph 159/305
+Running dot for graph 160/305
+Running dot for graph 161/305
+Running dot for graph 162/305
+Running dot for graph 163/305
+Running dot for graph 164/305
+Running dot for graph 165/305
+Running dot for graph 166/305
+Running dot for graph 167/305
+Running dot for graph 168/305
+Running dot for graph 169/305
+Running dot for graph 170/305
+Running dot for graph 171/305
+Running dot for graph 172/305
+Running dot for graph 173/305
+Running dot for graph 174/305
+Running dot for graph 175/305
+Running dot for graph 176/305
+Running dot for graph 177/305
+Running dot for graph 178/305
+Running dot for graph 179/305
+Running dot for graph 180/305
+Running dot for graph 181/305
+Running dot for graph 182/305
+Running dot for graph 183/305
+Running dot for graph 184/305
+Running dot for graph 185/305
+Running dot for graph 186/305
+Running dot for graph 187/305
+Running dot for graph 188/305
+Running dot for graph 189/305
+Running dot for graph 190/305
+Running dot for graph 191/305
+Running dot for graph 192/305
+Running dot for graph 193/305
+Running dot for graph 194/305
+Running dot for graph 195/305
+Running dot for graph 196/305
+Running dot for graph 197/305
+Running dot for graph 198/305
+Running dot for graph 199/305
+Running dot for graph 200/305
+Running dot for graph 201/305
+Running dot for graph 202/305
+Running dot for graph 203/305
+Running dot for graph 204/305
+Running dot for graph 205/305
+Running dot for graph 206/305
+Running dot for graph 207/305
+Running dot for graph 208/305
+Running dot for graph 209/305
+Running dot for graph 210/305
+Running dot for graph 211/305
+Running dot for graph 212/305
+Running dot for graph 213/305
+Running dot for graph 214/305
+Running dot for graph 215/305
+Running dot for graph 216/305
+Running dot for graph 217/305
+Running dot for graph 218/305
+Running dot for graph 219/305
+Running dot for graph 220/305
+Running dot for graph 221/305
+Running dot for graph 222/305
+Running dot for graph 223/305
+Running dot for graph 224/305
+Running dot for graph 225/305
+Running dot for graph 226/305
+Running dot for graph 227/305
+Running dot for graph 228/305
+Running dot for graph 229/305
+Running dot for graph 230/305
+Running dot for graph 231/305
+Running dot for graph 232/305
+Running dot for graph 233/305
+Running dot for graph 234/305
+Running dot for graph 235/305
+Running dot for graph 236/305
+Running dot for graph 237/305
+Running dot for graph 238/305
+Running dot for graph 239/305
+Running dot for graph 240/305
+Running dot for graph 241/305
+Running dot for graph 242/305
+Running dot for graph 243/305
+Running dot for graph 244/305
+Running dot for graph 245/305
+Running dot for graph 246/305
+Running dot for graph 247/305
+Running dot for graph 248/305
+Running dot for graph 249/305
+Running dot for graph 250/305
+Running dot for graph 251/305
+Running dot for graph 252/305
+Running dot for graph 253/305
+Running dot for graph 254/305
+Running dot for graph 255/305
+Running dot for graph 256/305
+Running dot for graph 257/305
+Running dot for graph 258/305
+Running dot for graph 259/305
+Running dot for graph 260/305
+Running dot for graph 261/305
+Running dot for graph 262/305
+Running dot for graph 263/305
+Running dot for graph 264/305
+Running dot for graph 265/305
+Running dot for graph 266/305
+Running dot for graph 267/305
+Running dot for graph 268/305
+Running dot for graph 269/305
+Running dot for graph 270/305
+Running dot for graph 271/305
+Running dot for graph 272/305
+Running dot for graph 273/305
+Running dot for graph 274/305
+Running dot for graph 275/305
+Running dot for graph 276/305
+Running dot for graph 277/305
+Running dot for graph 278/305
+Running dot for graph 279/305
+Running dot for graph 280/305
+Running dot for graph 281/305
+Running dot for graph 282/305
+Running dot for graph 283/305
+Running dot for graph 284/305
+Running dot for graph 285/305
+Running dot for graph 286/305
+Running dot for graph 287/305
+Running dot for graph 288/305
+Running dot for graph 289/305
+Running dot for graph 290/305
+Running dot for graph 291/305
+Running dot for graph 292/305
+Running dot for graph 293/305
+Running dot for graph 294/305
+Running dot for graph 295/305
+Running dot for graph 296/305
+Running dot for graph 297/305
+Running dot for graph 298/305
+Running dot for graph 299/305
+Running dot for graph 300/305
+Running dot for graph 301/305
+Running dot for graph 302/305
+Running dot for graph 303/305
+Running dot for graph 304/305
+Running dot for graph 305/305
+Patching output file 1/306
+Patching output file 2/306
+Patching output file 3/306
+Patching output file 4/306
+Patching output file 5/306
+Patching output file 6/306
+Patching output file 7/306
+Patching output file 8/306
+Patching output file 9/306
+Patching output file 10/306
+Patching output file 11/306
+Patching output file 12/306
+Patching output file 13/306
+Patching output file 14/306
+Patching output file 15/306
+Patching output file 16/306
+Patching output file 17/306
+Patching output file 18/306
+Patching output file 19/306
+Patching output file 20/306
+Patching output file 21/306
+Patching output file 22/306
+Patching output file 23/306
+Patching output file 24/306
+Patching output file 25/306
+Patching output file 26/306
+Patching output file 27/306
+Patching output file 28/306
+Patching output file 29/306
+Patching output file 30/306
+Patching output file 31/306
+Patching output file 32/306
+Patching output file 33/306
+Patching output file 34/306
+Patching output file 35/306
+Patching output file 36/306
+Patching output file 37/306
+Patching output file 38/306
+Patching output file 39/306
+Patching output file 40/306
+Patching output file 41/306
+Patching output file 42/306
+Patching output file 43/306
+Patching output file 44/306
+Patching output file 45/306
+Patching output file 46/306
+Patching output file 47/306
+Patching output file 48/306
+Patching output file 49/306
+Patching output file 50/306
+Patching output file 51/306
+Patching output file 52/306
+Patching output file 53/306
+Patching output file 54/306
+Patching output file 55/306
+Patching output file 56/306
+Patching output file 57/306
+Patching output file 58/306
+Patching output file 59/306
+Patching output file 60/306
+Patching output file 61/306
+Patching output file 62/306
+Patching output file 63/306
+Patching output file 64/306
+Patching output file 65/306
+Patching output file 66/306
+Patching output file 67/306
+Patching output file 68/306
+Patching output file 69/306
+Patching output file 70/306
+Patching output file 71/306
+Patching output file 72/306
+Patching output file 73/306
+Patching output file 74/306
+Patching output file 75/306
+Patching output file 76/306
+Patching output file 77/306
+Patching output file 78/306
+Patching output file 79/306
+Patching output file 80/306
+Patching output file 81/306
+Patching output file 82/306
+Patching output file 83/306
+Patching output file 84/306
+Patching output file 85/306
+Patching output file 86/306
+Patching output file 87/306
+Patching output file 88/306
+Patching output file 89/306
+Patching output file 90/306
+Patching output file 91/306
+Patching output file 92/306
+Patching output file 93/306
+Patching output file 94/306
+Patching output file 95/306
+Patching output file 96/306
+Patching output file 97/306
+Patching output file 98/306
+Patching output file 99/306
+Patching output file 100/306
+Patching output file 101/306
+Patching output file 102/306
+Patching output file 103/306
+Patching output file 104/306
+Patching output file 105/306
+Patching output file 106/306
+Patching output file 107/306
+Patching output file 108/306
+Patching output file 109/306
+Patching output file 110/306
+Patching output file 111/306
+Patching output file 112/306
+Patching output file 113/306
+Patching output file 114/306
+Patching output file 115/306
+Patching output file 116/306
+Patching output file 117/306
+Patching output file 118/306
+Patching output file 119/306
+Patching output file 120/306
+Patching output file 121/306
+Patching output file 122/306
+Patching output file 123/306
+Patching output file 124/306
+Patching output file 125/306
+Patching output file 126/306
+Patching output file 127/306
+Patching output file 128/306
+Patching output file 129/306
+Patching output file 130/306
+Patching output file 131/306
+Patching output file 132/306
+Patching output file 133/306
+Patching output file 134/306
+Patching output file 135/306
+Patching output file 136/306
+Patching output file 137/306
+Patching output file 138/306
+Patching output file 139/306
+Patching output file 140/306
+Patching output file 141/306
+Patching output file 142/306
+Patching output file 143/306
+Patching output file 144/306
+Patching output file 145/306
+Patching output file 146/306
+Patching output file 147/306
+Patching output file 148/306
+Patching output file 149/306
+Patching output file 150/306
+Patching output file 151/306
+Patching output file 152/306
+Patching output file 153/306
+Patching output file 154/306
+Patching output file 155/306
+Patching output file 156/306
+Patching output file 157/306
+Patching output file 158/306
+Patching output file 159/306
+Patching output file 160/306
+Patching output file 161/306
+Patching output file 162/306
+Patching output file 163/306
+Patching output file 164/306
+Patching output file 165/306
+Patching output file 166/306
+Patching output file 167/306
+Patching output file 168/306
+Patching output file 169/306
+Patching output file 170/306
+Patching output file 171/306
+Patching output file 172/306
+Patching output file 173/306
+Patching output file 174/306
+Patching output file 175/306
+Patching output file 176/306
+Patching output file 177/306
+Patching output file 178/306
+Patching output file 179/306
+Patching output file 180/306
+Patching output file 181/306
+Patching output file 182/306
+Patching output file 183/306
+Patching output file 184/306
+Patching output file 185/306
+Patching output file 186/306
+Patching output file 187/306
+Patching output file 188/306
+Patching output file 189/306
+Patching output file 190/306
+Patching output file 191/306
+Patching output file 192/306
+Patching output file 193/306
+Patching output file 194/306
+Patching output file 195/306
+Patching output file 196/306
+Patching output file 197/306
+Patching output file 198/306
+Patching output file 199/306
+Patching output file 200/306
+Patching output file 201/306
+Patching output file 202/306
+Patching output file 203/306
+Patching output file 204/306
+Patching output file 205/306
+Patching output file 206/306
+Patching output file 207/306
+Patching output file 208/306
+Patching output file 209/306
+Patching output file 210/306
+Patching output file 211/306
+Patching output file 212/306
+Patching output file 213/306
+Patching output file 214/306
+Patching output file 215/306
+Patching output file 216/306
+Patching output file 217/306
+Patching output file 218/306
+Patching output file 219/306
+Patching output file 220/306
+Patching output file 221/306
+Patching output file 222/306
+Patching output file 223/306
+Patching output file 224/306
+Patching output file 225/306
+Patching output file 226/306
+Patching output file 227/306
+Patching output file 228/306
+Patching output file 229/306
+Patching output file 230/306
+Patching output file 231/306
+Patching output file 232/306
+Patching output file 233/306
+Patching output file 234/306
+Patching output file 235/306
+Patching output file 236/306
+Patching output file 237/306
+Patching output file 238/306
+Patching output file 239/306
+Patching output file 240/306
+Patching output file 241/306
+Patching output file 242/306
+Patching output file 243/306
+Patching output file 244/306
+Patching output file 245/306
+Patching output file 246/306
+Patching output file 247/306
+Patching output file 248/306
+Patching output file 249/306
+Patching output file 250/306
+Patching output file 251/306
+Patching output file 252/306
+Patching output file 253/306
+Patching output file 254/306
+Patching output file 255/306
+Patching output file 256/306
+Patching output file 257/306
+Patching output file 258/306
+Patching output file 259/306
+Patching output file 260/306
+Patching output file 261/306
+Patching output file 262/306
+Patching output file 263/306
+Patching output file 264/306
+Patching output file 265/306
+Patching output file 266/306
+Patching output file 267/306
+Patching output file 268/306
+Patching output file 269/306
+Patching output file 270/306
+Patching output file 271/306
+Patching output file 272/306
+Patching output file 273/306
+Patching output file 274/306
+Patching output file 275/306
+Patching output file 276/306
+Patching output file 277/306
+Patching output file 278/306
+Patching output file 279/306
+Patching output file 280/306
+Patching output file 281/306
+Patching output file 282/306
+Patching output file 283/306
+Patching output file 284/306
+Patching output file 285/306
+Patching output file 286/306
+Patching output file 287/306
+Patching output file 288/306
+Patching output file 289/306
+Patching output file 290/306
+Patching output file 291/306
+Patching output file 292/306
+Patching output file 293/306
+Patching output file 294/306
+Patching output file 295/306
+Patching output file 296/306
+Patching output file 297/306
+Patching output file 298/306
+Patching output file 299/306
+Patching output file 300/306
+Patching output file 301/306
+Patching output file 302/306
+Patching output file 303/306
+Patching output file 304/306
+Patching output file 305/306
+Patching output file 306/306
+lookup cache used 12451/65536 hits=160372 misses=13895
 finished...

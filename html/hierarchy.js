@@ -27,6 +27,8 @@ var hierarchy =
     [ "hypro::ChildNodeGen< Representation >", "structhypro_1_1_child_node_gen.html", null ],
     [ "hypro::ChildTimingInformation< N >", "namespacehypro.html#structhypro_1_1_child_timing_information", null ],
     [ "hypro::ChildTimingInformation< Number >", "namespacehypro.html#namespacehypro", null ],
+    [ "Clock", "class_clock.html", null ],
+    [ "hypro::statistics::ClockRepository", "classhypro_1_1statistics_1_1_clock_repository.html", null ],
     [ "hypro::clp_context", "structhypro_1_1clp__context.html", null ],
     [ "hypro::concat_i< List, Lists >", "namespacehypro.html#structhypro_1_1concat__i", null ],
     [ "hypro::concat_i< TypeList< Ts... > >", "namespacehypro.html#structhypro_1_1concat__i_3_01_type_list_3_01_ts_8_8_8_01_4_01_4", null ],

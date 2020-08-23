@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1lti_jump_handler.html" title="hypro::ltiJumpHandler\l\&lt; State \&gt;" alt="" coords="5,5,164,47"/>
+<area shape="rect" id="node1" href="$classhypro_1_1lti_invariant_handler.html" title="hypro::ltiInvariantHandler\l\&lt; State \&gt;" alt="" coords="5,39,188,80"/>
+<area shape="rect" id="node2" href="$classhypro_1_1discrete_invariant_handler.html" title="hypro::discreteInvariant\lHandler\&lt; State \&gt;" alt="" coords="254,5,426,47"/>
+<area shape="rect" id="node3" href="$classhypro_1_1timed_invariant_handler.html" title="hypro::timedInvariantHandler\l\&lt; State \&gt;" alt="" coords="236,71,444,112"/>
 </map>

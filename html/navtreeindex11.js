@@ -1,5 +1,12 @@
 var NAVTREEINDEX11 =
 {
+"classhypro_1_1_transition.html#af49b9b263aa42e9e09a458b19ca17589":[8,0,2,272,32],
+"classhypro_1_1_transition.html#af734f1ea648d115c53430971a3171202":[8,0,2,272,24],
+"classhypro_1_1_tree_iterator.html":[8,0,2,273],
+"classhypro_1_1_tree_iterator.html#a0221503e32f089cc1e1aa72885ad6555":[8,0,2,273,11],
+"classhypro_1_1_tree_iterator.html#a099e60e4da950154b981d947ec781f69":[8,0,2,273,2],
+"classhypro_1_1_tree_iterator.html#a21f214ab078277282b5347c94673376a":[8,0,2,273,6],
+"classhypro_1_1_tree_iterator.html#a33aff124d42882d85a7bcad4567b5da2":[8,0,2,273,3],
 "classhypro_1_1_tree_iterator.html#a390092207f7d86348c90589e4a063a45":[8,0,2,273,10],
 "classhypro_1_1_tree_iterator.html#a5f52487b05b92b7fd3bd796d467d33ee":[8,0,2,273,1],
 "classhypro_1_1_tree_iterator.html#a5f7900e1415fa5085d041526aa4b63aa":[8,0,2,273,5],
@@ -242,12 +249,5 @@ var NAVTREEINDEX11 =
 "classhypro_1_1_vertex_enumeration.html#ae1b8481c7f01d10a611a37476b325ee5":[8,0,2,289,17],
 "classhypro_1_1_vertex_enumeration.html#ae5e671dc1451c4cefececcc9787430d4":[8,0,2,289,21],
 "classhypro_1_1_vertex_enumeration.html#ae9bacc4195ea797b5c3e967e0cb9df5c":[8,0,2,289,9],
-"classhypro_1_1_vertex_enumeration.html#aefd671c1f352990ea6c39c7b3dfd9c91":[8,0,2,289,16],
-"classhypro_1_1_vertex_enumeration.html#af9cb5538f58da8c21e3e779eb7332ac2":[8,0,2,289,15],
-"classhypro_1_1_vertex_enumeration.html#afdfdb53a5a46dde04708c22057e4d65b":[8,0,2,289,19],
-"classhypro_1_1_work_queue_manager.html":[8,0,2,293],
-"classhypro_1_1_work_queue_manager.html#a207706f9f5eb4396cc6e89924654d06a":[8,0,2,293,1],
-"classhypro_1_1_work_queue_manager.html#a4f6d88b21dabcc9a0876edd286f60036":[8,0,2,293,0],
-"classhypro_1_1_work_queue_manager.html#a5dd1bbeffecc7eaaed575c78e3c97fbe":[8,0,2,293,4],
-"classhypro_1_1_work_queue_manager.html#aba624b8a95b16bfd735ddda8ad07b9c7":[8,0,2,293,2]
+"classhypro_1_1_vertex_enumeration.html#aefd671c1f352990ea6c39c7b3dfd9c91":[8,0,2,289,16]
 };

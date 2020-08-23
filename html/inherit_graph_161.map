@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1_l_t_i_worker.html" title="hypro::LTIWorker\&lt; Representation \&gt;" alt="" coords="5,5,256,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1lti_time_evolution_handler.html" title="hypro::ltiTimeEvolutionHandler\l\&lt; State \&gt;" alt="" coords="5,71,221,112"/>
+<area shape="rect" id="node2" href="$classhypro_1_1timed_elapse_after_tick_time_evolution_handler.html" title="hypro::timedElapseAfterTick\lTimeEvolutionHandler\&lt; State \&gt;" alt="" coords="273,5,500,47"/>
+<area shape="rect" id="node3" href="$classhypro_1_1timed_elapse_time_evolution_handler.html" title="hypro::timedElapseTimeEvolution\lHandler\&lt; State \&gt;" alt="" coords="269,71,504,112"/>
+<area shape="rect" id="node4" href="$classhypro_1_1timed_tick_time_evolution_handler.html" title="hypro::timedTickTimeEvolution\lHandler\&lt; State \&gt;" alt="" coords="279,136,495,177"/>
 </map>

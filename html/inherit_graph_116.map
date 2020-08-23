@@ -1,3 +1,14 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1glpk__context.html" title="Context for linear optimization using glpk as a backend. " alt="" coords="5,5,152,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_geometric_object_base.html" title="Purely virtual class defining a common interface for geometric objects. @{. " alt="" coords="5,359,212,386"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_box_t.html" title="hypro::BoxT\&lt; Number,\l hypro::Converter, Setting \&gt;" alt="" coords="277,5,479,47"/>
+<area shape="rect" id="node3" href="$classhypro_1_1_box_t.html" title="The class which represents a box. " alt="" coords="294,71,462,112"/>
+<area shape="rect" id="node4" href="$classhypro_1_1_carl_polytope_t.html" title="Class for representing polytopes as CArL&#45;formulas. " alt="" coords="296,135,460,191"/>
+<area shape="rect" id="node5" href="$classhypro_1_1_difference_bounds_t.html" title="Class wrapping the difference bounds content. " alt="" coords="263,215,493,256"/>
+<area shape="rect" id="node6" href="$classhypro_1_1_generalized_star_t.html" title="The class which represents a GeneralizedStar. " alt="" coords="263,280,493,321"/>
+<area shape="rect" id="node7" href="$classhypro_1_1_h_polytope_t.html" title="Class for a H&#45;polytope. " alt="" coords="301,345,455,401"/>
+<area shape="rect" id="node8" href="$classhypro_1_1_statistic_wrapper.html" title="Wrapper class which allows to create traces of operations on state set representations. " alt="" coords="293,424,463,465"/>
+<area shape="rect" id="node9" href="$classhypro_1_1_support_function_new_t.html" title="The class which represents a SupportFunctionNew. " alt="" coords="260,489,496,531"/>
+<area shape="rect" id="node10" href="$classhypro_1_1_support_function_t.html" title="Class wrapping the support function content. " alt="" coords="263,555,493,596"/>
+<area shape="rect" id="node11" href="$classhypro_1_1_v_polytope_t.html" title="The class implementing the vertex representation of a convex polytope. " alt="" coords="287,620,469,661"/>
+<area shape="rect" id="node12" href="$classhypro_1_1_zonotope_t.html" title="Class for Zonotopes. " alt="" coords="275,685,481,727"/>
 </map>

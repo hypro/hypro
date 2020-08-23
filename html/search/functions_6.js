@@ -1,11 +1,12 @@
 var searchData=
 [
   ['generalizedstart',['GeneralizedStarT',['../classhypro_1_1_generalized_star_t.html#a6a74f84ca0363fb23117f37e55a5191f',1,'hypro::GeneralizedStarT::GeneralizedStarT()'],['../classhypro_1_1_generalized_star_t.html#a896a4a38af49fbe8767eb5ffadb637ac',1,'hypro::GeneralizedStarT::GeneralizedStarT(const GeneralizedStarT &amp;orig)'],['../classhypro_1_1_generalized_star_t.html#a4d5c7ce41a43eb869a2ca3d6ae4a9046',1,'hypro::GeneralizedStarT::GeneralizedStarT(const GeneralizedStarT&lt; Number, Converter, SettingRhs &gt; &amp;orig)'],['../classhypro_1_1_generalized_star_t.html#a9778ce22b7d1f0984bc96c3fa5cf349b',1,'hypro::GeneralizedStarT::GeneralizedStarT(GeneralizedStarT &amp;&amp;orig)']]],
-  ['get',['get',['../classhypro_1_1_dictionary.html#a18ee536c203d3ec1efadc70f99637e34',1,'hypro::Dictionary::get()'],['../classhypro_1_1statistics_1_1_counter_repository.html#a95645820c5717d88bdf2dab2ed293913',1,'hypro::statistics::CounterRepository::get()'],['../classhypro_1_1statistics_1_1_statistician.html#a1860b7383dfbdb74aba9b9af00226e3a',1,'hypro::statistics::Statistician::get()']]],
+  ['get',['get',['../classhypro_1_1_dictionary.html#a18ee536c203d3ec1efadc70f99637e34',1,'hypro::Dictionary::get()'],['../classhypro_1_1statistics_1_1_clock_repository.html#abcbf05f00ac0266aae30d6430d22db6e',1,'hypro::statistics::ClockRepository::get()'],['../classhypro_1_1statistics_1_1_counter_repository.html#a95645820c5717d88bdf2dab2ed293913',1,'hypro::statistics::CounterRepository::get()']]],
   ['getavgsubtreebranching',['getAvgSubtreeBranching',['../classhypro_1_1_tree_node.html#af6c48962970ad636ad5344d98efa86a7',1,'hypro::TreeNode']]],
   ['getchildren',['getChildren',['../classhypro_1_1_tree_node.html#acde9bf5d363b99723cb7de1b4b686383',1,'hypro::TreeNode']]],
   ['getcone',['getCone',['../classhypro_1_1_convex_hull.html#a996d3483533313ed093dc88ec91d9329',1,'hypro::ConvexHull']]],
   ['getconehsv',['getConeHsv',['../classhypro_1_1_convex_hull.html#a888fca1c4b7ce996b2c9401e9c0102f2',1,'hypro::ConvexHull']]],
+  ['getcounter',['getCounter',['../classhypro_1_1statistics_1_1_statistician.html#aa7ae52b4e29d4068e1ea984c94fea61e',1,'hypro::statistics::Statistician']]],
   ['getdepth',['getDepth',['../classhypro_1_1_tree_node.html#a22a4a6f07d38cc4a76faea5e06371ac0',1,'hypro::TreeNode']]],
   ['getdotrepresentation',['getDotRepresentation',['../classhypro_1_1_location.html#a00e08686c4582cda2df4c2084dcabf9a',1,'hypro::Location']]],
   ['getdualhsv',['getDualHsv',['../classhypro_1_1_convex_hull.html#a6cd3c8351199e96744e691a46aac71f3',1,'hypro::ConvexHull']]],
@@ -50,6 +51,7 @@ var searchData=
   ['getsubtreesize',['getSubtreeSize',['../classhypro_1_1_tree_node.html#a28ce02959783c660f0cbdb1de5b1a310',1,'hypro::TreeNode']]],
   ['getsuccessorcount',['getSuccessorCount',['../classhypro_1_1_timing_aggregate.html#a1b8668292ace3c3978e44b9046da03da',1,'hypro::TimingAggregate']]],
   ['getsuccessornodes',['getSuccessorNodes',['../classhypro_1_1_timing_aggregate.html#a733bfcd2471a1199e285fe773df35ebb',1,'hypro::TimingAggregate']]],
+  ['gettimer',['getTimer',['../classhypro_1_1statistics_1_1_statistician.html#af10417930be60ef83676bc1807b75d73',1,'hypro::statistics::Statistician']]],
   ['gettimestamp',['getTimestamp',['../classhypro_1_1_reach_tree_node.html#a2ef4e04986b25bf05c5576d3b3054bc6',1,'hypro::ReachTreeNode']]],
   ['gettimingnode',['getTimingNode',['../classhypro_1_1_event_timing_provider.html#ad03a1d36293c8ac61104cff8ee29fa8b',1,'hypro::EventTimingProvider']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1_hybrid_automaton.html#ab575bbccaeb28368bcb16da24cb22691',1,'hypro::HybridAutomaton::getTransitions()'],['../classhypro_1_1_location.html#acc99a0051b166f21ee7cf9b3f7999608',1,'hypro::Location::getTransitions()']]],

@@ -5,6 +5,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:7: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::Facet not found!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:10: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::FacetSpace not found!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:23: warning: Compound hypro::LRUCache is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:6: warning: Compound Clock is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h:6: warning: Compound hypro::LockableObjectWrapper is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyVisitors.h:8: warning: Compound hypro::setCreationVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:26: warning: Compound hypro::NonLinearOmega0Supportfunction is not documented.
@@ -111,7 +112,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h:9: warning: Compound hypro::TrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSetting.h:5: warning: Compound hypro::VPolytopeSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:14: warning: Compound hypro::AffineTransformation is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:22: warning: Compound hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:26: warning: Compound hypro::Halfspace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:24: warning: Compound hypro::Halfspace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:18: warning: Compound hypro::LTIWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/LTIContext.h:25: warning: Compound hypro::LTIContext is not documented.
@@ -677,7 +678,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:797: warning: documented symbol `Point< Number > hypro::PolytopeT::computeMaxPoint' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:818: warning: documented symbol `Point< Number > hypro::PolytopeT::computeInitVertex' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:835: warning: documented symbol `Point< Number > hypro::PolytopeT::localSearch' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1023: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1026: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const hypro::HPolytopeT< Number, hypro::Converter< Number >, Setting > &rhs) const
 Possible candidates:
@@ -926,7 +927,7 @@ Possible candidates:
   typedef hypro::std::set< vector_t< Number >> vectorSet()
 
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:79: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:26: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:28: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
@@ -976,6 +977,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/config.h:55: warning: Member defaultPPLDenominator (variable) of group globals is not documented.
 /home/travis/build/hypro/hypro/src/hypro/config.h:57: warning: Member MAX_DIMENSION_LIMIT (variable) of group globals is not documented.
 /home/travis/build/hypro/hypro/src/hypro/config.h:63: warning: Member SF_CACHE_SIZE (variable) of group globals is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:13: warning: Member start() (function) of class Clock is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:22: warning: Member stop() (function) of class Clock is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:29: warning: Member reset() (function) of class Clock is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:34: warning: Member operator<<(std::ostream &out, const Clock &clk) (friend) of class Clock is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:361: warning: Member _eat_assign(EnumType value) (function) of class better_enums::_eat_assign is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:366: warning: Member operator=(Any) const  (function) of class better_enums::_eat_assign is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:368: warning: Member operator EnumType() const  (function) of class better_enums::_eat_assign is not documented.
@@ -2135,12 +2140,12 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:17: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:23: warning: Member operator()(const A &lhs, const A &rhs) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:283: warning: Member operator()(const B &lhs) const  (function) of class hypro::genericVerticesVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:37: warning: Member GeometricObjectBase(const GeometricObjectBase &in)=default (function) of class hypro::GeometricObjectBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:38: warning: Member GeometricObjectBase(GeometricObjectBase &&in)=default (function) of class hypro::GeometricObjectBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:40: warning: Member operator=(const GeometricObjectBase &in)=default (function) of class hypro::GeometricObjectBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:41: warning: Member operator=(GeometricObjectBase &&in)=default (function) of class hypro::GeometricObjectBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:43: warning: Member GeometricObjectBase(SETSTATE state) (function) of class hypro::GeometricObjectBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:34: warning: Member mEmptyState (variable) of class hypro::GeometricObjectBase is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:41: warning: Member GeometricObjectBase(const GeometricObjectBase &in)=default (function) of class hypro::GeometricObjectBase is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:42: warning: Member GeometricObjectBase(GeometricObjectBase &&in)=default (function) of class hypro::GeometricObjectBase is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:44: warning: Member operator=(const GeometricObjectBase &in)=default (function) of class hypro::GeometricObjectBase is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:45: warning: Member operator=(GeometricObjectBase &&in)=default (function) of class hypro::GeometricObjectBase is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:47: warning: Member GeometricObjectBase(SETSTATE state) (function) of class hypro::GeometricObjectBase is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:38: warning: Member mEmptyState (variable) of class hypro::GeometricObjectBase is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:74: warning: Member gridMap (typedef) of class hypro::Grid is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:75: warning: Member gridPoints (typedef) of class hypro::Grid is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:76: warning: Member gridMapIterator (typedef) of class hypro::Grid is not documented.

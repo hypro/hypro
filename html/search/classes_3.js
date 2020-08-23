@@ -9,6 +9,8 @@ var searchData=
   ['childnodegen',['ChildNodeGen',['../structhypro_1_1_child_node_gen.html',1,'hypro']]],
   ['childtiminginformation',['ChildTimingInformation',['../namespacehypro.html#structhypro_1_1_child_timing_information',1,'hypro']]],
   ['childtiminginformation_3c_20number_20_3e',['ChildTimingInformation&lt; Number &gt;',['../namespacehypro.html#namespacehypro',1,'hypro']]],
+  ['clock',['Clock',['../class_clock.html',1,'']]],
+  ['clockrepository',['ClockRepository',['../classhypro_1_1statistics_1_1_clock_repository.html',1,'hypro::statistics']]],
   ['clp_5fcontext',['clp_context',['../structhypro_1_1clp__context.html',1,'hypro']]],
   ['concat_5fi',['concat_i',['../namespacehypro.html#structhypro_1_1concat__i',1,'hypro']]],
   ['concat_5fi_3c_20typelist_3c_20ts_2e_2e_2e_20_3e_20_3e',['concat_i&lt; TypeList&lt; Ts... &gt; &gt;',['../namespacehypro.html#structhypro_1_1concat__i_3_01_type_list_3_01_ts_8_8_8_01_4_01_4',1,'hypro']]],
