@@ -8,11 +8,13 @@
 #define RESET_STATS()
 #define COUNT( expr )
 #define START_BENCHMARK_OPERATION( expr )
+#define STOP_BENCHMARK_OPERATION( expr )
 #define EVALUATE_BENCHMARK_RESULT( expr )
 
 #ifdef HYPRO_STATISTICS
 #define INCL_FROM_STATISTICS
 
+#include "ClockRepository.h"
 #include "CounterRepository.h"
 
 namespace hypro {
@@ -26,7 +28,8 @@ class Statistician : public carl::Singleton<Statistician> {
 	friend carl::Singleton<Statistician>;
 
   private:
-	CounterRepository counters;
+	CounterRepository counters;	 ///< holds all counters
+	ClockRepository timers;		 ///< holds all timers
 
   public:
 	/// destructor
@@ -38,19 +41,37 @@ class Statistician : public carl::Singleton<Statistician> {
 	}
 
 	/// getter for counter
-	OperationCounter& get( std::string name ) {
+	OperationCounter& getCounter( std::string name ) {
 		return counters.get( name );
+	}
+
+	/// getter for Timer
+	Clock& getTimer( std::string name ) {
+		return timers.get( name );
+	}
+
+	/// starts a timer
+	void startTimer( std::string name ) {
+		timers.get( name ).start();
+	}
+
+	/// stops a timer
+	void stopTimer( std::string name ) {
+		timers.get( name ).stop();
 	}
 
 	/// resets all counters
 	void reset() {
 		counters.reset();
+		timers.reset();
 	}
 
 	/// outputs all current counter values
 	friend std::ostream& operator<<( std::ostream& ostr, const Statistician& stats ) {
-		ostr << "Statistics:" << std::endl;
-		ostr << stats.counters;
+		ostr << "Counters:" << std::endl;
+		ostr << stats.counters << std::endl;
+		ostr << "Timers:" << std::endl;
+		ostr << stats.timers << std::endl;
 		return ostr;
 	}
 };
@@ -62,15 +83,16 @@ class Statistician : public carl::Singleton<Statistician> {
 #undef RESET_STATS
 #undef COUNT
 #undef START_BENCHMARK_OPERATION
+#undef STOP_BENCHMARK_OPERATION
 #undef EVALUATE_BENCHMARK_RESULT
 #define PRINT_STATS() std::cout << hypro::statistics::Statistician::getInstance() << std::endl;
 #define RESET_STATS() hypro::statistics::Statistician::getInstance().reset();
-#define COUNT( expr ) ++hypro::statistics::Statistician::getInstance().get( expr );
-#define START_BENCHMARK_OPERATION( name ) std::chrono::high_resolution_clock::time_point name = std::chrono::high_resolution_clock::now()
-#define EVALUATE_BENCHMARK_RESULT( name )                                                                              \
-	do {                                                                                                               \
-		std::chrono::high_resolution_clock::time_point name##_##end = std::chrono::high_resolution_clock::now();       \
-		COUT( #name << " took " << std::chrono::duration<double>( name##_##end - name ).count() << "s" << std::endl ); \
-	} while ( 0 )
-
+#define COUNT( expr ) ++hypro::statistics::Statistician::getInstance().getCounter( expr );
+#define START_BENCHMARK_OPERATION( name ) \
+	hypro::statistics::Statistician::getInstance().startTimer( name );
+#define STOP_BENCHMARK_OPERATION( name ) \
+	hypro::statistics::Statistician::getInstance().stopTimer( name );
+#define EVALUATE_BENCHMARK_RESULT( name )                             \
+	hypro::statistics::Statistician::getInstance().stopTimer( name ); \
+	std::cout << name << ": " << hypro::statistics::Statistician::getInstance().getTimer( name );
 #endif

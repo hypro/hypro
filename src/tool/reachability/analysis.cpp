@@ -8,7 +8,7 @@ namespace reachability {
 using namespace hypro;
 
 std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	START_BENCHMARK_OPERATION( Verification );
+	START_BENCHMARK_OPERATION( "Verification" );
 	CEGARAnalyzerDefault<Number> analyzer{ automaton, setting };
 
 	REACHABILITY_RESULT result = analyzer.run();
@@ -18,7 +18,7 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 	} else {
 		std::cout << "The model is safe." << std::endl;
 	}
-	EVALUATE_BENCHMARK_RESULT( Verification );
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
@@ -45,7 +45,7 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 
 template <typename State>
 std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	START_BENCHMARK_OPERATION( Verification );
+	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeRoots<State>( automaton );
 	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
@@ -56,7 +56,7 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 	} else {
 		std::cout << "The model is safe." << std::endl;
 	}
-	EVALUATE_BENCHMARK_RESULT( Verification );
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
@@ -73,7 +73,7 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 
 template <typename State>
 std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	START_BENCHMARK_OPERATION( Verification );
+	START_BENCHMARK_OPERATION( "Verification" );
 	RectangularAnalyzer<State> analyzer{ automaton, setting };
 	auto result = analyzer.run();
 
@@ -83,7 +83,7 @@ std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& a
 	} else {
 		std::cout << "The model is safe." << std::endl;
 	}
-	EVALUATE_BENCHMARK_RESULT( Verification );
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};

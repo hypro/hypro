@@ -16,7 +16,7 @@ using namespace hypro;
 
 int main( int argc, char const* argv[] ) {
 	// parse command line arguments
-	START_BENCHMARK_OPERATION( Parsing );
+	START_BENCHMARK_OPERATION( "Parsing" );
 	auto options = hydra::handleCMDArguments( argc, argv );
 
 	// parse model file
@@ -31,16 +31,16 @@ int main( int argc, char const* argv[] ) {
 	// combine parsed settings and cli flags
 	auto settings = hydra::processSettings( reachSettings, options );
 
-	EVALUATE_BENCHMARK_RESULT( Parsing );
+	EVALUATE_BENCHMARK_RESULT( "Parsing" );
 
 	// run reachability analysis
-	START_BENCHMARK_OPERATION( Verification );
+	START_BENCHMARK_OPERATION( "Verification" );
 	auto result = hydra::reachability::analyze( automaton, settings, preprocessingInformation );
 
-	EVALUATE_BENCHMARK_RESULT( Verification );
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// call to plotting.
-	START_BENCHMARK_OPERATION( Plotting );
+	START_BENCHMARK_OPERATION( "Plotting" );
 
 	auto const& plotSettings = settings.plotting();
 	auto& plt = Plotter<Number>::getInstance();
@@ -56,7 +56,7 @@ int main( int argc, char const* argv[] ) {
 
 		plt.plot2d( plotSettings.plottingFileType );  // writes to .plt file for pdf creation
 	}
-	EVALUATE_BENCHMARK_RESULT( Plotting );
+	EVALUATE_BENCHMARK_RESULT( "Plotting" );
 
 	PRINT_STATS();
 
