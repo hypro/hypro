@@ -13,7 +13,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( const 
 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const ReachTreeNode<State>& task ) {
-	State initialSet = task.getState();
+	State initialSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet );
 	if ( containment == CONTAINMENT::NO ) {
@@ -78,7 +78,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( const
 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const ReachTreeNode<State>& task ) {
-	State badSet = task.getState();
+	State badSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( badSet );
 	if ( containment == CONTAINMENT::NO ) {
