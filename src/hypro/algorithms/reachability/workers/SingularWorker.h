@@ -5,11 +5,11 @@
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
 #include "../FlowpipeConstructionConvenience.h"
-#include "../handlers/badStateHandlers/rectangularBadStateHandler.h"
+#include "../handlers/badStateHandlers/ltiBadStateHandler.h"
 #include "../handlers/guardHandlers/rectangularGuardHandler.h"
 #include "../handlers/jumpHandlers/singularJumpHandler.h"
 #include "../handlers/resetHandlers/rectangularResetHandler.h"
-#include "../handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
+#include "../handlers/timeEvolutionHandlers/singularTimeEvolutionHandler.h"
 
 #include <vector>
 

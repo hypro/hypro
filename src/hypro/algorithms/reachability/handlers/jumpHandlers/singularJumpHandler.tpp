@@ -45,12 +45,12 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 	if ( !transitionPtr->getReset().empty() ) {
 		assert( transitionPtr->getReset().getMatrix().size() == 0 && "Singular automata do not support linear resets." );
 
-		const IntervalAssignment<Number>& intervalReset = transitionPtr->getReset().getIntervalReset();
+		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
 			VPolytope<Number> projectedSet = Converter<Number>::toVPolytope( stateSet );
 			std::vector<Halfspace<Number>> newConstraints;
 			for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
-				if ( !intervalReset.mIntervals[i].empty() ) {
+				if ( !intervalReset.mIntervals[i].isEmpty() ) {
 					// non-empty intervals represent some reset -> project out dimension, memorize new interval bounds
 					projectedSet = projectedSet.project( { { i } } );
 					// create and store new interval bounds
@@ -66,7 +66,7 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 			hpoly.insert( newConstraints.begin(), newConstraints.end() );
 
 			// convert back and assign to original representation type
-			stateSet = convert<HPolytope<Number>, Representation>( hpoly );
+			convert( hpoly, stateSet );
 		}
 	}
 }

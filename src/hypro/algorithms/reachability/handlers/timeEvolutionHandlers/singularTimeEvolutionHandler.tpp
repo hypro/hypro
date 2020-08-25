@@ -4,51 +4,60 @@ namespace hypro {
 template <typename StateSet>
 StateSet singularApplyTimeEvolution( const StateSet& initialSet, const StateSet& flow ) {
 	using Number = typename StateSet::NumberType;
-	VPolytope<Number> initSet = hypro::Converter<Number>::toVPolytope( initialSet );
-	VPolytope<Number> flowSet = hypro::Converter<Number>::toVPolytope( flow );
-	VPolytope<Number> timeElapse{ initSet.vertices() };
+	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
+	VPolytope<Number> flowSetPolytope = hypro::Converter<Number>::toVPolytope( flow );
+	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
 	// set rays
-	auto combinedRays = initSet.rays();
+	auto combinedRays = initSetPolytope.rays();
 	// add rays from flow set
-	combinedRays.insert( flowSet.rays().begin(), flowSet.rays().end() );
+	combinedRays.insert( flowSetPolytope.rays().begin(), flowSetPolytope.rays().end() );
 	// add rays originating from vertices of the flow set
-	std::for_each( flowSet.vertices().begin(), flowSet.vertices().end(), [&]( const auto& point ) {
+	std::for_each( flowSetPolytope.vertices().begin(), flowSetPolytope.vertices().end(), [&]( const auto& point ) {
 		combinedRays.insert( point.rawCoordinates() );
 	} );
 
-	timeElapse.setRays( combinedRays );
+	timeElapsePolytope.setRays( combinedRays );
 
+	// Convert back
+	StateSet timeElapse;
+	convert( timeElapsePolytope, timeElapse );
 	return timeElapse;
 }
 
 template <typename StateSet>
 StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const StateSet& flow, tNumber timeBound ) {
 	using Number = typename StateSet::NumberType;
-	VPolytope<Number> initSet = hypro::Converter<Number>::toVPolytope( initialSet );
-	VPolytope<Number> flowSet = hypro::Converter<Number>::toVPolytope( flow );
-	VPolytope<Number> timeElapse{ initSet.vertices() };
+	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
+	VPolytope<Number> flowSetPolytope = hypro::Converter<Number>::toVPolytope( flow );
+	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
 	// process rays: bound time, create new vertices
 	typename VPolytope<Number>::pointVector newVertices;
 
-	auto combinedRays = initSet.rays();
+	auto combinedRays = initSetPolytope.rays();
 	// add rays from flow set
-	combinedRays.insert( flowSet.rays().begin(), flowSet.rays().end() );
+	combinedRays.insert( flowSetPolytope.rays().begin(), flowSetPolytope.rays().end() );
 	// add rays originating from vertices of the flow set
-	std::for_each( flowSet.vertices().begin(), flowSet.vertices().end(), [&]( const auto& point ) {
+	std::for_each( flowSetPolytope.vertices().begin(), flowSetPolytope.vertices().end(), [&]( const auto& point ) {
 		combinedRays.insert( point.rawCoordinates() );
 	} );
 
-	for ( const auto& vertex : initSet.vertices() ) {
+	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
+			std::cout << "VERTEX SIZE: " << vertex.rawCoordinates().rows() << ", " << vertex.rawCoordinates().cols() << "\n";
+			std::cout << "RAY SIZE: " << ray.rows() << ", " << ray.cols() << "\n";
 			newVertices.emplace_back( Point<Number>( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray ) );
 		}
 	}
 
 	// update vertices
-	timeElapse.insert( newVertices.begin(), newVertices.end() );
-	timeElapse.removeRedundancy();
+	timeElapsePolytope.insert( newVertices.begin(), newVertices.end() );
+	timeElapsePolytope.removeRedundancy();
 
-	assert( timeElapse.rays().empty() );
+	assert( timeElapsePolytope.rays().empty() );
+
+	// Convert back
+	StateSet timeElapse;
+	convert( timeElapsePolytope, timeElapse );
 	return timeElapse;
 }
 
