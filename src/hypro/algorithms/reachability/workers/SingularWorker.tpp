@@ -35,7 +35,7 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 
 	// construct polytope describing the dynamics
 	std::vector<Point<Number>> vertices;
-	vertices.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() ) ) );
+	vertices.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() - 1 ) ) );
 	Representation dynamics{ vertices };
 
 	Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.fixedParameters().localTimeHorizon ) );

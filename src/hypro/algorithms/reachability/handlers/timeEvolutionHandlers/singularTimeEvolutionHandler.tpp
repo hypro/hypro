@@ -43,8 +43,6 @@ StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const St
 
 	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
-			std::cout << "VERTEX SIZE: " << vertex.rawCoordinates().rows() << ", " << vertex.rawCoordinates().cols() << "\n";
-			std::cout << "RAY SIZE: " << ray.rows() << ", " << ray.cols() << "\n";
 			newVertices.emplace_back( Point<Number>( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray ) );
 		}
 	}
