@@ -12,6 +12,7 @@
 
 #include "../../config.h"
 #include "../../types.h"
+#include "queries.h"
 #include "transformation.h"
 
 #include <carl/numbers/numbers.h>
