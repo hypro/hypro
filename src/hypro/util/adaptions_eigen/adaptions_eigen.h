@@ -110,12 +110,9 @@ inline bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_
 	if ( lhs.rows() != rhs.rows() ) {
 		return false;
 	}
-	if ( VectorHashValue( lhs ) != VectorHashValue( rhs ) ) {
-		return false;
-	}
 
-	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		if ( lhs( dim ) != rhs( dim ) ) {
+	for ( std::size_t i = 0, size = lhs.size(); i < size; ++i ) {
+		if ( ( *( lhs.data() + i ) ) != ( *( rhs.data() + i ) ) ) {
 			return false;
 		}
 	}
@@ -132,15 +129,10 @@ inline bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_
 	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) {
 		return false;
 	}
-	if ( MatrixHashValue( lhs ) != MatrixHashValue( rhs ) ) {
-		return false;
-	}
-	// TODO iterate over data assuming similar storage orientation?
-	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
-		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
-			if ( lhs( rowIndex, colIndex ) != rhs( rowIndex, colIndex ) ) {
-				return false;
-			}
+
+	for ( std::size_t i = 0, size = lhs.size(); i < size; ++i ) {
+		if ( ( *( lhs.data() + i ) ) != ( *( rhs.data() + i ) ) ) {
+			return false;
 		}
 	}
 	return true;
