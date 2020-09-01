@@ -37,6 +37,7 @@ var searchData=
   ['getdepth',['getDepth',['../classhypro_1_1_tree_node.html#a22a4a6f07d38cc4a76faea5e06371ac0',1,'hypro::TreeNode']]],
   ['getdotrepresentation',['getDotRepresentation',['../classhypro_1_1_location.html#a00e08686c4582cda2df4c2084dcabf9a',1,'hypro::Location']]],
   ['getdualhsv',['getDualHsv',['../classhypro_1_1_convex_hull.html#a6cd3c8351199e96744e691a46aac71f3',1,'hypro::ConvexHull']]],
+  ['getduplicaterows',['getDuplicateRows',['../namespacehypro.html#acdc8af95f842d0471722225416707120',1,'hypro']]],
   ['getdynamictype',['getDynamicType',['../namespacehypro.html#ad8c28fcf467153f5e97550bae1860feb',1,'hypro::getDynamicType(const HybridAutomaton&lt; Number &gt; &amp;automaton)'],['../namespacehypro.html#a4f7f506e024376881330dfe74f2a5c3c',1,'hypro::getDynamicType(const Location&lt; Number &gt; &amp;location)']]],
   ['getemptystate',['getEmptyState',['../classhypro_1_1_geometric_object_base.html#ad7f2b92f3b89ccb3f8656ce1803a794d',1,'hypro::GeometricObjectBase']]],
   ['getenabledtimings',['getEnabledTimings',['../classhypro_1_1_reach_tree_node.html#a6fa1ac7a92cdbb030c4a4ef9d4f0cb09',1,'hypro::ReachTreeNode']]],
@@ -89,8 +90,8 @@ var searchData=
   ['glpk_5fcontext',['glpk_context',['../structhypro_1_1glpk__context.html#ab23c8d90c66b5928ad781619b10b51c8',1,'hypro::glpk_context::glpk_context()'],['../structhypro_1_1glpk__context.html#ac24e12fec700f77fb9bbb41e3cdd1868',1,'hypro::glpk_context::glpk_context(const glpk_context &amp;orig)'],['../structhypro_1_1glpk__context.html#a3b51b0e070effc42d46299681eb28fd6',1,'hypro::glpk_context::glpk_context(glpk_context &amp;&amp;orig)=delete']]],
   ['gnuplotsettings',['gnuplotSettings',['../structhypro_1_1plotting_1_1gnuplot_settings.html',1,'hypro::plotting']]],
   ['grahamscan',['grahamScan',['../classhypro_1_1_plotter.html#a527bd19fc653f919297faf75e67cc17f',1,'hypro::Plotter']]],
-  ['grid',['Grid',['../classhypro_1_1_grid.html',1,'hypro']]],
   ['grid',['Grid',['../classhypro_1_1_grid.html#ade7f4c1b9cd1f2fa92ca2a27024037b9',1,'hypro::Grid']]],
+  ['grid',['Grid',['../classhypro_1_1_grid.html',1,'hypro']]],
   ['grid_2etpp',['Grid.tpp',['../_grid_8tpp.html',1,'']]],
   ['guardhandlersorter',['guardHandlerSorter',['../structhypro_1_1guard_handler_sorter.html',1,'hypro']]]
 ];

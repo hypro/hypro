@@ -33,8 +33,8 @@ var NAVTREEINDEX14 =
 "functions_d.html":[8,3,0,3],
 "functions_e.html":[8,3,0,4],
 "functions_f.html":[8,3,0,5],
-"functions_func.html":[8,3,1],
 "functions_func.html":[8,3,1,0],
+"functions_func.html":[8,3,1],
 "functions_func_0x7e.html":[8,3,1,21],
 "functions_func_b.html":[8,3,1,1],
 "functions_func_c.html":[8,3,1,2],
@@ -145,6 +145,7 @@ var NAVTREEINDEX14 =
 "plottype__enums_8cpp_source.html":[9,0,1,0,3,8,4],
 "plottype__enums_8h_source.html":[9,0,1,0,3,8,5],
 "qe_8h_source.html":[9,0,1,0,0,2,4],
+"queries_8h_source.html":[9,0,1,0,3,0,2],
 "quickhull__exact_2_quickhull_8h_source.html":[9,0,1,0,0,3,0,4],
 "rectangular_8h_source.html":[9,0,1,0,1,0,1,4],
 "rectangular_bad_state_handler_8h_source.html":[9,0,1,0,0,4,2,0,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX14 =
 "structbetter__enums_1_1map__compare.html":[8,0,0,4],
 "structbetter__enums_1_1map__compare_3_01const_01char_01_5_01_4.html":[8,0,0,5],
 "structbetter__enums_1_1map__compare_3_01const_01wchar__t_01_5_01_4.html":[8,0,0,6],
-"structbetter__enums_1_1optional.html":[8,0,0,7],
-"structbetter__enums_1_1optional.html#a06f8ac8fbec180fc99e1a0af2e61309c":[8,0,0,7,5]
+"structbetter__enums_1_1optional.html":[8,0,0,7]
 };

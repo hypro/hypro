@@ -39,7 +39,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">20.08</span>
+   &#160;<span id="projectnumber">20.09</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -1882,6 +1882,16 @@ template&lt;&gt; </td></tr>
 template&lt;&gt; </td></tr>
 <tr class="memitem:a34df264dae1ce105922a3c442d0a9bda"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>satisfiesIneqation</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;constraint, double constant, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;point)</td></tr>
 <tr class="separator:a34df264dae1ce105922a3c442d0a9bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdc8af95f842d0471722225416707120"><td class="memTemplParams" colspan="2"><a class="anchor" id="acdc8af95f842d0471722225416707120"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:acdc8af95f842d0471722225416707120"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; Eigen::Index &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#acdc8af95f842d0471722225416707120">getDuplicateRows</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;m)</td></tr>
+<tr class="memdesc:acdc8af95f842d0471722225416707120"><td class="mdescLeft">&#160;</td><td class="mdescRight">finds duplicate rows in a matrix, returns indices of duplicate rows <br /></td></tr>
+<tr class="separator:acdc8af95f842d0471722225416707120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4eff7810ca898803dc6fe7146be271f"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa4eff7810ca898803dc6fe7146be271f"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:aa4eff7810ca898803dc6fe7146be271f"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa4eff7810ca898803dc6fe7146be271f">hasRow</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;m, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;row)</td></tr>
+<tr class="memdesc:aa4eff7810ca898803dc6fe7146be271f"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns true if the passed row is also a row in the passed matrix <br /></td></tr>
+<tr class="separator:aa4eff7810ca898803dc6fe7146be271f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0de78bffa812e3a78036d8200953e074"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0de78bffa812e3a78036d8200953e074"></a>
 template&lt;typename Number , typename IdxType &gt; </td></tr>
 <tr class="memitem:a0de78bffa812e3a78036d8200953e074"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectRows</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;original, const std::vector&lt; IdxType &gt; &amp;rowIndices)</td></tr>
@@ -1906,6 +1916,10 @@ template&lt;typename Number , typename IdxType &gt; </td></tr>
 template&lt;typename Number , typename IdxType &gt; </td></tr>
 <tr class="memitem:a948175a8fbc97aa460cbf56f2192de30"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>removeRows</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;original, const std::vector&lt; IdxType &gt; &amp;rowIndices)</td></tr>
 <tr class="separator:a948175a8fbc97aa460cbf56f2192de30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2395a10a20ace3851bc44266e35592a"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab2395a10a20ace3851bc44266e35592a"></a>
+template&lt;typename Number , typename IdxType &gt; </td></tr>
+<tr class="memitem:ab2395a10a20ace3851bc44266e35592a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>removeCol</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;original, IdxType colIndex)</td></tr>
+<tr class="separator:ab2395a10a20ace3851bc44266e35592a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bdc74de913ae9948a411812b0153cf8"><td class="memTemplParams" colspan="2"><a class="anchor" id="a5bdc74de913ae9948a411812b0153cf8"></a>
 template&lt;typename Number , typename IdxType &gt; </td></tr>
 <tr class="memitem:a5bdc74de913ae9948a411812b0153cf8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectCols</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;original, const std::vector&lt; IdxType &gt; &amp;colIndices)</td></tr>
@@ -4008,11 +4022,11 @@ template&lt;typename Number &gt; </div>
 </li>
 </ul>
 
-<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00311">311</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
+<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00304">304</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
 
-<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00311">linearDependent()</a>.</p>
+<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>.</p>
 
-<p>Referenced by <a class="el" href="_optimizer_8tpp_source.html#l00169">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00466">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00311">linearDependent()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00282">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::multiEvaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00489">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="_zonotope_8tpp_source.html#l00235">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::removeEmptyGenerators()</a>.</p>
+<p>Referenced by <a class="el" href="_optimizer_8tpp_source.html#l00169">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00466">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00282">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::multiEvaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00489">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="_zonotope_8tpp_source.html#l00235">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::removeEmptyGenerators()</a>.</p>
 
 </div>
 </div>
@@ -4047,11 +4061,11 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>matrix_t&lt;Number&gt; Matrix exponential of inMatrix. </dd></dl>
 
-<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00406">406</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
+<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00399">399</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
 
-<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00406">matrixExponential()</a>.</p>
+<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00399">matrixExponential()</a>.</p>
 
-<p>Referenced by <a class="el" href="adaptions__eigen_8h_source.html#l00406">matrixExponential()</a>.</p>
+<p>Referenced by <a class="el" href="adaptions__eigen_8h_source.html#l00399">matrixExponential()</a>.</p>
 
 </div>
 </div>
@@ -4636,11 +4650,11 @@ template&lt;typename Number , carl::DisableIf&lt; std::is_same&lt; Number, doubl
 <p>rounding function for exact arithmetic types </p>
 <p>reduction for double (noop) </p>
 
-<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00336">336</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
+<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00329">329</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
 
-<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00336">reduceNumberRepresentation()</a>.</p>
+<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00329">reduceNumberRepresentation()</a>.</p>
 
-<p>Referenced by <a class="el" href="_box_8tpp_source.html#l00016">hypro::BoxT&lt; Number, Converter, Setting &gt;::BoxT()</a>, and <a class="el" href="adaptions__eigen_8h_source.html#l00336">reduceNumberRepresentation()</a>.</p>
+<p>Referenced by <a class="el" href="_box_8tpp_source.html#l00016">hypro::BoxT&lt; Number, Converter, Setting &gt;::BoxT()</a>, and <a class="el" href="adaptions__eigen_8h_source.html#l00329">reduceNumberRepresentation()</a>.</p>
 
 </div>
 </div>

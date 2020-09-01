@@ -53,9 +53,9 @@ var NAVTREEINDEX =
 "classhypro_1_1_vertex_enumeration.html#af9cb5538f58da8c21e3e779eb7332ac2",
 "classhypro_1_1lti_reset_handler.html#a2a82060214bf9f235a8de5b863d1e2be",
 "dir_fc2999d7bd6c3c285a592feb8f9838cf.html",
-"structbetter__enums_1_1optional.html#a1fc8bd647f687bafcf2b77652a0f3500",
-"structhypro_1_1_trafo_data.html#aca4ad4f868cec5bce52540d4e1e383dd",
-"util_8cpp_source.html"
+"structbetter__enums_1_1optional.html#a06f8ac8fbec180fc99e1a0af2e61309c",
+"structhypro_1_1_trafo_data.html#ac3ed9953a8f25b70ca45a3c6857109d5",
+"util_2typetraits_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

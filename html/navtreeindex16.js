@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"structhypro_1_1_trafo_data.html#ac3ed9953a8f25b70ca45a3c6857109d5":[8,0,2,268,3],
 "structhypro_1_1_trafo_data.html#aca4ad4f868cec5bce52540d4e1e383dd":[8,0,2,268,2],
 "structhypro_1_1_trafo_data.html#afcbef4e6a217dcf61c42cafad1b4939a":[8,0,2,268,4],
 "structhypro_1_1_type_mapping_3_01_r_3_01_n_00_01_c_00_01_setting_01_4_01_4.html":[8,0,2,279],
@@ -241,13 +242,12 @@ var NAVTREEINDEX16 =
 "timed_tick_time_evolution_handler_8h_source.html":[9,0,1,0,0,4,2,6,9],
 "timed_tick_time_evolution_handler_8tpp_source.html":[9,0,1,0,0,4,2,6,10],
 "timing_util_8h_source.html":[9,0,1,0,0,4,2,4,5],
-"transformation_8h_source.html":[9,0,1,0,3,0,2],
+"transformation_8h_source.html":[9,0,1,0,3,0,3],
 "typedefs_8h_source.html":[9,0,1,0,2,2,15],
 "types_8h_source.html":[9,0,1,0,7],
 "unreachable_8h_source.html":[9,0,1,0,3,19],
 "usage.html":[3,1],
 "utilFunc.html":[4],
 "util_2convenience_operators_8h_source.html":[9,0,1,0,3,10],
-"util_2linear_optimization_2_strategy_8h_source.html":[9,0,1,0,3,1,10],
-"util_2typetraits_8h_source.html":[9,0,1,0,3,18]
+"util_2linear_optimization_2_strategy_8h_source.html":[9,0,1,0,3,1,10]
 };

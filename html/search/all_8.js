@@ -31,6 +31,7 @@ var searchData=
   ['hash_3c_20hypro_3a_3avertexcontainer_3c_20number_20_3e_20_3e',['hash&lt; hypro::VertexContainer&lt; Number &gt; &gt;',['../structstd_1_1hash_3_01hypro_1_1_vertex_container_3_01_number_01_4_01_4.html',1,'std']]],
   ['hash_3c_20set_3c_20hypro_3a_3avertex_3c_20number_20_3e_20_3e_20_3e',['hash&lt; set&lt; hypro::Vertex&lt; Number &gt; &gt; &gt;',['../structstd_1_1hash_3_01set_3_01hypro_1_1_vertex_3_01_number_01_4_01_4_01_4.html',1,'std']]],
   ['hash_3c_20std_3a_3apair_3c_20first_2c_20second_20_3e_20_3e',['hash&lt; std::pair&lt; first, second &gt; &gt;',['../structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html',1,'std']]],
+  ['hasrow',['hasRow',['../namespacehypro.html#aa4eff7810ca898803dc6fe7146be271f',1,'hypro']]],
   ['hastrafo',['hasTrafo',['../classhypro_1_1_support_function_new_t.html#a0da7e9c275557bb6e7f261d0a6b839a3',1,'hypro::SupportFunctionNewT::hasTrafo()'],['../classhypro_1_1_trafo_op.html#acff29112cba589bbff9725b4631b165f',1,'hypro::TrafoOp::hasTrafo()']]],
   ['haveequalcoordinate',['haveEqualCoordinate',['../classhypro_1_1_point.html#a5e22f5709effa602649f688c4334290c',1,'hypro::Point']]],
   ['havesamedimensions',['haveSameDimensions',['../classhypro_1_1_point.html#a794a64cecf312dbac0bfdb4158bbb11d',1,'hypro::Point']]],
