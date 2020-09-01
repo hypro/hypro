@@ -57,6 +57,20 @@ vector_t<Number> removeRows( const vector_t<Number>& original, const std::vector
 }
 
 template <typename Number, typename IdxType>
+matrix_t<Number> removeCol( const matrix_t<Number>& original, IdxType colIndex ) {
+	if ( colIndex == 0 ) {
+		return original.block( 0, 1, original.rows(), original.cols() - 1 );
+	}
+	if ( colIndex == original.cols() - 1 ) {
+		return original.block( 0, 0, original.rows(), original.cols() - 1 );
+	}
+	matrix_t<Number> res = matrix_t<Number>( original.rows(), original.cols() - 1 );
+	res.block( 0, 0, original.rows(), colIndex ) = original.leftCols( colIndex );
+	res.block( 0, colIndex, original.rows(), original.cols() - ( colIndex + 1 ) ) = original.rightCols( original.cols() - ( colIndex + 1 ) );
+	return res;
+}
+
+template <typename Number, typename IdxType>
 matrix_t<Number> selectCols( const matrix_t<Number>& original, const std::vector<IdxType>& colIndices ) {
 	matrix_t<Number> res = matrix_t<Number>( original.rows(), Eigen::Index( colIndices.size() ) );
 	for ( Eigen::Index index = 0; index < res.cols(); index++ ) {
