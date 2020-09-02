@@ -4,9 +4,9 @@
 #include <carl/util/hash.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
-#include <util/type_handling/better_enums/enum_default_ctor.h>
 #include <iosfwd>
 #include <set>
+#include <util/type_handling/better_enums/enum_default_ctor.h>
 
 // global typedefs
 namespace hypro {
@@ -108,6 +108,7 @@ enum class LOCATIONTYPE { LTILOC = 0,
 enum class DynamicType { linear = 0,
 						 affine,
 						 rectangular,
+						 singular,
 						 timed,
 						 discrete,
 						 mixed,
