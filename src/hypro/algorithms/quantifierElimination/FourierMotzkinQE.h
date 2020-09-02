@@ -40,18 +40,8 @@ class FourierMotzkinQE {
 	PolyT<Number> getRemainder( const ConstraintT<Number>& c, carl::Variable v, bool isLowerBnd );
 };
 
-template <typename Number>
-std::pair<matrix_t<Number>, vector_t<Number>> eliminateCols( const matrix_t<Number>& constraints, const vector_t<Number> constants, const std::vector<Eigen::Index>& cols ) {
-	auto resultConstraints = constraints;
-	auto resultConstants = constants;
-	for ( auto cIndex : cols ) {
-		std::tie( resultConstraints, resultConstants ) = eliminateCol( resultConstraints, resultConstants, cIndex );
-	}
-	return std::make_pair( resultConstraints, resultConstants );
-}
-
-template <typename Number>
-std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Number>& constraints, const vector_t<Number> constants, Eigen::Index col ) {
+template <typename Number, typename IdxType>
+std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Number>& constraints, const vector_t<Number> constants, IdxType col, bool conservative = true ) {
 	std::vector<std::size_t> nobounds;
 	std::vector<std::size_t> upperbounds;
 	std::vector<std::size_t> lowerbounds;
@@ -109,8 +99,10 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Numbe
 
 	assert( vector_t<Number>( newConstraints.col( col ) ) == vector_t<Number>::Zero( newConstants.rows() ) );
 
-	// cleanup
-	//newConstraints = removeCol( newConstraints, col );
+	// cleanup, if demanded
+	if ( !conservative ) {
+		newConstraints = removeCol( newConstraints, col );
+	}
 
 	newConstraints = removeRows( newConstraints, emptyRows );
 	newConstants = removeRows( newConstants, emptyRows );
@@ -120,6 +112,16 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Numbe
 	newConstants = removeRows( newConstants, duplicateRows );
 
 	return std::make_pair( newConstraints, newConstants );
+}
+
+template <typename Number, typename IdxType>
+std::pair<matrix_t<Number>, vector_t<Number>> eliminateCols( const matrix_t<Number>& constraints, const vector_t<Number> constants, const std::vector<IdxType>& cols, bool conservative = true ) {
+	auto resultConstraints = constraints;
+	auto resultConstants = constants;
+	for ( auto cIndex : cols ) {
+		std::tie( resultConstraints, resultConstants ) = eliminateCol( resultConstraints, resultConstants, cIndex, conservative );
+	}
+	return std::make_pair( resultConstraints, resultConstants );
 }
 
 }  // namespace hypro
