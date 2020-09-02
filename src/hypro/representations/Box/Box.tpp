@@ -435,7 +435,7 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 }
 
 template <typename Number, typename Converter, class Setting>
-BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::project( const std::vector<std::size_t>& dimensions ) const {
+BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 	if ( dimensions.empty() ) {
 		return Empty();
 	}
@@ -449,12 +449,12 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::project( cons
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const {
-	std::vector<carl::Interval<Number>> newIntervals{mLimits};
+	std::vector<carl::Interval<Number>> newIntervals{ mLimits };
 	for ( const auto& dimensionIntervalPair : assignments ) {
 		assert( dimensionIntervalPair.first < newIntervals.size() );
 		newIntervals[dimensionIntervalPair.first] = dimensionIntervalPair.second;
 	}
-	return BoxT<Number, Converter, Settings>{newIntervals};
+	return BoxT<Number, Converter, Settings>{ newIntervals };
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -528,12 +528,12 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 	//std::cout << "Linear trafo ";
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
-		newIntervals[i] = carl::Interval<Number>{b( i )};
+		newIntervals[i] = carl::Interval<Number>{ b( i ) };
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
 			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
 		}
 	}
-	return BoxT<Number, Converter, Setting>{newIntervals};
+	return BoxT<Number, Converter, Setting>{ newIntervals };
 }
 
 template <typename Number, typename Converter, class Setting>

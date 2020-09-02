@@ -9,7 +9,7 @@ Point<Number>::Point()
 }
 
 template <typename Number>
-Point<Number>::Point( const Number &_value ) {
+Point<Number>::Point( const Number& _value ) {
 	mCoordinates = vector_t<Number>( 1 );
 	mCoordinates( 0 ) = _value;
 	assert( this->dimension() >= 0 );
@@ -19,7 +19,7 @@ template <typename Number>
 Point<Number>::Point( std::initializer_list<Number> _coordinates ) {
 	unsigned count = 0;
 	mCoordinates = vector_t<Number>( _coordinates.size() );
-	for ( auto &coordinate : _coordinates ) {
+	for ( auto& coordinate : _coordinates ) {
 		mCoordinates( count ) = Number( coordinate );
 		++count;
 	}
@@ -36,13 +36,13 @@ Point<Number>::Point( std::vector<Number> _coordinates ) {
 }
 
 template <typename Number>
-Point<Number>::Point( const vector_t<Number> &_vector )
+Point<Number>::Point( const vector_t<Number>& _vector )
 	: mCoordinates( _vector ) {
 	assert( this->dimension() >= 0 );
 }
 
 template <typename Number>
-Point<Number>::Point( vector_t<Number> &&_vector )
+Point<Number>::Point( vector_t<Number>&& _vector )
 	: mCoordinates( _vector ) {
 	assert( this->dimension() >= 0 );
 }
@@ -55,7 +55,7 @@ Point<Number> Point<Number>::origin() const {
 }
 
 template <typename Number>
-Number Point<Number>::coordinate( const carl::Variable &_var ) const {
+Number Point<Number>::coordinate( const carl::Variable& _var ) const {
 	return mCoordinates( hypro::VariablePool::getInstance().id( _var ) );
 }
 
@@ -75,12 +75,12 @@ typename Point<Number>::coordinateMap Point<Number>::coordinates() const {
 }
 
 template <typename Number>
-const vector_t<Number> &Point<Number>::rawCoordinates() const {
+const vector_t<Number>& Point<Number>::rawCoordinates() const {
 	return mCoordinates;
 }
 
 template <typename Number>
-void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_value ) {
+void Point<Number>::setCoordinate( const carl::Variable& _dim, const Number& _value ) {
 	std::size_t dim = hypro::VariablePool::getInstance().id( _dim );
 	if ( dim >= std::size_t( mCoordinates.rows() ) ) {
 		vector_t<Number> old = mCoordinates;
@@ -91,7 +91,7 @@ void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_va
 }
 
 template <typename Number>
-void Point<Number>::setCoordinate( std::size_t dimension, const Number &_value ) {
+void Point<Number>::setCoordinate( std::size_t dimension, const Number& _value ) {
 	if ( dimension >= std::size_t( mCoordinates.rows() ) ) {
 		vector_t<Number> old = mCoordinates;
 		mCoordinates.resize( dimension + 1 );
@@ -101,14 +101,14 @@ void Point<Number>::setCoordinate( std::size_t dimension, const Number &_value )
 }
 
 template <typename Number>
-void Point<Number>::swap( Point<Number> &_rhs ) {
+void Point<Number>::swap( Point<Number>& _rhs ) {
 	auto tmp = this->mCoordinates;
 	this->mCoordinates = _rhs.mCoordinates;
 	_rhs.mCoordinates = tmp;
 }
 
 template <typename Number>
-void Point<Number>::setCoordinates( const vector_t<Number> &vector ) {
+void Point<Number>::setCoordinates( const vector_t<Number>& vector ) {
 	mCoordinates = vector;
 }
 
@@ -156,7 +156,7 @@ std::vector<carl::Variable> Point<Number>::variables() const {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::extAdd( const Point<Number> &_rhs ) const {
+Point<Number> Point<Number>::extAdd( const Point<Number>& _rhs ) const {
 	assert( mCoordinates.rows() == _rhs.rawCoordinates().rows() );
 
 	Point<Number> result = Point<Number>( mCoordinates + _rhs.rawCoordinates() );
@@ -164,12 +164,12 @@ Point<Number> Point<Number>::extAdd( const Point<Number> &_rhs ) const {
 }
 
 template <typename Number>
-Number Point<Number>::distance( const Point<Number> &_rhs ) const {
+Number Point<Number>::distance( const Point<Number>& _rhs ) const {
 	return ( norm( vector_t<Number>( mCoordinates - _rhs.rawCoordinates() ) ) );
 }
 
 template <typename Number>
-std::vector<Number> Point<Number>::polarCoordinates( const Point<Number> &_origin, bool _radians ) const {
+std::vector<Number> Point<Number>::polarCoordinates( const Point<Number>& _origin, bool _radians ) const {
 	Point<Number> base = *this - _origin;
 	vector_t<double> transformedCoordinates = vector_t<double>( base.dimension() );
 	for ( unsigned d = 0; d < base.dimension(); ++d ) {
@@ -226,7 +226,7 @@ Point<Number> Point<Number>::newEmpty() const {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::project( const std::vector<std::size_t> &dimensions ) const {
+Point<Number> Point<Number>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 	if ( dimensions.empty() ) {
 		return Point<Number>();
 	}
@@ -242,13 +242,31 @@ Point<Number> Point<Number>::project( const std::vector<std::size_t> &dimensions
 }
 
 template <typename Number>
-Point<Number> Point<Number>::linearTransformation( const matrix_t<Number> &A ) const {
+Point<Number> Point<Number>::projectOut( const std::vector<std::size_t>& dimensions ) const {
+	if ( dimensions.empty() ) {
+		return *this;
+	}
+
+	vector_t<Number> projectedCoordinates = vector_t<Number>::Zero( this->dimension() - dimensions.size() );
+
+	Eigen::Index pos = 0;
+	for ( unsigned i = 0; i < this->dimension(); ++i ) {
+		if ( std::find( dimensions.begin(), dimensions.end(), i ) == dimensions.end() ) {
+			projectedCoordinates( pos ) = mCoordinates( i );
+			++pos;
+		}
+	}
+	return Point<Number>( projectedCoordinates );
+}
+
+template <typename Number>
+Point<Number> Point<Number>::linearTransformation( const matrix_t<Number>& A ) const {
 	assert( A.cols() == mCoordinates.rows() );
 	return Point<Number>( A * mCoordinates );
 }
 
 template <typename Number>
-Point<Number> Point<Number>::affineTransformation( const matrix_t<Number> &A, const vector_t<Number> &b ) const {
+Point<Number> Point<Number>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 	assert( A.cols() == mCoordinates.rows() );
 	assert( b.rows() == mCoordinates.rows() );
 	return Point<Number>( A * mCoordinates + b );
@@ -261,7 +279,7 @@ Number Point<Number>::sum() const {
 }
 
 template <typename Number>
-void Point<Number>::incrementInFixedDim( const carl::Variable &_d ) {
+void Point<Number>::incrementInFixedDim( const carl::Variable& _d ) {
 	mCoordinates( hypro::VariablePool::getInstance().id( _d ) ) += 1;
 }
 
@@ -271,14 +289,14 @@ void Point<Number>::incrementInFixedDim( unsigned _d ) {
 }
 
 template <typename Number>
-void Point<Number>::incrementInAllDim( const Number &_val ) {
+void Point<Number>::incrementInAllDim( const Number& _val ) {
 	vector_t<Number> one = vector_t<Number>::Ones( mCoordinates.rows() );
 	one *= _val;
 	mCoordinates += one;
 }
 
 template <typename Number>
-void Point<Number>::decrementInFixedDim( const carl::Variable &_d ) {
+void Point<Number>::decrementInFixedDim( const carl::Variable& _d ) {
 	mCoordinates( hypro::VariablePool::getInstance().id( _d ) ) -= 1;
 }
 
@@ -288,7 +306,7 @@ void Point<Number>::decrementInFixedDim( unsigned _d ) {
 }
 
 template <typename Number>
-Point<Number> Point<Number>::getPredecessorInDimension( const carl::Variable &_d ) const {
+Point<Number> Point<Number>::getPredecessorInDimension( const carl::Variable& _d ) const {
 	Point<Number> pred = Point<Number>( *this );
 	pred.decrementInFixedDim( _d );
 	return pred;
@@ -302,17 +320,17 @@ Point<Number> Point<Number>::getPredecessorInDimension( unsigned _d ) const {
 }
 
 template <typename Number>
-bool Point<Number>::isInBoundary( const Point<Number> &_boundary ) const {
+bool Point<Number>::isInBoundary( const Point<Number>& _boundary ) const {
 	return ( mCoordinates < _boundary.rawCoordinates() );
 }
 
 template <typename Number>
-bool Point<Number>::hasDimension( const carl::Variable &_i ) const {
+bool Point<Number>::hasDimension( const carl::Variable& _i ) const {
 	return ( mCoordinates.rows() > Eigen::Index( hypro::VariablePool::getInstance().id( _i ) ) );
 }
 
 template <typename Number>
-bool Point<Number>::hasDimensions( const std::vector<carl::Variable> &_variables ) const {
+bool Point<Number>::hasDimensions( const std::vector<carl::Variable>& _variables ) const {
 	for ( auto it : _variables ) {
 		if ( !hasDimension( it ) ) {
 			return false;
@@ -322,7 +340,7 @@ bool Point<Number>::hasDimensions( const std::vector<carl::Variable> &_variables
 }
 
 template <typename Number>
-std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number> &_p1, const Point<Number> &_p2 ) {
+std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number>& _p1, const Point<Number>& _p2 ) {
 	assert( _p1.dimension() == _p2.dimension() );
 	std::vector<bool> res;
 	res.resize( _p1.dimension() );
@@ -333,7 +351,7 @@ std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number> &_p
 }
 
 template <typename Number>
-bool Point<Number>::haveEqualCoordinate( const Point<Number> &_p2 ) const {
+bool Point<Number>::haveEqualCoordinate( const Point<Number>& _p2 ) const {
 	if ( dimension() == _p2.dimension() ) {
 		for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 			if ( mCoordinates( i ) == _p2.rawCoordinates()( i ) ) {
@@ -345,12 +363,12 @@ bool Point<Number>::haveEqualCoordinate( const Point<Number> &_p2 ) const {
 }
 
 template <typename Number>
-bool Point<Number>::haveSameDimensions( const Point<Number> &_p ) const {
+bool Point<Number>::haveSameDimensions( const Point<Number>& _p ) const {
 	return ( dimension() == _p.dimension() );
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator+=( const Point<Number> &_rhs ) {
+Point<Number>& Point<Number>::operator+=( const Point<Number>& _rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) += _rhs.at( i );
@@ -359,7 +377,7 @@ Point<Number> &Point<Number>::operator+=( const Point<Number> &_rhs ) {
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator+=( const vector_t<Number> &_rhs ) {
+Point<Number>& Point<Number>::operator+=( const vector_t<Number>& _rhs ) {
 	assert( this->dimension() == _rhs.rows() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) += _rhs( i );
@@ -368,7 +386,7 @@ Point<Number> &Point<Number>::operator+=( const vector_t<Number> &_rhs ) {
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator-=( const Point<Number> &_rhs ) {
+Point<Number>& Point<Number>::operator-=( const Point<Number>& _rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) -= _rhs.at( i );
@@ -377,7 +395,7 @@ Point<Number> &Point<Number>::operator-=( const Point<Number> &_rhs ) {
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator-=( const vector_t<Number> &_rhs ) {
+Point<Number>& Point<Number>::operator-=( const vector_t<Number>& _rhs ) {
 	assert( this->dimension() == _rhs.rows() );
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) -= _rhs( i );
@@ -391,7 +409,7 @@ Point<Number> Point<Number>::operator-() const {
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator/=( unsigned _quotient ) {
+Point<Number>& Point<Number>::operator/=( unsigned _quotient ) {
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) = mCoordinates( i ) / _quotient;
 	}
@@ -399,7 +417,7 @@ Point<Number> &Point<Number>::operator/=( unsigned _quotient ) {
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator*=( const Number _factor ) {
+Point<Number>& Point<Number>::operator*=( const Number _factor ) {
 	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) = mCoordinates( i ) * _factor;
 	}
@@ -407,41 +425,41 @@ Point<Number> &Point<Number>::operator*=( const Number _factor ) {
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator=( const vector_t<Number> &_in ) {
+Point<Number>& Point<Number>::operator=( const vector_t<Number>& _in ) {
 	mCoordinates = _in;
 	return *this;
 }
 
 template <typename Number>
-Point<Number> &Point<Number>::operator=( vector_t<Number> &&_in ) {
+Point<Number>& Point<Number>::operator=( vector_t<Number>&& _in ) {
 	mCoordinates = std::move( _in );
 	return *this;
 }
 
 template <typename Number>
-Number &Point<Number>::operator[]( const carl::Variable &_i ) {
+Number& Point<Number>::operator[]( const carl::Variable& _i ) {
 	std::size_t dim = hypro::VariablePool::getInstance().id( _i );
 	return mCoordinates( dim );
 }
 
 template <typename Number>
-Number &Point<Number>::operator[]( std::size_t _i ) {
+Number& Point<Number>::operator[]( std::size_t _i ) {
 	return mCoordinates( _i );
 }
 
 template <typename Number>
-const Number &Point<Number>::operator[]( const carl::Variable &_i ) const {
+const Number& Point<Number>::operator[]( const carl::Variable& _i ) const {
 	std::size_t dim = hypro::VariablePool::getInstance().id( _i );
 	return mCoordinates( dim );
 }
 
 template <typename Number>
-const Number &Point<Number>::operator[]( std::size_t _i ) const {
+const Number& Point<Number>::operator[]( std::size_t _i ) const {
 	return mCoordinates( _i );
 }
 
 template <typename Number>
-Number &Point<Number>::at( const carl::Variable &_i ) {
+Number& Point<Number>::at( const carl::Variable& _i ) {
 	if ( hypro::VariablePool::getInstance().id( _i ) >= mCoordinates.rows() ) {
 		throw std::out_of_range( "Variable dimension larger than state space of vector" );
 	}
@@ -449,7 +467,7 @@ Number &Point<Number>::at( const carl::Variable &_i ) {
 }
 
 template <typename Number>
-Number &Point<Number>::at( std::size_t _index ) {
+Number& Point<Number>::at( std::size_t _index ) {
 	if ( Eigen::Index( _index ) >= mCoordinates.rows() ) {
 		throw std::out_of_range( "Index larger than state space of vector" );
 	}
@@ -457,7 +475,7 @@ Number &Point<Number>::at( std::size_t _index ) {
 }
 
 template <typename Number>
-const Number &Point<Number>::at( const carl::Variable &_i ) const {
+const Number& Point<Number>::at( const carl::Variable& _i ) const {
 	if ( hypro::VariablePool::getInstance().id( _i ) >= mCoordinates.rows() ) {
 		throw std::out_of_range( "Variable dimension larger than state space of vector" );
 	}
@@ -465,7 +483,7 @@ const Number &Point<Number>::at( const carl::Variable &_i ) const {
 }
 
 template <typename Number>
-const Number &Point<Number>::at( std::size_t _index ) const {
+const Number& Point<Number>::at( std::size_t _index ) const {
 	if ( Eigen::Index( _index ) >= mCoordinates.rows() ) {
 		throw std::out_of_range( "Index larger than state space of vector" );
 	}

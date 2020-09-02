@@ -93,7 +93,7 @@ void MState::getSets( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	std::vector states = init->getSets();
 	mxArray* m_array_out;
 	int len = states.size();
-	const mwSize dims[2] = {1, (mwSize)len};
+	const mwSize dims[2] = { 1, (mwSize)len };
 	plhs[0] = mxCreateCellArray( 2, dims );
 	objArray2Matlab( states, plhs[0], len );
 
@@ -142,7 +142,7 @@ void MState::isEmpty( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	// //+++++++++++++TESTING++++++++++++++++++++
 }
 
-void MState::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+void MState::projectOn( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs < 1 ) mexErrMsgTxt( "MState - vertices: Expecting an output." );
 	if ( nrhs < 5 ) mexErrMsgTxt( "MState - vertices: One or more arguments are missing." );
 	if ( nrhs > 5 ) mexWarnMsgTxt( "MState - vertices: One or more arguments were ignored." );
@@ -159,7 +159,7 @@ void MState::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 	std::vector<std::size_t> dimensions = ObjectHandle::mSizeVector2Hypro( m_in_dimensions, len );
 	std::size_t offset = (std::size_t)mxGetScalar( prhs[4] );
 
-	hypro::State_t<double> new_st = st->project( dimensions, offset );
+	hypro::State_t<double> new_st = st->projectOn( dimensions, offset );
 	plhs[0] = convertPtr2Mat<hypro::State_t<double>>( new hypro::State_t<double>( new_st ) );
 
 	// //+++++++++++++TESTING++++++++++++++++++++
@@ -640,7 +640,7 @@ void MState::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
 		return;
 	}
 	if ( cmd == 10 ) {
-		project( nlhs, plhs, nrhs, prhs );
+		projectOn( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 11 ) {

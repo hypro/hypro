@@ -9,6 +9,7 @@
 #include "../../handles/ObjectHandle.h"
 #include "matrix.h"
 #include "mex.h"
+
 #include <cassert>
 #include <iostream>
 #include <map>
@@ -35,7 +36,7 @@ class MGeometricObject {
 	static void reduceNumberRepresentation( int, mxArray**, int, const mxArray** );
 	static void satisfiesHalfspace( int, mxArray**, int, const mxArray** );
 	static void satisfiesHalfspaces( int, mxArray**, int, const mxArray** );
-	static void project( int, mxArray**, int, const mxArray** );
+	static void projectOn( int, mxArray**, int, const mxArray** );
 	static void linearTransformation( int, mxArray**, int, const mxArray** );
 	static void affineTransformation( int, mxArray**, int, const mxArray** );
 	static void minkowskiSum( int, mxArray**, int, const mxArray** );

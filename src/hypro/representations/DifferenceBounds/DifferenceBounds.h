@@ -166,7 +166,7 @@ class DifferenceBoundsT : private GeometricObjectBase {
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 	std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	DifferenceBoundsT project( const std::vector<std::size_t>& dimensions ) const;
+	DifferenceBoundsT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	DifferenceBoundsT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

@@ -136,7 +136,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 //Halfspace vector constructor
 /*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) { 
+SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) {
 	using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 	mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( hspaces ) );
 }
@@ -605,7 +605,7 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), true ).supportValue;
 			//TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
 			//TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
-			if(-invDirVal > _vec( rowI )){
+			if ( -invDirVal > _vec( rowI ) ) {
 				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 			}
 			//if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal > _vec( rowI ) ) {
@@ -656,11 +656,10 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		TRACE( "hypro.representations.supportFunctionNew", "Intersect with " << _mat << ", " << _vec );
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspaces( _mat, _vec ) );
 	}
-
 }
 
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionNewT<Number, Converter, Setting> SupportFunctionNewT<Number, Converter, Setting>::project( const std::vector<std::size_t>& dimensions ) const {
+SupportFunctionNewT<Number, Converter, Setting> SupportFunctionNewT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 	if ( mRoot == nullptr ) return SupportFunctionNewT<Number, Converter, Setting>();
 
 	// check for full projection

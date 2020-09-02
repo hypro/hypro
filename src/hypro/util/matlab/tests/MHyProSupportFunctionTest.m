@@ -71,7 +71,7 @@ vec = [3; 5];
 
 % Project a support function on a certain dimension
 fct = MHyProSupportFunction('intervals', [3 5; 2 4; 1 2]);
-projfct = fct.project([1 2]);
+projfct = fct.projectOn([1 2]);
 mat = projfct.matrix();
 % assert ---> ?
 

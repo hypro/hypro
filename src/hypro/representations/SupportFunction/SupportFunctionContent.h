@@ -350,7 +350,7 @@ class SupportFunctionContent {
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
-	std::shared_ptr<SupportFunctionContent<Number, Setting>> project( const std::vector<std::size_t>& dimensions ) const;
+	std::shared_ptr<SupportFunctionContent<Number, Setting>> projectOn( const std::vector<std::size_t>& dimensions ) const;
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> minkowskiSum( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> intersect( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs ) const;
@@ -387,7 +387,7 @@ class SupportFunctionContent {
 		using Node = std::shared_ptr<SupportFunctionContent<Number, Setting>>;
 		using Res = bool;
 		std::vector<Node> callStack;
-		std::vector<std::pair<int, std::vector<Res>>> resultStack;  // The first value is an iterator to the calling frame
+		std::vector<std::pair<int, std::vector<Res>>> resultStack;	// The first value is an iterator to the calling frame
 
 		callStack.push_back( getThis() );
 		resultStack.push_back( std::make_pair( -1, std::vector<Res>() ) );
@@ -824,7 +824,7 @@ class SupportFunctionContent {
 
 		//std::cout << "With " << items.size() << " entries." << std::endl;
 		std::string unaryLevelTransition = "  |  ";							 // 1
-		std::string binaryLevelTransition = "  |  " + separator + "\\    ";  // 2
+		std::string binaryLevelTransition = "  |  " + separator + "\\    ";	 // 2
 		std::string emptyLevelTransition = "     ";							 // 0
 		std::vector<unsigned> transitionType;
 

@@ -60,7 +60,7 @@ class CarlPolytopeT : private GeometricObjectBase {
 
 	CarlPolytopeT intersect( const CarlPolytopeT& rhs ) const;
 
-	CarlPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	CarlPolytopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 
 	CarlPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );

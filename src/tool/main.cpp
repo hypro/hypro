@@ -51,7 +51,7 @@ int main( int argc, char const* argv[] ) {
 
 		for ( const auto& segment : result.plotData ) {
 			std::cout << "\r" << segmentCount++ << "/" << result.plotData.size() << "..." << std::flush;
-			plt.addObject( segment.sets.project( plotSettings.plotDimensions[pic] ).vertices() );
+			plt.addObject( segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices() );
 		}
 
 		plt.plot2d( plotSettings.plottingFileType );  // writes to .plt file for pdf creation

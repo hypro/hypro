@@ -9,6 +9,7 @@
 static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
+#include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../algorithms/quickhull/Quickhull.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
@@ -250,7 +251,9 @@ class HPolytopeT : private GeometricObjectBase {
 
 	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	HPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	HPolytopeT projectOut( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation = false ) const;
+	HPolytopeT projectOutConservative( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation = false ) const;
+	HPolytopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	HPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

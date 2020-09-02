@@ -79,7 +79,7 @@ class SupportFunctionT : private GeometricObjectBase {
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
-	SupportFunctionT project( const std::vector<std::size_t>& dimensions ) const;
+	SupportFunctionT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	SupportFunctionT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

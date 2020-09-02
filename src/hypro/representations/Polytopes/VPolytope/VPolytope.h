@@ -107,7 +107,14 @@ class VPolytopeT : private GeometricObjectBase {
 		return vector_t<Number>::Zero( 1 );
 	}
 
-	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	/**
+	 * @brief Computes a projection where the passed dimensions are projected out.
+	 * @details Note that this effectively reduces the state space dimension of the object in contrast to other representations.
+	 * @param dimensions
+	 * @return VPolytopeT
+	 */
+	VPolytopeT projectOut( const std::vector<std::size_t>& dimensions ) const;
+	VPolytopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	VPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;
@@ -280,7 +287,13 @@ class VPolytopeT : private GeometricObjectBase {
 		return mVertices.insert( mVertices.end(), begin, end );
 	}
 
+	/// getter to the vertices defining this object
 	const std::vector<Point<Number>>& vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const { return mVertices; };
+
+	/// getter for a non-const reference to the vertices. Use only if you know what you are doing.
+	std::vector<Point<Number>>& rVertices() {
+		return mVertices;
+	}
 
 	bool hasVertex( const Point<Number>& vertex ) const {
 		for ( const auto point : mVertices ) {

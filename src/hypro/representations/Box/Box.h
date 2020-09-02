@@ -215,9 +215,9 @@ class BoxT : private GeometricObjectBase {
 	 */
 	std::pair<Point<Number>, Point<Number>> limits() const {
 		if ( mEmptyState == SETSTATE::EMPTY ) {
-			return std::pair<Point<Number>, Point<Number>>{Point<Number>( vector_t<Number>::Ones( this->dimension() ) ), Point<Number>( vector_t<Number>::Zero( this->dimension() ) )};
+			return std::pair<Point<Number>, Point<Number>>{ Point<Number>( vector_t<Number>::Ones( this->dimension() ) ), Point<Number>( vector_t<Number>::Zero( this->dimension() ) ) };
 		}
-		std::pair<Point<Number>, Point<Number>> res{Point<Number>( vector_t<Number>( this->dimension() ) ), Point<Number>( vector_t<Number>( this->dimension() ) )};
+		std::pair<Point<Number>, Point<Number>> res{ Point<Number>( vector_t<Number>( this->dimension() ) ), Point<Number>( vector_t<Number>( this->dimension() ) ) };
 		std::size_t p = 0;
 		for ( const auto& i : mLimits ) {
 			res.first[p] = i.lower();
@@ -312,7 +312,7 @@ class BoxT : private GeometricObjectBase {
 	 * @return A point.
 	 */
 	Point<Number> max() const {
-		Point<Number> res{vector_t<Number>( this->dimension() )};
+		Point<Number> res{ vector_t<Number>( this->dimension() ) };
 		for ( std::size_t d = 0; d < mLimits.size(); ++d ) {
 			res[d] = mLimits[d].upper();
 		}
@@ -324,7 +324,7 @@ class BoxT : private GeometricObjectBase {
 	 * @return A point.
 	 */
 	Point<Number> min() const {
-		Point<Number> res{vector_t<Number>( this->dimension() )};
+		Point<Number> res{ vector_t<Number>( this->dimension() ) };
 		for ( std::size_t d = 0; d < mLimits.size(); ++d ) {
 			res[d] = mLimits[d].lower();
 		}
@@ -409,7 +409,7 @@ class BoxT : private GeometricObjectBase {
 	 * @return     The scaled box.
 	 */
 	BoxT operator*( const Number& factor ) const {
-		BoxT<Number, Converter, Setting> copy{*this};
+		BoxT<Number, Converter, Setting> copy{ *this };
 		for ( auto& i : copy.rIntervals() ) {
 			i *= factor;
 		}
@@ -488,7 +488,7 @@ class BoxT : private GeometricObjectBase {
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	BoxT project( const std::vector<std::size_t>& dimensions ) const;
+	BoxT projectOn( const std::vector<std::size_t>& dimensions ) const;
 
 	BoxT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& assignments ) const;
 

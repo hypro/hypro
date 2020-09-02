@@ -523,7 +523,7 @@ void MGeometricObject<T>::satisfiesHalfspaces( int nlhs, mxArray* plhs[], int nr
 }
 
 template <class T>
-void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
+void MGeometricObject<T>::projectOn( int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[] ) {
 	if ( nlhs != 1 ) mexErrMsgTxt( "MGeometricObject - project: Expecting one output value!" );
 	if ( nrhs < 4 ) mexErrMsgTxt( "MGeometricObject - project: One or more arguments are missing!" );
 	if ( nrhs > 4 ) mexWarnMsgTxt( "MGeometricObject - project: One or more input arguments were ignored." );
@@ -536,7 +536,7 @@ void MGeometricObject<T>::project( int nlhs, mxArray* plhs[], int nrhs, const mx
 	vec_dims = mxGetDimensions( prhs[3] );
 	len = (int)vec_dims[0];
 	std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro( prhs[3], len );
-	T temp = obj->project( hy_dimensions );
+	T temp = obj->projectOn( hy_dimensions );
 	plhs[0] = convertPtr2Mat<T>( new T( temp ) );
 
 	// //+++++++++++++TESTING++++++++++++++++++++

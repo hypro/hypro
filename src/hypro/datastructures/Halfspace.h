@@ -50,7 +50,7 @@ class Halfspace {
 	 */
 	template <
 		  typename Normal, typename Offset, enable_if<convertible<Normal, vector_t<Number>> && convertible<Offset, Number>> = 0>
-	Halfspace( Normal&& normal, Offset&& offset );      
+	Halfspace( Normal&& normal, Offset&& offset );
 
 	/**
 	 * @brief      Constructor from an offset vector and a set of points lying in the plane.
@@ -202,7 +202,7 @@ class Halfspace {
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected halfspace.
 	 */
-	Halfspace<Number> project( const std::vector<unsigned>& dimensions ) const;
+	Halfspace<Number> projectOn( const std::vector<unsigned>& dimensions ) const;
 
 	/**
 	 * @brief      Computes the linear transformation of the plane.

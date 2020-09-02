@@ -45,7 +45,7 @@ TYPED_TEST( SupportFunctionNewTest, LeafTest ) {
 			   representation_name::box );
 
 	// Test with Halfspace
-	Halfspace<TypeParam> hspace( {TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 1 ) );
+	Halfspace<TypeParam> hspace( { TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( 1 ) );
 	SupportFunctionNew<TypeParam> sfHSpace( hspace );
 	EXPECT_TRUE( sfHSpace.getRoot()->getType() == SFNEW_TYPE::LEAF );
 	EXPECT_EQ( sfHSpace.getRoot()->getOriginCount(), unsigned( 0 ) );
@@ -58,7 +58,7 @@ TYPED_TEST( SupportFunctionNewTest, LeafTest ) {
 			   representation_name::constraint_set );
 
 	// Test with Template polytope
-	TemplatePolyhedron<TypeParam> tpoly( matrix_t<TypeParam>::Ones(2,2), vector_t<TypeParam>::Ones(2) );
+	TemplatePolyhedron<TypeParam> tpoly( matrix_t<TypeParam>::Ones( 2, 2 ), vector_t<TypeParam>::Ones( 2 ) );
 	SupportFunctionNew<TypeParam> sfTPoly( tpoly );
 	EXPECT_TRUE( sfTPoly.getRoot()->getType() == SFNEW_TYPE::LEAF );
 	EXPECT_EQ( sfTPoly.getRoot()->getOriginCount(), unsigned( 0 ) );
@@ -66,7 +66,8 @@ TYPED_TEST( SupportFunctionNewTest, LeafTest ) {
 	EXPECT_EQ( sfTPoly.getRoot().use_count(), long( 1 ) );
 	EXPECT_FALSE( std::get<0>( isBox( tpoly.matrix(), tpoly.vector() ) ) );
 	EXPECT_FALSE( std::get<0>( isBox( sfTPoly.matrix(), sfTPoly.vector() ) ) );
-	//EXPECT_EQ( ( dynamic_cast<Leaf<N, C, S, TemplatePolyhedron<TypeParam>>*>( sfTPoly.getRoot().get() )->getRepresentation() )
+	// EXPECT_EQ( ( dynamic_cast<Leaf<N, C, S, TemplatePolyhedron<TypeParam>>*>( sfTPoly.getRoot().get()
+	// )->getRepresentation() )
 	//				 ->type(),
 	//		   representation_name::polytope_t );
 }
@@ -77,8 +78,8 @@ TYPED_TEST( SupportFunctionNewTest, TrafoOp ) {
 	using Setting = typename SupportFunctionNew<TypeParam>::Settings;
 
 	// Make the box
-	Point<TypeParam> p( {TypeParam( 0 ), TypeParam( 0 )} );
-	Point<TypeParam> q( {TypeParam( 1 ), TypeParam( 1 )} );
+	Point<TypeParam> p( { TypeParam( 0 ), TypeParam( 0 ) } );
+	Point<TypeParam> q( { TypeParam( 1 ), TypeParam( 1 ) } );
 	Box<TypeParam> box( std::make_pair( p, q ) );
 
 	// The tree with only one leaf containing the box
@@ -290,8 +291,8 @@ TYPED_TEST( SupportFunctionNewTest, TrafoOp ) {
 }
 
 TYPED_TEST( SupportFunctionNewTest, ScaleOp ) {
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										Point<TypeParam>( {TypeParam( 1 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										Point<TypeParam>( { TypeParam( 1 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf( box );
 	SupportFunctionNew<TypeParam> sfScale = sf.scale( TypeParam( 10 ) );
 	EXPECT_TRUE( sfScale.getRoot()->getType() == SFNEW_TYPE::SCALEOP );
@@ -311,7 +312,7 @@ TYPED_TEST( SupportFunctionNewTest, ScaleOp ) {
 	EXPECT_TRUE( res.at( 1 ).supportValue == TypeParam( 10 ) );
 
 	// Evaluate with Halfspace SF
-	Halfspace<TypeParam> hspace( {TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 0.5 ) );
+	Halfspace<TypeParam> hspace( { TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( 0.5 ) );
 	SupportFunctionNew<TypeParam> sf2( hspace );
 	SupportFunctionNew<TypeParam> sfScale2 = sf2.scale( TypeParam( 100 ) );
 	std::vector<EvaluationResult<TypeParam>> res2 = sfScale2.multiEvaluate( directions, true );
@@ -321,13 +322,13 @@ TYPED_TEST( SupportFunctionNewTest, ScaleOp ) {
 
 TYPED_TEST( SupportFunctionNewTest, ProjectOp ) {
 	// 3d box
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 ), TypeParam( 0 )} ),
-										Point<TypeParam>( {TypeParam( 1 ), TypeParam( 1 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ), TypeParam( 0 ) } ),
+										Point<TypeParam>( { TypeParam( 1 ), TypeParam( 1 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf( box );
 
 	// We want to throw out first and third dimension, keep second dimension
-	std::vector<std::size_t> dims( {1} );
-	SupportFunctionNew<TypeParam> sfProject = sf.project( dims );
+	std::vector<std::size_t> dims( { 1 } );
+	SupportFunctionNew<TypeParam> sfProject = sf.projectOn( dims );
 	EXPECT_TRUE( sfProject.getRoot()->getType() == SFNEW_TYPE::PROJECTOP );
 	EXPECT_EQ( sfProject.getRoot()->getOriginCount(), unsigned( 1 ) );
 	EXPECT_EQ( sfProject.getRoot()->getChildren().size(), std::size_t( 1 ) );
@@ -349,8 +350,8 @@ TYPED_TEST( SupportFunctionNewTest, ProjectOp ) {
 
 TYPED_TEST( SupportFunctionNewTest, SumOp ) {
 	// 2d box
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										Point<TypeParam>( {TypeParam( 1 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										Point<TypeParam>( { TypeParam( 1 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf( box );
 
 	// Sum has only 2 children
@@ -384,11 +385,11 @@ TYPED_TEST( SupportFunctionNewTest, SumOp ) {
 
 TYPED_TEST( SupportFunctionNewTest, IntersectOp ) {
 	// Two overlapping boxes, the overlapping box is (0,0) to (1,1)
-	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-											Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+											Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> uR( upRight );
-	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( {TypeParam( -1 ), TypeParam( -1 )} ),
-											 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( { TypeParam( -1 ), TypeParam( -1 ) } ),
+											 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> dL( downLeft );
 
 	// Intersect with only two boxes
@@ -416,15 +417,15 @@ TYPED_TEST( SupportFunctionNewTest, IntersectOp ) {
 	EXPECT_EQ( res.at( 1 ).supportValue, TypeParam( 0 ) );
 
 	// Intersect first two with two other boxes, overlapping region should still be the box (0,0) to (1,1)
-	Box<TypeParam> upLeft( std::make_pair( Point<TypeParam>( {TypeParam( -1 ), TypeParam( 0 )} ),
-										   Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> upLeft( std::make_pair( Point<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ) } ),
+										   Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> uL( upLeft );
-	Box<TypeParam> downRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-											  Point<TypeParam>( {TypeParam( 2 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> downRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+											  Point<TypeParam>( { TypeParam( 2 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> dR( downRight );
 
 	// Evaluate with the four boxes with directions (0,1) and (1,0)
-	std::vector<SupportFunctionNew<TypeParam>> sfVec{dL, uL, dR};
+	std::vector<SupportFunctionNew<TypeParam>> sfVec{ dL, uL, dR };
 	SupportFunctionNew<TypeParam> sfIntersect2 = uR.intersect( sfVec );
 	EXPECT_EQ( sfIntersect2.getRoot()->getChildren().size(), std::size_t( 4 ) );
 	res = sfIntersect2.multiEvaluate( directions, true );
@@ -436,11 +437,11 @@ TYPED_TEST( SupportFunctionNewTest, IntersectOp ) {
 
 TYPED_TEST( SupportFunctionNewTest, UnionOp ) {
 	// Two overlapping boxes, the overlapping box is (0,0) to (1,1)
-	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-											Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+											Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> uR( upRight );
-	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( {TypeParam( -1 ), TypeParam( -1 )} ),
-											 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( { TypeParam( -1 ), TypeParam( -1 ) } ),
+											 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> dL( downLeft );
 
 	// Intersect with only two boxes
@@ -468,15 +469,15 @@ TYPED_TEST( SupportFunctionNewTest, UnionOp ) {
 	EXPECT_EQ( res.at( 1 ).supportValue, TypeParam( 2 ) );
 
 	// Intersect first two with two other boxes, overlapping region should still be the box (0,0) to (1,1)
-	Box<TypeParam> upLeft( std::make_pair( Point<TypeParam>( {TypeParam( -1 ), TypeParam( 0 )} ),
-										   Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> upLeft( std::make_pair( Point<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ) } ),
+										   Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> uL( upLeft );
-	Box<TypeParam> downRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-											  Point<TypeParam>( {TypeParam( 2 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> downRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+											  Point<TypeParam>( { TypeParam( 2 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> dR( downRight );
 
 	// Evaluate with the four boxes with directions (0,1) and (1,0)
-	std::vector<SupportFunctionNew<TypeParam>> sfVec{dL, uL, dR};
+	std::vector<SupportFunctionNew<TypeParam>> sfVec{ dL, uL, dR };
 	SupportFunctionNew<TypeParam> sfUnion2 = uR.unite( sfVec );
 	EXPECT_EQ( sfUnion2.getRoot()->getChildren().size(), std::size_t( 4 ) );
 	res = sfUnion2.multiEvaluate( directions, true );
@@ -491,10 +492,10 @@ TYPED_TEST( SupportFunctionNewTest, IntersectHalfspaceOp ) {
 	using SF = SupportFunctionNewT<TypeParam, Converter<TypeParam>, SupportFunctionNewLeGuernic>;
 
 	// THIS WORKS
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SF sf( box );
-	Halfspace<TypeParam> hspace( {TypeParam( 1 ), TypeParam( 0 )}, TypeParam( 1 ) );
+	Halfspace<TypeParam> hspace( { TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( 1 ) );
 	SF sfInterHalfspace = sf.intersectHalfspace( hspace );
 	EXPECT_TRUE( sfInterHalfspace.getRoot()->getType() == SFNEW_TYPE::INTERSECTHSPACEOP );
 	EXPECT_EQ( sfInterHalfspace.getRoot()->getOriginCount(), unsigned( 1 ) );
@@ -515,7 +516,7 @@ TYPED_TEST( SupportFunctionNewTest, IntersectHalfspaceOp ) {
 
 	// Emptiness
 	EXPECT_TRUE( !sfInterHalfspace.empty() );
-	Halfspace<TypeParam> hspace2( {TypeParam( 1 ), TypeParam( 1 )}, TypeParam( -1 ) );
+	Halfspace<TypeParam> hspace2( { TypeParam( 1 ), TypeParam( 1 ) }, TypeParam( -1 ) );
 	SF sfEmpty = sfInterHalfspace.intersectHalfspace( hspace2 );
 	EXPECT_TRUE( sfEmpty.empty() );
 
@@ -528,9 +529,9 @@ TYPED_TEST( SupportFunctionNewTest, IntersectHalfspaceOp ) {
 	EXPECT_TRUE( sfInterHalfspace.supremum() <= TypeParam( 1.01 ) );
 
 	// Containment
-	Point<TypeParam> completelyInside( {TypeParam( 0.5 ), TypeParam( 0.5 )} );
-	Point<TypeParam> inSFButNotInHSpace( {TypeParam( 1.5 ), TypeParam( 0.5 )} );
-	Point<TypeParam> completelyOutside( {TypeParam( 2.5 ), TypeParam( 0.5 )} );
+	Point<TypeParam> completelyInside( { TypeParam( 0.5 ), TypeParam( 0.5 ) } );
+	Point<TypeParam> inSFButNotInHSpace( { TypeParam( 1.5 ), TypeParam( 0.5 ) } );
+	Point<TypeParam> completelyOutside( { TypeParam( 2.5 ), TypeParam( 0.5 ) } );
 	EXPECT_TRUE( sfInterHalfspace.contains( completelyInside ) );
 	EXPECT_FALSE( sfInterHalfspace.contains( inSFButNotInHSpace ) );
 	EXPECT_FALSE( sfInterHalfspace.contains( completelyOutside ) );
@@ -543,8 +544,8 @@ TYPED_TEST( SupportFunctionNewTest, Constructors ) {
 	EXPECT_TRUE( sfEmpty.getRoot() == nullptr );
 
 	// First make a small sf
-	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-										 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+										 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf( box1 );
 	EXPECT_EQ( sf.getRoot().use_count(), long( 1 ) );
 
@@ -640,10 +641,10 @@ TYPED_TEST( SupportFunctionNewTest, Deletion ) {
 
 	{
 		// Construct leaf nodes
-		Box<TypeParam> box1( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-											 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
-		Box<TypeParam> box2( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-											 Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+		Box<TypeParam> box1( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+											 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
+		Box<TypeParam> box2( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+											 Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 		std::shared_ptr<SupportFunctionNew<TypeParam>> sf1 = std::make_shared<SupportFunctionNew<TypeParam>>( box1 );
 		std::shared_ptr<SupportFunctionNew<TypeParam>> sf2 = std::make_shared<SupportFunctionNew<TypeParam>>( box2 );
 		sf1Copy = sf1;
@@ -697,10 +698,10 @@ TYPED_TEST( SupportFunctionNewTest, Deletion ) {
 
 TYPED_TEST( SupportFunctionNewTest, IntermediateDeletion ) {
 	// Construct leaf nodes
-	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-										 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
-	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										 Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+										 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
+	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										 Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf1( box1 );
 	SupportFunctionNew<TypeParam> sf2( box2 );
 
@@ -766,10 +767,10 @@ TYPED_TEST( SupportFunctionNewTest, IntermediateDeletion ) {
 
 TYPED_TEST( SupportFunctionNewTest, Evaluate ) {
 	// Construct leaf nodes
-	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-										 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
-	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										 Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+										 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
+	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										 Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 
 	// Assemble them to a tree
 	SupportFunctionNew<TypeParam> sf( box1 );
@@ -809,8 +810,8 @@ TYPED_TEST( SupportFunctionNewTest, Evaluate ) {
 
 TYPED_TEST( SupportFunctionNewTest, EvaluateMixedLeaves ) {
 	// Construct leaf nodes
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Zero( 3, 2 );
 	mat << 0, -1, 1, 1, -1, 1;
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Ones( 3 );
@@ -833,14 +834,14 @@ TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 	EXPECT_TRUE( sf1.empty() );
 	// HPolytope<TypeParam> hpoly1 = HPolytope<TypeParam>::Empty();
 	HPolytope<TypeParam> hpoly1;
-	hpoly1.insert( Halfspace<TypeParam>( {TypeParam( 1 ), TypeParam( 1 )}, TypeParam( -1 ) ) );
-	hpoly1.insert( Halfspace<TypeParam>( {TypeParam( -1 ), TypeParam( -1 )}, TypeParam( -1 ) ) );
+	hpoly1.insert( Halfspace<TypeParam>( { TypeParam( 1 ), TypeParam( 1 ) }, TypeParam( -1 ) ) );
+	hpoly1.insert( Halfspace<TypeParam>( { TypeParam( -1 ), TypeParam( -1 ) }, TypeParam( -1 ) ) );
 	sf1 = SupportFunctionNew<TypeParam>( hpoly1 );
 	EXPECT_TRUE( sf1.empty() );
 
 	// Leaf
-	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										 Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										 Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf2( box2 );
 	EXPECT_TRUE( !sf2.empty() );
 
@@ -857,13 +858,13 @@ TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 	EXPECT_TRUE( !trafo.empty() );
 
 	// ProjectOp
-	std::vector<std::size_t> dims( {0} );
-	SupportFunctionNew<TypeParam> proj = sf1.project( dims );
+	std::vector<std::size_t> dims( { 0 } );
+	SupportFunctionNew<TypeParam> proj = sf1.projectOn( dims );
 	EXPECT_TRUE( proj.empty() );
-	proj = sf2.project( dims );
+	proj = sf2.projectOn( dims );
 	EXPECT_TRUE( !proj.empty() );
 	std::vector<std::size_t> emptyDims;
-	proj = sf2.project( emptyDims );  // Test with empty dims
+	proj = sf2.projectOn( emptyDims );	// Test with empty dims
 	EXPECT_TRUE( proj.empty() );
 
 	// ScaleOp
@@ -879,12 +880,12 @@ TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 	EXPECT_TRUE( !sum.empty() );
 	sum = sf1.minkowskiSum( sf2 );
 	EXPECT_TRUE( !sum.empty() );
-	sum = proj.minkowskiSum( sf1 );  // Test with 2 empty sfs
+	sum = proj.minkowskiSum( sf1 );	 // Test with 2 empty sfs
 	EXPECT_TRUE( sum.empty() );
-	sum = sf2.minkowskiSum( std::vector<SupportFunctionNew<TypeParam>>{trafo, scale} );  // Test with no empty set
+	sum = sf2.minkowskiSum( std::vector<SupportFunctionNew<TypeParam>>{ trafo, scale } );  // Test with no empty set
 	EXPECT_TRUE( !sum.empty() );
 	sum = sf2.minkowskiSum(
-		  std::vector<SupportFunctionNew<TypeParam>>{trafo, scale, proj, sf1} );  // Test with empty set
+		  std::vector<SupportFunctionNew<TypeParam>>{ trafo, scale, proj, sf1 } );	// Test with empty set
 	EXPECT_TRUE( !sum.empty() );
 
 	// UnionOp
@@ -894,9 +895,10 @@ TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 	EXPECT_TRUE( !uniteOp.empty() );
 	uniteOp = proj.unite( sf1 );  // Test with 2 empty sfs
 	EXPECT_TRUE( uniteOp.empty() );
-	uniteOp = sf2.unite( std::vector<SupportFunctionNew<TypeParam>>{trafo, scale} );  // Test with no empty set
+	uniteOp = sf2.unite( std::vector<SupportFunctionNew<TypeParam>>{ trafo, scale } );	// Test with no empty set
 	EXPECT_TRUE( !uniteOp.empty() );
-	uniteOp = sf2.unite( std::vector<SupportFunctionNew<TypeParam>>{trafo, scale, proj, sf1} );  // Test with empty set
+	uniteOp =
+		  sf2.unite( std::vector<SupportFunctionNew<TypeParam>>{ trafo, scale, proj, sf1 } );  // Test with empty set
 	EXPECT_TRUE( !uniteOp.empty() );
 
 	// IntersectOp
@@ -914,11 +916,11 @@ TYPED_TEST( SupportFunctionNewTest, Emptiness ) {
 
 TYPED_TEST( SupportFunctionNewTest, Dimension ) {
 	// Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
-	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 1 )} ),
-											Point<TypeParam>( {TypeParam( 2 ), TypeParam( 3 )} ) ) );
+	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ) } ),
+											Point<TypeParam>( { TypeParam( 2 ), TypeParam( 3 ) } ) ) );
 	SupportFunctionNew<TypeParam> uR( upRight );
-	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( {TypeParam( -2 ), TypeParam( 0 )} ),
-											 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( { TypeParam( -2 ), TypeParam( 0 ) } ),
+											 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> dL( downLeft );
 
 	// Dimension of empty SF
@@ -938,8 +940,8 @@ TYPED_TEST( SupportFunctionNewTest, Dimension ) {
 	EXPECT_EQ( dim, std::size_t( 2 ) );
 
 	// Dimension for ProjectOp
-	std::vector<std::size_t> dims( {0} );
-	SupportFunctionNew<TypeParam> proj = uR.project( dims );
+	std::vector<std::size_t> dims( { 0 } );
+	SupportFunctionNew<TypeParam> proj = uR.projectOn( dims );
 	dim = proj.dimension();
 	EXPECT_EQ( dim, std::size_t( 2 ) );
 
@@ -966,11 +968,11 @@ TYPED_TEST( SupportFunctionNewTest, Dimension ) {
 
 TYPED_TEST( SupportFunctionNewTest, Supremum ) {
 	// Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
-	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 1 )} ),
-											Point<TypeParam>( {TypeParam( 2 ), TypeParam( 3 )} ) ) );
+	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ) } ),
+											Point<TypeParam>( { TypeParam( 2 ), TypeParam( 3 ) } ) ) );
 	SupportFunctionNew<TypeParam> uR( upRight );
-	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( {TypeParam( -2 ), TypeParam( 0 )} ),
-											 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( { TypeParam( -2 ), TypeParam( 0 ) } ),
+											 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> dL( downLeft );
 
 	// Supremum of empty SF
@@ -990,8 +992,8 @@ TYPED_TEST( SupportFunctionNewTest, Supremum ) {
 	EXPECT_EQ( sup, TypeParam( 6 ) );
 
 	// Supremum for ProjectOp
-	std::vector<std::size_t> dims( {0} );
-	SupportFunctionNew<TypeParam> proj = uR.project( dims );
+	std::vector<std::size_t> dims( { 0 } );
+	SupportFunctionNew<TypeParam> proj = uR.projectOn( dims );
 	sup = proj.supremum();
 	EXPECT_EQ( sup, TypeParam( 2 ) );
 
@@ -1026,10 +1028,10 @@ TYPED_TEST( SupportFunctionNewTest, StorageSize ) {
 
 	// Size of a tree consisting of n-ary, unary and leaves
 	// Construct leaf nodes
-	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( -1 )} ),
-										 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
-	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										 Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box1( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( -1 ) } ),
+										 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
+	Box<TypeParam> box2( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										 Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf1( box1 );
 	SupportFunctionNew<TypeParam> sf2( box2 );
 
@@ -1057,17 +1059,17 @@ TYPED_TEST( SupportFunctionNewTest, StorageSize ) {
 
 TYPED_TEST( SupportFunctionNewTest, Containment ) {
 	// Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
-	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 1 )} ),
-											Point<TypeParam>( {TypeParam( 2 ), TypeParam( 3 )} ) ) );
+	Box<TypeParam> upRight( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ) } ),
+											Point<TypeParam>( { TypeParam( 2 ), TypeParam( 3 ) } ) ) );
 	SupportFunctionNew<TypeParam> uR( upRight );
-	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( {TypeParam( -2 ), TypeParam( 0 )} ),
-											 Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> downLeft( std::make_pair( Point<TypeParam>( { TypeParam( -2 ), TypeParam( 0 ) } ),
+											 Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> dL( downLeft );
 
 	// Points to test for containment
-	Point<TypeParam> inUR{TypeParam( 2 ), TypeParam( 2 )};
-	Point<TypeParam> inDL{TypeParam( -1 ), TypeParam( 0 )};
-	Point<TypeParam> inBoth{TypeParam( 0 ), TypeParam( 1 )};
+	Point<TypeParam> inUR{ TypeParam( 2 ), TypeParam( 2 ) };
+	Point<TypeParam> inDL{ TypeParam( -1 ), TypeParam( 0 ) };
+	Point<TypeParam> inBoth{ TypeParam( 0 ), TypeParam( 1 ) };
 
 	// Contains of empty SF
 	SupportFunctionNew<TypeParam> sf;
@@ -1108,7 +1110,7 @@ TYPED_TEST( SupportFunctionNewTest, Containment ) {
 
 	// Contains for ProjectOp
 	// std::vector<std::size_t> dims({0});
-	// SupportFunctionNew<TypeParam> proj = uR.project(dims);
+	// SupportFunctionNew<TypeParam> proj = uR.projectOn(dims);
 	// No testing since not correct
 
 	// Contains for ScaleOp
@@ -1157,21 +1159,21 @@ TYPED_TEST( SupportFunctionNewTest, Containment ) {
 
 	// Contains for SupportFunctions
 	EXPECT_FALSE( uR.contains( dL ) );
-	Box<TypeParam> overlapBox( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 1 )} ),
-											   Point<TypeParam>( {TypeParam( 1 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> overlapBox( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 1 ) } ),
+											   Point<TypeParam>( { TypeParam( 1 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> overlapSF( overlapBox );
 	EXPECT_TRUE( uR.contains( overlapSF ) );
 }
 
 TYPED_TEST( SupportFunctionNewTest, IntersectAndSatisfiesHalfspace ) {
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0.1 ), TypeParam( 0.1 )} ),
-										Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0.1 ), TypeParam( 0.1 ) } ),
+										Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SupportFunctionNew<TypeParam> sf1( box );
 
 	// Halfspaces to test - belowBox does not contain the box, within box partially, aboveBox fully
-	Halfspace<TypeParam> belowBox( {TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 0 ) );
-	Halfspace<TypeParam> withinBox( {TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 1 ) );
-	Halfspace<TypeParam> aboveBox( {TypeParam( 0 ), TypeParam( 1 )}, TypeParam( 2 ) );
+	Halfspace<TypeParam> belowBox( { TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( 0 ) );
+	Halfspace<TypeParam> withinBox( { TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( 1 ) );
+	Halfspace<TypeParam> aboveBox( { TypeParam( 0 ), TypeParam( 1 ) }, TypeParam( 2 ) );
 
 	// Test with undefined sf
 	SupportFunctionNew<TypeParam> sfUndef;
@@ -1182,8 +1184,8 @@ TYPED_TEST( SupportFunctionNewTest, IntersectAndSatisfiesHalfspace ) {
 
 	// Test with unsatisfiable box
 	HPolytope<TypeParam> hpoly;
-	hpoly.insert( Halfspace<TypeParam>( {TypeParam( 1 ), TypeParam( 0 )}, TypeParam( -1 ) ) );
-	hpoly.insert( Halfspace<TypeParam>( {TypeParam( -1 ), TypeParam( 0 )}, TypeParam( -1 ) ) );
+	hpoly.insert( Halfspace<TypeParam>( { TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( -1 ) ) );
+	hpoly.insert( Halfspace<TypeParam>( { TypeParam( -1 ), TypeParam( 0 ) }, TypeParam( -1 ) ) );
 	SupportFunctionNew<TypeParam> sfUnsat( hpoly );
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> unsatSatisfy = sfUnsat.satisfiesHalfspace( belowBox );
 	EXPECT_EQ( unsatSatisfy.first, hypro::CONTAINMENT::NO );
@@ -1198,8 +1200,8 @@ TYPED_TEST( SupportFunctionNewTest, IntersectAndSatisfiesHalfspace ) {
 	std::pair<CONTAINMENT, SupportFunctionNew<TypeParam>> withinSatisfy = sf1.satisfiesHalfspace( withinBox );
 	EXPECT_TRUE( withinSatisfy.first == hypro::CONTAINMENT::PARTIAL );
 	EXPECT_TRUE( !withinSatisfy.second.empty() );
-	Box<TypeParam> boxWithin( std::make_pair( Point<TypeParam>( {TypeParam( 0.1 ), TypeParam( 0.1 )} ),
-											  Point<TypeParam>( {TypeParam( 2 ), TypeParam( 1 )} ) ) );
+	Box<TypeParam> boxWithin( std::make_pair( Point<TypeParam>( { TypeParam( 0.1 ), TypeParam( 0.1 ) } ),
+											  Point<TypeParam>( { TypeParam( 2 ), TypeParam( 1 ) } ) ) );
 	SupportFunctionNew<TypeParam> sfWithin( boxWithin );
 	EXPECT_TRUE( withinSatisfy.second.contains( sfWithin ) );
 	// EXPECT_TRUE(sfWithin.contains(withinSatisfy.second)); //DOES NOT WORK, SINCE WE OVERAPPROXIMATE
@@ -1269,14 +1271,14 @@ TYPED_TEST( SupportFunctionNewTest, IntersectAndSatisfiesHalfspace ) {
 
 TYPED_TEST( SupportFunctionNewTest, CollectProjections ) {
 	// Make a 5-dim box
-	Point<TypeParam> p1{TypeParam( 0 ), TypeParam( 1 ), TypeParam( 2 ), TypeParam( 3 ), TypeParam( 4 )};
-	Point<TypeParam> p2{TypeParam( -2 ), TypeParam( -1 ), TypeParam( 0 ), TypeParam( 1 ), TypeParam( 2 )};
-	Box<TypeParam> box( std::vector<Point<TypeParam>>( {p1, p2} ) );
+	Point<TypeParam> p1{ TypeParam( 0 ), TypeParam( 1 ), TypeParam( 2 ), TypeParam( 3 ), TypeParam( 4 ) };
+	Point<TypeParam> p2{ TypeParam( -2 ), TypeParam( -1 ), TypeParam( 0 ), TypeParam( 1 ), TypeParam( 2 ) };
+	Box<TypeParam> box( std::vector<Point<TypeParam>>( { p1, p2 } ) );
 	SupportFunctionNew<TypeParam> sf( box );
 
 	// Proj1 - projects away dimension 5
-	std::vector<std::size_t> proj1Dims( {0, 1, 2, 3} );
-	SupportFunctionNew<TypeParam> proj1 = sf.project( proj1Dims );
+	std::vector<std::size_t> proj1Dims( { 0, 1, 2, 3 } );
+	SupportFunctionNew<TypeParam> proj1 = sf.projectOn( proj1Dims );
 	// the 5th dimension is only projected away in other functions like collectProjections; the original dimension is
 	// still callable via dimension()
 	EXPECT_EQ( proj1.dimension(), std::size_t( 5 ) );
@@ -1287,8 +1289,8 @@ TYPED_TEST( SupportFunctionNewTest, CollectProjections ) {
 	EXPECT_EQ( unio.collectProjections(), proj1Dims );
 
 	// Proj2 - projects away dimension 2 and 3
-	std::vector<std::size_t> proj2Dims( {0, 3, 4} );
-	SupportFunctionNew<TypeParam> proj2 = sf.project( proj2Dims );
+	std::vector<std::size_t> proj2Dims( { 0, 3, 4 } );
+	SupportFunctionNew<TypeParam> proj2 = sf.projectOn( proj2Dims );
 	EXPECT_EQ(
 		  proj2.dimension(),
 		  std::size_t( 5 ) );  // the 5th dimension is only projected away in other functions like collectProjections
@@ -1296,28 +1298,28 @@ TYPED_TEST( SupportFunctionNewTest, CollectProjections ) {
 
 	// Sum - Should return intersection of proj1Dims and proj2Dims
 	SupportFunctionNew<TypeParam> sum = proj2.minkowskiSum( unio );
-	EXPECT_EQ( sum.collectProjections(), std::vector<std::size_t>( {0, 3} ) );
+	EXPECT_EQ( sum.collectProjections(), std::vector<std::size_t>( { 0, 3 } ) );
 
 	// Proj3 - projects away dimension 1
-	std::vector<std::size_t> proj3Dims( {1, 2, 3, 4} );
-	SupportFunctionNew<TypeParam> proj3 = sf.project( proj3Dims );
+	std::vector<std::size_t> proj3Dims( { 1, 2, 3, 4 } );
+	SupportFunctionNew<TypeParam> proj3 = sf.projectOn( proj3Dims );
 	EXPECT_EQ( proj3Dims, proj3.collectProjections() );
 
 	// Proj4 - projects away dimension 4
-	std::vector<std::size_t> proj4Dims( {0, 1, 2, 4} );
-	SupportFunctionNew<TypeParam> proj4 = sf.project( proj4Dims );
+	std::vector<std::size_t> proj4Dims( { 0, 1, 2, 4 } );
+	SupportFunctionNew<TypeParam> proj4 = sf.projectOn( proj4Dims );
 	EXPECT_EQ( proj4Dims, proj4.collectProjections() );
 
 	// Intersect - no dimension should be left
-	std::vector<SupportFunctionNew<TypeParam>> children( {proj3, sum} );
+	std::vector<SupportFunctionNew<TypeParam>> children( { proj3, sum } );
 	SupportFunctionNew<TypeParam> inter = proj4.intersect( children );
 	EXPECT_EQ( inter.collectProjections(), std::vector<std::size_t>() );
 }
 
 TYPED_TEST( SupportFunctionNewTest, Vertices ) {
 	// 3d box
-	Point<TypeParam> p1 = Point<TypeParam>( {TypeParam( 0 ), TypeParam( -4 ), TypeParam( -22 )} );
-	Point<TypeParam> p2 = Point<TypeParam>( {TypeParam( 3 ), TypeParam( 6.789 ), TypeParam( -3.1415 )} );
+	Point<TypeParam> p1 = Point<TypeParam>( { TypeParam( 0 ), TypeParam( -4 ), TypeParam( -22 ) } );
+	Point<TypeParam> p2 = Point<TypeParam>( { TypeParam( 3 ), TypeParam( 6.789 ), TypeParam( -3.1415 ) } );
 	Box<TypeParam> box( std::make_pair( p1, p2 ) );
 	SupportFunctionNew<TypeParam> sf( box );
 	std::vector<Point<TypeParam>> points = sf.vertices();
@@ -1329,8 +1331,8 @@ TYPED_TEST( SupportFunctionNewTest, Vertices ) {
 }
 
 TYPED_TEST( SupportFunctionNewTest, SettingsConversion ) {
-	Point<TypeParam> p1 = Point<TypeParam>( {TypeParam( 0 ), TypeParam( -4 ), TypeParam( -22 )} );
-	Point<TypeParam> p2 = Point<TypeParam>( {TypeParam( 3 ), TypeParam( 6.789 ), TypeParam( -3.1415 )} );
+	Point<TypeParam> p1 = Point<TypeParam>( { TypeParam( 0 ), TypeParam( -4 ), TypeParam( -22 ) } );
+	Point<TypeParam> p2 = Point<TypeParam>( { TypeParam( 3 ), TypeParam( 6.789 ), TypeParam( -3.1415 ) } );
 	Box<TypeParam> box( std::make_pair( p1, p2 ) );
 	SupportFunctionNew<TypeParam> sf( box );
 
@@ -1369,8 +1371,8 @@ TYPED_TEST( SupportFunctionNewTest, SettingsConversion ) {
 
 	try {
 		// ProjectOp
-		std::vector<std::size_t> dims( {0} );
-		SupportFunctionNew<TypeParam> proj = sf.project( dims );
+		std::vector<std::size_t> dims( { 0 } );
+		SupportFunctionNew<TypeParam> proj = sf.projectOn( dims );
 		SupportFunctionNewT<TypeParam, Converter<TypeParam>, SupportFunctionNewNoReduction> proj2( proj );
 		EXPECT_EQ( ( dynamic_cast<ProjectOp<TypeParam, Converter<TypeParam>, SupportFunctionNewNoReduction>*>(
 						   proj2.getRoot().get() )
@@ -1399,7 +1401,7 @@ TYPED_TEST( SupportFunctionNewTest, SettingsConversion ) {
 		EXPECT_EQ( inter2.dimension(), sf.dimension() );
 
 		// UnionOp
-		std::vector<SupportFunctionNew<TypeParam>> vec = {proj, scale, sumOp};
+		std::vector<SupportFunctionNew<TypeParam>> vec = { proj, scale, sumOp };
 		SupportFunctionNew<TypeParam> uniteOp = sf.unite( vec );
 		SupportFunctionNewT<TypeParam, Converter<TypeParam>, SupportFunctionNewNoReduction> unite2( uniteOp );
 		EXPECT_EQ( unite2.getRoot()->getChildren().size(), std::size_t( 4 ) );
@@ -1417,8 +1419,8 @@ TYPED_TEST( SupportFunctionNewTest, MatrixVector ) {
 	EXPECT_EQ( sfEmpty.vector(), vector_t<TypeParam>::Zero( 0 ) );
 
 	// Make a box
-	Point<TypeParam> p1{TypeParam( -1 ), TypeParam( -1 )};
-	Point<TypeParam> p2{TypeParam( 1 ), TypeParam( 1 )};
+	Point<TypeParam> p1{ TypeParam( -1 ), TypeParam( -1 ) };
+	Point<TypeParam> p2{ TypeParam( 1 ), TypeParam( 1 ) };
 	Box<TypeParam> box( std::make_pair( p1, p2 ) );
 	SupportFunctionNew<TypeParam> sf( box );
 	matrix_t<TypeParam> expectedResMat = matrix_t<TypeParam>::Zero( 8, 2 );
@@ -1444,8 +1446,8 @@ TYPED_TEST( SupportFunctionNewTest, Reduction ) {
 	// Halfspace
 
 	// Some SF
-	Point<TypeParam> p1{TypeParam( -1 ), TypeParam( -1 )};
-	Point<TypeParam> p2{TypeParam( 1 ), TypeParam( 1 )};
+	Point<TypeParam> p1{ TypeParam( -1 ), TypeParam( -1 ) };
+	Point<TypeParam> p2{ TypeParam( 1 ), TypeParam( 1 ) };
 	Box<TypeParam> box( std::make_pair( p1, p2 ) );
 	SupportFunctionNew<TypeParam> sf( box );
 	sf.reduceRepresentation();
@@ -1460,10 +1462,10 @@ TYPED_TEST( SupportFunctionNewTest, TrafoOpOverIntersectHalfspaceOp ) {
 
 	// Create sf: First {(0,0),(2,2)} then {(0,0),(1,2)} via intersectHalfspace then {(1,1),(3,5)} via
 	// affineTransformation
-	Box<TypeParam> box( std::make_pair( Point<TypeParam>( {TypeParam( 0 ), TypeParam( 0 )} ),
-										Point<TypeParam>( {TypeParam( 2 ), TypeParam( 2 )} ) ) );
+	Box<TypeParam> box( std::make_pair( Point<TypeParam>( { TypeParam( 0 ), TypeParam( 0 ) } ),
+										Point<TypeParam>( { TypeParam( 2 ), TypeParam( 2 ) } ) ) );
 	SF sf( box );
-	Halfspace<TypeParam> hspace( {TypeParam( 1 ), TypeParam( 0 )}, TypeParam( 1 ) );
+	Halfspace<TypeParam> hspace( { TypeParam( 1 ), TypeParam( 0 ) }, TypeParam( 1 ) );
 	SF sfInterHalfspace = sf.intersectHalfspace( hspace );
 	matrix_t<TypeParam> mat = 2 * matrix_t<TypeParam>::Identity( 2, 2 );
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Ones( 2 );

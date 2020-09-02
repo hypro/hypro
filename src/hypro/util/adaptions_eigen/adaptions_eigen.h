@@ -255,7 +255,7 @@ vector_t<Number> normalize( const vector_t<Number>& in ) {
 }
 /// projection of a vector on a subspace
 template <typename Number>
-vector_t<Number> project( const vector_t<Number>& in, const std::vector<std::size_t>& dimensions ) {
+vector_t<Number> projectOn( const vector_t<Number>& in, const std::vector<std::size_t>& dimensions ) {
 	if ( dimensions.empty() ) {
 		return vector_t<Number>::Zero( 0 );
 	}

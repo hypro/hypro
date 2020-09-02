@@ -1454,7 +1454,7 @@ BallSupportFunction<Number>* SupportFunctionContent<Number, Setting>::ball() con
 }
 
 template <typename Number, typename Setting>
-std::shared_ptr<SupportFunctionContent<Number, Setting>> SupportFunctionContent<Number, Setting>::project( const std::vector<std::size_t>& dimensions ) const {
+std::shared_ptr<SupportFunctionContent<Number, Setting>> SupportFunctionContent<Number, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 	return create( getThis(), dimensions );
 }
 

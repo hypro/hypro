@@ -162,7 +162,7 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const linearFlow<Numbe
 		projectionDimensions.push_back( i );
 	}
 
-	errorBoxX0 = errorBoxX0.project( projectionDimensions );
+	errorBoxX0 = errorBoxX0.projectOn( projectionDimensions );
 
 	Box<Number> differenceBox( errorBoxX0.minkowskiDecomposition( errorBoxExternalInput ) );
 	assert( !externalInput.empty() || errorBoxX0 == differenceBox );

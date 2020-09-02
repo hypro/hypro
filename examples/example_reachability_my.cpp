@@ -2,34 +2,34 @@
  *
  */
 
-#include "representations/GeometricObject.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "algorithms/reachability/Reach.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
+#include "representations/GeometricObject.h"
 #include "util/statistics/statistics.h"
 #ifdef HYPRO_USE_LACE
 #include <lace.h>
 #endif
 //#define PLOT_FLOWPIPE
 
-template<typename Number, typename Representation>
-static std::pair<double,bool> computeReachableStates(const std::string& filename, const hypro::representation_name& type) {
+template <typename Number, typename Representation>
+static std::pair<double, bool> computeReachableStates( const std::string& filename, const hypro::representation_name& type ) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move( hypro::parseFlowstarFile<Number>( filename ) );
 	//#ifdef HYPRO_LOGGING
 	//std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
 	//#endif
 
-	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher(ha.first, ha.second);
-	reacher.setRepresentationType(type);
+	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher( ha.first, ha.second );
+	reacher.setRepresentationType( type );
 	reacher.initQueue();
 	auto flowpipes = reacher.computeForwardReachability();
 	bool unsafe = reacher.reachedBadStates();
-	double dur = std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0;
-	std::pair<double,bool> out = std::make_pair(dur,unsafe);
+	double dur = std::chrono::duration_cast<timeunit>( clock::now() - start ).count() / 1000.0;
+	std::pair<double, bool> out = std::make_pair( dur, unsafe );
 	//std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 	//std::cout << "Finished computation of reachable states + verification: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 	//if(unsafe){
@@ -38,7 +38,7 @@ static std::pair<double,bool> computeReachableStates(const std::string& filename
 	//	std::cout << "Verification result: SAFE" << std::endl;
 	//}
 
-/*
+	/*
     if(ha.second.plotDimensions.size() > 0){
 
 		clock::time_point startPlotting = clock::now();
@@ -101,19 +101,19 @@ static std::pair<double,bool> computeReachableStates(const std::string& filename
 				Representation seg = boost::get<Representation>(segment.getSet(0));
 				switch (type) {
 					case hypro::representation_name::support_function:{
-						unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
+						unsigned tmp = plotter.addObject(seg.projectOn(plottingDimensions).vertices());
 						plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 						break;
 					}
 					case hypro::representation_name::zonotope:{
-						unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
+						unsigned tmp = plotter.addObject(seg.projectOn(plottingDimensions).vertices());
 						plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 						plotter.rSettings().dimensions.first = 0;
 						plotter.rSettings().dimensions.second = 1;
 						break;
 					}
 					case hypro::representation_name::box:{
-						unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
+						unsigned tmp = plotter.addObject(seg.projectOn(plottingDimensions).vertices());
 						plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 						plotter.rSettings().dimensions.first = 0;
 						plotter.rSettings().dimensions.second = 1;
@@ -141,12 +141,12 @@ static std::pair<double,bool> computeReachableStates(const std::string& filename
 	return out;
 }
 
-int main(int argc, char** argv) {
+int main( int argc, char** argv ) {
 	int rep = 0;
 	std::string filename = argv[1];
-	if(argc > 2) {
+	if ( argc > 2 ) {
 		char* p;
-		rep = strtol(argv[2], &p, 10);
+		rep = strtol( argv[2], &p, 10 );
 	}
 
 #ifdef USE_CLN_NUMBERS
@@ -156,70 +156,73 @@ int main(int argc, char** argv) {
 	using Number = double;
 #endif
 	std::string& benchName = filename;
-	std::string& soloName = benchName.erase(0,37);
+	std::string& soloName = benchName.erase( 0, 37 );
 
-	switch(rep){
-
-		#ifdef HYPRO_USE_PPL
+	switch ( rep ) {
+#ifdef HYPRO_USE_PPL
 		case 7: {
 			using Representation = hypro::Polytope<Number>;
 			//std::cout << "Using a ppl-polytope representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::ppl_polytope );
 			break;
 		}
-		#endif
+#endif
 
 		case 6: {
 			using Representation = hypro::DifferenceBounds<Number>;
 			std::cout << "Using a difference bounds representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::difference_bounds);
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::difference_bounds );
 			break;
 		}
 
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
-			std::cout << soloName << " " << res.first << " " << res.second << " " << "zono" << std::endl;
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::zonotope );
+			std::cout << soloName << " " << res.first << " " << res.second << " "
+					  << "zono" << std::endl;
 			break;
 		}
 
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
-			std::cout << soloName << " " << res.first << " " << res.second << " " << "sf" << std::endl;
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::support_function );
+			std::cout << soloName << " " << res.first << " " << res.second << " "
+					  << "sf" << std::endl;
 			break;
 		}
 
 		case 3: {
 			using Representation = hypro::VPolytope<Number>;
 			std::cout << "Using a v-polytope representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_v);
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::polytope_v );
 			break;
 		}
-        case 2: {
+		case 2: {
 			using Representation = hypro::HPolytope<Number>;
 			std::cout << "Using a h-polytope representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::polytope_h );
 			break;
 		}
 
 		case 1: {
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
-			std::cout << soloName << " " << res.first << " " << res.second << " " << "box" << std::endl;
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::box );
+			std::cout << soloName << " " << res.first << " " << res.second << " "
+					  << "box" << std::endl;
 			break;
 		}
-		default:{
+		default: {
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
-			std::pair<double,bool> res = computeReachableStates<Number, Representation>(filename, hypro::representation_name::box);
-			
-			std::cout << soloName << " " << res.first << " " << res.second << " " << "box" << std::endl;
+			std::pair<double, bool> res = computeReachableStates<Number, Representation>( filename, hypro::representation_name::box );
+
+			std::cout << soloName << " " << res.first << " " << res.second << " "
+					  << "box" << std::endl;
 		}
 	}
 
-	exit(0);
+	exit( 0 );
 }

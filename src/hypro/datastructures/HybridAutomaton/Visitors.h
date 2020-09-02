@@ -301,7 +301,7 @@ class genericProjectionVisitor {
 
 	template <typename A>
 	inline T operator()( const A& lhs ) const {
-		return lhs.project( mDimensions );
+		return lhs.projectOn( mDimensions );
 	}
 };
 

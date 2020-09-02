@@ -332,7 +332,7 @@ Number SupportFunctionT<Number, Converter, Setting>::supremum() const {
 }
 
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionT<Number, Converter, Setting> SupportFunctionT<Number, Converter, Setting>::project( const std::vector<std::size_t>& dimensions ) const {
+SupportFunctionT<Number, Converter, Setting> SupportFunctionT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 	// check for full projection
 	bool fullProjection = true;
 	if ( dimensions.size() == this->dimension() ) {
@@ -348,7 +348,7 @@ SupportFunctionT<Number, Converter, Setting> SupportFunctionT<Number, Converter,
 
 	if ( !fullProjection ) {
 		DEBUG( "hypro.represetations.supportFunction", "No full projection, create." );
-		SupportFunctionT<Number, Converter, Setting> res = SupportFunctionT<Number, Converter, Setting>( content->project( dimensions ) );
+		SupportFunctionT<Number, Converter, Setting> res = SupportFunctionT<Number, Converter, Setting>( content->projectOn( dimensions ) );
 		return res;
 	}
 	DEBUG( "hypro.represetations.supportFunction", "Full projection, copy." );

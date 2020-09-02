@@ -117,7 +117,7 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	//Remove augmentation via projection
 	std::vector<size_t> dims( errorBoxX0.dimension() - 1 );
 	std::iota( dims.begin(), dims.end(), 0 );  //fill with 0,1,...
-	errorBoxX0 = errorBoxX0.project( dims );
+	errorBoxX0 = errorBoxX0.projectOn( dims );
 
 	Box<Number> errorBoxExternalInput = externalInput.linearTransformation( flowMatrix.block( 0, 0, dimension - 1, dimension - 1 ) );
 

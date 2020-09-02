@@ -455,7 +455,7 @@ std::vector<Point<Number>> State<Number, Representation, Rargs...>::vertices( st
 }
 
 template <typename Number, typename Representation, typename... Rargs>
-State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::project( const std::vector<std::size_t>& dimensions, std::size_t I ) const {
+State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::projectOn( const std::vector<std::size_t>& dimensions, std::size_t I ) const {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
 	State res( *this );
@@ -467,13 +467,13 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 }
 
 template <typename Number, typename Representation, typename... Rargs>
-State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::project( const std::pair<std::size_t, std::size_t>& dimensions, std::size_t I ) const {
+State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::projectOn( const std::pair<std::size_t, std::size_t>& dimensions, std::size_t I ) const {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
 	std::vector<std::size_t> ds;
 	ds.push_back( dimensions.first );
 	ds.push_back( dimensions.second );
-	return this->project( ds, I );
+	return this->projectOn( ds, I );
 }
 
 template <typename Number, typename Representation, typename... Rargs>

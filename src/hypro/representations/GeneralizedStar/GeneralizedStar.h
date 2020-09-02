@@ -187,7 +187,7 @@ class GeneralizedStarT : private GeometricObjectBase {
 
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, GeneralizedStarT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	GeneralizedStarT project( const std::vector<std::size_t>& dimensions ) const;
+	GeneralizedStarT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	GeneralizedStarT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

@@ -342,7 +342,7 @@ void MSupportFunction::process( int nlhs, mxArray* plhs[], int nrhs, const mxArr
 		return;
 	}
 	if ( cmd == 16 ) {
-		project( nlhs, plhs, nrhs, prhs );
+		projectOn( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 17 ) {

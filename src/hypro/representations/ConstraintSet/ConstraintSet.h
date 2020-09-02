@@ -219,7 +219,7 @@ class ConstraintSetT {
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>&, const vector_t<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 
-	ConstraintSetT project( const std::vector<std::size_t>& ) const { return *this; }
+	ConstraintSetT projectOn( const std::vector<std::size_t>& ) const { return *this; }
 	ConstraintSetT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const { return *this; }
 
 	ConstraintSetT linearTransformation( const matrix_t<Number>& ) const { return *this; }

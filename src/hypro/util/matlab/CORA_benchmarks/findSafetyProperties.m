@@ -13,7 +13,7 @@ spec_counter = 1;
             for j = 1:length(ReachableSet{i})
                 % Check every specification for current set
                 matrix = diag(spec(spec_counter,:));
-                vector = prepareValues(ReachableSet{i}{j}, size(spec,2));   
+                vector = prepareValues(ReachableSet{i}{j}, size(spec,2));
                 temp = matrix * vector;
                 value = sum(temp);
                 values(counter,1) = infimum(value);
@@ -45,7 +45,7 @@ end
 % Auxiliary function
 function vector = prepareValues(rSet, dim)
     for i = 1:dim
-        vec(i) = interval(project(rSet,i));
+        vec(i) = interval(projectOn(rSet,i));
     end
 vector = vec.';
 end

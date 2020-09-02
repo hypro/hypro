@@ -209,7 +209,7 @@ class State {
      * @brief      Gets the location.
      * @return     The location.
      */
-	Location<Number>* rGetLocation() { return const_cast<Location<Number>*>(mLoc); }
+	Location<Number>* rGetLocation() { return const_cast<Location<Number>*>( mLoc ); }
 
 	/**
      * @brief      Gets the number of contained sets.
@@ -488,8 +488,8 @@ class State {
 
 	std::vector<Point<Number>> vertices( std::size_t I = 0 ) const;
 
-	State<Number, Representation, Rargs...> project( const std::vector<std::size_t>& dimensions, std::size_t I = 0 ) const;
-	State<Number, Representation, Rargs...> project( const std::pair<std::size_t, std::size_t>& dimensions, std::size_t I = 0 ) const;
+	State<Number, Representation, Rargs...> projectOn( const std::vector<std::size_t>& dimensions, std::size_t I = 0 ) const;
+	State<Number, Representation, Rargs...> projectOn( const std::pair<std::size_t, std::size_t>& dimensions, std::size_t I = 0 ) const;
 
 	State<Number, Representation, Rargs...> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>&, std::size_t I = 0 ) const;
 
@@ -641,10 +641,10 @@ State parallelCompose(
 */
 
 #ifdef HYPRO_USE_PPL
-template<typename Number>
+template <typename Number>
 using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, TemplatePolyhedron<Number>, Polytope<Number>>;
 #else
-template<typename Number>
+template <typename Number>
 using State_t = State<Number, Box<Number>, CarlPolytope<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, SupportFunctionNew<Number>, TemplatePolyhedron<Number>>;
 #endif
 
