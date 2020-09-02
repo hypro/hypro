@@ -85,7 +85,6 @@ SupportFunctionT<Number, Converter, Setting>::~SupportFunctionT() {
 
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionT<Number, Converter, Setting>& SupportFunctionT<Number, Converter, Setting>::operator=( SupportFunctionT<Number, Converter, Setting> _orig ) {
-	//std::cout << "SupportFunction Copy\n";
 	if ( this != &_orig ) {
 		swap( *this, _orig );
 	}
@@ -97,10 +96,7 @@ SupportFunctionT<Number, Converter, Setting>& SupportFunctionT<Number, Converter
 template <typename Number, typename Converter, typename Setting>
 EvaluationResult<Number> SupportFunctionT<Number, Converter, Setting>::evaluate( const vector_t<Number>& _direction, bool useExact ) const {
 	matrix_t<Number> tmpMatrix = _direction.transpose();
-	EvaluationResult<Number> tmp = content->multiEvaluate( tmpMatrix, useExact ).at( 0 );
-	TRACE( "hypro.representations.supportFunction", "(" << _direction << ") :" << tmp.supportValue );
-	//return content->evaluate(_direction, useExact);
-	return tmp;
+	return content->multiEvaluate( tmpMatrix, useExact ).at( 0 );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -108,10 +104,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionT<Number, Converter, Settin
 	TRACE( "hypro.representations.supportFunction", "Directions: " << _directions );
 	std::vector<EvaluationResult<Number>> res = content->multiEvaluate( _directions, useExact );
 	assert( res.size() == std::size_t( _directions.rows() ) );
-	//TRACE("hypro.representations.supportFunction", "Distances: ");
-	//for(const auto& item : res){
-	//	TRACE("hypro.representations.supportFunction", item.supportValue);
-	//}
 	return res;
 }
 
@@ -217,8 +209,8 @@ vector_t<Number> SupportFunctionT<Number, Converter, Setting>::vector() const {
 }
 
 template <typename Number, typename Converter, typename Setting>
-void SupportFunctionT<Number, Converter, Setting>::removeRedundancy() {
-	// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
+void SupportFunctionT<Number, Converter, Setting>::removeRedundancy() const {
+	// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction)
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -228,93 +220,6 @@ std::vector<Point<Number>> SupportFunctionT<Number, Converter, Setting>::vertice
 		additionalDirectionVector.push_back( vector_t<Number>( additionalDirections.row( rowIndex ) ) );
 	}
 
-	//std::cout << "Added " << additionalDirections.size() << " additional directions for evaluation." << std::endl;
-	/*
-		std::list<unsigned> projections = collectProjections();
-		if( projections.size() == this->dimension() ){
-			//std::cout << "Full vertices" << std::endl;
-			auto tmp = Converter::toHPolytope(*this, additionalDirections);
-			return tmp.vertices();
-		} else {
-			//std::cout << "Projection" << std::endl;
-			std::list<unsigned> zeroDimensions;
-			for(unsigned i = 0; i < this->dimension(); ++i) {
-				if(std::find(projections.begin(), projections.end(), i) == projections.end()){
-					//std::cout << "Dimension " << i << " is zero." << std::endl;
-					zeroDimensions.emplace_back(i);
-				}
-			}
-			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, 8, this->dimension()); // TODO: ATTENTION, 8 is hardcoded here.
-			for(auto& direction : additionalDirections) {
-				// project direction
-				for(const auto& dir : zeroDimensions) {
-					direction(dir) = 0;
-				}
-				// add projected direction
-				if(direction != vector_t<Number>::Zero(this->dimension()) && std::find(templateDirections.begin(), templateDirections.end(), direction) == templateDirections.end()) {
-					templateDirections.insert(templateDirections.end(), std::move(direction));
-				}
-			}
-
-			matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), this->dimension());
-
-			//fills the matrix with the template directions
-			for (unsigned i=0; i<templateDirections.size();++i){
-				templateDirectionMatrix.row(i) = templateDirections[i];
-			}
-			//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
-
-			std::vector<EvaluationResult<Number>> offsets = content->multiEvaluate(templateDirectionMatrix);
-			assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
-
-			//std::cout << "Multi-Eval done, add zero constraints" << std::endl;
-
-			std::vector<unsigned> boundedConstraints;
-			for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-				if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
-					boundedConstraints.push_back(offsetIndex);
-				}
-			}
-			matrix_t<Number> constraints = matrix_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size(), this->dimension());
-			vector_t<Number> constants = vector_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size());
-			unsigned pos = boundedConstraints.size()-1;
-			unsigned zeroDimensionPos = boundedConstraints.size();
-			while(!boundedConstraints.empty()){
-				constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
-				constants(pos) = offsets[boundedConstraints.back()].supportValue;
-				boundedConstraints.pop_back();
-				--pos;
-			}
-
-			//std::cout << "Projected polytope without zero constraints: " << std::endl << convert<Number,double>(constraints) << std::endl << convert<Number,double>(constants) << std::endl;
-
-			// add zero dimension constraints
-			while(!zeroDimensions.empty()) {
-				//std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
-				vector_t<Number> zDimConstraint = vector_t<Number>::Zero(this->dimension());
-				zDimConstraint(zeroDimensions.front()) = 1;
-				constraints.row(zeroDimensionPos) = zDimConstraint;
-				constants(zeroDimensionPos) = 0;
-				//std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
-
-				++zeroDimensionPos;
-
-				zDimConstraint(zeroDimensions.front()) = -1;
-				constraints.row(zeroDimensionPos) = zDimConstraint;
-				constants(zeroDimensionPos) = 0;
-				//std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
-
-				zeroDimensions.pop_front();
-				++zeroDimensionPos;
-			}
-
-			std::cout << "Projected Polytope: " << std::endl << constraints << std::endl << constants << std::endl;
-
-			VertexEnumeration<Number> ve(constraints, constants);
-			ve.enumerateVertices();
-			return ve.getPoints();
-		}
-		*/
 	auto tmp = Converter::toHPolytope( *this, additionalDirectionVector );
 	return tmp.vertices();
 }
@@ -450,8 +355,6 @@ SupportFunctionT<Number, Converter, Setting> SupportFunctionT<Number, Converter,
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunctionT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-	//std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
-
 	// catch zero-constraints separately
 	if ( rhs.normal() == vector_t<Number>::Zero( rhs.normal().rows() ) ) {
 		return rhs.offset() <= 0 ? std::make_pair( CONTAINMENT::FULL, *this ) : std::make_pair( CONTAINMENT::NO, *this );
@@ -460,18 +363,12 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 	bool limiting = false;
 	EvaluationResult<Number> planeEvalRes = content->evaluate( rhs.normal(), false );
 	if ( planeEvalRes.errorCode == SOLUTION::INFEAS ) {
-		//std::cout << "Is infeasible (should not happen)." << std::endl;
-		//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 		assert( Converter::toHPolytope( *this ).empty() );
 		return std::make_pair( CONTAINMENT::NO, *this );
 	} else if ( planeEvalRes.supportValue > rhs.offset() ) {
-		//std::cout << "Object will be limited. " << std::endl;
 		// the actual object will be limited by the new plane
 		limiting = true;
-		// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
 		if ( content->evaluate( -( rhs.normal() ), false ).supportValue < -( rhs.offset() ) ) {
-			//std::cout << "fullyOutside" << std::endl;
 			// the object lies fully outside one of the planes -> return false
 			return std::make_pair( CONTAINMENT::NO, this->intersectHalfspace( rhs ) );
 		}
@@ -605,8 +502,6 @@ std::pair<CONTAINMENT, SupportFunctionT<Number, Converter, Setting>> SupportFunc
 	if ( !res.has_value() ) {
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	} else {
-//assert( !res.value().empty() );
-//return std::make_pair( CONTAINMENT::PARTIAL, res.value() );
 #ifdef HYPRO_LOGGING
 		intersectionContent<Number, Setting>* intersection = res.value().rGetContent()->rIntersectionParameters();
 		TRACE( "hypro.representations.supportFunction", "Final intersection constraints " << intersection->rhs->rPolytope()->constraints() );
@@ -672,7 +567,6 @@ const SupportFunctionT<Number, Converter, Setting>& SupportFunctionT<Number, Con
 
 		std::vector<std::size_t> boundedConstraints;
 		for ( unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex ) {
-			//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
 			if ( offsets[offsetIndex].errorCode != SOLUTION::INFTY ) {
 				boundedConstraints.push_back( offsetIndex );
 			}
