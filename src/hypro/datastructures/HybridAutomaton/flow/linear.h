@@ -84,6 +84,9 @@ class linearFlow {
 		if ( isDiscrete() ) {
 			return DynamicType::discrete;
 		}
+		if ( isSingular() ) {
+			return DynamicType::singular;
+		}
 		return DynamicType::linear;
 	}
 
@@ -94,6 +97,15 @@ class linearFlow {
 			if ( mFlowMatrix.block( 0, rows - 1, rows - 1, 1 ) == vector_t<Number>::Ones( rows - 1 ) ) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	bool isSingular() const {
+		TRACE( "hypro.decisionEntity", "Flowmatrix: " << mFlowMatrix );
+		Eigen::Index rows = mFlowMatrix.rows();
+		if ( mFlowMatrix.block( 0, 0, rows - 1, rows - 1 ) == matrix_t<Number>::Zero( rows - 1, rows - 1 ) ) {
+			return true;
 		}
 		return false;
 	}

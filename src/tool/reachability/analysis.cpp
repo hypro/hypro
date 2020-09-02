@@ -72,13 +72,12 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 }
 
 template <typename State>
-std::vector<PlotData<PolytopalState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( Verification );
-	auto roots = makeRoots<State>( automaton );
-	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
+	SingularAnalyzer<hypro::VPolytope<Number>> analyzer{ automaton, setting };
 	auto result = analyzer.run();
 
-	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
 		std::cout << "Could not verify safety." << std::endl;
 		// Call bad state handling (e.g., return path)
 	} else {
@@ -87,12 +86,14 @@ std::vector<PlotData<PolytopalState>> singular_analyze( HybridAutomaton<Number>&
 	EVALUATE_BENCHMARK_RESULT( Verification );
 
 	// create plot data
-	std::vector<PlotData<PolytopalState>> plotData{};
+	std::vector<PlotData<FullState>> plotData{};
 
-	for ( const auto& node : preorder( roots ) ) {
-		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
-			PolytopalState state{};
-			state.setSet( segment );
+	for ( const auto& fp : analyzer.getFlowpipes() ) {
+		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
+			State convertedSegment;
+			hypro::convert( segment, convertedSegment );
+			FullState state;
+			state.setSet( convertedSegment );
 			return PlotData{ state, 0, 0 };
 		} );
 	}
@@ -161,7 +162,10 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			[[fallthrough]];
 		}
 		case DynamicType::singular: {
-			// no dispatch for rectangular automata, representation and setting are fixed
+			// no dispatch for singular automata, representation and setting are fixed
+			/*
+			return { singular_analyze<hypro::VPolytope<Number>>( automaton, setting ) };
+			*/
 			return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																		setting.strategy().front().representation_setting, SingularDispatcher{}, automaton, setting ) };
 			[[fallthrough]];

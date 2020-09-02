@@ -43,16 +43,16 @@ hypro::HybridAutomaton<Number> createSingularHA() {
 	loc.setFlow( flow );
 
 	// Set invariant x <= 1
-	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
+	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = Vector::Ones( 1 );
 	loc.setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Set initial state x = 0, aff = 1
-	Matrix initialConstraints = Matrix::Zero( 4, 2 );
-	Vector initialConstants = Vector::Zero( 4 );
-	initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
-	initialConstants << 0, 0, 1, -1;
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 0, 0;
 
 	// Create HA
 	res.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
@@ -79,16 +79,16 @@ hypro::HybridAutomaton<Number> createSingularHA2() {
 	loc.setFlow( flow );
 
 	// Set invariant x <= 3
-	Matrix invariantConstraints = Matrix::Zero( 1, 3 );
+	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = 3 * Vector::Ones( 1 );
 	loc.setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Set initial state x = 0, y = 1, aff = 1
-	Matrix initialConstraints = Matrix::Zero( 6, 3 );
-	Vector initialConstants = Vector::Zero( 6 );
-	initialConstraints << 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1;
-	initialConstants << 0, 0, 1, -1, 1, -1;
+	Matrix initialConstraints = Matrix::Zero( 4, 2 );
+	Vector initialConstants = Vector::Zero( 4 );
+	initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
+	initialConstants << 0, 0, 1, -1;
 
 	// Create HA
 	res.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
@@ -123,7 +123,7 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	loc1->setFlow( flow1 );
 
 	// Set invariant x <= 3 in loc0
-	Matrix invariantConstraints = Matrix::Zero( 1, 3 );
+	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = 3 * Vector::Ones( 1 );
 	loc0->setInvariant( { invariantConstraints, invariantConstants } );
@@ -131,32 +131,30 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 
 	// Construct transitions
 	// l0 -> l0 with guard x >= 1 and reset x := 0, y := 0
-	Matrix transConstraint = Matrix::Zero( 1, 3 );
+	Matrix transConstraint = Matrix::Zero( 1, 2 );
 	Vector transConstants = -1 * Vector::Ones( 1 );
 	transConstraint( 0, 0 ) = -1;
 	hypro::Condition<Number> guard( transConstraint, transConstants );
-	// resets: interval-assignments all to zero
-	std::vector<carl::Interval<Number>> resets{ { 0, 0 }, { 0, 0 }, { 0, 0 } };
-	hypro::Reset<Number> reset{ resets };
+	hypro::Reset<Number> reset{ { { 0, 0 }, { 0, 0 } } };
 
 	std::unique_ptr<hypro::Transition<Number>> trans0 =
 		  std::make_unique<hypro::Transition<Number>>( loc0.get(), loc0.get(), guard, reset );
 
 	// l0 -> l1 with guard y <= -2 and no reset
-	transConstraint = Matrix::Zero( 1, 3 );
+	transConstraint = Matrix::Zero( 1, 2 );
 	transConstants = -2 * Vector::Ones( 1 );
 	transConstraint( 0, 1 ) = 1;
 	guard = hypro::Condition<Number>( transConstraint, transConstants );
-	reset = hypro::Reset<Number>();
+	reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
 	std::unique_ptr<hypro::Transition<Number>> trans1 =
 		  std::make_unique<hypro::Transition<Number>>( loc0.get(), loc1.get(), guard, reset );
 
 	// Set initial state x = 0, y = 0, aff = 1
-	Matrix initialConstraints = Matrix::Zero( 6, 3 );
-	Vector initialConstants = Vector::Zero( 6 );
-	initialConstraints << 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1;
-	initialConstants << 0, 0, 0, 0, 1, -1;
+	Matrix initialConstraints = Matrix::Zero( 4, 2 );
+	Vector initialConstants = Vector::Zero( 4 );
+	initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
+	initialConstants << 0, 0, 0, 0;
 
 	// Create HA
 	loc0->addTransition( std::move( trans0 ) );
@@ -188,8 +186,8 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 
 	// Add bad states and analyze
 	// 1. x >= 0.5 (unsafe)
-	Matrix badStateMat = Matrix::Zero( 1, 2 );
-	badStateMat << -1, 0;
+	Matrix badStateMat = Matrix::Zero( 1, 1 );
+	badStateMat << -1;
 	Vector badStateVec = -0.5 * Vector::Ones( 1 );
 
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
@@ -218,8 +216,8 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	automaton = createSingularHA2<Number>();
 
 	// 1. y <= -1 (unsafe)
-	badStateMat = Matrix::Zero( 1, 3 );
-	badStateMat << 0, 1, 0;
+	badStateMat = Matrix::Zero( 1, 2 );
+	badStateMat << 0, 1;
 	badStateVec = -1 * Vector::Ones( 1 );
 
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
@@ -229,7 +227,7 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
 
 	// 2. x <= 1 (unsafe)
-	badStateMat << 1, 0, 0;
+	badStateMat << 1, 0;
 	badStateVec = Vector::Ones( 1 );
 
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
@@ -239,8 +237,8 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
 
 	// 3. y <= -1 && x <= 1 (safe)
-	badStateMat = Matrix::Zero( 2, 3 );
-	badStateMat << 0, 1, 0, 1, 0, 0;
+	badStateMat = Matrix::Zero( 2, 2 );
+	badStateMat << 0, 1, 1, 0;
 	badStateVec = Vector::Zero( 2 );
 	badStateVec << -1, 1;
 
@@ -260,7 +258,7 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	std::map<const hypro::Location<Number>*, hypro::Condition<Number>> localBadStates;
 
 	// 1. l0, y <= -4 (safe)
-	badStateMat = Matrix::Zero( 1, 3 );
+	badStateMat = Matrix::Zero( 1, 2 );
 	badStateMat( 0, 1 ) = 1;
 	badStateVec = -4 * Vector::Ones( 1 );
 	hypro::Condition<Number> badState( badStateMat, badStateVec );
@@ -285,7 +283,7 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
 
 	// 3. l1, x >= 3 (unsafe)
-	badStateMat = Matrix::Zero( 1, 3 );
+	badStateMat = Matrix::Zero( 1, 2 );
 	badStateMat( 0, 0 ) = -1;
 	badStateVec = -3 * Vector::Ones( 1 );
 	badState = hypro::Condition<Number>( badStateMat, badStateVec );

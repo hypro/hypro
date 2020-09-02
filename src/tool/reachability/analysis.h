@@ -4,6 +4,7 @@
 #include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/LTIAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <hypro/datastructures/HybridAutomaton/State.h>
 #include <hypro/datastructures/reachability/PreprocessingInformation.h>
 #include <hypro/datastructures/reachability/Settings.h>
@@ -18,7 +19,7 @@ using namespace hypro;
 
 using FullState = hypro::apply<hypro::State, concat<TypeList<Number, CarlPolytope<Number>>, RepresentationsList<Number, Converter<Number>>>>;
 
-using PolytopalState = hypro::apply<hypro::State, PolytopeTypesList>;
+using PolytopalState = hypro::apply<hypro::State, PolytopeTypesList<Number, Converter<Number>>>;
 
 struct AnalysisResult {
 	std::vector<hypro::PlotData<FullState>> plotData{};
