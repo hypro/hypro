@@ -81,11 +81,11 @@ class linearFlow {
 		if ( isTimed() ) {
 			return DynamicType::timed;
 		}
-		if ( isSingular() ) {
-			return DynamicType::singular;
-		}
 		if ( isDiscrete() ) {
 			return DynamicType::discrete;
+		}
+		if ( isSingular() ) {
+			return DynamicType::singular;
 		}
 		return DynamicType::linear;
 	}
