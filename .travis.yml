@@ -64,6 +64,13 @@ jobs:
           packages: [*packages_base, g++-9, lcov, gcovr]
       env: COMPILER=g++-9 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-9 CXX=g++-9
     - os: linux
+      compiler: g++-9
+      addons:
+        apt:
+          sources: [*sources_base]
+          packages: [*packages_base, g++-9, lcov, gcovr]
+      env: COMPILER=g++-9 CC=gcc-9 CXX=g++-9
+    - os: linux
       compiler: clang++-5.0
       addons:
         apt:
