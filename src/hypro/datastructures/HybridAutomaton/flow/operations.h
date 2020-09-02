@@ -30,6 +30,17 @@ bool isTimed( const T& f ) {
 }
 
 template <typename T>
+bool isSingular( const T& f ) {
+#ifdef HYPRO_LOGGING
+	bool singular = std::visit( flowIsSingularVisitor(), f );
+	DEBUG( "hypro.flow", ": " << singular );
+	return singular;
+#else
+	return std::visit( flowIsSingularVisitor(), f );
+#endif
+}
+
+template <typename T>
 bool isDiscrete( const T& f ) {
 #ifdef HYPRO_LOGGING
 	bool discrete = std::visit( flowIsDiscreteVisitor(), f );

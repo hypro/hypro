@@ -38,6 +38,13 @@ struct flowIsTimedVisitor {
 	}
 };
 
+struct flowIsSingularVisitor {
+	template <typename F>
+	inline bool operator()( const F& flow ) const {
+		return flow.isSingular();
+	}
+};
+
 struct flowIsDiscreteVisitor {
 	template <typename F>
 	inline bool operator()( const F& flow ) const {
