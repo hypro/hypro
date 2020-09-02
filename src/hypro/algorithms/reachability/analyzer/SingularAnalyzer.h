@@ -13,9 +13,9 @@ namespace hypro {
 struct SingularSuccess {};
 
 /**
- * @brief Class which implements a forward reachability analysis method for rectangular automata
+ * @brief Class which implements a forward reachability analysis method for singular automata.
  * @details Requires the usage of a suitable state set representation, e.g., carlPolytope.
- * @tparam Representation
+ * @tparam Representation The used state set representation.
  */
 template <typename Representation>
 class SingularAnalyzer {
@@ -24,18 +24,35 @@ class SingularAnalyzer {
   public:
 	using SingularResult = AnalysisResult<SingularSuccess, Failure<Representation>>;
 
-	/// default constructor (deleted)
+	/**
+	 * @brief      Default constructor (deleted).
+	 */
 	SingularAnalyzer() = delete;
-	/// constructor from automaton and settings
+
+	/**
+	 * @brief      Constructor from automaton and analysis settings.
+	 */
 	SingularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
 		, mReachTree() {
 	}
-	/// main method for reachability analysis
+	/**
+	 * @brief      Main method for reachability analysis. Calls the method @ref forwardRun.
+	 * @return     SAFE if no bad state intersection is found and UNKNOWN otherwise.
+	 */
 	REACHABILITY_RESULT run();
+
+	/**
+	 * @brief      Execute forward reachability result.
+	 * @return     SAFE if no bad state intersection is found and UNKNOWN otherwise.
+	 */
 	REACHABILITY_RESULT forwardRun();
-	/// getter for computed flowpipes
+
+	/**
+	 * @brief      Get the computed flowpipes.
+	 * @return     A vector holding the already computed flowpipes.
+	 */
 	const std::vector<Flowpipe<Representation>>& getFlowpipes() const { return mFlowpipes; }
 
   protected:
