@@ -55,7 +55,7 @@ var NAVTREEINDEX =
 "dir_fc2999d7bd6c3c285a592feb8f9838cf.html",
 "structbetter__enums_1_1optional.html#a06f8ac8fbec180fc99e1a0af2e61309c",
 "structhypro_1_1_trafo_data.html#ac3ed9953a8f25b70ca45a3c6857109d5",
-"util_2typetraits_8h_source.html"
+"vertex_enumeration_8h_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

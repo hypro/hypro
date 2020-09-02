@@ -1,9 +1,5 @@
 var NAVTREEINDEX17 =
 {
-"util_2typetraits_8h_source.html":[9,0,1,0,3,18],
-"util_8cpp_source.html":[9,0,1,0,0,4,2,4,6],
-"utility_8h_source.html":[9,0,1,0,0,4,2,1,11],
-"vertex_enumeration_8h.html":[9,0,1,0,0,0,5],
 "vertex_enumeration_8h_source.html":[9,0,1,0,0,0,5],
 "vertex_enumeration_8tpp_source.html":[9,0,1,0,0,0,6],
 "visitors_8h_source.html":[9,0,1,0,1,0,1,7],
