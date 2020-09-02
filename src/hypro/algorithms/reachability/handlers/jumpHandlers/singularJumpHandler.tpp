@@ -13,8 +13,6 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 		DEBUG( "hydra.worker", "Apply jump on " << statesVec.size() << " states." );
 		for ( const auto& state : statesVec ) {
 			// copy state - as there is no aggregation, the containing set and timestamp is already valid
-			// TODO: Why copy?
-			assert( !state.getTimestamp().isEmpty() );
 			Representation newState( state );
 
 			// apply reset function
@@ -43,16 +41,17 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 template <typename Representation>
 void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr ) const {
 	if ( !transitionPtr->getReset().empty() ) {
-		assert( transitionPtr->getReset().getMatrix().size() == 0 && "Singular automata do not support linear resets." );
+		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );
 
 		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
-			VPolytope<Number> projectedSet = Converter<Number>::toVPolytope( stateSet );
+			std::vector<std::size_t> projectOutDimensions;
+			HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );
 			std::vector<Halfspace<Number>> newConstraints;
 			for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
 				if ( !intervalReset.mIntervals[i].isEmpty() ) {
-					// non-empty intervals represent some reset -> project out dimension, memorize new interval bounds
-					projectedSet = projectedSet.project( { { i } } );
+					// non-empty intervals represent some reset different from identity -> project out dimension, memorize new interval bounds
+					projectOutDimensions.push_back( i );
 					// create and store new interval bounds
 					vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
 					normal( i ) = Number( 1 );
@@ -62,11 +61,12 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 				}
 			}
 			// add interval bounds as new constraints
-			HPolytope<Number> hpoly = Converter<Number>::toHPolytope( projectedSet );
-			hpoly.insert( newConstraints.begin(), newConstraints.end() );
+			projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
+			std::cout << "projectedSet dimension: " << projectedSet.dimension() << ", newConstraints: " << newConstraints << std::endl;
+			projectedSet.insert( newConstraints.begin(), newConstraints.end() );
 
 			// convert back and assign to original representation type
-			convert( hpoly, stateSet );
+			convert( projectedSet, stateSet );
 		}
 	}
 }

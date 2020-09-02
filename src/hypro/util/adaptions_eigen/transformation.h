@@ -61,7 +61,7 @@ matrix_t<Number> removeCol( const matrix_t<Number>& original, IdxType colIndex )
 	if ( colIndex == 0 ) {
 		return original.block( 0, 1, original.rows(), original.cols() - 1 );
 	}
-	if ( colIndex == original.cols() - 1 ) {
+	if ( Eigen::Index( colIndex ) == original.cols() - 1 ) {
 		return original.block( 0, 0, original.rows(), original.cols() - 1 );
 	}
 	matrix_t<Number> res = matrix_t<Number>( original.rows(), original.cols() - 1 );
