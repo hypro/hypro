@@ -1,41 +1,7 @@
-#include "Reach.h"
+//#include "Reach.h"
 
 namespace hypro {
 namespace reachability {
-
-using clock = std::chrono::high_resolution_clock;
-using timeunit = std::chrono::microseconds;
-
-template <typename Number, typename ReacherSettings, typename State>
-Reach<Number, ReacherSettings, State>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings )
-	: mAutomaton( _automaton )
-	, mSettings( _settings )
-	, mCurrentLevel( 0 )
-	, mReachabilityTree( std::make_unique<ReachTree<State>>( new ReachTreeNode<State>() ) )
-	, mIntersectedBadStates( false ) {
-	assert( mSettings.timeBound >= 0 );
-}
-
-template <typename Number, typename ReacherSettings, typename State>
-void Reach<Number, ReacherSettings, State>::setInitialStates( std::vector<State>&& initialStates ) {
-	for ( auto& s : initialStates ) {
-		s.setTimestamp( carl::Interval<tNumber>( 0 ) );
-		ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( s );
-		treeNode->setParent( mReachabilityTree->getRoot() );
-		mReachabilityTree->getRoot()->addChild( treeNode );
-		mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, treeNode ) ) );
-	}
-	mInitialStatesSet = true;
-}
-
-template <typename Number, typename ReacherSettings, typename State>
-void Reach<Number, ReacherSettings, State>::addInitialState( State&& initialState ) {
-	initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
-	ReachTreeNode<State>* treeNode = new ReachTreeNode<State>( initialState );
-	treeNode->setParent( mReachabilityTree->getRoot() );
-	mReachabilityTree->getRoot()->addChild( treeNode );
-	mWorkingQueue.enqueue( std::make_unique<TaskType>( std::make_pair( mCurrentLevel, treeNode ) ) );
-}
 
 template <typename Number, typename ReacherSettings, typename State>
 const std::map<typename Reach<Number, ReacherSettings, State>::NodePtr, typename Reach<Number, ReacherSettings, State>::flowpipe_t>& Reach<Number, ReacherSettings, State>::computeForwardReachability() {
@@ -63,7 +29,6 @@ const std::map<typename Reach<Number, ReacherSettings, State>::NodePtr, typename
 		mCurrentLevel = nextInitialSet->first;
 		INFO( "hypro.reacher", "Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second->getState().getLocation()->getName() );
 		assert( int( mCurrentLevel ) <= mSettings.jumpDepth );
-		TRACE( "hypro.reacher", "Obtained set of type " << nextInitialSet->second->getState().getSetType() << ", requested type is " << mType );
 		flowpipe_t newFlowpipe = computeForwardTimeClosure( nextInitialSet->second );
 
 		if ( !newFlowpipe.empty() ) {
@@ -125,18 +90,6 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 
 		// Set after linear transformation
 		State nextSegment;
-#ifdef USE_SYSTEM_SEPARATION
-		State autonomPart = currentSegment;
-#ifdef USE_ELLIPSOIDS
-		// Easy to addapt to any State use ellipsoid for the idea of my masterthesis here
-		Ellipsoid<Number> nonautonomPart( mBloatingFactor, currentSegment.dimension() );
-		Ellipsoid<Number> totalBloating = nonautonomPart;
-#else
-		Ellipsoid<Number> nonautonomPartAsEllispsoid( mBloatingFactor, currentSegment.dimension() );
-		State nonautonomPart = State( nonautonomPartAsEllispsoid );
-		State totalBloating = nonautonomPart;
-#endif
-#endif
 #ifdef REACH_DEBUG
 		if ( !noFlow ) {
 			INFO( "hypro.reacher", "--- Loop entered ---" );
@@ -158,28 +111,9 @@ typename Reach<Number, ReacherSettings, State>::flowpipe_t Reach<Number, Reacher
 			}
 
 			// perform linear transformation on the last segment of the flowpipe
-#ifdef USE_SYSTEM_SEPARATION
-			autonomPart = autonomPart.partiallyApplyTimeStep( ConstraintSet<Number>( std::get<2>( initialSetup ), std::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
-#ifdef USE_ELLIPSOIDS
-			if ( mBloatingFactor != 0 ) {
-				Representation temp = Representation( totalBloating );
-				nextSegment = autonomPart.minkowskiSum( temp );
-			} else {
-				nextSegment = autonomPart;
-			}
-#else
-			if ( mBloatingFactor != 0 ) {
-				nextSegment = autonomPart.minkowskiSum( totalBloating );
-			} else {
-				nextSegment = autonomPart;
-			}
-#endif
-			// nonautonomPart = nonautonomPart.linearTransformation( std::get<2>(initialSetup), vector_t<Number>::Zero(autonomPart.dimension()));
-			nonautonomPart = nonautonomPart.linearTransformation( std::get<2>( initialSetup ) );
-			totalBloating = totalBloating.minkowskiSum( nonautonomPart );
-#else
+
 			nextSegment = currentSegment.partiallyApplyTimeStep( ConstraintSet<Number>( std::get<2>( initialSetup ), std::get<3>( initialSetup ) ), mSettings.timeStep, 0 );
-#endif
+
 			// extend flowpipe (only if still within Invariant of location)
 			std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( currentTreeNode->getState().getLocation()->getInvariant() );
 
