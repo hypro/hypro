@@ -1,5 +1,6 @@
 var NAVTREEINDEX14 =
 {
+"dir_fc0efe5d2249fba2a29c6d003d9b04e9.html":[9,0,1,0,1,0],
 "dir_fc2999d7bd6c3c285a592feb8f9838cf.html":[9,0,1,0,0,4,0],
 "dir_fd4700aaeaadb223111da03ce650c1b7.html":[9,0,1,0,0,3],
 "discrete_bad_state_handler_8h_source.html":[9,0,1,0,0,4,2,0,1],
@@ -17,24 +18,24 @@ var NAVTREEINDEX14 =
 "enum_8h_source.html":[9,0,1,0,3,8,0,0],
 "enum__default__ctor_8h_source.html":[9,0,1,0,3,8,0,1],
 "example_box_8cpp-example.html":[10,0],
-"examples.html":[10],
 "examples.html":[1],
+"examples.html":[10],
 "features.html":[0],
 "files.html":[9,0],
 "flags_8h_source.html":[9,0,1,0,6],
 "flow_8h_source.html":[9,0,1,0,1,0,1,1],
 "for__each_8h_source.html":[9,0,1,0,3,7,0],
 "forward_declarations_8h_source.html":[9,0,1,0,0,4,2,7],
-"functions.html":[8,3,0],
 "functions.html":[8,3,0,0],
+"functions.html":[8,3,0],
 "functions_0x7e.html":[8,3,0,22],
 "functions_b.html":[8,3,0,1],
 "functions_c.html":[8,3,0,2],
 "functions_d.html":[8,3,0,3],
 "functions_e.html":[8,3,0,4],
 "functions_f.html":[8,3,0,5],
-"functions_func.html":[8,3,1,0],
 "functions_func.html":[8,3,1],
+"functions_func.html":[8,3,1,0],
 "functions_func_0x7e.html":[8,3,1,21],
 "functions_func_b.html":[8,3,1,1],
 "functions_func_c.html":[8,3,1,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX14 =
 "structbetter__enums_1_1map.html#af6a524709691d7d372e90fb6d8e074c9":[8,0,0,3,5],
 "structbetter__enums_1_1map__compare.html":[8,0,0,4],
 "structbetter__enums_1_1map__compare_3_01const_01char_01_5_01_4.html":[8,0,0,5],
-"structbetter__enums_1_1map__compare_3_01const_01wchar__t_01_5_01_4.html":[8,0,0,6],
-"structbetter__enums_1_1optional.html":[8,0,0,7]
+"structbetter__enums_1_1map__compare_3_01const_01wchar__t_01_5_01_4.html":[8,0,0,6]
 };

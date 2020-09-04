@@ -1135,6 +1135,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:65: warning: Member preorder(NodeType &node) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:70: warning: Member preorder(std::vector< NodeType > &nodes) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:77: warning: Member preorder(std::vector< NodeType * > &nodePtrs) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeUtil.h:5: warning: Member getNumberNodes(R &root) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:83: warning: Member operator<<(std::ostream &_ostr, const Ridge< Number > &_f) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:7: warning: Member BETTER_ENUM(boxSetting_name, int, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff) struct BoxLinearOptimizationOn (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.cpp:5: warning: Member reduceIntervalsNumberRepresentation(std::vector< carl::Interval< mpq_class >> &intervals, unsigned limit) (function) of namespace hypro is not documented.

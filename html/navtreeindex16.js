@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"structhypro_1_1_trafo_data.html#a9d2719056b65d00430d8eba9e0150548":[8,0,2,268,0],
 "structhypro_1_1_trafo_data.html#ac3ed9953a8f25b70ca45a3c6857109d5":[8,0,2,268,3],
 "structhypro_1_1_trafo_data.html#aca4ad4f868cec5bce52540d4e1e383dd":[8,0,2,268,2],
 "structhypro_1_1_trafo_data.html#afcbef4e6a217dcf61c42cafad1b4939a":[8,0,2,268,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX16 =
 "util_2linear_optimization_2_strategy_8h_source.html":[9,0,1,0,3,1,10],
 "util_2typetraits_8h_source.html":[9,0,1,0,3,18],
 "util_8cpp_source.html":[9,0,1,0,0,4,2,4,6],
-"utility_8h_source.html":[9,0,1,0,0,4,2,1,11],
-"vertex_enumeration_8h.html":[9,0,1,0,0,0,5]
+"utility_8h_source.html":[9,0,1,0,0,4,2,1,11]
 };

@@ -24,5 +24,6 @@ var dir_f695c0e486b1567b2450488137a0ccfa =
     [ "TreeNode.h", "_tree_node_8h_source.html", null ],
     [ "TreeNodev2.h", "_tree_nodev2_8h_source.html", null ],
     [ "TreeStatistic.h", "_tree_statistic_8h_source.html", null ],
-    [ "TreeTraversal.h", "_tree_traversal_8h_source.html", null ]
+    [ "TreeTraversal.h", "_tree_traversal_8h_source.html", null ],
+    [ "TreeUtil.h", "_tree_util_8h_source.html", null ]
 ];

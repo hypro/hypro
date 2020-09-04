@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"structbetter__enums_1_1optional.html":[8,0,0,7],
 "structbetter__enums_1_1optional.html#a06f8ac8fbec180fc99e1a0af2e61309c":[8,0,0,7,5],
 "structbetter__enums_1_1optional.html#a1fc8bd647f687bafcf2b77652a0f3500":[8,0,0,7,3],
 "structbetter__enums_1_1optional.html#a6b6c2ec649f33370031ce00cfc891b14":[8,0,0,7,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "structhypro_1_1_task.html#afed891aad92ac271ffa8fd9696712167":[8,0,2,245,0],
 "structhypro_1_1_template_polyhedron_default.html":[8,0,2,250],
 "structhypro_1_1_trafo_data.html":[8,0,2,268],
-"structhypro_1_1_trafo_data.html#a967b814075975c5cb27b03bcd2c1438c":[8,0,2,268,1],
-"structhypro_1_1_trafo_data.html#a9d2719056b65d00430d8eba9e0150548":[8,0,2,268,0]
+"structhypro_1_1_trafo_data.html#a967b814075975c5cb27b03bcd2c1438c":[8,0,2,268,1]
 };

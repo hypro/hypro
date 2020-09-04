@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classhypro_1_1_finish_with_discrete_processing_exception.html#ad88a623b91bde6e89cfacb1a2b68145e":[8,0,2,66,2],
 "classhypro_1_1_flowpipe.html":[8,0,2,75],
 "classhypro_1_1_flowpipe.html#a0c3cdda5bb32c0bc23818772b94eae01":[8,0,2,75,10],
 "classhypro_1_1_flowpipe.html#a0d482670d7817d6c55741afddba2c9f6":[8,0,2,75,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classhypro_1_1_halfspace.html#a688afe4cfaa561608cdad09ae2d3a968":[8,0,2,106,20],
 "classhypro_1_1_halfspace.html#a742b925958778e8c422c4922d372a92e":[8,0,2,106,26],
 "classhypro_1_1_halfspace.html#a751c7e58d55b313f6b1886e5524cfa77":[8,0,2,106,10],
-"classhypro_1_1_halfspace.html#a79950604785a9328d1804ffcbd062a5e":[8,0,2,106,12],
-"classhypro_1_1_halfspace.html#a8fff4736952b821ea77f2aed25038022":[8,0,2,106,39]
+"classhypro_1_1_halfspace.html#a79950604785a9328d1804ffcbd062a5e":[8,0,2,106,12]
 };

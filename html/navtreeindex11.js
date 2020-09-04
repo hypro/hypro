@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classhypro_1_1_transition.html#af353ec3f6a604f2cfc722e127178f14d":[8,0,2,272,4],
 "classhypro_1_1_transition.html#af49b9b263aa42e9e09a458b19ca17589":[8,0,2,272,32],
 "classhypro_1_1_transition.html#af734f1ea648d115c53430971a3171202":[8,0,2,272,24],
 "classhypro_1_1_tree_iterator.html":[8,0,2,273],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "classhypro_1_1_vertex_enumeration.html#ada520b106a28f40077920855663673a8":[8,0,2,289,26],
 "classhypro_1_1_vertex_enumeration.html#ae1b8481c7f01d10a611a37476b325ee5":[8,0,2,289,17],
 "classhypro_1_1_vertex_enumeration.html#ae5e671dc1451c4cefececcc9787430d4":[8,0,2,289,21],
-"classhypro_1_1_vertex_enumeration.html#ae9bacc4195ea797b5c3e967e0cb9df5c":[8,0,2,289,9],
-"classhypro_1_1_vertex_enumeration.html#aefd671c1f352990ea6c39c7b3dfd9c91":[8,0,2,289,16]
+"classhypro_1_1_vertex_enumeration.html#ae9bacc4195ea797b5c3e967e0cb9df5c":[8,0,2,289,9]
 };

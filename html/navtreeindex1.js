@@ -40,6 +40,7 @@ var NAVTREEINDEX1 =
 "_tree_nodev2_8h_source.html":[9,0,1,0,1,1,22],
 "_tree_statistic_8h_source.html":[9,0,1,0,1,1,23],
 "_tree_traversal_8h_source.html":[9,0,1,0,1,1,24],
+"_tree_util_8h_source.html":[9,0,1,0,1,1,25],
 "_type_list_8h_source.html":[9,0,1,0,3,8,1,3],
 "_typed_timing_vector_8h_source.html":[9,0,1,0,1,1,0,15],
 "_union_op_8h_source.html":[9,0,1,0,2,12,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classhypro_1_1_carl_polytope_t.html#adad598d71546d75ed2f1e03dd0e9f392":[6,1,5,33],
 "classhypro_1_1_carl_polytope_t.html#ae0fdde4044f25569498ff042a57af5b8":[6,1,5,11],
 "classhypro_1_1_carl_polytope_t.html#ae5d9f6188cf40b874476c4763c677a6b":[6,1,5,8],
-"classhypro_1_1_carl_polytope_t.html#aec2129a8ccc6e58ee1121364927fe2d0":[6,1,5,29],
-"classhypro_1_1_carl_polytope_t.html#aedab521ef017f7c5b9d003c2cbd2bc5a":[6,1,5,36]
+"classhypro_1_1_carl_polytope_t.html#aec2129a8ccc6e58ee1121364927fe2d0":[6,1,5,29]
 };
