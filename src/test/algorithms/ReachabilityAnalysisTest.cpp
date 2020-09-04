@@ -102,13 +102,10 @@ TEST_F( ReachabilityAnalysisTest, ReacherConstruction ) {
 
 TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots{};
-	std::transform( this->bball_ha.getInitialStates().begin(), this->bball_ha.getInitialStates().end(),
-					std::back_inserter( roots ), []( auto const& locCond ) {
-						auto const& [location, condition] = locCond;
-						return hypro::ReachTreeNode<hypro::Box<Number>>{
-							  location, hypro::Box<Number>{ condition.getMatrix(), condition.getVector() }, { 0, 0 } };
-					} );
+	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
+		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
 	using tNumber = hypro::tNumber;
 	hypro::FixedAnalysisParameters fixedParameters;
@@ -127,9 +124,9 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 		  hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, fixedParameters, analysisParameters, roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
-	auto flowpipes = reacher.computeForwardReachability();
+	auto reachabilityResult = reacher.computeForwardReachability();
 
 	// EXPECT_EQ( std::size_t( 3 ), flowpipes.size() );
 	// the first jump happens somewhat around 1.45
-	// EXPECT_TRUE( flowpipes.begin()->second.back().getTimestamp().contains( hypro::tNumber( 1.45 ) ) );
+	EXPECT_TRUE( roots.front().getFlowpipe().size() == 145 );
 }
