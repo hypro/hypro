@@ -14,6 +14,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		RangeTest.cpp
 		StateTest.cpp
 		StateVisitorTest.cpp
+		TreeTest.cpp
 		#StrategyTest.cpp
 		HybridAutomataTest.cpp
 		##HybridAutomataOutputTest.cpp
