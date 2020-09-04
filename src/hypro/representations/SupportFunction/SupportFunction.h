@@ -74,8 +74,8 @@ class SupportFunctionT : private GeometricObjectBase {
 	matrix_t<Number> matrix() const;
 	vector_t<Number> vector() const;
 
-	void removeRedundancy();
-	void reduceNumberRepresentation() {}
+	void removeRedundancy() const;
+	void reduceNumberRepresentation() const {}
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
