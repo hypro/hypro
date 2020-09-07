@@ -10,14 +10,14 @@
 namespace hypro {
 
 struct AnalysisParameters {
-	tNumber timeStep = 0;												   /// the used time step size/// the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
+	tNumber timeStep = 0;												   /// the used time step size
 	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   /// the forced aggregation settings
 	int clustering = -1;												   /// if clustering is used: number of clusters
 	representation_name representation_type = representation_name::UNDEF;  /// type of representation
 	int representation_setting = 0;										   /// used settings for the representation
 	bool uniformBloating = false;
-	int timeStepFactor = 0;
-	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
+	int timeStepFactor = 0;												  /// the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
+	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  /// method of reachability analysis
 };
 
 struct FixedAnalysisParameters {
@@ -26,8 +26,8 @@ struct FixedAnalysisParameters {
 #if HYPRO_USE_PPL
 	unsigned long pplDenominator{ defaultPPLDenominator };
 #endif
-	tNumber fixedTimeStep = 0;
-	TimePoint localTimeHorizonScaled = 0;
+	tNumber fixedTimeStep = 0;	/// a time step that all timesteps of the analysis parameters are multiples of, i.e. fixedTimeStep * timeStepFactor = timeStep.
+								/// computed on construction of the setting as the (fractional) gcd of the time steps
 };
 
 struct PlottingSettings {
