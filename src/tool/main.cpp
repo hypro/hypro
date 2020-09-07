@@ -45,13 +45,15 @@ int main( int argc, char const* argv[] ) {
 	auto const& plotSettings = settings.plotting();
 	auto& plt = Plotter<Number>::getInstance();
 	for ( std::size_t pic = 0; pic < plotSettings.plotDimensions.size(); ++pic ) {
-		std::cout << "Prepare plot " << pic + 1 << "/" << plotSettings.plotDimensions.size() << "." << std::endl;
+		assert( plotSettings.plotDimensions[pic].size() == 2 );
+		std::cout << "Prepare plot "
+				  << "(" << pic + 1 << "/" << plotSettings.plotDimensions.size() << ") for dimensions " << plotSettings.plotDimensions[pic].front() << ", " << plotSettings.plotDimensions[pic].back() << "." << std::endl;
 		plt.setFilename( plotSettings.plotFileNames[pic] );
 		std::size_t segmentCount = 0;
 
 		for ( const auto& segment : result.plotData ) {
 			std::cout << "\r" << segmentCount++ << "/" << result.plotData.size() << "..." << std::flush;
-			plt.addObject( segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices() );
+			plt.addObject( reduceToDimensions( segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices(), plotSettings.plotDimensions[pic] ) );
 		}
 
 		plt.plot2d( plotSettings.plottingFileType );  // writes to .plt file for pdf creation
