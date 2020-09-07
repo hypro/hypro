@@ -49,8 +49,8 @@ namespace hypro {
 		if(ctx->plotsetting().size() >= 1){
 			for(const auto& p : ctx->plotsetting()){
 				if(p->VARIABLE().size() >= 1){
-					std::vector<std::size_t> plotDimTupel = visit(p);
-					plotDims.push_back(plotDimTupel);
+					std::vector<std::size_t> plotDimTuple = visit(p);
+					plotDims.push_back(plotDimTuple);
 				}
 			}
 		}
@@ -130,7 +130,7 @@ namespace hypro {
   			}
   			if(!found){
   				std::cerr << "ERROR: variable " << culprit << " in gnuplot octagon has not been defined in state var." << std::endl;
-          exit(0);
+          exit(1);
   			}
   		}
 
@@ -154,7 +154,7 @@ namespace hypro {
   		for(std::size_t i=0; i < varCount.size(); i++){
   			if(varCount[i] > 1){
   				std::cerr << "ERROR: Variable " << vars[i] << "has been mentioned multiple times in gnuplot octagon. Please mention every variable at most one time." << std::endl;
-          exit(0);
+          exit(1);
   			}
   		}
 
@@ -167,6 +167,7 @@ namespace hypro {
   				}
   			}
   		}
+
   		return res;
   	}
 
