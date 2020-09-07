@@ -1259,7 +1259,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.cpp:68: warning: Member HSVtoRGB(const std::vector< double > &color) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.cpp:134: warning: Member adjustSaturation(const std::vector< std::size_t > &rgbColor, double factor) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.cpp:140: warning: Member adjustSaturation(std::size_t rgbColor, double factor) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h:21: warning: Member file_exists(const std::string &filename) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h:22: warning: Member file_exists(const std::string &filename) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.h:31: warning: Member reduceToDimensions(const std::vector< Point< N >> &vertices, const std::vector< std::size_t > &dims) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h:23: warning: Member toContainer(Range< T > &r) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h:28: warning: Member selectFirstConsecutiveRange(const T &in, std::function< bool(typename T::value_type)> cmp) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:24: warning: Member sample(const SetType &in, unsigned k=0) (function) of namespace hypro is not documented.

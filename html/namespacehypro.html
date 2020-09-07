@@ -2140,6 +2140,10 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>adjustSaturati
 <tr class="memitem:a791b385f01472365060febb371d703f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a791b385f01472365060febb371d703f9"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>file_exists</b> (const std::string &amp;filename)</td></tr>
 <tr class="separator:a791b385f01472365060febb371d703f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9456de38f194e7008843432ca1642b5b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a9456de38f194e7008843432ca1642b5b"></a>
+template&lt;typename N &gt; </td></tr>
+<tr class="memitem:a9456de38f194e7008843432ca1642b5b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; N &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceToDimensions</b> (const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; N &gt;&gt; &amp;vertices, const std::vector&lt; std::size_t &gt; &amp;dims)</td></tr>
+<tr class="separator:a9456de38f194e7008843432ca1642b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d75843a6fe56dac83cf35ff0df9a389"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7d75843a6fe56dac83cf35ff0df9a389"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a7d75843a6fe56dac83cf35ff0df9a389"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toContainer</b> (<a class="el" href="classhypro_1_1_range.html">Range</a>&lt; T &gt; &amp;r)</td></tr>
@@ -2264,7 +2268,7 @@ template&lt;typename Number &gt; </td></tr>
 <td class="fieldname">
 aggregation</td>
 <td class="fielddoc">
-the used time step size/// the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep </td></tr>
+the used time step size </td></tr>
 <tr><td class="fieldtype">
 <a class="anchor" id="aec764955210067c3eab3a538cd9ba71e"></a>int</td>
 <td class="fieldname">
@@ -2276,7 +2280,7 @@ the forced aggregation settings </td></tr>
 <td class="fieldname">
 reachability_analysis_method</td>
 <td class="fielddoc">
-method of reachability analysis </td></tr>
+the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep </td></tr>
 <tr><td class="fieldtype">
 <a class="anchor" id="aa65155691c065601013c0db4f1c72915"></a>int</td>
 <td class="fieldname">
@@ -2699,12 +2703,6 @@ jumpDepth</td>
 <a class="anchor" id="aad894fcfd43eddaf1bdbf30d61fe26e5"></a><a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a></td>
 <td class="fieldname">
 localTimeHorizon</td>
-<td class="fielddoc">
-</td></tr>
-<tr><td class="fieldtype">
-<a class="anchor" id="ab7cf0f195857a549b1d8f08045352a8a"></a><a class="el" href="namespacehypro.html#ac564b74a73fbf98d65f0af66de77e159">TimePoint</a></td>
-<td class="fieldname">
-localTimeHorizonScaled</td>
 <td class="fielddoc">
 </td></tr>
 <tr><td class="fieldtype">
