@@ -1,6 +1,7 @@
 #include "../defines.h"
 #include "algorithms/reachability/Reach.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/reachability/TreeUtil.h"
 #include "gtest/gtest.h"
 #include <cassert>
 
@@ -129,4 +130,5 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	// EXPECT_EQ( std::size_t( 3 ), flowpipes.size() );
 	// the first jump happens somewhat around 1.45
 	EXPECT_TRUE( roots.front().getFlowpipe().size() == 145 );
+	EXPECT_EQ( std::size_t( 4 ), hypro::getNumberNodes( roots.front() ) );
 }
