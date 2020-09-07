@@ -94,5 +94,5 @@ class Statistician : public carl::Singleton<Statistician> {
 	hypro::statistics::Statistician::getInstance().stopTimer( name );
 #define EVALUATE_BENCHMARK_RESULT( name )                             \
 	hypro::statistics::Statistician::getInstance().stopTimer( name ); \
-	std::cout << name << ": " << hypro::statistics::Statistician::getInstance().getTimer( name );
+	std::cout << name << ": " << hypro::statistics::Statistician::getInstance().getTimer( name ) << std::endl;
 #endif

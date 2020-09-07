@@ -73,7 +73,7 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 
 template <typename State>
 std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
-	START_BENCHMARK_OPERATION( Verification );
+	START_BENCHMARK_OPERATION( "Verification" );
 	SingularAnalyzer<hypro::VPolytope<Number>> analyzer{ automaton, setting };
 	auto result = analyzer.run();
 
@@ -83,7 +83,7 @@ std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& auto
 	} else {
 		std::cout << "The model is safe." << std::endl;
 	}
-	EVALUATE_BENCHMARK_RESULT( Verification );
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};

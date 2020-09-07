@@ -88,7 +88,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 	, mDimension( 0 )
 	, mNonRedundant( true ) {
 	mEmptyState = points.empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
-	START_BENCHMARK_OPERATION( "HPOLYVERTICESCONSTRUCTOR" )
+	START_BENCHMARK_OPERATION( "HPoly_vertices_constructor" )
 	// skip
 	if ( points.empty() ) {
 		EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
