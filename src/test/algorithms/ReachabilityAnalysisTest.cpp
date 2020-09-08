@@ -88,7 +88,6 @@ TEST_F( ReachabilityAnalysisTest, ReacherConstruction ) {
 	fixedParameters.jumpDepth = 3;
 	fixedParameters.localTimeHorizon = 5;
 	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
-	fixedParameters.localTimeHorizonScaled = 5000;
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
@@ -113,7 +112,6 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	fixedParameters.jumpDepth = 3;
 	fixedParameters.localTimeHorizon = 5;
 	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
-	fixedParameters.localTimeHorizonScaled = 5000;
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
@@ -131,4 +129,5 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	// the first jump happens somewhat around 1.45
 	EXPECT_TRUE( roots.front().getFlowpipe().size() == 145 );
 	EXPECT_EQ( std::size_t( 4 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }
