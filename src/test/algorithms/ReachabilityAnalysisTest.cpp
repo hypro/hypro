@@ -93,10 +93,11 @@ TEST_F( ReachabilityAnalysisTest, ReacherConstruction ) {
 	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
 	analysisParameters.representation_type = hypro::representation_name::polytope_h;
-	analysisParameters.timeStepFactor = 1;
 
-	auto reacher = hypro::reachability::Reach<hypro::HPolytope<Number>>( this->bball_ha, fixedParameters,
-																		 analysisParameters, roots );
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::HPolytope<Number>>( this->bball_ha, settings.fixedParameters(),
+																		 settings.strategy().front(), roots );
 	SUCCEED();
 }
 
@@ -116,11 +117,12 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
-	analysisParameters.representation_type = hypro::representation_name::box;
-	analysisParameters.timeStepFactor = 1;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
 
-	auto reacher =
-		  hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, fixedParameters, analysisParameters, roots );
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
+																   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();

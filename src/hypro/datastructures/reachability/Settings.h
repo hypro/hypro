@@ -9,15 +9,17 @@
 
 namespace hypro {
 
+class Settings;
+
 struct AnalysisParameters {
-	tNumber timeStep = 0;												   ///< the used time step size
+	tNumber timeStep = 0;												   ///< time step size for time-successor computation
 	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;						   ///< the forced aggregation settings
 	int clustering = -1;												   ///< if clustering is used: number of clusters
 	representation_name representation_type = representation_name::UNDEF;  ///< type of representation
 	int representation_setting = 0;										   ///< used settings for the representation
 	bool uniformBloating = false;
-	int timeStepFactor = 0;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
 	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
+	int timeStepFactor = 0;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
 };
 
 struct FixedAnalysisParameters {
@@ -48,7 +50,6 @@ class Settings {
 		, mStrategy( strategy ) {
 		if ( strategy.empty() ) return;
 		// calculate gcd of the strategies timesteps
-
 		mpz_class numerator_gcd = mStrategy.front().timeStep.get_num();
 		mpz_class denominator_lcm = mStrategy.front().timeStep.get_den();
 
