@@ -38,7 +38,7 @@ var classhypro_1_1_support_function_new_t =
     [ "multiEvaluate", "classhypro_1_1_support_function_new_t.html#a0eda41a6dcf138bd05594c9f2c7de620", null ],
     [ "operator=", "classhypro_1_1_support_function_new_t.html#ac65cfbf5fa3dcce1393b255cc618cd38", null ],
     [ "operator=", "classhypro_1_1_support_function_new_t.html#a0c2027a1c24247361590fc6b38b401fc", null ],
-    [ "project", "classhypro_1_1_support_function_new_t.html#a792e8708a75c57581b2df37b07d5841f", null ],
+    [ "projectOn", "classhypro_1_1_support_function_new_t.html#a47a48ed27d0b578563f569b5ae473ec9", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1_support_function_new_t.html#ae10615a797b96058b91e974271a48738", null ],
     [ "reduceRepresentation", "classhypro_1_1_support_function_new_t.html#a0c7043313549bb2574802b8d58610228", null ],
     [ "removeRedundancy", "classhypro_1_1_support_function_new_t.html#a56a9994ad2368065dd2f4bffbdb3e203", null ],

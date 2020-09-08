@@ -44,7 +44,7 @@ var classhypro_1_1_support_function_t =
     [ "operator=", "classhypro_1_1_support_function_t.html#a850b67aa813d17188af45c452a34153f", null ],
     [ "polytope", "classhypro_1_1_support_function_t.html#a33f7476d855cfe35e5e53a6e979c36c9", null ],
     [ "print", "classhypro_1_1_support_function_t.html#a4ce1eef88d35d0aa36174cd73576aa99", null ],
-    [ "project", "classhypro_1_1_support_function_t.html#a44ce6143eddb0eab1beb154cef7a7b8c", null ],
+    [ "projectOn", "classhypro_1_1_support_function_t.html#aae2a38df87323410e882e62fd8ea51b6", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1_support_function_t.html#a2a9b4ab26e95dc457f81cbb2a853081b", null ],
     [ "reduceRepresentation", "classhypro_1_1_support_function_t.html#a1beee2b99f7a5f440edc300bfec26e02", null ],
     [ "removeRedundancy", "classhypro_1_1_support_function_t.html#a9c7a976aceb97fa6be726a2acbdcf94a", null ],

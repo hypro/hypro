@@ -202,9 +202,9 @@ template&lt;typename N  = Number, carl::EnableIf&lt; std::is_same&lt; N, double 
 <tr class="memitem:a5cd50785f167eeca74122d1c489fe1ea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_halfspace.html#a5cd50785f167eeca74122d1c489fe1ea">intersection</a> (Number &amp;_result, const <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &amp;_vector) const </td></tr>
 <tr class="memdesc:a5cd50785f167eeca74122d1c489fe1ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of a vector with the plane.  <a href="#a5cd50785f167eeca74122d1c489fe1ea">More...</a><br /></td></tr>
 <tr class="separator:a5cd50785f167eeca74122d1c489fe1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0be9b7152b0430c13ee225f812ca3696"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_halfspace.html#a0be9b7152b0430c13ee225f812ca3696">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:a0be9b7152b0430c13ee225f812ca3696"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the halfspace on the given dimensions. Note that this corresponds to a projection of the normal vector without any re-scaling.  <a href="#a0be9b7152b0430c13ee225f812ca3696">More...</a><br /></td></tr>
-<tr class="separator:a0be9b7152b0430c13ee225f812ca3696"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77cfd871b72c7d5e8f9d29949287a16e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_halfspace.html#a77cfd871b72c7d5e8f9d29949287a16e">projectOn</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:a77cfd871b72c7d5e8f9d29949287a16e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the halfspace on the given dimensions. Note that this corresponds to a projection of the normal vector without any re-scaling.  <a href="#a77cfd871b72c7d5e8f9d29949287a16e">More...</a><br /></td></tr>
+<tr class="separator:a77cfd871b72c7d5e8f9d29949287a16e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb68c9ddd3207672710de8517ba263c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_halfspace.html#abb68c9ddd3207672710de8517ba263c5">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
 <tr class="memdesc:abb68c9ddd3207672710de8517ba263c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the linear transformation of the plane.  <a href="#abb68c9ddd3207672710de8517ba263c5">More...</a><br /></td></tr>
 <tr class="separator:abb68c9ddd3207672710de8517ba263c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1045,7 +1045,7 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="_halfspace_8h_source.html#l00113">113</a> of file <a class="el" href="_halfspace_8h_source.html">Halfspace.h</a>.</p>
 
-<p>References <a class="el" href="_halfspace_8tpp_source.html#l00171">hypro::Halfspace&lt; Number &gt;::affineTransformation()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00304">hypro::Halfspace&lt; Number &gt;::contains()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00116">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00324">hypro::Halfspace&lt; Number &gt;::exactContains()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00333">hypro::Halfspace&lt; Number &gt;::holds()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00127">hypro::Halfspace&lt; Number &gt;::intersection()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00187">hypro::Halfspace&lt; Number &gt;::intersectionVector()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00089">hypro::Halfspace&lt; Number &gt;::invert()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00156">hypro::Halfspace&lt; Number &gt;::linearTransformation()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00074">hypro::Halfspace&lt; Number &gt;::normal()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00096">hypro::Halfspace&lt; Number &gt;::offset()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00146">hypro::Halfspace&lt; Number &gt;::project()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00121">hypro::Halfspace&lt; Number &gt;::projectPointOnPlane()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00084">hypro::Halfspace&lt; Number &gt;::setNormal()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00106">hypro::Halfspace&lt; Number &gt;::setOffset()</a>, and <a class="el" href="_halfspace_8tpp_source.html#l00111">hypro::Halfspace&lt; Number &gt;::signedDistance()</a>.</p>
+<p>References <a class="el" href="_halfspace_8tpp_source.html#l00171">hypro::Halfspace&lt; Number &gt;::affineTransformation()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00304">hypro::Halfspace&lt; Number &gt;::contains()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00116">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00324">hypro::Halfspace&lt; Number &gt;::exactContains()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00333">hypro::Halfspace&lt; Number &gt;::holds()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00127">hypro::Halfspace&lt; Number &gt;::intersection()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00187">hypro::Halfspace&lt; Number &gt;::intersectionVector()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00089">hypro::Halfspace&lt; Number &gt;::invert()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00156">hypro::Halfspace&lt; Number &gt;::linearTransformation()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00074">hypro::Halfspace&lt; Number &gt;::normal()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00096">hypro::Halfspace&lt; Number &gt;::offset()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00146">hypro::Halfspace&lt; Number &gt;::projectOn()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00121">hypro::Halfspace&lt; Number &gt;::projectPointOnPlane()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00084">hypro::Halfspace&lt; Number &gt;::setNormal()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00106">hypro::Halfspace&lt; Number &gt;::setOffset()</a>, and <a class="el" href="_halfspace_8tpp_source.html#l00111">hypro::Halfspace&lt; Number &gt;::signedDistance()</a>.</p>
 
 <p>Referenced by <a class="el" href="_halfspace_8h_source.html#l00078">hypro::Halfspace&lt; Number &gt;::sizeOfHalfspace()</a>.</p>
 
@@ -1241,14 +1241,14 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0be9b7152b0430c13ee225f812ca3696"></a>
+<a class="anchor" id="a77cfd871b72c7d5e8f9d29949287a16e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt; <a class="el" href="classhypro_1_1_halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::project </td>
+          <td class="memname"><a class="el" href="classhypro_1_1_halfspace.html">Halfspace</a>&lt; Number &gt; <a class="el" href="classhypro_1_1_halfspace.html">hypro::Halfspace</a>&lt; Number &gt;::projectOn </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
@@ -1268,7 +1268,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="_halfspace_8tpp_source.html#l00146">146</a> of file <a class="el" href="_halfspace_8tpp_source.html">Halfspace.tpp</a>.</p>
 
-<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00258">hypro::project()</a>.</p>
+<p>References <a class="el" href="adaptions__eigen_8h_source.html#l00258">hypro::projectOn()</a>.</p>
 
 <p>Referenced by <a class="el" href="_halfspace_8h_source.html#l00113">hypro::Halfspace&lt; Number &gt;::isInteger()</a>.</p>
 

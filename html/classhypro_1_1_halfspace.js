@@ -31,7 +31,7 @@ var classhypro_1_1_halfspace =
     [ "normal", "classhypro_1_1_halfspace.html#a39a89f784278ce0eb36d702dc37be97d", null ],
     [ "offset", "classhypro_1_1_halfspace.html#a9076c2f33a04cac26a219d324acbccaf", null ],
     [ "offset", "classhypro_1_1_halfspace.html#a42d9a6ef991aa63ed2e7a5b9598d9281", null ],
-    [ "project", "classhypro_1_1_halfspace.html#a0be9b7152b0430c13ee225f812ca3696", null ],
+    [ "projectOn", "classhypro_1_1_halfspace.html#a77cfd871b72c7d5e8f9d29949287a16e", null ],
     [ "projectPointOnPlane", "classhypro_1_1_halfspace.html#a11f687c27d17271bf945558e0e42c124", null ],
     [ "removeRedundancy", "classhypro_1_1_halfspace.html#a0f1b1674a6bc28e92e8402efca56d019", null ],
     [ "setNormal", "classhypro_1_1_halfspace.html#a37412da1ef224814a1bef59a76948d70", null ],

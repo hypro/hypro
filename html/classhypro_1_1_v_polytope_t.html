@@ -135,6 +135,9 @@ Public Types</h2></td></tr>
 <tr class="memitem:af7eaddfaa395b22218720b263ae27611"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7eaddfaa395b22218720b263ae27611"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>pointVector</b> = std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&gt;</td></tr>
 <tr class="separator:af7eaddfaa395b22218720b263ae27611"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adef41bd57c4073a189fc218fb080c2ef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adef41bd57c4073a189fc218fb080c2ef"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Rays</b> = std::set&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:adef41bd57c4073a189fc218fb080c2ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a494fc319c9d42111438241757e202ae2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a494fc319c9d42111438241757e202ae2"></a>
 typedef S&#160;</td><td class="memItemRight" valign="bottom"><b>Settings</b></td></tr>
 <tr class="separator:a494fc319c9d42111438241757e202ae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -176,9 +179,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a038efe49528d22be12c2665613d2462e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a038efe49528d22be12c2665613d2462e"></a>
 <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vector</b> () const </td></tr>
 <tr class="separator:a038efe49528d22be12c2665613d2462e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26941ecfc6d297e02fb360a0057025d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26941ecfc6d297e02fb360a0057025d2"></a>
-<a class="el" href="classhypro_1_1_v_polytope_t.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="separator:a26941ecfc6d297e02fb360a0057025d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3b582fd0fb4027bf3e4e93afc20ccb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_v_polytope_t.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#ae3b582fd0fb4027bf3e4e93afc20ccb4">projectOut</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:ae3b582fd0fb4027bf3e4e93afc20ccb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a projection where the passed dimensions are projected out.  <a href="#ae3b582fd0fb4027bf3e4e93afc20ccb4">More...</a><br /></td></tr>
+<tr class="separator:ae3b582fd0fb4027bf3e4e93afc20ccb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4998a9d7aba0317a1e8b962d2895520b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4998a9d7aba0317a1e8b962d2895520b"></a>
+<a class="el" href="classhypro_1_1_v_polytope_t.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>projectOn</b> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="separator:a4998a9d7aba0317a1e8b962d2895520b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcc2db1ec650bde2ccf1906fba0e9d38"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abcc2db1ec650bde2ccf1906fba0e9d38"></a>
 <a class="el" href="classhypro_1_1_v_polytope_t.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>assignIntervals</b> (const std::map&lt; std::size_t, carl::Interval&lt; Number &gt;&gt; &amp;) const </td></tr>
 <tr class="separator:abcc2db1ec650bde2ccf1906fba0e9d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,12 +253,14 @@ std::vector&lt; <a class="el" href="structhypro_1_1_evaluation_result.html">Eval
 <tr class="memitem:a6f3e4acc11ae10b497021d8b3839208b"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#a6f3e4acc11ae10b497021d8b3839208b">supremum</a> () const </td></tr>
 <tr class="memdesc:a6f3e4acc11ae10b497021d8b3839208b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the supremum of the set according to the infty norm.  <a href="#a6f3e4acc11ae10b497021d8b3839208b">More...</a><br /></td></tr>
 <tr class="separator:a6f3e4acc11ae10b497021d8b3839208b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b10d464f47e71a118121c5fd197e0f3"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1_cone.html">Cone</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#a1b10d464f47e71a118121c5fd197e0f3">cone</a> () const </td></tr>
-<tr class="memdesc:a1b10d464f47e71a118121c5fd197e0f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cone of this.  <a href="#a1b10d464f47e71a118121c5fd197e0f3">More...</a><br /></td></tr>
-<tr class="separator:a1b10d464f47e71a118121c5fd197e0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5be174f9698497695fd665891735b633"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#a5be174f9698497695fd665891735b633">setCone</a> (const <a class="el" href="classhypro_1_1_cone.html">Cone</a>&lt; Number &gt; &amp;_cone)</td></tr>
-<tr class="memdesc:a5be174f9698497695fd665891735b633"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly sets the cone.  <a href="#a5be174f9698497695fd665891735b633">More...</a><br /></td></tr>
-<tr class="separator:a5be174f9698497695fd665891735b633"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9516e6e03083930cf279aa96d514d011"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9516e6e03083930cf279aa96d514d011"></a>
+const Rays &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#a9516e6e03083930cf279aa96d514d011">rays</a> () const </td></tr>
+<tr class="memdesc:a9516e6e03083930cf279aa96d514d011"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for generating rays <br /></td></tr>
+<tr class="separator:a9516e6e03083930cf279aa96d514d011"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ad219b83b4d54fc41310db936f4d3dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ad219b83b4d54fc41310db936f4d3dd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#a7ad219b83b4d54fc41310db936f4d3dd">setRays</a> (const Rays &amp;<a class="el" href="classhypro_1_1_v_polytope_t.html#a9516e6e03083930cf279aa96d514d011">rays</a>)</td></tr>
+<tr class="memdesc:a7ad219b83b4d54fc41310db936f4d3dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">setter for generating rays <br /></td></tr>
+<tr class="separator:a7ad219b83b4d54fc41310db936f4d3dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f0652a4a7f3b65f034502d9ecf74d88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f0652a4a7f3b65f034502d9ecf74d88"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setNeighbors</b> (const <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &amp;_point, const std::set&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&gt; &amp;_neighbors)</td></tr>
 <tr class="separator:a2f0652a4a7f3b65f034502d9ecf74d88"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,9 +282,14 @@ pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>inse
 <tr class="memitem:accfed35d1e4e854169fd8685b7f2bea3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="accfed35d1e4e854169fd8685b7f2bea3"></a>
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)</td></tr>
 <tr class="separator:accfed35d1e4e854169fd8685b7f2bea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec5bcb9e9075e060cc3151ac06284bb7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec5bcb9e9075e060cc3151ac06284bb7"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
-<tr class="separator:aec5bcb9e9075e060cc3151ac06284bb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d25c2bd37171925f7ad9f84c86ac47e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d25c2bd37171925f7ad9f84c86ac47e"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#a1d25c2bd37171925f7ad9f84c86ac47e">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
+<tr class="memdesc:a1d25c2bd37171925f7ad9f84c86ac47e"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter to the vertices defining this object <br /></td></tr>
+<tr class="separator:a1d25c2bd37171925f7ad9f84c86ac47e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add2375a6b2a3e26c37eebdcd6c290d55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add2375a6b2a3e26c37eebdcd6c290d55"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_v_polytope_t.html#add2375a6b2a3e26c37eebdcd6c290d55">rVertices</a> ()</td></tr>
+<tr class="memdesc:add2375a6b2a3e26c37eebdcd6c290d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for a non-const reference to the vertices. Use only if you know what you are doing. <br /></td></tr>
+<tr class="separator:add2375a6b2a3e26c37eebdcd6c290d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68a001d47ed62c20a91bdd3c73adb1ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68a001d47ed62c20a91bdd3c73adb1ba"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const <a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; &amp;vertex) const </td></tr>
 <tr class="separator:a68a001d47ed62c20a91bdd3c73adb1ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -467,7 +480,7 @@ template&lt;typename Number , typename Converter , typename S &gt; </div>
 
 <p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00056">56</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
 
-<p>References <a class="el" href="_v_polytope_8h_source.html#l00219">hypro::VPolytopeT&lt; Number, Converter, S &gt;::cone()</a>, <a class="el" href="config_8h_source.html#l00049">default_double_comparison_ulps</a>, <a class="el" href="_v_polytope_8h_source.html#l00186">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>, <a class="el" href="_v_polytope_8h_source.html#l00174">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, <a class="el" href="_v_polytope_8h_source.html#l00180">hypro::VPolytopeT&lt; Number, Converter, S &gt;::Empty()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00225">hypro::VPolytopeT&lt; Number, Converter, S &gt;::setCone()</a>.</p>
+<p>References <a class="el" href="config_8h_source.html#l00049">default_double_comparison_ulps</a>, and <a class="el" href="_v_polytope_8h_source.html#l00194">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>.</p>
 
 </div>
 </div>
@@ -540,38 +553,6 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a1b10d464f47e71a118121c5fd197e0f3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename Converter, typename S&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const <a class="el" href="classhypro_1_1_cone.html">Cone</a>&lt;Number&gt;&amp; <a class="el" href="classhypro_1_1_v_polytope_t.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, S &gt;::cone </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns the cone of this. </p>
-<dl class="section return"><dt>Returns</dt><dd>The cone. </dd></dl>
-
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00219">219</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
-
-<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00056">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
-
-</div>
-</div>
 <a class="anchor" id="a8ffedf87f544b9a3fef20388073ac6a0"></a>
 <div class="memitem">
 <div class="memproto">
@@ -597,9 +578,9 @@ template&lt;typename Number , typename Converter , typename S &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the polytope. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00328">328</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00339">339</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
 
-<p>References <a class="el" href="_optimizer_8tpp_source.html#l00122">hypro::Optimizer&lt; Number &gt;::addConstraint()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00293">hypro::Optimizer&lt; Number &gt;::checkConsistency()</a>, <a class="el" href="_v_polytope_8h_source.html#l00186">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>, <a class="el" href="_point_8h_source.html#l00623">hypro::effectiveDimension()</a>, <a class="el" href="_v_polytope_8h_source.html#l00174">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00195">hypro::VPolytopeT&lt; Number, Converter, S &gt;::size()</a>.</p>
+<p>References <a class="el" href="_optimizer_8tpp_source.html#l00122">hypro::Optimizer&lt; Number &gt;::addConstraint()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00293">hypro::Optimizer&lt; Number &gt;::checkConsistency()</a>, <a class="el" href="_v_polytope_8h_source.html#l00194">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>, <a class="el" href="_point_8h_source.html#l00630">hypro::effectiveDimension()</a>, <a class="el" href="_v_polytope_8h_source.html#l00182">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, <a class="el" href="_v_polytope_8h_source.html#l00203">hypro::VPolytopeT&lt; Number, Converter, S &gt;::size()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00291">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vertices()</a>.</p>
 
 </div>
 </div>
@@ -656,9 +637,9 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 <p>Returns the space dimension. </p>
 <dl class="section return"><dt>Returns</dt><dd>The space dimension. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00186">186</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00194">194</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="converter_to_v_polytope_8tpp_source.html#l00021">hypro::computeBoundaryPointsExpensive()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00328">hypro::VPolytopeT&lt; Number, Converter, S &gt;::contains()</a>, <a class="el" href="_v_polytope_8h_source.html#l00225">hypro::VPolytopeT&lt; Number, Converter, S &gt;::setCone()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00568">hypro::VPolytopeT&lt; Number, Converter, S &gt;::supremum()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00056">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="converter_to_v_polytope_8tpp_source.html#l00021">hypro::computeBoundaryPointsExpensive()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00339">hypro::VPolytopeT&lt; Number, Converter, S &gt;::contains()</a>, <a class="el" href="_v_polytope_8h_source.html#l00294">hypro::VPolytopeT&lt; Number, Converter, S &gt;::rVertices()</a>, <a class="el" href="_v_polytope_8h_source.html#l00227">hypro::VPolytopeT&lt; Number, Converter, S &gt;::setRays()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00579">hypro::VPolytopeT&lt; Number, Converter, S &gt;::supremum()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00056">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -688,9 +669,9 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 <p>Checks if the polytope represents the empty set. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if there are no vertices. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00174">174</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00182">182</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00328">hypro::VPolytopeT&lt; Number, Converter, S &gt;::contains()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00207">hypro::VPolytopeT&lt; Number, Converter, S &gt;::intersect()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00432">hypro::VPolytopeT&lt; Number, Converter, S &gt;::unite()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00056">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00339">hypro::VPolytopeT&lt; Number, Converter, S &gt;::contains()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00218">hypro::VPolytopeT&lt; Number, Converter, S &gt;::intersect()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00146">hypro::VPolytopeT&lt; Number, Converter, S &gt;::projectOut()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00443">hypro::VPolytopeT&lt; Number, Converter, S &gt;::unite()</a>.</p>
 
 </div>
 </div>
@@ -720,11 +701,11 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 <p>Constructs the empty polytope. </p>
 <dl class="section return"><dt>Returns</dt><dd>The polytope. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00180">180</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00188">188</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
 
 <p>References <a class="el" href="_v_polytope_8tpp_source.html#l00013">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
 
-<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00432">hypro::VPolytopeT&lt; Number, Converter, S &gt;::unite()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00056">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00146">hypro::VPolytopeT&lt; Number, Converter, S &gt;::projectOut()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00443">hypro::VPolytopeT&lt; Number, Converter, S &gt;::unite()</a>.</p>
 
 </div>
 </div>
@@ -753,11 +734,44 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00207">207</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00218">218</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
 
-<p>References <a class="el" href="_v_polytope_8h_source.html#l00174">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, <a class="el" href="_point_8tpp_source.html#l00078">hypro::Point&lt; Number &gt;::rawCoordinates()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00195">hypro::VPolytopeT&lt; Number, Converter, S &gt;::size()</a>.</p>
+<p>References <a class="el" href="_v_polytope_8h_source.html#l00182">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, <a class="el" href="_point_8tpp_source.html#l00078">hypro::Point&lt; Number &gt;::rawCoordinates()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00203">hypro::VPolytopeT&lt; Number, Converter, S &gt;::size()</a>.</p>
 
-<p>Referenced by <a class="el" href="_v_polytope_8h_source.html#l00093">hypro::VPolytopeT&lt; Number, Converter, S &gt;::~VPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="_v_polytope_8h_source.html#l00094">hypro::VPolytopeT&lt; Number, Converter, S &gt;::~VPolytopeT()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae3b582fd0fb4027bf3e4e93afc20ccb4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter , typename S &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1_v_polytope_t.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, S &gt; <a class="el" href="classhypro_1_1_v_polytope_t.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, S &gt;::projectOut </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dimensions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes a projection where the passed dimensions are projected out. </p>
+<p>Note that this effectively reduces the state space dimension of the object in contrast to other representations. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dimensions</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classhypro_1_1_v_polytope_t.html" title="The class implementing the vertex representation of a convex polytope. ">VPolytopeT</a> </dd></dl>
+
+<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00146">146</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
+
+<p>References <a class="el" href="_v_polytope_8h_source.html#l00182">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00188">hypro::VPolytopeT&lt; Number, Converter, S &gt;::Empty()</a>.</p>
+
+<p>Referenced by <a class="el" href="_v_polytope_8h_source.html#l00094">hypro::VPolytopeT&lt; Number, Converter, S &gt;::~VPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -787,49 +801,9 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 <p>Returns whether the polytope has been reduced (i.e. the set of vertices is minimal). </p>
 <dl class="section return"><dt>Returns</dt><dd>True, if the set of vertices is minimal. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00207">207</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00215">215</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
 
-<p>References <a class="el" href="_v_polytope_8tpp_source.html#l00568">hypro::VPolytopeT&lt; Number, Converter, S &gt;::supremum()</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a5be174f9698497695fd665891735b633"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number, typename Converter, typename S&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1_v_polytope_t.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, S &gt;::setCone </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1_cone.html">Cone</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_cone</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Explicitly sets the cone. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">_cone</td><td>The cone. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00225">225</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
-
-<p>References <a class="el" href="_halfspace_8h_source.html#l00360">hypro::convert()</a>, <a class="el" href="config_8h_source.html#l00049">default_double_comparison_ulps</a>, <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>, <a class="el" href="_v_polytope_8h_source.html#l00186">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>, and <a class="el" href="config_8h_source.html#l00047">fReach_DENOMINATOR</a>.</p>
-
-<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00056">hypro::VPolytopeT&lt; Number, Converter, S &gt;::VPolytopeT()</a>.</p>
+<p>References <a class="el" href="_v_polytope_8tpp_source.html#l00579">hypro::VPolytopeT&lt; Number, Converter, S &gt;::supremum()</a>.</p>
 
 </div>
 </div>
@@ -859,9 +833,9 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 <p>Returns the number of vertices. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of vertices. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00195">195</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00203">203</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
 
-<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00328">hypro::VPolytopeT&lt; Number, Converter, S &gt;::contains()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00207">hypro::VPolytopeT&lt; Number, Converter, S &gt;::intersect()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00432">hypro::VPolytopeT&lt; Number, Converter, S &gt;::unite()</a>.</p>
+<p>Referenced by <a class="el" href="_v_polytope_8tpp_source.html#l00339">hypro::VPolytopeT&lt; Number, Converter, S &gt;::contains()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00218">hypro::VPolytopeT&lt; Number, Converter, S &gt;::intersect()</a>, and <a class="el" href="_v_polytope_8tpp_source.html#l00443">hypro::VPolytopeT&lt; Number, Converter, S &gt;::unite()</a>.</p>
 
 </div>
 </div>
@@ -883,11 +857,11 @@ template&lt;typename Number , typename Converter , typename S &gt; </div>
 <p>Returns the supremum of the set according to the infty norm. </p>
 <dl class="section return"><dt>Returns</dt><dd>The supremum. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00568">568</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00579">579</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
 
-<p>References <a class="el" href="_v_polytope_8h_source.html#l00186">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>, and <a class="el" href="_point_8h_source.html#l00297">hypro::Point&lt; Number &gt;::inftyNorm()</a>.</p>
+<p>References <a class="el" href="_v_polytope_8h_source.html#l00194">hypro::VPolytopeT&lt; Number, Converter, S &gt;::dimension()</a>, <a class="el" href="_point_8h_source.html#l00304">hypro::Point&lt; Number &gt;::inftyNorm()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00291">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vertices()</a>.</p>
 
-<p>Referenced by <a class="el" href="_v_polytope_8h_source.html#l00207">hypro::VPolytopeT&lt; Number, Converter, S &gt;::reduced()</a>.</p>
+<p>Referenced by <a class="el" href="_v_polytope_8h_source.html#l00215">hypro::VPolytopeT&lt; Number, Converter, S &gt;::reduced()</a>.</p>
 
 </div>
 </div>
@@ -917,7 +891,7 @@ template&lt;typename Number, typename Converter, typename S&gt; </div>
 <p>Returns the type. </p>
 <dl class="section return"><dt>Returns</dt><dd>The type. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00201">201</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8h_source.html#l00209">209</a> of file <a class="el" href="_v_polytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -954,9 +928,9 @@ template&lt;typename Number , typename Converter , typename S &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
 
-<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00432">432</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_v_polytope_8tpp_source.html#l00443">443</a> of file <a class="el" href="_v_polytope_8tpp_source.html">VPolytope.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8h_source.html#l00623">hypro::effectiveDimension()</a>, <a class="el" href="_v_polytope_8h_source.html#l00174">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, <a class="el" href="_v_polytope_8h_source.html#l00180">hypro::VPolytopeT&lt; Number, Converter, S &gt;::Empty()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00195">hypro::VPolytopeT&lt; Number, Converter, S &gt;::size()</a>.</p>
+<p>References <a class="el" href="_point_8h_source.html#l00630">hypro::effectiveDimension()</a>, <a class="el" href="_v_polytope_8h_source.html#l00182">hypro::VPolytopeT&lt; Number, Converter, S &gt;::empty()</a>, <a class="el" href="_v_polytope_8h_source.html#l00188">hypro::VPolytopeT&lt; Number, Converter, S &gt;::Empty()</a>, <a class="el" href="_v_polytope_8h_source.html#l00203">hypro::VPolytopeT&lt; Number, Converter, S &gt;::size()</a>, and <a class="el" href="_v_polytope_8h_source.html#l00291">hypro::VPolytopeT&lt; Number, Converter, S &gt;::vertices()</a>.</p>
 
 </div>
 </div>

@@ -9,5 +9,7 @@ var dir_519994d85a4cf46cf1798a8eeb04af9e =
     [ "LTIWorker.h", "_l_t_i_worker_8h_source.html", null ],
     [ "LTIWorker.tpp", "_l_t_i_worker_8tpp_source.html", null ],
     [ "RectangularWorker.h", "_rectangular_worker_8h_source.html", null ],
-    [ "RectangularWorker.tpp", "_rectangular_worker_8tpp_source.html", null ]
+    [ "RectangularWorker.tpp", "_rectangular_worker_8tpp_source.html", null ],
+    [ "SingularWorker.h", "_singular_worker_8h_source.html", null ],
+    [ "SingularWorker.tpp", "_singular_worker_8tpp_source.html", null ]
 ];

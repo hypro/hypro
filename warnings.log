@@ -26,7 +26,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/CEGARAnalyzer.tpp:19: warning: Compound hypro::CEGARAnalyzer< Number, Representations... >::CreateRefinementLevel is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:147: warning: Compound std::hash< hypro::NoneAssignment > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:31: warning: Compound hypro::NoBoxReduction is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:128: warning: Compound Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:129: warning: Compound Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:37: warning: Compound hypro::SupportFunctionNewMorePrecision is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:14: warning: Compound hypro::TPolyFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/TPolyFirstSegmentHandler.h:16: warning: Compound hypro::TPolyFirstSegmentHandler is not documented.
@@ -58,13 +58,13 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectOp.h:22: warning: Compound hypro::RootGrowNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectHalfspaceOp.h:23: warning: Compound hypro::RootGrowNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:57: warning: Compound hypro::SupportFunctionNewLeGuernic is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:19: warning: Compound hypro::TimedValuationSet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:22: warning: Compound hypro::TimedValuationSet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:33: warning: Compound hypro::PlottingSettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:21: warning: Compound hypro::Domain is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.h:30: warning: Compound hypro::RefinementSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h:5: warning: Compound hypro::Range is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:163: warning: Compound hypro::Range is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:7: warning: Compound hypro::IndexedValuationSet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:10: warning: Compound hypro::IndexedValuationSet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:10: warning: Compound hypro::timedElapseFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/timedElapseFirstSegmentHandler.h:7: warning: Compound hypro::timedElapseFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:36: warning: Compound hypro::statistics::AtomicOperationCounter is not documented.
@@ -93,6 +93,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:9: warning: Compound hypro::AnalysisResult is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:27: warning: Compound hypro::flowDynamicsTypeVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h:15: warning: Compound hypro::Label is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:10: warning: Compound hypro::singularJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:23: warning: Compound hypro::FixedAnalysisParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:42: warning: Compound hypro::NoTrafoReduction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:128: warning: Compound std::hash< hypro::AffineTransformation< Number > > is not documented.
@@ -121,11 +122,12 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:32: warning: Compound hypro::DifferenceBoundsT::DBMEntry is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/HierarchicalIntervalVector.h:14: warning: Compound hypro::endPoint is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:35: warning: Compound hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:13: warning: Compound hypro::EnabledSets is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:16: warning: Compound hypro::EnabledSets is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/TemplatePolyhedronContext.h:34: warning: Compound hypro::TemplatePolyhedronContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:34: warning: Compound hypro::IBadStateHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/clp/clp_context.h:12: warning: Compound hypro::clp_context is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZonotopeSetting.h:12: warning: Compound hypro::ZonotopeSetting is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:41: warning: Compound hypro::flowIsSingularVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:288: warning: Compound better_enums::optional is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:9: warning: Compound hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:39: warning: Compound hypro::Settings is not documented.
@@ -167,7 +169,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:377: warning: Compound better_enums::_iterable is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/ltiJumpHandler.h:16: warning: Compound hypro::ltiJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:64: warning: Compound hypro::ltiJumpHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:153: warning: Compound Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:154: warning: Compound Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:35: warning: Compound hypro::Cacheable is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/TypeList.h:24: warning: Compound hypro::concat_i< TypeList< Ts... > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/ltiResetHandler.h:6: warning: Compound hypro::ltiResetHandler is not documented.
@@ -176,7 +178,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/invariantHandlers/discreteInvariantHandler.h:7: warning: Compound hypro::discreteInvariantHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:16: warning: Compound hypro::discreteInvariantHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:7: warning: Compound hypro::ExactQuickhull< Number, Euclidian >::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:25: warning: Compound hypro::JumpSuccessor is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:28: warning: Compound hypro::JumpSuccessor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:1041: warning: Compound better_enums::map_compare< const char * > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:47: warning: Compound hypro::SupportFunctionNewNoReduction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:25: warning: Compound hypro::rep_number_i< Rep< Number, Ts... > > is not documented.
@@ -195,7 +197,7 @@ Please use a more specific name by including a (larger) part of the path!
 
 /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/for_each.h:14: warning: Detected potential recursive class relation between class hypro::detail::gen_seq and base class gen_seq< N-1, N-1, Is... >!
 
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:41: warning: Compound hypro::flowIsDiscreteVisitor is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:48: warning: Compound hypro::flowIsDiscreteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/rectangularGuardHandler.h:5: warning: Compound hypro::rectangularGuardHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:40: warning: Compound hypro::rectangularGuardHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h:8: warning: Compound hypro::LockedFileWriter is not documented.
@@ -236,7 +238,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:14: warning: Compound hypro::detail::ResetVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:1036: warning: Compound better_enums::map_compare is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectHalfspaceOp.h:34: warning: Compound hypro::IntersectHalfspaceOp is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:123: warning: Compound std::hash< hypro::linearFlow< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:135: warning: Compound std::hash< hypro::linearFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/TimingAggregate.h:11: warning: Compound hypro::EventTimingNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingNode.h:12: warning: Compound hypro::EventTimingNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/PolytopeSetting.h:6: warning: Compound hypro::PolytopeSetting is not documented.
@@ -274,27 +276,14 @@ Possible candidates:
   hypro::RectangularContext< State >::RectangularContext()=delete
   hypro::RectangularContext< State >::RectangularContext(const TaskType &t, const Strategy< State > &strat, WorkQueue< TaskType > *localQueue, WorkQueue< TaskType > *localCEXQueue, Flowpipe< State > &localSegments, ReachabilitySettings &settings)
 
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/discreteHandling.tpp:5: warning: documented symbol `bool hypro::reachability::Reach::intersectGuard' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/discreteHandling.tpp:32: warning: documented symbol `void hypro::reachability::Reach::processDiscreteBehaviour' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/discreteHandling.tpp:145: warning: documented symbol `bool hypro::reachability::Reach::checkTransitions' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/discreteHandling.tpp:5: warning: documented symbol `bool hypro::reachability::Reach< Number, ReacherSettings, State >::intersectGuard' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/discreteHandling.tpp:32: warning: documented symbol `void hypro::reachability::Reach< Number, ReacherSettings, State >::processDiscreteBehaviour' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/discreteHandling.tpp:145: warning: documented symbol `bool hypro::reachability::Reach< Number, ReacherSettings, State >::checkTransitions' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h:12: warning: documented symbol `Singleton< HandlerFactory< State > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.tpp:10: warning: documented symbol `hypro::reachability::Reach::Reach' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.tpp:20: warning: no uniquely matching class member found for 
-  template < Number, ReacherSettings, State >
-  void hypro::reachability::Reach::setInitialStates(std::vector< State > &&initialStates)
-
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.tpp:32: warning: no matching class member found for 
-  template < Number, ReacherSettings, State >
-  void hypro::reachability::Reach::addInitialState(State &&initialState)
-
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.tpp:41: warning: no uniquely matching class member found for 
-  template < Number, ReacherSettings, State >
-  const std::map< typename Reach< Number, ReacherSettings, State >::NodePtr, typename Reach< Number, ReacherSettings, State >::flowpipe_t > & hypro::reachability::Reach::computeForwardReachability()
-
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.tpp:78: warning: documented symbol `Reach< Number, ReacherSettings, State >::flowpipe_t hypro::reachability::Reach::computeForwardTimeClosure' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.tpp:43: warning: documented symbol `Reach< Number, ReacherSettings, State >::flowpipe_t hypro::reachability::Reach< Number, ReacherSettings, State >::computeForwardTimeClosure' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/terminationHandling.tpp:7: warning: no uniquely matching class member found for 
   template < Number, ReacherSettings, State >
-  bool hypro::reachability::Reach::intersectBadStates(const State &_state) const
+  bool hypro::reachability::Reach< Number, ReacherSettings, State >::intersectBadStates(const State &_state) const
 
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.tpp:6: warning: documented symbol `hypro::Condition::Condition' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.tpp:15: warning: no uniquely matching class member found for 
@@ -395,11 +384,11 @@ Possible candidates:
 
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.tpp:458: warning: no uniquely matching class member found for 
   template < Number, Representation, Rargs >
-  State< Number, Representation, Rargs... > hypro::State::project(const std::vector< std::size_t > &dimensions, std::size_t I) const
+  State< Number, Representation, Rargs... > hypro::State::projectOn(const std::vector< std::size_t > &dimensions, std::size_t I) const
 
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.tpp:470: warning: no uniquely matching class member found for 
   template < Number, Representation, Rargs >
-  State< Number, Representation, Rargs... > hypro::State::project(const std::pair< std::size_t, std::size_t > &dimensions, std::size_t I) const
+  State< Number, Representation, Rargs... > hypro::State::projectOn(const std::pair< std::size_t, std::size_t > &dimensions, std::size_t I) const
 
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.tpp:480: warning: no uniquely matching class member found for 
   template < Number, Representation, Rargs >
@@ -483,101 +472,101 @@ Possible candidates:
   bool hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >::contains(const OrthogonalPolyhedronT &_other) const ' at line 105 of file /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h
 
 /home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:7: warning: documented symbol `hypro::OrthoplexT::OrthoplexT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:12: warning: documented symbol `hypro::OrthoplexT::OrthoplexT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:17: warning: documented symbol `hypro::OrthoplexT::OrthoplexT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:22: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:11: warning: documented symbol `hypro::OrthoplexT::OrthoplexT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:15: warning: documented symbol `hypro::OrthoplexT::OrthoplexT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:19: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::OrthoplexT::empty() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:27: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:24: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   Number hypro::OrthoplexT::supremum() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:32: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:29: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::vector< Point< Number > > hypro::OrthoplexT::vertices(const matrix_t< Number > &m) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:37: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:34: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   EvaluationResult< Number > hypro::OrthoplexT::evaluate(const vector_t< Number > &_direction, bool) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:42: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:39: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::vector< EvaluationResult< Number > > hypro::OrthoplexT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:47: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:44: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::size_t hypro::OrthoplexT::dimension() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:52: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:49: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   void hypro::OrthoplexT::removeRedundancy()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:57: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:53: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::size_t hypro::OrthoplexT::size() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:62: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:58: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   const OrthoplexT< Number, Converter, Setting > & hypro::OrthoplexT::reduceNumberRepresentation()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:67: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:63: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::pair< CONTAINMENT, OrthoplexT< Number, Converter, Setting > > hypro::OrthoplexT::satisfiesHalfspace(const Halfspace< Number > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:72: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:68: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::pair< CONTAINMENT, OrthoplexT< Number, Converter, Setting > > hypro::OrthoplexT::satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:77: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:73: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
-  OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::project(const std::vector< std::size_t > &dimensions) const
+  OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::projectOn(const std::vector< std::size_t > &dimensions) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:82: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:78: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::linearTransformation(const matrix_t< Number > &A) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:87: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:83: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:92: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:88: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::minkowskiSum(const OrthoplexT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:97: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:93: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::intersect(const OrthoplexT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:102: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:98: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::intersectHalfspace(const Halfspace< Number > &hspace) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:107: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:103: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:112: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:108: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::OrthoplexT::contains(const Point< Number > &point) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:117: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:113: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::OrthoplexT::contains(const OrthoplexT< Number, Converter, Setting > &Orthoplex) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:122: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:118: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::unite(const OrthoplexT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:127: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:123: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   OrthoplexT< Number, Converter, Setting > hypro::OrthoplexT::unite(const std::vector< OrthoplexT< Number, Converter, Setting >> &Orthoplexes)
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:132: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:128: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   void hypro::OrthoplexT::reduceRepresentation()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:137: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Orthoplex/Orthoplex.tpp:132: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   void hypro::OrthoplexT::clear()
 
@@ -627,7 +616,7 @@ Possible candidates:
 
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:356: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
-  PolytopeT< Number, Converter, Setting > hypro::PolytopeT::project(const std::vector< std::size_t > &dimensions) const
+  PolytopeT< Number, Converter, Setting > hypro::PolytopeT::projectOn(const std::vector< std::size_t > &dimensions) const
 
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:370: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
@@ -678,28 +667,28 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:797: warning: documented symbol `Point< Number > hypro::PolytopeT::computeMaxPoint' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:818: warning: documented symbol `Point< Number > hypro::PolytopeT::computeInitVertex' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:835: warning: documented symbol `Point< Number > hypro::PolytopeT::localSearch' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1026: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1063: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const hypro::HPolytopeT< Number, hypro::Converter< Number >, Setting > &rhs) const
 Possible candidates:
-  bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const Point< Number > &point) const ' at line 264 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h
-  bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const vector_t< Number > &vec) const ' at line 265 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h
-  bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const HPolytopeT &rhs) const ' at line 266 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h
+  bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const Point< Number > &point) const ' at line 267 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h
+  bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const vector_t< Number > &vec) const ' at line 268 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h
+  bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const HPolytopeT &rhs) const ' at line 269 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.tpp:369: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.tpp:380: warning: no uniquely matching class member found for 
   template < Number, Converter, S >
   bool hypro::VPolytopeT< Number, Converter, S >::contains(const hypro::VPolytopeT< Number, hypro::Converter< Number >, S > &_other) const
 Possible candidates:
-  bool hypro::VPolytopeT< Number, Converter, S >::contains(const Point< Number > &point) const ' at line 129 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
-  bool hypro::VPolytopeT< Number, Converter, S >::contains(const vector_t< Number > &vec) const ' at line 136 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
-  bool hypro::VPolytopeT< Number, Converter, S >::contains(const VPolytopeT &_other) const ' at line 143 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
+  bool hypro::VPolytopeT< Number, Converter, S >::contains(const Point< Number > &point) const ' at line 137 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
+  bool hypro::VPolytopeT< Number, Converter, S >::contains(const vector_t< Number > &vec) const ' at line 144 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
+  bool hypro::VPolytopeT< Number, Converter, S >::contains(const VPolytopeT &_other) const ' at line 151 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
 
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.tpp:382: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.tpp:393: warning: no uniquely matching class member found for 
   template < Number, Converter, S >
   VPolytopeT< Number, Converter, S > hypro::VPolytopeT< Number, Converter, S >::unite(const hypro::VPolytopeT< Number, hypro::Converter< Number >, S > &rhs) const
 Possible candidates:
-  VPolytopeT hypro::VPolytopeT< Number, Converter, S >::unite(const VPolytopeT &rhs) const ' at line 145 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
-  static VPolytopeT hypro::VPolytopeT< Number, Converter, S >::unite(const std::vector< VPolytopeT > &rhs)' at line 152 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
+  VPolytopeT hypro::VPolytopeT< Number, Converter, S >::unite(const VPolytopeT &rhs) const ' at line 153 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
+  static VPolytopeT hypro::VPolytopeT< Number, Converter, S >::unite(const std::vector< VPolytopeT > &rhs)' at line 160 of file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h
 
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.tpp:30: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
@@ -789,112 +778,112 @@ Possible candidates:
   hypro::SupportFunctionNewT< Number, Converter, Setting >::SupportFunctionNewT(const std::vector< Halfspace< Number >> &hspaces)
 
 /home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:9: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:17: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:37: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:50: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:89: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:105: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:123: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:144: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:164: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:16: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:35: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:47: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:83: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:98: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:115: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:135: warning: documented symbol `hypro::TemplatePolyhedronT::TemplatePolyhedronT' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:154: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::TemplatePolyhedronT::empty() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:197: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:186: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   Number hypro::TemplatePolyhedronT::supremum() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:212: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:201: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::vector< Point< Number > > hypro::TemplatePolyhedronT::vertices(const matrix_t< Number > &) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:224: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:213: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   EvaluationResult< Number > hypro::TemplatePolyhedronT::evaluate(const vector_t< Number > &_direction, bool useExact) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:243: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:232: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::vector< EvaluationResult< Number > > hypro::TemplatePolyhedronT::multiEvaluate(const matrix_t< Number > &_directions, bool useExact) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:283: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:272: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::size_t hypro::TemplatePolyhedronT::dimension() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:289: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:278: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   void hypro::TemplatePolyhedronT::removeRedundancy()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:336: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:325: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::size_t hypro::TemplatePolyhedronT::size() const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:341: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:330: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   const TemplatePolyhedronT< Number, Converter, Setting > & hypro::TemplatePolyhedronT::reduceNumberRepresentation()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:346: warning: documented symbol `std::pair< bool, bool > hypro::TemplatePolyhedronT::checkFullInsideFullOutside' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:369: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:335: warning: documented symbol `std::pair< bool, bool > hypro::TemplatePolyhedronT::checkFullInsideFullOutside' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:358: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::pair< CONTAINMENT, TemplatePolyhedronT< Number, Converter, Setting > > hypro::TemplatePolyhedronT::satisfiesHalfspace(const Halfspace< Number > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:392: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:380: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   std::pair< CONTAINMENT, TemplatePolyhedronT< Number, Converter, Setting > > hypro::TemplatePolyhedronT::satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:449: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:436: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
-  TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::project(const std::vector< std::size_t > &dimensions) const
+  TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::projectOn(const std::vector< std::size_t > &dimensions) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:474: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:460: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::linearTransformation(const matrix_t< Number > &A) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:517: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:502: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:538: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:522: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::minkowskiSum(const TemplatePolyhedronT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:579: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:562: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::intersect(const TemplatePolyhedronT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:605: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:588: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::intersectHalfspace(const Halfspace< Number > &hspace) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:634: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:616: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:715: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:696: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::TemplatePolyhedronT::contains(const Point< Number > &point) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:729: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:710: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::TemplatePolyhedronT::contains(const TemplatePolyhedronT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:752: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:732: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::unite(const TemplatePolyhedronT< Number, Converter, Setting > &rhs) const
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:768: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:748: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::unite(const std::vector< TemplatePolyhedronT< Number, Converter, Setting >> &templatePolyhedrones)
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:795: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:775: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   void hypro::TemplatePolyhedronT::reduceRepresentation()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:837: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:816: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   void hypro::TemplatePolyhedronT::clear()
 
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:847: warning: documented symbol `TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::overapproximate' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:877: warning: no matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:826: warning: documented symbol `TemplatePolyhedronT< Number, Converter, Setting > hypro::TemplatePolyhedronT::overapproximate' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedron.tpp:856: warning: no matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::TemplatePolyhedronT::isBounded() const
 
@@ -940,7 +929,6 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:31: warning: Member BoolMatrix (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:32: warning: Member ExpFunctionTypeStdVector (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:17: warning: Member EXP_FUNCT_TYPE (enumeration) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:29: warning: Member CLANG_WARNING_DISABLE("-Wdeprecated-register") CLANG_WARNING_RESETnamespace hypro (function) of file Reach.h is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:24: warning: Member vVec (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:26: warning: Member vVecIt (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:28: warning: Member vList (typedef) of namespace hypro is not documented.
@@ -1004,19 +992,19 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:298: warning: Member operator->() const  (function) of class better_enums::optional is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:300: warning: Member operator bool() const  (function) of class better_enums::optional is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:302: warning: Member value() const  (function) of class better_enums::optional is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:139: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:140: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:141: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:143: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:144: warning: Member dummy_precision() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:148: warning: Member highest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:149: warning: Member lowest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:154: warning: Member Real (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:155: warning: Member NonInteger (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:156: warning: Member Nested (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:157: warning: Member epsilon() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:158: warning: Member dummy_precision() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:159: warning: Member digits10() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:140: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:141: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:142: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:144: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:145: warning: Member dummy_precision() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:149: warning: Member highest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:150: warning: Member lowest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:155: warning: Member Real (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:156: warning: Member NonInteger (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:157: warning: Member Nested (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:158: warning: Member epsilon() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:159: warning: Member dummy_precision() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:160: warning: Member digits10() (function) of class Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:25: warning: Member Matrix (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:27: warning: Member Vector (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:29: warning: Member DiagonalMatrix (typedef) of namespace hypro is not documented.
@@ -1055,8 +1043,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/conversion/typedefs.h:47: warning: Member TemplatePolyhedron (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:14: warning: Member vectorSet (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:11: warning: Member DefaultRepresentations (typedef) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:27: warning: Member RepresentationsList (typedef) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:30: warning: Member DefaultDispatcher (typedef) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:26: warning: Member PolytopalRepresentations (typedef) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:39: warning: Member RepresentationsList (typedef) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:42: warning: Member PolytopeTypesList (typedef) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/default_dispatch.h:45: warning: Member DefaultDispatcher (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/dispatch_meta.h:54: warning: Member Dispatcher (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:30: warning: Member rep_number (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:42: warning: Member analyzer_rep (typedef) of namespace hypro is not documented.
@@ -1072,12 +1062,12 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Strategy.h:5: warning: Member OptimizerStrategy (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:15: warning: Member sampling_strategy_set (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:18: warning: Member sampling_strategy_interval (enumeration) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:44: warning: Member eliminateCols(const matrix_t< Number > &constraints, const vector_t< Number > constants, const std::vector< Eigen::Index > &cols) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:54: warning: Member eliminateCol(const matrix_t< Number > &constraints, const vector_t< Number > constants, Eigen::Index col) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:44: warning: Member eliminateCol(const matrix_t< Number > &constraints, const vector_t< Number > constants, IdxType col, bool conservative=true) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:104: warning: Member eliminateCols(const matrix_t< Number > &constraints, const vector_t< Number > constants, const std::vector< IdxType > &cols, bool conservative=true) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/qe.h:9: warning: Member eliminateQuantifiers(const FormulaT< Number > &qfree, const QEQuery &quantifiers) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.h:17: warning: Member RefinementSuccess(std::vector< ReachTreeNode< Representation > * >) -> RefinementSuccess< Representation > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.tpp:28: warning: Member ChildNodeGen(Gen *, ReachTreeNode< Rep > *, int) -> ChildNodeGen< Rep > (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:37: warning: Member Failure(ReachTreeNode< Representation > *) -> Failure< Representation > (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:39: warning: Member Failure(ReachTreeNode< Representation > *) -> Failure< Representation > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:11: warning: Member intersect(Representation const &valuationSet, Condition< Number > const &condition) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:16: warning: Member timeTrafoMatrixBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:21: warning: Member timeTrafoVectorBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
@@ -1114,7 +1104,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/operations.h:12: warning: Member getFlowType(const T &f) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/operations.h:17: warning: Member getFlowDimension(const T &f) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/operations.h:22: warning: Member isTimed(const T &f) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/operations.h:33: warning: Member isDiscrete(const T &f) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/operations.h:33: warning: Member isSingular(const T &f) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/operations.h:44: warning: Member isDiscrete(const T &f) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/rectangularOperations.h:8: warning: Member createFlowConstraints(carl::Variable original, carl::Variable primed, carl::Variable t, const carl::Interval< D > &flow) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.tpp:316: warning: Member operator||(const HybridAutomaton< Number > &lhs, const HybridAutomaton< Number > &rhs) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h:11: warning: Member toFlowstarFormat(const matrix_t< Number > &in, const std::map< Eigen::Index, std::string > &varNameMap, const std::string &prefix) (function) of namespace hypro is not documented.
@@ -1135,7 +1126,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:65: warning: Member preorder(NodeType &node) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:70: warning: Member preorder(std::vector< NodeType > &nodes) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:77: warning: Member preorder(std::vector< NodeType * > &nodePtrs) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeUtil.h:5: warning: Member getNumberNodes(R &root) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeUtil.h:6: warning: Member getNumberNodes(R &root) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:83: warning: Member operator<<(std::ostream &_ostr, const Ridge< Number > &_f) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:7: warning: Member BETTER_ENUM(boxSetting_name, int, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff) struct BoxLinearOptimizationOn (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.cpp:5: warning: Member reduceIntervalsNumberRepresentation(std::vector< carl::Interval< mpq_class >> &intervals, unsigned limit) (function) of namespace hypro is not documented.
@@ -1168,11 +1159,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/util.h:118: warning: Member computeWidening(const ConstraintT< N > &constraint) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:17: warning: Member operator<(std::shared_ptr< Halfspace< Number >> _lhs, std::shared_ptr< Halfspace< Number >> _rhs) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:61: warning: Member operator<<(std::ostream &_out, Cone< Number > &_cone) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:443: warning: Member convert(const HPolytopeT< From, Converter, Setting > &in) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:446: warning: Member convert(const HPolytopeT< From, Converter, Setting > &in) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:7: warning: Member BETTER_ENUM(hPolytopeSetting_name, int, HPolytopeSetting, HPolytopeOptimizerCaching, HPolytopeBoundingBoxCaching) struct HPolytopeSetting (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h:8: warning: Member numberOfPointsInHalfspace(const std::vector< Point< N >> &points, const Halfspace< N > &hsp) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:391: warning: Member operator<<(std::ostream &out, const hypro::VPolytopeT< Number, Converter, S > &lhs) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:401: warning: Member convert(const VPolytopeT< From, Converter, S > &in) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:399: warning: Member operator<<(std::ostream &out, const hypro::VPolytopeT< Number, Converter, S > &lhs) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:409: warning: Member convert(const VPolytopeT< From, Converter, S > &in) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h:19: warning: Member contains(std::vector< matrix_t< Number >> list, matrix_t< Number > direction, unsigned int length) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h:54: warning: Member contains(std::vector< matrix_t< Number >> *directions, matrix_t< Number > *direction) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h:90: warning: Member contains(std::vector< matrix_t< Number >> *directions, matrix_t< Number > direction) (function) of namespace hypro is not documented.
@@ -1203,7 +1194,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.tpp:621: warning: Member intersectZonotopeHalfspaceDSearch(const ZonotopeT< Number, Converter, Setting > &inputZonotope, const Halfspace< Number > &hp) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.tpp:748: warning: Member intersectAlamo(const ZonotopeT< Number, Converter, Setting > &inputZonotope, const Halfspace< Number > &hp) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.tpp:774: warning: Member intersectNDProjection(const ZonotopeT< Number, Converter, Setting > &inputZonotope, const Halfspace< Number > &hp, matrix_t< Number > &minMaxOfLine) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:116: warning: Member BETTER_ENUM(AGG_SETTING, int, MODEL, AGG, NO_AGG) enum class REACH_SETTING (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:117: warning: Member BETTER_ENUM(AGG_SETTING, int, MODEL, AGG, NO_AGG) enum class REACH_SETTING (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen_double.cpp:94: warning: Member linearDependent(const vector_t< double > &lhs, const vector_t< double > &rhs) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen_double.cpp:117: warning: Member satisfiesIneqation(const vector_t< double > &constraint, double constant, const vector_t< double > &point) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/transformation.h:10: warning: Member selectRows(const matrix_t< Number > &original, const std::vector< IdxType > &rowIndices) (function) of namespace hypro is not documented.
@@ -1274,14 +1265,14 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/unreachable.h:6: warning: Member unreachable() (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:49: warning: Member convertible (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:53: warning: Member is_exact (variable) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:552: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:603: warning: The following parameters of hypro::operator*(const Point< Number > &_lhs, const Number &_factor) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:559: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:610: warning: The following parameters of hypro::operator*(const Point< Number > &_lhs, const Number &_factor) are not documented:
   parameter '_factor'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:552: warning: argument '_lhs' of command @param is not found in the argument list of hypro::operator*(const Number &_factor, const Point< Number > &_rhs)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:611: warning: The following parameters of hypro::operator*(const Number &_factor, const Point< Number > &_rhs) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:559: warning: argument '_lhs' of command @param is not found in the argument list of hypro::operator*(const Number &_factor, const Point< Number > &_rhs)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:618: warning: The following parameters of hypro::operator*(const Number &_factor, const Point< Number > &_rhs) are not documented:
   parameter '_factor'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:552: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator/(const Point< Number > &_lhs, unsigned _quotient)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:588: warning: The following parameters of hypro::operator/(const Point< Number > &_lhs, unsigned _quotient) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:559: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator/(const Point< Number > &_lhs, unsigned _quotient)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:595: warning: The following parameters of hypro::operator/(const Point< Number > &_lhs, unsigned _quotient) are not documented:
   parameter '_quotient'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:18: warning: Member affineFlow(const affineFlow< Number > &in)=default (function) of class hypro::affineFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:19: warning: Member affineFlow(const matrix_t< Number > &A, const vector_t< Number > &b) (function) of class hypro::affineFlow is not documented.
@@ -1303,8 +1294,9 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:48: warning: Member isIdentity() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:64: warning: Member hasNoFlow() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:80: warning: Member getDynamicsType() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:90: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:101: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:93: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:104: warning: Member isSingular() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:25: warning: Member type() (function) of class hypro::affineFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:23: warning: Member type() (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:13: warning: Member mTranslation (variable) of class hypro::affineFlow is not documented.
@@ -1381,7 +1373,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:268: warning: Member rInterval(std::size_t d) (function) of class hypro::BoxT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:439: warning: Member operator[](unsigned i) (function) of class hypro::BoxT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:490: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:491: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:491: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::BoxT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:493: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &assignments) const  (function) of class hypro::BoxT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:512: warning: Member minkowskiSum(const BoxT &rhs) const  (function) of class hypro::BoxT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:537: warning: Member intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::BoxT is not documented.
@@ -1405,7 +1397,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:55: warning: Member CarlPolytopeT(const matrix_t< Number > &constraints, const vector_t< Number > &constants) (function) of class hypro::CarlPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:57: warning: Member CarlPolytopeT(const std::vector< carl::Interval< Number >> &intervals) (function) of class hypro::CarlPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:61: warning: Member intersect(const CarlPolytopeT &rhs) const  (function) of class hypro::CarlPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:63: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::CarlPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:63: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::CarlPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:65: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::CarlPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:70: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::CarlPolytopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:72: warning: Member minkowskiSum(const CarlPolytopeT &) const  (function) of class hypro::CarlPolytopeT is not documented.
@@ -1515,7 +1507,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:121: warning: Member addConstraint(const vector_t< Number > &normal, Number offset) (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:219: warning: Member satisfiesHalfspace(const Halfspace< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:220: warning: Member satisfiesHalfspaces(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:222: warning: Member project(const std::vector< std::size_t > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:222: warning: Member projectOn(const std::vector< std::size_t > &) const  (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:223: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:225: warning: Member linearTransformation(const matrix_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:226: warning: Member affineTransformation(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
@@ -1787,7 +1779,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:166: warning: Member vertices(const matrix_t< Number > &=matrix_t< Number >::Zero(0, 0)) const  (function) of class hypro::DifferenceBoundsT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:167: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::DifferenceBoundsT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:168: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::DifferenceBoundsT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:169: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::DifferenceBoundsT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:169: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::DifferenceBoundsT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:170: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::DifferenceBoundsT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:174: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::DifferenceBoundsT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:175: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::DifferenceBoundsT is not documented.
@@ -2042,7 +2034,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:15: warning: Member operator()(const F &flow) const  (function) of class hypro::flowDimensionVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:29: warning: Member operator()(const F &flow) const  (function) of class hypro::flowDynamicsTypeVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:8: warning: Member operator()(const F &flow) const  (function) of class hypro::flowHashVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:43: warning: Member operator()(const F &flow) const  (function) of class hypro::flowIsDiscreteVisitor is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:50: warning: Member operator()(const F &flow) const  (function) of class hypro::flowIsDiscreteVisitor is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:43: warning: Member operator()(const F &flow) const  (function) of class hypro::flowIsSingularVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:36: warning: Member operator()(const F &flow) const  (function) of class hypro::flowIsTimedVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:25: warning: Member setStates(const std::vector< Representation > &states) (function) of class hypro::Flowpipe is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:26: warning: Member setStates(std::vector< Representation > &&states) (function) of class hypro::Flowpipe is not documented.
@@ -2089,7 +2082,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:75: warning: Member getSettings() const  (function) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:188: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:189: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::GeneralizedStarT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:190: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::GeneralizedStarT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:190: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:191: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:195: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:196: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::GeneralizedStarT is not documented.
@@ -2262,57 +2255,59 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:25: warning: Member OPTIMIZER_CACHING (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:26: warning: Member NAIVE_ALGORITHMS (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h:27: warning: Member CACHE_BOUNDING_BOX (variable) of class hypro::HPolytopeOptimizerCaching is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:38: warning: Member REDUCTION_STRATEGY (enumeration) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:50: warning: Member HalfspaceVector (typedef) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:52: warning: Member Settings (typedef) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:53: warning: Member NumberType (typedef) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:228: warning: Member constraints() const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:229: warning: Member hasConstraint(const Halfspace< Number > &hplane) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:230: warning: Member removeRedundancy() (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:232: warning: Member heuristic() const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:233: warning: Member reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat=REDUCTION_STRATEGY::DROP) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:234: warning: Member reduce_directed(std::vector< vector_t< Number >> directions, REDUCTION_STRATEGY strat=REDUCTION_STRATEGY::DIRECTED_SMALL) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:235: warning: Member reduceAssign(unsigned _steps=1, REDUCTION_STRATEGY strat=REDUCTION_STRATEGY::DROP) (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:237: warning: Member isBounded(std::vector< vector_t< Number >>) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:240: warning: Member isExtremePoint(const vector_t< Number > &point) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:241: warning: Member isExtremePoint(const Point< Number > &point) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:242: warning: Member evaluate(const vector_t< Number > &_direction) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:243: warning: Member multiEvaluate(const matrix_t< Number > &_direction) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:244: warning: Member multiEvaluate(const matrix_t< Number > &_directions, bool useExact) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:245: warning: Member vertexEnumeration() const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:251: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:252: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:253: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:254: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:258: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:259: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:260: warning: Member minkowskiSum(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:261: warning: Member intersect(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:262: warning: Member intersectHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:263: warning: Member intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:264: warning: Member contains(const Point< Number > &point) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:265: warning: Member contains(const vector_t< Number > &vec) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:266: warning: Member contains(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:267: warning: Member unite(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:269: warning: Member reduceRepresentation() (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:274: warning: Member clear() (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:275: warning: Member print() const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:280: warning: Member operator=(const HPolytopeT< Number, Converter, Setting > &rhs) (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:305: warning: Member operator==(const HPolytopeT< Number, Converter, Setting > &rhs) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:323: warning: Member reduceNumberRepresentation(const std::vector< Point< Number >> &_vertices=std::vector< Point< Number >>(), unsigned limit=fReach_DENOMINATOR) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:398: warning: Member reduceNumberRepresentation(const std::vector< Point< double >> &=std::vector< Point< double >>(), unsigned=fReach_DENOMINATOR) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:435: warning: Member getOptimizer() const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:436: warning: Member setOptimizer(const matrix_t< Number > &mat=matrix_t< Number >::Zero(1, 1), const vector_t< Number > &vec=vector_t< Number >::Zero(1)) const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:437: warning: Member setUpdated(const bool &b) (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:438: warning: Member getUpdated() const  (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:157: warning: Member type() (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:268: warning: Member unite(const std::vector< HPolytopeT > &rhs) (function) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:54: warning: Member type_enum (variable) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:294: warning: Member operator<<(std::ostream &lhs, const HPolytopeT< Number, Converter, Setting > &rhs) (friend) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:313: warning: Member swap(HPolytopeT &a, HPolytopeT &b) (friend) of class hypro::HPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:216: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:216: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:220: warning: The following parameters of hypro::HPolytopeT::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:39: warning: Member REDUCTION_STRATEGY (enumeration) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:51: warning: Member HalfspaceVector (typedef) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:53: warning: Member Settings (typedef) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:54: warning: Member NumberType (typedef) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:229: warning: Member constraints() const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:230: warning: Member hasConstraint(const Halfspace< Number > &hplane) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:231: warning: Member removeRedundancy() (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:233: warning: Member heuristic() const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:234: warning: Member reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat=REDUCTION_STRATEGY::DROP) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:235: warning: Member reduce_directed(std::vector< vector_t< Number >> directions, REDUCTION_STRATEGY strat=REDUCTION_STRATEGY::DIRECTED_SMALL) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:236: warning: Member reduceAssign(unsigned _steps=1, REDUCTION_STRATEGY strat=REDUCTION_STRATEGY::DROP) (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:238: warning: Member isBounded(std::vector< vector_t< Number >>) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:241: warning: Member isExtremePoint(const vector_t< Number > &point) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:242: warning: Member isExtremePoint(const Point< Number > &point) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:243: warning: Member evaluate(const vector_t< Number > &_direction) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:244: warning: Member multiEvaluate(const matrix_t< Number > &_direction) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:245: warning: Member multiEvaluate(const matrix_t< Number > &_directions, bool useExact) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:246: warning: Member vertexEnumeration() const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:252: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:253: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:254: warning: Member projectOut(const std::vector< std::size_t > &dimensions, bool viaLinearTransformation=false) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:255: warning: Member projectOutConservative(const std::vector< std::size_t > &dimensions, bool viaLinearTransformation=false) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:256: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:257: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:261: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:262: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:263: warning: Member minkowskiSum(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:264: warning: Member intersect(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:265: warning: Member intersectHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:266: warning: Member intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:267: warning: Member contains(const Point< Number > &point) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:268: warning: Member contains(const vector_t< Number > &vec) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:269: warning: Member contains(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:270: warning: Member unite(const HPolytopeT &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:272: warning: Member reduceRepresentation() (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:277: warning: Member clear() (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:278: warning: Member print() const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:283: warning: Member operator=(const HPolytopeT< Number, Converter, Setting > &rhs) (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:308: warning: Member operator==(const HPolytopeT< Number, Converter, Setting > &rhs) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:326: warning: Member reduceNumberRepresentation(const std::vector< Point< Number >> &_vertices=std::vector< Point< Number >>(), unsigned limit=fReach_DENOMINATOR) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:401: warning: Member reduceNumberRepresentation(const std::vector< Point< double >> &=std::vector< Point< double >>(), unsigned=fReach_DENOMINATOR) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:438: warning: Member getOptimizer() const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:439: warning: Member setOptimizer(const matrix_t< Number > &mat=matrix_t< Number >::Zero(1, 1), const vector_t< Number > &vec=vector_t< Number >::Zero(1)) const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:440: warning: Member setUpdated(const bool &b) (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:441: warning: Member getUpdated() const  (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:158: warning: Member type() (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:271: warning: Member unite(const std::vector< HPolytopeT > &rhs) (function) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:55: warning: Member type_enum (variable) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:297: warning: Member operator<<(std::ostream &lhs, const HPolytopeT< Number, Converter, Setting > &rhs) (friend) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:316: warning: Member swap(HPolytopeT &a, HPolytopeT &b) (friend) of class hypro::HPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:217: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:217: warning: argument 'iterator' of command @param is not found in the argument list of hypro::HPolytopeT< Number, Converter, Setting >::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h:221: warning: The following parameters of hypro::HPolytopeT::insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end) are not documented:
   parameter 'begin'
   parameter 'end'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:38: warning: Member locationVector (typedef) of class hypro::HybridAutomaton is not documented.
@@ -2541,15 +2536,16 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:48: warning: Member isIdentity() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:64: warning: Member hasNoFlow() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:80: warning: Member getDynamicsType() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:90: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:101: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:93: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:104: warning: Member isSingular() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:23: warning: Member type() (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:12: warning: Member mFlowMatrix (variable) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:13: warning: Member mIsIdentity (variable) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:14: warning: Member mNoFlow (variable) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:105: warning: Member operator==(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:109: warning: Member operator!=(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member operator<<(std::ostream &out, const linearFlow< Number > &in) (friend) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:117: warning: Member operator==(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:121: warning: Member operator!=(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:125: warning: Member operator<<(std::ostream &out, const linearFlow< Number > &in) (friend) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/LinTrafoParameters.h:26: warning: Member LinTrafoParameters(const matrix_t< Number > &_A, const vector_t< Number > &_b, unsigned _power=Setting::LIN_TRANS_REDUCTION_GROUP_SIZE) (function) of class hypro::LinTrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/LinTrafoParameters.h:39: warning: Member matrix() const  (function) of class hypro::LinTrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/LinTrafoParameters.h:44: warning: Member vector() const  (function) of class hypro::LinTrafoParameters is not documented.
@@ -2760,7 +2756,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:330: warning: Member box() const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:331: warning: Member ball() const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:332: warning: Member ellipsoid() const  (function) of class hypro::SupportFunctionContent is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:334: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::SupportFunctionContent is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:334: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:335: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:336: warning: Member minkowskiSum(const std::shared_ptr< SupportFunctionContent< Number, Setting >> &_rhs) const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:337: warning: Member intersect(const std::shared_ptr< SupportFunctionContent< Number, Setting >> &_rhs) const  (function) of class hypro::SupportFunctionContent is not documented.
@@ -2955,52 +2951,52 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:216: warning: Member clear() (function) of class hypro::Plotter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:28: warning: Member pointSet (typedef) of class hypro::Point is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:29: warning: Member coordinateMap (typedef) of class hypro::Point is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:502: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::at(std::size_t _index)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:512: warning: The following parameters of hypro::Point::at(std::size_t _index) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:509: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::at(std::size_t _index)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:519: warning: The following parameters of hypro::Point::at(std::size_t _index) are not documented:
   parameter '_index'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:502: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::at(std::size_t _index) const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:514: warning: The following parameters of hypro::Point::at(std::size_t _index) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:509: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:521: warning: The following parameters of hypro::Point::at(std::size_t _index) const are not documented:
   parameter '_index'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:388: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::hasDimensions(const std::vector< carl::Variable > &_variables) const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:392: warning: The following parameters of hypro::Point::hasDimensions(const std::vector< carl::Variable > &_variables) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:395: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::hasDimensions(const std::vector< carl::Variable > &_variables) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:399: warning: The following parameters of hypro::Point::hasDimensions(const std::vector< carl::Variable > &_variables) const are not documented:
   parameter '_variables'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:374: warning: argument 'boundary' of command @param is not found in the argument list of hypro::Point< Number >::isInBoundary(const Point< Number > &_boundary) const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:378: warning: The following parameters of hypro::Point::isInBoundary(const Point< Number > &_boundary) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:381: warning: argument 'boundary' of command @param is not found in the argument list of hypro::Point< Number >::isInBoundary(const Point< Number > &_boundary) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:385: warning: The following parameters of hypro::Point::isInBoundary(const Point< Number > &_boundary) const are not documented:
   parameter '_boundary'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:241: warning: argument 'b' of command @param is not found in the argument list of hypro::Point< Number >::linearTransformation(const matrix_t< Number > &A) const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator*=(const Number _factor)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:493: warning: The following parameters of hypro::Point::operator*=(const Number _factor) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:248: warning: argument 'b' of command @param is not found in the argument list of hypro::Point< Number >::linearTransformation(const matrix_t< Number > &A) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator*=(const Number _factor)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:500: warning: The following parameters of hypro::Point::operator*=(const Number _factor) are not documented:
   parameter '_factor'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator+=(const Point< Number > &_rhs)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:487: warning: The following parameters of hypro::Point::operator+=(const Point< Number > &_rhs) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator+=(const Point< Number > &_rhs)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:494: warning: The following parameters of hypro::Point::operator+=(const Point< Number > &_rhs) are not documented:
   parameter '_rhs'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator+=(const vector_t< Number > &_rhs)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:488: warning: The following parameters of hypro::Point::operator+=(const vector_t< Number > &_rhs) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator+=(const vector_t< Number > &_rhs)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:495: warning: The following parameters of hypro::Point::operator+=(const vector_t< Number > &_rhs) are not documented:
   parameter '_rhs'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator-() const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator-=(const Point< Number > &_rhs)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:489: warning: The following parameters of hypro::Point::operator-=(const Point< Number > &_rhs) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator-() const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator-=(const Point< Number > &_rhs)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:496: warning: The following parameters of hypro::Point::operator-=(const Point< Number > &_rhs) are not documented:
   parameter '_rhs'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator-=(const vector_t< Number > &_rhs)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: The following parameters of hypro::Point::operator-=(const vector_t< Number > &_rhs) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator-=(const vector_t< Number > &_rhs)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:497: warning: The following parameters of hypro::Point::operator-=(const vector_t< Number > &_rhs) are not documented:
   parameter '_rhs'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator/=(unsigned _quotient)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:492: warning: The following parameters of hypro::Point::operator/=(unsigned _quotient) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator/=(unsigned _quotient)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:499: warning: The following parameters of hypro::Point::operator/=(unsigned _quotient) are not documented:
   parameter '_quotient'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(const Point< Number > &_in)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:494: warning: The following parameters of hypro::Point::operator=(const Point< Number > &_in) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(const Point< Number > &_in)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:501: warning: The following parameters of hypro::Point::operator=(const Point< Number > &_in) are not documented:
   parameter '_in'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(Point< Number > &&_in)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:495: warning: The following parameters of hypro::Point::operator=(Point< Number > &&_in) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(Point< Number > &&_in)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:502: warning: The following parameters of hypro::Point::operator=(Point< Number > &&_in) are not documented:
   parameter '_in'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(const vector_t< Number > &_in)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:496: warning: The following parameters of hypro::Point::operator=(const vector_t< Number > &_in) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(const vector_t< Number > &_in)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:503: warning: The following parameters of hypro::Point::operator=(const vector_t< Number > &_in) are not documented:
   parameter '_in'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:483: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(vector_t< Number > &&_in)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:497: warning: The following parameters of hypro::Point::operator=(vector_t< Number > &&_in) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:490: warning: argument 'The' of command @param is not found in the argument list of hypro::Point< Number >::operator=(vector_t< Number > &&_in)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:504: warning: The following parameters of hypro::Point::operator=(vector_t< Number > &&_in) are not documented:
   parameter '_in'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:308: warning: argument 'PointVec' of command @param is not found in the argument list of hypro::Point< Number >::removeDuplicatePoints(const std::vector< Point< Number >> &pointVec)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:313: warning: The following parameters of hypro::Point::removeDuplicatePoints(const std::vector< Point< Number >> &pointVec) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:315: warning: argument 'PointVec' of command @param is not found in the argument list of hypro::Point< Number >::removeDuplicatePoints(const std::vector< Point< Number >> &pointVec)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:320: warning: The following parameters of hypro::Point::removeDuplicatePoints(const std::vector< Point< Number >> &pointVec) are not documented:
   parameter 'pointVec'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:162: warning: argument '_dim' of command @param is not found in the argument list of hypro::Point< Number >::setCoordinate(std::size_t dimension, const Number &_value)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:166: warning: The following parameters of hypro::Point::setCoordinate(std::size_t dimension, const Number &_value) are not documented:
@@ -3448,6 +3444,16 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:86: warning: Member computeLocationSubspaceTypeMapping(const HybridAutomaton< Number > &ha) (function) of class hypro::SettingsProvider is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:88: warning: Member getLocationTypeMap() (function) of class hypro::SettingsProvider is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:89: warning: Member computeLocationTypeMapping(const HybridAutomaton< Number > &ha) (function) of class hypro::SettingsProvider is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/SingularAnalyzer.h:25: warning: Member SingularResult (typedef) of class hypro::SingularAnalyzer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:15: warning: Member applyJump(const TransitionStateMap &states) (function) of class hypro::singularJumpHandler is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:17: warning: Member applyReset(Representation &state, Transition< Number > *transitionPtr) const  (function) of class hypro::singularJumpHandler is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:19: warning: Member applyReduction(Representation &state) const  (function) of class hypro::singularJumpHandler is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:21: warning: Member applyReverseJump(const TransitionStateMap &states, Transition< Number > *transition, const AnalysisParameters &strategy) (function) of class hypro::singularJumpHandler is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:23: warning: Member applyGuard(Representation &state, Transition< Number > *transitionPtr) const  (function) of class hypro::singularJumpHandler is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/SingularWorker.h:43: warning: Member computeTimePredecessors(const ReachTreeNode< Representation > &task) (function) of class hypro::SingularWorker is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/SingularWorker.h:44: warning: Member computeJumpPredecessors() (function) of class hypro::SingularWorker is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/SingularWorker.h:45: warning: Member getJumpSuccessorSets() const  (function) of class hypro::SingularWorker is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/SingularWorker.h:46: warning: Member getJumpPredecessorSets() const  (function) of class hypro::SingularWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/StatisticWrapper.h:146: warning: argument 'obj' of command @param is not found in the argument list of hypro::StatisticWrapper< Representation >::operator<<(std::ostream &out, const GeometricObjectBase< Number, StatisticWrapper< Representation >> &in)
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/StatisticWrapper.h:151: warning: The following parameters of hypro::StatisticWrapper::operator<<(std::ostream &out, const GeometricObjectBase< Number, StatisticWrapper< Representation >> &in) are not documented:
   parameter 'in'
@@ -3511,7 +3517,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:330: warning: Member box() const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:331: warning: Member ball() const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:332: warning: Member ellipsoid() const  (function) of class hypro::SupportFunctionContent is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:334: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::SupportFunctionContent is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:334: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:335: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:336: warning: Member minkowskiSum(const std::shared_ptr< SupportFunctionContent< Number, Setting >> &_rhs) const  (function) of class hypro::SupportFunctionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:337: warning: Member intersect(const std::shared_ptr< SupportFunctionContent< Number, Setting >> &_rhs) const  (function) of class hypro::SupportFunctionContent is not documented.
@@ -3628,7 +3634,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:79: warning: Member vertices(const matrix_t< Number > &=matrix_t< Number >::Zero(0, 0)) const  (function) of class hypro::SupportFunctionT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:80: warning: Member vertices(const std::vector< vector_t< Number >> &additionalDirections) const  (function) of class hypro::SupportFunctionT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:81: warning: Member supremum() const  (function) of class hypro::SupportFunctionT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:82: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::SupportFunctionT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:82: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::SupportFunctionT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:83: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::SupportFunctionT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:87: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::SupportFunctionT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:88: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::SupportFunctionT is not documented.
@@ -4215,46 +4221,46 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSetting.h:6: warning: Member checkVerticesBeforeConversion (variable) of class hypro::VPolytopeSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSetting.h:7: warning: Member useLpForPointContainment (variable) of class hypro::VPolytopeSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:36: warning: Member pointVector (typedef) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:37: warning: Member Settings (typedef) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:38: warning: Member NumberType (typedef) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:100: warning: Member matrix() const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:104: warning: Member vector() const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:109: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:110: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:114: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:115: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:116: warning: Member minkowskiSum(const VPolytopeT &rhs) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:125: warning: Member intersectHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:126: warning: Member intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:127: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:128: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:129: warning: Member contains(const Point< Number > &point) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:145: warning: Member unite(const VPolytopeT &rhs) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:167: warning: Member evaluate(const vector_t< Number > &direction) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:168: warning: Member multiEvaluate(const matrix_t< Number > &directions, bool useExact=true) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:227: warning: Member setNeighbors(const Point< Number > &_point, const std::set< Point< Number >> &_neighbors) (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:244: warning: Member unsafeSetNeighbors(const std::vector< std::set< unsigned >> &_neighbors) (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:246: warning: Member neighbors(const Point< Number > &_point) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:257: warning: Member insert(const Point< Number > &i) (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:265: warning: Member emplace_back(Point< Number > &&i) (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:273: warning: Member insert(const vector_t< Number > &_coord) (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:280: warning: Member insert(const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end) (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:288: warning: Member vertices(const matrix_t< Number > &=matrix_t< Number >::Zero(0, 0)) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:290: warning: Member hasVertex(const Point< Number > &vertex) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:297: warning: Member hasVertex(const vector_t< Number > &vertex) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:299: warning: Member begin() (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:300: warning: Member begin() const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:301: warning: Member end() (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:302: warning: Member end() const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:304: warning: Member removeRedundancy() (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:307: warning: Member reduceNumberRepresentation(std::size_t limit=fReach_DENOMINATOR) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:352: warning: Member reduceNumberRepresentation(unsigned=fReach_DENOMINATOR) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:354: warning: Member updateNeighbors() (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:383: warning: Member operator=(const VPolytopeT< Number, Converter, S > &rhs)=default (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:384: warning: Member operator=(VPolytopeT< Number, Converter, S > &&rhs)=default (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:385: warning: Member operator==(const VPolytopeT< Number, Converter, S > &rhs) const  (function) of class hypro::VPolytopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:85: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::VPolytopeT< Number, Converter, S >::VPolytopeT(VPolytopeT &&_orig)
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:88: warning: The following parameters of hypro::VPolytopeT::VPolytopeT(VPolytopeT &&_orig) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:37: warning: Member Rays (typedef) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:38: warning: Member Settings (typedef) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:39: warning: Member NumberType (typedef) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:101: warning: Member matrix() const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:105: warning: Member vector() const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:117: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:118: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:122: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:123: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:124: warning: Member minkowskiSum(const VPolytopeT &rhs) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:133: warning: Member intersectHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:134: warning: Member intersectHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:135: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:136: warning: Member satisfiesHalfspaces(const matrix_t< Number > &_mat, const vector_t< Number > &_vec) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:137: warning: Member contains(const Point< Number > &point) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:153: warning: Member unite(const VPolytopeT &rhs) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:175: warning: Member evaluate(const vector_t< Number > &direction) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:176: warning: Member multiEvaluate(const matrix_t< Number > &directions, bool useExact=true) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:229: warning: Member setNeighbors(const Point< Number > &_point, const std::set< Point< Number >> &_neighbors) (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:246: warning: Member unsafeSetNeighbors(const std::vector< std::set< unsigned >> &_neighbors) (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:248: warning: Member neighbors(const Point< Number > &_point) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:259: warning: Member insert(const Point< Number > &i) (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:267: warning: Member emplace_back(Point< Number > &&i) (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:275: warning: Member insert(const vector_t< Number > &_coord) (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:282: warning: Member insert(const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end) (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:298: warning: Member hasVertex(const Point< Number > &vertex) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:305: warning: Member hasVertex(const vector_t< Number > &vertex) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:307: warning: Member begin() (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:308: warning: Member begin() const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:309: warning: Member end() (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:310: warning: Member end() const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:312: warning: Member removeRedundancy() (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:315: warning: Member reduceNumberRepresentation(std::size_t limit=fReach_DENOMINATOR) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:360: warning: Member reduceNumberRepresentation(unsigned=fReach_DENOMINATOR) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:362: warning: Member updateNeighbors() (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:391: warning: Member operator=(const VPolytopeT< Number, Converter, S > &rhs)=default (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:392: warning: Member operator=(VPolytopeT< Number, Converter, S > &&rhs)=default (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:393: warning: Member operator==(const VPolytopeT< Number, Converter, S > &rhs) const  (function) of class hypro::VPolytopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:86: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::VPolytopeT< Number, Converter, S >::VPolytopeT(VPolytopeT &&_orig)
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:89: warning: The following parameters of hypro::VPolytopeT::VPolytopeT(VPolytopeT &&_orig) are not documented:
   parameter '_orig'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:6: warning: Member findDuplicates (variable) of class hypro::WorkQueueDefaultSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h:15: warning: Member addQueue() (function) of class hypro::WorkQueueManager is not documented.
@@ -4296,7 +4302,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:201: warning: Member evaluate(const vector_t< Number > &directions) const  (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:202: warning: Member multiEvaluate(const matrix_t< Number > &directions, bool useExact=true) const  (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:210: warning: Member minkowskiSum(const ZonotopeT &rhs) const  (function) of class hypro::ZonotopeT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:211: warning: Member project(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::ZonotopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:211: warning: Member projectOn(const std::vector< std::size_t > &dimensions) const  (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:212: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:216: warning: Member linearTransformation(const matrix_t< Number > &A) const  (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:217: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const  (function) of class hypro::ZonotopeT is not documented.
@@ -4392,6 +4398,18 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:11: warning: Member mData (variable) of class hypro::qe::CellTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:12: warning: Member mChildren (variable) of class hypro::qe::CellTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:13: warning: Member mParent (variable) of class hypro::qe::CellTreeNode is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:35: warning: Member NodePtr (typedef) of class hypro::reachability::Reach is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:36: warning: Member VerificationResult (typedef) of class hypro::reachability::Reach is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:39: warning: Member mInitialStatesSet (variable) of class hypro::reachability::Reach is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:40: warning: Member mAnalyzer (variable) of class hypro::reachability::Reach is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:41: warning: Member mReachabilityTree (variable) of class hypro::reachability::Reach is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:45: warning: argument '_automaton' of command @param is not found in the argument list of hypro::reachability::Reach< Representation, Analyzer >::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:45: warning: argument '_settings' of command @param is not found in the argument list of hypro::reachability::Reach< Representation, Analyzer >::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:50: warning: The following parameters of hypro::reachability::Reach::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots) are not documented:
+  parameter 'automaton'
+  parameter 'fixedParameters'
+  parameter 'parameters'
+  parameter 'roots'
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:36: warning: Member bloatBoxVisitor(const Box< Number > &box) (function) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:40: warning: Member operator()(const ConcreteType &set) (function) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:32: warning: Member box (variable) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
@@ -4415,11 +4433,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:64: warning: Member operator()(hypro::Cacheable< Content > const &item) const  (function) of class std::hash< hypro::Cacheable< Content > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:435: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:139: warning: Member operator()(const hypro::IntervalAssignment< Number > &reset) const  (function) of class std::hash< hypro::IntervalAssignment< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:124: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:136: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:306: warning: Member operator()(const hypro::Location< Number > &loc) const  (function) of class std::hash< hypro::Location< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:430: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:148: warning: Member operator()(const hypro::NoneAssignment &reset) const  (function) of class std::hash< hypro::NoneAssignment > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:685: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:692: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/rectangular.h:95: warning: Member operator()(const hypro::rectangularFlow< Number > &f) const  (function) of class std::hash< hypro::rectangularFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:132: warning: Member operator()(const hypro::Reset< Number > &reset) const  (function) of class std::hash< hypro::Reset< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:94: warning: Member operator()(const hypro::Ridge< Number > &ridge) const  (function) of class std::hash< hypro::Ridge< Number > > is not documented.

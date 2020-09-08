@@ -5,6 +5,8 @@ var dir_b22059ad2ad3604da29eff8b301e1502 =
     [ "ltiJumpHandler.tpp", "lti_jump_handler_8tpp_source.html", null ],
     [ "rectangularJumpHandler.h", "rectangular_jump_handler_8h_source.html", null ],
     [ "rectangularJumpHandler.tpp", "rectangular_jump_handler_8tpp_source.html", null ],
+    [ "singularJumpHandler.h", "singular_jump_handler_8h_source.html", null ],
+    [ "singularJumpHandler.tpp", "singular_jump_handler_8tpp_source.html", null ],
     [ "timingUtil.h", "timing_util_8h_source.html", null ],
     [ "util.cpp", "util_8cpp_source.html", null ],
     [ "util.h", "algorithms_2reachability_2handlers_2jump_handlers_2util_8h_source.html", null ]

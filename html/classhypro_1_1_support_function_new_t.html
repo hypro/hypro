@@ -248,9 +248,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ac0450ab3e6105efd0a96d3e06e6e638c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0450ab3e6105efd0a96d3e06e6e638c"></a>
 std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1_support_function_new_t.html">SupportFunctionNewT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspaces</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
 <tr class="separator:ac0450ab3e6105efd0a96d3e06e6e638c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a792e8708a75c57581b2df37b07d5841f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_support_function_new_t.html">SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_support_function_new_t.html#a792e8708a75c57581b2df37b07d5841f">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:a792e8708a75c57581b2df37b07d5841f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the projection of the SupportFunction onto the given dimensions.  <a href="#a792e8708a75c57581b2df37b07d5841f">More...</a><br /></td></tr>
-<tr class="separator:a792e8708a75c57581b2df37b07d5841f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47a48ed27d0b578563f569b5ae473ec9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_support_function_new_t.html">SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_support_function_new_t.html#a47a48ed27d0b578563f569b5ae473ec9">projectOn</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:a47a48ed27d0b578563f569b5ae473ec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the projection of the SupportFunction onto the given dimensions.  <a href="#a47a48ed27d0b578563f569b5ae473ec9">More...</a><br /></td></tr>
+<tr class="separator:a47a48ed27d0b578563f569b5ae473ec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa50743e9977d1abb7e74297af3d0ab49"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa50743e9977d1abb7e74297af3d0ab49"></a>
 <a class="el" href="classhypro_1_1_support_function_new_t.html">SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>assignIntervals</b> (const std::map&lt; std::size_t, carl::Interval&lt; Number &gt;&gt; &amp;) const </td></tr>
 <tr class="separator:aa50743e9977d1abb7e74297af3d0ab49"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -598,7 +598,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 <p>Traverses the tree and computes dimensions remaining after all projection operations considered. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector containing the indices of the dimensions remaining </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00862">862</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00861">861</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -627,7 +627,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the given point is contained in the current SupportFunctionNew, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00769">769</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00768">768</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 <p>References <a class="el" href="_support_function_new_8tpp_source.html#l00385">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::evaluate()</a>, and <a class="el" href="_point_8tpp_source.html#l00078">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -660,7 +660,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the given SupportFunctionNew is contained in the current SupportFunctionNew, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00824">824</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00823">823</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -783,7 +783,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00385">385</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="converter_to_v_polytope_8tpp_source.html#l00370">hypro::computeBoundaryPointsExpensive()</a>, and <a class="el" href="_support_function_new_8tpp_source.html#l00769">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::contains()</a>.</p>
+<p>Referenced by <a class="el" href="converter_to_v_polytope_8tpp_source.html#l00370">hypro::computeBoundaryPointsExpensive()</a>, and <a class="el" href="_support_function_new_8tpp_source.html#l00768">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::contains()</a>.</p>
 
 </div>
 </div>
@@ -822,7 +822,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00889">889</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00888">888</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -960,7 +960,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting SupportFunctionNew. </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00731">731</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00730">730</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 <p>Referenced by <a class="el" href="converter_to_v_polytope_8tpp_source.html#l00370">hypro::computeBoundaryPointsExpensive()</a>.</p>
 
@@ -991,7 +991,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting SupportFunctionNew. </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00747">747</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00746">746</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -1021,7 +1021,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The transformed SupportFunction </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00690">690</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00689">689</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -1074,7 +1074,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting minkowskiSum </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00707">707</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00706">706</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -1185,14 +1185,14 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a792e8708a75c57581b2df37b07d5841f"></a>
+<a class="anchor" id="a47a48ed27d0b578563f569b5ae473ec9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number , typename Converter , typename Setting &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_support_function_new_t.html">SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt; <a class="el" href="classhypro_1_1_support_function_new_t.html">hypro::SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt;::project </td>
+          <td class="memname"><a class="el" href="classhypro_1_1_support_function_new_t.html">SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt; <a class="el" href="classhypro_1_1_support_function_new_t.html">hypro::SupportFunctionNewT</a>&lt; Number, <a class="el" href="classhypro_1_1_converter.html">Converter</a>, Setting &gt;::projectOn </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
@@ -1210,7 +1210,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The projected SupportFunction </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00663">663</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00662">662</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -1247,7 +1247,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 <p>Definition at line <a class="el" href="_support_function_new_8h_source.html#l00407">407</a> of file <a class="el" href="_support_function_new_8h_source.html">SupportFunctionNew.h</a>.</p>
 
-<p>References <a class="el" href="config_8h_source.html#l00053">defaultTemplateDirectionCount</a>, and <a class="el" href="adaptions__eigen_8h_source.html#l00258">hypro::project()</a>.</p>
+<p>References <a class="el" href="config_8h_source.html#l00053">defaultTemplateDirectionCount</a>, and <a class="el" href="adaptions__eigen_8h_source.html#l00258">hypro::projectOn()</a>.</p>
 
 </div>
 </div>
@@ -1307,7 +1307,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The scaled SupportFunction </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00723">723</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00722">722</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -1353,7 +1353,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00350">350</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8h_source.html#l00297">hypro::Point&lt; Number &gt;::inftyNorm()</a>.</p>
+<p>References <a class="el" href="_point_8h_source.html#l00304">hypro::Point&lt; Number &gt;::inftyNorm()</a>.</p>
 
 </div>
 </div>
@@ -1412,7 +1412,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting SupportFunctionNew. </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00829">829</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00828">828</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>
@@ -1441,7 +1441,7 @@ template&lt;typename Number , typename Converter , typename Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting SupportFunctionNew. </dd></dl>
 
-<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00837">837</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_support_function_new_8tpp_source.html#l00836">836</a> of file <a class="el" href="_support_function_new_8tpp_source.html">SupportFunctionNew.tpp</a>.</p>
 
 </div>
 </div>

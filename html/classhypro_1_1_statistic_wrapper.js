@@ -9,7 +9,7 @@ var classhypro_1_1_statistic_wrapper =
     [ "intersectHalfspaces", "classhypro_1_1_statistic_wrapper.html#abba004538aa543aa17735e950d49007e", null ],
     [ "linearTransformation", "classhypro_1_1_statistic_wrapper.html#a07bf45a2b81953bd3b9211d563ac6c04", null ],
     [ "minkowskiSum", "classhypro_1_1_statistic_wrapper.html#aa1bb3d2456dc059fa406ee888cbc1520", null ],
-    [ "project", "classhypro_1_1_statistic_wrapper.html#af250252bfe30434d5a181ea98d17a031", null ],
+    [ "projectOn", "classhypro_1_1_statistic_wrapper.html#ad6e401b909e257bfa7824f68266b6361", null ],
     [ "satisfiesHalfspace", "classhypro_1_1_statistic_wrapper.html#a22a02aa2d116054fd960d6f87a557b76", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1_statistic_wrapper.html#ab9782e8b9f355dd20959cb7745f9f0d2", null ],
     [ "unite", "classhypro_1_1_statistic_wrapper.html#aeb83ec47a14432cf669007b093259543", null ],

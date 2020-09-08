@@ -1,18 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1_i_handler.html" title="hypro::IHandler" alt="" coords="5,188,124,215"/>
-<area shape="rect" id="node2" href="$classhypro_1_1_i_bad_state_handler.html" title="hypro::IBadStateHandler" alt="" coords="187,5,365,32"/>
-<area shape="rect" id="node3" href="$classhypro_1_1_i_first_segment_handler.html" title="hypro::IFirstSegmentHandler\l\&lt; State \&gt;" alt="" coords="174,57,378,98"/>
-<area shape="rect" id="node6" href="$classhypro_1_1_i_guard_handler.html" title="hypro::IGuardHandler\l\&lt; State \&gt;" alt="" coords="197,122,355,163"/>
-<area shape="rect" id="node7" href="$classhypro_1_1_i_invariant_handler.html" title="hypro::IInvariantHandler" alt="" coords="189,188,363,215"/>
-<area shape="rect" id="node8" href="$classhypro_1_1_i_jump_handler.html" title="hypro::IJumpHandler" alt="" coords="201,239,351,265"/>
-<area shape="rect" id="node9" href="$classhypro_1_1_i_reset_handler.html" title="hypro::IResetHandler" alt="" coords="199,289,353,316"/>
-<area shape="rect" id="node14" href="$classhypro_1_1_i_time_evolution_handler.html" title="hypro::ITimeEvolutionHandler" alt="" coords="172,355,380,381"/>
-<area shape="rect" id="node4" href="$classhypro_1_1rectangular_first_segment_handler.html" title="hypro::rectangularFirstSegment\lHandler\&lt; State \&gt;" alt="" coords="428,25,652,66"/>
-<area shape="rect" id="node5" href="$classhypro_1_1_t_poly_first_segment_handler.html" title="hypro::TPolyFirstSegment\lHandler\&lt; State \&gt;" alt="" coords="448,90,632,131"/>
-<area shape="rect" id="node10" href="$classhypro_1_1lti_reset_handler.html" title="hypro::ltiResetHandler\l\&lt; State \&gt;" alt="" coords="459,217,621,258"/>
-<area shape="rect" id="node13" href="$classhypro_1_1rectangular_reset_handler.html" title="hypro::rectangularResetHandler\l\&lt; State \&gt;" alt="" coords="428,282,652,323"/>
-<area shape="rect" id="node11" href="$classhypro_1_1discrete_reset_handler.html" title="hypro::discreteResetHandler\l\&lt; State \&gt;" alt="" coords="700,183,903,225"/>
-<area shape="rect" id="node12" href="$classhypro_1_1timed_reset_handler.html" title="hypro::timedResetHandler\l\&lt; State \&gt;" alt="" coords="707,249,895,290"/>
-<area shape="rect" id="node15" href="$classhypro_1_1discrete_time_evolution_handler.html" title="hypro::discreteTimeEvolution\lHandler" alt="" coords="437,347,643,389"/>
-<area shape="rect" id="node16" href="$classhypro_1_1_t_poly_time_evolution_handler.html" title="hypro::TPolyTimeEvolution\lHandler\&lt; State \&gt;" alt="" coords="446,413,634,454"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_i_context.html" title="hypro::IContext" alt="" coords="5,78,124,105"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_l_t_i_context.html" title="hypro::LTIContext\&lt;\l State \&gt;" alt="" coords="196,37,339,79"/>
+<area shape="rect" id="node5" href="$classhypro_1_1_rectangular_context.html" title="hypro::RectangularContext\l\&lt; State \&gt;" alt="" coords="172,103,363,144"/>
+<area shape="rect" id="node3" href="$classhypro_1_1_template_polyhedron_context.html" title="hypro::TemplatePolyhedron\lContext\&lt; State \&gt;" alt="" coords="411,5,605,47"/>
+<area shape="rect" id="node4" href="$classhypro_1_1_timed_context.html" title="hypro::TimedContext\l\&lt; State \&gt;" alt="" coords="431,71,585,112"/>
 </map>

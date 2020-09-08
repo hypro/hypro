@@ -2,11 +2,14 @@ var searchData=
 [
   ['range',['Range',['../classhypro_1_1_range.html',1,'hypro']]],
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1_point.html#a6043b600ceea75a32970ab2939027ac1',1,'hypro::Point']]],
+  ['rays',['rays',['../classhypro_1_1_v_polytope_t.html#a9516e6e03083930cf279aa96d514d011',1,'hypro::VPolytopeT']]],
+  ['reach',['Reach',['../classhypro_1_1reachability_1_1_reach.html',1,'hypro::reachability']]],
+  ['reach',['Reach',['../classhypro_1_1reachability_1_1_reach.html#ab5332eca803db92365b23c544b962d9c',1,'hypro::reachability::Reach']]],
   ['reach_2eh',['Reach.h',['../_reach_8h.html',1,'']]],
   ['reachability',['reachability',['../namespacereachability.html',1,'']]],
   ['reachability_5fanalysis_5fmethod',['reachability_analysis_method',['../namespacehypro.html#ad4fd2a57ccb06efb8978eee3558214a9',1,'hypro::AnalysisParameters']]],
-  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html',1,'hypro']]],
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html#af91b99cf64b956259347ba1595d0ad4d',1,'hypro::ReachabilitySettings']]],
+  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html',1,'hypro']]],
   ['reachtree',['ReachTree',['../classhypro_1_1_reach_tree.html',1,'hypro']]],
   ['reachtreenode',['ReachTreeNode',['../classhypro_1_1_reach_tree_node.html',1,'hypro']]],
   ['reachtreenode_3c_20representation_20_3e',['ReachTreeNode&lt; Representation &gt;',['../classhypro_1_1_reach_tree_node.html',1,'hypro']]],
@@ -17,6 +20,7 @@ var searchData=
   ['rectangularfirstsegmenthandler',['rectangularFirstSegmentHandler',['../classhypro_1_1rectangular_first_segment_handler.html',1,'hypro']]],
   ['rectangularflow',['rectangularFlow',['../classhypro_1_1rectangular_flow.html',1,'hypro']]],
   ['rectangularguardhandler',['rectangularGuardHandler',['../classhypro_1_1rectangular_guard_handler.html',1,'hypro']]],
+  ['rectangularguardhandler_3c_20representation_20_3e',['rectangularGuardHandler&lt; Representation &gt;',['../classhypro_1_1rectangular_guard_handler.html',1,'hypro']]],
   ['rectangularinvarianthandler',['rectangularInvariantHandler',['../namespacehypro.html#classhypro_1_1rectangular_invariant_handler',1,'hypro']]],
   ['rectangularjumphandler',['rectangularJumpHandler',['../classhypro_1_1rectangular_jump_handler.html',1,'hypro']]],
   ['rectangularresethandler',['rectangularResetHandler',['../classhypro_1_1rectangular_reset_handler.html',1,'hypro']]],
@@ -31,8 +35,8 @@ var searchData=
   ['reducetodimensions',['reduceToDimensions',['../classhypro_1_1_point.html#a8a14c2f71bd78d78d6e0c98209770c5a',1,'hypro::Point']]],
   ['redundantconstraints',['redundantConstraints',['../classhypro_1_1_optimizer.html#a5050c9364f680bba0a87cf0cff4952f2',1,'hypro::Optimizer']]],
   ['refinementanalyzer',['RefinementAnalyzer',['../classhypro_1_1_refinement_analyzer.html',1,'hypro']]],
-  ['refinementsetting',['RefinementSetting',['../structhypro_1_1_refinement_setting.html',1,'hypro']]],
   ['refinementsetting',['RefinementSetting',['../structhypro_1_1_refinement_setting.html#aef4ab59d09d621981204dd0c3533cc38',1,'hypro::RefinementSetting']]],
+  ['refinementsetting',['RefinementSetting',['../structhypro_1_1_refinement_setting.html',1,'hypro']]],
   ['refinementsetting_3c_20representation_20_3e',['RefinementSetting&lt; Representation &gt;',['../structhypro_1_1_refinement_setting.html',1,'hypro']]],
   ['refinementsuccess',['RefinementSuccess',['../namespacehypro.html#structhypro_1_1_refinement_success',1,'hypro']]],
   ['removeduplicatepoints',['removeDuplicatePoints',['../classhypro_1_1_point.html#a7a8c12183c854b044cdfc6122ad385ed',1,'hypro::Point']]],
@@ -61,6 +65,6 @@ var searchData=
   ['rsettings',['rSettings',['../classhypro_1_1_plotter.html#a02a94273e330fcd5ced4216cf10b9c40',1,'hypro::Plotter']]],
   ['rtn_5frep_5fi',['RTN_Rep_i',['../namespacehypro.html#structhypro_1_1_r_t_n___rep__i',1,'hypro']]],
   ['rtn_5frep_5fi_3c_20reachtreenode_3c_20representation_20_3e_20_3e',['RTN_Rep_i&lt; ReachTreeNode&lt; Representation &gt; &gt;',['../namespacehypro.html#structhypro_1_1_r_t_n___rep__i_3_01_reach_tree_node_3_01_representation_01_4_01_4',1,'hypro']]],
-  ['run',['run',['../classhypro_1_1_rectangular_analyzer.html#a7e113f483e0cf18fc225e48f065608a3',1,'hypro::RectangularAnalyzer']]],
-  ['rvertices',['rVertices',['../classhypro_1_1_ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge']]]
+  ['run',['run',['../classhypro_1_1_rectangular_analyzer.html#a7e113f483e0cf18fc225e48f065608a3',1,'hypro::RectangularAnalyzer::run()'],['../classhypro_1_1_singular_analyzer.html#a41e89414ecfacc1f4c801df69317e5cc',1,'hypro::SingularAnalyzer::run()']]],
+  ['rvertices',['rVertices',['../classhypro_1_1_ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge::rVertices()'],['../classhypro_1_1_v_polytope_t.html#add2375a6b2a3e26c37eebdcd6c290d55',1,'hypro::VPolytopeT::rVertices()']]]
 ];

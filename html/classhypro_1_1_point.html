@@ -233,9 +233,12 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:aae547162554fd3963ddceeac72cca75e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_point.html#aae547162554fd3963ddceeac72cca75e">newEmpty</a> () const </td></tr>
 <tr class="memdesc:aae547162554fd3963ddceeac72cca75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty origin point with the same dimensions as the current point.  <a href="#aae547162554fd3963ddceeac72cca75e">More...</a><br /></td></tr>
 <tr class="separator:aae547162554fd3963ddceeac72cca75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45a2e16d0e2cf7ac02716f2cd42e5d4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_point.html#a45a2e16d0e2cf7ac02716f2cd42e5d4b">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:a45a2e16d0e2cf7ac02716f2cd42e5d4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the point on the given dimensions.  <a href="#a45a2e16d0e2cf7ac02716f2cd42e5d4b">More...</a><br /></td></tr>
-<tr class="separator:a45a2e16d0e2cf7ac02716f2cd42e5d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d2c2ed606c684a232138a38939ab0ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_point.html#a0d2c2ed606c684a232138a38939ab0ee">projectOn</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:a0d2c2ed606c684a232138a38939ab0ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the point on the given dimensions.  <a href="#a0d2c2ed606c684a232138a38939ab0ee">More...</a><br /></td></tr>
+<tr class="separator:a0d2c2ed606c684a232138a38939ab0ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab54382343ab78fdff903388e4bbd48c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_point.html#ab54382343ab78fdff903388e4bbd48c2">projectOut</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:ab54382343ab78fdff903388e4bbd48c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects out the given dimensions from the point.  <a href="#ab54382343ab78fdff903388e4bbd48c2">More...</a><br /></td></tr>
+<tr class="separator:ab54382343ab78fdff903388e4bbd48c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a027db2b48bb7708dbdcba1405d9fed35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_point.html#a027db2b48bb7708dbdcba1405d9fed35">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a027db2b48bb7708dbdcba1405d9fed35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation on the current point.  <a href="#a027db2b48bb7708dbdcba1405d9fed35">More...</a><br /></td></tr>
 <tr class="separator:a027db2b48bb7708dbdcba1405d9fed35"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -704,7 +707,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00251">251</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00269">269</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>Referenced by <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
@@ -735,9 +738,9 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00444">444</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00462">462</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_grid_8tpp_source.html#l00581">hypro::Grid&lt; Number &gt;::calculateInduced()</a>, <a class="el" href="_grid_8tpp_source.html#l00607">hypro::Grid&lt; Number &gt;::calculateOriginal()</a>, <a class="el" href="_point_8h_source.html#l00268">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="_point_8h_source.html#l00283">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="_grid_8tpp_source.html#l00090">hypro::Grid&lt; Number &gt;::colorAt()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00086">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_box_8tpp_source.html#l00589">hypro::BoxT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="_point_8tpp_source.html#l00325">hypro::Point&lt; Number &gt;::lesserDimensionPattern()</a>, <a class="el" href="_box_8tpp_source.html#l00461">hypro::BoxT&lt; Number, Converter, Setting &gt;::linearTransformation()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>, <a class="el" href="_point_8tpp_source.html#l00353">hypro::Point&lt; Number &gt;::operator+=()</a>, <a class="el" href="_point_8tpp_source.html#l00371">hypro::Point&lt; Number &gt;::operator-=()</a>, <a class="el" href="_point_8h_source.html#l00464">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="_vertex_8h_source.html#l00240">hypro::Vertex&lt; std::size_t &gt;::operator[]()</a>, <a class="el" href="_point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, and <a class="el" href="_point_8tpp_source.html#l00172">hypro::Point&lt; Number &gt;::polarCoordinates()</a>.</p>
+<p>Referenced by <a class="el" href="_grid_8tpp_source.html#l00581">hypro::Grid&lt; Number &gt;::calculateInduced()</a>, <a class="el" href="_grid_8tpp_source.html#l00607">hypro::Grid&lt; Number &gt;::calculateOriginal()</a>, <a class="el" href="_point_8h_source.html#l00275">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="_point_8h_source.html#l00290">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="_grid_8tpp_source.html#l00090">hypro::Grid&lt; Number &gt;::colorAt()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00086">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_box_8tpp_source.html#l00589">hypro::BoxT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="_point_8tpp_source.html#l00343">hypro::Point&lt; Number &gt;::lesserDimensionPattern()</a>, <a class="el" href="_box_8tpp_source.html#l00461">hypro::BoxT&lt; Number, Converter, Setting &gt;::linearTransformation()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>, <a class="el" href="_point_8tpp_source.html#l00371">hypro::Point&lt; Number &gt;::operator+=()</a>, <a class="el" href="_point_8tpp_source.html#l00389">hypro::Point&lt; Number &gt;::operator-=()</a>, <a class="el" href="_point_8h_source.html#l00471">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="_vertex_8h_source.html#l00240">hypro::Vertex&lt; std::size_t &gt;::operator[]()</a>, <a class="el" href="_point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, and <a class="el" href="_point_8tpp_source.html#l00172">hypro::Point&lt; Number &gt;::polarCoordinates()</a>.</p>
 
 </div>
 </div>
@@ -766,7 +769,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00452">452</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00470">470</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -795,7 +798,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00460">460</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00478">478</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -824,7 +827,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00468">468</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00486">486</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -872,7 +875,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00268">268</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00275">275</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 <p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00086">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>.</p>
 
@@ -922,7 +925,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00283">283</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00290">290</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 <p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00086">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>.</p>
 
@@ -1008,7 +1011,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="_point_8tpp_source.html#l00069">69</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00268">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="_point_8h_source.html#l00283">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="_point_8tpp_source.html#l00051">hypro::Point&lt; Number &gt;::origin()</a>, <a class="el" href="_point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00275">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="_point_8h_source.html#l00290">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="_point_8tpp_source.html#l00051">hypro::Point&lt; Number &gt;::origin()</a>, <a class="el" href="_point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
@@ -1036,9 +1039,9 @@ template&lt;typename Number &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00281">281</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00299">299</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8tpp_source.html#l00291">hypro::Point&lt; Number &gt;::getPredecessorInDimension()</a>, and <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8tpp_source.html#l00309">hypro::Point&lt; Number &gt;::getPredecessorInDimension()</a>, and <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1066,7 +1069,7 @@ template&lt;typename Number &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00286">286</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00304">304</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -1090,7 +1093,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="_point_8tpp_source.html#l00116">116</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_plotter_8tpp_source.html#l00162">hypro::Plotter&lt; Number &gt;::addPoint()</a>, <a class="el" href="_point_8h_source.html#l00268">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="_point_8h_source.html#l00283">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="_grid_8tpp_source.html#l00090">hypro::Grid&lt; Number &gt;::colorAt()</a>, <a class="el" href="_box_support_function_8tpp_source.html#l00170">hypro::BoxSupportFunction&lt; Number, Setting &gt;::contains()</a>, <a class="el" href="_vertex_8h_source.html#l00137">hypro::Vertex&lt; std::size_t &gt;::dimension()</a>, <a class="el" href="_neighborhood_container_8cpp_source.html#l00027">hypro::NeighborhoodContainer::getNeighborhoodForDimension()</a>, <a class="el" href="_plotter_8tpp_source.html#l00460">hypro::Plotter&lt; Number &gt;::grahamScan()</a>, <a class="el" href="_point_8tpp_source.html#l00336">hypro::Point&lt; Number &gt;::haveEqualCoordinate()</a>, <a class="el" href="_point_8tpp_source.html#l00348">hypro::Point&lt; Number &gt;::haveSameDimensions()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00086">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_point_8h_source.html#l00297">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="_box_8tpp_source.html#l00589">hypro::BoxT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="_point_8tpp_source.html#l00325">hypro::Point&lt; Number &gt;::lesserDimensionPattern()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_point_8tpp_source.html#l00223">hypro::Point&lt; Number &gt;::newEmpty()</a>, <a class="el" href="_point_8h_source.html#l00603">hypro::operator*()</a>, <a class="el" href="_point_8h_source.html#l00559">hypro::operator+()</a>, <a class="el" href="_point_8tpp_source.html#l00353">hypro::Point&lt; Number &gt;::operator+=()</a>, <a class="el" href="_point_8h_source.html#l00578">hypro::operator-()</a>, <a class="el" href="_point_8tpp_source.html#l00371">hypro::Point&lt; Number &gt;::operator-=()</a>, <a class="el" href="_point_8h_source.html#l00588">hypro::operator/()</a>, <a class="el" href="_point_8h_source.html#l00449">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="_point_8tpp_source.html#l00051">hypro::Point&lt; Number &gt;::origin()</a>, <a class="el" href="_point_8tpp_source.html#l00006">hypro::Point&lt; Number &gt;::Point()</a>, <a class="el" href="_point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, <a class="el" href="_point_8tpp_source.html#l00172">hypro::Point&lt; Number &gt;::polarCoordinates()</a>, <a class="el" href="_point_8tpp_source.html#l00229">hypro::Point&lt; Number &gt;::project()</a>, <a class="el" href="_v_polytope_8h_source.html#l00225">hypro::VPolytopeT&lt; Number, Converter, S &gt;::setCone()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
+<p>Referenced by <a class="el" href="_plotter_8tpp_source.html#l00162">hypro::Plotter&lt; Number &gt;::addPoint()</a>, <a class="el" href="_point_8h_source.html#l00275">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="_point_8h_source.html#l00290">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="_grid_8tpp_source.html#l00090">hypro::Grid&lt; Number &gt;::colorAt()</a>, <a class="el" href="_box_support_function_8tpp_source.html#l00170">hypro::BoxSupportFunction&lt; Number, Setting &gt;::contains()</a>, <a class="el" href="_vertex_8h_source.html#l00137">hypro::Vertex&lt; std::size_t &gt;::dimension()</a>, <a class="el" href="_neighborhood_container_8cpp_source.html#l00027">hypro::NeighborhoodContainer::getNeighborhoodForDimension()</a>, <a class="el" href="_plotter_8tpp_source.html#l00460">hypro::Plotter&lt; Number &gt;::grahamScan()</a>, <a class="el" href="_point_8tpp_source.html#l00354">hypro::Point&lt; Number &gt;::haveEqualCoordinate()</a>, <a class="el" href="_point_8tpp_source.html#l00366">hypro::Point&lt; Number &gt;::haveSameDimensions()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00086">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_point_8h_source.html#l00304">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="_box_8tpp_source.html#l00589">hypro::BoxT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="_point_8tpp_source.html#l00343">hypro::Point&lt; Number &gt;::lesserDimensionPattern()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_point_8tpp_source.html#l00223">hypro::Point&lt; Number &gt;::newEmpty()</a>, <a class="el" href="_point_8h_source.html#l00610">hypro::operator*()</a>, <a class="el" href="_point_8h_source.html#l00566">hypro::operator+()</a>, <a class="el" href="_point_8tpp_source.html#l00371">hypro::Point&lt; Number &gt;::operator+=()</a>, <a class="el" href="_point_8h_source.html#l00585">hypro::operator-()</a>, <a class="el" href="_point_8tpp_source.html#l00389">hypro::Point&lt; Number &gt;::operator-=()</a>, <a class="el" href="_point_8h_source.html#l00595">hypro::operator/()</a>, <a class="el" href="_point_8h_source.html#l00456">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="_point_8tpp_source.html#l00051">hypro::Point&lt; Number &gt;::origin()</a>, <a class="el" href="_point_8tpp_source.html#l00006">hypro::Point&lt; Number &gt;::Point()</a>, <a class="el" href="_point_8h_source.html#l00086">hypro::Point&lt; int &gt;::Point()</a>, <a class="el" href="_point_8tpp_source.html#l00172">hypro::Point&lt; Number &gt;::polarCoordinates()</a>, <a class="el" href="_point_8tpp_source.html#l00229">hypro::Point&lt; Number &gt;::projectOn()</a>, <a class="el" href="_point_8tpp_source.html#l00245">hypro::Point&lt; Number &gt;::projectOut()</a>, <a class="el" href="_v_polytope_8h_source.html#l00227">hypro::VPolytopeT&lt; Number, Converter, S &gt;::setRays()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
@@ -1221,11 +1224,11 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The predecessor in dimension. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00291">291</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00309">309</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00281">hypro::Point&lt; Number &gt;::decrementInFixedDim()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00299">hypro::Point&lt; Number &gt;::decrementInFixedDim()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1254,9 +1257,9 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The predecessor in dimension. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00298">298</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00316">316</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00281">hypro::Point&lt; Number &gt;::decrementInFixedDim()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00299">hypro::Point&lt; Number &gt;::decrementInFixedDim()</a>.</p>
 
 </div>
 </div>
@@ -1285,9 +1288,9 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if has the passed dimension, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00310">310</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00328">328</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00147">hypro::Vertex&lt; std::size_t &gt;::hasDimension()</a>, <a class="el" href="_point_8tpp_source.html#l00315">hypro::Point&lt; Number &gt;::hasDimensions()</a>, and <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00147">hypro::Vertex&lt; std::size_t &gt;::hasDimension()</a>, <a class="el" href="_point_8tpp_source.html#l00333">hypro::Point&lt; Number &gt;::hasDimensions()</a>, and <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1316,11 +1319,11 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if has all passed dimensions, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00315">315</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00333">333</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00310">hypro::Point&lt; Number &gt;::hasDimension()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00328">hypro::Point&lt; Number &gt;::hasDimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00152">hypro::Vertex&lt; std::size_t &gt;::hasDimensions()</a>, and <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00152">hypro::Vertex&lt; std::size_t &gt;::hasDimensions()</a>, and <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1352,7 +1355,7 @@ template&lt;class Number&gt; </div>
 
 <p>Definition at line <a class="el" href="_point_8h_source.html#l00102">102</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00449">hypro::Point&lt; int &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00456">hypro::Point&lt; int &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -1381,11 +1384,11 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if at least one coordinate is equal. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00336">336</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00354">354</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>, and <a class="el" href="_point_8tpp_source.html#l00078">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1414,11 +1417,11 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the space dimensions are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00348">348</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00366">366</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1446,9 +1449,9 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00274">274</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00292">292</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1476,9 +1479,9 @@ template&lt;typename Number &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00264">264</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00282">282</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1506,7 +1509,7 @@ template&lt;typename Number &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00269">269</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00287">287</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -1543,9 +1546,9 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The infinity norm. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00297">297</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00304">304</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
-<p>Referenced by <a class="el" href="_support_function_8tpp_source.html#l00131">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;::cleanUp()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00536">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00568">hypro::VPolytopeT&lt; Number, Converter, S &gt;::supremum()</a>, <a class="el" href="_support_function_new_8tpp_source.html#l00350">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::supremum()</a>, and <a class="el" href="_box_8tpp_source.html#l00253">hypro::BoxT&lt; Number, Converter, Setting &gt;::supremum()</a>.</p>
+<p>Referenced by <a class="el" href="_support_function_8tpp_source.html#l00131">hypro::SupportFunctionT&lt; Number, Converter, Setting &gt;::cleanUp()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00536">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00579">hypro::VPolytopeT&lt; Number, Converter, S &gt;::supremum()</a>, <a class="el" href="_support_function_new_8tpp_source.html#l00350">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::supremum()</a>, and <a class="el" href="_box_8tpp_source.html#l00253">hypro::BoxT&lt; Number, Converter, Setting &gt;::supremum()</a>.</p>
 
 </div>
 </div>
@@ -1574,11 +1577,11 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if every coordinate is within boundary[i] and the origin, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00305">305</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00323">323</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00078">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1626,11 +1629,11 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting bitvector. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00325">325</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00343">343</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00444">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00462">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00313">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00320">hypro::Point&lt; int &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1660,7 +1663,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00245">245</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00263">263</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>Referenced by <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
@@ -1725,7 +1728,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00479">479</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00486">486</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1754,9 +1757,9 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00402">402</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00420">420</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -1785,11 +1788,11 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00353">353</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00371">371</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00444">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00462">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -1818,7 +1821,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00362">362</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00380">380</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
@@ -1848,9 +1851,9 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00389">389</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00407">407</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -1879,11 +1882,11 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00371">371</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00389">389</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00444">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00462">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -1912,7 +1915,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00380">380</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00398">398</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
@@ -1943,9 +1946,9 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00394">394</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00412">412</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -1982,7 +1985,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00421">421</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00428">428</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2019,7 +2022,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00428">428</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00435">435</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2056,7 +2059,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -2120,7 +2123,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00410">410</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00428">428</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -2149,7 +2152,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the current point modified by the operation. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00416">416</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00434">434</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -2186,7 +2189,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00449">449</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00456">456</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2225,7 +2228,7 @@ template&lt;typename F , carl::DisableIf&lt; std::is_same&lt; F, Number &gt;&gt;
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00464">464</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00471">471</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2262,7 +2265,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00435">435</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00442">442</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2299,7 +2302,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00442">442</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00449">449</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2328,9 +2331,9 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00422">422</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00440">440</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_point_8h_source.html#l00479">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00486">hypro::Point&lt; int &gt;::operator!=()</a>.</p>
 
 </div>
 </div>
@@ -2359,7 +2362,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00428">428</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00446">446</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -2388,7 +2391,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00433">433</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00451">451</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -2417,7 +2420,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00439">439</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00457">457</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 </div>
 </div>
@@ -2485,20 +2488,20 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="_point_8tpp_source.html#l00172">172</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00444">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
+<p>References <a class="el" href="_point_8tpp_source.html#l00462">hypro::Point&lt; Number &gt;::at()</a>, and <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
 <p>Referenced by <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a45a2e16d0e2cf7ac02716f2cd42e5d4b"></a>
+<a class="anchor" id="a0d2c2ed606c684a232138a38939ab0ee"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; <a class="el" href="classhypro_1_1_point.html">hypro::Point</a>&lt; Number &gt;::project </td>
+          <td class="memname"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; <a class="el" href="classhypro_1_1_point.html">hypro::Point</a>&lt; Number &gt;::projectOn </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
@@ -2517,6 +2520,39 @@ template&lt;typename Number &gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The projected point. </dd></dl>
 
 <p>Definition at line <a class="el" href="_point_8tpp_source.html#l00229">229</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+
+<p>References <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
+
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab54382343ab78fdff903388e4bbd48c2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1_point.html">Point</a>&lt; Number &gt; <a class="el" href="classhypro_1_1_point.html">hypro::Point</a>&lt; Number &gt;::projectOut </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dimensions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Projects out the given dimensions from the point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dimensions</td><td>The dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The projected point. </dd></dl>
+
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00245">245</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00116">hypro::Point&lt; Number &gt;::dimension()</a>.</p>
 
@@ -2544,7 +2580,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="_point_8tpp_source.html#l00078">78</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_plotter_8tpp_source.html#l00162">hypro::Plotter&lt; Number &gt;::addPoint()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00438">hypro::Halfspace&lt; Number &gt;::computePlaneOffset()</a>, <a class="el" href="_ball_support_function_8tpp_source.html#l00121">hypro::BallSupportFunction&lt; Number &gt;::contains()</a>, <a class="el" href="_ellipsoid_support_function_8tpp_source.html#l00056">hypro::EllipsoidSupportFunction&lt; Number &gt;::contains()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00322">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::contains()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00309">hypro::Halfspace&lt; Number &gt;::contains()</a>, <a class="el" href="_support_function_new_8tpp_source.html#l00769">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::contains()</a>, <a class="el" href="_point_8h_source.html#l00672">hypro::convert()</a>, <a class="el" href="_vertex_8h_source.html#l00128">hypro::Vertex&lt; std::size_t &gt;::coordinate()</a>, <a class="el" href="_point_8tpp_source.html#l00167">hypro::Point&lt; Number &gt;::distance()</a>, <a class="el" href="datastructures_2_facet_8h_source.html#l00115">hypro::Facet&lt; Number &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00638">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_point_8tpp_source.html#l00159">hypro::Point&lt; Number &gt;::extAdd()</a>, <a class="el" href="_neighborhood_container_8cpp_source.html#l00027">hypro::NeighborhoodContainer::getNeighborhoodForDimension()</a>, <a class="el" href="_plotter_8tpp_source.html#l00460">hypro::Plotter&lt; Number &gt;::grahamScan()</a>, <a class="el" href="_point_8tpp_source.html#l00336">hypro::Point&lt; Number &gt;::haveEqualCoordinate()</a>, <a class="el" href="_point_8h_source.html#l00297">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00207">hypro::VPolytopeT&lt; Number, Converter, S &gt;::intersect()</a>, <a class="el" href="_box_8tpp_source.html#l00589">hypro::BoxT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00141">hypro::Halfspace&lt; Number &gt;::intersection()</a>, <a class="el" href="_zonotope_8tpp_source.html#l01225">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::intervalHull()</a>, <a class="el" href="_point_8tpp_source.html#l00305">hypro::Point&lt; Number &gt;::isInBoundary()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_point_8h_source.html#l00596">hypro::operator*()</a>, <a class="el" href="_point_8h_source.html#l00559">hypro::operator+()</a>, <a class="el" href="_point_8h_source.html#l00578">hypro::operator-()</a>, <a class="el" href="_point_8h_source.html#l00588">hypro::operator/()</a>, <a class="el" href="_point_8h_source.html#l00421">hypro::Point&lt; int &gt;::operator&lt;()</a>, <a class="el" href="_point_8h_source.html#l00428">hypro::Point&lt; int &gt;::operator&lt;=()</a>, <a class="el" href="_point_8h_source.html#l00449">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00121">hypro::Halfspace&lt; Number &gt;::projectPointOnPlane()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
+<p>Referenced by <a class="el" href="_plotter_8tpp_source.html#l00162">hypro::Plotter&lt; Number &gt;::addPoint()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00438">hypro::Halfspace&lt; Number &gt;::computePlaneOffset()</a>, <a class="el" href="_ball_support_function_8tpp_source.html#l00121">hypro::BallSupportFunction&lt; Number &gt;::contains()</a>, <a class="el" href="_ellipsoid_support_function_8tpp_source.html#l00056">hypro::EllipsoidSupportFunction&lt; Number &gt;::contains()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00322">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::contains()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00309">hypro::Halfspace&lt; Number &gt;::contains()</a>, <a class="el" href="_support_function_new_8tpp_source.html#l00768">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::contains()</a>, <a class="el" href="_point_8h_source.html#l00679">hypro::convert()</a>, <a class="el" href="_vertex_8h_source.html#l00128">hypro::Vertex&lt; std::size_t &gt;::coordinate()</a>, <a class="el" href="_point_8tpp_source.html#l00167">hypro::Point&lt; Number &gt;::distance()</a>, <a class="el" href="datastructures_2_facet_8h_source.html#l00115">hypro::Facet&lt; Number &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00638">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_point_8tpp_source.html#l00159">hypro::Point&lt; Number &gt;::extAdd()</a>, <a class="el" href="_neighborhood_container_8cpp_source.html#l00027">hypro::NeighborhoodContainer::getNeighborhoodForDimension()</a>, <a class="el" href="_plotter_8tpp_source.html#l00460">hypro::Plotter&lt; Number &gt;::grahamScan()</a>, <a class="el" href="_point_8tpp_source.html#l00354">hypro::Point&lt; Number &gt;::haveEqualCoordinate()</a>, <a class="el" href="_point_8h_source.html#l00304">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="_v_polytope_8tpp_source.html#l00218">hypro::VPolytopeT&lt; Number, Converter, S &gt;::intersect()</a>, <a class="el" href="_box_8tpp_source.html#l00589">hypro::BoxT&lt; Number, Converter, Setting &gt;::intersectHalfspace()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00141">hypro::Halfspace&lt; Number &gt;::intersection()</a>, <a class="el" href="_zonotope_8tpp_source.html#l01225">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::intervalHull()</a>, <a class="el" href="_point_8tpp_source.html#l00323">hypro::Point&lt; Number &gt;::isInBoundary()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_point_8h_source.html#l00603">hypro::operator*()</a>, <a class="el" href="_point_8h_source.html#l00566">hypro::operator+()</a>, <a class="el" href="_point_8h_source.html#l00585">hypro::operator-()</a>, <a class="el" href="_point_8h_source.html#l00595">hypro::operator/()</a>, <a class="el" href="_point_8h_source.html#l00428">hypro::Point&lt; int &gt;::operator&lt;()</a>, <a class="el" href="_point_8h_source.html#l00435">hypro::Point&lt; int &gt;::operator&lt;=()</a>, <a class="el" href="_point_8h_source.html#l00456">hypro::Point&lt; int &gt;::operator==()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00121">hypro::Halfspace&lt; Number &gt;::projectPointOnPlane()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
@@ -2643,7 +2679,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point vector that is duplicate-free. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00313">313</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00320">320</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 <p>Referenced by <a class="el" href="converter_to_v_polytope_8tpp_source.html#l00021">hypro::computeBoundaryPointsExpensive()</a>.</p>
 
@@ -2777,11 +2813,9 @@ template&lt;typename Number &gt; </div>
 <p>Returns the sum of all coordinates. </p>
 <dl class="section return"><dt>Returns</dt><dd>The sum. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00258">258</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
+<p>Definition at line <a class="el" href="_point_8tpp_source.html#l00276">276</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>References <a class="el" href="_point_8tpp_source.html#l00258">hypro::Point&lt; Number &gt;::sum()</a>.</p>
-
-<p>Referenced by <a class="el" href="_point_8tpp_source.html#l00258">hypro::Point&lt; Number &gt;::sum()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
+<p>Referenced by <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
@@ -2811,7 +2845,7 @@ template&lt;typename Number&gt; </div>
 
 <p>Definition at line <a class="el" href="_point_8tpp_source.html#l00104">104</a> of file <a class="el" href="_point_8tpp_source.html">Point.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_point_8h_source.html#l00546">hypro::swap()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
+<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_point_8h_source.html#l00553">hypro::swap()</a>, and <a class="el" href="_point_8h_source.html#l00120">hypro::Point&lt; int &gt;::Zero()</a>.</p>
 
 </div>
 </div>
@@ -2923,7 +2957,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="_point_8h_source.html#l00523">523</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="_point_8h_source.html#l00530">530</a> of file <a class="el" href="_point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>

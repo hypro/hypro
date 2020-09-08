@@ -198,7 +198,6 @@ var NAVTREEINDEX0 =
 "_quickhull_8tpp_source.html":[9,0,1,0,0,3,0,5],
 "_range_8h_source.html":[9,0,1,0,3,16],
 "_reach_8h.html":[9,0,1,0,0,4,7],
-"_reach_8h.html#a4de9607cb06733403ac4710b4a9cdf9e":[9,0,1,0,0,4,7,0],
 "_reach_8h_source.html":[9,0,1,0,0,4,7],
 "_reach_8tpp_source.html":[9,0,1,0,0,4,8],
 "_reach_tree_8h_source.html":[9,0,1,0,1,1,7],
@@ -230,6 +229,10 @@ var NAVTREEINDEX0 =
 "_settings_provider_8tpp_source.html":[9,0,1,0,1,1,15],
 "_simplex_solver_8h.html":[9,0,1,0,3,1,2,4],
 "_simplex_solver_8h_source.html":[9,0,1,0,3,1,2,4],
+"_singular_analyzer_8h_source.html":[9,0,1,0,0,4,0,8],
+"_singular_analyzer_8tpp_source.html":[9,0,1,0,0,4,0,9],
+"_singular_worker_8h_source.html":[9,0,1,0,0,4,3,10],
+"_singular_worker_8tpp_source.html":[9,0,1,0,0,4,3,11],
 "_state_8h_source.html":[9,0,1,0,1,0,18],
 "_state_8tpp_source.html":[9,0,1,0,1,0,19],
 "_state_util_8h_source.html":[9,0,1,0,1,0,20],
@@ -246,8 +249,5 @@ var NAVTREEINDEX0 =
 "_support_function_content_8tpp_source.html":[9,0,1,0,2,11,13],
 "_support_function_new_8h_source.html":[9,0,1,0,2,12,8],
 "_support_function_new_8tpp_source.html":[9,0,1,0,2,12,9],
-"_support_function_new_setting_8h_source.html":[9,0,1,0,2,12,10],
-"_support_function_setting_8h_source.html":[9,0,1,0,2,11,14],
-"_t_poly_first_segment_handler_8h_source.html":[9,0,1,0,0,4,2,1,9],
-"_t_poly_first_segment_handler_8tpp_source.html":[9,0,1,0,0,4,2,1,10]
+"_support_function_new_setting_8h_source.html":[9,0,1,0,2,12,10]
 };

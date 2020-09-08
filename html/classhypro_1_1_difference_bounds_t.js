@@ -37,7 +37,7 @@ var classhypro_1_1_difference_bounds_t =
     [ "matrix", "classhypro_1_1_difference_bounds_t.html#af152804efaafa5e52860c002de21e800", null ],
     [ "minkowskiSum", "classhypro_1_1_difference_bounds_t.html#ad9b384be2e47615ab6332db1c47ecb0f", null ],
     [ "multiEvaluate", "classhypro_1_1_difference_bounds_t.html#a79710dc8b26c123f768c2c636449564b", null ],
-    [ "project", "classhypro_1_1_difference_bounds_t.html#a4f37ac3d896c20c37555722eac1db74b", null ],
+    [ "projectOn", "classhypro_1_1_difference_bounds_t.html#a03919ab1aee4df5ac5f78f7791727cce", null ],
     [ "reduceRepresentation", "classhypro_1_1_difference_bounds_t.html#a05b7844e57dc4e95635b54608ab4f7aa", null ],
     [ "removeRedundancy", "classhypro_1_1_difference_bounds_t.html#afd014c62cc80cfbe27133403da02b0a4", null ],
     [ "reset", "classhypro_1_1_difference_bounds_t.html#ad422d450c7ff11b09f9796ab0cabb7bb", null ],

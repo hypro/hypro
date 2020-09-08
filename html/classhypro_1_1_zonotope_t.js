@@ -37,7 +37,7 @@ var classhypro_1_1_zonotope_t =
     [ "operator==", "classhypro_1_1_zonotope_t.html#ae3dd1ab2f50c8fbe5b83c912af32dab6", null ],
     [ "order", "classhypro_1_1_zonotope_t.html#a494602399af7c0507a9c2158c79ff0b7", null ],
     [ "print", "classhypro_1_1_zonotope_t.html#a17d0c4135fab2f671532dc37edabe64a", null ],
-    [ "project", "classhypro_1_1_zonotope_t.html#a83523a01be705e32d2441ec9659c06b5", null ],
+    [ "projectOn", "classhypro_1_1_zonotope_t.html#af7b116e8239fa3f78bec674898a16b9e", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1_zonotope_t.html#a2d2195cc78e65c1ed42c51dd50e63650", null ],
     [ "reduceOrder", "classhypro_1_1_zonotope_t.html#a4ca07528e34888d71b21268b5423b245", null ],
     [ "reduceRepresentation", "classhypro_1_1_zonotope_t.html#a877e9010a178e05e1d1634f28b10b40d", null ],

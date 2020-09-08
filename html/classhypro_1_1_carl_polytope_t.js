@@ -30,7 +30,7 @@ var classhypro_1_1_carl_polytope_t =
     [ "matrix", "classhypro_1_1_carl_polytope_t.html#af6339009155a482c90f7d2d007904f25", null ],
     [ "minkowskiSum", "classhypro_1_1_carl_polytope_t.html#a93dde36e6acf577cb3edf34025e514bc", null ],
     [ "multiEvaluate", "classhypro_1_1_carl_polytope_t.html#aec2129a8ccc6e58ee1121364927fe2d0", null ],
-    [ "project", "classhypro_1_1_carl_polytope_t.html#a8d091344543deb321e7899c9dee96ab2", null ],
+    [ "projectOn", "classhypro_1_1_carl_polytope_t.html#a10bc2123644fafd9f5bd61a3a27334ea", null ],
     [ "reduceRepresentation", "classhypro_1_1_carl_polytope_t.html#a818c0a9d8428d0c8e7aa70a48d8221f6", null ],
     [ "removeRedundancy", "classhypro_1_1_carl_polytope_t.html#a7c56da11a6c53c3b2242fd0f91c8065a", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1_carl_polytope_t.html#adad598d71546d75ed2f1e03dd0e9f392", null ],

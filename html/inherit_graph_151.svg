@@ -11,11 +11,11 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-57 141,-57 141,4 -4,4"/>
 <!-- Node1 -->
 <g id="node1" class="node"><title>Node1</title>
-<g id="a_node1"><a xlink:href="classhypro_1_1_l_r_u_cache.html" target="_top" xlink:title="hypro::LRUCache\&lt; hypro\l::Cacheable\&lt; vector_t\l\&lt; Number \&gt; \&gt;, vector_t\l\&lt; Number \&gt; \&gt;">
+<g id="a_node1"><a xlink:href="classhypro_1_1_l_r_u_cache.html" target="_top" xlink:title="hypro::LRUCache\&lt; hypro\l::Cacheable\&lt; matrix_t\l\&lt; Number \&gt; \&gt;, matrix_t\l\&lt; Number \&gt; \&gt;">
 <polygon fill="white" stroke="black" points="0,-0.5 0,-52.5 137,-52.5 137,-0.5 0,-0.5"/>
 <text text-anchor="start" x="8" y="-40.5" font-family="Helvetica,sans-Serif" font-size="10.00">hypro::LRUCache&lt; hypro</text>
-<text text-anchor="start" x="8" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Cacheable&lt; vector_t</text>
-<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number &gt; &gt;, vector_t</text>
+<text text-anchor="start" x="8" y="-29.5" font-family="Helvetica,sans-Serif" font-size="10.00">::Cacheable&lt; matrix_t</text>
+<text text-anchor="start" x="8" y="-18.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number &gt; &gt;, matrix_t</text>
 <text text-anchor="middle" x="68.5" y="-7.5" font-family="Helvetica,sans-Serif" font-size="10.00">&lt; Number &gt; &gt;</text>
 </a>
 </g>

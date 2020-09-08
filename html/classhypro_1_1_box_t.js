@@ -46,7 +46,7 @@ var classhypro_1_1_box_t =
     [ "operator[]", "classhypro_1_1_box_t.html#a27ff4b567389830329e0928c266ea0f3", null ],
     [ "operator[]", "classhypro_1_1_box_t.html#a4cd04af5dc7a0539162ca3a5fba58603", null ],
     [ "print", "classhypro_1_1_box_t.html#a0efbff2f9a740e9cea28bd9018b44155", null ],
-    [ "project", "classhypro_1_1_box_t.html#a9c902bb68fd7e33ff7304e9b89f0eb9d", null ],
+    [ "projectOn", "classhypro_1_1_box_t.html#a599b82ae0349674629dc46c5a452fda2", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1_box_t.html#ace52ce4e3e40d7ad8ba4f13e3784ac47", null ],
     [ "reduceRepresentation", "classhypro_1_1_box_t.html#a0647c38c34ce94c61ba5826768330549", null ],
     [ "removeRedundancy", "classhypro_1_1_box_t.html#aebb35f675c01367a5fa74fd0c681ea78", null ],

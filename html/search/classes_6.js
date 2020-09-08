@@ -13,6 +13,7 @@ var searchData=
   ['flowdynamicstypevisitor',['flowDynamicsTypeVisitor',['../structhypro_1_1flow_dynamics_type_visitor.html',1,'hypro']]],
   ['flowhashvisitor',['flowHashVisitor',['../structhypro_1_1flow_hash_visitor.html',1,'hypro']]],
   ['flowisdiscretevisitor',['flowIsDiscreteVisitor',['../structhypro_1_1flow_is_discrete_visitor.html',1,'hypro']]],
+  ['flowissingularvisitor',['flowIsSingularVisitor',['../structhypro_1_1flow_is_singular_visitor.html',1,'hypro']]],
   ['flowistimedvisitor',['flowIsTimedVisitor',['../structhypro_1_1flow_is_timed_visitor.html',1,'hypro']]],
   ['flowpipe',['Flowpipe',['../classhypro_1_1_flowpipe.html',1,'hypro']]],
   ['flowpipe_3c_20number_20_3e',['Flowpipe&lt; Number &gt;',['../classhypro_1_1_flowpipe.html',1,'hypro']]],

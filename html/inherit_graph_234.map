@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1sum_content.html" title="hypro::sumContent\&lt;\l Number, Setting \&gt;" alt="" coords="5,5,161,47"/>
+<area shape="rect" id="node1" href="$structhypro_1_1statistics_1_1_operation_counter.html" title="An operation counter based on stackoverflow.com/questions/11365351/how&#45;to&#45;implement&#45;efficient&#45;c&#45;runti..." alt="" coords="5,5,141,47"/>
+<area shape="rect" id="node2" href="$structhypro_1_1statistics_1_1_atomic_operation_counter.html" title="hypro::statistics::\lAtomicOperationCounter" alt="" coords="189,5,371,47"/>
 </map>

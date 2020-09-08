@@ -24,7 +24,7 @@ var classhypro_1_1_generalized_star_t =
     [ "multiEvaluate", "classhypro_1_1_generalized_star_t.html#af7b4d764df481792c039bac59439ac67", null ],
     [ "operator=", "classhypro_1_1_generalized_star_t.html#a83ab2b092e08b8891f4b3402a748c03c", null ],
     [ "operator=", "classhypro_1_1_generalized_star_t.html#ac665a8254fefbeb98abe07464b770db0", null ],
-    [ "project", "classhypro_1_1_generalized_star_t.html#aa0e9494fd746554451a1275cc33ca9ac", null ],
+    [ "projectOn", "classhypro_1_1_generalized_star_t.html#ac77f29d366e7c9ba2819cab27749d6ba", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1_generalized_star_t.html#ac1ddcd52aeb06379f79962cf4d9cffae", null ],
     [ "reduceRepresentation", "classhypro_1_1_generalized_star_t.html#ad8f958beb89172f04eec1b7123f5cfc2", null ],
     [ "removeRedundancy", "classhypro_1_1_generalized_star_t.html#aeb9b3014c8ba65843b11c438c7baa3cc", null ],

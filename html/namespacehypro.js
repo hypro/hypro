@@ -21,7 +21,8 @@ var namespacehypro =
     [ "reachability", null, [
       [ "detail", null, [
         [ "bloatBoxVisitor", "classhypro_1_1reachability_1_1detail_1_1bloat_box_visitor.html", "classhypro_1_1reachability_1_1detail_1_1bloat_box_visitor" ]
-      ] ]
+      ] ],
+      [ "Reach", "classhypro_1_1reachability_1_1_reach.html", "classhypro_1_1reachability_1_1_reach" ]
     ] ],
     [ "statistics", null, [
       [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1_atomic_operation_counter.html", "structhypro_1_1statistics_1_1_atomic_operation_counter" ],
@@ -100,6 +101,7 @@ var namespacehypro =
     [ "flowDynamicsTypeVisitor", "structhypro_1_1flow_dynamics_type_visitor.html", "structhypro_1_1flow_dynamics_type_visitor" ],
     [ "flowHashVisitor", "structhypro_1_1flow_hash_visitor.html", "structhypro_1_1flow_hash_visitor" ],
     [ "flowIsDiscreteVisitor", "structhypro_1_1flow_is_discrete_visitor.html", "structhypro_1_1flow_is_discrete_visitor" ],
+    [ "flowIsSingularVisitor", "structhypro_1_1flow_is_singular_visitor.html", "structhypro_1_1flow_is_singular_visitor" ],
     [ "flowIsTimedVisitor", "structhypro_1_1flow_is_timed_visitor.html", "structhypro_1_1flow_is_timed_visitor" ],
     [ "Flowpipe", "classhypro_1_1_flowpipe.html", "classhypro_1_1_flowpipe" ],
     [ "FlowpipeTimingVector", "classhypro_1_1_flowpipe_timing_vector.html", "classhypro_1_1_flowpipe_timing_vector" ],
@@ -256,6 +258,10 @@ var namespacehypro =
     [ "setCreationVisitor", "structhypro_1_1set_creation_visitor.html", "structhypro_1_1set_creation_visitor" ],
     [ "Settings", "classhypro_1_1_settings.html", "classhypro_1_1_settings" ],
     [ "SettingsProvider", "classhypro_1_1_settings_provider.html", "classhypro_1_1_settings_provider" ],
+    [ "SingularAnalyzer", "classhypro_1_1_singular_analyzer.html", "classhypro_1_1_singular_analyzer" ],
+    [ "singularJumpHandler", "classhypro_1_1singular_jump_handler.html", "classhypro_1_1singular_jump_handler" ],
+    [ "SingularSuccess", "namespacehypro.html#structhypro_1_1_singular_success", null ],
+    [ "SingularWorker", "classhypro_1_1_singular_worker.html", "classhypro_1_1_singular_worker" ],
     [ "STallValues", "namespacehypro.html#structhypro_1_1_s_tall_values", "namespacehypro_structhypro_1_1_s_tall_values_dup" ],
     [ "StatisticWrapper", "classhypro_1_1_statistic_wrapper.html", "classhypro_1_1_statistic_wrapper" ],
     [ "STflowpipeSegment", "namespacehypro.html#structhypro_1_1_s_tflowpipe_segment", "namespacehypro_structhypro_1_1_s_tflowpipe_segment_dup" ],
@@ -313,6 +319,7 @@ var namespacehypro =
     [ "UnionOp", "classhypro_1_1_union_op.html", "classhypro_1_1_union_op" ],
     [ "UtilSetting", "structhypro_1_1_util_setting.html", null ],
     [ "VariablePool", "classhypro_1_1_variable_pool.html", "classhypro_1_1_variable_pool" ],
+    [ "VerificationSuccess", "namespacehypro.html#structhypro_1_1_verification_success", null ],
     [ "Vertex", "classhypro_1_1_vertex.html", "classhypro_1_1_vertex" ],
     [ "VertexContainer", "classhypro_1_1_vertex_container.html", "classhypro_1_1_vertex_container" ],
     [ "VertexEnumeration", "classhypro_1_1_vertex_enumeration.html", "classhypro_1_1_vertex_enumeration" ],

@@ -25,7 +25,7 @@ var classhypro_1_1_constraint_set_t =
     [ "minkowskiSum", "classhypro_1_1_constraint_set_t.html#a45badc237959f8764132731fc6794885", null ],
     [ "operator=", "classhypro_1_1_constraint_set_t.html#aab37d875435f5241220414c20e7d8b33", null ],
     [ "operator=", "classhypro_1_1_constraint_set_t.html#a7be7cc697d8b51967c1302fdf341e9ba", null ],
-    [ "project", "classhypro_1_1_constraint_set_t.html#a91f2e7bfaa826aa85cca5578ce7bd5ed", null ],
+    [ "projectOn", "classhypro_1_1_constraint_set_t.html#a9681845523e58c02b6c078ecbc675de2", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1_constraint_set_t.html#aec6511adcc1c719c89fb4666003d4a22", null ],
     [ "reduceRepresentation", "classhypro_1_1_constraint_set_t.html#a0c60d8da290e0a34ba18c34a02bbf3b7", null ],
     [ "removeRedundancy", "classhypro_1_1_constraint_set_t.html#ad4db936b9a54804a35ecf9f1e02413a7", null ],
