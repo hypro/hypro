@@ -32,7 +32,7 @@ class Clock {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const Clock& clk ) {
-		out << double( std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>( clk.duration ).count() << " ms" );
+		out << double( std::chrono::duration_cast<std::chrono::duration<double, std::ratio<1, 1000>>>( clk.duration ).count() ) << " ms";
 		return out;
 	}
 };
