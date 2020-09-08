@@ -12,6 +12,7 @@
 
 #pragma once
 #include "analyzer/LTIAnalyzer.h"
+#include "analyzer/ReturnTypes.h"
 #include "datastructures/reachability/ReachTreev2.h"
 
 namespace hypro {
@@ -28,14 +29,15 @@ namespace reachability {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Representation>
+template <typename Representation, class Analyzer = LTIAnalyzer<Representation>>
 class Reach {
   public:
 	using NodePtr = ReachTreeNode<Representation>*;
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
   protected:
 	bool mInitialStatesSet = false;
-	LTIAnalyzer<Representation> mAnalyzer;
+	Analyzer mAnalyzer;
 	std::vector<ReachTreeNode<Representation>> mReachabilityTree;
 
   public:
@@ -55,8 +57,8 @@ class Reach {
 	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	typename LTIAnalyzer<Representation>::LTIResult computeForwardReachability() {
-		return mAnalyzer.run();
+	REACHABILITY_RESULT computeForwardReachability() {
+		return mAnalyzer.run().result();
 	}
 };
 
