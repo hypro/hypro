@@ -5,8 +5,7 @@ namespace hypro {
 template <typename Representation>
 template <typename OutputIt>
 REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
-	auto timeStep = mSettings.timeStep;
-	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, timeStep ), timeStep );
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
 	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -25,7 +24,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 
 	// while not done
 	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
-		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, timeStep ) );
+		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
 		std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
 		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
