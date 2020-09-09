@@ -86,6 +86,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      * @brief Get the time intervals the passed transition was enabled
      * @param transition
      * @return std::vector<carl::Interval<SegmentInd>>
+	 * TODO Implement
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };

@@ -9,6 +9,10 @@ namespace hypro {
 
 template <class Representation, class Number>
 std::pair<CONTAINMENT, Representation> intersect( Representation const& valuationSet, Condition<Number> const& condition ) {
+	assert( valuationSet.dimension() == condition.dimension() );
+	if ( condition.empty() ) {
+		return std::make_pair( CONTAINMENT::FULL, valuationSet );
+	}
 	return valuationSet.satisfiesHalfspaces( condition.getMatrix(), condition.getVector() );
 }
 

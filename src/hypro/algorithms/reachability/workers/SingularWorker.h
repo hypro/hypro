@@ -46,6 +46,12 @@ class SingularWorker {
 	const JumpSuccessors& getJumpPredecessorSets() const { return mJumpPredecessorSets; }
 	/// getter for time successor sets
 	const Flowpipe<Representation>& getFlowpipe() const { return mFlowpipe; }
+	/// resets all stored items
+	void reset() {
+		mJumpSuccessorSets.clear();
+		mJumpPredecessorSets.clear();
+		mFlowpipe.clear();
+	}
 
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );

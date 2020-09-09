@@ -5,6 +5,7 @@
 #include "decomposition/Decomposition.h"
 
 #include <iosfwd>
+#include <numeric>
 #include <variant>
 
 namespace hypro {
@@ -24,9 +25,11 @@ class Condition {
 	Condition() = default;
 	/// constructor from matrix and vector. Creates constraints describing Ax = b.
 	Condition( const matrix_t<Number>& mat, const vector_t<Number>& vec )
-		: mConstraints( { ConstraintSetT<Number>( mat, vec ) } )
+		: mConstraints()
 		, mConditionIsBox( { TRIBOOL::NSET } )
-		, mHash( 0 ) {}
+		, mHash( 0 ) {
+		mConstraints.emplace_back( mat, vec );
+	}
 	/// constructor from constraint set (which encapsulates a matrix and a vector)
 	explicit Condition( const ConstraintSetT<Number>& constraints )
 		: mConstraints( { constraints } )
@@ -49,6 +52,10 @@ class Condition {
 	std::size_t size() const { return mConstraints.size(); }
 	/// checks for emptiness
 	bool empty() const { return mConstraints.empty(); }
+	/// returns state space dimension
+	std::size_t dimension() const {
+		return std::accumulate( mConstraints.begin(), mConstraints.end(), 0, []( std::size_t cur, const auto& cSet ) { return cur + cSet.dimension(); } );
+	}
 	/// returns matrix representing constraints for a subspace (default 0)
 	const matrix_t<Number>& getMatrix( std::size_t I = 0 ) const {
 		assert( mConstraints.size() > I );
