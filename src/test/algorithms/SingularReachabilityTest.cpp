@@ -3,8 +3,15 @@
 #include <algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <algorithms/reachability/workers/SingularWorker.h>
 #include <datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <datastructures/reachability/ReachTreev2Util.h>
 #include <datastructures/reachability/Settings.h>
 #include <representations/GeometricObjectBase.h>
+
+using Number = mpq_class;
+using VPoly = hypro::VPolytope<Number>;
+using Matrix = hypro::matrix_t<Number>;
+using Vector = hypro::vector_t<Number>;
+using Point = hypro::Point<Number>;
 
 template <typename Number>
 hypro::HybridAutomaton<Number> createBouncingBall() {
@@ -55,8 +62,8 @@ hypro::HybridAutomaton<Number> createSingularHA() {
 	initialConstants << 0, 0;
 
 	// Create HA
-	res.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
-	res.addInitialState( &loc, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+	auto& locPtr = res.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
+	res.addInitialState( locPtr.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }
@@ -91,8 +98,8 @@ hypro::HybridAutomaton<Number> createSingularHA2() {
 	initialConstants << 0, 0, 1, -1;
 
 	// Create HA
-	res.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
-	res.addInitialState( &loc, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+	auto& locPtr = res.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
+	res.addInitialState( locPtr.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }
@@ -106,28 +113,30 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	hypro::HybridAutomaton<Number> res;
 
 	// Create locations
-	std::unique_ptr<hypro::Location<Number>> loc0 = std::make_unique<hypro::Location<Number>>();
-	std::unique_ptr<hypro::Location<Number>> loc1 = std::make_unique<hypro::Location<Number>>();
-	loc0->setName( "l0" );
-	loc1->setName( "l1" );
+	hypro::Location<Number> loc0{};
+	hypro::Location<Number> loc1{};
+	auto uniqueLoc0{ std::make_unique<hypro::Location<Number>>( loc0 ) };
+	auto uniqueLoc1{ std::make_unique<hypro::Location<Number>>( loc1 ) };
+	uniqueLoc0->setName( "l0" );
+	uniqueLoc1->setName( "l1" );
 
 	// Set flow x' = 1, y' = -1 in loc0
 	Matrix flow0 = Matrix::Zero( 3, 3 );
 	flow0( 0, 2 ) = 1;
 	flow0( 1, 2 ) = -1;
-	loc0->setFlow( flow0 );
+	uniqueLoc0->setFlow( flow0 );
 
 	// Set flow x' = 0, y' = 1 in loc1
 	Matrix flow1 = Matrix::Zero( 3, 3 );
 	flow1( 1, 2 ) = 1;
-	loc1->setFlow( flow1 );
+	uniqueLoc1->setFlow( flow1 );
 
 	// Set invariant x <= 3 in loc0 and loc1
 	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = 3 * Vector::Ones( 1 );
-	loc0->setInvariant( { invariantConstraints, invariantConstants } );
-	loc1->setInvariant( { invariantConstraints, invariantConstants } );
+	uniqueLoc0->setInvariant( { invariantConstraints, invariantConstants } );
+	uniqueLoc1->setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Construct transitions
 	// l0 -> l0 with guard x >= 1 and reset x := 0, y := 0
@@ -138,7 +147,7 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	hypro::Reset<Number> reset{ { { 0, 0 }, { 0, 0 } } };
 
 	std::unique_ptr<hypro::Transition<Number>> trans0 =
-		  std::make_unique<hypro::Transition<Number>>( loc0.get(), loc0.get(), guard, reset );
+		  std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
 	// l0 -> l1 with guard y <= -2 and no reset
 	transConstraint = Matrix::Zero( 1, 2 );
@@ -148,7 +157,7 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
 	std::unique_ptr<hypro::Transition<Number>> trans1 =
-		  std::make_unique<hypro::Transition<Number>>( loc0.get(), loc1.get(), guard, reset );
+		  std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = 0, y = 0, aff = 1
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -157,11 +166,13 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	initialConstants << 0, 0, 0, 0;
 
 	// Create HA
-	loc0->addTransition( std::move( trans0 ) );
-	loc0->addTransition( std::move( trans1 ) );
-	res.addLocation( std::move( loc0 ) );
-	res.addLocation( std::move( loc1 ) );
-	res.addInitialState( loc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+	uniqueLoc0->addTransition( std::move( trans0 ) );
+	uniqueLoc0->addTransition( std::move( trans1 ) );
+
+	res.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+	res.addLocation( std::move( uniqueLoc0 ) );
+	res.addLocation( std::move( uniqueLoc1 ) );
 
 	return res;
 }
@@ -206,8 +217,8 @@ hypro::HybridAutomaton<Number> createSingularHA4() {
 	initialConstraints << 1, -1;
 	initialConstants << 0, 0;
 
-	res.addLocation( std::move( loc ) );
-	res.addInitialState( loc.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+	auto& locPtr = res.addLocation( std::move( loc ) );
+	res.addInitialState( locPtr.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }
@@ -218,16 +229,10 @@ TEST( SingularRechabilityTest, WorkerConstruction ) {
 
 	auto automaton = createSingularHA<Number>();
 
-	auto worker = hypro::SingularWorker<VPoly>( automaton, hypro::Settings{ {}, { 1, hypro::tNumber( 10 ) }, {} } );
+	auto worker = hypro::SingularWorker<VPoly>( automaton, hypro::FixedAnalysisParameters{ 1, hypro::tNumber( 10 ) } );
 }
 
 TEST( SingularRechabilityTest, SingularAnalyzer ) {
-	using Number = mpq_class;
-	using VPoly = hypro::VPolytope<Number>;
-	using Matrix = hypro::matrix_t<Number>;
-	using Vector = hypro::vector_t<Number>;
-	using Point = hypro::Point<Number>;
-
 	// Create automaton and analyzer
 	auto automaton = createSingularHA<Number>();
 
@@ -238,40 +243,66 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	Vector badStateVec = -0.5 * Vector::Ones( 1 );
 
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
+	auto initialNodes1 = hypro::makeRoots<VPoly, Number>( automaton );
 	auto analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	hypro::REACHABILITY_RESULT result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
-
+		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes1 );
+	auto result = analyzer.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
 
 	// Compare flowpipes. Expect one flowpipe with two Polytopes (one for initial state and one for final)
-	EXPECT_TRUE( analyzer.getFlowpipes().size() == 1 );
-	EXPECT_TRUE( analyzer.getFlowpipes()[0].size() == 2 );
+	auto flowpipes = hypro::getFlowpipes( initialNodes1 );
+	EXPECT_TRUE( flowpipes.size() == 1 );
+	EXPECT_TRUE( flowpipes[0].size() == 2 );
 
 	// Initial contains only x = 0, final is the line segment x = [0, 1]
 	VPoly init( { Point{ 0 } } );
 	VPoly final( { Point{ 0 }, Point{ 1 } } );
-	EXPECT_EQ( init, analyzer.getFlowpipes()[0].begin()[0] );
-	EXPECT_EQ( final, analyzer.getFlowpipes()[0].begin()[1] );
+	EXPECT_EQ( init, flowpipes[0].begin()[0] );
+	EXPECT_EQ( final, flowpipes[0].begin()[1] );
+}
 
+TEST( SingularRechabilityTest, SingularAnalyzer2 ) {
 	// 2. x >= 2 (safe)
+	Matrix badStateMat = Matrix::Zero( 1, 1 );
+	badStateMat << -1;
+	Vector badStateVec = -0.5 * Vector::Ones( 1 );
+
+	auto automaton = createSingularHA<Number>();
+
 	badStateVec = -2 * Vector::Ones( 1 );
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result );
+	auto initialNodes2 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer2 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes2 );
+	auto result = analyzer2.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+}
 
+TEST( SingularRechabilityTest, SingularAnalyzer3 ) {
 	// 3. x >= 0.5 with time horizon 0.2 (safe)
+	Matrix badStateMat = Matrix::Zero( 1, 1 );
+	badStateMat << -1;
+	Vector badStateVec = -0.5 * Vector::Ones( 1 );
+
+	auto automaton = createSingularHA<Number>();
+
 	badStateVec = -0.5 * Vector::Ones( 1 );
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 0, hypro::tNumber( 0.2 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result );
+	auto initialNodes3 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer3 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 0.2 ), hypro::tNumber( 0.01 ) },
+		  initialNodes3 );
+	auto result = analyzer3.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+}
 
+TEST( SingularRechabilityTest, SingularAnalyzerTwoDimensions ) {
 	// two-dimensional HA
-	automaton = createSingularHA2<Number>();
+	Matrix badStateMat = Matrix::Zero( 1, 1 );
+	badStateMat << -1;
+	Vector badStateVec = -0.5 * Vector::Ones( 1 );
+
+	auto automaton = createSingularHA2<Number>();
 
 	// 1. y <= -1 (unsafe)
 	badStateMat = Matrix::Zero( 1, 2 );
@@ -279,35 +310,51 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	badStateVec = -1 * Vector::Ones( 1 );
 
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+	auto initialNodes4 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer4 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes4 );
+	auto result = analyzer4.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
+}
 
+TEST( SingularRechabilityTest, SingularAnalyzerTwoDimensionsUnsafe ) {
 	// 2. x <= 1 (unsafe)
+	Matrix badStateMat = Matrix::Zero( 1, 2 );
+	Vector badStateVec = -0.5 * Vector::Ones( 1 );
+
 	badStateMat << 1, 0;
 	badStateVec = Vector::Ones( 1 );
 
-	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+	auto automaton = createSingularHA2<Number>();
 
+	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
+	auto initialNodes5 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer5 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes5 );
+	auto result = analyzer5.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
+}
+
+TEST( SingularRechabilityTest, SingularAnalyzerTwoDimensionsSafe ) {
 	// 3. y <= -1 && x <= 1 (safe)
-	badStateMat = Matrix::Zero( 2, 2 );
+	Matrix badStateMat = Matrix::Zero( 2, 2 );
 	badStateMat << 0, 1, 1, 0;
-	badStateVec = Vector::Zero( 2 );
+	Vector badStateVec = Vector::Zero( 2 );
 	badStateVec << -1, 1;
 
-	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result );
+	auto automaton = createSingularHA2<Number>();
 
+	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
+	auto initialNodes6 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer6 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes6 );
+	auto result = analyzer6.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+}
+
+TEST( SingularRechabilityTest, SingularAnalyzerWithJumpsSafe ) {
 	// two-dimensional HA with two locations
-	automaton = createSingularHA3<Number>();
+	auto automaton = createSingularHA3<Number>();
 
 	// Get locations for local bad states
 	hypro::Location<Number>* l0 = automaton.getLocation( "l0" );
@@ -316,30 +363,39 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	std::map<const hypro::Location<Number>*, hypro::Condition<Number>> localBadStates;
 
 	// 1. l0, y <= -4 (safe)
-	badStateMat = Matrix::Zero( 1, 2 );
+	Matrix badStateMat = Matrix::Zero( 1, 2 );
 	badStateMat( 0, 1 ) = 1;
-	badStateVec = -4 * Vector::Ones( 1 );
+	Vector badStateVec = -4 * Vector::Ones( 1 );
 	hypro::Condition<Number> badState( badStateMat, badStateVec );
 	localBadStates[l0] = badState;
 
 	automaton.setLocalBadStates( localBadStates );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result );
+	auto initialNodes7 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer7 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, initialNodes7 );
+	auto result = analyzer7.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+}
 
+TEST( SingularRechabilityTest, SingularAnalyzerWithJumpsUnsafe ) {
+	auto automaton = createSingularHA3<Number>();
 	// 2. l1, y <= -2 (unsafe)
+	Matrix badStateMat = Matrix::Zero( 2, 2 );
+	Vector badStateVec = Vector::Zero( 2 );
 	badStateMat( 0, 1 ) = 1;
 	badStateVec( 0 ) = -2;
-	badState = hypro::Condition<Number>( badStateMat, badStateVec );
-	localBadStates.clear();
+	auto badState = hypro::Condition<Number>( badStateMat, badStateVec );
+
+	hypro::Location<Number>* l1 = automaton.getLocation( "l1" );
+	std::map<const hypro::Location<Number>*, hypro::Condition<Number>> localBadStates;
 	localBadStates[l1] = badState;
 
 	automaton.setLocalBadStates( localBadStates );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+	auto initialNodes8 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer8 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, initialNodes8 );
+	auto result = analyzer8.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
 
 	// 3. l1, x >= 3 (unsafe)
 	badStateMat = Matrix::Zero( 1, 2 );
@@ -350,10 +406,11 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	localBadStates[l1] = badState;
 
 	automaton.setLocalBadStates( localBadStates );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+	auto initialNodes9 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer9 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, initialNodes9 );
+	result = analyzer9.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
 
 TEST( SingularRechabilityTest, MultipleJumpsEnabled ) {
@@ -369,17 +426,17 @@ TEST( SingularRechabilityTest, MultipleJumpsEnabled ) {
 	Vector badStateVec = -1 * Vector::Ones( 1 );
 
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
+	auto initialNodes1 = hypro::makeRoots<VPoly, Number>( automaton );
 	auto analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::Settings{ {}, { 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	hypro::REACHABILITY_RESULT result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes1 );
+	auto result = analyzer.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
 
 	badStateMat << -1;
 	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	analyzer = hypro::SingularAnalyzer<VPoly>(
-		automaton, hypro::Settings{ {}, { 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, {} } );
-	result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
-
-
+	auto initialNodes2 = hypro::makeRoots<VPoly, Number>( automaton );
+	auto analyzer2 = hypro::SingularAnalyzer<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes2 );
+	result = analyzer2.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
 }

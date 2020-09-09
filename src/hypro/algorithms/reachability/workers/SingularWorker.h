@@ -29,7 +29,7 @@ class SingularWorker {
 
   public:
 	/// constructor from rectangular automaton and settings
-	SingularWorker( const HybridAutomaton<Number>& ha, const Settings& settings )
+	SingularWorker( const HybridAutomaton<Number>& ha, const FixedAnalysisParameters& settings )
 		: mHybridAutomaton( ha )
 		, mSettings( settings ) {}
 	/// computes a time transition followed by a discrete transition
@@ -59,7 +59,7 @@ class SingularWorker {
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;  ///< Reference to the rectangular automaton
-	const Settings& mSettings;						  ///< Reference to the used analysis settings
+	const FixedAnalysisParameters& mSettings;		  ///< Reference to the used analysis settings
 	JumpSuccessors mJumpSuccessorSets;				  ///< Storage of computed jump successors
 	JumpPredecessors mJumpPredecessorSets;			  ///< Storage of computed jump predecessors
 	Flowpipe<Representation> mFlowpipe;				  ///< Storage of computed time successors

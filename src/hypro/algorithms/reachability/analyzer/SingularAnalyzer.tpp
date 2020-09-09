@@ -3,42 +3,31 @@
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT SingularAnalyzer<Representation>::run() {
+typename SingularAnalyzer<Representation>::SingularResult SingularAnalyzer<Representation>::run() {
 	return forwardRun();
 }
 
 template <typename Representation>
-REACHABILITY_RESULT SingularAnalyzer<Representation>::forwardRun() {
-	// initialize queue
-	for ( auto& [location, condition] : mHybridAutomaton.getInitialStates() ) {
-		// create initial state
-		Representation initialStateSet{ condition.getMatrix(), condition.getVector() };
-
-		// create node from state
-		auto initialNode{ std::make_unique<ReachTreeNode<Representation>>( location, initialStateSet, carl::Interval<SegmentInd>( 0 ) ) };
-		// add to reachTree
-		mReachTree.emplace_back( std::move( initialNode ) );
-		// add to queue
-		mWorkQueue.push( mReachTree.back().get() );
-	}
+typename SingularAnalyzer<Representation>::SingularResult SingularAnalyzer<Representation>::forwardRun() {
+	SingularWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
 
 	while ( !mWorkQueue.empty() ) {
-		SingularWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
 		ReachTreeNode<Representation>* currentNode = mWorkQueue.front();
-		mWorkQueue.pop();
+		mWorkQueue.pop_front();
 		REACHABILITY_RESULT safetyResult;
 
-		if ( currentNode->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth ) {
+		if ( currentNode->getDepth() < mAnalysisSettings.jumpDepth ) {
 			safetyResult = worker.computeForwardReachability( *currentNode );
 		} else {
 			safetyResult = worker.computeTimeSuccessors( *currentNode );
 		}
 
 		// only for plotting
-		mFlowpipes.emplace_back( worker.getFlowpipe() );
+		auto& flowpipe = currentNode->getFlowpipe();
+		flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return safetyResult;
+			return { Failure{ currentNode } };
 		}
 
 		// create jump successor tasks
@@ -49,12 +38,14 @@ REACHABILITY_RESULT SingularAnalyzer<Representation>::forwardRun() {
 				auto& childNode = currentNode->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transition );
 
 				// create Task
-				mWorkQueue.push( &childNode );
+				mWorkQueue.push_back( &childNode );
 			}
 		}
+		// reset worker for next task
+		worker.reset();
 	}
 
-	return REACHABILITY_RESULT::SAFE;
+	return { VerificationSuccess{} };
 }
 
 }  // namespace hypro

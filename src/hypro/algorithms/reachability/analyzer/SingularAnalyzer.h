@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/ReachTreev2.h"
+#include "../../../datastructures/reachability/Settings.h"
 #include "../../../types.h"
 #include "../workers/SingularWorker.h"
 #include "ReturnTypes.h"
@@ -22,7 +23,7 @@ class SingularAnalyzer {
 	using Number = typename Representation::NumberType;
 
   public:
-	using SingularResult = AnalysisResult<SingularSuccess, Failure<Representation>>;
+	using SingularResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
 	/**
 	 * @brief      Default constructor (deleted).
@@ -30,37 +31,39 @@ class SingularAnalyzer {
 	SingularAnalyzer() = delete;
 
 	/**
-	 * @brief      Constructor from automaton and analysis settings.
+	 * @brief Construct a new Singular Analyzer object
+	 *
+	 * @param ha The hybrid (singular) automaton
+	 * @param fixedParameters A parameter configuration (parameter timeStep is not used)
+	 * @param roots The root nodes of the search tree containing the initial states of ha
 	 */
-	SingularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
+	SingularAnalyzer( HybridAutomaton<Number> const& ha,
+					  FixedAnalysisParameters const& fixedParameters,
+					  std::vector<ReachTreeNode<Representation>>& roots )
 		: mHybridAutomaton( ha )
-		, mAnalysisSettings( setting )
-		, mReachTree() {
+		, mAnalysisSettings( fixedParameters )
+		, mReachTree( roots ) {
+		for ( auto& root : roots ) {
+			mWorkQueue.push_back( &root );
+		}
 	}
 	/**
 	 * @brief      Main method for reachability analysis. Calls the method @ref forwardRun.
 	 * @return     SAFE if no bad state intersection is found and UNKNOWN otherwise.
 	 */
-	REACHABILITY_RESULT run();
+	SingularResult run();
 
 	/**
 	 * @brief      Execute forward reachability result.
 	 * @return     SAFE if no bad state intersection is found and UNKNOWN otherwise.
 	 */
-	REACHABILITY_RESULT forwardRun();
-
-	/**
-	 * @brief      Get the computed flowpipes.
-	 * @return     A vector holding the already computed flowpipes.
-	 */
-	const std::vector<Flowpipe<Representation>>& getFlowpipes() const { return mFlowpipes; }
+	SingularResult forwardRun();
 
   protected:
-	std::queue<ReachTreeNode<Representation>*> mWorkQueue;					 ///< Queue holds all nodes that require processing
-	std::vector<Flowpipe<Representation>> mFlowpipes;						 ///< Storage for already computed flowpipes
-	HybridAutomaton<Number> mHybridAutomaton;								 ///< Automaton which is analyzed
-	Settings mAnalysisSettings;												 ///< Settings used for analysis
-	std::vector<std::unique_ptr<ReachTreeNode<Representation>>> mReachTree;	 ///< Forest of ReachTrees computed
+	HybridAutomaton<Number> mHybridAutomaton;				 ///< Automaton which is analyzed
+	FixedAnalysisParameters mAnalysisSettings;				 ///< Settings used for analysis
+	std::vector<ReachTreeNode<Representation>>& mReachTree;	 ///< Forest of ReachTrees computed
+	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	 ///< Queue holds all nodes that require processing
 };
 
 }  // namespace hypro
