@@ -144,6 +144,7 @@ void Location<Number>::setLinearFlow( const linearFlow<Number>& f, std::size_t I
 		mFlows.push_back( f );
 		mFlowTypes.push_back( DynamicType::linear );
 	}
+	assert( isConsistent() );
 	mHash = 0;
 }
 

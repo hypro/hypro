@@ -88,10 +88,10 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 	, mDimension( 0 )
 	, mNonRedundant( true ) {
 	mEmptyState = points.empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
-	START_BENCHMARK_OPERATION( "HPoly_vertices_constructor" )
+	//START_BENCHMARK_OPERATION( "HPoly_vertices_constructor" )
 	// skip
 	if ( points.empty() ) {
-		EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
+		//EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
 		return;
 	}
 
@@ -142,7 +142,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			if ( Setting::OPTIMIZER_CACHING ) {
 				setOptimizer( this->matrix(), this->vector() );
 			}
-			EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
+			//EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
 			return;
 		}
 
@@ -271,7 +271,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			}
 		}
 	}
-	EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
+	//EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
 }
 
 //conversion ctor - just like copy ctor

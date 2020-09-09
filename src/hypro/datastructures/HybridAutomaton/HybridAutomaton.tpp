@@ -9,8 +9,8 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 	, mGlobalBadStates( hybrid.getGlobalBadStates() )
 	, mVariables( hybrid.getVariables() ) {
 	// mappings to update nested datastructures (transitions sets of locations and source/target locations of transitions).
-	std::map<const Location<Number>*, std::size_t> locationMapping;  // maps to position in new vector.
-	std::map<Transition<Number>*, std::size_t> transitionMapping;	// maps to position in new vector.
+	std::map<const Location<Number>*, std::size_t> locationMapping;	 // maps to position in new vector.
+	std::map<Transition<Number>*, std::size_t> transitionMapping;	 // maps to position in new vector.
 
 	// create real copies of the locations
 	for ( const auto l : hybrid.getLocations() ) {
@@ -126,7 +126,7 @@ HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
 template <typename Number>
 HybridAutomaton<Number>& HybridAutomaton<Number>::operator=( const HybridAutomaton<Number>& rhs ) {
 	if ( this != &rhs ) {
-		auto copy{rhs};
+		auto copy{ rhs };
 		*this = std::move( copy );
 	}
 	return *this;

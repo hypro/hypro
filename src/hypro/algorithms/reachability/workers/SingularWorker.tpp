@@ -31,7 +31,8 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	}
 
 	// compute time successor states
-	// TODO add assertions to check that location is singular indeed.
+	// assert singular flow
+	assert( task.getLocation()->getLinearFlow().getFlowMatrix().leftCols( initialSet.dimension() ) == matrix_t<Number>::Zero( initialSet.dimension() + 1, initialSet.dimension() ) );
 
 	// construct polytope describing the dynamics
 	std::vector<Point<Number>> vertices;
@@ -39,7 +40,7 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	vertices.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
 	Representation dynamics{ vertices };
 
-	Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.fixedParameters().localTimeHorizon ) );
+	Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.localTimeHorizon ) );
 	auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant() );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
@@ -145,6 +146,7 @@ void SingularWorker<Representation>::computeJumpPredecessors() {
 template <typename Representation>
 void SingularWorker<Representation>::reverseProcessJumpPredecessors( const JumpSuccessors& guardSatisfyingSets ) {
 	singularJumpHandler<Representation> jmpHandler;
-	mJumpPredecessorSets = jmpHandler.applyReverseJump( guardSatisfyingSets, nullptr, mSettings.strategy().front() );
+	mJumpPredecessorSets = jmpHandler.applyReverseJump( guardSatisfyingSets, nullptr );
 }
+
 }  // namespace hypro

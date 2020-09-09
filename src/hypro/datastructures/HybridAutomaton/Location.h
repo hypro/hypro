@@ -238,8 +238,7 @@ class Location {
 	inline bool operator!=( const Location<Number>& rhs ) const { return !( *this == rhs ); }
 	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& ostr, const Location<Number>& l ) {
-#ifdef HYPRO_LOGGING
-		ostr << "location " << l.getName() << " ptr " << &l << " (id: " << l.hash() << ")" << std::endl
+		ostr << "location ptr " << &l << " (id: " << l.hash() << ")" << std::endl
 			 << "\t Flow: " << std::endl;
 		for ( size_t i = 0; i < l.getNumberSubspaces(); i++ ) {
 			switch ( l.getFlowTypes()[i] ) {
@@ -264,12 +263,13 @@ class Location {
 		ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 		ostr << std::endl
 			 << ")";
-#endif
 		return ostr;
 	}
 
   private:
-	bool isConsistent() const { return mFlows.size() == mFlowTypes.size(); }
+	bool isConsistent() const {
+		return mFlows.size() == mFlowTypes.size();
+	}
 };
 
 /**

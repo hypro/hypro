@@ -44,7 +44,7 @@ class HybridAutomaton {
 	locationVector mLocations;			   /// The locations of the hybrid automaton.
 	locationConditionMap mInitialStates;   /// The set of initial states.
 	locationConditionMap mLocalBadStates;  /// The set of bad states which are bound to locations.
-	conditionVector mGlobalBadStates;	  /// The set of bad states which are not bound to any location.
+	conditionVector mGlobalBadStates;	   /// The set of bad states which are not bound to any location.
 	variableVector mVariables;
 
   public:

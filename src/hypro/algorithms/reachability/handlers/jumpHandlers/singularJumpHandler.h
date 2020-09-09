@@ -18,7 +18,7 @@ class singularJumpHandler {
 
 	void applyReduction( Representation& state ) const;
 
-	TransitionStateMap applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy );
+	TransitionStateMap applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition );
 
 	void applyGuard( Representation& state, Transition<Number>* transitionPtr ) const;
 

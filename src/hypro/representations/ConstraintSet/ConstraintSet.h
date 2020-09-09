@@ -33,9 +33,9 @@ class ConstraintSetT {
 	typedef Number NumberType;
 
   private:
-	matrix_t<Number> mConstraints;			/*!< Matrix describing the linear constraints.*/
-	vector_t<Number> mConstants;			/*!< Vector describing the constant parts for the respective constraints.*/
-	mutable TRIBOOL mIsBox = TRIBOOL::NSET; /*<  Cache to store whether the constraints are axis-aligned. */
+	matrix_t<Number> mConstraints = matrix_t<Number>::Zero( 0, 0 ); /*!< Matrix describing the linear constraints.*/
+	vector_t<Number> mConstants = vector_t<Number>::Zero( 0 );		/*!< Vector describing the constant parts for the respective constraints.*/
+	mutable TRIBOOL mIsBox = TRIBOOL::NSET;							/*<  Cache to store whether the constraints are axis-aligned. */
 
   public:
 	/***************************************************************************
@@ -46,9 +46,7 @@ class ConstraintSetT {
 	 * @brief      Creates an empty constraintSet.
 	 * @details   The empty constraintSet is represented by a zero-dimensional point pair.
 	 */
-	ConstraintSetT()
-		: mConstraints( matrix_t<Number>::Zero( 0, 0 ) )
-		, mConstants( vector_t<Number>::Zero( 0 ) ) {}
+	ConstraintSetT() {}
 
 	/**
 	 * @brief      Copy constructor.

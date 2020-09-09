@@ -62,7 +62,6 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 			}
 			// add interval bounds as new constraints
 			projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
-			std::cout << "projectedSet dimension: " << projectedSet.dimension() << ", newConstraints: " << newConstraints << std::endl;
 			projectedSet.insert( newConstraints.begin(), newConstraints.end() );
 
 			// convert back and assign to original representation type
@@ -71,9 +70,8 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 	}
 }
 
-/*
 template <typename Representation>
-auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy ) -> TransitionStateMap {
+auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition ) -> TransitionStateMap {
 	// holds a mapping of transitions to states which need to be aggregated
 	TransitionStateMap toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -85,21 +83,10 @@ auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStat
 		if ( transition == nullptr || transitionPtr == transition ) {
 			// check aggregation settings
 
-			if ( ( strategy.aggregation == AGG_SETTING::NO_AGG && strategy.clustering == -1 ) ||
-				 ( strategy.aggregation == AGG_SETTING::MODEL && transitionPtr->getAggregation() == Aggregation::none ) ) {
-				// just copy the states to the toProcess map.
-
-				auto& targetVec = toProcess[transitionPtr];
-				targetVec.insert( targetVec.end(), statesVec.begin(), statesVec.end() );
-			} else {  // store for aggregation
-				auto& targetVec = toAggregate[transitionPtr];
-				targetVec.insert( targetVec.end(), statesVec.begin(), statesVec.end() );
-			}
+			auto& targetVec = toProcess[transitionPtr];
+			targetVec.insert( targetVec.end(), statesVec.begin(), statesVec.end() );
 		}
 	}
-
-	// aggregate all sets marked for aggregation
-	aggregate( toProcess, toAggregate, strategy );
 
 	DEBUG( "hydra.worker", "Apply jump on " << toProcess.size() << " transitions." );
 
@@ -139,6 +126,5 @@ auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStat
 	}
 	return processedStates;
 }
-*/
 
 }  // namespace hypro
