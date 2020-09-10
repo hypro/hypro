@@ -1,5 +1,8 @@
 var NAVTREEINDEX15 =
 {
+"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8a32a0947c195c76d9586dd4cf75e58cc0":[9,0,1,0,3,5,0,0,2],
+"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8ac6b502f0b23b3da587a15b27e646f28f":[9,0,1,0,3,5,0,0,0],
+"sampling_8h.html#af4c85ea08f845de363019cfc27f271e5":[9,0,1,0,3,5,0,3],
 "sampling_8h_source.html":[9,0,1,0,3,5,0],
 "settings__enums_8cpp_source.html":[9,0,1,0,3,8,7],
 "settings__enums_8h_source.html":[9,0,1,0,3,8,8],
@@ -246,8 +249,5 @@ var NAVTREEINDEX15 =
 "structhypro_1_1_reachability_settings.html#aa17f76655c115df2a6ce1107f6c03341":[8,0,2,198,9],
 "structhypro_1_1_reachability_settings.html#aa879f947713bf99a791174af672ba59d":[8,0,2,198,15],
 "structhypro_1_1_reachability_settings.html#ae93b9fbf4be9c3f1ec20ff1647283dcb":[8,0,2,198,3],
-"structhypro_1_1_reachability_settings.html#aec7ef31f8312516dd54b2b338903e6fd":[8,0,2,198,5],
-"structhypro_1_1_reachability_settings.html#af27b3c78a5d04e3e98845619e059b2ff":[8,0,2,198,4],
-"structhypro_1_1_reachability_settings.html#af91b99cf64b956259347ba1595d0ad4d":[8,0,2,198,0],
-"structhypro_1_1_refinement_setting.html":[8,0,2,213]
+"structhypro_1_1_reachability_settings.html#aec7ef31f8312516dd54b2b338903e6fd":[8,0,2,198,5]
 };

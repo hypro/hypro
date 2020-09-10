@@ -6,7 +6,10 @@ var namespacehypro =
       [ "nth_element_impl", "structhypro_1_1detail_1_1nth__element__impl.html", "structhypro_1_1detail_1_1nth__element__impl" ],
       [ "nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4.html", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4" ],
       [ "ResetVisitor", "structhypro_1_1detail_1_1_reset_visitor.html", "structhypro_1_1detail_1_1_reset_visitor" ],
-      [ "seq", "structhypro_1_1detail_1_1seq.html", null ]
+      [ "seq", "structhypro_1_1detail_1_1seq.html", null ],
+      [ "UnpackRepresentation", "structhypro_1_1detail_1_1_unpack_representation.html", null ],
+      [ "UnpackRepresentation< ReachTreeNode< R > & >", "structhypro_1_1detail_1_1_unpack_representation_3_01_reach_tree_node_3_01_r_01_4_01_6_01_4.html", "structhypro_1_1detail_1_1_unpack_representation_3_01_reach_tree_node_3_01_r_01_4_01_6_01_4" ],
+      [ "UnpackRepresentation< std::vector< ReachTreeNode< R > > & >", "structhypro_1_1detail_1_1_unpack_representation_3_01std_1_1vector_3_01_reach_tree_node_3_01_r_01_4_01_4_01_6_01_4.html", "structhypro_1_1detail_1_1_unpack_representation_3_01std_1_1vector_3_01_reach_tree_node_3_01_r_01_4_01_4_01_6_01_4" ]
     ] ],
     [ "ExactQuickhull", null, [
       [ "Facet", "structhypro_1_1_exact_quickhull_1_1_facet.html", "structhypro_1_1_exact_quickhull_1_1_facet" ],
@@ -22,7 +25,8 @@ var namespacehypro =
       [ "detail", null, [
         [ "bloatBoxVisitor", "classhypro_1_1reachability_1_1detail_1_1bloat_box_visitor.html", "classhypro_1_1reachability_1_1detail_1_1bloat_box_visitor" ]
       ] ],
-      [ "Reach", "classhypro_1_1reachability_1_1_reach.html", "classhypro_1_1reachability_1_1_reach" ]
+      [ "Reach", "classhypro_1_1reachability_1_1_reach.html", "classhypro_1_1reachability_1_1_reach" ],
+      [ "ReachSingular", "classhypro_1_1reachability_1_1_reach_singular.html", "classhypro_1_1reachability_1_1_reach_singular" ]
     ] ],
     [ "statistics", null, [
       [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1_atomic_operation_counter.html", "structhypro_1_1statistics_1_1_atomic_operation_counter" ],

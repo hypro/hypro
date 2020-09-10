@@ -125,55 +125,78 @@ $(document).ready(function(){initNavTree('structhypro_1_1_exact_quickhull_1_1_fa
 <div class="title">hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Struct representing a facet in Euclidean space.  
+ <a href="structhypro_1_1_exact_quickhull_1_1_facet.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a719a29980351f1bf93eea1d7b5c4eb7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a719a29980351f1bf93eea1d7b5c4eb7b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>invert</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a719a29980351f1bf93eea1d7b5c4eb7b">invert</a> ()</td></tr>
+<tr class="memdesc:a719a29980351f1bf93eea1d7b5c4eb7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inverts the facet. <br /></td></tr>
 <tr class="separator:a719a29980351f1bf93eea1d7b5c4eb7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade0192e24cebd6f519868031bb7012f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade0192e24cebd6f519868031bb7012f8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setOrientation</b> (point_t const &amp;containedPoint, <a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html">Facet</a> const &amp;adjacentFacet)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#ade0192e24cebd6f519868031bb7012f8">setOrientation</a> (point_t const &amp;containedPoint, <a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html">Facet</a> const &amp;adjacentFacet)</td></tr>
+<tr class="memdesc:ade0192e24cebd6f519868031bb7012f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets normal vector orientation and normal vector? <br /></td></tr>
 <tr class="separator:ade0192e24cebd6f519868031bb7012f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43c2f00503e91bc4c741fbc30e1a7500"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a43c2f00503e91bc4c741fbc30e1a7500"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>distance</b> (point_t const &amp;point) const </td></tr>
+Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a43c2f00503e91bc4c741fbc30e1a7500">distance</a> (point_t const &amp;point) const </td></tr>
+<tr class="memdesc:a43c2f00503e91bc4c741fbc30e1a7500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns signed distance from point to hyperplane. <br /></td></tr>
 <tr class="separator:a43c2f00503e91bc4c741fbc30e1a7500"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5f177ee8bdd3bdd1b42efb3ea446ae9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5f177ee8bdd3bdd1b42efb3ea446ae9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>visible</b> (point_t const &amp;vertex) const </td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#af5f177ee8bdd3bdd1b42efb3ea446ae9">visible</a> (point_t const &amp;vertex) const </td></tr>
+<tr class="memdesc:af5f177ee8bdd3bdd1b42efb3ea446ae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">True if the passed point is above the facet (outside) <br /></td></tr>
 <tr class="separator:af5f177ee8bdd3bdd1b42efb3ea446ae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b5bfd8069e811003656f909ab4198f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b5bfd8069e811003656f909ab4198f1"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>findNeighborIndex</b> (facet_ind_t facet_i)</td></tr>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a2b5bfd8069e811003656f909ab4198f1">findNeighborIndex</a> (facet_ind_t facet_i)</td></tr>
+<tr class="memdesc:a2b5bfd8069e811003656f909ab4198f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns index in the neighbor set of the passed facet. <br /></td></tr>
 <tr class="separator:a2b5bfd8069e811003656f909ab4198f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a380abd2251f4a27aa8b250ce7f89e8e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a380abd2251f4a27aa8b250ce7f89e8e1"></a>
-std::vector&lt; point_ind_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mVertices</b></td></tr>
+std::vector&lt; point_ind_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a380abd2251f4a27aa8b250ce7f89e8e1">mVertices</a></td></tr>
+<tr class="memdesc:a380abd2251f4a27aa8b250ce7f89e8e1"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classhypro_1_1_vertex.html" title="Forward declaration of class Vertex. ">Vertex</a> cache. <br /></td></tr>
 <tr class="separator:a380abd2251f4a27aa8b250ce7f89e8e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55fd769dca0ca49a60a9b3663f25ce15"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55fd769dca0ca49a60a9b3663f25ce15"></a>
-std::vector&lt; facet_ind_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mNeighbors</b></td></tr>
+std::vector&lt; facet_ind_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a55fd769dca0ca49a60a9b3663f25ce15">mNeighbors</a></td></tr>
+<tr class="memdesc:a55fd769dca0ca49a60a9b3663f25ce15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Neighbor cache. <br /></td></tr>
 <tr class="separator:a55fd769dca0ca49a60a9b3663f25ce15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fa9c043e6dcf7566a56cc424bee8b97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0fa9c043e6dcf7566a56cc424bee8b97"></a>
-std::vector&lt; point_ind_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mOutsideSet</b></td></tr>
+std::vector&lt; point_ind_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a0fa9c043e6dcf7566a56cc424bee8b97">mOutsideSet</a></td></tr>
+<tr class="memdesc:a0fa9c043e6dcf7566a56cc424bee8b97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outside vertices cache. <br /></td></tr>
 <tr class="separator:a0fa9c043e6dcf7566a56cc424bee8b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56385e1705a05a8eee45de2057ece6be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56385e1705a05a8eee45de2057ece6be"></a>
-point_t&#160;</td><td class="memItemRight" valign="bottom"><b>mNormal</b></td></tr>
+point_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a56385e1705a05a8eee45de2057ece6be">mNormal</a></td></tr>
+<tr class="memdesc:a56385e1705a05a8eee45de2057ece6be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normal vector. <br /></td></tr>
 <tr class="separator:a56385e1705a05a8eee45de2057ece6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a930fda353889760b9ed810f83a699758"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a930fda353889760b9ed810f83a699758"></a>
-point_ind_t&#160;</td><td class="memItemRight" valign="bottom"><b>furthestPoint</b></td></tr>
+point_ind_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a930fda353889760b9ed810f83a699758">furthestPoint</a></td></tr>
+<tr class="memdesc:a930fda353889760b9ed810f83a699758"><td class="mdescLeft">&#160;</td><td class="mdescRight">??? <br /></td></tr>
 <tr class="separator:a930fda353889760b9ed810f83a699758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fe1d226d922b19107675fbd6b17c904"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fe1d226d922b19107675fbd6b17c904"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>furthestPointDistance</b> = Number(0)</td></tr>
+Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a8fe1d226d922b19107675fbd6b17c904">furthestPointDistance</a> = Number( 0 )</td></tr>
+<tr class="memdesc:a8fe1d226d922b19107675fbd6b17c904"><td class="mdescLeft">&#160;</td><td class="mdescRight">??? <br /></td></tr>
 <tr class="separator:a8fe1d226d922b19107675fbd6b17c904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a7ca1c89832c40989d900ada01c48c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a7ca1c89832c40989d900ada01c48c1"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>mOffset</b> = Number(1000)</td></tr>
+Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_exact_quickhull_1_1_facet.html#a7a7ca1c89832c40989d900ada01c48c1">mOffset</a> = Number( 1000 )</td></tr>
+<tr class="memdesc:a7a7ca1c89832c40989d900ada01c48c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset. <br /></td></tr>
 <tr class="separator:a7a7ca1c89832c40989d900ada01c48c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, bool Euclidian&gt;<br />
 struct hypro::ExactQuickhull::Facet&lt; Number, Euclidian &gt;</h3>
 
+<p>Struct representing a facet in Euclidean space. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td></td></tr>
+    <tr><td class="paramname">Euclidian</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="algorithms_2quickhull_2quickhull__exact_2_facet_8h_source.html#l00007">7</a> of file <a class="el" href="algorithms_2quickhull_2quickhull__exact_2_facet_8h_source.html">Facet.h</a>.</p>
+<p>Definition at line <a class="el" href="algorithms_2quickhull_2quickhull__exact_2_facet_8h_source.html#l00012">12</a> of file <a class="el" href="algorithms_2quickhull_2quickhull__exact_2_facet_8h_source.html">Facet.h</a>.</p>
 </div><hr/>The documentation for this struct was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/<a class="el" href="algorithms_2quickhull_2quickhull__exact_2_facet_8h_source.html">Facet.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/<a class="el" href="_facet_8tpp_source.html">Facet.tpp</a></li>

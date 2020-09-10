@@ -29,7 +29,7 @@ var searchData=
   ['dispatch',['dispatch',['../namespacehypro.html#af0c322e9e974c73e225ea66c228dba92',1,'hypro']]],
   ['dispatcher_5fi',['Dispatcher_i',['../structhypro_1_1_dispatcher__i.html',1,'hypro']]],
   ['dispatcher_5fi_3c_20representation_20_3e',['Dispatcher_i&lt; Representation &gt;',['../structhypro_1_1_dispatcher__i_3_01_representation_01_4.html',1,'hypro']]],
-  ['distance',['distance',['../classhypro_1_1_point.html#a3f87fd5562d144a031be521708a99c6b',1,'hypro::Point']]],
+  ['distance',['distance',['../structhypro_1_1_exact_quickhull_1_1_facet.html#a43c2f00503e91bc4c741fbc30e1a7500',1,'hypro::ExactQuickhull::Facet::distance()'],['../classhypro_1_1_point.html#a3f87fd5562d144a031be521708a99c6b',1,'hypro::Point::distance()']]],
   ['domain',['Domain',['../classhypro_1_1_domain.html',1,'hypro']]],
   ['dummy',['Dummy',['../structhypro_1_1_dummy.html',1,'hypro']]],
   ['dynamic',['dynamic',['../namespacehypro.html#a4a88dfa1cbef6e1ffadd45caf4e6d3d6',1,'hypro::PreprocessingInformation']]],

@@ -10,6 +10,7 @@ var classhypro_1_1_flowpipe =
     [ "addState", "classhypro_1_1_flowpipe.html#a993053410bb57af4f02bb4d0bde074de", null ],
     [ "begin", "classhypro_1_1_flowpipe.html#a9a7254911bd1c3cac858afb105d00c6a", null ],
     [ "begin", "classhypro_1_1_flowpipe.html#ab1e051f23c5bf7baeecd333745ee590a", null ],
+    [ "clear", "classhypro_1_1_flowpipe.html#a3af03a014b21c706c1a0f89f6320fa28", null ],
     [ "clear", "classhypro_1_1_flowpipe.html#a0c3cdda5bb32c0bc23818772b94eae01", null ],
     [ "composition", "classhypro_1_1_flowpipe.html#a32120636a2ad844578d53253287fb836", null ],
     [ "enclosure", "classhypro_1_1_flowpipe.html#ae4a8928867fdd58b5baca08dd6fa1863", null ],

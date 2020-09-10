@@ -2,11 +2,13 @@
    /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h
    /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h
 Please use a more specific name by including a (larger) part of the path!
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:7: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::Facet not found!
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:12: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::Facet not found!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:10: warning: Internal inconsistency: scope for class hypro::ExactQuickhull::FacetSpace not found!
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:62: warning: Compound hypro::reachability::ReachSingular is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:23: warning: Compound hypro::LRUCache is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:6: warning: Compound Clock is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h:6: warning: Compound hypro::LockableObjectWrapper is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:18: warning: Compound hypro::detail::UnpackRepresentation< std::vector< ReachTreeNode< R > > & > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyVisitors.h:8: warning: Compound hypro::setCreationVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:26: warning: Compound hypro::NonLinearOmega0Supportfunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:42: warning: Compound hypro::STflowpipeSegment is not documented.
@@ -59,7 +61,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectHalfspaceOp.h:23: warning: Compound hypro::RootGrowNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:57: warning: Compound hypro::SupportFunctionNewLeGuernic is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:22: warning: Compound hypro::TimedValuationSet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:33: warning: Compound hypro::PlottingSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:35: warning: Compound hypro::PlottingSettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:21: warning: Compound hypro::Domain is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.h:30: warning: Compound hypro::RefinementSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Range.h:5: warning: Compound hypro::Range is not documented.
@@ -94,7 +96,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:27: warning: Compound hypro::flowDynamicsTypeVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h:15: warning: Compound hypro::Label is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:10: warning: Compound hypro::singularJumpHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:23: warning: Compound hypro::FixedAnalysisParameters is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:25: warning: Compound hypro::FixedAnalysisParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:42: warning: Compound hypro::NoTrafoReduction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:128: warning: Compound std::hash< hypro::AffineTransformation< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:191: warning: Compound hypro::TaylorModelVec is not documented.
@@ -108,7 +110,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueSettings.h:5: warning: Compound hypro::WorkQueueDefaultSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/TimedContext.h:20: warning: Compound hypro::TimedContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/Leaf.h:22: warning: Compound hypro::LeafData is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:66: warning: Compound hypro::LTIWorker< Representation >::EnabledSegmentsGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:65: warning: Compound hypro::LTIWorker< Representation >::EnabledSegmentsGen is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TimeTransformationCache.h:9: warning: Compound hypro::TimeTransformationCache is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h:9: warning: Compound hypro::TrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSetting.h:5: warning: Compound hypro::VPolytopeSetting is not documented.
@@ -126,11 +128,12 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/TemplatePolyhedronContext.h:34: warning: Compound hypro::TemplatePolyhedronContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:34: warning: Compound hypro::IBadStateHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/clp/clp_context.h:12: warning: Compound hypro::clp_context is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:13: warning: Compound hypro::detail::UnpackRepresentation< ReachTreeNode< R > & > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZonotopeSetting.h:12: warning: Compound hypro::ZonotopeSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:41: warning: Compound hypro::flowIsSingularVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:288: warning: Compound better_enums::optional is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:9: warning: Compound hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:39: warning: Compound hypro::Settings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:41: warning: Compound hypro::Settings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/VertexContainer.h:19: warning: Compound hypro::VertexContainer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:63: warning: Compound std::hash< hypro::Cacheable< Content > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:58: warning: Compound hypro::IntervalAssignment is not documented.
@@ -147,7 +150,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:74: warning: Compound hypro::TaylorModel is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:10: warning: Compound hypro::TreeIterator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:20: warning: Compound hypro::flowTypeVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:130: warning: Compound hypro::LTIWorker< Representation >::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:129: warning: Compound hypro::LTIWorker< Representation >::JumpSuccessorGen is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:19: warning: Compound hypro::ContextBasedReachabilityWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:6: warning: Compound hypro::LockableBase is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/rectangularResetHandler.h:6: warning: Compound hypro::rectangularResetHandler is not documented.
@@ -177,7 +180,6 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:20: warning: Compound hypro::BallSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/invariantHandlers/discreteInvariantHandler.h:7: warning: Compound hypro::discreteInvariantHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:16: warning: Compound hypro::discreteInvariantHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:7: warning: Compound hypro::ExactQuickhull< Number, Euclidian >::Facet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:28: warning: Compound hypro::JumpSuccessor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:1041: warning: Compound better_enums::map_compare< const char * > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:47: warning: Compound hypro::SupportFunctionNewNoReduction is not documented.
@@ -188,7 +190,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/RectangularContext.h:25: warning: Compound hypro::RectangularContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:63: warning: Compound hypro::PolytopeSupportFunctionSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:10: warning: Compound std::hash< std::pair< first, second > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:103: warning: Compound hypro::LTIWorker< Representation >::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:102: warning: Compound hypro::LTIWorker< Representation >::AggregatedGen is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/for_each.h:14: warning: Detected potential recursive class relation between class hypro::detail::gen_seq and base class hypro::detail::gen_seq< N-1, N-1, Is... >!
 
 /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/for_each.h:14: warning: Detected potential recursive class relation between class hypro::detail::gen_seq and base class gen_seq< N-1, N-1, Is... >!
@@ -211,7 +213,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:35: warning: Compound hypro::BoxIntervalArithmeticOff is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:15: warning: Compound hypro::ReachTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.h:111: warning: Compound hypro::ReachTreeNode is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:109: warning: Compound hypro::RTN_Rep_i< ReachTreeNode< Representation > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:110: warning: Compound hypro::RTN_Rep_i< ReachTreeNode< Representation > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNew.h:46: warning: Compound hypro::Parameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:45: warning: Compound hypro::BoxAllOff is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:12: warning: Compound hypro::timedFirstSegmentHandler is not documented.
@@ -244,7 +246,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/PolytopeSetting.h:6: warning: Compound hypro::PolytopeSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/CEGARAnalyzer.tpp:8: warning: Compound hypro::CEGARAnalyzer< Number, Representations... >::CreateBaseLevel is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:138: warning: Compound hypro::intersectionContent is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:12: warning: Compound hypro::AnalysisParameters is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:14: warning: Compound hypro::AnalysisParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:46: warning: Compound hypro::IGuardHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/dispatch_meta.h:21: warning: Compound hypro::TypeMapping< R< N, C, Setting > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueueManager.h:8: warning: Compound hypro::WorkQueueManager is not documented.
@@ -1020,7 +1022,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:26: warning: Member QEQuery (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:26: warning: Member flowVariant (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:22: warning: Member initialData (typedef) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:114: warning: Member RTN_Rep (typedef) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:115: warning: Member RTN_Rep (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/WorkQueue.h:113: warning: Member WorkQueue (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:24: warning: Member vVec (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:26: warning: Member vVecIt (typedef) of namespace hypro is not documented.
@@ -1069,10 +1071,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.tpp:28: warning: Member ChildNodeGen(Gen *, ReachTreeNode< Rep > *, int) -> ChildNodeGen< Rep > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:39: warning: Member Failure(ReachTreeNode< Representation > *) -> Failure< Representation > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:11: warning: Member intersect(Representation const &valuationSet, Condition< Number > const &condition) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:16: warning: Member timeTrafoMatrixBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:21: warning: Member timeTrafoVectorBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:26: warning: Member applyTimeEvolution(Representation const &valuationSet, matrix_t< Number > const &timeTransformation) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:31: warning: Member applyReset(Representation const &valuationSet, Reset< Number > const &reset) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:20: warning: Member timeTrafoMatrixBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:25: warning: Member timeTrafoVectorBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:30: warning: Member applyTimeEvolution(Representation const &valuationSet, matrix_t< Number > const &timeTransformation) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:35: warning: Member applyReset(Representation const &valuationSet, Reset< Number > const &reset) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h:7: warning: Member ltiIntersectBadStates(const Representation &valuationSet, Location< Number > const *location, const HybridAutomaton< Number > &automaton) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/rectangularBadStateHandler.h:5: warning: Member rectangularIntersectBadStates(const State &stateSet, const HybridAutomaton< typename State::NumberType > &automaton) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/badStateHandlers/rectangularBadStateHandler.h:8: warning: Member rectangularBadIntersectInitialStates(const State &stateSet, const HybridAutomaton< typename State::NumberType > &automaton) (function) of namespace hypro is not documented.
@@ -1120,7 +1122,9 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.tpp:372: warning: Member operator<<(std::ostream &out, const ReachTreeNode< State > &reachTreeNode) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.tpp:381: warning: Member operator<(const ReachTreeNode< S > &lhs, const ReachTreeNode< S > &rhs) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.tpp:386: warning: Member operator==(const ReachTreeNode< S > &lhs, const ReachTreeNode< S > &rhs) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:94: warning: Member makeRoots(HybridAutomaton< Number > const &ha) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2.h:95: warning: Member makeRoots(HybridAutomaton< Number > const &ha) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:25: warning: Member visitPreorder(RootType &&root, Function func) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:32: warning: Member getFlowpipes(RootType &&root) -> std::vector< std::vector< typename detail::UnpackRepresentation< RootType >::Representation >> (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Task.h:113: warning: Member operator==(const std::shared_ptr< Task< State >> &lhs, const std::shared_ptr< Task< State >> &rhs) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/ETC_util.cpp:5: warning: Member getEnabledTimings(const HierarchicalIntervalVector< CONTAINMENT, tNumber > &in) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeTraversal.h:65: warning: Member preorder(NodeType &node) (function) of namespace hypro is not documented.
@@ -1497,31 +1501,31 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/ConstrainSet.h:160: warning: Member operator<<(std::ostream &_ostr, const ConstrainSet< Number > &cs) (friend) of class hypro::ConstrainSet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:32: warning: Member Settings (typedef) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:33: warning: Member NumberType (typedef) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:96: warning: Member matrix() const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:97: warning: Member vector() const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:99: warning: Member rMatrix() (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:100: warning: Member rVector() (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:102: warning: Member setMatrix(const matrix_t< Number > &in) (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:103: warning: Member setVector(const vector_t< Number > &in) (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:105: warning: Member isAxisAligned() const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:121: warning: Member addConstraint(const vector_t< Number > &normal, Number offset) (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:219: warning: Member satisfiesHalfspace(const Halfspace< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:220: warning: Member satisfiesHalfspaces(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:222: warning: Member projectOn(const std::vector< std::size_t > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:223: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:225: warning: Member linearTransformation(const matrix_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:226: warning: Member affineTransformation(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:227: warning: Member minkowskiSum(const ConstraintSetT &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:236: warning: Member intersectHalfspace(const Halfspace< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:237: warning: Member intersectHalfspaces(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:238: warning: Member contains(const Point< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:208: warning: Member type() (function) of class hypro::ConstraintSetT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:79: warning: argument '_constants' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::ConstraintSetT(const matrix_t< Number > &_constraints)
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:241: warning: argument 'constraintSet' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::contains(const ConstraintSetT &) const
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:230: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::intersect(const ConstraintSetT &) const
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:213: warning: argument 'limit' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::reduceNumberRepresentation(unsigned)
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:251: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::unite(const ConstraintSetT &) const
-/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:258: warning: argument 'constraintSets' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::unite(const std::vector< ConstraintSetT > &)
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:94: warning: Member matrix() const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:95: warning: Member vector() const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:97: warning: Member rMatrix() (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:98: warning: Member rVector() (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:100: warning: Member setMatrix(const matrix_t< Number > &in) (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:101: warning: Member setVector(const vector_t< Number > &in) (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:103: warning: Member isAxisAligned() const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:119: warning: Member addConstraint(const vector_t< Number > &normal, Number offset) (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:217: warning: Member satisfiesHalfspace(const Halfspace< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:218: warning: Member satisfiesHalfspaces(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:220: warning: Member projectOn(const std::vector< std::size_t > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:221: warning: Member assignIntervals(const std::map< std::size_t, carl::Interval< Number >> &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:223: warning: Member linearTransformation(const matrix_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:224: warning: Member affineTransformation(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:225: warning: Member minkowskiSum(const ConstraintSetT &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:234: warning: Member intersectHalfspace(const Halfspace< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:235: warning: Member intersectHalfspaces(const matrix_t< Number > &, const vector_t< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:236: warning: Member contains(const Point< Number > &) const  (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:206: warning: Member type() (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:77: warning: argument '_constants' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::ConstraintSetT(const matrix_t< Number > &_constraints)
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:239: warning: argument 'constraintSet' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::contains(const ConstraintSetT &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:228: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::intersect(const ConstraintSetT &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:211: warning: argument 'limit' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::reduceNumberRepresentation(unsigned)
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:249: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::unite(const ConstraintSetT &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:256: warning: argument 'constraintSets' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, S >::unite(const std::vector< ConstraintSetT > &)
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:24: warning: Member ContextBasedReachabilityWorker(const ReachabilitySettings &settings) (function) of class hypro::ContextBasedReachabilityWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:31: warning: Member processTask(const TaskType &t, const Strategy< State > &strat, WorkQueue< TaskType > *localQueue, WorkQueue< TaskType > *localCEXQueue, Flowpipe< State > &localSegments) (function) of class hypro::ContextBasedReachabilityWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:37: warning: Member computeForwardReachability(const TaskType &task, const Strategy< State > &strat, WorkQueue< TaskType > *localQueue, WorkQueue< TaskType > *localCEXQueue, Flowpipe< State > &localSegments) (function) of class hypro::ContextBasedReachabilityWorker is not documented.
@@ -2042,11 +2046,12 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:27: warning: Member addState(const Representation &state) (function) of class hypro::Flowpipe is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:28: warning: Member addState(Representation &&state) (function) of class hypro::Flowpipe is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:31: warning: Member selectSatisfyingStates(const Condition< Number > &cond) (function) of class hypro::Flowpipe is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:35: warning: Member begin() (function) of class hypro::Flowpipe is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:36: warning: Member end() (function) of class hypro::Flowpipe is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:37: warning: Member begin() const  (function) of class hypro::Flowpipe is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:38: warning: Member end() const  (function) of class hypro::Flowpipe is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:40: warning: Member size() const  (function) of class hypro::Flowpipe is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:35: warning: Member clear() (function) of class hypro::Flowpipe is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:37: warning: Member begin() (function) of class hypro::Flowpipe is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:38: warning: Member end() (function) of class hypro::Flowpipe is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:39: warning: Member begin() const  (function) of class hypro::Flowpipe is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:40: warning: Member end() const  (function) of class hypro::Flowpipe is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Flowpipe.h:42: warning: Member size() const  (function) of class hypro::Flowpipe is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/continuous.h:24: warning: Member Flowpipe(const TaylorModelVec< Number > &tmv_input, const Domain< Number > &domain_input) (function) of class hypro::Flowpipe is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/continuous.h:25: warning: Member Flowpipe(const Flowpipe< Number > &flowpipe) (function) of class hypro::Flowpipe is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/continuous.h:28: warning: Member clear() (function) of class hypro::Flowpipe is not documented.
@@ -2686,29 +2691,26 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:35: warning: Member computeTimeSuccessors(const Representation &initialSet, Location< Number > const *loc, OutputIt out) const  (function) of class hypro::LTIWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:37: warning: Member computeJumpSuccessors(std::vector< Representation > const &flowpipe, Location< Number > const *loc) const  (function) of class hypro::LTIWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:38: warning: Member getJumpSuccessors(std::vector< Representation > const &flowpipe, Transition< Number > const *transition) const  (function) of class hypro::LTIWorker is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:41: warning: Member mHybridAutomaton (variable) of class hypro::LTIWorker is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:43: warning: Member mLocalTimeHorizon (variable) of class hypro::LTIWorker is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:44: warning: Member mTrafoCache (variable) of class hypro::LTIWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:46: warning: Member mNumSegments (variable) of class hypro::LTIWorker is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:109: warning: Member AggregatedGen(size_t segmentsPerBlock, std::vector< Representation > &enabled, SegmentInd firstEnabled) (function) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:114: warning: Member AggregatedGen(size_t segmentsPerBlock, std::pair< std::vector< Representation >, SegmentInd > &p) (function) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:117: warning: Member next() (function) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:104: warning: Member segmentsPerBlock (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:105: warning: Member enabled (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:106: warning: Member firstEnabled (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:107: warning: Member current (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:71: warning: Member EnabledSegmentsGen(std::vector< Representation > const *flowpipe, Transition< Number > const *transition) (function) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:75: warning: Member next() (function) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:67: warning: Member flowpipe (variable) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:68: warning: Member transition (variable) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:69: warning: Member current (variable) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:140: warning: Member JumpSuccessorGen(std::vector< Representation > const &flowpipe, Transition< Number > const *transition, size_t segmentsPerBlock) (function) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:146: warning: Member next() (function) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:131: warning: Member mEnabledRange (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:133: warning: Member mSegmentsPerBlock (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:134: warning: Member mTransition (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:136: warning: Member mEnabled (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:137: warning: Member mAggregated (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:108: warning: Member AggregatedGen(size_t segmentsPerBlock, std::vector< Representation > &enabled, SegmentInd firstEnabled) (function) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:113: warning: Member AggregatedGen(size_t segmentsPerBlock, std::pair< std::vector< Representation >, SegmentInd > &p) (function) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:116: warning: Member next() (function) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:103: warning: Member segmentsPerBlock (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:104: warning: Member enabled (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:105: warning: Member firstEnabled (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:106: warning: Member current (variable) of class hypro::LTIWorker::AggregatedGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:70: warning: Member EnabledSegmentsGen(std::vector< Representation > const *flowpipe, Transition< Number > const *transition) (function) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:74: warning: Member next() (function) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:66: warning: Member flowpipe (variable) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:67: warning: Member transition (variable) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:68: warning: Member current (variable) of class hypro::LTIWorker::EnabledSegmentsGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:139: warning: Member JumpSuccessorGen(std::vector< Representation > const &flowpipe, Transition< Number > const *transition, size_t segmentsPerBlock) (function) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:145: warning: Member next() (function) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:130: warning: Member mEnabledRange (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:132: warning: Member mSegmentsPerBlock (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:133: warning: Member mTransition (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:135: warning: Member mEnabled (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.tpp:136: warning: Member mAggregated (variable) of class hypro::LTIWorker::JumpSuccessorGen is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h:20: warning: Member neighborhood (typedef) of class hypro::NeighborhoodContainer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h:28: warning: Member NeighborhoodContainer(const NeighborhoodContainer &copy) (function) of class hypro::NeighborhoodContainer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h:32: warning: Member operator=(const NeighborhoodContainer &orig)=default (function) of class hypro::NeighborhoodContainer is not documented.
@@ -3102,10 +3104,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:166: warning: Member assignment_type (typedef) of class hypro::Range is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:165: warning: Member assignments (variable) of class hypro::Range is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:182: warning: Member operator<<(std::ostream &os, const Range< N > &range) (friend) of class hypro::Range is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:124: warning: Member ReachabilitySettings(const ReachabilitySettings &orig)=default (function) of class hypro::ReachabilitySettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:98: warning: Member timeBound (variable) of class hypro::ReachabilitySettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:107: warning: Member useGuardTimingInformation (variable) of class hypro::ReachabilitySettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:108: warning: Member useBadStateTimingInformation (variable) of class hypro::ReachabilitySettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:125: warning: Member ReachabilitySettings(const ReachabilitySettings &orig)=default (function) of class hypro::ReachabilitySettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:99: warning: Member timeBound (variable) of class hypro::ReachabilitySettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:108: warning: Member useGuardTimingInformation (variable) of class hypro::ReachabilitySettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:109: warning: Member useBadStateTimingInformation (variable) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTree.h:21: warning: Member ReachTree(ReachTreeNode< State > *_root) (function) of class hypro::ReachTree is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTree.h:27: warning: Member getRoot() const  (function) of class hypro::ReachTree is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTree.h:29: warning: Member getDepth() const  (function) of class hypro::ReachTree is not documented.
@@ -3406,10 +3408,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyVisitors.h:18: warning: Member operator()(const SElement &se) (function) of class hypro::setCreationVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyVisitors.h:9: warning: Member mMatrix (variable) of class hypro::setCreationVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyVisitors.h:10: warning: Member mVector (variable) of class hypro::setCreationVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:45: warning: Member Settings(PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector< AnalysisParameters > strategy) (function) of class hypro::Settings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:81: warning: Member plotting() const  (function) of class hypro::Settings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:85: warning: Member fixedParameters() const  (function) of class hypro::Settings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:89: warning: Member strategy() const  (function) of class hypro::Settings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:47: warning: Member Settings(PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector< AnalysisParameters > strategy) (function) of class hypro::Settings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:82: warning: Member plotting() const  (function) of class hypro::Settings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:86: warning: Member fixedParameters() const  (function) of class hypro::Settings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:90: warning: Member strategy() const  (function) of class hypro::Settings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:26: warning: Member getHybridAutomaton() (function) of class hypro::SettingsProvider is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:28: warning: Member getReachabilitySettings() (function) of class hypro::SettingsProvider is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:30: warning: Member getWorkerThreadCount() const  (function) of class hypro::SettingsProvider is not documented.
@@ -3444,11 +3446,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:86: warning: Member computeLocationSubspaceTypeMapping(const HybridAutomaton< Number > &ha) (function) of class hypro::SettingsProvider is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:88: warning: Member getLocationTypeMap() (function) of class hypro::SettingsProvider is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:89: warning: Member computeLocationTypeMapping(const HybridAutomaton< Number > &ha) (function) of class hypro::SettingsProvider is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/SingularAnalyzer.h:25: warning: Member SingularResult (typedef) of class hypro::SingularAnalyzer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/SingularAnalyzer.h:26: warning: Member SingularResult (typedef) of class hypro::SingularAnalyzer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:15: warning: Member applyJump(const TransitionStateMap &states) (function) of class hypro::singularJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:17: warning: Member applyReset(Representation &state, Transition< Number > *transitionPtr) const  (function) of class hypro::singularJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:19: warning: Member applyReduction(Representation &state) const  (function) of class hypro::singularJumpHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:21: warning: Member applyReverseJump(const TransitionStateMap &states, Transition< Number > *transition, const AnalysisParameters &strategy) (function) of class hypro::singularJumpHandler is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:21: warning: Member applyReverseJump(const TransitionStateMap &states, Transition< Number > *transition) (function) of class hypro::singularJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:23: warning: Member applyGuard(Representation &state, Transition< Number > *transitionPtr) const  (function) of class hypro::singularJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/SingularWorker.h:43: warning: Member computeTimePredecessors(const ReachTreeNode< Representation > &task) (function) of class hypro::SingularWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/SingularWorker.h:44: warning: Member computeJumpPredecessors() (function) of class hypro::SingularWorker is not documented.
@@ -4340,18 +4342,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:18: warning: Member ResetVisitor(const Function &c) (function) of class hypro::detail::ResetVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:22: warning: Member operator()(In &&reset) (function) of class hypro::detail::ResetVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:15: warning: Member function (variable) of class hypro::detail::ResetVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:11: warning: Member invert() (function) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:12: warning: Member setOrientation(point_t const &containedPoint, Facet const &adjacentFacet) (function) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:15: warning: Member distance(point_t const &point) const  (function) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:16: warning: Member visible(point_t const &vertex) const  (function) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:17: warning: Member findNeighborIndex(facet_ind_t facet_i) (function) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:20: warning: Member mVertices (variable) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:21: warning: Member mNeighbors (variable) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:22: warning: Member mOutsideSet (variable) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:23: warning: Member mNormal (variable) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:24: warning: Member furthestPoint (variable) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:25: warning: Member furthestPointDistance (variable) of class hypro::ExactQuickhull::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Facet.h:26: warning: Member mOffset (variable) of class hypro::ExactQuickhull::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:14: warning: Member Representation (typedef) of class hypro::detail::UnpackRepresentation< ReachTreeNode< R > & > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:19: warning: Member Representation (typedef) of class hypro::detail::UnpackRepresentation< std::vector< ReachTreeNode< R > > & > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:21: warning: Member FacetSpace(pointVector_t &points, dimension_t dimension) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:24: warning: Member insertNew() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:51: warning: Member computeNormal(Facet &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
@@ -4398,17 +4390,22 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:11: warning: Member mData (variable) of class hypro::qe::CellTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:12: warning: Member mChildren (variable) of class hypro::qe::CellTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:13: warning: Member mParent (variable) of class hypro::qe::CellTreeNode is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:35: warning: Member NodePtr (typedef) of class hypro::reachability::Reach is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:36: warning: Member VerificationResult (typedef) of class hypro::reachability::Reach is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:39: warning: Member mInitialStatesSet (variable) of class hypro::reachability::Reach is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:40: warning: Member mAnalyzer (variable) of class hypro::reachability::Reach is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:41: warning: Member mReachabilityTree (variable) of class hypro::reachability::Reach is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:45: warning: argument '_automaton' of command @param is not found in the argument list of hypro::reachability::Reach< Representation, Analyzer >::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:45: warning: argument '_settings' of command @param is not found in the argument list of hypro::reachability::Reach< Representation, Analyzer >::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:50: warning: The following parameters of hypro::reachability::Reach::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:39: warning: Member mAnalyzer (variable) of class hypro::reachability::Reach is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:43: warning: argument '_automaton' of command @param is not found in the argument list of hypro::reachability::Reach< Representation >::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:43: warning: argument '_settings' of command @param is not found in the argument list of hypro::reachability::Reach< Representation >::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:48: warning: The following parameters of hypro::reachability::Reach::Reach(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, const AnalysisParameters &parameters, std::vector< ReachTreeNode< Representation >> &roots) are not documented:
   parameter 'automaton'
   parameter 'fixedParameters'
   parameter 'parameters'
+  parameter 'roots'
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:64: warning: Member VerificationResult (typedef) of class hypro::reachability::ReachSingular is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:67: warning: Member mAnalyzer (variable) of class hypro::reachability::ReachSingular is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:71: warning: argument '_automaton' of command @param is not found in the argument list of hypro::reachability::ReachSingular< Representation >::ReachSingular(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, std::vector< ReachTreeNode< Representation >> &roots)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:71: warning: argument '_settings' of command @param is not found in the argument list of hypro::reachability::ReachSingular< Representation >::ReachSingular(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, std::vector< ReachTreeNode< Representation >> &roots)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h:76: warning: The following parameters of hypro::reachability::ReachSingular::ReachSingular(const HybridAutomaton< typename Representation::NumberType > &automaton, const FixedAnalysisParameters &fixedParameters, std::vector< ReachTreeNode< Representation >> &roots) are not documented:
+  parameter 'automaton'
+  parameter 'fixedParameters'
   parameter 'roots'
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:36: warning: Member bloatBoxVisitor(const Box< Number > &box) (function) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:40: warning: Member operator()(const ConcreteType &set) (function) of class hypro::reachability::detail::bloatBoxVisitor is not documented.

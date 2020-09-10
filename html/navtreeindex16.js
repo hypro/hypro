@@ -1,5 +1,8 @@
 var NAVTREEINDEX16 =
 {
+"structhypro_1_1_reachability_settings.html#af27b3c78a5d04e3e98845619e059b2ff":[8,0,2,198,4],
+"structhypro_1_1_reachability_settings.html#af91b99cf64b956259347ba1595d0ad4d":[8,0,2,198,0],
+"structhypro_1_1_refinement_setting.html":[8,0,2,213],
 "structhypro_1_1_refinement_setting.html#a0a652b8ce470b70f212a3521406d1feb":[8,0,2,213,2],
 "structhypro_1_1_refinement_setting.html#a0b63b1680c1a01011f3ffef30e1e4a39":[8,0,2,213,17],
 "structhypro_1_1_refinement_setting.html#a1010629c8dba168337bf9fb97922a2de":[8,0,2,213,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX16 =
 "structstd_1_1hash_3_01hypro_1_1_location_3_01_number_01_4_01_4.html":[8,0,4,6],
 "structstd_1_1hash_3_01hypro_1_1_location_3_01_number_01_4_01_4.html#a69dd34fe1ef0a89d808941dc75a8f4ab":[8,0,4,6,0],
 "structstd_1_1hash_3_01hypro_1_1_none_assignment_01_4.html":[8,0,4,8],
-"structstd_1_1hash_3_01hypro_1_1_none_assignment_01_4.html#a616e0f5227f3c91159f0c11c074bf3a0":[8,0,4,8,0],
-"structstd_1_1hash_3_01hypro_1_1_point_3_01_number_01_4_01_4.html":[8,0,4,9],
-"structstd_1_1hash_3_01hypro_1_1_point_3_01_number_01_4_01_4.html#a6b7d24a1757259fb4bdad132dfcf3d5c":[8,0,4,9,0],
-"structstd_1_1hash_3_01hypro_1_1_reset_3_01_number_01_4_01_4.html":[8,0,4,11]
+"structstd_1_1hash_3_01hypro_1_1_none_assignment_01_4.html#a616e0f5227f3c91159f0c11c074bf3a0":[8,0,4,8,0]
 };

@@ -155,20 +155,23 @@ std::vector&lt; <a class="el" href="namespacehypro.html#structhypro_1_1_jump_suc
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a3588da0576e7676511a7bd71a84d5f30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3588da0576e7676511a7bd71a84d5f30"></a>
-const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mHybridAutomaton</b></td></tr>
+const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_l_t_i_worker.html#a3588da0576e7676511a7bd71a84d5f30">mHybridAutomaton</a></td></tr>
+<tr class="memdesc:a3588da0576e7676511a7bd71a84d5f30"><td class="mdescLeft">&#160;</td><td class="mdescRight">hybrid automaton to analyze <br /></td></tr>
 <tr class="separator:a3588da0576e7676511a7bd71a84d5f30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfc10be593f2ceb376329a853ea44307"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abfc10be593f2ceb376329a853ea44307"></a>
 const <a class="el" href="namespacehypro.html#structhypro_1_1_analysis_parameters">AnalysisParameters</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_l_t_i_worker.html#abfc10be593f2ceb376329a853ea44307">mSettings</a></td></tr>
-<tr class="memdesc:abfc10be593f2ceb376329a853ea44307"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO add documentation. <br /></td></tr>
+<tr class="memdesc:abfc10be593f2ceb376329a853ea44307"><td class="mdescLeft">&#160;</td><td class="mdescRight">analysis settings <br /></td></tr>
 <tr class="separator:abfc10be593f2ceb376329a853ea44307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e0f16797aded2a62c907cc4ff24d2b4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e0f16797aded2a62c907cc4ff24d2b4"></a>
-<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalTimeHorizon</b></td></tr>
+<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_l_t_i_worker.html#a4e0f16797aded2a62c907cc4ff24d2b4">mLocalTimeHorizon</a></td></tr>
+<tr class="memdesc:a4e0f16797aded2a62c907cc4ff24d2b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">local time horizon <br /></td></tr>
 <tr class="separator:a4e0f16797aded2a62c907cc4ff24d2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae6184e98fc9b69b28b823548e2346b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae6184e98fc9b69b28b823548e2346b6"></a>
-<a class="el" href="classhypro_1_1_time_transformation_cache.html">TimeTransformationCache</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mTrafoCache</b></td></tr>
+<a class="el" href="classhypro_1_1_time_transformation_cache.html">TimeTransformationCache</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_l_t_i_worker.html#aae6184e98fc9b69b28b823548e2346b6">mTrafoCache</a></td></tr>
+<tr class="memdesc:aae6184e98fc9b69b28b823548e2346b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">cache for matrix exponential <br /></td></tr>
 <tr class="separator:aae6184e98fc9b69b28b823548e2346b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6eb977c778311800caa75c39b297d111"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6eb977c778311800caa75c39b297d111"></a>
-size_t const&#160;</td><td class="memItemRight" valign="bottom"><b>mNumSegments</b> = size_t( std::ceil( std::nextafter( carl::convert&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>, double&gt;( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits&lt;double&gt;::max() ) ) )</td></tr>
+size_t const&#160;</td><td class="memItemRight" valign="bottom"><b>mNumSegments</b> = size_t( std::ceil( std::nextafter( carl::convert&lt;<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>, double&gt;( <a class="el" href="classhypro_1_1_l_t_i_worker.html#a4e0f16797aded2a62c907cc4ff24d2b4">mLocalTimeHorizon</a> / mSettings.timeStep ), std::numeric_limits&lt;double&gt;::max() ) ) )</td></tr>
 <tr class="separator:a6eb977c778311800caa75c39b297d111"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>

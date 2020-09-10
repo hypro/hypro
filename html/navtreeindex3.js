@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classhypro_1_1_difference_bounds_t.html#a4cba67e52943a988fd9199f426e9365e":[6,1,2,24],
 "classhypro_1_1_difference_bounds_t.html#a50f881dd68093e4d6dd848988deb4792":[6,1,2,23],
 "classhypro_1_1_difference_bounds_t.html#a547c2e742413155b887bd0d9c4ec5899":[6,1,2,15],
 "classhypro_1_1_difference_bounds_t.html#a56e7628d1a1e44fe4bbcc9b3dd68eb23":[6,1,2,25],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classhypro_1_1_fan.html#ac4638205f3962bd94e69ea02d7857a7a":[8,0,2,65,0],
 "classhypro_1_1_fan.html#ac586ac22f94d448cba0c22277c46a0c7":[8,0,2,65,9],
 "classhypro_1_1_fan.html#ac8d3c0b3b0a81ca96e1e28893356ebd3":[8,0,2,65,10],
-"classhypro_1_1_fan.html#acdd6fb04006dc35dcdf1c5864ffd921c":[8,0,2,65,7],
-"classhypro_1_1_fan.html#af946c83efb7e2554e893dc5fdd404c65":[8,0,2,65,4]
+"classhypro_1_1_fan.html#acdd6fb04006dc35dcdf1c5864ffd921c":[8,0,2,65,7]
 };

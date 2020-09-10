@@ -132,9 +132,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1_singular_analyzer.html'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5077b697ca12885b33ad7fe21ade2aa7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5077b697ca12885b33ad7fe21ade2aa7"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>SingularResult</b> = <a class="el" href="structhypro_1_1_analysis_result.html">AnalysisResult</a>&lt; <a class="el" href="namespacehypro.html#structhypro_1_1_singular_success">SingularSuccess</a>, <a class="el" href="namespacehypro.html#structhypro_1_1_failure">Failure</a>&lt; Representation &gt;&gt;</td></tr>
-<tr class="separator:a5077b697ca12885b33ad7fe21ade2aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6905c4b365c8b43e313a4f74228d2e8f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6905c4b365c8b43e313a4f74228d2e8f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>SingularResult</b> = <a class="el" href="structhypro_1_1_analysis_result.html">AnalysisResult</a>&lt; <a class="el" href="namespacehypro.html#structhypro_1_1_verification_success">VerificationSuccess</a>, <a class="el" href="namespacehypro.html#structhypro_1_1_failure">Failure</a>&lt; Representation &gt;&gt;</td></tr>
+<tr class="separator:a6905c4b365c8b43e313a4f74228d2e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -142,42 +142,34 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a38aecb75efcf10d2131c39ead8f38d2c">SingularAnalyzer</a> ()=delete</td></tr>
 <tr class="memdesc:a38aecb75efcf10d2131c39ead8f38d2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor (deleted). <br /></td></tr>
 <tr class="separator:a38aecb75efcf10d2131c39ead8f38d2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d21150320485db4defb0ef74a283c96"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d21150320485db4defb0ef74a283c96"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a7d21150320485db4defb0ef74a283c96">SingularAnalyzer</a> (const <a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;ha, const <a class="el" href="classhypro_1_1_settings.html">Settings</a> &amp;setting)</td></tr>
-<tr class="memdesc:a7d21150320485db4defb0ef74a283c96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from automaton and analysis settings. <br /></td></tr>
-<tr class="separator:a7d21150320485db4defb0ef74a283c96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41e89414ecfacc1f4c801df69317e5cc"><td class="memItemLeft" align="right" valign="top">REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a41e89414ecfacc1f4c801df69317e5cc">run</a> ()</td></tr>
-<tr class="memdesc:a41e89414ecfacc1f4c801df69317e5cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main method for reachability analysis. Calls the method <a class="el" href="classhypro_1_1_singular_analyzer.html#a474ad33d1f833f6173da0318005a6ac6">forwardRun</a>.  <a href="#a41e89414ecfacc1f4c801df69317e5cc">More...</a><br /></td></tr>
-<tr class="separator:a41e89414ecfacc1f4c801df69317e5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a474ad33d1f833f6173da0318005a6ac6"><td class="memItemLeft" align="right" valign="top">REACHABILITY_RESULT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a474ad33d1f833f6173da0318005a6ac6">forwardRun</a> ()</td></tr>
-<tr class="memdesc:a474ad33d1f833f6173da0318005a6ac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute forward reachability result.  <a href="#a474ad33d1f833f6173da0318005a6ac6">More...</a><br /></td></tr>
-<tr class="separator:a474ad33d1f833f6173da0318005a6ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada24699a3f2647945da20b9da6a60dd3"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; Representation &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ada24699a3f2647945da20b9da6a60dd3">getFlowpipes</a> () const </td></tr>
-<tr class="memdesc:ada24699a3f2647945da20b9da6a60dd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the computed flowpipes.  <a href="#ada24699a3f2647945da20b9da6a60dd3">More...</a><br /></td></tr>
-<tr class="separator:ada24699a3f2647945da20b9da6a60dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0dc58018d9b63574a3aa67054d01ebd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ac0dc58018d9b63574a3aa67054d01ebd">SingularAnalyzer</a> (<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; const &amp;ha, <a class="el" href="namespacehypro.html#structhypro_1_1_fixed_analysis_parameters">FixedAnalysisParameters</a> const &amp;fixedParameters, std::vector&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt;&gt; &amp;roots)</td></tr>
+<tr class="memdesc:ac0dc58018d9b63574a3aa67054d01ebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Singular Analyzer object.  <a href="#ac0dc58018d9b63574a3aa67054d01ebd">More...</a><br /></td></tr>
+<tr class="separator:ac0dc58018d9b63574a3aa67054d01ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae14feb6cd3f0c680af6bedb01e8fc23d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1_analysis_result.html">SingularResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ae14feb6cd3f0c680af6bedb01e8fc23d">run</a> ()</td></tr>
+<tr class="memdesc:ae14feb6cd3f0c680af6bedb01e8fc23d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main method for reachability analysis. Calls the method <a class="el" href="classhypro_1_1_singular_analyzer.html#a7184ea6d5573a2388abab3a5e50b425c">forwardRun</a>.  <a href="#ae14feb6cd3f0c680af6bedb01e8fc23d">More...</a><br /></td></tr>
+<tr class="separator:ae14feb6cd3f0c680af6bedb01e8fc23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7184ea6d5573a2388abab3a5e50b425c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1_analysis_result.html">SingularResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a7184ea6d5573a2388abab3a5e50b425c">forwardRun</a> ()</td></tr>
+<tr class="memdesc:a7184ea6d5573a2388abab3a5e50b425c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute forward reachability result.  <a href="#a7184ea6d5573a2388abab3a5e50b425c">More...</a><br /></td></tr>
+<tr class="separator:a7184ea6d5573a2388abab3a5e50b425c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:ade96d4511710a85fb558cfcf3bfdc62b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade96d4511710a85fb558cfcf3bfdc62b"></a>
-std::queue&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ade96d4511710a85fb558cfcf3bfdc62b">mWorkQueue</a></td></tr>
-<tr class="memdesc:ade96d4511710a85fb558cfcf3bfdc62b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue holds all nodes that require processing. <br /></td></tr>
-<tr class="separator:ade96d4511710a85fb558cfcf3bfdc62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afbd39da130272af406be1193c2a2fd24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afbd39da130272af406be1193c2a2fd24"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt; Representation &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#afbd39da130272af406be1193c2a2fd24">mFlowpipes</a></td></tr>
-<tr class="memdesc:afbd39da130272af406be1193c2a2fd24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Storage for already computed flowpipes. <br /></td></tr>
-<tr class="separator:afbd39da130272af406be1193c2a2fd24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1d3719bfda3f9d69707f57c4e289c7c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1d3719bfda3f9d69707f57c4e289c7c"></a>
-<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ab1d3719bfda3f9d69707f57c4e289c7c">mHybridAutomaton</a></td></tr>
-<tr class="memdesc:ab1d3719bfda3f9d69707f57c4e289c7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Automaton which is analyzed. <br /></td></tr>
-<tr class="separator:ab1d3719bfda3f9d69707f57c4e289c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10aa046dcd35d373c4611967e55abb36"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10aa046dcd35d373c4611967e55abb36"></a>
-<a class="el" href="classhypro_1_1_settings.html">Settings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a10aa046dcd35d373c4611967e55abb36">mAnalysisSettings</a></td></tr>
-<tr class="memdesc:a10aa046dcd35d373c4611967e55abb36"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classhypro_1_1_settings.html">Settings</a> used for analysis. <br /></td></tr>
-<tr class="separator:a10aa046dcd35d373c4611967e55abb36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1627cd8042731a4edbf36c18b815dea0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1627cd8042731a4edbf36c18b815dea0"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a1627cd8042731a4edbf36c18b815dea0">mReachTree</a></td></tr>
-<tr class="memdesc:a1627cd8042731a4edbf36c18b815dea0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forest of ReachTrees computed. <br /></td></tr>
-<tr class="separator:a1627cd8042731a4edbf36c18b815dea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09d057e55bbcb0bc6e9ee324c5db0266"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09d057e55bbcb0bc6e9ee324c5db0266"></a>
+<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; const *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a09d057e55bbcb0bc6e9ee324c5db0266">mHybridAutomaton</a></td></tr>
+<tr class="memdesc:a09d057e55bbcb0bc6e9ee324c5db0266"><td class="mdescLeft">&#160;</td><td class="mdescRight">Automaton which is analyzed. <br /></td></tr>
+<tr class="separator:a09d057e55bbcb0bc6e9ee324c5db0266"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab070fed1644ab381b5fd943b157969e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab070fed1644ab381b5fd943b157969e3"></a>
+<a class="el" href="namespacehypro.html#structhypro_1_1_fixed_analysis_parameters">FixedAnalysisParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ab070fed1644ab381b5fd943b157969e3">mAnalysisSettings</a></td></tr>
+<tr class="memdesc:ab070fed1644ab381b5fd943b157969e3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classhypro_1_1_settings.html">Settings</a> used for analysis. <br /></td></tr>
+<tr class="separator:ab070fed1644ab381b5fd943b157969e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a528d462882a94ca97d1a857fe04de8e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a528d462882a94ca97d1a857fe04de8e3"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#a528d462882a94ca97d1a857fe04de8e3">mReachTree</a></td></tr>
+<tr class="memdesc:a528d462882a94ca97d1a857fe04de8e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forest of ReachTrees computed. <br /></td></tr>
+<tr class="separator:a528d462882a94ca97d1a857fe04de8e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f9f77431a1072a740c4ac414337ddc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4f9f77431a1072a740c4ac414337ddc"></a>
+std::deque&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_singular_analyzer.html#ae4f9f77431a1072a740c4ac414337ddc">mWorkQueue</a></td></tr>
+<tr class="memdesc:ae4f9f77431a1072a740c4ac414337ddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue holds all nodes that require processing. <br /></td></tr>
+<tr class="separator:ae4f9f77431a1072a740c4ac414337ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Representation&gt;<br />
@@ -191,16 +183,71 @@ class hypro::SingularAnalyzer&lt; Representation &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_singular_analyzer_8h_source.html#l00021">21</a> of file <a class="el" href="_singular_analyzer_8h_source.html">SingularAnalyzer.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a474ad33d1f833f6173da0318005a6ac6"></a>
+<p>Definition at line <a class="el" href="_singular_analyzer_8h_source.html#l00022">22</a> of file <a class="el" href="_singular_analyzer_8h_source.html">SingularAnalyzer.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ac0dc58018d9b63574a3aa67054d01ebd"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Representation&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1_singular_analyzer.html">hypro::SingularAnalyzer</a>&lt; Representation &gt;::<a class="el" href="classhypro_1_1_singular_analyzer.html">SingularAnalyzer</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>ha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacehypro.html#structhypro_1_1_fixed_analysis_parameters">FixedAnalysisParameters</a> const &amp;&#160;</td>
+          <td class="paramname"><em>fixedParameters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>roots</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new Singular Analyzer object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ha</td><td>The hybrid (singular) automaton </td></tr>
+    <tr><td class="paramname">fixedParameters</td><td>A parameter configuration (parameter timeStep is not used) </td></tr>
+    <tr><td class="paramname">roots</td><td>The root nodes of the search tree containing the initial states of ha </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="_singular_analyzer_8h_source.html#l00040">40</a> of file <a class="el" href="_singular_analyzer_8h_source.html">SingularAnalyzer.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a7184ea6d5573a2388abab3a5e50b425c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Representation &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">REACHABILITY_RESULT <a class="el" href="classhypro_1_1_singular_analyzer.html">hypro::SingularAnalyzer</a>&lt; Representation &gt;::forwardRun </td>
+          <td class="memname"><a class="el" href="classhypro_1_1_singular_analyzer.html">SingularAnalyzer</a>&lt; Representation &gt;::<a class="el" href="structhypro_1_1_analysis_result.html">SingularResult</a> <a class="el" href="classhypro_1_1_singular_analyzer.html">hypro::SingularAnalyzer</a>&lt; Representation &gt;::forwardRun </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -213,48 +260,18 @@ template&lt;typename Representation &gt; </div>
 
 <p>Definition at line <a class="el" href="_singular_analyzer_8tpp_source.html#l00011">11</a> of file <a class="el" href="_singular_analyzer_8tpp_source.html">SingularAnalyzer.tpp</a>.</p>
 
-<p>References <a class="el" href="_reach_treev2_8tpp_source.html#l00006">hypro::ReachTreeNode&lt; State &gt;::addChild()</a>, and <a class="el" href="_tree_node_8h_source.html#l00058">hypro::TreeNode&lt; Data &gt;::getDepth()</a>.</p>
+<p>References <a class="el" href="_reach_treev2_8tpp_source.html#l00006">hypro::ReachTreeNode&lt; State &gt;::addChild()</a>, <a class="el" href="_tree_node_8h_source.html#l00058">hypro::TreeNode&lt; Data &gt;::getDepth()</a>, and <a class="el" href="_reach_treev2_8h_source.html#l00070">hypro::ReachTreeNode&lt; State &gt;::getFlowpipe()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ada24699a3f2647945da20b9da6a60dd3"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Representation &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const std::vector&lt;<a class="el" href="classhypro_1_1_flowpipe.html">Flowpipe</a>&lt;Representation&gt; &gt;&amp; <a class="el" href="classhypro_1_1_singular_analyzer.html">hypro::SingularAnalyzer</a>&lt; Representation &gt;::getFlowpipes </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the computed flowpipes. </p>
-<dl class="section return"><dt>Returns</dt><dd>A vector holding the already computed flowpipes. </dd></dl>
-
-<p>Definition at line <a class="el" href="_singular_analyzer_8h_source.html#l00056">56</a> of file <a class="el" href="_singular_analyzer_8h_source.html">SingularAnalyzer.h</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a41e89414ecfacc1f4c801df69317e5cc"></a>
+<a class="anchor" id="ae14feb6cd3f0c680af6bedb01e8fc23d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Representation &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">REACHABILITY_RESULT <a class="el" href="classhypro_1_1_singular_analyzer.html">hypro::SingularAnalyzer</a>&lt; Representation &gt;::run </td>
+          <td class="memname"><a class="el" href="classhypro_1_1_singular_analyzer.html">SingularAnalyzer</a>&lt; Representation &gt;::<a class="el" href="structhypro_1_1_analysis_result.html">SingularResult</a> <a class="el" href="classhypro_1_1_singular_analyzer.html">hypro::SingularAnalyzer</a>&lt; Representation &gt;::run </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -262,10 +279,12 @@ template&lt;typename Representation &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Main method for reachability analysis. Calls the method <a class="el" href="classhypro_1_1_singular_analyzer.html#a474ad33d1f833f6173da0318005a6ac6">forwardRun</a>. </p>
+<p>Main method for reachability analysis. Calls the method <a class="el" href="classhypro_1_1_singular_analyzer.html#a7184ea6d5573a2388abab3a5e50b425c">forwardRun</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>SAFE if no bad state intersection is found and UNKNOWN otherwise. </dd></dl>
 
 <p>Definition at line <a class="el" href="_singular_analyzer_8tpp_source.html#l00006">6</a> of file <a class="el" href="_singular_analyzer_8tpp_source.html">SingularAnalyzer.tpp</a>.</p>
+
+<p>Referenced by <a class="el" href="_reach_8h_source.html#l00084">hypro::reachability::ReachSingular&lt; Representation &gt;::computeForwardReachability()</a>.</p>
 
 </div>
 </div>

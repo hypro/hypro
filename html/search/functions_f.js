@@ -2,8 +2,9 @@ var searchData=
 [
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1_point.html#a6043b600ceea75a32970ab2939027ac1',1,'hypro::Point']]],
   ['rays',['rays',['../classhypro_1_1_v_polytope_t.html#a9516e6e03083930cf279aa96d514d011',1,'hypro::VPolytopeT']]],
-  ['reach',['Reach',['../classhypro_1_1reachability_1_1_reach.html#ab5332eca803db92365b23c544b962d9c',1,'hypro::reachability::Reach']]],
+  ['reach',['Reach',['../classhypro_1_1reachability_1_1_reach.html#ad94fb32064b0bf29945ecb2d9a27a865',1,'hypro::reachability::Reach']]],
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html#af91b99cf64b956259347ba1595d0ad4d',1,'hypro::ReachabilitySettings']]],
+  ['reachsingular',['ReachSingular',['../classhypro_1_1reachability_1_1_reach_singular.html#a2342adfd68867fa0b386335c4f81276d',1,'hypro::reachability::ReachSingular']]],
   ['rectangularanalyzer',['RectangularAnalyzer',['../classhypro_1_1_rectangular_analyzer.html#a944f8a795ade0b26abe2b9362f24e50c',1,'hypro::RectangularAnalyzer::RectangularAnalyzer()=delete'],['../classhypro_1_1_rectangular_analyzer.html#a3de280c34125071b0e23273495eae81a',1,'hypro::RectangularAnalyzer::RectangularAnalyzer(const HybridAutomaton&lt; Number &gt; &amp;ha, const Settings &amp;setting)']]],
   ['rectangularworker',['RectangularWorker',['../classhypro_1_1_rectangular_worker.html#ac88809c07f542e2c0b1ea42fa1484319',1,'hypro::RectangularWorker']]],
   ['reduce',['reduce',['../classhypro_1_1_hybrid_automaton.html#a18ace72be9084ee3df5c54aead596737',1,'hypro::HybridAutomaton']]],
@@ -17,7 +18,7 @@ var searchData=
   ['removeduplicatepoints',['removeDuplicatePoints',['../classhypro_1_1_point.html#a7a8c12183c854b044cdfc6122ad385ed',1,'hypro::Point']]],
   ['removeemptygenerators',['removeEmptyGenerators',['../classhypro_1_1_zonotope_t.html#a2a2f65a547b6e619fb00e1d2a0cd2c2b',1,'hypro::ZonotopeT']]],
   ['removeredundancy',['removeRedundancy',['../classhypro_1_1_halfspace.html#a0f1b1674a6bc28e92e8402efca56d019',1,'hypro::Halfspace::removeRedundancy()'],['../classhypro_1_1_box_t.html#aebb35f675c01367a5fa74fd0c681ea78',1,'hypro::BoxT::removeRedundancy()'],['../classhypro_1_1_constraint_set_t.html#ad4db936b9a54804a35ecf9f1e02413a7',1,'hypro::ConstraintSetT::removeRedundancy()'],['../classhypro_1_1_generalized_star_t.html#aeb9b3014c8ba65843b11c438c7baa3cc',1,'hypro::GeneralizedStarT::removeRedundancy()'],['../classhypro_1_1_support_function_new_t.html#a56a9994ad2368065dd2f4bffbdb3e203',1,'hypro::SupportFunctionNewT::removeRedundancy()']]],
-  ['reset',['reset',['../classhypro_1_1_difference_bounds_t.html#ad422d450c7ff11b09f9796ab0cabb7bb',1,'hypro::DifferenceBoundsT::reset()'],['../classhypro_1_1statistics_1_1_clock_repository.html#a144cefee7b81ab12a7f762f291da24a8',1,'hypro::statistics::ClockRepository::reset()'],['../classhypro_1_1statistics_1_1_counter_repository.html#a536caabe0dd9860483607251a73efceb',1,'hypro::statistics::CounterRepository::reset()'],['../classhypro_1_1statistics_1_1_statistician.html#abbeb403188929576d411f148a806cd13',1,'hypro::statistics::Statistician::reset()']]],
+  ['reset',['reset',['../classhypro_1_1_singular_worker.html#a24445065d52911913a1003f87fe511d7',1,'hypro::SingularWorker::reset()'],['../classhypro_1_1_difference_bounds_t.html#ad422d450c7ff11b09f9796ab0cabb7bb',1,'hypro::DifferenceBoundsT::reset()'],['../classhypro_1_1statistics_1_1_clock_repository.html#a144cefee7b81ab12a7f762f291da24a8',1,'hypro::statistics::ClockRepository::reset()'],['../classhypro_1_1statistics_1_1_counter_repository.html#a536caabe0dd9860483607251a73efceb',1,'hypro::statistics::CounterRepository::reset()'],['../classhypro_1_1statistics_1_1_statistician.html#abbeb403188929576d411f148a806cd13',1,'hypro::statistics::Statistician::reset()']]],
   ['reverse',['reverse',['../classhypro_1_1_dictionary.html#a01733c1d6fece3171d984ed419d7b1e7',1,'hypro::Dictionary']]],
   ['reverseop',['reverseOp',['../classhypro_1_1_trafo_op.html#a1d55de4fd928833525747ac9e72e994a',1,'hypro::TrafoOp']]],
   ['rewind',['rewind',['../classhypro_1_1_difference_bounds_t.html#a5ff14b424650f04052cd24d703f8e017',1,'hypro::DifferenceBoundsT']]],
@@ -26,6 +27,6 @@ var searchData=
   ['ridge',['Ridge',['../classhypro_1_1_ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
   ['rpoint',['rPoint',['../classhypro_1_1_vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
   ['rsettings',['rSettings',['../classhypro_1_1_plotter.html#a02a94273e330fcd5ced4216cf10b9c40',1,'hypro::Plotter']]],
-  ['run',['run',['../classhypro_1_1_rectangular_analyzer.html#a7e113f483e0cf18fc225e48f065608a3',1,'hypro::RectangularAnalyzer::run()'],['../classhypro_1_1_singular_analyzer.html#a41e89414ecfacc1f4c801df69317e5cc',1,'hypro::SingularAnalyzer::run()']]],
+  ['run',['run',['../classhypro_1_1_rectangular_analyzer.html#a7e113f483e0cf18fc225e48f065608a3',1,'hypro::RectangularAnalyzer::run()'],['../classhypro_1_1_singular_analyzer.html#ae14feb6cd3f0c680af6bedb01e8fc23d',1,'hypro::SingularAnalyzer::run()']]],
   ['rvertices',['rVertices',['../classhypro_1_1_ridge.html#a84490edc4c394c50a2f642450ec1d1a5',1,'hypro::Ridge::rVertices()'],['../classhypro_1_1_v_polytope_t.html#add2375a6b2a3e26c37eebdcd6c290d55',1,'hypro::VPolytopeT::rVertices()']]]
 ];

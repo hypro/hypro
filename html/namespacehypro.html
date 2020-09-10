@@ -1544,6 +1544,14 @@ template&lt;typename S &gt; </td></tr>
 template&lt;class Representation , class Number &gt; </td></tr>
 <tr class="memitem:a1ddfba058fcd15f6acc0c408ca77b002"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1_reach_tree_node.html">ReachTreeNode</a>&lt; Representation &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>makeRoots</b> (<a class="el" href="classhypro_1_1_hybrid_automaton.html">HybridAutomaton</a>&lt; Number &gt; const &amp;ha)</td></tr>
 <tr class="separator:a1ddfba058fcd15f6acc0c408ca77b002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48939a31873c7f89934fe0bf8825f743"><td class="memTemplParams" colspan="2"><a class="anchor" id="a48939a31873c7f89934fe0bf8825f743"></a>
+template&lt;class RootType , class Function &gt; </td></tr>
+<tr class="memitem:a48939a31873c7f89934fe0bf8825f743"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>visitPreorder</b> (RootType &amp;&amp;root, Function func)</td></tr>
+<tr class="separator:a48939a31873c7f89934fe0bf8825f743"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f576459bb65129a07763e27d98a9923"><td class="memTemplParams" colspan="2"><a class="anchor" id="a6f576459bb65129a07763e27d98a9923"></a>
+template&lt;typename RootType &gt; </td></tr>
+<tr class="memitem:a6f576459bb65129a07763e27d98a9923"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getFlowpipes</b> (RootType &amp;&amp;root) -&gt; std::vector&lt; std::vector&lt; typename <a class="el" href="structhypro_1_1detail_1_1_unpack_representation.html">detail::UnpackRepresentation</a>&lt; RootType &gt;::Representation &gt;&gt;</td></tr>
+<tr class="separator:a6f576459bb65129a07763e27d98a9923"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1f74f5131f1a3c252a6410b3e543b2e"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac1f74f5131f1a3c252a6410b3e543b2e"></a>
 template&lt;typename Number , typename State &gt; </td></tr>
 <tr class="memitem:ac1f74f5131f1a3c252a6410b3e543b2e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;lhs, const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;rhs)</td></tr>
@@ -2295,7 +2303,7 @@ template&lt;typename Number &gt; </td></tr>
       </table>
 </div><div class="memdoc">
 <div class="textblock">
-<p>Definition at line <a class="el" href="_settings_8h_source.html#l00012">12</a> of file <a class="el" href="_settings_8h_source.html">Settings.h</a>.</p>
+<p>Definition at line <a class="el" href="_settings_8h_source.html#l00014">14</a> of file <a class="el" href="_settings_8h_source.html">Settings.h</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -2333,7 +2341,7 @@ type of representation </td></tr>
 <td class="fieldname">
 timeStep</td>
 <td class="fielddoc">
-the used time step size </td></tr>
+time step size for time-successor computation </td></tr>
 <tr><td class="fieldtype">
 <a class="anchor" id="a093ad5c691218f6156848f19e2feddc2"></a>int</td>
 <td class="fieldname">
@@ -2719,7 +2727,7 @@ The node where a conflict occured, i.e. a bad state was intersected. </td></tr>
       </table>
 </div><div class="memdoc">
 <div class="textblock">
-<p>Definition at line <a class="el" href="_settings_8h_source.html#l00023">23</a> of file <a class="el" href="_settings_8h_source.html">Settings.h</a>.</p>
+<p>Definition at line <a class="el" href="_settings_8h_source.html#l00025">25</a> of file <a class="el" href="_settings_8h_source.html">Settings.h</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -2900,7 +2908,7 @@ valuationSets</td>
       </table>
 </div><div class="memdoc">
 <div class="textblock">
-<p>Definition at line <a class="el" href="_settings_8h_source.html#l00033">33</a> of file <a class="el" href="_settings_8h_source.html">Settings.h</a>.</p>
+<p>Definition at line <a class="el" href="_settings_8h_source.html#l00035">35</a> of file <a class="el" href="_settings_8h_source.html">Settings.h</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -3136,7 +3144,7 @@ combinations</td>
 struct hypro::RTN_Rep_i&lt; RTN &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="_reach_treev2_8h_source.html#l00106">106</a> of file <a class="el" href="_reach_treev2_8h_source.html">ReachTreev2.h</a>.</p>
+<p>Definition at line <a class="el" href="_reach_treev2_8h_source.html#l00107">107</a> of file <a class="el" href="_reach_treev2_8h_source.html">ReachTreev2.h</a>.</p>
 </div>
 </div>
 </div>
@@ -3153,7 +3161,7 @@ struct hypro::RTN_Rep_i&lt; RTN &gt;</h3>
 struct hypro::RTN_Rep_i&lt; ReachTreeNode&lt; Representation &gt; &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="_reach_treev2_8h_source.html#l00109">109</a> of file <a class="el" href="_reach_treev2_8h_source.html">ReachTreev2.h</a>.</p>
+<p>Definition at line <a class="el" href="_reach_treev2_8h_source.html#l00110">110</a> of file <a class="el" href="_reach_treev2_8h_source.html">ReachTreev2.h</a>.</p>
 </div><table class="fieldtable">
 <tr><th colspan="3">Class Members</th></tr>
 <tr><td class="fieldtype">
@@ -3177,7 +3185,7 @@ type</td>
 </div><div class="memdoc">
 <div class="textblock"><p>indicates that the singular analysis succeeded, i.e. no </p>
 
-<p>Definition at line <a class="el" href="_singular_analyzer_8h_source.html#l00013">13</a> of file <a class="el" href="_singular_analyzer_8h_source.html">SingularAnalyzer.h</a>.</p>
+<p>Definition at line <a class="el" href="_singular_analyzer_8h_source.html#l00014">14</a> of file <a class="el" href="_singular_analyzer_8h_source.html">SingularAnalyzer.h</a>.</p>
 </div>
 </div>
 </div>
@@ -3684,7 +3692,7 @@ template&lt;typename From , typename To , typename S &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting constraintSet. </dd></dl>
 
-<p>Definition at line <a class="el" href="_constraint_set_8h_source.html#l00291">291</a> of file <a class="el" href="_constraint_set_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="_constraint_set_8h_source.html#l00289">289</a> of file <a class="el" href="_constraint_set_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -4040,7 +4048,7 @@ template&lt;typename Number &gt; </div>
 
 <p>Definition at line <a class="el" href="is_box_8h_source.html#l00018">18</a> of file <a class="el" href="is_box_8h_source.html">isBox.h</a>.</p>
 
-<p>Referenced by <a class="el" href="_box_8tpp_source.html#l00016">hypro::BoxT&lt; Number, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="_support_function_new_8tpp_source.html#l00090">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::SupportFunctionNewT()</a>, and <a class="el" href="_constraint_set_8h_source.html#l00090">hypro::ConstraintSetT&lt; Number &gt;::~ConstraintSetT()</a>.</p>
+<p>Referenced by <a class="el" href="_box_8tpp_source.html#l00016">hypro::BoxT&lt; Number, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="_support_function_new_8tpp_source.html#l00090">hypro::SupportFunctionNewT&lt; Number, Converter, Setting &gt;::SupportFunctionNewT()</a>, and <a class="el" href="_constraint_set_8h_source.html#l00088">hypro::ConstraintSetT&lt; Number &gt;::~ConstraintSetT()</a>.</p>
 
 </div>
 </div>

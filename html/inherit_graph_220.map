@@ -1,11 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1_root_grow_node.html" title="hypro::RootGrowNode\l\&lt; Number, Converter,\l Setting \&gt;" alt="" coords="5,271,169,327"/>
-<area shape="rect" id="node2" href="$classhypro_1_1_intersect_halfspace_op.html" title="hypro::IntersectHalfspace\lOp\&lt; Number, Converter,\l Setting \&gt;" alt="" coords="224,5,409,61"/>
-<area shape="rect" id="node3" href="$classhypro_1_1_intersect_op.html" title="hypro::IntersectOp\l\&lt; Number, Converter,\l Setting \&gt;" alt="" coords="235,85,399,141"/>
-<area shape="rect" id="node4" href="$classhypro_1_1_leaf.html" title="hypro::Leaf\&lt; Number,\l Converter, Setting,\l Representation \&gt;" alt="" coords="235,165,399,221"/>
-<area shape="rect" id="node5" href="$classhypro_1_1_project_op.html" title="hypro::ProjectOp\&lt; Number,\l Converter, Setting \&gt;" alt="" coords="217,245,416,286"/>
-<area shape="rect" id="node6" href="$classhypro_1_1_scale_op.html" title="hypro::ScaleOp\&lt; Number,\l Converter, Setting \&gt;" alt="" coords="221,310,412,351"/>
-<area shape="rect" id="node7" href="$classhypro_1_1_sum_op.html" title="hypro::SumOp\&lt; Number,\l Converter, Setting \&gt;" alt="" coords="224,375,409,417"/>
-<area shape="rect" id="node8" href="$classhypro_1_1_trafo_op.html" title="Specialized subclass for transformations as example of a unary operator. " alt="" coords="224,441,409,482"/>
-<area shape="rect" id="node9" href="$classhypro_1_1_union_op.html" title="hypro::UnionOp\&lt; Number,\l Converter, Setting \&gt;" alt="" coords="221,506,413,547"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_reset.html" title="hypro::Reset\&lt; Number \&gt;" alt="" coords="5,5,188,32"/>
 </map>

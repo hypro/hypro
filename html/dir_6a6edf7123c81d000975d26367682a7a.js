@@ -8,7 +8,8 @@ var dir_6a6edf7123c81d000975d26367682a7a =
     [ "FirstSegment.h", "_first_segment_8h_source.html", null ],
     [ "FlowpipeConstructionConvenience.h", "_flowpipe_construction_convenience_8h_source.html", null ],
     [ "Reach.h", "_reach_8h.html", [
-      [ "Reach", "classhypro_1_1reachability_1_1_reach.html", "classhypro_1_1reachability_1_1_reach" ]
+      [ "Reach", "classhypro_1_1reachability_1_1_reach.html", "classhypro_1_1reachability_1_1_reach" ],
+      [ "ReachSingular", "classhypro_1_1reachability_1_1_reach_singular.html", "classhypro_1_1reachability_1_1_reach_singular" ]
     ] ],
     [ "Reach.tpp", "_reach_8tpp_source.html", null ],
     [ "terminationHandling.tpp", "termination_handling_8tpp_source.html", null ],

@@ -39,7 +39,7 @@ var searchData=
   ['intervalassignment_3c_20rep_5fnumber_3c_20representation_20_3e_20_3e',['IntervalAssignment&lt; rep_number&lt; Representation &gt; &gt;',['../structhypro_1_1_interval_assignment.html',1,'hypro']]],
   ['intervalhull',['intervalHull',['../classhypro_1_1_zonotope_t.html#ac84acd668541cdf7dd2edbb030317e20',1,'hypro::ZonotopeT']]],
   ['intervals',['intervals',['../classhypro_1_1_box_t.html#a5898aee312cbaed8a8396d9666dd6518',1,'hypro::BoxT']]],
-  ['invert',['invert',['../classhypro_1_1_halfspace.html#a688afe4cfaa561608cdad09ae2d3a968',1,'hypro::Halfspace']]],
+  ['invert',['invert',['../structhypro_1_1_exact_quickhull_1_1_facet.html#a719a29980351f1bf93eea1d7b5c4eb7b',1,'hypro::ExactQuickhull::Facet::invert()'],['../classhypro_1_1_halfspace.html#a688afe4cfaa561608cdad09ae2d3a968',1,'hypro::Halfspace::invert()']]],
   ['invertcolor',['invertColor',['../classhypro_1_1_vertex.html#aba2719a95c51fb51ea2e5b39ad6e85e1',1,'hypro::Vertex']]],
   ['iresethandler',['IResetHandler',['../classhypro_1_1_i_reset_handler.html',1,'hypro']]],
   ['is_5fflow',['is_flow',['../structhypro_1_1is__flow.html',1,'hypro']]],

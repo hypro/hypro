@@ -21,7 +21,7 @@ var searchData=
   ['interval',['interval',['../classhypro_1_1_box_t.html#a5867c2e690057c155f025601e7ac43b7',1,'hypro::BoxT']]],
   ['intervalhull',['intervalHull',['../classhypro_1_1_zonotope_t.html#ac84acd668541cdf7dd2edbb030317e20',1,'hypro::ZonotopeT']]],
   ['intervals',['intervals',['../classhypro_1_1_box_t.html#a5898aee312cbaed8a8396d9666dd6518',1,'hypro::BoxT']]],
-  ['invert',['invert',['../classhypro_1_1_halfspace.html#a688afe4cfaa561608cdad09ae2d3a968',1,'hypro::Halfspace']]],
+  ['invert',['invert',['../structhypro_1_1_exact_quickhull_1_1_facet.html#a719a29980351f1bf93eea1d7b5c4eb7b',1,'hypro::ExactQuickhull::Facet::invert()'],['../classhypro_1_1_halfspace.html#a688afe4cfaa561608cdad09ae2d3a968',1,'hypro::Halfspace::invert()']]],
   ['invertcolor',['invertColor',['../classhypro_1_1_vertex.html#aba2719a95c51fb51ea2e5b39ad6e85e1',1,'hypro::Vertex']]],
   ['isbox',['isBox',['../namespacehypro.html#a1ac526782355d03bd9abd156bb90fcf8',1,'hypro']]],
   ['iscomposedof',['isComposedOf',['../classhypro_1_1_hybrid_automaton.html#a473b1cedb272fed6b77b7b5c6e8cf848',1,'hypro::HybridAutomaton::isComposedOf()'],['../classhypro_1_1_transition.html#ad296fd8807a81c377e20d499056277db',1,'hypro::Transition::isComposedOf()']]],
