@@ -1,5 +1,6 @@
 #include "../defines.h"
 #include "gtest/gtest.h"
+#include <algorithms/reachability/Reach.h>
 #include <algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <algorithms/reachability/workers/SingularWorker.h>
 #include <datastructures/HybridAutomaton/HybridAutomaton.h>
@@ -232,6 +233,17 @@ TEST( SingularRechabilityTest, WorkerConstruction ) {
 	auto worker = hypro::SingularWorker<VPoly>( automaton, hypro::FixedAnalysisParameters{ 1, hypro::tNumber( 10 ) } );
 }
 
+TEST( SingularRechabilityTest, ReacherConstruction ) {
+	using Number = mpq_class;
+	using VPoly = hypro::VPolytope<Number>;
+
+	auto automaton = createSingularHA<Number>();
+	auto roots = hypro::makeRoots<VPoly, Number>( automaton );
+
+	auto reach = hypro::reachability::ReachSingular<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 1, hypro::tNumber( 10 ) }, roots );
+}
+
 TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	// Create automaton and analyzer
 	auto automaton = createSingularHA<Number>();
@@ -375,6 +387,13 @@ TEST( SingularRechabilityTest, SingularAnalyzerWithJumpsSafe ) {
 		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, initialNodes7 );
 	auto result = analyzer7.run();
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+
+	// same test using the Reach-interface
+	auto roots = hypro::makeRoots<VPoly, Number>( automaton );
+	auto reach = hypro::reachability::ReachSingular<VPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 10 ), hypro::tNumber( 0.01 ) }, roots );
+	hypro::REACHABILITY_RESULT reachRes = reach.computeForwardReachability();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachRes );
 }
 
 TEST( SingularRechabilityTest, SingularAnalyzerWithJumpsUnsafe ) {
