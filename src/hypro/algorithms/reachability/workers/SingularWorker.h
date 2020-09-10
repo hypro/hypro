@@ -58,7 +58,7 @@ class SingularWorker {
 	void reverseProcessJumpPredecessors( const JumpSuccessors& guardSatisfyingSets );
 
   protected:
-	const HybridAutomaton<Number>& mHybridAutomaton;  ///< Reference to the rectangular automaton
+	const HybridAutomaton<Number>& mHybridAutomaton;  ///< Reference to the singular automaton
 	const FixedAnalysisParameters& mSettings;		  ///< Reference to the used analysis settings
 	JumpSuccessors mJumpSuccessorSets;				  ///< Storage of computed jump successors
 	JumpPredecessors mJumpPredecessorSets;			  ///< Storage of computed jump predecessors

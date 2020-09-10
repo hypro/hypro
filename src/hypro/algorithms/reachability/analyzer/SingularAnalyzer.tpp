@@ -9,7 +9,7 @@ typename SingularAnalyzer<Representation>::SingularResult SingularAnalyzer<Repre
 
 template <typename Representation>
 typename SingularAnalyzer<Representation>::SingularResult SingularAnalyzer<Representation>::forwardRun() {
-	SingularWorker<Representation> worker{ mHybridAutomaton, mAnalysisSettings };
+	SingularWorker<Representation> worker{ *mHybridAutomaton, mAnalysisSettings };
 
 	while ( !mWorkQueue.empty() ) {
 		ReachTreeNode<Representation>* currentNode = mWorkQueue.front();

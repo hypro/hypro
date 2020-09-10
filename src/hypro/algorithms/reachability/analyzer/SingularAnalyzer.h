@@ -40,7 +40,7 @@ class SingularAnalyzer {
 	SingularAnalyzer( HybridAutomaton<Number> const& ha,
 					  FixedAnalysisParameters const& fixedParameters,
 					  std::vector<ReachTreeNode<Representation>>& roots )
-		: mHybridAutomaton( ha )
+		: mHybridAutomaton( &ha )
 		, mAnalysisSettings( fixedParameters )
 		, mReachTree( roots ) {
 		for ( auto& root : roots ) {
@@ -60,7 +60,7 @@ class SingularAnalyzer {
 	SingularResult forwardRun();
 
   protected:
-	HybridAutomaton<Number> mHybridAutomaton;				 ///< Automaton which is analyzed
+	HybridAutomaton<Number> const* mHybridAutomaton;		 ///< Automaton which is analyzed
 	FixedAnalysisParameters mAnalysisSettings;				 ///< Settings used for analysis
 	std::vector<ReachTreeNode<Representation>>& mReachTree;	 ///< Forest of ReachTrees computed
 	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	 ///< Queue holds all nodes that require processing
