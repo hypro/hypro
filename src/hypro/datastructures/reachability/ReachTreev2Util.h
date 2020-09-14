@@ -35,4 +35,18 @@ auto getFlowpipes( RootType&& root ) -> std::vector<std::vector<typename detail:
 	return res;
 }
 
+template <typename RootType>
+auto getMaximalDepth( RootType&& root ) -> std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> {
+	std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> res;
+	visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { res.insert( res.end(), node.getFlowpipe() ); } );
+	return res;
+}
+
+template <typename RootType>
+auto getNumberNodes( RootType&& root ) -> std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> {
+	std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> res;
+	visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { res.insert( res.end(), node.getFlowpipe() ); } );
+	return res;
+}
+
 }  // namespace hypro
