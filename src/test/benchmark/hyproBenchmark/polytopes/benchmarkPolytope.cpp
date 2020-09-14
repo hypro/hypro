@@ -40,6 +40,10 @@ Results<std::size_t> run( const Settings& settings ) {
 	tmp.createCSV( "polytopeContainmentCache", "\t", "hPolyContainmentCache" );
 	ress.insert( ress.end(), tmp.begin(), tmp.end() );
 
+	std::cout << "Benchmarking HPolytope construction from list of vertices." << std::endl;
+	tmp = hPolyConstruction( settings );
+	ress.insert( ress.end(), tmp.begin(), tmp.end() );
+
 	std::cout << "Polytope benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
 
 	return ress;
