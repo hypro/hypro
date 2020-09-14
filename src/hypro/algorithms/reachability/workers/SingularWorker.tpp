@@ -34,11 +34,10 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	// assert singular flow
 	assert( task.getLocation()->getLinearFlow().getFlowMatrix().leftCols( initialSet.dimension() ) == matrix_t<Number>::Zero( initialSet.dimension() + 1, initialSet.dimension() ) );
 
-	// construct polytope describing the dynamics
-	std::vector<Point<Number>> vertices;
+	// construct point describing the dynamics
+	std::vector<Point<Number>> dynamics;
 	// The last column of the flow matrix are the constant derivatives. Only take the head to have consistent dimensions with the initial set
-	vertices.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
-	Representation dynamics{ vertices };
+	dynamics.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
 
 	Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.localTimeHorizon ) );
 	auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant() );

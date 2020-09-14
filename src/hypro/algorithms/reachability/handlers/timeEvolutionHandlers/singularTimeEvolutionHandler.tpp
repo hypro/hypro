@@ -2,10 +2,10 @@
 
 namespace hypro {
 template <typename StateSet>
-StateSet singularApplyTimeEvolution( const StateSet& initialSet, const StateSet& flow ) {
+StateSet singularApplyTimeEvolution( const StateSet& initialSet, const std::vector<Point<typename StateSet::NumberType>>& flowVertices ) {
 	using Number = typename StateSet::NumberType;
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
-	VPolytope<Number> flowSetPolytope = hypro::Converter<Number>::toVPolytope( flow );
+	VPolytope<Number> flowSetPolytope{ flowVertices };
 	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
 	// set rays
 	auto combinedRays = initSetPolytope.rays();
@@ -25,10 +25,10 @@ StateSet singularApplyTimeEvolution( const StateSet& initialSet, const StateSet&
 }
 
 template <typename StateSet>
-StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const StateSet& flow, tNumber timeBound ) {
+StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const std::vector<Point<typename StateSet::NumberType>>& flowVertices, tNumber timeBound ) {
 	using Number = typename StateSet::NumberType;
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
-	VPolytope<Number> flowSetPolytope = hypro::Converter<Number>::toVPolytope( flow );
+	VPolytope<Number> flowSetPolytope{ flowVertices };
 	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
 	// process rays: bound time, create new vertices
 	typename VPolytope<Number>::pointVector newVertices;
