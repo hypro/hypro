@@ -75,7 +75,7 @@ class Settings {
 			TRACE( "hypro.settings", "timeStepFactor " << timeStepFactor );
 			assert( timeStepFactor.get_den() == 1 );
 			assert( timeStepFactor.get_num().fits_sint_p() );
-			params.timeStepFactor = timeStepFactor.get_num().get_si();
+			params.timeStepFactor = int( timeStepFactor.get_num().get_si() );
 		}
 	}
 

@@ -253,7 +253,7 @@ class VPolytopeT : private GeometricObjectBase {
 		if ( mVertices[pos] == _point ) {
 			for ( unsigned nPos : mNeighbors[pos] ) result.emplace_back( mVertices[nPos] );
 		}
-		return std::move( result );
+		return result;
 	}
 
 	typename pointVector::iterator insert( const Point<Number>& i ) {

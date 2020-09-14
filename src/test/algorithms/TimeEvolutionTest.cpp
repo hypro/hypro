@@ -9,11 +9,11 @@ TEST( TimeEvolutionTest, SingularEvolution ) {
 	using Vector = hypro::vector_t<Number>;
 
 	Vector origin = Vector::Zero( 2 );
-	VPoly init{ { origin } };
+	VPoly init{ hypro::Point<Number>{ origin } };
 
 	Vector dynamics1 = Vector::Zero( 2 );
 	dynamics1 << Number( 1 ), Number( 1 );
-	VPoly dynamicsPoly1{ { dynamics1 } };
+	VPoly dynamicsPoly1{ hypro::Point<Number>{ dynamics1 } };
 
 	auto unbndTimeEvolution = hypro::singularApplyTimeEvolution( init, dynamicsPoly1 );
 

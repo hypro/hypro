@@ -362,7 +362,7 @@ namespace hypro {
 		} else {
 
 			//1.Iteratively call visit(ctx->constraint()) to get vector of pairs of constraint vectors and constant Numbers
-			unsigned size = ctx->constraint().size() + ctx->intervalexpr().size();
+			Eigen::Index size = Eigen::Index(ctx->constraint().size() + ctx->intervalexpr().size());
 			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(size, vars.size());
 			vector_t<Number> tmpVector = vector_t<Number>::Zero(size);
 			unsigned i = 0;
@@ -375,7 +375,7 @@ namespace hypro {
 				if(i < ctx->constraint().size()){
 					values = (visitor.visit(ctx->constraint().at(i))).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
 				} else {
-					unsigned posInIntervalExpr = i - ctx->constraint().size();
+					std::size_t posInIntervalExpr = i - ctx->constraint().size();
 					if(posInIntervalExpr < ctx->intervalexpr().size()){
 						values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
 					} else {

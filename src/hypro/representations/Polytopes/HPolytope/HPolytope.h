@@ -11,6 +11,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../algorithms/quickhull/Quickhull.h"
+#include "../../../types.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"

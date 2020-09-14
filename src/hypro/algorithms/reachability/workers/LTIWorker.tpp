@@ -121,7 +121,7 @@ struct LTIWorker<Representation>::AggregatedGen {
 		for ( size_t inBlock = 1; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
 			aggregated.unite( ( *enabled )[current] );
 		}
-		return std::pair{ aggregated, carl::Interval<int>{ indexFirst, firstEnabled + current } };
+		return std::pair{ aggregated, carl::Interval<int>{ indexFirst, int( firstEnabled + current ) } };
 	}
 };
 

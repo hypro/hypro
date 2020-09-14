@@ -321,9 +321,7 @@ bool HPolytopeT<Number, Converter, Setting>::empty() const {
 		}
 		res = !mOptimizer->checkConsistency();
 	} else {
-		Optimizer<Number> opt;
-		opt.setMatrix( this->matrix() );
-		opt.setVector( this->vector() );
+		Optimizer<Number> opt{ this->matrix(), this->vector() };
 		res = !opt.checkConsistency();
 	}
 
@@ -999,7 +997,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 #ifdef HYPRO_LOGGING
 	TRACE( "hypro.representations.HPolytope", "with " << rhs << std::endl );
 #endif
-	HPolytopeT<Number, Converter, Setting> res( *this );
+	HPolytopeT<Number, Converter, Setting> res{ *this };
 	// only insert the new Halfspace, if it is not already redundant.
 	if ( res.evaluate( rhs.normal() ).supportValue > rhs.offset() )
 		res.insert( Halfspace<Number>( rhs ) );
@@ -1008,8 +1006,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 }
 
 template <typename Number, typename Converter, class Setting>
-HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat,
-																									const vector_t<Number>& _vec ) const {
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	TRACE( "hypro.representations.HPolytope", "P' = P AND Ax <= b,  A: " << std::endl
 																		 << _mat << std::endl
 																		 << "b: " << _vec );
@@ -1204,7 +1201,7 @@ void HPolytopeT<Number, Converter, Setting>::print() const {
 template <typename Number, typename Converter, class Setting>
 typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Number, Converter, Setting>::computeConstraintsForDegeneratedPolytope( std::vector<Point<Number>>& points, unsigned degeneratedDimensions ) const {
 	if ( degeneratedDimensions == 0 ) {
-		return std::move( HPolytopeT<Number, Converter, Setting>( points ).mHPlanes );
+		return HPolytopeT<Number, Converter, Setting>( points ).mHPlanes;
 	}
 	assert( !points.empty() );
 	Halfspace<Number> h;  // TODO set h to some hyperplane holding all points, i.e., a*p=b for all points p
@@ -1214,7 +1211,7 @@ typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Numb
 	// Furthermore, one of the faces of the convex hull of points is the polytope we are looking for.
 	// This is exactly the face we get when we intersect the convex hull with the halfspace h
 	HalfspaceVector result = commputeConstraintsForDegeneratedPolytope( points, degeneratedDimensions - 1 );
-	result.push_back( std::move( h ) );	 // decreases the effective dimension again
+	result.emplace_back( std::move( h ) );	// decreases the effective dimension again
 	return result;
 }
 

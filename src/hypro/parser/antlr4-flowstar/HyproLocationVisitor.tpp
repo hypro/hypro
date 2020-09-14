@@ -66,9 +66,9 @@ namespace hypro {
 				matrix_t<Number> newMat = inv.getMatrix();
 				matrix_t<Number> currInvMat = currInv.getMatrix();
 				assert(newMat.cols() == currInvMat.cols());
-				std::size_t newMatRowsBefore = newMat.rows();
+				Eigen::Index newMatRowsBefore = newMat.rows();
 				newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
-				for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
+				for(Eigen::Index i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
 					newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
 				}
 
@@ -76,7 +76,7 @@ namespace hypro {
 				vector_t<Number> newVec = inv.getVector();
 				vector_t<Number> currInvVec = currInv.getVector();
 				newVec.conservativeResize(newVec.rows()+currInvVec.rows());
-				for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
+				for(Eigen::Index i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
 					newVec(i) = currInvVec(i-newMatRowsBefore);
 				}
 

@@ -7,7 +7,7 @@ namespace hypro {
 		std::string message("ERROR: at token ");
 		message += token->getText();
 		message += " (type ";
-		message += token->getType();
+		message += char(token->getType());
 		message += ") in line: ";
 		message += std::to_string(line);
 		message += ":";

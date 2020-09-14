@@ -36,7 +36,7 @@ bool RefinementAnalyzer<Representation>::matchesPathTiming( ReachTreeNode<Repres
 template <typename Representation>
 bool RefinementAnalyzer<Representation>::matchesPathTransition( ReachTreeNode<Representation>* node ) {
 	auto const* transition = mPath.elements.at( node->getDepth() - 1 ).second;
-	return transition = node->getTransition();
+	return ( transition == node->getTransition() );
 }
 
 template <typename Representation>
