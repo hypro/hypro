@@ -44,7 +44,7 @@ class TreeNode {
 
 	auto getChildren() const {
 		return boost::adaptors::transform( mChildren, []( auto const& uPtr ) -> DerivedNode const& {
-			return uPtr.get();
+			return *uPtr.get();
 		} );
 	}
 };
