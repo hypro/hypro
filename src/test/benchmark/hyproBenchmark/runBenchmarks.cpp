@@ -26,7 +26,8 @@ int main( int argc, char const *argv[] ) {
 
 	std::cout << "Benchmark polytopes." << std::endl;
 	s.maxDimension = 6;
-	s.iterations = 10000000;
+	s.iterations = 20;
+	//s.iterations = 10000000;
 	benchmark::polytope::run( s );
 
 	// std::cout << "Benchmark support functions." << std::endl;

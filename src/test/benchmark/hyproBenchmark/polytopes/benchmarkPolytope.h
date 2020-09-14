@@ -27,6 +27,7 @@ Results<std::size_t> affineTransformation( const Settings& settings );
 Results<std::size_t> unite( const Settings& settings );
 Results<std::size_t> intersect( const Settings& settings );
 Results<std::size_t> hPolyContainment( const Settings& settings );
+Results<std::size_t> hPolyConstruction( const Settings& settings );
 Results<std::size_t> run( const Settings& settings );
 
 }  // namespace polytope
