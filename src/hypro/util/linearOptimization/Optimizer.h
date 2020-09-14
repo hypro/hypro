@@ -7,6 +7,7 @@
 
 #include "../../datastructures/Point.h"
 #include "../../flags.h"
+#include "../../types.h"
 #include "EvaluationResult.h"
 #include "Strategy.h"
 #ifdef HYPRO_USE_SMTRAT
@@ -137,7 +138,7 @@ class Optimizer {
 		 * @brief      Destroys the object.
 		 */
 	~Optimizer() {
-		this->cleanContexts();
+		//this->cleanContexts();
 	}
 
 	void cleanContexts();
