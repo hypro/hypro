@@ -7,15 +7,17 @@ TEST( TimeEvolutionTest, SingularEvolution ) {
 	using Number = mpq_class;
 	using VPoly = hypro::VPolytope<Number>;
 	using Vector = hypro::vector_t<Number>;
+	using Point = hypro::Point<Number>;
 
 	Vector origin = Vector::Zero( 2 );
-	VPoly init{ hypro::Point<Number>{ origin } };
+
+	VPoly init{ std::vector{ origin } };
 
 	Vector dynamics1 = Vector::Zero( 2 );
 	dynamics1 << Number( 1 ), Number( 1 );
-	VPoly dynamicsPoly1{ hypro::Point<Number>{ dynamics1 } };
+	std::vector<Point> dynamicsVertices{ Point( dynamics1 ) };
 
-	auto unbndTimeEvolution = hypro::singularApplyTimeEvolution( init, dynamicsPoly1 );
+	auto unbndTimeEvolution = hypro::singularApplyTimeEvolution( init, dynamicsVertices );
 
 	EXPECT_TRUE( unbndTimeEvolution.vertices().size() == 1 );
 	EXPECT_TRUE( unbndTimeEvolution.rays().size() == 1 );
@@ -26,7 +28,7 @@ TEST( TimeEvolutionTest, SingularEvolution ) {
 
 	VPoly init2{ { origin, v1 } };
 
-	auto bndTimeEvolution = hypro::singularApplyBoundedTimeEvolution( init2, dynamicsPoly1, hypro::tNumber( 10 ) );
+	auto bndTimeEvolution = hypro::singularApplyBoundedTimeEvolution( init2, dynamicsVertices, hypro::tNumber( 10 ) );
 	EXPECT_TRUE( bndTimeEvolution.vertices().size() == 4 );
 	EXPECT_TRUE( bndTimeEvolution.rays().size() == 0 );
 
