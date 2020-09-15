@@ -74,10 +74,11 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 template <typename State>
 std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	SingularAnalyzer<hypro::VPolytope<Number>> analyzer{ automaton, setting };
+	auto roots = makeRoots<State>( automaton );
+	SingularAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), roots };
 	auto result = analyzer.run();
 
-	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
+	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
 		std::cout << "Could not verify safety." << std::endl;
 		// Call bad state handling (e.g., return path)
 	} else {
@@ -88,12 +89,10 @@ std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& auto
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
 
-	for ( const auto& fp : analyzer.getFlowpipes() ) {
-		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
-			State convertedSegment;
-			hypro::convert( segment, convertedSegment );
-			FullState state;
-			state.setSet( convertedSegment );
+	for ( const auto& node : preorder( roots ) ) {
+		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
+			FullState state{};
+			state.setSet( segment );
 			return PlotData{ state, 0, 0 };
 		} );
 	}
