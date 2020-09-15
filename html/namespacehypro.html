@@ -1552,6 +1552,14 @@ template&lt;class RootType , class Function &gt; </td></tr>
 template&lt;typename RootType &gt; </td></tr>
 <tr class="memitem:a6f576459bb65129a07763e27d98a9923"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getFlowpipes</b> (RootType &amp;&amp;root) -&gt; std::vector&lt; std::vector&lt; typename <a class="el" href="structhypro_1_1detail_1_1_unpack_representation.html">detail::UnpackRepresentation</a>&lt; RootType &gt;::Representation &gt;&gt;</td></tr>
 <tr class="separator:a6f576459bb65129a07763e27d98a9923"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac19347b8d53ce8db875ec1aba8359df5"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac19347b8d53ce8db875ec1aba8359df5"></a>
+template&lt;typename RootType &gt; </td></tr>
+<tr class="memitem:ac19347b8d53ce8db875ec1aba8359df5"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getMaximalDepth</b> (RootType &amp;&amp;root) -&gt; std::vector&lt; std::vector&lt; typename <a class="el" href="structhypro_1_1detail_1_1_unpack_representation.html">detail::UnpackRepresentation</a>&lt; RootType &gt;::Representation &gt;&gt;</td></tr>
+<tr class="separator:ac19347b8d53ce8db875ec1aba8359df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a202c6649d57606e760b679e729b97149"><td class="memTemplParams" colspan="2"><a class="anchor" id="a202c6649d57606e760b679e729b97149"></a>
+template&lt;typename RootType &gt; </td></tr>
+<tr class="memitem:a202c6649d57606e760b679e729b97149"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>getNumberNodes</b> (RootType &amp;&amp;root) -&gt; std::vector&lt; std::vector&lt; typename <a class="el" href="structhypro_1_1detail_1_1_unpack_representation.html">detail::UnpackRepresentation</a>&lt; RootType &gt;::Representation &gt;&gt;</td></tr>
+<tr class="separator:a202c6649d57606e760b679e729b97149"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1f74f5131f1a3c252a6410b3e543b2e"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac1f74f5131f1a3c252a6410b3e543b2e"></a>
 template&lt;typename Number , typename State &gt; </td></tr>
 <tr class="memitem:ac1f74f5131f1a3c252a6410b3e543b2e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;lhs, const std::shared_ptr&lt; <a class="el" href="structhypro_1_1_task.html">Task</a>&lt; State &gt;&gt; &amp;rhs)</td></tr>
@@ -3732,7 +3740,7 @@ template&lt;typename From , typename To &gt; </div>
 
 <p>References <a class="el" href="_halfspace_8tpp_source.html#l00074">hypro::Halfspace&lt; Number &gt;::normal()</a>, and <a class="el" href="_halfspace_8tpp_source.html#l00096">hypro::Halfspace&lt; Number &gt;::offset()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00177">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_v_polytope_8h_source.html#l00294">hypro::VPolytopeT&lt; Number, Converter, S &gt;::rVertices()</a>, <a class="el" href="singular_time_evolution_handler_8tpp_source.html#l00028">singularApplyBoundedTimeEvolution()</a>, and <a class="el" href="singular_time_evolution_handler_8tpp_source.html#l00005">singularApplyTimeEvolution()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00178">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_v_polytope_8h_source.html#l00294">hypro::VPolytopeT&lt; Number, Converter, S &gt;::rVertices()</a>, <a class="el" href="singular_time_evolution_handler_8tpp_source.html#l00028">singularApplyBoundedTimeEvolution()</a>, and <a class="el" href="singular_time_evolution_handler_8tpp_source.html#l00005">singularApplyTimeEvolution()</a>.</p>
 
 </div>
 </div>
@@ -4919,7 +4927,7 @@ template&lt;typename Number &gt; </div>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00104">hypro::Point&lt; Number &gt;::swap()</a>.</p>
 
-<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00080">hypro::Optimizer&lt; Number &gt;::operator=()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00043">hypro::Optimizer&lt; Number &gt;::vector()</a>, and <a class="el" href="_optimizer_8h_source.html#l00139">hypro::Optimizer&lt; Number &gt;::~Optimizer()</a>.</p>
+<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00080">hypro::Optimizer&lt; Number &gt;::operator=()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00043">hypro::Optimizer&lt; Number &gt;::vector()</a>, and <a class="el" href="_optimizer_8h_source.html#l00140">hypro::Optimizer&lt; Number &gt;::~Optimizer()</a>.</p>
 
 </div>
 </div>
