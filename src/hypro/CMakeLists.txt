@@ -50,7 +50,7 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_include_directories(${PROJECT_NAME}-static
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
 
@@ -86,7 +86,7 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_include_directories(${PROJECT_NAME}-shared
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 		INTERFACE
 		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>

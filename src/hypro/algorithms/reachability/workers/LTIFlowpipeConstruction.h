@@ -1,14 +1,14 @@
 #pragma once
 #pragma once
 
-#include "algorithms/reachability/FlowpipeConstructionConvenience.h"
-#include "algorithms/reachability/types.h"
-#include "algorithms/reachability/util.h"
-#include "datastructures/HybridAutomaton/Transition.h"
-#include "datastructures/HybridAutomaton/flow/linear.h"
-#include "representations/GeometricObjectBase.h"
-#include "types.h"
-#include "util/typetraits.h"
+#include "../../../datastructures/HybridAutomaton/Transition.h"
+#include "../../../datastructures/HybridAutomaton/flow/linear.h"
+#include "../../../representations/GeometricObjectBase.h"
+#include "../../../types.h"
+#include "../../../util/typetraits.h"
+#include "../FlowpipeConstructionConvenience.h"
+#include "../types.h"
+#include "../util.h"
 
 #include <carl/interval/Interval.h>
 

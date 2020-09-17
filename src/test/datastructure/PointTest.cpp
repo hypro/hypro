@@ -4,11 +4,11 @@
  * @author Benedikt Seidl
  */
 
-#include "../../hypro/datastructures/Point.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
 #include <carl/interval/Interval.h>
-
+#include <hypro/datastructures/Point.h>
+#include <hypro/util/logging/Logger.h>
 
 using namespace hypro;
 

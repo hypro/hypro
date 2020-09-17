@@ -1,6 +1,6 @@
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <algorithms/quantifierElimination/qe.h>
+#include <hypro/algorithms/quantifierElimination/qe.h>
 
 using namespace hypro;
 

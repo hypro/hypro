@@ -1,12 +1,12 @@
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <algorithms/reachability/Reach.h>
-#include <algorithms/reachability/analyzer/SingularAnalyzer.h>
-#include <algorithms/reachability/workers/SingularWorker.h>
-#include <datastructures/HybridAutomaton/HybridAutomaton.h>
-#include <datastructures/reachability/ReachTreev2Util.h>
-#include <datastructures/reachability/Settings.h>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
+#include <hypro/algorithms/reachability/workers/SingularWorker.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
+#include <hypro/datastructures/reachability/Settings.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 using Number = mpq_class;
 using VPoly = hypro::VPolytope<Number>;

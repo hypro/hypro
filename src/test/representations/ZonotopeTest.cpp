@@ -6,9 +6,9 @@
  */
 
 #include "../defines.h"
-#include "datastructures/Halfspace.h"
-#include "representations/GeometricObjectBase.h"
 #include "gtest/gtest.h"
+#include <hypro/datastructures/Halfspace.h>
+#include <hypro/representations/GeometricObjectBase.h>
 #include <iostream>
 #include <stdlib.h>
 
@@ -74,8 +74,8 @@ TYPED_TEST( ZonotopeTest, CopyConstructor ) {
 
 TYPED_TEST( ZonotopeTest, ComputeZonotopeBoundary ) {
 	Zonotope<TypeParam> z1( 2 );
-	Eigen::Matrix<TypeParam, 2, 1> center = {carl::rationalize<TypeParam>( 1.1941 ),
-											 carl::rationalize<TypeParam>( 0.1068 )};
+	Eigen::Matrix<TypeParam, 2, 1> center = { carl::rationalize<TypeParam>( 1.1941 ),
+											  carl::rationalize<TypeParam>( 0.1068 ) };
 	Eigen::Matrix<TypeParam, 2, 6> generators;
 	generators << carl::rationalize<TypeParam>( 0.3993 ), carl::rationalize<TypeParam>( 0.0160 ),
 		  carl::rationalize<TypeParam>( 0.0020 ), carl::rationalize<TypeParam>( 0.0035 ), 0,
@@ -106,8 +106,8 @@ TYPED_TEST(ZonotopeTest, Corners) {
 */
 
 TYPED_TEST( ZonotopeTest, ZonogoneHPIntersect ) {
-	Eigen::Matrix<TypeParam, 2, 1> dVec = {0, 1}, center = {carl::rationalize<TypeParam>( 1.1941 ),
-															carl::rationalize<TypeParam>( 0.1068 )};
+	Eigen::Matrix<TypeParam, 2, 1> dVec = { 0, 1 }, center = { carl::rationalize<TypeParam>( 1.1941 ),
+															   carl::rationalize<TypeParam>( 0.1068 ) };
 	Eigen::Matrix<TypeParam, 2, 6> generators;
 	generators << carl::rationalize<TypeParam>( 0.3993 ), carl::rationalize<TypeParam>( 0.0160 ),
 		  carl::rationalize<TypeParam>( 0.0020 ), carl::rationalize<TypeParam>( 0.0035 ), 0,
@@ -381,7 +381,7 @@ TYPED_TEST( ZonotopeTest, ConvexHull ) {
 }
 
 TYPED_TEST( ZonotopeTest, IntervalHull ) {
-	Eigen::Matrix<TypeParam, 2, 1> center = {2, 1};
+	Eigen::Matrix<TypeParam, 2, 1> center = { 2, 1 };
 	Eigen::Matrix<TypeParam, 2, 3> generators;
 	Eigen::Matrix<TypeParam, 2, 2> expected_generators;
 	generators << 1, 4, 3, 6, 2, 1;
@@ -424,8 +424,8 @@ TYPED_TEST( ZonotopeTest, SatisfiesHalfspaces ) {
 
 	Halfspace<TypeParam> rightSideOfBox( boxMat.row( 0 ), boxVec( 0 ) );
 	Halfspace<TypeParam> leftSideOfBox( boxMat.row( 2 ), boxVec( 2 ) );
-	Point<TypeParam> rightExtremePoint( {TypeParam( 2.5 ), TypeParam( 1.5 )} );
-	Point<TypeParam> leftExtremePoint( {TypeParam( -0.5 ), TypeParam( 0.5 )} );
+	Point<TypeParam> rightExtremePoint( { TypeParam( 2.5 ), TypeParam( 1.5 ) } );
+	Point<TypeParam> leftExtremePoint( { TypeParam( -0.5 ), TypeParam( 0.5 ) } );
 	EXPECT_TRUE( !rightSideOfBox.contains( rightExtremePoint ) );
 	EXPECT_TRUE( !leftSideOfBox.contains( leftExtremePoint ) );
 	EXPECT_TRUE( zono.contains( rightExtremePoint ) );

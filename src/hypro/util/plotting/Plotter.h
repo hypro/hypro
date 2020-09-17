@@ -11,6 +11,7 @@
 #include "../../config.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
+#include "../logging/Logger.h"
 #include "../type_handling/plottype_enums.h"
 #include "PlotterUtil.h"
 
@@ -43,8 +44,8 @@ enum {
 /**
 	 * Color array holding a set of colors.
 	 */
-const std::size_t colors[] = {0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
-							  0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F};
+const std::size_t colors[] = { 0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
+							   0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F };
 
 /**
 	 * @brief      A struct holding a basic set of options for the gnuplot plotting.

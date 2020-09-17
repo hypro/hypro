@@ -13,6 +13,7 @@
 #include "../util/VariablePool.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
 #include "../util/linearOptimization/EvaluationResult.h"
+#include "../util/logging/Logger.h"
 #include "../util/typetraits.h"
 #include "Point.h"
 
