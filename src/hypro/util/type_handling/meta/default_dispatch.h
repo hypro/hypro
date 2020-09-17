@@ -17,6 +17,8 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
+				  VPolytopeT, VPolytopeSetting>,
+			RepresentationCombinations<
 				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting>,
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
