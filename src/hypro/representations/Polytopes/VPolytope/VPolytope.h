@@ -38,6 +38,8 @@ class VPolytopeT : private GeometricObjectBase {
 	typedef S Settings;
 	typedef Number NumberType;
 
+	static constexpr auto type_enum = representation_name::polytope_v;
+
   private:
 	mutable pointVector mVertices;	///< set of generating vertices
 	Rays mRays;						///< set of generating rays
