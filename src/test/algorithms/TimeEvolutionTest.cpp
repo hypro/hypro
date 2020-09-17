@@ -1,7 +1,7 @@
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <algorithms/reachability/handlers/timeEvolutionHandlers/singularTimeEvolutionHandler.h>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/algorithms/reachability/handlers/timeEvolutionHandlers/singularTimeEvolutionHandler.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 TEST( TimeEvolutionTest, SingularEvolution ) {
 	using Number = mpq_class;

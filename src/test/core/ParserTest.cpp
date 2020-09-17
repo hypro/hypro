@@ -1,8 +1,8 @@
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/reachability/Settings.h"
-#include "parser/antlr4-flowstar/ParserWrapper.h"
 #include "gtest/gtest.h"
 #include <fstream>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/reachability/Settings.h>
+#include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 
 TEST( ParserTest, ParseAutomaton ) {
 	using namespace hypro;

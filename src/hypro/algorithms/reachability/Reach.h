@@ -11,10 +11,10 @@
  */
 
 #pragma once
+#include "../../datastructures/reachability/ReachTreev2.h"
 #include "analyzer/LTIAnalyzer.h"
 #include "analyzer/ReturnTypes.h"
 #include "analyzer/SingularAnalyzer.h"
-#include "datastructures/reachability/ReachTreev2.h"
 
 namespace hypro {
 /**

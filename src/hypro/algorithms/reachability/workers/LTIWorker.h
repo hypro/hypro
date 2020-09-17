@@ -1,13 +1,13 @@
 #pragma once
 
-#include "algorithms/reachability/FlowpipeConstructionConvenience.h"
-#include "algorithms/reachability/handlers/badStateHandlers/ltiBadStateHandler.h"
-#include "algorithms/reachability/workers/LTIFlowpipeConstruction.h"
-#include "datastructures/reachability/Settings.h"
-#include "datastructures/reachability/TimeTransformationCache.h"
-#include "datastructures/reachability/timing/HierarchicalIntervalVector.h"
-#include "util/logging/Logger.h"
-#include "util/plotting/PlotData.h"
+#include "../../../datastructures/reachability/Settings.h"
+#include "../../../datastructures/reachability/TimeTransformationCache.h"
+#include "../../../datastructures/reachability/timing/HierarchicalIntervalVector.h"
+#include "../../../util/logging/Logger.h"
+#include "../../../util/plotting/PlotData.h"
+#include "../FlowpipeConstructionConvenience.h"
+#include "../handlers/badStateHandlers/ltiBadStateHandler.h"
+#include "../workers/LTIFlowpipeConstruction.h"
 
 #include <optional>
 #include <vector>

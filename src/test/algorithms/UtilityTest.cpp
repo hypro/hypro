@@ -1,5 +1,5 @@
-#include "algorithms/reachability/handlers/jumpHandlers/util.h"
 #include "gtest/gtest.h"
+#include <hypro/algorithms/reachability/handlers/jumpHandlers/util.h>
 #include <iostream>
 
 TEST( UtilityTest, ClusteringDistribution ) {

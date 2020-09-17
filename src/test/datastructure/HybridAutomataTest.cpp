@@ -4,10 +4,10 @@
  */
 
 #include "../defines.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/State.h"
-#include "representations/GeometricObjectBase.h"
 #include "gtest/gtest.h"
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/HybridAutomaton/State.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 using namespace hypro;
 

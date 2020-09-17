@@ -1,6 +1,6 @@
+#include "../../../representations/GeometricObjectBase.h"
+#include "../../../util/combine.h"
 #include "CEGARAnalyzer.h"
-#include "representations/GeometricObjectBase.h"
-#include "util/combine.h"
 
 namespace hypro {
 

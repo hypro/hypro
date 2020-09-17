@@ -1,6 +1,6 @@
 #include "../defines.h"
-#include "util/adaptions_eigen/adaptions_eigen.h"
 #include "gtest/gtest.h"
+#include <hypro/util/adaptions_eigen/adaptions_eigen.h>
 
 template <typename Number>
 class EigenAdaptionsTest : public ::testing::Test {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datastructures/HybridAutomaton/Condition.h"
+#include "../../datastructures/HybridAutomaton/Condition.h"
 #include "types.h"
 
 #include <utility>

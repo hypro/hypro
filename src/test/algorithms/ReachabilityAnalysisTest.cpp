@@ -1,9 +1,9 @@
 #include "../defines.h"
-#include "algorithms/reachability/Reach.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/reachability/TreeUtil.h"
 #include "gtest/gtest.h"
 #include <cassert>
+#include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/reachability/TreeUtil.h>
 
 class ReachabilityAnalysisTest : public ::testing::Test {
   protected:

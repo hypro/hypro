@@ -1,7 +1,7 @@
 #pragma once
 
-#include "datastructures/HybridAutomaton/Transition.h"
-#include "types.h"
+#include "../../types.h"
+#include "Transition.h"
 
 namespace hypro {
 
