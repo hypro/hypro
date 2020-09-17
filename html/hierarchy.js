@@ -346,6 +346,7 @@ var hierarchy =
     ] ],
     [ "hypro::RTN_Rep_i< RTN >", "namespacehypro.html#structhypro_1_1_r_t_n___rep__i", null ],
     [ "hypro::RTN_Rep_i< ReachTreeNode< Representation > >", "namespacehypro.html#structhypro_1_1_r_t_n___rep__i_3_01_reach_tree_node_3_01_representation_01_4_01_4", null ],
+    [ "Eigen::internal::scalar_score_coeff_op< mpq_class >", "struct_eigen_1_1internal_1_1scalar__score__coeff__op_3_01mpq__class_01_4.html", null ],
     [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scale_content.html", null ],
     [ "hypro::ScopedLock< Lockable >", "classhypro_1_1_scoped_lock.html", null ],
     [ "hypro::detail::seq< Is >", "structhypro_1_1detail_1_1seq.html", null ],
@@ -401,6 +402,9 @@ var hierarchy =
     [ "hypro::TimeTransformationCache< Number >", "classhypro_1_1_time_transformation_cache.html", null ],
     [ "hypro::TimingAggregate< Number >", "classhypro_1_1_timing_aggregate.html", null ],
     [ "hypro::TimingAggregate< N >", "classhypro_1_1_timing_aggregate.html", null ],
+    [ "totally_ordered1", null, [
+      [ "Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type", "struct_eigen_1_1internal_1_1scalar__score__coeff__op_3_01mpq__class_01_4_1_1result__type.html", null ]
+    ] ],
     [ "hypro::TPathElement< Number, tNumber >", "structhypro_1_1_t_path_element.html", null ],
     [ "hypro::TPathElement< Number, Number >", "structhypro_1_1_t_path_element.html", null ],
     [ "hypro::trafoContent< Number, Setting >", "structhypro_1_1trafo_content.html", null ],

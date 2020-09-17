@@ -28,7 +28,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/CEGARAnalyzer.tpp:19: warning: Compound hypro::CEGARAnalyzer< Number, Representations... >::CreateRefinementLevel is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:147: warning: Compound std::hash< hypro::NoneAssignment > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionSetting.h:31: warning: Compound hypro::NoBoxReduction is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:129: warning: Compound Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:131: warning: Compound Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:37: warning: Compound hypro::SupportFunctionNewMorePrecision is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:14: warning: Compound hypro::TPolyFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/TPolyFirstSegmentHandler.h:16: warning: Compound hypro::TPolyFirstSegmentHandler is not documented.
@@ -45,6 +45,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:303: warning: Compound std::hash< hypro::Transition< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:10: warning: Compound hypro::affineFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:150: warning: Compound hypro::projectionContent is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:179: warning: Compound Eigen::internal::scalar_score_coeff_op< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/timeEvolutionHandlers/timedElapseTimeEvolutionHandler.h:8: warning: Compound hypro::timedElapseTimeEvolutionHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:50: warning: Compound hypro::timedElapseTimeEvolutionHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/GuardHandlers.h:10: warning: Compound hypro::guardHandlerSorter is not documented.
@@ -92,7 +93,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:25: warning: Compound hypro::BoxLinearOptimizationOff is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/HierarchicalIntervalVector.h:34: warning: Compound hypro::HierarchicalIntervalVector is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: Compound hypro::VariablePool is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:9: warning: Compound hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:10: warning: Compound hypro::AnalysisResult is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:27: warning: Compound hypro::flowDynamicsTypeVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h:15: warning: Compound hypro::Label is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/singularJumpHandler.h:10: warning: Compound hypro::singularJumpHandler is not documented.
@@ -172,7 +173,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:377: warning: Compound better_enums::_iterable is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/jumpHandlers/ltiJumpHandler.h:16: warning: Compound hypro::ltiJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:64: warning: Compound hypro::ltiJumpHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:154: warning: Compound Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:156: warning: Compound Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:180: warning: Compound Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:35: warning: Compound hypro::Cacheable is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/meta/TypeList.h:24: warning: Compound hypro::concat_i< TypeList< Ts... > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/ltiResetHandler.h:6: warning: Compound hypro::ltiResetHandler is not documented.
@@ -913,7 +915,7 @@ Possible candidates:
   ZonotopeT hypro::ZonotopeT< Number, Converter, Setting >::unite(const ZonotopeT &other) const ' at line 290 of file /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h
   static ZonotopeT hypro::ZonotopeT< Number, Converter, Setting >::unite(const std::vector< ZonotopeT > &sets)' at line 292 of file /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h
 
-/home/travis/build/hypro/hypro/src/hypro/types.h:42: warning: no matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/types.h:44: warning: no matching class member found for 
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
 
@@ -994,19 +996,25 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:298: warning: Member operator->() const  (function) of class better_enums::optional is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:300: warning: Member operator bool() const  (function) of class better_enums::optional is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:302: warning: Member value() const  (function) of class better_enums::optional is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:140: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:141: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:142: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:144: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:145: warning: Member dummy_precision() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:149: warning: Member highest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:150: warning: Member lowest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:155: warning: Member Real (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:156: warning: Member NonInteger (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:157: warning: Member Nested (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:158: warning: Member epsilon() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:159: warning: Member dummy_precision() (function) of class Eigen::NumTraits< mpq_class > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:160: warning: Member digits10() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:142: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:143: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:144: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:146: warning: Member epsilon() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:147: warning: Member dummy_precision() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:151: warning: Member highest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:152: warning: Member lowest() (function) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:157: warning: Member Real (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:158: warning: Member NonInteger (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:159: warning: Member Nested (typedef) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:161: warning: Member epsilon() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:162: warning: Member dummy_precision() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:163: warning: Member digits10() (function) of class Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:199: warning: Member operator()(mpq_class const &x) const  (function) of class Eigen::internal::scalar_score_coeff_op< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:182: warning: Member result_type(int i=0) (function) of class Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:184: warning: Member result_type(mpq_class const &q) (function) of class Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:181: warning: Member len (variable) of class Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:187: warning: Member operator<(result_type x, result_type y) (friend) of class Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:194: warning: Member operator==(result_type x, result_type y) (friend) of class Eigen::internal::scalar_score_coeff_op< mpq_class >::result_type is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:25: warning: Member Matrix (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:27: warning: Member Vector (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:29: warning: Member DiagonalMatrix (typedef) of namespace hypro is not documented.
@@ -1060,7 +1068,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:9: warning: Member ResetType (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:21: warning: Member Aggregation (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/RootGrowNode.h:34: warning: Member SFNEW_TYPE (enumeration) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:51: warning: Member REACHABILITY_RESULT (enumeration) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:53: warning: Member REACHABILITY_RESULT (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Strategy.h:5: warning: Member OptimizerStrategy (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:15: warning: Member sampling_strategy_set (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:18: warning: Member sampling_strategy_interval (enumeration) of namespace hypro is not documented.
@@ -1069,7 +1077,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/qe.h:9: warning: Member eliminateQuantifiers(const FormulaT< Number > &qfree, const QEQuery &quantifiers) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.h:17: warning: Member RefinementSuccess(std::vector< ReachTreeNode< Representation > * >) -> RefinementSuccess< Representation > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.tpp:28: warning: Member ChildNodeGen(Gen *, ReachTreeNode< Rep > *, int) -> ChildNodeGen< Rep > (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:39: warning: Member Failure(ReachTreeNode< Representation > *) -> Failure< Representation > (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:40: warning: Member Failure(ReachTreeNode< Representation > *) -> Failure< Representation > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:11: warning: Member intersect(Representation const &valuationSet, Condition< Number > const &condition) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:20: warning: Member timeTrafoMatrixBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FlowpipeConstructionConvenience.h:25: warning: Member timeTrafoVectorBlock(matrix_t< Number > const &timeTrafo) (function) of namespace hypro is not documented.
@@ -1200,7 +1208,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.tpp:621: warning: Member intersectZonotopeHalfspaceDSearch(const ZonotopeT< Number, Converter, Setting > &inputZonotope, const Halfspace< Number > &hp) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.tpp:748: warning: Member intersectAlamo(const ZonotopeT< Number, Converter, Setting > &inputZonotope, const Halfspace< Number > &hp) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.tpp:774: warning: Member intersectNDProjection(const ZonotopeT< Number, Converter, Setting > &inputZonotope, const Halfspace< Number > &hp, matrix_t< Number > &minMaxOfLine) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/types.h:117: warning: Member BETTER_ENUM(AGG_SETTING, int, MODEL, AGG, NO_AGG) enum class REACH_SETTING (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:119: warning: Member BETTER_ENUM(AGG_SETTING, int, MODEL, AGG, NO_AGG) enum class REACH_SETTING (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen_double.cpp:94: warning: Member linearDependent(const vector_t< double > &lhs, const vector_t< double > &rhs) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen_double.cpp:117: warning: Member satisfiesIneqation(const vector_t< double > &constraint, double constant, const vector_t< double > &point) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/transformation.h:10: warning: Member selectRows(const matrix_t< Number > &original, const std::vector< IdxType > &rowIndices) (function) of namespace hypro is not documented.
@@ -1326,13 +1334,13 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:15: warning: Member mTransformation (variable) of class hypro::AffineTransformation is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:47: warning: Member operator<<(std::ostream &out, const AffineTransformation< Number > &in) (friend) of class hypro::AffineTransformation is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:52: warning: Member operator==(const AffineTransformation< Number > &lhs, const AffineTransformation< Number > &rhs) (friend) of class hypro::AffineTransformation is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:12: warning: Member result() (function) of class hypro::AnalysisResult is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:16: warning: Member isSuccess() (function) of class hypro::AnalysisResult is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:17: warning: Member isFailure() (function) of class hypro::AnalysisResult is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:19: warning: Member success() (function) of class hypro::AnalysisResult is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:20: warning: Member failure() (function) of class hypro::AnalysisResult is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:22: warning: Member operator std::variant< Success, Failure > &() (function) of class hypro::AnalysisResult is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:10: warning: Member variant (variable) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:13: warning: Member result() (function) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:17: warning: Member isSuccess() (function) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:18: warning: Member isFailure() (function) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:20: warning: Member success() (function) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:21: warning: Member failure() (function) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:23: warning: Member operator std::variant< Success, Failure > &() (function) of class hypro::AnalysisResult is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/ReturnTypes.h:11: warning: Member variant (variable) of class hypro::AnalysisResult is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:27: warning: Member BallSupportFunction(const BallSupportFunction< Number > &_orig) (function) of class hypro::BallSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:28: warning: Member BallSupportFunction(Number _radius, SF_TYPE _type) (function) of class hypro::BallSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:37: warning: Member radius() const  (function) of class hypro::BallSupportFunction is not documented.
@@ -4347,17 +4355,17 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:14: warning: Member Representation (typedef) of class hypro::detail::UnpackRepresentation< ReachTreeNode< R > & > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreev2Util.h:19: warning: Member Representation (typedef) of class hypro::detail::UnpackRepresentation< std::vector< ReachTreeNode< R > > & > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:21: warning: Member FacetSpace(pointVector_t &points, dimension_t dimension) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:24: warning: Member insertNew() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:51: warning: Member computeNormal(Facet &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:52: warning: Member validateFacet(Facet &facet, point_t const &containedPoint, Facet const &adjacentFacet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:53: warning: Member validateVertexContainment(Facet &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:55: warning: Member tryAddToOutsideSet(Facet &facet, point_ind_t point_i) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:56: warning: Member establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:63: warning: Member findFacet(UnaryPredicate predicate) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:65: warning: Member removeCoplanarFacets() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:66: warning: Member compressVector() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:67: warning: Member endModificationPhase() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:68: warning: Member deleteFacet(facet_ind_t facet_i) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:26: warning: Member insertNew() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:53: warning: Member computeNormal(Facet &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:54: warning: Member validateFacet(Facet &facet, point_t const &containedPoint, Facet const &adjacentFacet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:55: warning: Member validateVertexContainment(Facet &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:57: warning: Member tryAddToOutsideSet(Facet &facet, point_ind_t point_i) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:58: warning: Member establishNeighborhood(facet_ind_t facet_i, facet_ind_t other_i) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:64: warning: Member findFacet(UnaryPredicate predicate) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:66: warning: Member removeCoplanarFacets() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:67: warning: Member compressVector() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:68: warning: Member endModificationPhase() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:69: warning: Member deleteFacet(facet_ind_t facet_i) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:74: warning: Member printAll() (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:75: warning: Member printFacet(Facet const &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:76: warning: Member containsVertices(Facet &facet) (function) of class hypro::ExactQuickhull::FacetSpace is not documented.
@@ -4368,10 +4376,10 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:16: warning: Member firstDeleted (variable) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:17: warning: Member deletedPositions (variable) of class hypro::ExactQuickhull::FacetSpace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:19: warning: Member facets (variable) of class hypro::ExactQuickhull::FacetSpace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:41: warning: argument 'other' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:41: warning: argument 'insertAt' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:41: warning: argument 'containedPoint' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:48: warning: The following parameters of hypro::ExactQuickhull::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:43: warning: argument 'other' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:43: warning: argument 'insertAt' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:43: warning: argument 'containedPoint' of command @param is not found in the argument list of hypro::ExactQuickhull::FacetSpace< Number, Euclidian >::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:50: warning: The following parameters of hypro::ExactQuickhull::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt) are not documented:
   parameter 'other_i'
   parameter 'replaceAt'
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:53: warning: Member name (variable) of class hypro::plotting::gnuplotSettings is not documented.

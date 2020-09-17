@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classhypro_1_1_carl_polytope_t.html#acc6f369714c5be3893892e168256b841":[6,1,5,9],
 "classhypro_1_1_carl_polytope_t.html#adad598d71546d75ed2f1e03dd0e9f392":[6,1,5,33],
 "classhypro_1_1_carl_polytope_t.html#ae0fdde4044f25569498ff042a57af5b8":[6,1,5,11],
 "classhypro_1_1_carl_polytope_t.html#ae5d9f6188cf40b874476c4763c677a6b":[6,1,5,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classhypro_1_1_difference_bounds_t.html#a36365c8595003b6ad6d1bec01f33ca93":[6,1,2,21],
 "classhypro_1_1_difference_bounds_t.html#a39641596db114377dc5dd91e63bd6cea":[6,1,2,2],
 "classhypro_1_1_difference_bounds_t.html#a434525b091feaea9f1e43d16eee15249":[6,1,2,16],
-"classhypro_1_1_difference_bounds_t.html#a445d4d5f5d3eaa84a0bf4fe659957b09":[6,1,2,8],
-"classhypro_1_1_difference_bounds_t.html#a45c0685b613cb82df77b3ce8f16e892b":[6,1,2,26]
+"classhypro_1_1_difference_bounds_t.html#a445d4d5f5d3eaa84a0bf4fe659957b09":[6,1,2,8]
 };

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['scalar_5fscore_5fcoeff_5fop_3c_20mpq_5fclass_20_3e',['scalar_score_coeff_op&lt; mpq_class &gt;',['../struct_eigen_1_1internal_1_1scalar__score__coeff__op_3_01mpq__class_01_4.html',1,'Eigen::internal']]],
   ['scalecontent',['scaleContent',['../structhypro_1_1scale_content.html',1,'hypro']]],
   ['scaledata',['ScaleData',['../structhypro_1_1_scale_data.html',1,'hypro']]],
   ['scaleop',['ScaleOp',['../classhypro_1_1_scale_op.html',1,'hypro']]],

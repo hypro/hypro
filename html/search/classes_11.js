@@ -30,6 +30,7 @@ var searchData=
   ['reset_3c_20n_20_3e',['Reset&lt; N &gt;',['../classhypro_1_1_reset.html',1,'hypro']]],
   ['reset_3c_20rep_5fnumber_3c_20representation_20_3e_20_3e',['Reset&lt; rep_number&lt; Representation &gt; &gt;',['../classhypro_1_1_reset.html',1,'hypro']]],
   ['resetvisitor',['ResetVisitor',['../structhypro_1_1detail_1_1_reset_visitor.html',1,'hypro::detail']]],
+  ['result_5ftype',['result_type',['../struct_eigen_1_1internal_1_1scalar__score__coeff__op_3_01mpq__class_01_4_1_1result__type.html',1,'Eigen::internal::scalar_score_coeff_op&lt; mpq_class &gt;']]],
   ['rgndata',['RGNData',['../structhypro_1_1_r_g_n_data.html',1,'hypro']]],
   ['ridge',['Ridge',['../classhypro_1_1_ridge.html',1,'hypro']]],
   ['rootgrownode',['RootGrowNode',['../classhypro_1_1_root_grow_node.html',1,'hypro']]],

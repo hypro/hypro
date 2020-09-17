@@ -11,6 +11,9 @@ var annotated_dup =
       [ "optional", "structbetter__enums_1_1optional.html", "structbetter__enums_1_1optional" ]
     ] ],
     [ "Eigen", null, [
+      [ "internal", null, [
+        [ "scalar_score_coeff_op< mpq_class >", "struct_eigen_1_1internal_1_1scalar__score__coeff__op_3_01mpq__class_01_4.html", "struct_eigen_1_1internal_1_1scalar__score__coeff__op_3_01mpq__class_01_4" ]
+      ] ],
       [ "NumTraits< carl::FLOAT_T< Number > >", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4" ],
       [ "NumTraits< mpq_class >", "struct_eigen_1_1_num_traits_3_01mpq__class_01_4.html", "struct_eigen_1_1_num_traits_3_01mpq__class_01_4" ]
     ] ],

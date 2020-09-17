@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"_support_function_new_8tpp_source.html":[9,0,1,0,2,12,9],
 "_support_function_new_setting_8h_source.html":[9,0,1,0,2,12,10],
 "_support_function_setting_8h_source.html":[9,0,1,0,2,11,14],
 "_t_poly_first_segment_handler_8h_source.html":[9,0,1,0,0,4,2,1,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classhypro_1_1_carl_polytope_t.html#ab9fcd476634ff0144b48071b6d9a64d0":[6,1,5,3],
 "classhypro_1_1_carl_polytope_t.html#abada6c5c36a6401f6ecd455bcb23faed":[6,1,5,24],
 "classhypro_1_1_carl_polytope_t.html#abccbf7b4b2c0e0bbd712f2bf55af8605":[6,1,5,41],
-"classhypro_1_1_carl_polytope_t.html#ac557083c2cad13ea08ed9295659b6166":[6,1,5,40],
-"classhypro_1_1_carl_polytope_t.html#acc6f369714c5be3893892e168256b841":[6,1,5,9]
+"classhypro_1_1_carl_polytope_t.html#ac557083c2cad13ea08ed9295659b6166":[6,1,5,40]
 };

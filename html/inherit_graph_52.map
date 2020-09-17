@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1detail_1_1gen__seq.html" title="hypro::detail::gen\l_seq\&lt; N, Is \&gt;" alt="" coords="5,5,139,47"/>
+<area shape="rect" id="node1" href="$classhypro_1_1_d_a_g_node.html" title="hypro::DAGNode\&lt; EventTiming\lNode\&lt; Number \&gt; \&gt;" alt="" coords="5,5,228,47"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_event_timing_node.html" title="hypro::EventTimingNode\l\&lt; Number \&gt;" alt="" coords="276,5,455,47"/>
 </map>
