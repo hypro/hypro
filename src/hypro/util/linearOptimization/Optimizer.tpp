@@ -9,24 +9,24 @@ void Optimizer<Number>::cleanContexts() {
 
 	std::lock_guard<std::mutex> lock( mContextLock );
 #ifdef HYPRO_USE_GLPK
-	auto ctxtIt = mGlpkContexts.find( std::this_thread::get_id() );
-	if ( ctxtIt != mGlpkContexts.end() ) {
+	auto ctxtItGlpk = mGlpkContexts.find( std::this_thread::get_id() );
+	if ( ctxtItGlpk != mGlpkContexts.end() ) {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContexts.size() );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-		ctxtIt->second.deleteLPInstance();
+		ctxtItGlpk->second.deleteLPInstance();
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
-		mGlpkContexts.erase( ctxtIt );
+		mGlpkContexts.erase( ctxtItGlpk );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
 	}
 #endif
 #ifdef HYPRO_USE_CLP
-	auto ctxtIt = mClpContexts.find( std::this_thread::get_id() );
-	if ( ctxtIt != mClpContexts.end() ) {
+	auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
+	if ( ctxtItClp != mClpContexts.end() ) {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-		ctxtIt->second.deleteLPInstance();
+		ctxtItClp->second.deleteLPInstance();
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
-		mClpContexts.erase( ctxtIt );
+		mClpContexts.erase( ctxtItClp );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
 	}
 #endif
@@ -191,20 +191,18 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 	res = glpkOptimizeLinear( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpOptimizeLinear( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX
+	res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT
+	res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE
+	res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
-// call to secondary solver
-#if HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
-
-#elif HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-#elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
-
-#else
+#if !defined( HYPRO_SECONDARY_SOLVER )
 	return res;
-#endif
-#if defined( HYPRO_USE_SMTRAT ) || defined( HYPRO_USE_Z3 ) || defined( HYPRO_USE_SOPLEX )
-
-	// At this point we can check, whether the glpk result is already exact and optimal.
+#else
+	// At this point we can check, whether the primary result is already exact and optimal.
 	// We do this by inserting the solution into the constraints. The solution is exact,
 	// whenever it lies at least on one hyperplane (the respective constraint is saturated). Moreover
 	// the solution should always satisfy all constraints and if the direction is linear independent from
@@ -269,22 +267,18 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 			COUNT( "linear dependence failure" )
 		};
 
-#ifdef HYPRO_USE_Z3
-		COUNT( "z3" );
-		res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, res );
-#elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
-		COUNT( "smtrat" );
-		res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
-#elif defined( HYPRO_USE_SOPLEX )
-		COUNT( "soplex" );
-		res = soplexOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, res );
+#if HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+	res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_CLP
+	res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
+	res = soplexOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
+	res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
+#elif HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
+	res = z3OptimizeLinearPostSolve( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
 #endif
 	}
-
-	// if there is a valid solution (FEAS), it implies the optimumValue is set.
-	//assert(res.errorCode  !=SOLUTION::FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
-	//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
-	//assert(res.errorCode  !=SOLUTION::FEAS || checkPoint(Point<Number>(res.optimumValue)));
 	return res;
 #endif
 }
@@ -305,10 +299,10 @@ bool Optimizer<Number>::checkConsistency() const {
 	mLastConsistencyAnswer = smtratCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #elif defined( HYPRO_USE_Z3 )
-	mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+	mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #elif defined( HYPRO_USE_SOPLEX )
-	mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+	mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #endif
 
@@ -337,14 +331,14 @@ bool Optimizer<Number>::checkPoint( const Point<Number>& _point ) const {
 	}
 
 #ifdef HYPRO_USE_Z3
-	return z3CheckPoint( mConstraintMatrix, mConstraintVector, _point );
+	return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif defined( HYPRO_USE_SMTRAT )
 	return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif defined( HYPRO_USE_SOPLEX )
-	return soplexCheckPoint( mConstraintMatrix, mConstraintVector, _point );
-#elif defined( HYPRO_USE_GLPK )
+	return soplexCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	return glpkCheckPoint( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
-#elif defined( HYPRO_USE_CLP )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	return clpCheckPoint( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
 #endif
 }
@@ -366,12 +360,20 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	res = smtratGetInternalPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
-#elif defined( HYPRO_USE_GLPK )
+#elif defined( HYPRO_USE_SOPLEX )
+	res = soplexGetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
-#elif defined( HYPRO_USE_CLP )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpGetInternalPoint<Number>( mClpContexts[std::this_thread::get_id()] );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE
+	res = z3GetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
 #endif
@@ -389,13 +391,15 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 	}
 
 #ifdef HYPRO_USE_Z3
-	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector );
+	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
 	res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
-#elif defined( HYPRO_USE_GLPK )
-	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector );
-#elif defined( HYPRO_USE_CLP )
-	res = clpRedundantConstraints( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector );
+#elif defined( HYPRO_USE_SOPLEX )
+	res = soplexRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
+	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
+	res = clpRedundantConstraints( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
 	std::sort( res.begin(), res.end() );

@@ -1,5 +1,6 @@
 #pragma once
 #include <z3.h>
+#include "z3Context.h"
 
 namespace hypro {
 

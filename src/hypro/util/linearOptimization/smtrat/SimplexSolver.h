@@ -5,7 +5,7 @@
 #include "../../../flags.h"
 #ifdef HYPRO_USE_SMTRAT
 #include <smtrat-modules/LRAModule/LRAModule.h>
-#include <smtrat-solver/Manager.h>
+#include <lib/solver/Manager.h>
 
 namespace smtrat {
 /**
