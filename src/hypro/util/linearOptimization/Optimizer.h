@@ -51,6 +51,11 @@ class Optimizer {
 	matrix_t<Number> mConstraintMatrix;
 	vector_t<Number> mConstraintVector;
 
+#ifdef HYPRO_STATISTICS
+	mutable statistics::AtomicCounter contextConstructions;
+	mutable statistics::AtomicCounter contextDeletions;
+#endif
+
 	mutable bool mConsistencyChecked = false;
 	mutable SOLUTION mLastConsistencyAnswer = SOLUTION::UNKNOWN;
 	static bool warnInexact;
@@ -138,7 +143,7 @@ class Optimizer {
 		 * @brief      Destroys the object.
 		 */
 	~Optimizer() {
-		//this->cleanContexts();
+		this->cleanContexts();
 	}
 
 	void cleanContexts();
