@@ -1,6 +1,6 @@
 namespace hypro {
 template <typename Number>
-void addPreSolution( smtrat::SimplexSolver& solver, const EvaluationResult<Number>& preSolution, const vector_t<Number>& direction, const smtrat::Poly& objective ) {
+void addPreSolution( smtrat::SimplexSolver& solver, const EvaluationResult<Number>& preSolution, const vector_t<Number>& direction, const smtrat::Poly& objective, bool maximize ) {
 	// add assignment from presolution
 	VariablePool& varPool = VariablePool::getInstance();
 	for ( unsigned i = 0; i < preSolution.optimumValue.rows(); ++i ) {
@@ -20,8 +20,12 @@ void addPreSolution( smtrat::SimplexSolver& solver, const EvaluationResult<Numbe
 
 	// add constraint for improvement of glpk solution.
 	smtrat::Poly preSolutionPolynomial = objective - carl::convert<Number, smtrat::Rational>( preSolution.supportValue );
-	smtrat::FormulaT preSolutionConstraint( preSolutionPolynomial, carl::Relation::GEQ );
-
+	smtrat::FormulaT preSolutionConstraint;
+	if ( maximize ) {
+		preSolutionConstraint = smtrat::FormulaT( preSolutionPolynomial, carl::Relation::GEQ );
+	} else {
+		preSolutionConstraint = smtrat::FormulaT( preSolutionPolynomial, carl::Relation::LEQ );
+	}
 	//std::cout << "Inform and add improvement constraint " << preSolutionConstraint << std::endl;
 
 	solver.inform( preSolutionConstraint );
@@ -70,4 +74,26 @@ EvaluationResult<Number> extractSolution( smtrat::SimplexSolver& solver, const s
 	}
 	return res;
 }
+template <typename Number>
+carl::Relation negateRelation( const carl::Relation& _rel ){
+	switch( _rel )
+        {
+            case carl::Relation::EQ:
+                return carl::Relation::EQ;
+            case carl::Relation::NEQ:
+                return carl::Relation::NEQ;
+            case carl::Relation::LEQ:
+                return carl::Relation::GREATER;
+            case carl::Relation::GEQ:
+                return carl::Relation::LESS;
+            case carl::Relation::LESS:
+                return carl::Relation::GEQ;
+            case carl::Relation::GREATER:
+                return carl::Relation::LEQ;
+            default:
+                assert( false );
+                return carl::Relation::EQ;
+        }
+}
+
 }  // namespace hypro

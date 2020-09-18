@@ -77,6 +77,10 @@ endif()
 
 if(HYPRO_USE_Z3)
 	load_library(${PROJECT_NAME} z3 0)
+	if(NOT z3_FOUND)
+		message(STATUS "Downloading Z3")
+		include(z3.cmake)
+	endif()
 endif()
 
 if(HYPRO_USE_SOPLEX)

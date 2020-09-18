@@ -4,7 +4,64 @@
 namespace hypro {
 
 template <typename Number>
-EvaluationResult<Number> smtratOptimizeLinear( const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols, const EvaluationResult<Number>& preSolution ) {
+EvaluationResult<Number> smtratOptimizeLinearPostSolve( const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols, bool maximize, const EvaluationResult<Number>& preSolution ){
+	EvaluationResult<Number> res;
+	smtrat::Poly objective = createObjective( _direction );
+	//#ifdef RECREATE_SOLVER
+	smtrat::SimplexSolver simplex;
+	simplex.push();
+	std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula( constraints, constants, relationSymbols );
+	for ( const auto& constraintPair : formulaMapping ) {
+		simplex.inform( constraintPair.first );
+		simplex.add( constraintPair.first, false );
+	}
+
+	simplex.push();
+	// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
+	if ( preSolution.errorCode == SOLUTION::FEAS ) {
+		addPreSolution( simplex, preSolution, _direction, objective, maximize );
+	} else if ( preSolution.errorCode == SOLUTION::INFEAS ) {
+		if ( simplex.check() == smtrat::Answer::UNSAT ) {
+			//std::cout << "SMTRAT infeas." << std::endl;
+			return preSolution;  // glpk correctly detected infeasibility.
+		}						 // if glpk falsely detected infeasibility, we cope with this case below.
+	} else {					 // if glpk already detected unboundedness we return its result.
+		return preSolution;
+	}
+
+	simplex.addObjective( objective, !maximize );
+	smtrat::Answer smtratCheck = simplex.check();
+
+	switch ( smtratCheck ) {
+		case smtrat::Answer::SAT: {
+			//std::cout << "smtrat: SAT" << std::endl;
+			res = extractSolution<Number>( simplex, objective, constraints.cols() );
+			break;
+		}
+		default: {
+			// in this case the constraints introduced by the presolution made the problem infeasible
+			simplex.pop();
+			simplex.addObjective( objective, !maximize );
+			// std::cout << "Cleared formula: " << std::endl;
+			// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+			// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+			smtratCheck = simplex.check();
+			assert( smtratCheck != smtrat::Answer::UNKNOWN );
+			if ( smtratCheck == smtrat::Answer::SAT ) {
+				res = extractSolution<Number>( simplex, objective, constraints.cols() );
+				assert( smtratCheckPoint( constraints, constants, Point<Number>( res.optimumValue ) ) );
+			} else {
+				assert( smtratCheck == smtrat::Answer::UNSAT );
+				res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
+			}
+			break;
+		}
+	}
+	return res;
+}
+
+template <typename Number>
+EvaluationResult<Number> smtratOptimizeLinear( const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols, bool maximize ) {
 	EvaluationResult<Number> res;
 	smtrat::Poly objective = createObjective( _direction );
 	//#ifdef RECREATE_SOLVER
@@ -17,22 +74,7 @@ EvaluationResult<Number> smtratOptimizeLinear( const vector_t<Number>& _directio
 	}
 	// std::cout << "Informed basic constraints defining the object." << std::endl;
 
-#ifdef USE_PRESOLUTION
-	simplex.push();
-	// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
-	if ( preSolution.errorCode == SOLUTION::FEAS ) {
-		addPreSolution( simplex, preSolution, _direction, objective );
-	} else if ( preSolution.errorCode == SOLUTION::INFEAS ) {
-		if ( simplex.check() == smtrat::Answer::UNSAT ) {
-			//std::cout << "SMTRAT infeas." << std::endl;
-			return preSolution;  // glpk correctly detected infeasibility.
-		}						 // if glpk falsely detected infeasibility, we cope with this case below.
-	} else {					 // if glpk already detected unboundedness we return its result.
-		return preSolution;
-	}
-	//std::cout << "SMTRAT: Without presolution." << std::endl;
-#endif  // USE_PRESOLUTION
-	simplex.addObjective( objective, false );
+	simplex.addObjective( objective, !maximize );
 
 #ifdef DEBUG_MSG
 	//std::cout << "(push)" << std::endl;
@@ -53,31 +95,14 @@ EvaluationResult<Number> smtratOptimizeLinear( const vector_t<Number>& _directio
 	switch ( smtratCheck ) {
 		case smtrat::Answer::SAT: {
 			//std::cout << "smtrat: SAT" << std::endl;
-			return extractSolution<Number>( simplex, objective, constraints.cols() );
+			res = extractSolution<Number>( simplex, objective, constraints.cols() );
+			break;
 		}
 		default: {
-#ifdef USE_PRESOLUTION
-			// in this case the constraints introduced by the presolution made the problem infeasible
-			simplex.pop();
-			simplex.addObjective( objective, false );
-			// std::cout << "Cleared formula: " << std::endl;
-			// std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-			// std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
-			smtratCheck = simplex.check();
-			assert( smtratCheck != smtrat::Answer::UNKNOWN );
-			if ( smtratCheck == smtrat::Answer::SAT ) {
-				res = extractSolution<Number>( simplex, objective, constraints.cols() );
-				assert( smtratCheckPoint( constraints, constants, Point<Number>( res.optimumValue ) ) );
-			} else {
-				assert( smtratCheck == smtrat::Answer::UNSAT );
-				return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-			}
-#else  // NOT USE_PRESOLUTION \
-	  // the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
+	  		// the original constraint system is UNSAT. (LRA Module cannot return UNKNOWN, except for inequality constraints (!=)
 			assert( smtratCheck == smtrat::Answer::UNSAT );
 			// std::cout << "smtrat: UNSAT" << std::endl;
-			return EvaluationResult<Number>( 0, SOLUTION::INFEAS );
-#endif  // USE_PRESOLUTION
+			res = EvaluationResult<Number>( 0, SOLUTION::INFEAS );
 			break;
 		}
 	}
@@ -196,9 +221,7 @@ std::vector<std::size_t> smtratRedundantConstraints( const matrix_t<Number>& con
 
 	// first call to check satisfiability
 	smtrat::Answer firstCheck = simplex.check();
-#ifdef DEBUG_MSG
-	//std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
-#endif
+
 	switch ( firstCheck ) {
 		case smtrat::Answer::UNSAT: {
 			return res;
@@ -213,34 +236,24 @@ std::vector<std::size_t> smtratRedundantConstraints( const matrix_t<Number>& con
 	}
 
 	std::size_t count = 0;
-#ifdef DEBUG_MSG
-	//std::cout << __func__ << " Original Formula: " << std::endl;
-	//simplex.printAssertions();
-#endif
 
 	std::size_t formulaSize = simplex.formula().size();
 	for ( auto formulaIt = simplex.formulaBegin(); count < formulaSize; ++count ) {
 		smtrat::FormulaT originalConstraint = ( *formulaIt ).formula();
-#ifdef DEBUG_MSG
-		//std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
-#endif
-		smtrat::FormulaT negatedConstraint = smtrat::FormulaT( ( *formulaIt ).formula().constraint().lhs(), carl::turnAroundRelation( ( *formulaIt ).formula().constraint().relation() ) );
+
+		smtrat::FormulaT negatedConstraint = smtrat::FormulaT( ( *formulaIt ).formula().constraint().lhs(), negateRelation<Number>( ( *formulaIt ).formula().constraint().relation() ) );
 		unsigned currentFormulaSize = simplex.formula().size();
 		simplex.inform( negatedConstraint );
 		simplex.add( negatedConstraint, false );
 
 		if ( simplex.formula().size() > currentFormulaSize ) {
 			formulaIt = simplex.remove( formulaIt );
-#ifdef DEBUG_MSG
-			//std::cout << __func__ << " Negated Constraint: " << negatedConstraint << std::endl;
-#endif
+
 
 			smtrat::Answer isRedundant = simplex.check();
 			assert( isRedundant != smtrat::Answer::UNKNOWN );
 			if ( isRedundant == smtrat::Answer::UNSAT ) {
-#ifdef DEBUG_MSG
-				//std::cout << __func__ << " is redundant." << std::endl;
-#endif
+
 				assert( formulaMapping.find( originalConstraint ) != formulaMapping.end() );
 				assert( unsigned( formulaMapping.at( originalConstraint ) ) < constraints.rows() );
 				res.push_back( formulaMapping.at( originalConstraint ) );
@@ -331,13 +344,13 @@ EvaluationResult<Number> smtratGetInternalPoint( const matrix_t<Number>& constra
 	}
 	smtrat::Answer sol = simplex.check();
 	if ( sol == smtrat::Answer::UNSAT ) {
-		res.errorCode = SOLUTION::INFEAS;
+		res = EvaluationResult<Number>( 0, vector_t<Number>::Zero( 1 ), SOLUTION::INFEAS );
 		return res;
 	} else {
 		res.errorCode = SOLUTION::FEAS;
 	}
 	smtrat::Model assignment = simplex.model();
-	vector_t<Number> point;
+	vector_t<Number> point = vector_t<Number>( constraints.cols() );
 	for ( unsigned d = 0; d < constraints.cols(); ++d ) {
 		// if the variable did not occur in the current call, set to 0.
 		if ( assignment.find( hypro::VariablePool::getInstance().carlVarByIndex( d ) ) == assignment.end() ) {

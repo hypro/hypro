@@ -1,6 +1,6 @@
 #pragma once
 
-#define USE_PRESOLUTION
+//#define USE_PRESOLUTION
 #define RECREATE_SOLVER
 //#define VERIFY_RESULT
 //#define DEBUG_MSG
