@@ -279,7 +279,7 @@ vector_t<Number> scalarProjection( const vector_t<Number>& source, const vector_
 template <typename Number>
 int effectiveDimension( const std::vector<vector_t<Number>>& vertices ) {
 	if ( !vertices.empty() ) {
-		if ( vertices.size() == 1 ) {
+		if ( ( vertices.size() == 1 ) || ( vertices.begin()->rows() == 0 ) ) {
 			return 0;
 		}
 		long maxDim = vertices.begin()->rows();

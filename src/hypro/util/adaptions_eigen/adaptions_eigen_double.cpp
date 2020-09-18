@@ -53,7 +53,7 @@ inline bool operator==( const hypro::vector_t<double>& lhs, const hypro::vector_
 
 	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		// compare with 128 ULPs
-		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), default_double_comparison_ulps ) ) {
+		if ( !carl::AlmostEqual2sComplement( lhs( dim ), rhs( dim ), hypro::default_double_comparison_ulps ) ) {
 			return false;
 		}
 	}
@@ -74,7 +74,7 @@ inline bool operator==( const hypro::matrix_t<double>& lhs, const hypro::matrix_
 	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
 		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
 			// compare with 128 ULPs
-			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), default_double_comparison_ulps ) ) {
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), hypro::default_double_comparison_ulps ) ) {
 				return false;
 			}
 		}
@@ -126,7 +126,7 @@ bool satisfiesIneqation( const vector_t<double>& constraint, double constant, co
 		return true;
 	}
 
-	return carl::AlmostEqual2sComplement( sp, constant );
+	return carl::AlmostEqual2sComplement( sp, constant, hypro::default_double_comparison_ulps );
 }
 
 }  // namespace hypro

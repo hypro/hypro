@@ -95,6 +95,23 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 		return;
 	}
 
+	// special case: 1 point - we can directly use box constraints.
+	if ( points.size() == 1 ) {
+		assert( ( *points.begin() ).dimension() > 0 );
+		mDimension = points.begin()->dimension();
+		for ( unsigned d = 0; d < points.begin()->dimension(); ++d ) {
+			vector_t<Number> normal = vector_t<Number>::Zero( points.begin()->dimension() );
+			normal( d ) = 1;
+			mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( normal, points.begin()->at( d ) ) );
+			mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( -normal, -( points.begin()->at( d ) ) ) );
+		}
+		if ( Setting::OPTIMIZER_CACHING ) {
+			setOptimizer( this->matrix(), this->vector() );
+		}
+		//EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
+		return;
+	}
+
 	if constexpr ( is_exact<Number> ) {
 		mDimension = points.front().dimension();
 
@@ -121,62 +138,55 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			} );
 		} ) );
 	} else {
-		TRACE( "hypro.representations.HPolytope", "Construct from vertices: " );
+		// remove duplicates inplace
+		auto pointsCopy = points;
+		for ( auto pointsIt = pointsCopy.begin(); pointsIt != pointsCopy.end(); ++pointsIt ) {
+			for ( auto compIt = std::next( pointsIt ); compIt != pointsCopy.end(); ++compIt ) {
+				if ( *pointsIt == *compIt ) {
+					compIt = pointsCopy.erase( compIt );
+				}
+			}
+		}
+
 #ifdef HYPRO_LOGGING
-		for ( auto vertex : points ) {
+		TRACE( "hypro.representations.HPolytope", "Construct from vertices (duplicates removed): " );
+		for ( auto vertex : pointsCopy ) {
 			Point<double> tmp = convert<Number, double>( vertex );
 			TRACE( "hypro.representations.HPolytope", tmp );
 		}
 #endif
 
-		// special case: 1 point - we can directly use box constraints.
-		if ( points.size() == 1 ) {
-			assert( ( *points.begin() ).dimension() > 0 );
-			mDimension = points.begin()->dimension();
-			for ( unsigned d = 0; d < points.begin()->dimension(); ++d ) {
-				vector_t<Number> normal = vector_t<Number>::Zero( points.begin()->dimension() );
-				normal( d ) = 1;
-				mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( normal, points.begin()->at( d ) ) );
-				mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( -normal, -( points.begin()->at( d ) ) ) );
-			}
-			if ( Setting::OPTIMIZER_CACHING ) {
-				setOptimizer( this->matrix(), this->vector() );
-			}
-			//EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
-			return;
-		}
-
-		if ( !points.empty() ) {
-			mDimension = points.begin()->dimension();
+		if ( !pointsCopy.empty() ) {
+			mDimension = pointsCopy.begin()->dimension();
 			// check affine independence - verify object dimension.
 			std::vector<vector_t<Number>> coordinates;
-			for ( const auto& vertex : points ) {
+			for ( const auto& vertex : pointsCopy ) {
 				coordinates.push_back( vertex.rawCoordinates() );
 			}
 			int effectiveDim = effectiveDimension( coordinates );
 			assert( effectiveDim >= 0 );
 
-			//if ( points.size() <= mDimension ) {
+			//if ( pointsCopy.size() <= mDimension ) {
 			if ( unsigned( effectiveDim ) < mDimension ) {
-				TRACE( "hypro.representations.HPolytope", "Points size: " << points.size() );
+				TRACE( "hypro.representations.HPolytope", "Points size: " << pointsCopy.size() );
 				TRACE( "hypro.representations.HPolytope", "Affine dimension: " << effectiveDim );
 				// get common plane
 				std::vector<vector_t<Number>> vectorsInPlane;
-				//std::cout << "first point: " << *points.begin() << std::endl;
-				for ( unsigned i = 1; i < points.size(); ++i ) {
-					vectorsInPlane.emplace_back( points[i].rawCoordinates() - points[0].rawCoordinates() );
+				//std::cout << "first point: " << *pointsCopy.begin() << std::endl;
+				for ( unsigned i = 1; i < pointsCopy.size(); ++i ) {
+					vectorsInPlane.emplace_back( pointsCopy[i].rawCoordinates() - pointsCopy[0].rawCoordinates() );
 				}
 				vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal( vectorsInPlane );
-				Number planeOffset = Halfspace<Number>::computePlaneOffset( planeNormal, points[0] );
+				Number planeOffset = Halfspace<Number>::computePlaneOffset( planeNormal, pointsCopy[0] );
 
 				TRACE( "hypro.representations.HPolytope", "Shared plane normal: " << planeNormal << ", plane offset: " << planeOffset );
 
 				// project on lower dimension.
 				// Use dimensions with largest coordinate range for improved stability.
 				// So to say: Drop dimensions with minimal coordinate range
-				Point<Number> maxP = points[0];
-				Point<Number> minP = points[0];
-				for ( const auto& point : points ) {
+				Point<Number> maxP = pointsCopy[0];
+				Point<Number> minP = pointsCopy[0];
+				for ( const auto& point : pointsCopy ) {
 					maxP = Point<Number>::coeffWiseMax( maxP, point );
 					minP = Point<Number>::coeffWiseMin( minP, point );
 				}
@@ -217,7 +227,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					}
 					*/
 				std::vector<Point<Number>> projectedPoints;
-				for ( const auto& point : points ) {
+				for ( const auto& point : pointsCopy ) {
 					TRACE( "hypro.representations.HPolytope", "Projected point " << point.projectOn( projectionDimensions ) );
 					projectedPoints.emplace_back( point.projectOn( projectionDimensions ) );
 				}
@@ -242,7 +252,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 				}
 
 				// Alternative version
-				// We need a copy of the set of points since auxiliary points will be added
+				// We need a copy of the set of pointsCopy since auxiliary points will be added
 				//std::vector<Point<Number>> auxiliaryPoints(points);
 				//mHPlanes = computeConstraintsForDegeneratedPolytope(auxiliaryPoints, mDimension - effectiveDim);
 
@@ -253,14 +263,14 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 					mHPlanes = ch.getHsv();
 					*/
 
-				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
+				std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( pointsCopy ).first;
 				for ( auto& facet : facets ) {
 #ifndef NDEBUG
-					std::for_each( points.begin(), points.end(), [&facet]( const auto& p ) { if(!facet->halfspace().contains(p)) {
+					std::for_each( pointsCopy.begin(), pointsCopy.end(), [&facet]( const auto& p ) { if(!facet->halfspace().contains(p)) {
 						std::cout << "Facet " << *facet << " does not contain point " << p << ", distance: " << facet->getDist(p) <<  std::endl;
 					} } );
 #endif
-					assert( facet->halfspace().contains( points ) );
+					assert( facet->halfspace().contains( pointsCopy ) );
 					mHPlanes.push_back( facet->halfspace() );
 				}
 				facets.clear();
