@@ -29,6 +29,7 @@ var namespacehypro =
       [ "ReachSingular", "classhypro_1_1reachability_1_1_reach_singular.html", "classhypro_1_1reachability_1_1_reach_singular" ]
     ] ],
     [ "statistics", null, [
+      [ "AtomicCounter", "structhypro_1_1statistics_1_1_atomic_counter.html", "structhypro_1_1statistics_1_1_atomic_counter" ],
       [ "AtomicOperationCounter", "structhypro_1_1statistics_1_1_atomic_operation_counter.html", "structhypro_1_1statistics_1_1_atomic_operation_counter" ],
       [ "ClockRepository", "classhypro_1_1statistics_1_1_clock_repository.html", "classhypro_1_1statistics_1_1_clock_repository" ],
       [ "CounterRepository", "classhypro_1_1statistics_1_1_counter_repository.html", "classhypro_1_1statistics_1_1_counter_repository" ],

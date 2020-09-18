@@ -70,7 +70,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/types.h:10: warning: Compound hypro::IndexedValuationSet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/forwardDeclarations.h:10: warning: Compound hypro::timedElapseFirstSegmentHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/timedElapseFirstSegmentHandler.h:7: warning: Compound hypro::timedElapseFirstSegmentHandler is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:36: warning: Compound hypro::statistics::AtomicOperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:37: warning: Compound hypro::statistics::AtomicOperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:138: warning: Compound std::hash< hypro::IntervalAssignment< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:22: warning: Compound hypro::Cone is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:71: warning: Compound hypro::IResetHandler is not documented.
@@ -117,7 +117,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSetting.h:5: warning: Compound hypro::VPolytopeSetting is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:14: warning: Compound hypro::AffineTransformation is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:26: warning: Compound hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:24: warning: Compound hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:25: warning: Compound hypro::Halfspace is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIWorker.h:18: warning: Compound hypro::LTIWorker is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/LTIContext.h:25: warning: Compound hypro::LTIContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/timeEvolutionHandlers/timedTickTimeEvolutionHandler.h:8: warning: Compound hypro::timedTickTimeEvolutionHandler is not documented.
@@ -187,6 +187,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/SupportFunctionNewSetting.h:47: warning: Compound hypro::SupportFunctionNewNoReduction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:25: warning: Compound hypro::rep_number_i< Rep< Number, Ts... > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:13: warning: Compound hypro::flowDimensionVisitor is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:49: warning: Compound hypro::statistics::AtomicCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/TreeStatistic.h:6: warning: Compound hypro::TreeStatistic is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h:78: warning: Compound hypro::IJumpHandler is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/RectangularContext.h:25: warning: Compound hypro::RectangularContext is not documented.
@@ -671,7 +672,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:797: warning: documented symbol `Point< Number > hypro::PolytopeT::computeMaxPoint' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:818: warning: documented symbol `Point< Number > hypro::PolytopeT::computeInitVertex' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:835: warning: documented symbol `Point< Number > hypro::PolytopeT::localSearch' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1060: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1070: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const hypro::HPolytopeT< Number, hypro::Converter< Number >, Setting > &rhs) const
 Possible candidates:
@@ -919,13 +920,13 @@ Possible candidates:
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
 
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:79: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:80: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:28: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:338: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:345: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:313: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:339: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:346: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:25: warning: Member Matrix (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:27: warning: Member Vector (typedef) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h:29: warning: Member DiagonalMatrix (typedef) of namespace hypro is not documented.
@@ -964,11 +965,6 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md:23: warning: unable to resolve reference to `example_HPolytope.cpp' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md:25: warning: unable to resolve reference to `example_bouncingBall.cpp' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/utilityFunctions/plot.md:9: warning: unable to resolve reference to `example_plot.cpp' for \ref command
-/home/travis/build/hypro/hypro/src/hypro/config.h:42: warning: Member PI_UP (variable) of group globals is not documented.
-/home/travis/build/hypro/hypro/src/hypro/config.h:43: warning: Member PI_DN (variable) of group globals is not documented.
-/home/travis/build/hypro/hypro/src/hypro/config.h:55: warning: Member defaultPPLDenominator (variable) of group globals is not documented.
-/home/travis/build/hypro/hypro/src/hypro/config.h:57: warning: Member MAX_DIMENSION_LIMIT (variable) of group globals is not documented.
-/home/travis/build/hypro/hypro/src/hypro/config.h:63: warning: Member SF_CACHE_SIZE (variable) of group globals is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:13: warning: Member start() (function) of class Clock is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:22: warning: Member stop() (function) of class Clock is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/Clock.h:29: warning: Member reset() (function) of class Clock is not documented.
@@ -1072,8 +1068,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Strategy.h:5: warning: Member OptimizerStrategy (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:15: warning: Member sampling_strategy_set (enumeration) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:18: warning: Member sampling_strategy_interval (enumeration) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:44: warning: Member eliminateCol(const matrix_t< Number > &constraints, const vector_t< Number > constants, IdxType col, bool conservative=true) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:104: warning: Member eliminateCols(const matrix_t< Number > &constraints, const vector_t< Number > constants, const std::vector< IdxType > &cols, bool conservative=true) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:45: warning: Member eliminateCol(const matrix_t< Number > &constraints, const vector_t< Number > constants, IdxType col, bool conservative=true) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:105: warning: Member eliminateCols(const matrix_t< Number > &constraints, const vector_t< Number > constants, const std::vector< IdxType > &cols, bool conservative=true) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/qe.h:9: warning: Member eliminateQuantifiers(const FormulaT< Number > &qfree, const QEQuery &quantifiers) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.h:17: warning: Member RefinementSuccess(std::vector< ReachTreeNode< Representation > * >) -> RefinementSuccess< Representation > (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/analyzer/impl/RefinementAnalyzer.tpp:28: warning: Member ChildNodeGen(Gen *, ReachTreeNode< Rep > *, int) -> ChildNodeGen< Rep > (function) of namespace hypro is not documented.
@@ -1277,6 +1273,11 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/dispatch.h:7: warning: Member dispatch(representation_name representation, int setting, Callable func, Args &&...args) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/dispatch_manual.h:12: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/util/unreachable.h:6: warning: Member unreachable() (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/config.h:43: warning: Member PI_UP (variable) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/config.h:44: warning: Member PI_DN (variable) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/config.h:56: warning: Member defaultPPLDenominator (variable) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/config.h:58: warning: Member MAX_DIMENSION_LIMIT (variable) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/config.h:64: warning: Member SF_CACHE_SIZE (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:49: warning: Member convertible (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:53: warning: Member is_exact (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:559: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
@@ -2089,9 +2090,9 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/FlowpipeTimingVector.h:78: warning: Member intersect(FlowpipeTimingVector const &left, FlowpipeTimingVector const &right) (function) of class hypro::FlowpipeTimingVector is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/FlowpipeTimingVector.h:106: warning: Member operator<<(std::ostream &out, FlowpipeTimingVector const &left) (friend) of class hypro::FlowpipeTimingVector is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:22: warning: Member operator()(const F &flow) const  (function) of class hypro::flowTypeVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:16: warning: Member FormulaPartition (typedef) of class hypro::FourierMotzkinQE is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:23: warning: Member FourierMotzkinQE(const FormulaT< Number > &qfree, const QEQuery &quantifiers) (function) of class hypro::FourierMotzkinQE is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:29: warning: Member eliminateQuantifiers() (function) of class hypro::FourierMotzkinQE is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:17: warning: Member FormulaPartition (typedef) of class hypro::FourierMotzkinQE is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:24: warning: Member FourierMotzkinQE(const FormulaT< Number > &qfree, const QEQuery &quantifiers) (function) of class hypro::FourierMotzkinQE is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/FourierMotzkinQE.h:30: warning: Member eliminateQuantifiers() (function) of class hypro::FourierMotzkinQE is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:28: warning: Member NumberType (typedef) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:29: warning: Member Settings (typedef) of class hypro::GeneralizedStarT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeneralizedStar/GeneralizedStar.h:75: warning: Member getSettings() const  (function) of class hypro::GeneralizedStarT is not documented.
@@ -2205,23 +2206,23 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:201: warning: Member operator!=(const Grid< Number > &op1, const Grid< Number > &op2) (friend) of class hypro::Grid is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:205: warning: Member operator<<(std::ostream &out, const Grid< Number > &grid) (friend) of class hypro::Grid is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/GuardHandlers.h:12: warning: Member operator()(IGuardHandler< State > *lhs, IGuardHandler< State > *rhs) (function) of class hypro::guardHandlerSorter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:87: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:105: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:312: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:338: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:229: warning: Member fastIntersect(const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:230: warning: Member saveIntersect(const std::vector< Halfspace< Number >> &_planes, Number threshold=0) (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:345: warning: Found unknown command `\detail'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:47: warning: argument '_vector' of command @param is not found in the argument list of hypro::Halfspace< Number >::Halfspace(Normal &&normal, Offset &&offset)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:47: warning: argument '_off' of command @param is not found in the argument list of hypro::Halfspace< Number >::Halfspace(Normal &&normal, Offset &&offset)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:53: warning: The following parameters of hypro::Halfspace::Halfspace(Normal &&normal, Offset &&offset) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:88: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:106: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:313: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:339: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:230: warning: Member fastIntersect(const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:231: warning: Member saveIntersect(const std::vector< Halfspace< Number >> &_planes, Number threshold=0) (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:346: warning: Found unknown command `\detail'
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:48: warning: argument '_vector' of command @param is not found in the argument list of hypro::Halfspace< Number >::Halfspace(Normal &&normal, Offset &&offset)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:48: warning: argument '_off' of command @param is not found in the argument list of hypro::Halfspace< Number >::Halfspace(Normal &&normal, Offset &&offset)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:54: warning: The following parameters of hypro::Halfspace::Halfspace(Normal &&normal, Offset &&offset) are not documented:
   parameter 'normal'
   parameter 'offset'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:279: warning: argument 'The' of command @param is not found in the argument list of hypro::Halfspace< Number >::computePlaneNormal(const std::vector< vector_t< Number >> &pointSet)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:285: warning: The following parameters of hypro::Halfspace::computePlaneNormal(const std::vector< vector_t< Number >> &pointSet) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:280: warning: argument 'The' of command @param is not found in the argument list of hypro::Halfspace< Number >::computePlaneNormal(const std::vector< vector_t< Number >> &pointSet)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:286: warning: The following parameters of hypro::Halfspace::computePlaneNormal(const std::vector< vector_t< Number >> &pointSet) are not documented:
   parameter 'pointSet'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:177: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number > point) const
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:181: warning: The following parameters of hypro::Halfspace::projectPointOnPlane(const Point< Number > point) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:178: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number > point) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:182: warning: The following parameters of hypro::Halfspace::projectPointOnPlane(const Point< Number > point) const are not documented:
   parameter 'point'
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h:16: warning: Member buildFirstSegmentHandler(representation_name name, State *state, size_t index, tNumber timeStep) (function) of class hypro::HandlerFactory is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h:17: warning: Member buildInvariantHandler(representation_name name, State *state, size_t index, bool noFlow) (function) of class hypro::HandlerFactory is not documented.
@@ -2821,19 +2822,19 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedronSetting.h:46: warning: Member BOUNDING_VALUE (variable) of class hypro::TemplatePolyhedronDefault is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedronSetting.h:50: warning: Member DIRECTLY_COMPUTE_ROOTS (variable) of class hypro::TemplatePolyhedronDefault is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TemplatePolyhedron/TemplatePolyhedronSetting.h:54: warning: Member MONOTONICITY_GRANULARITY (variable) of class hypro::TemplatePolyhedronDefault is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:114: warning: Member Optimizer(Optimizer< Number > &&orig) (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:115: warning: Member Optimizer(const Optimizer< Number > &orig) (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:144: warning: Member cleanContexts() (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:147: warning: Member getLastConsistencyAnswer() const  (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:148: warning: Member getConsistencyChecked() const  (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:151: warning: Member getGLPContexts() const  (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:156: warning: Member getCLPContexts() const  (function) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:161: warning: Member swap(Optimizer< Number > &lhs, Optimizer< Number > &rhs) (friend) of class hypro::Optimizer is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:122: warning: The following parameters of hypro::Optimizer::Optimizer(const matrix_t< Number > &constraints, const vector_t< Number > &constants, bool max=true) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:119: warning: Member Optimizer(Optimizer< Number > &&orig) (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:120: warning: Member Optimizer(const Optimizer< Number > &orig) (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:149: warning: Member cleanContexts() (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:152: warning: Member getLastConsistencyAnswer() const  (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:153: warning: Member getConsistencyChecked() const  (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:156: warning: Member getGLPContexts() const  (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:161: warning: Member getCLPContexts() const  (function) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:166: warning: Member swap(Optimizer< Number > &lhs, Optimizer< Number > &rhs) (friend) of class hypro::Optimizer is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:127: warning: The following parameters of hypro::Optimizer::Optimizer(const matrix_t< Number > &constraints, const vector_t< Number > &constants, bool max=true) are not documented:
   parameter 'max'
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:228: warning: The following parameters of hypro::Optimizer::addConstraint(const vector_t< Number > &constraint, Number constantPart, carl::Relation rel) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:233: warning: The following parameters of hypro::Optimizer::addConstraint(const vector_t< Number > &constraint, Number constantPart, carl::Relation rel) are not documented:
   parameter 'rel'
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:235: warning: The following parameters of hypro::Optimizer::setRelation(carl::Relation rel, std::size_t pos) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:240: warning: The following parameters of hypro::Optimizer::setRelation(carl::Relation rel, std::size_t pos) are not documented:
   parameter 'rel'
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h:27: warning: Member OrthogonalPolyhedron(const Vertex< Number > &_vertex) (function) of class hypro::OrthogonalPolyhedron is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h:28: warning: Member OrthogonalPolyhedron(const VertexContainer< Number > &vertices) (function) of class hypro::OrthogonalPolyhedron is not documented.
@@ -2959,8 +2960,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotData.h:14: warning: Member sets (variable) of class hypro::PlotData is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotData.h:15: warning: Member threadId (variable) of class hypro::PlotData is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotData.h:16: warning: Member refinementLevel (variable) of class hypro::PlotData is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:149: warning: Member plotGen() const  (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:216: warning: Member clear() (function) of class hypro::Plotter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:150: warning: Member plotGen() const  (function) of class hypro::Plotter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:217: warning: Member clear() (function) of class hypro::Plotter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:28: warning: Member pointSet (typedef) of class hypro::Point is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:29: warning: Member coordinateMap (typedef) of class hypro::Point is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:509: warning: argument '_i' of command @param is not found in the argument list of hypro::Point< Number >::at(std::size_t _index)
@@ -4382,20 +4383,20 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/FacetSpace.h:50: warning: The following parameters of hypro::ExactQuickhull::FacetSpace::insertConePart(facet_ind_t other_i, point_ind_t visiblePoint, size_t replaceAt) are not documented:
   parameter 'other_i'
   parameter 'replaceAt'
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:53: warning: Member name (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:54: warning: Member filename (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:55: warning: Member color (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:56: warning: Member fill (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:57: warning: Member axes (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:58: warning: Member grid (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:59: warning: Member title (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:61: warning: Member pointSize (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:63: warning: Member linewidth (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:64: warning: Member keepAspectRatio (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:65: warning: Member dimensions (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:66: warning: Member cummulative (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:67: warning: Member plain (variable) of class hypro::plotting::gnuplotSettings is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:68: warning: Member overwriteFiles (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:54: warning: Member name (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:55: warning: Member filename (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:56: warning: Member color (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:57: warning: Member fill (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:58: warning: Member axes (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:59: warning: Member grid (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:60: warning: Member title (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:62: warning: Member pointSize (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:64: warning: Member linewidth (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:65: warning: Member keepAspectRatio (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:66: warning: Member dimensions (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:67: warning: Member cummulative (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:68: warning: Member plain (variable) of class hypro::plotting::gnuplotSettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:69: warning: Member overwriteFiles (variable) of class hypro::plotting::gnuplotSettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:15: warning: Member addChild(const CellTreeNode< Data > &c) (function) of class hypro::qe::CellTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:11: warning: Member mData (variable) of class hypro::qe::CellTreeNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/CellTree.h:12: warning: Member mChildren (variable) of class hypro::qe::CellTreeNode is not documented.
@@ -4420,25 +4421,38 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:36: warning: Member bloatBoxVisitor(const Box< Number > &box) (function) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:40: warning: Member operator()(const ConcreteType &set) (function) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h:32: warning: Member box (variable) of class hypro::reachability::detail::bloatBoxVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:37: warning: Member operator++() (function) of class hypro::statistics::AtomicOperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:50: warning: Member operator++() (function) of class hypro::statistics::AtomicCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:55: warning: Member operator++(int) (function) of class hypro::statistics::AtomicCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:60: warning: Member operator--() (function) of class hypro::statistics::AtomicCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:65: warning: Member operator--(int) (function) of class hypro::statistics::AtomicCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:23: warning: Member operator++() (function) of class hypro::statistics::OperationCounter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:24: warning: Member operator unsigned long() const  (function) of class hypro::statistics::OperationCounter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:25: warning: Member reset() (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:24: warning: Member operator++(int) (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:25: warning: Member operator unsigned long() const  (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:26: warning: Member reset() (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:21: warning: Member mMtx (variable) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:22: warning: Member val (variable) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:38: warning: Member operator++() (function) of class hypro::statistics::AtomicOperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:43: warning: Member operator++(int) (function) of class hypro::statistics::AtomicOperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:23: warning: Member operator++() (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:24: warning: Member operator++(int) (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:25: warning: Member operator unsigned long() const  (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:26: warning: Member reset() (function) of class hypro::statistics::OperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:21: warning: Member mMtx (variable) of class hypro::statistics::OperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:22: warning: Member val (variable) of class hypro::statistics::OperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:23: warning: Member operator++() (function) of class hypro::statistics::OperationCounter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:24: warning: Member operator unsigned long() const  (function) of class hypro::statistics::OperationCounter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:25: warning: Member reset() (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:24: warning: Member operator++(int) (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:25: warning: Member operator unsigned long() const  (function) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:26: warning: Member reset() (function) of class hypro::statistics::OperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:21: warning: Member mMtx (variable) of class hypro::statistics::OperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:22: warning: Member val (variable) of class hypro::statistics::OperationCounter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:30: warning: Member operator<<(std::ostream &ostr, const OperationCounter &opCnt) (friend) of class hypro::statistics::OperationCounter is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:31: warning: Member operator<<(std::ostream &ostr, const OperationCounter &opCnt) (friend) of class hypro::statistics::OperationCounter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:88: warning: Member Line_t(Eigen::Matrix< Number, 2, 1 > pt_, Eigen::Matrix< Number, 2, 1 > direction_) (function) of class hypro::ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:93: warning: Member point (variable) of class hypro::ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/ZUtility.h:94: warning: Member direction (variable) of class hypro::ZUtility::Line_t is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:85: warning: Member operator()(const hypro::affineFlow< Number > &f) const  (function) of class std::hash< hypro::affineFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:129: warning: Member operator()(const hypro::AffineTransformation< Number > &reset) const  (function) of class std::hash< hypro::AffineTransformation< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:64: warning: Member operator()(hypro::Cacheable< Content > const &item) const  (function) of class std::hash< hypro::Cacheable< Content > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:435: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:436: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:139: warning: Member operator()(const hypro::IntervalAssignment< Number > &reset) const  (function) of class std::hash< hypro::IntervalAssignment< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:136: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:306: warning: Member operator()(const hypro::Location< Number > &loc) const  (function) of class std::hash< hypro::Location< Number > > is not documented.

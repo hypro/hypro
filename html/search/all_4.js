@@ -8,8 +8,8 @@ var searchData=
   ['decompose',['decompose',['../classhypro_1_1_hybrid_automaton.html#a0330392633323d928f32f04e2d2cb088',1,'hypro::HybridAutomaton::decompose()'],['../classhypro_1_1_location.html#ae2072188d156cafa50e0c0bcc4809c27',1,'hypro::Location::decompose()'],['../classhypro_1_1_reset.html#a0a31929c7f990bcecceaf32835e7d681',1,'hypro::Reset::decompose()'],['../classhypro_1_1_transition.html#ae34b8848beb4860f2a2ef1a4f5ae33a8',1,'hypro::Transition::decompose()']]],
   ['decomposition',['Decomposition',['../namespacehypro.html#structhypro_1_1_decomposition',1,'hypro']]],
   ['decrementinfixeddim',['decrementInFixedDim',['../classhypro_1_1_point.html#a6364ad4b0857f49cdc1633e118cd2481',1,'hypro::Point::decrementInFixedDim(const carl::Variable &amp;_d)'],['../classhypro_1_1_point.html#a63eb94a9722755edcd2eea333d8a4293',1,'hypro::Point::decrementInFixedDim(unsigned _d)']]],
-  ['default_5fdouble_5fcomparison_5fulps',['default_double_comparison_ulps',['../group__globals.html#gab2f19f742ea698a529102d85c3c0be0e',1,'config.h']]],
-  ['defaulttemplatedirectioncount',['defaultTemplateDirectionCount',['../group__globals.html#ga6416b4b09ad3984e740a0e19ef391467',1,'config.h']]],
+  ['default_5fdouble_5fcomparison_5fulps',['default_double_comparison_ulps',['../namespacehypro.html#aa87e0983d8ff77b997385414d2245cab',1,'hypro']]],
+  ['defaulttemplatedirectioncount',['defaultTemplateDirectionCount',['../namespacehypro.html#aa282f0222b0bb166b2a3547b465a0f9b',1,'hypro']]],
   ['deletearrays',['deleteArrays',['../structhypro_1_1glpk__context.html#ac17f844cae26b15091f2c6541343f238',1,'hypro::glpk_context']]],
   ['deletelpinstance',['deleteLPInstance',['../structhypro_1_1glpk__context.html#aa257c8cc75e722278eacf844cef92829',1,'hypro::glpk_context']]],
   ['dependencies',['Dependencies',['../dependencies.html',1,'gettingStarted']]],
@@ -33,6 +33,6 @@ var searchData=
   ['domain',['Domain',['../classhypro_1_1_domain.html',1,'hypro']]],
   ['dummy',['Dummy',['../structhypro_1_1_dummy.html',1,'hypro']]],
   ['dynamic',['dynamic',['../namespacehypro.html#a4a88dfa1cbef6e1ffadd45caf4e6d3d6',1,'hypro::PreprocessingInformation']]],
-  ['dynamicheuristic',['DYNAMICHEURISTIC',['../group__globals.html#ga607d8cb76bcf54172542359fda640812',1,'config.h']]],
+  ['dynamicheuristic',['DYNAMICHEURISTIC',['../namespacehypro.html#afb9cedf0703dc3127f35005b40f91379',1,'hypro']]],
   ['dynamictype',['DynamicType',['../namespacehypro.html#ade3e42b7b774f60999db5eb776027882',1,'hypro']]]
 ];

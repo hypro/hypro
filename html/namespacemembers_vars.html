@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>HyPro: hypro::FourierMotzkinQE&lt; Number &gt; Class Template Reference</title>
+<title>HyPro: Namespace Members</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -57,8 +57,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
@@ -81,10 +81,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
-      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
-      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
-      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
+      <li><a href="namespaces.html"><span>Namespace&#160;List</span></a></li>
+      <li class="current"><a href="namespacemembers.html"><span>Namespace&#160;Members</span></a></li>
+    </ul>
+  </div>
+  <div id="navrow3" class="tabs2">
+    <ul class="tablist">
+      <li><a href="namespacemembers.html"><span>All</span></a></li>
+      <li><a href="namespacemembers_func.html"><span>Functions</span></a></li>
+      <li class="current"><a href="namespacemembers_vars.html"><span>Variables</span></a></li>
+      <li><a href="namespacemembers_type.html"><span>Typedefs</span></a></li>
+      <li><a href="namespacemembers_enum.html"><span>Enumerations</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -99,7 +106,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('classhypro_1_1_fourier_motzkin_q_e.html','');});
+$(document).ready(function(){initNavTree('namespacemembers_vars.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -116,44 +123,26 @@ $(document).ready(function(){initNavTree('classhypro_1_1_fourier_motzkin_q_e.htm
 </iframe>
 </div>
 
-<div class="header">
-  <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="classhypro_1_1_fourier_motzkin_q_e-members.html">List of all members</a>  </div>
-  <div class="headertitle">
-<div class="title">hypro::FourierMotzkinQE&lt; Number &gt; Class Template Reference</div>  </div>
-</div><!--header-->
 <div class="contents">
-
-<p>Provides a simple implementation for Fourier Motzkin variable elimination for linear, existentially quantified constraints.  
- <a href="classhypro_1_1_fourier_motzkin_q_e.html#details">More...</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:ab6c196d60a3616cbd5cc7b48d73a4a9b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6c196d60a3616cbd5cc7b48d73a4a9b"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>FormulaPartition</b> = std::vector&lt; FormulasT&lt; Number &gt;&gt;</td></tr>
-<tr class="separator:ab6c196d60a3616cbd5cc7b48d73a4a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a6cbca2f37148f100331d3c7ea51c2342"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6cbca2f37148f100331d3c7ea51c2342"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>FourierMotzkinQE</b> (const FormulaT&lt; Number &gt; &amp;qfree, const QEQuery &amp;quantifiers)</td></tr>
-<tr class="separator:a6cbca2f37148f100331d3c7ea51c2342"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d9bb6564e8503046f4d8a9c9d1f7fba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d9bb6564e8503046f4d8a9c9d1f7fba"></a>
-FormulaT&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>eliminateQuantifiers</b> ()</td></tr>
-<tr class="separator:a5d9bb6564e8503046f4d8a9c9d1f7fba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number&gt;<br />
-class hypro::FourierMotzkinQE&lt; Number &gt;</h3>
-
-<p>Provides a simple implementation for Fourier Motzkin variable elimination for linear, existentially quantified constraints. </p>
-
-<p>Definition at line <a class="el" href="_fourier_motzkin_q_e_8h_source.html#l00013">13</a> of file <a class="el" href="_fourier_motzkin_q_e_8h_source.html">FourierMotzkinQE.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/<a class="el" href="_fourier_motzkin_q_e_8h_source.html">FourierMotzkinQE.h</a></li>
-<li>/home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/<a class="el" href="_fourier_motzkin_q_e_8tpp_source.html">FourierMotzkinQE.tpp</a></li>
+&#160;<ul>
+<li>default_double_comparison_ulps
+: <a class="el" href="namespacehypro.html#aa87e0983d8ff77b997385414d2245cab">hypro</a>
+</li>
+<li>defaultTemplateDirectionCount
+: <a class="el" href="namespacehypro.html#aa282f0222b0bb166b2a3547b465a0f9b">hypro</a>
+</li>
+<li>DYNAMICHEURISTIC
+: <a class="el" href="namespacehypro.html#afb9cedf0703dc3127f35005b40f91379">hypro</a>
+</li>
+<li>EPSILON
+: <a class="el" href="namespacehypro.html#a7e938199cd83675a4ffe5b261b608eb9">hypro</a>
+</li>
+<li>fReach_DENOMINATOR
+: <a class="el" href="namespacehypro.html#ac7ea229fb95591a62e685e139bb0348e">hypro</a>
+</li>
+<li>POS_CONSTANT
+: <a class="el" href="namespacehypro.html#a3ea4b9fe9de952b7db0401ac4902566d">hypro</a>
+</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -161,7 +150,6 @@ class hypro::FourierMotzkinQE&lt; Number &gt;</h3>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="namespacehypro.html">hypro</a></li><li class="navelem"><a class="el" href="classhypro_1_1_fourier_motzkin_q_e.html">FourierMotzkinQE</a></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>

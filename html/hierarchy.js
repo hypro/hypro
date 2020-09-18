@@ -273,6 +273,7 @@ var hierarchy =
     [ "hypro::detail::nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4.html", null ],
     [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html", null ],
     [ "hypro::statistics::OperationCounter", "structhypro_1_1statistics_1_1_operation_counter.html", [
+      [ "hypro::statistics::AtomicCounter", "structhypro_1_1statistics_1_1_atomic_counter.html", null ],
       [ "hypro::statistics::AtomicOperationCounter", "structhypro_1_1statistics_1_1_atomic_operation_counter.html", null ]
     ] ],
     [ "hypro::Optimizer< Number >", "classhypro_1_1_optimizer.html", null ],

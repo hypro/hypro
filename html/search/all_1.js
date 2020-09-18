@@ -34,5 +34,6 @@ var searchData=
   ['arrayscreated',['arraysCreated',['../structhypro_1_1glpk__context.html#a6731cf145286af345d5a801dcd25e03e',1,'hypro::glpk_context']]],
   ['as_5finteger',['as_integer',['../namespacehypro.html#a207c927372177371eb7d6dd9a197a4d0',1,'hypro']]],
   ['at',['at',['../classhypro_1_1_point.html#af60aed9cca3a1142eb2b6c6d493df935',1,'hypro::Point::at(const carl::Variable &amp;_i)'],['../classhypro_1_1_point.html#a1f2b1b8f9b7e49dae39d58b17b4e97f3',1,'hypro::Point::at(std::size_t _index)'],['../classhypro_1_1_point.html#a6fc8d4e11f07300bafc5f852c3310f7c',1,'hypro::Point::at(const carl::Variable &amp;_i) const '],['../classhypro_1_1_point.html#abaae108a846d2b9eaa157b6883658c80',1,'hypro::Point::at(std::size_t _index) const '],['../classhypro_1_1_box_t.html#a5af4f53b597c603d5c921fa000ad5dc8',1,'hypro::BoxT::at()']]],
+  ['atomiccounter',['AtomicCounter',['../structhypro_1_1statistics_1_1_atomic_counter.html',1,'hypro::statistics']]],
   ['atomicoperationcounter',['AtomicOperationCounter',['../structhypro_1_1statistics_1_1_atomic_operation_counter.html',1,'hypro::statistics']]]
 ];

@@ -13,6 +13,7 @@ var NAVTREE =
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
         [ "Typedefs", "namespacemembers_type.html", null ],
         [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
@@ -53,9 +54,9 @@ var NAVTREEINDEX =
 "classhypro_1_1_vertex_container.html#adb8b3a3b5f9111be872c6f7412f8ed41",
 "classhypro_1_1linear_flow.html#a4a3592226d36afc8ac3c66b4bcc62ff5",
 "dir_3100e148cb0b6b745355fdee31bcb5c6.html",
-"sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8a2e182522bc70be75f15f20a319f906da",
-"structhypro_1_1_reachability_settings.html#a6fec83f69b27ea8473a100b497482a92",
-"structstd_1_1hash_3_01hypro_1_1_cacheable_3_01_content_01_4_01_4.html#aaf6c63de47b22a17271744011600ad81"
+"settings__enums_8cpp_source.html",
+"structhypro_1_1_reachability_settings.html#aa17f76655c115df2a6ce1107f6c03341",
+"structstd_1_1hash_3_01hypro_1_1_affine_transformation_3_01_number_01_4_01_4.html#a0d46fdadc294acafd0f9117b0d02264a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
