@@ -165,8 +165,10 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			/*
 			return { singular_analyze<hypro::VPolytope<Number>>( automaton, setting ) };
 			*/
+			/*
 			return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																		setting.strategy().front().representation_setting, SingularDispatcher{}, automaton, setting ) };
+	*/
 			[[fallthrough]];
 		}
 		case DynamicType::timed:

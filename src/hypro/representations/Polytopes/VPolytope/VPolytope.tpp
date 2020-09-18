@@ -175,7 +175,7 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::linearTransfo
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytopeT<Number, Converter, S> result;
 	for ( const auto& vertex : mVertices ) {
-		Point<Number> tmp( vertex.linearTransformation( A ) );
+		Point<Number> tmp{ vertex.linearTransformation( A ) };
 		if ( std::find( result.begin(), result.end(), tmp ) == result.end() ) {
 			result.emplace_back( std::move( tmp ) );
 		}
@@ -190,7 +190,7 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::affineTransfo
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytopeT<Number, Converter, S> result;
 	for ( const auto& vertex : mVertices ) {
-		Point<Number> tmp( vertex.affineTransformation( A, b ) );
+		Point<Number> tmp{ vertex.affineTransformation( A, b ) };
 		if ( std::find( result.begin(), result.end(), tmp ) == result.end() ) {
 			result.emplace_back( std::move( tmp ) );
 		}

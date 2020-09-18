@@ -1,6 +1,7 @@
 #pragma once
-#include <datastructures/reachability/ReachTreev2.h>
-#include <types.h>
+#include "../../../datastructures/reachability/ReachTreev2.h"
+#include "../../../types.h"
+
 #include <variant>
 
 namespace hypro {

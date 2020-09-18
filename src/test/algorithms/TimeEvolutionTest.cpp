@@ -1,7 +1,7 @@
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <algorithms/reachability/handlers/timeEvolutionHandlers/singularTimeEvolutionHandler.h>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/algorithms/reachability/handlers/timeEvolutionHandlers/singularTimeEvolutionHandler.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 TEST( TimeEvolutionTest, SingularEvolution ) {
 	using Number = mpq_class;
@@ -10,11 +10,12 @@ TEST( TimeEvolutionTest, SingularEvolution ) {
 	using Point = hypro::Point<Number>;
 
 	Vector origin = Vector::Zero( 2 );
-	VPoly init{ std::vector{ origin } };
+
+	VPoly init{ hypro::Point<Number>{ origin } };
 
 	Vector dynamics1 = Vector::Zero( 2 );
 	dynamics1 << Number( 1 ), Number( 1 );
-	std::vector<Point> dynamicsVertices{ Point( dynamics1 ) };
+	VPoly dynamicsPoly1{ hypro::Point<Number>{ dynamics1 } };
 
 	auto unbndTimeEvolution = hypro::singularApplyTimeEvolution( init, dynamicsVertices );
 

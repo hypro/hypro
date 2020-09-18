@@ -10,28 +10,21 @@ namespace hypro {
  */
 template <typename Number>
 struct EvaluationResult {
-	Number supportValue;			//*< The value returned by the evaluation.
-	vector_t<Number> optimumValue;	//*< The point leading to the evaluation value (extremum in direction).
-	SOLUTION errorCode;				//*< Potential error code indicating success or failure of the evaluation.
+	Number supportValue = Number( 0 );							  //*< The value returned by the evaluation.
+	vector_t<Number> optimumValue = vector_t<Number>::Zero( 0 );  //*< The point leading to the evaluation value (extremum in direction).
+	SOLUTION errorCode = SOLUTION::INFEAS;						  //*< Potential error code indicating success or failure of the evaluation.
 
-	EvaluationResult()
-		: supportValue( Number( 0 ) )
-		, optimumValue( vector_t<Number>::Zero( 0 ) )
-		, errorCode( SOLUTION::INFEAS ) {}
+	EvaluationResult() {}
 
 	explicit EvaluationResult( SOLUTION err )
-		: supportValue( Number( 0 ) )
-		, optimumValue( vector_t<Number>::Zero( 0 ) )
-		, errorCode( err ) {}
+		: errorCode( err ) {}
 
 	EvaluationResult( const Number& val, SOLUTION err )
 		: supportValue( val )
-		, optimumValue( vector_t<Number>::Zero( 0 ) )
 		, errorCode( err ) {}
 
 	EvaluationResult( const vector_t<Number>& val, SOLUTION err )
-		: supportValue( 0 )
-		, optimumValue( val )
+		: optimumValue( val )
 		, errorCode( err ) {}
 
 	EvaluationResult( Number sValue, const vector_t<Number> val, SOLUTION err )

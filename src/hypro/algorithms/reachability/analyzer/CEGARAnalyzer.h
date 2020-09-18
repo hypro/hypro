@@ -3,10 +3,10 @@
 #include "../../../datastructures/reachability/ReachTreev2.h"
 #include "../../../datastructures/reachability/Strategy.h"
 #include "../../../types.h"
-#include "./impl/RefinementAnalyzer.h"
-#include "algorithms/reachability/analyzer/LTIAnalyzer.h"
-#include "util/plotting/Plotter.h"
-#include "util/type_handling/dispatch.h"
+#include "../../../util/plotting/Plotter.h"
+#include "../../../util/type_handling/dispatch.h"
+#include "LTIAnalyzer.h"
+#include "impl/RefinementAnalyzer.h"
 
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/counting_range.hpp>
@@ -69,18 +69,18 @@ class CEGARAnalyzer {
 						std::variant<Failure<Representations>...> targetFailure,
 						TargetLevel& targetLevel );
 
-	template<class Representation>
+	template <class Representation>
 	void handleFailure( ReachTreeNode<Representation>* conflictNode, size_t targetIndex );
 
 	/**
 	 * @brief Gets the level at index. Helps with the offset of mLevels.
 	 */
-//	RefinementLevel& getRefinementLevel( size_t index ) {
-//		assert( index >= 1 );
-//		assert( index <= mLevels.size() );
-//
-//		return mLevels[index - 1];
-//	}
+	//	RefinementLevel& getRefinementLevel( size_t index ) {
+	//		assert( index >= 1 );
+	//		assert( index <= mLevels.size() );
+	//
+	//		return mLevels[index - 1];
+	//	}
 
   public:
 	CEGARAnalyzer() = delete;
@@ -93,8 +93,8 @@ class CEGARAnalyzer {
 	CEGARAnalyzer( const HybridAutomaton<Number>& ha, const Settings& settings )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
-		, mBaseLevel( createBaseLevel( mHybridAutomaton, settings ) ) {} // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
-																		 // thus location and transition pointers are different between them.
+		, mBaseLevel( createBaseLevel( mHybridAutomaton, settings ) ) {}  // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
+																		  // thus location and transition pointers are different between them.
 
 	REACHABILITY_RESULT run();
 

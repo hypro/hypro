@@ -19,8 +19,9 @@ namespace statistics {
 	 */
 struct OperationCounter {
 	std::mutex mMtx;
-	unsigned long val;
+	unsigned long val = 0;
 	unsigned long operator++() { return ++val; }
+	unsigned long operator++( int ) { return val++; }
 	operator unsigned long() const { return val; }
 	void reset() {
 		ScopedLock<std::mutex>( this->mMtx );
@@ -37,6 +38,33 @@ struct AtomicOperationCounter : public OperationCounter {
 	unsigned long operator++() {
 		ScopedLock<std::mutex>( this->mMtx );
 		return ++val;
+	}
+
+	unsigned long operator++( int ) {
+		ScopedLock<std::mutex>( this->mMtx );
+		return val++;
+	}
+};
+
+struct AtomicCounter : public OperationCounter {
+	unsigned long operator++() {
+		ScopedLock<std::mutex>( this->mMtx );
+		return ++val;
+	}
+
+	unsigned long operator++( int ) {
+		ScopedLock<std::mutex>( this->mMtx );
+		return ++val;
+	}
+
+	unsigned long operator--() {
+		ScopedLock<std::mutex>( this->mMtx );
+		return --val;
+	}
+
+	unsigned long operator--( int ) {
+		ScopedLock<std::mutex>( this->mMtx );
+		return val--;
 	}
 };
 

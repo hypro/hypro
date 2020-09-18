@@ -7,100 +7,88 @@
  * @version     2015-02-12
  */
 
-#include "gtest/gtest.h"
 #include "../defines.h"
-#include "datastructures/Halfspace.h"
+#include "gtest/gtest.h"
+#include <hypro/datastructures/Halfspace.h>
 
 using namespace hypro;
 using namespace carl;
 
-template<typename Number>
-class HalfspaceTest : public ::testing::Test
-{
-protected:
-    virtual void SetUp()
-    {
-    }
+template <typename Number>
+class HalfspaceTest : public ::testing::Test {
+  protected:
+	virtual void SetUp() {}
 
-    virtual void TearDown()
-    {
-    }
-
+	virtual void TearDown() {}
 };
 
-TYPED_TEST(HalfspaceTest, Constructor)
-{
-	//Halfspace<TypeParam> empty = Halfspace<TypeParam>();
-	Point<TypeParam> vec = Point<TypeParam>({2,4});
-	Halfspace<TypeParam> normals = Halfspace<TypeParam>(vec, TypeParam(3));
-	Halfspace<TypeParam> initializer = Halfspace<TypeParam>({TypeParam(2), TypeParam(4)}, TypeParam(3));
-	EXPECT_EQ(normals, initializer);
+TYPED_TEST( HalfspaceTest, Constructor ) {
+	// Halfspace<TypeParam> empty = Halfspace<TypeParam>();
+	Point<TypeParam> vec = Point<TypeParam>( { 2, 4 } );
+	Halfspace<TypeParam> normals = Halfspace<TypeParam>( vec, TypeParam( 3 ) );
+	Halfspace<TypeParam> initializer = Halfspace<TypeParam>( { TypeParam( 2 ), TypeParam( 4 ) }, TypeParam( 3 ) );
+	EXPECT_EQ( normals, initializer );
 
-	vector_t<TypeParam> normal = vector_t<TypeParam>(2);
-	normal(0) = TypeParam(2);
-	normal(1) = TypeParam(4);
-	Halfspace<TypeParam>(normal, TypeParam(3));
+	vector_t<TypeParam> normal = vector_t<TypeParam>( 2 );
+	normal( 0 ) = TypeParam( 2 );
+	normal( 1 ) = TypeParam( 4 );
+	Halfspace<TypeParam>( normal, TypeParam( 3 ) );
 
-	Halfspace<TypeParam> copy = Halfspace<TypeParam>(normals);
-	EXPECT_EQ(copy, normals);
+	Halfspace<TypeParam> copy = Halfspace<TypeParam>( normals );
+	EXPECT_EQ( copy, normals );
 
 	SUCCEED();
 }
 
-TYPED_TEST(HalfspaceTest, Access)
-{
-	Halfspace<TypeParam> tmp ({1,2},3);
+TYPED_TEST( HalfspaceTest, Access ) {
+	Halfspace<TypeParam> tmp( { 1, 2 }, 3 );
 }
 
-TYPED_TEST(HalfspaceTest, Evaluation)
-{
-	vector_t<TypeParam> vec(2);
-	vec(0) = 2;
-	vec(1) = 4;
-	Halfspace<TypeParam> hp1 = Halfspace<TypeParam>(vec, TypeParam(3));
+TYPED_TEST( HalfspaceTest, Evaluation ) {
+	vector_t<TypeParam> vec( 2 );
+	vec( 0 ) = 2;
+	vec( 1 ) = 4;
+	Halfspace<TypeParam> hp1 = Halfspace<TypeParam>( vec, TypeParam( 3 ) );
 
-	vector_t<TypeParam> test(2);
-	test(0) = 5;
-	test(1) = 1;
+	vector_t<TypeParam> test( 2 );
+	test( 0 ) = 5;
+	test( 1 ) = 1;
 
-	EXPECT_EQ(TypeParam(vec.dot(test)), hp1.evaluate(test) );
+	EXPECT_EQ( TypeParam( vec.dot( test ) ), hp1.evaluate( test ) );
 }
 
-TYPED_TEST(HalfspaceTest, SignedDistance)
-{
-	vector_t<TypeParam> vec(2);
-	vec(0) = 2;
-	vec(1) = 4;
-	Halfspace<TypeParam> hp1 = Halfspace<TypeParam>(vec, TypeParam(3));
+TYPED_TEST( HalfspaceTest, SignedDistance ) {
+	vector_t<TypeParam> vec( 2 );
+	vec( 0 ) = 2;
+	vec( 1 ) = 4;
+	Halfspace<TypeParam> hp1 = Halfspace<TypeParam>( vec, TypeParam( 3 ) );
 
-	vector_t<TypeParam> test(2);
-	test(0) = 5;
-	test(1) = 1;
+	vector_t<TypeParam> test( 2 );
+	test( 0 ) = 5;
+	test( 1 ) = 1;
 
-	EXPECT_EQ(TypeParam(vec.dot(test)) - hp1.offset(), hp1.signedDistance(test) );
+	EXPECT_EQ( TypeParam( vec.dot( test ) ) - hp1.offset(), hp1.signedDistance( test ) );
 }
 
-TYPED_TEST(HalfspaceTest, Intersection)
-{
-	vector_t<TypeParam> normal1(4);
-	normal1(0) = 1;
-	normal1(1) = 1;
-	normal1(2) = 1;
-	normal1(3) = 1;
-	Halfspace<TypeParam> hp1 = Halfspace<TypeParam>(normal1, TypeParam(3));
+TYPED_TEST( HalfspaceTest, Intersection ) {
+	vector_t<TypeParam> normal1( 4 );
+	normal1( 0 ) = 1;
+	normal1( 1 ) = 1;
+	normal1( 2 ) = 1;
+	normal1( 3 ) = 1;
+	Halfspace<TypeParam> hp1 = Halfspace<TypeParam>( normal1, TypeParam( 3 ) );
 
-	vector_t<TypeParam> normal2(4);
-	normal2(0) = 2;
-	normal2(1) = 1;
-	normal2(2) = 3;
-	normal2(3) = 4;
-	Halfspace<TypeParam> hp2 = Halfspace<TypeParam>(normal2, TypeParam(4));
+	vector_t<TypeParam> normal2( 4 );
+	normal2( 0 ) = 2;
+	normal2( 1 ) = 1;
+	normal2( 2 ) = 3;
+	normal2( 3 ) = 4;
+	Halfspace<TypeParam> hp2 = Halfspace<TypeParam>( normal2, TypeParam( 4 ) );
 
-	vector_t<TypeParam> v = hp1.intersectionVector(hp2);
+	vector_t<TypeParam> v = hp1.intersectionVector( hp2 );
 }
 
-TYPED_TEST(HalfspaceTest, saveIntersection)
-{
+TYPED_TEST( HalfspaceTest, saveIntersection ) {
 	/*
 	vector_t<TypeParam> normal1(2);
 	normal1(0) = 1;

@@ -10,14 +10,14 @@
  */
 
 #include "../defines.h"
-#include "datastructures/Point.h"
-#include "datastructures/Vertex.h"
-#include "datastructures/VertexContainer.h"
-#include "representations/GeometricObjectBase.h"
-#include "representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
-#include "types.h"
-#include "util/VariablePool.h"
 #include "gtest/gtest.h"
+#include <hypro/datastructures/Point.h>
+#include <hypro/datastructures/Vertex.h>
+#include <hypro/datastructures/VertexContainer.h>
+#include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h>
+#include <hypro/types.h>
+#include <hypro/util/VariablePool.h>
 
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
@@ -31,21 +31,21 @@ template <typename Number>
 class OrthogonalPolyhedronTest : public ::testing::Test {
   protected:
 	virtual void SetUp() {
-		container1.insert( Point<Number>( {3, 3} ), true );
-		container1.insert( Point<Number>( {3, 6} ), false );
-		container1.insert( Point<Number>( {5, 3} ), false );
-		container1.insert( Point<Number>( {5, 5} ), true );
-		container1.insert( Point<Number>( {7, 5} ), false );
-		container1.insert( Point<Number>( {7, 6} ), false );
+		container1.insert( Point<Number>( { 3, 3 } ), true );
+		container1.insert( Point<Number>( { 3, 6 } ), false );
+		container1.insert( Point<Number>( { 5, 3 } ), false );
+		container1.insert( Point<Number>( { 5, 5 } ), true );
+		container1.insert( Point<Number>( { 7, 5 } ), false );
+		container1.insert( Point<Number>( { 7, 6 } ), false );
 
 		p1 = OrthogonalPolyhedron<Number>( container1 );
 
-		container2.insert( Point<Number>( {1, 2} ), true );
-		container2.insert( Point<Number>( {1, 4} ), false );
-		container2.insert( Point<Number>( {2, 4} ), true );
-		container2.insert( Point<Number>( {2, 5} ), false );
-		container2.insert( Point<Number>( {4, 5} ), false );
-		container2.insert( Point<Number>( {4, 2} ), false );
+		container2.insert( Point<Number>( { 1, 2 } ), true );
+		container2.insert( Point<Number>( { 1, 4 } ), false );
+		container2.insert( Point<Number>( { 2, 4 } ), true );
+		container2.insert( Point<Number>( { 2, 5 } ), false );
+		container2.insert( Point<Number>( { 4, 5 } ), false );
+		container2.insert( Point<Number>( { 4, 2 } ), false );
 
 		p2 = OrthogonalPolyhedron<Number>( container2 );
 	}
@@ -68,7 +68,7 @@ TYPED_TEST( OrthogonalPolyhedronTest, Constructor ) {
 	OrthogonalPolyhedron<TypeParam> p1;
 
 	// constructor from vertex
-	Vertex<TypeParam> v1( Point<TypeParam>( {1, 2} ), false );
+	Vertex<TypeParam> v1( Point<TypeParam>( { 1, 2 } ), false );
 	OrthogonalPolyhedron<TypeParam> p2( v1 );
 
 	// constructor from vertexContainer
@@ -182,10 +182,10 @@ TYPED_TEST( OrthogonalPolyhedronTest, Intersect ) {
 
 	VertexContainer<TypeParam> container;
 
-	container.insert( Point<TypeParam>( {3, 3} ), true );
-	container.insert( Point<TypeParam>( {4, 3} ), false );
-	container.insert( Point<TypeParam>( {3, 5} ), false );
-	container.insert( Point<TypeParam>( {4, 5} ), false );
+	container.insert( Point<TypeParam>( { 3, 3 } ), true );
+	container.insert( Point<TypeParam>( { 4, 3 } ), false );
+	container.insert( Point<TypeParam>( { 3, 5 } ), false );
+	container.insert( Point<TypeParam>( { 4, 5 } ), false );
 	OrthogonalPolyhedron<TypeParam> p3( container );
 
 	OrthogonalPolyhedron<TypeParam> expected( container );
@@ -198,10 +198,10 @@ TYPED_TEST( OrthogonalPolyhedronTest, Intersect ) {
 TYPED_TEST( OrthogonalPolyhedronTest, Hull ) {
 	VertexContainer<TypeParam> container;
 
-	container.insert( Point<TypeParam>( {3, 3} ), true );
-	container.insert( Point<TypeParam>( {3, 6} ), false );
-	container.insert( Point<TypeParam>( {7, 3} ), false );
-	container.insert( Point<TypeParam>( {7, 6} ), false );
+	container.insert( Point<TypeParam>( { 3, 3 } ), true );
+	container.insert( Point<TypeParam>( { 3, 6 } ), false );
+	container.insert( Point<TypeParam>( { 7, 3 } ), false );
+	container.insert( Point<TypeParam>( { 7, 6 } ), false );
 
 	OrthogonalPolyhedron<TypeParam> hull( container );
 	OrthogonalPolyhedron<TypeParam> result;
@@ -284,20 +284,20 @@ TYPED_TEST( OrthogonalPolyhedronTest, Unite ) {
 
 	VertexContainer<TypeParam> container;
 
-	container.insert( Point<TypeParam>( {1, 3} ), true );
-	container.insert( Point<TypeParam>( {1, 4} ), false );
-	container.insert( Point<TypeParam>( {2, 2} ), true );
-	container.insert( Point<TypeParam>( {2, 3} ), true );
-	container.insert( Point<TypeParam>( {2, 4} ), true );
-	container.insert( Point<TypeParam>( {2, 5} ), false );
-	container.insert( Point<TypeParam>( {3, 5} ), true );
-	container.insert( Point<TypeParam>( {3, 6} ), false );
-	container.insert( Point<TypeParam>( {4, 2} ), false );
-	container.insert( Point<TypeParam>( {4, 3} ), true );
-	container.insert( Point<TypeParam>( {5, 3} ), false );
-	container.insert( Point<TypeParam>( {5, 5} ), true );
-	container.insert( Point<TypeParam>( {7, 5} ), false );
-	container.insert( Point<TypeParam>( {7, 6} ), false );
+	container.insert( Point<TypeParam>( { 1, 3 } ), true );
+	container.insert( Point<TypeParam>( { 1, 4 } ), false );
+	container.insert( Point<TypeParam>( { 2, 2 } ), true );
+	container.insert( Point<TypeParam>( { 2, 3 } ), true );
+	container.insert( Point<TypeParam>( { 2, 4 } ), true );
+	container.insert( Point<TypeParam>( { 2, 5 } ), false );
+	container.insert( Point<TypeParam>( { 3, 5 } ), true );
+	container.insert( Point<TypeParam>( { 3, 6 } ), false );
+	container.insert( Point<TypeParam>( { 4, 2 } ), false );
+	container.insert( Point<TypeParam>( { 4, 3 } ), true );
+	container.insert( Point<TypeParam>( { 5, 3 } ), false );
+	container.insert( Point<TypeParam>( { 5, 5 } ), true );
+	container.insert( Point<TypeParam>( { 7, 5 } ), false );
+	container.insert( Point<TypeParam>( { 7, 6 } ), false );
 
 	OrthogonalPolyhedron<TypeParam> expected( container );
 

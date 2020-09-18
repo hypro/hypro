@@ -1,6 +1,6 @@
 #pragma once
-#include "algorithms/reachability/workers/LTIFlowpipeConstruction.h"
-#include "datastructures/HybridAutomaton/Location.h"
+#include "../../algorithms/reachability/workers/LTIFlowpipeConstruction.h"
+#include "../HybridAutomaton/Location.h"
 
 #include <unordered_map>
 

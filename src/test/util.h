@@ -7,10 +7,10 @@
  */
 
 #pragma once
-#include "types.h"
-#include "util/VariablePool.h"
-#include <vector>
 #include <cassert>
+#include <hypro/types.h>
+#include <hypro/util/VariablePool.h>
+#include <vector>
 
 namespace hypro {
 

@@ -20,15 +20,7 @@ struct glpk_context {
 	mutable bool mConstraintsSet = false;  ///< true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
 
 	/// default constructor
-	glpk_context()
-		: lp( nullptr )
-		, parm()
-		, ia( nullptr )
-		, ja( nullptr )
-		, ar( nullptr )
-		, arraysCreated( false )
-		, mInitialized( false )
-		, mConstraintsSet( false ) {
+	glpk_context() {
 		TRACE( "hypro.optimizer", "Create glpk_context " << this );
 	}
 

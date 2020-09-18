@@ -7,6 +7,7 @@
 
 #include "../../datastructures/Point.h"
 #include "../../flags.h"
+#include "../../types.h"
 #include "EvaluationResult.h"
 #include "Strategy.h"
 #ifdef HYPRO_USE_SMTRAT
@@ -49,6 +50,11 @@ class Optimizer {
   private:
 	matrix_t<Number> mConstraintMatrix;
 	vector_t<Number> mConstraintVector;
+
+#ifdef HYPRO_STATISTICS
+	mutable statistics::AtomicCounter contextConstructions;
+	mutable statistics::AtomicCounter contextDeletions;
+#endif
 
 	mutable bool mConsistencyChecked = false;
 	mutable SOLUTION mLastConsistencyAnswer = SOLUTION::UNKNOWN;

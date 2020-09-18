@@ -11,12 +11,18 @@ void Optimizer<Number>::cleanContexts() {
 #ifdef HYPRO_USE_GLPK
 	auto ctxtIt = mGlpkContexts.find( std::this_thread::get_id() );
 	if ( ctxtIt != mGlpkContexts.end() ) {
+#ifdef HYPRO_STATISTICS
+		contextDeletions++;
+		//std::cout << "Constructions: " << contextConstructions << ", deletions: " << contextDeletions << std::endl;
+#endif
+		/*
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContexts.size() );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
 		ctxtIt->second.deleteLPInstance();
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
 		mGlpkContexts.erase( ctxtIt );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
+		*/
 	}
 #endif
 #ifdef HYPRO_USE_CLP
@@ -431,6 +437,10 @@ void Optimizer<Number>::initialize() const {
 	if ( mGlpkContexts.find( std::this_thread::get_id() ) == mGlpkContexts.end() ) {
 		std::lock_guard<std::mutex> lock( mContextLock );
 		TRACE( "hypro.optimizer", "Actual creation." );
+#ifdef HYPRO_STATISTICS
+		contextConstructions++;
+		//std::cout << "Constructions: " << contextConstructions << ", deletions: " << contextDeletions << std::endl;
+#endif
 		mGlpkContexts.emplace( std::this_thread::get_id(), glpk_context() );
 	}
 #endif
