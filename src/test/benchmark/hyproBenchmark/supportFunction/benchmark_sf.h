@@ -4,12 +4,12 @@
 #include "../Results.h"
 #include "../Settings.h"
 #include "../types.h"
-#include <flags.h>
+#include <hypro/flags.h>
 #include <future>
 #include <iostream>
 #include <queue>
 #include <random>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 namespace benchmark {
 namespace sf {

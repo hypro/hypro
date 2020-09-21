@@ -11,11 +11,11 @@
 #include "../Results.h"
 #include "../Settings.h"
 #include "../types.h"
-#include <flags.h>
+#include <hypro/flags.h>
 #include <future>
 #include <iosfwd>
 #include <random>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/representations/GeometricObjectBase.h>
 #ifdef HYPRO_USE_PPL
 #include "pplStructs.h"
 #include <ppl.hh>

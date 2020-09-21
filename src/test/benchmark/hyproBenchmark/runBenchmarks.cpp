@@ -13,10 +13,10 @@
 #include "algorithms/singularAnalysis/benchmarkSingularAnalyzer.h"
 #include "supportFunction/benchmark_sf.h"
 #include "types.h"
-#include <flags.h>
+#include <hypro/flags.h>
 #include <future>
 #include <iostream>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 int main( int argc, char const *argv[] ) {
 	benchmark::Timer general;

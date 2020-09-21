@@ -11,10 +11,10 @@
 #include "../Results.h"
 #include "../Settings.h"
 #include "../types.h"
-#include <flags.h>
+#include <hypro/flags.h>
 #include <iostream>
 #include <random>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/representations/GeometricObjectBase.h>
 #ifdef HYPRO_USE_PPL
 #include "../box/pplStructs.h"
 #include <ppl.hh>
