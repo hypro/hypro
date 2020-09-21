@@ -32,7 +32,8 @@ int main( int argc, char const *argv[] ) {
 	benchmark::polytope::run( s );
 
 	std::cout << "Benchmark singular analyzer." << std::endl;
-	s.maxDimension = 10;
+	s.maxDimension = 5;
+	s.iterations = 4;
 	benchmark::singularAnalysis::run( s );
 
 	// std::cout << "Benchmark support functions." << std::endl;

@@ -17,6 +17,7 @@
 namespace benchmark {
 namespace singularAnalysis {
 Results<std::size_t> singularTimeElapse( const Settings& settings );
+Results<std::size_t> singularJumps( const Settings& setting );
 Results<std::size_t> run( const Settings& settings );
 
 
