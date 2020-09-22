@@ -13,7 +13,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( const 
 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const ReachTreeNode<State>& task ) {
-	State initialSet = task.getState();
+	State initialSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet );
 	if ( containment == CONTAINMENT::NO ) {
@@ -68,7 +68,6 @@ void RectangularWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& 
 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( const ReachTreeNode<State>& task ) {
-	std::cout << "backward automata is " << mHybridAutomaton << std::endl;
 	if ( computeTimePredecessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -78,8 +77,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( const
 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const ReachTreeNode<State>& task ) {
-	State badSet = task.getState();
-
+	State badSet = task.getInitialSet();
 	auto [containment, segment] = rectangularIntersectInvariant( badSet );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
@@ -96,7 +94,6 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const Rea
 
 	// compute time predecessors states
 	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, badSet.getLocation()->getRectangularFlow() );
-	std::cout << "time" << std::endl;
 	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
@@ -119,7 +116,6 @@ void RectangularWorker<State>::computeJumpPredecessors() {
 	// for each state: find possible transitions and intersect the set with reset of the transitions
 	rectangularResetHandler<State> resetHandler;
 	for ( auto& state : mFlowpipe ) {
-		std::cout << "reset check" << std::endl;
 		resetHandler.rectangularIntersectReset( state, mHybridAutomaton );
 	}
 

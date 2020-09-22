@@ -42,6 +42,8 @@ class Settings {
 	std::vector<AnalysisParameters> mStrategy{ 1 };
 
   public:
+	Settings() {}
+
 	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy )
 		: mPlotting( plotting )
 		, mFixedParameters( fixedParameters )
@@ -89,6 +91,8 @@ class Settings {
 	std::vector<AnalysisParameters> const& strategy() const {
 		return mStrategy;
 	}
+
+	void setStrategy( const std::vector<AnalysisParameters> strategy ) { mStrategy = strategy; }
 };
 
 /**

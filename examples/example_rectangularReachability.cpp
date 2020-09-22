@@ -11,8 +11,8 @@ int main() {
 	// typedefs
 	using Number = double;
 	using State = hypro::State<Number, hypro::CarlPolytope<Number>>;
- 	using Matrix = hypro::matrix_t<Number>;
-  	using Vector = hypro::vector_t<Number>;
+ 	// using Matrix = hypro::matrix_t<Number>;
+  	// using Vector = hypro::vector_t<Number>;
 
 	// variables
 	carl::Variable x = hypro::VariablePool::getInstance().carlVarByIndex( 0 );
@@ -28,7 +28,7 @@ int main() {
 	// hybrid automaton instance
 	hypro::HybridAutomaton<Number> ha;
 
-	// create one location with rectangular flow
+	// create locations with rectangular flow
 	hypro::Location<Number> loc1;
 	hypro::rectangularFlow<Number> flow( dynamics );
 	loc1.setRectangularFlow( flow );
@@ -36,44 +36,32 @@ int main() {
 	hypro::rectangularFlow<Number> flow2( dynamics2 );
 	loc2.setRectangularFlow( flow2 );
 
-	// setup of the transition.
+	// create transitions
 	std::unique_ptr<hypro::Transition<Number>> trans =
     	std::make_unique<hypro::Transition<Number>>();
+	
 	// guard
-	hypro::Condition<Number> guard;
-	Matrix guardMat = Matrix::Zero(4, 2);
-	Vector guardVec = Vector::Zero(4);
-
-	guardMat(0, 0) = Number(1);
-	guardMat(1, 0) = Number(-1);
-	guardVec(0, 0) = Number(10);
-	guardVec(1, 0) = Number(-4);
-
-	guard.setMatrix(guardMat);
-	guard.setVector(guardVec);
+	hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>( 4, 2 );
+	guardConstraints << 1, 0, -1, 0, 0, 0, 0, 0;
+	hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>( 4 );
+	guardConstants << 10, -4, 0, 0;
+	hypro::Condition<Number> guard(guardConstraints,guardConstants);
 
 	// reset function
+	
+	// interval representation
+	// std::vector<carl::Interval<Number>> intervalReset;
+	// intervalReset.emplace_back( carl::Interval<Number>( -2, 2 ) );
+	// intervalReset.emplace_back( carl::Interval<Number>( -3, 3 ) );
 	// hypro::Reset<Number> reset;
-	// Matrix linearReset = Matrix::Zero(4, 2);
-	// Vector constantReset = Vector::Zero(4);
+	// reset.setIntervals( intervalReset );
 
-	// linearReset(0, 0) = Number(1);
-	// linearReset(1, 0) = Number(-1);
-	// linearReset(2, 1) = Number(1);
-	// linearReset(3, 1) = Number(-1);
-	// constantReset(0, 0) = Number(0);
-	// constantReset(1, 0) = Number(0);
-	// constantReset(2, 0) = Number(0);
-	// constantReset(3, 0) = Number(0);
-
-	// reset.setMatrix(linearReset);
-	// reset.setVector(constantReset);
-
-	std::vector<carl::Interval<Number>> intervalReset;
-	intervalReset.emplace_back( carl::Interval<Number>( -2, 2 ) );
-	intervalReset.emplace_back( carl::Interval<Number>( -3, 3 ) );
-	hypro::Reset<Number> reset;
-	reset.setIntervals( intervalReset );
+	// matrix representation
+	hypro::matrix_t<Number> resetConstraints = hypro::matrix_t<Number>( 4, 2 );
+	resetConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
+	hypro::vector_t<Number> resetConstants = hypro::vector_t<Number>( 4 );
+	resetConstants << 2, 2, 3, 3;
+	hypro::Reset<Number> reset(resetConstraints,resetConstants);
 
 	// setup transition
 	trans->setGuard(guard);
@@ -81,40 +69,8 @@ int main() {
 	trans->setTarget(&loc2);
 	trans->setReset(reset);
 
-	// add defined location and transition to the automaton.
+	// add defined transition to location
 	loc1.addTransition(std::move(trans));
-
-	// setup of the transition.
-	// std::unique_ptr<hypro::Transition<Number>> trans2 =
-    // 	std::make_unique<hypro::Transition<Number>>();
-	// // guard
-	// hypro::Condition<Number> guard2;
-	// Matrix guardMat2 = Matrix::Zero(4, 2);
-	// Vector guardVec2 = Vector::Zero(4);
-
-	// guardMat2(0, 0) = Number(1);
-	// guardMat2(1, 0) = Number(-1);
-	// guardVec2(0, 0) = Number(15);
-	// guardVec2(1, 0) = Number(-6);
-
-	// guard2.setMatrix(guardMat2);
-	// guard2.setVector(guardVec2);
-
-	// // reset function
-	// std::vector<carl::Interval<Number>> intervalReset2;
-	// intervalReset2.emplace_back( carl::Interval<Number>( -1, 1 ) );
-	// intervalReset2.emplace_back( carl::Interval<Number>( -1, 1 ) );
-	// hypro::Reset<Number> reset2;
-	// // reset2.setIntervals( intervalReset2 );
-
-	// // setup 
-	// trans2->setGuard(guard2);
-	// trans2->setSource(&loc2);
-	// trans2->setTarget(&loc1);
-	// trans2->setReset(reset2);
-
-	// add defined location and transition to the automaton.
-	// loc2.addTransition(std::move(trans2));
 
 	// add location
 	std::map<const hypro::Location<Number>*, std::size_t> locationMapping;
@@ -137,11 +93,27 @@ int main() {
 	ha.addInitialState( ha.getLocations()[locationMapping[&loc1]], hypro::Condition<Number>( constraints, constants ) );
 	// ha.addInitialState( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( constraints2, constants2 ) );
 
+	// setup local bad state
+	hypro::matrix_t<Number> localBadConstraints = hypro::matrix_t<Number>( 4, 2 );
+	localBadConstraints << 1, 0, 0, 0, 0, 0, 0, 0;
+	hypro::vector_t<Number> localBadConstants = hypro::vector_t<Number>( 4 );
+	localBadConstants << -10, 0, 0, 0;
+	ha.addLocalBadState( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
+
+	// setup global bad state
+	hypro::matrix_t<Number> globalBadConstraints = hypro::matrix_t<Number>( 4, 2 );
+	globalBadConstraints << 0, 0, -1, 0, 0, 0, 0, 0;
+	hypro::vector_t<Number> globalBadConstants = hypro::vector_t<Number>( 4 );
+	globalBadConstants << 0, -10, 0, 0;
+	// ha.addGlobalBadState( hypro::Condition<Number>( globalBadConstraints, globalBadConstants ) );
+
 	// std::cout << "HA is: " << ha << std::endl;
 
 	// create settings
+	std::vector<hypro::AnalysisParameters> strategy;
+	strategy.emplace_back( hypro::AnalysisParameters{ mpq_class( 1 ) / mpq_class( 100 ), hypro::AGG_SETTING::AGG, -1, hypro::representation_name::carl_polytope, 0, false, 0, hypro::REACH_SETTING::BACKWARD } );
 	hypro::Settings settings;
-	settings.strategy[0] = hypro::AnalysisParameters{ mpq_class( 1 ) / mpq_class( 100 ), hypro::AGG_SETTING::AGG, -1, hypro::representation_name::carl_polytope };
+	settings.setStrategy( strategy );
 
 	// call to analysis core
 	hypro::RectangularAnalyzer<State> analyzer{ ha, settings };
