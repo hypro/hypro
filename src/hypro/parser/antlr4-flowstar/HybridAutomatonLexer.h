@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
+// Generated from HybridAutomaton.g4 by ANTLR 4.8
 
 #pragma once
 
@@ -16,13 +16,14 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, T__22 = 23, POLY = 24, LINEAR = 25, NONLINEAR = 26, 
-    NONPOLY = 27, LTI = 28, ODE = 29, IN = 30, TRUE = 31, FALSE = 32, PAR = 33, 
-    JUMPS = 34, URGENT = 35, GUARD = 36, RESET = 37, PARALLELOTOPE = 38, 
-    BOX = 39, JUMP = 40, DEFINE = 41, COMMENT = 42, EQUALS = 43, BOOLRELATION = 44, 
-    PLUS = 45, MINUS = 46, TIMES = 47, DIVIDE = 48, SBOPEN = 49, SBCLOSE = 50, 
-    CBOPEN = 51, CBCLOSE = 52, RBOPEN = 53, RBCLOSE = 54, COMMA = 55, NUMBER = 56, 
-    CONSTANT = 57, VARIABLE = 58, WS = 59, INTERVALAGG = 60, EXPONENTIAL = 61
+    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, POLY = 25, LINEAR = 26, 
+    NONLINEAR = 27, NONPOLY = 28, LTI = 29, ODE = 30, IN = 31, TRUE = 32, 
+    FALSE = 33, PAR = 34, JUMPS = 35, URGENT = 36, GUARD = 37, RESET = 38, 
+    PARALLELOTOPE = 39, BOX = 40, JUMP = 41, DEFINE = 42, COMMENT = 43, 
+    EQUALS = 44, BOOLRELATION = 45, PLUS = 46, MINUS = 47, TIMES = 48, DIVIDE = 49, 
+    SBOPEN = 50, SBCLOSE = 51, CBOPEN = 52, CBCLOSE = 53, RBOPEN = 54, RBCLOSE = 55, 
+    COMMA = 56, NUMBER = 57, CONSTANT = 58, VARIABLE = 59, WS = 60, INTERVALAGG = 61, 
+    EXPONENTIAL = 62
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);

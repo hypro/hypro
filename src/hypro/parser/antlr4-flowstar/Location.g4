@@ -13,13 +13,18 @@ import Formula;
 
 ////// Parser Rules
 
-modes			: 'modes' '{' location* '}' ;
+modes			: 'modes' '{' (location | stochasticlocation)* '}' ;
 
 location 		: VARIABLE '{' activities invariants* '}' ;
 
 activities 		: (POLY | LINEAR | NONLINEAR | NONPOLY | LTI) ODE NUMBER* '{' (equation | intervalexpr)* '}' ;
 
 invariants		: 'inv' '{' constrset? '}' ;
+
+// start of grammer rules exclusively for Stochastic Hybrid Automata
+stochasticlocation : VARIABLE '{' activities invariants probdistribution* '}' ;
+
+probdistribution   : 'probdist' '{' equation '}';
 
 ////// Lexer Rules
 

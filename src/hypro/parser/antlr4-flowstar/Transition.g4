@@ -16,7 +16,7 @@ import Formula;
 //fromto must be at the beginning. Then, all the other options are optional.
 //It can be that one will have (fromto reset reset reset), in this case trigger a warning!
 
-jumps		: 'jumps' '{' transition* '}' ;
+jumps		: 'jumps' '{' (transition | stochastictransition)* '}' ;
 
 transition 	: fromto (urgent | guard | labels | resetfct | aggregation)* ;
 
@@ -33,6 +33,17 @@ allocation	: VARIABLE DEFINE (polynom | interval) ;
 resetfct	: 'reset' '{' allocation* '}' ;
 
 aggregation	: (PARALLELOTOPE | BOX | INTERVALAGG) '{' '}' ;
+
+// start of grammer rules exclusively for Stochastic Hybrid Automata
+stochastictransition	: probfrom (urgent | guard | labels)* '{' probtransition* '}';
+
+probtransition		    : probto (resetfct | aggregation)* ;
+
+// <source-location> --
+probfrom			    : VARIABLE MINUS MINUS;
+
+// <weight> -> <target-location>
+probto				    : NUMBER JUMP VARIABLE ;
 
 //////// Lexer Rules
 
