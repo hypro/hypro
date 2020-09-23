@@ -16,7 +16,7 @@ class linearFlow {
   public:
 	linearFlow() = default;
 	linearFlow( const linearFlow& in ) = default;
-	linearFlow( const matrix_t<Number> A )
+	linearFlow( const matrix_t<Number>& A )
 		: mFlowMatrix( A ) {}
 	virtual ~linearFlow() {}
 

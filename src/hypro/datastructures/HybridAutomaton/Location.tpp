@@ -183,6 +183,13 @@ void Location<Number>::addTransition( std::unique_ptr<Transition<Number>>&& tran
 	mHash = 0;
 }
 
+template <typename Number>
+Transition<Number>* Location<Number>::createTransition( Location<Number>* target ) {
+	auto& res = mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>{ this, target } ) );
+	mHash = 0;
+	return res.get();
+}
+
 /*
 template<typename Number>
 void Location<Number>::updateTransition(Transition<Number>* original, Transition<Number>* newT) {

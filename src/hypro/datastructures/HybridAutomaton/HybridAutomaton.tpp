@@ -229,6 +229,11 @@ void HybridAutomaton<Number>::addTransition( std::unique_ptr<Transition<Number>>
 }
 
 template <typename Number>
+Location<Number>* HybridAutomaton<Number>::createLocation() {
+	return mLocations.emplace_back( std::make_unique<Location<Number>>( Location<Number>{} ) ).get();
+}
+
+template <typename Number>
 void HybridAutomaton<Number>::reduce() {
 	// TODO rewrite
 	assert( false && "NOT IMPLEMENTED." );

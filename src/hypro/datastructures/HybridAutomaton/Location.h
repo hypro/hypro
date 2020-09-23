@@ -7,6 +7,10 @@
 
 #pragma once
 
+#ifndef INCL_FROM_HAHEADER
+static_assert( false, "This file may only be included indirectly by HybridAutomaton.h" );
+#endif
+
 #include "../../types.h"
 #include "Condition.h"
 #include "decomposition/Decomposition.h"
@@ -131,6 +135,8 @@ class Location {
 	void setTransitions( transitionVector&& trans );
 	/// adds outgoing transitions
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
+	/// creates a transition from this location to the target
+	Transition<Number>* createTransition( Location<Number>* target );
 	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
 	/// returns hash value of the location
@@ -337,4 +343,9 @@ struct hash<hypro::Location<Number>> {
 
 }  // namespace std
 
+// clang-format off
+#define INCL_FROM_LOCHEADER true
+
+#include "Transition.h"
 #include "Location.tpp"
+// clang-format on

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../../util/typetraits.h"
-#include "../HybridAutomaton/Location.h"
+#include "../HybridAutomaton/HybridAutomaton.h"
 #include "../HybridAutomaton/Pathv2.h"
-#include "../HybridAutomaton/Transition.h"
 #include "TreeNodev2.h"
 
 #include <carl/interval/Interval.h>
