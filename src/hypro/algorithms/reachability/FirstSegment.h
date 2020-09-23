@@ -1,5 +1,5 @@
 #pragma once
-#include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/HybridAutomaton/State.h"
 #include "../../representations/GeometricObjectBase.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
@@ -115,7 +115,7 @@ std::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> 
 			errorBoxVector = errorBoxes( carl::convert<tNumber, Number>( timeStep ), _state.getLocation()->getLinearFlow(), initialPair.second, trafoMatrix, externalInputTmp );
 		} else {
 			//std::cout << "Model has external input: " << _state.getLocation()->getExternalInput() << std::endl;
-			errorBoxVector = errorBoxes( carl::convert<tNumber, Number>( timeStep ), _state.getLocation()->getLinearFlow(), initialPair.second, trafoMatrix, Box<Number>{_state.getLocation()->getExternalInput()} );
+			errorBoxVector = errorBoxes( carl::convert<tNumber, Number>( timeStep ), _state.getLocation()->getLinearFlow(), initialPair.second, trafoMatrix, Box<Number>{ _state.getLocation()->getExternalInput() } );
 		}
 
 		firstSegment = deltaValuation.unite( initialPair.second );

@@ -8,6 +8,10 @@
 
 #pragma once
 
+#ifndef INCL_FROM_LOCHEADER
+static_assert( false, "This file may only be included indirectly by Location.h" );
+#endif
+
 #include "Condition.h"
 #include "HybridAutomaton.h"
 #include "Label.h"

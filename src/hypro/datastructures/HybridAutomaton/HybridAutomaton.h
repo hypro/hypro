@@ -9,6 +9,8 @@
 
 #pragma once
 
+#define INCL_FROM_HAHEADER true
+
 #include "../../types.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "Condition.h"
@@ -16,7 +18,6 @@
 #include "Label.h"
 #include "Location.h"
 #include "Reset.h"
-#include "Transition.h"
 #include "decomposition/Decomposition.h"
 #include "decomposition/decomposeConstraintSet.h"
 
@@ -149,6 +150,8 @@ class HybridAutomaton {
 	void addLocalBadState( const Location<Number>* loc, const Condition<Number>& condition ) { mLocalBadStates.emplace( std::make_pair( loc, condition ) ); }
 	void addGlobalBadState( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
 	///@}
+
+	Location<Number>* createLocation();
 
 	/**
      * @brief Decomposes an automaton into the components
