@@ -35,7 +35,12 @@ Location<Number>::Location( const Location<Number>& _loc )
 	, mHash( 0 ) {
 	// update copied transitions
 	for ( const auto& t : _loc.getTransitions() ) {
-		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
+		StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( t.get() );
+		if ( !stoTrans ) {
+			mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
+		} else {
+			mTransitions.emplace_back( std::make_unique<StochasticTransition<Number>>( StochasticTransition<Number>( *( stoTrans ) ) ) );
+		}
 		mTransitions.back()->setSource( this );
 	}
 
@@ -80,7 +85,12 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 	mHash = 0;
 	// update copied transitions
 	for ( const auto& t : in.getTransitions() ) {
-		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
+		StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( t.get() );
+		if ( !stoTrans ) {
+			mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
+		} else {
+			mTransitions.emplace_back( std::make_unique<StochasticTransition<Number>>( StochasticTransition<Number>( *( stoTrans ) ) ) );
+		}
 		mTransitions.back()->setSource( this );
 	}
 

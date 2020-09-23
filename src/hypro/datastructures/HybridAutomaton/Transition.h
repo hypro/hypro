@@ -78,7 +78,7 @@ class Transition {
 	/**
      * @brief      Destroys the object.
      */
-	~Transition() {}
+	virtual ~Transition() {}
 
 	/**
      * @brief      Constructor from source and target location.

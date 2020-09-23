@@ -15,7 +15,12 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 	// create real copies of the locations
 	for ( const auto l : hybrid.getLocations() ) {
 		Location<Number> tmp = Location<Number>( *l );
-		mLocations.emplace_back( std::make_unique<Location<Number>>( tmp ) );
+		StochasticLocation<Number>* stoLoc = dynamic_cast<StochasticLocation<Number>*>( l );
+		if ( !stoLoc ) {
+			mLocations.emplace_back( std::make_unique<Location<Number>>( tmp ) );
+		} else {
+			mLocations.emplace_back( std::make_unique<StochasticLocation<Number>>( StochasticLocation<Number>( *( stoLoc ) ) ) );
+		}
 		locationMapping[l] = mLocations.size() - 1;
 		assert( tmp.hash() == l->hash() );
 	}
@@ -208,7 +213,20 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 
 template <typename Number>
 const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( const Location<Number>& location ) {
-	return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+	try{
+		std::cout<<"try transform Location to StochasticLocation!"<<std::endl;
+		auto stoLoc = dynamic_cast<const StochasticLocation<Number>&>( location );
+		std::cout<<"nothing wrong!"<<std::endl;
+		return this->addLocation( std::move( std::make_unique<StochasticLocation<Number>>( stoLoc ) ) );
+	}catch(const std::bad_cast& re){
+		std::cout<<"wrong with message: " << re.what()<<std::endl;
+		return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+	}
+	// if ( stoLoc != std::bad_cast ) {
+	// 	return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+	// } else {
+	// 	return this->addLocation( std::move( std::make_unique<StochasticLocation<Number>>( stoLoc ) ) );
+	// }
 }
 
 template <typename Number>

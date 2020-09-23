@@ -15,8 +15,10 @@
 #include "HybridAutomatonComp.h"
 #include "Label.h"
 #include "Location.h"
+#include "StochasticLocation.h"
 #include "Reset.h"
 #include "Transition.h"
+#include "StochasticTransition.h"
 #include "decomposition/Decomposition.h"
 #include "decomposition/decomposeConstraintSet.h"
 
