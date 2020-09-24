@@ -39,5 +39,6 @@ var searchData=
   ['coversentry',['coversEntry',['../classhypro_1_1_hierarchical_interval_vector.html#a9258adb71802345bd1820d69f5b775d4',1,'hypro::HierarchicalIntervalVector']]],
   ['createarrays',['createArrays',['../structhypro_1_1glpk__context.html#a325fb7c0a103dda1dffe0e2d2fd2d2d7',1,'hypro::glpk_context']]],
   ['createcode',['createCode',['../namespacehypro.html#aca775c0838012ccbeb05379c94f9c09b',1,'hypro::createCode(const matrix_t&lt; Number &gt; &amp;in, unsigned index=0)'],['../namespacehypro.html#a30c119e7444b792de3f0ab86fc560b0b',1,'hypro::createCode(const vector_t&lt; Number &gt; &amp;in, unsigned index=0)']]],
-  ['createlpinstance',['createLPInstance',['../structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35',1,'hypro::glpk_context']]]
+  ['createlpinstance',['createLPInstance',['../structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35',1,'hypro::glpk_context']]],
+  ['createtransition',['createTransition',['../classhypro_1_1_location.html#ab6500f5ebe29d989b65e09f3947e26c2',1,'hypro::Location']]]
 ];

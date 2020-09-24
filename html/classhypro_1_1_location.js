@@ -9,6 +9,7 @@ var classhypro_1_1_location =
     [ "Location", "classhypro_1_1_location.html#ae636049e31a377d3268934a3458ad0d7", null ],
     [ "~Location", "classhypro_1_1_location.html#ac6bc63470680fc9f68e250e74557d8d0", null ],
     [ "addTransition", "classhypro_1_1_location.html#aa7410f1fadba495a97262f8e10087c64", null ],
+    [ "createTransition", "classhypro_1_1_location.html#ab6500f5ebe29d989b65e09f3947e26c2", null ],
     [ "decompose", "classhypro_1_1_location.html#ae2072188d156cafa50e0c0bcc4809c27", null ],
     [ "dimension", "classhypro_1_1_location.html#ac8f40e19fd7d2ee2655d4e898680e957", null ],
     [ "dimension", "classhypro_1_1_location.html#ab56663403e32b53f04661ca1c685f993", null ],

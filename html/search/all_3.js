@@ -70,8 +70,8 @@ var searchData=
   ['convertertosupportfunction_2etpp',['converterToSupportFunction.tpp',['../converter_to_support_function_8tpp.html',1,'']]],
   ['convertertovpolytope_2etpp',['converterToVPolytope.tpp',['../converter_to_v_polytope_8tpp.html',1,'']]],
   ['convertertozonotope_2etpp',['converterToZonotope.tpp',['../converter_to_zonotope_8tpp.html',1,'']]],
-  ['convexhull',['ConvexHull',['../classhypro_1_1_convex_hull.html',1,'hypro']]],
   ['convexhull',['ConvexHull',['../classhypro_1_1_convex_hull.html#ae65257a677b4f0a22b15ca0a71b43c87',1,'hypro::ConvexHull::ConvexHull()=default'],['../classhypro_1_1_convex_hull.html#a7cd0cce18327874cff206c16f13156c2',1,'hypro::ConvexHull::ConvexHull(const ConvexHull&lt; Number &gt; &amp;_orig)=default'],['../classhypro_1_1_convex_hull.html#a37706c1c709cdd78440a2c07110ea913',1,'hypro::ConvexHull::ConvexHull(const std::vector&lt; Point&lt; Number &gt;&gt; points)'],['../classhypro_1_1_convex_hull.html#a72d25c1b65f34c147196b1a0d5574c0f',1,'hypro::ConvexHull::ConvexHull(const std::vector&lt; Point&lt; Number &gt;&gt; points, const std::vector&lt; vector_t&lt; Number &gt;&gt; cone)'],['../classhypro_1_1_convex_hull.html#ac518a93a564cc5b27f0b79549783a735',1,'hypro::ConvexHull::ConvexHull(const std::vector&lt; Point&lt; Number &gt;&gt; points, const std::vector&lt; vector_t&lt; Number &gt;&gt; cone, const std::vector&lt; vector_t&lt; Number &gt;&gt; linealty)']]],
+  ['convexhull',['ConvexHull',['../classhypro_1_1_convex_hull.html',1,'hypro']]],
   ['convexhullvertices',['convexHullVertices',['../classhypro_1_1_convex_hull.html#a5a1ef906a71ffcb97131ec56dda09dde',1,'hypro::ConvexHull']]],
   ['coordinate',['coordinate',['../classhypro_1_1_point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53',1,'hypro::Point::coordinate(const carl::Variable &amp;_var) const '],['../classhypro_1_1_point.html#af3a4db44815daa25768b01afaf88e68a',1,'hypro::Point::coordinate(std::size_t _dimension) const '],['../classhypro_1_1_vertex.html#a52db98764c18889c9d28414df7ef7b68',1,'hypro::Vertex::coordinate()']]],
   ['coordinates',['coordinates',['../classhypro_1_1_point.html#a84681a46738894dbd193d7e73c6c3d97',1,'hypro::Point']]],
@@ -83,5 +83,6 @@ var searchData=
   ['createcode',['createCode',['../namespacehypro.html#aca775c0838012ccbeb05379c94f9c09b',1,'hypro::createCode(const matrix_t&lt; Number &gt; &amp;in, unsigned index=0)'],['../namespacehypro.html#a30c119e7444b792de3f0ab86fc560b0b',1,'hypro::createCode(const vector_t&lt; Number &gt; &amp;in, unsigned index=0)']]],
   ['createlpinstance',['createLPInstance',['../structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35',1,'hypro::glpk_context']]],
   ['createrefinementlevel',['CreateRefinementLevel',['../structhypro_1_1_c_e_g_a_r_analyzer_1_1_create_refinement_level.html',1,'hypro::CEGARAnalyzer']]],
+  ['createtransition',['createTransition',['../classhypro_1_1_location.html#ab6500f5ebe29d989b65e09f3947e26c2',1,'hypro::Location']]],
   ['currentbtposition',['currentBTPosition',['../structhypro_1_1_t_backtracking_info.html#a113aa00925adc4303c6cdc62dad52991',1,'hypro::TBacktrackingInfo']]]
 ];

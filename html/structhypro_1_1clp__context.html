@@ -131,9 +131,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2ced850cf805f810561fe0e0bf8616f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2ced850cf805f810561fe0e0bf8616f2"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="structhypro_1_1clp__context.html">clp_context</a> &amp;rhs)</td></tr>
 <tr class="separator:a2ced850cf805f810561fe0e0bf8616f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad13ba013e590afb406c0e0703f92baa8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad13ba013e590afb406c0e0703f92baa8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>createArrays</b> (unsigned)</td></tr>
-<tr class="separator:ad13ba013e590afb406c0e0703f92baa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e184c37f49cc7c240887f6c4dfe5945"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e184c37f49cc7c240887f6c4dfe5945"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>createArrays</b> (unsigned rows, unsigned columns)</td></tr>
+<tr class="separator:a4e184c37f49cc7c240887f6c4dfe5945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52fe4ba1e77374c43c94083df62a92da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a52fe4ba1e77374c43c94083df62a92da"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>deleteArrays</b> ()</td></tr>
 <tr class="separator:a52fe4ba1e77374c43c94083df62a92da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,11 +161,17 @@ ClpSimplex&#160;</td><td class="memItemRight" valign="bottom"><b>lp</b></td></tr
 CoinPackedMatrix&#160;</td><td class="memItemRight" valign="bottom"><b>matrix</b></td></tr>
 <tr class="separator:a18364c55fce6952a4a297a854e02959a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb4df37c14d24ca609470b8086608ed2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb4df37c14d24ca609470b8086608ed2"></a>
-double *&#160;</td><td class="memItemRight" valign="bottom"><b>mUpperBounds</b></td></tr>
+double *&#160;</td><td class="memItemRight" valign="bottom"><b>mUpperBounds</b> = nullptr</td></tr>
 <tr class="separator:afb4df37c14d24ca609470b8086608ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba1527a771a993719e2cee77bc93e1cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba1527a771a993719e2cee77bc93e1cc"></a>
-double *&#160;</td><td class="memItemRight" valign="bottom"><b>mLowerBounds</b></td></tr>
+double *&#160;</td><td class="memItemRight" valign="bottom"><b>mLowerBounds</b> = nullptr</td></tr>
 <tr class="separator:aba1527a771a993719e2cee77bc93e1cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a1b8b32b1e1378deb3f117a89d8302b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a1b8b32b1e1378deb3f117a89d8302b"></a>
+double *&#160;</td><td class="memItemRight" valign="bottom"><b>mColumnLowerBounds</b> = nullptr</td></tr>
+<tr class="separator:a6a1b8b32b1e1378deb3f117a89d8302b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92ee14a3e8ee41cbadda000435ae08bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92ee14a3e8ee41cbadda000435ae08bd"></a>
+double *&#160;</td><td class="memItemRight" valign="bottom"><b>mColumnUpperBounds</b> = nullptr</td></tr>
+<tr class="separator:a92ee14a3e8ee41cbadda000435ae08bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86f4ac3e5da4b77795abc59cf1ca2e11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86f4ac3e5da4b77795abc59cf1ca2e11"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>arraysCreated</b> = false</td></tr>
 <tr class="separator:a86f4ac3e5da4b77795abc59cf1ca2e11"><td class="memSeparator" colspan="2">&#160;</td></tr>

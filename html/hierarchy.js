@@ -449,7 +449,6 @@ var hierarchy =
     [ "hypro::Vertex< std::size_t >", "classhypro_1_1_vertex.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1_vertex_container.html", null ],
     [ "hypro::VertexEnumeration< Number >", "classhypro_1_1_vertex_enumeration.html", null ],
-    [ "hypro::VPolytopeSetting", "structhypro_1_1_v_polytope_setting.html", null ],
     [ "hypro::WorkQueueDefaultSetting", "structhypro_1_1_work_queue_default_setting.html", null ],
     [ "hypro::WorkQueueManager< Workable >", "classhypro_1_1_work_queue_manager.html", null ],
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1_work_queue_t.html", null ],

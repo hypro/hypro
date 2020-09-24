@@ -294,6 +294,7 @@ var group__geo_state =
       [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ace2482394f3956e68d43a2b0821e6eb9", null ],
       [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ad8ac77adb1a425aafd8ea1a3fb2566fb", null ],
       [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#af3f5ff7341c3376027c53d7d08e4e6c0", null ],
+      [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ab7575ee706d854ff019a7a94a670ab7b", null ],
       [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ae8ffb8012cea36f1f7b36dc864229377", null ],
       [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#af4c2e015266cdca614ee0c372efab8dd", null ],
       [ "~HPolytopeT", "classhypro_1_1_h_polytope_t.html#a7644f352a7f3ebe0e0d9dcf3f2ca35c3", null ],
