@@ -1,5 +1,5 @@
 
-#include "config.h"
+#include "../config.h"
 
 namespace hypro {
 
@@ -33,9 +33,9 @@ static Number approximateVolume( Representation _in ) {
 	// Compute bounderies
 	for ( Point<Number> vertex : vertices ) {
 		for ( unsigned i = 0; i < dimension; i++ ) {
-			if ( bounderies.at( i ).first > vertex.coordinate( i ) ) {  // min
+			if ( bounderies.at( i ).first > vertex.coordinate( i ) ) {	// min
 				bounderies.at( i ).first = vertex.coordinate( i );
-			} else if ( bounderies.at( i ).second < vertex.coordinate( i ) ) {  // max
+			} else if ( bounderies.at( i ).second < vertex.coordinate( i ) ) {	// max
 				bounderies.at( i ).second = vertex.coordinate( i );
 			}
 		}
@@ -44,7 +44,7 @@ static Number approximateVolume( Representation _in ) {
 	// Post-init with bounderies-info: compute resolution, volumeUnit and init count_point
 	for ( unsigned i = 0; i < dimension; i++ ) {
 		//std::cout << "bound." << i << " : " << bounderies[i].first << " till " << bounderies[i].second << std::endl;
-		resolution[i] = ( bounderies[i].second - bounderies[i].first ) / 3;  // 100 for 2D, 50 for 3D, 12 for 4D - if to high -> might be very slow
+		resolution[i] = ( bounderies[i].second - bounderies[i].first ) / 3;	 // 100 for 2D, 50 for 3D, 12 for 4D - if to high -> might be very slow
 		if ( !carl::AlmostEqual2sComplement( resolution[i] + (Number)1, (Number)1 ) ) {
 			volumeUnit *= resolution[i];
 		}

@@ -21,13 +21,13 @@ Transformation<Number>::Transformation( const HybridAutomaton<Number>& _hybrid )
 	Matrix<Number> A_nonlinear;
 	Vector<Number> b_nonlinear;
 	LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
-	typename HybridAutomaton<Number>::locationVector locations;
+	typename HybridAutomaton<Number>::Locations locations;
 	Location<Number>* PtrtoNewLoc;
 	mTransformedHA = HybridAutomaton<Number>();
 	//LOCATIONS
 	for ( Location<Number>* LocPtr : _hybrid.getLocations() ) {
 		matrix_in_parser = LocPtr->getFlow();  //copy for calculation; TODO many flows? -> lots of duplicate code/management
-		m_size = matrix_in_parser.cols();	  //rows
+		m_size = matrix_in_parser.cols();	   //rows
 		assert( m_size >= 1 );				   //exit if location size < 1  ==>> underflow error
 		m_size -= 1;						   //Due to parsing: for representation zero row is added for constant coefficients we do not need
 		STallValues<Number> mSTallvalues;
@@ -41,7 +41,7 @@ Transformation<Number>::Transformation( const HybridAutomaton<Number>& _hybrid )
 		declare_structures( mSTallvalues, m_size );
 		b_tr = Vector<Number>( m_size );
 		A_in = Matrix<Number>( m_size, m_size );  //no change due to being lookup
-		V = Matrix<Number>( m_size, m_size );	 //mSTallvalues gets V as well
+		V = Matrix<Number>( m_size, m_size );	  //mSTallvalues gets V as well
 		Vinv = Matrix<Number>( m_size, m_size );
 		b_tr = matrix_in_parser.topRightCorner( m_size, 1 );
 		A_in = matrix_in_parser.topLeftCorner( m_size, m_size );
@@ -307,7 +307,7 @@ size_t Transformation<Number>::countLinearAndRemember( const Matrix<Number>& A_i
 			++count_linearVariables;
 			mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = EXP_FUNCT_TYPE::LINEAR;
 		} else {
-			assert( A_in( nrow, nrow ) != 0 );  //diagonal of nonlinear-term has to be defined
+			assert( A_in( nrow, nrow ) != 0 );	//diagonal of nonlinear-term has to be defined
 		}
 	}
 	return count_linearVariables;
@@ -365,7 +365,7 @@ void Transformation<Number>::EigenvalueDecomposition( const Matrix<Number>& A_no
 				  << A_nonlinear << "\n";
 		return;
 	}
-	DiagonalMatrixdouble Ddouble = DiagonalMatrixdouble( dimensionNonLinear );  //formulation in .h
+	DiagonalMatrixdouble Ddouble = DiagonalMatrixdouble( dimensionNonLinear );	//formulation in .h
 	Matrix<double> Vdouble = Matrix<double>( dimensionNonLinear, dimensionNonLinear );
 	Matrix<double> Vinvdouble = Matrix<double>( dimensionNonLinear, dimensionNonLinear );
 	Matrix<double> matrixCalcDouble = Matrix<double>( dimensionNonLinear, dimensionNonLinear );

@@ -53,26 +53,15 @@ class Settings {
 		mpz_class numerator_gcd = mStrategy.front().timeStep.get_num();
 		mpz_class denominator_lcm = mStrategy.front().timeStep.get_den();
 
-		TRACE( "hypro.settings", "numerator_gcd " << numerator_gcd )
-		TRACE( "hypro.settings", "denominator_lcm " << denominator_lcm );
-
 		for ( AnalysisParameters const& params : mStrategy ) {
 			numerator_gcd = gcd( numerator_gcd, params.timeStep.get_num() );
 			denominator_lcm = lcm( denominator_lcm, params.timeStep.get_den() );
-
-			TRACE( "hypro.settings", "params.timeStep.get_num() " << params.timeStep.get_num() )
-			TRACE( "hypro.settings", "params.timeStep.get_den() " << params.timeStep.get_den() );
-			TRACE( "hypro.settings", "numerator_gcd " << numerator_gcd )
-			TRACE( "hypro.settings", "denominator_lcm " << denominator_lcm );
 		}
 
 		mFixedParameters.fixedTimeStep = mpq_class( numerator_gcd, denominator_lcm );
 
-		TRACE( "hypro.settings", "fixedTimeStep " << mFixedParameters.fixedTimeStep );
-
 		for ( AnalysisParameters& params : mStrategy ) {
 			mpq_class timeStepFactor = params.timeStep / mFixedParameters.fixedTimeStep;
-			TRACE( "hypro.settings", "timeStepFactor " << timeStepFactor );
 			assert( timeStepFactor.get_den() == 1 );
 			assert( timeStepFactor.get_num().fits_sint_p() );
 			params.timeStepFactor = int( timeStepFactor.get_num().get_si() );
