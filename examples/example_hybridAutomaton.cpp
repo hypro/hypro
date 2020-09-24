@@ -1,7 +1,7 @@
 
-#include "../src/hypro/algorithms/reachability/Reach.h"
-#include "../src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../src/hypro/representations/GeometricObjectBase.h"
+#include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 int main() {
 	using Number = double;
@@ -11,8 +11,8 @@ int main() {
 	hypro::Location<Number> loc = hypro::Location<Number>();
 	hypro::Location<Number> loc2 = hypro::Location<Number>();
 
-	std::unique_ptr<hypro::Location<Number>> unique_loc{std::make_unique<hypro::Location<Number>>( loc )};
-	std::unique_ptr<hypro::Location<Number>> unique_loc2{std::make_unique<hypro::Location<Number>>( loc2 )};
+	std::unique_ptr<hypro::Location<Number>> unique_loc{ std::make_unique<hypro::Location<Number>>( loc ) };
+	std::unique_ptr<hypro::Location<Number>> unique_loc2{ std::make_unique<hypro::Location<Number>>( loc2 ) };
 
 	// flows
 	Matrix flowMatrix = Matrix::Zero( 4, 4 );
@@ -59,7 +59,7 @@ int main() {
 
 	// call reachability analysis
 
-	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher{ha};
+	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher{ ha };
 	auto settings = reacher.settings();
 	settings.timeStep = carl::convert<double, hypro::tNumber>( 0.5 );
 	settings.timeBound = hypro::tNumber( 20 );
@@ -69,7 +69,7 @@ int main() {
 
 	std::vector<hypro::State_t<Number>> initialStates;
 	for ( const auto& locationConditionPair : ha.getInitialStates() ) {
-		hypro::State_t<Number> tmp{locationConditionPair.first};
+		hypro::State_t<Number> tmp{ locationConditionPair.first };
 		tmp.setSet( hypro::HPolytope<Number>( locationConditionPair.second.getMatrix(),
 											  locationConditionPair.second.getVector() ) );
 		initialStates.emplace_back( std::move( tmp ) );

@@ -1,8 +1,7 @@
-#include "representations/GeometricObjectBase.h"
-#include "util/type_handling/dispatch.h"
-#include "util/type_handling/representation_enums.h"
-#include "util/type_handling/settings_enums.h"
-
+#include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/util/type_handling/dispatch.h>
+#include <hypro/util/type_handling/representation_enums.h>
+#include <hypro/util/type_handling/settings_enums.h>
 #include <iostream>
 #include <string>
 
@@ -25,7 +24,7 @@ struct Functor {
 }  // namespace examples
 }  // namespace hypro
 
-int main( int argc, char **argv ) {
+int main( int argc, char** argv ) {
 	assert( argc == 3 );
 	std::string representationStr{ argv[1] };
 	std::string settingStr{ argv[2] };

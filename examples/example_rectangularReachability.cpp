@@ -3,16 +3,16 @@
  * context handlers.
  */
 
-#include <algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/representations/GeometricObjectBase.h>
 #include <iostream>
-#include <representations/GeometricObjectBase.h>
 
 int main() {
 	// typedefs
 	using Number = double;
 	using State = hypro::State<Number, hypro::CarlPolytope<Number>>;
- 	using Matrix = hypro::matrix_t<Number>;
-  	using Vector = hypro::vector_t<Number>;
+	using Matrix = hypro::matrix_t<Number>;
+	using Vector = hypro::vector_t<Number>;
 
 	// variables
 	carl::Variable x = hypro::VariablePool::getInstance().carlVarByIndex( 0 );
@@ -38,19 +38,19 @@ int main() {
 
 	// setup of the transition.
 	std::unique_ptr<hypro::Transition<Number>> trans =
-    	std::make_unique<hypro::Transition<Number>>();
+		  std::make_unique<hypro::Transition<Number>>();
 	// guard
 	hypro::Condition<Number> guard;
-	Matrix guardMat = Matrix::Zero(4, 2);
-	Vector guardVec = Vector::Zero(4);
+	Matrix guardMat = Matrix::Zero( 4, 2 );
+	Vector guardVec = Vector::Zero( 4 );
 
-	guardMat(0, 0) = Number(1);
-	guardMat(1, 0) = Number(-1);
-	guardVec(0, 0) = Number(10);
-	guardVec(1, 0) = Number(-4);
+	guardMat( 0, 0 ) = Number( 1 );
+	guardMat( 1, 0 ) = Number( -1 );
+	guardVec( 0, 0 ) = Number( 10 );
+	guardVec( 1, 0 ) = Number( -4 );
 
-	guard.setMatrix(guardMat);
-	guard.setVector(guardVec);
+	guard.setMatrix( guardMat );
+	guard.setVector( guardVec );
 
 	// reset function
 	// hypro::Reset<Number> reset;
@@ -76,17 +76,17 @@ int main() {
 	reset.setIntervals( intervalReset );
 
 	// setup transition
-	trans->setGuard(guard);
-	trans->setSource(&loc1);
-	trans->setTarget(&loc2);
-	trans->setReset(reset);
+	trans->setGuard( guard );
+	trans->setSource( &loc1 );
+	trans->setTarget( &loc2 );
+	trans->setReset( reset );
 
 	// add defined location and transition to the automaton.
-	loc1.addTransition(std::move(trans));
+	loc1.addTransition( std::move( trans ) );
 
 	// setup of the transition.
 	// std::unique_ptr<hypro::Transition<Number>> trans2 =
-    // 	std::make_unique<hypro::Transition<Number>>();
+	// 	std::make_unique<hypro::Transition<Number>>();
 	// // guard
 	// hypro::Condition<Number> guard2;
 	// Matrix guardMat2 = Matrix::Zero(4, 2);
@@ -107,7 +107,7 @@ int main() {
 	// hypro::Reset<Number> reset2;
 	// // reset2.setIntervals( intervalReset2 );
 
-	// // setup 
+	// // setup
 	// trans2->setGuard(guard2);
 	// trans2->setSource(&loc2);
 	// trans2->setTarget(&loc1);
@@ -140,8 +140,7 @@ int main() {
 	// std::cout << "HA is: " << ha << std::endl;
 
 	// create settings
-	hypro::Settings settings;
-	settings.strategy[0] = hypro::AnalysisParameters{ mpq_class( 1 ) / mpq_class( 100 ), hypro::AGG_SETTING::AGG, -1, hypro::representation_name::carl_polytope };
+	hypro::Settings settings{ {}, {}, { hypro::AnalysisParameters{ mpq_class( 1 ) / mpq_class( 100 ), hypro::AGG_SETTING::AGG, -1, hypro::representation_name::carl_polytope } } };
 
 	// call to analysis core
 	hypro::RectangularAnalyzer<State> analyzer{ ha, settings };

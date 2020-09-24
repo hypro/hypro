@@ -19,11 +19,7 @@ static void computeReachableStates( const std::string& filename,
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move( hypro::parseFlowstarFile<Number>( filename ) );
-
-	//#ifdef HYPRO_LOGGING
-	// std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed
-	// ReachabilitySettings:\n" << ha.second << std::endl; #endif
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = hypro::parseFlowstarFile<Number>( filename );
 
 	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher( ha.first, ha.second );
 	reacher.setRepresentationType( type );
