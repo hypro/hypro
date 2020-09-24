@@ -83,6 +83,21 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number>& A )
 }
 
 template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const Point<Number>& point )
+	: mDimension( point.dimension() ) {
+	assert( mDimension > 0 );
+	for ( unsigned d = 0; d < mDimension; ++d ) {
+		vector_t<Number> normal = vector_t<Number>::Zero( mDimension );
+		normal( d ) = 1;
+		mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( normal, point.at( d ) ) );
+		mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( -normal, -( point.at( d ) ) ) );
+	}
+	if ( Setting::OPTIMIZER_CACHING ) {
+		setOptimizer( this->matrix(), this->vector() );
+	}
+}
+
+template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes()
 	, mDimension( 0 )
@@ -97,18 +112,7 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 
 	// special case: 1 point - we can directly use box constraints.
 	if ( points.size() == 1 ) {
-		assert( ( *points.begin() ).dimension() > 0 );
-		mDimension = points.begin()->dimension();
-		for ( unsigned d = 0; d < points.begin()->dimension(); ++d ) {
-			vector_t<Number> normal = vector_t<Number>::Zero( points.begin()->dimension() );
-			normal( d ) = 1;
-			mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( normal, points.begin()->at( d ) ) );
-			mHPlanes.insert( mHPlanes.end(), Halfspace<Number>( -normal, -( points.begin()->at( d ) ) ) );
-		}
-		if ( Setting::OPTIMIZER_CACHING ) {
-			setOptimizer( this->matrix(), this->vector() );
-		}
-		//EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
+		*this = { *points.begin() };
 		return;
 	}
 
@@ -138,14 +142,29 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Numb
 			} );
 		} ) );
 	} else {
-		// remove duplicates inplace
 		auto pointsCopy = points;
+
+		// remove duplicates
+		/*
+		unordered_set<Point<Number>> s;
+		for ( int i : points )
+			s.insert( i );
+		points.assign( s.begin(), s.end() );
+		*/
+
 		for ( auto pointsIt = pointsCopy.begin(); pointsIt != pointsCopy.end(); ++pointsIt ) {
-			for ( auto compIt = std::next( pointsIt ); compIt != pointsCopy.end(); ++compIt ) {
+			for ( auto compIt = std::next( pointsIt ); compIt != pointsCopy.end(); ) {
 				if ( *pointsIt == *compIt ) {
 					compIt = pointsCopy.erase( compIt );
+				} else {
+					++compIt;
 				}
 			}
+		}
+
+		if ( pointsCopy.size() == 1 ) {
+			*this = { *pointsCopy.begin() };
+			return;
 		}
 
 #ifdef HYPRO_LOGGING
