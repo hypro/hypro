@@ -7,6 +7,7 @@
 #include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/util/plotting/Plotter.h>
 
 using Number = mpq_class;
 using VPoly = hypro::VPolytope<Number>;
@@ -224,6 +225,129 @@ hypro::HybridAutomaton<Number> createSingularHA4() {
 	return res;
 }
 
+template <typename Number>
+hypro::HybridAutomaton<Number> createPLTSingularAutomaton() {
+	// automaton created from a parametric location tree of a hybrid Petri net
+	using Matrix = hypro::matrix_t<Number>;
+	using Vector = hypro::vector_t<Number>;
+
+	hypro::HybridAutomaton<Number> res;
+
+	// get location pointers
+	auto* locAllOn = res.createLocation();
+	auto* locInOffFirst = res.createLocation();
+	auto* locOutOffFirst = res.createLocation();
+	auto* locAllOff = res.createLocation();
+	auto* locRateAdaptationUp = res.createLocation();
+	auto* locRateAdaptationLo = res.createLocation();
+
+	// set dynamics, variable order: t,s,x,aff
+	Eigen::Index aff = 3;
+	Eigen::Index t = 0;
+	Eigen::Index s = 1;
+	Eigen::Index x = 2;
+	Matrix dynamics = Matrix::Zero( 4, 4 );
+	dynamics( t, aff ) = 1;	 // t' = 1
+
+	dynamics( s, aff ) = 1;	 // s' = 1
+	dynamics( x, aff ) = 1;	 // x' = 1
+	locAllOn->setLinearFlow( { dynamics } );
+
+	dynamics( s, aff ) = 0;	  // s' = 1
+	dynamics( x, aff ) = -1;  // x' = -1
+	locInOffFirst->setLinearFlow( { dynamics } );
+
+	dynamics( s, aff ) = 1;	 // s' = 1
+	dynamics( x, aff ) = 2;	 // x' = 2
+	locOutOffFirst->setLinearFlow( { dynamics } );
+
+	dynamics( s, aff ) = 0;	 // s' = 0
+	dynamics( x, aff ) = 0;	 // x' = 0
+	locAllOff->setLinearFlow( { dynamics } );
+	locRateAdaptationLo->setLinearFlow( { dynamics } );
+
+	dynamics( s, aff ) = 1;	 // s' = 1
+	dynamics( x, aff ) = 0;	 // x' = 0
+	locRateAdaptationUp->setLinearFlow( { dynamics } );
+
+	// set invariants
+	Matrix constraints = Matrix::Zero( 4, 3 );
+	Vector constants = Vector::Zero( 4 );
+
+	// global invariants: t <= 15, x in [0,10]
+	constraints( 0, t ) = 1;
+	constants( 0 ) = 15;
+	constraints( 1, x ) = 1;
+	constants( 1 ) = 10;
+	constraints( 2, x ) = -1;
+	constants( 2 ) = 0;
+
+	locOutOffFirst->setInvariant( { constraints, constants } );
+	locAllOff->setInvariant( { constraints, constants } );
+	locRateAdaptationUp->setInvariant( { constraints, constants } );
+
+	// t <= 5
+	constraints( 3, t ) = 1;
+	constants( 3 ) = 5;
+
+	locAllOn->setInvariant( { constraints, constants } );
+	locInOffFirst->setInvariant( { constraints, constants } );
+	locRateAdaptationLo->setInvariant( { constraints, constants } );
+
+	// transitions with guards
+	Matrix guardConstraints = Matrix::Zero( 2, 3 );
+	Vector guardConstants = Vector::Zero( 2 );
+
+	// guard t = 5
+	guardConstraints( 0, t ) = 1;
+	guardConstraints( 1, t ) = -1;
+	guardConstants( 0 ) = 5;
+	guardConstants( 1 ) = -5;
+
+	locAllOn->createTransition( locInOffFirst );
+	auto* t1 = locAllOn->createTransition( locOutOffFirst );
+	auto* t2 = locInOffFirst->createTransition( locRateAdaptationLo );
+	auto* t3 = locInOffFirst->createTransition( locAllOff );
+	auto* t4 = locOutOffFirst->createTransition( locRateAdaptationUp );
+	locOutOffFirst->createTransition( locAllOff );
+	auto* t6 = locRateAdaptationLo->createTransition( locAllOff );
+	locRateAdaptationUp->createTransition( locAllOff );
+
+	t1->setGuard( { guardConstraints, guardConstants } );
+	t3->setGuard( { guardConstraints, guardConstants } );
+	t6->setGuard( { guardConstraints, guardConstants } );
+
+	// guard x = 0
+	guardConstraints = Matrix::Zero( 2, 3 );
+	guardConstants = Vector::Zero( 2 );
+	guardConstraints( 0, x ) = 1;
+	guardConstraints( 1, x ) = -1;
+	guardConstants( 0 ) = 0;
+	guardConstants( 1 ) = -0;
+
+	t2->setGuard( { guardConstraints, guardConstants } );
+
+	// guard x = 10
+	guardConstants( 0 ) = 10;
+	guardConstants( 1 ) = -10;
+
+	t4->setGuard( { guardConstraints, guardConstants } );
+
+	// initial states: x=z=t=0, aff = 1
+	Matrix initialConstraints = Matrix::Zero( 6, 3 );
+	Vector initialConstants = Vector::Zero( 6 );
+	initialConstraints( 0, t ) = 1;
+	initialConstraints( 1, t ) = -1;
+	initialConstraints( 2, x ) = 1;
+	initialConstraints( 3, x ) = -1;
+	initialConstraints( 4, s ) = 1;
+	initialConstraints( 5, s ) = -1;
+
+	res.addInitialState( locAllOn, { initialConstraints, initialConstants } );
+
+	return res;
+}
+
 TEST( SingularRechabilityTest, WorkerConstruction ) {
 	using Number = mpq_class;
 	using VPoly = hypro::VPolytope<Number>;
@@ -370,7 +494,6 @@ TEST( SingularRechabilityTest, SingularAnalyzerWithJumpsSafe ) {
 
 	// Get locations for local bad states
 	hypro::Location<Number>* l0 = automaton.getLocation( "l0" );
-	hypro::Location<Number>* l1 = automaton.getLocation( "l1" );
 
 	std::map<const hypro::Location<Number>*, hypro::Condition<Number>> localBadStates;
 
@@ -463,4 +586,40 @@ TEST( SingularRechabilityTest, MultipleJumpsEnabled ) {
 		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes2 );
 	result = analyzer2.run();
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
+}
+
+TEST( SingularRechabilityTest, SimplePLTScenario ) {
+	// example which uses the automaton created from a plt
+	using Number = mpq_class;
+	using HPoly = hypro::HPolytope<Number>;
+
+	auto automaton = createPLTSingularAutomaton<Number>();
+
+	auto initialNodes = hypro::makeRoots<HPoly, Number>( automaton );
+	EXPECT_TRUE( initialNodes.size() == 1 );
+	auto analyzer = hypro::SingularAnalyzer<HPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 3, hypro::tNumber( 15 ), hypro::tNumber( 0.01 ) }, initialNodes );
+	auto result = analyzer.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+
+	// plot flowpipes
+	hypro::Plotter<Number>& plt = hypro::Plotter<Number>::getInstance();
+	plt.rSettings().fill = true;
+	plt.rSettings().cummulative = true;
+	// variable order: t,s,x,aff
+	std::vector<std::vector<std::size_t>> pltDimensions{ { 0, 1 }, { 0, 2 }, { 1, 2 } };
+	std::vector<std::string> filenames{ "test_t_s", "test_t_x", "test_s_x" };
+	std::size_t pos = 0;
+	auto flowpipes = getFlowpipes( initialNodes.front() );
+	for ( const auto& dimPair : pltDimensions ) {
+		plt.setFilename( filenames[pos] );
+		++pos;
+		for ( const auto& fp : flowpipes ) {
+			for ( const auto& segment : fp ) {
+				plt.addObject( reduceToDimensions( segment.projectOn( dimPair ).vertices(), dimPair ) );
+			}
+		}
+		plt.plot2d();
+		plt.clear();
+	}
 }
