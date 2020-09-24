@@ -51,22 +51,20 @@ const std::size_t colors[] = { 0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
 	 * @brief      A struct holding a basic set of options for the gnuplot plotting.
 	 */
 struct gnuplotSettings {
-	std::string name = "";			   // title
-	std::string filename = "out";	   // filename
-	std::size_t color = colors[blue];  // default blue
-	bool fill = false;				   // do not fill
-	bool axes = true;				   // plot axes
-	bool grid = true;				   // plot grid
-	bool title = false;				   // plot title
-
-	double pointSize = 0.6;	 // pointsize
-
-	double linewidth = 0.1;												// linewidth
-	bool keepAspectRatio = true;										// keep aspect ratio for both axes
-	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	// dimensions to plot
-	bool cummulative = false;											// if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
-	bool plain = false;
-	bool overwriteFiles = false;  // set to enable file overwriting
+	std::string name = "";												//< title
+	std::string filename = "out";										//< filename
+	std::size_t color = colors[blue];									//< default blue
+	bool fill = false;													//< do not fill
+	bool axes = true;													//< plot axes
+	bool grid = true;													//< plot grid
+	bool title = false;													//< plot title
+	double pointSize = 0.6;												//< pointsize
+	double linewidth = 0.1;												//< linewidth
+	bool keepAspectRatio = true;										//< keep aspect ratio for both axes
+	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	//< dimensions to plot
+	bool cummulative = false;											//< if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
+	bool plain = false;													//< overrides most settings
+	bool overwriteFiles = false;										//< set to enable file overwriting
 };
 
 }  // namespace plotting
