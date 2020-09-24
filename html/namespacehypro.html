@@ -2107,6 +2107,12 @@ template&lt;&gt; </td></tr>
 template&lt;&gt; </td></tr>
 <tr class="memitem:a3e8447f0691817ff9320dca8bcac855b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkRedundantConstraints</b> (<a class="el" href="structhypro_1_1glpk__context.html">glpk_context</a> &amp;context, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; constraints, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; constants, std::vector&lt; carl::Relation &gt; &amp;relations)</td></tr>
 <tr class="separator:a3e8447f0691817ff9320dca8bcac855b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94b22a5b62707e5a7ce404d94c79fd18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94b22a5b62707e5a7ce404d94c79fd18"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>if</b> (ctxtItClp!=mClpContexts.end())</td></tr>
+<tr class="separator:a94b22a5b62707e5a7ce404d94c79fd18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3242170c0c8c48f4e2d1848fd17259f7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3242170c0c8c48f4e2d1848fd17259f7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>assert</b> (isSane())</td></tr>
+<tr class="separator:a3242170c0c8c48f4e2d1848fd17259f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8430032872339aad31d991b90dd38f2"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae8430032872339aad31d991b90dd38f2"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ae8430032872339aad31d991b90dd38f2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1_evaluation_result.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>smtratOptimizeLinearPostSolve</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants, const std::vector&lt; carl::Relation &gt; &amp;relationSymbols, bool maximize, const <a class="el" href="structhypro_1_1_evaluation_result.html">EvaluationResult</a>&lt; Number &gt; &amp;preSolution)</td></tr>
@@ -2353,6 +2359,9 @@ constexpr long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" 
 <tr class="memitem:a4f1cd53eedd870d219a2707babdfdf58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f1cd53eedd870d219a2707babdfdf58"></a>
 constexpr unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>SF_CACHE_SIZE</b> = 200</td></tr>
 <tr class="separator:a4f1cd53eedd870d219a2707babdfdf58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f41f91a8564c8562151664b4a45ac4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29f41f91a8564c8562151664b4a45ac4"></a>
+auto&#160;</td><td class="memItemRight" valign="bottom"><b>ctxtItClp</b> = mClpContexts.find( std::this_thread::get_id() )</td></tr>
+<tr class="separator:a29f41f91a8564c8562151664b4a45ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e6712e1aaf7f51d443adfad12410b3d"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7e6712e1aaf7f51d443adfad12410b3d"></a>
 template&lt;typename T , typename U &gt; </td></tr>
 <tr class="memitem:a7e6712e1aaf7f51d443adfad12410b3d"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>convertible</b> = std::is_convertible_v&lt;T, U&gt;</td></tr>
@@ -4196,7 +4205,7 @@ template&lt;typename Number &gt; </div>
 
 <p>References <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>.</p>
 
-<p>Referenced by <a class="el" href="_optimizer_8tpp_source.html#l00170">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00466">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00282">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::multiEvaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00489">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="_zonotope_8tpp_source.html#l00235">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::removeEmptyGenerators()</a>.</p>
+<p>Referenced by <a class="el" href="_optimizer_8tpp_source.html#l00171">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00466">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00282">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::multiEvaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00489">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="_zonotope_8tpp_source.html#l00235">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::removeEmptyGenerators()</a>.</p>
 
 </div>
 </div>
@@ -5006,7 +5015,7 @@ template&lt;typename Number &gt; </div>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00104">hypro::Point&lt; Number &gt;::swap()</a>.</p>
 
-<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00081">hypro::Optimizer&lt; Number &gt;::operator=()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00044">hypro::Optimizer&lt; Number &gt;::vector()</a>, and <a class="el" href="_optimizer_8h_source.html#l00145">hypro::Optimizer&lt; Number &gt;::~Optimizer()</a>.</p>
+<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00082">hypro::Optimizer&lt; Number &gt;::operator=()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00045">hypro::Optimizer&lt; Number &gt;::vector()</a>, and <a class="el" href="_optimizer_8h_source.html#l00145">hypro::Optimizer&lt; Number &gt;::~Optimizer()</a>.</p>
 
 </div>
 </div>
