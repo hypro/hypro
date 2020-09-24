@@ -104,6 +104,12 @@ class HPolytopeT : private GeometricObjectBase {
 	HPolytopeT( const matrix_t<Number>& A );
 
 	/**
+	 * @brief Construct a new HPolytopeT object from a single point
+	 * @param point
+	 */
+	HPolytopeT( const Point<Number>& point );
+
+	/**
 	 * @brief Constructor from a vector of points.
 	 * @details Converts a vertex-representation into a hyperplanar representation, i.e. solving the plane enumeration
 	 * problem.
