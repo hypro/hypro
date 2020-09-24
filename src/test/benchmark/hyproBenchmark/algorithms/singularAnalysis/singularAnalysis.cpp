@@ -27,7 +27,7 @@ hypro::vector_t<Number> randomInitConstants( const std::size_t& dim, int lower, 
     hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2*dim );
     for( std::size_t varIndex = 0; varIndex < dim; ++varIndex ) {
         constants( varIndex ) = Number( distUpper( generator ) );
-        constants( 2*varIndex + 1 ) = Number( -1 * distLower( generator ) );
+        constants( dim + varIndex ) = Number( -1 * distLower( generator ) );
     }
     return constants;
 
@@ -54,7 +54,7 @@ hypro::HybridAutomaton<Number> randomHaNoJump( const std::size_t& dim ) {
     Matrix initialConstraints = Matrix::Zero( 2*dim, dim );
     for ( std::size_t varIndex = 0; varIndex < dim; ++varIndex ) {
         initialConstraints( varIndex, varIndex ) = 1;
-        initialConstraints( 2*varIndex + 1, varIndex ) = -1;
+        initialConstraints( dim + varIndex, varIndex ) = -1;
     }
 
     ha.addInitialState( uniqueLoc.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
@@ -109,7 +109,7 @@ hypro::HybridAutomaton<Number> randomHaWithJumps( const std::size_t& dim, const 
         locations[ locCount ]->addTransition( std::move ( transition ) );
 
         // empty invariant (for now)
-        locations[ locCount ]->setInvariant( { Matrix::Zero( 1, dim ), Vector::Zero( 1 ) } );
+        //locations[ locCount ]->setInvariant( { Matrix::Zero( 1, dim ), Vector::Zero( 1 ) } );
 
         zeroTrace += flowVector;
     }
@@ -124,10 +124,10 @@ hypro::HybridAutomaton<Number> randomHaWithJumps( const std::size_t& dim, const 
     Matrix initialConstraints = Matrix::Zero( 2*dim, dim );
     for ( std::size_t varIndex = 0; varIndex < dim; ++varIndex ) {
         initialConstraints( varIndex, varIndex ) = 1;
-        initialConstraints( 2*varIndex + 1, varIndex ) = -1;
+        initialConstraints( dim + varIndex, varIndex ) = -1;
     }
 
-    ha.addInitialState( ha.getLocation( "l0" ), { initialConstraints, initialConstraints } );
+    ha.addInitialState( ha.getLocation( "l0" ), { initialConstraints, initialConstants } );
     // Set last location as bad state, to confirm that it is reachable (all guards satisfied)
     ha.addLocalBadState( ha.getLocation( "l" + std::to_string( jumps ) ), { Matrix::Zero( 1, dim ), Vector::Zero( 1 ) } );
 
