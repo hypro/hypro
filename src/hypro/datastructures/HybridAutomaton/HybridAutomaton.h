@@ -36,13 +36,13 @@ namespace hypro {
 template <typename Number>
 class HybridAutomaton {
   public:
-	using locationVector = std::vector<std::unique_ptr<Location<Number>>>;
+	using Locations = std::vector<std::unique_ptr<Location<Number>>>;
 	using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>;
 	using conditionVector = std::vector<Condition<Number>>;
 	using variableVector = std::vector<std::string>;
 
   private:
-	locationVector mLocations;			   /// The locations of the hybrid automaton.
+	Locations mLocations;				   /// The locations of the hybrid automaton.
 	locationConditionMap mInitialStates;   /// The set of initial states.
 	locationConditionMap mLocalBadStates;  /// The set of bad states which are bound to locations.
 	conditionVector mGlobalBadStates;	   /// The set of bad states which are not bound to any location.
@@ -75,9 +75,9 @@ class HybridAutomaton {
      * @param[in]	trans 			Set of transitions
      * @param[in] 	initialStates 	Map of initial states
      */
-	//HybridAutomaton(const locationVector& locs, const transitionVector& trans, const locationConditionMap& initialStates);
+	//HybridAutomaton(const Locations& locs, const transitionVector& trans, const locationConditionMap& initialStates);
 	//TOOOOOODOOOOOOO: This is missing
-	HybridAutomaton( const locationVector& locs, const locationConditionMap& initialStates );
+	HybridAutomaton( const Locations& locs, const locationConditionMap& initialStates );
 
 	/**
      * @brief 		Destructor
@@ -127,7 +127,7 @@ class HybridAutomaton {
      * @brief      Setter function.
      */
 	///@{
-	void setLocations( locationVector&& locs ) {
+	void setLocations( Locations&& locs ) {
 		assert( checkConsistency() );
 		mLocations.clear();
 		mLocations = std::move( locs );
