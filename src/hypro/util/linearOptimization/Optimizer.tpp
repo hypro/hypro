@@ -18,21 +18,22 @@ void Optimizer<Number>::cleanContexts() {
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
 		mGlpkContexts.erase( ctxtItGlpk );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
-}
-*/
+
+	}
+	*/
 #endif
 #ifdef HYPRO_USE_CLP
-	auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
-	if ( ctxtItClp != mClpContexts.end() ) {
-		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
-		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-		ctxtItClp->second.deleteLPInstance();
-		TRACE( "hypro.optimizer", "Deleted lp instance." );
-		mClpContexts.erase( ctxtItClp );
-		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
-	}
+auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
+if ( ctxtItClp != mClpContexts.end() ) {
+	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
+	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
+	ctxtItClp->second.deleteLPInstance();
+	TRACE( "hypro.optimizer", "Deleted lp instance." );
+	mClpContexts.erase( ctxtItClp );
+	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
+}
 #endif
-	assert( isSane() );
+assert( isSane() );
 }  // namespace hypro
 
 template <typename Number>
