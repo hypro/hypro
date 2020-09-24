@@ -96,7 +96,7 @@ if(DEVELOPER)
  -Wunused-function\
  -Wunused-value\
  -Wunused-variable\
- -fsanitize=address,dataflow \
+ -fsanitize=address \
  -fstack-protector-strong\
  -g" CACHE INTERNAL "")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEV_FLAGS}")
