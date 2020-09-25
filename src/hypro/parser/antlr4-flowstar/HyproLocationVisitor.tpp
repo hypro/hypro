@@ -18,26 +18,51 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitModes(HybridAutomatonParser::ModesContext *ctx){
 
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
-		unsigned i = 0;
-		std::set<Location<Number>*> locSet;
-		while(i < ctx->location().size()){
+		if ( ctx->location().size()>0 ) {
+			unsigned i = 0;
+			std::set<Location<Number>*> locSet;
+			while(i < ctx->location().size()){
 
-			//0.Syntax check - Location name already parsed?
-			for(auto& loc : locSet){
-				if(loc->getName() == ctx->location().at(i)->VARIABLE()->getText()){
-					std::cerr << "ERROR: Location " << loc->getName() << " has already been parsed." << std::endl;
-					exit(0);
+				//0.Syntax check - Location name already parsed?
+				for(auto& loc : locSet){
+					if(loc->getName() == ctx->location().at(i)->VARIABLE()->getText()){
+						std::cerr << "ERROR: Location " << loc->getName() << " has already been parsed." << std::endl;
+						exit(0);
+					}
 				}
-			}
 
-			Location<Number>* loc = visit(ctx->location().at(i));
-			assert(loc != nullptr);
-			//locSet.insert(loc);
-			locSet.emplace(loc);
-			i++;
+				Location<Number>* loc = visit(ctx->location().at(i));
+				assert(loc != nullptr);
+				//locSet.insert(loc);
+				locSet.emplace(loc);
+				i++;
+			}
+			//return set of raw ptrs to locations
+			return locSet;
+		} else if ( ctx->stochasticlocation().size()>0 ){
+			unsigned i = 0;
+			std::set<Location<Number>*> locSet;
+			while(i < ctx->stochasticlocation().size()){
+
+				//0.Syntax check - Location name already parsed?
+				for(auto& loc : locSet){
+					if(loc->getName() == ctx->stochasticlocation().at(i)->VARIABLE()->getText()){
+						std::cerr << "ERROR: Location " << loc->getName() << " has already been parsed." << std::endl;
+						exit(0);
+					}
+				}
+
+				StochasticLocation<Number>* loc = visit(ctx->stochasticlocation().at(i));
+				assert(loc != nullptr);
+				//locSet.insert(loc);
+				locSet.emplace(loc);
+				i++;
+			}
+			//return set of raw ptrs to locations
+			return locSet;
+		} else {
+			return std::set<Location<Number>*>();
 		}
-		//return set of raw ptrs to locations
-		return locSet;
 	}
 
 	template<typename Number>
@@ -191,5 +216,107 @@ namespace hypro {
 
 		return Condition<Number>();
 
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproLocationVisitor<Number>::visitStochasticlocation(HybridAutomatonParser::StochasticlocationContext *ctx) {
+
+		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
+		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
+		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
+		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
+
+		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
+		//By default, if no invariant is given, return a 0xn matrix because we have zero contraints over n variables
+		Condition<Number> inv{ConstraintSetT<Number>{matrix_t<Number>::Zero(0,vars.size()), vector_t<Number>::Zero(0)}};
+
+		bool firstTime = true;
+		for(auto& currInvCtx : ctx->invariants()){
+			Condition<Number> currInv = visit(currInvCtx);
+			if(currInv != Condition<Number>()){
+				if(firstTime){
+					inv = currInv;
+					firstTime = false;
+					continue;
+				}
+
+				//Extend inv.matrix with currInv.matrix
+				matrix_t<Number> newMat = inv.getMatrix();
+				matrix_t<Number> currInvMat = currInv.getMatrix();
+				assert(newMat.cols() == currInvMat.cols());
+				std::size_t newMatRowsBefore = newMat.rows();
+				newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
+				for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
+					newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
+				}
+
+				//Extend inv.vector with currInv.vector
+				vector_t<Number> newVec = inv.getVector();
+				vector_t<Number> currInvVec = currInv.getVector();
+				newVec.conservativeResize(newVec.rows()+currInvVec.rows());
+				for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
+					newVec(i) = currInvVec(i-newMatRowsBefore);
+				}
+
+				inv = Condition<Number>(newMat, newVec);
+			}
+		}
+
+		//3.Calls visit(ctx->probdistribution()) to get probability distribution
+		matrix_t<Number> probdist = visit(ctx->probdistribution());
+
+		//4.Returns a ptr to location
+		StochasticLocation<Number>* loc = new StochasticLocation<Number>();
+		loc->setName(ctx->VARIABLE()->getText());
+		if(std::get<0>(flowAndExtInput).size() > 0) {
+			loc->setLinearFlow(std::get<0>(flowAndExtInput));
+		}
+		if(!std::get<1>(flowAndExtInput).empty()) {
+			loc->setRectangularFlow(std::get<1>(flowAndExtInput));
+		}
+
+		loc->setInvariant(inv);
+
+		loc->setLocationDistribution(probdist);
+
+		// only set external input, if it is different from zero
+		if(!std::get<2>(flowAndExtInput).empty()) {
+			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
+			loc->setExtInput(std::get<2>(flowAndExtInput));
+		}
+		return loc;
+	}
+
+	template<typename Number>
+  	antlrcpp::Any HyproLocationVisitor<Number>::visitProbdistribution(HybridAutomatonParser::ProbdistributionContext *ctx) {
+
+		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
+		// maps used to deduce subspaces
+		std::map<std::size_t, vector_t<Number>> linearExp;
+
+		HyproFormulaVisitor<Number> equationVisitor(vars);
+		for(unsigned i=0; i < ctx->equation().size(); i++){
+			//std::cout << "Try to parse linear flow." << std::endl;
+			//insert into row according to state var order
+			vector_t<Number> tmpRow = equationVisitor.visit(ctx->equation(i)).template as<vector_t<Number>>();
+			for(unsigned j=0; j < vars.size(); j++){
+				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
+					//std::cout << "Linear flow for variable " << j << ", row: " << tmpRow << std::endl;
+					linearExp[j] = tmpRow;
+					break;
+				}
+			}
+		}
+
+		// 2. assemble probability distribution
+		matrix_t<Number> distMatrix = matrix_t<Number>::Zero(vars.size()+1,vars.size()+1);
+		for(const auto exp : linearExp) {
+			distMatrix.row(exp.first) = exp.second;
+		}
+
+		// linearFlow<Number> lDist;
+		// lDist.setFlowMatrix(distMatrix);
+
+		return distMatrix;
 	}
 }

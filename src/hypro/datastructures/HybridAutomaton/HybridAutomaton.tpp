@@ -214,9 +214,9 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 template <typename Number>
 const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( const Location<Number>& location ) {
 	try{
-		std::cout<<"try transform Location to StochasticLocation!"<<std::endl;
+		// std::cout<<"try transform Location to StochasticLocation!"<<std::endl;
 		auto stoLoc = dynamic_cast<const StochasticLocation<Number>&>( location );
-		std::cout<<"nothing wrong!"<<std::endl;
+		// std::cout<<"nothing wrong!"<<std::endl;
 		return this->addLocation( std::move( std::make_unique<StochasticLocation<Number>>( stoLoc ) ) );
 	}catch(const std::bad_cast& re){
 		std::cout<<"wrong with message: " << re.what()<<std::endl;

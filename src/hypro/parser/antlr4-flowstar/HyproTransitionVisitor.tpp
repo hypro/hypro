@@ -31,6 +31,15 @@ namespace hypro {
 			}
 			return trSet;
 			//return std::move(trSet);
+		} else if(ctx->stochastictransition().size() > 0){
+			std::set<Transition<Number>*> trSet;
+			for(auto tr : ctx->stochastictransition()){
+				std::set<StochasticTransition<Number> *> tSet = visit(tr);
+				for(auto t : tSet){
+					trSet.emplace(t);
+				}
+			}
+			return trSet;
 		} else {
 			return std::set<Transition<Number>*>();
 			//return std::move(std::set<std::unique_ptr<Transition<Number>>>());
@@ -251,4 +260,145 @@ namespace hypro {
 		}
 	}
 
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitStochastictransition(HybridAutomatonParser::StochastictransitionContext *ctx){
+		std::set<StochasticTransition<Number>*> trSet;
+
+		if (ctx->probtransition().size() > 0) {
+			for (auto tr : ctx->probtransition()) {
+				StochasticTransition<Number>* t = visit(tr);
+				trSet.emplace(t);
+			}
+		}
+
+		// 1. Collect start location from visitProbfrom
+		StochasticLocation<Number>* probFrom = visit(ctx->probfrom());
+		for (auto t : trSet) {
+			t->setSource(probFrom);
+		}
+
+		// 2. Collect Urgency
+		if(ctx->urgent().size() > 1){
+			std::cout << "WARNING: Please refrain from entering 'urgent' multiple times. One time is sufficient->" << std::endl;
+		} else if(ctx->urgent().size() == 1){
+			for (auto t : trSet) {
+				t->setUrgent(true);
+			}
+		} else {
+			for (auto t : trSet) {
+				t->setUrgent(false);
+			}
+		}
+
+		// 3. Collect Guards
+		if(ctx->guard().size() > 1){
+			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
+		}
+		if(ctx->guard().size() == 1){
+			Condition<Number> inv = visit(ctx->guard()[0]);
+			for (auto t : trSet) {
+				t->setGuard(inv);
+			}
+		}
+
+		// 6. Collect synchronization labels
+		if(ctx->labels().size() > 0){
+			std::vector<Label> transformed{};
+			for(const auto& l : ctx->labels()) {
+				auto labels = visit(l).template as<std::vector<hypro::Label>>();
+				transformed.insert(transformed.end(),labels.begin(),labels.end());
+			}
+
+			for (auto t : trSet) {
+				t->setLabels(transformed);
+			}
+		}
+		
+		return trSet;
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitProbtransition(HybridAutomatonParser::ProbtransitionContext *ctx) {
+
+		StochasticTransition<Number>* t = new StochasticTransition<Number>();
+
+		// 1. Collect probability and destination location from visitProbTo
+		std::pair<Number,StochasticLocation<Number>*> probTo = visit(ctx->probto());
+		t->setTransitionWeight(probTo.first);
+		t->setTarget(probTo.second);
+		
+		// 4. Collect Resets
+		if(ctx->resetfct().size() > 1){
+			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces. Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient->" << std::endl;
+		}
+		if(ctx->resetfct().size() == 1){
+			Reset<Number> reset = visit(ctx->resetfct()[0]);
+			t->setReset(reset);
+		}
+
+		// 5. Collect Aggregation
+		if(ctx->aggregation().size() > 1){
+			std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
+			exit(0);
+		}
+		if(ctx->aggregation().size() == 1){
+			Aggregation agg = visit(ctx->aggregation()[0]);
+			t->setAggregation(agg);
+		}
+		return t;
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitProbfrom(HybridAutomatonParser::ProbfromContext *ctx) {
+
+		// 0. Syntax check - is the given name really a location name?
+		// 1. While doing syntax check, also fill from (defined below) so we can return it.
+		bool found = false;
+		StochasticLocation<Number>* from;
+		for(const auto& loc : locSet){
+			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
+			if(loc->getName() == ctx->VARIABLE()->getText()){
+				found = true;
+				from = dynamic_cast<StochasticLocation<Number>*>( loc );
+			}
+		}
+		if(!found){
+			std::cerr << "ERROR: Location source in a probabilistic jump does not exist." << std::endl;
+			exit(0);
+		}
+
+		// 2. Return location pointer to given location name
+		return from;
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitProbto(HybridAutomatonParser::ProbtoContext *ctx) {
+
+		// 0. Syntax check - is the given name really a location name?
+		// 1. While doing syntax check, also fill from (defined below) so we can return it.
+		bool found = false;
+		std::pair<Number,StochasticLocation<Number>*> to;
+		for(const auto& loc : locSet){
+			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
+			if(loc->getName() == ctx->VARIABLE()->getText()){
+				found = true;
+				to.second = dynamic_cast<StochasticLocation<Number>*>( loc );
+				break;
+			}
+		}
+		if(!found){
+			std::cerr << "ERROR: Location source in a probabilistic jump does not exist." << std::endl;
+			exit(0);
+		}
+
+		std::string weightString = ctx->NUMBER()[0].getText();
+		// from HyproFormularVisitor::stringToNumber
+		double weightInFloat = boost::lexical_cast<double>(weightString);
+		Number weight = Number(weightInFloat);
+		to.first = weight;
+		
+
+		// 2. Return pair of probability and location pointer to given location name
+		return to;
+	}
 }

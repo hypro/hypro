@@ -394,3 +394,26 @@ std::endl; FAIL();
 //	}
 //
 //}
+
+TYPED_TEST( AntlrParserTest, StochasticParsing ) {
+	std::string path( "../src/test/core/examples/test_stochastic_parsing.txt" );
+	// std::string path( "../../../../src/test/core/examples/test_stochastic_parsing.txt" );
+
+	try {
+		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
+
+		auto loc = *automaton.getLocation( "l1" );
+
+		auto transition = std::find_if( loc.getTransitions().begin(), loc.getTransitions().end(),
+										[]( auto& transPtr ) { return transPtr->getTarget()->getName() == "l2"; } );
+
+		ASSERT_TRUE( transition != loc.getTransitions().end() );
+
+		EXPECT_EQ( "sync_1", ( *transition )->getLabels().front().getName() );
+
+		SUCCEED();
+	} catch ( const std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}

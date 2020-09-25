@@ -755,21 +755,23 @@ HybridAutomatonParser::ActivitiesContext* HybridAutomatonParser::Stochasticlocat
   return getRuleContext<HybridAutomatonParser::ActivitiesContext>(0);
 }
 
-HybridAutomatonParser::InvariantsContext* HybridAutomatonParser::StochasticlocationContext::invariants() {
-  return getRuleContext<HybridAutomatonParser::InvariantsContext>(0);
+std::vector<HybridAutomatonParser::InvariantsContext *> HybridAutomatonParser::StochasticlocationContext::invariants() {
+  return getRuleContexts<HybridAutomatonParser::InvariantsContext>();
 }
+
+HybridAutomatonParser::InvariantsContext* HybridAutomatonParser::StochasticlocationContext::invariants(size_t i) {
+  return getRuleContext<HybridAutomatonParser::InvariantsContext>(i);
+}
+
 
 tree::TerminalNode* HybridAutomatonParser::StochasticlocationContext::CBCLOSE() {
   return getToken(HybridAutomatonParser::CBCLOSE, 0);
 }
 
-std::vector<HybridAutomatonParser::ProbdistributionContext *> HybridAutomatonParser::StochasticlocationContext::probdistribution() {
-  return getRuleContexts<HybridAutomatonParser::ProbdistributionContext>();
+HybridAutomatonParser::ProbdistributionContext* HybridAutomatonParser::StochasticlocationContext::probdistribution() {
+  return getRuleContext<HybridAutomatonParser::ProbdistributionContext>(0);
 }
 
-HybridAutomatonParser::ProbdistributionContext* HybridAutomatonParser::StochasticlocationContext::probdistribution(size_t i) {
-  return getRuleContext<HybridAutomatonParser::ProbdistributionContext>(i);
-}
 
 
 size_t HybridAutomatonParser::StochasticlocationContext::getRuleIndex() const {
@@ -835,8 +837,12 @@ tree::TerminalNode* HybridAutomatonParser::ProbdistributionContext::CBOPEN() {
   return getToken(HybridAutomatonParser::CBOPEN, 0);
 }
 
-HybridAutomatonParser::EquationContext* HybridAutomatonParser::ProbdistributionContext::equation() {
-  return getRuleContext<HybridAutomatonParser::EquationContext>(0);
+std::vector<HybridAutomatonParser::EquationContext *> HybridAutomatonParser::ProbdistributionContext::equation() {
+  return getRuleContexts<HybridAutomatonParser::EquationContext>();
+}
+
+HybridAutomatonParser::EquationContext* HybridAutomatonParser::ProbdistributionContext::equation(size_t i) {
+  return getRuleContext<HybridAutomatonParser::EquationContext>(i);
 }
 
 tree::TerminalNode* HybridAutomatonParser::ProbdistributionContext::CBCLOSE() {

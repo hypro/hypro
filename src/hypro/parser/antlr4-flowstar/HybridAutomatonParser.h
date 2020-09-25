@@ -257,10 +257,10 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *CBOPEN();
     ActivitiesContext *activities();
-    InvariantsContext *invariants();
+    std::vector<InvariantsContext *> invariants();
+    InvariantsContext* invariants(size_t i);
     antlr4::tree::TerminalNode *CBCLOSE();
-    std::vector<ProbdistributionContext *> probdistribution();
-    ProbdistributionContext* probdistribution(size_t i);
+    ProbdistributionContext *probdistribution();
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -274,7 +274,8 @@ public:
     ProbdistributionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *CBOPEN();
-    EquationContext *equation();
+    std::vector<EquationContext *> equation();
+    EquationContext* equation(size_t i);
     antlr4::tree::TerminalNode *CBCLOSE();
 
 

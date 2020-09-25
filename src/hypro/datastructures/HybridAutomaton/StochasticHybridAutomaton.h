@@ -15,7 +15,7 @@ namespace hypro {
 template <typename Number>
 class StochasticHybridAutomaton : public HybridAutomaton<Number> {
   public:
-	using stochasticInitialMap = std::map< const locationConditionMap, Number>;
+	using stochasticInitialMap = std::map<const StochasticLocation<Number>*, std::pair< Condition<Number>, Number>>;
 
   private:
 	// Number mProbability = 1;
@@ -27,9 +27,9 @@ class StochasticHybridAutomaton : public HybridAutomaton<Number> {
 		mProbInitialStates = probInitialStates;
 	}
     void addProbInitialState( const StochasticLocation<Number>* loc, const Condition<Number>& state, Number prob ) { 
-        mInitialStates.emplace( std::make_pair( std::make_pair( loc, state ), prob ) ); 
+        mProbInitialStates.emplace( std::make_pair( loc, std::make_pair( state , prob ) ) ); 
     }
-	const matrix_t<Number>& getProbInitialState() const {
+	const stochasticInitialMap& getProbInitialState() const {
 		return mProbInitialStates;
 	}
 };

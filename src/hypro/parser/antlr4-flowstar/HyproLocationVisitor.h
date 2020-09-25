@@ -11,6 +11,7 @@
 
 #include "../../datastructures/HybridAutomaton/Condition.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/StochasticLocation.h"
 #include "../../types.h"
 #include "../../util/VariablePool.h"
 #include "HybridAutomatonLexer.h"
@@ -39,6 +40,8 @@ class HyproLocationVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *ctx) override;
 		antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *ctx) override;
 		antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override;
+		antlrcpp::Any visitStochasticlocation(HybridAutomatonParser::StochasticlocationContext *ctx) override;
+  		antlrcpp::Any visitProbdistribution(HybridAutomatonParser::ProbdistributionContext *ctx) override;
 
 	public:
 
