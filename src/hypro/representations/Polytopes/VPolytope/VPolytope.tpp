@@ -652,7 +652,15 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 
 		mReduced = true;
 #else
-		updateNeighbors();
+		std::size_t vertexCount = mVertices.size();
+		for( std::size_t i; i < vertexCount; ++i ) {
+			auto vertex = mVertices[0];
+			mVertices.erase( mVertices.begin() );
+			if( !this->contains( vertex ) ) {
+				mVertices.push_back( vertex );
+			}
+		}
+		mReduced = true;
 #endif
 	}
 }
