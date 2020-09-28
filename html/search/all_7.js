@@ -52,7 +52,7 @@ var searchData=
   ['getid',['getId',['../classhypro_1_1_location.html#a00d1e50edc314d7228eb8673f975cc85',1,'hypro::Location']]],
   ['getinitialset',['getInitialSet',['../classhypro_1_1_reach_tree_node.html#a5a1825d90fefdb5ce3890d69bb14536d',1,'hypro::ReachTreeNode']]],
   ['getinitialstates',['getInitialStates',['../classhypro_1_1_hybrid_automaton.html#add2a3c35a2df09a11a668a5583695680',1,'hypro::HybridAutomaton']]],
-  ['getinternalpoint',['getInternalPoint',['../classhypro_1_1_optimizer.html#a30b63a7f263f6f6de518d33e843457c9',1,'hypro::Optimizer']]],
+  ['getinternalpoint',['getInternalPoint',['../classhypro_1_1_optimizer.html#acfc04f3309bbd99949758fd876e7a8a0',1,'hypro::Optimizer']]],
   ['getinvariant',['getInvariant',['../classhypro_1_1_location.html#acf2a88e7cce8962765ae1f2468934952',1,'hypro::Location']]],
   ['getlabels',['getLabels',['../classhypro_1_1_hybrid_automaton.html#a3da3480850acb8cb1deb7fa54b9d001f',1,'hypro::HybridAutomaton']]],
   ['getlinealtyspace',['getLinealtySpace',['../classhypro_1_1_convex_hull.html#a6e59cd23877d751d373d8b73857c72fd',1,'hypro::ConvexHull']]],

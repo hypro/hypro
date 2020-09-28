@@ -242,7 +242,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:14: warning: Compound hypro::detail::ResetVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/type_handling/better_enums/enum.h:1036: warning: Compound better_enums::map_compare is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/IntersectHalfspaceOp.h:34: warning: Compound hypro::IntersectHalfspaceOp is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:135: warning: Compound std::hash< hypro::linearFlow< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:144: warning: Compound std::hash< hypro::linearFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/TimingAggregate.h:11: warning: Compound hypro::EventTimingNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingNode.h:12: warning: Compound hypro::EventTimingNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/PolytopeSetting.h:6: warning: Compound hypro::PolytopeSetting is not documented.
@@ -1238,8 +1238,6 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:35: warning: Member glpkOptimizeLinear(glpk_context &context, const vector_t< double > &_direction, const matrix_t< double > &constraints, const vector_t< double > &constants, bool useExact) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:38: warning: Member glpkCheckPoint(glpk_context &context, const matrix_t< double > &constraints, const vector_t< double > &, const Point< double > &point) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:41: warning: Member glpkRedundantConstraints(glpk_context &context, matrix_t< double > constraints, vector_t< double > constants, std::vector< carl::Relation > &relations) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.tpp:26: warning: Member if(ctxtItClp!=mClpContexts.end()) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.tpp:35: warning: Member assert(isSane()) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:10: warning: Member smtratOptimizeLinearPostSolve(const vector_t< Number > &_direction, const matrix_t< Number > &constraints, const vector_t< Number > &constants, const std::vector< carl::Relation > &relationSymbols, bool maximize, const EvaluationResult< Number > &preSolution) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:13: warning: Member smtratOptimizeLinear(const vector_t< Number > &_direction, const matrix_t< Number > &constraints, const vector_t< Number > &constants, const std::vector< carl::Relation > &relationSymbols, bool maximize) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:16: warning: Member smtratCheckConsistency(const matrix_t< Number > &constraints, const vector_t< Number > &constants) (function) of namespace hypro is not documented.
@@ -1290,7 +1288,6 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/config.h:56: warning: Member defaultPPLDenominator (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/config.h:58: warning: Member MAX_DIMENSION_LIMIT (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/config.h:64: warning: Member SF_CACHE_SIZE (variable) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.tpp:25: warning: Member ctxtItClp (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:50: warning: Member convertible (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/typetraits.h:54: warning: Member is_exact (variable) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:559: warning: argument '_rhs' of command @param is not found in the argument list of hypro::operator*(const Point< Number > &_lhs, const Number &_factor)
@@ -1321,10 +1318,12 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:46: warning: Member rGetFlowMatrix() (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:48: warning: Member isIdentity() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:64: warning: Member hasNoFlow() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:80: warning: Member getDynamicsType() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:93: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:104: warning: Member isSingular() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:80: warning: Member hasNoFlow(std::size_t varIndex) const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:85: warning: Member hasFlow(std::size_t varIndex) const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:89: warning: Member getDynamicsType() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:102: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member isSingular() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:122: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:25: warning: Member type() (function) of class hypro::affineFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:23: warning: Member type() (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/affine.h:13: warning: Member mTranslation (variable) of class hypro::affineFlow is not documented.
@@ -2567,17 +2566,19 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:46: warning: Member rGetFlowMatrix() (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:48: warning: Member isIdentity() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:64: warning: Member hasNoFlow() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:80: warning: Member getDynamicsType() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:93: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:104: warning: Member isSingular() const  (function) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:80: warning: Member hasNoFlow(std::size_t varIndex) const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:85: warning: Member hasFlow(std::size_t varIndex) const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:89: warning: Member getDynamicsType() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:102: warning: Member isTimed() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:113: warning: Member isSingular() const  (function) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:122: warning: Member isDiscrete() const  (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:23: warning: Member type() (function) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:12: warning: Member mFlowMatrix (variable) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:13: warning: Member mIsIdentity (variable) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:14: warning: Member mNoFlow (variable) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:117: warning: Member operator==(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:121: warning: Member operator!=(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:125: warning: Member operator<<(std::ostream &out, const linearFlow< Number > &in) (friend) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:126: warning: Member operator==(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:130: warning: Member operator!=(const linearFlow< Number > &lhs, const linearFlow< Number > &rhs) (friend) of class hypro::linearFlow is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:134: warning: Member operator<<(std::ostream &out, const linearFlow< Number > &in) (friend) of class hypro::linearFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:88: warning: Member lintrafoParameters(const matrix_t< Number > &_A, const vector_t< Number > &_b, unsigned _power=2) (function) of class hypro::lintrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:105: warning: Member matrix() const  (function) of class hypro::lintrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:110: warning: Member vector() const  (function) of class hypro::lintrafoParameters is not documented.
@@ -4469,7 +4470,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:64: warning: Member operator()(hypro::Cacheable< Content > const &item) const  (function) of class std::hash< hypro::Cacheable< Content > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:436: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:139: warning: Member operator()(const hypro::IntervalAssignment< Number > &reset) const  (function) of class std::hash< hypro::IntervalAssignment< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:136: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:145: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:312: warning: Member operator()(const hypro::Location< Number > &loc) const  (function) of class std::hash< hypro::Location< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:430: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:148: warning: Member operator()(const hypro::NoneAssignment &reset) const  (function) of class std::hash< hypro::NoneAssignment > is not documented.
