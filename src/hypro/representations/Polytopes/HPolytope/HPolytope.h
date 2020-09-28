@@ -76,6 +76,13 @@ class HPolytopeT : private GeometricObjectBase {
 	//HPolytopeT( const HPolytopeT& orig ) = default;
 	HPolytopeT( const HPolytopeT& orig );
 
+	template <typename M, typename C, typename S, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+	HPolytopeT( const HPolytopeT<M, C, S>& in ) {
+		HalfspaceVector convertedSpaces;
+		std::transform( in.constraints().begin(), in.constraints().end(), std::back_inserter( convertedSpaces ), [&]( const auto& constraint ) { return Halfspace<Number>( convert<M, Number>( constraint.normal() ), carl::convert<M, Number>( constraint.offset() ) ); } );
+		*this = HPolytopeT( convertedSpaces );
+	}
+
 	/**
 	 * @brief Constructor from a vector of halfspaces.
 	 * @details The resulting object is the intersection of the given halfspaces, i.e. the conjunction of the linear
