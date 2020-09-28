@@ -61,7 +61,7 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 				}
 			}
 			// add interval bounds as new constraints
-			projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
+			projectedSet = projectedSet.projectOutConservative( projectOutDimensions, true );
 			projectedSet.insert( newConstraints.begin(), newConstraints.end() );
 
 			// convert back and assign to original representation type
