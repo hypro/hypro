@@ -3,5 +3,5 @@
  */
 
 namespace benchmark {
-    using Number = double;
+    using Number = mpq_class;
 } // namespace benchmark

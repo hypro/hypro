@@ -21,8 +21,8 @@ hypro::matrix_t<Number> randomFlow( const std::size_t& dim ) {
 template <typename Number>
 hypro::vector_t<Number> randomInitConstants( const std::size_t& dim, int lower, int upper ) {
     static std::mt19937 generator;
-    std::uniform_int_distribution<int> distLower = std::uniform_int_distribution<int>( lower, 0 );
-    std::uniform_int_distribution<int> distUpper = std::uniform_int_distribution<int>( 0, upper );
+    std::uniform_int_distribution<int> distLower = std::uniform_int_distribution<int>( lower, -1 );
+    std::uniform_int_distribution<int> distUpper = std::uniform_int_distribution<int>( 1, upper );
 
     hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2*dim );
     for( std::size_t varIndex = 0; varIndex < dim; ++varIndex ) {
@@ -81,37 +81,40 @@ hypro::HybridAutomaton<Number> randomHaWithJumps( const std::size_t& dim, const 
     }
 
     /* 
-     * Create jumps such that the trace of the origin always satisfies the guards (no empty guard intersections)
+     * Create jumps such that the origin always satisfies the guards (no empty guard intersections)
      * Additionaly, every jump should be enabled after 1 time unit, so that every location
      * can be reached in time. 
     */
-    Vector zeroTrace = Vector::Zero( dim );
     for( std::size_t locCount = 0; locCount < jumps; ++locCount ) {
         // create random flow
         auto flowMatrix = randomFlow<Number>( dim );
         Vector flowVector = flowMatrix.col( dim ).head( dim );
         locations[ locCount ]->setFlow( flowMatrix );
 
-        // Create guard that contains zeroTrace
+        // Create guard that contains origin
         Matrix guardMatrix = Matrix::Zero( dim, dim );
         Vector guardVector = Vector::Zero( dim );
         for( std::size_t row = 0; row < dim; ++row ) {
-            // Encode inequality sgn(flow_i)*(x_i - zeroTrace_i) >= sgn(flow_i)*flow_i
+            // Encode inequality sgn(flow_i)*x_i >= sgn(flow_i)*flow_i
             // scale rhs with factor of 0.9 to not lose too many states on every guard
             int sgn = flowVector( row ) < 0 ? -1 : 1;
             guardMatrix( row, row ) = Number( -sgn );
-            guardVector( row ) = Number( -sgn * ( flowVector( row ) * Number( 0.9 ) + zeroTrace( row ) ) );
+            guardVector( row ) = Number( -sgn * flowVector( row ) * Number( 0.9 ) );
         }
         hypro::Condition<Number> guard( guardMatrix, guardVector );
-        // empty reset
+
+        // Reset to box centered at the origin
+        auto resetConstants = randomInitConstants<Number>( dim, -10, 10 );
+        // Reset uses intervals
+        std::vector<carl::Interval<Number>> resetIntervals;
+        for( std::size_t varIndex = 0; varIndex < dim; ++varIndex ) {
+            resetIntervals.push_back( { -1 * resetConstants( dim + varIndex ), resetConstants( varIndex ) } );
+        }
         auto transition{ std::make_unique<hypro::Transition<Number>>(
-            locations[ locCount ].get(), locations[ locCount + 1 ].get(), guard, hypro::Reset<Number>() ) };
+            locations[ locCount ].get(), locations[ locCount + 1 ].get(), guard, hypro::Reset<Number>( resetIntervals ) ) };
         locations[ locCount ]->addTransition( std::move ( transition ) );
 
         // empty invariant (for now)
-        //locations[ locCount ]->setInvariant( { Matrix::Zero( 1, dim ), Vector::Zero( 1 ) } );
-
-        zeroTrace += flowVector;
     }
 
     for( auto& location : locations ) {
