@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"structhypro_1_1type_name_3_01mpq__class_01_4.html#add4131b868df14ab4c902c0bdabfdb53":[8,0,2,287,0],
 "structhypro_1_1union_content.html":[8,0,2,288],
 "structhypro_1_1union_content.html#a198297511c12b7825c457e30213347f1":[8,0,2,288,0],
 "structhypro_1_1union_content.html#a23439e5f2b8c26e9cae04a3227095ecf":[8,0,2,288,4],

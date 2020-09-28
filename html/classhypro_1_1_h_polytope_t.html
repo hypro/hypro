@@ -168,6 +168,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1d8152dae05f45413cd573634876a000"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_h_polytope_t.html#a1d8152dae05f45413cd573634876a000">HPolytopeT</a> (const <a class="el" href="classhypro_1_1_h_polytope_t.html">HPolytopeT</a> &amp;orig)</td></tr>
 <tr class="memdesc:a1d8152dae05f45413cd573634876a000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="#a1d8152dae05f45413cd573634876a000">More...</a><br /></td></tr>
 <tr class="separator:a1d8152dae05f45413cd573634876a000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa573e0d532dbd5a9d48ea61fcf297c61"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa573e0d532dbd5a9d48ea61fcf297c61"></a>
+template&lt;typename M , typename C , typename S , carl::DisableIf&lt; std::is_same&lt; M, Number &gt;&gt;  = carl::dummy&gt; </td></tr>
+<tr class="memitem:aa573e0d532dbd5a9d48ea61fcf297c61"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>HPolytopeT</b> (const <a class="el" href="classhypro_1_1_h_polytope_t.html">HPolytopeT</a>&lt; M, C, S &gt; &amp;in)</td></tr>
+<tr class="separator:aa573e0d532dbd5a9d48ea61fcf297c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace2482394f3956e68d43a2b0821e6eb9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_h_polytope_t.html#ace2482394f3956e68d43a2b0821e6eb9">HPolytopeT</a> (const HalfspaceVector &amp;planes)</td></tr>
 <tr class="memdesc:ace2482394f3956e68d43a2b0821e6eb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from a vector of halfspaces.  <a href="#ace2482394f3956e68d43a2b0821e6eb9">More...</a><br /></td></tr>
 <tr class="separator:ace2482394f3956e68d43a2b0821e6eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -615,7 +619,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="_h_polytope_8tpp_source.html#l00371">371</a> of file <a class="el" href="_h_polytope_8tpp_source.html">HPolytope.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="_h_polytope_8h_source.html#l00134">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="_h_polytope_8h_source.html#l00141">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
 </div>
 </div>
@@ -641,7 +645,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00392">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00027">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_h_polytope_8h_source.html#l00134">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00563">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00027">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_h_polytope_8h_source.html#l00141">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00563">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
 </div>
 </div>
@@ -675,7 +679,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_geometric_object_base_8h_source.html#l00060">hypro::GeometricObjectBase::setEmptyState()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00134">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00141">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -707,7 +711,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_h_polytope_8tpp_source.html#l00371">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00363">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::Empty()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00172">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00005">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00630">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00074">hypro::Halfspace&lt; Number &gt;::normal()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00096">hypro::Halfspace&lt; Number &gt;::offset()</a>, <a class="el" href="_point_8tpp_source.html#l00078">hypro::Point&lt; Number &gt;::rawCoordinates()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00387">hypro::Optimizer&lt; Number &gt;::redundantConstraints()</a>, <a class="el" href="_geometric_object_base_8h_source.html#l00060">hypro::GeometricObjectBase::setEmptyState()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00090">hypro::Optimizer&lt; Number &gt;::setMatrix()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00100">hypro::Optimizer&lt; Number &gt;::setVector()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00377">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::size()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00392">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -733,7 +737,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00392">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -765,7 +769,7 @@ template&lt;typename Number, typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_halfspace_8tpp_source.html#l00069">hypro::Halfspace&lt; Number &gt;::dimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00101">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00656">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00101">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00656">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -836,11 +840,11 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Returns, whether the current polytope contains redundant constraints. </p>
 <p>Only reads the stored flag without. </p><dl class="section return"><dt>Returns</dt><dd>True, if there are no redundant constraints, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00184">184</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00191">191</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
 
-<p>References <a class="el" href="_halfspace_8h_source.html#l00361">hypro::convert()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00371">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="config_8h_source.html#l00048">hypro::fReach_DENOMINATOR</a>, <a class="el" href="_geometric_object_base_8h_source.html#l00054">hypro::GeometricObjectBase::getEmptyState()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00630">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00563">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00392">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
+<p>References <a class="el" href="_halfspace_8h_source.html#l00361">hypro::convert()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00371">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="config_8h_source.html#l00048">hypro::fReach_DENOMINATOR</a>, <a class="el" href="_geometric_object_base_8h_source.html#l00054">hypro::GeometricObjectBase::getEmptyState()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00630">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::insert()</a>, <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00382">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::matrix()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00563">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00392">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vector()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -866,7 +870,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_h_polytope_8tpp_source.html#l00371">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00016">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00016">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -896,7 +900,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Manually sets the polytope to behave as if it did not contain redundant constraints. </p>
 <p>This function can avoid an expensive redundancy removal call in case the user already knows that this property holds. </p>
 
-<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00177">177</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00184">184</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -920,7 +924,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="_h_polytope_8tpp_source.html#l00377">377</a> of file <a class="el" href="_h_polytope_8tpp_source.html">HPolytope.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00134">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00141">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::sizeOfHPolytopeT()</a>.</p>
 
 </div>
 </div>
@@ -950,7 +954,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Approximates the storage usage of the current polytope. </p>
 <p>[long description] </p><dl class="section return"><dt>Returns</dt><dd>The size. </dd></dl>
 
-<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00134">134</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00141">141</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
 
 <p>References <a class="el" href="_h_polytope_8tpp_source.html#l00371">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00363">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::Empty()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00377">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::size()</a>.</p>
 
@@ -978,7 +982,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_point_8h_source.html#l00304">hypro::Point&lt; Number &gt;::inftyNorm()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00406">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::vertices()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1008,7 +1012,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Resets the information if the current polytope contains redundant constraints. </p>
 <p>This function may be used to allow a manual call to the redundancy removal method. </p>
 
-<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00171">171</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="_h_polytope_8h_source.html#l00178">178</a> of file <a class="el" href="_h_polytope_8h_source.html">HPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -1032,7 +1036,7 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 
 <p>Definition at line <a class="el" href="_h_polytope_8tpp_source.html#l00392">392</a> of file <a class="el" href="_h_polytope_8tpp_source.html">HPolytope.tpp</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00016">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00016">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::HPolytopeT()</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00401">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::inequalities()</a>, and <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>.</p>
 
 </div>
 </div>
@@ -1059,7 +1063,7 @@ template&lt;typename Number, typename Converter , class Setting &gt; </div>
 
 <p>References <a class="el" href="config_8h_source.html#l00050">hypro::default_double_comparison_ulps</a>, <a class="el" href="_h_polytope_8tpp_source.html#l00371">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::dimension()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00327">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
 
-<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8h_source.html#l00184">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00563">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>.</p>
+<p>Referenced by <a class="el" href="_h_polytope_8tpp_source.html#l00665">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::erase()</a>, <a class="el" href="_h_polytope_8h_source.html#l00191">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::isNonRedundant()</a>, and <a class="el" href="_h_polytope_8tpp_source.html#l00563">hypro::HPolytopeT&lt; Number, Converter, Setting &gt;::supremum()</a>.</p>
 
 </div>
 </div>

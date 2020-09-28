@@ -16,6 +16,7 @@ var classhypro_1_1_h_polytope_t =
     ] ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ac05f6a189a7860ca437652e345968f85", null ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#a1d8152dae05f45413cd573634876a000", null ],
+    [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#aa573e0d532dbd5a9d48ea61fcf297c61", null ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ace2482394f3956e68d43a2b0821e6eb9", null ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#ad8ac77adb1a425aafd8ea1a3fb2566fb", null ],
     [ "HPolytopeT", "classhypro_1_1_h_polytope_t.html#af3f5ff7341c3376027c53d7d08e4e6c0", null ],

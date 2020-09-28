@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"structhypro_1_1_reachability_settings.html#a52e2aa09e72bba3c3c4385c18f7248aa":[8,0,2,198,11],
 "structhypro_1_1_reachability_settings.html#a5820205b3c95b72db229e5f580c32b83":[8,0,2,198,2],
 "structhypro_1_1_reachability_settings.html#a6fec83f69b27ea8473a100b497482a92":[8,0,2,198,14],
 "structhypro_1_1_reachability_settings.html#a75dab1f6c8dcf210c5e8319ece734829":[8,0,2,198,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX16 =
 "structhypro_1_1type_name.html#a47c64536c6a905f2a217f6dd8bcef539":[8,0,2,285,0],
 "structhypro_1_1type_name_3_01double_01_4.html":[8,0,2,286],
 "structhypro_1_1type_name_3_01double_01_4.html#a6d8c1fdf23fba5f819b00864feac81ea":[8,0,2,286,0],
-"structhypro_1_1type_name_3_01mpq__class_01_4.html":[8,0,2,287],
-"structhypro_1_1type_name_3_01mpq__class_01_4.html#add4131b868df14ab4c902c0bdabfdb53":[8,0,2,287,0]
+"structhypro_1_1type_name_3_01mpq__class_01_4.html":[8,0,2,287]
 };
