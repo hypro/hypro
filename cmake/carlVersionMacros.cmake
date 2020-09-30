@@ -8,9 +8,7 @@ message(STATUS "Using member substitute function of CArL")
 	set(CARL_POLY_MEMBER_SUBSTITUTE "True")
 endif()
 
-
-    set(CARL_VARIABLE_VARIANTS "True")
-
-
-
-    set(CARL_LOGGING_VX "True")
+if(${carl_VERSION} VERSION_LESS_EQUAL "19.10" )
+	set(CARL_VARIABLE_VARIANTS "True")
+	set(CARL_LOGGING_PRE_1910 "True")
+endif()
