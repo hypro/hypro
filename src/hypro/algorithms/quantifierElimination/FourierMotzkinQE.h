@@ -1,5 +1,6 @@
 #pragma once
 #include "../../carlTypes.h"
+#include "../../util/adaptions_carl/adaptions_formula.h"
 #include "../../util/logging/Logger.h"
 
 namespace hypro {
