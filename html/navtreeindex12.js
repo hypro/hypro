@@ -1,5 +1,9 @@
 var NAVTREEINDEX12 =
 {
+"classhypro_1_1_vertex_container.html#a850c6a7ca1a81c45bbaf6d68c9b177e7":[8,0,2,294,11],
+"classhypro_1_1_vertex_container.html#aa4cc2840134554a84e53de4ab22959f5":[8,0,2,294,28],
+"classhypro_1_1_vertex_container.html#abb839a11446e749b8713fd337432c28d":[8,0,2,294,34],
+"classhypro_1_1_vertex_container.html#ac45273ec0c9f4cf9c3894ba57ad78b3b":[8,0,2,294,22],
 "classhypro_1_1_vertex_container.html#aca058a9cec7ae9e8acf9516876226940":[8,0,2,294,31],
 "classhypro_1_1_vertex_container.html#ad83942f23fc4cd686da487e2007f4d5a":[8,0,2,294,0],
 "classhypro_1_1_vertex_container.html#ada2d7787a56f0640be1f671bfc009aa7":[8,0,2,294,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX12 =
 "classhypro_1_1generic_type_visitor.html":[8,0,2,100],
 "classhypro_1_1generic_type_visitor.html#a3903e858811f0b6cbee1f453275ced76":[8,0,2,100,0],
 "classhypro_1_1generic_unite_visitor.html":[8,0,2,101],
-"classhypro_1_1generic_unite_visitor.html#a8d326a3b5c61db0d66ea1ba4b175027a":[8,0,2,101,0],
-"classhypro_1_1generic_unite_visitor.html#abbb89f1b4de9c0c66d08821170825049":[8,0,2,101,1],
-"classhypro_1_1generic_vertices_visitor.html":[8,0,2,102],
-"classhypro_1_1generic_vertices_visitor.html#a54d12c17bb80af8c45173e7c20c8b72c":[8,0,2,102,0],
-"classhypro_1_1linear_flow.html":[8,0,2,145]
+"classhypro_1_1generic_unite_visitor.html#a8d326a3b5c61db0d66ea1ba4b175027a":[8,0,2,101,0]
 };
