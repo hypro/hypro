@@ -40,10 +40,10 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 
 template <typename Representation>
 void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr ) const {
-	if ( !transitionPtr->getReset().empty() ) {
-		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );
+	if ( !transitionPtr->getReset().empty() && !transitionPtr->getReset().isIdentity() ) {
+		assert( transitionPtr->getReset().isAffineIdentity() && "Singular automata do not support linear/affine resets." );
 
-		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
+		const IntervalAssignment<Number>& intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
 			std::vector<std::size_t> projectOutDimensions;
 			HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );

@@ -300,6 +300,12 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	t->setTriggerTime( TypeParam( 1 ) );
 	EXPECT_TRUE( t->isTimeTriggered() );
 	EXPECT_EQ( t->getTriggerTime(), TypeParam( 1 ) );
+
+	Reset<TypeParam> empty{};
+	EXPECT_TRUE( empty.isIdentity() );
+	EXPECT_TRUE( empty.isAffineIdentity() );
+	EXPECT_TRUE( empty.isIntervalIdentity() );
+	EXPECT_TRUE( empty.isIntervalIdentity() );
 }
 
 /**
