@@ -35,7 +35,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BoxSupportFunction.h:24: warning: Compound hypro::BoxSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:17: warning: Compound hypro::Ridge is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h:45: warning: Compound hypro::PolytopeSupportFunction is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:131: warning: Compound std::hash< hypro::Reset< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:133: warning: Compound std::hash< hypro::Reset< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/rectangular.h:10: warning: Compound hypro::rectangularFlow is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/DAGNode.h:13: warning: Compound hypro::DAGNode is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/visitors.h:6: warning: Compound hypro::flowHashVisitor is not documented.
@@ -1120,7 +1120,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h:131: warning: Member toFlowstarFormat(const Location< Number > *loc, const std::map< Eigen::Index, std::string > &varNameMap, const std::string &prefix) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h:157: warning: Member toFlowstarFormat(const ReachabilitySettings &settings, const std::map< Eigen::Index, std::string > &varNameMap, const std::string &prefix) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h:181: warning: Member toFlowstarFormat(const HybridAutomaton< Number > &in, const ReachabilitySettings &settings=ReachabilitySettings()) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:122: warning: Member combine(const Reset< Number > &lhs, const Reset< Number > &rhs, const std::vector< std::string > haVar, const std::vector< std::string > lhsVar, const std::vector< std::string > rhsVar) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:124: warning: Member combine(const Reset< Number > &lhs, const Reset< Number > &rhs, const std::vector< std::string > haVar, const std::vector< std::string > lhsVar, const std::vector< std::string > rhsVar) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/StateUtil.h:6: warning: Member applyReset(const State< Number, Representation, Rargs... > &inState, const Reset< Number > &reset) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.tpp:372: warning: Member operator<<(std::ostream &out, const ReachTreeNode< State > &reachTreeNode) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.tpp:381: warning: Member operator<(const ReachTreeNode< S > &lhs, const ReachTreeNode< S > &rhs) (function) of namespace hypro is not documented.
@@ -2494,7 +2494,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:63: warning: Member IntervalAssignment(const std::vector< carl::Interval< Number >> &i) (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:65: warning: Member operator=(const IntervalAssignment< Number > &rhs)=default (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:66: warning: Member operator=(IntervalAssignment< Number > &&rhs)=default (function) of class hypro::IntervalAssignment is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:71: warning: Member size() (function) of class hypro::IntervalAssignment is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:71: warning: Member size() const  (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:73: warning: Member isIdentity() const  (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:69: warning: Member type() (function) of class hypro::IntervalAssignment is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:59: warning: Member mIntervals (variable) of class hypro::IntervalAssignment is not documented.
@@ -3353,14 +3353,16 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:70: warning: Member setVector(const vector_t< Number > &in, std::size_t I=0) (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:71: warning: Member setMatrix(const matrix_t< Number > &in, std::size_t I=0) (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:72: warning: Member setIntervals(const std::vector< carl::Interval< Number >> &intervals, std::size_t I=0) (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:74: warning: Member isIdentity() const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:76: warning: Member hash() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:74: warning: Member isAffineIdentity() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:75: warning: Member isIntervalIdentity() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:76: warning: Member isIdentity() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:78: warning: Member hash() const  (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:37: warning: Member mAffineResets (variable) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:38: warning: Member mIntervalResets (variable) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:39: warning: Member mHash (variable) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:40: warning: Member mDecomposed (variable) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:83: warning: Member operator<<(std::ostream &ostr, const Reset< Number > &a) friend std (friend) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:116: warning: Member operator!=(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:85: warning: Member operator<<(std::ostream &ostr, const Reset< Number > &a) friend std (friend) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:118: warning: Member operator!=(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:38: warning: Member Ridge(const Ridge< Number > &f) (function) of class hypro::Ridge is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:44: warning: Member Ridge(std::shared_ptr< Facet< Number >> facet1, std::shared_ptr< Facet< Number >> facet2) (function) of class hypro::Ridge is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:73: warning: Member vertices() const  (function) of class hypro::Ridge is not documented.
@@ -4480,7 +4482,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:148: warning: Member operator()(const hypro::NoneAssignment &reset) const  (function) of class std::hash< hypro::NoneAssignment > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:692: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/rectangular.h:95: warning: Member operator()(const hypro::rectangularFlow< Number > &f) const  (function) of class std::hash< hypro::rectangularFlow< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:132: warning: Member operator()(const hypro::Reset< Number > &reset) const  (function) of class std::hash< hypro::Reset< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:134: warning: Member operator()(const hypro::Reset< Number > &reset) const  (function) of class std::hash< hypro::Reset< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:94: warning: Member operator()(const hypro::Ridge< Number > &ridge) const  (function) of class std::hash< hypro::Ridge< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Transition.h:308: warning: Member operator()(const hypro::Transition< Number > &trans) (function) of class std::hash< hypro::Transition< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:423: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class std::hash< hypro::vector_t< Number > > is not documented.

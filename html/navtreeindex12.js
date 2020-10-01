@@ -1,5 +1,7 @@
 var NAVTREEINDEX12 =
 {
+"classhypro_1_1_vertex_container.html#a7248ca2f55da91c5b282bb483a4d1d32":[8,0,2,294,14],
+"classhypro_1_1_vertex_container.html#a789d18d6915292b888a69d7506616e27":[8,0,2,294,10],
 "classhypro_1_1_vertex_container.html#a850c6a7ca1a81c45bbaf6d68c9b177e7":[8,0,2,294,11],
 "classhypro_1_1_vertex_container.html#aa4cc2840134554a84e53de4ab22959f5":[8,0,2,294,28],
 "classhypro_1_1_vertex_container.html#abb839a11446e749b8713fd337432c28d":[8,0,2,294,34],
@@ -247,7 +249,5 @@ var NAVTREEINDEX12 =
 "classhypro_1_1generic_to_string_visitor.html":[8,0,2,99],
 "classhypro_1_1generic_to_string_visitor.html#a8bc6961b3ed06dfd7c9bed99e4f9cce7":[8,0,2,99,0],
 "classhypro_1_1generic_type_visitor.html":[8,0,2,100],
-"classhypro_1_1generic_type_visitor.html#a3903e858811f0b6cbee1f453275ced76":[8,0,2,100,0],
-"classhypro_1_1generic_unite_visitor.html":[8,0,2,101],
-"classhypro_1_1generic_unite_visitor.html#a8d326a3b5c61db0d66ea1ba4b175027a":[8,0,2,101,0]
+"classhypro_1_1generic_type_visitor.html#a3903e858811f0b6cbee1f453275ced76":[8,0,2,100,0]
 };

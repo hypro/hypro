@@ -1,5 +1,7 @@
 var NAVTREEINDEX15 =
 {
+"representations_2conversion_2convenience_operators_8h_source.html":[9,0,1,0,2,2,0],
+"representations_2types_8h_source.html":[9,0,1,0,2,17],
 "sampling_8h.html":[9,0,1,0,3,6,0],
 "sampling_8h.html#a3e37feb43640833bd84cbb3b5f3e0143":[9,0,1,0,3,6,0,1],
 "sampling_8h.html#a3e37feb43640833bd84cbb3b5f3e0143a214f76594d89e177a7749e5c57eebc75":[9,0,1,0,3,6,0,1,1],
@@ -173,11 +175,11 @@ var NAVTREEINDEX15 =
 "structhypro_1_1_interval_assignment.html#a4401471a354139f8f2483f4a99093dd8":[8,0,2,129,2],
 "structhypro_1_1_interval_assignment.html#a6f634ed8cef13a9f8dbbba9d5d590936":[8,0,2,129,3],
 "structhypro_1_1_interval_assignment.html#a76f3bf047f25d008a0c30e0eead04653":[8,0,2,129,4],
+"structhypro_1_1_interval_assignment.html#a9d3093a91b9302f5db154fe694445107":[8,0,2,129,7],
 "structhypro_1_1_interval_assignment.html#ab16ab3aca5b62474f67d27f9ac39ce6a":[8,0,2,129,10],
 "structhypro_1_1_interval_assignment.html#abc49d76e3a439b7d6b5b548ec3d6d43b":[8,0,2,129,0],
 "structhypro_1_1_interval_assignment.html#adaa3399e17717800cc1d56510ea86259":[8,0,2,129,6],
 "structhypro_1_1_interval_assignment.html#addf749f9e67e3fb28b13876006858f25":[8,0,2,129,1],
-"structhypro_1_1_interval_assignment.html#af0ad803294d2e26c022bd5f8764bd869":[8,0,2,129,7],
 "structhypro_1_1_l_t_i_worker_1_1_aggregated_gen.html":[8,0,2,164,0],
 "structhypro_1_1_l_t_i_worker_1_1_aggregated_gen.html#a2587fb1338f8c36964400f3fca6df872":[8,0,2,164,0,6],
 "structhypro_1_1_l_t_i_worker_1_1_aggregated_gen.html#a4c241cd63f3c10ab607b97c0975535f6":[8,0,2,164,0,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX15 =
 "structhypro_1_1_polytope_support_function_setting.html":[8,0,2,189],
 "structhypro_1_1_project_data.html":[8,0,2,192],
 "structhypro_1_1_project_data.html#a7db29b824049ff21bbeabe83196ac928":[8,0,2,192,1],
-"structhypro_1_1_project_data.html#ae59ed9b9e929c31872c923b941023c0c":[8,0,2,192,0],
-"structhypro_1_1_r_g_n_data.html":[8,0,2,219],
-"structhypro_1_1_r_g_n_data.html#a3fe043efd3bfa2b9949726c8a31a0271":[8,0,2,219,1]
+"structhypro_1_1_project_data.html#ae59ed9b9e929c31872c923b941023c0c":[8,0,2,192,0]
 };

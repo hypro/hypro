@@ -1,5 +1,7 @@
 var NAVTREEINDEX17 =
 {
+"structhypro_1_1trafo_content.html#ac1c00486451cee326a407c25d4b0162f":[8,0,2,272,1],
+"structhypro_1_1trafo_content.html#acd0d808592c93c00b81c7a2b5a720213":[8,0,2,272,4],
 "structhypro_1_1type_name.html":[8,0,2,285],
 "structhypro_1_1type_name.html#a47c64536c6a905f2a217f6dd8bcef539":[8,0,2,285,0],
 "structhypro_1_1type_name_3_01double_01_4.html":[8,0,2,286],
