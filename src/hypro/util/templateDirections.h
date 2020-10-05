@@ -8,7 +8,7 @@
  */
 
 #pragma once
-#include "Permutator.h"
+#include "sequenceGeneration/SequenceGenerator.h"
 
 namespace hypro {
 
@@ -107,7 +107,7 @@ static std::vector<vector_t<Number>> computeTemplate( std::size_t dimension, std
 		templateVector2d( 1 ) = 0;
 		directions2d.push_back( templateVector2d );
 
-		matrix_t<Number> m( 2, 2 );  //init matrix
+		matrix_t<Number> m( 2, 2 );	 //init matrix
 		m( 0, 0 ) = carl::rationalize<Number>( cos( degree ) );
 		m( 0, 1 ) = carl::rationalize<Number>( ( -1 ) * sin( degree ) );
 		m( 1, 0 ) = carl::rationalize<Number>( sin( degree ) );
@@ -124,7 +124,7 @@ static std::vector<vector_t<Number>> computeTemplate( std::size_t dimension, std
 		while ( !permutator.end() ) {
 			permutation = permutator();
 			for ( vector_t<Number> vectorOfdirections2d : directions2d ) {
-				vector_t<Number> templateVector = vector_t<Number>::Zero( dimension );  // init templateVector
+				vector_t<Number> templateVector = vector_t<Number>::Zero( dimension );	// init templateVector
 
 				templateVector( permutation.at( 0 ) ) = vectorOfdirections2d( 0 );
 				templateVector( permutation.at( 1 ) ) = vectorOfdirections2d( 1 );
@@ -190,7 +190,7 @@ static std::vector<vector_t<Number>> computeTemplate( std::vector<std::size_t> d
 		templateVector2d( 1 ) = 0;
 		directions2d.push_back( templateVector2d );
 
-		matrix_t<Number> m( 2, 2 );  //init matrix
+		matrix_t<Number> m( 2, 2 );	 //init matrix
 		m( 0, 0 ) = carl::rationalize<Number>( cos( degree ) );
 		m( 0, 1 ) = carl::rationalize<Number>( ( -1 ) * sin( degree ) );
 		m( 1, 0 ) = carl::rationalize<Number>( sin( degree ) );
