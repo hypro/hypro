@@ -12,7 +12,7 @@ hypro::matrix_t<Number> randomFlow( const std::size_t& dim ) {
     std::uniform_real_distribution<double> dist = std::uniform_real_distribution<double>( -100, 100 );
 
     Matrix flow = Matrix::Zero( dim + 1, dim + 1 );
-    for ( std::size_t row = 0; row <= dim; ++row ) {
+    for ( std::size_t row = 0; row < dim; ++row ) {
         flow( row, dim ) = Number( dist( generator ) );
     }
     return flow;
@@ -157,7 +157,7 @@ Results<std::size_t> singularTimeElapse( const Settings& settings ) {
         badStateMat( 1, 0 ) = -1;
         Vector badStateVec = Vector::Zero( 2 );
         badStateVec( 0 ) = -1;
-        badStateVec( 1 ) = 1;
+        badStateVec( 1 ) = -1;
 
         ha.addGlobalBadState( { badStateMat, badStateVec } );
         auto initialNodes = hypro::makeRoots<Representation, Number>( ha );
