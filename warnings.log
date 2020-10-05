@@ -2181,7 +2181,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:45: warning: Member operator=(GeometricObjectBase &&in)=default (function) of class hypro::GeometricObjectBase is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:47: warning: Member GeometricObjectBase(SETSTATE state) (function) of class hypro::GeometricObjectBase is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/GeometricObjectBase.h:38: warning: Member mEmptyState (variable) of class hypro::GeometricObjectBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk_context.h:217: warning: Member clear() (function) of class hypro::glpk_context is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk_context.h:216: warning: Member clear() (function) of class hypro::glpk_context is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:74: warning: Member gridMap (typedef) of class hypro::Grid is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:75: warning: Member gridPoints (typedef) of class hypro::Grid is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.h:76: warning: Member gridMapIterator (typedef) of class hypro::Grid is not documented.
