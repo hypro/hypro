@@ -8,7 +8,6 @@ namespace hypro {
 
 static void cleanupGlpk() {
 	glp_free_env();
-	std::cout << "Cleanup glpk env." << std::endl;
 }
 
 /**
