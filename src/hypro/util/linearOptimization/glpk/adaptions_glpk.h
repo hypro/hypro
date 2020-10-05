@@ -10,6 +10,7 @@
 #include <glpk.h>
 
 namespace hypro {
+
 inline void printProblem( glp_prob* glpkProblem );
 
 template <typename Number>

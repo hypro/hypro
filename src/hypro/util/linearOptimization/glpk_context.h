@@ -5,6 +5,12 @@
 #include <glpk.h>
 
 namespace hypro {
+
+static void cleanupGlpk() {
+	glp_free_env();
+	std::cout << "Cleanup glpk env." << std::endl;
+}
+
 /**
 	 * @brief Context for linear optimization using glpk as a backend
 	 *
@@ -22,6 +28,7 @@ struct glpk_context {
 	/// default constructor
 	glpk_context() {
 		TRACE( "hypro.optimizer", "Create glpk_context " << this );
+		std::atexit( cleanupGlpk );
 	}
 
 	/// copy constructor
@@ -97,6 +104,9 @@ struct glpk_context {
 	/// initialization of the lp-problem instance
 	void createLPInstance() {
 		if ( !mInitialized ) {
+			if ( lp != nullptr ) {
+				glp_delete_prob( lp );
+			}
 			lp = glp_create_prob();
 			glp_init_smcp( &parm );
 			parm.msg_lev = GLP_MSG_OFF;
@@ -203,10 +213,16 @@ struct glpk_context {
 			mConstraintsSet = true;
 		}
 	}
+	// clearing function
+	void clear() {
+		deleteLPInstance();
+		deleteArrays();
+	}
+
 	/// destructor
 	~glpk_context() {
 		TRACE( "hypro.optimizer", "Arrays created: " << arraysCreated << " instance @" << this );
-		// deleteLPInstance();
+		deleteLPInstance();
 		// assume that all fields are set at once so just check one.
 		deleteArrays();
 	}

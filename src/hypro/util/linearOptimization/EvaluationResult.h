@@ -10,9 +10,9 @@ namespace hypro {
  */
 template <typename Number>
 struct EvaluationResult {
-	Number supportValue = Number( 0 );							  //*< The value returned by the evaluation.
-	vector_t<Number> optimumValue = vector_t<Number>::Zero( 0 );  //*< The point leading to the evaluation value (extremum in direction).
-	SOLUTION errorCode = SOLUTION::INFEAS;						  //*< Potential error code indicating success or failure of the evaluation.
+	vector_t<Number> optimumValue;			//*< The point leading to the evaluation value (extremum in direction).
+	Number supportValue = Number( 0 );		//*< The value returned by the evaluation.
+	SOLUTION errorCode = SOLUTION::INFEAS;	//*< Potential error code indicating success or failure of the evaluation.
 
 	EvaluationResult() {}
 
@@ -28,11 +28,12 @@ struct EvaluationResult {
 		, errorCode( err ) {}
 
 	EvaluationResult( Number sValue, const vector_t<Number> val, SOLUTION err )
-		: supportValue( sValue )
-		, optimumValue( val )
+		: optimumValue( val )
+		, supportValue( sValue )
 		, errorCode( err ) {}
 
-	~EvaluationResult() {}
+	~EvaluationResult() {
+	}
 
 	friend std::ostream& operator<<( std::ostream& _out, const EvaluationResult<Number>& _in ) {
 		_out << _in.supportValue << "(" << _in.errorCode << ") : \n"

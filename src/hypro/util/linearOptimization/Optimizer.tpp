@@ -9,31 +9,29 @@ void Optimizer<Number>::cleanContexts() {
 
 	std::lock_guard<std::mutex> lock( mContextLock );
 #ifdef HYPRO_USE_GLPK
-	/*
-	auto ctxtItGlpk = mGlpkContexts.find( std::this_thread::get_id() );
-	if ( ctxtItGlpk != mGlpkContexts.end() ) {
-		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContexts.size() );
-		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-		ctxtItGlpk->second.deleteLPInstance();
-		TRACE( "hypro.optimizer", "Deleted lp instance." );
-		mGlpkContexts.erase( ctxtItGlpk );
-		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
-
-	}
-	*/
+	//auto ctxtItGlpk = mGlpkContexts.find( std::this_thread::get_id() );
+	//if ( ctxtItGlpk != mGlpkContexts.end() ) {
+	//	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << //mGlpkContexts.size() );
+	//	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
+	//	//ctxtItGlpk->second.deleteLPInstance();
+	//	TRACE( "hypro.optimizer", "Deleted lp instance." );
+	//	mGlpkContexts.erase( ctxtItGlpk );
+	//	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << //mGlpkContexts.size() );
+	//}
+	mGlpkContext.clear();
 #endif
 #ifdef HYPRO_USE_CLP
-auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
-if ( ctxtItClp != mClpContexts.end() ) {
-	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
-	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-	ctxtItClp->second.deleteLPInstance();
-	TRACE( "hypro.optimizer", "Deleted lp instance." );
-	mClpContexts.erase( ctxtItClp );
-	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
-}
+	auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
+	if ( ctxtItClp != mClpContexts.end() ) {
+		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
+		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
+		ctxtItClp->second.deleteLPInstance();
+		TRACE( "hypro.optimizer", "Deleted lp instance." );
+		mClpContexts.erase( ctxtItClp );
+		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
+	}
 #endif
-assert( isSane() );
+	assert( isSane() );
 }  // namespace hypro
 
 template <typename Number>
@@ -156,9 +154,10 @@ void Optimizer<Number>::clear() {
 	//#endif
 	assert( false );
 #ifdef HYPRO_USE_GLPK
-	while ( !mGlpkContexts.empty() ) {
-		mGlpkContexts.erase( mGlpkContexts.begin() );
-	}
+	mGlpkContext.clear();
+	//while ( !mGlpkContexts.empty() ) {
+	//	mGlpkContexts.erase( mGlpkContexts.begin() );
+	//}
 #endif
 #ifdef HYPRO_USE_CLP
 	while ( !mClpContexts.empty() ) {
@@ -191,7 +190,8 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 
 	// call to first solver
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-	res = glpkOptimizeLinear( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
+	//res = glpkOptimizeLinear( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
+	res = glpkOptimizeLinear( mGlpkContext, _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpOptimizeLinear( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX
@@ -271,7 +271,8 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 		};
 
 #if HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
-		res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+		//res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+		res = glpkOptimizeLinearPostSolve( mGlpkContext, _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 		res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
@@ -311,9 +312,12 @@ bool Optimizer<Number>::checkConsistency() const {
 
 	if ( !mConsistencyChecked ) {
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-		glp_simplex( mGlpkContexts[std::this_thread::get_id()].lp, &mGlpkContexts[std::this_thread::get_id()].parm );
-		glp_exact( mGlpkContexts[std::this_thread::get_id()].lp, &mGlpkContexts[std::this_thread::get_id()].parm );
-		mLastConsistencyAnswer = glp_get_status( mGlpkContexts[std::this_thread::get_id()].lp ) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
+		//glp_simplex( mGlpkContexts[std::this_thread::get_id()].lp, &mGlpkContexts[std::this_thread::get_id()].parm );
+		//glp_exact( mGlpkContexts[std::this_thread::get_id()].lp, &mGlpkContexts[std::this_thread::get_id()].parm );
+		//mLastConsistencyAnswer = glp_get_status( mGlpkContexts[std::this_thread::get_id()].lp ) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
+		glp_simplex( mGlpkContext.lp, &mGlpkContext.parm );
+		glp_exact( mGlpkContext.lp, &mGlpkContext.parm );
+		mLastConsistencyAnswer = glp_get_status( mGlpkContext.lp ) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
 		mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 		mLastConsistencyAnswer = clpCheckConsistency( mClpContexts[std::this_thread::get_id()] );
@@ -340,7 +344,8 @@ bool Optimizer<Number>::checkPoint( const Point<Number>& _point ) const {
 #elif defined( HYPRO_USE_SOPLEX )
 	return soplexCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-	return glpkCheckPoint( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
+	//return glpkCheckPoint( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
+	return glpkCheckPoint( mGlpkContext, mConstraintMatrix, mConstraintVector, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	return clpCheckPoint( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
 #endif
@@ -368,7 +373,8 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false );
+	//res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false );
+	res = glpkGetInternalPoint<Number>( mGlpkContext, mConstraintMatrix.cols(), false );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
@@ -400,7 +406,8 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 #elif defined( HYPRO_USE_SOPLEX )
 	res = soplexRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	//res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	res = glpkRedundantConstraints( mGlpkContext, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
 	res = clpRedundantConstraints( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
@@ -435,15 +442,15 @@ void Optimizer<Number>::initialize() const {
 	//assert( mGlpkContext[std::this_thread::get_id()].mInitialized == true );
 
 #if defined( HYPRO_USE_GLPK )
-	if ( mGlpkContexts.find( std::this_thread::get_id() ) == mGlpkContexts.end() ) {
-		std::lock_guard<std::mutex> lock( mContextLock );
-		TRACE( "hypro.optimizer", "Actual creation." );
+	//if ( mGlpkContexts.find( std::this_thread::get_id() ) == mGlpkContexts.end() ) {
+	//	std::lock_guard<std::mutex> lock( mContextLock );
+	//	TRACE( "hypro.optimizer", "Actual creation." );
 #ifdef HYPRO_STATISTICS
-		contextConstructions++;
-		//std::cout << "Constructions: " << contextConstructions << ", deletions: " << contextDeletions << std::endl;
+	contextConstructions++;
+	//std::cout << "Constructions: " << contextConstructions << ", deletions: " << contextDeletions << std::endl;
 #endif
-		mGlpkContexts.emplace( std::this_thread::get_id(), glpk_context() );
-	}
+	//	mGlpkContexts.emplace( std::this_thread::get_id(), glpk_context() );
+	//}
 #endif
 #if defined( HYPRO_USE_CLP )
 	if ( mClpContexts.find( std::this_thread::get_id() ) == mClpContexts.end() ) {
@@ -463,7 +470,8 @@ void Optimizer<Number>::updateConstraints() const {
 	initialize();
 
 #if defined( HYPRO_USE_GLPK )
-	mGlpkContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	//mGlpkContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	mGlpkContext.updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #endif
 #if defined( HYPRO_USE_CLP )
 	mClpContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
@@ -506,9 +514,10 @@ void Optimizer<Number>::updateConstraints() const {
 template <typename Number>
 void Optimizer<Number>::clearCache() const {
 #ifdef HYPRO_USE_GLPK
-	for ( auto& idContextPair : mGlpkContexts ) {
-		idContextPair.second.mConstraintsSet = false;
-	}
+	//for ( auto& idContextPair : mGlpkContexts ) {
+	//	idContextPair.second.mConstraintsSet = false;
+	//}
+	mGlpkContext.mConstraintsSet = false;
 #endif
 #ifdef HYPRO_USE_CLP
 	for ( auto& idContextPair : mClpContexts ) {
