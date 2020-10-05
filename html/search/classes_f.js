@@ -3,7 +3,7 @@ var searchData=
   ['parameters',['Parameters',['../structhypro_1_1_parameters.html',1,'hypro']]],
   ['path',['Path',['../classhypro_1_1_path.html',1,'hypro']]],
   ['path_3c_20number_20_3e',['Path&lt; Number &gt;',['../classhypro_1_1_path.html',1,'hypro']]],
-  ['permutator',['Permutator',['../classhypro_1_1_permutator.html',1,'hypro']]],
+  ['permutationsequencegenerator',['PermutationSequenceGenerator',['../classhypro_1_1_permutation_sequence_generator.html',1,'hypro']]],
   ['plotdata',['PlotData',['../structhypro_1_1_plot_data.html',1,'hypro']]],
   ['plotter',['Plotter',['../classhypro_1_1_plotter.html',1,'hypro']]],
   ['plottingsettings',['PlottingSettings',['../namespacehypro.html#structhypro_1_1_plotting_settings',1,'hypro']]],

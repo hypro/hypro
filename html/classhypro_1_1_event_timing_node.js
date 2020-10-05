@@ -6,7 +6,7 @@ var classhypro_1_1_event_timing_node =
     [ "EventTimingNode", "classhypro_1_1_event_timing_node.html#a89b370a9771bacd012c88d5846813a61", null ],
     [ "EventTimingNode", "classhypro_1_1_event_timing_node.html#aaeaebcc808e7c532009738505d971500", null ],
     [ "extendEntryTimestamp", "classhypro_1_1_event_timing_node.html#a4bc62f891a1bddd5735fb44141edc538", null ],
-    [ "getDotRepresentation", "classhypro_1_1_event_timing_node.html#a3eeee9513ec4a7b00d3a5681eddd1264", null ],
+    [ "getDotRepresentation", "classhypro_1_1_event_timing_node.html#a102ec4bcfed6e50c0d2318d81f9adae6", null ],
     [ "getEntryTimestamp", "classhypro_1_1_event_timing_node.html#a5b4d1daaf7a82f9380a378cc67ea8341", null ],
     [ "getEntryTransition", "classhypro_1_1_event_timing_node.html#a1f61896b65c8792c6c0148c1c476e196", null ],
     [ "getLevel", "classhypro_1_1_event_timing_node.html#a7e1fd796f9ec8bea6e6bc37d3272beec", null ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"classhypro_1_1_root_grow_node.html#ac3f1dd792a64c26195e0e34413037be3":[8,0,2,221,30],
 "classhypro_1_1_root_grow_node.html#ac7e3df9d9d5e5099997f4c8e860d6a9d":[8,0,2,221,28],
 "classhypro_1_1_root_grow_node.html#ac9bda0a2336ca8479a8d2b74def9ad0a":[8,0,2,221,29],
 "classhypro_1_1_root_grow_node.html#acf8810280ac279d6e2692a8349ec8fdb":[8,0,2,221,21],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "classhypro_1_1_support_function_t.html#a023a67522470952aedfd7a05c3d7a58b":[6,1,8,6],
 "classhypro_1_1_support_function_t.html#a04bec4233f5e03bddb9c0cfe70fde604":[6,1,8,37],
 "classhypro_1_1_support_function_t.html#a08d2ea47d6929b9b3ede9b4a400f97b6":[6,1,8,5],
-"classhypro_1_1_support_function_t.html#a0c2230eedda6aeee3d6b606cb3182622":[6,1,8,53],
-"classhypro_1_1_support_function_t.html#a0cc55f61372cfbda0c1186d976a57aef":[6,1,8,36]
+"classhypro_1_1_support_function_t.html#a0c2230eedda6aeee3d6b606cb3182622":[6,1,8,53]
 };

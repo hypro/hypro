@@ -1,5 +1,11 @@
 var NAVTREEINDEX17 =
 {
+"structhypro_1_1trafo_content.html":[8,0,2,272],
+"structhypro_1_1trafo_content.html#a52345918b06b2be7a130f1ffe0fc88e6":[8,0,2,272,0],
+"structhypro_1_1trafo_content.html#a6bd08ad999f18d446b1e9b14882416fc":[8,0,2,272,3],
+"structhypro_1_1trafo_content.html#a8bfdfe3a9e4fcce698a08f7c7602f32f":[8,0,2,272,6],
+"structhypro_1_1trafo_content.html#a9488650341da5f7093a0f075067c5b6a":[8,0,2,272,5],
+"structhypro_1_1trafo_content.html#aadfca57d1f3e44a3b33922073b574cce":[8,0,2,272,2],
 "structhypro_1_1trafo_content.html#ac1c00486451cee326a407c25d4b0162f":[8,0,2,272,1],
 "structhypro_1_1trafo_content.html#acd0d808592c93c00b81c7a2b5a720213":[8,0,2,272,4],
 "structhypro_1_1type_name.html":[8,0,2,285],
@@ -82,7 +88,7 @@ var NAVTREEINDEX17 =
 "unreachable_8h_source.html":[9,0,1,0,3,20],
 "usage.html":[3,1],
 "utilFunc.html":[4],
-"util_2convenience_operators_8h_source.html":[9,0,1,0,3,11],
+"util_2convenience_operators_8h_source.html":[9,0,1,0,3,12],
 "util_2linear_optimization_2_strategy_8h_source.html":[9,0,1,0,3,2,10],
 "util_2typetraits_8h_source.html":[9,0,1,0,3,19],
 "util_8cpp_source.html":[9,0,1,0,0,4,2,4,8],

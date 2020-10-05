@@ -3,13 +3,15 @@ var namespacehypro =
     [ "detail", null, [
       [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
       [ "gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01_is_8_8_8_01_4.html", null ],
+      [ "NoReturningWithoutOrder", "structhypro_1_1detail_1_1_no_returning_without_order.html", null ],
       [ "nth_element_impl", "structhypro_1_1detail_1_1nth__element__impl.html", "structhypro_1_1detail_1_1nth__element__impl" ],
       [ "nth_element_impl< 0, T, Ts... >", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4.html", "structhypro_1_1detail_1_1nth__element__impl_3_010_00_01_t_00_01_ts_8_8_8_01_4" ],
       [ "ResetVisitor", "structhypro_1_1detail_1_1_reset_visitor.html", "structhypro_1_1detail_1_1_reset_visitor" ],
       [ "seq", "structhypro_1_1detail_1_1seq.html", null ],
       [ "UnpackRepresentation", "structhypro_1_1detail_1_1_unpack_representation.html", null ],
       [ "UnpackRepresentation< ReachTreeNode< R > & >", "structhypro_1_1detail_1_1_unpack_representation_3_01_reach_tree_node_3_01_r_01_4_01_6_01_4.html", "structhypro_1_1detail_1_1_unpack_representation_3_01_reach_tree_node_3_01_r_01_4_01_6_01_4" ],
-      [ "UnpackRepresentation< std::vector< ReachTreeNode< R > > & >", "structhypro_1_1detail_1_1_unpack_representation_3_01std_1_1vector_3_01_reach_tree_node_3_01_r_01_4_01_4_01_6_01_4.html", "structhypro_1_1detail_1_1_unpack_representation_3_01std_1_1vector_3_01_reach_tree_node_3_01_r_01_4_01_4_01_6_01_4" ]
+      [ "UnpackRepresentation< std::vector< ReachTreeNode< R > > & >", "structhypro_1_1detail_1_1_unpack_representation_3_01std_1_1vector_3_01_reach_tree_node_3_01_r_01_4_01_4_01_6_01_4.html", "structhypro_1_1detail_1_1_unpack_representation_3_01std_1_1vector_3_01_reach_tree_node_3_01_r_01_4_01_4_01_6_01_4" ],
+      [ "WithReturningNoOrder", "structhypro_1_1detail_1_1_with_returning_no_order.html", null ]
     ] ],
     [ "ExactQuickhull", null, [
       [ "Facet", "structhypro_1_1_exact_quickhull_1_1_facet.html", "structhypro_1_1_exact_quickhull_1_1_facet" ],
@@ -212,7 +214,7 @@ var namespacehypro =
     [ "OrthoplexDefault", "namespacehypro.html#structhypro_1_1_orthoplex_default", null ],
     [ "Parameters", "structhypro_1_1_parameters.html", "structhypro_1_1_parameters" ],
     [ "Path", "classhypro_1_1_path.html", "classhypro_1_1_path" ],
-    [ "Permutator", "classhypro_1_1_permutator.html", "classhypro_1_1_permutator" ],
+    [ "PermutationSequenceGenerator", "classhypro_1_1_permutation_sequence_generator.html", "classhypro_1_1_permutation_sequence_generator" ],
     [ "PlotData", "structhypro_1_1_plot_data.html", "structhypro_1_1_plot_data" ],
     [ "Plotter", "classhypro_1_1_plotter.html", "classhypro_1_1_plotter" ],
     [ "PlottingSettings", "namespacehypro.html#structhypro_1_1_plotting_settings", "namespacehypro_structhypro_1_1_plotting_settings_dup" ],

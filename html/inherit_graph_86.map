@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$namespacehypro.html#structhypro_1_1flatten_representations__i" title="Takes a Number and Converter type and a TypeList of RepresentationCombinations and flattens them into..." alt="" coords="5,5,272,61"/>
+<area shape="rect" id="node1" title="STL class. " alt="" coords="5,42,117,69"/>
+<area shape="rect" id="node2" href="$classhypro_1_1_finish_with_discrete_processing_exception.html" title="hypro::FinishWithDiscrete\lProcessingException" alt="" coords="186,5,367,47"/>
+<area shape="rect" id="node3" href="$classhypro_1_1_hard_terminate_exception.html" title="hypro::HardTerminateException" alt="" coords="165,71,388,98"/>
 </map>

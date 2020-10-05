@@ -536,8 +536,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_path.html">Path</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to define a path in some hybrid automaton.  <a href="classhypro_1_1_path.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_permutator.html">Permutator</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for a permutator.  <a href="classhypro_1_1_permutator.html#details">More...</a><br /></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_permutation_sequence_generator.html">PermutationSequenceGenerator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class which implements a generator for permutations based on different ways of chosing.  The class upon calling the operator() the class generates the next tuple of size numberChoices, the elements of the tuple are taken from the domain [0, domainUpperBound-1].  <a href="classhypro_1_1_permutation_sequence_generator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1_plot_data.html">PlotData</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class that contains a raw segment for plotting. Note that a segment can be composed of several sub-segments, in case subspace decomposition is used.  <a href="structhypro_1_1_plot_data.html#details">More...</a><br /></td></tr>
@@ -1000,6 +1000,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nam
 <tr class="memitem:a52a4896e811a0710bcfc5a410a780034"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a52a4896e811a0710bcfc5a410a780034"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a> = Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt;</td></tr>
 <tr class="separator:a52a4896e811a0710bcfc5a410a780034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12173fc4ccf085e5f1f8fdfeae29d37c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12173fc4ccf085e5f1f8fdfeae29d37c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Permutator</b> = <a class="el" href="classhypro_1_1_permutation_sequence_generator.html">PermutationSequenceGenerator</a>&lt; <a class="el" href="structhypro_1_1detail_1_1_no_returning_without_order.html">detail::NoReturningWithoutOrder</a> &gt;</td></tr>
+<tr class="separator:a12173fc4ccf085e5f1f8fdfeae29d37c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a787e14e08ff8a977a21f1a83739cf75d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a787e14e08ff8a977a21f1a83739cf75d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Combinator</b> = <a class="el" href="classhypro_1_1_permutation_sequence_generator.html">PermutationSequenceGenerator</a>&lt; <a class="el" href="structhypro_1_1detail_1_1_with_returning_no_order.html">detail::WithReturningNoOrder</a> &gt;</td></tr>
+<tr class="separator:a787e14e08ff8a977a21f1a83739cf75d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc3efcdce4ee151a51d809844f44a18d"><td class="memTemplParams" colspan="2"><a class="anchor" id="acc3efcdce4ee151a51d809844f44a18d"></a>
 template&lt;std::size_t I, typename... Ts&gt; </td></tr>
 <tr class="memitem:acc3efcdce4ee151a51d809844f44a18d"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#acc3efcdce4ee151a51d809844f44a18d">nth_element</a> = typename <a class="el" href="structhypro_1_1detail_1_1nth__element__impl.html">detail::nth_element_impl</a>&lt; I, Ts... &gt;::type</td></tr>
@@ -2387,9 +2393,6 @@ template&lt;typename Number &gt; </td></tr>
 <p>File holding utility functions to keep the main files clean.</p>
 <p>This file contains transformation functions for matrices and vectors.</p>
 <p>Holds convenience functions when working with SMTRat.</p>
-<dl class="section author"><dt>Author</dt><dd>Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'ch'+'upp'+'@c'+'s.r'+'wt'+'h-a'+'ac'+'hen'+'.d'+'e'; return false;">stefa<span style="display: none;">.nosp@m.</span>n.sc<span style="display: none;">.nosp@m.</span>hupp@<span style="display: none;">.nosp@m.</span>cs.r<span style="display: none;">.nosp@m.</span>wth-a<span style="display: none;">.nosp@m.</span>ache<span style="display: none;">.nosp@m.</span>n.de</a> </dd></dl>
-<dl class="section since"><dt>Since</dt><dd>2016-03-22 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>2016-03-22</dd></dl>
 <p>With reference to <a href="https://stackoverflow.com/questions/16387354/template-tuple-calling-a-function-on-each-element">https://stackoverflow.com/questions/16387354/template-tuple-calling-a-function-on-each-element</a> </p>
 </div><hr/><h2 class="groupheader">Class Documentation</h2>
 <a name="structhypro_1_1_analysis_parameters" id="structhypro_1_1_analysis_parameters"></a>
@@ -3587,7 +3590,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>typedef wrapping an Eigen::Matrix type. </p>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00041">41</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00042">42</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -3669,7 +3672,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>typedef wrapping an Eigen::Matrix type with only one column. </p>
 
-<p>Definition at line <a class="el" href="types_8h_source.html#l00035">35</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
+<p>Definition at line <a class="el" href="types_8h_source.html#l00036">36</a> of file <a class="el" href="types_8h_source.html">types.h</a>.</p>
 
 </div>
 </div>
@@ -4208,7 +4211,7 @@ template&lt;typename Number &gt; </div>
 
 <p>References <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>.</p>
 
-<p>Referenced by <a class="el" href="_optimizer_8tpp_source.html#l00172">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00466">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00282">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::multiEvaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00489">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="_zonotope_8tpp_source.html#l00235">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::removeEmptyGenerators()</a>.</p>
+<p>Referenced by <a class="el" href="_optimizer_8tpp_source.html#l00171">hypro::Optimizer&lt; Number &gt;::evaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00466">hypro::Halfspace&lt; Number &gt;::evaluate()</a>, <a class="el" href="adaptions__eigen_8h_source.html#l00304">linearDependent()</a>, <a class="el" href="_polytope_support_function_8tpp_source.html#l00282">hypro::PolytopeSupportFunction&lt; Number, Setting &gt;::multiEvaluate()</a>, <a class="el" href="_halfspace_8tpp_source.html#l00489">hypro::Halfspace&lt; Number &gt;::multiEvaluate()</a>, and <a class="el" href="_zonotope_8tpp_source.html#l00235">hypro::ZonotopeT&lt; Number, Converter, Setting &gt;::removeEmptyGenerators()</a>.</p>
 
 </div>
 </div>
@@ -5018,7 +5021,7 @@ template&lt;typename Number &gt; </div>
 
 <p>References <a class="el" href="_point_8tpp_source.html#l00104">hypro::Point&lt; Number &gt;::swap()</a>.</p>
 
-<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00083">hypro::Optimizer&lt; Number &gt;::operator=()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00046">hypro::Optimizer&lt; Number &gt;::vector()</a>, and <a class="el" href="_optimizer_8h_source.html#l00145">hypro::Optimizer&lt; Number &gt;::~Optimizer()</a>.</p>
+<p>Referenced by <a class="el" href="_vertex_8h_source.html#l00114">hypro::Vertex&lt; std::size_t &gt;::invertColor()</a>, <a class="el" href="_support_function_content_8tpp_source.html#l00866">hypro::SupportFunctionContent&lt; Number, Setting &gt;::multiplicationsPerEvaluation()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00081">hypro::Optimizer&lt; Number &gt;::operator=()</a>, <a class="el" href="_optimizer_8tpp_source.html#l00044">hypro::Optimizer&lt; Number &gt;::vector()</a>, and <a class="el" href="_optimizer_8h_source.html#l00146">hypro::Optimizer&lt; Number &gt;::~Optimizer()</a>.</p>
 
 </div>
 </div>

@@ -13,7 +13,7 @@ var classhypro_1_1_facet =
     [ "~Facet", "classhypro_1_1_facet.html#ab6db963a37fc11ae7134e703e6b24942", null ],
     [ "addNeighbor", "classhypro_1_1_facet.html#abaecf7d77f4252b5b9bcacc183031db1", null ],
     [ "addPoint", "classhypro_1_1_facet.html#a37b13ca839dd0fda24629ecaba277338", null ],
-    [ "addPointToOutsideSet", "classhypro_1_1_facet.html#a8c0821586aac970588f81c1f0b71f003", null ],
+    [ "addPointToOutsideSet", "classhypro_1_1_facet.html#a11887edc717e41523e1049078950ed8a", null ],
     [ "begin", "classhypro_1_1_facet.html#ac26a9439913d4d868a3cbf167e1c3430", null ],
     [ "begin", "classhypro_1_1_facet.html#a6181e0299d9f8543ef9e27f0903ef709", null ],
     [ "empty", "classhypro_1_1_facet.html#a7a12cdcdc12ea69455ec07f823bdf480", null ],

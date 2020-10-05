@@ -1,5 +1,6 @@
 var NAVTREEINDEX13 =
 {
+"classhypro_1_1generic_type_visitor.html#a3903e858811f0b6cbee1f453275ced76":[8,0,2,100,0],
 "classhypro_1_1generic_unite_visitor.html":[8,0,2,101],
 "classhypro_1_1generic_unite_visitor.html#a8d326a3b5c61db0d66ea1ba4b175027a":[8,0,2,101,0],
 "classhypro_1_1generic_unite_visitor.html#abbb89f1b4de9c0c66d08821170825049":[8,0,2,101,1],
@@ -214,12 +215,12 @@ var NAVTREEINDEX13 =
 "classsmtrat_1_1_simplex_solver.html":[8,0,3,0],
 "classsmtrat_1_1_simplex_solver.html#ab03581b41667c0504a0e2e0ad8aeada1":[8,0,3,0,0],
 "clp__context_8h_source.html":[9,0,1,0,3,2,0,3],
-"combine_8h_source.html":[9,0,1,0,3,10],
+"combine_8h_source.html":[9,0,1,0,3,11],
 "config_8h_source.html":[9,0,1,0,5],
 "continuous_8h_source.html":[9,0,1,0,2,13,0],
 "continuous_8tpp_source.html":[9,0,1,0,2,13,1],
 "convenience_8h_source.html":[9,0,1,0,3,2,2,2],
-"conversion_8h_source.html":[9,0,1,0,3,12],
+"conversion_8h_source.html":[9,0,1,0,3,13],
 "conversion_helper_8h_source.html":[9,0,1,0,2,2,1],
 "converter_to_box_8tpp.html":[9,0,1,0,2,2,3],
 "converter_to_box_8tpp_source.html":[9,0,1,0,2,2,3],
@@ -246,8 +247,7 @@ var NAVTREEINDEX13 =
 "converter_to_zonotope_8tpp.html":[9,0,1,0,2,2,14],
 "converter_to_zonotope_8tpp.html#a3624ca5a624b0de8679dc35d53ed8f2f":[9,0,1,0,2,2,14,0],
 "converter_to_zonotope_8tpp_source.html":[9,0,1,0,2,2,14],
-"convex_hull_8h_source.html":[9,0,1,0,3,13],
+"convex_hull_8h_source.html":[9,0,1,0,3,14],
 "datastructures_2_facet_8h_source.html":[9,0,1,0,1,2],
-"datastructures_2_hybrid_automaton_2flow_2typetraits_8h_source.html":[9,0,1,0,1,0,1,6],
-"datastructures_2reachability_2_strategy_8h_source.html":[9,0,1,0,1,1,17]
+"datastructures_2_hybrid_automaton_2flow_2typetraits_8h_source.html":[9,0,1,0,1,0,1,6]
 };

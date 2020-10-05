@@ -4,6 +4,7 @@ var structhypro_1_1glpk__context =
     [ "glpk_context", "structhypro_1_1glpk__context.html#ac24e12fec700f77fb9bbb41e3cdd1868", null ],
     [ "glpk_context", "structhypro_1_1glpk__context.html#a3b51b0e070effc42d46299681eb28fd6", null ],
     [ "~glpk_context", "structhypro_1_1glpk__context.html#a510166cf79b28ab6e2541778955fcbfe", null ],
+    [ "clear", "structhypro_1_1glpk__context.html#aa09aba8f6c076241ef72b070b207d647", null ],
     [ "createArrays", "structhypro_1_1glpk__context.html#a325fb7c0a103dda1dffe0e2d2fd2d2d7", null ],
     [ "createLPInstance", "structhypro_1_1glpk__context.html#a7749aae179a9b9d5f05fc7c1cdac5e35", null ],
     [ "deleteArrays", "structhypro_1_1glpk__context.html#ac17f844cae26b15091f2c6541343f238", null ],

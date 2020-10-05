@@ -1,5 +1,8 @@
 var NAVTREEINDEX15 =
 {
+"representations_2_support_function_2util_8h.html#a862b0cdf77254036feeb8ad6fb6da2b7afddff4fb587899fe5f4cf407c7e900b6":[9,0,1,0,2,11,15,3,10],
+"representations_2_support_function_2util_8h.html#a862b0cdf77254036feeb8ad6fb6da2b7affe5a80bffe4bc75e445c9f2ff8ae2bc":[9,0,1,0,2,11,15,3,8],
+"representations_2_support_function_2util_8h_source.html":[9,0,1,0,2,11,15],
 "representations_2conversion_2convenience_operators_8h_source.html":[9,0,1,0,2,2,0],
 "representations_2types_8h_source.html":[9,0,1,0,2,17],
 "sampling_8h.html":[9,0,1,0,3,6,0],
@@ -14,8 +17,8 @@ var NAVTREEINDEX15 =
 "sampling_8h.html#a97972edfa147ffef68658c9df3c5f0f8ac6b502f0b23b3da587a15b27e646f28f":[9,0,1,0,3,6,0,0,0],
 "sampling_8h.html#af4c85ea08f845de363019cfc27f271e5":[9,0,1,0,3,6,0,3],
 "sampling_8h_source.html":[9,0,1,0,3,6,0],
-"settings__enums_8cpp_source.html":[9,0,1,0,3,9,7],
-"settings__enums_8h_source.html":[9,0,1,0,3,9,8],
+"settings__enums_8cpp_source.html":[9,0,1,0,3,10,7],
+"settings__enums_8h_source.html":[9,0,1,0,3,10,8],
 "simplex_8h_source.html":[9,0,1,0,2,10,1,4],
 "singular_jump_handler_8h_source.html":[9,0,1,0,0,4,2,4,5],
 "singular_jump_handler_8tpp_source.html":[9,0,1,0,0,4,2,4,6],
@@ -23,7 +26,7 @@ var NAVTREEINDEX15 =
 "singular_time_evolution_handler_8tpp_source.html":[9,0,1,0,0,4,2,6,6],
 "smtrat_2helper__methods_8h_source.html":[9,0,1,0,3,2,2,3],
 "stateSets.html":[3],
-"statistics_8h_source.html":[9,0,1,0,3,7,4],
+"statistics_8h_source.html":[9,0,1,0,3,8,4],
 "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html":[8,0,1,1],
 "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html#a08fa72941959ac2331da7ba0ce4ff4cb":[8,0,1,1,0],
 "struct_eigen_1_1_num_traits_3_01carl_1_1_f_l_o_a_t___t_3_01_number_01_4_01_4.html#a115d9943cdf983e8ab54d8e58a40935e":[8,0,1,1,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX15 =
 "structhypro_1_1_plot_data.html#aac8564fd747a04a6da1c450491dd58ee":[8,0,2,181,4],
 "structhypro_1_1_plot_data.html#ae3c84bb6e57f67248f150822895305c6":[8,0,2,181,0],
 "structhypro_1_1_polytope_setting.html":[8,0,2,187],
-"structhypro_1_1_polytope_support_function_setting.html":[8,0,2,189],
-"structhypro_1_1_project_data.html":[8,0,2,192],
-"structhypro_1_1_project_data.html#a7db29b824049ff21bbeabe83196ac928":[8,0,2,192,1],
-"structhypro_1_1_project_data.html#ae59ed9b9e929c31872c923b941023c0c":[8,0,2,192,0]
+"structhypro_1_1_polytope_support_function_setting.html":[8,0,2,189]
 };

@@ -13,7 +13,6 @@ var classhypro_1_1_optimizer =
     [ "evaluate", "classhypro_1_1_optimizer.html#ac4bbafc90bcaea83a57096dc2f8197ed", null ],
     [ "getCLPContexts", "classhypro_1_1_optimizer.html#a39c4674e7bbb053f3c324955867e874f", null ],
     [ "getConsistencyChecked", "classhypro_1_1_optimizer.html#a87e9c1a6c10d21ad1299a35c187f90fd", null ],
-    [ "getGLPContexts", "classhypro_1_1_optimizer.html#ab9552429ff7bfb36b5bdb641c93f7ca1", null ],
     [ "getInternalPoint", "classhypro_1_1_optimizer.html#acfc04f3309bbd99949758fd876e7a8a0", null ],
     [ "getLastConsistencyAnswer", "classhypro_1_1_optimizer.html#ab8697e0f8b4e880b57eedd4889324cfc", null ],
     [ "matrix", "classhypro_1_1_optimizer.html#a0bf695db27fc8d5c243b6db281e29d8b", null ],

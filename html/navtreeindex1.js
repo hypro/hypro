@@ -46,7 +46,7 @@ var NAVTREEINDEX1 =
 "_tree_statistic_8h_source.html":[9,0,1,0,1,1,24],
 "_tree_traversal_8h_source.html":[9,0,1,0,1,1,25],
 "_tree_util_8h_source.html":[9,0,1,0,1,1,26],
-"_type_list_8h_source.html":[9,0,1,0,3,9,1,3],
+"_type_list_8h_source.html":[9,0,1,0,3,10,1,3],
 "_typed_timing_vector_8h_source.html":[9,0,1,0,1,1,0,15],
 "_union_op_8h_source.html":[9,0,1,0,2,12,12],
 "_v_polytope_8h_source.html":[9,0,1,0,2,10,2,1],

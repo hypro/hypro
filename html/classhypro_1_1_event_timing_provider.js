@@ -1,6 +1,7 @@
 var classhypro_1_1_event_timing_provider =
 [
     [ "EventTimingProvider", "classhypro_1_1_event_timing_provider.html#af9c11ba2436d8a70e6c34d6752006418", null ],
+    [ "~EventTimingProvider", "classhypro_1_1_event_timing_provider.html#a3da576ef22ffd02574fdea1fd610a408", null ],
     [ "addChildToNode", "classhypro_1_1_event_timing_provider.html#ad76999c6147afc91b5800660e06cfb6d", null ],
     [ "clear", "classhypro_1_1_event_timing_provider.html#a64bcdbbc252417423121034495204be1", null ],
     [ "getDotRepresentation", "classhypro_1_1_event_timing_provider.html#a7e456aaca4272d73d012877f9bebcf53", null ],
