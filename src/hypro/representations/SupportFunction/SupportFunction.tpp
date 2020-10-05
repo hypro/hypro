@@ -573,7 +573,7 @@ const SupportFunctionT<Number, Converter, Setting>& SupportFunctionT<Number, Con
 		}
 		matrix_t<Number> constraints = matrix_t<Number>( boundedConstraints.size(), this->dimension() );
 		vector_t<Number> constants = vector_t<Number>( boundedConstraints.size() );
-		unsigned pos = boundedConstraints.size() - 1;
+		Eigen::Index pos = Eigen::Index( boundedConstraints.size() ) - 1;
 		while ( !boundedConstraints.empty() ) {
 			constraints.row( pos ) = templateDirectionMatrix.row( boundedConstraints.back() );
 			constants( pos ) = offsets[boundedConstraints.back()].supportValue;

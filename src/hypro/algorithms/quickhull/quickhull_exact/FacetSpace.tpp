@@ -246,9 +246,8 @@ namespace hypro {
             char var = 'y';
 
             out << "(" << carl::convert<mpq_class, double>(facet.mNormal[0]) << ")x";
-            for(size_t i = 1; i < dimension; ++i) {
+            for(size_t i = 1; i < dimension; ++i, ++var) {
                 out << " + (" << carl::convert<mpq_class, double>(facet.mNormal[i]) << ")" << var;
-                var += 1;
             }
 
             out << " = " << carl::convert<mpq_class, double>(facet.mOffset) << std::endl;

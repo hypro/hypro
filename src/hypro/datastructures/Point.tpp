@@ -43,7 +43,7 @@ Point<Number>::Point( const vector_t<Number>& _vector )
 
 template <typename Number>
 Point<Number>::Point( vector_t<Number>&& _vector )
-	: mCoordinates( _vector ) {
+	: mCoordinates( std::move( _vector ) ) {
 	assert( this->dimension() >= 0 );
 }
 

@@ -925,7 +925,7 @@ TYPED_TEST( SupportFunctionNewTest, Dimension ) {
 
 	// Dimension of empty SF
 	SupportFunctionNew<TypeParam> sf;
-	TypeParam dim = sf.dimension();
+	std::size_t dim = sf.dimension();
 	EXPECT_EQ( dim, std::size_t( 0 ) );
 
 	// Dimension for Leaf

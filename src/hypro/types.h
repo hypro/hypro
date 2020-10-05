@@ -7,6 +7,7 @@
 #include <carl/util/hash.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/StdVector>
 #include <iosfwd>
 #include <set>
 
@@ -262,6 +263,6 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::CONTAINMENT& _
 }
 }  // namespace std
 
-#include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/adaptions_carl/adaptions_carl.h"
+#include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/conversion.h"

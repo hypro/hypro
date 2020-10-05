@@ -200,9 +200,8 @@ void printFacet( qh::Facet const& facet, size_t dimension ) {
 	char var = 'b';
 
 	std::cout << "(" << facet.mNormal[0] << ")a";
-	for ( size_t i = 1; i < dimension; ++i ) {
+	for ( size_t i = 1; i < dimension; ++i, ++var ) {
 		std::cout << " + (" << facet.mNormal[i] << ")" << var;
-		var += 1;
 	}
 
 	std::cout << " = " << facet.mOffset << std::endl;
