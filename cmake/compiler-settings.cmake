@@ -79,10 +79,30 @@ else()
 endif()
 
 # enable eigen3 vectorization
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -DEIGEN_DONT_VECTORIZE")
 
 # flags related to development
 if(DEVELOPER)
+
+#GCC_ASAN_PRELOAD=$(gcc -print-file-name=libasan.so)
+#CLANG_ASAN_PRELOAD=$(clang -print-file-name=libclang_rt.asan-x86_64.so)
+
+	#detect asan location
+	if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+		execute_process (
+    		COMMAND bash -c "gcc -print-file-name=libasan.so"
+    		OUTPUT_VARIABLE asanLocation
+		)
+	endif()
+	if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		execute_process (
+			COMMAND bash -c "clang -print-file-name=libclang_rt.asan-x86_64.so"
+			OUTPUT_VARIABLE asanLocation
+		)
+	endif()
+	message(STATUS "asan runtime location for preloading: ${asanLocation}")
+
+
 	set(DEV_FLAGS "\
  -Wswitch\
  -Wno-deprecated-declarations\

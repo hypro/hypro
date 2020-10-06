@@ -221,9 +221,9 @@ struct glpk_context {
 	/// destructor
 	~glpk_context() {
 		TRACE( "hypro.optimizer", "Arrays created: " << arraysCreated << " instance @" << this );
-		deleteLPInstance();
+		//deleteLPInstance();
 		// assume that all fields are set at once so just check one.
-		deleteArrays();
+		//deleteArrays();
 	}
 };
 }  // namespace hypro

@@ -18,7 +18,7 @@ void Optimizer<Number>::cleanContexts() {
 	//	mGlpkContexts.erase( ctxtItGlpk );
 	//	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << //mGlpkContexts.size() );
 	//}
-	mGlpkContext.clear();
+	//mGlpkContext.clear();
 #endif
 #ifdef HYPRO_USE_CLP
 	auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
