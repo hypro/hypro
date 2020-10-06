@@ -654,6 +654,10 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 		std::size_t vertexCount = mVertices.size();
 		std::vector<std::size_t> redundantVertices{};
 		for ( std::size_t vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex ) {
+			if ( vertexCount - redundantVertices.size() == 1 ) {
+				// Only one vertex remaining
+				break;
+			}
 			matrix_t<Number> A = matrix_t<Number>( this->dimension(), vertexCount - redundantVertices.size() - 1 );
 			Eigen::Index colIndex = 0;
 			for( std::size_t i = 0; i < vertexCount; ++i ) {
