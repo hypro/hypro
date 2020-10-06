@@ -49,13 +49,13 @@ StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const st
 
 	// update vertices
 	timeElapsePolytope.insert( newVertices.begin(), newVertices.end() );
-	timeElapsePolytope.removeRedundancy();
 
 	assert( timeElapsePolytope.rays().empty() );
 
 	// Convert back
 	StateSet timeElapse;
 	convert( timeElapsePolytope, timeElapse );
+	timeElapse.removeRedundancy();
 	return timeElapse;
 }
 
