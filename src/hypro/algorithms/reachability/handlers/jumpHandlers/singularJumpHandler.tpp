@@ -46,14 +46,14 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 		const IntervalAssignment<Number>& intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
 			std::vector<std::size_t> projectOutDimensions;
-			std::vector<std::size_t> resetToZeroDimensions;
-			HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );
+			std::set<std::size_t> resetToZeroDimensions;
+			VPolytope<Number> projectedSet = Converter<Number>::toVPolytope( stateSet );
 			std::vector<Halfspace<Number>> newConstraints;
 			for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
 				if ( !intervalReset.mIntervals[i].isEmpty() ) {
 					if ( intervalReset.mIntervals[i].lower() == 0 && intervalReset.mIntervals[i].upper() == 0 ) {
 						// reset to zero: solve via linear transformation
-						resetToZeroDimensions.push_back( i );
+						resetToZeroDimensions.insert( i );
 					} else {
 						// non-empty intervals represent some reset different from identity and from zero-> project out dimension, memorize new interval bounds
 						projectOutDimensions.push_back( i );
@@ -66,16 +66,37 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 					}
 				}
 			}
+
+			// set entries in resetToZeroDimensions and projectOutDimensions to zero
+			for ( auto& vertex : projectedSet.rVertices() ) {
+				for ( Eigen::Index i = 0; i < vertex.rawCoordinates().rows(); ++i ) {
+					if ( std::find( resetToZeroDimensions.begin(), resetToZeroDimensions.end(), std::size_t( i ) ) != resetToZeroDimensions.end() ) {
+						vertex[i] = 0;
+						// a selected dimension cannot be in both sets
+						continue;
+					}
+					/*
+					if ( std::find( projectOutDimensions.begin(), projectOutDimensions.end(), std::size_t( i ) ) != projectOutDimensions.end() ) {
+						vertex[i] = 0;
+					}
+					*/
+				}
+			}
+			HPolytope<Number> transformedSet = Converter<Number>::toHPolytope( projectedSet );
+
+			// find bounding constraints for dimensions which are not reset to zero and remove them
+			// Assumption: Those constraints do have non-zero entries in their normal vectors only for those bounding constraints
+			// temporary: FM elimination
+			auto [constraints, constants] = eliminateCols( transformedSet.matrix(), transformedSet.vector(), projectOutDimensions, true );
+			transformedSet = HPolytope<Number>{ constraints, constants };
+
 			// add interval bounds as new constraints
-			projectedSet = projectedSet.projectOutConservative( projectOutDimensions, true );
-			projectedSet.insert( newConstraints.begin(), newConstraints.end() );
+			transformedSet.insert( newConstraints.begin(), newConstraints.end() );
 
 			// TODO convert to V-Rep., set entries in resetToZeroDimensions and projectOutDimensions to zero. Convert to H-rep, remove constraints (detect syntactically) on projectOutDimensions, insert new constraints.
 
-			// TODO alternative: convert to V-Rep., set entries in resetToZeroDimensions to zero, create 2^projectOutDimensions copies of vertices, set entries to all combinations of projectOutDimensions. Convert to H-rep
-
 			// convert back and assign to original representation type
-			convert( projectedSet, stateSet );
+			convert( transformedSet, stateSet );
 		}
 	}
 }
