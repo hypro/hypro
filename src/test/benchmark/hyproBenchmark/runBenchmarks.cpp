@@ -13,10 +13,10 @@
 #include "algorithms/singularAnalysis/benchmarkSingularAnalyzer.h"
 #include "supportFunction/benchmark_sf.h"
 #include "types.h"
-#include <flags.h>
+#include <hypro/flags.h>
 #include <future>
 #include <iostream>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/representations/GeometricObjectBase.h>
 
 int main( int argc, char const *argv[] ) {
 	benchmark::Timer general;
@@ -32,7 +32,8 @@ int main( int argc, char const *argv[] ) {
 	benchmark::polytope::run( s );
 
 	std::cout << "Benchmark singular analyzer." << std::endl;
-	s.maxDimension = 10;
+	s.maxDimension = 5;
+	s.iterations = 4;
 	benchmark::singularAnalysis::run( s );
 
 	// std::cout << "Benchmark support functions." << std::endl;
