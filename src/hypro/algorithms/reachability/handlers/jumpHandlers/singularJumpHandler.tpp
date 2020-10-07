@@ -46,23 +46,33 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 		const IntervalAssignment<Number>& intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
 			std::vector<std::size_t> projectOutDimensions;
+			std::vector<std::size_t> resetToZeroDimensions;
 			HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );
 			std::vector<Halfspace<Number>> newConstraints;
 			for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
 				if ( !intervalReset.mIntervals[i].isEmpty() ) {
-					// non-empty intervals represent some reset different from identity -> project out dimension, memorize new interval bounds
-					projectOutDimensions.push_back( i );
-					// create and store new interval bounds
-					vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
-					normal( i ) = Number( 1 );
-					newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
-					normal = -normal;
-					newConstraints.emplace_back( normal, intervalReset.mIntervals[i].lower() );
+					if ( intervalReset.mIntervals[i].lower() == 0 && intervalReset.mIntervals[i].upper() == 0 ) {
+						// reset to zero: solve via linear transformation
+						resetToZeroDimensions.push_back( i );
+					} else {
+						// non-empty intervals represent some reset different from identity and from zero-> project out dimension, memorize new interval bounds
+						projectOutDimensions.push_back( i );
+						// create and store new interval bounds
+						vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
+						normal( i ) = Number( 1 );
+						newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
+						normal = -normal;
+						newConstraints.emplace_back( normal, intervalReset.mIntervals[i].lower() );
+					}
 				}
 			}
 			// add interval bounds as new constraints
 			projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
 			projectedSet.insert( newConstraints.begin(), newConstraints.end() );
+
+			// TODO convert to V-Rep., set entries in resetToZeroDimensions and projectOutDimensions to zero. Convert to H-rep, remove constraints (detect syntactically) on projectOutDimensions, insert new constraints.
+
+			// TODO alternative: convert to V-Rep., set entries in resetToZeroDimensions to zero, create 2^projectOutDimensions copies of vertices, set entries to all combinations of projectOutDimensions. Convert to H-rep
 
 			// convert back and assign to original representation type
 			convert( projectedSet, stateSet );

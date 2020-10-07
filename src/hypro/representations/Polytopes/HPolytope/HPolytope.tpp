@@ -882,8 +882,14 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::p
 			projectionMatrix( i, i ) = 0;
 		}
 
-		return this->linearTransformation( projectionMatrix );
+		auto res = this->linearTransformation( projectionMatrix );
+
+		// TODO detect bounding constraints (syntactically) in res, remove them.
+		// Bounding constraints: Those which ensure that all variables in dimensions are zero
+
+		return res;
 	} else {
+		// Via Fourier-Motzkin variable elimination
 		auto [newConstraints, newConstants] = eliminateCols( this->matrix(), this->vector(), dimensions, true );
 		return { newConstraints, newConstants };
 	}
