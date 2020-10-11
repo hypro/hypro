@@ -47,6 +47,9 @@ target_include_directories(${PROJECT_NAME}-objects
 	endif()
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
+	if(HYPRO_GSL_INTEGRATION)
+		target_link_libraries(${PROJECT_NAME}-static PUBLIC GSL_STATIC)
+	endif()
 	target_include_directories(${PROJECT_NAME}-static
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
@@ -81,6 +84,9 @@ target_include_directories(${PROJECT_NAME}-objects
 	if(HYPRO_USE_SMTRAT)
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC smtrat-solver-shared smtrat-module-LRAModule-shared)
 		target_link_libraries(${PROJECT_NAME}-static PUBLIC smtrat-solver-static smtrat-module-LRAModule-static)
+	endif()
+	if(HYPRO_GSL_INTEGRATION)
+		target_link_libraries(${PROJECT_NAME}-shared PUBLIC GSL_SHARED)
 	endif()
 
 	target_include_directories(${PROJECT_NAME}-shared

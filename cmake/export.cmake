@@ -58,6 +58,10 @@ if (HYPRO_USE_Z3)
 	export_target(DEPENDENT_TARGETS z3_SHARED)
 	export_target(DEPENDENT_TARGETS z3_STATIC)
 endif ()
+if(HYPRO_GSL_INTEGRATION)
+	export_target(DEPENDENT_TARGETS GSL_SHARED)
+	export_target(DEPENDENT_TARGETS GSL_STATIC)
+endif()
 
 
 include(CMakePackageConfigHelpers)
