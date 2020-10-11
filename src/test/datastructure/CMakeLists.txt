@@ -44,5 +44,11 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_test( NAME datastructures COMMAND runDatastructureTests )
 
+	if(DEVELOPER)
+	set_property(TEST datastructures PROPERTY
+		ENVIRONMENT LD_PRELOAD=${asanLocation}
+	)
+	endif()
+
 	add_dependencies(allTests runDatastructureTests)
 endif()

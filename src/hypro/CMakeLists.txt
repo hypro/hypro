@@ -6,9 +6,9 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 # Create object library first
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 # filter out matlab-bindings
-message(STATUS "sources before filtering: ${sources}")
+#message(STATUS "sources before filtering: ${sources}")
 list(FILTER sources EXCLUDE REGEX MHyPro.cpp|MReach.cpp|CompareMHyProAndCORA/example_box.cpp|CompareMHyProAndCORA/example_zonotope.cpp)
-message(STATUS "sources after filtering: ${sources}")
+#message(STATUS "sources after filtering: ${sources}")
 
 add_library(${PROJECT_NAME}-objects OBJECT ${sources})
 add_dependencies(${PROJECT_NAME}-objects resources)

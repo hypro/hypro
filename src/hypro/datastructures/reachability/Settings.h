@@ -19,7 +19,7 @@ struct AnalysisParameters {
 	int representation_setting = 0;										   ///< used settings for the representation
 	bool uniformBloating = false;
 	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
-	int timeStepFactor = 0;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
+	int timeStepFactor = 1;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
 };
 
 struct FixedAnalysisParameters {

@@ -1,7 +1,7 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	# reduce compiler optimization for tests
-	set(representation_test_sources 
+	set(representation_test_sources
 		BoxTest.cpp
 		CarlPolytopeTest.cpp
 		ConverterTest.cpp
@@ -43,6 +43,12 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	cotire(runRepresentationTests)
 
 	add_test( NAME representations COMMAND runRepresentationTests )
+
+	if(DEVELOPER)
+	set_property(TEST representations PROPERTY
+		   ENVIRONMENT LD_PRELOAD=${asanLocation}
+		   )
+	endif()
 
 	add_dependencies(allTests runRepresentationTests)
 endif()
