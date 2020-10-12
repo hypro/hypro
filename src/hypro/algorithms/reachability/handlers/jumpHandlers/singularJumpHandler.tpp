@@ -62,7 +62,7 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 						normal( i ) = Number( 1 );
 						newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
 						normal = -normal;
-						newConstraints.emplace_back( normal, intervalReset.mIntervals[i].lower() );
+						newConstraints.emplace_back( normal, -intervalReset.mIntervals[i].lower() );
 					}
 				}
 			}
