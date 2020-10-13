@@ -25,6 +25,9 @@ class singularJumpHandler {
 	// typename ReachTreeNode<Representation>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<Representation>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<Representation>::Node_t parent );
 };
 
+template <typename Number>
+bool equalPolytopes( HPolytope<Number> hpol1, HPolytope<Number> hpol2 );
+
 }  // namespace hypro
 
 #include "singularJumpHandler.tpp"
