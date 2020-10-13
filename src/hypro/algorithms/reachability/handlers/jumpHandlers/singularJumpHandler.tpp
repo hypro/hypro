@@ -40,36 +40,23 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 
 template <typename Representation>
 void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr ) const {
-	// We have 3 different variants for applying resets and want to check that they all give the same result.
+	// We have 3 different implementations for applying resets and want to check that they all give the same result.
 	// Note: applyResetFM is the one that definitely works.
-	// Todo: Decide for one variant and remove other 2 and function equalPolytopes (only used to confirm that the results are the same)
+	// Todo: Decide for one implementation and remove other 2
 	if ( !transitionPtr->getReset().empty() ) {
 		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );		
 		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
 			auto transformedSet1 = applyResetFM( stateSet, intervalReset );
-			assert( equalPolytopes<Number>( transformedSet1, applyResetFindZeroConstraints( stateSet, intervalReset ) ) );
-			assert( equalPolytopes<Number>( transformedSet1, applyResetProjectAndExpand( stateSet, intervalReset ) ) );
-			//assert( equalPolytopes<Number>( transformedSet, applyReset2( stateSet, intervalReset ) ) );
-			//assert( equalPolytopes<Number>( transformedSet, applyReset3( stateSet, intervalReset ) ) );
+#ifndef NDEBUG
+			auto transformedSet2 = applyResetFindZeroConstraints( stateSet, intervalReset );
+			auto transformedSet3 = applyResetProjectAndExpand( stateSet, intervalReset );
+			assert( transformedSet1.contains( transformedSet2 ) && transformedSet2.contains( transformedSet1 ) );
+			assert( transformedSet1.contains( transformedSet3 ) && transformedSet3.contains( transformedSet1 ) );
+#endif
 			convert( transformedSet1, stateSet );
 		}
 	}	
-}
-
-template <typename Number>
-bool equalPolytopes( HPolytope<Number> hpol1, HPolytope<Number> hpol2 ) {
-	for ( auto vertex1 : hpol1.vertices() ) {
-		if ( !hpol2.contains( vertex1 ) ) {
-			return false;
-		}
-	}
-	for ( auto vertex2 : hpol2.vertices() ) {
-		if ( !hpol1.contains( vertex2 ) ) {
-			return false;
-		}
-	}
-	return true;
 }
 
 
