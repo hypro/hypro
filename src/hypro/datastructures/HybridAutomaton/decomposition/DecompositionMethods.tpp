@@ -322,13 +322,22 @@ Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton
 		return Decomposition();
 	}
 	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> Graph;
-	Graph G( automaton.dimension() - 1 );
+	Graph G( automaton.dimension() );
 
 	//check flow and invariant of locations
 	for ( auto locPtr : automaton.getLocations() ) {
-		for ( std::size_t i = 0; i < locPtr->getNumberFlow(); ++i ) {
-			detail::addEdgesForAffineTrafo( locPtr->getLinearFlow( i ).getFlowMatrix(), G );
-			detail::addEdgesForRectMap( locPtr->getRectangularFlow( i ).getFlowIntervals(), G );
+		for ( std::size_t i = 0; i < locPtr->getFlows().size(); ++i ) {
+			switch ( locPtr->getFlowTypes()[ i ] ) {
+				case DynamicType::linear:
+					detail::addEdgesForAffineTrafo( locPtr->getLinearFlow( i ).getFlowMatrix(), G );
+					break;
+				case DynamicType::rectangular:
+					detail::addEdgesForRectMap( locPtr->getRectangularFlow( i ).getFlowIntervals(), G );
+					break;
+				default:
+					assert( false && "Decompososition for flow type " locPtr->getFlowTypes()[ i ] << " not implemented yet." );
+					break;
+			}
 		}
 		// TODO: add further flow types
 		detail::addEdgesForCondition( locPtr->getInvariant(), G );

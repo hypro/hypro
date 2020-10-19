@@ -41,7 +41,7 @@ template <typename Number>
 void addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
 /// adds edges in the subspace graph for related variables in a condition
 template <typename Number>
-void addEdgesForCondition( Condition<Number> condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+void addEdgesForCondition( const Condition<Number> &condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
 /// adds edges in the subspace graph for related variables in an interval transformation
 template <typename Number>
 void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
