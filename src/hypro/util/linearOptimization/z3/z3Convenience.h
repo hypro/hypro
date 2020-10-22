@@ -5,10 +5,10 @@
 //
 
 #pragma once
-#include "datastructures/Point.h"
-#include "flags.h"
-#include "types.h"
-#include "util/linearOptimization/EvaluationResult.h"
+#include "../../../datastructures/Point.h"
+#include "../../../flags.h"
+#include "../../../types.h"
+#include "../EvaluationResult.h"
 #ifdef HYPRO_USE_Z3
 #include "z3Context.h"
 
