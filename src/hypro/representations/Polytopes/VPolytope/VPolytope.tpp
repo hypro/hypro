@@ -367,6 +367,9 @@ bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number>& vec ) c
 		vector_t<Number> constraint = vector_t<Number>::Ones( A.cols() );
 		opt.addConstraint( constraint, 1, carl::Relation::EQ );
 
+		// Check that the point can be represented (EQ).
+		opt.setRelations( std::vector<carl::Relation>( this->dimension(), carl::Relation::EQ ) );
+
 		return opt.checkConsistency();
 
 	} else {
@@ -660,16 +663,16 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 			}
 			matrix_t<Number> A = matrix_t<Number>( this->dimension(), vertexCount - redundantVertices.size() - 1 );
 			Eigen::Index colIndex = 0;
-			for( std::size_t i = 0; i < vertexCount; ++i ) {
+			for ( std::size_t i = 0; i < vertexCount; ++i ) {
 				// Only use other non-redundant for convex combination
-				if( i != vertexIndex && std::find( redundantVertices.begin(), redundantVertices.end(), i ) == redundantVertices.end() ) {
-					A.col( colIndex ) = mVertices[ i ].rawCoordinates();
+				if ( i != vertexIndex && std::find( redundantVertices.begin(), redundantVertices.end(), i ) == redundantVertices.end() ) {
+					A.col( colIndex ) = mVertices[i].rawCoordinates();
 					colIndex += 1;
 				}
 			}
 
 			// Convex combination should equal the current vertex
-			Optimizer<Number> opt( A, mVertices[ vertexIndex ].rawCoordinates() );
+			Optimizer<Number> opt( A, mVertices[vertexIndex].rawCoordinates() );
 			opt.setRelations( std::vector<carl::Relation>( this->dimension(), carl::Relation::EQ ) );
 
 			// Bound columns
@@ -683,7 +686,7 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 			vector_t<Number> constraint = vector_t<Number>::Ones( A.cols() );
 			opt.addConstraint( constraint, 1, carl::Relation::EQ );
 
-			if( opt.checkConsistency() ) {
+			if ( opt.checkConsistency() ) {
 				redundantVertices.push_back( vertexIndex );
 			}
 		}
@@ -693,9 +696,9 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 		std::size_t reducedIndex = 0;
 		for ( std::size_t vIndex = 0; vIndex < vertexCount; ++vIndex ) {
 			if ( std::find( redundantVertices.begin(), redundantVertices.end(), vIndex ) == redundantVertices.end() ) {
-				reducedVertices[ reducedIndex ] = mVertices[ vIndex ];
+				reducedVertices[reducedIndex] = mVertices[vIndex];
 				reducedIndex += 1;
-			}			
+			}
 		}
 
 		mVertices = reducedVertices;
