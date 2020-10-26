@@ -39,12 +39,20 @@ representation_name getRepresentationForLocation( const Location<Number> &loc ) 
 
 template <typename Number>
 bool isDiscreteSubspace( const Location<Number> &loc, size_t index ) {
-	return loc.getLinearFlow( index ).isDiscrete() && loc.getRectangularFlow( index ).isDiscrete();
+	assert( index < loc.getNumberSubspaces() );
+	if ( loc.getFlowTypes()[ index ] == DynamicType::rectangular ) {
+		return false;
+	}
+	return loc.getLinearFlow( index ).isDiscrete();
 }
 
 template <typename Number>
 bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
+	assert( index < loc.getNumberSubspaces() );
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
+	if ( loc.getFlowTypes()[ index ] == DynamicType::rectangular ) {
+		return false;
+	}	
 	// check if flow is of the form
 	//	0 ... 0 1
 	//  .........
@@ -109,9 +117,9 @@ bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
 
 template <typename Number>
 bool isRectangularSubspace( const Location<Number> &loc, size_t index ) {
+	assert( index < loc.getNumberSubspaces() );
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
-
-	if ( !( loc.getLinearFlow( index ).hasNoFlow() && !loc.getRectangularFlow( index ).empty() ) ) {
+	if ( loc.getFlowTypes()[ index ] != DynamicType::rectangular ) {
 		TRACE( "hypro.decisionEntity", "Flow is not rectangular." );
 		return false;
 	}
@@ -316,30 +324,37 @@ void addEdgesForCondition( const Condition<Number> &condition, boost::adjacency_
 }  // namespace detail
 
 template <typename Number>
-Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton ) {
+std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomaton<Number> &automaton ) {
 	if ( checkDecomposed( automaton ) ) {
 		// return empty decomposition
-		return Decomposition();
+		return std::vector<std::vector<std::size_t>>();
 	}
 	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> Graph;
 	Graph G( automaton.dimension() );
 
 	//check flow and invariant of locations
 	for ( auto locPtr : automaton.getLocations() ) {
-		for ( std::size_t i = 0; i < locPtr->getFlows().size(); ++i ) {
-			switch ( locPtr->getFlowTypes()[ i ] ) {
-				case DynamicType::linear:
-					detail::addEdgesForAffineTrafo( locPtr->getLinearFlow( i ).getFlowMatrix(), G );
-					break;
-				case DynamicType::rectangular:
-					detail::addEdgesForRectMap( locPtr->getRectangularFlow( i ).getFlowIntervals(), G );
-					break;
-				default:
-					assert( false && "Decompososition for flow type " locPtr->getFlowTypes()[ i ] << " not implemented yet." );
-					break;
-			}
+		// Automaton is not decomposed so every location should have exactly one flow
+		assert( locPtr->getNumberSubspaces() == 1 && "Subspace decomposition called on decomposed automaton" );
+		switch ( locPtr->getFlowTypes()[ 0 ] ) {
+			case DynamicType::discrete:
+				[[fallthrough]];
+			case DynamicType::timed:
+				[[fallthrough]];
+			case DynamicType::singular:
+				[[fallthrough]];
+			case DynamicType::affine:
+				[[fallthrough]];
+			case DynamicType::linear:
+				detail::addEdgesForAffineTrafo( locPtr->getLinearFlow().getFlowMatrix(), G );
+				break;
+			case DynamicType::rectangular:
+				detail::addEdgesForRectMap( locPtr->getRectangularFlow().getFlowIntervals(), G );
+				break;
+			default:
+				assert( false && "Decompososition for flow type " locPtr->getFlowTypes()[ i ] << " not implemented yet." );
+				break;
 		}
-		// TODO: add further flow types
 		detail::addEdgesForCondition( locPtr->getInvariant(), G );
 	}
 
@@ -364,12 +379,10 @@ Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton
 	// components now holds an array. It has one entry for each variable specifying its component
 	// we parse this to a vector of vectors. each vector contains the variable indices for one component
 	// and can consequently can be given to project.
-	Decomposition res;
-	res.subspaces = std::vector<std::vector<size_t>>( num );
-	res.subspaceTypes = std::vector<DynamicType>( num, DynamicType::undefined );
+	std::vector<std::vector<size_t>> res( num );
 	std::vector<size_t>::size_type i;
 	for ( i = 0; i != component.size(); i++ ) {
-		res.subspaces[component[i]].push_back( i );
+		res[component[i]].push_back( i );
 	}
 	return res;
 }
@@ -377,17 +390,127 @@ Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton
 template <typename Number>
 std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton ) {
 	// compute decomposition
-	Decomposition decomposition = getSubspaceDecomposition( automaton );
+	auto partition = getSubspacePartition( automaton );
 
-	if ( decomposition.subspaces.size() <= 1 ) {
-		// decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
-		return std::make_pair( automaton, decomposition );
+	// Todo: What if partition.size() == 0? In that case decomposition must have been called twice
+	if ( partition.size() == 0 ) {
+		// decomposing failed/was already done(0-case)
+		return std::make_pair( automaton, Decomposition() );
 	}
 	TRACE( "hypro.decisionEntity", "Automaton before decomposition: " << automaton );
 	auto automatonCopy = automaton;
-	automatonCopy.decompose( decomposition );
+	automatonCopy.decompose( partition );
+	Decomposition res;
+	res.subspaces = partition;
+	res.subspaceTypes = refineSubspaceDynamicTypes( automatonCopy );
+
 	TRACE( "hypro.decisionEntity", "Automaton after decomposition: " << automatonCopy );
-	return std::make_pair( automatonCopy, decomposition );
+	return std::make_pair( automatonCopy, res );
 }
+
+template <typename Number>
+std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Number>& automaton ) {
+	std::vector<DynamicType> subspaceTypes( automaton.getLocations()[0]->getNumberSubspaces(), DynamicType::undefined );
+	// Check for every location which dynamics it has in the subspace. Combine them
+
+#ifndef NDEBUG
+	// Assume that every location is decomposed in the same number of subspaces, as is done by the decomposeAutomaton function
+	for( auto& loc : automaton.getLocations() ) {
+		assuert( loc->getNumberSubspaces() == subspaceTypes.size() );
+	}
+#endif
+	for ( std::size_t subspaceIndex = 0; subspaceIndex < subspaceTypes.size(); ++subspaceIndex ) {
+		for ( auto & loc : automaton.getLocations() ) {
+			switch ( subspaceTypes[ subspaceIndex ] ) {
+				case DynamicType::undefined:
+					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
+					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
+					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
+					} else {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					}
+					break;
+				case DynamicType::discrete:
+					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
+					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
+					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					}
+					break;
+				case DynamicType::timed:
+					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
+					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
+					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					}
+					break;
+				case DynamicType::singular:
+					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					}
+					break;
+				case DynamicType::rectangular:
+					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+					//	subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
+					} else {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					}
+					break;
+				case DynamicType::affine:
+					[[fallthrough]];
+				case DynamicType::linear:
+					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+					//	subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					}
+					break;
+				case DynamicType::mixed:
+					break;
+			}
+		}
+		assert( subspaceTypes[ subspaceIndex ] != DynamicType::undefined );
+	}
+	return subspaceTypes;
+}
+
+
 
 }  // namespace hypro

@@ -202,9 +202,9 @@ class Transition {
 	/**
     * decomposes guard  and reset of this transition.
     */
-	void decompose( const Decomposition& decomposition ) {
-		mGuard.decompose( decomposition );
-		mReset.decompose( decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition ) {
+		mGuard.decompose( partition );
+		mReset.decompose( partition );
 		mHash = 0;
 	}
 

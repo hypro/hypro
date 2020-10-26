@@ -159,7 +159,7 @@ class HybridAutomaton {
      *  sets of variables that are at least syntactically
      *  independet to each other.
      */
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 	/**
      * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.

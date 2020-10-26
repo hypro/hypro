@@ -117,14 +117,14 @@ Condition<Number> combine(
 }
 
 template <typename Number>
-void Condition<Number>::decompose( const Decomposition& decomposition ) {
+void Condition<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	if ( mConstraints.size() > 1 ) {
 		//already decomposed/empty constraints
 		return;
-	} else if ( mConstraints.size() == 0 && decomposition.subspaces.size() > 0 ) {
+	} else if ( mConstraints.size() == 0 && partition.size() > 0 ) {
 		//fill mConstaints with empty constraint sets
 		std::vector<ConstraintSetT<Number>> newCset;
-		for ( std::size_t i = 0; i < decomposition.subspaces.size(); i++ ) {
+		for ( std::size_t i = 0; i < partition.size(); i++ ) {
 			ConstraintSetT<Number> res = ConstraintSetT<Number>();
 			newCset.push_back( res );
 		}
@@ -142,7 +142,7 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 
 	std::vector<ConstraintSetT<Number>> newCset;
 	// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
-	for ( auto set : decomposition.subspaces ) {
+	for ( auto set : partition ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "decompose constraint for set: {" );
 		for ( auto entry : set ) {

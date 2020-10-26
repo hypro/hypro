@@ -157,7 +157,7 @@ class Location {
 	/// returns dot-representation of the location
 	std::string getDotRepresentation( const std::vector<std::string>& vars ) const;
 	/// decomposes location into subspaces defined in the passed decomposition
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 	/// hash-based less operator
 	inline bool operator<( const Location<Number>& rhs ) const {
 		if ( this->hash() != rhs.hash() ) {

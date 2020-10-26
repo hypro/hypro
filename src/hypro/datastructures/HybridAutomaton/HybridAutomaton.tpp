@@ -286,25 +286,25 @@ std::string HybridAutomaton<Number>::getDotRepresentation() const {
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::decompose( const Decomposition& decomposition ) {
+void HybridAutomaton<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	// decompose locations (flow (affine trafo) and invariant(condition))
 	for ( auto& location : mLocations ) {
-		location->decompose( decomposition );
+		location->decompose( partition );
 	}
 
 	// decompose local bad states (condition)
 	for ( auto it = mLocalBadStates.begin(); it != mLocalBadStates.end(); ++it ) {
-		it->second.decompose( decomposition );
+		it->second.decompose( partition );
 	}
 
 	// decompose global bad states (conditions)
 	for ( auto it = mGlobalBadStates.begin(); it != mGlobalBadStates.end(); ++it ) {
-		it->decompose( decomposition );
+		it->decompose( partition );
 	}
 	// decompose intial states (state sets)
 	DEBUG( "hypro.datastructures", "Decompose initial states." );
 	for ( auto it = mInitialStates.begin(); it != mInitialStates.end(); ++it ) {
-		it->second.decompose( decomposition );
+		it->second.decompose( partition );
 	}
 	DEBUG( "hypro.datastructures", "Decompose initial states done. Having " << mInitialStates.size() << " initial states." );
 }

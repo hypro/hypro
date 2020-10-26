@@ -509,7 +509,7 @@ class State {
 	/**
     * decomposes state set by projection
     */
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 	/**
      * @brief      Outstream operator.

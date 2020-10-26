@@ -79,7 +79,7 @@ class Reset {
 	/**
     * decomposes reset
     */
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const Reset<Number>& a )

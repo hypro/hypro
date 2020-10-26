@@ -605,15 +605,15 @@ void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<std
 }
 
 template <typename Number, typename Representation, typename... Rargs>
-void State<Number, Representation, Rargs...>::decompose( const Decomposition& decomposition ) {
-	if ( decomposition.subspaces.size() == 1 || mSets.size() != 1 ) {
+void State<Number, Representation, Rargs...>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
+	if ( partition.size() == 1 || mSets.size() != 1 ) {
 		// no decomposition/already decomposed
 	}
 	// initial set is a constraint set
 	matrix_t<Number> constraintsOld( std::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).matrix() );
 	vector_t<Number> constantsOld( std::get<hypro::ConstraintSet<Number>>( mSets.at( 0 ) ).vector() );
 	int i = 0;
-	for ( auto decomp : decomposition.subspaces ) {
+	for ( auto decomp : partition ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "Trying to project set: \n " << mSets.at( 0 ) << "\n to dimensions: " );
 		DEBUG( "hypro.datastructures", "{" );

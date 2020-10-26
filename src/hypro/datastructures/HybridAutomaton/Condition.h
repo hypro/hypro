@@ -81,7 +81,7 @@ class Condition {
 	/// computes string with dot-representation
 	std::string getDotRepresentation( const std::vector<std::string>& vars ) const;
 	/// decomposes constraints according to passed decomposition
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 	/// compare equal
 	friend bool operator==( const Condition& lhs, const Condition& rhs ) {
 		if ( lhs.hash() != rhs.hash() || lhs.size() != rhs.size() ) {

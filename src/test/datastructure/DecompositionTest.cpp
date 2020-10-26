@@ -292,6 +292,7 @@ TEST( DecompositionMethodsTest, GetDynamicTypeLocation ) {
 	// TODO: transitions - reset
 }
 
+/*
 TEST( DecompositionMethodsTest, GetSubspaceDecomposition ) {
 	using Number = double;
 
@@ -323,6 +324,12 @@ TEST( DecompositionMethodsTest, GetSubspaceDecomposition ) {
 	auto decomposition6 = getSubspaceDecomposition( ha6 );
 	auto expectedSubspaces6 = std::vector<std::vector<std::size_t>>{ { 0 }, { 1 } };
 	EXPECT_EQ( expectedSubspaces6, decomposition6.subspaces );
+}
+*/
 
-
+TEST( DecompositionMethodsTest, DecomposeAutomaton ) {
+	using Number = double;
+	auto ha1 = independentHA<Number>();
+	auto decomposition = decomposeAutomaton( ha1 );
+	EXPECT_EQ( 2, ha1.getLocations()[0]->getNumberSubspaces() );
 }

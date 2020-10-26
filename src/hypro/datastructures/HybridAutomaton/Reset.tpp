@@ -213,7 +213,7 @@ Reset<Number> combine(
 }
 
 template <typename Number>
-void Reset<Number>::decompose( const Decomposition& decomposition ) {
+void Reset<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	if ( mAffineResets.size() == 0 || mDecomposed ) {
 		//empty constraints
 		return;
@@ -234,7 +234,7 @@ void Reset<Number>::decompose( const Decomposition& decomposition ) {
 	mIntervalResets.clear();
 
 	// select constrains i,j,k into new constraint vector
-	for ( auto set : decomposition.subspaces ) {
+	for ( auto set : partition ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "decompose constraint for set: {" );
 		for ( auto entry : set ) {

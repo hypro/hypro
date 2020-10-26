@@ -541,22 +541,25 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 }
 */
 
+
 template <typename Number>
-void Location<Number>::decompose( const Decomposition& decomposition ) {
-	auto newFlowTypes = decomposition.subspaceTypes;
+void Location<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
+	// assumption: this function is only called on locations that are not yet decomposed (i.e have exactly one flow)
 	std::vector<flowVariant> newFlows;
+	std::vector<DynamicType> newFlowTypes;
 	using Matrix = matrix_t<Number>;
 
 	auto& vpool = VariablePool::getInstance();
 
-	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
-	for ( std::size_t i = 0; i < decomposition.subspaces.size(); ++i ) {
-		if ( decomposition.subspaceTypes[i] == DynamicType::linear ) {
-			Matrix newFlow = Matrix::Zero( decomposition.subspaces[i].size() + 1, this->dimension() + 1 );
+
+	for ( auto& supspace : partition ) {
+		if ( mFlowTypes[0] == DynamicType::discrete || mFlowTypes[0] == DynamicType::timed || mFlowTypes[0] == DynamicType::singular || mFlowTypes[0] == DynamicType::affine || mFlowTypes[0] == DynamicType::linear ) {
+			// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
+			Matrix newFlow = Matrix::Zero( supspace.size() + 1, this->dimension() + 1 );
 
 			// assemble new flow matrix: iterate over all existing flows to find the correct row
 			Eigen::Index rowIndex = 0;
-			for ( std::size_t dimension : decomposition.subspaces[i] ) {
+			for ( std::size_t dimension : supspace ) {
 				// first find correct flow-cluster in existing dynamics
 				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
 				std::size_t accumulatedDimension = std::visit( flowDimensionVisitor{}, mFlows[0] );
@@ -571,16 +574,17 @@ void Location<Number>::decompose( const Decomposition& decomposition ) {
 			}
 			// re-shape columns
 			// +1 for constant column
-			auto dimensionsCopy = decomposition.subspaces[i];
+			auto dimensionsCopy = supspace;
 			dimensionsCopy.push_back( newFlow.cols() - 1 );
 			newFlow = selectRows( newFlow, dimensionsCopy );
 
 			newFlows.emplace_back( linearFlow<Number>( newFlow ) );
-
-		} else if ( decomposition.subspaceTypes[i] == DynamicType::rectangular ) {
+			// Todo: do we want to specify flowTypes here or later?
+			newFlowTypes.emplace_back( DynamicType::linear );
+		} else if ( mFlowTypes[0] == DynamicType::rectangular ) {
 			std::map<carl::Variable, carl::Interval<Number>> newIntervals;
 			// iterate over selected dimensions and find corresponding rectangular flows in the existing flow definition
-			for ( std::size_t dimension : decomposition.subspaces[i] ) {
+			for ( std::size_t dimension : supspace ) {
 				// first find correct flow-cluster in existing dynamics
 				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
 				// correct cluster found, get offset and write row
@@ -589,20 +593,24 @@ void Location<Number>::decompose( const Decomposition& decomposition ) {
 				newIntervals.insert( std::make_pair( variable, std::get<rectangularFlow<Number>>( mFlows[clusterpos] ).getFlowIntervalForDimension( variable ) ) );
 			}
 			newFlows.emplace_back( rectangularFlow<Number>( newIntervals ) );
+			newFlowTypes.emplace_back( DynamicType::rectangular );
+		} else {
+			assert( false && "Mixed analysis not implemented" );
 		}
 	}
 	assert( newFlows.size() == newFlowTypes.size() );
-	assert( newFlows.size() == decomposition.subspaces.size() );
+	assert( newFlows.size() == partition.size() );
 	mFlows = std::move( newFlows );
 	mFlowTypes = std::move( newFlowTypes );
 
 	// decompose invariant
-	mInvariant.decompose( decomposition );
+	mInvariant.decompose( partition );
 	// decompose transitions
 	for ( auto& transition : mTransitions ) {
-		transition->decompose( decomposition );
+		transition->decompose( partition );
 	}
 	mHash = 0;
 }
+
 
 }  // namespace hypro

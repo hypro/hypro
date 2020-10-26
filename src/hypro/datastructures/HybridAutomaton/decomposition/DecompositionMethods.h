@@ -26,7 +26,9 @@ representation_name getRepresentationForSubspace( const Location<Number> &loc, s
     * dependent variables
     */
 template <typename Number>
-Decomposition getSubspaceDecomposition( const HybridAutomaton<Number> &automaton );
+std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomaton<Number> &automaton );
+template <typename Number>
+std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Number>& automaton );
 template <typename Number>
 bool checkDecomposed( const HybridAutomaton<Number> &automaton );
 template <typename Number>
