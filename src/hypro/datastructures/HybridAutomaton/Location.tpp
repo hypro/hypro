@@ -545,52 +545,30 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 template <typename Number>
 void Location<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	// assumption: this function is only called on locations that are not yet decomposed (i.e have exactly one flow)
+	if ( mFlows.size() != 1 ) {
+		// Already decomposed or empty flow
+		return;
+	}
 	std::vector<flowVariant> newFlows;
 	std::vector<DynamicType> newFlowTypes;
-	using Matrix = matrix_t<Number>;
 
 	auto& vpool = VariablePool::getInstance();
 
 
-	for ( auto& supspace : partition ) {
+	for ( auto& subspace : partition ) {
 		if ( mFlowTypes[0] == DynamicType::discrete || mFlowTypes[0] == DynamicType::timed || mFlowTypes[0] == DynamicType::singular || mFlowTypes[0] == DynamicType::affine || mFlowTypes[0] == DynamicType::linear ) {
-			// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
-			Matrix newFlow = Matrix::Zero( supspace.size() + 1, this->dimension() + 1 );
-
-			// assemble new flow matrix: iterate over all existing flows to find the correct row
-			Eigen::Index rowIndex = 0;
-			for ( std::size_t dimension : supspace ) {
-				// first find correct flow-cluster in existing dynamics
-				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
-				std::size_t accumulatedDimension = std::visit( flowDimensionVisitor{}, mFlows[0] );
-				// accumulate state space dimensions
-				for ( std::size_t clusterIndex = 0; clusterIndex < clusterpos; ++clusterIndex ) {
-					accumulatedDimension += std::visit( flowDimensionVisitor{}, mFlows[clusterIndex] );
-				}
-				// correct cluster found, get offset and write row
-				assert( mFlowTypes[clusterpos] == DynamicType::linear );
-				newFlow.row( rowIndex ) = std::get<linearFlow<Number>>( mFlows[clusterpos] ).getFlowMatrix().row( accumulatedDimension - dimension - 1 );
-				++rowIndex;
-			}
-			// re-shape columns
-			// +1 for constant column
-			auto dimensionsCopy = supspace;
-			dimensionsCopy.push_back( newFlow.cols() - 1 );
-			newFlow = selectRows( newFlow, dimensionsCopy );
-
-			newFlows.emplace_back( linearFlow<Number>( newFlow ) );
-			// Todo: do we want to specify flowTypes here or later?
+			std::vector selectedIndices = subspace;
+			// Keep last row (affine)
+			selectedIndices.emplace_back( this->dimension() );
+			auto newFlowMatrix = selectCols( selectRows( this->getLinearFlow().getFlowMatrix(), selectedIndices ), selectedIndices );
+			newFlows.emplace_back( newFlowMatrix );
 			newFlowTypes.emplace_back( DynamicType::linear );
 		} else if ( mFlowTypes[0] == DynamicType::rectangular ) {
 			std::map<carl::Variable, carl::Interval<Number>> newIntervals;
 			// iterate over selected dimensions and find corresponding rectangular flows in the existing flow definition
-			for ( std::size_t dimension : supspace ) {
-				// first find correct flow-cluster in existing dynamics
-				std::size_t clusterpos = getSubspaceIndexForStateSpaceDimension( dimension );
-				// correct cluster found, get offset and write row
-				assert( mFlowTypes[clusterpos] == DynamicType::rectangular );
+			for ( std::size_t dimension : subspace ) {
 				auto variable = vpool.carlVarByIndex( dimension );
-				newIntervals.insert( std::make_pair( variable, std::get<rectangularFlow<Number>>( mFlows[clusterpos] ).getFlowIntervalForDimension( variable ) ) );
+				newIntervals.insert( std::make_pair( variable, this->getRectangularFlow().getFlowIntervalForDimension( variable ) ) );
 			}
 			newFlows.emplace_back( rectangularFlow<Number>( newIntervals ) );
 			newFlowTypes.emplace_back( DynamicType::rectangular );
