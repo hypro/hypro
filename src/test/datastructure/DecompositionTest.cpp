@@ -6,7 +6,7 @@
 using namespace hypro;
 
 template<typename Number>
-HybridAutomaton<Number> singleVariableHA() {
+HybridAutomaton<Number> singleVariableHa() {
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -40,7 +40,7 @@ HybridAutomaton<Number> singleVariableHA() {
 }
 
 template<typename Number>
-HybridAutomaton<Number> independentHA() {
+HybridAutomaton<Number> independentHa() {
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -49,10 +49,10 @@ HybridAutomaton<Number> independentHA() {
     // Create location
     hypro::Location<Number> loc;
 
-    // Set flow x' = 1, y' = 1
+    // Set flow x' = 1, y' = 2
     Matrix flow = Matrix::Zero( 3, 3 );
     flow( 0, 2 ) = 1;
-    flow( 1, 2 ) = 1;
+    flow( 1, 2 ) = 2;
     loc.setFlow( flow );
 
     // Set invariant x <= 1
@@ -78,7 +78,7 @@ HybridAutomaton<Number> independentHA() {
 }
 
 template<typename Number>
-HybridAutomaton<Number> dependentFlowHA() {
+HybridAutomaton<Number> dependentFlowHa() {
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -117,7 +117,7 @@ HybridAutomaton<Number> dependentFlowHA() {
 }
 
 template<typename Number>
-HybridAutomaton<Number> dependentInvariantHA() {
+HybridAutomaton<Number> dependentInvariantHa() {
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -126,10 +126,8 @@ HybridAutomaton<Number> dependentInvariantHA() {
     // Create location
     hypro::Location<Number> loc;
 
-    // Set flow x' = 1, y' = 1
+    // Set flow x' = 0, y' = 0
     Matrix flow = Matrix::Zero( 3, 3 );
-    flow( 0, 2 ) = 1;
-    flow( 1, 2 ) = 1;
     loc.setFlow( flow );
 
     // Set invariant x + y <= 1
@@ -156,7 +154,7 @@ HybridAutomaton<Number> dependentInvariantHA() {
 }
 
 template<typename Number>
-HybridAutomaton<Number> transitiveDependentHA() {
+HybridAutomaton<Number> transitiveDependentHa() {
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -198,7 +196,7 @@ HybridAutomaton<Number> transitiveDependentHA() {
 }
 
 template<typename Number>
-HybridAutomaton<Number> rectangularIndependentHA() {
+HybridAutomaton<Number> rectangularIndependentHa() {
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -238,6 +236,104 @@ HybridAutomaton<Number> rectangularIndependentHA() {
     auto& locPtr = ha.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
     ha.addInitialState( locPtr.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
+    return ha;
+}
+
+template<typename Number>
+HybridAutomaton<Number> mixedDynamicsHa() {
+    using Matrix = hypro::matrix_t<Number>;
+    using Vector = hypro::vector_t<Number>;
+
+    hypro::HybridAutomaton<Number> ha;
+
+    // Create location
+    hypro::Location<Number> loc;
+
+    // Set flow x' = 1, y' = 1, z' = 1, u' = 0
+    Matrix flow = Matrix::Zero( 5, 5 );
+    flow( 0, 4 ) = 1;
+    flow( 1, 4 ) = 1;
+    flow( 2, 4 ) = 1;
+    loc.setFlow( flow );
+
+    // Set invariant y + z <= 0
+    Matrix invariantConstraints = Matrix::Zero( 1, 4 );
+    invariantConstraints( 0, 1 ) = 1;
+    invariantConstraints( 0, 2 ) = 1;
+    Vector invariantConstants = Vector::Zero( 1 );
+    loc.setInvariant( { invariantConstraints, invariantConstants } );
+
+    // Set initial state x = 0, y = 0, z = 0, u = 0
+    Matrix initialConstraints = Matrix::Zero( 8, 4 );
+    Vector initialConstants = Vector::Zero( 8 );
+    initialConstraints << 1, 0, 0, 0,
+                        -1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, -1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, -1, 0,
+                        0, 0, 0, 1,
+                        0, 0, 0, -1;
+    initialConstants << 0, 0, 0, 0, 0, 0, 0, 0;
+
+    // Create HA
+    auto& locPtr = ha.addLocation( std::make_unique<hypro::Location<Number>>( loc ) );
+    ha.addInitialState( locPtr.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+    return ha;
+}
+
+template<typename Number>
+HybridAutomaton<Number> multipleLocationsHa() {
+    using Matrix = hypro::matrix_t<Number>;
+    using Vector = hypro::vector_t<Number>;
+
+    hypro::HybridAutomaton<Number> ha;
+
+    // Create locations
+    hypro::Location<Number> loc0{};
+    hypro::Location<Number> loc1{};
+    auto uniqueLoc0{ std::make_unique<hypro::Location<Number>>( loc0 ) };
+    auto uniqueLoc1{ std::make_unique<hypro::Location<Number>>( loc1 ) };
+
+    // Set flow x' = 1, y' = 0, z' = 0, u' = 1 in loc0
+    Matrix flow0 = Matrix::Zero( 5, 5 );
+    flow0( 0, 4 ) = 1;
+    flow0( 3, 4 ) = 1;
+    uniqueLoc0->setFlow( flow0 );
+
+    // Set flow x' = 1, y' = 2x+1, z' = 2, u' = 0 in loc1
+    Matrix flow1 = Matrix::Zero( 5, 5 );
+    flow1( 0, 4 ) = 1;
+    flow1( 1, 0 ) = 2;
+    flow1( 1, 4 ) = 1;
+    flow1( 2, 4 ) = 2;
+    uniqueLoc1->setFlow( flow1 );
+
+    // Set invariant y + z <= 0 in loc0
+    Matrix invariantConstraints = Matrix::Zero( 1, 4 );
+    invariantConstraints( 0, 1 ) = 1;
+    invariantConstraints( 0, 2 ) = 1;
+    Vector invariantConstants = Vector::Zero( 1 );
+    uniqueLoc0->setInvariant( { invariantConstraints, invariantConstants } );
+
+    // Set initial state x = 0, y = 0, z = 0, u = 0 in loc0
+    Matrix initialConstraints = Matrix::Zero( 8, 4 );
+    Vector initialConstants = Vector::Zero( 8 );
+    initialConstraints << 1, 0, 0, 0,
+                        -1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, -1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, -1, 0,
+                        0, 0, 0, 1,
+                        0, 0, 0, -1;
+    initialConstants << 0, 0, 0, 0, 0, 0, 0, 0;
+
+    // Create HA
+    ha.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+    ha.addLocation( std::move( uniqueLoc0 ) );
+    ha.addLocation( std::move( uniqueLoc1 ) );
     return ha;
 }
 
@@ -292,44 +388,192 @@ TEST( DecompositionMethodsTest, GetDynamicTypeLocation ) {
 	// TODO: transitions - reset
 }
 
-/*
-TEST( DecompositionMethodsTest, GetSubspaceDecomposition ) {
+TEST( DecompositionMethodsTest, getSubspacePartition ) {
 	using Number = double;
 
-    auto ha1 = singleVariableHA<Number>();
-	auto decomposition1 = getSubspaceDecomposition( ha1 );
-	EXPECT_EQ( std::vector<std::vector<std::size_t>>{ { 0 } }, decomposition1.subspaces );
+    auto ha1 = singleVariableHa<Number>();
+	auto partition1 = getSubspacePartition( ha1 );
+	EXPECT_EQ( std::vector<std::vector<std::size_t>>{ { 0 } }, partition1 );
 
-	auto ha2 = independentHA<Number>();
-	auto decomposition2 = getSubspaceDecomposition( ha2 );
+	auto ha2 = independentHa<Number>();
+	auto partition2 = getSubspacePartition( ha2 );
 	auto expectedSubspaces2 = std::vector<std::vector<std::size_t>>{ { 0 }, { 1 } };
-	EXPECT_EQ( expectedSubspaces2, decomposition2.subspaces );
+	EXPECT_EQ( expectedSubspaces2, partition2 );
 
-	auto ha3 = dependentFlowHA<Number>();
-	auto decomposition3 = getSubspaceDecomposition( ha3 );
+	auto ha3 = dependentFlowHa<Number>();
+	auto partition3 = getSubspacePartition( ha3 );
 	auto expectedSubspaces3 = std::vector<std::vector<std::size_t>>{ { 0, 1 } };
-	EXPECT_EQ( expectedSubspaces3, decomposition3.subspaces );
+	EXPECT_EQ( expectedSubspaces3, partition3 );
 
-	auto ha4 = dependentInvariantHA<Number>();
-	auto decomposition4 = getSubspaceDecomposition( ha4 );
+	auto ha4 = dependentInvariantHa<Number>();
+	auto partition4 = getSubspacePartition( ha4 );
 	auto expectedSubspaces4 = std::vector<std::vector<std::size_t>>{ { 0, 1 } };
-	EXPECT_EQ( expectedSubspaces4, decomposition4.subspaces );
+	EXPECT_EQ( expectedSubspaces4, partition4 );
 
-	auto ha5 = transitiveDependentHA<Number>();
-	auto decomposition5 = getSubspaceDecomposition( ha5 );
+	auto ha5 = transitiveDependentHa<Number>();
+	auto partition5 = getSubspacePartition( ha5 );
 	auto expectedSubspaces5 = std::vector<std::vector<std::size_t>>{ { 0, 1, 2 } };
-	EXPECT_EQ( expectedSubspaces5, decomposition5.subspaces );
+	EXPECT_EQ( expectedSubspaces5, partition5 );
 
-	auto ha6 = rectangularIndependentHA<Number>();
-	auto decomposition6 = getSubspaceDecomposition( ha6 );
+	auto ha6 = rectangularIndependentHa<Number>();
+	auto partition6 = getSubspacePartition( ha6 );
 	auto expectedSubspaces6 = std::vector<std::vector<std::size_t>>{ { 0 }, { 1 } };
-	EXPECT_EQ( expectedSubspaces6, decomposition6.subspaces );
-}
-*/
+	EXPECT_EQ( expectedSubspaces6, partition6 );
 
-TEST( DecompositionMethodsTest, DecomposeAutomaton ) {
+    auto ha7 = mixedDynamicsHa<Number>();
+    auto partition7 = getSubspacePartition( ha7 );
+    auto expectedSubspaces7 = std::vector<std::vector<std::size_t>>{ { 0 }, { 1, 2 }, { 3 } };
+    EXPECT_EQ( expectedSubspaces7, partition7);
+
+    auto ha8 = multipleLocationsHa<Number>();
+    auto partition8 = getSubspacePartition( ha8 );
+    auto expectedSubspaces8 = std::vector<std::vector<std::size_t>>{ { 0, 1, 2 }, { 3 } };
+}
+
+// Todo: test case for guards/resets; check initial state decomposition; bad states
+TEST( DecompositionMethodsTest, decomposeAutomaton1 ) {
 	using Number = double;
-	auto ha1 = independentHA<Number>();
-	auto decomposition = decomposeAutomaton( ha1 );
-	EXPECT_EQ( 2, ha1.getLocations()[0]->getNumberSubspaces() );
+
+	auto ha = singleVariableHa<Number>();
+	HybridAutomaton<Number> decomposedHa;
+	Decomposition decomposition;
+	std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+    Decomposition expectedDecomposition{ { { 0 } }, { DynamicType::timed} };
+
+	EXPECT_EQ( ha, decomposedHa );
+    EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+    EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+}
+
+TEST( DecompositionMethodsTest, decomposeAutomaton2 ) {
+    using Number = double;
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+	auto ha = independentHa<Number>();
+	HybridAutomaton<Number> decomposedHa;
+	Decomposition decomposition;
+	std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+	Decomposition expectedDecomposition{ { { 0 }, { 1 } }, { DynamicType::timed, DynamicType::singular } };
+	Condition<Number> expectedInvariant( { ConstraintSetT<Number>{ Matrix::Ones( 1, 1 ), Vector::Ones( 1 ) }, ConstraintSetT<Number>{ } } );
+    Matrix initialConstraints = Matrix::Zero( 2, 1 );
+    initialConstraints << 1, -1;
+	Condition<Number> expectedInitial( { ConstraintSetT<Number>{ initialConstraints, Vector::Zero( 2 ) }, ConstraintSetT<Number>{ initialConstraints, Vector::Zero( 2 ) } } );
+	Matrix expectedFlow1 = Matrix::Zero( 2, 2 );
+	Matrix expectedFlow2 = Matrix::Zero( 2, 2 );
+	expectedFlow1( 0, 1 ) = 1;
+	expectedFlow2( 0, 1 ) = 2;
+	auto loc = decomposedHa.getLocations()[ 0 ];
+
+	EXPECT_EQ( 2, loc->getNumberSubspaces() );
+	EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+	EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+	EXPECT_EQ( expectedInvariant, loc->getInvariant() );
+	EXPECT_EQ( expectedFlow1, loc->getLinearFlow( 0 ).getFlowMatrix() );
+	EXPECT_EQ( expectedFlow2, loc->getLinearFlow( 1 ).getFlowMatrix() );
+    EXPECT_EQ( expectedInitial, decomposedHa.getInitialStates().at( loc ) );
+}
+
+TEST( DecompositionMethodsTest, decomposeAutomaton3 ) {
+    using Number = double;
+
+	auto ha = dependentFlowHa<Number>();
+	HybridAutomaton<Number> decomposedHa;
+	Decomposition decomposition;
+	std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+	Decomposition expectedDecomposition{ { { 0, 1 } }, { DynamicType::linear } };
+	auto loc = decomposedHa.getLocations()[ 0 ];
+
+	EXPECT_EQ( 1, loc->getNumberSubspaces() );
+    EXPECT_EQ( ha, decomposedHa );
+	EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+	EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+}
+
+TEST( DecompositionMethodsTest, decomposeAutomaton4 ) {
+    using Number = double;
+
+    auto ha = dependentInvariantHa<Number>();
+    HybridAutomaton<Number> decomposedHa;
+    Decomposition decomposition;
+    std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+    Decomposition expectedDecomposition{ { { 0, 1 } }, { DynamicType::discrete } };
+    EXPECT_EQ( ha, decomposedHa );
+    EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+    EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+}
+
+TEST( DecompositionMethodsTest, decomposeAutomaton5 ) {
+    using Number = double;
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    auto ha = mixedDynamicsHa<Number>();
+    HybridAutomaton<Number> decomposedHa;
+    Decomposition decomposition;
+    std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+    Decomposition expectedDecomposition{ { { 0 }, { 1, 2 }, { 3 } }, { DynamicType::timed, DynamicType::linear, DynamicType::discrete } };
+    Condition<Number> expectedInvariant( { ConstraintSetT<Number>{ }, ConstraintSetT<Number>{ Matrix::Ones( 1, 2 ), Vector::Zero( 1 ) }, ConstraintSetT<Number>{ } } );
+    Matrix expectedFlow1 = Matrix::Zero( 2, 2 );
+    Matrix expectedFlow2 = Matrix::Zero( 3, 3 );
+    Matrix expectedFlow3 = Matrix::Zero( 2, 2 );
+    expectedFlow1( 0, 1 ) = 1;
+    expectedFlow2( 0, 2 ) = 1;
+    expectedFlow2( 1, 2 ) = 1;
+
+    auto loc = decomposedHa.getLocations()[ 0 ];
+
+    EXPECT_EQ( 3, loc->getNumberSubspaces() );
+    EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+    EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+    EXPECT_EQ( expectedInvariant, loc->getInvariant() );
+    EXPECT_EQ( expectedFlow1, loc->getLinearFlow( 0 ).getFlowMatrix() );
+    EXPECT_EQ( expectedFlow2, loc->getLinearFlow( 1 ).getFlowMatrix() );
+    EXPECT_EQ( expectedFlow3, loc->getLinearFlow( 2 ).getFlowMatrix() );
+}
+
+TEST( DecompositionMethodsTest, decomposeAutomaton6 ) {
+    using Number = double;
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    auto ha = multipleLocationsHa<Number>();
+    HybridAutomaton<Number> decomposedHa;
+    Decomposition decomposition;
+    std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+    Decomposition expectedDecomposition{ { { 0, 1, 2 }, { 3 } }, { DynamicType::linear, DynamicType::timed } };
+
+    Matrix invariantConstraints = Matrix::Zero( 1, 3 );
+    invariantConstraints << 0, 1, 1;
+    Condition<Number> expectedInvariant0( { ConstraintSetT<Number>{ invariantConstraints, Vector::Zero( 1 ) }, ConstraintSetT<Number>{ } } );
+    Condition<Number> expectedInvariant1( { ConstraintSetT<Number>{ }, ConstraintSetT<Number>{ } } );
+    Matrix expectedFlow00 = Matrix::Zero( 4, 4 );
+    Matrix expectedFlow01 = Matrix::Zero( 2, 2 );
+    Matrix expectedFlow10 = Matrix::Zero( 4, 4 );
+    Matrix expectedFlow11 = Matrix::Zero( 2, 2);
+    expectedFlow00( 0, 3 ) = 1;
+    expectedFlow01( 0, 1 ) = 1;
+    expectedFlow10( 0, 3 ) = 1;
+    expectedFlow10( 1, 0 ) = 2;
+    expectedFlow10( 1, 3 ) = 1;
+    expectedFlow10( 2, 3 ) = 2;
+    auto loc0 = decomposedHa.getLocations()[ 0 ];
+    auto loc1 = decomposedHa.getLocations()[ 1 ];
+
+
+    EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+    EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+    EXPECT_EQ( expectedInvariant0, loc0->getInvariant() );
+    EXPECT_EQ( expectedInvariant1, loc1->getInvariant() );
+    EXPECT_EQ( expectedFlow00, loc0->getLinearFlow( 0 ).getFlowMatrix() );
+    EXPECT_EQ( expectedFlow01, loc0->getLinearFlow( 1 ).getFlowMatrix() );
+    EXPECT_EQ( expectedFlow10, loc1->getLinearFlow( 0 ).getFlowMatrix() );
+    EXPECT_EQ( expectedFlow11, loc1->getLinearFlow( 1 ).getFlowMatrix() );
+
 }

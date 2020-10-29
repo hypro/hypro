@@ -402,7 +402,7 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 				detail::addEdgesForRectMap( locPtr->getRectangularFlow().getFlowIntervals(), G );
 				break;
 			default:
-				assert( false && "Decompososition for flow type " locPtr->getFlowTypes()[ i ] << " not implemented yet." );
+				assert( false && "Decompososition for flow type not implemented yet." );
 				break;
 		}
 		detail::addEdgesForCondition( locPtr->getInvariant(), G );
@@ -466,7 +466,7 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 #ifndef NDEBUG
 	// Assume that every location is decomposed in the same number of subspaces, as is done by the decomposeAutomaton function
 	for( auto& loc : automaton.getLocations() ) {
-		assuert( loc->getNumberSubspaces() == subspaceTypes.size() );
+		assert( loc->getNumberSubspaces() == subspaceTypes.size() );
 	}
 #endif
 	for ( std::size_t subspaceIndex = 0; subspaceIndex < subspaceTypes.size(); ++subspaceIndex ) {
