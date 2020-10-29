@@ -69,6 +69,9 @@ bool isRectangularLocation( const Location<Number> &loc );
 /// checks whether the subspace at index exhibits timed automata semantics
 template <typename Number>
 bool isTimedSubspace( const Location<Number> &loc, size_t index );
+/// checks whether the subspace at index exhibits singular automata semantics
+template <typename Number>
+bool isSingularSubspace( const Location<Number> &loc, size_t index );
 /// checks whether the subspace at index exhibits rectangular automata semantics
 template <typename Number>
 bool isRectangularSubspace( const Location<Number> &loc, size_t index );

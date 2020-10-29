@@ -116,6 +116,56 @@ bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
 }
 
 template <typename Number>
+bool isSingularSubspace( const Location<Number> &loc, size_t index ) {
+	assert( index < loc.getNumberSubspaces() );
+	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
+	if ( loc.getFlowTypes()[ index ] == DynamicType::rectangular ) {
+		return false;
+	}	
+	// check if flow is of the form
+	//	0 ... 0 c_1
+	//  .........
+	//	0 ... 0 c_n
+	//  0 ....0 0
+
+	if ( !( loc.getLinearFlow( index ) ).isSingular() ) {
+		TRACE( "hypro.decisionEntity", "Flow is not singular." );
+		return false;
+	}
+
+	// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
+	if ( loc.getInvariant().size() > 0 ) {
+		if ( !loc.getInvariant().isAxisAligned( index ) ) {
+			TRACE( "hypro.decisionEntity", "Invariant is not axis-aligned." );
+			return false;
+		}
+	}
+
+	for ( const auto &transition : loc.getTransitions() ) {
+		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
+
+		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
+
+		if ( transition->getGuard().size() > 0 ) {
+			if ( !transition->getGuard().isAxisAligned( index ) ) {
+				TRACE( "hypro.decisionEntity", "Guard is not axis-aligned." );
+				return false;
+			}
+		}
+
+		// Check that all resets are interval based
+		if ( transition->getReset().size() > 0 ) {
+			if ( !transition->getReset().getAffineReset( index ).isIdentity() ) {
+				TRACE( "hypro.decisionEntity", "Reset is not interval-based." );
+				return false;
+			}
+		}
+	}
+	TRACE( "hypro.decisionEntitiy", "Is timed." );
+	return true;
+}
+
+template <typename Number>
 bool isRectangularSubspace( const Location<Number> &loc, size_t index ) {
 	assert( index < loc.getNumberSubspaces() );
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
@@ -427,8 +477,8 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
-					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
 					} else {
@@ -440,8 +490,8 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
-					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else {
@@ -453,8 +503,8 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
-					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else {
@@ -466,8 +516,8 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
-					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-					//	subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else {
@@ -479,8 +529,8 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-					//	subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
 					} else {
@@ -494,8 +544,8 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					//} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-					//	subspaceTypes[ subspaceIndex ] = DynamicType::linear;
+					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else {
