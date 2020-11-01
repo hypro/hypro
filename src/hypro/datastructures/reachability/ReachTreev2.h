@@ -61,6 +61,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	Path<Number> getPath() const;
 
+	auto getParent() const { return this->mParent; }
+
 	Transition<Number> const* getTransition() const { return mTransition; }
 
 	/**

@@ -17,9 +17,33 @@ class StochasticTransition : public Transition<Number> {
   private:
 	Number mProbability = 1;
     Number mTransitionWeight;
-	Number mTransitionInterval;
+	carl::Interval<Number> mTransitionInterval;
 
   public:
+//   StochasticTransition() 
+// 		: Transition<Number>()
+// 		, mProbability()
+// 		, mTransitionWeight()
+// 		, mTransitionInterval() {}
+
+// StochasticTransition( const StochasticTransition<Number>& orig ) 
+// 		: Transition<Number>( orig )
+// 		, mProbability()
+// 		, mTransitionWeight()
+// 		, mTransitionInterval() {}
+
+//   StochasticTransition( StochasticLocation<Number>* source, StochasticLocation<Number>* target )
+// 		: Transition<Number>( source, target )
+// 		, mProbability()
+// 		, mTransitionWeight()
+// 		, mTransitionInterval() {}
+
+// 	StochasticTransition( StochasticLocation<Number>* source, StochasticLocation<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset )
+// 		: Transition<Number>( source, target, guard, reset )
+// 		, mProbability()
+// 		, mTransitionWeight()
+// 		, mTransitionInterval() {}
+
 	void setProbability( Number probability ) {
 		mProbability = probability;
 	}

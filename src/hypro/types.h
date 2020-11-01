@@ -50,7 +50,8 @@ enum class TRIBOOL { TRUE,
 
 enum class REACHABILITY_RESULT {
 	SAFE,
-	UNKNOWN
+	UNKNOWN,
+	UNSAFE
 };
 
 BETTER_ENUM( PLOTTYPE, int,
