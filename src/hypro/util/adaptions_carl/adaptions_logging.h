@@ -2,7 +2,7 @@
 #include "../../flags.h"
 
 // clang-format off
-#ifdef CARL_LOGGING_PRE_1910
+#ifdef CARL_LOGGING_POST_1910
 #include <carl-logging/logging.h>
 #include <carl-logging/Logger.h>
 #include <carl-logging/carl-logging.h>

@@ -13,8 +13,11 @@ endif()
 
 export_target(DEPENDENT_TARGETS carl-shared)
 export_target(DEPENDENT_TARGETS carl-static)
-#export_target(DEPENDENT_TARGETS carl-logging-shared)
-#export_target(DEPENDENT_TARGETS carl-logging-static)
+if(CARL_LOGGING_POST_1910)
+	message(STATUS "Export carl-logging")
+	export_target(DEPENDENT_TARGETS carl-logging-shared)
+	export_target(DEPENDENT_TARGETS carl-logging-static)
+endif()
 
 if(STATICLIB_SWITCH)
 	if(HYPRO_MATLAB_BINDINGS)
