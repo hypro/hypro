@@ -105,10 +105,10 @@ class Reset {
 		}
 
 		for ( std::size_t i = 0; i < lhs.size(); ++i ) {
-			if ( lhs.getAffineReset( i ) != rhs.getAffineReset( i ) ) {
+			if ( !( lhs.getAffineReset( i ) == rhs.getAffineReset( i ) ) ) {
 				return false;
 			}
-			if ( lhs.getIntervals( i ) != rhs.getIntervals( i ) ) {
+			if ( !( lhs.getIntervals( i ) == rhs.getIntervals( i ) ) ) {
 				return false;
 			}
 		}

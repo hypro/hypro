@@ -214,13 +214,18 @@ Reset<Number> combine(
 
 template <typename Number>
 void Reset<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
-	if ( mAffineResets.size() == 0 || mDecomposed ) {
+	if ( mAffineResets.size() == 0 ) {
 		//empty constraints
 		return;
 	}
+	if ( mAffineResets.size() > 1 || mDecomposed ) {
+		// Already decomposed
+		mDecomposed = true;
+		return;
+	}	
+	assert( mAffineResets.size() == 1 );
 
 	INFO( "hypro.datastructures", "In the current state we assume that rectangular subspaces will not be decomposed." );
-	assert( mAffineResets.size() == 1 );
 
 	// traverse reset variants to collect all assignments per proposed subspace
 	ConstraintSetT<Number> cset = mAffineResets[0].mTransformation;
@@ -244,15 +249,15 @@ void Reset<Number>::decompose( const std::vector<std::vector<std::size_t>>& part
 #endif
 
 		// new interval assignments are just copied, as we do not store the variable
-		//std::vector<carl::Interval<Number>> newIntervals;
-		std::vector<carl::Interval<Number>> newIntervals = oldIntervalAssignments;
+		std::vector<carl::Interval<Number>> newIntervals;
+		//std::vector<carl::Interval<Number>> newIntervals = oldIntervalAssignments;
 
 		// for each row of the constraints check if it contains an entry for one of the variables of the set
 		// and add the corresponding rows to a list of indices that are later added to a matrix
 		std::vector<Eigen::Index> indicesToAdd;
 		for ( auto entry : set ) {
 			indicesToAdd.emplace_back( Eigen::Index( entry ) );
-			//newIntervals.emplace_back(oldIntervalAssignments[entry]);
+			newIntervals.emplace_back( oldIntervalAssignments[ entry ] );
 		}
 
 		// create a row matrix with numIndicesToAdd many rows
