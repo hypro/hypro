@@ -356,14 +356,14 @@ HybridAutomaton<Number> resetHa() {
     uniqueLoc1->setFlow( flow );
 
     // Construct transitions
-    // l0 -> l1 with guard x <= 0, y + z <= 0 and reset x := 0, z := 0
+    // l0 -> l1 with guard x <= 0, y + z <= 0 and reset x := [0,2], z := 0
     Matrix transConstraint = Matrix::Zero( 2, 3 );
     Vector transConstants = Vector::Zero( 2 );
     transConstraint( 0, 0 ) = 1;
     transConstraint( 1, 1 ) = 1;
     transConstraint( 1, 2 ) = 1;
     hypro::Condition<Number> guard( transConstraint, transConstants );
-    hypro::Reset<Number> reset{ { { 0, 0 }, {}, { 0, 0 } } };
+    hypro::Reset<Number> reset{ { { 0, 2 }, {}, { 0, 0 } } };
 
     std::unique_ptr<hypro::Transition<Number>> trans0 =
           std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
@@ -387,6 +387,58 @@ HybridAutomaton<Number> resetHa() {
     return ha;
 }
 
+template<typename Number>
+HybridAutomaton<Number> affineResetHa() {
+    using Matrix = hypro::matrix_t<Number>;
+    using Vector = hypro::vector_t<Number>;
+
+    hypro::HybridAutomaton<Number> ha;
+
+    // Create locations
+    hypro::Location<Number> loc0{};
+    hypro::Location<Number> loc1{};
+    auto uniqueLoc0{ std::make_unique<hypro::Location<Number>>( loc0 ) };
+    auto uniqueLoc1{ std::make_unique<hypro::Location<Number>>( loc1 ) };
+
+    // Set flow x' = 0, y' = 0, z' = 0 in loc0 and loc1
+    Matrix flow = Matrix::Zero( 4, 4 );
+    uniqueLoc0->setFlow( flow );
+    uniqueLoc1->setFlow( flow );
+
+    // Construct transitions
+    // l0 -> l1 with guard x <= 0 and reset x := y, z := 1
+    Matrix transConstraint = Matrix::Zero( 1, 3 );
+    Vector transConstants = Vector::Zero( 1 );
+    transConstraint( 0, 0 ) = 1;
+    hypro::Condition<Number> guard( transConstraint, transConstants );
+    Matrix resetMat = Matrix::Zero( 3, 3 );
+    Vector resetVec = Vector::Zero( 3 );
+    resetMat( 0, 1 ) = 1;
+    resetMat( 1, 1 ) = 1;
+    resetVec( 2 ) = 1;
+    hypro::Reset<Number> reset( resetMat, resetVec );
+
+    std::unique_ptr<hypro::Transition<Number>> trans0 =
+          std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+    uniqueLoc0->addTransition( std::move( trans0 ) );
+
+    // Set initial state x = 0, y = 0, z = 0 in loc0
+    Matrix initialConstraints = Matrix::Zero( 6, 3 );
+    Vector initialConstants = Vector::Zero( 6 );
+    initialConstraints << 1, 0, 0,
+                        -1, 0, 0,
+                        0, 1, 0,
+                        0, -1, 0,
+                        0, 0, 1,
+                        0, 0, -1,
+    initialConstants << 0, 0, 0, 0, 0, 0;
+
+    // Create HA
+    ha.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+    ha.addLocation( std::move( uniqueLoc0 ) );
+    ha.addLocation( std::move( uniqueLoc1 ) );
+    return ha;
+}
 
 
 TEST( DecompositionMethodsTest, GetDynamicTypeLocation ) {
@@ -486,6 +538,11 @@ TEST( DecompositionMethodsTest, getSubspacePartition ) {
     auto partition9 = getSubspacePartition( ha9 );
     auto expectedSubspaces9 = std::vector<std::vector<std::size_t>>{ { 0 }, { 1, 2 } };
     EXPECT_EQ( expectedSubspaces9, partition9 );
+
+    auto ha10 = affineResetHa<Number>();
+    auto partition10 = getSubspacePartition( ha10 );
+    auto expectedSubspaces10 = std::vector<std::vector<std::size_t>>{ { 0, 1 }, { 2 } };
+    EXPECT_EQ( expectedSubspaces10, partition10 );
 }
 
 TEST( DecompositionMethodsTest, decomposeAutomaton1 ) {
@@ -650,7 +707,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton7 ) {
     auto loc1 = decomposedHa.getLocations()[ 1 ];
 
     // Construct expected transition
-    // l0 -> l1 with guard x <= 0, y + z <= 0 and reset x := 0, z := 0
+    // l0 -> l1 with guard x <= 0, y + z <= 0 and reset x := [0,2], z := 0
     Matrix transConstraint0 = Matrix::Ones( 1, 1 );
     Vector transConstants0 = Vector::Zero( 1 );
     Matrix transConstraint1 = Matrix::Ones( 1, 2 );
@@ -662,7 +719,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton7 ) {
     expectedReset.setVector( Vector::Zero( 1 ), 0 );
     expectedReset.setMatrix( Matrix::Identity( 2, 2 ), 1);
     expectedReset.setVector( Vector::Zero( 2 ), 1 );
-    expectedReset.setIntervals( { { 0, 0 } }, 0 );
+    expectedReset.setIntervals( { { 0, 2 } }, 0 );
     expectedReset.setIntervals( { { }, { 0, 0 } }, 1 );
 
     Transition<Number> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
@@ -672,5 +729,43 @@ TEST( DecompositionMethodsTest, decomposeAutomaton7 ) {
     EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
     Transition<Number> trans = *decomposedHa.getLocations()[ 0 ]->getTransitions()[0].get();
     EXPECT_EQ( expectedTrans, trans );
-    auto uniqueTrans = decomposedHa.getLocations()[ 0 ]->getTransitions()[0].get();
+}
+
+TEST( DecompositionMethodsTest, decomposeAutomaton8 ) {
+    using Number = double;
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    auto ha = affineResetHa<Number>();
+    HybridAutomaton<Number> decomposedHa;
+    Decomposition decomposition;
+    std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
+
+    Decomposition expectedDecomposition{ { { 0, 1 }, { 2 } }, { DynamicType::discrete, DynamicType::discrete } };
+    auto loc0 = decomposedHa.getLocations()[ 0 ];
+    auto loc1 = decomposedHa.getLocations()[ 1 ];
+
+    // Construct expected transition
+    // l0 -> l1 with guard x <= 0 and reset x := y, z := 1
+    Matrix transConstraint = Matrix::Zero( 1, 2 );
+    Vector transConstants = Vector::Zero( 1 );
+    transConstraint( 0, 0 ) = 1;
+
+    Condition<Number> expectedGuard( { ConstraintSetT<Number>{ transConstraint, transConstants }, ConstraintSetT<Number>{ } } );
+    Reset<Number> expectedReset;
+    Matrix resetMat0 = Matrix::Zero( 2, 2 );
+    resetMat0( 0, 1 ) = 1;
+    resetMat0( 1, 1 ) = 1;
+    expectedReset.setMatrix( resetMat0, 0 );
+    expectedReset.setVector( Vector::Zero( 2 ), 0 );
+    expectedReset.setMatrix( Matrix::Zero( 1, 1 ), 1);
+    expectedReset.setVector( Vector::Ones( 1 ), 1 );
+    expectedReset.setIntervals( { { }, { } }, 0 );
+    expectedReset.setIntervals( { { } }, 1 );
+    Transition<Number> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
+
+    EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+    EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+    Transition<Number> trans = *decomposedHa.getLocations()[ 0 ]->getTransitions()[0].get();
+    EXPECT_EQ( expectedTrans, trans );
 }
