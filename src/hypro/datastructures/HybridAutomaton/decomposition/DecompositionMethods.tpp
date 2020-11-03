@@ -399,7 +399,8 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 				detail::addEdgesForAffineTrafo( locPtr->getLinearFlow().getFlowMatrix(), G );
 				break;
 			case DynamicType::rectangular:
-				detail::addEdgesForRectMap( locPtr->getRectangularFlow().getFlowIntervals(), G );
+				// Rectangular flows do not introduce dependencies
+				//detail::addEdgesForRectMap( locPtr->getRectangularFlow().getFlowIntervals(), G );
 				break;
 			default:
 				assert( false && "Decompososition for flow type not implemented yet." );
@@ -411,7 +412,8 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 	//check reset and guards of transitions
 	for ( const auto &transition : automaton.getTransitions() ) {
 		detail::addEdgesForLinTrafo( transition->getReset().getMatrix(), G );
-		detail::addEdgesForRectTrafo( transition->getReset().getIntervals(), G );
+		// Resets to intervals do not introduce dependencies
+		//detail::addEdgesForRectTrafo( transition->getReset().getIntervals(), G );
 		detail::addEdgesForCondition( transition->getGuard(), G );
 	}
 

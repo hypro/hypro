@@ -488,7 +488,6 @@ TEST( DecompositionMethodsTest, getSubspacePartition ) {
     EXPECT_EQ( expectedSubspaces9, partition9 );
 }
 
-// Todo: test case for guards/resets; check initial state decomposition; bad states
 TEST( DecompositionMethodsTest, decomposeAutomaton1 ) {
 	using Number = double;
 
